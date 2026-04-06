@@ -123,7 +123,7 @@ async function fetchNewsFromAPI() {
       const response = await fetch(
         `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&sortBy=publishedAt&language=en&pageSize=5`,
         {
-          headers: { 'Authorization': `Bearer ${newsApiKey}` },
+          headers: { 'X-Api-Key': newsApiKey },
           next: { revalidate: 3600 } // Cache 1 hour
         }
       )
