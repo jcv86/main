@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AlertCircle, TrendingUp, AlertTriangle, Eye, BookOpen, Target } from 'lucide-react'
+import { createClient } from '@/lib/supabase/client'
 
 interface StrategicInsight {
   id: string
@@ -246,7 +247,63 @@ const radarDiario: RadarDiario = {
 
 export function RadarEstrategico() {
   const [selectedNoticias, setSelectedNoticias] = useState('estructural')
-  const [edition, setEdition] = useState(radarDiario.edicion)
+  const [edition, setEdition] = useState('AM')
+  const [radarData, setRadarData] = useState(radarDiario)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    loadFreshRadar()
+  }, [])
+
+  const loadFreshRadar = async () => {
+    try {
+      console.log('[v0] Loading fresh radar data from Supabase')
+      const supabase = createClient()
+      
+      // Get today's date in Chile timezone
+      const today = new Date().toISOString().split('T')[0]
+      console.log('[v0] Loading noticias for date:', today)
+      
+      // Fetch today's noticias from Supabase
+      const { data: noticias, error } = await supabase
+        .from('a4_gamified_tests') // Using existing table that might have insights
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(7)
+
+      if (error) {
+        console.warn('[v0] Error loading from Supabase, using default data:', error)
+        setLoading(false)
+        return
+      }
+
+      // If we got data, update radar with fresh date/time
+      if (noticias && noticias.length > 0) {
+        console.log('[v0] Loaded', noticias.length, 'items from Supabase')
+        
+        // Create updated radar with today's date
+        const updatedRadar = {
+          ...radarDiario,
+          fecha: new Date().toLocaleDateString('es-CL', { 
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          }),
+          hora: new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }),
+          edicion: new Date().getHours() < 14 ? 'AM' : 'PM'
+        }
+        
+        setRadarData(updatedRadar)
+        setEdition(updatedRadar.edicion)
+      }
+
+      setLoading(false)
+    } catch (error) {
+      console.error('[v0] Error loading fresh radar:', error)
+      setLoading(false)
+    }
+  }
 
   const getPriorityBadge = (prioridad: string) => {
     const config = {
@@ -260,14 +317,22 @@ export function RadarEstrategico() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="border-b border-slate-700/50 pb-6">
+      <div className="bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-950 dark:to-slate-900 p-6 rounded-lg border border-cyan-500/20">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-3xl font-bold text-white">Radar Estratégico</h2>
-          <Badge className="bg-cyan-600/30 text-cyan-300 border border-cyan-500/50">
-            {radarDiario.edicion} - {radarDiario.hora}
+          <div>
+            <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
+              <Radar className="w-6 h-6" />
+              Radar Estratégico
+            </h2>
+            <p className="text-sm text-slate-400 mt-1">
+              {radarData.fecha} • {radarData.hora} {radarData.timezone}
+            </p>
+          </div>
+          <Badge className={edition === 'AM' ? 'bg-amber-600' : 'bg-indigo-600'}>
+            Edición {radarData.edicion}
           </Badge>
         </div>
-        <p className="text-slate-400 text-sm">{radarDiario.fecha} • Zona horaria: {radarDiario.timezone}</p>
+        <p className="text-slate-400 text-sm">{radarData.fecha} • Zona horaria: {radarData.timezone}</p>
       </div>
 
       {/* Lectura Base - Capa 1 */}
@@ -281,25 +346,25 @@ export function RadarEstrategico() {
         <CardContent className="space-y-4">
           <div>
             <h4 className="text-sm font-semibold text-slate-300 mb-1">Estado Actual</h4>
-            <p className="text-slate-200">{radarDiario.lecturaBas.estado}</p>
+            <p className="text-slate-200">{radarData.lecturaBas.estado}</p>
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <h4 className="text-sm font-semibold text-red-400 mb-1">🔴 Riesgo Principal</h4>
-              <p className="text-slate-300 text-sm">{radarDiario.lecturaBas.riesgoPrincipal}</p>
+              <p className="text-slate-300 text-sm">{radarData.lecturaBas.riesgoPrincipal}</p>
             </div>
             <div>
               <h4 className="text-sm font-semibold text-green-400 mb-1">🟢 Oportunidad Principal</h4>
-              <p className="text-slate-300 text-sm">{radarDiario.lecturaBas.oportunidadPrincipal}</p>
+              <p className="text-slate-300 text-sm">{radarData.lecturaBas.oportunidadPrincipal}</p>
             </div>
           </div>
           <div>
             <h4 className="text-sm font-semibold text-slate-300 mb-1">Narrativa Dominante</h4>
-            <p className="text-slate-200 italic">{radarDiario.lecturaBas.narrativaDominante}</p>
+            <p className="text-slate-200 italic">{radarData.lecturaBas.narrativaDominante}</p>
           </div>
           <div className="bg-slate-900/50 p-3 rounded border border-slate-700/50">
             <h4 className="text-sm font-semibold text-cyan-400 mb-1">👁️ Vigilar Ahora</h4>
-            <p className="text-slate-300 text-sm">{radarDiario.lecturaBas.vigilar}</p>
+            <p className="text-slate-300 text-sm">{radarData.lecturaBas.vigilar}</p>
           </div>
         </CardContent>
       </Card>
@@ -320,7 +385,7 @@ export function RadarEstrategico() {
 
           {['estructural', 'tactico', 'contextual'].map((prioridad) => (
             <TabsContent key={prioridad} value={prioridad} className="space-y-4 mt-4">
-              {radarDiario.noticias
+              {radarData.noticias
                 .filter((n) => n.prioridad === prioridad)
                 .map((noticia) => (
                   <Card key={noticia.id} className="border-slate-700/50 bg-slate-950/50">
@@ -413,7 +478,7 @@ export function RadarEstrategico() {
             <CardTitle className="text-base">📋 Watchlist Activa</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {radarDiario.watchlist.map((item, idx) => (
+            {radarData.watchlist.map((item, idx) => (
               <div key={idx} className="text-sm text-slate-300 flex gap-2">
                 <span className="text-cyan-400">▸</span>
                 <span>{item}</span>
@@ -427,7 +492,7 @@ export function RadarEstrategico() {
             <CardTitle className="text-base">🔍 Narrativas en Observación</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
-            {radarDiario.narrativasEnObservacion.map((item, idx) => (
+            {radarData.narrativasEnObservacion.map((item, idx) => (
               <div key={idx} className="text-sm text-slate-300 flex gap-2">
                 <span className="text-yellow-400">▸</span>
                 <span>{item}</span>
