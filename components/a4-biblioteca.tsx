@@ -1,11 +1,12 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { BookOpen, Search, Bookmark, Download, ExternalLink, Star, Clock, Users } from 'lucide-react'
+import { getBibliotecaResources } from '@/lib/supabase/a4-queries'
 
 interface Recurso {
   id: string
@@ -94,16 +95,58 @@ const getCategoriaColor = (categoria: string) => {
   return colors[categoria] || 'bg-gray-100 text-gray-800'
 }
 
-export function A4Biblioteca({ recursos = RECURSOS_DEFAULT }: A4BibliotecaProps) {
+export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
+  const [recursos, setRecursos] = useState<Recurso[]>(initialRecursos || RECURSOS_DEFAULT)
+  const [loading, setLoading] = useState(!initialRecursos)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedTipo, setSelectedTipo] = useState<string | null>(null)
+  const [selectedCategoria, setSelectedCategoria] = useState<string | null>(null)
   const [savedItems, setSavedItems] = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    if (!initialRecursos) {
+      fetchRecursos()
+    }
+  }, [initialRecursos])
+
+  const fetchRecursos = async () => {
+    try {
+      console.log('[v0] Fetching biblioteca resources from Supabase')
+      const data = await getBibliotecaResources()
+      
+      // Map Supabase fields to Recurso interface
+      const mapped = data.map((item: any) => ({
+        id: item.id,
+        titulo: item.titulo || item.title || '',
+        descripcion: item.descripcion || item.description || '',
+        autor: item.autor || item.author || '',
+        tipo: (item.tipo || item.type || 'libro').toLowerCase(),
+        categoria: item.categoria || item.category || 'General',
+        duracion: item.duracion || item.duration,
+        rating: item.rating || 0,
+        votos: item.votos || item.votes || 0,
+        enlace: item.enlace || item.url || item.link,
+      }))
+      
+      console.log('[v0] Loaded', mapped.length, 'resources from Supabase')
+      setRecursos(mapped)
+    } catch (error) {
+      console.error('[v0] Error loading biblioteca:', error)
+      setRecursos(RECURSOS_DEFAULT)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const categorias = [...new Set(recursos.map(r => r.categoria))]
 
   const filteredRecursos = recursos.filter(r => {
     const matchesSearch = r.titulo.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         r.descripcion.toLowerCase().includes(searchTerm.toLowerCase())
+                         r.descripcion.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         r.autor.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesTipo = !selectedTipo || r.tipo === selectedTipo
-    return matchesSearch && matchesTipo
+    const matchesCategoria = !selectedCategoria || r.categoria === selectedCategoria
+    return matchesSearch && matchesTipo && matchesCategoria
   })
 
   const tipos = [...new Set(recursos.map(r => r.tipo))]
@@ -173,6 +216,29 @@ export function A4Biblioteca({ recursos = RECURSOS_DEFAULT }: A4BibliotecaProps)
               })}
             </div>
           </div>
+
+          <div>
+            <p className="text-sm font-semibold mb-2">Por Categoría:</p>
+            <div className="flex gap-2 flex-wrap">
+              <Button
+                variant={selectedCategoria === null ? "default" : "outline"}
+                size="sm"
+                onClick={() => setSelectedCategoria(null)}
+              >
+                Todas
+              </Button>
+              {categorias.map(categoria => (
+                <Button
+                  key={categoria}
+                  variant={selectedCategoria === categoria ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setSelectedCategoria(categoria)}
+                >
+                  {categoria}
+                </Button>
+              ))}
+            </div>
+          </div>
         </CardContent>
       </Card>
 
@@ -182,7 +248,16 @@ export function A4Biblioteca({ recursos = RECURSOS_DEFAULT }: A4BibliotecaProps)
           <Badge variant="outline">{savedItems.size} guardados</Badge>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        {loading ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Cargando biblioteca...</p>
+          </div>
+        ) : filteredRecursos.length === 0 ? (
+          <div className="text-center py-12 bg-muted/30 rounded-lg">
+            <p className="text-muted-foreground">No se encontraron recursos</p>
+          </div>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredRecursos.map(recurso => {
             const tipoInfo = getTipoColor(recurso.tipo)
             const isSaved = savedItems.has(recurso.id)
@@ -256,9 +331,10 @@ export function A4Biblioteca({ recursos = RECURSOS_DEFAULT }: A4BibliotecaProps)
               </Card>
             )
           })}
-        </div>
+          </div>
+        )}
 
-        {filteredRecursos.length === 0 && (
+        {filteredRecursos.length === 0 && !loading && (
           <Card>
             <CardContent className="py-12 text-center">
               <BookOpen className="w-12 h-12 text-muted-foreground mx-auto mb-3 opacity-50" />
