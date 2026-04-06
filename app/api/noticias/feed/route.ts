@@ -37,6 +37,7 @@ export async function GET(req: NextRequest) {
     let query = supabase
       .from('a4_noticias')
       .select('id, title, content, relevance_score, category, published_at, source, url')
+      .not('url', 'is', null)  // Only get articles with real URLs
       .order('relevance_score', { ascending: false })
       .order('published_at', { ascending: false })
 
@@ -88,7 +89,7 @@ export async function GET(req: NextRequest) {
         category: item.category || 'General',
         relevance: Math.round((item.relevance_score || 0.5) * 100),
         source: item.source || 'Despega',
-        url: item.url || 'https://despega.cl',
+        url: item.url,
         timestamp
       }
     })
