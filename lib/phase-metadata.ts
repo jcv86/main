@@ -25,11 +25,11 @@ export const phaseMetadata = {
   },
   a3Intro: {
     title: 'Prepárate para Entrevistas - Entrenamiento | Despega Tu Carrera',
-    description: 'Intro a la fase de simulación intensiva. Entrenamientos realistas con video, análisis de postura y feedback IA instantáneo.',
+    description: 'Intro a la fase de entrenamiento intensivo. Entrenamientos realistas con video, análisis de postura y feedback IA instantáneo.',
   },
   a3Dashboard: {
-    title: 'Simulaciones y Feedback - Entrenamiento Intensivo | Despega Tu Carrera',
-    description: 'Tu hub de entrenamientos especializados. Simulaciones guiadas, análisis multimodal con video y ajuste por vacante específica.',
+    title: 'Entrenamientos y Feedback - Módulo de Entrenamiento | Despega Tu Carrera',
+    description: 'Tu hub de entrenamientos especializados. Entrenamientos guiados, análisis multimodal con video y ajuste por vacante específica.',
   },
   a4Intro: {
     title: 'Contexto del Mercado - La Realidad | Despega Tu Carrera',

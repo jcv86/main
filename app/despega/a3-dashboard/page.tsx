@@ -11,15 +11,15 @@ import { Badge } from '@/components/ui/badge'
 import { PhaseTransitionHandler } from '@/components/phase-transition-handler'
 import { Loader2, Video, FileText, Briefcase, TrendingUp, CheckCircle2, Clock, Zap, Target, ArrowRight } from 'lucide-react'
 
-interface A3Progress {
+interface TrainingProgress {
   interview_0: boolean
   cv_prepared: boolean
   market_insights: boolean
-  simulations_done: number
+  trainings_done: number
 }
 
-export default function A3DashboardPage() {
-  const [progress, setProgress] = useState<A3Progress | null>(null)
+export default function TrainingDashboardPage() {
+  const [progress, setProgress] = useState<TrainingProgress | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const { user, loading: authLoading } = useAuthRedirect()
@@ -54,8 +54,8 @@ export default function A3DashboardPage() {
         .eq('user_id', user.id)
         .limit(1)
 
-      // Check Simulations
-      const { data: sims } = await supabase
+      // Check Training Sessions
+      const { data: trainings } = await supabase
         .from('user_a3_simulations')
         .select('id')
         .eq('user_id', user.id)
@@ -64,12 +64,12 @@ export default function A3DashboardPage() {
         interview_0: !!interview?.length,
         cv_prepared: !!cv?.length,
         market_insights: !!market?.length,
-        simulations_done: sims?.length || 0
+        trainings_done: trainings?.length || 0
       })
 
-      console.log('[v0] A3 progress loaded')
+      console.log('[v0] Training progress loaded')
     } catch (err) {
-      console.error('[v0] Error loading A3 progress:', err)
+      console.error('[v0] Error loading training progress:', err)
       setError('Error al cargar progreso')
     } finally {
       setLoading(false)
@@ -81,7 +81,7 @@ export default function A3DashboardPage() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-950 to-slate-950">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-cyan-500" />
-          <p className="text-slate-300">Cargando tu progreso A3...</p>
+          <p className="text-slate-300">Cargando tu progreso de entrenamiento...</p>
         </div>
       </div>
     )
@@ -93,7 +93,7 @@ export default function A3DashboardPage() {
     progress.interview_0,
     progress.cv_prepared,
     progress.market_insights,
-    progress.simulations_done >= 2
+    progress.trainings_done >= 2
   ].filter(Boolean).length
 
   const completionPercentage = (completedItems / 4) * 100
@@ -137,11 +137,11 @@ export default function A3DashboardPage() {
     {
       category: 'ENTRENAMIENTO GUIADO',
       icon: Briefcase,
-      title: 'Simulaciones Guiadas',
+      title: 'Entrenamientos Guiados',
       description: '6 preguntas con guía paso a paso. Usa STAR method. Input voz y texto. Feedback IA en tiempo real.',
       status: 'pending',
       action: 'Comenzar',
-      href: '/despega/a3/simulaciones-guiado',
+      href: '/despega/a3/entrenamiento-guiado',
       badge: '6 preguntas'
     },
     {
@@ -159,11 +159,11 @@ export default function A3DashboardPage() {
     {
       category: 'ENTRENAMIENTO ESTRUCTURADO',
       icon: Target,
-      title: 'Simulaciones Estructuradas',
+      title: 'Entrenamientos Estructurados',
       description: 'Entrenamientos conductuales y técnicos con presión moderada. Construye confianza sistemáticamente.',
       status: 'pending',
       action: 'Practicar',
-      href: '/despega/a3/simulaciones-estructurada',
+      href: '/despega/a3/entrenamiento-estructurado',
       badge: 'Intermedio'
     },
     {
@@ -181,11 +181,11 @@ export default function A3DashboardPage() {
     {
       category: 'DESAFÍO MÁXIMO',
       icon: Zap,
-      title: 'Simulaciones Desafiantes',
+      title: 'Entrenamientos Desafiantes',
       description: 'Entrenamientos intensos. Preguntas difíciles sin guía. Simula presión real de entrevista ejecutiva.',
       status: 'pending',
       action: 'Desafiarse',
-      href: '/despega/a3/simulaciones-desafiante',
+      href: '/despega/a3/entrenamiento-desafiante',
       badge: 'Avanzado'
     },
     {
@@ -203,19 +203,19 @@ export default function A3DashboardPage() {
   return (
     <ASection
       title="Entrenamiento Intensivo"
-      subtitle="Simulación y Feedback Realista para Entrevistas"
+      subtitle="Práctica y Feedback Realista para Entrevistas"
       icon="🎯"
       colorClass="from-cyan-500 to-teal-500"
     >
       {/* EXPLICACIÓN */}
       <ASectionPart title="¿Qué es Entrenamiento Intensivo?" icon={<Zap />}>
         <p className="text-slate-300 mb-4">
-          Esta es tu fase de práctica intensiva. Aquí realizas simulaciones realistas de entrevistas, recibes feedback inmediato, 
+          Esta es tu fase de práctica intensiva. Aquí realizas entrenamientos realistas de entrevistas, recibes feedback inmediato, 
           y ajustas tu enfoque basado en análisis. Combinas tu Interview 0, CV optimizado e inteligencia del mercado 
           en entrenamientos prácticos que te preparan para situaciones reales.
         </p>
         <p className="text-slate-400 text-sm">
-          🎯 Enfoque: Simulación realista, feedback de IA, iteración y mejora continua durante 30-60 días.
+          🎯 Enfoque: Práctica realista, feedback de IA, iteración y mejora continua durante 30-60 días.
         </p>
       </ASectionPart>
 
