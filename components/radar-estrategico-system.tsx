@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { AlertCircle, TrendingUp, AlertTriangle, Eye, BookOpen, Target } from 'lucide-react'
+import { AlertCircle, TrendingUp, AlertTriangle, Eye, BookOpen, Target, Radar } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 interface StrategicInsight {
