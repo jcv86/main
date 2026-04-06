@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertTriangle, Pause, RefreshCw, ChevronRight } from "lucide-react"
-import { useChat } from "ai/react"
 
 interface A3ChatCoachProps {
   scenarioId: string
@@ -23,23 +22,10 @@ export function A3ChatCoach({ scenarioId, onComplete }: A3ChatCoachProps) {
   const [pauseExplanation, setPauseExplanation] = useState<string | null>(null)
   const [microExperimentActive, setMicroExperimentActive] = useState(false)
   const [microExperimentPrompt, setMicroExperimentPrompt] = useState<string | null>(null)
+  const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([])
+  const [userInput, setUserInput] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
-
-  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages } = useChat({
-    api: "/api/despega/a3-coach",
-    onFinish: (message) => {
-      // Update simulation stage based on message metadata
-      if (message.content.includes("pausa explicativa")) {
-        setSimulationStage("pause")
-        setIsPaused(true)
-      } else if (message.content.includes("micro-experimento")) {
-        setSimulationStage("micro_experiment")
-        setMicroExperimentActive(true)
-      } else if (message.content.includes("resumen") || message.content.includes("cierre")) {
-        setSimulationStage("closing")
-      }
-    },
-  })
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -47,36 +33,97 @@ export function A3ChatCoach({ scenarioId, onComplete }: A3ChatCoachProps) {
 
   const handleScenarioStart = () => {
     setSimulationStage("exploring")
-    setMessages([
-      {
-        id: "1",
-        role: "assistant",
-        content: `Hola, bienvenido a esta simulación. Vamos a explorar un escenario juntos sin presión. Tu rol es experimentar y observar cómo respondes en distintas situaciones.
+    const initialMessage = {
+      role: "assistant",
+      content: `Hola, bienvenido a esta simulación. Vamos a explorar un escenario juntos sin presión. Tu rol es experimentar y observar cómo respondes en distintas situaciones.
 
-¿Estás listo para comenzar? Cuéntame qué es lo primero que haría en esta situación.`,
-      },
-    ])
+¿Estás listo para comenzar? Cuéntame qué es lo primero que haría en esta situación.`
+    }
+    setMessages([initialMessage])
   }
 
   const handleUserResponse = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!input.trim()) return
+    if (!userInput.trim()) return
 
-    setResponseHistory([...responseHistory, input])
+    try {
+      setIsLoading(true)
+      const newResponses = [...responseHistory, userInput]
+      setResponseHistory(newResponses)
 
-    handleSubmit(e, {
-      headers: {
-        "Content-Type": "application/json",
-        // Pass context to API
-        "X-Simulation-Stage": simulationStage,
-        "X-Scenario-Id": scenarioId,
-      },
-      data: {
-        context: { scenarioId, stage: simulationStage },
-        simulationStage,
-        previousResponses: responseHistory,
-      },
-    })
+      // Add user message to chat
+      setMessages(prev => [...prev, { role: "user", content: userInput }])
+      setUserInput("")
+
+      // Call OpenAI directly
+      const response = await fetch("/api/a3-coach", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            ...messages,
+            { role: "user", content: userInput }
+          ],
+          context: { scenarioId, stage: simulationStage },
+          simulationStage,
+          previousResponses: newResponses
+        })
+      })
+
+      if (!response.ok) throw new Error("API error")
+
+      // Parse streaming response
+      const reader = response.body?.getReader()
+      const decoder = new TextDecoder()
+      let fullResponse = ""
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+
+          const chunk = decoder.decode(value)
+          const lines = chunk.split("\n")
+
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              try {
+                const data = JSON.parse(line.slice(6))
+                if (data.choices?.[0]?.delta?.content) {
+                  fullResponse += data.choices[0].delta.content
+                  setMessages(prev => {
+                    const updated = [...prev]
+                    if (updated[updated.length - 1]?.role === "assistant") {
+                      updated[updated.length - 1].content = fullResponse
+                    } else {
+                      updated.push({ role: "assistant", content: fullResponse })
+                    }
+                    return updated
+                  })
+                }
+              } catch (e) {
+                // Skip invalid JSON
+              }
+            }
+          }
+        }
+      }
+
+      // Update simulation stage based on response
+      if (fullResponse.includes("pausa explicativa")) {
+        setSimulationStage("pause")
+        setIsPaused(true)
+      } else if (fullResponse.includes("micro-experimento")) {
+        setSimulationStage("micro_experiment")
+        setMicroExperimentActive(true)
+      } else if (fullResponse.includes("resumen") || fullResponse.includes("cierre")) {
+        setSimulationStage("closing")
+      }
+    } catch (error) {
+      console.error("[v0] Chat coach error:", error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleRetryWithVariation = async () => {
@@ -230,9 +277,9 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
       <CardContent className="space-y-6">
         {/* Messages */}
         <div className="space-y-4 max-h-96 overflow-y-auto">
-          {messages.map((message) => (
+          {messages.map((message, idx) => (
             <div
-              key={message.id}
+              key={idx}
               className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
@@ -252,8 +299,8 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
         {/* User Input */}
         <form onSubmit={handleUserResponse} className="space-y-3">
           <Input
-            value={input}
-            onChange={handleInputChange}
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
             placeholder="Escribe tu respuesta..."
             disabled={isLoading}
             className="w-full"
@@ -262,7 +309,7 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
           <div className="flex gap-2">
             <Button
               type="submit"
-              disabled={isLoading || !input.trim()}
+              disabled={isLoading || !userInput.trim()}
               className="flex-1"
             >
               {isLoading ? "Pensando..." : "Enviar"}
