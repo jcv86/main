@@ -12,6 +12,7 @@ import { ExecutiveDashboard } from '@/components/executive-dashboard'
 import { RadarEstrategico } from '@/components/radar-estrategico-system'
 import { NoticiasFeed } from '@/components/noticias-feed-fixed'
 import { A4GamifiedTests } from '@/components/a4-gamified-tests'
+import { A4Biblioteca } from '@/components/a4-biblioteca'
 
 export default function A4Page() {
   const { user, loading } = useAuthRedirect()
@@ -123,20 +124,7 @@ export default function A4Page() {
 
           {/* Recursos Tab */}
           <TabsContent value="recursos" className="space-y-4">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold mb-2">Biblioteca de Recursos</h2>
-              <p className="text-slate-600 dark:text-slate-400">
-                100+ libros, artículos, podcasts y reportes seleccionados para tu crecimiento profesional
-              </p>
-            </div>
-            <div className="bg-slate-100 dark:bg-slate-800 rounded-lg p-12 text-center">
-              <p className="text-slate-600 dark:text-slate-400 mb-4">
-                Componente en desarrollo
-              </p>
-              <p className="text-sm text-slate-500 dark:text-slate-500">
-                Contenido curado sobre liderazgo, IA, tendencias e industrias disponible próximamente
-              </p>
-            </div>
+            <A4Biblioteca />
           </TabsContent>
         </Tabs>
       </div>
