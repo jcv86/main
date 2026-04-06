@@ -1,11 +1,5 @@
 import { NextRequest } from 'next/server'
 
-interface NewsSource {
-  name: string
-  url: string
-  category: string
-}
-
 interface AggregatedNews {
   id: string
   title: string
@@ -18,28 +12,7 @@ interface AggregatedNews {
   pubDate?: string
 }
 
-// Curated real news sources for Chilean labor market + global trends
-const newsSources: NewsSource[] = [
-  // Chilean labor market sources
-  { name: 'El Mercurio - Empleo', url: 'https://www.elmercurio.com/empleos/', category: 'Mercado Local' },
-  { name: 'La Tercera - Empleo', url: 'https://www.latercera.com/negocios/', category: 'Mercado Local' },
-  { name: 'Fundación Chile - Tendencias', url: 'https://www.fundacionchile.cl/', category: 'Mercado Local' },
-  
-  // Tech & AI global trends
-  { name: 'TechCrunch', url: 'https://techcrunch.com/tag/ai/', category: 'Tecnología' },
-  { name: 'The Verge', url: 'https://www.theverge.com/ai-artificial-intelligence', category: 'Tecnología' },
-  { name: 'Hacker News', url: 'https://news.ycombinator.com/', category: 'Tecnología' },
-  
-  // Leadership & HR
-  { name: 'McKinsey - Careers', url: 'https://www.mckinsey.com/careers', category: 'Liderazgo' },
-  { name: 'Harvard Business Review', url: 'https://hbr.org/topic/jobs', category: 'Liderazgo' },
-  
-  // Education & Skills
-  { name: 'LinkedIn Learning', url: 'https://www.linkedin.com/learning/', category: 'Educación' },
-  { name: 'Coursera', url: 'https://www.coursera.org/', category: 'Educación' }
-]
-
-// Pre-curated high-relevance news articles (fallback + seed data)
+// Pre-curated high-relevance news articles (seed + fallback)
 const curatedNews: AggregatedNews[] = [
   {
     id: 'curated-1',
@@ -109,6 +82,77 @@ const curatedNews: AggregatedNews[] = [
   }
 ]
 
+// Keywords for filtering relevance to labor market + career
+const LABOR_MARKET_KEYWORDS = [
+  'ai', 'automation', 'skills', 'jobs', 'employment', 'career', 'hiring', 'talent',
+  'salaries', 'mercado laboral', 'empleo', 'oportunidades', 'talento', 'datos',
+  'inteligencia emocional', 'liderazgo', 'certificaciones', 'startups', 'tech',
+  'engineering', 'product', 'growth', 'leadership', 'chile'
+]
+
+// Calculate relevance score based on keywords
+function calculateRelevance(title: string, description: string): number {
+  const text = (title + ' ' + description).toLowerCase()
+  let score = 0
+  
+  // Count keyword matches
+  const matches = LABOR_MARKET_KEYWORDS.filter(kw => text.includes(kw)).length
+  score = Math.min(100, matches * 15)
+  
+  // Boost recent articles
+  score += 10
+  
+  return Math.min(100, score)
+}
+
+async function fetchNewsFromAPI() {
+  try {
+    // Intenta traer de NewsAPI (requiere env var)
+    const newsApiKey = process.env.NEWS_API_KEY
+    if (!newsApiKey) return []
+    
+    const queries = [
+      'artificial intelligence jobs',
+      'market trends 2026',
+      'career development'
+    ]
+    
+    let allNews: AggregatedNews[] = []
+    
+    for (const query of queries) {
+      const response = await fetch(
+        `https://newsapi.org/v2/everything?q=${encodeURIComponent(query)}&sortBy=publishedAt&language=en&pageSize=5`,
+        {
+          headers: { 'Authorization': `Bearer ${newsApiKey}` },
+          next: { revalidate: 3600 } // Cache 1 hour
+        }
+      )
+      
+      if (!response.ok) continue
+      
+      const data = await response.json()
+      if (!data.articles) continue
+      
+      allNews.push(...data.articles.map((article: any, idx: number) => ({
+        id: `news-${query}-${idx}`,
+        title: article.title,
+        description: article.description || article.content || '',
+        category: 'Tecnología', // Default category
+        relevance: calculateRelevance(article.title, article.description || ''),
+        source: article.source.name,
+        url: article.url,
+        timestamp: new Date(article.publishedAt).toLocaleString('es-CL'),
+        pubDate: article.publishedAt
+      })))
+    }
+    
+    return allNews
+  } catch (error) {
+    console.error('[v0] NewsAPI fetch error:', error)
+    return []
+  }
+}
+
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url)
@@ -116,8 +160,17 @@ export async function GET(req: NextRequest) {
     const category = searchParams.get('category')
     const minRelevance = parseInt(searchParams.get('minRelevance') || '0')
 
-    // Filter curated news by criteria
-    let filtered = curatedNews
+    // Try to get real API data, fallback to curated
+    let allNews = await fetchNewsFromAPI()
+    if (allNews.length === 0) {
+      allNews = curatedNews
+    } else {
+      // Combine with curated for consistency
+      allNews = [...allNews, ...curatedNews]
+    }
+
+    // Filter by criteria
+    let filtered = allNews
     
     if (category && category !== 'Todas') {
       filtered = filtered.filter(n => n.category === category)
@@ -127,8 +180,15 @@ export async function GET(req: NextRequest) {
       filtered = filtered.filter(n => n.relevance >= minRelevance)
     }
 
-    // Sort by relevance and recency
-    const sorted = filtered.sort((a, b) => {
+    // Remove duplicates and sort
+    const seen = new Set<string>()
+    const unique = filtered.filter(n => {
+      if (seen.has(n.title)) return false
+      seen.add(n.title)
+      return true
+    })
+
+    const sorted = unique.sort((a, b) => {
       const relevanceDiff = (b.relevance - a.relevance)
       if (relevanceDiff !== 0) return relevanceDiff
       
@@ -144,7 +204,8 @@ export async function GET(req: NextRequest) {
         success: true,
         data: paginated,
         total: sorted.length,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        source: allNews.length > curatedNews.length ? 'mixed' : 'curated'
       }),
       {
         headers: { 'Content-Type': 'application/json' },
