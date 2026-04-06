@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -65,27 +66,39 @@ const keyInsights = [
 
 const upcomingActions = [
   {
+    id: 'tech-interview',
     title: 'Simulación de entrevista técnica',
     stage: 'A3 - Entrenamiento',
     priority: 'Alta',
-    daysLeft: 2
+    daysLeft: 2,
+    route: '/despega/a3-entrenamiento'
   },
   {
+    id: 'job-analysis',
     title: 'Análisis de vacante target',
     stage: 'A3 - Ajuste por Vacante',
     priority: 'Media',
-    daysLeft: 5
+    daysLeft: 5,
+    route: '/despega/a3-ajuste-vacante'
   },
   {
+    id: 'cv-review',
     title: 'Review de CV con coach',
     stage: 'A3 - CV ATS',
     priority: 'Alta',
-    daysLeft: 3
+    daysLeft: 3,
+    route: '/despega/a3-cv-ats'
   }
 ]
 
 export function ExecutiveDashboard() {
   const [expandedInsight, setExpandedInsight] = useState<number | null>(null)
+  const router = useRouter()
+
+  const handleActionClick = (route: string) => {
+    console.log('[v0] Navigating to:', route)
+    router.push(route)
+  }
 
   return (
     <div className="space-y-8">
@@ -170,7 +183,12 @@ export function ExecutiveDashboard() {
                       {action.stage} • {action.daysLeft} días
                     </p>
                   </div>
-                  <Button size="sm" variant="outline">
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => handleActionClick(action.route)}
+                    className="cursor-pointer hover:bg-cyan-50 dark:hover:bg-cyan-900/20"
+                  >
                     Acceder
                   </Button>
                 </div>
