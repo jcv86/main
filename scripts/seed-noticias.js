@@ -4,6 +4,11 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 const newsApiKey = process.env.NEWS_API_KEY
 
+console.log('[v0] Environment variables check:')
+console.log('[v0] NEXT_PUBLIC_SUPABASE_URL:', supabaseUrl ? 'SET' : 'NOT_SET')
+console.log('[v0] SUPABASE_SERVICE_ROLE_KEY:', supabaseServiceKey ? 'SET' : 'NOT_SET')
+console.log('[v0] NEWS_API_KEY:', newsApiKey ? 'SET (length: ' + newsApiKey.length + ')' : 'NOT_SET')
+
 if (!supabaseUrl || !supabaseServiceKey) {
   console.error('[v0] Missing Supabase environment variables')
   process.exit(1)
