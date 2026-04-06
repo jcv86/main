@@ -19,6 +19,8 @@ export async function GET(req: NextRequest) {
     const category = searchParams.get('category')
     const minRelevance = parseInt(searchParams.get('minRelevance') || '0')
 
+    console.log('[v0] /api/noticias/feed called with:', { limit, category, minRelevance })
+
     // Initialize Supabase client
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -44,14 +46,21 @@ export async function GET(req: NextRequest) {
     // Filter by category if provided
     if (category && category !== 'Todas') {
       query = query.eq('category', category)
+      console.log('[v0] Filtering by category:', category)
     }
 
     // Filter by minimum relevance if provided
     if (minRelevance > 0) {
       query = query.gte('relevance_score', minRelevance / 100)
+      console.log('[v0] Filtering by minRelevance:', minRelevance / 100)
     }
 
     const { data, error } = await query.limit(limit)
+
+    console.log('[v0] Supabase query result:', { 
+      dataCount: data?.length || 0, 
+      error: error?.message || 'none' 
+    })
 
     if (error) {
       console.error('[v0] Supabase query error:', error)
@@ -93,6 +102,8 @@ export async function GET(req: NextRequest) {
         timestamp
       }
     })
+
+    console.log('[v0] Returning noticias:', noticias.length)
 
     return new Response(
       JSON.stringify({
