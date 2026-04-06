@@ -6,11 +6,10 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ArrowLeft, Radar, TrendingUp, BookOpen, Award, Brain } from 'lucide-react'
+import { ArrowLeft, Radar, Brain, BookOpen, Award } from 'lucide-react'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { ExecutiveDashboard } from '@/components/executive-dashboard'
 import { RadarEstrategico } from '@/components/radar-estrategico-system'
-import { NoticiasFeed } from '@/components/noticias-feed-fixed'
 import { A4GamifiedTests } from '@/components/a4-gamified-tests'
 import { A4Biblioteca } from '@/components/a4-biblioteca'
 
@@ -67,14 +66,10 @@ export default function A4Page() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8 gap-1 bg-background/50">
+          <TabsList className="grid w-full grid-cols-4 mb-8 gap-1 bg-background/50">
             <TabsTrigger value="dashboard" className="text-sm">
               <Award className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Dashboard</span>
-            </TabsTrigger>
-            <TabsTrigger value="noticias" className="text-sm">
-              <TrendingUp className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Noticias</span>
             </TabsTrigger>
             <TabsTrigger value="tests" className="text-sm">
               <Brain className="w-4 h-4 mr-2" />
@@ -93,17 +88,6 @@ export default function A4Page() {
           {/* Dashboard Tab */}
           <TabsContent value="dashboard" className="space-y-4">
             <ExecutiveDashboard />
-          </TabsContent>
-
-          {/* Noticias Tab */}
-          <TabsContent value="noticias" className="space-y-4">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold mb-2">Noticias del Mercado</h2>
-              <p className="text-slate-600 dark:text-slate-400">
-                Tendencias laborales, oportunidades emergentes y contexto del mercado que afecta tu carrera
-              </p>
-            </div>
-            <NoticiasFeed />
           </TabsContent>
 
           {/* Tests Tab */}
