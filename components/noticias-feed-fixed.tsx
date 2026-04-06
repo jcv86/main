@@ -61,11 +61,22 @@ export function NoticiasFeed() {
           }
         }
         
-        // Remove duplicates by title
+        // Remove duplicates by title and URL (more robust deduplication)
         const seenTitles = new Set()
+        const seenUrls = new Set()
         noticiasData = noticiasData.filter(n => {
-          if (seenTitles.has(n.title)) return false
-          seenTitles.add(n.title)
+          // Normalize title for comparison
+          const normalizedTitle = n.title?.toLowerCase().trim() || ''
+          const normalizedUrl = n.url?.toLowerCase().trim() || ''
+          
+          // Check if title or URL already seen
+          if (seenTitles.has(normalizedTitle) || seenUrls.has(normalizedUrl)) {
+            console.log('[v0] Duplicate removed:', n.title)
+            return false
+          }
+          
+          seenTitles.add(normalizedTitle)
+          seenUrls.add(normalizedUrl)
           return true
         }).slice(0, 10)
         

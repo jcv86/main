@@ -127,30 +127,108 @@ const radarDiario: RadarDiario = {
       fuentes: ['Harvard Business Review', 'McKinsey Leadership Report 2026', 'LinkedIn Executive Network']
     },
     {
-      id: '3',
-      prioridad: 'estructural',
+      id: '4',
+      prioridad: 'tactico',
       fecha: '2026-04-06',
-      hora: '11:30 Chile',
-      titulo: 'Mercado Laboral Chileno: IA y Startups como motor',
-      traduccion: 'Chile está atrayendo inversión en tech-for-good, healthcare-tech y fintech como nunca antes.',
-      errorConsensual: 'Creer que oportunidades están solo en Silicon Valley. Hay demanda local explosiva.',
-      descontandoMercado: 'Equity en startups chilenas es 30-40% más accesible que US, pero riesgo más alto.',
-      noEncaja: 'Aún hay fuga de talento. No se ha creado masa crítica de "successful founders" locales que inspiren.',
-      incentivos: 'Gobierno chileno busca diversificar economía. Subsidios para startups y talento tech.',
+      hora: '16:10 Chile',
+      titulo: 'Certificaciones en Demanda Inmediata: ¿Cuál aprender primero?',
+      traduccion: 'AWS Solutions Architect, Google Cloud Associate y Databricks lidera demanda Q2 2026.',
+      errorConsensual: 'Pensar que un MBA es mejor que certificaciones técnicas. ROI de certificaciones es 3-4x superior.',
+      descontandoMercado: 'Personas con AWS + SCRUM ganan 25-35% más que solo SCRUM en mercado latino.',
+      noEncaja: 'Algunas empresas aún piden titulación completa y minimizan certificaciones. Aunque raro.',
+      incentivos: 'Proveedores de cursos (Coursera, Udemy, A Cloud Guru) invierten en marketing para impulsar demanda.',
       impactoTemporal: {
-        corto: '6-12 meses: Nuevas aceleradoras anuncian cohorts. Demanda talent > oferta',
-        medio: '1-2 años: Primera ola de startup exits crea "angel investor network" local',
-        largo: '3-5 años: Chile como hub regional de IA y healthtech'
+        corto: '1-3 meses: Aprender la certificación',
+        medio: '3-6 meses: Aplicar en primer proyecto',
+        largo: '6-12 meses: Diferenciador competitivo sólido en CV'
       },
-      cadenaCausal: 'Capital extranjero → Startups locales ↑ → Demanda talent ↑↑ → Salarios suben → Retención talento sube',
+      cadenaCausal: 'Skill demandado → Certificación disponible → ROI claro → Más gente estudia → Nuevas oportunidades',
       mapeoExposicion: {
-        chile: 'Directamente: oportunidades en startups, salarios en tech sube 20-30% anual',
-        global: 'Indirectamente: Chile deviene atractor de remote workers latinoamericanos',
-        personal: 'Ventana de 2-4 años para early adoption de estas oportunidades con menos competencia que en US.'
+        chile: 'Bancos chilenos adoptan cloud agresivamente. Demanda AWS/Azure en Santiago x2 en 6 meses.',
+        global: 'Competencia global por talento certificado. Quién consigue la certificación primero gana.',
+        personal: 'Inversión de $200-500 hoy en certificación = $10k-20k en salario anual adicional en 12 meses.'
       },
-      evolucionNarrativa: 'De "Chile es minería y retail" a "Chile es tech hub regional".',
-      narrativaZombie: '"No hay oportunidades en Chile, hay que irse a US" — Parcialmente desmentida.',
-      fuentes: ['StartupChile', 'El Mercurio (Negocios)', 'Endeavor Chile']
+      evolucionNarrativa: 'De "títulos universitarios = seguridad" a "habilidades demostrables = seguridad".',
+      narrativaZombie: '"Las certificaciones se devalúan rápido" — Depende del proveedor. Cloud certs siguen subiendo valor.',
+      fuentes: ['LinkedIn Jobs Report Q2 2026', 'Burning Glass Tech Skills Report', 'Computrabajo Chile']
+    },
+    {
+      id: '5',
+      prioridad: 'tactico',
+      fecha: '2026-04-05',
+      hora: '13:45 Chile',
+      titulo: 'Negociación Salarial 2026: Datos que Debes Tener',
+      traduccion: 'Profesionales que llegan con datos de mercado (Glassdoor, Levels.fyi, Computrabajo) negocian 15-20% más.',
+      errorConsensual: 'Creer que pedir más se ve "codicioso". Realidad: es preparación profesional.',
+      descontandoMercado: 'Brecha salarial género persiste: mujeres en tech ganan 12-18% menos por mismo rol en Latam.',
+      noEncaja: 'Algunas startups "no tienen presupuesto" pero dan equity. A veces funciona, a veces no.',
+      incentivos: 'Empresas prefieren no ser first-mover en salarios. Si tú negocias, ellos ahorran. Si no, ellos ganan.',
+      impactoTemporal: {
+        corto: '1 semana: Investigar mercado',
+        medio: '1 mes: Negociar oferta',
+        largo: 'Carrera: Compounded salary multiplier de 1.5-2x'
+      },
+      cadenaCausal: 'Falta de datos → Aceptas oferta baja → Tu baseline baja → Increases% también bajan → Compounding negativo',
+      mapeoExposicion: {
+        chile: 'Dev Senior en Santiago: $3500-4500 USD. Senior en SF: $8000-12000 USD. Pero cost of life ratio es 1:3-4.',
+        global: 'Salarios tech se globalizan. Remote work permite arbitraje geográfico.',
+        personal: 'Cada punto porcentual que negocias hoy = cientos de miles de pesos en lifetime earnings.'
+      },
+      evolucionNarrativa: 'De "tomar lo que ofrecen" a "negociar como profesional".',
+      narrativaZombie: '"Si pides más, no te contratan" — Falso. Es negociación normal.',
+      fuentes: ['Levels.fyi', 'Glassdoor', 'Computrabajo', 'LinkedIn Salary']
+    },
+    {
+      id: '6',
+      prioridad: 'contextual',
+      fecha: '2026-04-06',
+      hora: '10:20 Chile',
+      titulo: 'El Ciclo Energético de tu Carrera: Cuándo Cambiar de Trabajo',
+      traduccion: 'Patrones psicológicos de profesionales que crecen vs que se estancan. Timing de cambios importa más que paga.',
+      errorConsensual: 'Que más dinero = más felicidad. Realidad: challenge y crecimiento determinan satisfacción.',
+      descontandoMercado: 'Personas que cambian cada 2-3 años ganan 30-50% más en 10 años vs que se quedan en una empresa.',
+      noEncaja: 'A veces quedarse en una empresa y crecer dentro es mejor. Depende del liderazgo.',
+      incentivos: 'Tu próximo empleador evalúa "growth trajectory", no solo skills actuales. Cambios estratégicos = plus.',
+      impactoTemporal: {
+        corto: '0-6 meses en nuevo rol: Aprendizaje acelerado',
+        medio: '6-18 meses: Contribuciones visibles',
+        largo: '2-4 años: Punto de decision (¿seguir o cambiar?)'
+      },
+      cadenaCausal: 'Estancamiento percibido → Búsqueda activa → Nuevo reto → Nuevo skill set → Valor mercado sube → Leverage',
+      mapeoExposicion: {
+        chile: 'Mercado tech chileno es pequeño. Tu "permanencia" se ve como lealtad o falta de ambición.',
+        global: 'Job hopping es estándar en SV. 2-3 años = mínimo esperado.',
+        personal: 'Carrera es maratón. Cambios estratégicos (no reactivos) te mantienen en ofensiva.'
+      },
+      evolucionNarrativa: 'De "lealtad a empresa" a "lealtad a desarrollo propio".',
+      narrativaZombie: '"Cambiarse de trabajo cada 2 años se ve mal" — En tech, cambios estratégicos son esperados.',
+      fuentes: ['MIT Sloan Management Review', 'Harvard Business Review', 'LinkedIn Career Research']
+    },
+    {
+      id: '7',
+      prioridad: 'contextual',
+      fecha: '2026-04-04',
+      hora: '09:15 Chile',
+      titulo: 'Red Profesional: El Recurso Más Subestimado de tu Carrera',
+      traduccion: '70-80% de oportunidades laborales llegan por red. El otro 20% es aplicaciones online.',
+      errorConsensual: 'Que candidato más calificado gana siempre. Realidad: candidato con referral interno avanza.',
+      descontandoMercado: 'Personas con red activa reciben ofertas sin aplicar. Personas sin red compiten en pool masivo.',
+      noEncaja: 'Redes débiles a veces funcionan mejor que redes fuertes. Brokers weak ties tienen más oportunidades.',
+      incentivos: 'Si refiero a alguien y entra, yo gano reputación. Incentivo directo a crear network.',
+      impactoTemporal: {
+        corto: '0-3 meses: Construir red activa',
+        medio: '3-12 meses: Oportunidades sin aplicar',
+        largo: 'Carrera: Network = nuevo job security'
+      },
+      cadenaCausal: 'Red pequeña → Solo aplicas → Competencia masiva → Tarda más conseguir → Red crece lentamente',
+      mapeoExposicion: {
+        chile: 'Santiago: comunidad tech es 3000-5000 personas. Con red, todo el mundo se conoce o casi.',
+        global: 'LinkedIn es proxy de red. Personas con 10k+ conexiones con endorsements reciben opportunities',
+        personal: 'Construir red hoy = seguridadlaboral de mañana. Inversión compuesta más importante post-skills.'
+      },
+      evolucionNarrativa: 'De "skills = empleabilidad" a "skills + network = empleabilidad exponencial".',
+      narrativaZombie: '"El networking es superficial" — Para networking superficial, sí. Networking profundo crea oportunidades.',
+      fuentes: ['Research Mark Granovetter', 'LinkedIn Opportunity Research', 'Endeavor Chile Network Studies']
     }
   ],
   watchlist: [
