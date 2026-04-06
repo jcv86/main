@@ -6,7 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
-import { ArrowLeft, BookOpen, Play, Lock, CheckCircle2, Brain, Target } from 'lucide-react'
+import { ArrowLeft, BookOpen, Play, Lock, CheckCircle2, Brain, Target, Video } from 'lucide-react'
+import { InteractiveTrainingSession } from '@/components/interactive-training-session'
 
 const TRAINING_MODULES = [
   {
@@ -79,6 +80,7 @@ const TRAINING_MODULES = [
 export default function GuidedTrainingPage() {
   const [selectedModule, setSelectedModule] = useState<any>(null)
   const [currentLesson, setCurrentLesson] = useState(0)
+  const [showVideoSession, setShowVideoSession] = useState(false)
 
   const handleStartModule = (module: any) => {
     if (module.status !== 'locked') {
@@ -174,15 +176,47 @@ export default function GuidedTrainingPage() {
             </div>
 
             {/* Practice Section */}
-            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-6">
-              <p className="font-bold text-amber-900 dark:text-amber-200 mb-3">
-                Practica conmigo:
-              </p>
-              <p className="text-sm text-amber-800 dark:text-amber-300">
-                {currentLesson === 0 && 'Piensa en un proyecto importante que lideraste. Déjame guiarte a través de STAR.'}
-                {currentLesson === 2 && 'Ahora, construyamos la sección "Acción" de tu historia. ¿Qué fue lo específico que HICISTE tú?'}
-              </p>
-            </div>
+            {!showVideoSession ? (
+              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-6 space-y-4">
+                <p className="font-bold text-amber-900 dark:text-amber-200">
+                  Practica conmigo:
+                </p>
+                <p className="text-sm text-amber-800 dark:text-amber-300">
+                  {currentLesson === 0 && 'Piensa en un proyecto importante que lideraste. Déjame guiarte a través de STAR.'}
+                  {currentLesson === 2 && 'Ahora, construyamos la sección "Acción" de tu historia. ¿Qué fue lo específico que HICISTE tú?'}
+                </p>
+                
+                <Button
+                  onClick={() => setShowVideoSession(true)}
+                  className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+                >
+                  <Video className="w-4 h-4 mr-2" />
+                  Practicar con Video
+                </Button>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <Button
+                  onClick={() => setShowVideoSession(false)}
+                  variant="outline"
+                  className="mb-4"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Volver a la Lección
+                </Button>
+                
+                <InteractiveTrainingSession
+                  question={currentLesson === 0 
+                    ? "Cuéntame sobre un proyecto importante que lideraste. Usa STAR: Situación, Tarea, Acción (qué específicamente HICISTE), Resultado."
+                    : "Cuéntame la sección 'Acción' de tu historia. ¿Qué fue lo específico que TÚ hiciste? Sé detallado."}
+                  guidance={currentLesson === 0 
+                    ? "1. Empieza describiendo el contexto (Situación)\n2. Explica tu responsabilidad (Tarea)\n3. Detalla exactamente qué acciones tomaste (Acción - usa 'yo', 'decidí', 'implementé')\n4. Termina con el resultado medible que obtuviste\n\nRecuerda: Habla claro, mantén contacto visual con la cámara, y sé específico con números/impacto."
+                    : "Enfócate en la parte Acción:\n1. Usa verbos de acción: implementé, diseñé, lideré, resolví\n2. Sé específico - no digas 'el equipo trabajó', sino 'yo investigué X, propuse Y, implementé Z'\n3. Cuantifica si es posible (líneas de código, % de mejora, tiempo ahorrado)\n4. Muestra liderazgo o iniciativa\n\nIntenta responder en 1-2 minutos."}
+                  estimatedTime="2-3 minutos"
+                  trainingType="guided"
+                />
+              </div>
+            )}
 
             {/* Navigation */}
             <div className="flex gap-4 justify-between pt-4 border-t border-slate-200 dark:border-slate-700">
