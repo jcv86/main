@@ -1,4 +1,5 @@
 import { streamText } from 'ai'
+import { openai } from '@ai-sdk/openai'
 import { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
     Mantén respuestas breves y concisas (max 100 palabras por respuesta).`
 
     const result = streamText({
-      model: 'openai/gpt-4-turbo',
+      model: openai('gpt-4-turbo'),
       system: systemPrompt,
       messages: await import('ai').then(m => m.convertToModelMessages(messages)),
       temperature: 0.7,
