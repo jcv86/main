@@ -66,6 +66,7 @@
     "recharts": "3.1.2",
     "redis": "^5.11.0",
     "resend": "^6.10.0",
+    "rss-parser": "^3.13.0",
     "sswr": "latest",
     "swr": "^2.4.1",
     "tailwind-merge": "^2.2.0",
