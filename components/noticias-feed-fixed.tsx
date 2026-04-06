@@ -17,72 +17,38 @@ interface Noticia {
   timestamp: string
 }
 
-const mockNoticias: Noticia[] = [
-  {
-    id: '1',
-    title: 'El Futuro del Trabajo: IA y Automatización en 2026',
-    description: 'Análisis de cómo la IA está transformando los roles laborales. Empresas buscan profesionales que comprendan y trabajen con IA, no contra ella.',
-    category: 'Tecnología',
-    relevance: 95,
-    source: 'TechCrunch',
-    url: 'https://techcrunch.com/2026/04/future-of-work-ai-automation',
-    timestamp: '2 horas atrás'
-  },
-  {
-    id: '2',
-    title: 'Tendencias de Liderazgo 2026: Inteligencia Emocional + Datos',
-    description: 'Los mejores líderes ahora combinan empatía con análisis de datos. El cambio de mentalidad que necesita la próxima generación de ejecutivos.',
-    category: 'Liderazgo',
-    relevance: 88,
-    source: 'McKinsey',
-    url: 'https://mckinsey.com/leadership-2026-emotional-intelligence-data',
-    timestamp: '5 horas atrás'
-  },
-  {
-    id: '3',
-    title: 'Mercado Laboral Chileno: Crecimiento en Tech y Sostenibilidad',
-    description: 'Chile lidera en startups de IA en Latinoamérica. Demanda de roles en machine learning, prompt engineering, y compliance ESG.',
-    category: 'Mercado Local',
-    relevance: 92,
-    source: 'El Mercurio',
-    url: 'https://elmercurio.com/negocios/mercado-laboral-chile-tech-2026',
-    timestamp: '1 día atrás'
-  },
-  {
-    id: '4',
-    title: 'Certificaciones Que Importan En 2026',
-    description: 'Estudio: las certificaciones en IA y data literacy tienen 3x más valor que MBA tradicionales. El tiempo de capacitación se reduce a 3-6 meses.',
-    category: 'Educación',
-    relevance: 85,
-    source: 'LinkedIn Learning',
-    url: 'https://linkedin.com/learning/ai-certifications-2026',
-    timestamp: '2 días atrás'
-  },
-  {
-    id: '5',
-    title: 'Startups que Contratan Talento Diverso',
-    description: 'Top 20 startups chilenas contratando senior profiles con mentalidad emprendedora. Roles en product, engineering, y growth disponibles.',
-    category: 'Oportunidades',
-    relevance: 78,
-    source: 'Platanus',
-    url: 'https://platanus.network/hiring-chile-2026',
-    timestamp: '3 días atrás'
-  }
-]
-
 export function NoticiasFeed() {
   const [noticias, setNoticias] = useState<Noticia[]>([])
   const [saved, setSaved] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string>('Todas')
+
+  const categories = ['Todas', 'Tecnología', 'Mercado Local', 'Liderazgo', 'Educación', 'Oportunidades']
 
   useEffect(() => {
-    // Simulate loading from API
-    const timer = setTimeout(() => {
-      setNoticias(mockNoticias)
-      setLoading(false)
-    }, 500)
-    return () => clearTimeout(timer)
-  }, [])
+    const fetchNoticias = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const categoryParam = selectedCategory !== 'Todas' ? `&category=${selectedCategory}` : ''
+        const response = await fetch(`/api/noticias/feed?limit=10${categoryParam}&minRelevance=80`)
+        
+        if (!response.ok) throw new Error('Failed to fetch noticias')
+        
+        const result = await response.json()
+        setNoticias(result.data || [])
+      } catch (err) {
+        console.error('[v0] Error fetching noticias:', err)
+        setError('No se pudieron cargar las noticias')
+        setNoticias([])
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchNoticias()
+  }, [selectedCategory])
 
   const handleSave = (id: string) => {
     const newSaved = new Set(saved)
@@ -122,6 +88,29 @@ export function NoticiasFeed() {
 
   return (
     <div className="space-y-4">
+      {/* Category Filters */}
+      <div className="flex gap-2 flex-wrap mb-6">
+        {categories.map((cat) => (
+          <Button
+            key={cat}
+            size="sm"
+            variant={selectedCategory === cat ? 'default' : 'outline'}
+            onClick={() => setSelectedCategory(cat)}
+            className={selectedCategory === cat ? 'bg-cyan-600 hover:bg-cyan-700' : ''}
+          >
+            {cat}
+          </Button>
+        ))}
+      </div>
+
+      {/* Error State */}
+      {error && (
+        <div className="bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 p-3 rounded-lg">
+          {error}
+        </div>
+      )}
+
+      {/* News Cards */}
       {noticias.map((noticia) => (
         <Card
           key={noticia.id}
