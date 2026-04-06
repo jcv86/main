@@ -6,11 +6,12 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ArrowLeft, Radar, TrendingUp, BookOpen, Award } from 'lucide-react'
+import { ArrowLeft, Radar, TrendingUp, BookOpen, Award, Brain } from 'lucide-react'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { ExecutiveDashboard } from '@/components/executive-dashboard'
 import { RadarEstrategico } from '@/components/radar-estrategico-system'
 import { NoticiasFeed } from '@/components/noticias-feed-fixed'
+import { A4GamifiedTests } from '@/components/a4-gamified-tests'
 
 export default function A4Page() {
   const { user, loading } = useAuthRedirect()
@@ -65,7 +66,7 @@ export default function A4Page() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8 gap-1 bg-background/50">
+          <TabsList className="grid w-full grid-cols-5 mb-8 gap-1 bg-background/50">
             <TabsTrigger value="dashboard" className="text-sm">
               <Award className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Dashboard</span>
@@ -73,6 +74,10 @@ export default function A4Page() {
             <TabsTrigger value="noticias" className="text-sm">
               <TrendingUp className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Noticias</span>
+            </TabsTrigger>
+            <TabsTrigger value="tests" className="text-sm">
+              <Brain className="w-4 h-4 mr-2" />
+              <span className="hidden sm:inline">Tests</span>
             </TabsTrigger>
             <TabsTrigger value="radar" className="text-sm">
               <Radar className="w-4 h-4 mr-2" />
@@ -98,6 +103,17 @@ export default function A4Page() {
               </p>
             </div>
             <NoticiasFeed />
+          </TabsContent>
+
+          {/* Tests Tab */}
+          <TabsContent value="tests" className="space-y-4">
+            <div className="mb-6">
+              <h2 className="text-2xl font-bold mb-2">Cultura General & Tests</h2>
+              <p className="text-slate-600 dark:text-slate-400">
+                Evalúa tu conocimiento sobre historia, geografía, actualidad y cultura. Acumula puntos y desbloquea badges.
+              </p>
+            </div>
+            <A4GamifiedTests />
           </TabsContent>
 
           {/* Radar Tab */}
