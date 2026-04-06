@@ -25,7 +25,7 @@ const mockNoticias: Noticia[] = [
     category: 'Tecnología',
     relevance: 95,
     source: 'TechCrunch',
-    url: '#',
+    url: 'https://techcrunch.com/2026/04/future-of-work-ai-automation',
     timestamp: '2 horas atrás'
   },
   {
@@ -35,7 +35,7 @@ const mockNoticias: Noticia[] = [
     category: 'Liderazgo',
     relevance: 88,
     source: 'McKinsey',
-    url: '#',
+    url: 'https://mckinsey.com/leadership-2026-emotional-intelligence-data',
     timestamp: '5 horas atrás'
   },
   {
@@ -45,7 +45,7 @@ const mockNoticias: Noticia[] = [
     category: 'Mercado Local',
     relevance: 92,
     source: 'El Mercurio',
-    url: '#',
+    url: 'https://elmercurio.com/negocios/mercado-laboral-chile-tech-2026',
     timestamp: '1 día atrás'
   },
   {
@@ -55,7 +55,7 @@ const mockNoticias: Noticia[] = [
     category: 'Educación',
     relevance: 85,
     source: 'LinkedIn Learning',
-    url: '#',
+    url: 'https://linkedin.com/learning/ai-certifications-2026',
     timestamp: '2 días atrás'
   },
   {
@@ -65,7 +65,7 @@ const mockNoticias: Noticia[] = [
     category: 'Oportunidades',
     relevance: 78,
     source: 'Platanus',
-    url: '#',
+    url: 'https://platanus.network/hiring-chile-2026',
     timestamp: '3 días atrás'
   }
 ]
