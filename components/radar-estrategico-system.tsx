@@ -260,28 +260,62 @@ export function RadarEstrategico() {
       console.log('[v0] Loading fresh radar data from Supabase')
       const supabase = createClient()
       
-      // Get today's date in Chile timezone
-      const today = new Date().toISOString().split('T')[0]
-      console.log('[v0] Loading noticias for date:', today)
-      
-      // Fetch today's noticias from Supabase
+      // Fetch noticias from Supabase a4_noticias table
       const { data: noticias, error } = await supabase
-        .from('a4_gamified_tests') // Using existing table that might have insights
+        .from('a4_noticias')
         .select('*')
-        .order('created_at', { ascending: false })
-        .limit(7)
+        .eq('is_active', true)
+        .order('relevancia', { ascending: false })
+        .limit(6)
 
       if (error) {
-        console.warn('[v0] Error loading from Supabase, using default data:', error)
+        console.warn('[v0] Error loading noticias from Supabase:', error)
+        console.log('[v0] Using default hardcoded radar data')
         setLoading(false)
         return
       }
 
-      // If we got data, update radar with fresh date/time
+      console.log('[v0] Loaded', noticias?.length || 0, 'noticias from Supabase')
+
+      // If we got real noticias, map them to radar format
       if (noticias && noticias.length > 0) {
-        console.log('[v0] Loaded', noticias.length, 'items from Supabase')
+        console.log('[v0] Transforming Supabase noticias to radar format')
         
-        // Create updated radar with today's date
+        // Map real noticias to radar structure (split between estructural, tactico, contextual)
+        const estructurales = noticias.slice(0, 2).map((n: any) => ({
+          id: n.id,
+          prioridad: 'estructural',
+          fecha: n.publish_date || new Date().toISOString().split('T')[0],
+          hora: new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }),
+          titulo: n.title,
+          traduccion: n.description,
+          errorConsensual: 'A confirmar',
+          descontandoMercado: 'Análisis en curso',
+          noEncaja: 'Evaluando',
+          incentivos: 'Bajo análisis',
+          impactoTemporal: { corto: 'Inmediato', medio: 'Corto plazo', largo: 'Mediano plazo' },
+          cadenaCausal: 'Ver artículo completo',
+          mapeoExposicion: { chile: 'Local', global: 'Global', personal: 'Individual' },
+          evolucionNarrativa: n.title,
+          narrativaZombie: 'Bajo revisión',
+          fuentes: [n.source || 'Despega']
+        }))
+
+        const tacticos = noticias.slice(2, 4).map((n: any) => ({
+          ...estructurales[0],
+          prioridad: 'tactico',
+          titulo: n.title,
+          traduccion: n.description,
+        }))
+
+        const contextuales = noticias.slice(4, 6).map((n: any) => ({
+          ...estructurales[0],
+          prioridad: 'contextual',
+          titulo: n.title,
+          traduccion: n.description,
+        }))
+
+        // Create updated radar with TODAY's date and REAL noticias
         const updatedRadar = {
           ...radarDiario,
           fecha: new Date().toLocaleDateString('es-CL', { 
@@ -291,11 +325,15 @@ export function RadarEstrategico() {
             day: 'numeric'
           }),
           hora: new Date().toLocaleTimeString('es-CL', { hour: '2-digit', minute: '2-digit' }),
-          edicion: (new Date().getHours() < 14 ? 'AM' : 'PM') as "AM" | "PM"
+          edicion: (new Date().getHours() < 14 ? 'AM' : 'PM') as "AM" | "PM",
+          noticias: [...estructurales, ...tacticos, ...contextuales]
         }
         
+        console.log('[v0] Radar updated with', updatedRadar.noticias.length, 'real noticias')
         setRadarData(updatedRadar)
         setEdition(updatedRadar.edicion)
+      } else {
+        console.log('[v0] No noticias found, using default data')
       }
 
       setLoading(false)
