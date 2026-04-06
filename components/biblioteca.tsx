@@ -53,7 +53,7 @@ export function Biblioteca() {
   const loadResources = async () => {
     setLoading(true)
     try {
-      const res = await getBibliotecaResources(selectedCategory || undefined, 50)
+      const res = await getBibliotecaResources(selectedCategory || undefined, undefined, 50)
       setResources(res)
     } catch (error) {
       console.error("[v0] Error loading resources:", error)
