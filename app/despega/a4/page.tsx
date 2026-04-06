@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ArrowLeft, Radar, TrendingUp, BookOpen, Award } from 'lucide-react'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { ExecutiveDashboard } from '@/components/executive-dashboard'
+import { RadarEstrategico } from '@/components/radar-estrategico-system'
 import { NoticiasFeed } from '@/components/noticias-feed-fixed'
 
 export default function A4Page() {
@@ -101,20 +102,7 @@ export default function A4Page() {
 
           {/* Radar Tab */}
           <TabsContent value="radar" className="space-y-4">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold mb-2">Radar Estratégico</h2>
-              <p className="text-slate-600 dark:text-slate-400">
-                Análisis profundo del mercado laboral chileno: tendencias, sectores en expansión, roles demandados, salarios y ubicación geográfica.
-              </p>
-            </div>
-            <div className="bg-slate-100 dark:bg-slate-800 rounded-lg p-12 text-center">
-              <p className="text-slate-600 dark:text-slate-400 mb-4">
-                Componente en desarrollo
-              </p>
-              <p className="text-sm text-slate-500 dark:text-slate-500">
-                Análisis de 7 capas cognitivas del mercado laboral disponible próximamente
-              </p>
-            </div>
+            <RadarEstrategico />
           </TabsContent>
 
           {/* Recursos Tab */}
