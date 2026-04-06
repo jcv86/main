@@ -67,11 +67,11 @@ const keyInsights = [
 const upcomingActions = [
   {
     id: 'tech-interview',
-    title: 'Simulación de entrevista técnica',
+    title: 'Entrenamiento de entrevista técnica',
     stage: 'A3 - Entrenamiento',
     priority: 'Alta',
     daysLeft: 2,
-    route: '/despega/a3/simulations'
+    route: '/despega/a3/entrenamiento-guiado'
   },
   {
     id: 'job-analysis',
