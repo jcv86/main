@@ -23,6 +23,7 @@ const CURATED_NEWS = [
     category: 'Tecnología',
     relevance_score: 0.98,
     source: 'McKinsey',
+    url: 'https://www.mckinsey.com/capabilities/mckinsey-digital/our-insights/generative-ai-and-the-future-of-work',
     published_at: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
   },
   {
@@ -31,6 +32,7 @@ const CURATED_NEWS = [
     category: 'Mercado Local',
     relevance_score: 0.96,
     source: 'LinkedIn',
+    url: 'https://www.linkedin.com/pulse/mercado-laboral-chileno-demanda-talento-digital-2026/',
     published_at: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
   },
   {
@@ -39,6 +41,7 @@ const CURATED_NEWS = [
     category: 'Liderazgo',
     relevance_score: 0.92,
     source: 'Harvard Business Review',
+    url: 'https://hbr.org/2026/04/emotional-intelligence-in-the-age-of-ai',
     published_at: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString()
   },
   {
@@ -47,6 +50,7 @@ const CURATED_NEWS = [
     category: 'Educación',
     relevance_score: 0.88,
     source: 'Coursera',
+    url: 'https://www.coursera.org/skills/ai-literacy',
     published_at: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString()
   },
   {
@@ -55,6 +59,7 @@ const CURATED_NEWS = [
     category: 'Oportunidades',
     relevance_score: 0.84,
     source: 'Fundación Chile',
+    url: 'https://www.platanus.network/opportunities-2026',
     published_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString()
   },
   {
@@ -63,6 +68,7 @@ const CURATED_NEWS = [
     category: 'Tecnología',
     relevance_score: 0.90,
     source: 'Forbes',
+    url: 'https://www.forbes.com/sites/andrewrosssorkin/2026/04/automation-and-professional-reinvention/',
     published_at: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
   },
   {
@@ -71,6 +77,7 @@ const CURATED_NEWS = [
     category: 'Tendencias',
     relevance_score: 0.85,
     source: 'TechCrunch',
+    url: 'https://techcrunch.com/2026/04/work-from-anywhere-consolidation/',
     published_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
   },
   {
@@ -79,6 +86,7 @@ const CURATED_NEWS = [
     category: 'Educación',
     relevance_score: 0.82,
     source: 'PMI',
+    url: 'https://www.pmi.org/certifications/agile-certifications',
     published_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
   }
 ]
@@ -128,6 +136,7 @@ async function fetchFromNewsAPI() {
           category: 'Tecnología', // Default category
           relevance_score: 0.75, // Default relevance
           source: article.source?.name || 'NewsAPI',
+          url: article.url || 'https://newsapi.org',
           published_at: new Date(article.publishedAt || Date.now()).toISOString()
         })))
       } catch (err) {

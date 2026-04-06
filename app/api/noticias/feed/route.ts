@@ -8,6 +8,7 @@ interface AggregatedNews {
   category: string
   relevance: number
   source: string
+  url: string
   timestamp: string
 }
 
@@ -35,7 +36,7 @@ export async function GET(req: NextRequest) {
     // Build query
     let query = supabase
       .from('a4_noticias')
-      .select('id, title, content, relevance_score, category, published_at, source')
+      .select('id, title, content, relevance_score, category, published_at, source, url')
       .order('relevance_score', { ascending: false })
       .order('published_at', { ascending: false })
 
@@ -87,6 +88,7 @@ export async function GET(req: NextRequest) {
         category: item.category || 'General',
         relevance: Math.round((item.relevance_score || 0.5) * 100),
         source: item.source || 'Despega',
+        url: item.url || 'https://despega.cl',
         timestamp
       }
     })

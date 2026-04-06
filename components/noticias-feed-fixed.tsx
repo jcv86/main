@@ -162,7 +162,11 @@ export function NoticiasFeed() {
                 <TrendingUp className="w-3 h-3 inline mr-1" />
                 {noticia.source} • {noticia.timestamp}
               </div>
-              <Button size="sm" className="bg-cyan-600 hover:bg-cyan-700">
+              <Button 
+                size="sm" 
+                className="bg-cyan-600 hover:bg-cyan-700"
+                onClick={() => window.open(noticia.url, '_blank')}
+              >
                 Leer Más
               </Button>
             </div>
