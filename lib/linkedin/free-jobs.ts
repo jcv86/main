@@ -242,20 +242,3 @@ export async function getPersonalizedJobRecommendations() {
     return [] // Return empty array on error
   }
 }
-        description: job.description,
-        url: job.url,
-        source: job.source,
-        skills_required: job.skills_required,
-        match_score: job.match_score,
-        published_at: job.published_at,
-      }))
-    )
-
-    console.log('[v0] Generated', sortedJobs.length, 'job recommendations for user:', user.id)
-
-    return sortedJobs
-  } catch (error) {
-    console.error('[v0] Error getting job recommendations:', error)
-    throw error
-  }
-}
