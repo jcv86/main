@@ -159,12 +159,13 @@ export async function syncLinkedInProfile() {
  */
 export async function getLinkedInProfile() {
   try {
-    const user = await getCurrentUser()
+    const supabase = await createClient()
+
+    // Get current user from Supabase auth
+    const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       throw new Error('User not authenticated')
     }
-
-    const supabase = await createClient()
 
     const { data, error } = await supabase
       .from('linkedin_user_profiles')
