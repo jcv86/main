@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ArrowRight, Copy, Download, Lightbulb, MessageCircle, Briefcase, TrendingUp, CheckCircle2 } from 'lucide-react'
+import { ArrowRight, Copy, Download, Lightbulb, MessageCircle, Briefcase, TrendingUp, CheckCircle2, Sparkles } from 'lucide-react'
 import { useState } from 'react'
 
 interface A1WowReportProps {
