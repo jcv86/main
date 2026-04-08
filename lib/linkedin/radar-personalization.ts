@@ -2,11 +2,24 @@
 
 import { createClient } from '@/lib/supabase/server'
 
+// Type definition for personalization data
+interface PersonalizationDataType {
+  user_id: string
+  industry: string
+  seniority_level: string
+  headline: string
+  user_skills: string[]
+  market_trending_skills: string[]
+  skills_gap: string[]
+  total_market_jobs: number
+  relevant_companies: string[]
+}
+
 /**
  * Personalizar el Radar Estratégico basado en el perfil de LinkedIn del usuario
  * Filtra noticias por industria, skills y seniority level
  */
-export async function getPersonalizedRadarData() {
+export async function getPersonalizedRadarData(): Promise<PersonalizationDataType | null> {
   try {
     const supabase = await createClient()
     
