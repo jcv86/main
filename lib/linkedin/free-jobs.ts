@@ -199,12 +199,13 @@ function calculateMatchScore(userSkills: string[], jobSkills: string[]): number 
  */
 export async function getPersonalizedJobRecommendations() {
   try {
-    const user = await getCurrentUser()
-    if (!user) {
-      throw new Error('User not authenticated')
-    }
-
     const supabase = await createClient()
+    
+    // Get current user from Supabase auth
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return [] // Return empty array if not authenticated
+    }
 
     // Get user's LinkedIn profile with skills
     const { data: profile } = await supabase
@@ -214,7 +215,7 @@ export async function getPersonalizedJobRecommendations() {
       .single()
 
     if (!profile) {
-      throw new Error('LinkedIn profile not synced')
+      return [] // Return empty array if no profile
     }
 
     // Extract job search keywords from headline and experience
@@ -235,13 +236,12 @@ export async function getPersonalizedJobRecommendations() {
     // Sort by match score
     const sortedJobs = jobsWithScores.sort((a, b) => (b.match_score || 0) - (a.match_score || 0))
 
-    // Store in database for later reference
-    await supabase.from('linkedin_market_job_listings').insert(
-      sortedJobs.map((job) => ({
-        user_id: user.id,
-        title: job.title,
-        company: job.company,
-        location: job.location,
+    return sortedJobs.slice(0, 10) // Return top 10 matches
+  } catch (error) {
+    console.error('[v0] Error getting personalized job recommendations:', error)
+    return [] // Return empty array on error
+  }
+}
         description: job.description,
         url: job.url,
         source: job.source,
