@@ -96,12 +96,20 @@ export async function analyzeMarketTrends(limit: number = 20) {
  */
 export async function calculateSkillGap() {
   try {
-    const user = await getCurrentUser()
-    if (!user) {
-      throw new Error('User not authenticated')
-    }
-
     const supabase = await createClient()
+
+    // Get current user from Supabase auth
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      // Return empty gap data if not authenticated
+      return {
+        skills_to_learn: [],
+        current_strengths: [],
+        gap_percentage: 0,
+        market_trending_skills: [],
+      }
+    }
 
     // Get user's LinkedIn profile
     const { data: profile } = await supabase
@@ -111,18 +119,24 @@ export async function calculateSkillGap() {
       .single()
 
     if (!profile) {
-      throw new Error('LinkedIn profile not synced')
+      // Return empty gap data if no profile
+      return {
+        skills_to_learn: [],
+        current_strengths: [],
+        gap_percentage: 0,
+        market_trending_skills: [],
+      }
     }
 
     // Get market trends
     const marketData = await analyzeMarketTrends(50)
 
-    const userSkills = new Set(profile.skills?.map((s: any) => s.name.toLowerCase()) || [])
+    const userSkills = new Set((profile.skills as any[])?.map((s: any) => String(s.name).toLowerCase()) || [])
     const marketSkills = new Set(marketData.trending_skills.map((s) => s.skill.toLowerCase()))
 
     // Calculate gaps
-    const skillsToLearn = Array.from(marketSkills).filter((skill) => !userSkills.has(skill))
-    const userAdvantage = Array.from(userSkills).filter((skill) => marketSkills.has(skill))
+    const skillsToLearn: string[] = Array.from(marketSkills).filter((skill) => !userSkills.has(skill)) as string[]
+    const userAdvantage: string[] = Array.from(userSkills).filter((skill) => marketSkills.has(skill)) as string[]
 
     return {
       skills_to_learn: skillsToLearn.slice(0, 10),
@@ -132,7 +146,13 @@ export async function calculateSkillGap() {
     }
   } catch (error) {
     console.error('[v0] Error calculating skill gap:', error)
-    throw error
+    // Return empty data on error instead of throwing
+    return {
+      skills_to_learn: [],
+      current_strengths: [],
+      gap_percentage: 0,
+      market_trending_skills: [],
+    }
   }
 }
 
@@ -141,9 +161,12 @@ export async function calculateSkillGap() {
  */
 export async function getTrainingRecommendationsByMarket() {
   try {
-    const user = await getCurrentUser()
+    const supabase = await createClient()
+    
+    // Get current user from Supabase auth
+    const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
-      throw new Error('User not authenticated')
+      return []
     }
 
     const skillGap = await calculateSkillGap()
