@@ -25,6 +25,7 @@ export function JobRecommendationsCard() {
   const [jobs, setJobs] = useState<JobListing[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [hasAttemptedLoad, setHasAttemptedLoad] = useState(false)
 
   useEffect(() => {
     loadJobs()
@@ -34,11 +35,15 @@ export function JobRecommendationsCard() {
     try {
       setLoading(true)
       setError(null)
+      setHasAttemptedLoad(true)
       const recommendations = await getPersonalizedJobRecommendations()
       setJobs(recommendations)
     } catch (err) {
       console.error('[v0] Error loading job recommendations:', err)
-      setError('Failed to load job recommendations. Connect your LinkedIn profile first.')
+      // Only set error if user explicitly clicked "Try Again"
+      if (hasAttemptedLoad) {
+        setError('Failed to load recommendations. Please connect your LinkedIn profile.')
+      }
     } finally {
       setLoading(false)
     }
@@ -65,7 +70,7 @@ export function JobRecommendationsCard() {
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {error && (
+        {error && hasAttemptedLoad && (
           <div className="p-3 bg-red-100 text-red-800 rounded-lg text-sm">
             {error}
           </div>
@@ -73,7 +78,7 @@ export function JobRecommendationsCard() {
 
         {jobs.length === 0 ? (
           <div className="text-center py-6 text-slate-600">
-            <p>No job recommendations yet. Sync your LinkedIn profile to get matches.</p>
+            <p>No recommendations yet. Connect your LinkedIn profile to discover personalized opportunities.</p>
             <Button onClick={loadJobs} className="mt-4" variant="outline">
               Try Again
             </Button>

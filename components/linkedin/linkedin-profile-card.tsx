@@ -29,6 +29,7 @@ export function LinkedInProfileCard() {
   const [loading, setLoading] = useState(true)
   const [syncing, setSyncing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [hasAttemptedSync, setHasAttemptedSync] = useState(false)
 
   useEffect(() => {
     loadProfile()
@@ -41,7 +42,7 @@ export function LinkedInProfileCard() {
       setProfile(data)
     } catch (err) {
       console.error('[v0] Error loading LinkedIn profile:', err)
-      setError('Error loading LinkedIn profile')
+      // Don't set error on initial load - it's expected when no profile exists
     } finally {
       setLoading(false)
     }
@@ -51,12 +52,12 @@ export function LinkedInProfileCard() {
     try {
       setSyncing(true)
       setError(null)
+      setHasAttemptedSync(true)
       await syncLinkedInProfile()
       await loadProfile()
     } catch (err) {
       console.error('[v0] Error syncing LinkedIn:', err)
-      // Don't show error for first sync attempt - just inform user to connect
-      setError(null)
+      setError('Unable to sync. Please ensure LinkedIn OAuth is properly configured.')
     } finally {
       setSyncing(false)
     }
@@ -95,7 +96,7 @@ export function LinkedInProfileCard() {
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {error && (
+        {error && hasAttemptedSync && (
           <div className="p-3 bg-red-100 text-red-800 rounded-lg flex gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
             <span className="text-sm">{error}</span>
