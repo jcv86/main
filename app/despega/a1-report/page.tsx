@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Loader2, ArrowRight, CheckCircle2, Zap, Target, Phone, Sparkles } from 'lucide-react'
 import { PhaseTransitionHandler } from '@/components/phase-transition-handler'
 import { EnhancedInsightsGrid } from '@/components/a1-enhanced-insights-grid'
+import { A1WowReport } from '@/components/a1-wow-report'
 import { ASection, ASectionPart } from '@/components/a-section-layout'
 import { DESPEGA_PROFILES } from '@/lib/despega-profiles'
 import { StepHeader } from '@/components/step-header'
@@ -378,6 +379,22 @@ export default function A1ReportPage() {
             <p className="text-red-400 text-sm mt-2">Por favor intenta de nuevo. Si el problema persiste, contacta con soporte.</p>
           </div>
         )}
+      </ASectionPart>
+
+      {/* A1 WOW REPORT - El Reporte de Transformación */}
+      <ASectionPart title="🚀 Tu Reporte de Transformación" icon={<Sparkles />}>
+        <div className="mb-6">
+          <p className="text-slate-300 text-center text-lg mb-6">
+            Ahora que entiendes tu perfil, aquí está tu mapa de acción. Las 5 herramientas que te hacen imprescindible.
+          </p>
+        </div>
+        {profile && insights ? (
+          <A1WowReport 
+            profile={profile} 
+            insights={insights}
+            userName={user?.user_metadata?.full_name || user?.email?.split('@')[0]}
+          />
+        ) : null}
       </ASectionPart>
 
       <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
