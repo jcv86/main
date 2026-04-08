@@ -49,7 +49,7 @@ const stages = [
     icon: Zap,
     routes: [
       { label: 'Prepárate para Entrevistas', href: '/despega/a3-intro' },
-      { label: 'Simulaciones y Feedback', href: '/despega/a3-dashboard' },
+      { label: 'Entrenamientos y Feedback', href: '/despega/a3-dashboard' },
     ]
   },
   {
