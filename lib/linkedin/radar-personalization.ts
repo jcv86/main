@@ -66,11 +66,11 @@ export async function getPersonalizedRadarData() {
       industry: profile.industry || 'Technology',
       seniority_level: profile.seniority_level || 'mid-level',
       headline: profile.headline,
-      user_skills: Array.from(userSkills),
-      market_trending_skills: Array.from(trendingSkills).slice(0, 10),
-      skills_gap: skillsToLearn,
+      user_skills: Array.from(userSkills) as string[],
+      market_trending_skills: Array.from(trendingSkills).slice(0, 10) as string[],
+      skills_gap: skillsToLearn as string[],
       total_market_jobs: marketJobs?.length || 0,
-      relevant_companies: marketJobs?.map((j: any) => j.company_name).filter((v, i, a) => a.indexOf(v) === i).slice(0, 5) || [],
+      relevant_companies: (marketJobs?.map((j: any) => j.company_name).filter((v, i, a) => a.indexOf(v) === i).slice(0, 5) || []) as string[],
     }
 
     console.log('[v0] Personalization context:', {
