@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { getCurrentUser } from '@/lib/auth/session'
 
 interface MarketTrend {
   skill: string

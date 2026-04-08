@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
-import { getCurrentUser } from '@/lib/auth/session'
 
 interface GitHubJob {
   id: string
@@ -185,7 +184,7 @@ function extractSkillsFromText(text: string): string[] {
 /**
  * Calculate match score between user skills and job requirements
  */
-export function calculateMatchScore(userSkills: string[], jobSkills: string[]): number {
+function calculateMatchScore(userSkills: string[], jobSkills: string[]): number {
   if (jobSkills.length === 0) return 0
 
   const matchedSkills = userSkills.filter((skill) =>
