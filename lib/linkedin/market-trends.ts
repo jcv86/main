@@ -209,12 +209,13 @@ export async function getTrainingRecommendationsByMarket() {
  */
 export async function storeMarketInsights() {
   try {
-    const user = await getCurrentUser()
-    if (!user) {
-      throw new Error('User not authenticated')
-    }
-
     const supabase = await createClient()
+
+    // Get current user from Supabase auth
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return false // Return false if not authenticated
+    }
 
     const skillGap = await calculateSkillGap()
     const trends = await analyzeMarketTrends()
@@ -232,13 +233,14 @@ export async function storeMarketInsights() {
       )
 
     if (error) {
-      throw error
+      console.error('[v0] Error upserting market insights:', error)
+      return false
     }
 
     console.log('[v0] Market insights stored for user:', user.id)
     return true
   } catch (error) {
     console.error('[v0] Error storing market insights:', error)
-    throw error
+    return false
   }
 }
