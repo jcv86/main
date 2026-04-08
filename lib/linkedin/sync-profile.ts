@@ -33,12 +33,13 @@ interface LinkedInSkill {
  */
 export async function syncLinkedInProfile() {
   try {
-    const user = await getCurrentUser()
+    const supabase = await createClient()
+
+    // Get current user from Supabase auth
+    const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       throw new Error('User not authenticated')
     }
-
-    const supabase = await createClient()
 
     // Get user's LinkedIn access token from accounts table
     const { data: account, error: accountError } = await supabase
