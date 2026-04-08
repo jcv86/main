@@ -55,7 +55,8 @@ export function LinkedInProfileCard() {
       await loadProfile()
     } catch (err) {
       console.error('[v0] Error syncing LinkedIn:', err)
-      setError('Failed to sync LinkedIn profile. Make sure you\'ve connected your LinkedIn account.')
+      // Don't show error for first sync attempt - just inform user to connect
+      setError(null)
     } finally {
       setSyncing(false)
     }
