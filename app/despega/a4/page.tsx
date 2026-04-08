@@ -9,12 +9,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ArrowLeft, Radar, Brain, BookOpen, Award, Briefcase } from 'lucide-react'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { ExecutiveDashboard } from '@/components/executive-dashboard'
-import { RadarEstrategico } from '@/components/radar-estrategico-system'
 import { A4GamifiedTests } from '@/components/a4-gamified-tests'
 import { A4Biblioteca } from '@/components/a4-biblioteca'
 import { LinkedInProfileCard } from '@/components/linkedin/linkedin-profile-card'
 import { JobRecommendationsCard } from '@/components/linkedin/job-recommendations-card'
 import { MarketInsightsCard } from '@/components/linkedin/market-insights-card'
+import { PersonalizedRadarSystem } from '@/components/personalized-radar-system'
 
 export default function A4Page() {
   const { user, loading } = useAuthRedirect()
@@ -133,7 +133,7 @@ export default function A4Page() {
 
           {/* Radar Tab */}
           <TabsContent value="radar" className="space-y-4">
-            <RadarEstrategico />
+            <PersonalizedRadarSystem />
           </TabsContent>
 
           {/* Recursos Tab */}
