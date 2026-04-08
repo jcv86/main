@@ -12,7 +12,6 @@ const nextConfig = {
         buildDependencies: {
           config: [__filename],
         },
-        // Add fallback to disable caching on errors
         maxAge: 1000 * 60 * 60 * 24, // 24 hours
       };
     } else {
