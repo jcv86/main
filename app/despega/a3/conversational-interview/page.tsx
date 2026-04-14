@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
-import { ConversationalInterview } from '@/components/conversational-interview'
+import { ConversationalInterviewSimulator } from '@/components/conversational-interview-simulator'
 
 export default function ConversationalInterviewPage() {
   const { user, loading } = useAuthRedirect()
@@ -42,12 +42,12 @@ export default function ConversationalInterviewPage() {
               Volver al Dashboard
             </Button>
           </Link>
-          <ConversationalInterview
-            role={selectedRole}
-            industry={selectedIndustry}
-            level={selectedLevel as any}
+          <ConversationalInterviewSimulator
+            level={selectedLevel}
             onComplete={() => {
-              // Redirect to dashboard with completion
+              setSelectedLevel(null)
+              setSelectedRole(null)
+              setSelectedIndustry(null)
             }}
           />
         </div>

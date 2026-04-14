@@ -1,13 +1,15 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Mic, MicOff, Video, VideoOff, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp } from 'lucide-react'
+import { Mic, MicOff, Video, VideoOff, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp, Lightbulb, HelpCircle } from 'lucide-react'
 
 interface ConversationalInterviewSimulatorProps {
   level: 'basico' | 'intermedio' | 'avanzado'
@@ -127,6 +129,9 @@ export function ConversationalInterviewSimulator({
   level,
   onComplete
 }: ConversationalInterviewSimulatorProps) {
+  const { user } = useAuthRedirect()
+  const supabase = createClient()
+  
   const [stage, setStage] = useState<'setup' | 'question' | 'response' | 'feedback' | 'complete'>('setup')
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
   const [videoEnabled, setVideoEnabled] = useState(true)
@@ -137,40 +142,82 @@ export function ConversationalInterviewSimulator({
   const [isLoading, setIsLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [showCoachTip, setShowCoachTip] = useState(true)
+  const [recordedAudioUrl, setRecordedAudioUrl] = useState<string | null>(null)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+  const audioChunksRef = useRef<Blob[]>([])
   const questions = INTERVIEW_QUESTIONS[level]
   const currentQuestion = questions[currentQuestionIdx]
   const currentAttempts = attempts[currentQuestion.id] || []
 
-  // Initialize camera
+  // Coach tips contextuales basadas en la pregunta
+  const coachTips = {
+    behavioral: 'Usa STAR: Situación, Tarea, Acción, Resultado. Incluye números y impacto.',
+    situational: 'Sé específico con tu proceso de decisión. Muestra pensamiento estratégico.',
+    technical: 'Explica tu rol exactamente. Valida con métricas cuando sea posible.'
+  }
+
+  // Initialize camera and audio recording
   useEffect(() => {
     if (stage === 'response' && videoEnabled) {
-      initializeCamera()
-      return () => stopCamera()
+      initializeCameraAndAudio()
+      return () => stopCameraAndAudio()
     }
   }, [stage, videoEnabled])
 
-  const initializeCamera = async () => {
+  const initializeCameraAndAudio = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
-        audio: audioEnabled
+        audio: true
       })
       streamRef.current = stream
       if (videoRef.current) {
         videoRef.current.srcObject = stream
       }
+      
+      // Setup media recorder for audio
+      const mediaRecorder = new MediaRecorder(stream)
+      mediaRecorderRef.current = mediaRecorder
+      
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data)
+      }
+      
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' })
+        const url = URL.createObjectURL(audioBlob)
+        setRecordedAudioUrl(url)
+        audioChunksRef.current = []
+      }
     } catch (err) {
-      setError('No se pudo acceder a la cámara. Verifica permisos.')
-      console.error('[v0] Camera error:', err)
+      setError('No se pudo acceder a cámara/micrófono. Verifica permisos.')
+      console.error('[v0] Media error:', err)
     }
   }
 
-  const stopCamera = () => {
+  const stopCameraAndAudio = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+      mediaRecorderRef.current.stop()
+    }
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop())
+    }
+  }
+
+  const toggleRecording = () => {
+    if (!mediaRecorderRef.current) return
+
+    if (isRecording) {
+      mediaRecorderRef.current.stop()
+      setIsRecording(false)
+    } else {
+      audioChunksRef.current = []
+      mediaRecorderRef.current.start()
+      setIsRecording(true)
     }
   }
 
@@ -243,9 +290,34 @@ export function ConversationalInterviewSimulator({
     }
   }
 
-  const completeInterview = () => {
+  const completeInterview = async () => {
     const allScores = Object.values(attempts).flat().map(a => a.score)
     const averageScore = allScores.length > 0 ? Math.round(allScores.reduce((a, b) => a + b) / allScores.length) : 0
+
+    // Save to database if user is authenticated
+    if (user?.id) {
+      try {
+        const { error } = await supabase
+          .from('user_a3_simulations')
+          .insert({
+            user_id: user.id,
+            level,
+            questions_completed: questions.length,
+            total_attempts: Object.values(attempts).flat().length,
+            average_score: averageScore,
+            results: attempts,
+            completed_at: new Date().toISOString()
+          })
+        
+        if (error) {
+          console.error('[v0] Error saving simulation results:', error)
+        } else {
+          console.log('[v0] Simulation results saved successfully')
+        }
+      } catch (err) {
+        console.error('[v0] Error during save:', err)
+      }
+    }
 
     onComplete?.({
       level,
@@ -389,6 +461,65 @@ export function ConversationalInterviewSimulator({
                   {audioEnabled ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
                 </Button>
               </div>
+            </div>
+
+            {/* Coach Helper Tip */}
+            {showCoachTip && (
+              <Alert className="border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20">
+                <Lightbulb className="h-4 w-4 text-amber-600" />
+                <AlertDescription className="text-amber-900 dark:text-amber-200">
+                  <strong>Coach Tip:</strong> {coachTips[currentQuestion.category]}
+                </AlertDescription>
+              </Alert>
+            )}
+
+            {/* Recording Controls */}
+            <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-lg space-y-4">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <div className={`w-3 h-3 rounded-full ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-slate-400'}`} />
+                  <span className="text-sm font-medium">
+                    {isRecording ? 'Grabando...' : 'Listo para grabar'}
+                  </span>
+                </div>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setShowCoachTip(!showCoachTip)}
+                  className="text-xs"
+                >
+                  <HelpCircle className="w-4 h-4 mr-1" />
+                  {showCoachTip ? 'Ocultar' : 'Mostrar'} tip
+                </Button>
+              </div>
+
+              <div className="flex gap-3">
+                <Button
+                  onClick={toggleRecording}
+                  variant={isRecording ? 'destructive' : 'default'}
+                  className="flex-1"
+                  disabled={!mediaRecorderRef.current}
+                >
+                  {isRecording ? (
+                    <>
+                      <MicOff className="w-4 h-4 mr-2" />
+                      Detener Grabación
+                    </>
+                  ) : (
+                    <>
+                      <Mic className="w-4 h-4 mr-2" />
+                      Grabar Audio
+                    </>
+                  )}
+                </Button>
+              </div>
+
+              {recordedAudioUrl && (
+                <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded border border-green-300 dark:border-green-800">
+                  <p className="text-sm text-green-900 dark:text-green-200 mb-2">Audio grabado:</p>
+                  <audio src={recordedAudioUrl} controls className="w-full h-8" />
+                </div>
+              )}
             </div>
 
             {/* Response Input */}
