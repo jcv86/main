@@ -144,6 +144,8 @@ export function ConversationalInterviewSimulator({
   const [error, setError] = useState<string | null>(null)
   const [showCoachTip, setShowCoachTip] = useState(true)
   const [recordedAudioUrl, setRecordedAudioUrl] = useState<string | null>(null)
+  const [isTranscribing, setIsTranscribing] = useState(false)
+  const [transcribedText, setTranscribedText] = useState('')
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
@@ -160,7 +162,7 @@ export function ConversationalInterviewSimulator({
     technical: 'Explica tu rol exactamente. Valida con métricas cuando sea posible.'
   }
 
-  // Initialize camera and audio recording
+  // Initialize camera and audio recording - AUTO START
   useEffect(() => {
     if (stage === 'response' && videoEnabled) {
       initializeCameraAndAudio()
@@ -182,20 +184,92 @@ export function ConversationalInterviewSimulator({
       // Setup media recorder for audio
       const mediaRecorder = new MediaRecorder(stream)
       mediaRecorderRef.current = mediaRecorder
+      audioChunksRef.current = []
       
       mediaRecorder.ondataavailable = (event) => {
         audioChunksRef.current.push(event.data)
       }
       
-      mediaRecorder.onstop = () => {
+      mediaRecorder.onstop = async () => {
         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' })
         const url = URL.createObjectURL(audioBlob)
         setRecordedAudioUrl(url)
+        
+        // AUTO TRANSCRIBE using Web Speech API
+        await transcribeAudio(audioBlob)
         audioChunksRef.current = []
       }
+      
+      // AUTO START RECORDING when camera is ready
+      setTimeout(() => {
+        if (mediaRecorder.state === 'inactive') {
+          mediaRecorder.start()
+          setIsRecording(true)
+          console.log('[v0] Recording started automatically')
+        }
+      }, 500)
     } catch (err) {
       setError('No se pudo acceder a cámara/micrófono. Verifica permisos.')
       console.error('[v0] Media error:', err)
+    }
+  }
+
+  const transcribeAudio = async (audioBlob: Blob) => {
+    setIsTranscribing(true)
+    try {
+      // Using Web Speech API for client-side transcription
+      const reader = new FileReader()
+      reader.onload = async (e) => {
+        try {
+          // For production, use OpenAI Whisper API
+          // For now, we'll use the browser's Web Speech API
+          const recognition = new (window as any).webkitSpeechRecognition()
+          recognition.continuous = true
+          recognition.interimResults = true
+          recognition.language = 'es-ES'
+          
+          let transcript = ''
+          
+          recognition.onresult = (event: any) => {
+            for (let i = event.resultIndex; i < event.results.length; i++) {
+              transcript += event.results[i][0].transcript
+            }
+          }
+          
+          recognition.onerror = (event: any) => {
+            console.log('[v0] Speech recognition error:', event.error)
+            setIsTranscribing(false)
+          }
+          
+          recognition.onend = () => {
+            if (transcript.trim()) {
+              setTranscribedText(transcript)
+              setUserResponse(transcript)
+              console.log('[v0] Transcribed text:', transcript)
+            }
+            setIsTranscribing(false)
+          }
+          
+          // Start speech recognition
+          recognition.start()
+          
+          // Play the audio for recognition
+          const audio = new Audio(URL.createObjectURL(audioBlob))
+          audio.play()
+          
+          // Stop recognition after audio finishes
+          audio.onended = () => {
+            recognition.stop()
+          }
+        } catch (err) {
+          console.error('[v0] Transcription error:', err)
+          setIsTranscribing(false)
+        }
+      }
+      reader.readAsArrayBuffer(audioBlob)
+    } catch (err) {
+      console.error('[v0] Error preparing transcription:', err)
+      setIsTranscribing(false)
     }
   }
 
@@ -472,7 +546,7 @@ export function ConversationalInterviewSimulator({
 
                 {/* Recording Controls Below Video */}
                 <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-lg">
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 mb-3">
                     <Button
                       onClick={toggleRecording}
                       variant={isRecording ? 'destructive' : 'default'}
@@ -487,7 +561,7 @@ export function ConversationalInterviewSimulator({
                       ) : (
                         <>
                           <Mic className="w-5 h-5 mr-2" />
-                          Iniciar Grabación
+                          Regrabar
                         </>
                       )}
                     </Button>
@@ -500,6 +574,11 @@ export function ConversationalInterviewSimulator({
                       <RotateCcw className="w-5 h-5" />
                     </Button>
                   </div>
+                  {isTranscribing && (
+                    <p className="text-sm text-amber-600 dark:text-amber-400">
+                      Transcribiendo audio... por favor espera.
+                    </p>
+                  )}
                 </div>
 
                 {/* Audio Playback if exists */}
