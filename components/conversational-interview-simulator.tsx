@@ -544,43 +544,6 @@ export function ConversationalInterviewSimulator({
                   </div>
                 </div>
 
-                {/* Recording Controls Below Video */}
-                <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-lg">
-                  <div className="flex gap-3 mb-3">
-                    <Button
-                      onClick={toggleRecording}
-                      variant={isRecording ? 'destructive' : 'default'}
-                      className="flex-1 h-12 text-base"
-                      disabled={!mediaRecorderRef.current}
-                    >
-                      {isRecording ? (
-                        <>
-                          <MicOff className="w-5 h-5 mr-2" />
-                          Detener Grabación
-                        </>
-                      ) : (
-                        <>
-                          <Mic className="w-5 h-5 mr-2" />
-                          Regrabar
-                        </>
-                      )}
-                    </Button>
-                    <Button
-                      onClick={() => setUserResponse('')}
-                      variant="outline"
-                      className="h-12"
-                      title="Reset response"
-                    >
-                      <RotateCcw className="w-5 h-5" />
-                    </Button>
-                  </div>
-                  {isTranscribing && (
-                    <p className="text-sm text-amber-600 dark:text-amber-400">
-                      Transcribiendo audio... por favor espera.
-                    </p>
-                  )}
-                </div>
-
                 {/* Audio Playback if exists */}
                 {recordedAudioUrl && (
                   <div className="p-4 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg border border-emerald-300 dark:border-emerald-700">
@@ -629,19 +592,68 @@ export function ConversationalInterviewSimulator({
               </div>
             </div>
 
-            {/* Response Text Area */}
+            {/* Response Text Area - WITH INTEGRATED MIC */}
             <div className="space-y-3 border-t border-slate-200 dark:border-slate-700 pt-6">
-              <label className="block text-sm font-semibold text-slate-900 dark:text-white">
-                Tu respuesta (escrita o transcrita):
-              </label>
+              <div className="flex items-center justify-between mb-3">
+                <label className="text-sm font-semibold text-slate-900 dark:text-white">
+                  Tu respuesta (escrita o por voz):
+                </label>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={toggleRecording}
+                    variant={isRecording ? 'destructive' : 'outline'}
+                    size="sm"
+                    disabled={!mediaRecorderRef.current}
+                    className="gap-2 text-xs"
+                    title={isRecording ? 'Detener grabación' : 'Grabar respuesta con micrófono'}
+                  >
+                    {isRecording ? (
+                      <>
+                        <MicOff className="w-4 h-4 animate-pulse" />
+                        Grabando...
+                      </>
+                    ) : (
+                      <>
+                        <Mic className="w-4 h-4" />
+                        Usar micrófono
+                      </>
+                    )}
+                  </Button>
+                  <Button
+                    onClick={() => setUserResponse('')}
+                    variant="outline"
+                    size="sm"
+                    className="text-xs"
+                    title="Limpiar respuesta"
+                  >
+                    <RotateCcw className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+
               <textarea
                 value={userResponse}
                 onChange={(e) => setUserResponse(e.target.value)}
-                placeholder="Escribe tu respuesta aquí o transcribe lo que dijiste al grabar..."
-                className="w-full p-4 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-900 dark:text-white min-h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Escribe tu respuesta aquí o usa el micrófono para grabar y transcribir..."
+                className="w-full p-4 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-900 dark:text-white min-h-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+
+              {isTranscribing && (
+                <p className="text-xs text-amber-600 dark:text-amber-400 flex items-center gap-2">
+                  <span className="inline-block w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+                  Transcribiendo audio...
+                </p>
+              )}
+
+              {recordedAudioUrl && (
+                <div className="p-3 bg-emerald-100 dark:bg-emerald-900/30 rounded border border-emerald-300 dark:border-emerald-700">
+                  <p className="text-xs font-semibold text-emerald-900 dark:text-emerald-200 mb-2">Audio grabado:</p>
+                  <audio src={recordedAudioUrl} controls className="w-full h-8 rounded" />
+                </div>
+              )}
+
               <p className="text-xs text-slate-500 dark:text-slate-400">
-                Tip: Puedes grabar tu respuesta y luego escribirla, o escribir directamente.
+                Tip: Presiona "Usar micrófono" para grabar, la respuesta se transcribirá automáticamente. Puedes editar antes de enviar.
               </p>
             </div>
 
