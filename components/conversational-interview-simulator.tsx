@@ -194,20 +194,11 @@ export function ConversationalInterviewSimulator({
         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' })
         const url = URL.createObjectURL(audioBlob)
         setRecordedAudioUrl(url)
-        
-        // AUTO TRANSCRIBE using Web Speech API
-        await transcribeAudio(audioBlob)
         audioChunksRef.current = []
       }
       
-      // AUTO START RECORDING when camera is ready
-      setTimeout(() => {
-        if (mediaRecorder.state === 'inactive') {
-          mediaRecorder.start()
-          setIsRecording(true)
-          console.log('[v0] Recording started automatically')
-        }
-      }, 500)
+      // Camera opens but recording waits for user to press "Usar micrófono" button
+      console.log('[v0] Camera initialized, ready for user to start recording')
     } catch (err) {
       setError('No se pudo acceder a cámara/micrófono. Verifica permisos.')
       console.error('[v0] Media error:', err)
@@ -215,62 +206,9 @@ export function ConversationalInterviewSimulator({
   }
 
   const transcribeAudio = async (audioBlob: Blob) => {
-    setIsTranscribing(true)
-    try {
-      // Using Web Speech API for client-side transcription
-      const reader = new FileReader()
-      reader.onload = async (e) => {
-        try {
-          // For production, use OpenAI Whisper API
-          // For now, we'll use the browser's Web Speech API
-          const recognition = new (window as any).webkitSpeechRecognition()
-          recognition.continuous = true
-          recognition.interimResults = true
-          recognition.language = 'es-ES'
-          
-          let transcript = ''
-          
-          recognition.onresult = (event: any) => {
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-              transcript += event.results[i][0].transcript
-            }
-          }
-          
-          recognition.onerror = (event: any) => {
-            console.log('[v0] Speech recognition error:', event.error)
-            setIsTranscribing(false)
-          }
-          
-          recognition.onend = () => {
-            if (transcript.trim()) {
-              setTranscribedText(transcript)
-              setUserResponse(transcript)
-              console.log('[v0] Transcribed text:', transcript)
-            }
-            setIsTranscribing(false)
-          }
-          
-          // Start speech recognition
-          recognition.start()
-          
-          // Play the audio for recognition
-          const audio = new Audio(URL.createObjectURL(audioBlob))
-          audio.play()
-          
-          // Stop recognition after audio finishes
-          audio.onended = () => {
-            recognition.stop()
-          }
-        } catch (err) {
-          console.error('[v0] Transcription error:', err)
-          setIsTranscribing(false)
-        }
-      }
-      reader.readAsArrayBuffer(audioBlob)
-    } catch (err) {
-      console.error('[v0] Error preparing transcription:', err)
-      setIsTranscribing(false)
-    }
+    // Don't auto-transcribe. Let user manually use mic button to record and transcribe on demand.
+    // This prevents interruptions and allows user to finish speaking completely.
+    console.log('[v0] Audio blob ready for user to transcribe:', audioBlob.size, 'bytes')
   }
 
   const stopCameraAndAudio = () => {
@@ -286,12 +224,64 @@ export function ConversationalInterviewSimulator({
     if (!mediaRecorderRef.current) return
 
     if (isRecording) {
+      // Stop recording and let user finish speaking before transcribing
       mediaRecorderRef.current.stop()
       setIsRecording(false)
+      setIsTranscribing(true)
+      console.log('[v0] Recording stopped, waiting for transcription...')
     } else {
+      // Start recording fresh
       audioChunksRef.current = []
+      setUserResponse('') // Clear previous response
+      setTranscribedText('')
+      setIsTranscribing(false)
       mediaRecorderRef.current.start()
       setIsRecording(true)
+      console.log('[v0] Recording started by user')
+      
+      // Use Web Speech API for live transcription while recording
+      const recognition = new (window as any).webkitSpeechRecognition()
+      recognition.continuous = false
+      recognition.interimResults = true
+      recognition.language = 'es-ES'
+      
+      let interimTranscript = ''
+      let finalTranscript = ''
+      
+      recognition.onstart = () => {
+        console.log('[v0] Speech recognition started')
+      }
+      
+      recognition.onresult = (event: any) => {
+        interimTranscript = ''
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript + ' '
+          } else {
+            interimTranscript += transcript
+          }
+        }
+        // Show user what's being transcribed in real time
+        setUserResponse(finalTranscript + interimTranscript)
+      }
+      
+      recognition.onerror = (event: any) => {
+        console.log('[v0] Speech recognition error:', event.error)
+      }
+      
+      recognition.onend = () => {
+        if (finalTranscript.trim()) {
+          setUserResponse(finalTranscript.trim())
+          setTranscribedText(finalTranscript.trim())
+          console.log('[v0] Final transcription:', finalTranscript.trim())
+        }
+        setIsTranscribing(false)
+        setIsRecording(false)
+      }
+      
+      // Start listening
+      recognition.start()
     }
   }
 
@@ -519,7 +509,7 @@ export function ConversationalInterviewSimulator({
                   <div className="absolute top-4 left-4 flex items-center gap-2">
                     <div className={`w-3 h-3 rounded-full ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
                     <span className="text-xs font-semibold text-white bg-black/50 px-2 py-1 rounded">
-                      {isRecording ? 'GRABANDO' : 'LISTO'}
+                      {isRecording ? '🔴 GRABANDO' : '🎥 CÁMARA LISTA'}
                     </span>
                   </div>
 
