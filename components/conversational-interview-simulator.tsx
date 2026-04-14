@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Mic, MicOff, Video, VideoOff, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp, Lightbulb, HelpCircle } from 'lucide-react'
+import { Mic, MicOff, Video, VideoOff, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp, Lightbulb, HelpCircle, Loader2 } from 'lucide-react'
 
 interface ConversationalInterviewSimulatorProps {
   level: 'basico' | 'intermedio' | 'avanzado'
@@ -423,114 +423,147 @@ export function ConversationalInterviewSimulator({
 
       {/* Response Recording Stage */}
       {stage === 'response' && (
-        <Card>
+        <Card className="w-full">
           <CardHeader>
             <CardTitle>Graba tu respuesta</CardTitle>
-            <CardDescription>Mira la pregunta y responde como lo harías en una entrevista real</CardDescription>
+            <CardDescription>Mira la pregunta, mantén contacto visual con la cámara y responde como en entrevista real</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Question Display */}
-            <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-lg">
-              <p className="font-semibold text-slate-900 dark:text-white">
-                {currentQuestion.text}
-              </p>
-            </div>
+            <div className="grid lg:grid-cols-3 gap-6">
+              {/* Main Video Section - Left */}
+              <div className="lg:col-span-2 space-y-4">
+                {/* Video Preview - FULL SCREEN */}
+                <div className="relative bg-black rounded-lg overflow-hidden shadow-lg" style={{ aspectRatio: '16/9' }}>
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="w-full h-full object-cover"
+                  />
+                  {/* Recording Indicator */}
+                  <div className="absolute top-4 left-4 flex items-center gap-2">
+                    <div className={`w-3 h-3 rounded-full ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
+                    <span className="text-xs font-semibold text-white bg-black/50 px-2 py-1 rounded">
+                      {isRecording ? 'GRABANDO' : 'LISTO'}
+                    </span>
+                  </div>
 
-            {/* Video Preview */}
-            <div className="relative bg-black rounded-lg overflow-hidden" style={{ aspectRatio: '16/9' }}>
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute top-4 right-4 flex gap-2">
-                <Button
-                  size="sm"
-                  variant={videoEnabled ? 'default' : 'destructive'}
-                  onClick={() => setVideoEnabled(!videoEnabled)}
-                >
-                  {videoEnabled ? <Video className="w-4 h-4" /> : <VideoOff className="w-4 h-4" />}
-                </Button>
-                <Button
-                  size="sm"
-                  variant={audioEnabled ? 'default' : 'destructive'}
-                  onClick={() => setAudioEnabled(!audioEnabled)}
-                >
-                  {audioEnabled ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
-                </Button>
-              </div>
-            </div>
-
-            {/* Coach Helper Tip */}
-            {showCoachTip && (
-              <Alert className="border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20">
-                <Lightbulb className="h-4 w-4 text-amber-600" />
-                <AlertDescription className="text-amber-900 dark:text-amber-200">
-                  <strong>Coach Tip:</strong> {coachTips[currentQuestion.category]}
-                </AlertDescription>
-              </Alert>
-            )}
-
-            {/* Recording Controls */}
-            <div className="bg-slate-100 dark:bg-slate-800 p-6 rounded-lg space-y-4">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-2">
-                  <div className={`w-3 h-3 rounded-full ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-slate-400'}`} />
-                  <span className="text-sm font-medium">
-                    {isRecording ? 'Grabando...' : 'Listo para grabar'}
-                  </span>
+                  {/* Video Controls */}
+                  <div className="absolute top-4 right-4 flex gap-2">
+                    <Button
+                      size="sm"
+                      variant={videoEnabled ? 'default' : 'destructive'}
+                      onClick={() => setVideoEnabled(!videoEnabled)}
+                      title="Toggle video"
+                    >
+                      {videoEnabled ? <Video className="w-4 h-4" /> : <VideoOff className="w-4 h-4" />}
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant={audioEnabled ? 'default' : 'destructive'}
+                      onClick={() => setAudioEnabled(!audioEnabled)}
+                      title="Toggle audio"
+                    >
+                      {audioEnabled ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
+                    </Button>
+                  </div>
                 </div>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setShowCoachTip(!showCoachTip)}
-                  className="text-xs"
-                >
-                  <HelpCircle className="w-4 h-4 mr-1" />
-                  {showCoachTip ? 'Ocultar' : 'Mostrar'} tip
-                </Button>
-              </div>
 
-              <div className="flex gap-3">
-                <Button
-                  onClick={toggleRecording}
-                  variant={isRecording ? 'destructive' : 'default'}
-                  className="flex-1"
-                  disabled={!mediaRecorderRef.current}
-                >
-                  {isRecording ? (
-                    <>
-                      <MicOff className="w-4 h-4 mr-2" />
-                      Detener Grabación
-                    </>
-                  ) : (
-                    <>
-                      <Mic className="w-4 h-4 mr-2" />
-                      Grabar Audio
-                    </>
-                  )}
-                </Button>
-              </div>
-
-              {recordedAudioUrl && (
-                <div className="p-3 bg-green-100 dark:bg-green-900/20 rounded border border-green-300 dark:border-green-800">
-                  <p className="text-sm text-green-900 dark:text-green-200 mb-2">Audio grabado:</p>
-                  <audio src={recordedAudioUrl} controls className="w-full h-8" />
+                {/* Recording Controls Below Video */}
+                <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-lg">
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={toggleRecording}
+                      variant={isRecording ? 'destructive' : 'default'}
+                      className="flex-1 h-12 text-base"
+                      disabled={!mediaRecorderRef.current}
+                    >
+                      {isRecording ? (
+                        <>
+                          <MicOff className="w-5 h-5 mr-2" />
+                          Detener Grabación
+                        </>
+                      ) : (
+                        <>
+                          <Mic className="w-5 h-5 mr-2" />
+                          Iniciar Grabación
+                        </>
+                      )}
+                    </Button>
+                    <Button
+                      onClick={() => setUserResponse('')}
+                      variant="outline"
+                      className="h-12"
+                      title="Reset response"
+                    >
+                      <RotateCcw className="w-5 h-5" />
+                    </Button>
+                  </div>
                 </div>
-              )}
+
+                {/* Audio Playback if exists */}
+                {recordedAudioUrl && (
+                  <div className="p-4 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg border border-emerald-300 dark:border-emerald-700">
+                    <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-200 mb-3">Audio grabado:</p>
+                    <audio src={recordedAudioUrl} controls className="w-full h-10" />
+                  </div>
+                )}
+              </div>
+
+              {/* Sidebar - Right */}
+              <div className="space-y-4">
+                {/* Question Card */}
+                <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base">Pregunta</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm font-semibold text-slate-900 dark:text-white mb-2">
+                      {currentQuestion.text}
+                    </p>
+                    <p className="text-xs text-slate-600 dark:text-slate-400 italic">
+                      {currentQuestion.context}
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* Coach Tip */}
+                <Alert className="border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/30">
+                  <Lightbulb className="h-5 w-5 text-amber-600" />
+                  <AlertDescription className="text-amber-900 dark:text-amber-200 text-sm mt-2">
+                    <strong>Coach Tip:</strong>
+                    <p className="mt-1">{coachTips[currentQuestion.category]}</p>
+                  </AlertDescription>
+                </Alert>
+
+                {/* Progress */}
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-600 dark:text-slate-400">Progreso</span>
+                    <span className="font-semibold text-slate-900 dark:text-white">
+                      {currentQuestionIdx + 1}/{questions.length}
+                    </span>
+                  </div>
+                  <Progress value={((currentQuestionIdx + 1) / questions.length) * 100} className="h-2" />
+                </div>
+              </div>
             </div>
 
-            {/* Response Input */}
-            <div className="space-y-3">
-              <label className="block text-sm font-semibold">Tu respuesta (escrita o transcrita):</label>
+            {/* Response Text Area */}
+            <div className="space-y-3 border-t border-slate-200 dark:border-slate-700 pt-6">
+              <label className="block text-sm font-semibold text-slate-900 dark:text-white">
+                Tu respuesta (escrita o transcrita):
+              </label>
               <textarea
                 value={userResponse}
                 onChange={(e) => setUserResponse(e.target.value)}
-                placeholder="Escribe tu respuesta aquí (puedes grabar y transcribir)..."
-                className="w-full p-4 border rounded-lg dark:bg-slate-900 dark:border-slate-700 min-h-24"
+                placeholder="Escribe tu respuesta aquí o transcribe lo que dijiste al grabar..."
+                className="w-full p-4 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-900 dark:text-white min-h-24 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Tip: Puedes grabar tu respuesta y luego escribirla, o escribir directamente.
+              </p>
             </div>
 
             {error && (
@@ -539,14 +572,36 @@ export function ConversationalInterviewSimulator({
               </Alert>
             )}
 
-            <Button
-              onClick={handleSubmitResponse}
-              disabled={!userResponse.trim() || isLoading}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12"
-            >
-              <Send className="w-4 h-4 mr-2" />
-              Enviar Respuesta
-            </Button>
+            {/* Submit Button */}
+            <div className="flex gap-3">
+              <Button
+                onClick={() => {
+                  stopCameraAndAudio()
+                  setStage('question')
+                }}
+                variant="outline"
+                className="flex-1 h-12"
+              >
+                Atrás
+              </Button>
+              <Button
+                onClick={handleSubmitResponse}
+                disabled={!userResponse.trim() || isLoading}
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white h-12 text-base"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Procesando...
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4 mr-2" />
+                    Enviar Respuesta
+                  </>
+                )}
+              </Button>
+            </div>
           </CardContent>
         </Card>
       )}
