@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Mic, MicOff, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp, Lightbulb, HelpCircle, Loader2 } from 'lucide-react'
+import { Mic, MicOff, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp, Lightbulb, HelpCircle, Loader2, AlertTriangle } from 'lucide-react'
 
 interface ConversationalInterviewSimulatorProps {
   level: 'basico' | 'intermedio' | 'avanzado'
@@ -219,6 +219,15 @@ export function ConversationalInterviewSimulator({
       setIsLoading(true)
       setError(null)
 
+      // Validate that response is contextually relevant to the question
+      const isRelevant = await validateContextRelevance(currentQuestion.text, userResponse)
+      
+      if (!isRelevant) {
+        setError('Tu respuesta no está relacionada con la pregunta. Por favor, responde sobre el tema preguntado.')
+        setIsLoading(false)
+        return
+      }
+
       // Simulate scoring - in production would call AI API
       const score = Math.floor(Math.random() * 35 + 65) // 65-100
       const followUp = generateFollowUp(userResponse, currentQuestion)
@@ -260,6 +269,35 @@ export function ConversationalInterviewSimulator({
       console.error('[v0] Submission error:', err)
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  // Validate that user response is contextually relevant to the question
+  const validateContextRelevance = async (question: string, response: string): Promise<boolean> => {
+    try {
+      // Use OpenAI to validate context relevance
+      const apiResponse = await fetch('/api/validate-interview-response', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question,
+          response,
+          language: 'es'
+        })
+      })
+
+      if (!apiResponse.ok) {
+        console.error('[v0] Validation API error:', apiResponse.statusText)
+        // If API fails, allow the response to proceed
+        return true
+      }
+
+      const data = await apiResponse.json()
+      return data.isRelevant === true
+    } catch (err) {
+      console.error('[v0] Context validation error:', err)
+      // If validation fails, allow response to proceed to avoid blocking user
+      return true
     }
   }
 
@@ -547,8 +585,11 @@ export function ConversationalInterviewSimulator({
             </div>
 
             {error && (
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
+              <Alert variant="destructive" className="border-red-300 bg-red-50 dark:bg-red-900/20">
+                <AlertTriangle className="h-4 w-4 text-red-600" />
+                <AlertDescription className="text-red-700 dark:text-red-200 ml-2">
+                  {error}
+                </AlertDescription>
               </Alert>
             )}
 
