@@ -11,7 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Mic, MicOff, Video, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp, Lightbulb, HelpCircle, Loader2, AlertTriangle } from 'lucide-react'
+import { Mic, MicOff, Video, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp, Lightbulb, HelpCircle, Loader2, AlertTriangle, Volume2 } from 'lucide-react'
 
 interface ConversationalInterviewSimulatorProps {
   level: 'basico' | 'intermedio' | 'avanzado'
