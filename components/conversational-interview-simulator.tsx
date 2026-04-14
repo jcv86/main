@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
+import { useContextValidation } from '@/lib/hooks/use-context-validation'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -131,6 +132,7 @@ export function ConversationalInterviewSimulator({
 }: ConversationalInterviewSimulatorProps) {
   const { user } = useAuthRedirect()
   const supabase = createClient()
+  const { validateContextRelevance, isValidating, validationError, clearError } = useContextValidation()
   
   // STT Hook - usar como en C1
   const { isListening, isSupported, transcript, isFinal, startListening, stopListening, resetTranscript } = useSpeechRecognition({
@@ -217,13 +219,17 @@ export function ConversationalInterviewSimulator({
 
     try {
       setIsLoading(true)
-      setError(null)
+      clearError()
 
       // Validate that response is contextually relevant to the question
-      const isRelevant = await validateContextRelevance(currentQuestion.text, userResponse)
-      
-      if (!isRelevant) {
-        setError('Tu respuesta no está relacionada con la pregunta. Por favor, responde sobre el tema preguntado.')
+      const validation = await validateContextRelevance(
+        currentQuestion.text,
+        userResponse,
+        'conversational-interview'
+      )
+
+      if (!validation.isRelevant) {
+        setError(validation.reason || 'Tu respuesta no está relacionada con la pregunta. Por favor, responde sobre el tema preguntado.')
         setIsLoading(false)
         return
       }
@@ -269,35 +275,6 @@ export function ConversationalInterviewSimulator({
       console.error('[v0] Submission error:', err)
     } finally {
       setIsLoading(false)
-    }
-  }
-
-  // Validate that user response is contextually relevant to the question
-  const validateContextRelevance = async (question: string, response: string): Promise<boolean> => {
-    try {
-      // Use OpenAI to validate context relevance
-      const apiResponse = await fetch('/api/validate-interview-response', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          question,
-          response,
-          language: 'es'
-        })
-      })
-
-      if (!apiResponse.ok) {
-        console.error('[v0] Validation API error:', apiResponse.statusText)
-        // If API fails, allow the response to proceed
-        return true
-      }
-
-      const data = await apiResponse.json()
-      return data.isRelevant === true
-    } catch (err) {
-      console.error('[v0] Context validation error:', err)
-      // If validation fails, allow response to proceed to avoid blocking user
-      return true
     }
   }
 

@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { useContextValidation } from '@/lib/hooks/use-context-validation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { Mic, MicOff, Video, VideoOff, RotateCcw, Send, Pause, Play, AlertCircle } from 'lucide-react'
+import { Mic, MicOff, Video, VideoOff, RotateCcw, Send, Pause, Play, AlertCircle, AlertTriangle } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 
 interface ConversationalInterviewProps {
@@ -39,6 +40,7 @@ export function ConversationalInterview({
   level,
   onComplete
 }: ConversationalInterviewProps) {
+  const { validateContextRelevance, validationError, clearError } = useContextValidation()
   const [stage, setStage] = useState<'setup' | 'interview' | 'feedback'>('setup')
   const [videoEnabled, setVideoEnabled] = useState(true)
   const [audioEnabled, setAudioEnabled] = useState(true)
@@ -103,7 +105,24 @@ export function ConversationalInterview({
 
     try {
       setIsLoading(true)
-      setError(null)
+      clearError()
+
+      // Get the current question text for context validation
+      const currentQuestion = INTERVIEW_QUESTIONS[level][currentQuestionIdx]?.replace('{role}', role) || ''
+
+      // Validate that response is contextually relevant to the question
+      const validation = await validateContextRelevance(
+        currentQuestion,
+        userInput,
+        'a3-conversational-interview'
+      )
+
+      if (!validation.isRelevant) {
+        setError(validation.reason || 'Tu respuesta no está relacionada con la pregunta. Por favor, responde sobre el tema preguntado.')
+        setIsLoading(false)
+        return
+      }
+
       const newResponses = [...userResponses, userInput]
       setUserResponses(newResponses)
       setUserInput('')
@@ -285,9 +304,9 @@ export function ConversationalInterview({
 
         {/* Error */}
         {error && (
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{error}</AlertDescription>
+          <Alert variant="destructive" className="border-red-300 bg-red-50 dark:bg-red-900/20">
+            <AlertTriangle className="h-4 w-4 text-red-600" />
+            <AlertDescription className="text-red-700 dark:text-red-200 ml-2">{error}</AlertDescription>
           </Alert>
         )}
 
