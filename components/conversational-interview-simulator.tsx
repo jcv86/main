@@ -430,20 +430,12 @@ export function ConversationalInterviewSimulator({
                   />
                   {/* Recording Indicator */}
                   <div className="absolute top-4 left-4 flex items-center gap-2">
-                    <div className={`w-3 h-3 rounded-full ${isRecording ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
+                    <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
                     <span className="text-xs font-semibold text-white bg-black/50 px-2 py-1 rounded">
-                      {isRecording ? '🔴 GRABANDO' : '🎥 CÁMARA LISTA'}
+                      {isListening ? '🔴 GRABANDO' : '🎥 CÁMARA LISTA'}
                     </span>
                   </div>
                 </div>
-
-                {/* Audio Playback if exists */}
-                {recordedAudioUrl && (
-                  <div className="p-4 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg border border-emerald-300 dark:border-emerald-700">
-                    <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-200 mb-3">Audio grabado:</p>
-                    <audio src={recordedAudioUrl} controls className="w-full h-10" />
-                  </div>
-                )}
               </div>
 
               {/* Sidebar - Right */}
