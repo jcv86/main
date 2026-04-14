@@ -74,7 +74,7 @@ export function useSpeechRecognition(options: UseSpeechRecognitionOptions = {}) 
 
         // Set new silence timer - stop after 2 seconds of silence
         silenceTimerRef.current = setTimeout(() => {
-          if (recognitionRef.current && isListening) {
+          if (recognitionRef.current) {
             recognitionRef.current.stop()
           }
         }, silenceTimeout)

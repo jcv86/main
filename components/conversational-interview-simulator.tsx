@@ -137,7 +137,7 @@ export function ConversationalInterviewSimulator({
   const { isListening, isSupported, transcript, isFinal, startListening, stopListening, resetTranscript } = useSpeechRecognition({
     language: 'es-ES',
     continuous: false,
-    interimResults: true,
+    interimResults: false, // Changed from true - only get final results
     silenceTimeout: 2000
   })
   
@@ -171,9 +171,9 @@ export function ConversationalInterviewSimulator({
     if (transcript && isFinal && transcript !== lastTranscriptRef.current && stage === 'response') {
       lastTranscriptRef.current = transcript
       setUserResponse(transcript)
-      console.log('[v0] STT Final transcript:', transcript)
       // Reset for next recording
       resetTranscript()
+      lastTranscriptRef.current = ''
     }
   }, [transcript, isFinal, stage, resetTranscript])
 
@@ -547,13 +547,6 @@ export function ConversationalInterviewSimulator({
                 <p className="text-xs text-red-600 dark:text-red-400 flex items-center gap-2 font-semibold">
                   <span className="inline-block w-2 h-2 bg-red-500 rounded-full animate-pulse" />
                   Escuchando... habla ahora
-                </p>
-              )}
-
-              {transcript && !isFinal && (
-                <p className="text-xs text-amber-600 dark:text-amber-400 flex items-center gap-2">
-                  <span className="inline-block w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
-                  Transcribiendo: "{transcript}"
                 </p>
               )}
 
