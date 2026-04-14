@@ -3,14 +3,13 @@
 import { useState, useRef, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
-import { useSpeechRecognition } from '@/lib/hooks/use-speech-recognition'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Mic, MicOff, Video, VideoOff, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp, Lightbulb, HelpCircle, Loader2, Volume2 } from 'lucide-react'
+import { Mic, MicOff, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp, Lightbulb, HelpCircle, Loader2 } from 'lucide-react'
 
 interface ConversationalInterviewSimulatorProps {
   level: 'basico' | 'intermedio' | 'avanzado'
