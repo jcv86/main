@@ -512,26 +512,6 @@ export function ConversationalInterviewSimulator({
                       {isRecording ? '🔴 GRABANDO' : '🎥 CÁMARA LISTA'}
                     </span>
                   </div>
-
-                  {/* Video Controls */}
-                  <div className="absolute top-4 right-4 flex gap-2">
-                    <Button
-                      size="sm"
-                      variant={videoEnabled ? 'default' : 'destructive'}
-                      onClick={() => setVideoEnabled(!videoEnabled)}
-                      title="Toggle video"
-                    >
-                      {videoEnabled ? <Video className="w-4 h-4" /> : <VideoOff className="w-4 h-4" />}
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant={audioEnabled ? 'default' : 'destructive'}
-                      onClick={() => setAudioEnabled(!audioEnabled)}
-                      title="Toggle audio"
-                    >
-                      {audioEnabled ? <Mic className="w-4 h-4" /> : <MicOff className="w-4 h-4" />}
-                    </Button>
-                  </div>
                 </div>
 
                 {/* Audio Playback if exists */}
