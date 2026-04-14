@@ -3,13 +3,14 @@
 import { useState, useRef, useEffect } from 'react'
 import { createClient } from '@/lib/supabase/client'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
+import { useSpeechRecognition } from '@/lib/hooks/use-speech-recognition'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Mic, MicOff, Video, VideoOff, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp, Lightbulb, HelpCircle, Loader2 } from 'lucide-react'
+import { Mic, MicOff, Video, VideoOff, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp, Lightbulb, HelpCircle, Loader2, Volume2 } from 'lucide-react'
 
 interface ConversationalInterviewSimulatorProps {
   level: 'basico' | 'intermedio' | 'avanzado'
@@ -132,25 +133,28 @@ export function ConversationalInterviewSimulator({
   const { user } = useAuthRedirect()
   const supabase = createClient()
   
+  // STT Hook - usar como en C1
+  const { isListening, isSupported, transcript, isFinal, startListening, stopListening, resetTranscript } = useSpeechRecognition({
+    language: 'es-ES',
+    continuous: false,
+    interimResults: true,
+    silenceTimeout: 2000
+  })
+  
   const [stage, setStage] = useState<'setup' | 'question' | 'response' | 'feedback' | 'complete'>('setup')
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
   const [videoEnabled, setVideoEnabled] = useState(true)
-  const [audioEnabled, setAudioEnabled] = useState(true)
-  const [isRecording, setIsRecording] = useState(false)
   const [userResponse, setUserResponse] = useState('')
   const [attempts, setAttempts] = useState<Record<string, AttemptResult[]>>({})
   const [isLoading, setIsLoading] = useState(false)
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showCoachTip, setShowCoachTip] = useState(true)
-  const [recordedAudioUrl, setRecordedAudioUrl] = useState<string | null>(null)
-  const [isTranscribing, setIsTranscribing] = useState(false)
-  const [transcribedText, setTranscribedText] = useState('')
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
-  const audioChunksRef = useRef<Blob[]>([])
+  const lastTranscriptRef = useRef<string>('')
+  
   const questions = INTERVIEW_QUESTIONS[level]
   const currentQuestion = questions[currentQuestionIdx]
   const currentAttempts = attempts[currentQuestion.id] || []
@@ -162,126 +166,45 @@ export function ConversationalInterviewSimulator({
     technical: 'Explica tu rol exactamente. Valida con métricas cuando sea posible.'
   }
 
-  // Initialize camera and audio recording - AUTO START
+  // Handle speech recognition results like C1
+  useEffect(() => {
+    if (transcript && isFinal && transcript !== lastTranscriptRef.current && stage === 'response') {
+      lastTranscriptRef.current = transcript
+      setUserResponse(transcript)
+      console.log('[v0] STT Final transcript:', transcript)
+      // Reset for next recording
+      resetTranscript()
+    }
+  }, [transcript, isFinal, stage, resetTranscript])
+
+  // Initialize camera only
   useEffect(() => {
     if (stage === 'response' && videoEnabled) {
-      initializeCameraAndAudio()
-      return () => stopCameraAndAudio()
+      initializeCamera()
+      return () => stopCamera()
     }
   }, [stage, videoEnabled])
 
-  const initializeCameraAndAudio = async () => {
+  const initializeCamera = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
-        audio: true
+        audio: false // Audio handled by Web Speech API, not MediaRecorder
       })
       streamRef.current = stream
       if (videoRef.current) {
         videoRef.current.srcObject = stream
       }
-      
-      // Setup media recorder for audio
-      const mediaRecorder = new MediaRecorder(stream)
-      mediaRecorderRef.current = mediaRecorder
-      audioChunksRef.current = []
-      
-      mediaRecorder.ondataavailable = (event) => {
-        audioChunksRef.current.push(event.data)
-      }
-      
-      mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' })
-        const url = URL.createObjectURL(audioBlob)
-        setRecordedAudioUrl(url)
-        audioChunksRef.current = []
-      }
-      
-      // Camera opens but recording waits for user to press "Usar micrófono" button
-      console.log('[v0] Camera initialized, ready for user to start recording')
+      console.log('[v0] Camera initialized, ready for user to start STT')
     } catch (err) {
-      setError('No se pudo acceder a cámara/micrófono. Verifica permisos.')
-      console.error('[v0] Media error:', err)
+      setError('No se pudo acceder a la cámara. Verifica permisos.')
+      console.error('[v0] Camera error:', err)
     }
   }
 
-  const transcribeAudio = async (audioBlob: Blob) => {
-    // Don't auto-transcribe. Let user manually use mic button to record and transcribe on demand.
-    // This prevents interruptions and allows user to finish speaking completely.
-    console.log('[v0] Audio blob ready for user to transcribe:', audioBlob.size, 'bytes')
-  }
-
-  const stopCameraAndAudio = () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
-      mediaRecorderRef.current.stop()
-    }
+  const stopCamera = () => {
     if (streamRef.current) {
       streamRef.current.getTracks().forEach(track => track.stop())
-    }
-  }
-
-  const toggleRecording = () => {
-    if (!mediaRecorderRef.current) return
-
-    if (isRecording) {
-      // Stop recording and let user finish speaking before transcribing
-      mediaRecorderRef.current.stop()
-      setIsRecording(false)
-      setIsTranscribing(true)
-      console.log('[v0] Recording stopped, waiting for transcription...')
-    } else {
-      // Start recording fresh
-      audioChunksRef.current = []
-      setUserResponse('') // Clear previous response
-      setTranscribedText('')
-      setIsTranscribing(false)
-      mediaRecorderRef.current.start()
-      setIsRecording(true)
-      console.log('[v0] Recording started by user')
-      
-      // Use Web Speech API for live transcription while recording
-      const recognition = new (window as any).webkitSpeechRecognition()
-      recognition.continuous = false
-      recognition.interimResults = true
-      recognition.language = 'es-ES'
-      
-      let interimTranscript = ''
-      let finalTranscript = ''
-      
-      recognition.onstart = () => {
-        console.log('[v0] Speech recognition started')
-      }
-      
-      recognition.onresult = (event: any) => {
-        interimTranscript = ''
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          const transcript = event.results[i][0].transcript
-          if (event.results[i].isFinal) {
-            finalTranscript += transcript + ' '
-          } else {
-            interimTranscript += transcript
-          }
-        }
-        // Show user what's being transcribed in real time
-        setUserResponse(finalTranscript + interimTranscript)
-      }
-      
-      recognition.onerror = (event: any) => {
-        console.log('[v0] Speech recognition error:', event.error)
-      }
-      
-      recognition.onend = () => {
-        if (finalTranscript.trim()) {
-          setUserResponse(finalTranscript.trim())
-          setTranscribedText(finalTranscript.trim())
-          console.log('[v0] Final transcription:', finalTranscript.trim())
-        }
-        setIsTranscribing(false)
-        setIsRecording(false)
-      }
-      
-      // Start listening
-      recognition.start()
     }
   }
 
@@ -569,35 +492,47 @@ export function ConversationalInterviewSimulator({
                   Tu respuesta (escrita o por voz):
                 </label>
                 <div className="flex gap-2">
-                  <Button
-                    onClick={toggleRecording}
-                    variant={isRecording ? 'destructive' : 'outline'}
-                    size="sm"
-                    disabled={!mediaRecorderRef.current}
-                    className="gap-2 text-xs"
-                    title={isRecording ? 'Detener grabación' : 'Grabar respuesta con micrófono'}
-                  >
-                    {isRecording ? (
-                      <>
-                        <MicOff className="w-4 h-4 animate-pulse" />
-                        Grabando...
-                      </>
-                    ) : (
-                      <>
-                        <Mic className="w-4 h-4" />
-                        Usar micrófono
-                      </>
-                    )}
-                  </Button>
-                  <Button
-                    onClick={() => setUserResponse('')}
-                    variant="outline"
-                    size="sm"
-                    className="text-xs"
-                    title="Limpiar respuesta"
-                  >
-                    <RotateCcw className="w-4 h-4" />
-                  </Button>
+                  {!isSupported ? (
+                    <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
+                      <Volume2 className="w-4 h-4" />
+                      Micrófono no disponible
+                    </div>
+                  ) : (
+                    <>
+                      <Button
+                        onClick={isListening ? stopListening : startListening}
+                        variant={isListening ? 'destructive' : 'outline'}
+                        size="sm"
+                        className="gap-2 text-xs"
+                        title={isListening ? 'Detener grabación' : 'Grabar respuesta con micrófono'}
+                      >
+                        {isListening ? (
+                          <>
+                            <MicOff className="w-4 h-4 animate-pulse" />
+                            Grabando...
+                          </>
+                        ) : (
+                          <>
+                            <Mic className="w-4 h-4" />
+                            Usar micrófono
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          setUserResponse('')
+                          resetTranscript()
+                          lastTranscriptRef.current = ''
+                        }}
+                        variant="outline"
+                        size="sm"
+                        className="text-xs"
+                        title="Limpiar respuesta"
+                      >
+                        <RotateCcw className="w-4 h-4" />
+                      </Button>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -608,18 +543,18 @@ export function ConversationalInterviewSimulator({
                 className="w-full p-4 border border-slate-300 dark:border-slate-600 rounded-lg dark:bg-slate-900 dark:text-white min-h-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
 
-              {isTranscribing && (
-                <p className="text-xs text-amber-600 dark:text-amber-400 flex items-center gap-2">
-                  <span className="inline-block w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
-                  Transcribiendo audio...
+              {isListening && (
+                <p className="text-xs text-red-600 dark:text-red-400 flex items-center gap-2 font-semibold">
+                  <span className="inline-block w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                  Escuchando... habla ahora
                 </p>
               )}
 
-              {recordedAudioUrl && (
-                <div className="p-3 bg-emerald-100 dark:bg-emerald-900/30 rounded border border-emerald-300 dark:border-emerald-700">
-                  <p className="text-xs font-semibold text-emerald-900 dark:text-emerald-200 mb-2">Audio grabado:</p>
-                  <audio src={recordedAudioUrl} controls className="w-full h-8 rounded" />
-                </div>
+              {transcript && !isFinal && (
+                <p className="text-xs text-amber-600 dark:text-amber-400 flex items-center gap-2">
+                  <span className="inline-block w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
+                  Transcribiendo: "{transcript}"
+                </p>
               )}
 
               <p className="text-xs text-slate-500 dark:text-slate-400">
@@ -637,7 +572,8 @@ export function ConversationalInterviewSimulator({
             <div className="flex gap-3">
               <Button
                 onClick={() => {
-                  stopCameraAndAudio()
+                  stopCamera()
+                  stopListening()
                   setStage('question')
                 }}
                 variant="outline"
