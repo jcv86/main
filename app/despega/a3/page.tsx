@@ -9,8 +9,10 @@ import { useCoach } from '@/contexts/coach-context'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { A3ProgressTracker } from '@/components/a3-progress-tracker'
+import { A3TrainingLevels } from '@/components/a3-training-levels'
 import Link from 'next/link'
-import { Target, Zap, Brain, Video, Award, TrendingUp, ArrowRight, BarChart3, MessageCircle } from 'lucide-react'
+import { Target, Zap, Brain, Video, Award, TrendingUp, ArrowRight, BarChart3, MessageCircle, Lightbulb, CheckCircle2 } from 'lucide-react'
 import { useV1Analytics } from '@/lib/v1-analytics/use-v1-analytics'
 
 export default function A3Page() {
@@ -215,140 +217,109 @@ export default function A3Page() {
           </Card>
         </div>
 
-        {/* Main Training Options */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Diagnosis Card - Now ENTREVISTA 0 */}
-          <Card className="border-2 border-purple-200 dark:border-purple-800 hover:shadow-lg transition md:col-span-2">
+      {/* PROGRESS SECTION - NEW */}
+        {user?.id && (
+          <>
+            <div>
+              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Tu Progreso</h2>
+              <p className="text-slate-600 dark:text-slate-400">Monitorea tu desarrollo y mejora continua</p>
+            </div>
+            <A3ProgressTracker userId={user.id} level="basico" />
+          </>
+        )}
+
+        {/* TRAINING LEVELS SECTION */}
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Módulo de Entrevistas</h2>
+          <p className="text-slate-600 dark:text-slate-400 mb-6">
+            Progresa a través de tres niveles de dificultad. Completa cada uno antes de avanzar al siguiente.
+          </p>
+        </div>
+        {user?.id && <A3TrainingLevels userProgress={a3Progress?.levelProgress} />}
+
+        {/* Diagnosis Card - Entrevista 0 */}
+        <Card className="border-2 border-purple-200 dark:border-purple-800 hover:shadow-lg transition">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Brain className="w-5 h-5 text-purple-600" />
+              Entrevista 0: Tu Diagnóstico
+            </CardTitle>
+            <CardDescription>
+              Baseline de preparación profesional
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-slate-600 dark:text-slate-400">
+              Antes de entrenar, conoce tu punto de partida. Evaluamos luz, fondo, audio, postura, presencia y comunicación.
+            </p>
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+              {['Luz', 'Fondo', 'Audio', 'Postura', 'Presencia', 'Lenguaje'].map((item) => (
+                <div key={item} className="p-2 bg-purple-50 dark:bg-purple-900/20 rounded text-center">
+                  <p className="text-xs font-semibold text-purple-900 dark:text-purple-300">{item}</p>
+                </div>
+              ))}
+            </div>
+            <Link href="/despega/a3/entrevista-0" className="block">
+              <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                Comenzar Diagnóstico <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        {/* Resources Section */}
+        <div className="grid md:grid-cols-2 gap-6">
+          <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Brain className="w-5 h-5 text-purple-600" />
-                Entrevista 0: Tu Punto de Partida
+              <CardTitle className="text-lg flex items-center gap-2">
+                <Lightbulb className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                Tips Profesionales
               </CardTitle>
-              <CardDescription>
-                Diagnóstico de preparación profesional integral
-              </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Antes de entrenar entrevistas, necesitamos tu baseline: ¿Cómo te ves? ¿Suenas seguro? ¿Tu fondo dice algo sobre ti? 
-                ¿Tu postura comunica presencia? Entrevista 0 calibra estos elementos.
-              </p>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-                <div className="p-2 bg-purple-50 dark:bg-purple-900/20 rounded text-center">
-                  <p className="text-xs font-semibold text-purple-900 dark:text-purple-300">Luz</p>
-                </div>
-                <div className="p-2 bg-indigo-50 dark:bg-indigo-900/20 rounded text-center">
-                  <p className="text-xs font-semibold text-indigo-900 dark:text-indigo-300">Fondo</p>
-                </div>
-                <div className="p-2 bg-blue-50 dark:bg-blue-900/20 rounded text-center">
-                  <p className="text-xs font-semibold text-blue-900 dark:text-blue-300">Audio</p>
-                </div>
-                <div className="p-2 bg-cyan-50 dark:bg-cyan-900/20 rounded text-center">
-                  <p className="text-xs font-semibold text-cyan-900 dark:text-cyan-300">Postura</p>
-                </div>
-                <div className="p-2 bg-teal-50 dark:bg-teal-900/20 rounded text-center">
-                  <p className="text-xs font-semibold text-teal-900 dark:text-teal-300">Presencia</p>
-                </div>
+            <CardContent className="space-y-3">
+              <div className="flex gap-3">
+                <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-1" />
+                <p className="text-sm text-slate-600 dark:text-slate-400">Usa el método STAR: Situación, Tarea, Acción, Resultado</p>
               </div>
-              <Link href="/despega/a3/entrevista-0" className="block">
-                <Button className="w-full bg-purple-600 hover:bg-purple-700">
-                  Comenzar Entrevista 0 <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          {/* Interview Training Card - Now emphasizing progression */}
-          <Card className="border-2 border-indigo-200 dark:border-indigo-800 hover:shadow-lg transition md:col-span-2">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Video className="w-5 h-5 text-indigo-600" />
-                Entrenamientos: 4 Niveles Progresivos
-              </CardTitle>
-              <CardDescription>
-                De básico a maestría: guiada → estructurada → desafiante → bajo presión
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Después de Entrevista 0, avanzas en 4 niveles de dificultad. Cada uno te prepara para situaciones más reales.
-              </p>
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 p-2 bg-green-50 dark:bg-green-900/20 rounded">
-                  <span className="text-lg font-bold text-green-600">▸</span>
-                  <span className="text-sm font-semibold text-green-900 dark:text-green-300">Guiada: Preguntas claras, respuestas estructuradas</span>
-                </div>
-                <div className="flex items-center gap-2 p-2 bg-yellow-50 dark:bg-yellow-900/20 rounded">
-                  <span className="text-lg font-bold text-yellow-600">▸▸</span>
-                  <span className="text-sm font-semibold text-yellow-900 dark:text-yellow-300">Estructurada: Preguntas más complejas</span>
-                </div>
-                <div className="flex items-center gap-2 p-2 bg-orange-50 dark:bg-orange-900/20 rounded">
-                  <span className="text-lg font-bold text-orange-600">▸▸▸</span>
-                  <span className="text-sm font-semibold text-orange-900 dark:text-orange-300">Desafiante: Preguntas inesperadas, casos</span>
-                </div>
-                <div className="flex items-center gap-2 p-2 bg-red-50 dark:bg-red-900/20 rounded">
-                  <span className="text-lg font-bold text-red-600">▸▸▸▸</span>
-                  <span className="text-sm font-semibold text-red-900 dark:text-red-300">Maestría: Bajo presión, tiempo límite, jurado</span>
-                </div>
+              <div className="flex gap-3">
+                <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-1" />
+                <p className="text-sm text-slate-600 dark:text-slate-400">Practica frente a espejo antes de cada nivel</p>
               </div>
-              <Link href="/despega/a3/simulations" className="block">
-                <Button className="w-full bg-indigo-600 hover:bg-indigo-700">
-                  Ir a Entrenamientos <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
+              <div className="flex gap-3">
+                <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-1" />
+                <p className="text-sm text-slate-600 dark:text-slate-400">Registra tus respuestas para auto-análisis</p>
+              </div>
+              <div className="flex gap-3">
+                <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0 mt-1" />
+                <p className="text-sm text-slate-600 dark:text-slate-400">Revisa retroalimentación después de cada intento</p>
+              </div>
             </CardContent>
           </Card>
 
-          {/* Behavioral Analysis Card */}
-          <Card className="border-2 border-blue-200 dark:border-blue-800 hover:shadow-lg transition">
+          <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-blue-600" />
-                Análisis Multimodal
+              <CardTitle className="text-lg flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                Tu Empleabilidad
               </CardTitle>
-              <CardDescription>
-                Visual, voz, y lenguaje corporal
-              </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="p-4 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20 rounded-lg">
+                <p className="text-3xl font-bold text-emerald-700 dark:text-emerald-300">
+                  {a3Progress?.employability_score || 'Iniciar'}
+                </p>
+                <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">Score de empleabilidad actual</p>
+              </div>
               <p className="text-sm text-slate-600 dark:text-slate-400">
-                Feedback detallado sobre postura, contacto visual, tono de voz, gestos, y coherencia emocional.
+                Tu score aumenta con cada sesión completada y cada mejora de feedback implementada.
               </p>
-              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
-                <li>✓ Detección de microexpresiones</li>
-                <li>✓ Análisis de confianza y coherencia</li>
-                <li>✓ Recomendaciones específicas</li>
-              </ul>
-              <Link href="/despega/a3/analisis-multimodal" className="block">
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">
-                  Análisis Multimodal <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
             </CardContent>
           </Card>
-
-          {/* Entrenamiento Guiado Card */}
-          <Card className="border-2 border-rose-200 dark:border-rose-800 hover:shadow-lg transition">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Award className="w-5 h-5 text-rose-600" />
-                Entrenamiento Guiado
-              </CardTitle>
-              <CardDescription>
-                Práctica estructurada con mentor IA
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Sesiones paso a paso con un mentor IA que te guía, explica qué mejorar, y práctica contigo.
-              </p>
-              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
-                <li>✓ Módulos temáticos (STAR, Técnicas, Negociación)</li>
-                <li>✓ Explicación de mejores prácticas</li>
-                <li>✓ Práctica repetida con retroalimentación</li>
-              </ul>
-              <Link href="/despega/a3/entrenamiento-guiado" className="block">
-                <Button className="w-full bg-rose-600 hover:bg-rose-700">
+        </div>
+      </div>
+    </div>
+  )
+}
                   Entrenamiento Guiado <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </Link>
