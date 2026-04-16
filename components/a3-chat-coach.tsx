@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { useContextValidation } from "@/lib/hooks/use-context-validation"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -16,6 +17,7 @@ interface A3ChatCoachProps {
 type SimulationStage = "initial" | "exploring" | "pause" | "micro_experiment" | "closing"
 
 export function A3ChatCoach({ scenarioId, onComplete }: A3ChatCoachProps) {
+  const { validateContextRelevance, validationError, clearError } = useContextValidation()
   const [simulationStage, setSimulationStage] = useState<SimulationStage>("initial")
   const [responseHistory, setResponseHistory] = useState<string[]>([])
   const [isPaused, setIsPaused] = useState(false)
@@ -25,6 +27,7 @@ export function A3ChatCoach({ scenarioId, onComplete }: A3ChatCoachProps) {
   const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([])
   const [userInput, setUserInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -48,6 +51,22 @@ export function A3ChatCoach({ scenarioId, onComplete }: A3ChatCoachProps) {
 
     try {
       setIsLoading(true)
+      clearError()
+
+      // Validate that response is contextually relevant to the simulation scenario
+      const scenarioContext = `Simulación: ${scenarioId}. Stage: ${simulationStage}. El usuario debe proporcionar respuestas relevantes al escenario de simulación.`
+      const validation = await validateContextRelevance(
+        scenarioContext,
+        userInput,
+        'a3-chat-coach'
+      )
+
+      if (!validation.isRelevant) {
+        setError(validation.reason || 'Tu respuesta no está relacionada con la simulación. Por favor, responde sobre el escenario propuesto.')
+        setIsLoading(false)
+        return
+      }
+
       const newResponses = [...responseHistory, userInput]
       setResponseHistory(newResponses)
 
@@ -296,6 +315,13 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
 
         {/* User Input */}
         <form onSubmit={handleUserResponse} className="space-y-3">
+          {error && (
+            <Alert variant="destructive" className="border-red-300 bg-red-50 dark:bg-red-900/20">
+              <AlertTriangle className="h-4 w-4 text-red-600" />
+              <AlertDescription className="text-red-700 dark:text-red-200 ml-2">{error}</AlertDescription>
+            </Alert>
+          )}
+
           <Input
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}

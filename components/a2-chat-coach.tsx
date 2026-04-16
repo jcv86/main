@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { useContextValidation } from "@/lib/hooks/use-context-validation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { MessageCircle, Send, Loader, AlertCircle } from "lucide-react"
+import { MessageCircle, Send, Loader, AlertCircle, AlertTriangle } from "lucide-react"
 
 interface A2ChatCoachProps {
   a1Pattern: string
@@ -20,10 +21,12 @@ export function A2ChatCoach({
   variantContexts = [],
   internalTensions = [],
 }: A2ChatCoachProps) {
+  const { validateContextRelevance, validationError, clearError } = useContextValidation()
   const [messages, setMessages] = useState<Array<{ role: "user" | "coach"; content: string; type?: string }>>([])
   const [input, setInput] = useState("")
   const [loading, setLoading] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const supabase = createClient()
 
   const scrollToBottom = () => {
@@ -41,11 +44,28 @@ export function A2ChatCoach({
     e.preventDefault()
     if (!input.trim() || loading) return
 
-    // Add user message
-    const userMessage = input.trim()
-    setMessages((prev) => [...prev, { role: "user", content: userMessage }])
-    setInput("")
-    setLoading(true)
+    try {
+      setLoading(true)
+      clearError()
+
+      // Validate that response is contextually relevant to A1 pattern and A2 context
+      const coachContext = `A1 Pattern: ${a1Pattern}. Variant Contexts: ${variantContexts.join(', ')}. Internal Tensions: ${internalTensions.join(', ')}. La respuesta debe ser relevante al patrón A1 y contextos mencionados.`
+      const validation = await validateContextRelevance(
+        coachContext,
+        input,
+        'a2-chat-coach'
+      )
+
+      if (!validation.isRelevant) {
+        setError(validation.reason || 'Tu respuesta no está relacionada con tu patrón A1 o contexto A2. Por favor, profundiza en ello.')
+        setLoading(false)
+        return
+      }
+
+      // Add user message
+      const userMessage = input.trim()
+      setMessages((prev) => [...prev, { role: "user", content: userMessage }])
+      setInput("")
 
     try {
       const response = await fetch("/api/despega/a2-coach", {
@@ -188,6 +208,14 @@ export function A2ChatCoach({
             A2 expande tu comprensión, no etiqueta. Tus respuestas son tuyas.
           </AlertDescription>
         </Alert>
+
+        {/* Context Validation Error */}
+        {error && (
+          <Alert variant="destructive" className="border-red-300 bg-red-50 dark:bg-red-900/20">
+            <AlertTriangle className="h-4 w-4 text-red-600" />
+            <AlertDescription className="text-red-700 dark:text-red-200 ml-2">{error}</AlertDescription>
+          </Alert>
+        )}
 
         {/* Input Form */}
         <form onSubmit={handleSendMessage} className="flex gap-2">

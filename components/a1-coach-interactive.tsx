@@ -1,13 +1,15 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { useContextValidation } from "@/lib/hooks/use-context-validation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Send, Sparkles, Loader } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Send, Sparkles, Loader, AlertTriangle } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 
 interface Message {
@@ -26,10 +28,12 @@ interface A1CoachProps {
 }
 
 export function A1Coach({ a1Results, pilarActive, missionsCompleted, missionsTotal }: A1CoachProps) {
+  const { validateContextRelevance, validationError, clearError } = useContextValidation()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [sessionId, setSessionId] = useState("")
+  const [error, setError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -67,16 +71,36 @@ He revisado tu diagnóstico A1 y tengo algunas recomendaciones personalizadas pa
   const handleSendMessage = async () => {
     if (!input.trim()) return
 
-    const userMessage: Message = {
-      id: Math.random().toString(),
-      content: input,
-      sender: "user",
-      timestamp: new Date(),
-    }
+    try {
+      clearError()
+      
+      // Validate that response is contextually relevant to A1 diagnosis and pilar
+      const pilarName = pilarActive === "energia" ? "Energía" :
+                        pilarActive === "enfoque" ? "Enfoque" :
+                        pilarActive === "relaciones" ? "Relaciones" : "Plan Ejecutivo"
+      const coachContext = `Usuario está trabajando en el pilar de ${pilarName}. Sus resultados A1 indican: ${JSON.stringify(a1Results).substring(0, 200)}. La respuesta debe ser relevante a su diagnóstico y pilar.`
+      
+      const validation = await validateContextRelevance(
+        coachContext,
+        input,
+        'a1-coach-interactive'
+      )
 
-    setMessages(prev => [...prev, userMessage])
-    setInput("")
-    setIsLoading(true)
+      if (!validation.isRelevant) {
+        setError(validation.reason || 'Tu respuesta no está relacionada con tu diagnóstico A1 o el pilar que estás trabajando. Por favor, profundiza en ello.')
+        return
+      }
+
+      const userMessage: Message = {
+        id: Math.random().toString(),
+        content: input,
+        sender: "user",
+        timestamp: new Date(),
+      }
+
+      setMessages(prev => [...prev, userMessage])
+      setInput("")
+      setIsLoading(true)
 
     try {
       // Call AI coach endpoint
@@ -180,6 +204,13 @@ He revisado tu diagnóstico A1 y tengo algunas recomendaciones personalizadas pa
       </ScrollArea>
 
       <div className="border-t p-4 space-y-2">
+        {error && (
+          <Alert variant="destructive" className="border-red-300 bg-red-50 dark:bg-red-900/20">
+            <AlertTriangle className="h-4 w-4 text-red-600" />
+            <AlertDescription className="text-red-700 dark:text-red-200 ml-2">{error}</AlertDescription>
+          </Alert>
+        )}
+
         <Textarea
           placeholder="Pregunta sobre tu progreso, desafíos, o cualquier cosa..."
           value={input}
