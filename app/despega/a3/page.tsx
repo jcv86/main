@@ -320,43 +320,6 @@ export default function A3Page() {
     </div>
   )
 }
-                <li>✓ Extrae información de A1 y A2</li>
-                <li>✓ Múltiples formatos exportables</li>
-                <li>✓ Optimizado para ATS</li>
-              </ul>
-              <Link href="/despega/a3/cv-ats" className="block">
-                <Button className="w-full bg-cyan-600 hover:bg-cyan-700">
-                  Mi CV ATS <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          {/* Ajuste por Vacante Card */}
-          <Card className="border-2 border-teal-200 dark:border-teal-800 hover:shadow-lg transition">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-teal-600" />
-                Ajuste por Vacante
-              </CardTitle>
-              <CardDescription>
-                Personaliza CV y respuestas por oferta
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Pega una oferta de trabajo y obtén: CV ajustado, respuestas personalizadas, y simulación específica.
-              </p>
-              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
-                <li>✓ Análisis de JD</li>
-                <li>✓ Mapeo de skills vs vacante</li>
-                <li>✓ CV y respuestas personalizadas</li>
-              </ul>
-              <Link href="/despega/a3/ajuste-por-vacante" className="block">
-                <Button className="w-full bg-teal-600 hover:bg-teal-700">
-                  Ajustar a Vacante <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
             </CardContent>
           </Card>
 
