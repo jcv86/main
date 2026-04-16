@@ -71,7 +71,6 @@ export function A2ChatCoach({
       setMessages((prev) => [...prev, { role: "user", content: userMessage }])
       setInput("")
 
-    try {
       const response = await fetch("/api/despega/a2-coach", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -100,11 +99,6 @@ export function A2ChatCoach({
           type: data.type,
         },
       ])
-
-      // Show coherence warnings if needed
-      if (!data.coherenceCheck.isValid) {
-        console.warn("A2 Coach coherence warning:", data.coherenceCheck)
-      }
     } catch (error) {
       console.error("Error sending message:", error)
       setMessages((prev) => [
