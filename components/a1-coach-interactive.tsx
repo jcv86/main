@@ -102,7 +102,6 @@ He revisado tu diagnóstico A1 y tengo algunas recomendaciones personalizadas pa
       setInput("")
       setIsLoading(true)
 
-    try {
       // Call AI coach endpoint
       const response = await fetch("/api/ai-coach", {
         method: "POST",
