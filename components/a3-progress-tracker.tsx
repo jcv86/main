@@ -74,11 +74,11 @@ export function A3ProgressTracker({ userId, level }: A3ProgressTrackerProps) {
 
       const strengthAreas = Array.from(
         new Set(attempts.flatMap(a => a.feedback?.strengths || []))
-      ).slice(0, 4)
+      ).slice(0, 4) as string[]
 
       const improvementAreas = Array.from(
         new Set(attempts.flatMap(a => a.feedback?.improvements || []))
-      ).slice(0, 4)
+      ).slice(0, 4) as string[]
 
       setProgress({
         totalAttempts: attempts.length,
