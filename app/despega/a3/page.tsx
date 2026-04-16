@@ -320,28 +320,6 @@ export default function A3Page() {
     </div>
   )
 }
-                  Entrenamiento Guiado <ArrowRight className="ml-2 w-4 h-4" />
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-
-          {/* CV ATS Card */}
-          <Card className="border-2 border-cyan-200 dark:border-cyan-800 hover:shadow-lg transition">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-cyan-600" />
-                CV ATS Optimizado
-              </CardTitle>
-              <CardDescription>
-                Tu CV según tu desempeño DTC
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-slate-600 dark:text-slate-400">
-                Construido automáticamente según lo que demostraste en DTC. Formatos: estándar, ATS, y actualizable según vacantes.
-              </p>
-              <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
                 <li>✓ Extrae información de A1 y A2</li>
                 <li>✓ Múltiples formatos exportables</li>
                 <li>✓ Optimizado para ATS</li>

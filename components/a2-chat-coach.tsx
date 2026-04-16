@@ -37,6 +37,10 @@ export function A2ChatCoach({
   }
 
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
     scrollToBottom()
   }, [messages])
 
@@ -118,7 +122,7 @@ export function A2ChatCoach({
   if (!mounted) return null
 
   return (
-    <div className="w-full flex flex-col h-full">
+    <Card className="w-full flex flex-col h-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <MessageCircle className="w-5 h-5 text-blue-600" />
@@ -236,6 +240,6 @@ export function A2ChatCoach({
           </Button>
         </form>
       </CardContent>
-    </div>
+    </Card>
   )
 }
