@@ -141,7 +141,7 @@ export default function A4ResultadosPage() {
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {insightCards.map((card) => (
-              <Card key={card.key} className={`bg-background`}
+              <Card key={card.key} className={`bg-background`}>
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>`}

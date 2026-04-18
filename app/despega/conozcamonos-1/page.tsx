@@ -225,7 +225,7 @@ export default function Conozcamonos1Page() {
                   <div key={option} className="space-y-2">
                     <button
                       onClick={() => handleAnswer(option)}
-                      className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${`}
+                      className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${
                         isSelected
                           ? 'border-purple bg-purple/10'
                           : 'border-border hover:border-border/80'

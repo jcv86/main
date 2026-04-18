@@ -173,7 +173,7 @@ export default function CycleCompletionPage() {
                 <div className="font-semibold">A2</div>
                 <div className="text-xs">{a2Route ? 'Completo' : 'Pendiente'}</div>
               </div>
-              <div className={`p-2 rounded ${a3Progress?.sessions_completed`} > 0 ? 'bg-green/50/20' : 'bg-muted/50/20'}`}>
+              <div className={`p-2 rounded ${a3Progress?.sessions_completed > 0 ? 'bg-green/50/20' : 'bg-muted/50/20'}`}>
                 <div className="font-semibold">A3</div>
                 <div className="text-xs">{a3Progress?.sessions_completed > 0 ? `${a3Progress.sessions_completed} sesiones` : 'Comenzar'}</div>
               </div>

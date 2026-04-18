@@ -632,7 +632,6 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                         : test.status === "testing"
                           ? "border-blue/20 bg-blue/5 shadow-lg"
                           : "border-muted/20"}`}
-                  }`}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-3">
@@ -646,7 +645,6 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                                 : test.status === "testing"
                                   ? "bg-blue/10"
                                   : "bg-muted/10"
-                          }`}
                           }`}
                         >
                           <IconComponent className="h-5 w-5" />
