@@ -90,7 +90,7 @@ export default function OnboardingIntereses({ onComplete }: { onComplete: (prefe
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue/5 to-purple-50 flex items-center justify-center p-4">
       <Card className="w-full max-w-3xl">
         <CardHeader>
           <Progress value={progress} className="mb-4" />
@@ -108,7 +108,7 @@ export default function OnboardingIntereses({ onComplete }: { onComplete: (prefe
                 <Card
                   key={area.id}
                   className={`cursor-pointer transition-all ${
-                    selectedAreas.has(area.id) ? "border-blue-500 bg-blue-50" : "hover:border-gray-300"
+                    selectedAreas.has(area.id) ? "border-blue/50 bg-blue/5" : "hover:border-gray-300"
                   }`}
                   onClick={() => toggleArea(area.id)}
                 >
@@ -122,7 +122,7 @@ export default function OnboardingIntereses({ onComplete }: { onComplete: (prefe
                 </Card>
               ))}
               {selectedAreas.size < 3 && (
-                <p className="text-sm text-amber-600">Selecciona al menos 3 áreas para continuar</p>
+                <p className="text-sm text-yellow">Selecciona al menos 3 áreas para continuar</p>
               )}
             </div>
           )}
@@ -151,9 +151,9 @@ export default function OnboardingIntereses({ onComplete }: { onComplete: (prefe
 
           {step === 3 && (
             <div className="space-y-4">
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="bg-green/5 border border-green/20 rounded-lg p-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <Check className="h-5 w-5 text-green-600" />
+                  <Check className="h-5 w-5 text-green" />
                   <h4 className="font-semibold text-green-900">Configuración completa</h4>
                 </div>
                 <p className="text-sm text-green-700">
@@ -164,7 +164,7 @@ export default function OnboardingIntereses({ onComplete }: { onComplete: (prefe
                 <h4 className="font-medium mb-2">Tus áreas de interés:</h4>
                 <div className="flex flex-wrap gap-2">
                   {Array.from(selectedAreas).map((area) => (
-                    <span key={area} className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm capitalize">
+                    <span key={area} className="px-3 py-1 bg-blue/10 text-blue-800 rounded-full text-sm capitalize">
                       {area}
                     </span>
                   ))}

@@ -6,9 +6,9 @@ export default function OnePagerClient() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header - Print-friendly */}
-      <header className="bg-gradient-to-r from-purple-600 to-blue-600 text-white py-8 no-print">
+      <header className="bg-gradient-to-r from-purple to-blue text-white py-8 no-print">
         <div className="container mx-auto px-4 max-w-5xl flex items-center justify-between">
-          <Link href="/" className="text-lg font-semibold hover:text-purple-100">
+          <Link href="/" className="text-lg font-semibold hover:text-purple/10">
             ← Volver al Inicio
           </Link>
           <button
@@ -24,9 +24,9 @@ export default function OnePagerClient() {
       <main className="container mx-auto px-4 py-8 max-w-5xl">
         <div className="bg-white">
           {/* Header Section */}
-          <div className="border-b-4 border-purple-600 pb-6 mb-6">
+          <div className="border-b-4 border-purple pb-6 mb-6">
             <h1 className="text-5xl font-bold mb-2 text-gray-900">Despega Tu Carrera</h1>
-            <p className="text-2xl text-purple-600 font-semibold mb-4">
+            <p className="text-2xl text-purple font-semibold mb-4">
               Plataforma de Desarrollo Profesional Impulsada por IA para América Latina
             </p>
             <div className="flex flex-wrap gap-4 text-sm">
@@ -73,14 +73,14 @@ export default function OnePagerClient() {
 
               {/* The Solution */}
               <section>
-                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-purple-500 pl-3">
+                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-purple/50 pl-3">
                   Nuestra Solución
                 </h2>
                 <p className="text-sm text-gray-700 mb-3">
                   Plataforma todo-en-uno impulsada por IA combinando pruebas psicométricas validadas científicamente,
                   contenido de clase mundial y orientación personalizada - accesible para todos.
                 </p>
-                <div className="bg-purple-50 rounded-lg p-4 border border-purple-100">
+                <div className="bg-purple/5 rounded-lg p-4 border border-purple/10">
                   <div className="grid grid-cols-3 gap-3 text-center text-xs">
                     <div>
                       <div className="text-2xl mb-1">🧠</div>
@@ -103,7 +103,7 @@ export default function OnePagerClient() {
 
               {/* Key Features */}
               <section>
-                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-blue-500 pl-3">
+                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-blue/50 pl-3">
                   Características Principales
                 </h2>
                 <ul className="space-y-2 text-sm text-gray-700">
@@ -159,9 +159,9 @@ export default function OnePagerClient() {
                 <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-emerald-500 pl-3">
                   Oportunidad de Mercado
                 </h2>
-                <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-100 mb-3">
+                <div className="bg-green/5 rounded-lg p-4 border border-emerald-100 mb-3">
                   <div className="text-center mb-3">
-                    <div className="text-3xl font-bold text-emerald-600">$65B+</div>
+                    <div className="text-3xl font-bold text-green">$65B+</div>
                     <div className="text-xs text-gray-600">Mercado de Desarrollo Profesional en LATAM</div>
                   </div>
                   <div className="grid grid-cols-2 gap-3 text-xs text-gray-700">
@@ -183,23 +183,23 @@ export default function OnePagerClient() {
 
               {/* Business Model */}
               <section>
-                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-blue-500 pl-3">
+                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-blue/50 pl-3">
                   Modelo de Negocio
                 </h2>
                 <div className="grid grid-cols-3 gap-2 text-xs">
-                  <div className="bg-purple-50 rounded p-3 border border-purple-100">
+                  <div className="bg-purple/5 rounded p-3 border border-purple/10">
                     <div className="font-bold text-gray-900 mb-1">Freemium</div>
-                    <div className="text-2xl font-bold text-purple-600 mb-1">$0</div>
+                    <div className="text-2xl font-bold text-purple mb-1">$0</div>
                     <div className="text-gray-600">Todas las pruebas + biblioteca + IA básica</div>
                   </div>
-                  <div className="bg-blue-50 rounded p-3 border border-blue-100">
+                  <div className="bg-blue/5 rounded p-3 border border-blue/10">
                     <div className="font-bold text-gray-900 mb-1">Premium</div>
-                    <div className="text-2xl font-bold text-blue-600 mb-1">$29/mes</div>
+                    <div className="text-2xl font-bold text-blue mb-1">$29/mes</div>
                     <div className="text-gray-600">IA ilimitada + análisis avanzados</div>
                   </div>
-                  <div className="bg-emerald-50 rounded p-3 border border-emerald-100">
+                  <div className="bg-green/5 rounded p-3 border border-emerald-100">
                     <div className="font-bold text-gray-900 mb-1">Enterprise</div>
-                    <div className="text-2xl font-bold text-emerald-600 mb-1">Personalizado</div>
+                    <div className="text-2xl font-bold text-green mb-1">Personalizado</div>
                     <div className="text-gray-600">Tableros de equipo + integración con HR</div>
                   </div>
                 </div>
@@ -236,20 +236,20 @@ export default function OnePagerClient() {
 
               {/* Roadmap */}
               <section>
-                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-purple-500 pl-3">Roadmap</h2>
+                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-purple/50 pl-3">Roadmap</h2>
                 <div className="space-y-2 text-xs">
                   <div className="flex items-start gap-2">
-                    <span className="font-bold text-purple-600 min-w-[80px]">Q1 2026:</span>
+                    <span className="font-bold text-purple min-w-[80px]">Q1 2026:</span>
                     <span className="text-gray-700">Lanzamiento público, 1K usuarios en 3 meses</span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="font-bold text-blue-600 min-w-[80px]">Q2-Q4 2026:</span>
+                    <span className="font-bold text-blue min-w-[80px]">Q2-Q4 2026:</span>
                     <span className="text-gray-700">
                       Suscripción Premium, aplicaciones móviles, B2B empresarial, 10K usuarios
                     </span>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="font-bold text-emerald-600 min-w-[80px]">2027:</span>
+                    <span className="font-bold text-green min-w-[80px]">2027:</span>
                     <span className="text-gray-700">
                       Expansión en LATAM (ARG, PER, COL, MEX), 100K usuarios, $2M ARR
                     </span>
@@ -259,7 +259,7 @@ export default function OnePagerClient() {
 
               {/* Metrics */}
               <section>
-                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-blue-500 pl-3">
+                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-blue/50 pl-3">
                   Métricas de Plataforma
                 </h2>
                 <div className="grid grid-cols-2 gap-2 text-xs">
@@ -293,14 +293,14 @@ export default function OnePagerClient() {
                 <div className="space-y-3 text-sm">
                   <div>
                     <div className="font-bold text-gray-900">Joaquin Covarrubias</div>
-                    <div className="text-purple-600 text-xs">Fundador & CEO</div>
+                    <div className="text-purple text-xs">Fundador & CEO</div>
                     <div className="text-gray-600 text-xs">
                       Estrategia de negocio, investigación de mercado, financiamiento
                     </div>
                   </div>
                   <div>
                     <div className="font-bold text-gray-900">Travis Comber</div>
-                    <div className="text-blue-600 text-xs">CTO & Desarrollador Líder</div>
+                    <div className="text-blue text-xs">CTO & Desarrollador Líder</div>
                     <div className="text-gray-600 text-xs">Desarrollo completo de la plataforma desde cero</div>
                   </div>
                 </div>
@@ -332,11 +332,11 @@ export default function OnePagerClient() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-gray-600">Estado de la Plataforma:</span>
-                    <span className="font-bold text-green-600">✓ Completo</span>
+                    <span className="font-bold text-green">✓ Completo</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Objetivo de Lanzamiento:</span>
-                    <span className="font-bold text-purple-600">Q1 2026</span>
+                    <span className="font-bold text-purple">Q1 2026</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Mercado Objetivo:</span>
@@ -348,7 +348,7 @@ export default function OnePagerClient() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">Objetivo de 12 Meses:</span>
-                    <span className="font-bold text-emerald-600">$500K ARR</span>
+                    <span className="font-bold text-green">$500K ARR</span>
                   </div>
                 </div>
               </section>

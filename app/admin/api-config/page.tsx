@@ -31,8 +31,8 @@ export default function ApiConfigPage() {
             </AlertDescription>
           </Alert>
         ) : (
-          <Alert className="border-green-500 bg-green-50">
-            <CheckCircle2 className="h-4 w-4 text-green-600" />
+          <Alert className="border-green-500 bg-green/5">
+            <CheckCircle2 className="h-4 w-4 text-green" />
             <AlertTitle className="text-green-800">Sistema Configurado Correctamente</AlertTitle>
             <AlertDescription className="text-green-700">
               Todas las variables de entorno necesarias están configuradas y listas para usar.
@@ -192,7 +192,7 @@ export default function ApiConfigPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-blue/20 bg-blue/5">
           <CardHeader>
             <CardTitle className="text-base">Próximos Pasos</CardTitle>
           </CardHeader>
@@ -204,7 +204,7 @@ export default function ApiConfigPage() {
                   Obtén una clave de API de OpenAI en{" "}
                   <a
                     href="https://platform.openai.com/api-keys"
-                    className="text-blue-600 underline"
+                    className="text-blue underline"
                     target="_blank"
                     rel="noreferrer noopener"
                   >
@@ -225,7 +225,7 @@ export default function ApiConfigPage() {
                   <span>✓</span>
                   <p>
                     Ejecuta el script 249 para habilitar soporte de vectores:{" "}
-                    <code className="bg-blue-100 px-2 py-1 rounded">scripts/249-add-embeddings-support.sql</code>
+                    <code className="bg-blue/10 px-2 py-1 rounded">scripts/249-add-embeddings-support.sql</code>
                   </p>
                 </div>
                 <div className="flex gap-2">

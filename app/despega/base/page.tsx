@@ -26,7 +26,7 @@ const CATEGORIAS_BASE = [
     description: "Conocimiento que marca la diferencia",
     icon: Globe,
     color: "bg-blue/50",
-    lightColor: "bg-blue-100",
+    lightColor: "bg-blue/10",
     textColor: "text-blue-800",
   },
   {
@@ -34,7 +34,7 @@ const CATEGORIAS_BASE = [
     name: "Lecturas Recomendadas",
     description: "Libros y artículos clave",
     icon: BookOpen,
-    color: "bg-green-500",
+    color: "bg-green/50",
     lightColor: "bg-green-100",
     textColor: "text-green-800",
   },
@@ -44,8 +44,8 @@ const CATEGORIAS_BASE = [
     description: "Lo que viene en tu industria",
     icon: TrendingUp,
     color: "bg-purple/50",
-    lightColor: "bg-purple-100",
-    textColor: "text-purple-800",
+    lightColor: "bg-purple/10",
+    textColor: "text-purple",
   },
 ]
 
@@ -189,19 +189,19 @@ export default function BasePage() {
         </div>
 
         {/* NEXT STEPS - PROMINENT */}
-        <Card className="border-2 border-green-500 bg-green-50 dark:bg-green-950/30 shadow-lg">
+        <Card className="border-2 border-green-500 bg-green/5 dark:bg-green-950/30 shadow-lg">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <span className="text-2xl">🎯</span> Tu Próximo Paso
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-slate-700 dark:text-slate-300 mb-4">
+            <p className="text-sm text-muted/70 dark:text-muted/30 mb-4">
               Estás en <strong>Sprint 1: Fundamentos</strong> (días 1-30). Continúa con tus acciones diarias y aprenderás los pilares básicos de tu transformación.
             </p>
             <div className="flex gap-3">
               <Link href="/despega/a2/dashboard" className="flex-1">
-                <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold" size="lg">
+                <Button className="w-full bg-green hover:bg-green-700 text-white font-semibold" size="lg">
                   Continuar en A2 Sprint 1
                 </Button>
               </Link>
@@ -219,25 +219,25 @@ export default function BasePage() {
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
               <div className="text-3xl font-bold text-blue">1/4</div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">Fases Completadas</p>
+              <p className="text-xs text-muted/60 dark:text-muted/40 mt-2">Fases Completadas</p>
             </CardContent>
           </Card>
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
               <div className="text-3xl font-bold text-yellow-600">5/30</div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">Días Sprint 1</p>
+              <p className="text-xs text-muted/60 dark:text-muted/40 mt-2">Días Sprint 1</p>
             </CardContent>
           </Card>
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
               <div className="text-3xl font-bold text-purple">12</div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">Acciones Totales</p>
+              <p className="text-xs text-muted/60 dark:text-muted/40 mt-2">Acciones Totales</p>
             </CardContent>
           </Card>
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
-              <div className="text-3xl font-bold text-green-600">7/7</div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">Racha Días</p>
+              <div className="text-3xl font-bold text-green">7/7</div>
+              <p className="text-xs text-muted/60 dark:text-muted/40 mt-2">Racha Días</p>
             </CardContent>
           </Card>
         </div>
@@ -245,7 +245,7 @@ export default function BasePage() {
         {/* Section Title */}
         <div className="space-y-2">
           <h2 className="text-2xl font-bold">Centro de Recursos</h2>
-          <p className="text-slate-600 dark:text-slate-400">Acceso rápido a noticias, cultura y recursos para tu transformación</p>
+          <p className="text-muted/60 dark:text-muted/40">Acceso rápido a noticias, cultura y recursos para tu transformación</p>
         </div>
 
         {/* Categorías */}
@@ -278,7 +278,7 @@ export default function BasePage() {
                 return (
                   <div 
                     key={noticia.id}
-                    className={`p-4 border rounded-lg ${leida ? "bg-green-50 border-green-200" : ""}`}
+                    className={`p-4 border rounded-lg ${leida ? "bg-green/5 border-green/20" : ""}`}
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
@@ -294,7 +294,7 @@ export default function BasePage() {
                       <div className="flex items-center gap-3">
                         <span className="text-sm font-medium text-primary">+{noticia.puntos} pts</span>
                         {leida ? (
-                          <Badge className="bg-green-500">Leído</Badge>
+                          <Badge className="bg-green/50">Leído</Badge>
                         ) : (
                           <Button size="sm" onClick={() => handleLeerNoticia(noticia.id)}>
                             Leer

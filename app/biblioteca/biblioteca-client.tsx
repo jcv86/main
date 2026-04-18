@@ -26,8 +26,8 @@ interface Book {
 
 function getContentQualityBadge(book: Book) {
   const readCount = book.read_count || 0
-  if (readCount > 100) return { label: "Muy Popular", color: "bg-green-500 text-white" }
-  if (readCount > 50) return { label: "Popular", color: "bg-blue-500 text-white" }
+  if (readCount > 100) return { label: "Muy Popular", color: "bg-green/50 text-white" }
+  if (readCount > 50) return { label: "Popular", color: "bg-blue/50 text-white" }
   return { label: "Nuevo", color: "bg-gray-500 text-white" }
 }
 
@@ -201,17 +201,17 @@ export default function BibliotecaPage() {
   const filteredBooks = getFilteredBooks()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl">
+            <div className="p-3 bg-gradient-to-br from-purple/50 to-blue rounded-xl">
               <BookOpen className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Biblioteca Digital</h1>
-              <p className="text-slate-700 dark:text-slate-300 font-medium">
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Biblioteca Digital</h1>
+              <p className="text-muted/70 dark:text-muted/30 font-medium">
                 {user
                   ? `Hola ${user.email?.split("@")[0]}, aquí están tus recursos personalizados`
                   : "Descubre recursos valiosos para tu crecimiento personal y profesional"}
@@ -222,11 +222,11 @@ export default function BibliotecaPage() {
 
       {/* Personalized Recommendations Section */}
       {user && (
-        <Card className="mb-8 border-2 border-blue-200 dark:border-blue-900 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-slate-900 dark:to-slate-800">
+        <Card className="mb-8 border-2 border-blue/20 dark:border-blue bg-gradient-to-r from-blue/5 to-purple-50 dark:from-slate-900 dark:to-slate-800">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Sparkles className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+                <Sparkles className="h-6 w-6 text-blue dark:text-blue/40" />
                 <div>
                   <CardTitle className="text-xl text-foreground">
                     {userProfile ? "Recomendados para Tu Perfil" : "Comienza Tu Viaje Profesional"}
@@ -244,7 +244,7 @@ export default function BibliotecaPage() {
               {!userProfile && (
                 <Button
                   onClick={() => router.push("/test/disc")}
-                  className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+                  className="bg-blue hover:bg-blue dark:bg-blue/50 dark:hover:bg-blue"
                 >
                   <Target className="h-4 w-4 mr-2" />
                   Hacer Test DISC
@@ -256,7 +256,7 @@ export default function BibliotecaPage() {
             {loadingProfile ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {[1, 2, 3].map((i) => (
-                  <Card key={i} className="animate-pulse bg-background dark:bg-slate-800">
+                  <Card key={i} className="animate-pulse bg-background dark:bg-card">
                     <CardHeader className="pb-3">
                       <div className="h-4 bg-gray-200 dark:bg-slate-700 rounded w-3/4 mb-2"></div>
                       <div className="h-3 bg-gray-200 dark:bg-slate-700 rounded w-1/2"></div>
@@ -274,14 +274,14 @@ export default function BibliotecaPage() {
                   return (
                     <Card
                       key={book.id}
-                      className="hover:shadow-lg transition-shadow duration-200 bg-card dark:bg-slate-800 border border-gray-200 dark:border-slate-700"
+                      className="hover:shadow-lg transition-shadow duration-200 bg-card dark:bg-card border border-gray-200 dark:border-card"
                     >
                       <CardHeader className="pb-3">
                         <div className="flex justify-between items-start mb-2">
                           <Badge
                             variant="default"
                             className={
-                              userProfile ? "bg-blue-600 dark:bg-blue-500" : "bg-purple-600 dark:bg-purple-500"
+                              userProfile ? "bg-blue dark:bg-blue/50" : "bg-purple dark:bg-purple/50"
                             }
                           >
                             <Target className="h-3 w-3 mr-1" />
@@ -361,7 +361,7 @@ export default function BibliotecaPage() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <BookMarked className="h-5 w-5 text-blue-600" />
+              <BookMarked className="h-5 w-5 text-blue" />
               <span className="text-2xl font-bold">{stats.totalBooks}</span>
             </div>
           </CardContent>
@@ -373,7 +373,7 @@ export default function BibliotecaPage() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-5 w-5 text-green-600" />
+              <CheckCircle className="h-5 w-5 text-green" />
               <span className="text-2xl font-bold">{stats.completed}</span>
             </div>
           </CardContent>
@@ -385,7 +385,7 @@ export default function BibliotecaPage() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <Filter className="h-5 w-5 text-purple-600" />
+              <Filter className="h-5 w-5 text-purple" />
               <span className="text-2xl font-bold">{stats.totalResources}</span>
             </div>
           </CardContent>
@@ -487,7 +487,7 @@ export default function BibliotecaPage() {
             <Badge
               key={tag}
               variant={selectedTag === tag ? "default" : "outline"}
-              className="cursor-pointer hover:bg-blue-100"
+              className="cursor-pointer hover:bg-blue/10"
               onClick={() => setSelectedTag(selectedTag === tag ? "" : tag)}
             >
               {tag} ({books.filter((b) => b.tags && b.tags.includes(tag)).length})
@@ -503,7 +503,7 @@ export default function BibliotecaPage() {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 font-medium transition-colors ${
-              activeTab === tab ? "text-blue-600 border-b-2 border-blue-600" : "text-gray-600 hover:text-gray-900"
+              activeTab === tab ? "text-blue border-b-2 border-blue" : "text-gray-600 hover:text-gray-900"
             }`}
           >
             {tab === "all" && `Todos (${books.length})`}
@@ -518,7 +518,7 @@ export default function BibliotecaPage() {
       {/* Books Grid */}
       {loading ? (
         <div className="text-center py-12">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto"></div>
           <p className="mt-4 text-gray-600">Cargando biblioteca...</p>
         </div>
       ) : filteredBooks.length === 0 ? (
@@ -533,7 +533,7 @@ export default function BibliotecaPage() {
             return (
               <Card
                 key={book.id}
-                className="hover:shadow-lg transition-shadow duration-200 bg-card dark:bg-slate-800 border border-gray-200 dark:border-slate-700"
+                className="hover:shadow-lg transition-shadow duration-200 bg-card dark:bg-card border border-gray-200 dark:border-card"
               >
                 <CardHeader>
                   <div className="flex justify-between items-start mb-2">

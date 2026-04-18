@@ -192,23 +192,23 @@ export default function Conozcamonos2Page() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 p-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-cyan-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 p-4 py-8">
       <div className="max-w-3xl mx-auto">
         {/* Header with brandbook styling */}
         <div className="text-center mb-8">
-          <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 rounded-full mb-4">
-            <p className="text-sm font-semibold text-blue-700 dark:text-blue-300">Conozcámonos 2: Tu Ruta</p>
+          <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue/10 to-cyan-100 dark:from-blue/30 dark:to-cyan-900/30 rounded-full mb-4">
+            <p className="text-sm font-semibold text-blue dark:text-blue/30">Conozcámonos 2: Tu Ruta</p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue via-cyan-600 to-teal-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-cyan-400 dark:to-teal-400 mb-2">
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue via-cyan-600 to-teal-600 bg-clip-text text-transparent dark:from-blue/40 dark:via-cyan-400 dark:to-teal-400 mb-2">
             Explora y Diseña Tu Ruta
           </h1>
-          <p className="text-slate-700 dark:text-slate-300 mb-4">
+          <p className="text-muted/70 dark:text-muted/30 mb-4">
             {currentStep === 'paso1'
               ? 'Paso 1: Define tu objetivo y contexto profesional'
               : 'Paso 2: Personaliza los detalles de tu desarrollo'}
           </p>
-          <Progress value={progress} className="h-2 bg-slate-200 dark:bg-slate-700" />
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-3 font-medium">
+          <Progress value={progress} className="h-2 bg-muted/20 dark:bg-slate-700" />
+          <p className="text-sm text-muted/60 dark:text-muted/40 mt-3 font-medium">
             Progreso: {completedCount} de {totalQuestions} preguntas
           </p>
         </div>
@@ -222,22 +222,22 @@ export default function Conozcamonos2Page() {
               key={question.id} 
               className={`p-6 transition-all ${
                 isAnswered 
-                  ? 'border-green-200 dark:border-green-800/50' 
-                  : 'border-slate-200 dark:border-slate-700'
+                  ? 'border-green/20 dark:border-green-800/50' 
+                  : 'border-muted/20 dark:border-card'
               }`}
             >
               <div className="flex items-start gap-3 mb-4">
                 <h3 className="text-lg font-semibold text-slate-900 dark:text-white flex-1">
                   {question.question}
                 </h3>
-                {isAnswered && <span className="text-green-600 dark:text-green-400">✓</span>}
+                {isAnswered && <span className="text-green dark:text-green-400">✓</span>}
               </div>
 
               {question.type === 'select' && (
                 <select
                   value={responses[question.id] as string || ''}
                   onChange={(e) => handleAnswer(question.id, e.target.value)}
-                  className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-[28px] bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                  className="w-full p-3 border border-muted/30 dark:border-slate-600 rounded-[28px] bg-white dark:bg-card text-slate-900 dark:text-white"
                 >
                   <option value="">-- Selecciona una opción --</option>
                   {question.options?.map((opt) => (
@@ -257,10 +257,10 @@ export default function Conozcamonos2Page() {
                       onBlur={(e) => validateTextResponse(question.id, question.question, e.target.value)}
                       placeholder={question.placeholder}
                       maxLength={question.maxLength}
-                      className={`flex-1 p-3 border rounded-[28px] bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple-600 disabled:opacity-50 transition-colors ${
+                      className={`flex-1 p-3 border rounded-[28px] bg-white dark:bg-card text-slate-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple disabled:opacity-50 transition-colors ${
                         error && !validatingIds.has(question.id) 
                           ? 'border-red-500 dark:border-red-500 bg-red-50 dark:bg-red-950/20' 
-                          : 'border-slate-300 dark:border-slate-600'
+                          : 'border-muted/30 dark:border-slate-600'
                       }`}
                       rows={3}
                       disabled={validatingIds.has(question.id)}
@@ -269,7 +269,7 @@ export default function Conozcamonos2Page() {
                   
                   {/* Validation status */}
                   {validatingIds.has(question.id) && (
-                    <p className="text-xs text-blue-500 flex items-center gap-1">
+                    <p className="text-xs text-blue/50 flex items-center gap-1">
                       <span className="animate-spin">⏳</span> Validando...
                     </p>
                   )}
@@ -281,7 +281,7 @@ export default function Conozcamonos2Page() {
                   )}
                   
                   {/* Character count */}
-                  <div className="text-xs text-slate-500 dark:text-slate-400">
+                  <div className="text-xs text-muted/50 dark:text-muted/40">
                     {(responses[question.id] as string || '').length} / {question.maxLength} caracteres
                   </div>
                   
@@ -292,7 +292,7 @@ export default function Conozcamonos2Page() {
                       }}
                       isDisabled={loading || validatingIds.has(question.id)}
                     />
-                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                    <span className="text-xs text-muted/50 dark:text-muted/40">
                       O habla para dictar tu respuesta
                     </span>
                   </div>
@@ -320,7 +320,7 @@ export default function Conozcamonos2Page() {
                           handleAnswer(question.id, updated)
                         }}
                       />
-                      <span className="text-slate-700 dark:text-slate-300">{opt}</span>
+                      <span className="text-muted/70 dark:text-muted/30">{opt}</span>
                     </label>
                   ))}
                 </div>
@@ -344,9 +344,9 @@ export default function Conozcamonos2Page() {
         )}
 
         {/* Navigation */}
-        <div className="flex gap-4 justify-between items-center mt-8 pt-6 border-t border-slate-200 dark:border-slate-700">
+        <div className="flex gap-4 justify-between items-center mt-8 pt-6 border-t border-muted/20 dark:border-card">
           {!allStepAnswered && (
-            <div className="flex-1 text-sm text-slate-600 dark:text-slate-400">
+            <div className="flex-1 text-sm text-muted/60 dark:text-muted/40">
               <p>Responde todas las preguntas para continuar</p>
             </div>
           )}
@@ -367,7 +367,7 @@ export default function Conozcamonos2Page() {
             <Button
               onClick={handleNext}
               disabled={!allStepAnswered || loading || !!error}
-              className="bg-gradient-to-r from-purple to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               title={
                 error 
                   ? 'Error de validación: ' + error

@@ -105,9 +105,9 @@ export default function TestSemanticSearchPage() {
   }
 
   const getSimilarityColor = (score: number) => {
-    if (score >= 0.9) return "text-green-600 bg-green-50 border-green-200"
-    if (score >= 0.8) return "text-blue-600 bg-blue-50 border-blue-200"
-    if (score >= 0.7) return "text-purple-600 bg-purple-50 border-purple-200"
+    if (score >= 0.9) return "text-green bg-green/5 border-green/20"
+    if (score >= 0.8) return "text-blue bg-blue/5 border-blue/20"
+    if (score >= 0.7) return "text-purple bg-purple/5 border-purple/20"
     return "text-gray-600 bg-gray-50 border-gray-200"
   }
 
@@ -119,15 +119,15 @@ export default function TestSemanticSearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-indigo-50">
       <div className="container mx-auto py-8 px-4 max-w-7xl">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl">
+            <div className="p-3 bg-gradient-to-br from-purple/50 to-blue rounded-2xl">
               <Brain className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">
                 Búsqueda Semántica
               </h1>
               <p className="text-muted-foreground">Encuentra contenido relevante usando inteligencia artificial</p>
@@ -219,11 +219,11 @@ export default function TestSemanticSearchPage() {
             )}
 
             {searchStats && !error && (
-              <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-blue-50">
+              <Card className="border-purple/20 bg-gradient-to-br from-purple/5 to-blue/5">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <Sparkles className="h-5 w-5 text-purple-600" />
+                      <Sparkles className="h-5 w-5 text-purple" />
                       <span className="font-medium">Resultados encontrados: {searchStats.totalResults}</span>
                     </div>
                     <div className="flex gap-4 text-sm text-muted-foreground">
@@ -260,7 +260,7 @@ export default function TestSemanticSearchPage() {
                 {isSearching && (
                   <Card>
                     <CardContent className="py-12 text-center">
-                      <Loader2 className="h-12 w-12 text-purple-600 animate-spin mx-auto mb-4" />
+                      <Loader2 className="h-12 w-12 text-purple animate-spin mx-auto mb-4" />
                       <p className="text-muted-foreground">Buscando en la base de conocimiento...</p>
                     </CardContent>
                   </Card>
@@ -321,18 +321,18 @@ export default function TestSemanticSearchPage() {
                     {searchStats ? (
                       <>
                         <div className="grid grid-cols-3 gap-4">
-                          <div className="text-center p-4 bg-purple-50 rounded-lg">
-                            <p className="text-2xl font-bold text-purple-600">{searchStats.totalResults}</p>
+                          <div className="text-center p-4 bg-purple/5 rounded-lg">
+                            <p className="text-2xl font-bold text-purple">{searchStats.totalResults}</p>
                             <p className="text-sm text-muted-foreground">Resultados</p>
                           </div>
-                          <div className="text-center p-4 bg-blue-50 rounded-lg">
-                            <p className="text-2xl font-bold text-blue-600">
+                          <div className="text-center p-4 bg-blue/5 rounded-lg">
+                            <p className="text-2xl font-bold text-blue">
                               {(searchStats.avgSimilarity * 100).toFixed(0)}%
                             </p>
                             <p className="text-sm text-muted-foreground">Similitud Promedio</p>
                           </div>
-                          <div className="text-center p-4 bg-indigo-50 rounded-lg">
-                            <p className="text-2xl font-bold text-indigo-600">{searchStats.searchTimeMs}ms</p>
+                          <div className="text-center p-4 bg-blue/5 rounded-lg">
+                            <p className="text-2xl font-bold text-blue">{searchStats.searchTimeMs}ms</p>
                             <p className="text-sm text-muted-foreground">Tiempo de Búsqueda</p>
                           </div>
                         </div>
@@ -384,25 +384,25 @@ export default function TestSemanticSearchPage() {
           </div>
 
           <div className="space-y-6">
-            <Card className="shadow-lg border-0 bg-gradient-to-br from-purple-50 to-blue-50">
+            <Card className="shadow-lg border-0 bg-gradient-to-br from-purple/5 to-blue/5">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-purple-900">
+                <CardTitle className="flex items-center gap-2 text-purple">
                   <Brain className="h-5 w-5" />
                   ¿Cómo Funciona?
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3 text-sm">
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-200 flex items-center justify-center text-purple-700 font-bold text-xs">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-200 flex items-center justify-center text-purple font-bold text-xs">
                     1
                   </div>
-                  <p className="text-purple-900">Ingresa tu pregunta o tema en lenguaje natural (español o inglés)</p>
+                  <p className="text-purple">Ingresa tu pregunta o tema en lenguaje natural (español o inglés)</p>
                 </div>
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue-200 flex items-center justify-center text-blue-700 font-bold text-xs">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-blue/20 flex items-center justify-center text-blue font-bold text-xs">
                     2
                   </div>
-                  <p className="text-purple-900">
+                  <p className="text-purple">
                     La IA convierte tu búsqueda en embeddings vectoriales (1536 dimensiones)
                   </p>
                 </div>
@@ -410,13 +410,13 @@ export default function TestSemanticSearchPage() {
                   <div className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-200 flex items-center justify-center text-indigo-700 font-bold text-xs">
                     3
                   </div>
-                  <p className="text-purple-900">Busca en 120+ libros y 100+ recursos web usando similitud de coseno</p>
+                  <p className="text-purple">Busca en 120+ libros y 100+ recursos web usando similitud de coseno</p>
                 </div>
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-200 flex items-center justify-center text-purple-700 font-bold text-xs">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-200 flex items-center justify-center text-purple font-bold text-xs">
                     4
                   </div>
-                  <p className="text-purple-900">Recibe resultados ordenados por relevancia con scores de similitud</p>
+                  <p className="text-purple">Recibe resultados ordenados por relevancia con scores de similitud</p>
                 </div>
               </CardContent>
             </Card>
@@ -426,31 +426,31 @@ export default function TestSemanticSearchPage() {
                 <CardTitle className="text-lg">Base de Conocimiento</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-blue/5 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <BookOpen className="h-5 w-5 text-blue-600" />
+                    <BookOpen className="h-5 w-5 text-blue" />
                     <span className="font-medium">Libros</span>
                   </div>
-                  <Badge className="bg-blue-600">120+</Badge>
+                  <Badge className="bg-blue">120+</Badge>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-purple/5 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Globe className="h-5 w-5 text-purple-600" />
+                    <Globe className="h-5 w-5 text-purple" />
                     <span className="font-medium">Recursos Web</span>
                   </div>
-                  <Badge className="bg-purple-600">100+</Badge>
+                  <Badge className="bg-purple">100+</Badge>
                 </div>
-                <div className="flex items-center justify-between p-3 bg-indigo-50 rounded-lg">
+                <div className="flex items-center justify-between p-3 bg-blue/5 rounded-lg">
                   <div className="flex items-center gap-2">
-                    <Sparkles className="h-5 w-5 text-indigo-600" />
+                    <Sparkles className="h-5 w-5 text-blue" />
                     <span className="font-medium">Total Fuentes</span>
                   </div>
-                  <Badge className="bg-indigo-600">220+</Badge>
+                  <Badge className="bg-blue">220+</Badge>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="shadow-lg border-green-200 bg-green-50">
+            <Card className="shadow-lg border-green/20 bg-green/5">
               <CardHeader>
                 <CardTitle className="text-lg text-green-900">Consejos de Búsqueda</CardTitle>
               </CardHeader>

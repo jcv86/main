@@ -243,7 +243,7 @@ export default function ChallensingTrainingPage() {
             </Link>
             <div className="flex gap-4 items-center">
               <Badge className="bg-red-600">DESAFÍO MÁXIMO</Badge>
-              <Badge className="bg-purple-600">{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
+              <Badge className="bg-purple">{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
             </div>
           </div>
         </div>
@@ -278,7 +278,7 @@ export default function ChallensingTrainingPage() {
                 <div className="space-y-2">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h3 className="text-sm font-bold text-slate-400 mb-2">Pregunta {currentQuestion + 1} de {CHALLENGING_QUESTIONS.length}</h3>
+                      <h3 className="text-sm font-bold text-muted/40 mb-2">Pregunta {currentQuestion + 1} de {CHALLENGING_QUESTIONS.length}</h3>
                       <p className="text-lg text-white font-semibold">{question.question}</p>
                     </div>
                     <Badge className={question.difficulty === 'Crítico' ? 'bg-red-600' : 'bg-yellow-600'}>{question.difficulty}</Badge>
@@ -290,7 +290,7 @@ export default function ChallensingTrainingPage() {
                   <>
                     {/* Recording Controls */}
                     <div className="space-y-3">
-                      <p className="text-sm font-semibold text-slate-300">Opción 1: Grabar tu respuesta</p>
+                      <p className="text-sm font-semibold text-muted/30">Opción 1: Grabar tu respuesta</p>
                       <div className="flex gap-2">
                         {!isRecording ? (
                           <Button
@@ -315,7 +315,7 @@ export default function ChallensingTrainingPage() {
 
                     {/* Text Input */}
                     <div className="space-y-3 border-t border-slate-800 pt-4">
-                      <p className="text-sm font-semibold text-slate-300">Opción 2: Escribe tu respuesta</p>
+                      <p className="text-sm font-semibold text-muted/30">Opción 2: Escribe tu respuesta</p>
                       <textarea
                         value={textResponse}
                         onChange={(e) => {
@@ -323,7 +323,7 @@ export default function ChallensingTrainingPage() {
                           setHasResponse(e.target.value.trim().length > 0)
                         }}
                         placeholder="Escribe aquí tu respuesta detallada... (mínimo 50 caracteres)"
-                        className="w-full h-24 bg-slate-800 text-white border border-slate-700 rounded-[28px] p-3 text-sm focus:border-purple-500 focus:outline-none resize-none"
+                        className="w-full h-24 bg-slate-800 text-white border border-slate-700 rounded-[28px] p-3 text-sm focus:border-purple/50 focus:outline-none resize-none"
                       />
                       {textResponse && <p className="text-xs text-green-400 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />Respuesta escrita ({textResponse.length} caracteres)</p>}
                     </div>
@@ -340,7 +340,7 @@ export default function ChallensingTrainingPage() {
                     <Button
                       onClick={evaluateResponse}
                       disabled={!hasResponse || isEvaluating}
-                      className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-50 gap-2"
+                      className="w-full bg-purple hover:bg-purple disabled:opacity-50 gap-2"
                     >
                       {isEvaluating ? (
                         <>
@@ -365,12 +365,12 @@ export default function ChallensingTrainingPage() {
                 ) : (
                   /* Evaluation Results */
                   <div className="space-y-4 border-t border-slate-800 pt-4">
-                    <div className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-500/30 rounded-[28px] p-4 space-y-3">
+                    <div className="bg-gradient-to-r from-purple/30 to-pink-900/30 border border-purple/50/30 rounded-[28px] p-4 space-y-3">
                       <div className="flex items-center justify-between">
-                        <p className="text-sm font-semibold text-slate-300">Tu Puntuación</p>
+                        <p className="text-sm font-semibold text-muted/30">Tu Puntuación</p>
                         <div className="text-3xl font-bold text-purple-400">{evaluation.score}</div>
                       </div>
-                      <p className="text-sm text-slate-300">{evaluation.scoreExplanation}</p>
+                      <p className="text-sm text-muted/30">{evaluation.scoreExplanation}</p>
                     </div>
 
                     {/* Strengths */}
@@ -379,7 +379,7 @@ export default function ChallensingTrainingPage() {
                         <CheckCircle2 className="w-4 h-4" />
                         Fortalezas Identificadas
                       </p>
-                      <ul className="space-y-1 text-sm text-slate-300">
+                      <ul className="space-y-1 text-sm text-muted/30">
                         {evaluation.strengths.map((s: string, i: number) => (
                           <li key={i} className="flex gap-2">
                             <span className="text-green-400">•</span>
@@ -395,7 +395,7 @@ export default function ChallensingTrainingPage() {
                         <TrendingUp className="w-4 h-4" />
                         Áreas de Mejora
                       </p>
-                      <ul className="space-y-1 text-sm text-slate-300">
+                      <ul className="space-y-1 text-sm text-muted/30">
                         {evaluation.improvements.map((i: string, idx: number) => (
                           <li key={idx} className="flex gap-2">
                             <span className="text-yellow-400">•</span>
@@ -407,22 +407,22 @@ export default function ChallensingTrainingPage() {
 
                     {/* Feedback */}
                     <div className="bg-slate-800/50 border border-slate-700 rounded-[28px] p-3">
-                      <p className="text-xs font-semibold text-slate-400 mb-2">RETROALIMENTACIÓN</p>
-                      <p className="text-sm text-slate-300">{evaluation.feedback}</p>
+                      <p className="text-xs font-semibold text-muted/40 mb-2">RETROALIMENTACIÓN</p>
+                      <p className="text-sm text-muted/30">{evaluation.feedback}</p>
                     </div>
 
                     {/* Next Question Button */}
                     {currentQuestion < CHALLENGING_QUESTIONS.length - 1 ? (
                       <Button
                         onClick={moveToNextQuestion}
-                        className="w-full bg-purple-600 hover:bg-purple-700 gap-2"
+                        className="w-full bg-purple hover:bg-purple gap-2"
                       >
                         Siguiente Pregunta
                       </Button>
                     ) : (
                       <Button
                         onClick={() => window.location.href = '/despega/a3-dashboard'}
-                        className="w-full bg-green-600 hover:bg-green-700 gap-2"
+                        className="w-full bg-green hover:bg-green-700 gap-2"
                       >
                         Completar Entrenamiento
                       </Button>
@@ -443,17 +443,17 @@ export default function ChallensingTrainingPage() {
                 </h3>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-xs text-slate-400 mb-2">Promedio General</p>
+                    <p className="text-xs text-muted/40 mb-2">Promedio General</p>
                     <div className="flex items-end gap-2">
                       <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green-400' : averageScore >= 60 ? 'text-yellow-400' : 'text-red-400'}`}>
                         {averageScore}
                       </span>
-                      <span className="text-xs text-slate-400 pb-2">/100</span>
+                      <span className="text-xs text-muted/40 pb-2">/100</span>
                     </div>
                   </div>
                   {currentScore !== undefined && (
                     <div className="pt-4 border-t border-slate-700">
-                      <p className="text-xs text-slate-400 mb-2">Esta Pregunta</p>
+                      <p className="text-xs text-muted/40 mb-2">Esta Pregunta</p>
                       <span className="text-2xl font-bold text-purple-400">{currentScore}</span>
                     </div>
                   )}
@@ -462,7 +462,7 @@ export default function ChallensingTrainingPage() {
 
               {/* Questions List */}
               <div className="flex-1 overflow-y-auto p-4 space-y-2">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Preguntas</p>
+                <p className="text-xs font-bold text-muted/40 uppercase tracking-widest mb-3">Preguntas</p>
                 {CHALLENGING_QUESTIONS.map((q, idx) => (
                   <button
                     key={q.id}
@@ -477,9 +477,9 @@ export default function ChallensingTrainingPage() {
                     disabled={!completedQuestions.includes(idx) && idx !== currentQuestion}
                     className={`w-full text-left p-3 rounded-lg transition-all text-xs disabled:opacity-50 ${
                       idx === currentQuestion
-                        ? 'bg-purple-600/30 border border-purple-500/50'
+                        ? 'bg-purple/30 border border-purple/50/50'
                         : completedQuestions.includes(idx)
-                        ? 'bg-green-600/20 border border-green-500/30 cursor-pointer hover:bg-green-600/30'
+                        ? 'bg-green/20 border border-green-500/30 cursor-pointer hover:bg-green/30'
                         : 'bg-slate-800/50 border border-slate-700/30'
                     }`}
                   >
@@ -487,12 +487,12 @@ export default function ChallensingTrainingPage() {
                       <div className="mt-0.5">
                         {completedQuestions.includes(idx) && scores[idx] ? (
                           <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold ${
-                            scores[idx] >= 75 ? 'bg-green-600' : scores[idx] >= 60 ? 'bg-yellow-600' : 'bg-red-600'
+                            scores[idx] >= 75 ? 'bg-green' : scores[idx] >= 60 ? 'bg-yellow-600' : 'bg-red-600'
                           }`}>
                             {scores[idx]}
                           </div>
                         ) : completedQuestions.includes(idx) ? (
-                          <div className="w-6 h-6 rounded-[20px] bg-green-600 flex items-center justify-center">
+                          <div className="w-6 h-6 rounded-[20px] bg-green flex items-center justify-center">
                             <CheckCircle2 className="w-4 h-4 text-white" />
                           </div>
                         ) : (
@@ -500,8 +500,8 @@ export default function ChallensingTrainingPage() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-slate-400 mb-1">P{idx + 1}</p>
-                        <p className="text-slate-300 line-clamp-2">{q.question}</p>
+                        <p className="text-muted/40 mb-1">P{idx + 1}</p>
+                        <p className="text-muted/30 line-clamp-2">{q.question}</p>
                       </div>
                     </div>
                   </button>
@@ -510,8 +510,8 @@ export default function ChallensingTrainingPage() {
 
               {/* Standard Info */}
               <div className="p-4 border-t border-slate-800 bg-slate-950/50 flex-shrink-0">
-                <p className="text-xs font-bold text-slate-400 mb-2">ESTÁNDAR EJECUTIVO</p>
-                <p className="text-xs text-slate-300">75+ = Listo para entrevista executiva<br/>60-74 = Mejora necesaria<br/>{'<'}60 = Requiere trabajo</p>
+                <p className="text-xs font-bold text-muted/40 mb-2">ESTÁNDAR EJECUTIVO</p>
+                <p className="text-xs text-muted/30">75+ = Listo para entrevista executiva<br/>60-74 = Mejora necesaria<br/>{'<'}60 = Requiere trabajo</p>
               </div>
             </div>
           </div>

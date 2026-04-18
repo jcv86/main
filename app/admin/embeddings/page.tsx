@@ -136,7 +136,7 @@ export default function EmbeddingsAdminPage() {
               </div>
               <div className="flex justify-between text-sm">
                 <span>Con embeddings:</span>
-                <span className="font-bold text-green-600">{stats?.books.withEmbeddings}</span>
+                <span className="font-bold text-green">{stats?.books.withEmbeddings}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Faltantes:</span>
@@ -165,7 +165,7 @@ export default function EmbeddingsAdminPage() {
               </div>
               <div className="flex justify-between text-sm">
                 <span>Con embeddings:</span>
-                <span className="font-bold text-green-600">{stats?.webResources.withEmbeddings}</span>
+                <span className="font-bold text-green">{stats?.webResources.withEmbeddings}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Faltantes:</span>
@@ -194,7 +194,7 @@ export default function EmbeddingsAdminPage() {
               </div>
               <div className="flex justify-between text-sm">
                 <span>Con embeddings:</span>
-                <span className="font-bold text-green-600">{stats?.overall.withEmbeddings}</span>
+                <span className="font-bold text-green">{stats?.overall.withEmbeddings}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Faltantes:</span>
@@ -298,7 +298,7 @@ export default function EmbeddingsAdminPage() {
                         <p className="text-sm text-muted-foreground">{result.author}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-semibold text-green-600">
+                        <p className="text-sm font-semibold text-green">
                           {(result.similarityScore * 100).toFixed(1)}%
                         </p>
                         <p className="text-xs text-muted-foreground">similitud</p>

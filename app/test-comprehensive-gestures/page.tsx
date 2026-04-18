@@ -324,11 +324,11 @@ export default function ComprehensiveGestureTestPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "completed":
-        return <CheckCircle className="h-5 w-5 text-green-500" />
+        return <CheckCircle className="h-5 w-5 text-green" />
       case "failed":
         return <XCircle className="h-5 w-5 text-red-500" />
       case "running":
-        return <Clock className="h-5 w-5 text-blue-500 animate-spin" />
+        return <Clock className="h-5 w-5 text-blue/50 animate-spin" />
       default:
         return <Clock className="h-5 w-5 text-gray-400" />
     }
@@ -664,7 +664,7 @@ export default function ComprehensiveGestureTestPage() {
                               <div key={gesture} className="flex items-center justify-between p-2 bg-muted/50 rounded">
                                 <div className="flex items-center gap-2">
                                   {result.success ? (
-                                    <CheckCircle className="h-4 w-4 text-green-500" />
+                                    <CheckCircle className="h-4 w-4 text-green" />
                                   ) : (
                                     <XCircle className="h-4 w-4 text-red-500" />
                                   )}
@@ -740,11 +740,11 @@ export default function ComprehensiveGestureTestPage() {
               )}
 
               {!deviceInfo?.touchSupport && (
-                <div className="flex items-start gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <Smartphone className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-blue/5 border border-blue/20 rounded-lg">
+                  <Smartphone className="h-5 w-5 text-blue flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="font-medium text-blue-800">Sin Soporte Táctil</div>
-                    <div className="text-sm text-blue-700">
+                    <div className="text-sm text-blue">
                       Este dispositivo no soporta gestos táctiles. Se usarán controles alternativos.
                     </div>
                   </div>
@@ -752,8 +752,8 @@ export default function ComprehensiveGestureTestPage() {
               )}
 
               {stats.successRate >= 90 && stats.avgResponseTime < 100 && (
-                <div className="flex items-start gap-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-green/5 border border-green/20 rounded-lg">
+                  <CheckCircle className="h-5 w-5 text-green flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="font-medium text-green-800">Rendimiento Excelente</div>
                     <div className="text-sm text-green-700">

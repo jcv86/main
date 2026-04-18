@@ -37,11 +37,11 @@ export default function DataRetentionPage() {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "essential":
-        return "bg-blue-500"
+        return "bg-blue/50"
       case "operational":
-        return "bg-green-500"
+        return "bg-green/50"
       case "analytics":
-        return "bg-purple-500"
+        return "bg-purple/50"
       case "temporary":
         return "bg-yellow-500"
       case "cache":
@@ -189,7 +189,7 @@ export default function DataRetentionPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Archivado</CardTitle>
-                <Archive className="h-4 w-4 text-blue-500" />
+                <Archive className="h-4 w-4 text-blue/50" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{totalArchived.toLocaleString()}</div>

@@ -292,7 +292,7 @@ export default function AdminUsersPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <Shield className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue-600" />
+          <Shield className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue" />
           <p>Verificando permisos...</p>
         </div>
       </div>
@@ -315,7 +315,7 @@ export default function AdminUsersPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <Users className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue-600" />
+          <Users className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue" />
           <p>Cargando usuarios...</p>
         </div>
       </div>

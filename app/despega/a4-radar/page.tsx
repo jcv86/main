@@ -45,7 +45,7 @@ export default function A4RadarPage() {
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
-          <p className="text-slate-300">Activando tu Radar...</p>
+          <p className="text-muted/30">Activando tu Radar...</p>
         </div>
       </div>
     )
@@ -60,12 +60,12 @@ export default function A4RadarPage() {
     >
       {/* EXPLICACIÓN */}
       <ASectionPart title="¿Qué es A4: Radar?" icon={<Zap />}>
-        <p className="text-slate-300 mb-4">
+        <p className="text-muted/30 mb-4">
           En A4: Radar, tu transformación Despega entra en la fase de acción. Aquí monitoreas oportunidades en tiempo real, 
           recibes alertas sobre posiciones que coinciden con tu perfil, y mantienes un pulso constante del mercado. 
           Es tu sistema de seguimiento y aceleración para conseguir resultados.
         </p>
-        <p className="text-slate-400 text-sm">
+        <p className="text-muted/40 text-sm">
           ⏱️ Duración: Indefinido. A4 es tu herramienta permanente mientras buscas.
         </p>
       </ASectionPart>
@@ -78,28 +78,28 @@ export default function A4RadarPage() {
               <div className="w-8 h-8 rounded-[20px] bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">1</div>
               <div>
                 <p className="font-semibold text-white">Tu Perfil Se Carga</p>
-                <p className="text-sm text-slate-400">Tus datos de A1-A3 alimentan el sistema de matching</p>
+                <p className="text-sm text-muted/40">Tus datos de A1-A3 alimentan el sistema de matching</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
               <div className="w-8 h-8 rounded-[20px] bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">2</div>
               <div>
                 <p className="font-semibold text-white">Algoritmo Busca Coincidencias</p>
-                <p className="text-sm text-slate-400">Escaneamos el mercado por ofertas que coincidan</p>
+                <p className="text-sm text-muted/40">Escaneamos el mercado por ofertas que coincidan</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
               <div className="w-8 h-8 rounded-[20px] bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">3</div>
               <div>
                 <p className="font-semibold text-white">Recibes Alertas</p>
-                <p className="text-sm text-slate-400">Notificaciones de posiciones que son TU fit</p>
+                <p className="text-sm text-muted/40">Notificaciones de posiciones que son TU fit</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
               <div className="w-8 h-8 rounded-[20px] bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">4</div>
               <div>
                 <p className="font-semibold text-white">Tomas Acción</p>
-                <p className="text-sm text-slate-400">Aplicas, entrevishas, y avanzas en tu búsqueda</p>
+                <p className="text-sm text-muted/40">Aplicas, entrevishas, y avanzas en tu búsqueda</p>
               </div>
             </div>
           </div>
@@ -117,10 +117,10 @@ export default function A4RadarPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-muted/40">
                 Noticias y actualizaciones sobre empresas e industrias de tu interés
               </p>
-              <ul className="space-y-1 text-xs text-slate-400">
+              <ul className="space-y-1 text-xs text-muted/40">
                 <li>✓ Hirings en tu industria</li>
                 <li>✓ Funding rounds y crecimiento</li>
                 <li>✓ Cambios en liderazgo</li>
@@ -137,10 +137,10 @@ export default function A4RadarPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-muted/40">
                 Análisis automático del fit entre tu perfil y posiciones disponibles
               </p>
-              <ul className="space-space-y-1 text-xs text-slate-400">
+              <ul className="space-space-y-1 text-xs text-muted/40">
                 <li>✓ Análisis de skills match</li>
                 <li>✓ Fit cultural basado en DISC</li>
                 <li>✓ Análisis salarial</li>
@@ -157,10 +157,10 @@ export default function A4RadarPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-muted/40">
                 Sigue tu avance completo desde A1 hasta oportunidades aplicadas
               </p>
-              <ul className="space-y-1 text-xs text-slate-400">
+              <ul className="space-y-1 text-xs text-muted/40">
                 <li>✓ Readiness score en tiempo real</li>
                 <li>✓ Aplicaciones enviadas</li>
                 <li>✓ Entrevistas coordinadas</li>
@@ -177,10 +177,10 @@ export default function A4RadarPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-muted/40">
                 Asistente inteligente disponible en todos los stages
               </p>
-              <ul className="space-y-1 text-xs text-slate-400">
+              <ul className="space-y-1 text-xs text-muted/40">
                 <li>✓ Preguntas sobre estrategia</li>
                 <li>✓ Revisión de documentos</li>
                 <li>✓ Prep de entrevistas</li>
@@ -200,13 +200,13 @@ export default function A4RadarPage() {
                 <CardTitle className="text-lg">Tu Transformación Está Completa</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="text-sm text-slate-300">
+                <p className="text-sm text-muted/30">
                   Has pasado por A1 (Origen), A2 (Ruta), A3 (Impulso). Ahora con A4 (Radar), 
                   tienes todas las herramientas para buscar y asegurar tu próxima oportunidad con confianza.
                 </p>
                 <Button 
                   onClick={() => router.push('/despega')}
-                  className="w-full bg-teal-600 hover:bg-teal-700"
+                  className="w-full bg-blue hover:bg-teal-700"
                   size="sm"
                 >
                   Ver Dashboard Completo
@@ -220,10 +220,10 @@ export default function A4RadarPage() {
                 <CardTitle className="text-lg">Sigue Monitoreando</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="text-sm text-slate-300">
+                <p className="text-sm text-muted/30">
                   A4 es permanente. Vuelve regularmente para:
                 </p>
-                <ul className="space-y-1 text-xs text-slate-400">
+                <ul className="space-y-1 text-xs text-muted/40">
                   <li>✓ Ver nuevas oportunidades</li>
                   <li>✓ Revisar tu readiness score</li>
                   <li>✓ Hablar con el coach</li>
@@ -234,13 +234,13 @@ export default function A4RadarPage() {
           </div>
 
           <div className="p-6 bg-gradient-to-r from-teal-900/30 to-emerald-900/30 border border-teal-500/30 rounded-lg">
-            <p className="text-slate-300 mb-4">
+            <p className="text-muted/30 mb-4">
               <strong>¿Listo para empezar?</strong> Ve al dashboard principal para ver todas las oportunidades 
               que el Radar ha identificado para ti. Tu search ha comenzado.
             </p>
             <Button 
               onClick={() => router.push('/despega')}
-              className="bg-teal-600 hover:bg-teal-700"
+              className="bg-blue hover:bg-teal-700"
             >
               Ir al Dashboard Despega
               <ArrowRight className="w-4 h-4 ml-2" />

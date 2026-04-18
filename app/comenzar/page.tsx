@@ -8,20 +8,20 @@ import { Rocket, CheckCircle2, PlayCircle, FileText, Zap } from 'lucide-react'
 
 export default function ComenzarPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-blue-50 dark:from-slate-950 dark:via-purple-950 dark:to-blue-950">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-purple-50 to-blue/5 dark:from-slate-950 dark:via-purple-950 dark:to-blue-950">
       {/* Hero */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center max-w-3xl mx-auto">
-          <Badge className="mb-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0">
+          <Badge className="mb-4 bg-gradient-to-r from-purple to-blue text-white border-0">
             <Rocket className="h-3 w-3 mr-2" />
             Listo para Producción
           </Badge>
 
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple via-blue to-blue bg-clip-text text-transparent">
             Tu Transformación Comienza Aquí
           </h1>
 
-          <p className="text-xl text-slate-600 dark:text-slate-300 mb-12">
+          <p className="text-xl text-muted/60 dark:text-muted/30 mb-12">
             Sistema completamente integrado de 4 pilares. 
             <br />
             Descubrimiento → Exploración → Entrenamiento → Acción
@@ -29,7 +29,7 @@ export default function ComenzarPage() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Link href="/demo/ciclo-completo">
-              <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700">
+              <Button size="lg" className="bg-gradient-to-r from-purple to-blue text-white hover:from-purple-700 hover:to-blue-700">
                 Ver Demo (5 min)
               </Button>
             </Link>
@@ -53,9 +53,9 @@ export default function ComenzarPage() {
               { label: 'Tests Ilimitados', value: 'A3' },
               { label: 'Insights IA', value: 'OpenAI' }
             ].map((stat, idx) => (
-              <div key={idx} className="bg-white/50 dark:bg-slate-900/50 backdrop-blur rounded-lg p-4">
+              <div key={idx} className="bg-white/50 dark:bg-background/50 backdrop-blur rounded-lg p-4">
                 <div className="text-2xl font-bold text-slate-900 dark:text-white">{stat.value}</div>
-                <div className="text-sm text-slate-600 dark:text-slate-400">{stat.label}</div>
+                <div className="text-sm text-muted/60 dark:text-muted/40">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -69,13 +69,13 @@ export default function ComenzarPage() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Left: For Testing */}
-            <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-950/30">
+            <Card className="border-2 border-blue/20 dark:border-blue/10 bg-blue/5/50 dark:bg-blue-950/30">
               <CardHeader>
-                <PlayCircle className="h-8 w-8 text-blue-600 dark:text-blue-400 mb-2" />
+                <PlayCircle className="h-8 w-8 text-blue dark:text-blue/40 mb-2" />
                 <CardTitle>Para Testing & QA</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-muted/70 dark:text-muted/30">
                   Prueba rápidamente la integración de todos los pilares sin necesidad de hacer el ciclo completo.
                 </p>
                 <div className="space-y-2">
@@ -99,18 +99,18 @@ export default function ComenzarPage() {
             </Card>
 
             {/* Right: For Users */}
-            <Card className="border-2 border-purple-200 dark:border-purple-800 bg-purple-50/50 dark:bg-purple-950/30">
+            <Card className="border-2 border-purple/20 dark:border-purple bg-purple/5/50 dark:bg-purple/30">
               <CardHeader>
-                <Rocket className="h-8 w-8 text-purple-600 dark:text-purple-400 mb-2" />
+                <Rocket className="h-8 w-8 text-purple dark:text-purple/40 mb-2" />
                 <CardTitle>Para Usuarios Nuevos</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-muted/70 dark:text-muted/30">
                   Inicia tu ciclo de transformación completo. Completarás los 4 pilares en orden.
                 </p>
                 <div className="space-y-2">
                   <Link href="/despega/conozcamonos-1">
-                    <Button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700 justify-between">
+                    <Button className="w-full bg-gradient-to-r from-purple to-blue text-white hover:from-purple-700 hover:to-blue-700 justify-between">
                       Comenzar Ahora <Rocket className="h-4 w-4" />
                     </Button>
                   </Link>
@@ -137,7 +137,7 @@ export default function ComenzarPage() {
 
         <div className="max-w-5xl mx-auto grid md:grid-cols-2 gap-6">
           {/* A1 */}
-          <Card className="border-purple-200 dark:border-purple-800">
+          <Card className="border-purple/20 dark:border-purple">
             <CardHeader>
               <CardTitle className="text-lg">Pilar 1: Descubrimiento</CardTitle>
             </CardHeader>
@@ -161,7 +161,7 @@ export default function ComenzarPage() {
           </Card>
 
           {/* A2 */}
-          <Card className="border-blue-200 dark:border-blue-800">
+          <Card className="border-blue/20 dark:border-blue/10">
             <CardHeader>
               <CardTitle className="text-lg">Pilar 2: Exploración</CardTitle>
             </CardHeader>
@@ -209,7 +209,7 @@ export default function ComenzarPage() {
           </Card>
 
           {/* A4 */}
-          <Card className="border-cyan-200 dark:border-cyan-800">
+          <Card className="border-blue/20 dark:border-cyan-800">
             <CardHeader>
               <CardTitle className="text-lg">Pilar 4: La Realidad</CardTitle>
             </CardHeader>
@@ -242,11 +242,11 @@ export default function ComenzarPage() {
           <div className="grid md:grid-cols-3 gap-6">
             <Card>
               <CardHeader>
-                <FileText className="h-8 w-8 text-slate-600 dark:text-slate-400 mb-2" />
+                <FileText className="h-8 w-8 text-muted/60 dark:text-muted/40 mb-2" />
                 <CardTitle className="text-lg">Testing Guide</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                <p className="text-sm text-muted/60 dark:text-muted/40 mb-4">
                   Guía completa de testing con todos los endpoints y flujos
                 </p>
                 <Link href="/TESTING_GUIDE.md" target="_blank">
@@ -259,11 +259,11 @@ export default function ComenzarPage() {
 
             <Card>
               <CardHeader>
-                <CheckCircle2 className="h-8 w-8 text-green-600 dark:text-green-400 mb-2" />
+                <CheckCircle2 className="h-8 w-8 text-green dark:text-green-400 mb-2" />
                 <CardTitle className="text-lg">Production Checklist</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                <p className="text-sm text-muted/60 dark:text-muted/40 mb-4">
                   Checklist de validación para producción
                 </p>
                 <Link href="/PRODUCTION_READY_CHECKLIST.md" target="_blank">
@@ -276,11 +276,11 @@ export default function ComenzarPage() {
 
             <Card>
               <CardHeader>
-                <Zap className="h-8 w-8 text-blue-600 dark:text-blue-400 mb-2" />
+                <Zap className="h-8 w-8 text-blue dark:text-blue/40 mb-2" />
                 <CardTitle className="text-lg">Testing Links</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-slate-600 dark:text-slate-400 mb-4">
+                <p className="text-sm text-muted/60 dark:text-muted/40 mb-4">
                   Index completo de todas las rutas disponibles
                 </p>
                 <Link href="/TESTING_LINKS.md" target="_blank">
@@ -295,11 +295,11 @@ export default function ComenzarPage() {
       </section>
 
       {/* Footer */}
-      <section className="container mx-auto px-4 py-12 text-center border-t border-slate-200 dark:border-slate-800">
-        <p className="text-slate-600 dark:text-slate-400 mb-4">
+      <section className="container mx-auto px-4 py-12 text-center border-t border-muted/20 dark:border-slate-800">
+        <p className="text-muted/60 dark:text-muted/40 mb-4">
           Sistema DTC - Transformación Profesional Integrada
         </p>
-        <p className="text-sm text-slate-500 dark:text-slate-500">
+        <p className="text-sm text-muted/50 dark:text-muted/50">
           ✅ Todos los 4 pilares (A1-A4) integrados y listos para producción
         </p>
       </section>

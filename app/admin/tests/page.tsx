@@ -126,8 +126,8 @@ export default function AdminTestsPage() {
 
   const getCategoryColor = (category) => {
     const colors = {
-      'Core': 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
-      'Backend': 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200',
+      'Core': 'bg-blue/10 text-blue-800 dark:bg-blue dark:text-blue/20',
+      'Backend': 'bg-purple/10 text-purple dark:bg-purple dark:text-purple-200',
       'AI': 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200',
       'UX': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
       'Mobile': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
@@ -136,7 +136,7 @@ export default function AdminTestsPage() {
       'Design': 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
       'Auth': 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
     }
-    return colors[category] || 'bg-slate-100 text-slate-800'
+    return colors[category] || 'bg-muted/10 text-slate-800'
   }
 
   return (
@@ -184,8 +184,8 @@ export default function AdminTestsPage() {
                   onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 rounded-lg font-medium transition-all ${
                     selectedCategory === category
-                      ? 'bg-blue-600 text-white dark:bg-blue-700'
-                      : 'bg-slate-200 text-slate-900 dark:bg-slate-700 dark:text-slate-100 hover:bg-slate-300 dark:hover:bg-slate-600'
+                      ? 'bg-blue text-white dark:bg-blue'
+                      : 'bg-muted/20 text-slate-900 dark:bg-slate-700 dark:text-slate-100 hover:bg-muted/30 dark:hover:bg-slate-600'
                   }`}
                 >
                   {category.charAt(0).toUpperCase() + category.slice(1)}
@@ -205,7 +205,7 @@ export default function AdminTestsPage() {
                     <CardTitle className="text-lg">{test.name}</CardTitle>
                     <CardDescription className="mt-1">{test.path}</CardDescription>
                   </div>
-                  <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-1" />
+                  <CheckCircle2 className="w-5 h-5 text-green dark:text-green-400 flex-shrink-0 mt-1" />
                 </div>
               </CardHeader>
 
@@ -222,7 +222,7 @@ export default function AdminTestsPage() {
 
                 {/* Action Button */}
                 <Link href={test.path} className="block">
-                  <Button className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-800 text-white">
+                  <Button className="w-full bg-blue hover:bg-blue dark:bg-blue dark:hover:bg-blue-800 text-white">
                     <Beaker className="w-4 h-4 mr-2" />
                     Run Test
                   </Button>
@@ -270,14 +270,14 @@ export default function AdminTestsPage() {
               <CardTitle className="text-sm font-medium">Status</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-green-600 dark:text-green-400">100%</div>
+              <div className="text-3xl font-bold text-green dark:text-green-400">100%</div>
               <p className="text-xs text-foreground/50 mt-1">Tests operational</p>
             </CardContent>
           </Card>
         </div>
 
         {/* Documentation */}
-        <Card className="mt-12 bg-slate-50 dark:bg-slate-800/50">
+        <Card className="mt-12 bg-muted/5 dark:bg-card/50">
           <CardHeader>
             <CardTitle>About This Dashboard</CardTitle>
           </CardHeader>

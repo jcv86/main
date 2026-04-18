@@ -7,26 +7,26 @@ export const metadata: Metadata = {
 
 export default function AnalisisMercadoChilePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue/5 to-indigo-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6">
             Análisis del Mercado Chileno
           </h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+          <p className="text-xl text-muted/60 max-w-3xl mx-auto">
             Investigación exhaustiva del mercado de empleabilidad, desarrollo profesional y EdTech en Chile
           </p>
-          <div className="mt-6 text-sm text-slate-500">
+          <div className="mt-6 text-sm text-muted/50">
             Actualizado: Enero 2026 | Fuentes: INE, Mineduc, ManpowerGroup, Mifuturo.cl
           </div>
         </div>
 
         {/* Executive Summary */}
-        <section className="mb-16 bg-white rounded-2xl shadow-lg p-8 border border-slate-200">
+        <section className="mb-16 bg-white rounded-2xl shadow-lg p-8 border border-muted/20">
           <h2 className="text-3xl font-bold text-slate-900 mb-6">Resumen Ejecutivo</h2>
           <div className="prose prose-slate max-w-none">
-            <p className="text-lg text-slate-700 leading-relaxed">
+            <p className="text-lg text-muted/70 leading-relaxed">
               El mercado chileno enfrenta una <strong>crisis de empleabilidad profesional sin precedentes</strong>, con
               8.1% de desempleo entre profesionales (máximo histórico) y 21.4% de desempleo juvenil. Simultáneamente, el
               60% de empleadores reporta escasez crítica de talento, revelando un
@@ -41,8 +41,8 @@ export default function AnalisisMercadoChilePage() {
                 <div className="text-3xl font-bold text-orange-600 mb-2">60%</div>
                 <div className="text-sm text-orange-800">Empresas con escasez de talento</div>
               </div>
-              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                <div className="text-3xl font-bold text-blue-600 mb-2">1.39M</div>
+              <div className="bg-blue/5 p-4 rounded-lg border border-blue/20">
+                <div className="text-3xl font-bold text-blue mb-2">1.39M</div>
                 <div className="text-sm text-blue-800">Estudiantes educación superior (2024)</div>
               </div>
             </div>
@@ -136,33 +136,33 @@ export default function AnalisisMercadoChilePage() {
           </div>
 
           {/* Causas Raíz */}
-          <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-200">
+          <div className="bg-white rounded-2xl shadow-lg p-8 border border-muted/20">
             <h3 className="text-2xl font-bold text-slate-900 mb-6">🔍 Causas Raíz del Problema</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="border-l-4 border-blue-600 pl-4">
+              <div className="border-l-4 border-blue pl-4">
                 <h4 className="font-bold text-slate-900 mb-2">Desajuste Educación-Mercado</h4>
-                <p className="text-slate-600 text-sm">
+                <p className="text-muted/60 text-sm">
                   Exceso de profesionales en áreas no demandadas. Carreras tradicionales saturadas mientras sectores
                   tecnológicos carecen de talento.
                 </p>
               </div>
-              <div className="border-l-4 border-purple-600 pl-4">
+              <div className="border-l-4 border-purple pl-4">
                 <h4 className="font-bold text-slate-900 mb-2">Déficit de Soft Skills</h4>
-                <p className="text-slate-600 text-sm">
+                <p className="text-muted/60 text-sm">
                   Universidades priorizan conocimientos técnicos. Estudiantes egresan sin habilidades de comunicación,
                   liderazgo o adaptabilidad.
                 </p>
               </div>
               <div className="border-l-4 border-green-600 pl-4">
                 <h4 className="font-bold text-slate-900 mb-2">Falta de Orientación Vocacional</h4>
-                <p className="text-slate-600 text-sm">
+                <p className="text-muted/60 text-sm">
                   Decisiones de carrera basadas en mitos familiares o prestigio social, no en aptitudes reales o demanda
                   del mercado.
                 </p>
               </div>
               <div className="border-l-4 border-red-600 pl-4">
                 <h4 className="font-bold text-slate-900 mb-2">Herramientas Obsoletas</h4>
-                <p className="text-slate-600 text-sm">
+                <p className="text-muted/60 text-sm">
                   Servicios universitarios de carrera sobrecargados, tests vocacionales estáticos, sin coaching
                   personalizado ni seguimiento continuo.
                 </p>
@@ -175,13 +175,13 @@ export default function AnalisisMercadoChilePage() {
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-slate-900 mb-8">2. Tamaño y Oportunidad de Mercado</h2>
 
-          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-lg p-8 text-white mb-8">
+          <div className="bg-gradient-to-r from-blue to-indigo-600 rounded-2xl shadow-lg p-8 text-white mb-8">
             <h3 className="text-2xl font-bold mb-6">📊 Segmentos de Mercado Primarios</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
                 <div className="text-4xl font-bold mb-2">1.39M</div>
-                <div className="text-blue-100 mb-4">Estudiantes educación superior (2024)</div>
-                <ul className="text-sm space-y-1 text-blue-50">
+                <div className="text-blue/10 mb-4">Estudiantes educación superior (2024)</div>
+                <ul className="text-sm space-y-1 text-blue/5">
                   <li>• 58.8% en universidades</li>
                   <li>• 53.3% mujeres</li>
                   <li>• Top áreas: Tecnología (27.1%), Salud (18.9%), Comercio (18.2%)</li>
@@ -189,8 +189,8 @@ export default function AnalisisMercadoChilePage() {
               </div>
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
                 <div className="text-4xl font-bold mb-2">~300K</div>
-                <div className="text-blue-100 mb-4">Egresados anuales (estimado)</div>
-                <ul className="text-sm space-y-1 text-blue-50">
+                <div className="text-blue/10 mb-4">Egresados anuales (estimado)</div>
+                <ul className="text-sm space-y-1 text-blue/5">
                   <li>• Transición universidad → trabajo</li>
                   <li>• Alta vulnerabilidad laboral</li>
                   <li>• Necesitan orientación urgente</li>
@@ -198,8 +198,8 @@ export default function AnalisisMercadoChilePage() {
               </div>
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
                 <div className="text-4xl font-bold mb-2">917K</div>
-                <div className="text-blue-100 mb-4">Desempleados actuales</div>
-                <ul className="text-sm space-y-1 text-blue-50">
+                <div className="text-blue/10 mb-4">Desempleados actuales</div>
+                <ul className="text-sm space-y-1 text-blue/5">
                   <li>• 8.9% población activa</li>
                   <li>• Necesitan re-skilling</li>
                   <li>• Mercado B2C directo</li>
@@ -209,46 +209,46 @@ export default function AnalisisMercadoChilePage() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-200">
+            <div className="bg-white rounded-2xl shadow-lg p-8 border border-muted/20">
               <h3 className="text-xl font-bold text-slate-900 mb-4">🎯 Mercado B2B (Universidades)</h3>
               <div className="space-y-4">
-                <div className="flex justify-between items-center pb-3 border-b border-slate-200">
-                  <span className="text-slate-600">Universidades tradicionales</span>
+                <div className="flex justify-between items-center pb-3 border-b border-muted/20">
+                  <span className="text-muted/60">Universidades tradicionales</span>
                   <span className="font-bold text-slate-900">~60 instituciones</span>
                 </div>
-                <div className="flex justify-between items-center pb-3 border-b border-slate-200">
-                  <span className="text-slate-600">Matrícula universitaria total</span>
+                <div className="flex justify-between items-center pb-3 border-b border-muted/20">
+                  <span className="text-muted/60">Matrícula universitaria total</span>
                   <span className="font-bold text-slate-900">814,692 estudiantes</span>
                 </div>
-                <div className="flex justify-between items-center pb-3 border-b border-slate-200">
-                  <span className="text-slate-600">Valor contrato promedio/año</span>
-                  <span className="font-bold text-green-600">$15-50M CLP</span>
+                <div className="flex justify-between items-center pb-3 border-b border-muted/20">
+                  <span className="text-muted/60">Valor contrato promedio/año</span>
+                  <span className="font-bold text-green">$15-50M CLP</span>
                 </div>
-                <div className="bg-blue-50 p-4 rounded-lg mt-4">
-                  <p className="text-sm text-slate-700">
+                <div className="bg-blue/5 p-4 rounded-lg mt-4">
+                  <p className="text-sm text-muted/70">
                     <strong>TAM potencial B2B:</strong> $900M - $3,000M CLP/año (60 universidades × $15-50M promedio)
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-200">
+            <div className="bg-white rounded-2xl shadow-lg p-8 border border-muted/20">
               <h3 className="text-xl font-bold text-slate-900 mb-4">💰 Mercado B2C (Usuarios Directos)</h3>
               <div className="space-y-4">
-                <div className="flex justify-between items-center pb-3 border-b border-slate-200">
-                  <span className="text-slate-600">Estudiantes universitarios</span>
+                <div className="flex justify-between items-center pb-3 border-b border-muted/20">
+                  <span className="text-muted/60">Estudiantes universitarios</span>
                   <span className="font-bold text-slate-900">814K potenciales</span>
                 </div>
-                <div className="flex justify-between items-center pb-3 border-b border-slate-200">
-                  <span className="text-slate-600">Profesionales desempleados</span>
+                <div className="flex justify-between items-center pb-3 border-b border-muted/20">
+                  <span className="text-muted/60">Profesionales desempleados</span>
                   <span className="font-bold text-slate-900">~370K (con ed. superior)</span>
                 </div>
-                <div className="flex justify-between items-center pb-3 border-b border-slate-200">
-                  <span className="text-slate-600">Precio premium mensual</span>
-                  <span className="font-bold text-green-600">$15,000 - $25,000 CLP</span>
+                <div className="flex justify-between items-center pb-3 border-b border-muted/20">
+                  <span className="text-muted/60">Precio premium mensual</span>
+                  <span className="font-bold text-green">$15,000 - $25,000 CLP</span>
                 </div>
-                <div className="bg-green-50 p-4 rounded-lg mt-4">
-                  <p className="text-sm text-slate-700">
+                <div className="bg-green/5 p-4 rounded-lg mt-4">
+                  <p className="text-sm text-muted/70">
                     <strong>TAM potencial B2C:</strong> Con 1% penetración del mercado universitario (~8K usuarios) ×
                     $20K/mes = $160M CLP/mes = $1,920M CLP/año
                   </p>
@@ -262,7 +262,7 @@ export default function AnalisisMercadoChilePage() {
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-slate-900 mb-8">3. Análisis Competitivo</h2>
 
-          <div className="bg-white rounded-2xl shadow-lg p-8 border border-slate-200 mb-6">
+          <div className="bg-white rounded-2xl shadow-lg p-8 border border-muted/20 mb-6">
             <h3 className="text-xl font-bold text-slate-900 mb-6">Competidores Identificados</h3>
             <div className="space-y-6">
               {/* Competidor 1 */}
@@ -273,21 +273,21 @@ export default function AnalisisMercadoChilePage() {
                     Competencia Indirecta
                   </span>
                 </div>
-                <p className="text-sm text-slate-600 mb-3">
+                <p className="text-sm text-muted/60 mb-3">
                   Centros de Carrera, unidades de empleabilidad, orientación vocacional interna
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <strong className="text-xs text-slate-500">FORTALEZAS:</strong>
-                    <ul className="text-sm text-slate-700 mt-1 space-y-1">
+                    <strong className="text-xs text-muted/50">FORTALEZAS:</strong>
+                    <ul className="text-sm text-muted/70 mt-1 space-y-1">
                       <li>• Acceso directo a estudiantes</li>
                       <li>• Sin costo adicional para usuarios</li>
                       <li>• Conexión con empresas locales</li>
                     </ul>
                   </div>
                   <div>
-                    <strong className="text-xs text-slate-500">DEBILIDADES:</strong>
-                    <ul className="text-sm text-slate-700 mt-1 space-y-1">
+                    <strong className="text-xs text-muted/50">DEBILIDADES:</strong>
+                    <ul className="text-sm text-muted/70 mt-1 space-y-1">
                       <li>• Sobrecargados (1 orientador × 500+ alumnos)</li>
                       <li>• Sin tecnología avanzada</li>
                       <li>• Atención limitada, no 24/7</li>
@@ -305,21 +305,21 @@ export default function AnalisisMercadoChilePage() {
                     Competencia Directa
                   </span>
                 </div>
-                <p className="text-sm text-slate-600 mb-3">
+                <p className="text-sm text-muted/60 mb-3">
                   Ej: OrientacionVocacional.cl, Ruta Vocacional INACAP, Chat Vocacional IA de AIEP
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <strong className="text-xs text-slate-500">FORTALEZAS:</strong>
-                    <ul className="text-sm text-slate-700 mt-1 space-y-1">
+                    <strong className="text-xs text-muted/50">FORTALEZAS:</strong>
+                    <ul className="text-sm text-muted/70 mt-1 space-y-1">
                       <li>• Accesibles online</li>
                       <li>• Tests vocacionales gratuitos</li>
                       <li>• Algunas usan IA básica</li>
                     </ul>
                   </div>
                   <div>
-                    <strong className="text-xs text-slate-500">DEBILIDADES:</strong>
-                    <ul className="text-sm text-slate-700 mt-1 space-y-1">
+                    <strong className="text-xs text-muted/50">DEBILIDADES:</strong>
+                    <ul className="text-sm text-muted/70 mt-1 space-y-1">
                       <li>• Tests estáticos, no adaptativos</li>
                       <li>• Sin coaching personalizado continuo</li>
                       <li>• No integran biblioteca de conocimiento</li>
@@ -330,26 +330,26 @@ export default function AnalisisMercadoChilePage() {
               </div>
 
               {/* Competidor 3 */}
-              <div className="border-l-4 border-blue-500 pl-6 bg-blue-50 p-4 rounded-r-lg">
+              <div className="border-l-4 border-blue/50 pl-6 bg-blue/5 p-4 rounded-r-lg">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-bold text-slate-900">Plataformas EdTech LATAM</h4>
-                  <span className="text-xs bg-blue-200 text-blue-800 px-3 py-1 rounded-full">Competencia Lateral</span>
+                  <span className="text-xs bg-blue/20 text-blue-800 px-3 py-1 rounded-full">Competencia Lateral</span>
                 </div>
-                <p className="text-sm text-slate-600 mb-3">
+                <p className="text-sm text-muted/60 mb-3">
                   Ej: Colegium, Lifebox, MÜUD, plataformas de upskilling como Coursera/Platzi
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <strong className="text-xs text-slate-500">FORTALEZAS:</strong>
-                    <ul className="text-sm text-slate-700 mt-1 space-y-1">
+                    <strong className="text-xs text-muted/50">FORTALEZAS:</strong>
+                    <ul className="text-sm text-muted/70 mt-1 space-y-1">
                       <li>• Escalabilidad probada</li>
                       <li>• Financiamiento establecido</li>
                       <li>• Ecosistemas consolidados</li>
                     </ul>
                   </div>
                   <div>
-                    <strong className="text-xs text-slate-500">DEBILIDADES:</strong>
-                    <ul className="text-sm text-slate-700 mt-1 space-y-1">
+                    <strong className="text-xs text-muted/50">DEBILIDADES:</strong>
+                    <ul className="text-sm text-muted/70 mt-1 space-y-1">
                       <li>• Enfocados en K-12 o cursos técnicos</li>
                       <li>• No especializados en empleabilidad</li>
                       <li>• Sin tests psicométricos profundos</li>
@@ -362,7 +362,7 @@ export default function AnalisisMercadoChilePage() {
           </div>
 
           {/* Ventaja Competitiva de DTC */}
-          <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg p-8 text-white">
+          <div className="bg-gradient-to-br from-green/50 to-emerald-600 rounded-2xl shadow-lg p-8 text-white">
             <h3 className="text-2xl font-bold mb-6">🏆 Ventaja Competitiva de Despega Tu Carrera</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
@@ -438,26 +438,26 @@ export default function AnalisisMercadoChilePage() {
           <h2 className="text-3xl font-bold text-slate-900 mb-8">4. Tendencias Clave del Mercado</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-slate-200">
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-muted/20">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-4xl">🤖</span>
                 <h3 className="text-xl font-bold text-slate-900">Adopción de IA en Empresas</h3>
               </div>
-              <ul className="space-y-2 text-slate-700">
+              <ul className="space-y-2 text-muted/70">
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
+                  <span className="text-green mt-1">✓</span>
                   <span>
                     <strong>93%</strong> de empresas optimistas sobre impacto positivo de IA
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
+                  <span className="text-green mt-1">✓</span>
                   <span>
                     <strong>80%</strong> de grandes empresas ya usan IA
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
+                  <span className="text-green mt-1">✓</span>
                   <span>Chile lidera LATAM en capacidades de IA (ILIA 2024)</span>
                 </li>
                 <li className="flex items-start gap-2">
@@ -465,63 +465,63 @@ export default function AnalisisMercadoChilePage() {
                   <span>Brecha: falta capacitación trabajadores para IA</span>
                 </li>
               </ul>
-              <div className="mt-4 p-3 bg-blue-50 rounded-lg">
-                <p className="text-sm text-slate-700">
+              <div className="mt-4 p-3 bg-blue/5 rounded-lg">
+                <p className="text-sm text-muted/70">
                   <strong>Implicancia para DTC:</strong> Las empresas demandan talento que entienda IA. DTC debe
                   incorporar módulos de "AI Literacy" y preparar a usuarios para trabajos potenciados por IA.
                 </p>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-slate-200">
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-muted/20">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-4xl">📱</span>
                 <h3 className="text-xl font-bold text-slate-900">Crecimiento EdTech LATAM</h3>
               </div>
-              <ul className="space-y-2 text-slate-700">
+              <ul className="space-y-2 text-muted/70">
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
+                  <span className="text-green mt-1">✓</span>
                   <span>
                     Chile: <strong>114 startups EdTech</strong>, 3er ecosistema más grande LATAM
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
+                  <span className="text-green mt-1">✓</span>
                   <span>
                     Demanda alta en <strong>upskilling, workforce skills, tutoring</strong>
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
+                  <span className="text-green mt-1">✓</span>
                   <span>Colegium crece 20%/año, adquiere 5 empresas desde 2020</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
+                  <span className="text-green mt-1">✓</span>
                   <span>Alianzas: U. Central + Coursera, UAH + Ucampus</span>
                 </li>
               </ul>
-              <div className="mt-4 p-3 bg-green-50 rounded-lg">
-                <p className="text-sm text-slate-700">
+              <div className="mt-4 p-3 bg-green/5 rounded-lg">
+                <p className="text-sm text-muted/70">
                   <strong>Implicancia para DTC:</strong> Mercado EdTech maduro y receptivo. Universidades abiertas a
                   alianzas tecnológicas. Momento ideal para lanzar.
                 </p>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-slate-200">
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-muted/20">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-4xl">🎯</span>
                 <h3 className="text-xl font-bold text-slate-900">Prioridad en Soft Skills</h3>
               </div>
-              <ul className="space-y-2 text-slate-700">
+              <ul className="space-y-2 text-muted/70">
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
+                  <span className="text-green mt-1">✓</span>
                   <span>
                     <strong>85%</strong> del éxito profesional depende de soft skills
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
+                  <span className="text-green mt-1">✓</span>
                   <span>
                     <strong>92%</strong> de reclutadores priorizan soft skills sobre técnicas
                   </span>
@@ -535,34 +535,34 @@ export default function AnalisisMercadoChilePage() {
                   <span>Brecha crítica: profesionales sin comunicación efectiva, liderazgo, adaptabilidad</span>
                 </li>
               </ul>
-              <div className="mt-4 p-3 bg-purple-50 rounded-lg">
-                <p className="text-sm text-slate-700">
+              <div className="mt-4 p-3 bg-purple/5 rounded-lg">
+                <p className="text-sm text-muted/70">
                   <strong>Implicancia para DTC:</strong> Test de Soft Skills + módulos de desarrollo son diferenciador
                   clave. Posicionar DTC como "universidad de soft skills".
                 </p>
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-lg p-6 border border-slate-200">
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-muted/20">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-4xl">💼</span>
                 <h3 className="text-xl font-bold text-slate-900">Demanda de Upskilling</h3>
               </div>
-              <ul className="space-y-2 text-slate-700">
+              <ul className="space-y-2 text-muted/70">
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
+                  <span className="text-green mt-1">✓</span>
                   <span>
                     Empresas priorizan <strong>desarrollo interno (27%)</strong> para cubrir escasez
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
+                  <span className="text-green mt-1">✓</span>
                   <span>
                     Programas de <strong>reskilling y upskilling</strong> en alta demanda
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green-600 mt-1">✓</span>
+                  <span className="text-green mt-1">✓</span>
                   <span>
                     Profesionales buscan <strong>cultura, experiencia</strong>, no solo salario
                   </span>
@@ -573,7 +573,7 @@ export default function AnalisisMercadoChilePage() {
                 </li>
               </ul>
               <div className="mt-4 p-3 bg-orange-50 rounded-lg">
-                <p className="text-sm text-slate-700">
+                <p className="text-sm text-muted/70">
                   <strong>Implicancia para DTC:</strong> Oportunidad B2B Enterprise - vender paquetes de upskilling a
                   empresas para sus empleados (mercado adicional de miles de profesionales).
                 </p>
@@ -590,12 +590,12 @@ export default function AnalisisMercadoChilePage() {
 
           <div className="space-y-6">
             {/* Recomendación 1 */}
-            <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-gradient-to-r from-blue to-blue-700 rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">🎯</span>
                 <div>
                   <h3 className="text-2xl font-bold">1. Posicionamiento: "El Sistema Nervioso de tu Carrera"</h3>
-                  <p className="text-blue-100 mt-1">
+                  <p className="text-blue/10 mt-1">
                     Cambiar narrativa de "plataforma de tests" a "ecosistema inteligente de carrera"
                   </p>
                 </div>
@@ -603,7 +603,7 @@ export default function AnalisisMercadoChilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">Mensajes Clave:</h4>
-                  <ul className="text-sm space-y-1 text-blue-50">
+                  <ul className="text-sm space-y-1 text-blue/5">
                     <li>• "Tu cerebro profesional externo que nunca duerme"</li>
                     <li>• "120+ libros de desarrollo profesional en tu bolsillo"</li>
                     <li>• "Coach IA que conoce tu perfil psicométrico completo"</li>
@@ -612,7 +612,7 @@ export default function AnalisisMercadoChilePage() {
                 </div>
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">Audiencias Prioritarias:</h4>
-                  <ul className="text-sm space-y-1 text-blue-50">
+                  <ul className="text-sm space-y-1 text-blue/5">
                     <li>
                       • <strong>Primaria:</strong> Universidades (UDD, PUC, U. Chile) - B2B
                     </li>
@@ -631,12 +631,12 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Recomendación 2 */}
-            <div className="bg-gradient-to-r from-purple-600 to-purple-700 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-gradient-to-r from-purple to-purple-700 rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">🚀</span>
                 <div>
                   <h3 className="text-2xl font-bold">2. Agregar Módulos de "AI Literacy" y Habilidades Futuras</h3>
-                  <p className="text-purple-100 mt-1">
+                  <p className="text-purple/10 mt-1">
                     Responder a la demanda de preparación para trabajos potenciados por IA
                   </p>
                 </div>
@@ -644,7 +644,7 @@ export default function AnalisisMercadoChilePage() {
               <div className="space-y-4">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">Nuevos Contenidos en Biblioteca:</h4>
-                  <ul className="text-sm space-y-1 text-purple-50">
+                  <ul className="text-sm space-y-1 text-purple/5">
                     <li>
                       • <strong>Sección "Habilidades IA":</strong> Prompt engineering, uso ético de IA, automatización
                     </li>
@@ -658,7 +658,7 @@ export default function AnalisisMercadoChilePage() {
                 </div>
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">Nuevo Test: "Readiness IA"</h4>
-                  <p className="text-sm text-purple-50">
+                  <p className="text-sm text-purple/5">
                     Evaluar qué tan preparado está el usuario para trabajar con IA. Resultados: áreas donde IA puede
                     amenazar su rol vs áreas donde puede potenciarlo.
                   </p>
@@ -759,7 +759,7 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Recomendación 5 */}
-            <div className="bg-gradient-to-r from-indigo-600 to-blue-700 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-gradient-to-r from-blue to-blue-700 rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">🎓</span>
                 <div>
@@ -802,7 +802,7 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Recomendación 6 */}
-            <div className="bg-gradient-to-r from-pink-600 to-rose-600 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-gradient-to-r from-red to-rose-600 rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">🌎</span>
                 <div>
@@ -855,20 +855,20 @@ export default function AnalisisMercadoChilePage() {
             <div className="space-y-6">
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">Semana 1-4</span>
+                  <span className="bg-blue text-white px-3 py-1 rounded-full text-sm font-bold">Semana 1-4</span>
                   <h4 className="text-xl font-bold">Cerrar Primeros 3 Convenios Universitarios</h4>
                 </div>
-                <ul className="text-slate-200 space-y-2 ml-6">
+                <ul className="text-muted/20 space-y-2 ml-6">
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">→</span>
+                    <span className="text-blue/40 mt-1">→</span>
                     <span>Contactar directamente a Directores de Centros de Carrera de UDD, PUC, U. Chile</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">→</span>
+                    <span className="text-blue/40 mt-1">→</span>
                     <span>Ofrecer piloto gratuito 3 meses con 100-200 estudiantes por universidad</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-blue-400 mt-1">→</span>
+                    <span className="text-blue/40 mt-1">→</span>
                     <span>Compromiso: medir empleabilidad vs grupo control, publicar resultados</span>
                   </li>
                 </ul>
@@ -876,10 +876,10 @@ export default function AnalisisMercadoChilePage() {
 
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="bg-purple-600 text-white px-3 py-1 rounded-full text-sm font-bold">Semana 5-8</span>
+                  <span className="bg-purple text-white px-3 py-1 rounded-full text-sm font-bold">Semana 5-8</span>
                   <h4 className="text-xl font-bold">Lanzamiento Beta Público B2C</h4>
                 </div>
-                <ul className="text-slate-200 space-y-2 ml-6">
+                <ul className="text-muted/20 space-y-2 ml-6">
                   <li className="flex items-start gap-2">
                     <span className="text-purple-400 mt-1">→</span>
                     <span>Tier Freemium: 1 test gratis + 5 consultas coach IA/mes + búsqueda biblioteca limitada</span>
@@ -902,10 +902,10 @@ export default function AnalisisMercadoChilePage() {
 
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-bold">Semana 9-12</span>
+                  <span className="bg-green text-white px-3 py-1 rounded-full text-sm font-bold">Semana 9-12</span>
                   <h4 className="text-xl font-bold">Agregar Módulo "AI Literacy"</h4>
                 </div>
-                <ul className="text-slate-200 space-y-2 ml-6">
+                <ul className="text-muted/20 space-y-2 ml-6">
                   <li className="flex items-start gap-2">
                     <span className="text-green-400 mt-1">→</span>
                     <span>
@@ -928,7 +928,7 @@ export default function AnalisisMercadoChilePage() {
                   <span className="bg-orange-600 text-white px-3 py-1 rounded-full text-sm font-bold">Continuo</span>
                   <h4 className="text-xl font-bold">Construir Casos de Éxito y Testimonios</h4>
                 </div>
-                <ul className="text-slate-200 space-y-2 ml-6">
+                <ul className="text-muted/20 space-y-2 ml-6">
                   <li className="flex items-start gap-2">
                     <span className="text-orange-400 mt-1">→</span>
                     <span>
@@ -951,9 +951,9 @@ export default function AnalisisMercadoChilePage() {
 
         {/* Conclusión */}
         <section className="mb-16">
-          <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-white text-center">
+          <div className="bg-gradient-to-r from-blue via-indigo-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-white text-center">
             <h2 className="text-4xl font-bold mb-6">Conclusión</h2>
-            <p className="text-xl text-blue-50 max-w-4xl mx-auto leading-relaxed mb-8">
+            <p className="text-xl text-blue/5 max-w-4xl mx-auto leading-relaxed mb-8">
               Chile enfrenta una crisis estructural de empleabilidad con <strong>8.1% de desempleo profesional</strong>y{" "}
               <strong>60% de empresas con escasez de talento</strong>. Despega Tu Carrera está posicionado de manera
               única para resolver este problema con su ecosistema integrado de tests psicométricos, biblioteca de 120+
@@ -962,18 +962,18 @@ export default function AnalisisMercadoChilePage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
                 <div className="text-3xl font-bold mb-2">$4-5B</div>
-                <div className="text-blue-100">Mercado potencial combinado B2B + B2C Chile</div>
+                <div className="text-blue/10">Mercado potencial combinado B2B + B2C Chile</div>
               </div>
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
                 <div className="text-3xl font-bold mb-2">1.39M</div>
-                <div className="text-blue-100">Estudiantes educación superior - audiencia principal</div>
+                <div className="text-blue/10">Estudiantes educación superior - audiencia principal</div>
               </div>
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
                 <div className="text-3xl font-bold mb-2">Q1 2026</div>
-                <div className="text-blue-100">Lanzamiento oficial - timing perfecto</div>
+                <div className="text-blue/10">Lanzamiento oficial - timing perfecto</div>
               </div>
             </div>
-            <p className="text-lg text-blue-100 max-w-3xl mx-auto mt-8">
+            <p className="text-lg text-blue/10 max-w-3xl mx-auto mt-8">
               Con las mejoras estratégicas propuestas (AI Literacy, vertical B2B Enterprise, certificación para
               orientadores), DTC puede capturar una porción significativa del mercado y expandirse exitosamente a LATAM
               en 2027.
@@ -982,7 +982,7 @@ export default function AnalisisMercadoChilePage() {
         </section>
 
         {/* Footer */}
-        <footer className="text-center text-slate-500 text-sm">
+        <footer className="text-center text-muted/50 text-sm">
           <p>Análisis de Mercado Despega Tu Carrera | Enero 2026</p>
           <p className="mt-2">
             Desarrollado por: <strong>Travis Comber</strong> (CTO & Lead Developer) | Dirigido por:{" "}

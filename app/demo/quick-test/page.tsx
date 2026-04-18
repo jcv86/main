@@ -63,15 +63,15 @@ export default function QuickTestPage() {
             Quick Test Mode
           </Badge>
           <h1 className="text-4xl font-bold mb-4">Prueba Cada Pilar</h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          <p className="text-lg text-muted/60 dark:text-muted/40 max-w-2xl mx-auto">
             Accede rápidamente a cada fase del ciclo A1-A4 para verificar integración y funcionamiento
           </p>
         </div>
 
         {/* Alert */}
-        <Alert className="mb-8 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/30">
-          <AlertCircle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-          <AlertDescription className="text-blue-800 dark:text-blue-200">
+        <Alert className="mb-8 border-blue/20 dark:border-blue/10 bg-blue/5 dark:bg-blue-950/30">
+          <AlertCircle className="h-4 w-4 text-blue dark:text-blue/40" />
+          <AlertDescription className="text-blue-800 dark:text-blue/20">
             Este es un modo de testing. Todos los links abiertos sin requirir autenticación completa.
           </AlertDescription>
         </Alert>
@@ -83,13 +83,13 @@ export default function QuickTestPage() {
             const isComplete = results[test.id]?.success
             
             return (
-              <Card key={test.id} className="border-2 hover:border-slate-300 dark:hover:border-slate-700 transition-all">
+              <Card key={test.id} className="border-2 hover:border-muted/30 dark:hover:border-slate-700 transition-all">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <CardTitle className="flex items-center gap-2">
                         {test.name}
-                        {isComplete && <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />}
+                        {isComplete && <CheckCircle2 className="h-5 w-5 text-green dark:text-green-400" />}
                       </CardTitle>
                       <CardDescription className="mt-1">{test.description}</CardDescription>
                     </div>
@@ -121,7 +121,7 @@ export default function QuickTestPage() {
 
         {/* Summary */}
         {Object.keys(results).length > 0 && (
-          <Card className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 border-green-200 dark:border-green-800">
+          <Card className="bg-gradient-to-r from-green/5 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 border-green/20 dark:border-green-800">
             <CardHeader>
               <CardTitle className="text-green-900 dark:text-green-100">
                 ✓ {Object.keys(results).length}/{tests.length} Pilares Probados

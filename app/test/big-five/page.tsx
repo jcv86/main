@@ -342,7 +342,7 @@ export default function BigFiveTest() {
                   <Clock className="h-4 w-4 mr-1" />
                   <span>~20 minutes</span>
                 </div>
-                <Badge variant="outline" className="bg-blue-100 text-blue-700">
+                <Badge variant="outline" className="bg-blue/10 text-blue">
                   <Sparkles className="h-3 w-3 mr-1" />
                   With AI Analysis
                 </Badge>

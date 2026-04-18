@@ -30,10 +30,10 @@ const routeIcons: Record<string, any> = {
 }
 
 const routeColors: Record<string, string> = {
-  'liderazgo': 'from-blue to-blue-600',
-  'comunicacion': 'from-emerald-500 to-emerald-600',
-  'emprendimiento': 'from-amber-500 to-amber-600',
-  'transformacion': 'from-purple-500 to-purple-600',
+  'liderazgo': 'from-blue to-blue',
+  'comunicacion': 'from-green/50 to-emerald-600',
+  'emprendimiento': 'from-yellow/50 to-amber-600',
+  'transformacion': 'from-purple/50 to-purple-600',
 }
 
 export default function A2RoutasPage() {
@@ -279,10 +279,10 @@ export default function A2RoutasPage() {
                   </div>
 
                   {/* Why this route */}
-                  <div className="p-3 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue-800">
+                  <div className="p-3 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue/10">
                     <p className="text-sm">
-                      <span className="font-semibold text-blue-900 dark:text-blue-100">Por qué para ti: </span>
-                      <span className="text-blue-800 dark:text-blue-200">{route.razon_seleccion}</span>
+                      <span className="font-semibold text-blue dark:text-blue/10">Por qué para ti: </span>
+                      <span className="text-blue-800 dark:text-blue/20">{route.razon_seleccion}</span>
                     </p>
                   </div>
 

@@ -48,7 +48,7 @@ export default function A2CaminoPage() {
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
             Elige Tu Camino
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted/60 dark:text-muted/40">
             ¿En qué aspectos quieres enfocarte en estos 90 días?
           </p>
         </div>
@@ -68,7 +68,7 @@ export default function A2CaminoPage() {
               <Card
                 className={`h-full hover:shadow-lg transition-shadow ${
                   selectedCamino === camino.id
-                    ? "bg-slate-100 dark:bg-slate-800"
+                    ? "bg-muted/10 dark:bg-card"
                     : ""
                 }`}
               >
@@ -82,14 +82,14 @@ export default function A2CaminoPage() {
                     {camino.examples.map((example) => (
                       <div key={example} className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-[20px] bg-slate-400"></div>
-                        <span className="text-sm text-slate-600 dark:text-slate-400">
+                        <span className="text-sm text-muted/60 dark:text-muted/40">
                           {example}
                         </span>
                       </div>
                     ))}
                   </div>
                   {selectedCamino === camino.id && (
-                    <div className="mt-4 p-2 bg-slate-900 dark:bg-slate-100 rounded text-white dark:text-slate-900 text-sm font-medium text-center">
+                    <div className="mt-4 p-2 bg-slate-900 dark:bg-muted/10 rounded text-white dark:text-slate-900 text-sm font-medium text-center">
                       Seleccionado
                     </div>
                   )}

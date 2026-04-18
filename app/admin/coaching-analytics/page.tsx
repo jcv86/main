@@ -344,7 +344,7 @@ export default function CoachingAnalyticsPage() {
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-purple/10 flex items-center justify-center">
                     <span className="text-2xl">👩‍💼</span>
                   </div>
                   <div>
@@ -379,7 +379,7 @@ export default function CoachingAnalyticsPage() {
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                  <div className="w-12 h-12 rounded-full bg-blue/10 flex items-center justify-center">
                     <span className="text-2xl">👨‍💼</span>
                   </div>
                   <div>

@@ -4,11 +4,11 @@ import { Brain, Loader2 } from "lucide-react"
 
 export default function CerebroLoading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-white to-blue/5 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl shadow-lg">
+            <div className="p-3 bg-gradient-to-br from-purple to-blue rounded-xl shadow-lg">
               <Brain className="h-8 w-8 text-white animate-pulse" />
             </div>
             <Skeleton className="h-10 w-64" />
@@ -19,7 +19,7 @@ export default function CerebroLoading() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 max-w-[1600px] mx-auto">
           <div className="lg:col-span-3">
             <Card className="h-[calc(100vh-8rem)] flex flex-col shadow-xl">
-              <CardHeader className="border-b bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+              <CardHeader className="border-b bg-gradient-to-r from-purple to-blue text-white">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Skeleton className="h-10 w-10 rounded-lg bg-white/20" />
@@ -33,7 +33,7 @@ export default function CerebroLoading() {
 
               <div className="flex-1 flex items-center justify-center">
                 <div className="text-center space-y-4">
-                  <Loader2 className="h-16 w-16 animate-spin text-purple-600 mx-auto" />
+                  <Loader2 className="h-16 w-16 animate-spin text-purple mx-auto" />
                   <p className="text-gray-600 dark:text-gray-400">Cargando cerebro inteligente...</p>
                 </div>
               </div>

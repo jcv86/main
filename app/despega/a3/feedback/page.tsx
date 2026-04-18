@@ -75,18 +75,18 @@ export default function FeedbackPage() {
   const getFeedbackColor = (type: string) => {
     switch (type) {
       case 'strength':
-        return 'border-l-4 border-green-500 bg-green-50 dark:bg-green-900/20'
+        return 'border-l-4 border-green-500 bg-green/5 dark:bg-green-900/20'
       case 'improvement':
         return 'border-l-4 border-orange-500 bg-orange/5 dark:bg-orange-900/20'
       case 'insight':
-        return 'border-l-4 border-blue-500 bg-blue/5 dark:bg-blue-900/20'
+        return 'border-l-4 border-blue/50 bg-blue/5 dark:bg-blue/20'
       default:
         return ''
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <Link href="/despega/a3">
@@ -100,7 +100,7 @@ export default function FeedbackPage() {
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
             Feedback del Coach IA
           </h1>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-muted/60 dark:text-muted/40">
             Análisis detallado de cada simulación con recomendaciones específicas
           </p>
         </div>
@@ -118,15 +118,15 @@ export default function FeedbackPage() {
                   onClick={() => setSelectedInterview(key)}
                   className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${
                     selectedInterview === key
-                      ? 'border-blue-500 bg-blue/5 dark:bg-blue-900/20'
-                      : 'border-slate-200 dark:border-slate-700 hover:border-blue-300'
+                      ? 'border-blue/50 bg-blue/5 dark:bg-blue/20'
+                      : 'border-muted/20 dark:border-card hover:border-blue/30'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <p className="font-semibold text-slate-900 dark:text-white">{value.simulation}</p>
                     <Badge className="bg-blue">{value.overallScore}%</Badge>
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">{value.date}</p>
+                  <p className="text-sm text-muted/60 dark:text-muted/40">{value.date}</p>
                 </button>
               ))}
             </div>
@@ -161,10 +161,10 @@ export default function FeedbackPage() {
                     <div className="flex gap-4">
                       <Icon className={`w-6 h-6 flex-shrink-0 ${
                         item.type === 'strength'
-                          ? 'text-green-600 dark:text-green-400'
+                          ? 'text-green dark:text-green-400'
                           : item.type === 'improvement'
                           ? 'text-orange dark:text-orange-400'
-                          : 'text-blue dark:text-blue-400'
+                          : 'text-blue dark:text-blue/40'
                       }`} />
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
@@ -172,7 +172,7 @@ export default function FeedbackPage() {
                             {item.title}
                           </h3>
                           {item.type === 'strength' && (
-                            <Badge className="bg-green-600">Fortaleza</Badge>
+                            <Badge className="bg-green">Fortaleza</Badge>
                           )}
                           {item.type === 'improvement' && (
                             <Badge className="bg-orange-600">Mejorar</Badge>
@@ -181,10 +181,10 @@ export default function FeedbackPage() {
                             <Badge className="bg-blue">Insight</Badge>
                           )}
                         </div>
-                        <p className="text-slate-700 dark:text-slate-300 mb-3">
+                        <p className="text-muted/70 dark:text-muted/30 mb-3">
                           {item.description}
                         </p>
-                        <p className="text-xs text-slate-500 flex items-center gap-2">
+                        <p className="text-xs text-muted/50 flex items-center gap-2">
                           <span className="w-1 h-1 bg-slate-400 rounded-full" />
                           Timestampv: {item.timestamp}
                         </p>
@@ -197,7 +197,7 @@ export default function FeedbackPage() {
           </div>
 
           {/* Action Items */}
-          <Card className="border-2 border-purple/30 dark:border-purple-800">
+          <Card className="border-2 border-purple/30 dark:border-purple">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Lightbulb className="w-5 h-5 text-purple" />
@@ -209,7 +209,7 @@ export default function FeedbackPage() {
                 <p className="text-sm font-semibold text-slate-900 dark:text-white">
                   Para tu próxima simulación, enfócate en:
                 </p>
-                <ol className="list-decimal list-inside space-y-2 text-sm text-slate-700 dark:text-slate-300">
+                <ol className="list-decimal list-inside space-y-2 text-sm text-muted/70 dark:text-muted/30">
                   <li>Añadir 2-3 números específicos en cada logro (% de mejora, cantidad de usuarios, tiempo ahorrado)</li>
                   <li>Practicar verbalizaciones de pausa ("Déjame pensar...", "Buena pregunta...")</li>
                   <li>Incluir un aprendizaje de un colega en al menos una respuesta</li>
@@ -217,11 +217,11 @@ export default function FeedbackPage() {
                 </ol>
               </div>
 
-              <div className="pt-4 border-t border-purple/30 dark:border-purple-800">
-                <p className="text-sm text-slate-700 dark:text-slate-300 mb-3">
+              <div className="pt-4 border-t border-purple/30 dark:border-purple">
+                <p className="text-sm text-muted/70 dark:text-muted/30 mb-3">
                   Cuando estés listo, practica la siguiente dificultad:
                 </p>
-                <Button className="w-full bg-purple-600 hover:bg-purple-700">
+                <Button className="w-full bg-purple hover:bg-purple">
                   <Volume2 className="w-4 h-4 mr-2" />
                   Iniciar Entrevista Estructurada (Siguiente Nivel)
                 </Button>
@@ -246,20 +246,20 @@ export default function FeedbackPage() {
                   <div key={idx}>
                     <div className="flex justify-between text-sm mb-2">
                       <span className="font-medium text-slate-900 dark:text-white">{item.metric}</span>
-                      <span className="text-green-600 dark:text-green-400 font-bold">
+                      <span className="text-green dark:text-green-400 font-bold">
                         +{item.after - item.before}%
                       </span>
                     </div>
                     <div className="flex gap-2 h-2">
-                      <div className="flex-1 bg-slate-200 dark:bg-slate-700 rounded overflow-hidden">
+                      <div className="flex-1 bg-muted/20 dark:bg-slate-700 rounded overflow-hidden">
                         <div
-                          className="bg-slate-400 dark:bg-slate-500 h-full"
+                          className="bg-slate-400 dark:bg-muted/50 h-full"
                           style={{ width: `${item.before}%` }}
                         />
                       </div>
-                      <div className="flex-1 bg-slate-200 dark:bg-slate-700 rounded overflow-hidden">
+                      <div className="flex-1 bg-muted/20 dark:bg-slate-700 rounded overflow-hidden">
                         <div
-                          className="bg-green-500 h-full"
+                          className="bg-green/50 h-full"
                           style={{ width: `${item.after}%` }}
                         />
                       </div>

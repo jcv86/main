@@ -81,7 +81,7 @@ export default function TrainingDashboardPage() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-950 to-slate-950">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-cyan-500" />
-          <p className="text-slate-300">Cargando tu progreso de entrenamiento...</p>
+          <p className="text-muted/30">Cargando tu progreso de entrenamiento...</p>
         </div>
       </div>
     )
@@ -209,12 +209,12 @@ export default function TrainingDashboardPage() {
     >
       {/* EXPLICACIÓN */}
       <ASectionPart title="¿Qué es Entrenamiento Intensivo?" icon={<Zap />}>
-        <p className="text-slate-300 mb-4">
+        <p className="text-muted/30 mb-4">
           Esta es tu fase de práctica intensiva. Aquí realizas entrenamientos realistas de entrevistas, recibes feedback inmediato, 
           y ajustas tu enfoque basado en análisis. Combinas tu Interview 0, CV optimizado e inteligencia del mercado 
           en entrenamientos prácticos que te preparan para situaciones reales.
         </p>
-        <p className="text-slate-400 text-sm">
+        <p className="text-muted/40 text-sm">
           🎯 Enfoque: Práctica realista, feedback de IA, iteración y mejora continua durante 30-60 días.
         </p>
       </ASectionPart>
@@ -232,7 +232,7 @@ export default function TrainingDashboardPage() {
               style={{ width: `${completionPercentage}%` }}
             />
           </div>
-          <p className="text-xs text-slate-400">{completedItems} de 4 módulos completados</p>
+          <p className="text-xs text-muted/40">{completedItems} de 4 módulos completados</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -241,10 +241,10 @@ export default function TrainingDashboardPage() {
             return (
               <div key={i} className={`p-3 rounded-[28px] border ${isCompleted ? 'bg-emerald-900/20 border-emerald-500/30' : 'bg-slate-800/20 border-slate-700'}`}>
                 <div className="flex items-center gap-2 mb-1">
-                  {isCompleted ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-slate-400" />}
+                  {isCompleted ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-muted/40" />}
                   <p className="text-sm font-semibold text-white">{card.title}</p>
                 </div>
-                <p className="text-xs text-slate-400 ml-6">{isCompleted ? 'Completado' : 'Pendiente'}</p>
+                <p className="text-xs text-muted/40 ml-6">{isCompleted ? 'Completado' : 'Pendiente'}</p>
               </div>
             )
           })}
@@ -276,11 +276,11 @@ export default function TrainingDashboardPage() {
                           </div>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                          <p className="text-sm text-slate-400">{card.description}</p>
+                          <p className="text-sm text-muted/40">{card.description}</p>
                           {isCompleted && <Badge className="bg-green/50/20 text-emerald-400 border border-emerald-500/50">✓ Completado</Badge>}
                           <Button 
                             onClick={() => router.push(card.href)}
-                            className={`w-full group/btn transition-all ${isCompleted ? 'bg-slate-700 hover:bg-slate-600' : 'bg-cyan-600 hover:bg-cyan-700'}`}
+                            className={`w-full group/btn transition-all ${isCompleted ? 'bg-slate-700 hover:bg-slate-600' : 'bg-blue hover:bg-cyan-700'}`}
                           >
                             {card.action}
                             <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
@@ -300,7 +300,7 @@ export default function TrainingDashboardPage() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h4 className="text-white font-semibold mb-1">Tu Progreso General</h4>
-              <p className="text-sm text-slate-400">Completadas: Interview 0 + CV base + Market Insights</p>
+              <p className="text-sm text-muted/40">Completadas: Interview 0 + CV base + Market Insights</p>
             </div>
             <div className="text-right">
               <p className="text-3xl font-black text-cyan-400">{Math.round(completionPercentage)}%</p>
@@ -312,7 +312,7 @@ export default function TrainingDashboardPage() {
               style={{ width: `${completionPercentage}%` }}
             />
           </div>
-          <p className="text-xs text-slate-400">{completedItems} de 4 componentes base completados</p>
+          <p className="text-xs text-muted/40">{completedItems} de 4 componentes base completados</p>
         </div>
       </ASectionPart>
 
@@ -322,10 +322,10 @@ export default function TrainingDashboardPage() {
           {completionPercentage === 0 && (
             <div className="p-6 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border border-cyan-500/30 rounded-lg">
               <h4 className="text-white font-semibold mb-2">Comienza aquí</h4>
-              <p className="text-slate-300 text-sm mb-4">
+              <p className="text-muted/30 text-sm mb-4">
                 La base es fundamental. Completa Interview 0 primero - es la piedra angular de todas tus entrevistas.
               </p>
-              <Button onClick={() => router.push('/despega/interview-0')} className="bg-cyan-600 hover:bg-cyan-700">
+              <Button onClick={() => router.push('/despega/interview-0')} className="bg-blue hover:bg-cyan-700">
                 Comenzar Interview 0
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -335,10 +335,10 @@ export default function TrainingDashboardPage() {
           {completionPercentage > 0 && completionPercentage < 50 && (
             <div className="p-6 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border border-cyan-500/30 rounded-lg">
               <h4 className="text-white font-semibold mb-2">Siguiente: Entrenamiento Guiado</h4>
-              <p className="text-slate-300 text-sm mb-4">
+              <p className="text-muted/30 text-sm mb-4">
                 Ya tienes tu base. Ahora practica con guía. Los Entrenamientos Guiados te enseñan la metodología STAR y te dan feedback IA en tiempo real.
               </p>
-              <Button onClick={() => router.push('/despega/a3/entrenamiento-guiado')} className="bg-cyan-600 hover:bg-cyan-700">
+              <Button onClick={() => router.push('/despega/a3/entrenamiento-guiado')} className="bg-blue hover:bg-cyan-700">
                 Ir a Entrenamientos Guiados
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -348,10 +348,10 @@ export default function TrainingDashboardPage() {
           {completionPercentage >= 50 && completionPercentage < 100 && (
             <div className="p-6 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border border-cyan-500/30 rounded-lg">
               <h4 className="text-white font-semibold mb-2">Intensifica: Desafío Máximo</h4>
-              <p className="text-slate-300 text-sm mb-4">
+              <p className="text-muted/30 text-sm mb-4">
                 Estás en buena forma. Es momento de desafiarte. Los Entrenamientos Desafiantes te preparan para presión real de entrevista ejecutiva.
               </p>
-              <Button onClick={() => router.push('/despega/a3/entrenamiento-desafiante')} className="bg-teal-600 hover:bg-teal-700">
+              <Button onClick={() => router.push('/despega/a3/entrenamiento-desafiante')} className="bg-blue hover:bg-teal-700">
                 Ir a Entrenamientos Desafiantes
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -373,7 +373,7 @@ export default function TrainingDashboardPage() {
                 <CardTitle className="text-lg">4 Principios del Módulo de Entrenamiento</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="space-y-2 text-sm text-slate-300">
+                <div className="space-y-2 text-sm text-muted/30">
                   <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Progresión: Guiado → Estructurado → Desafío</p>
                   <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Feedback: Análisis IA después de cada sesión</p>
                   <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Video: Analiza postura, tono, gestos reales</p>
@@ -387,7 +387,7 @@ export default function TrainingDashboardPage() {
                 <CardTitle className="text-lg">Tips de Experto</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <ul className="space-y-2 text-sm text-slate-300">
+                <ul className="space-y-2 text-sm text-muted/30">
                   <li>• Practiquen 2-3 entrenamientos por semana para máximo progreso</li>
                   <li>• Mira el video de ti mismo - es incómodo pero transformador</li>
                   <li>• Ajusta tus respuestas según feedback IA</li>

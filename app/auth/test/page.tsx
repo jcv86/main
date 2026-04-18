@@ -13,7 +13,7 @@ export default function AuthTestPage() {
       </div>
 
       <div className="mt-8">
-        <a href="/auth/signin" className="text-blue-600 underline">
+        <a href="/auth/signin" className="text-blue underline">
           Go to Sign In Page
         </a>
       </div>

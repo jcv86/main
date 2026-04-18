@@ -106,8 +106,8 @@ export default function A1CallEntrenaPage() {
               <div className="text-5xl font-black text-transparent bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text mb-2">
                 {profileNames[profile]}
               </div>
-              <p className="text-lg text-slate-300">Completaste tu Call Entrena</p>
-              <p className="text-sm text-slate-400 mt-2">Una sesión de entrenamiento para practicar respuestas en entrevistas</p>
+              <p className="text-lg text-muted/30">Completaste tu Call Entrena</p>
+              <p className="text-sm text-muted/40 mt-2">Una sesión de entrenamiento para practicar respuestas en entrevistas</p>
             </div>
 
             <div className="bg-slate-800/50 rounded-[28px] p-6 mb-6 text-left">
@@ -115,14 +115,14 @@ export default function A1CallEntrenaPage() {
               <div className="space-y-3">
                 {responses.map((response, idx) => (
                   <div key={idx} className="border border-slate-600 rounded p-3">
-                    <p className="text-xs text-slate-400 mb-1">Pregunta {idx + 1}:</p>
-                    <p className="text-slate-200">{response}</p>
+                    <p className="text-xs text-muted/40 mb-1">Pregunta {idx + 1}:</p>
+                    <p className="text-muted/20">{response}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <p className="text-slate-400 mb-6">
+            <p className="text-muted/40 mb-6">
               Tu Call Entrena fue adaptado para tu perfil {profileNames[profile]}. Repítelo cuantas veces quieras para mejorar tus respuestas.
             </p>
           </div>
@@ -144,7 +144,7 @@ export default function A1CallEntrenaPage() {
             </Button>
             <Button 
               onClick={() => router.push('/despega')}
-              className="w-full bg-purple-600 hover:bg-purple-700"
+              className="w-full bg-purple hover:bg-purple"
             >
               Dashboard
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -168,8 +168,8 @@ export default function A1CallEntrenaPage() {
       <ASectionPart title={`Pregunta ${currentQuestion + 1} de ${CALL_ENTRENA_QUESTIONS.length}`} icon={<Phone />}>
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            <p className="text-sm text-slate-400">Tu Perfil: <span className="font-semibold text-cyan-300">{profileNames[profile]}</span></p>
-            <p className="text-sm text-slate-400">{Math.round(progress)}%</p>
+            <p className="text-sm text-muted/40">Tu Perfil: <span className="font-semibold text-cyan-300">{profileNames[profile]}</span></p>
+            <p className="text-sm text-muted/40">{Math.round(progress)}%</p>
           </div>
           <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
             <div 
@@ -184,8 +184,8 @@ export default function A1CallEntrenaPage() {
             <CardTitle className="text-lg">{question.question}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-slate-400 italic mb-4">Contexto: {question.scenario}</p>
-            <p className="text-xs text-slate-500">Responde cómo lo haría alguien con tu perfil {profileNames[profile]}.</p>
+            <p className="text-sm text-muted/40 italic mb-4">Contexto: {question.scenario}</p>
+            <p className="text-xs text-muted/50">Responde cómo lo haría alguien con tu perfil {profileNames[profile]}.</p>
           </CardContent>
         </Card>
 
@@ -220,9 +220,9 @@ export default function A1CallEntrenaPage() {
             >
               <div className="text-left flex-1">
                 <p className="font-semibold text-white text-sm">{option.label}</p>
-                <p className="text-xs text-slate-400">{option.description}</p>
+                <p className="text-xs text-muted/40">{option.description}</p>
               </div>
-              <ArrowRight className="w-4 h-4 text-slate-400" />
+              <ArrowRight className="w-4 h-4 text-muted/40" />
             </Button>
           ))}
         </div>

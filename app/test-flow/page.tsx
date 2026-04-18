@@ -246,8 +246,8 @@ export default function TestFlowVerification() {
   }
 
   const getCheckIcon = (passed: boolean, isActive: boolean) => {
-    if (isActive) return <RefreshCw className="h-4 w-4 animate-spin text-blue-500" />
-    if (passed) return <CheckCircle className="h-4 w-4 text-green-500" />
+    if (isActive) return <RefreshCw className="h-4 w-4 animate-spin text-blue/50" />
+    if (passed) return <CheckCircle className="h-4 w-4 text-green" />
     return <XCircle className="h-4 w-4 text-gray-300" />
   }
 
@@ -256,9 +256,9 @@ export default function TestFlowVerification() {
       case "pending":
         return <Badge variant="outline">Pending</Badge>
       case "running":
-        return <Badge className="bg-blue-500">Running</Badge>
+        return <Badge className="bg-blue/50">Running</Badge>
       case "passed":
-        return <Badge className="bg-green-500">Passed</Badge>
+        return <Badge className="bg-green/50">Passed</Badge>
       case "failed":
         return <Badge variant="destructive">Failed</Badge>
     }
@@ -286,7 +286,7 @@ export default function TestFlowVerification() {
                 </p>
                 <div className="flex items-center gap-4 text-sm">
                   <span className="flex items-center gap-1">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <CheckCircle className="h-4 w-4 text-green" />
                     {passedTests} Passed
                   </span>
                   <span className="flex items-center gap-1">
@@ -433,7 +433,7 @@ export default function TestFlowVerification() {
               <div className="text-center">
                 {failedTests === 0 ? (
                   <div className="space-y-2">
-                    <CheckCircle className="h-12 w-12 text-green-500 mx-auto" />
+                    <CheckCircle className="h-12 w-12 text-green mx-auto" />
                     <h3 className="text-xl font-semibold text-green-900">All Tests Passed! ✅</h3>
                     <p className="text-green-700">
                       All {passedTests} personality tests have proper navigation flow and completion processes.

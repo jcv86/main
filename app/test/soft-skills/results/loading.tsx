@@ -6,7 +6,7 @@ import { MessageCircle, Crown, Users, Puzzle, RotateCcw, Heart, Clock, Target, S
 
 export default function SoftSkillsResultsLoading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-red/5 via-purple-50 to-indigo-50 p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
@@ -15,34 +15,34 @@ export default function SoftSkillsResultsLoading() {
         </div>
 
         {/* Progress Section */}
-        <Card className="mb-8 border-pink-200 shadow-lg">
+        <Card className="mb-8 border-red/20 shadow-lg">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Loader2 className="h-5 w-5 animate-spin text-pink-600" />
+                <Loader2 className="h-5 w-5 animate-spin text-red" />
                 <span className="text-lg font-semibold text-gray-800">
                   Analizando tus competencias profesionales...
                 </span>
               </div>
-              <span className="text-pink-600 font-bold">75%</span>
+              <span className="text-red font-bold">75%</span>
             </div>
             <Progress value={75} className="h-3 mb-4" />
 
             {/* Processing Steps */}
             <div className="space-y-2 text-sm">
-              <div className="flex items-center gap-2 text-green-600">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <div className="flex items-center gap-2 text-green">
+                <div className="w-2 h-2 bg-green/50 rounded-full"></div>
                 <span>✅ Evaluando competencias de comunicación</span>
               </div>
-              <div className="flex items-center gap-2 text-green-600">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <div className="flex items-center gap-2 text-green">
+                <div className="w-2 h-2 bg-green/50 rounded-full"></div>
                 <span>✅ Analizando habilidades de liderazgo</span>
               </div>
-              <div className="flex items-center gap-2 text-green-600">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+              <div className="flex items-center gap-2 text-green">
+                <div className="w-2 h-2 bg-green/50 rounded-full"></div>
                 <span>✅ Midiendo capacidad de trabajo en equipo</span>
               </div>
-              <div className="flex items-center gap-2 text-pink-600">
+              <div className="flex items-center gap-2 text-red">
                 <Loader2 className="w-2 h-2 animate-spin" />
                 <span>🔄 Generando recomendaciones personalizadas</span>
               </div>
@@ -54,25 +54,25 @@ export default function SoftSkillsResultsLoading() {
         <div className="mb-8">
           <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">Descubre lo que analizaremos para ti</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Card className="border-pink-200 hover:shadow-md transition-shadow">
+            <Card className="border-red/20 hover:shadow-md transition-shadow">
               <CardContent className="p-4 text-center">
-                <MessageCircle className="h-8 w-8 text-pink-600 mx-auto mb-2" />
+                <MessageCircle className="h-8 w-8 text-red mx-auto mb-2" />
                 <h4 className="font-semibold text-gray-800 mb-1">Análisis de Comunicación</h4>
                 <p className="text-sm text-gray-600">Evaluamos tu capacidad para transmitir ideas efectivamente</p>
               </CardContent>
             </Card>
 
-            <Card className="border-purple-200 hover:shadow-md transition-shadow">
+            <Card className="border-purple/20 hover:shadow-md transition-shadow">
               <CardContent className="p-4 text-center">
-                <Crown className="h-8 w-8 text-purple-600 mx-auto mb-2" />
+                <Crown className="h-8 w-8 text-purple mx-auto mb-2" />
                 <h4 className="font-semibold text-gray-800 mb-1">Potencial de Liderazgo</h4>
                 <p className="text-sm text-gray-600">Medimos tu habilidad para guiar y motivar equipos</p>
               </CardContent>
             </Card>
 
-            <Card className="border-indigo-200 hover:shadow-md transition-shadow">
+            <Card className="border-blue/20 hover:shadow-md transition-shadow">
               <CardContent className="p-4 text-center">
-                <Users className="h-8 w-8 text-indigo-600 mx-auto mb-2" />
+                <Users className="h-8 w-8 text-blue mx-auto mb-2" />
                 <h4 className="font-semibold text-gray-800 mb-1">Colaboración</h4>
                 <p className="text-sm text-gray-600">Analizamos tu efectividad trabajando en equipo</p>
               </CardContent>

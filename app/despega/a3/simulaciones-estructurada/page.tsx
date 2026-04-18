@@ -25,12 +25,12 @@ export default function StructuredSimulationPage() {
           
           <div className="text-center py-12">
             <h1 className="text-4xl font-bold text-cyan-400 mb-4">¡Simulación Completada!</h1>
-            <p className="text-slate-300 text-lg mb-8">
+            <p className="text-muted/30 text-lg mb-8">
               Excelente trabajo. Ahora tienes el material para sonar como un profesional en tu próxima entrevista.
             </p>
             <Button 
               onClick={() => setIsComplete(false)}
-              className="bg-cyan-600 hover:bg-cyan-700 text-white h-12 px-8"
+              className="bg-blue hover:bg-cyan-700 text-white h-12 px-8"
             >
               Hacer otra simulación
             </Button>

@@ -172,7 +172,7 @@ export default function AdminProgressDashboard() {
               <CardTitle className="text-sm font-medium text-gray-600">Fully Onboarded</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-emerald-600">{stats.fullyOnboarded}</div>
+              <div className="text-3xl font-bold text-green">{stats.fullyOnboarded}</div>
               <Progress value={(stats.fullyOnboarded / stats.totalUsers) * 100} className="mt-2" />
               <p className="text-xs text-gray-500 mt-1">{((stats.fullyOnboarded / stats.totalUsers) * 100).toFixed(1)}% completion</p>
             </CardContent>
@@ -278,42 +278,42 @@ export default function AdminProgressDashboard() {
                       </TableCell>
                       <TableCell>
                         {user.onboarding_completed ? (
-                          <CheckCircle2 className="w-5 h-5 text-green-600" />
+                          <CheckCircle2 className="w-5 h-5 text-green" />
                         ) : (
                           <Clock className="w-5 h-5 text-gray-400" />
                         )}
                       </TableCell>
                       <TableCell>
                         {user.a1_test_completed ? (
-                          <CheckCircle2 className="w-5 h-5 text-green-600" />
+                          <CheckCircle2 className="w-5 h-5 text-green" />
                         ) : (
                           <Clock className="w-5 h-5 text-gray-400" />
                         )}
                       </TableCell>
                       <TableCell>
                         {user.onboarding_conozcamonos_2_completed ? (
-                          <CheckCircle2 className="w-5 h-5 text-green-600" />
+                          <CheckCircle2 className="w-5 h-5 text-green" />
                         ) : (
                           <Clock className="w-5 h-5 text-gray-400" />
                         )}
                       </TableCell>
                       <TableCell>
                         {user.a2_missions_started ? (
-                          <CheckCircle2 className="w-5 h-5 text-green-600" />
+                          <CheckCircle2 className="w-5 h-5 text-green" />
                         ) : (
                           <Clock className="w-5 h-5 text-gray-400" />
                         )}
                       </TableCell>
                       <TableCell>
                         {user.a3_training_started ? (
-                          <CheckCircle2 className="w-5 h-5 text-green-600" />
+                          <CheckCircle2 className="w-5 h-5 text-green" />
                         ) : (
                           <Clock className="w-5 h-5 text-gray-400" />
                         )}
                       </TableCell>
                       <TableCell>
                         {user.a4_unlocked ? (
-                          <CheckCircle2 className="w-5 h-5 text-green-600" />
+                          <CheckCircle2 className="w-5 h-5 text-green" />
                         ) : (
                           <Clock className="w-5 h-5 text-gray-400" />
                         )}

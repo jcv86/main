@@ -171,12 +171,12 @@ export default function DocumentsPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-white to-purple-50 py-8">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center gap-3 mb-3">
-            <Brain className="w-10 h-10 text-blue-600" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <Brain className="w-10 h-10 text-blue" />
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue to-purple-600 bg-clip-text text-transparent">
               Cerebro de Conocimiento
             </h1>
           </div>
@@ -218,7 +218,7 @@ export default function DocumentsPage() {
                 <TabsContent value="documents" className="space-y-2 max-h-[600px] overflow-y-auto mt-4">
                   {loading ? (
                     <div className="text-center py-8">
-                      <Loader2 className="w-6 h-6 animate-spin mx-auto text-blue-500" />
+                      <Loader2 className="w-6 h-6 animate-spin mx-auto text-blue/50" />
                       <p className="text-sm text-gray-500 mt-2">Cargando documentos...</p>
                     </div>
                   ) : filteredDocuments.length === 0 ? (
@@ -232,7 +232,7 @@ export default function DocumentsPage() {
                         key={doc.id}
                         className={`p-3 border rounded-lg cursor-pointer transition-all ${
                           isSourceSelected(doc.id, "document")
-                            ? "bg-blue-50 border-blue-300 shadow-sm"
+                            ? "bg-blue/5 border-blue/30 shadow-sm"
                             : "hover:bg-gray-50 hover:border-gray-300"
                         }`}
                         onClick={() => toggleSourceSelection(doc.id, "document")}
@@ -261,7 +261,7 @@ export default function DocumentsPage() {
                             )}
                             <p className="text-xs text-gray-400 mt-1">{doc.chunk_count} chunks procesados</p>
                           </div>
-                          <FileText className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <FileText className="w-4 h-4 text-blue flex-shrink-0" />
                         </div>
                       </div>
                     ))
@@ -272,7 +272,7 @@ export default function DocumentsPage() {
                 <TabsContent value="biblioteca" className="space-y-2 max-h-[600px] overflow-y-auto mt-4">
                   {loading ? (
                     <div className="text-center py-8">
-                      <Loader2 className="w-6 h-6 animate-spin mx-auto text-green-500" />
+                      <Loader2 className="w-6 h-6 animate-spin mx-auto text-green" />
                       <p className="text-sm text-gray-500 mt-2">Cargando biblioteca...</p>
                     </div>
                   ) : filteredBooks.length === 0 ? (
@@ -286,7 +286,7 @@ export default function DocumentsPage() {
                         key={book.id}
                         className={`p-3 border rounded-lg cursor-pointer transition-all ${
                           isSourceSelected(book.id, "book")
-                            ? "bg-green-50 border-green-300 shadow-sm"
+                            ? "bg-green/5 border-green-300 shadow-sm"
                             : "hover:bg-gray-50 hover:border-gray-300"
                         }`}
                         onClick={() => toggleSourceSelection(book.id, "book")}
@@ -306,7 +306,7 @@ export default function DocumentsPage() {
                               ))}
                             </div>
                           </div>
-                          <BookOpen className="w-4 h-4 text-green-600 flex-shrink-0" />
+                          <BookOpen className="w-4 h-4 text-green flex-shrink-0" />
                         </div>
                       </div>
                     ))
@@ -335,7 +335,7 @@ export default function DocumentsPage() {
             <Card className="p-6 h-[700px] flex flex-col">
               <div className="flex items-center justify-between mb-4 pb-4 border-b">
                 <h2 className="text-xl font-bold flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5 text-blue-600" />
+                  <MessageSquare className="w-5 h-5 text-blue" />
                   Chat con el Cerebro
                 </h2>
                 {selectedSources.length > 0 && (
@@ -373,7 +373,7 @@ export default function DocumentsPage() {
                           <div
                             className={`max-w-[80%] p-4 rounded-lg shadow-sm ${
                               msg.role === "user"
-                                ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
+                                ? "bg-gradient-to-r from-blue/50 to-blue text-white"
                                 : "bg-white border border-gray-200 text-gray-900"
                             }`}
                           >
@@ -386,7 +386,7 @@ export default function DocumentsPage() {
                       <div className="flex justify-start">
                         <div className="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
                           <div className="flex items-center gap-2">
-                            <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
+                            <Loader2 className="w-4 h-4 animate-spin text-blue/50" />
                             <span className="text-sm text-gray-600">Analizando fuentes...</span>
                           </div>
                         </div>

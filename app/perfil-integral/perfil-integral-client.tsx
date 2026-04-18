@@ -101,13 +101,13 @@ export function PerfilIntegralClient() {
       </div>
 
       {testsCompleted === 0 && (
-        <Card className="border-amber-200 bg-amber-50 mb-8">
+        <Card className="border-yellow/20 bg-yellow/5 mb-8">
           <CardContent className="pt-6">
             <div className="flex items-start gap-3">
-              <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5" />
+              <AlertCircle className="h-5 w-5 text-yellow mt-0.5" />
               <div>
                 <p className="font-medium text-amber-900 mb-1">Aún no tienes tests completados</p>
-                <p className="text-sm text-amber-700">
+                <p className="text-sm text-yellow">
                   Completa al menos un test para empezar a construir tu perfil integral. Te recomendamos empezar con
                   DISC o Inteligencia Emocional.
                 </p>
@@ -134,7 +134,7 @@ export function PerfilIntegralClient() {
             <Card className={!discResult ? "opacity-50" : ""}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Zap className="h-8 w-8 text-blue-600" />
+                  <Zap className="h-8 w-8 text-blue" />
                   {discResult && <Badge variant="secondary">Completado</Badge>}
                 </div>
                 <CardTitle>DISC</CardTitle>
@@ -143,7 +143,7 @@ export function PerfilIntegralClient() {
               <CardContent>
                 {discResult ? (
                   <div>
-                    <p className="text-2xl font-bold text-blue-600 mb-2">{discResult.results?.primary_type || "N/A"}</p>
+                    <p className="text-2xl font-bold text-blue mb-2">{discResult.results?.primary_type || "N/A"}</p>
                     <p className="text-sm text-muted-foreground">Perfil dominante que define tu estilo de acción</p>
                   </div>
                 ) : (
@@ -156,7 +156,7 @@ export function PerfilIntegralClient() {
             <Card className={!mbtiResult ? "opacity-50" : ""}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Brain className="h-8 w-8 text-purple-600" />
+                  <Brain className="h-8 w-8 text-purple" />
                   {mbtiResult && <Badge variant="secondary">Completado</Badge>}
                 </div>
                 <CardTitle>MBTI</CardTitle>
@@ -165,7 +165,7 @@ export function PerfilIntegralClient() {
               <CardContent>
                 {mbtiResult ? (
                   <div>
-                    <p className="text-2xl font-bold text-purple-600 mb-2">{mbtiResult.results?.type || "N/A"}</p>
+                    <p className="text-2xl font-bold text-purple mb-2">{mbtiResult.results?.type || "N/A"}</p>
                     <p className="text-sm text-muted-foreground">Tu tipo de personalidad y preferencias cognitivas</p>
                   </div>
                 ) : (
@@ -178,7 +178,7 @@ export function PerfilIntegralClient() {
             <Card className={!bigFiveResult ? "opacity-50" : ""}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <TrendingUp className="h-8 w-8 text-green-600" />
+                  <TrendingUp className="h-8 w-8 text-green" />
                   {bigFiveResult && <Badge variant="secondary">Completado</Badge>}
                 </div>
                 <CardTitle>Big Five</CardTitle>
@@ -244,7 +244,7 @@ export function PerfilIntegralClient() {
             <Card className={!softSkillsResult ? "opacity-50" : ""}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Users className="h-8 w-8 text-teal-600" />
+                  <Users className="h-8 w-8 text-blue" />
                   {softSkillsResult && <Badge variant="secondary">Completado</Badge>}
                 </div>
                 <CardTitle>Soft Skills</CardTitle>
@@ -291,7 +291,7 @@ export function PerfilIntegralClient() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Brain className="h-6 w-6 text-purple-600" />
+                <Brain className="h-6 w-6 text-purple" />
                 Cómo Piensas y Procesas Información
               </CardTitle>
               <CardDescription>Tu estilo cognitivo, cómo tomas decisiones y procesas el mundo</CardDescription>
@@ -418,7 +418,7 @@ export function PerfilIntegralClient() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Zap className="h-6 w-6 text-blue-600" />
+                <Zap className="h-6 w-6 text-blue" />
                 Cómo Actúas y Comunicas
               </CardTitle>
               <CardDescription>Tu estilo de comportamiento natural y cómo te expresas</CardDescription>
@@ -467,8 +467,8 @@ export function PerfilIntegralClient() {
                     </div>
                   </div>
 
-                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
-                    <p className="text-sm font-medium text-blue-900 mb-2">💡 En tu vida diaria</p>
+                  <div className="bg-blue/5 border border-blue/10 rounded-lg p-4">
+                    <p className="text-sm font-medium text-blue mb-2">💡 En tu vida diaria</p>
                     <p className="text-sm text-blue-800">
                       Tu estilo DISC influye en cómo te comunicas con tu familia, manejas el estrés en casa, y organizas
                       tu vida personal. Entenderlo te ayuda a mejorar tus relaciones y bienestar.
@@ -541,7 +541,7 @@ export function PerfilIntegralClient() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Users className="h-6 w-6 text-teal-600" />
+                <Users className="h-6 w-6 text-blue" />
                 Cómo te Relacionas con Otros
               </CardTitle>
               <CardDescription>Tus habilidades interpersonales y cómo conectas con las personas</CardDescription>

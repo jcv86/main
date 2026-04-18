@@ -159,8 +159,8 @@ export default function A2RoutesPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
-          <p className="text-slate-300">Generando tu ruta personalizada...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-purple/50" />
+          <p className="text-muted/30">Generando tu ruta personalizada...</p>
         </div>
       </div>
     )
@@ -178,7 +178,7 @@ export default function A2RoutesPage() {
                 <p className="text-red-400 text-lg mb-6">{error || 'No se encontró ruta personalizada'}</p>
                 <Button 
                   onClick={() => loadAndGenerateRoute()}
-                  className="bg-blue hover:bg-blue-700 text-white"
+                  className="bg-blue hover:bg-blue text-white"
                 >
                   Reintentar
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -199,7 +199,7 @@ export default function A2RoutesPage() {
           <h1 className="text-4xl font-bold text-white flex items-center gap-3">
             <span className="text-3xl">🗺️</span> A2: Ruta
           </h1>
-          <p className="text-lg text-slate-400">Tu plan personalizado de 90 días</p>
+          <p className="text-lg text-muted/40">Tu plan personalizado de 90 días</p>
         </div>
 
         {/* What is A2 */}
@@ -211,12 +211,12 @@ export default function A2RoutesPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-slate-300">
+            <p className="text-muted/30">
               Basado en tu perfil DISC y objetivos, hemos generado tu plan personalizado de 90 días. 
               Este es el resultado de A2: Diseño de tu Ruta. Aquí visualizas las acciones, milestones y recursos 
               organizados en 3 fases progresivas para llevar tu carrera al siguiente nivel.
             </p>
-            <p className="text-slate-400 text-sm">
+            <p className="text-muted/40 text-sm">
               📋 Estructura: 3 fases de 30 días cada una con tareas específicas, recursos y hitos de progreso.
             </p>
           </CardContent>
@@ -235,15 +235,15 @@ export default function A2RoutesPage() {
               <CheckCircle2 className="w-6 h-6 text-emerald-400 flex-shrink-0" />
               <div>
                 <p className="font-semibold text-emerald-400">Ruta Generada</p>
-                <p className="text-sm text-slate-400">Tu plan de 90 días personalizado está listo</p>
+                <p className="text-sm text-muted/40">Tu plan de 90 días personalizado está listo</p>
               </div>
             </div>
             
             <div className="p-4 bg-slate-800/30 border border-slate-700 rounded-lg">
-              <p className="text-slate-300 text-sm mb-3">Próximo: Continúa a <span className="font-semibold">Entrenamiento Intensivo</span> para prepararte para entrevistas</p>
+              <p className="text-muted/30 text-sm mb-3">Próximo: Continúa a <span className="font-semibold">Entrenamiento Intensivo</span> para prepararte para entrevistas</p>
               <Button 
                 onClick={() => router.push('/despega/a3-intro')}
-                className="w-full bg-cyan-600 hover:bg-cyan-700"
+                className="w-full bg-blue hover:bg-cyan-700"
               >
                 Ir a Entrenamiento Intensivo
                 <ArrowRight className="w-4 h-4 ml-2" />
@@ -256,7 +256,7 @@ export default function A2RoutesPage() {
         <Card className="bg-slate-900 border-slate-800">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <Calendar className="w-5 h-5 text-blue-500" />
+              <Calendar className="w-5 h-5 text-blue/50" />
               Tus 90 Días Estructurados
             </CardTitle>
           </CardHeader>
@@ -300,15 +300,15 @@ export default function A2RoutesPage() {
                                 <div className="flex-1">
                                   <div className="flex items-center justify-between gap-2">
                                     <h4 className="font-semibold text-white text-sm">Día {task.day}: {task.title}</h4>
-                                    <span className="text-xs bg-slate-600/50 text-slate-300 px-2 py-1 rounded whitespace-nowrap">
+                                    <span className="text-xs bg-slate-600/50 text-muted/30 px-2 py-1 rounded whitespace-nowrap">
                                       {Math.round(task.timeEstimate / 60)}h
                                     </span>
                                   </div>
-                                  <p className="text-sm text-slate-400 mt-2">{task.description}</p>
+                                  <p className="text-sm text-muted/40 mt-2">{task.description}</p>
                                   {task.resources && task.resources.length > 0 && (
                                     <div className="flex flex-wrap gap-2 mt-2">
                                       {task.resources.map((resource, ridx) => (
-                                        <span key={ridx} className="text-xs bg-blue/50/20 text-blue-300 px-2 py-1 rounded">
+                                        <span key={ridx} className="text-xs bg-blue/50/20 text-blue/30 px-2 py-1 rounded">
                                           📌 {resource}
                                         </span>
                                       ))}
@@ -320,7 +320,7 @@ export default function A2RoutesPage() {
                           ))}
                         </div>
                       ) : (
-                        <p className="text-slate-400">Contenido personalizado para la fase de {days} días</p>
+                        <p className="text-muted/40">Contenido personalizado para la fase de {days} días</p>
                       )}
                     </div>
                   )}
@@ -334,11 +334,11 @@ export default function A2RoutesPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex gap-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <p className="text-slate-300">Completar todas las acciones de cada fase</p>
+                  <p className="text-muted/30">Completar todas las acciones de cada fase</p>
                 </div>
                 <div className="flex gap-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <p className="text-slate-300">Dedicar el tiempo programado cada semana</p>
+                  <p className="text-muted/30">Dedicar el tiempo programado cada semana</p>
                 </div>
               </div>
             </div>
@@ -349,34 +349,34 @@ export default function A2RoutesPage() {
         <Card className="bg-slate-900 border-slate-800">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <CheckCircle2 className="w-5 h-5 text-purple-500" />
+              <CheckCircle2 className="w-5 h-5 text-purple/50" />
               Próximos Pasos
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <Card className="bg-slate-800/40 border-slate-700 hover:border-blue-500/50 transition-colors">
+              <Card className="bg-slate-800/40 border-slate-700 hover:border-blue/50/50 transition-colors">
                 <CardHeader>
                   <CardTitle className="text-lg">Ver Detalle del Plan</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-sm text-slate-400">
+                  <p className="text-sm text-muted/40">
                     Expande cada fase (30, 60, 90 días) para ver las acciones detalladas.
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-slate-800/40 border-slate-700 hover:border-blue-500/50 transition-colors">
+              <Card className="bg-slate-800/40 border-slate-700 hover:border-blue/50/50 transition-colors">
                 <CardHeader>
                   <CardTitle className="text-lg">Avanzar a A3</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-sm text-slate-400">
+                  <p className="text-sm text-muted/40">
                     Dirígete a <span className="font-semibold">A3: Impulso</span> para prepararte para entrevistas.
                   </p>
                   <Button 
                     onClick={() => router.push('/despega/a3-dashboard')}
-                    className="w-full bg-blue hover:bg-blue-700 mt-2"
+                    className="w-full bg-blue hover:bg-blue mt-2"
                     size="sm"
                   >
                     Ir a A3: Impulso
@@ -386,12 +386,12 @@ export default function A2RoutesPage() {
               </Card>
             </div>
 
-            <div className="p-6 bg-gradient-to-r from-blue-900/30 to-cyan-900/30 border border-blue-500/30 rounded-lg">
-              <p className="text-slate-300 mb-4">
+            <div className="p-6 bg-gradient-to-r from-blue/30 to-cyan-900/30 border border-blue/50/30 rounded-lg">
+              <p className="text-muted/30 mb-4">
                 <strong>Este es tu plan. Adáptalo según sea necesario.</strong> La vida acontece, y el plan puede cambiar. 
                 Si necesitas ajustes o tienes preguntas, habla con el coach.
               </p>
-              <Button variant="outline" className="border-blue-500 hover:border-blue-400 hover:text-blue-400">
+              <Button variant="outline" className="border-blue/50 hover:border-blue/40 hover:text-blue/40">
                 Hablar con el Coach
               </Button>
             </div>

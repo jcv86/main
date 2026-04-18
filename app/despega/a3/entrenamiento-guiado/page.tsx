@@ -126,7 +126,7 @@ export default function GuidedTrainingPage() {
     const Icon = selectedModule.icon
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+      <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
         <div className="max-w-3xl mx-auto space-y-6">
           {/* Header */}
           <Button
@@ -141,13 +141,13 @@ export default function GuidedTrainingPage() {
           {/* Module Info */}
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <Icon className="w-8 h-8 text-blue dark:text-blue-400" />
+              <Icon className="w-8 h-8 text-blue dark:text-blue/40" />
               <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
                 {selectedModule.name}
               </h1>
             </div>
             <Progress value={selectedModule.progress} className="h-2" />
-            <p className="text-sm text-slate-600 dark:text-slate-400">
+            <p className="text-sm text-muted/60 dark:text-muted/40">
               Lección {currentLesson + 1} de {selectedModule.lessons.length}
             </p>
           </div>
@@ -158,15 +158,15 @@ export default function GuidedTrainingPage() {
               <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                 {lesson.title}
               </h2>
-              <p className="text-slate-600 dark:text-slate-400">{lesson.description}</p>
+              <p className="text-muted/60 dark:text-muted/40">{lesson.description}</p>
             </div>
 
             {/* Coach Content Area */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue/30 dark:border-blue-800 rounded-[28px] p-8 min-h-64 space-y-4">
-              <div className="space-y-4 text-slate-700 dark:text-slate-300">
+            <div className="bg-gradient-to-br from-blue/5 to-indigo-50 dark:from-blue/20 dark:to-indigo-900/20 border-2 border-blue/30 dark:border-blue/10 rounded-[28px] p-8 min-h-64 space-y-4">
+              <div className="space-y-4 text-muted/70 dark:text-muted/30">
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
-                    <Lightbulb className="w-5 h-5 text-blue dark:text-blue-400" />
+                    <Lightbulb className="w-5 h-5 text-blue dark:text-blue/40" />
                     Tu Coach IA explica:
                   </p>
                   <Button
@@ -191,7 +191,7 @@ export default function GuidedTrainingPage() {
                 </div>
 
                 {aiTip ? (
-                  <div className="bg-white dark:bg-slate-900 p-4 rounded-[28px] border-l-4 border-blue space-y-3">
+                  <div className="bg-white dark:bg-background p-4 rounded-[28px] border-l-4 border-blue space-y-3">
                     <p className="text-slate-900 dark:text-white">{aiTip}</p>
                   </div>
                 ) : (
@@ -216,13 +216,13 @@ export default function GuidedTrainingPage() {
                         <p>
                           La Situación y Tarea son el contexto que da credibilidad a tu historia.
                         </p>
-                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue">
+                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-blue">
                           <p className="font-semibold mb-2">Ejemplo BUENO:</p>
                           <p className="text-sm">
                             "En mi anterior empresa, como Tech Lead de un equipo de 5 developers, nos asignaron migrar una base de datos legacy a PostgreSQL bajo presión..."
                           </p>
                         </div>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                        <p className="text-sm text-muted/60 dark:text-muted/40">
                           Sé específico: ¿Qué empresa? ¿Cuál era tu rol? ¿Cuál era el desafío? ¿Bajo qué presión estabas?
                         </p>
                       </div>
@@ -233,19 +233,19 @@ export default function GuidedTrainingPage() {
                         <p>
                           La Acción es donde demuestras TU impacto personal. No lo que el equipo hizo, sino específicamente qué HICISTE TÚ.
                         </p>
-                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue">
+                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-blue">
                           <p className="font-semibold mb-2">Ejemplo BUENO:</p>
                           <p className="text-sm">
                             "YO rediseñé la arquitectura, implementé testing automático, y mentoricé a 3 developers junior"
                           </p>
                         </div>
-                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-red-600">
+                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-red-600">
                           <p className="font-semibold mb-2 text-red-600">Ejemplo MALO:</p>
                           <p className="text-sm">
                             "El equipo trabajó duro y mejoramos el sistema"
                           </p>
                         </div>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 italic">
+                        <p className="text-sm text-muted/60 dark:text-muted/40 italic">
                           Usa "yo", "decidí", "implementé", "resolví" - verbos de acción clara.
                         </p>
                       </div>
@@ -256,13 +256,13 @@ export default function GuidedTrainingPage() {
                         <p>
                           El Resultado es el cierre que lo hace memorable. Cuantifica siempre que puedas.
                         </p>
-                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue">
+                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-blue">
                           <p className="font-semibold mb-2">Ejemplo BUENO:</p>
                           <p className="text-sm">
                             "La migración se completó 2 semanas antes, con zero downtime. Redujimos queries en un 40% y el equipo ganó confianza en nuevas tecnologías."
                           </p>
                         </div>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                        <p className="text-sm text-muted/60 dark:text-muted/40">
                           Números, porcentajes, tiempo ahorrado, mejoras medibles - eso es lo que recuerdan los entrevistadores.
                         </p>
                       </div>
@@ -282,7 +282,7 @@ export default function GuidedTrainingPage() {
                             <li>Decisiones: "Cuéntame de una decisión difícil que tomaste"</li>
                           </ul>
                         </div>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 italic">
+                        <p className="text-xs text-muted/60 dark:text-muted/40 italic">
                           Usa STAR para todas. El entrevistador quiere ver madurez, aprendizaje y responsabilidad.
                         </p>
                       </div>
@@ -294,7 +294,7 @@ export default function GuidedTrainingPage() {
                         <p>
                           Poder explicar conceptos técnicos complejos a non-technical people es un superpoder.
                         </p>
-                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue">
+                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-blue">
                           <p className="font-semibold mb-2">Ejemplo:</p>
                           <p className="text-sm">
                             En lugar de "Implementé microservicios con Docker y Kubernetes"...
@@ -303,7 +303,7 @@ export default function GuidedTrainingPage() {
                             Intenta: "Dividimos el sistema en servicios independientes que pueden crecer y actualizarse por separado, como restaurantes en un mall"
                           </p>
                         </div>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                        <p className="text-sm text-muted/60 dark:text-muted/40">
                           Usa analogías, evita jerga, explica el "por qué" y el impacto en negocio.
                         </p>
                       </div>
@@ -326,7 +326,7 @@ export default function GuidedTrainingPage() {
                 
                 <Button
                   onClick={() => setShowVideoSession(true)}
-                  className="w-full bg-amber-600 hover:bg-amber-700 text-white"
+                  className="w-full bg-yellow hover:bg-amber-700 text-white"
                 >
                   <Video className="w-4 h-4 mr-2" />
                   Practicar con Video
@@ -355,7 +355,7 @@ export default function GuidedTrainingPage() {
             )}
 
             {/* Navigation */}
-            <div className="flex gap-4 justify-between pt-4 border-t border-slate-200 dark:border-slate-700">
+            <div className="flex gap-4 justify-between pt-4 border-t border-muted/20 dark:border-card">
               <Button
                 onClick={() => setCurrentLesson(Math.max(0, currentLesson - 1))}
                 disabled={currentLesson === 0}
@@ -369,13 +369,13 @@ export default function GuidedTrainingPage() {
                 {currentLesson < selectedModule.lessons.length - 1 ? (
                   <Button
                     onClick={() => setCurrentLesson(currentLesson + 1)}
-                    className="bg-blue hover:bg-blue-700"
+                    className="bg-blue hover:bg-blue"
                   >
                     Siguiente
                     <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
                   </Button>
                 ) : (
-                  <Button className="bg-green-600 hover:bg-green-700">
+                  <Button className="bg-green hover:bg-green-700">
                     <CheckCircle2 className="w-4 h-4 mr-2" />
                     Completar Módulo
                   </Button>
@@ -389,7 +389,7 @@ export default function GuidedTrainingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Header */}
         <Link href="/despega/a3">
@@ -403,7 +403,7 @@ export default function GuidedTrainingPage() {
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
             Entrenamiento Guiado
           </h1>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-muted/60 dark:text-muted/40">
             Aprende junto a tu Coach IA. Módulos progresivos que te llevan de lo básico a dominar entrevistas complejas.
           </p>
         </div>
@@ -418,13 +418,13 @@ export default function GuidedTrainingPage() {
               <Card
                 key={module.id}
                 className={`cursor-pointer transition-all hover:shadow-lg ${
-                  isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:border-blue-400'
+                  isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:border-blue/40'
                 }`}
               >
                 <CardHeader>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <Icon className="w-8 h-8 text-blue dark:text-blue-400" />
+                      <Icon className="w-8 h-8 text-blue dark:text-blue/40" />
                       <div>
                         <CardTitle className="text-xl">{module.name}</CardTitle>
                         <CardDescription>{module.description}</CardDescription>
@@ -435,12 +435,12 @@ export default function GuidedTrainingPage() {
                       {module.status === 'in-progress' && (
                         <Badge className="bg-blue">En Progreso</Badge>
                       )}
-                      {isLocked && <Lock className="w-5 h-5 text-slate-400" />}
+                      {isLocked && <Lock className="w-5 h-5 text-muted/40" />}
                     </div>
                   </div>
 
                   <Progress value={module.progress} className="h-2 mb-2" />
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-muted/50">
                     {module.progress}% completo • {module.duration}
                   </p>
                 </CardHeader>
@@ -451,18 +451,18 @@ export default function GuidedTrainingPage() {
                     {module.lessons.map((lesson, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-3 p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800/50"
+                        className="flex items-center gap-3 p-2 rounded hover:bg-muted/10 dark:hover:bg-slate-800/50"
                       >
                         {lesson.completed ? (
-                          <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                          <CheckCircle2 className="w-5 h-5 text-green flex-shrink-0" />
                         ) : (
-                          <div className="w-5 h-5 border-2 border-slate-300 rounded-full flex-shrink-0" />
+                          <div className="w-5 h-5 border-2 border-muted/30 rounded-full flex-shrink-0" />
                         )}
                         <div className="flex-1">
                           <p className="text-sm font-medium text-slate-900 dark:text-white">
                             {lesson.title}
                           </p>
-                          <p className="text-xs text-slate-500">{lesson.description}</p>
+                          <p className="text-xs text-muted/50">{lesson.description}</p>
                         </div>
                       </div>
                     ))}
@@ -474,8 +474,8 @@ export default function GuidedTrainingPage() {
                     disabled={isLocked}
                     className={`w-full ${
                       isLocked
-                        ? 'bg-slate-300 dark:bg-slate-700 cursor-not-allowed'
-                        : 'bg-blue hover:bg-blue-700'
+                        ? 'bg-muted/30 dark:bg-slate-700 cursor-not-allowed'
+                        : 'bg-blue hover:bg-blue'
                     }`}
                   >
                     {isLocked ? (

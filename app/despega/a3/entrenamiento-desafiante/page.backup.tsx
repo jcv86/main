@@ -142,7 +142,7 @@ export default function ChallensingTrainingPage() {
   }
 
   const getScoreColor = (score: number) => {
-    if (score >= 85) return 'bg-green-600'
+    if (score >= 85) return 'bg-green'
     if (score >= 75) return 'bg-blue'
     if (score >= 65) return 'bg-yellow-600'
     return 'bg-red-600'
@@ -167,7 +167,7 @@ export default function ChallensingTrainingPage() {
             </Link>
             <div className="flex gap-4 items-center">
               <Badge className="bg-red-600 text-xs">DESAFÍO MÁXIMO</Badge>
-              <Badge className="bg-purple-600 text-xs">{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
+              <Badge className="bg-purple text-xs">{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
             </div>
           </div>
         </div>
@@ -207,8 +207,8 @@ export default function ChallensingTrainingPage() {
                 </div>
 
                 {/* Guidance */}
-                <div className="bg-blue-900/30 border border-blue-500/20 rounded-[28px] p-3">
-                  <p className="text-sm text-blue-300">{question.guidance}</p>
+                <div className="bg-blue/30 border border-blue/50/20 rounded-[28px] p-3">
+                  <p className="text-sm text-blue/30">{question.guidance}</p>
                 </div>
 
                 {/* Recording Status */}
@@ -253,7 +253,7 @@ export default function ChallensingTrainingPage() {
                   <Button
                     onClick={() => handleQuestionComplete(75)}
                     disabled={!hasResponseBeenRecorded || isRecording}
-                    className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-purple hover:bg-purple disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {currentQuestion === CHALLENGING_QUESTIONS.length - 1 ? 'Finalizar' : 'Siguiente Desafío'}
                   </Button>
@@ -272,17 +272,17 @@ export default function ChallensingTrainingPage() {
                 </h3>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-xs text-slate-400 mb-2">Promedio General</p>
+                    <p className="text-xs text-muted/40 mb-2">Promedio General</p>
                     <div className="flex items-end gap-2">
                       <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green-400' : 'text-yellow-400'}`}>
                         {averageScore}
                       </span>
-                      <span className="text-xs text-slate-400 pb-2">/100</span>
+                      <span className="text-xs text-muted/40 pb-2">/100</span>
                     </div>
                   </div>
                   {currentScore !== undefined && (
                     <div className="pt-4 border-t border-slate-700">
-                      <p className="text-xs text-slate-400 mb-2">Respuesta Actual</p>
+                      <p className="text-xs text-muted/40 mb-2">Respuesta Actual</p>
                       <div className="flex items-center justify-between">
                         <span className="text-3xl font-bold text-purple-400">{currentScore}</span>
                         <Badge className={`${getScoreColor(currentScore)} text-xs`}>
@@ -296,7 +296,7 @@ export default function ChallensingTrainingPage() {
 
               {/* Questions List */}
               <div className="flex-1 overflow-y-auto p-4 space-y-2">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Desafíos</p>
+                <p className="text-xs font-bold text-muted/40 uppercase tracking-widest mb-3">Desafíos</p>
                 {CHALLENGING_QUESTIONS.map((q, idx) => (
                   <button
                     key={q.id}
@@ -306,9 +306,9 @@ export default function ChallensingTrainingPage() {
                     }}
                     className={`w-full text-left p-3 rounded-lg transition-all text-xs ${
                       idx === currentQuestion
-                        ? 'bg-purple-600/30 border border-purple-500/50'
+                        ? 'bg-purple/30 border border-purple/50/50'
                         : completedQuestions.includes(idx)
-                        ? 'bg-green-600/20 border border-green-500/30'
+                        ? 'bg-green/20 border border-green-500/30'
                         : 'bg-slate-800/50 border border-slate-700/30 hover:bg-slate-700/50'
                     }`}
                   >
@@ -319,7 +319,7 @@ export default function ChallensingTrainingPage() {
                             {scores[idx]}
                           </div>
                         ) : completedQuestions.includes(idx) ? (
-                          <div className="w-6 h-6 rounded-[20px] bg-green-600 flex items-center justify-center">
+                          <div className="w-6 h-6 rounded-[20px] bg-green flex items-center justify-center">
                             <span className="text-xs text-white">✓</span>
                           </div>
                         ) : (
@@ -327,8 +327,8 @@ export default function ChallensingTrainingPage() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-slate-400 mb-1">Pregunta {idx + 1}</p>
-                        <p className="text-slate-300 line-clamp-2">{q.question}</p>
+                        <p className="text-muted/40 mb-1">Pregunta {idx + 1}</p>
+                        <p className="text-muted/30 line-clamp-2">{q.question}</p>
                       </div>
                     </div>
                   </button>

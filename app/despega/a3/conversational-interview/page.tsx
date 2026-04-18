@@ -73,13 +73,13 @@ export default function ConversationalInterviewPage() {
         <div className="space-y-8">
           <div>
             <h1 className="text-4xl font-bold mb-2">Simulación de Entrevista Conversacional</h1>
-            <p className="text-slate-600 dark:text-slate-400">
+            <p className="text-muted/60 dark:text-muted/40">
               Personaliza tu entrevista y practica con IA como entrevistador
             </p>
           </div>
 
           {/* Rol */}
-          <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border border-slate-200 dark:border-slate-700">
+          <div className="bg-white dark:bg-card rounded-[28px] p-6 border border-muted/20 dark:border-card">
             <h2 className="text-lg font-semibold mb-4">1. Selecciona el Puesto</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {roles.map(role => (
@@ -89,7 +89,7 @@ export default function ConversationalInterviewPage() {
                   className={`p-3 rounded-[28px] border-2 transition ${
                     selectedRole === role
                       ? 'border-cyan-600 bg-blue/5 dark:bg-cyan-900/20'
-                      : 'border-slate-200 dark:border-slate-700 hover:border-cyan-400'
+                      : 'border-muted/20 dark:border-card hover:border-cyan-400'
                   }`}
                 >
                   {role}
@@ -100,7 +100,7 @@ export default function ConversationalInterviewPage() {
 
           {/* Industria */}
           {selectedRole && (
-            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border border-slate-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-card rounded-[28px] p-6 border border-muted/20 dark:border-card">
               <h2 className="text-lg font-semibold mb-4">2. Selecciona la Industria</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {industries.map(industry => (
@@ -110,7 +110,7 @@ export default function ConversationalInterviewPage() {
                     className={`p-3 rounded-[28px] border-2 transition ${
                       selectedIndustry === industry
                         ? 'border-cyan-600 bg-blue/5 dark:bg-cyan-900/20'
-                        : 'border-slate-200 dark:border-slate-700 hover:border-cyan-400'
+                        : 'border-muted/20 dark:border-card hover:border-cyan-400'
                     }`}
                   >
                     {industry}
@@ -122,7 +122,7 @@ export default function ConversationalInterviewPage() {
 
           {/* Nivel */}
           {selectedRole && selectedIndustry && (
-            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border border-slate-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-card rounded-[28px] p-6 border border-muted/20 dark:border-card">
               <h2 className="text-lg font-semibold mb-4">3. Selecciona el Nivel de Dificultad</h2>
               <div className="space-y-3">
                 {levels.map(level => (
@@ -132,17 +132,17 @@ export default function ConversationalInterviewPage() {
                     className={`w-full p-4 rounded-[28px] border-2 transition text-left ${
                       selectedLevel === level.id
                         ? 'border-cyan-600 bg-blue/5 dark:bg-cyan-900/20'
-                        : 'border-slate-200 dark:border-slate-700 hover:border-cyan-400'
+                        : 'border-muted/20 dark:border-card hover:border-cyan-400'
                     }`}
                   >
                     <div className="font-semibold">{level.label}</div>
-                    <div className="text-sm text-slate-600 dark:text-slate-400">{level.desc}</div>
+                    <div className="text-sm text-muted/60 dark:text-muted/40">{level.desc}</div>
                   </button>
                 ))}
               </div>
 
               <Button
-                className="w-full mt-6 py-6 bg-cyan-600 hover:bg-cyan-700 text-white text-lg"
+                className="w-full mt-6 py-6 bg-blue hover:bg-cyan-700 text-white text-lg"
                 onClick={() => {}}
               >
                 Comenzar Entrevista

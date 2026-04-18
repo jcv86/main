@@ -46,7 +46,7 @@ export default function A1CerebralIntroPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <StepHeader
           stepNumber={1}
@@ -68,7 +68,7 @@ export default function A1CerebralIntroPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-slate-700 dark:text-slate-300">
+              <p className="text-muted/70 dark:text-muted/30">
                 El Análisis Cerebral es una evaluación de comportamiento inspirada en metodologías reconocidas que identifica tu estilo natural de comunicación y liderazgo. Basado en cuatro dimensiones principales:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -80,13 +80,13 @@ export default function A1CerebralIntroPage() {
                   <p className="font-semibold text-yellow-900 dark:text-yellow-100 mb-1">Catalizador</p>
                   <p className="text-sm text-yellow-800 dark:text-yellow-200">Comunicativo, entusiasta, orientado a personas</p>
                 </div>
-                <div className="p-4 bg-green-50 dark:bg-green-950 rounded-[28px] border border-green-200 dark:border-green-800">
+                <div className="p-4 bg-green/5 dark:bg-green-950 rounded-[28px] border border-green/20 dark:border-green-800">
                   <p className="font-semibold text-green-900 dark:text-green-100 mb-1">Estabilizador</p>
                   <p className="text-sm text-green-800 dark:text-green-200">Estable, cooperativo, confiable, paciente</p>
                 </div>
-                <div className="p-4 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue-800">
-                  <p className="font-semibold text-blue-900 dark:text-blue-100 mb-1">Arquitecto</p>
-                  <p className="text-sm text-blue-800 dark:text-blue-200">Analítico, detallista, exigente con calidad</p>
+                <div className="p-4 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue/10">
+                  <p className="font-semibold text-blue dark:text-blue/10 mb-1">Arquitecto</p>
+                  <p className="text-sm text-blue-800 dark:text-blue/20">Analítico, detallista, exigente con calidad</p>
                 </div>
               </div>
             </CardContent>
@@ -96,7 +96,7 @@ export default function A1CerebralIntroPage() {
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2">
-                <CheckCircle2 className="w-6 h-6 text-green-600" />
+                <CheckCircle2 className="w-6 h-6 text-green" />
                 ¿Cómo funciona el test?
               </CardTitle>
             </CardHeader>
@@ -106,21 +106,21 @@ export default function A1CerebralIntroPage() {
                   <div className="flex-shrink-0 w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center font-bold">1</div>
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-white">28 preguntas</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Responde 28 preguntas simples sobre tu comportamiento</p>
+                    <p className="text-sm text-muted/60 dark:text-muted/40">Responde 28 preguntas simples sobre tu comportamiento</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
                   <div className="flex-shrink-0 w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center font-bold">2</div>
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-white">Dos selecciones por pregunta</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Para cada pregunta, selecciona la opción que más y menos te describe</p>
+                    <p className="text-sm text-muted/60 dark:text-muted/40">Para cada pregunta, selecciona la opción que más y menos te describe</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
                   <div className="flex-shrink-0 w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center font-bold">3</div>
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-white">Análisis automático</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Obtendrás tu perfil cerebral personalizado con insights sobre tu comunicación y liderazgo</p>
+                    <p className="text-sm text-muted/60 dark:text-muted/40">Obtendrás tu perfil cerebral personalizado con insights sobre tu comunicación y liderazgo</p>
                   </div>
                 </div>
               </div>
@@ -128,10 +128,10 @@ export default function A1CerebralIntroPage() {
           </Card>
 
           {/* Example Question */}
-          <Card className="border-0 shadow-lg bg-slate-900 dark:bg-slate-800">
+          <Card className="border-0 shadow-lg bg-slate-900 dark:bg-card">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-white">Ejemplo Real de Pregunta</CardTitle>
-              <CardDescription className="text-slate-400">Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
+              <CardDescription className="text-muted/40">Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="bg-slate-800 dark:bg-slate-700 p-8 rounded-[28px] border border-slate-700">
@@ -143,25 +143,25 @@ export default function A1CerebralIntroPage() {
                   {/* MÁS column */}
                   <div>
                     <p className="text-sm font-semibold text-green-400 mb-4 flex items-center gap-2">
-                      <span className="bg-green-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">+</span>
+                      <span className="bg-green text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">+</span>
                       MÁS como yo
                     </p>
                     <div className="space-y-3">
-                      <button className="w-full p-4 border-2 border-green-600 bg-green-600/20 rounded-lg text-left hover:bg-green-600/30 transition-all">
+                      <button className="w-full p-4 border-2 border-green-600 bg-green/20 rounded-lg text-left hover:bg-green/30 transition-all">
                         <p className="font-medium text-white">Decidido y directo</p>
-                        <p className="text-xs text-slate-400 mt-1">Impulsor</p>
+                        <p className="text-xs text-muted/40 mt-1">Impulsor</p>
                       </button>
                       <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
-                        <p className="text-slate-300">Optimista e inspirador</p>
-                        <p className="text-xs text-slate-500 mt-1">Catalizador</p>
+                        <p className="text-muted/30">Optimista e inspirador</p>
+                        <p className="text-xs text-muted/50 mt-1">Catalizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
-                        <p className="text-slate-300">Paciente y considerado</p>
-                        <p className="text-xs text-slate-500 mt-1">Estabilizador</p>
+                        <p className="text-muted/30">Paciente y considerado</p>
+                        <p className="text-xs text-muted/50 mt-1">Estabilizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
-                        <p className="text-slate-300">Analítico y preciso</p>
-                        <p className="text-xs text-slate-500 mt-1">Arquitecto</p>
+                        <p className="text-muted/30">Analítico y preciso</p>
+                        <p className="text-xs text-muted/50 mt-1">Arquitecto</p>
                       </button>
                     </div>
                   </div>
@@ -174,28 +174,28 @@ export default function A1CerebralIntroPage() {
                     </p>
                     <div className="space-y-3">
                       <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
-                        <p className="text-slate-300">Decidido y directo</p>
-                        <p className="text-xs text-slate-500 mt-1">Impulsor</p>
+                        <p className="text-muted/30">Decidido y directo</p>
+                        <p className="text-xs text-muted/50 mt-1">Impulsor</p>
                       </button>
                       <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
-                        <p className="text-slate-300">Optimista e inspirador</p>
-                        <p className="text-xs text-slate-500 mt-1">Catalizador</p>
+                        <p className="text-muted/30">Optimista e inspirador</p>
+                        <p className="text-xs text-muted/50 mt-1">Catalizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
-                        <p className="text-slate-300">Paciente y considerado</p>
-                        <p className="text-xs text-slate-500 mt-1">Estabilizador</p>
+                        <p className="text-muted/30">Paciente y considerado</p>
+                        <p className="text-xs text-muted/50 mt-1">Estabilizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-red-600 bg-red-600/20 rounded-lg text-left hover:bg-red-600/30 transition-all">
                         <p className="font-medium text-white">Analítico y preciso</p>
-                        <p className="text-xs text-slate-400 mt-1">Arquitecto</p>
+                        <p className="text-xs text-muted/40 mt-1">Arquitecto</p>
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-blue/5 dark:bg-blue-950 p-4 rounded-[28px] border border-blue/30 dark:border-blue-800">
-                <p className="text-sm text-blue-900 dark:text-blue-100">
+              <div className="bg-blue/5 dark:bg-blue-950 p-4 rounded-[28px] border border-blue/30 dark:border-blue/10">
+                <p className="text-sm text-blue dark:text-blue/10">
                   <span className="font-semibold">¿Cómo funciona?</span> Cada pregunta tiene 4 opciones que representan los 4 estilos: Directo, Inspirador, Seguro y Consciente. Seleccionas cuál te describe MÁS y cuál te describe MENOS. El sistema cuenta tus selecciones y determina tu perfil dominante.
                 </p>
               </div>
@@ -205,11 +205,11 @@ export default function A1CerebralIntroPage() {
           {/* Benefits */}
           <Card className="border-0 shadow-lg bg-blue/5 dark:bg-blue-950">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl text-blue-900 dark:text-blue-100">
+              <CardTitle className="text-2xl text-blue dark:text-blue/10">
                 ¿Por qué es importante?
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-blue-900 dark:text-blue-100">
+            <CardContent className="space-y-3 text-blue dark:text-blue/10">
               <div className="flex gap-3">
                 <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue" />
                 <p>Entiende tu estilo de comunicación natural</p>
@@ -234,7 +234,7 @@ export default function A1CerebralIntroPage() {
             <Button
               onClick={() => router.push('/despega/a1-cerebral')}
               size="lg"
-              className="px-8 text-lg bg-blue hover:bg-blue-700 text-white"
+              className="px-8 text-lg bg-blue hover:bg-blue text-white"
             >
               Comenzar Análisis Cerebral
             </Button>

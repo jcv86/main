@@ -148,7 +148,7 @@ export default function A2TestPage() {
           <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-50 mb-2">
             CANON A2 - Test Completo
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted/60 dark:text-muted/40">
             Prueba el flujo completo: C1 → A1 → C2 con OpenAI integrado
           </p>
         </div>
@@ -157,7 +157,7 @@ export default function A2TestPage() {
         <Card className="mb-8 border-0 shadow-lg">
           <CardHeader className="bg-gradient-to-r from-blue to-blue-700 text-white rounded-t-lg">
             <CardTitle>Panel de Control</CardTitle>
-            <CardDescription className="text-blue-100">
+            <CardDescription className="text-blue/10">
               Haz clic para probar cada fase del flujo CANON
             </CardDescription>
           </CardHeader>
@@ -211,7 +211,7 @@ export default function A2TestPage() {
                 onClick={runFullTest}
                 disabled={isRunning}
                 size="lg"
-                className="h-14 text-lg font-bold bg-gradient-to-r from-blue to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                className="h-14 text-lg font-bold bg-gradient-to-r from-blue to-blue-700 hover:from-blue hover:to-blue-800"
               >
                 {isRunning ? (
                   <>
@@ -255,8 +255,8 @@ export default function A2TestPage() {
                         )}
                         {result.status === "success" && (
                           <>
-                            <CheckCircle2 className="w-5 h-5 text-green-600" />
-                            <Badge variant="outline" className="bg-green-50 text-green-700">Éxito</Badge>
+                            <CheckCircle2 className="w-5 h-5 text-green" />
+                            <Badge variant="outline" className="bg-green/5 text-green-700">Éxito</Badge>
                           </>
                         )}
                         {result.status === "error" && (
@@ -269,7 +269,7 @@ export default function A2TestPage() {
 
                       {/* Result Data */}
                       {result.data && (
-                        <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-[28px] overflow-auto max-h-96">
+                        <div className="bg-muted/5 dark:bg-background p-4 rounded-[28px] overflow-auto max-h-96">
                           <pre className="text-sm font-mono whitespace-pre-wrap break-words">
                             {JSON.stringify(result.data, null, 2)}
                           </pre>

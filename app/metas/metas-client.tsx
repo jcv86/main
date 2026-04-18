@@ -330,7 +330,7 @@ export default function MetasSMARTClient() {
       case "activa":
         return "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
       case "completada":
-        return "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200"
+        return "bg-blue/10 dark:bg-blue text-blue-800 dark:text-blue/20"
       case "pausada":
         return "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200"
       case "abandonada":
@@ -388,16 +388,16 @@ export default function MetasSMARTClient() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
-                <Target className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
+                <Target className="h-8 w-8 text-blue dark:text-indigo-400" />
                 Sistema de Metas SMART
               </h1>
-              <p className="text-slate-600 dark:text-slate-400 mt-2">
+              <p className="text-muted/60 dark:text-muted/40 mt-2">
                 Metas inteligentes basadas en tus resultados de tests psicométricos
               </p>
             </div>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-indigo-600 hover:bg-indigo-700">
+                <Button className="bg-blue hover:bg-indigo-700">
                   <Plus className="h-4 w-4 mr-2" />
                   Nueva Meta SMART
                 </Button>
@@ -405,7 +405,7 @@ export default function MetasSMARTClient() {
               <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
-                    <Target className="h-5 w-5 text-indigo-600" />
+                    <Target className="h-5 w-5 text-blue" />
                     {metaEditando ? "Editar Meta SMART" : "Crear Nueva Meta SMART"}
                   </DialogTitle>
                   <DialogDescription>
@@ -432,7 +432,7 @@ export default function MetasSMARTClient() {
                       id="tipo"
                       value={nuevaMeta.tipo}
                       onChange={(e) => setNuevaMeta({ ...nuevaMeta, tipo: e.target.value as any })}
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+                      className="w-full px-3 py-2 border border-muted/30 rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white"
                     >
                       <option value="laboral">Laboral</option>
                       <option value="personal">Personal</option>
@@ -447,7 +447,7 @@ export default function MetasSMARTClient() {
                       value={nuevaMeta.motivoProfundo}
                       onChange={(e) => setNuevaMeta({ ...nuevaMeta, motivoProfundo: e.target.value })}
                       placeholder="¿Por qué es importante esta meta para ti?"
-                      className="w-full px-3 py-2 border border-slate-300 rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white min-h-20"
+                      className="w-full px-3 py-2 border border-muted/30 rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white min-h-20"
                     />
                   </div>
 
@@ -455,7 +455,7 @@ export default function MetasSMARTClient() {
                     <Button variant="outline" onClick={() => setDialogOpen(false)}>
                       Cancelar
                     </Button>
-                    <Button onClick={handleGuardarMeta} className="bg-indigo-600 hover:bg-indigo-700">
+                    <Button onClick={handleGuardarMeta} className="bg-blue hover:bg-indigo-700">
                       {metaEditando ? "Actualizar" : "Crear"} Meta
                     </Button>
                   </DialogFooter>
@@ -467,7 +467,7 @@ export default function MetasSMARTClient() {
 
         {/* Tabs */}
         <Tabs defaultValue="progreso" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-slate-100 dark:bg-slate-800">
+          <TabsList className="grid w-full grid-cols-3 bg-muted/10 dark:bg-card">
             <TabsTrigger value="progreso">Mi Progreso</TabsTrigger>
             <TabsTrigger value="metas">Todas las Metas</TabsTrigger>
             <TabsTrigger value="plantillas">Plantillas</TabsTrigger>
@@ -475,10 +475,10 @@ export default function MetasSMARTClient() {
 
           {/* Tab: Mi Progreso */}
           <TabsContent value="progreso" className="space-y-6">
-            <Card className="dark:bg-slate-800 dark:border-slate-700">
+            <Card className="dark:bg-card dark:border-card">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-white">
-                  <TrendingUp className="h-5 w-5 text-green-600 dark:text-green-400" />
+                  <TrendingUp className="h-5 w-5 text-green dark:text-green-400" />
                   Resumen de Progreso
                 </CardTitle>
               </CardHeader>
@@ -491,14 +491,14 @@ export default function MetasSMARTClient() {
                         <div className="flex justify-between items-center">
                           <div className="flex items-center gap-2">
                             {getIconoTipo(meta.tipo)}
-                            <span className="font-medium text-slate-800 dark:text-slate-200">{meta.nombre}</span>
+                            <span className="font-medium text-slate-800 dark:text-muted/20">{meta.nombre}</span>
                           </div>
-                          <span className="text-sm font-bold text-indigo-600 dark:text-indigo-400">
+                          <span className="text-sm font-bold text-blue dark:text-indigo-400">
                             {meta.progreso}%
                           </span>
                         </div>
                         <Progress value={meta.progreso} className="h-3" />
-                        <div className="flex justify-between text-xs text-slate-500 dark:text-slate-400">
+                        <div className="flex justify-between text-xs text-muted/50 dark:text-muted/40">
                           <span>Inicio: {meta.fechaCreacion}</span>
                           <span>Meta: {meta.temporal}</span>
                         </div>
@@ -507,8 +507,8 @@ export default function MetasSMARTClient() {
                 </div>
 
                 {metas.filter((m) => m.estado === "activa").length === 0 && (
-                  <div className="text-center py-8 text-slate-500 dark:text-slate-400">
-                    <Target className="h-12 w-12 mx-auto mb-3 text-slate-300 dark:text-slate-600" />
+                  <div className="text-center py-8 text-muted/50 dark:text-muted/40">
+                    <Target className="h-12 w-12 mx-auto mb-3 text-muted/30 dark:text-muted/60" />
                     <p>No tienes metas activas. ¡Crea una nueva meta para empezar!</p>
                   </div>
                 )}
@@ -516,10 +516,10 @@ export default function MetasSMARTClient() {
             </Card>
 
             {/* Conexión con tests */}
-            <Card className="dark:bg-slate-800 dark:border-slate-700">
+            <Card className="dark:bg-card dark:border-card">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-white">
-                  <Brain className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                  <Brain className="h-5 w-5 text-blue dark:text-indigo-400" />
                   Metas por Origen de Test
                 </CardTitle>
               </CardHeader>
@@ -528,10 +528,10 @@ export default function MetasSMARTClient() {
                   {["DISC", "MBTI", "Big Five", "IE", "RIASEC", "Soft Skills"].map((test) => {
                     const metasDelTest = metas.filter((m) => m.origen.includes(test))
                     return (
-                      <div key={test} className="p-4 bg-slate-50 rounded-lg dark:bg-slate-700">
-                        <h4 className="font-medium mb-2 text-slate-800 dark:text-slate-200">{test}</h4>
-                        <p className="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{metasDelTest.length}</p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                      <div key={test} className="p-4 bg-muted/5 rounded-lg dark:bg-slate-700">
+                        <h4 className="font-medium mb-2 text-slate-800 dark:text-muted/20">{test}</h4>
+                        <p className="text-2xl font-bold text-blue dark:text-indigo-400">{metasDelTest.length}</p>
+                        <p className="text-xs text-muted/50 dark:text-muted/40">
                           {metasDelTest.filter((m) => m.estado === "activa").length} activas
                         </p>
                       </div>

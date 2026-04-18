@@ -45,16 +45,16 @@ export default function TestOpenAIInsightsPage() {
         {/* Header */}
         <div className="space-y-3">
           <h1 className="text-5xl font-bold text-white">Descubre Quién Eres Realmente</h1>
-          <p className="text-lg text-purple-100">Tu viaje de 90 días comienza aquí. 5 fases. 1 insight que lo cambia todo.</p>
+          <p className="text-lg text-purple/10">Tu viaje de 90 días comienza aquí. 5 fases. 1 insight que lo cambia todo.</p>
         </div>
 
         {/* Main Test Button */}
-        <Card className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-purple-400/50 shadow-2xl">
+        <Card className="bg-gradient-to-r from-purple/50 to-pink-900/50 border-purple/40/50 shadow-2xl">
           <CardContent className="pt-8 pb-8">
             <Button 
               onClick={runTest} 
               disabled={loading}
-              className="w-full h-14 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+              className="w-full h-14 bg-gradient-to-r from-purple to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all"
             >
               {loading ? (
                 <>
@@ -101,15 +101,15 @@ export default function TestOpenAIInsightsPage() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <div className="p-3 bg-slate-800 rounded">
-                    <p className="text-xs text-slate-400">Tiempo Total</p>
+                    <p className="text-xs text-muted/40">Tiempo Total</p>
                     <p className="text-lg font-bold text-white">{results.performance.total_ms}ms</p>
                   </div>
                   <div className="p-3 bg-slate-800 rounded">
-                    <p className="text-xs text-slate-400">Promedio Fase</p>
+                    <p className="text-xs text-muted/40">Promedio Fase</p>
                     <p className="text-lg font-bold text-white">{results.performance.avg_phase_ms}ms</p>
                   </div>
                   <div className="p-3 bg-slate-800 rounded">
-                    <p className="text-xs text-slate-400">Fases</p>
+                    <p className="text-xs text-muted/40">Fases</p>
                     <p className="text-lg font-bold text-white">{results.validation.insights_generated}</p>
                   </div>
                 </div>
@@ -117,10 +117,10 @@ export default function TestOpenAIInsightsPage() {
             </Card>
 
             {/* A1 Insights */}
-            <Card className="bg-slate-900/50 border-blue-500/30">
+            <Card className="bg-slate-900/50 border-blue/50/30">
               <CardHeader>
-                <CardTitle className="text-blue-400">Fase 1: Quién Eres Realmente (Despega Cerebral)</CardTitle>
-                <CardDescription className="text-blue-200">
+                <CardTitle className="text-blue/40">Fase 1: Quién Eres Realmente (Despega Cerebral)</CardTitle>
+                <CardDescription className="text-blue/20">
                   Tu patrón natural de comportamiento - descubierto
                 </CardDescription>
               </CardHeader>
@@ -162,7 +162,7 @@ export default function TestOpenAIInsightsPage() {
             </Card>
 
             {/* A4 Insights */}
-            <Card className="bg-slate-900/50 border-purple-500/30">
+            <Card className="bg-slate-900/50 border-purple/50/30">
               <CardHeader>
                 <CardTitle className="text-purple-400">Fase 4: Tu Momento Ahora (Contexto de Mercado)</CardTitle>
                 <CardDescription className="text-purple-200">
@@ -177,7 +177,7 @@ export default function TestOpenAIInsightsPage() {
             </Card>
 
             {/* Brain Chain - The Master Insight */}
-            <Card className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 border-purple-400/50 shadow-2xl">
+            <Card className="bg-gradient-to-r from-purple/50 to-pink-900/50 border-purple/40/50 shadow-2xl">
               <CardHeader>
                 <CardTitle className="text-2xl bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
                   Tu Insight Maestro: El Que Lo Cambia Todo
@@ -187,14 +187,14 @@ export default function TestOpenAIInsightsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="bg-slate-900/70 p-6 rounded-lg border-2 border-purple-400/50">
+                <div className="bg-slate-900/70 p-6 rounded-lg border-2 border-purple/40/50">
                   <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-lg font-bold text-center">
                     "{results.results.brain_chain}"
                   </p>
                 </div>
-                <div className="mt-4 p-4 bg-purple-950/50 rounded flex items-center gap-3">
+                <div className="mt-4 p-4 bg-purple/50 rounded flex items-center gap-3">
                   <CheckCircle2 className="w-5 h-5 text-purple-300 flex-shrink-0" />
-                  <span className="text-sm text-purple-100">
+                  <span className="text-sm text-purple/10">
                     Este es el insight que te guía en cada decisión los próximos 90 días
                   </span>
                 </div>
@@ -208,19 +208,19 @@ export default function TestOpenAIInsightsPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Todas las fases completadas</span>
-                  <Badge className={results.validation.all_phases_completed ? 'bg-green-600' : 'bg-red-600'}>
+                  <span className="text-muted/30">Todas las fases completadas</span>
+                  <Badge className={results.validation.all_phases_completed ? 'bg-green' : 'bg-red-600'}>
                     {results.validation.all_phases_completed ? 'EXITOSO' : 'FALLIDO'}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Cadena BRAIN conectada</span>
-                  <Badge className={results.validation.brain_connected ? 'bg-green-600' : 'bg-red-600'}>
+                  <span className="text-muted/30">Cadena BRAIN conectada</span>
+                  <Badge className={results.validation.brain_connected ? 'bg-green' : 'bg-red-600'}>
                     {results.validation.brain_connected ? 'EXITOSO' : 'FALLIDO'}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-slate-300">Tiempo de respuesta API</span>
+                  <span className="text-muted/30">Tiempo de respuesta API</span>
                   <Badge variant={results.performance.total_ms < 10000 ? 'default' : 'destructive'}>
                     {results.performance.total_ms}ms
                   </Badge>
@@ -235,10 +235,10 @@ export default function TestOpenAIInsightsPage() {
           <CardHeader>
             <CardTitle>Cómo Funciona Tu Viaje de Descubrimiento</CardTitle>
           </CardHeader>
-          <CardContent className="text-sm text-slate-300 space-y-3">
+          <CardContent className="text-sm text-muted/30 space-y-3">
             <p className="font-semibold text-slate-100">4 Fases. 1 Insight Maestro. Tu Transformación Comienza.</p>
-            <div className="space-y-2 text-slate-400">
-              <p><span className="text-blue-300 font-semibold">Fase 1:</span> Descubrimos quién eres realmente (tu patrón natural)</p>
+            <div className="space-y-2 text-muted/40">
+              <p><span className="text-blue/30 font-semibold">Fase 1:</span> Descubrimos quién eres realmente (tu patrón natural)</p>
               <p><span className="text-emerald-300 font-semibold">Fase 2:</span> Creamos tu camino claro (qué hacer cada 30 días)</p>
               <p><span className="text-orange-300 font-semibold">Fase 3:</span> Te preparamos (feedback honesto sobre lo que necesitas cambiar)</p>
               <p><span className="text-purple-300 font-semibold">Fase 4:</span> Te mostramos tu momento (por qué ahora es tu oportunidad)</p>

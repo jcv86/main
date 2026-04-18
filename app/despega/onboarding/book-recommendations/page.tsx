@@ -117,7 +117,7 @@ export default function BookRecommendationsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-purple/5 to-blue/5 flex items-center justify-center">
         <div className="text-center">
           <Sparkles className="h-12 w-12 text-purple mx-auto mb-4 animate-spin" />
           <p className="text-lg text-gray-600">Personalizando tus recomendaciones...</p>
@@ -127,7 +127,7 @@ export default function BookRecommendationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-blue-50 py-12 px-4">
+    <div className="min-h-screen bg-gradient-to-b from-purple/5 to-blue/5 py-12 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -178,7 +178,7 @@ export default function BookRecommendationsPage() {
             )}
 
             {/* Development Path Section */}
-            <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 border-0 shadow-lg">
+            <Card className="bg-gradient-to-br from-blue/5 to-purple-50 border-0 shadow-lg">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg">Tu Ruta de Desarrollo</CardTitle>
               </CardHeader>
@@ -210,7 +210,7 @@ export default function BookRecommendationsPage() {
                     className="overflow-hidden hover:shadow-lg transition-shadow border-0 bg-white flex flex-row h-64"
                   >
                     {/* Book Cover */}
-                    <div className="relative w-40 flex-shrink-0 bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                    <div className="relative w-40 flex-shrink-0 bg-gradient-to-br from-purple/10 to-blue/10 flex items-center justify-center">
                       {book.cover_url ? (
                         <Image
                           src={book.cover_url}
@@ -222,7 +222,7 @@ export default function BookRecommendationsPage() {
                       ) : (
                         <BookOpen className="h-16 w-16 text-purple-400" />
                       )}
-                      <div className="absolute top-3 right-3 bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
+                      <div className="absolute top-3 right-3 bg-purple text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
                         {index + 1}
                       </div>
                     </div>
@@ -265,7 +265,7 @@ export default function BookRecommendationsPage() {
                         <span className="text-xs text-gray-500">{book.pages} páginas</span>
                         <Button
                           size="sm"
-                          className="bg-purple-600 hover:bg-purple-700 text-white"
+                          className="bg-purple hover:bg-purple text-white"
                           onClick={() => router.push(`/biblioteca/${book.id}`)}
                         >
                           Explorar <ArrowRight className="ml-1 h-3 w-3" />
@@ -287,7 +287,7 @@ export default function BookRecommendationsPage() {
         <div className="text-center space-y-4 pt-8 border-t border-gray-200">
           <Button
             onClick={() => router.push("/dashboard?refetch=true")}
-            className="bg-blue hover:bg-blue-700 text-white px-8 py-3 text-base"
+            className="bg-blue hover:bg-blue text-white px-8 py-3 text-base"
             size="lg"
           >
             Ir a mi Dashboard

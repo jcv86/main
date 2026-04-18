@@ -105,7 +105,7 @@ export default function BooksExportPage() {
   const bookCount = csvData.split("\n").length - 1 // Subtract 1 for header
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue/5 to-indigo-100 p-4">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Exportar Biblioteca Completa</h1>
@@ -171,15 +171,15 @@ export default function BooksExportPage() {
             <h3 className="text-lg font-semibold mb-4">Información del Dataset</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div>
-                <div className="font-medium text-blue-600">Total Libros</div>
+                <div className="font-medium text-blue">Total Libros</div>
                 <div className="text-2xl font-bold">{bookCount}</div>
               </div>
               <div>
-                <div className="font-medium text-green-600">Categorías</div>
+                <div className="font-medium text-green">Categorías</div>
                 <div className="text-2xl font-bold">15+</div>
               </div>
               <div>
-                <div className="font-medium text-purple-600">Idioma</div>
+                <div className="font-medium text-purple">Idioma</div>
                 <div className="text-2xl font-bold">ES</div>
               </div>
               <div>

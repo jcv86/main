@@ -50,7 +50,7 @@ const tests: Test[] = [
     difficulty: "Beginner",
     category: "Personality",
     path: "/despega/a1-cerebral",
-    color: "bg-blue-100 text-blue-700 border-blue-200",
+    color: "bg-blue/10 text-blue border-blue/20",
   },
   {
     id: "emotional-intelligence",
@@ -62,7 +62,7 @@ const tests: Test[] = [
     difficulty: "Beginner",
     category: "Intelligence",
     path: "/test/emotional-intelligence",
-    color: "bg-cyan-100 text-cyan-700 border-cyan-200",
+    color: "bg-cyan-100 text-cyan-700 border-blue/20",
   },
   {
     id: "mbti",
@@ -74,7 +74,7 @@ const tests: Test[] = [
     difficulty: "Intermediate",
     category: "Personality",
     path: "/test/mbti",
-    color: "bg-purple-100 text-purple-700 border-purple-200",
+    color: "bg-purple/10 text-purple border-purple/20",
     prerequisites: ["disc"],
   },
   {
@@ -88,7 +88,7 @@ const tests: Test[] = [
     difficulty: "Intermediate",
     category: "Personality",
     path: "/test/big-five",
-    color: "bg-green-100 text-green-700 border-green-200",
+    color: "bg-green-100 text-green-700 border-green/20",
     prerequisites: ["disc", "emotional-intelligence"],
   },
   {
@@ -214,7 +214,7 @@ export default function TestsPage() {
             <Button
               variant="outline"
               onClick={() => router.push("/test-verification")}
-              className="text-xs sm:text-sm bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900 flex-1 sm:flex-none"
+              className="text-xs sm:text-sm bg-blue/5 dark:bg-blue-950 border-blue/20 dark:border-blue/10 text-blue dark:text-blue/30 hover:bg-blue/10 dark:hover:bg-blue flex-1 sm:flex-none"
               size={isMobile ? "sm" : "default"}
             >
               {isMobile ? <Smartphone className="h-4 w-4 mr-2" /> : <Monitor className="h-4 w-4 mr-2" />}
@@ -234,11 +234,11 @@ export default function TestsPage() {
 
         {/* Mobile Device Banner */}
         {isMobile && (
-          <Card className="mb-6 sm:mb-8 border-green-200 dark:border-green-800 bg-gradient-to-r from-green-50 dark:from-green-950 to-emerald-50 dark:to-emerald-950">
+          <Card className="mb-6 sm:mb-8 border-green/20 dark:border-green-800 bg-gradient-to-r from-green/5 dark:from-green-950 to-emerald-50 dark:to-emerald-950">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-                  <Smartphone className="h-5 w-5 text-green-600 dark:text-green-400" />
+                  <Smartphone className="h-5 w-5 text-green dark:text-green-400" />
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold text-green-900 dark:text-green-300 text-sm">
@@ -255,18 +255,18 @@ export default function TestsPage() {
         )}
 
         {/* Verification Status Banner */}
-        <Card className="mb-6 sm:mb-8 border-blue-200 dark:border-blue-800 bg-gradient-to-r from-blue-50 dark:from-blue-950 to-indigo-50 dark:to-indigo-950">
+        <Card className="mb-6 sm:mb-8 border-blue/20 dark:border-blue/10 bg-gradient-to-r from-blue/5 dark:from-blue-950 to-indigo-50 dark:to-indigo-950">
           <CardContent className="p-3 sm:p-4">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 dark:bg-blue-900 rounded-lg">
-                  <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 dark:text-blue-400" />
+                <div className="p-2 bg-blue/10 dark:bg-blue rounded-lg">
+                  <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-blue dark:text-blue/40" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-blue-900 dark:text-blue-300 text-sm sm:text-base">
+                  <h3 className="font-semibold text-blue dark:text-blue/30 text-sm sm:text-base">
                     Verificación de Tests en Tiempo Real
                   </h3>
-                  <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-400">
+                  <p className="text-xs sm:text-sm text-blue dark:text-blue/40">
                     Todos los tests de personalidad son verificados continuamente para asegurar navegación, validación y
                     flujos de completitud adecuados en {isMobile ? "dispositivos móviles" : "todos los dispositivos"}.
                   </p>
@@ -274,7 +274,7 @@ export default function TestsPage() {
               </div>
               <Button
                 onClick={() => router.push("/test-verification")}
-                className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 w-full sm:w-auto"
+                className="bg-blue hover:bg-blue dark:bg-blue dark:hover:bg-blue w-full sm:w-auto"
                 size={isMobile ? "sm" : "default"}
               >
                 {isMobile ? <Smartphone className="h-4 w-4 mr-2" /> : <Monitor className="h-4 w-4 mr-2" />}
@@ -306,14 +306,14 @@ export default function TestsPage() {
             <Progress value={completionPercentage} className="h-2" />
 
             {nextTest && (
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 p-3 sm:p-4 bg-blue/5 dark:bg-blue-950 rounded-lg border border-blue/20 dark:border-blue/10">
                 <div className="flex items-center gap-3">
-                  <nextTest.icon className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                  <nextTest.icon className="h-4 w-4 sm:h-5 sm:w-5 text-blue dark:text-blue/40 flex-shrink-0" />
                   <div className="min-w-0">
-                    <p className="font-medium text-blue-900 dark:text-blue-300 text-sm sm:text-base truncate">
+                    <p className="font-medium text-blue dark:text-blue/30 text-sm sm:text-base truncate">
                       Recomendado: {nextTest.title}
                     </p>
-                    <p className="text-xs sm:text-sm text-blue-700 dark:text-blue-400">
+                    <p className="text-xs sm:text-sm text-blue dark:text-blue/40">
                       {nextTest.duration} • {nextTest.questions} preguntas •{" "}
                       {nextTest.difficulty === "Beginner"
                         ? "Principiante"
@@ -325,7 +325,7 @@ export default function TestsPage() {
                 </div>
                 <Button
                   onClick={() => router.push(nextTest.path)}
-                  className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 w-full sm:w-auto"
+                  className="bg-blue hover:bg-blue dark:bg-blue dark:hover:bg-blue w-full sm:w-auto"
                   size={isMobile ? "sm" : "default"}
                 >
                   Iniciar Test
@@ -373,15 +373,15 @@ export default function TestsPage() {
                 key={test.id}
                 className={`relative transition-all hover:shadow-lg ${
                   isCompleted
-                    ? "border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950"
+                    ? "border-green/20 dark:border-green-800 bg-green/5 dark:bg-green-950"
                     : isAvailable
                       ? "hover:border-gray-300 dark:hover:border-gray-600"
-                      : "opacity-60 bg-gray-50 dark:bg-slate-900"
+                      : "opacity-60 bg-gray-50 dark:bg-background"
                 }`}
               >
                 {isCompleted && (
                   <div className="absolute top-3 sm:top-4 right-3 sm:right-4">
-                    <Badge className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800 text-xs">
+                    <Badge className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green/20 dark:border-green-800 text-xs">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       Completado
                     </Badge>
@@ -402,7 +402,7 @@ export default function TestsPage() {
                           variant="outline"
                           className={`text-xs ${
                             test.difficulty === "Beginner"
-                              ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800"
+                              ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green/20 dark:border-green-800"
                               : test.difficulty === "Intermediate"
                                 ? "bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800"
                                 : "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800"
@@ -446,7 +446,7 @@ export default function TestsPage() {
                   </div>
 
                   {test.prerequisites && !isCompleted && (
-                    <div className="text-xs text-gray-500 dark:text-gray-400 p-2 bg-gray-100 dark:bg-slate-800 rounded">
+                    <div className="text-xs text-gray-500 dark:text-gray-400 p-2 bg-gray-100 dark:bg-card rounded">
                       <span className="font-medium">Requisitos previos:</span>{" "}
                       {test.prerequisites.map((prereq) => {
                         const prereqTest = tests.find((t) => t.id === prereq)
@@ -456,7 +456,7 @@ export default function TestsPage() {
                             key={prereq}
                             className={
                               isPrereqCompleted
-                                ? "text-green-600 dark:text-green-400"
+                                ? "text-green dark:text-green-400"
                                 : "text-red-500 dark:text-red-400"
                             }
                           >
@@ -492,7 +492,7 @@ export default function TestsPage() {
                       <Button
                         size="sm"
                         onClick={() => router.push(test.path)}
-                        className="flex-1 bg-gray-900 hover:bg-gray-800 dark:bg-blue-600 dark:hover:bg-blue-500 text-xs sm:text-sm"
+                        className="flex-1 bg-gray-900 hover:bg-gray-800 dark:bg-blue dark:hover:bg-blue/50 text-xs sm:text-sm"
                       >
                         <PlayCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                         Iniciar Evaluación
@@ -511,9 +511,9 @@ export default function TestsPage() {
 
         {/* Completion Message */}
         {completedTests.length === tests.length && (
-          <Card className="mt-6 sm:mt-8 border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950">
+          <Card className="mt-6 sm:mt-8 border-green/20 dark:border-green-800 bg-green/5 dark:bg-green-950">
             <CardContent className="p-6 sm:p-8 text-center">
-              <CheckCircle className="h-12 w-12 sm:h-16 sm:w-16 text-green-600 dark:text-green-400 mx-auto mb-4" />
+              <CheckCircle className="h-12 w-12 sm:h-16 sm:w-16 text-green dark:text-green-400 mx-auto mb-4" />
               <h3 className="text-xl sm:text-2xl font-bold text-green-900 dark:text-green-300 mb-2">
                 🎉 ¡Todas las Evaluaciones Completadas!
               </h3>
@@ -523,7 +523,7 @@ export default function TestsPage() {
               </p>
               <Button
                 onClick={() => router.push("/dashboard")}
-                className="bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600"
+                className="bg-green hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green"
                 size={isMobile ? "sm" : "default"}
               >
                 Ver Perfil Completo

@@ -83,7 +83,7 @@ const ENTRENAMIENTO_TYPES = [
 
 export default function SimulationsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <Link href="/despega/a3">
@@ -97,7 +97,7 @@ export default function SimulationsPage() {
           <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
             Entrenamiento de Entrevista
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted/60 dark:text-muted/40">
             4 niveles progresivos para entrenar desde lo básico hasta la maestría total.
           </p>
         </div>
@@ -125,14 +125,14 @@ export default function SimulationsPage() {
               <Card key={ent.id} className="border-2 hover:shadow-lg transition flex flex-col">
                 <CardHeader>
                   <div className="flex items-start justify-between mb-2">
-                    <IconComponent className="w-6 h-6 text-slate-400" />
+                    <IconComponent className="w-6 h-6 text-muted/40" />
                     <Badge className={ent.difficultyColor}>{ent.difficulty}</Badge>
                   </div>
                   <CardTitle>{ent.name}</CardTitle>
                   <CardDescription className="text-base">{ent.subtitle}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 space-y-4">
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                  <p className="text-sm text-muted/60 dark:text-muted/40">
                     {ent.description}
                   </p>
 
@@ -140,14 +140,14 @@ export default function SimulationsPage() {
                     <div className="text-sm font-semibold text-slate-900 dark:text-slate-50">
                       Incluye:
                     </div>
-                    <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
+                    <ul className="text-sm space-y-1 text-muted/70 dark:text-muted/30">
                       {ent.features.map((feature, idx) => (
                         <li key={idx}>✓ {feature}</li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 pt-2">
+                  <div className="flex items-center gap-2 text-sm text-muted/60 dark:text-muted/40 pt-2">
                     <Clock className="w-4 h-4" />
                     Duración: {ent.duration}
                   </div>
@@ -164,12 +164,12 @@ export default function SimulationsPage() {
         </div>
 
         {/* Tips Card */}
-        <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border-0">
+        <Card className="bg-gradient-to-r from-purple/5 to-indigo-50 dark:from-purple/20 dark:to-indigo-900/20 border-0">
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-purple text-lg">💡</div>
             <div>
-              <div className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Cómo progresar en entrenamiento de entrevistas</div>
-              <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">
+              <div className="font-semibold text-purple dark:text-purple/10 mb-2">Cómo progresar en entrenamiento de entrevistas</div>
+              <ul className="text-sm text-purple dark:text-purple-200 space-y-1">
                 <li>✓ Domina cada nivel antes de subir (practica hasta sentirte cómodo)</li>
                 <li>✓ Revisa el feedback del coach después de cada entrenamiento</li>
                 <li>✓ Identifica patrones en tus fortalezas y debilidades</li>

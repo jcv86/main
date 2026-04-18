@@ -3410,9 +3410,9 @@ export default function BookReaderPage() {
       case "Productividad":
         return "bg-green-100 text-green-800"
       case "Psicología":
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue/10 text-blue-800"
       case "Desarrollo Personal":
-        return "bg-purple-100 text-purple-800"
+        return "bg-purple/10 text-purple"
       case "Comunicación":
         return "bg-orange-100 text-orange-800"
       default:
@@ -3432,7 +3432,7 @@ export default function BookReaderPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto mb-4"></div>
             <p className="text-gray-600">Cargando libro...</p>
           </div>
         </div>
@@ -3514,7 +3514,7 @@ export default function BookReaderPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setIsBookmarked(!isBookmarked)}
-                className={isBookmarked ? "text-blue-600" : ""}
+                className={isBookmarked ? "text-blue" : ""}
               >
                 <Bookmark className="h-4 w-4" />
               </Button>
@@ -3547,11 +3547,11 @@ export default function BookReaderPage() {
           </div>
 
           {isTTSSupported && (
-            <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+            <div className="mt-4 p-4 bg-blue/5 rounded-lg border border-blue/20">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <Volume2 className="h-5 w-5 text-blue-600" />
-                  <span className="font-semibold text-blue-900">Lectura en Voz Alta</span>
+                  <Volume2 className="h-5 w-5 text-blue" />
+                  <span className="font-semibold text-blue">Lectura en Voz Alta</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Button
@@ -3596,7 +3596,7 @@ export default function BookReaderPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-blue-900">Voz</label>
+                  <label className="text-sm font-medium text-blue">Voz</label>
                   <Select value={selectedVoice} onValueChange={setSelectedVoice} disabled={isPlaying}>
                     <SelectTrigger className="bg-white">
                       <SelectValue placeholder="Seleccionar voz" />
@@ -3612,7 +3612,7 @@ export default function BookReaderPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-blue-900">Velocidad: {ttsRate.toFixed(1)}x</label>
+                  <label className="text-sm font-medium text-blue">Velocidad: {ttsRate.toFixed(1)}x</label>
                   <Slider
                     value={[ttsRate]}
                     onValueChange={(value) => setTtsRate(value[0])}
@@ -3624,7 +3624,7 @@ export default function BookReaderPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-blue-900">Volumen: {Math.round(ttsVolume * 100)}%</label>
+                  <label className="text-sm font-medium text-blue">Volumen: {Math.round(ttsVolume * 100)}%</label>
                   <Slider
                     value={[ttsVolume]}
                     onValueChange={(value) => setTtsVolume(value[0])}
@@ -3637,7 +3637,7 @@ export default function BookReaderPage() {
 
               {isPlaying && (
                 <div className="mt-3 flex items-center justify-between">
-                  <div className="text-sm text-blue-700">
+                  <div className="text-sm text-blue">
                     Fragmento {currentChunkIndex + 1} de {chunksRef.current.length}
                   </div>
                   <Progress value={((currentChunkIndex + 1) / chunksRef.current.length) * 100} className="h-2 w-48" />

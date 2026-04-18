@@ -107,11 +107,11 @@ export default function SeverityThresholdsPage() {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "performance":
-        return "bg-blue-500/10 text-blue-500"
+        return "bg-blue/50/10 text-blue/50"
       case "system":
-        return "bg-purple-500/10 text-purple-500"
+        return "bg-purple/50/10 text-purple/50"
       case "engagement":
-        return "bg-green-500/10 text-green-500"
+        return "bg-green/50/10 text-green"
       case "quality":
         return "bg-orange-500/10 text-orange-500"
       default:
@@ -297,7 +297,7 @@ export default function SeverityThresholdsPage() {
           {alerts.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
-                <CheckCircle className="h-12 w-12 text-green-500 mb-4" />
+                <CheckCircle className="h-12 w-12 text-green mb-4" />
                 <h3 className="text-lg font-medium mb-2">No hay alertas activas</h3>
                 <p className="text-sm text-muted-foreground">Todas las métricas están dentro de los umbrales</p>
               </CardContent>

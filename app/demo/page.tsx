@@ -122,31 +122,31 @@ export default function DemoPage() {
 
             <Button 
               onClick={() => setStep('questions')}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white text-lg px-8 py-6"
+              className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white text-lg px-8 py-6"
             >
               Comenzar Demo
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
 
             {/* Features Preview */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12 pt-8 border-t border-slate-200 dark:border-slate-800">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12 pt-8 border-t border-muted/20 dark:border-slate-800">
               <div className="text-left">
                 <h3 className="font-bold mb-2 flex items-center gap-2">
-                  <Check className="w-5 h-5 text-green-600" />
+                  <Check className="w-5 h-5 text-green" />
                   5 Preguntas
                 </h3>
                 <p className="text-sm text-foreground/60">Científico y rápido. Sin registrarse.</p>
               </div>
               <div className="text-left">
                 <h3 className="font-bold mb-2 flex items-center gap-2">
-                  <Sparkles className="w-5 h-5 text-purple-600" />
+                  <Sparkles className="w-5 h-5 text-purple" />
                   Perfil Instant
                 </h3>
                 <p className="text-sm text-foreground/60">Descubre quién eres realmente.</p>
               </div>
               <div className="text-left">
                 <h3 className="font-bold mb-2 flex items-center gap-2">
-                  <ArrowRight className="w-5 h-5 text-blue-600" />
+                  <ArrowRight className="w-5 h-5 text-blue" />
                   Acceso Completo
                 </h3>
                 <p className="text-sm text-foreground/60">Regístrate para toda la plataforma.</p>
@@ -163,7 +163,7 @@ export default function DemoPage() {
             </div>
 
             {demoQuestions.map((q, idx) => (
-              <Card key={q.id} className="border-2 border-slate-200 dark:border-slate-700">
+              <Card key={q.id} className="border-2 border-muted/20 dark:border-card">
                 <CardHeader>
                   <CardTitle className="text-lg">
                     {idx + 1}. {q.question}
@@ -177,14 +177,14 @@ export default function DemoPage() {
                         onClick={() => handleAnswer(q.id, option.value)}
                         className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
                           demoAnswers[q.id] === option.value
-                            ? 'border-purple-600 bg-purple-50 dark:bg-purple-950'
-                            : 'border-slate-200 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600'
+                            ? 'border-purple bg-purple/5 dark:bg-purple'
+                            : 'border-muted/20 dark:border-card hover:border-slate-400 dark:hover:border-slate-600'
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-medium">{option.text}</span>
                           {demoAnswers[q.id] === option.value && (
-                            <Check className="w-5 h-5 text-purple-600" />
+                            <Check className="w-5 h-5 text-purple" />
                           )}
                         </div>
                       </button>
@@ -197,7 +197,7 @@ export default function DemoPage() {
             <Button 
               onClick={() => setStep('results')}
               disabled={!allAnswered}
-              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white text-lg py-6"
+              className="w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white text-lg py-6"
             >
               Ver Mi Perfil
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -208,7 +208,7 @@ export default function DemoPage() {
         {step === 'results' && allAnswered && (
           <div className="space-y-8">
             {/* Profile Card */}
-            <Card className="border-4 border-purple-500 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/30 dark:to-blue-950/30">
+            <Card className="border-4 border-purple/50 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple-950/30 dark:to-blue-950/30">
               <CardHeader>
                 <CardTitle className="text-3xl mb-2">Tu Perfil: {profileNames[primary]} + {profileNames[secondary]}</CardTitle>
                 <CardDescription className="text-lg">{profileDescriptions[primary]}</CardDescription>
@@ -218,7 +218,7 @@ export default function DemoPage() {
                   {Object.entries(profileNames).map(([key, name]) => (
                     <div key={key} className="text-center">
                       <div className={`font-bold text-2xl mb-2 ${
-                        key === primary ? 'text-purple-600' : key === secondary ? 'text-blue-600' : 'text-slate-400'
+                        key === primary ? 'text-purple' : key === secondary ? 'text-blue' : 'text-muted/40'
                       }`}>
                         {scores[key]}/5
                       </div>
@@ -241,21 +241,21 @@ export default function DemoPage() {
               <CardContent className="space-y-4">
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                    <Check className="w-5 h-5 text-green flex-shrink-0 mt-1" />
                     <div>
                       <h4 className="font-bold">Análisis Completo de El Ritual (28 preguntas)</h4>
                       <p className="text-sm text-foreground/70">Precisión máxima con 8 insights personalizados por IA</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                    <Check className="w-5 h-5 text-green flex-shrink-0 mt-1" />
                     <div>
                       <h4 className="font-bold">Ruta Personalizada de 90 Días</h4>
                       <p className="text-sm text-foreground/70">Plan específico basado en tu perfil y objetivos</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-green-600 flex-shrink-0 mt-1" />
+                    <Check className="w-5 h-5 text-green flex-shrink-0 mt-1" />
                     <div>
                       <h4 className="font-bold">Coach IA 24/7 + Simulaciones</h4>
                       <p className="text-sm text-foreground/70">Entrenamientos personalizados y mentoría constante</p>
@@ -263,9 +263,9 @@ export default function DemoPage() {
                   </div>
                 </div>
 
-                <div className="border-t border-slate-200 dark:border-slate-800 pt-4 space-y-2">
+                <div className="border-t border-muted/20 dark:border-slate-800 pt-4 space-y-2">
                   <Link href="/auth/signin">
-                    <Button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-6 text-lg">
+                    <Button className="w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white py-6 text-lg">
                       Crear Mi Cuenta Gratuita
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>

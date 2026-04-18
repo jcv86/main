@@ -6,7 +6,7 @@ export default function CriticalLogsPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="mb-8">
           <h1 className="text-4xl font-bold text-slate-900 mb-2">Logs Críticos</h1>
-          <p className="text-slate-600">Conversaciones con bajo rendimiento que requieren revisión y mejora</p>
+          <p className="text-muted/60">Conversaciones con bajo rendimiento que requieren revisión y mejora</p>
         </div>
 
         <CriticalLogsDashboard />

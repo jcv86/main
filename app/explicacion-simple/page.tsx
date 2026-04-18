@@ -4,8 +4,8 @@ export default function ExplicacionSimplePage() {
       <div className="container mx-auto px-4 py-16 max-w-5xl">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-3 bg-purple-100 px-6 py-3 rounded-full mb-6">
-            <span className="text-purple-700 font-bold text-lg">Explicación Clara y Directa</span>
+          <div className="inline-flex items-center gap-3 bg-purple/10 px-6 py-3 rounded-full mb-6">
+            <span className="text-purple font-bold text-lg">Explicación Clara y Directa</span>
           </div>
           <h1 className="text-5xl font-bold mb-6 text-gray-900">Despega Tu Carrera</h1>
           <p className="text-2xl text-gray-600">Desarrollo profesional inteligente y personalizado</p>
@@ -74,13 +74,13 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 3: How it works - 3 Core Tools */}
-          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-8 border border-blue-200">
+          <div className="bg-gradient-to-br from-blue/5 to-purple-50 rounded-2xl p-8 border border-blue/20">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">¿Cómo Funciona? Tres Pilares Integrados</h2>
 
             <div className="space-y-6">
               {/* Tool 1 */}
-              <div className="bg-white rounded-xl p-6 border-l-4 border-purple-500">
-                <h3 className="text-2xl font-bold text-purple-700 mb-3">1. Evaluaciones Psicométricas</h3>
+              <div className="bg-white rounded-xl p-6 border-l-4 border-purple/50">
+                <h3 className="text-2xl font-bold text-purple mb-3">1. Evaluaciones Psicométricas</h3>
                 <p className="text-lg text-gray-700 mb-3">
                   <strong>Seis instrumentos validados científicamente:</strong>
                 </p>
@@ -99,8 +99,8 @@ export default function ExplicacionSimplePage() {
               </div>
 
               {/* Tool 2 */}
-              <div className="bg-white rounded-xl p-6 border-l-4 border-blue-500">
-                <h3 className="text-2xl font-bold text-blue-700 mb-3">2. Cerebro (Biblioteca Digital Inteligente)</h3>
+              <div className="bg-white rounded-xl p-6 border-l-4 border-blue/50">
+                <h3 className="text-2xl font-bold text-blue mb-3">2. Cerebro (Biblioteca Digital Inteligente)</h3>
                 <p className="text-lg text-gray-700 mb-3">
                   <strong>Repositorio de 120+ libros de desarrollo profesional:</strong>
                 </p>
@@ -137,7 +137,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 4: Target Audience */}
-          <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8 border border-green-200">
+          <div className="bg-gradient-to-br from-green/5 to-blue/5 rounded-2xl p-8 border border-green/20">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">¿Para Quién es?</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-xl p-6">
@@ -162,7 +162,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 5: Value Proposition */}
-          <div className="bg-gradient-to-br from-indigo-50 to-purple-50 rounded-2xl p-8 border border-indigo-200">
+          <div className="bg-gradient-to-br from-blue/5 to-purple-50 rounded-2xl p-8 border border-blue/20">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Propuesta de Valor</h2>
             <div className="space-y-4">
               <div className="bg-white rounded-xl p-6">
@@ -203,11 +203,11 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 6: How to Use */}
-          <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-2xl p-8 border border-purple-200">
+          <div className="bg-gradient-to-br from-purple/5 to-pink-50 rounded-2xl p-8 border border-purple/20">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Proceso de Uso</h2>
             <div className="space-y-4">
-              <div className="flex items-start gap-4 bg-white rounded-xl p-5 border-l-4 border-purple-500">
-                <div className="w-10 h-10 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
+              <div className="flex items-start gap-4 bg-white rounded-xl p-5 border-l-4 border-purple/50">
+                <div className="w-10 h-10 bg-purple/50 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
                   1
                 </div>
                 <div>
@@ -216,8 +216,8 @@ export default function ExplicacionSimplePage() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 bg-white rounded-xl p-5 border-l-4 border-purple-500">
-                <div className="w-10 h-10 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
+              <div className="flex items-start gap-4 bg-white rounded-xl p-5 border-l-4 border-purple/50">
+                <div className="w-10 h-10 bg-purple/50 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
                   2
                 </div>
                 <div>
@@ -228,8 +228,8 @@ export default function ExplicacionSimplePage() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 bg-white rounded-xl p-5 border-l-4 border-purple-500">
-                <div className="w-10 h-10 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
+              <div className="flex items-start gap-4 bg-white rounded-xl p-5 border-l-4 border-purple/50">
+                <div className="w-10 h-10 bg-purple/50 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
                   3
                 </div>
                 <div>
@@ -240,8 +240,8 @@ export default function ExplicacionSimplePage() {
                 </div>
               </div>
 
-              <div className="flex items-start gap-4 bg-white rounded-xl p-5 border-l-4 border-purple-500">
-                <div className="w-10 h-10 bg-purple-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
+              <div className="flex items-start gap-4 bg-white rounded-xl p-5 border-l-4 border-purple/50">
+                <div className="w-10 h-10 bg-purple/50 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">
                   4
                 </div>
                 <div>
@@ -255,7 +255,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 7: Technology Stack */}
-          <div className="bg-gradient-to-br from-slate-50 to-gray-50 rounded-2xl p-8 border border-slate-200">
+          <div className="bg-gradient-to-br from-slate-50 to-gray-50 rounded-2xl p-8 border border-muted/20">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Stack Tecnológico</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-xl p-6">
@@ -295,7 +295,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 8: Team */}
-          <div className="bg-gradient-to-br from-rose-50 to-orange-50 rounded-2xl p-8 border border-rose-200">
+          <div className="bg-gradient-to-br from-red/5 to-orange-50 rounded-2xl p-8 border border-red/20">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Equipo</h2>
             <div className="space-y-4">
               <div className="bg-white rounded-xl p-6 border-l-4 border-rose-500">
@@ -307,8 +307,8 @@ export default function ExplicacionSimplePage() {
                 </p>
               </div>
 
-              <div className="bg-white rounded-xl p-6 border-l-4 border-blue-500">
-                <p className="font-bold text-blue-700 text-2xl mb-2">Travis Comber</p>
+              <div className="bg-white rounded-xl p-6 border-l-4 border-blue/50">
+                <p className="font-bold text-blue text-2xl mb-2">Travis Comber</p>
                 <p className="text-gray-600 font-semibold mb-3">CTO & Lead Developer</p>
                 <p className="text-gray-700">
                   Arquitecto y desarrollador fullstack. Responsable de la construcción completa de la plataforma desde

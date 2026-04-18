@@ -53,7 +53,7 @@ export default function DashboardPage() {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center space-y-4">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-yellow"></div>
-          <p className="text-slate-400">Cargando tu transformación...</p>
+          <p className="text-muted/40">Cargando tu transformación...</p>
         </div>
       </div>
     )
@@ -64,7 +64,7 @@ export default function DashboardPage() {
       <div className="min-h-screen bg-black flex items-center justify-center p-4">
         <Card className="p-8 max-w-md text-center space-y-4 bg-slate-900 border-slate-800">
           <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'Lora, serif' }}>No hay datos</h2>
-          <p className="text-slate-400">
+          <p className="text-muted/40">
             Por favor, completa el onboarding primero
           </p>
           <Button onClick={() => router.push('/despega/onboarding')} className="w-full bg-yellow text-black hover:bg-yellow/90">
@@ -104,21 +104,21 @@ export default function DashboardPage() {
 
         {/* Misión Section */}
         {userData.a2_mission ? (
-          <Card className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 border-2 border-blue/30 dark:border-blue-800 p-8">
+          <Card className="bg-gradient-to-r from-blue/5 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 border-2 border-blue/30 dark:border-blue/10 p-8">
             <div className="space-y-4">
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
                   Tu Misión de 90 Días
                 </h2>
-                <h3 className="text-xl font-semibold text-blue dark:text-blue-400">
+                <h3 className="text-xl font-semibold text-blue dark:text-blue/40">
                   {userData.a2_mission.titulo}
                 </h3>
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-muted/70 dark:text-muted/30">
                   {userData.a2_mission.objetivo}
                 </p>
               </div>
               <div className="flex gap-4">
-                <Button className="bg-blue hover:bg-blue-700">
+                <Button className="bg-blue hover:bg-blue">
                   Ver Detalles de Misión
                 </Button>
                 <Button variant="outline">
@@ -128,15 +128,15 @@ export default function DashboardPage() {
             </div>
           </Card>
         ) : (
-          <Card className="bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900 border-2 border-slate-300 dark:border-slate-700 p-8">
+          <Card className="bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900 border-2 border-muted/30 dark:border-card p-8">
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
                 Elige Tu Camino de Transformación
               </h2>
-              <p className="text-slate-700 dark:text-slate-300">
+              <p className="text-muted/70 dark:text-muted/30">
                 Comienza eligiendo entre tu transformación personal o profesional
               </p>
-              <Button className="bg-blue hover:bg-blue-700" size="lg">
+              <Button className="bg-blue hover:bg-blue" size="lg">
                 Comenzar Mi Misión
               </Button>
             </div>
@@ -197,7 +197,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Coach Section */}
-        <Card className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border-2 border-yellow/30 dark:border-amber-800 p-8">
+        <Card className="bg-gradient-to-r from-yellow/5 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border-2 border-yellow/30 dark:border-amber-800 p-8">
           <div className="flex items-start gap-6">
             <div className="text-5xl">🤖</div>
             <div className="flex-1 space-y-4">
@@ -205,11 +205,11 @@ export default function DashboardPage() {
                 <h3 className="text-xl font-bold text-slate-900 dark:text-slate-50 mb-2">
                   Tu Coach IA: Sofía
                 </h3>
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-muted/70 dark:text-muted/30">
                   "¡Hola María! Veo que eres AZUL, lo que significa que te guía la empatía y las relaciones. Tu transformación comenzará fortaleciendo estas cualidades naturales tuyas."
                 </p>
               </div>
-              <Button className="bg-amber-600 hover:bg-amber-700">
+              <Button className="bg-yellow hover:bg-amber-700">
                 <MessageCircle className="w-4 h-4 mr-2" />
                 Hablar con Sofía
               </Button>

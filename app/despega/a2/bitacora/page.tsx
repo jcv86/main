@@ -79,16 +79,16 @@ export default function BitacoraPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
       {/* Header */}
-      <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+      <div className="border-b border-muted/20 dark:border-slate-800 bg-white dark:bg-background">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center gap-3 mb-2">
-            <Link href="/despega/a2/dashboard" className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition">
+            <Link href="/despega/a2/dashboard" className="p-2 hover:bg-muted/10 dark:hover:bg-slate-800 rounded-lg transition">
               <ChevronLeft className="w-5 h-5" />
             </Link>
-            <BookOpen className="w-6 h-6 text-blue dark:text-blue-400" />
+            <BookOpen className="w-6 h-6 text-blue dark:text-blue/40" />
             <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Mi Bitácora</h1>
           </div>
-          <p className="text-slate-600 dark:text-slate-400 ml-11">
+          <p className="text-muted/60 dark:text-muted/40 ml-11">
             Tu registro personal de aprendizaje, reflexiones e insights
           </p>
         </div>
@@ -101,7 +101,7 @@ export default function BitacoraPage() {
           <div className="flex items-center justify-center py-12">
             <div className="text-center space-y-3">
               <Loader className="w-8 h-8 animate-spin text-blue mx-auto" />
-              <p className="text-slate-600 dark:text-slate-400">Cargando tu bitácora...</p>
+              <p className="text-muted/60 dark:text-muted/40">Cargando tu bitácora...</p>
             </div>
           </div>
         )}
@@ -124,9 +124,9 @@ export default function BitacoraPage() {
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-6">
                   <div className="space-y-2">
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Entradas Registradas</p>
+                    <p className="text-sm text-muted/60 dark:text-muted/40">Entradas Registradas</p>
                     <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">{stats.total}</p>
-                    <p className="text-xs text-slate-500">Bitácora activa</p>
+                    <p className="text-xs text-muted/50">Bitácora activa</p>
                   </div>
                 </CardContent>
               </Card>
@@ -134,9 +134,9 @@ export default function BitacoraPage() {
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-6">
                   <div className="space-y-2">
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Ánimo Promedio</p>
+                    <p className="text-sm text-muted/60 dark:text-muted/40">Ánimo Promedio</p>
                     <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">{stats.avgMood}/5</p>
-                    <p className="text-xs text-slate-500">{stats.avgMood >= 4 ? 'Muy positivo' : stats.avgMood >= 3 ? 'Neutral' : 'Desafiante'}</p>
+                    <p className="text-xs text-muted/50">{stats.avgMood >= 4 ? 'Muy positivo' : stats.avgMood >= 3 ? 'Neutral' : 'Desafiante'}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -144,9 +144,9 @@ export default function BitacoraPage() {
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-6">
                   <div className="space-y-2">
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Acciones Completadas</p>
+                    <p className="text-sm text-muted/60 dark:text-muted/40">Acciones Completadas</p>
                     <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">{stats.totalActions}</p>
-                    <p className="text-xs text-slate-500">En total</p>
+                    <p className="text-xs text-muted/50">En total</p>
                   </div>
                 </CardContent>
               </Card>
@@ -155,7 +155,7 @@ export default function BitacoraPage() {
             {/* Create Entry Section */}
             {isCreating ? (
               <Card className="border-0 shadow-lg">
-                <CardHeader className="border-b border-slate-200 dark:border-slate-800">
+                <CardHeader className="border-b border-muted/20 dark:border-slate-800">
                   <CardTitle>Nueva Entrada en Bitácora</CardTitle>
                   <CardDescription>Comparte tu reflexión del día o semana</CardDescription>
                 </CardHeader>
@@ -171,7 +171,7 @@ export default function BitacoraPage() {
                           className={`px-4 py-2 rounded-lg font-medium transition ${
                             newEntry.type === type
                               ? 'bg-blue text-white'
-                              : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
+                              : 'bg-muted/10 dark:bg-card text-muted/70 dark:text-muted/30'
                           }`}
                         >
                           {type === 'daily' ? 'Reflexión Diaria' : 'Revisión Semanal'}
@@ -188,7 +188,7 @@ export default function BitacoraPage() {
                       placeholder="Ej: Día 3 - Aprendizaje clave"
                       value={newEntry.title}
                       onChange={e => setNewEntry({ ...newEntry, title: e.target.value })}
-                      className="w-full px-4 py-2 rounded-[28px] border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50"
+                      className="w-full px-4 py-2 rounded-[28px] border border-muted/20 dark:border-card bg-white dark:bg-background text-slate-900 dark:text-slate-50"
                     />
                   </div>
 
@@ -229,7 +229,7 @@ export default function BitacoraPage() {
                           </button>
                         ))}
                       </div>
-                      <p className="text-xs text-slate-500 text-center">{getMoodLabel(newEntry.mood)}</p>
+                      <p className="text-xs text-muted/50 text-center">{getMoodLabel(newEntry.mood)}</p>
                     </div>
 
                     <div className="space-y-2">
@@ -239,7 +239,7 @@ export default function BitacoraPage() {
                         min="0"
                         value={newEntry.actionsTaken}
                         onChange={e => setNewEntry({ ...newEntry, actionsTaken: parseInt(e.target.value) || 0 })}
-                        className="w-full px-4 py-2 rounded-[28px] border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50"
+                        className="w-full px-4 py-2 rounded-[28px] border border-muted/20 dark:border-card bg-white dark:bg-background text-slate-900 dark:text-slate-50"
                       />
                     </div>
                   </div>
@@ -294,8 +294,8 @@ export default function BitacoraPage() {
               {entries.length === 0 ? (
                 <Card className="border-0 shadow-sm">
                   <CardContent className="py-12 text-center">
-                    <BookOpen className="w-12 h-12 text-slate-300 dark:text-slate-700 mx-auto mb-4" />
-                    <p className="text-slate-600 dark:text-slate-400">Aún no hay entradas. ¡Comienza tu primera reflexión!</p>
+                    <BookOpen className="w-12 h-12 text-muted/30 dark:text-muted/70 mx-auto mb-4" />
+                    <p className="text-muted/60 dark:text-muted/40">Aún no hay entradas. ¡Comienza tu primera reflexión!</p>
                   </CardContent>
                 </Card>
               ) : (
@@ -309,7 +309,7 @@ export default function BitacoraPage() {
                             <Badge variant={entry.type === 'daily' ? 'default' : 'secondary'}>
                               {entry.type === 'daily' ? 'Diaria' : 'Semanal'}
                             </Badge>
-                            <span className="text-xs text-slate-500 flex items-center gap-1">
+                            <span className="text-xs text-muted/50 flex items-center gap-1">
                               <Calendar className="w-3 h-3" />
                               {new Date(entry.date).toLocaleDateString('es-ES')}
                             </span>
@@ -322,7 +322,7 @@ export default function BitacoraPage() {
                       </div>
 
                       {/* Reflection */}
-                      <p className="text-slate-700 dark:text-slate-300 leading-relaxed">{entry.reflection}</p>
+                      <p className="text-muted/70 dark:text-muted/30 leading-relaxed">{entry.reflection}</p>
 
                       {/* Insights */}
                       {entry.insights && entry.insights.length > 0 && (
@@ -342,7 +342,7 @@ export default function BitacoraPage() {
                       )}
 
                       {/* Stats */}
-                      <div className="flex items-center gap-4 text-sm text-slate-600 dark:text-slate-400 pt-2 border-t border-slate-200 dark:border-slate-800">
+                      <div className="flex items-center gap-4 text-sm text-muted/60 dark:text-muted/40 pt-2 border-t border-muted/20 dark:border-slate-800">
                         <span className="flex items-center gap-1">
                           <TrendingUp className="w-4 h-4" />
                           {entry.actionsTaken} acción{entry.actionsTaken !== 1 ? 'es' : ''} completada{entry.actionsTaken !== 1 ? 's' : ''}
@@ -351,9 +351,9 @@ export default function BitacoraPage() {
 
                       {/* Next Steps */}
                       {entry.nextSteps && (
-                        <div className="p-3 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue-800">
-                          <p className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">Próximos Pasos</p>
-                          <p className="text-sm text-blue-800 dark:text-blue-200">{entry.nextSteps}</p>
+                        <div className="p-3 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue/10">
+                          <p className="text-sm font-medium text-blue dark:text-blue/10 mb-1">Próximos Pasos</p>
+                          <p className="text-sm text-blue-800 dark:text-blue/20">{entry.nextSteps}</p>
                         </div>
                       )}
                     </CardContent>

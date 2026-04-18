@@ -41,7 +41,7 @@ export default function ContentLicensesPage() {
   const getComplianceColor = (status: string) => {
     switch (status) {
       case "verified":
-        return "bg-green-500"
+        return "bg-green/50"
       case "pending_review":
         return "bg-yellow-500"
       case "needs_documentation":
@@ -111,7 +111,7 @@ export default function ContentLicensesPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Verificadas</CardTitle>
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-green" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">

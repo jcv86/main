@@ -76,17 +76,17 @@ export default function LearningPathsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-purple-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container mx-auto py-8 px-4">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl">
+            <div className="p-3 bg-gradient-to-br from-purple/50 to-blue rounded-xl">
               <BookOpen className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Rutas de Aprendizaje</h1>
-              <p className="text-slate-700 dark:text-slate-300 font-medium">Caminos estructurados para el desarrollo profesional continuo</p>
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Rutas de Aprendizaje</h1>
+              <p className="text-muted/70 dark:text-muted/30 font-medium">Caminos estructurados para el desarrollo profesional continuo</p>
             </div>
           </div>
 
@@ -95,7 +95,7 @@ export default function LearningPathsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <Sparkles className="h-8 w-8 mx-auto mb-2 text-purple-600" />
+                <Sparkles className="h-8 w-8 mx-auto mb-2 text-purple" />
                 <p className="text-2xl font-bold">{recommendedPaths.length}</p>
                 <p className="text-xs text-muted-foreground">Rutas Disponibles</p>
               </div>
@@ -105,7 +105,7 @@ export default function LearningPathsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <TrendingUp className="h-8 w-8 mx-auto mb-2 text-blue-600" />
+                <TrendingUp className="h-8 w-8 mx-auto mb-2 text-blue" />
                 <p className="text-2xl font-bold">{myPaths.length}</p>
                 <p className="text-xs text-muted-foreground">En Progreso</p>
               </div>
@@ -127,7 +127,7 @@ export default function LearningPathsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <Target className="h-8 w-8 mx-auto mb-2 text-green-600" />
+                <Target className="h-8 w-8 mx-auto mb-2 text-green" />
                 <p className="text-2xl font-bold">
                   {myPaths.length > 0
                     ? Math.round(
@@ -190,10 +190,10 @@ export default function LearningPathsPage() {
         </TabsList>
 
         <TabsContent value="recommended" className="space-y-6">
-          <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
+          <Card className="bg-gradient-to-r from-purple/5 to-blue/5 border-purple/20">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
-                <Sparkles className="h-5 w-5 text-purple-600" />
+                <Sparkles className="h-5 w-5 text-purple" />
                 Recomendaciones Personalizadas
               </CardTitle>
             </CardHeader>
@@ -203,15 +203,15 @@ export default function LearningPathsPage() {
               </p>
               <ul className="mt-2 space-y-1 text-sm">
                 <li className="flex items-center gap-2">
-                  <span className="text-purple-600">•</span>
+                  <span className="text-purple">•</span>
                   Tus brechas de habilidades identificadas
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-purple-600">•</span>
+                  <span className="text-purple">•</span>
                   Tu perfil psicométrico (DISC, MBTI, IE)
                 </li>
                 <li className="flex items-center gap-2">
-                  <span className="text-purple-600">•</span>
+                  <span className="text-purple">•</span>
                   Patrones de aprendizaje de profesionales similares
                 </li>
               </ul>
@@ -221,7 +221,7 @@ export default function LearningPathsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {recommendedPaths.map((path) => (
               <div key={path.id} className="relative">
-                <Badge className="absolute -top-2 -right-2 z-10 bg-purple-600">{path.match_score}% match</Badge>
+                <Badge className="absolute -top-2 -right-2 z-10 bg-purple">{path.match_score}% match</Badge>
                 <LearningPathCard path={path} onStart={() => console.log("Start path", path.id)} />
               </div>
             ))}

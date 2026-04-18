@@ -86,7 +86,7 @@ export default function A2DashboardPage() {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center space-y-4">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange"></div>
-          <p className="text-slate-400">Cargando tu exploración...</p>
+          <p className="text-muted/40">Cargando tu exploración...</p>
         </div>
       </div>
     )
@@ -109,21 +109,21 @@ export default function A2DashboardPage() {
           <Card className="bg-slate-900 border-slate-800 shadow-lg">
             <CardHeader>
               <CardTitle className="text-2xl text-white" style={{ fontFamily: 'Lora, serif' }}>Misión: {mission.mission_title}</CardTitle>
-              <p className="text-sm text-slate-400 mt-2">{mission.mission_description}</p>
+              <p className="text-sm text-muted/40 mt-2">{mission.mission_description}</p>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-3 gap-4">
                 <div className="text-center p-4 bg-slate-800 rounded-surface-lg border border-slate-700">
                   <p className="text-3xl font-bold text-orange">90</p>
-                  <p className="text-sm text-slate-400">Días</p>
+                  <p className="text-sm text-muted/40">Días</p>
                 </div>
                 <div className="text-center p-4 bg-slate-800 rounded-surface-lg border border-slate-700">
                   <p className="text-3xl font-bold text-orange">3</p>
-                  <p className="text-sm text-slate-400">Sprints</p>
+                  <p className="text-sm text-muted/40">Sprints</p>
                 </div>
                 <div className="text-center p-4 bg-slate-800 rounded-surface-lg border border-slate-700">
                   <p className="text-3xl font-bold text-orange">0%</p>
-                  <p className="text-sm text-slate-400">Progreso</p>
+                  <p className="text-sm text-muted/40">Progreso</p>
                 </div>
               </div>
             </CardContent>
@@ -141,7 +141,7 @@ export default function A2DashboardPage() {
                     <CardTitle className="text-lg text-white">
                       Sprint {sprintNum}: {sprintNum === 1 ? "Fundamentos" : sprintNum === 2 ? "Profundización" : "Consolidación"}
                     </CardTitle>
-                    <p className="text-sm text-slate-400">Días {(sprintNum - 1) * 30 + 1}-{sprintNum * 30}</p>
+                    <p className="text-sm text-muted/40">Días {(sprintNum - 1) * 30 + 1}-{sprintNum * 30}</p>
                   </CardHeader>
                   <CardContent>
                     <Badge className="bg-orange text-black">{sprintNum === 1 ? "En progreso" : sprintNum === 2 ? "Próximo" : "Futuro"}</Badge>
@@ -156,14 +156,14 @@ export default function A2DashboardPage() {
         <div>
           <div className="mb-4">
             <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-1">Checkpoints del Sprint Actual</h2>
-            <p className="text-slate-600 dark:text-slate-400 text-sm">Hitos de verificación que marcan el avance real</p>
+            <p className="text-muted/60 dark:text-muted/40 text-sm">Hitos de verificación que marcan el avance real</p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card className="border-2 border-green-200 dark:border-green-800">
+            <Card className="border-2 border-green/20 dark:border-green-800">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-[20px] bg-green-500 flex items-center justify-center text-white text-xs font-bold">1</div>
+                  <div className="w-6 h-6 rounded-[20px] bg-green/50 flex items-center justify-center text-white text-xs font-bold">1</div>
                   Semana 1: Fundamentos
                 </CardTitle>
               </CardHeader>
@@ -206,7 +206,7 @@ export default function A2DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-purple/30 dark:border-purple-800">
+            <Card className="border-2 border-purple/30 dark:border-purple">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
                   <div className="w-6 h-6 rounded-[20px] bg-purple/50 flex items-center justify-center text-white text-xs font-bold">3</div>
@@ -229,7 +229,7 @@ export default function A2DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-blue/30 dark:border-blue-800">
+            <Card className="border-2 border-blue/30 dark:border-blue/10">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
                   <div className="w-6 h-6 rounded-[20px] bg-blue/50 flex items-center justify-center text-white text-xs font-bold">✓</div>
@@ -237,8 +237,8 @@ export default function A2DashboardPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
-                <p className="text-sm text-slate-600 dark:text-slate-400">Prepárate para la revisión con tu Coach. Trae datos de tu progreso y aprende qué ajustar.</p>
-                <Button className="w-full mt-2 bg-blue hover:bg-blue-700">Programar Revisión</Button>
+                <p className="text-sm text-muted/60 dark:text-muted/40">Prepárate para la revisión con tu Coach. Trae datos de tu progreso y aprende qué ajustar.</p>
+                <Button className="w-full mt-2 bg-blue hover:bg-blue">Programar Revisión</Button>
               </CardContent>
             </Card>
           </div>
@@ -251,24 +251,24 @@ export default function A2DashboardPage() {
               <CardTitle className="text-xl flex items-center gap-2">
                 📋 Tu Ritual Semanal de Revisión
               </CardTitle>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2 font-normal">Cada domingo, dedica 15 min a revisar la semana</p>
+              <p className="text-sm text-muted/60 dark:text-muted/40 mt-2 font-normal">Cada domingo, dedica 15 min a revisar la semana</p>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
-                <div className="p-3 bg-white dark:bg-slate-900 rounded border-l-4 border-indigo-600">
+                <div className="p-3 bg-white dark:bg-background rounded border-l-4 border-indigo-600">
                   <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">1. Evalúa: ¿Qué hizo clic?</p>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">¿Dónde avanzaste? ¿Qué energía sintió más real?</p>
+                  <p className="text-xs text-muted/60 dark:text-muted/40 mt-1">¿Dónde avanzaste? ¿Qué energía sintió más real?</p>
                 </div>
-                <div className="p-3 bg-white dark:bg-slate-900 rounded border-l-4 border-indigo-600">
+                <div className="p-3 bg-white dark:bg-background rounded border-l-4 border-indigo-600">
                   <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">2. Identifica: ¿Qué frenó?</p>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">¿Dónde se bloqueó? ¿Qué necesita ajuste?</p>
+                  <p className="text-xs text-muted/60 dark:text-muted/40 mt-1">¿Dónde se bloqueó? ¿Qué necesita ajuste?</p>
                 </div>
-                <div className="p-3 bg-white dark:bg-slate-900 rounded border-l-4 border-indigo-600">
+                <div className="p-3 bg-white dark:bg-background rounded border-l-4 border-indigo-600">
                   <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">3. Ajusta: ¿Qué cambia la próxima?</p>
-                  <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">Pequeño cambio para semana 2. Una cosa. Máximo.</p>
+                  <p className="text-xs text-muted/60 dark:text-muted/40 mt-1">Pequeño cambio para semana 2. Una cosa. Máximo.</p>
                 </div>
               </div>
-              <Button className="w-full bg-indigo-600 hover:bg-indigo-700">Abrir Revisión Semanal</Button>
+              <Button className="w-full bg-blue hover:bg-indigo-700">Abrir Revisión Semanal</Button>
             </CardContent>
           </Card>
         </div>

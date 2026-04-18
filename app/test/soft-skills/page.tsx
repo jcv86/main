@@ -663,14 +663,14 @@ export default function SoftSkillsTest() {
           <CardContent className="pt-6">
             <h3 className="font-semibold mb-4">Competencias Evaluadas:</h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3 text-sm">
-              <div className="p-2 bg-blue-50 rounded text-blue-900">Comunicación</div>
-              <div className="p-2 bg-purple-50 rounded text-purple-900">Liderazgo</div>
-              <div className="p-2 bg-green-50 rounded text-green-900">Trabajo en Equipo</div>
+              <div className="p-2 bg-blue/5 rounded text-blue">Comunicación</div>
+              <div className="p-2 bg-purple/5 rounded text-purple">Liderazgo</div>
+              <div className="p-2 bg-green/5 rounded text-green-900">Trabajo en Equipo</div>
               <div className="p-2 bg-orange-50 rounded text-orange-900">Resolución de Problemas</div>
-              <div className="p-2 bg-pink-50 rounded text-pink-900">Adaptabilidad</div>
+              <div className="p-2 bg-red/5 rounded text-pink-900">Adaptabilidad</div>
               <div className="p-2 bg-yellow-50 rounded text-yellow-900">Gestión del Tiempo</div>
               <div className="p-2 bg-red-50 rounded text-red-900">Inteligencia Emocional</div>
-              <div className="p-2 bg-indigo-50 rounded text-indigo-900">Creatividad</div>
+              <div className="p-2 bg-blue/5 rounded text-indigo-900">Creatividad</div>
             </div>
           </CardContent>
         </Card>

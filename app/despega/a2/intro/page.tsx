@@ -131,8 +131,8 @@ export default function A2IntroPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin mx-auto text-purple dark:text-purple-400" />
-          <p className="mt-4 text-slate-600 dark:text-slate-400">Cargando tu A2...</p>
+          <Loader2 className="h-12 w-12 animate-spin mx-auto text-purple dark:text-purple/40" />
+          <p className="mt-4 text-muted/60 dark:text-muted/40">Cargando tu A2...</p>
         </div>
       </div>
     )
@@ -168,22 +168,22 @@ export default function A2IntroPage() {
           <h1 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-slate-50 leading-tight">
             Tu Motor de Avance
           </h1>
-          <p className="text-xl text-slate-600 dark:text-slate-400">
+          <p className="text-xl text-muted/60 dark:text-muted/40">
             90 días de acciones personalizadas según tu patrón
           </p>
         </div>
 
         {/* Main Content */}
-        <Card className="border-0 shadow-lg bg-white dark:bg-slate-900">
+        <Card className="border-0 shadow-lg bg-white dark:bg-background">
           <CardContent className="pt-8 space-y-6">
             <div className="space-y-4">
-              <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+              <p className="text-lg text-muted/70 dark:text-muted/30 leading-relaxed">
                 Basado en tu perfil <strong>{profileName}</strong> de Despega Cerebral con puntuación dominante de <strong>{cerebroProfile.primaryScore}%</strong>, 
                 hemos diseñado un plan de 90 días con micro-acciones concretas.
               </p>
               
-              <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-[28px] border border-slate-200 dark:border-slate-700">
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+              <div className="p-4 bg-muted/5 dark:bg-card/50 rounded-[28px] border border-muted/20 dark:border-card">
+                <p className="text-muted/70 dark:text-muted/30 leading-relaxed">
                   No se trata de trabajar más horas. Se trata de trabajar <strong>en dirección correcta, 
                   con acciones que realmente importan</strong>, adaptadas a tu patrón natural de comportamiento.
                 </p>
@@ -199,13 +199,13 @@ export default function A2IntroPage() {
                   <p className="text-xs text-yellow-600 dark:text-yellow-400 font-semibold">Enfoque</p>
                   <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">{cerebroProfile?.enfoque}%</p>
                 </div>
-                <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-[28px] border border-green-200 dark:border-green-800">
-                  <p className="text-xs text-green-600 dark:text-green-400 font-semibold">Relaciones</p>
+                <div className="bg-green/5 dark:bg-green-900/20 p-3 rounded-[28px] border border-green/20 dark:border-green-800">
+                  <p className="text-xs text-green dark:text-green-400 font-semibold">Relaciones</p>
                   <p className="text-2xl font-bold text-green-700 dark:text-green-300">{cerebroProfile?.relaciones}%</p>
                 </div>
-                <div className="bg-blue/5 dark:bg-blue-900/20 p-3 rounded-[28px] border border-blue/30 dark:border-blue-800">
-                  <p className="text-xs text-blue dark:text-blue-400 font-semibold">Plan Ejecutivo</p>
-                  <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{cerebroProfile?.plan_ejecutivo}%</p>
+                <div className="bg-blue/5 dark:bg-blue/20 p-3 rounded-[28px] border border-blue/30 dark:border-blue/10">
+                  <p className="text-xs text-blue dark:text-blue/40 font-semibold">Plan Ejecutivo</p>
+                  <p className="text-2xl font-bold text-blue dark:text-blue/30">{cerebroProfile?.plan_ejecutivo}%</p>
                 </div>
               </div>
 
@@ -214,21 +214,21 @@ export default function A2IntroPage() {
                   <Zap className="w-6 h-6 text-amber-500 flex-shrink-0 mt-1" />
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-slate-100">Micro-acciones diarias</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">De 5 a 120 minutos, nunca abrumador</p>
+                    <p className="text-sm text-muted/60 dark:text-muted/40">De 5 a 120 minutos, nunca abrumador</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <Target className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-1" />
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-slate-100">3 Sprints estructurados</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">30 días cada uno, con momentum progresivo</p>
+                    <p className="text-sm text-muted/60 dark:text-muted/40">30 días cada uno, con momentum progresivo</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
-                  <BookOpen className="w-6 h-6 text-blue-500 flex-shrink-0 mt-1" />
+                  <BookOpen className="w-6 h-6 text-blue/50 flex-shrink-0 mt-1" />
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-slate-100">Bitácora de aprendizaje</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Reflexión semanal para consolidar progreso</p>
+                    <p className="text-sm text-muted/60 dark:text-muted/40">Reflexión semanal para consolidar progreso</p>
                   </div>
                 </div>
               </div>
@@ -238,37 +238,37 @@ export default function A2IntroPage() {
 
         {/* 3-Sprint Timeline */}
         <div className="grid md:grid-cols-3 gap-4">
-          <Card className="border-l-4 border-l-red-500 bg-white dark:bg-slate-900">
+          <Card className="border-l-4 border-l-red-500 bg-white dark:bg-background">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Sprint 1: Aterrizaje</CardTitle>
               <CardDescription>Días 1-30</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <p className="text-sm text-muted/60 dark:text-muted/40">
                 Tomar velocidad, establecer rutinas, descubrir tu ritmo natural
               </p>
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-amber-500 bg-white dark:bg-slate-900">
+          <Card className="border-l-4 border-l-amber-500 bg-white dark:bg-background">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Sprint 2: Consolidación</CardTitle>
               <CardDescription>Días 31-60</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <p className="text-sm text-muted/60 dark:text-muted/40">
                 Profundizar habilidades, resolver obstáculos, acelerar transformación
               </p>
             </CardContent>
           </Card>
 
-          <Card className="border-l-4 border-l-emerald-500 bg-white dark:bg-slate-900">
+          <Card className="border-l-4 border-l-emerald-500 bg-white dark:bg-background">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Sprint 3: Maestría</CardTitle>
               <CardDescription>Días 61-90</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <p className="text-sm text-muted/60 dark:text-muted/40">
                 Integración definitiva, preparación para A3, nuevo estándar
               </p>
             </CardContent>
@@ -284,7 +284,7 @@ export default function A2IntroPage() {
           >
             Comenzar Mi A2 <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
-          <p className="text-center text-sm text-slate-600 dark:text-slate-400">
+          <p className="text-center text-sm text-muted/60 dark:text-muted/40">
             Tómate un momento para entender por dónde comenzaremos
           </p>
         </div>

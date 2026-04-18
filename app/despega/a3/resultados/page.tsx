@@ -22,7 +22,7 @@ const insightCards = [
     key: 'retroalimentacionAudio',
     icon: '🎤',
     title: 'Retroalimentación de Audio',
-    color: 'from-emerald-500 to-blue'
+    color: 'from-green/50 to-blue'
   },
   {
     key: 'retroalimentacionVideo',
@@ -34,25 +34,25 @@ const insightCards = [
     key: 'calidadRespuestas',
     icon: '💬',
     title: 'Calidad de Respuestas',
-    color: 'from-purple-500 to-pink-500'
+    color: 'from-purple/50 to-pink-500'
   },
   {
     key: 'siguientesAntes',
     icon: '🔄',
     title: 'Próximas Prácticas',
-    color: 'from-amber-500 to-orange-500'
+    color: 'from-yellow/50 to-orange-500'
   },
   {
     key: 'fortalezasAplicar',
     icon: '💪',
     title: 'Fortalezas a Aplicar',
-    color: 'from-rose-500 to-red-500'
+    color: 'from-red/50 to-red-500'
   },
   {
     key: 'estrategiaIntegracion',
     icon: '🎯',
     title: 'Estrategia de Integración',
-    color: 'from-indigo-500 to-violet-500'
+    color: 'from-blue/50 to-violet-500'
   }
 ]
 
@@ -115,7 +115,7 @@ export default function A3ResultadosPage() {
 
   if (error) {
     return (
-      <ASection title="A3: Entrena" subtitle="Resultados de Simulación" icon="🎬" colorClass="from-purple-500 to-pink-500">
+      <ASection title="A3: Entrena" subtitle="Resultados de Simulación" icon="🎬" colorClass="from-purple/50 to-pink-500">
         <ASectionPart title="Error" icon={<Target />}>
           <div className="space-y-4">
             <div className="p-6 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-900/50 rounded-lg">
@@ -135,7 +135,7 @@ export default function A3ResultadosPage() {
   }
 
   return (
-    <ASection title="A3: Entrena" subtitle="Resultados de Simulación" icon="🎬" colorClass="from-purple-500 to-pink-500">
+    <ASection title="A3: Entrena" subtitle="Resultados de Simulación" icon="🎬" colorClass="from-purple/50 to-pink-500">
       <ASectionPart title="Retroalimentación Detallada" icon={<Zap />}>
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

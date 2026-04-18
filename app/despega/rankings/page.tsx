@@ -112,7 +112,7 @@ export default function RankingsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-950 to-slate-950 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple/50" />
       </div>
     )
   }
@@ -132,21 +132,21 @@ export default function RankingsPage() {
             </div>
             <div>
               <h1 className="text-4xl font-bold text-white">Rankings Despega</h1>
-              <p className="text-slate-300 font-medium">Compite y mejora junto a la comunidad</p>
+              <p className="text-muted/30 font-medium">Compite y mejora junto a la comunidad</p>
             </div>
           </div>
         </div>
 
         {/* Your Position Card */}
-        <Card className="mb-8 bg-gradient-to-r from-purple-500/10 to-slate-500/10 border-2 border-purple-500/30 dark:border-purple-400/30">
+        <Card className="mb-8 bg-gradient-to-r from-purple/50/10 to-slate-500/10 border-2 border-purple/50/30 dark:border-purple/40/30">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-300 font-medium">Tu posición actual</p>
+                <p className="text-sm text-muted/30 font-medium">Tu posición actual</p>
                 <p className="text-4xl font-bold text-white">#{getCurrentUserRank(RANKING_TABS.find(t => t.id === activeTab)?.scoreKey || "score_general")}</p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-slate-300 font-medium">Puntos</p>
+                <p className="text-sm text-muted/30 font-medium">Puntos</p>
                 <p className="text-4xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text">
                   {getCurrentUserScore(RANKING_TABS.find(t => t.id === activeTab)?.scoreKey || "score_general")}
                 </p>

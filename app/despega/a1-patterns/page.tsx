@@ -68,22 +68,22 @@ export default function A1PatternsPage() {
 
   if (loading) {
     return (
-      <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple-500 to-blue">
+      <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple/50 to-blue">
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-purple/50" />
         </div>
       </ASection>
     )
   }
 
   return (
-    <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple-500 to-blue">
+    <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple/50 to-blue">
       <ASectionPart title={`Tu Perfil: ${label}`} icon={<Target />}>
         {/* Profile Header */}
-        <div className="bg-gradient-to-r from-purple to-blue-600 rounded-xl p-8 text-white mb-8 shadow-lg">
-          <p className="text-purple-100 text-sm mb-2 font-semibold">Perfil Cerebral Identificado</p>
+        <div className="bg-gradient-to-r from-purple to-blue rounded-xl p-8 text-white mb-8 shadow-lg">
+          <p className="text-purple/10 text-sm mb-2 font-semibold">Perfil Cerebral Identificado</p>
           <h1 className="text-5xl font-black mb-3">{label}</h1>
-          <p className="text-lg text-purple-100 font-medium">{description}</p>
+          <p className="text-lg text-purple/10 font-medium">{description}</p>
         </div>
 
         {/* Tab Navigation */}
@@ -94,8 +94,8 @@ export default function A1PatternsPage() {
               onClick={() => setSelectedTab(tab)}
               className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                 selectedTab === tab
-                  ? 'bg-purple-600 text-white shadow-lg'
-                  : 'bg-slate-700 text-slate-300 hover:bg-slate-600'
+                  ? 'bg-purple text-white shadow-lg'
+                  : 'bg-slate-700 text-muted/30 hover:bg-slate-600'
               }`}
             >
               {tab === 'strengths' && '💪 Fortalezas'}
@@ -146,7 +146,7 @@ export default function A1PatternsPage() {
                 <CardTitle className="text-cyan-300">Tu Ventaja Natural</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-300">{details.teamRole}</p>
+                <p className="text-muted/30">{details.teamRole}</p>
               </CardContent>
             </Card>
 
@@ -197,7 +197,7 @@ export default function A1PatternsPage() {
             <h3 className="text-2xl font-bold text-white mb-6">Carreras Ideales para Ti</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {details.career.map((role, idx) => (
-                <Card key={idx} className="bg-gradient-to-br from-purple-900/40 to-blue-900/20 border-purple-500/30 border-2 hover:border-purple-400/50 transition-colors">
+                <Card key={idx} className="bg-gradient-to-br from-purple/40 to-blue-900/20 border-purple/50/30 border-2 hover:border-purple/40/50 transition-colors">
                   <CardContent className="pt-6">
                     <p className="text-purple-300 font-semibold text-lg">🎯 {role}</p>
                   </CardContent>
@@ -219,7 +219,7 @@ export default function A1PatternsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-300 mb-4">Practica entrevistas específicas para tu perfil</p>
+                <p className="text-muted/30 mb-4">Practica entrevistas específicas para tu perfil</p>
                 <Button 
                   onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile}`)}
                   className="w-full bg-gradient-to-r from-blue to-teal-600 hover:from-cyan-700 hover:to-teal-700"
@@ -235,10 +235,10 @@ export default function A1PatternsPage() {
                 <CardTitle>Ir a A2: Ruta</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-300 mb-4">Crea tu plan personalizado de 90 días</p>
+                <p className="text-muted/30 mb-4">Crea tu plan personalizado de 90 días</p>
                 <Button 
                   onClick={() => router.push('/despega/a2-routes')}
-                  className="w-full bg-purple-600 hover:bg-purple-700"
+                  className="w-full bg-purple hover:bg-purple"
                 >
                   Siguiente Etapa
                   <ArrowRight className="w-4 h-4 ml-2" />

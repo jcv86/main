@@ -109,7 +109,7 @@ export default function AutopublishPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Listos para Publicar</CardTitle>
-            <CheckCircle2 className="h-4 w-4 text-green-500" />
+            <CheckCircle2 className="h-4 w-4 text-green" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{readyCandidates.length}</div>
@@ -120,7 +120,7 @@ export default function AutopublishPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Publicados</CardTitle>
-            <TrendingUp className="h-4 w-4 text-blue-500" />
+            <TrendingUp className="h-4 w-4 text-blue/50" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{publishedCandidates.length}</div>
@@ -131,7 +131,7 @@ export default function AutopublishPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Estado del Sistema</CardTitle>
-            <Settings className="h-4 w-4 text-purple-500" />
+            <Settings className="h-4 w-4 text-purple/50" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{config?.is_enabled ? "Activo" : "Inactivo"}</div>
@@ -190,13 +190,13 @@ export default function AutopublishPage() {
                           <span>Completitud: {(candidate.action_completion_rate * 100).toFixed(1)}%</span>
                         </div>
                         <div className="flex gap-2 text-xs">
-                          <Badge variant="default" className="bg-green-500">
+                          <Badge variant="default" className="bg-green/50">
                             +{candidate.engagement_improvement_pct.toFixed(1)}% engagement
                           </Badge>
-                          <Badge variant="default" className="bg-blue-500">
+                          <Badge variant="default" className="bg-blue/50">
                             +{candidate.satisfaction_improvement_pct.toFixed(1)}% satisfacción
                           </Badge>
-                          <Badge variant="default" className="bg-purple-500">
+                          <Badge variant="default" className="bg-purple/50">
                             +{candidate.completion_improvement_pct.toFixed(1)}% completitud
                           </Badge>
                         </div>
@@ -226,11 +226,11 @@ export default function AutopublishPage() {
                   {publishedCandidates.map((candidate) => (
                     <div
                       key={candidate.prompt_version_id}
-                      className="flex items-center justify-between p-4 border rounded-lg bg-green-50"
+                      className="flex items-center justify-between p-4 border rounded-lg bg-green/5"
                     >
                       <div className="space-y-1">
                         <div className="flex items-center gap-2">
-                          <CheckCircle2 className="h-4 w-4 text-green-500" />
+                          <CheckCircle2 className="h-4 w-4 text-green" />
                           <h3 className="font-semibold">{candidate.version_name}</h3>
                           <Badge variant="outline">{candidate.coach_type}</Badge>
                         </div>
@@ -294,7 +294,7 @@ export default function AutopublishPage() {
                       <label className="text-sm font-medium">Estado del Sistema</label>
                       <div className="flex items-center gap-2">
                         {config.is_enabled ? (
-                          <Badge variant="default" className="bg-green-500">
+                          <Badge variant="default" className="bg-green/50">
                             Activo
                           </Badge>
                         ) : (

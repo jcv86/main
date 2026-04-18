@@ -76,7 +76,7 @@ export default function AvatarSetupPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto mb-4"></div>
-          <p className="text-slate-600 dark:text-slate-400">Cargando configuración...</p>
+          <p className="text-muted/60 dark:text-muted/40">Cargando configuración...</p>
         </div>
       </div>
     )
@@ -87,20 +87,20 @@ export default function AvatarSetupPage() {
       <div className="max-w-5xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 mb-4">
+          <Badge className="bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue/30 mb-4">
             <Sparkles className="w-3 h-3 mr-1" />
             Configuración de Entrevista
           </Badge>
           <h1 className="text-4xl font-bold text-slate-900 dark:text-white mb-3">
             Tu Perfil y Entrevistador
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted/60 dark:text-muted/40">
             Usa tu foto de perfil y selecciona quién te entrevistará en las sesiones de práctica.
           </p>
         </div>
 
         {/* Profile Photo Section */}
-        <Card className="border-slate-200 dark:border-slate-800">
+        <Card className="border-muted/20 dark:border-slate-800">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-amber-500" />
@@ -119,7 +119,7 @@ export default function AvatarSetupPage() {
               </Avatar>
               <div className="text-center">
                 <p className="font-semibold text-slate-900 dark:text-white">{user?.email}</p>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-sm text-muted/60 dark:text-muted/40">
                   {profilePhoto ? 'Foto cargada automáticamente' : 'Captura una foto para comenzar'}
                 </p>
               </div>
@@ -147,7 +147,7 @@ export default function AvatarSetupPage() {
                       className="w-full rounded-[28px] bg-black"
                     />
                     <div className="flex gap-2">
-                      <Button onClick={capturePhoto} className="flex-1 bg-blue hover:bg-blue-700">
+                      <Button onClick={capturePhoto} className="flex-1 bg-blue hover:bg-blue">
                         Capturar Foto
                       </Button>
                       <Button onClick={stopCamera} variant="outline" className="flex-1">
@@ -175,29 +175,29 @@ export default function AvatarSetupPage() {
         </div>
 
         {/* Benefits */}
-        <Card className="border-slate-200 dark:border-slate-800 bg-gradient-to-br from-white to-slate-50 dark:from-slate-950 dark:to-slate-900">
+        <Card className="border-muted/20 dark:border-slate-800 bg-gradient-to-br from-white to-slate-50 dark:from-slate-950 dark:to-slate-900">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-600" />
+              <CheckCircle2 className="w-5 h-5 text-green" />
               Por qué usar tu foto real
             </CardTitle>
           </CardHeader>
           <CardContent className="grid md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <h4 className="font-semibold text-slate-900 dark:text-white">Realismo Máximo</h4>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <p className="text-sm text-muted/60 dark:text-muted/40">
                 Las entrevistas son más auténticas cuando ves tu verdadera apariencia frente al entrevistador
               </p>
             </div>
             <div className="space-y-2">
               <h4 className="font-semibold text-slate-900 dark:text-white">Retroalimentación Real</h4>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <p className="text-sm text-muted/60 dark:text-muted/40">
                 Recibe feedback basado en cómo realmente te ves, no en un avatar genérico
               </p>
             </div>
             <div className="space-y-2">
               <h4 className="font-semibold text-slate-900 dark:text-white">Preparación Efectiva</h4>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <p className="text-sm text-muted/60 dark:text-muted/40">
                 Entrena con tu apariencia real para ganar confianza en entrevistas verdaderas
               </p>
             </div>
@@ -210,7 +210,7 @@ export default function AvatarSetupPage() {
             onClick={handleSave}
             disabled={!interviewerAvatar}
             size="lg"
-            className="bg-blue hover:bg-blue-700 text-white"
+            className="bg-blue hover:bg-blue text-white"
           >
             <Sparkles className="w-4 h-4 mr-2" />
             {saved ? 'Configuración Guardada ✓' : 'Guardar Configuración'}

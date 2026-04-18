@@ -44,7 +44,7 @@ export default function A4Page() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <Link href="/despega">
-            <Button variant="ghost" size="sm" className="hover:bg-slate-200 dark:hover:bg-slate-700">
+            <Button variant="ghost" size="sm" className="hover:bg-muted/20 dark:hover:bg-slate-700">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Volver
             </Button>
@@ -59,10 +59,10 @@ export default function A4Page() {
           <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance bg-gradient-to-r from-blue to-emerald-600 bg-clip-text text-transparent dark:from-teal-400 dark:to-emerald-400">
             Tu Dashboard Ejecutivo
           </h1>
-          <p className="text-xl text-slate-700 dark:text-slate-300 mb-2">
+          <p className="text-xl text-muted/70 dark:text-muted/30 mb-2">
             Coach IA 24/7 • Contexto de Mercado • Decisiones Estratégicas
           </p>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-muted/60 dark:text-muted/40">
             Monitorea tu progreso, descubre oportunidades y desarrolla criterio laboral
           </p>
         </div>
@@ -101,7 +101,7 @@ export default function A4Page() {
           <TabsContent value="oportunidades" className="space-y-4">
             <div className="mb-6">
               <h2 className="text-2xl font-bold mb-2">Oportunidades en el Mercado</h2>
-              <p className="text-slate-600 dark:text-slate-400">
+              <p className="text-muted/60 dark:text-muted/40">
                 Tu perfil de LinkedIn sincronizado, ofertas personalizadas y análisis del mercado laboral
               </p>
             </div>
@@ -124,7 +124,7 @@ export default function A4Page() {
           <TabsContent value="tests" className="space-y-4">
             <div className="mb-6">
               <h2 className="text-2xl font-bold mb-2">Cultura General & Tests</h2>
-              <p className="text-slate-600 dark:text-slate-400">
+              <p className="text-muted/60 dark:text-muted/40">
                 Evalúa tu conocimiento sobre historia, geografía, actualidad y cultura. Acumula puntos y desbloquea badges.
               </p>
             </div>

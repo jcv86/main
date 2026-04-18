@@ -23,7 +23,7 @@ const insightCards = [
     key: 'alineacionMision',
     icon: '🎯',
     title: 'Alineación de Misión',
-    color: 'from-emerald-500 to-blue'
+    color: 'from-green/50 to-blue'
   },
   {
     key: 'rutaAprendizaje',
@@ -35,25 +35,25 @@ const insightCards = [
     key: 'dinamicasEquipo',
     icon: '👥',
     title: 'Dinámicas de Equipo',
-    color: 'from-purple-500 to-pink-500'
+    color: 'from-purple/50 to-pink-500'
   },
   {
     key: 'areasGrowth',
     icon: '📈',
     title: 'Áreas de Crecimiento',
-    color: 'from-amber-500 to-orange-500'
+    color: 'from-yellow/50 to-orange-500'
   },
   {
     key: 'hitosExito',
     icon: '🏆',
     title: 'Hitos de Éxito',
-    color: 'from-rose-500 to-red-500'
+    color: 'from-red/50 to-red-500'
   },
   {
     key: 'riesgosOportunidades',
     icon: '⚡',
     title: 'Riesgos & Oportunidades',
-    color: 'from-indigo-500 to-violet-500'
+    color: 'from-blue/50 to-violet-500'
   }
 ]
 
@@ -152,7 +152,7 @@ export default function A2ResultadosPage() {
             </div>
             <Button 
               onClick={() => router.push('/despega/a2/dashboard')} 
-              className="w-full bg-gradient-to-r from-blue to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-6 text-lg"
+              className="w-full bg-gradient-to-r from-blue to-blue hover:from-blue hover:to-cyan-700 text-white font-semibold py-6 text-lg"
             >
               <ArrowRight className="w-5 h-5 mr-2" />
               Volver al Dashboard A2
@@ -190,7 +190,7 @@ export default function A2ResultadosPage() {
           <div className="mt-8 flex gap-4 justify-center">
             <Button 
               onClick={() => router.push('/despega/a2/dashboard')}
-              className="bg-gradient-to-r from-blue to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-6 px-8"
+              className="bg-gradient-to-r from-blue to-blue hover:from-blue hover:to-cyan-700 text-white font-semibold py-6 px-8"
             >
               <Target className="w-5 h-5 mr-2" />
               Continuar con Misión

@@ -104,8 +104,8 @@ export default function CycleCompletionPage() {
     switch (profile?.toUpperCase()) {
       case 'D': return 'bg-red-500/20 border-red-300 text-red-800'
       case 'I': return 'bg-yellow-500/20 border-yellow-300 text-yellow-800'
-      case 'S': return 'bg-green-500/20 border-green-300 text-green-800'
-      case 'C': return 'bg-blue/50/20 border-blue-300 text-blue-800'
+      case 'S': return 'bg-green/50/20 border-green-300 text-green-800'
+      case 'C': return 'bg-blue/50/20 border-blue/30 text-blue-800'
       default: return 'bg-gray-500/20 border-gray-300 text-gray-800'
     }
   }
@@ -165,19 +165,19 @@ export default function CycleCompletionPage() {
               <Progress value={overallProgress} className="h-3" />
             </div>
             <div className="grid grid-cols-4 gap-2 text-xs text-center">
-              <div className={`p-2 rounded ${a1Results ? 'bg-green-500/20' : 'bg-gray-500/20'}`}>
+              <div className={`p-2 rounded ${a1Results ? 'bg-green/50/20' : 'bg-gray-500/20'}`}>
                 <div className="font-semibold">A1</div>
                 <div className="text-xs">{a1Results ? 'Completo' : 'Pendiente'}</div>
               </div>
-              <div className={`p-2 rounded ${a2Route ? 'bg-green-500/20' : 'bg-gray-500/20'}`}>
+              <div className={`p-2 rounded ${a2Route ? 'bg-green/50/20' : 'bg-gray-500/20'}`}>
                 <div className="font-semibold">A2</div>
                 <div className="text-xs">{a2Route ? 'Completo' : 'Pendiente'}</div>
               </div>
-              <div className={`p-2 rounded ${a3Progress?.sessions_completed > 0 ? 'bg-green-500/20' : 'bg-gray-500/20'}`}>
+              <div className={`p-2 rounded ${a3Progress?.sessions_completed > 0 ? 'bg-green/50/20' : 'bg-gray-500/20'}`}>
                 <div className="font-semibold">A3</div>
                 <div className="text-xs">{a3Progress?.sessions_completed > 0 ? `${a3Progress.sessions_completed} sesiones` : 'Comenzar'}</div>
               </div>
-              <div className={`p-2 rounded ${a4Stats ? 'bg-green-500/20' : 'bg-gray-500/20'}`}>
+              <div className={`p-2 rounded ${a4Stats ? 'bg-green/50/20' : 'bg-gray-500/20'}`}>
                 <div className="font-semibold">A4</div>
                 <div className="text-xs">{a4Stats ? 'Activo' : 'Comenzar'}</div>
               </div>
@@ -186,14 +186,14 @@ export default function CycleCompletionPage() {
         </Card>
 
         {/* A1: Diagnóstico */}
-        <Card className={`border-2 ${a1Results ? 'border-green-300 bg-green-500/5' : 'border-muted'}`}>
+        <Card className={`border-2 ${a1Results ? 'border-green-300 bg-green/50/5' : 'border-muted'}`}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2">
                 <Award className="w-5 h-5" />
                 A1: Tu Diagnóstico DISC
               </span>
-              {a1Results && <CheckCircle2 className="w-5 h-5 text-green-500" />}
+              {a1Results && <CheckCircle2 className="w-5 h-5 text-green" />}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -253,14 +253,14 @@ export default function CycleCompletionPage() {
         </Card>
 
         {/* A2: Ruta Personalizada */}
-        <Card className={`border-2 ${a2Route ? 'border-green-300 bg-green-500/5' : 'border-muted'}`}>
+        <Card className={`border-2 ${a2Route ? 'border-green-300 bg-green/50/5' : 'border-muted'}`}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2">
                 <Target className="w-5 h-5" />
                 A2: Tu Ruta Personalizada
               </span>
-              {a2Route && <CheckCircle2 className="w-5 h-5 text-green-500" />}
+              {a2Route && <CheckCircle2 className="w-5 h-5 text-green" />}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -312,14 +312,14 @@ export default function CycleCompletionPage() {
         </Card>
 
         {/* A3: Entrenamientos */}
-        <Card className={`border-2 ${a3Progress?.sessions_completed > 0 ? 'border-green-300 bg-green-500/5' : 'border-muted'}`}>
+        <Card className={`border-2 ${a3Progress?.sessions_completed > 0 ? 'border-green-300 bg-green/50/5' : 'border-muted'}`}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2">
                 <Lightbulb className="w-5 h-5" />
                 A3: Tu Aterrizaje & Entrenamientos
               </span>
-              {a3Progress?.sessions_completed > 0 && <CheckCircle2 className="w-5 h-5 text-green-500" />}
+              {a3Progress?.sessions_completed > 0 && <CheckCircle2 className="w-5 h-5 text-green" />}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -364,14 +364,14 @@ export default function CycleCompletionPage() {
         </Card>
 
         {/* A4: Contexto Estratégico */}
-        <Card className={`border-2 ${a4Stats ? 'border-green-300 bg-green-500/5' : 'border-muted'}`}>
+        <Card className={`border-2 ${a4Stats ? 'border-green-300 bg-green/50/5' : 'border-muted'}`}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2">
                 <TrendingUp className="w-5 h-5" />
                 A4: Tu Contexto Estratégico
               </span>
-              {a4Stats && <CheckCircle2 className="w-5 h-5 text-green-500" />}
+              {a4Stats && <CheckCircle2 className="w-5 h-5 text-green" />}
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">

@@ -16,7 +16,7 @@ const MODULOS_ATERRIZAJE = [
     description: "Crea un currículum que destaque",
     icon: FileText,
     color: "bg-blue/50",
-    lightColor: "bg-blue-100",
+    lightColor: "bg-blue/10",
     textColor: "text-blue-800",
     contenido: [
       "Estructura óptima de CV",
@@ -45,7 +45,7 @@ const MODULOS_ATERRIZAJE = [
     name: "Entrevistas",
     description: "Domina cualquier entrevista",
     icon: Users,
-    color: "bg-green-500",
+    color: "bg-green/50",
     lightColor: "bg-green-100",
     textColor: "text-green-800",
     contenido: [

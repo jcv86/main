@@ -15,13 +15,13 @@ export default function Interview0Page() {
       <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4">
         <div className="text-center max-w-md">
           <h1 className="text-4xl font-bold text-cyan-400 mb-4">¡Interview 0 Completado!</h1>
-          <p className="text-slate-300 mb-8">
+          <p className="text-muted/30 mb-8">
             Excelente trabajo preparando tu pitch personal. Ahora tienes la base para entrevistas más complejas.
           </p>
           <div className="flex gap-4">
             <Button
               onClick={() => setIsComplete(false)}
-              className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+              className="flex-1 bg-blue hover:bg-cyan-700"
             >
               Hacer otro entrenamiento
             </Button>

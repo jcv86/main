@@ -199,19 +199,19 @@ export default function Conozcamonos1Page() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <div className="mb-8">
-          <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-full mb-4">
-            <p className="text-sm font-semibold text-purple-700 dark:text-purple-300">El Ritual: Paso 1 - Conocámonos</p>
+          <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple/10 to-blue/10 dark:from-purple/30 dark:to-blue-900/30 rounded-full mb-4">
+            <p className="text-sm font-semibold text-purple dark:text-purple-300">El Ritual: Paso 1 - Conocámonos</p>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">
             Antes de Empezar, Cuéntame Tu Historia
           </h1>
-          <p className="text-lg text-slate-700 dark:text-slate-300 font-medium">Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
+          <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 border-2 border-purple/30 dark:border-purple-900/50 rounded-2xl p-8 mb-8 shadow-lg">
+        <div className="bg-white dark:bg-background border-2 border-purple/30 dark:border-purple-900/50 rounded-2xl p-8 mb-8 shadow-lg">
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">{question.question}</h2>
 
           {question.type === 'select' && (
@@ -236,7 +236,7 @@ export default function Conozcamonos1Page() {
                     
                     {/* Show text input for "Otro" option */}
                     {option === 'Otro' && isSelected && (
-                      <div className="space-y-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-[28px] border border-slate-200 dark:border-slate-700">
+                      <div className="space-y-3 p-3 bg-muted/5 dark:bg-background rounded-[28px] border border-muted/20 dark:border-card">
                         <textarea
                           value={customResponses[question.id] || ''}
                           onChange={(e) => handleCustomText(e.target.value)}
@@ -253,7 +253,7 @@ export default function Conozcamonos1Page() {
                             }}
                             isDisabled={loading || validating}
                           />
-                          <span className="text-xs text-slate-500 dark:text-slate-400">
+                          <span className="text-xs text-muted/50 dark:text-muted/40">
                             O habla para dictar
                           </span>
                         </div>
@@ -294,7 +294,7 @@ export default function Conozcamonos1Page() {
                   }}
                   isDisabled={loading || validating}
                 />
-                <span className="text-xs text-slate-500 dark:text-slate-400">
+                <span className="text-xs text-muted/50 dark:text-muted/40">
                   O habla para dictar tu respuesta
                 </span>
               </div>

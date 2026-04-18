@@ -45,15 +45,15 @@ export default function InterviewSimulationsPage() {
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
             Entrenamiento de Entrevista
           </h1>
-          <p className="text-slate-600 dark:text-slate-400 mb-6">
+          <p className="text-muted/60 dark:text-muted/40 mb-6">
             Simula entrevistas realistas y recibe feedback instantáneo
           </p>
-          <div className="bg-blue/5 dark:bg-blue-950 border border-blue/30 dark:border-blue-800 rounded-[28px] p-4 mb-6">
-            <p className="text-blue-900 dark:text-blue-200 text-sm">
+          <div className="bg-blue/5 dark:bg-blue-950 border border-blue/30 dark:border-blue/10 rounded-[28px] p-4 mb-6">
+            <p className="text-blue dark:text-blue/20 text-sm">
               Este módulo ofrece: entrevistas técnicas, conductuales, preguntas STAR, feedback en tiempo real
             </p>
           </div>
-          <Button onClick={handleCompleteSimulation} className="bg-purple-600 hover:bg-purple-700">
+          <Button onClick={handleCompleteSimulation} className="bg-purple hover:bg-purple">
             {loading ? 'Guardando...' : 'Completar simulación'}
           </Button>
         </Card>

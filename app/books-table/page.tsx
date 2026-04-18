@@ -92,7 +92,7 @@ export default function BooksTablePage() {
       <div className="container mx-auto px-4 py-8">
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto mb-4"></div>
             <p className="text-gray-600">Cargando libros...</p>
           </div>
         </div>
@@ -124,17 +124,17 @@ export default function BooksTablePage() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-4 gap-4 mb-6">
-            <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="bg-blue/5 p-4 rounded-lg">
               <p className="text-sm text-gray-600 mb-1">Total Libros</p>
-              <p className="text-2xl font-bold text-blue-600">{books.length}</p>
+              <p className="text-2xl font-bold text-blue">{books.length}</p>
             </div>
-            <div className="bg-green-50 p-4 rounded-lg">
+            <div className="bg-green/5 p-4 rounded-lg">
               <p className="text-sm text-gray-600 mb-1">Total Palabras</p>
-              <p className="text-2xl font-bold text-green-600">{totalWords.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-green">{totalWords.toLocaleString()}</p>
             </div>
-            <div className="bg-purple-50 p-4 rounded-lg">
+            <div className="bg-purple/5 p-4 rounded-lg">
               <p className="text-sm text-gray-600 mb-1">Total Páginas (est.)</p>
-              <p className="text-2xl font-bold text-purple-600">{totalPages.toLocaleString()}</p>
+              <p className="text-2xl font-bold text-purple">{totalPages.toLocaleString()}</p>
             </div>
             <div className="bg-orange-50 p-4 rounded-lg">
               <p className="text-sm text-gray-600 mb-1">Tiempo Total (horas)</p>
@@ -167,7 +167,7 @@ export default function BooksTablePage() {
                       <TableCell className="font-medium">{book.title}</TableCell>
                       <TableCell>{book.author}</TableCell>
                       <TableCell>
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue/10 text-blue-800">
                           {book.category}
                         </span>
                       </TableCell>

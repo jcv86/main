@@ -114,7 +114,7 @@ export default function CronAlertsPage() {
   const getHealthStatusIcon = (status: string) => {
     switch (status) {
       case "healthy":
-        return <CheckCircle className="h-5 w-5 text-green-500" />
+        return <CheckCircle className="h-5 w-5 text-green" />
       case "warning":
         return <AlertTriangle className="h-5 w-5 text-yellow-500" />
       case "degraded":
@@ -181,10 +181,10 @@ export default function CronAlertsPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Jobs Saludables</CardTitle>
-            <CheckCircle className="h-4 w-4 text-green-500" />
+            <CheckCircle className="h-4 w-4 text-green" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-500">
+            <div className="text-2xl font-bold text-green">
               {healthSummary.filter((h) => h.health_status === "healthy").length}
             </div>
           </CardContent>
@@ -200,7 +200,7 @@ export default function CronAlertsPage() {
         <CardContent>
           {activeAlerts.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
-              <CheckCircle className="h-12 w-12 mx-auto mb-2 text-green-500" />
+              <CheckCircle className="h-12 w-12 mx-auto mb-2 text-green" />
               <p>No hay alertas activas</p>
             </div>
           ) : (

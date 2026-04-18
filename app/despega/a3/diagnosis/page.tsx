@@ -13,7 +13,7 @@ export default function DiagnosisPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
       <div className="max-w-2xl mx-auto space-y-6">
         {/* Header */}
         <Link href="/despega/a3">
@@ -27,7 +27,7 @@ export default function DiagnosisPage() {
           <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
             Diagnosis de Empleabilidad
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted/60 dark:text-muted/40">
             Evaluación rápida para entender tu nivel actual y calibrar tus entrenamientos.
           </p>
         </div>
@@ -36,11 +36,11 @@ export default function DiagnosisPage() {
         <A3EmployabilityDiagnosis onComplete={handleDiagnosisComplete} />
 
         {/* Info Card */}
-        <Card className="bg-blue/5 dark:bg-blue-900/20 border-blue/30 dark:border-blue-800">
+        <Card className="bg-blue/5 dark:bg-blue/20 border-blue/30 dark:border-blue/10">
           <CardHeader>
             <CardTitle className="text-base">¿Por qué esta diagnosis?</CardTitle>
           </CardHeader>
-          <CardContent className="text-sm text-slate-700 dark:text-slate-300 space-y-2">
+          <CardContent className="text-sm text-muted/70 dark:text-muted/30 space-y-2">
             <p>
               Cada persona tiene un punto de partida diferente. Esta diagnosis nos ayuda a:
             </p>

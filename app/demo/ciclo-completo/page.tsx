@@ -15,9 +15,9 @@ export default function CicloCompletoDemoPage() {
       id: 'a1',
       name: 'El Ritual',
       subtitle: 'Quién Eres Ahora',
-      color: 'from-purple-600 to-purple-400',
-      bgColor: 'bg-purple-50 dark:bg-purple-950/30',
-      borderColor: 'border-purple-200 dark:border-purple-800',
+      color: 'from-purple to-purple-400',
+      bgColor: 'bg-purple/5 dark:bg-purple/30',
+      borderColor: 'border-purple/20 dark:border-purple',
       icon: Brain,
       description: 'Realiza el test Despega Cerebral. Descubre tu perfil DISC, tus fortalezas y áreas de desarrollo.',
       duration: '20-25 min',
@@ -33,9 +33,9 @@ export default function CicloCompletoDemoPage() {
       id: 'a2',
       name: 'Exploración',
       subtitle: 'Aprende Nuevas Formas',
-      color: 'from-blue-600 to-blue-400',
-      bgColor: 'bg-blue-50 dark:bg-blue-950/30',
-      borderColor: 'border-blue-200 dark:border-blue-800',
+      color: 'from-blue to-blue-400',
+      bgColor: 'bg-blue/5 dark:bg-blue-950/30',
+      borderColor: 'border-blue/20 dark:border-blue/10',
       icon: BookOpen,
       description: 'Descubre tu ruta personalizada de 30/60/90 días con 120+ recursos y estrategias reales.',
       duration: '30-45 min',
@@ -69,9 +69,9 @@ export default function CicloCompletoDemoPage() {
       id: 'a4',
       name: 'La Realidad',
       subtitle: 'Vive Tu Nueva Identidad',
-      color: 'from-cyan-600 to-cyan-400',
-      bgColor: 'bg-cyan-50 dark:bg-cyan-950/30',
-      borderColor: 'border-cyan-200 dark:border-cyan-800',
+      color: 'from-blue to-cyan-400',
+      bgColor: 'bg-blue/5 dark:bg-cyan-950/30',
+      borderColor: 'border-blue/20 dark:border-cyan-800',
       icon: Globe,
       description: 'Inteligencia de mercado, noticias relevantes y plan de acción con contexto local.',
       duration: '10-20 min',
@@ -111,26 +111,26 @@ export default function CicloCompletoDemoPage() {
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <Badge className="mb-4 bg-gradient-to-r from-purple-600 to-blue-600 text-white border-0">
+          <Badge className="mb-4 bg-gradient-to-r from-purple to-blue text-white border-0">
             <Sparkles className="h-3 w-3 mr-2" />
             Ciclo Completo A1-A4
           </Badge>
           
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
             Tu Transformación en{' '}
-            <span className="bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-purple via-blue to-blue bg-clip-text text-transparent">
               4 Pilares
             </span>
           </h1>
           
-          <p className="text-xl text-slate-600 dark:text-slate-300 mb-8">
+          <p className="text-xl text-muted/60 dark:text-muted/30 mb-8">
             Un viaje guiado desde el autoconocimiento hasta la acción estratégica. 
             Completa todos los pilares y desbloquea tu potencial máximo.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/despega/conozcamonos-1">
-              <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white">
+              <Button size="lg" className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white">
                 Comenzar el Ciclo <ChevronRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -147,13 +147,13 @@ export default function CicloCompletoDemoPage() {
           <div className="flex justify-between mb-4">
             {phases.map((phase) => (
               <div key={phase.id} className="flex-1 text-center">
-                <phase.icon className={`h-6 w-6 mx-auto mb-2 ${phase.id === 'a1' ? 'text-purple-600' : phase.id === 'a2' ? 'text-blue-600' : phase.id === 'a3' ? 'text-orange-600' : 'text-cyan-600'}`} />
-                <p className="text-xs font-medium text-slate-700 dark:text-slate-300">{phase.id.toUpperCase()}</p>
+                <phase.icon className={`h-6 w-6 mx-auto mb-2 ${phase.id === 'a1' ? 'text-purple' : phase.id === 'a2' ? 'text-blue' : phase.id === 'a3' ? 'text-orange-600' : 'text-blue'}`} />
+                <p className="text-xs font-medium text-muted/70 dark:text-muted/30">{phase.id.toUpperCase()}</p>
               </div>
             ))}
           </div>
-          <div className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
-            <div className="h-full w-0 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 rounded-full transition-all duration-500" />
+          <div className="w-full h-2 bg-muted/20 dark:bg-card rounded-full overflow-hidden">
+            <div className="h-full w-0 bg-gradient-to-r from-purple via-blue to-blue rounded-full transition-all duration-500" />
           </div>
         </div>
       </section>
@@ -177,21 +177,21 @@ export default function CicloCompletoDemoPage() {
                     <CardTitle className="text-xl">{phase.name}</CardTitle>
                     <CardDescription className="text-base font-medium">{phase.subtitle}</CardDescription>
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">{phase.duration}</p>
+                  <p className="text-sm text-muted/60 dark:text-muted/40 mt-2">{phase.duration}</p>
                 </CardHeader>
 
                 <CardContent className="space-y-4">
-                  <p className="text-sm text-slate-700 dark:text-slate-300">
+                  <p className="text-sm text-muted/70 dark:text-muted/30">
                     {phase.description}
                   </p>
 
                   {selectedPhase === phase.id && (
-                    <div className="space-y-2 pt-4 border-t border-slate-200 dark:border-slate-700">
-                      <p className="text-xs font-semibold text-slate-600 dark:text-slate-400">Incluye:</p>
+                    <div className="space-y-2 pt-4 border-t border-muted/20 dark:border-card">
+                      <p className="text-xs font-semibold text-muted/60 dark:text-muted/40">Incluye:</p>
                       <ul className="space-y-1">
                         {phase.features.map((feature, idx) => (
                           <li key={idx} className="text-sm flex items-start gap-2">
-                            <CheckCircle2 className="h-4 w-4 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0" />
+                            <CheckCircle2 className="h-4 w-4 text-green dark:text-green-400 mt-0.5 flex-shrink-0" />
                             <span>{feature}</span>
                           </li>
                         ))}
@@ -219,11 +219,11 @@ export default function CicloCompletoDemoPage() {
             const Icon = link.icon
             return (
               <Link key={link.route} href={link.route}>
-                <Card className="h-full hover:shadow-lg transition-all cursor-pointer border-2 hover:border-slate-300 dark:hover:border-slate-700">
+                <Card className="h-full hover:shadow-lg transition-all cursor-pointer border-2 hover:border-muted/30 dark:hover:border-slate-700">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <CardTitle className="text-lg">{link.title}</CardTitle>
-                      <Icon className="h-5 w-5 text-slate-400" />
+                      <Icon className="h-5 w-5 text-muted/40" />
                     </div>
                     <CardDescription>{link.description}</CardDescription>
                   </CardHeader>
@@ -241,7 +241,7 @@ export default function CicloCompletoDemoPage() {
 
       {/* Quick Stats */}
       <section className="container mx-auto px-4 py-12">
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 md:p-12 text-white">
+        <div className="bg-gradient-to-r from-purple to-blue rounded-2xl p-8 md:p-12 text-white">
           <h2 className="text-3xl font-bold mb-8">¿Qué lograrás?</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {[
@@ -261,11 +261,11 @@ export default function CicloCompletoDemoPage() {
 
       {/* Footer CTA */}
       <section className="container mx-auto px-4 py-12 text-center">
-        <p className="text-slate-600 dark:text-slate-400 mb-6">
+        <p className="text-muted/60 dark:text-muted/40 mb-6">
           Sistema completamente integrado. Resultados medibles. Acción clara.
         </p>
         <Link href="/despega/conozcamonos-1">
-          <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white">
+          <Button size="lg" className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white">
             Iniciar Tu Transformación Ahora
           </Button>
         </Link>

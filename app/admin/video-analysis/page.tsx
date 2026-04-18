@@ -285,7 +285,7 @@ export default function AdminVideoAnalysisPage() {
                     <ul className="space-y-1">
                       {result.keyFindings.map((finding, i) => (
                         <li key={i} className="text-sm flex gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-600 flex-shrink-0 mt-0.5" />
+                          <CheckCircle className="h-4 w-4 text-green flex-shrink-0 mt-0.5" />
                           <span>{finding}</span>
                         </li>
                       ))}
@@ -299,12 +299,12 @@ export default function AdminVideoAnalysisPage() {
                     <h3 className="font-semibold text-sm">Preguntas Detectadas</h3>
                     <div className="space-y-2">
                       {result.questions.map((q, i) => (
-                        <div key={i} className="bg-slate-50 p-2 rounded text-sm">
-                          <p className="font-medium text-xs text-slate-600 mb-1">P{i + 1}:</p>
+                        <div key={i} className="bg-muted/5 p-2 rounded text-sm">
+                          <p className="font-medium text-xs text-muted/60 mb-1">P{i + 1}:</p>
                           <p className="text-foreground">{q}</p>
                           {result.answers && result.answers[i] && (
                             <>
-                              <p className="font-medium text-xs text-slate-600 mt-2 mb-1">R{i + 1}:</p>
+                              <p className="font-medium text-xs text-muted/60 mt-2 mb-1">R{i + 1}:</p>
                               <p className="text-foreground">{result.answers[i]}</p>
                             </>
                           )}

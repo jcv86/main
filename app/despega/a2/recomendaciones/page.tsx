@@ -108,8 +108,8 @@ export default function RecomendacionesPage() {
         description: "Domina tu atención y logra resultados con precisión",
         icon: "🎯",
         color: "from-green to-green",
-        borderColor: "border-green-200 dark:border-green-800",
-        bgColor: "bg-green-50 dark:bg-green-900/20",
+        borderColor: "border-green/20 dark:border-green-800",
+        bgColor: "bg-green/5 dark:bg-green-900/20",
         textColor: "text-green-900 dark:text-green-100",
         duration: "30-60 días",
         skills: ["Deep Work", "Priorización", "Bloques de tiempo", "Gestión de distracciones"],
@@ -123,9 +123,9 @@ export default function RecomendacionesPage() {
         name: "Relaciones Significativas",
         description: "Construye conexiones profundas y comunicación efectiva",
         icon: "🤝",
-        color: "from-pink-500 to-rose-500",
-        borderColor: "border-pink-200 dark:border-pink-800",
-        bgColor: "bg-pink-50 dark:bg-pink-900/20",
+        color: "from-red/50 to-rose-500",
+        borderColor: "border-red/20 dark:border-pink-800",
+        bgColor: "bg-red/5 dark:bg-pink-900/20",
         textColor: "text-pink-900 dark:text-pink-100",
         duration: "60-90 días",
         skills: ["Comunicación", "Empatía", "Resolución de conflictos", "Liderazgo relacional"],
@@ -139,10 +139,10 @@ export default function RecomendacionesPage() {
         name: "Plan Ejecutivo",
         description: "Ejecuta con precisión y consistencia tu estrategia",
         icon: "📋",
-        color: "from-purple-500 to-indigo-500",
-        borderColor: "border-purple/30 dark:border-purple-800",
-        bgColor: "bg-purple/5 dark:bg-purple-900/20",
-        textColor: "text-purple-900 dark:text-purple-100",
+        color: "from-purple/50 to-indigo-500",
+        borderColor: "border-purple/30 dark:border-purple",
+        bgColor: "bg-purple/5 dark:bg-purple/20",
+        textColor: "text-purple dark:text-purple/10",
         duration: "30-90 días",
         skills: ["Planificación", "Decisiones estratégicas", "Rituales", "Revisión semanal"],
         matchScore: Math.round((100 - planScore) * 0.7 + 30),
@@ -201,7 +201,7 @@ export default function RecomendacionesPage() {
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-          <p className="mt-4 text-slate-600 dark:text-slate-400">Personalizando tus rutas...</p>
+          <p className="mt-4 text-muted/60 dark:text-muted/40">Personalizando tus rutas...</p>
         </div>
       </div>
     )
@@ -218,7 +218,7 @@ export default function RecomendacionesPage() {
           <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
             Tus Rutas Recomendadas
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          <p className="text-lg text-muted/60 dark:text-muted/40 max-w-2xl mx-auto">
             Basadas en tu patrón A1 y tu objetivo. Selecciona una para comenzar.
           </p>
         </div>
@@ -231,7 +231,7 @@ export default function RecomendacionesPage() {
               className={`cursor-pointer transition-all border-2 overflow-hidden hover:shadow-md ${
                 selectedRoute === route.id
                   ? `${route.borderColor} shadow-lg`
-                  : "border-slate-200 dark:border-slate-700"
+                  : "border-muted/20 dark:border-card"
               }`}
               onClick={() => handleSelectRoute(route.id)}
             >
@@ -246,7 +246,7 @@ export default function RecomendacionesPage() {
                           <h3 className="font-bold text-lg text-slate-900 dark:text-slate-50">
                             {route.name}
                           </h3>
-                          <p className="text-sm text-slate-600 dark:text-slate-400">
+                          <p className="text-sm text-muted/60 dark:text-muted/40">
                             {route.description}
                           </p>
                         </div>
@@ -256,7 +256,7 @@ export default function RecomendacionesPage() {
                       <div className={`text-2xl font-bold ${route.textColor}`}>
                         {route.matchScore}%
                       </div>
-                      <p className="text-xs text-slate-600 dark:text-slate-400">
+                      <p className="text-xs text-muted/60 dark:text-muted/40">
                         Match para ti
                       </p>
                     </div>
@@ -265,10 +265,10 @@ export default function RecomendacionesPage() {
                   {/* Match Score Bar */}
                   <div className="space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                      <span className="text-xs font-semibold text-muted/60 dark:text-muted/40">
                         Alineación con tu perfil
                       </span>
-                      <span className="text-xs text-slate-600 dark:text-slate-400">
+                      <span className="text-xs text-muted/60 dark:text-muted/40">
                         {route.matchScore}%
                       </span>
                     </div>
@@ -285,7 +285,7 @@ export default function RecomendacionesPage() {
                   {/* Details Grid */}
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2">
+                      <p className="text-xs font-semibold text-muted/60 dark:text-muted/40 mb-2">
                         Duración
                       </p>
                       <p className="text-sm text-slate-900 dark:text-slate-50 font-medium">
@@ -293,7 +293,7 @@ export default function RecomendacionesPage() {
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2">
+                      <p className="text-xs font-semibold text-muted/60 dark:text-muted/40 mb-2">
                         Habilidades a Desarrollar
                       </p>
                       <div className="flex flex-wrap gap-1">
@@ -312,7 +312,7 @@ export default function RecomendacionesPage() {
                     disabled={submitting}
                     className={`w-full ${
                       selectedRoute === route.id
-                        ? "bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
+                        ? "bg-green hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
                         : ""
                     }`}
                   >
@@ -335,7 +335,7 @@ export default function RecomendacionesPage() {
         {/* Info Box */}
         <Card className="border-0 bg-yellow/5 dark:bg-amber-900/20 border-l-4 border-l-amber-500">
           <CardContent className="p-4">
-            <p className="text-sm text-slate-700 dark:text-slate-300">
+            <p className="text-sm text-muted/70 dark:text-muted/30">
               <strong>💡 Consejo:</strong> Todas estas rutas son poderosas. Elige la que resuena más con tu objetivo inmediato. Puedes explorar otras después.
             </p>
           </CardContent>

@@ -292,7 +292,7 @@ export default function MBTIResultsPage() {
   const mbtiType = mbtiResult.type
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-purple/5 to-white">
       <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -313,10 +313,10 @@ export default function MBTIResultsPage() {
         </div>
 
         {/* Hero Section */}
-        <Card className="border-l-4 border-l-purple-500 bg-gradient-to-r from-purple-50 to-blue-50">
+        <Card className="border-l-4 border-l-purple-500 bg-gradient-to-r from-purple/5 to-blue/5">
           <CardHeader>
             <div className="flex items-center gap-4">
-              <div className="h-16 w-16 bg-purple-600 rounded-full flex items-center justify-center">
+              <div className="h-16 w-16 bg-purple rounded-full flex items-center justify-center">
                 <Brain className="h-8 w-8 text-white" />
               </div>
               <div className="flex-1">
@@ -333,10 +333,10 @@ export default function MBTIResultsPage() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950">
+        <Card className="border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple-950 dark:to-blue-950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-purple-600" />
+              <Sparkles className="h-5 w-5 text-purple" />
               Tu Puente de Transición
             </CardTitle>
             <CardDescription>
@@ -346,15 +346,15 @@ export default function MBTIResultsPage() {
           <CardContent className="space-y-6">
             <div className="grid md:grid-cols-3 gap-4">
               {/* Eres Ahora */}
-              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500">
+              <div className="p-4 bg-white dark:bg-background rounded-lg border-l-4 border-blue/50">
                 <h4 className="font-semibold text-lg mb-2">Eres Ahora</h4>
                 <p className="text-sm text-muted-foreground mb-3">Tu tipo actual</p>
-                <div className="text-2xl font-bold text-blue-600">{mbtiResult.type}</div>
+                <div className="text-2xl font-bold text-blue">{mbtiResult.type}</div>
                 <p className="text-xs text-muted-foreground mt-2">{typeInfo.title}</p>
               </div>
 
               {/* Puedes Ser */}
-              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-purple-500">
+              <div className="p-4 bg-white dark:bg-background rounded-lg border-l-4 border-purple/50">
                 <h4 className="font-semibold text-lg mb-2">Puedes Ser</h4>
                 <p className="text-sm text-muted-foreground mb-3">Nuevas facetas tuyas</p>
                 <div className="text-xs space-y-1">
@@ -365,7 +365,7 @@ export default function MBTIResultsPage() {
               </div>
 
               {/* Cómo Llegas */}
-              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500">
+              <div className="p-4 bg-white dark:bg-background rounded-lg border-l-4 border-green-500">
                 <h4 className="font-semibold text-lg mb-2">Cómo Llegas</h4>
                 <p className="text-sm text-muted-foreground mb-3">El puente práctico</p>
                 <ul className="text-xs space-y-1">
@@ -377,7 +377,7 @@ export default function MBTIResultsPage() {
               </div>
             </div>
 
-            <div className="p-4 bg-purple-100 dark:bg-purple-900/30 rounded-lg border border-purple-300">
+            <div className="p-4 bg-purple/10 dark:bg-purple/30 rounded-lg border border-purple-300">
               <p className="text-sm text-foreground">
                 <strong>Tu Siguiente Paso:</strong> Identifica qué faceta de ti quieres expandir. Tu coach IA creará un plan para practicar una perspectiva complementaria a tu naturaleza.
               </p>
@@ -401,10 +401,10 @@ export default function MBTIResultsPage() {
 
           {/* Resumen Ejecutivo */}
           <TabsContent value="resumen-ejecutivo" className="space-y-6">
-            <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">
+            <Card className="border-2 border-blue/20 bg-gradient-to-br from-blue/5 via-purple-50 to-pink-50">
               <CardHeader>
                 <CardTitle className="text-3xl font-bold flex items-center gap-3">
-                  <Lightbulb className="w-8 h-8 text-blue-600" />
+                  <Lightbulb className="w-8 h-8 text-blue" />
                   Resumen Ejecutivo Integral DTC
                 </CardTitle>
                 <CardDescription className="text-lg">
@@ -413,16 +413,16 @@ export default function MBTIResultsPage() {
               </CardHeader>
               <CardContent className="space-y-8">
                 {/* Foto 360° del perfil */}
-                <div className="bg-white rounded-xl p-6 border-2 border-blue-100">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-blue-900">
+                <div className="bg-white rounded-xl p-6 border-2 border-blue/10">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-blue">
                     <Target className="w-6 h-6" />
                     Foto 360° de tu personalidad {mbtiType}
                   </h3>
                   <div className="grid md:grid-cols-2 gap-6">
                     <div className="space-y-3">
                       <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
-                          <Zap className="w-4 h-4 text-blue-600" />
+                        <div className="w-8 h-8 rounded-full bg-blue/10 flex items-center justify-center flex-shrink-0">
+                          <Zap className="w-4 h-4 text-blue" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900">Energía</h4>
@@ -435,8 +435,8 @@ export default function MBTIResultsPage() {
                       </div>
 
                       <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center flex-shrink-0">
-                          <Eye className="w-4 h-4 text-purple-600" />
+                        <div className="w-8 h-8 rounded-full bg-purple/10 flex items-center justify-center flex-shrink-0">
+                          <Eye className="w-4 h-4 text-purple" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900">Percepción</h4>
@@ -452,7 +452,7 @@ export default function MBTIResultsPage() {
                     <div className="space-y-3">
                       <div className="flex items-start gap-3">
                         <div className="w-8 h-8 rounded-full bg-pink-100 flex items-center justify-center flex-shrink-0">
-                          <Brain className="w-4 h-4 text-pink-600" />
+                          <Brain className="w-4 h-4 text-red" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900">Decisiones</h4>
@@ -466,7 +466,7 @@ export default function MBTIResultsPage() {
 
                       <div className="flex items-start gap-3">
                         <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                          <Calendar className="w-4 h-4 text-green-600" />
+                          <Calendar className="w-4 h-4 text-green" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-gray-900">Estilo de vida</h4>
@@ -482,14 +482,14 @@ export default function MBTIResultsPage() {
                 </div>
 
                 {/* Top 5 ideas sobre tu forma de ser */}
-                <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6 border border-purple-200">
-                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-purple-900">
+                <div className="bg-gradient-to-r from-purple/5 to-blue/5 rounded-xl p-6 border border-purple/20">
+                  <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-purple">
                     <Sparkles className="w-6 h-6" />
                     Top 5 ideas sobre tu forma de ser
                   </h3>
                   <div className="space-y-4">
-                    <div className="bg-white rounded-lg p-4 border-l-4 border-blue-500">
-                      <h4 className="font-semibold text-blue-900 mb-2">1. Cómo piensas y procesas</h4>
+                    <div className="bg-white rounded-lg p-4 border-l-4 border-blue/50">
+                      <h4 className="font-semibold text-blue mb-2">1. Cómo piensas y procesas</h4>
                       <p className="text-gray-700">
                         {mbtiType.includes("N")
                           ? 'Ves patrones, conexiones y posibilidades. Tu mente vive en el "qué podría ser". Esto te hace innovador pero a veces desconectado del presente.'
@@ -497,8 +497,8 @@ export default function MBTIResultsPage() {
                       </p>
                     </div>
 
-                    <div className="bg-white rounded-lg p-4 border-l-4 border-purple-500">
-                      <h4 className="font-semibold text-purple-900 mb-2">2. Cómo te ves a ti mismo</h4>
+                    <div className="bg-white rounded-lg p-4 border-l-4 border-purple/50">
+                      <h4 className="font-semibold text-purple mb-2">2. Cómo te ves a ti mismo</h4>
                       <p className="text-gray-700">
                         {mbtiType.includes("I")
                           ? "Te sientes más auténtico en la introspección. Valoras tu mundo interno, tus pensamientos y tu autonomía. No eres tímido, simplemente selectivo con tu energía."
@@ -536,20 +536,20 @@ export default function MBTIResultsPage() {
                 </div>
 
                 {/* Mapa de impacto en 3 áreas */}
-                <div className="bg-white rounded-xl p-6 border-2 border-blue-100">
-                  <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-blue-900">
+                <div className="bg-white rounded-xl p-6 border-2 border-blue/10">
+                  <h3 className="text-xl font-bold mb-6 flex items-center gap-2 text-blue">
                     <MapPin className="w-6 h-6" />
                     Mapa de impacto: Dónde te juegas la vida
                   </h3>
                   <div className="grid md:grid-cols-3 gap-6">
-                    <div className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-lg p-5 border border-pink-200">
+                    <div className="bg-gradient-to-br from-red/5 to-purple-50 rounded-lg p-5 border border-red/20">
                       <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-pink-900">
                         <Heart className="w-5 h-5" />
                         Vida Personal
                       </h4>
                       <ul className="space-y-2 text-sm text-gray-700">
                         <li className="flex items-start gap-2">
-                          <ArrowRight className="w-4 h-4 text-pink-600 mt-0.5 flex-shrink-0" />
+                          <ArrowRight className="w-4 h-4 text-red mt-0.5 flex-shrink-0" />
                           <span>
                             {mbtiType.includes("F")
                               ? "Tus emociones guían tus decisiones de vida: con quién estar, qué hacer, qué tolerar"
@@ -557,7 +557,7 @@ export default function MBTIResultsPage() {
                           </span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <ArrowRight className="w-4 h-4 text-pink-600 mt-0.5 flex-shrink-0" />
+                          <ArrowRight className="w-4 h-4 text-red mt-0.5 flex-shrink-0" />
                           <span>
                             {mbtiType.includes("I")
                               ? "Necesitas tiempo a solas para recargar. No es egoísta, es supervivencia"
@@ -567,14 +567,14 @@ export default function MBTIResultsPage() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg p-5 border border-blue-200">
-                      <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-blue-900">
+                    <div className="bg-gradient-to-br from-blue/5 to-cyan-50 rounded-lg p-5 border border-blue/20">
+                      <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-blue">
                         <Users className="w-5 h-5" />
                         Relaciones
                       </h4>
                       <ul className="space-y-2 text-sm text-gray-700">
                         <li className="flex items-start gap-2">
-                          <ArrowRight className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                          <ArrowRight className="w-4 h-4 text-blue mt-0.5 flex-shrink-0" />
                           <span>
                             {mbtiType.includes("E")
                               ? "Tiendes a compartir rápido. Asegúrate de también escuchar profundamente a los demás"
@@ -582,7 +582,7 @@ export default function MBTIResultsPage() {
                           </span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <ArrowRight className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                          <ArrowRight className="w-4 h-4 text-blue mt-0.5 flex-shrink-0" />
                           <span>
                             {mbtiType.includes("J")
                               ? "Tu necesidad de estructura puede frustrar a tipos más espontáneos. Suelta el control a veces"
@@ -592,14 +592,14 @@ export default function MBTIResultsPage() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-5 border border-green-200">
+                    <div className="bg-gradient-to-br from-green/5 to-emerald-50 rounded-lg p-5 border border-green/20">
                       <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-green-900">
                         <Briefcase className="w-5 h-5" />
                         Trabajo
                       </h4>
                       <ul className="space-y-2 text-sm text-gray-700">
                         <li className="flex items-start gap-2">
-                          <ArrowRight className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <ArrowRight className="w-4 h-4 text-green mt-0.5 flex-shrink-0" />
                           <span>
                             {mbtiType.includes("N")
                               ? "Brillas en innovación y visión, pero necesitas a alguien que ejecute los detalles"
@@ -607,7 +607,7 @@ export default function MBTIResultsPage() {
                           </span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <ArrowRight className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <ArrowRight className="w-4 h-4 text-green mt-0.5 flex-shrink-0" />
                           <span>El trabajo es solo UN área de tu vida. No sacrifiques relaciones ni salud por él</span>
                         </li>
                       </ul>
@@ -616,7 +616,7 @@ export default function MBTIResultsPage() {
                 </div>
 
                 {/* 3 movimientos clave próximos 90 días */}
-                <div className="bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 rounded-xl p-6 border-2 border-amber-200">
+                <div className="bg-gradient-to-br from-yellow/5 via-orange-50 to-red-50 rounded-xl p-6 border-2 border-yellow/20">
                   <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-amber-900">
                     <Trophy className="w-6 h-6" />3 movimientos clave para los próximos 90 días
                   </h3>
@@ -633,8 +633,8 @@ export default function MBTIResultsPage() {
                       </p>
                     </div>
 
-                    <div className="bg-white rounded-lg p-5 border-l-4 border-blue-500">
-                      <h4 className="font-bold mb-2 text-blue-900">Movimiento Relacional</h4>
+                    <div className="bg-white rounded-lg p-5 border-l-4 border-blue/50">
+                      <h4 className="font-bold mb-2 text-blue">Movimiento Relacional</h4>
                       <p className="text-gray-700 text-sm mb-3">
                         {mbtiType.includes("F")
                           ? 'Practica decir "no" a peticiones que no te corresponden. Tus límites son sagrados.'
@@ -659,10 +659,10 @@ export default function MBTIResultsPage() {
               </CardContent>
             </Card>
 
-            <Card className="mb-8 border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
+            <Card className="mb-8 border-2 border-purple/20 bg-gradient-to-br from-purple/5 to-pink-50">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Heart className="w-6 h-6 text-purple-600" />
+                  <Heart className="w-6 h-6 text-purple" />
                   Impacto en tu Vida Personal
                 </CardTitle>
                 <CardDescription>
@@ -672,7 +672,7 @@ export default function MBTIResultsPage() {
               <CardContent className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
                       <Users className="w-5 h-5" />
                       Relaciones Personales
                     </h3>
@@ -684,7 +684,7 @@ export default function MBTIResultsPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
                       <Home className="w-5 h-5" />
                       Vida Familiar
                     </h3>
@@ -696,7 +696,7 @@ export default function MBTIResultsPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
                       <Heart className="w-5 h-5" />
                       Bienestar Emocional
                     </h3>
@@ -708,7 +708,7 @@ export default function MBTIResultsPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
                       <Sparkles className="w-5 h-5" />
                       Desarrollo Personal
                     </h3>
@@ -720,8 +720,8 @@ export default function MBTIResultsPage() {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg p-6 border-l-4 border-purple-600">
-                  <h3 className="font-semibold text-lg mb-3 text-purple-900">
+                <div className="bg-white rounded-lg p-6 border-l-4 border-purple">
+                  <h3 className="font-semibold text-lg mb-3 text-purple">
                     💡 Recuerda: Tu personalidad es para vivir mejor, no solo para trabajar mejor
                   </h3>
                   <p className="text-gray-700 leading-relaxed">
@@ -747,7 +747,7 @@ export default function MBTIResultsPage() {
                       <ul className="space-y-2">
                         {typeInfo.strengths.map((strength, idx) => (
                           <li key={idx} className="flex items-start gap-2">
-                            <Check className="h-5 w-5 text-green-600 mt-0.5" />
+                            <Check className="h-5 w-5 text-green mt-0.5" />
                             <span>{strength}</span>
                           </li>
                         ))}
@@ -763,7 +763,7 @@ export default function MBTIResultsPage() {
                       <ul className="space-y-2">
                         {typeInfo.challenges.map((challenge, idx) => (
                           <li key={idx} className="flex items-start gap-2">
-                            <Target className="h-5 w-5 text-amber-600 mt-0.5" />
+                            <Target className="h-5 w-5 text-yellow mt-0.5" />
                             <span>{challenge}</span>
                           </li>
                         ))}
@@ -923,7 +923,7 @@ export default function MBTIResultsPage() {
             <Card className="border-l-4 border-l-amber-500">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <TrendingUp className="h-6 w-6 text-amber-600" />
+                  <TrendingUp className="h-6 w-6 text-yellow" />
                   Oportunidades de Desarrollo
                 </CardTitle>
                 <CardDescription>
@@ -931,7 +931,7 @@ export default function MBTIResultsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-yellow/5 to-orange-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué estas oportunidades son relevantes para ti</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Tu tipo {mbtiResult.type} ({typeInfo.title}) tiene preferencias naturales que son fortalezas, pero
@@ -951,21 +951,21 @@ export default function MBTIResultsPage() {
                     </p>
                     <ul className="space-y-2 text-sm">
                       <li className="flex gap-2">
-                        <span className="text-blue-600">→</span>
+                        <span className="text-blue">→</span>
                         <span>
                           Si eres Introvertido (I): Practica interacciones sociales breves pero significativas
                         </span>
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-blue-600">→</span>
+                        <span className="text-blue">→</span>
                         <span>Si eres Intuitivo (N): Enfócate en detalles prácticos 1 hora al día</span>
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-blue-600">→</span>
+                        <span className="text-blue">→</span>
                         <span>Si eres Pensamiento (T): Considera el impacto emocional antes de decidir</span>
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-blue-600">→</span>
+                        <span className="text-blue">→</span>
                         <span>Si eres Calificador (J): Practica la flexibilidad dejando 1 día sin plan fijo</span>
                       </li>
                     </ul>
@@ -982,15 +982,15 @@ export default function MBTIResultsPage() {
                     </p>
                     <ul className="space-y-2 text-sm">
                       <li className="flex gap-2">
-                        <span className="text-green-600">→</span>
+                        <span className="text-green">→</span>
                         <span>Toma un curso de comunicación emocional si eres tipo T (Pensamiento)</span>
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-green-600">→</span>
+                        <span className="text-green">→</span>
                         <span>Practica mindfulness si eres tipo E (Extravertido) para conectar contigo mismo</span>
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-green-600">→</span>
+                        <span className="text-green">→</span>
                         <span>Desarrolla habilidades de planificación si eres tipo P (Perceptivo)</span>
                       </li>
                     </ul>
@@ -1007,15 +1007,15 @@ export default function MBTIResultsPage() {
                     </p>
                     <ul className="space-y-2 text-sm">
                       <li className="flex gap-2">
-                        <span className="text-purple-600">→</span>
+                        <span className="text-purple">→</span>
                         <span>Busca un mentor con tipo opuesto al tuyo (ej: si eres INTJ, busca un ESFP)</span>
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-purple-600">→</span>
+                        <span className="text-purple">→</span>
                         <span>Únete a grupos con diversidad de tipos para ampliar tu visión</span>
                       </li>
                       <li className="flex gap-2">
-                        <span className="text-purple-600">→</span>
+                        <span className="text-purple">→</span>
                         <span>Practica adaptación conductual: actúa "fuera de tipo" 1 hora/semana</span>
                       </li>
                     </ul>
@@ -1053,13 +1053,13 @@ export default function MBTIResultsPage() {
             <Card className="border-l-4 border-l-indigo-500">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Brain className="h-6 w-6 text-indigo-600" />
+                  <Brain className="h-6 w-6 text-blue" />
                   Conexión con Otros Módulos DTC
                 </CardTitle>
                 <CardDescription>Cómo MBTI se relaciona con los demás tests del ecosistema DTC</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">El Mapa Completo de Tu Personalidad</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     MBTI revela tus preferencias cognitivas naturales (cómo procesas información y tomas decisiones).
@@ -1068,12 +1068,12 @@ export default function MBTIResultsPage() {
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
-                  <Card className="border-2 border-blue-300">
+                  <Card className="border-2 border-blue/30">
                     <CardHeader>
                       <CardTitle className="text-base">DISC (Despega Cerebral)</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="bg-blue-50 p-3 rounded text-sm">
+                      <div className="bg-blue/5 p-3 rounded text-sm">
                         <strong>Conexión:</strong>
                         <p className="mt-1">MBTI mide preferencias cognitivas, DISC mide comportamiento observable.</p>
                       </div>
@@ -1107,7 +1107,7 @@ export default function MBTIResultsPage() {
                       <CardTitle className="text-base">Big Five</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="bg-purple-50 p-3 rounded text-sm">
+                      <div className="bg-purple/5 p-3 rounded text-sm">
                         <strong>Conexión:</strong>
                         <p className="mt-1">
                           MBTI usa categorías (I o E), Big Five usa espectros (0-100 en Extraversion).
@@ -1125,7 +1125,7 @@ export default function MBTIResultsPage() {
                       <CardTitle className="text-base">RIASEC</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="bg-green-50 p-3 rounded text-sm">
+                      <div className="bg-green/5 p-3 rounded text-sm">
                         <strong>Conexión:</strong>
                         <p className="mt-1">
                           MBTI sugiere cómo trabajas, RIASEC sugiere qué tipo de trabajo disfrutas.
@@ -1162,7 +1162,7 @@ export default function MBTIResultsPage() {
                     <CardTitle>Ejemplos de Sinergia MBTI + Otros Tests</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 1: El Estratega Empático</h4>
                       <ul className="space-y-1 text-sm">
                         <li>• MBTI: INFJ (Visionario idealista)</li>
@@ -1172,7 +1172,7 @@ export default function MBTIResultsPage() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-green/5 to-blue/5 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 2: El Innovador Práctico</h4>
                       <ul className="space-y-1 text-sm">
                         <li>• MBTI: ENTP (Visionario debatidor)</li>
@@ -1182,7 +1182,7 @@ export default function MBTIResultsPage() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-purple/5 to-pink-50 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 3: El Ejecutor Sistemático</h4>
                       <ul className="space-y-1 text-sm">
                         <li>• MBTI: ISTJ (Organizado confiable)</li>
@@ -1202,13 +1202,13 @@ export default function MBTIResultsPage() {
             <Card className="border-l-4 border-l-pink-500">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Lightbulb className="h-6 w-6 text-pink-600" />
+                  <Lightbulb className="h-6 w-6 text-red" />
                   Preguntas de Reflexión Profunda
                 </CardTitle>
                 <CardDescription>Explora tu tipo MBTI más allá de los resultados del test</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-pink-50 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-red/5 to-purple-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué reflexionar es tan importante</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Tu tipo MBTI es una brújula, no una caja. Estas preguntas te ayudan a entender cómo tu tipo se
@@ -1218,7 +1218,7 @@ export default function MBTIResultsPage() {
 
                 <Accordion type="single" collapsible className="space-y-4">
                   <AccordionItem value="identidad">
-                    <AccordionTrigger className="bg-blue-50 px-4 rounded-lg">
+                    <AccordionTrigger className="bg-blue/5 px-4 rounded-lg">
                       <div className="flex items-center gap-3">
                         <span className="text-2xl">🎭</span>
                         <span className="font-semibold">Identidad y Autenticidad</span>
@@ -1277,7 +1277,7 @@ export default function MBTIResultsPage() {
                   </AccordionItem>
 
                   <AccordionItem value="relaciones">
-                    <AccordionTrigger className="bg-green-50 px-4 rounded-lg">
+                    <AccordionTrigger className="bg-green/5 px-4 rounded-lg">
                       <div className="flex items-center gap-3">
                         <span className="text-2xl">💬</span>
                         <span className="font-semibold">Relaciones y Comunicación</span>
@@ -1334,7 +1334,7 @@ export default function MBTIResultsPage() {
                   </AccordionItem>
 
                   <AccordionItem value="carrera">
-                    <AccordionTrigger className="bg-purple-50 px-4 rounded-lg">
+                    <AccordionTrigger className="bg-purple/5 px-4 rounded-lg">
                       <div className="flex items-center gap-3">
                         <span className="text-2xl">💼</span>
                         <span className="font-semibold">Carrera y Propósito</span>
@@ -1460,7 +1460,7 @@ export default function MBTIResultsPage() {
                   <AccordionItem value="mes-1">
                     <AccordionTrigger className="text-lg font-semibold">
                       <div className="flex items-center gap-2">
-                        <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                        <div className="bg-blue/50 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
                           1
                         </div>
                         Mes 1: Autoconocimiento Profundo de tu Tipo
@@ -1523,7 +1523,7 @@ export default function MBTIResultsPage() {
                         </Card>
                       </div>
 
-                      <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-lg">
+                      <div className="bg-blue/5 dark:bg-blue-950/20 p-3 rounded-lg">
                         <p className="text-sm">
                           <strong>KPI del Mes:</strong> Completar análisis de las 4 preferencias con ejemplos reales
                         </p>
@@ -1535,7 +1535,7 @@ export default function MBTIResultsPage() {
                   <AccordionItem value="mes-2">
                     <AccordionTrigger className="text-lg font-semibold">
                       <div className="flex items-center gap-2">
-                        <div className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                        <div className="bg-green/50 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
                           2
                         </div>
                         Mes 2: Desarrollo de Funciones Cognitivas
@@ -1598,7 +1598,7 @@ export default function MBTIResultsPage() {
                         </Card>
                       </div>
 
-                      <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded-lg">
+                      <div className="bg-green/5 dark:bg-green-950/20 p-3 rounded-lg">
                         <p className="text-sm">
                           <strong>KPI del Mes:</strong> Documentar 5 mejoras en el uso de tu función inferior
                         </p>
@@ -1610,7 +1610,7 @@ export default function MBTIResultsPage() {
                   <AccordionItem value="mes-3">
                     <AccordionTrigger className="text-lg font-semibold">
                       <div className="flex items-center gap-2">
-                        <div className="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                        <div className="bg-purple/50 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
                           3
                         </div>
                         Mes 3: Integración y Mejora de Relaciones
@@ -1671,7 +1671,7 @@ export default function MBTIResultsPage() {
                         </Card>
                       </div>
 
-                      <div className="bg-purple-50 dark:bg-purple-950/20 p-3 rounded-lg">
+                      <div className="bg-purple/5 dark:bg-purple/20 p-3 rounded-lg">
                         <p className="text-sm">
                           <strong>KPI del Mes:</strong> Completar manifiesto personal y plan de carrera MBTI-aligned
                         </p>
@@ -1720,8 +1720,8 @@ export default function MBTIResultsPage() {
                 <Card className="border-l-4 border-l-blue-500">
                   <CardContent className="pt-6">
                     <div className="flex items-start gap-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100">
-                        <span className="text-xl font-bold text-blue-600">1</span>
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue/10">
+                        <span className="text-xl font-bold text-blue">1</span>
                       </div>
                       <div className="flex-1">
                         <h3 className="font-semibold mb-2">Completa los otros tests DTC</h3>
@@ -1741,7 +1741,7 @@ export default function MBTIResultsPage() {
                   <CardContent className="pt-6">
                     <div className="flex items-start gap-4">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100">
-                        <span className="text-xl font-bold text-green-600">2</span>
+                        <span className="text-xl font-bold text-green">2</span>
                       </div>
                       <div className="flex-1">
                         <h3 className="font-semibold mb-2">Reflexiona con tu Coach IA</h3>
@@ -1759,8 +1759,8 @@ export default function MBTIResultsPage() {
                 <Card className="border-l-4 border-l-purple-500">
                   <CardContent className="pt-6">
                     <div className="flex items-start gap-4">
-                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-100">
-                        <span className="text-xl font-bold text-purple-600">3</span>
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple/10">
+                        <span className="text-xl font-bold text-purple">3</span>
                       </div>
                       <div className="flex-1">
                         <h3 className="font-semibold mb-2">Explora Oportunidades de Desarrollo</h3>
@@ -1799,10 +1799,10 @@ export default function MBTIResultsPage() {
           </TabsContent>
 
           <TabsContent value="biblioteca" className="space-y-6">
-            <Card className="border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-purple-50">
+            <Card className="border-2 border-blue/20 bg-gradient-to-br from-blue/5 to-purple-50">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-3">
-                  <BookOpen className="w-7 h-7 text-blue-600" />
+                  <BookOpen className="w-7 h-7 text-blue" />
                   Biblioteca DTC Recomendada para {mbtiType}
                 </CardTitle>
                 <CardDescription className="text-base">
@@ -1813,21 +1813,21 @@ export default function MBTIResultsPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse">
                     <thead>
-                      <tr className="bg-blue-100 border-b-2 border-blue-200">
-                        <th className="text-left p-4 font-bold text-blue-900">Área de Desarrollo</th>
-                        <th className="text-left p-4 font-bold text-blue-900">Recurso Recomendado</th>
-                        <th className="text-left p-4 font-bold text-blue-900">Por qué es clave para ti</th>
-                        <th className="text-left p-4 font-bold text-blue-900">Mini-desafío (7 días)</th>
+                      <tr className="bg-blue/10 border-b-2 border-blue/20">
+                        <th className="text-left p-4 font-bold text-blue">Área de Desarrollo</th>
+                        <th className="text-left p-4 font-bold text-blue">Recurso Recomendado</th>
+                        <th className="text-left p-4 font-bold text-blue">Por qué es clave para ti</th>
+                        <th className="text-left p-4 font-bold text-blue">Mini-desafío (7 días)</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      <tr className="hover:bg-blue-50 transition-colors">
+                      <tr className="hover:bg-blue/5 transition-colors">
                         <td className="p-4">
                           <div className="font-semibold text-gray-900">Autoconocimiento profundo</div>
                           <div className="text-sm text-gray-600">Entender por qué haces lo que haces</div>
                         </td>
                         <td className="p-4">
-                          <div className="font-medium text-blue-900">Libro: "Gifts Differing"</div>
+                          <div className="font-medium text-blue">Libro: "Gifts Differing"</div>
                           <div className="text-sm text-gray-600">Por Isabel Briggs Myers</div>
                         </td>
                         <td className="p-4 text-sm text-gray-700">
@@ -1835,13 +1835,13 @@ export default function MBTIResultsPage() {
                           perder tu esencia
                         </td>
                         <td className="p-4 text-sm">
-                          <div className="bg-amber-50 rounded p-3 border-l-4 border-amber-400">
+                          <div className="bg-yellow/5 rounded p-3 border-l-4 border-amber-400">
                             Lee el capítulo de tu tipo y anota 3 comportamientos tuyos que ahora entiendes mejor
                           </div>
                         </td>
                       </tr>
 
-                      <tr className="hover:bg-blue-50 transition-colors">
+                      <tr className="hover:bg-blue/5 transition-colors">
                         <td className="p-4">
                           <div className="font-semibold text-gray-900">
                             {mbtiType.includes("I") ? "Comunicación asertiva" : "Escucha profunda"}
@@ -1851,7 +1851,7 @@ export default function MBTIResultsPage() {
                           </div>
                         </td>
                         <td className="p-4">
-                          <div className="font-medium text-blue-900">
+                          <div className="font-medium text-blue">
                             {mbtiType.includes("I")
                               ? 'Libro: "Quiet" de Susan Cain'
                               : 'Libro: "El arte de la comunicación consciente"'}
@@ -1864,7 +1864,7 @@ export default function MBTIResultsPage() {
                             : "Te ayuda a frenar, escuchar de verdad y no monopolizar conversaciones"}
                         </td>
                         <td className="p-4 text-sm">
-                          <div className="bg-amber-50 rounded p-3 border-l-4 border-amber-400">
+                          <div className="bg-yellow/5 rounded p-3 border-l-4 border-amber-400">
                             {mbtiType.includes("I")
                               ? "En 3 reuniones esta semana, comparte tu opinión aunque no te la pidan"
                               : "En 3 conversaciones esta semana, haz 3 preguntas antes de dar tu opinión"}
@@ -1872,13 +1872,13 @@ export default function MBTIResultsPage() {
                         </td>
                       </tr>
 
-                      <tr className="hover:bg-blue-50 transition-colors">
+                      <tr className="hover:bg-blue/5 transition-colors">
                         <td className="p-4">
                           <div className="font-semibold text-gray-900">Relaciones personales</div>
                           <div className="text-sm text-gray-600">Entender y conectar con otros tipos</div>
                         </td>
                         <td className="p-4">
-                          <div className="font-medium text-blue-900">
+                          <div className="font-medium text-blue">
                             Curso: "MBTI en relaciones" (Udemy o Coursera)
                           </div>
                           <div className="text-sm text-gray-600">Aplicación práctica</div>
@@ -1888,14 +1888,14 @@ export default function MBTIResultsPage() {
                           resolverlos con pareja, familia y amigos
                         </td>
                         <td className="p-4 text-sm">
-                          <div className="bg-amber-50 rounded p-3 border-l-4 border-amber-400">
+                          <div className="bg-yellow/5 rounded p-3 border-l-4 border-amber-400">
                             Identifica el tipo MBTI de 2 personas cercanas y observa cómo sus diferencias generan
                             fricción
                           </div>
                         </td>
                       </tr>
 
-                      <tr className="hover:bg-blue-50 transition-colors">
+                      <tr className="hover:bg-blue/5 transition-colors">
                         <td className="p-4">
                           <div className="font-semibold text-gray-900">
                             {mbtiType.includes("N") ? "Ejecución práctica" : "Pensamiento estratégico"}
@@ -1905,7 +1905,7 @@ export default function MBTIResultsPage() {
                           </div>
                         </td>
                         <td className="p-4">
-                          <div className="font-medium text-blue-900">
+                          <div className="font-medium text-blue">
                             {mbtiType.includes("N")
                               ? 'Libro: "Getting Things Done" de David Allen'
                               : 'Libro: "Thinking, Fast and Slow" de Daniel Kahneman'}
@@ -1918,7 +1918,7 @@ export default function MBTIResultsPage() {
                             : "Como sensorial, tiendes a lo concreto. Este libro te ayuda a pensar en grande y anticipar futuros posibles"}
                         </td>
                         <td className="p-4 text-sm">
-                          <div className="bg-amber-50 rounded p-3 border-l-4 border-amber-400">
+                          <div className="bg-yellow/5 rounded p-3 border-l-4 border-amber-400">
                             {mbtiType.includes("N")
                               ? "Elige UNA idea que llevas meses pensando y define los 3 primeros pasos concretos"
                               : "Dedica 30 min a imaginar cómo podría verse tu vida en 5 años si todo saliera bien"}
@@ -1926,7 +1926,7 @@ export default function MBTIResultsPage() {
                         </td>
                       </tr>
 
-                      <tr className="hover:bg-blue-50 transition-colors">
+                      <tr className="hover:bg-blue/5 transition-colors">
                         <td className="p-4">
                           <div className="font-semibold text-gray-900">Gestión emocional</div>
                           <div className="text-sm text-gray-600">
@@ -1934,7 +1934,7 @@ export default function MBTIResultsPage() {
                           </div>
                         </td>
                         <td className="p-4">
-                          <div className="font-medium text-blue-900">
+                          <div className="font-medium text-blue">
                             {mbtiType.includes("F")
                               ? 'Libro: "Boundaries" de Henry Cloud'
                               : 'Libro: "Permission to Feel" de Marc Brackett'}
@@ -1947,7 +1947,7 @@ export default function MBTIResultsPage() {
                             : "Como thinking type, puedes desconectarte de tus emociones. Aprende a reconocerlas y nombrarlas"}
                         </td>
                         <td className="p-4 text-sm">
-                          <div className="bg-amber-50 rounded p-3 border-l-4 border-amber-400">
+                          <div className="bg-yellow/5 rounded p-3 border-l-4 border-amber-400">
                             {mbtiType.includes("F")
                               ? 'Di "no" a una petición esta semana sin dar explicaciones excesivas ni sentirte culpable'
                               : "Al final del día durante 7 días, nombra 3 emociones que sentiste y por qué"}
@@ -1955,13 +1955,13 @@ export default function MBTIResultsPage() {
                         </td>
                       </tr>
 
-                      <tr className="hover:bg-blue-50 transition-colors">
+                      <tr className="hover:bg-blue/5 transition-colors">
                         <td className="p-4">
                           <div className="font-semibold text-gray-900">Desarrollo profesional</div>
                           <div className="text-sm text-gray-600">Aprovechar tus fortalezas en el trabajo</div>
                         </td>
                         <td className="p-4">
-                          <div className="font-medium text-blue-900">Libro: "Do What You Are" de Paul Tieger</div>
+                          <div className="font-medium text-blue">Libro: "Do What You Are" de Paul Tieger</div>
                           <div className="text-sm text-gray-600">Carrera y MBTI</div>
                         </td>
                         <td className="p-4 text-sm text-gray-700">
@@ -1969,7 +1969,7 @@ export default function MBTIResultsPage() {
                           qué ambientes laborales drenan tu energía
                         </td>
                         <td className="p-4 text-sm">
-                          <div className="bg-amber-50 rounded p-3 border-l-4 border-amber-400">
+                          <div className="bg-yellow/5 rounded p-3 border-l-4 border-amber-400">
                             Escribe 3 aspectos de tu trabajo actual que drenan tu energía y 3 que te energizan. ¿Hay
                             patrón?
                           </div>
@@ -1979,28 +1979,28 @@ export default function MBTIResultsPage() {
                   </table>
                 </div>
 
-                <div className="mt-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-6 border border-blue-200">
-                  <h3 className="font-bold text-lg mb-3 flex items-center gap-2 text-blue-900">
+                <div className="mt-6 bg-gradient-to-r from-blue/5 to-purple-50 rounded-lg p-6 border border-blue/20">
+                  <h3 className="font-bold text-lg mb-3 flex items-center gap-2 text-blue">
                     <Lightbulb className="w-5 h-5" />
                     Cómo usar estos recursos
                   </h3>
                   <ul className="space-y-2 text-gray-700">
                     <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                      <Check className="w-5 h-5 text-green mt-0.5 flex-shrink-0" />
                       <span>
                         <strong>Prioriza por dolor:</strong> Si tienes problemas de comunicación, empieza por ese
                         recurso. Si te cuesta ejecutar ideas, ve ahí primero.
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                      <Check className="w-5 h-5 text-green mt-0.5 flex-shrink-0" />
                       <span>
                         <strong>No acumules:</strong> Mejor leer 1 libro y aplicarlo que comprar 10 y no hacer nada. Los
                         mini-desafíos son clave.
                       </span>
                     </li>
                     <li className="flex items-start gap-2">
-                      <Check className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
+                      <Check className="w-5 h-5 text-green mt-0.5 flex-shrink-0" />
                       <span>
                         <strong>Comparte lo aprendido:</strong> Explica a alguien cercano un insight de cada recurso.
                         Enseñar es la mejor forma de aprender.

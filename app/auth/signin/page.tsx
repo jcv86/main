@@ -93,11 +93,11 @@ export default function SignInPage() {
   const isLoading = isLoadingGoogle || isLoadingLinkedIn
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900 px-4 py-8">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple/5 via-blue/5 to-cyan-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900 px-4 py-8">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-200 dark:bg-purple-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-200 dark:bg-blue-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse animation-delay-2000" />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-200 dark:bg-purple/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue/20 dark:bg-blue/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse animation-delay-2000" />
         <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan-200 dark:bg-cyan-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30" />
       </div>
 
@@ -105,23 +105,23 @@ export default function SignInPage() {
         {/* Header section */}
         <div className="text-center space-y-3 mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg">
+            <div className="p-2 bg-gradient-to-br from-purple/50 to-blue/50 rounded-lg">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple via-blue to-blue bg-clip-text text-transparent dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400">
             Despega Tu Carrera
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-300">
+          <p className="text-lg text-muted/60 dark:text-muted/30">
             Tu transformación profesional comienza hoy
           </p>
-          <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+          <p className="text-sm text-muted/50 dark:text-muted/40 max-w-sm mx-auto">
             Descubre quién eres, explora tu potencial, entrénate para triunfar
           </p>
         </div>
 
         {/* Main Card */}
-        <Card className="border-2 border-purple-200/50 dark:border-purple-900/50 shadow-xl backdrop-blur-sm bg-white/80 dark:bg-slate-950/80">
+        <Card className="border-2 border-purple/20/50 dark:border-purple-900/50 shadow-xl backdrop-blur-sm bg-white/80 dark:bg-slate-950/80">
           <CardContent className="pt-8 pb-8 space-y-5">
             {/* OAuth Error Alert */}
             {error && (
@@ -140,7 +140,7 @@ export default function SignInPage() {
             <Button
               onClick={handleGoogleSignIn}
               disabled={isLoading}
-              className="w-full h-12 text-base gap-2 bg-white hover:bg-gray-50 border-2 border-gray-200 text-slate-900 hover:border-blue-300 hover:shadow-md transition-all duration-200 dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-slate-700 dark:text-white dark:hover:border-blue-500"
+              className="w-full h-12 text-base gap-2 bg-white hover:bg-gray-50 border-2 border-gray-200 text-slate-900 hover:border-blue/30 hover:shadow-md transition-all duration-200 dark:bg-background dark:hover:bg-slate-800 dark:border-card dark:text-white dark:hover:border-blue/50"
             >
               {isLoadingGoogle ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -154,7 +154,7 @@ export default function SignInPage() {
             <Button
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
-              className="w-full h-12 text-base gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-200 dark:from-blue-700 dark:to-blue-800 dark:hover:from-blue-800 dark:hover:to-blue-900"
+              className="w-full h-12 text-base gap-2 bg-gradient-to-r from-blue to-blue-700 hover:from-blue hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-200 dark:from-blue dark:to-blue-800 dark:hover:from-blue-800 dark:hover:to-blue-900"
             >
               {isLoadingLinkedIn ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -167,37 +167,37 @@ export default function SignInPage() {
             {/* Divider */}
             <div className="relative my-2">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200 dark:border-slate-700" />
+                <div className="w-full border-t border-muted/20 dark:border-card" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="px-2 bg-white dark:bg-slate-950 text-slate-500 dark:text-slate-400">o</span>
+                <span className="px-2 bg-white dark:bg-slate-950 text-muted/50 dark:text-muted/40">o</span>
               </div>
             </div>
 
             {/* Trust indicators */}
             <div className="grid grid-cols-3 gap-3 py-2">
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-700 dark:text-purple-400">6</div>
-                <p className="text-xs text-slate-700 dark:text-slate-400 font-medium">Tests</p>
+                <div className="text-2xl font-bold text-purple dark:text-purple/40">6</div>
+                <p className="text-xs text-muted/70 dark:text-muted/40 font-medium">Tests</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-700 dark:text-blue-400">120+</div>
-                <p className="text-xs text-slate-700 dark:text-slate-400 font-medium">Recursos</p>
+                <div className="text-2xl font-bold text-blue dark:text-blue/40">120+</div>
+                <p className="text-xs text-muted/70 dark:text-muted/40 font-medium">Recursos</p>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-cyan-700 dark:text-cyan-400">24/7</div>
-                <p className="text-xs text-slate-700 dark:text-slate-400 font-medium">Coach IA</p>
+                <p className="text-xs text-muted/70 dark:text-muted/40 font-medium">Coach IA</p>
               </div>
             </div>
 
             {/* Terms */}
-            <p className="text-xs text-center text-slate-500 dark:text-slate-400 leading-relaxed pt-2">
+            <p className="text-xs text-center text-muted/50 dark:text-muted/40 leading-relaxed pt-2">
               Al ingresar, aceptas nuestros{' '}
-              <a href="/terms" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+              <a href="/terms" className="text-blue dark:text-blue/40 hover:underline font-medium">
                 términos de servicio
               </a>
               {' '}y{' '}
-              <a href="/privacy" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+              <a href="/privacy" className="text-blue dark:text-blue/40 hover:underline font-medium">
                 política de privacidad
               </a>
             </p>
@@ -205,7 +205,7 @@ export default function SignInPage() {
         </Card>
 
         {/* Footer note */}
-        <p className="text-center text-xs text-slate-500 dark:text-slate-400">
+        <p className="text-center text-xs text-muted/50 dark:text-muted/40">
           ¿Es tu primera vez? Crearemos tu cuenta automáticamente
         </p>
       </div>

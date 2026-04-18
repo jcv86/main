@@ -123,8 +123,8 @@ export default function DespegazoDashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-950 to-slate-950">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
-          <p className="text-slate-300">Cargando tu dashboard...</p>
+          <Loader2 className="h-8 w-8 animate-spin text-purple/50" />
+          <p className="text-muted/30">Cargando tu dashboard...</p>
         </div>
       </div>
     )
@@ -138,7 +138,7 @@ export default function DespegazoDashboard() {
       href: '/despega/a1-report',
       score: readiness.a1_completeness,
       icon: '🎯',
-      color: 'from-purple-500 to-blue'
+      color: 'from-purple/50 to-blue'
     },
     {
       name: 'A2: Exploración',
@@ -193,23 +193,23 @@ export default function DespegazoDashboard() {
               </span>
             </h1>
           </div>
-          <p className="text-lg text-slate-400 max-w-2xl">
+          <p className="text-lg text-muted/40 max-w-2xl">
             Sigue tu progreso a través de 4 etapas de desarrollo profesional. 
             Alcanza el 80+ de readiness para estar completamente listo.
           </p>
         </div>
 
         {/* Readiness Score - Premium */}
-        <div className="mb-16 bg-gradient-to-br from-purple-900/40 to-blue-900/40 border border-purple-500/20 rounded-2xl p-12 backdrop-blur">
+        <div className="mb-16 bg-gradient-to-br from-purple/40 to-blue-900/40 border border-purple/50/20 rounded-2xl p-12 backdrop-blur">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="flex flex-col items-center justify-center">
               <div className={`text-7xl font-black ${scoreColor} mb-2`}>
                 {readiness.overall_score}
               </div>
-              <p className="text-slate-400 text-sm font-semibold">Readiness Score</p>
+              <p className="text-muted/40 text-sm font-semibold">Readiness Score</p>
               <div className="mt-4 w-full h-1 bg-slate-800 rounded-full overflow-hidden">
                 <div
-                  className={`h-full bg-gradient-to-r ${scoreColor === 'text-emerald-400' ? 'from-emerald-500 to-teal-400' : scoreColor === 'text-yellow-400' ? 'from-yellow-500 to-orange-400' : 'from-orange-500 to-red-400'} transition-all duration-500`}
+                  className={`h-full bg-gradient-to-r ${scoreColor === 'text-emerald-400' ? 'from-green/50 to-teal-400' : scoreColor === 'text-yellow-400' ? 'from-yellow-500 to-orange-400' : 'from-orange-500 to-red-400'} transition-all duration-500`}
                   style={{ width: `${readiness.overall_score}%` }}
                 />
               </div>
@@ -221,7 +221,7 @@ export default function DespegazoDashboard() {
                 {readiness.recommendations.slice(0, 3).map((rec, i) => (
                   <div key={i} className="flex gap-3 items-start">
                     <Zap className="w-5 h-5 text-purple-400 flex-shrink-0 mt-1" />
-                    <p className="text-slate-200">{rec}</p>
+                    <p className="text-muted/20">{rec}</p>
                   </div>
                 ))}
               </div>
@@ -238,10 +238,10 @@ export default function DespegazoDashboard() {
             <ul className="space-y-2">
               {readiness.strengths.length > 0 ? (
                 readiness.strengths.map((strength, i) => (
-                  <li key={i} className="text-slate-300 text-sm">{strength}</li>
+                  <li key={i} className="text-muted/30 text-sm">{strength}</li>
                 ))
               ) : (
-                <p className="text-slate-500">Completa más etapas</p>
+                <p className="text-muted/50">Completa más etapas</p>
               )}
             </ul>
           </div>
@@ -253,7 +253,7 @@ export default function DespegazoDashboard() {
             <ul className="space-y-2">
               {readiness.gaps.length > 0 ? (
                 readiness.gaps.map((gap, i) => (
-                  <li key={i} className="text-slate-300 text-sm">{gap}</li>
+                  <li key={i} className="text-muted/30 text-sm">{gap}</li>
                 ))
               ) : (
                 <p className="text-emerald-400 font-semibold">¡Excelente, todo completo!</p>
@@ -279,7 +279,7 @@ export default function DespegazoDashboard() {
                     <h3 className="text-xl font-bold text-white group-hover:text-purple-400 transition-colors">
                       {stage.name}
                     </h3>
-                    <p className="text-slate-400 text-sm mt-1">{stage.description}</p>
+                    <p className="text-muted/40 text-sm mt-1">{stage.description}</p>
                   </div>
                 </div>
                 {stage.completed ? (
@@ -287,7 +287,7 @@ export default function DespegazoDashboard() {
                     ✓ Completo
                   </Badge>
                 ) : (
-                  <Badge className="bg-purple/50/20 text-purple-400 border border-purple-500/50 ml-4">
+                  <Badge className="bg-purple/50/20 text-purple-400 border border-purple/50/50 ml-4">
                     {Math.round(stage.score)}%
                   </Badge>
                 )}
@@ -304,7 +304,7 @@ export default function DespegazoDashboard() {
                 }}
                 className={`w-full group/btn ${
                   stage.completed
-                    ? 'bg-slate-700 hover:bg-slate-600 text-slate-300'
+                    ? 'bg-slate-700 hover:bg-slate-600 text-muted/30'
                     : `bg-gradient-to-r ${stage.color} hover:shadow-lg text-white font-semibold`
                 }`}
               >
@@ -320,14 +320,14 @@ export default function DespegazoDashboard() {
           <Button
             onClick={() => router.push('/despega/conozcamonos-1')}
             variant="outline"
-            className="h-12 border-slate-600 hover:border-purple-500 text-white hover:text-purple-400"
+            className="h-12 border-slate-600 hover:border-purple/50 text-white hover:text-purple-400"
           >
             <Clock className="w-4 h-4 mr-2" />
             Comenzar o Continuar
           </Button>
           <Button
             onClick={() => loadUserProgress()}
-            className="h-12 bg-purple-600 hover:bg-purple-700 font-semibold"
+            className="h-12 bg-purple hover:bg-purple font-semibold"
           >
             <TrendingUp className="w-4 h-4 mr-2" />
             Actualizar Progreso
@@ -336,7 +336,7 @@ export default function DespegazoDashboard() {
 
         {/* Footer Note */}
         <div className="bg-slate-800/40 border border-slate-700 rounded-[28px] p-4 text-center">
-          <p className="text-slate-400 text-sm">
+          <p className="text-muted/40 text-sm">
             💡 Tu score se actualiza automáticamente. Alcanza <span className="font-bold text-purple-400">80+</span> para estar completamente listo.
           </p>
         </div>

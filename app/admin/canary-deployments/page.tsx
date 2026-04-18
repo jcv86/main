@@ -243,9 +243,9 @@ export default function CanaryDeploymentsPage() {
                         key={stage.id}
                         className={`p-2 rounded border text-center text-xs ${
                           stage.status === "completed"
-                            ? "bg-green-50 border-green-200"
+                            ? "bg-green/5 border-green/20"
                             : stage.status === "active"
-                              ? "bg-blue-50 border-blue-200"
+                              ? "bg-blue/5 border-blue/20"
                               : stage.status === "failed"
                                 ? "bg-red-50 border-red-200"
                                 : "bg-gray-50 border-gray-200"

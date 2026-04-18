@@ -315,7 +315,7 @@ export default function SprintViewerPage() {
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-          <p className="mt-4 text-slate-600 dark:text-slate-400">Cargando tu sprint...</p>
+          <p className="mt-4 text-muted/60 dark:text-muted/40">Cargando tu sprint...</p>
         </div>
       </div>
     )
@@ -350,7 +350,7 @@ export default function SprintViewerPage() {
               <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
                 {sprint.theme}
               </h1>
-              <p className="text-lg text-slate-600 dark:text-slate-400">
+              <p className="text-lg text-muted/60 dark:text-muted/40">
                 Días {sprint.startDay}-{sprint.endDay} de tu transformación
               </p>
             </div>
@@ -365,7 +365,7 @@ export default function SprintViewerPage() {
               <span className="font-medium text-slate-900 dark:text-slate-50">
                 Progreso del Sprint
               </span>
-              <span className="text-slate-600 dark:text-slate-400">
+              <span className="text-muted/60 dark:text-muted/40">
                 {completedCount} de {actions.length} acciones
               </span>
             </div>
@@ -374,9 +374,9 @@ export default function SprintViewerPage() {
         </div>
 
         {/* Sprint Info */}
-        <Card className="border-0 shadow-md bg-white dark:bg-slate-900">
+        <Card className="border-0 shadow-md bg-white dark:bg-background">
           <CardContent className="p-6">
-            <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
+            <p className="text-muted/70 dark:text-muted/30 leading-relaxed">
               {sprint.description}
             </p>
           </CardContent>
@@ -385,7 +385,7 @@ export default function SprintViewerPage() {
         {/* Micro-Actions List */}
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 flex items-center gap-2">
-            <CheckCircle className="w-6 h-6 text-green-600" />
+            <CheckCircle className="w-6 h-6 text-green" />
             Tu Checklist de Acciones
           </h2>
 
@@ -395,8 +395,8 @@ export default function SprintViewerPage() {
                 key={action.id}
                 className={`border-0 transition-all cursor-pointer hover:shadow-md ${
                   action.completed
-                    ? "bg-green-50 dark:bg-green-900/10 border-l-4 border-l-green-500"
-                    : "bg-white dark:bg-slate-800"
+                    ? "bg-green/5 dark:bg-green-900/10 border-l-4 border-l-green-500"
+                    : "bg-white dark:bg-card"
                 }`}
                 onClick={() => toggleAction(action.id)}
               >
@@ -407,8 +407,8 @@ export default function SprintViewerPage() {
                       <div
                         className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${
                           action.completed
-                            ? "bg-green-600 border-green-600"
-                            : "border-slate-300 dark:border-slate-600"
+                            ? "bg-green border-green-600"
+                            : "border-muted/30 dark:border-slate-600"
                         }`}
                       >
                         {action.completed && (
@@ -421,15 +421,15 @@ export default function SprintViewerPage() {
                     <div className="flex-1 min-w-0">
                       <h3 className={`font-semibold text-base ${
                         action.completed
-                          ? "line-through text-slate-600 dark:text-slate-400"
+                          ? "line-through text-muted/60 dark:text-muted/40"
                           : "text-slate-900 dark:text-slate-50"
                       }`}>
                         {action.title}
                       </h3>
                       <p className={`text-sm mt-1 ${
                         action.completed
-                          ? "text-slate-600 dark:text-slate-400"
-                          : "text-slate-600 dark:text-slate-400"
+                          ? "text-muted/60 dark:text-muted/40"
+                          : "text-muted/60 dark:text-muted/40"
                       }`}>
                         {action.description}
                       </p>
@@ -451,9 +451,9 @@ export default function SprintViewerPage() {
                     {/* Right Icon */}
                     <div className="flex-shrink-0">
                       {action.completed ? (
-                        <CheckCircle className="w-6 h-6 text-green-600" />
+                        <CheckCircle className="w-6 h-6 text-green" />
                       ) : (
-                        <Circle className="w-6 h-6 text-slate-400 dark:text-slate-600" />
+                        <Circle className="w-6 h-6 text-muted/40 dark:text-muted/60" />
                       )}
                     </div>
                   </div>
@@ -465,13 +465,13 @@ export default function SprintViewerPage() {
 
         {/* Check-in Prompt */}
         {sprintNumber === 1 && (
-          <Card className="border-0 shadow-md bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-l-4 border-l-orange-500">
+          <Card className="border-0 shadow-md bg-gradient-to-r from-yellow/5 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-l-4 border-l-orange-500">
             <CardContent className="p-6 space-y-3">
               <h3 className="font-bold text-lg text-slate-900 dark:text-slate-50 flex items-center gap-2">
                 <BookOpen className="w-5 h-5" />
                 Reflexión Semanal
               </h3>
-              <p className="text-sm text-slate-700 dark:text-slate-300">
+              <p className="text-sm text-muted/70 dark:text-muted/30">
                 Al final de cada semana, reflexiona: ¿Qué salió bien? ¿Qué fue más difícil? ¿Qué aprendiste?
               </p>
               <Button variant="outline" asChild>

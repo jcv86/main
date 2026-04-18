@@ -167,8 +167,8 @@ export default function GamificationClient() {
 
   const getMissionTypeColor = (type: Mission["type"]) => {
     const colors = {
-      daily: "bg-blue-500",
-      weekly: "bg-purple-500",
+      daily: "bg-blue/50",
+      weekly: "bg-purple/50",
       monthly: "bg-orange-500",
     }
     return colors[type]
@@ -176,9 +176,9 @@ export default function GamificationClient() {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      tests: "bg-blue-100 text-blue-800",
+      tests: "bg-blue/10 text-blue-800",
       lectura: "bg-green-100 text-green-800",
-      simulaciones: "bg-purple-100 text-purple-800",
+      simulaciones: "bg-purple/10 text-purple",
       metas: "bg-orange-100 text-orange-800",
       engagement: "bg-red-100 text-red-800",
     }
@@ -201,25 +201,25 @@ export default function GamificationClient() {
   const totalCount = achievements.length
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
       <div className="container mx-auto p-6 max-w-7xl">
         <div className="mb-8">
-          <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-full mb-4">
-            <p className="text-sm font-semibold text-purple-700 dark:text-purple-300">Tu Progreso y Logros</p>
+          <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple/10 to-blue/10 dark:from-purple/30 dark:to-blue-900/30 rounded-full mb-4">
+            <p className="text-sm font-semibold text-purple dark:text-purple-300">Tu Progreso y Logros</p>
           </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">Gamificación DTC</h1>
-          <p className="text-lg text-slate-700 dark:text-slate-300 font-medium">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">Gamificación DTC</h1>
+          <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">
             Completa misiones, gana logros y sube de nivel mientras creces personalmente
           </p>
         </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <Card className="border-2 border-purple-200 dark:border-purple-900/50 bg-white dark:bg-slate-900">
+          <Card className="border-2 border-purple/20 dark:border-purple-900/50 bg-white dark:bg-background">
             <CardHeader className="pb-3">
               <div className="flex items-center gap-2">
-                <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                  <Zap className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <div className="p-2 bg-purple/10 dark:bg-purple/30 rounded-lg">
+                  <Zap className="w-5 h-5 text-purple dark:text-purple/40" />
                 </div>
               <CardTitle className="text-lg">Nivel {stats.level}</CardTitle>
             </div>
@@ -242,7 +242,7 @@ export default function GamificationClient() {
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
               <div className="p-2 bg-green-100 rounded-lg">
-                <Trophy className="w-5 h-5 text-green-600" />
+                <Trophy className="w-5 h-5 text-green" />
               </div>
               <CardTitle className="text-lg">Logros</CardTitle>
             </div>
@@ -260,8 +260,8 @@ export default function GamificationClient() {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <Target className="w-5 h-5 text-purple-600" />
+              <div className="p-2 bg-purple/10 rounded-lg">
+                <Target className="w-5 h-5 text-purple" />
               </div>
               <CardTitle className="text-lg">Misiones</CardTitle>
             </div>
@@ -301,7 +301,7 @@ export default function GamificationClient() {
           {/* Daily Missions */}
           <div>
             <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <span className="p-1.5 bg-blue-100 rounded">☀️</span>
+              <span className="p-1.5 bg-blue/10 rounded">☀️</span>
               Misiones Diarias
             </h3>
             <div className="grid gap-4">
@@ -315,7 +315,7 @@ export default function GamificationClient() {
                           <div className="flex items-center gap-2 mb-2">
                             <h4 className="font-semibold">{mission.title}</h4>
                             {mission.completed && (
-                              <Badge variant="default" className="bg-green-500">
+                              <Badge variant="default" className="bg-green/50">
                                 <Check className="w-3 h-3 mr-1" /> Completada
                               </Badge>
                             )}
@@ -328,7 +328,7 @@ export default function GamificationClient() {
                                 {mission.progress} / {mission.target}
                               </p>
                             </div>
-                            <div className="flex items-center gap-1 text-sm font-medium text-blue-600">
+                            <div className="flex items-center gap-1 text-sm font-medium text-blue">
                               <Zap className="w-4 h-4" />+{mission.xp_reward} XP
                             </div>
                           </div>
@@ -348,7 +348,7 @@ export default function GamificationClient() {
           {/* Weekly Missions */}
           <div>
             <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <span className="p-1.5 bg-purple-100 rounded">📅</span>
+              <span className="p-1.5 bg-purple/10 rounded">📅</span>
               Misiones Semanales
             </h3>
             <div className="grid gap-4">
@@ -362,7 +362,7 @@ export default function GamificationClient() {
                           <div className="flex items-center gap-2 mb-2">
                             <h4 className="font-semibold">{mission.title}</h4>
                             {mission.completed && (
-                              <Badge variant="default" className="bg-green-500">
+                              <Badge variant="default" className="bg-green/50">
                                 <Check className="w-3 h-3 mr-1" /> Completada
                               </Badge>
                             )}
@@ -375,7 +375,7 @@ export default function GamificationClient() {
                                 {mission.progress} / {mission.target}
                               </p>
                             </div>
-                            <div className="flex items-center gap-1 text-sm font-medium text-purple-600">
+                            <div className="flex items-center gap-1 text-sm font-medium text-purple">
                               <Zap className="w-4 h-4" />+{mission.xp_reward} XP
                             </div>
                           </div>
@@ -404,7 +404,7 @@ export default function GamificationClient() {
                           <div className="flex items-center gap-2 mb-2">
                             <h4 className="font-semibold">{mission.title}</h4>
                             {mission.completed && (
-                              <Badge variant="default" className="bg-green-500">
+                              <Badge variant="default" className="bg-green/50">
                                 <Check className="w-3 h-3 mr-1" /> Completada
                               </Badge>
                             )}
@@ -479,7 +479,7 @@ export default function GamificationClient() {
                     <div className="flex items-center gap-4">
                       <div
                         className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${
-                          item.unlocked ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-500"
+                          item.unlocked ? "bg-blue/50 text-white" : "bg-gray-200 text-gray-500"
                         }`}
                       >
                         {item.level}
@@ -490,7 +490,7 @@ export default function GamificationClient() {
                       </div>
                     </div>
                     {item.unlocked ? (
-                      <Badge variant="default" className="bg-green-500">
+                      <Badge variant="default" className="bg-green/50">
                         <Check className="w-4 h-4 mr-1" />
                         Desbloqueado
                       </Badge>

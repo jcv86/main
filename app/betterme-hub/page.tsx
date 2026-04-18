@@ -24,14 +24,14 @@ export default function BetterMeHubPage() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card className="border-l-4 border-l-blue-500">
             <CardContent className="pt-6">
-              <BookOpen className="w-6 h-6 mb-2 text-blue-500" />
+              <BookOpen className="w-6 h-6 mb-2 text-blue/50" />
               <p className="text-sm text-muted-foreground">Libros en Progreso</p>
               <p className="text-2xl font-bold">2</p>
             </CardContent>
           </Card>
           <Card className="border-l-4 border-l-green-500">
             <CardContent className="pt-6">
-              <TrendingUp className="w-6 h-6 mb-2 text-green-500" />
+              <TrendingUp className="w-6 h-6 mb-2 text-green" />
               <p className="text-sm text-muted-foreground">Racha Actual</p>
               <p className="text-2xl font-bold">12 días</p>
             </CardContent>
@@ -45,7 +45,7 @@ export default function BetterMeHubPage() {
           </Card>
           <Card className="border-l-4 border-l-purple-500">
             <CardContent className="pt-6">
-              <Lightbulb className="w-6 h-6 mb-2 text-purple-500" />
+              <Lightbulb className="w-6 h-6 mb-2 text-purple/50" />
               <p className="text-sm text-muted-foreground">Próx. Meta</p>
               <p className="text-2xl font-bold">+1 nivel</p>
             </CardContent>
@@ -84,7 +84,7 @@ export default function BetterMeHubPage() {
                     <p className="font-semibold">✓ Paso 1: Completa tu Perfil</p>
                     <p className="text-sm text-muted-foreground">Define tus intereses y objetivos</p>
                   </div>
-                  <div className="border-l-4 border-blue-500 pl-4 py-2">
+                  <div className="border-l-4 border-blue/50 pl-4 py-2">
                     <p className="font-semibold">→ Paso 2: Lee el Primer Libro</p>
                     <p className="text-sm text-muted-foreground">Comienza con una recomendación personalizada</p>
                   </div>
@@ -92,7 +92,7 @@ export default function BetterMeHubPage() {
                     <p className="font-semibold">→ Paso 3: Mantén tu Racha</p>
                     <p className="text-sm text-muted-foreground">Lee todos los días para subir en el ranking</p>
                   </div>
-                  <div className="border-l-4 border-purple-500 pl-4 py-2">
+                  <div className="border-l-4 border-purple/50 pl-4 py-2">
                     <p className="font-semibold">→ Paso 4: Desbloquea Logros</p>
                     <p className="text-sm text-muted-foreground">Completa retos y sube de nivel</p>
                   </div>

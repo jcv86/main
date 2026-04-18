@@ -161,10 +161,10 @@ export default function BigFiveResults() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-purple/5 to-pink-50 flex items-center justify-center">
         <Card className="w-96">
           <CardContent className="p-8 text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
             <h3 className="text-lg font-semibold mb-2">Cargando Resultados</h3>
             <p className="text-gray-600">Preparando tu análisis personalizado...</p>
           </CardContent>
@@ -175,13 +175,13 @@ export default function BigFiveResults() {
 
   if (!testResult) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-purple/5 to-pink-50 flex items-center justify-center">
         <Card className="w-96">
           <CardContent className="p-8 text-center">
             <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No se encontraron resultados</h3>
             <p className="text-gray-600 mb-4">Parece que aún no has completado el Test Big Five.</p>
-            <Button onClick={() => router.push("/test/big-five")} className="bg-purple-600 hover:bg-purple-700">
+            <Button onClick={() => router.push("/test/big-five")} className="bg-purple hover:bg-purple">
               Realizar Test
             </Button>
           </CardContent>
@@ -232,18 +232,18 @@ export default function BigFiveResults() {
         <p className="text-gray-600 mb-8">Tu perfil completo de personalidad según las cinco grandes dimensiones</p>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <div className="mb-8 p-6 border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950 rounded-lg">
+        <div className="mb-8 p-6 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple-950 dark:to-blue-950 rounded-lg">
           <div className="flex items-center gap-2 mb-4">
-            <Sparkles className="h-5 w-5 text-purple-600" />
+            <Sparkles className="h-5 w-5 text-purple" />
             <h2 className="text-2xl font-bold">Tu Puente de Transición</h2>
           </div>
           <p className="text-sm text-muted-foreground mb-6">No es tu perfil fijo. Es cómo evolucionas en cada dimensión.</p>
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="p-4 bg-white dark:bg-slate-900 rounded border-l-4 border-blue-500">
+            <div className="p-4 bg-white dark:bg-background rounded border-l-4 border-blue/50">
               <h4 className="font-semibold mb-2">Eres Ahora</h4>
               <p className="text-xs text-muted-foreground">Tu perfil en las 5 dimensiones</p>
             </div>
-            <div className="p-4 bg-white dark:bg-slate-900 rounded border-l-4 border-purple-500">
+            <div className="p-4 bg-white dark:bg-background rounded border-l-4 border-purple/50">
               <h4 className="font-semibold mb-2">Puedes Ser</h4>
               <p className="text-xs text-muted-foreground">Mayor flexibilidad y equilibrio en cada área</p>
             </div>
@@ -285,18 +285,18 @@ export default function BigFiveResults() {
 
           <TabsContent value="summary" className="space-y-6">
             {/* CHANGE: Adding Resumen Ejecutivo Integral DTC at the beginning */}
-            <Card className="mb-8 border-2 border-blue-200 bg-gradient-to-br from-blue-50 to-indigo-50">
+            <Card className="mb-8 border-2 border-blue/20 bg-gradient-to-br from-blue/5 to-indigo-50">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Target className="w-6 h-6 text-blue-600" />
+                  <Target className="w-6 h-6 text-blue" />
                   Resumen Ejecutivo Integral DTC
                 </CardTitle>
                 <CardDescription>Tu foto 360° y las ideas clave sobre tu personalidad</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Foto 360° */}
-                <div className="bg-white rounded-lg p-6 border-l-4 border-blue-600">
-                  <h3 className="font-semibold text-lg mb-4 text-blue-900">📸 Foto 360° de tu Perfil</h3>
+                <div className="bg-white rounded-lg p-6 border-l-4 border-blue">
+                  <h3 className="font-semibold text-lg mb-4 text-blue">📸 Foto 360° de tu Perfil</h3>
                   <div className="grid md:grid-cols-2 gap-4 text-sm">
                     <div>
                       <span className="font-semibold text-blue-800">Apertura:</span>
@@ -353,17 +353,17 @@ export default function BigFiveResults() {
 
                 {/* Top 5 Ideas */}
                 <div>
-                  <h3 className="font-semibold text-lg mb-3 text-blue-900">💡 Top 5 Ideas sobre tu Personalidad</h3>
+                  <h3 className="font-semibold text-lg mb-3 text-blue">💡 Top 5 Ideas sobre tu Personalidad</h3>
                   <div className="space-y-3">
-                    <div className="bg-blue-50 rounded-lg p-4 border-l-4 border-blue-400">
-                      <span className="font-semibold text-blue-900">1. Cómo te ves a ti mismo:</span>
+                    <div className="bg-blue/5 rounded-lg p-4 border-l-4 border-blue/40">
+                      <span className="font-semibold text-blue">1. Cómo te ves a ti mismo:</span>
                       <p className="text-gray-700 mt-1">
                         {results.O >= 60
                           ? "Te percibes como alguien curioso y abierto a nuevas experiencias."
                           : "Valoras la estabilidad y lo familiar sobre lo desconocido."}
                       </p>
                     </div>
-                    <div className="bg-indigo-50 rounded-lg p-4 border-l-4 border-indigo-400">
+                    <div className="bg-blue/5 rounded-lg p-4 border-l-4 border-indigo-400">
                       <span className="font-semibold text-indigo-900">2. Cómo te perciben otros:</span>
                       <p className="text-gray-700 mt-1">
                         {results.E >= 60
@@ -371,15 +371,15 @@ export default function BigFiveResults() {
                           : "Te ven como alguien reflexivo y tranquilo."}
                       </p>
                     </div>
-                    <div className="bg-purple-50 rounded-lg p-4 border-l-4 border-purple-400">
-                      <span className="font-semibold text-purple-900">3. Tu estilo relacional:</span>
+                    <div className="bg-purple/5 rounded-lg p-4 border-l-4 border-purple/40">
+                      <span className="font-semibold text-purple">3. Tu estilo relacional:</span>
                       <p className="text-gray-700 mt-1">
                         {results.A >= 60
                           ? "Priorizas la armonía y la empatía en tus relaciones."
                           : "Valoras la honestidad directa aunque genere fricción."}
                       </p>
                     </div>
-                    <div className="bg-pink-50 rounded-lg p-4 border-l-4 border-pink-400">
+                    <div className="bg-red/5 rounded-lg p-4 border-l-4 border-pink-400">
                       <span className="font-semibold text-pink-900">4. Tu enfoque de vida:</span>
                       <p className="text-gray-700 mt-1">
                         {results.C >= 60
@@ -400,9 +400,9 @@ export default function BigFiveResults() {
 
                 {/* Mapa de Impacto */}
                 <div>
-                  <h3 className="font-semibold text-lg mb-3 text-blue-900">🗺️ Mapa de Impacto en tu Vida</h3>
+                  <h3 className="font-semibold text-lg mb-3 text-blue">🗺️ Mapa de Impacto en tu Vida</h3>
                   <div className="grid md:grid-cols-3 gap-4">
-                    <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-4 border border-green-200">
+                    <div className="bg-gradient-to-br from-green/5 to-emerald-50 rounded-lg p-4 border border-green/20">
                       <h4 className="font-semibold text-green-800 mb-2 flex items-center gap-2">
                         <Heart className="w-4 h-4" />
                         Vida Personal
@@ -412,8 +412,8 @@ export default function BigFiveResults() {
                         y satisfacción personal.
                       </p>
                     </div>
-                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-4 border border-purple-200">
-                      <h4 className="font-semibold text-purple-800 mb-2 flex items-center gap-2">
+                    <div className="bg-gradient-to-br from-purple/5 to-pink-50 rounded-lg p-4 border border-purple/20">
+                      <h4 className="font-semibold text-purple mb-2 flex items-center gap-2">
                         <Users className="w-4 h-4" />
                         Relaciones
                       </h4>
@@ -422,7 +422,7 @@ export default function BigFiveResults() {
                         con familia, pareja y amigos.
                       </p>
                     </div>
-                    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-4 border border-blue-200">
+                    <div className="bg-gradient-to-br from-blue/5 to-indigo-50 rounded-lg p-4 border border-blue/20">
                       <h4 className="font-semibold text-blue-800 mb-2 flex items-center gap-2">
                         <Briefcase className="w-4 h-4" />
                         Trabajo
@@ -437,7 +437,7 @@ export default function BigFiveResults() {
 
                 {/* 3 Movimientos Clave */}
                 <div>
-                  <h3 className="font-semibold text-lg mb-3 text-blue-900">
+                  <h3 className="font-semibold text-lg mb-3 text-blue">
                     🎯 3 Movimientos Clave para los próximos 90 días
                   </h3>
                   <div className="space-y-3">
@@ -455,8 +455,8 @@ export default function BigFiveResults() {
                       </div>
                     </div>
                     <div className="flex items-start gap-3 bg-white rounded-lg p-4 border border-gray-200">
-                      <div className="bg-purple-100 rounded-full p-2">
-                        <Users className="w-5 h-5 text-purple-700" />
+                      <div className="bg-purple/10 rounded-full p-2">
+                        <Users className="w-5 h-5 text-purple" />
                       </div>
                       <div className="flex-1">
                         <h4 className="font-semibold text-gray-900">Relacional:</h4>
@@ -468,8 +468,8 @@ export default function BigFiveResults() {
                       </div>
                     </div>
                     <div className="flex items-start gap-3 bg-white rounded-lg p-4 border border-gray-200">
-                      <div className="bg-blue-100 rounded-full p-2">
-                        <Target className="w-5 h-5 text-blue-700" />
+                      <div className="bg-blue/10 rounded-full p-2">
+                        <Target className="w-5 h-5 text-blue" />
                       </div>
                       <div className="flex-1">
                         <h4 className="font-semibold text-gray-900">Laboral:</h4>
@@ -485,10 +485,10 @@ export default function BigFiveResults() {
               </CardContent>
             </Card>
 
-            <Card className="mb-8 border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
+            <Card className="mb-8 border-2 border-purple/20 bg-gradient-to-br from-purple/5 to-pink-50">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Heart className="w-6 h-6 text-purple-600" />
+                  <Heart className="w-6 h-6 text-purple" />
                   Impacto en tu Vida Personal
                 </CardTitle>
                 <CardDescription>
@@ -498,7 +498,7 @@ export default function BigFiveResults() {
               <CardContent className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
                       <Users className="w-5 h-5" />
                       Relaciones Personales
                     </h3>
@@ -509,7 +509,7 @@ export default function BigFiveResults() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
                       <Home className="w-5 h-5" />
                       Vida Familiar
                     </h3>
@@ -520,7 +520,7 @@ export default function BigFiveResults() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
                       <Heart className="w-5 h-5" />
                       Bienestar Emocional
                     </h3>
@@ -531,7 +531,7 @@ export default function BigFiveResults() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
                       <Sparkles className="w-5 h-5" />
                       Desarrollo Personal
                     </h3>
@@ -542,8 +542,8 @@ export default function BigFiveResults() {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg p-6 border-l-4 border-purple-600">
-                  <h3 className="font-semibold text-lg mb-3 text-purple-900">
+                <div className="bg-white rounded-lg p-6 border-l-4 border-purple">
+                  <h3 className="font-semibold text-lg mb-3 text-purple">
                     💡 Recuerda: Tu personalidad impacta tu felicidad, no solo tu productividad
                   </h3>
                   <p className="text-gray-700 leading-relaxed">
@@ -569,7 +569,7 @@ export default function BigFiveResults() {
                     </CardHeader>
                     <CardContent>
                       <div className="flex items-center justify-between mb-2">
-                        <span className="text-2xl font-bold text-purple-800">{score}%</span>
+                        <span className="text-2xl font-bold text-purple">{score}%</span>
                         <Badge
                           variant={score >= 70 ? "default" : score >= 40 ? "secondary" : "outline"}
                           className={
@@ -594,7 +594,7 @@ export default function BigFiveResults() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-green-600" />
+                    <TrendingUp className="h-5 w-5 text-green" />
                     Rasgos Principales
                   </CardTitle>
                 </CardHeader>
@@ -612,7 +612,7 @@ export default function BigFiveResults() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Lightbulb className="h-5 w-5 text-blue-600" />
+                    <Lightbulb className="h-5 w-5 text-blue" />
                     Fortalezas Identificadas
                   </CardTitle>
                 </CardHeader>
@@ -620,7 +620,7 @@ export default function BigFiveResults() {
                   <ul className="space-y-2">
                     {results.strengths?.slice(0, 3).map((strength: string, index: number) => (
                       <li key={index} className="flex items-start gap-2">
-                        <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                        <CheckCircle className="h-4 w-4 text-green mt-0.5 flex-shrink-0" />
                         <span className="text-sm">{strength}</span>
                       </li>
                     ))}
@@ -725,7 +725,7 @@ export default function BigFiveResults() {
                     <div className="space-y-4">
                       {Object.entries(results.detailed_analysis || {}).map(([factor, analysis]) => (
                         <div key={factor} className="border-b pb-4 last:border-b-0">
-                          <h4 className="font-semibold text-purple-800 mb-2">
+                          <h4 className="font-semibold text-purple mb-2">
                             {factorNames[factor.charAt(0).toUpperCase() as keyof typeof factorNames] || factor}
                           </h4>
                           <p className="text-sm text-gray-700">{analysis as string}</p>
@@ -747,7 +747,7 @@ export default function BigFiveResults() {
                       {results.open_responses &&
                         Object.entries(results.open_responses).map(([questionId, response]) => (
                           <div key={questionId} className="border-b pb-4 last:border-b-0">
-                            <h4 className="font-semibold text-purple-800 mb-2">Pregunta {questionId}</h4>
+                            <h4 className="font-semibold text-purple mb-2">Pregunta {questionId}</h4>
                             <p className="text-sm text-gray-700 italic">"{response as string}"</p>
                           </div>
                         ))}
@@ -798,7 +798,7 @@ export default function BigFiveResults() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Target className="h-5 w-5 text-blue-600" />
+                    <Target className="h-5 w-5 text-blue" />
                     Recomendaciones Profesionales
                   </CardTitle>
                   <CardDescription>Roles que se alinean con tu perfil de personalidad</CardDescription>
@@ -806,8 +806,8 @@ export default function BigFiveResults() {
                 <CardContent>
                   <div className="space-y-3">
                     {results.career_recommendations?.map((career: string, index: number) => (
-                      <div key={index} className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                        <Users className="h-5 w-5 text-blue-600 flex-shrink-0" />
+                      <div key={index} className="flex items-center gap-3 p-3 bg-blue/5 rounded-lg">
+                        <Users className="h-5 w-5 text-blue flex-shrink-0" />
                         <span className="font-medium">{career}</span>
                       </div>
                     ))}
@@ -818,17 +818,17 @@ export default function BigFiveResults() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Brain className="h-5 w-5 text-purple-600" />
+                    <Brain className="h-5 w-5 text-purple" />
                     Resumen de Personalidad
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-gray-700 mb-4">{results.personality_summary}</p>
                   <div className="space-y-2">
-                    <h4 className="font-semibold text-purple-800">Rasgos Secundarios:</h4>
+                    <h4 className="font-semibold text-purple">Rasgos Secundarios:</h4>
                     <div className="flex flex-wrap gap-2">
                       {results.secondary_traits?.map((trait: string, index: number) => (
-                        <Badge key={index} variant="outline" className="bg-purple-50 text-purple-700">
+                        <Badge key={index} variant="outline" className="bg-purple/5 text-purple">
                           {trait}
                         </Badge>
                       ))}
@@ -841,7 +841,7 @@ export default function BigFiveResults() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Lightbulb className="h-5 w-5 text-green-600" />
+                  <Lightbulb className="h-5 w-5 text-green" />
                   Plan de Acción Personalizado
                 </CardTitle>
                 <CardDescription>Pasos recomendados para tu desarrollo profesional</CardDescription>
@@ -853,7 +853,7 @@ export default function BigFiveResults() {
                     <ul className="space-y-2">
                       {results.strengths?.slice(0, 3).map((strength: string, index: number) => (
                         <li key={index} className="flex items-start gap-2">
-                          <CheckCircle className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <CheckCircle className="h-4 w-4 text-green mt-0.5 flex-shrink-0" />
                           <span className="text-sm">{strength}</span>
                         </li>
                       ))}
@@ -879,13 +879,13 @@ export default function BigFiveResults() {
             <Card className="border-l-4 border-l-amber-500">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <TrendingUp className="h-6 w-6 text-amber-600" />
+                  <TrendingUp className="h-6 w-6 text-yellow" />
                   Oportunidades de Desarrollo
                 </CardTitle>
                 <CardDescription>Áreas específicas donde puedes crecer basadas en tu perfil Big Five</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-amber-50 to-orange-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-yellow/5 to-orange-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué estas oportunidades son relevantes para ti</h3>
                   <p className="text-sm text-gray-700">
                     Tu perfil Big Five con Apertura: {results.O}%, Responsabilidad: {results.C}%, Extraversión:{" "}
@@ -898,13 +898,13 @@ export default function BigFiveResults() {
                 <Card className="border-l-4 border-l-blue-500">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <Sparkles className="h-5 w-5 text-blue-600" />
+                      <Sparkles className="h-5 w-5 text-blue" />
                       1. Desarrollo de Apertura Mental
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-blue-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-blue-900 mb-2">Oportunidad Principal</h4>
+                    <div className="bg-blue/5 p-4 rounded-lg">
+                      <h4 className="font-semibold text-blue mb-2">Oportunidad Principal</h4>
                       <p className="text-sm text-blue-800">
                         {results.O > 70
                           ? "Canalizar tu alta apertura hacia proyectos innovadores que generen impacto real en tu comunidad o industria."
@@ -918,21 +918,21 @@ export default function BigFiveResults() {
                       <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
                       <ul className="space-y-2">
                         <li className="flex gap-3">
-                          <span className="text-blue-600 font-bold">→</span>
+                          <span className="text-blue font-bold">→</span>
                           <div>
                             <strong>Reto de Perspectivas (semanal):</strong> Lee un artículo de opinión con el que
                             normalmente no estarías de acuerdo e identifica 3 puntos válidos.
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="text-blue-600 font-bold">→</span>
+                          <span className="text-blue font-bold">→</span>
                           <div>
                             <strong>Experiencia Cultural:</strong> Una vez al mes, sumérgete en una expresión cultural
                             completamente nueva (música, cocina, arte, filosofía).
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="text-blue-600 font-bold">→</span>
+                          <span className="text-blue font-bold">→</span>
                           <div>
                             <strong>Diario de Ideas:</strong> Dedica 10 minutos diarios a escribir ideas creativas sin
                             filtro, sin preocuparte por su viabilidad.
@@ -946,12 +946,12 @@ export default function BigFiveResults() {
                 <Card className="border-l-4 border-l-green-500">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <Lightbulb className="h-5 w-5 text-green-600" />
+                      <Lightbulb className="h-5 w-5 text-green" />
                       2. Fortalecimiento de Responsabilidad
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-green-50 p-4 rounded-lg">
+                    <div className="bg-green/5 p-4 rounded-lg">
                       <h4 className="font-semibold text-green-900 mb-2">Oportunidad Principal</h4>
                       <p className="text-sm text-green-800">
                         {results.C > 70
@@ -966,21 +966,21 @@ export default function BigFiveResults() {
                       <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
                       <ul className="space-y-2">
                         <li className="flex gap-3">
-                          <span className="text-green-600 font-bold">→</span>
+                          <span className="text-green font-bold">→</span>
                           <div>
                             <strong>Sistema de 3 Prioridades:</strong> Cada mañana, identifica solo 3 cosas no
                             negociables para el día.
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="text-green-600 font-bold">→</span>
+                          <span className="text-green font-bold">→</span>
                           <div>
                             <strong>Revisión Semanal:</strong> Dedica 30 minutos cada domingo a revisar logros y ajustar
                             la próxima semana.
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="text-green-600 font-bold">→</span>
+                          <span className="text-green font-bold">→</span>
                           <div>
                             <strong>Accountability Partner:</strong> Encuentra alguien con quien compartir metas
                             semanales y hacer check-ins.
@@ -994,14 +994,14 @@ export default function BigFiveResults() {
                 <Card className="border-l-4 border-l-purple-500">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <Users className="h-5 w-5 text-purple-600" />
+                      <Users className="h-5 w-5 text-purple" />
                       3. Expansión de Conexión Social (Extraversión)
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-purple-50 p-4 rounded-lg">
-                      <h4 className="font-semibold text-purple-900 mb-2">Oportunidad Principal</h4>
-                      <p className="text-sm text-purple-800">
+                    <div className="bg-purple/5 p-4 rounded-lg">
+                      <h4 className="font-semibold text-purple mb-2">Oportunidad Principal</h4>
+                      <p className="text-sm text-purple">
                         {results.E > 70
                           ? "Convertir tu energía social en liderazgo de comunidad, creando espacios donde otros también puedan conectar."
                           : results.E < 40
@@ -1014,21 +1014,21 @@ export default function BigFiveResults() {
                       <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
                       <ul className="space-y-2">
                         <li className="flex gap-3">
-                          <span className="text-purple-600 font-bold">→</span>
+                          <span className="text-purple font-bold">→</span>
                           <div>
                             <strong>Mapeo de Energía Social:</strong> Durante una semana, registra qué interacciones te
                             energizan vs. te agotan.
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="text-purple-600 font-bold">→</span>
+                          <span className="text-purple font-bold">→</span>
                           <div>
                             <strong>Círculo Intencional:</strong> Identifica 5 personas clave con quienes quieres
                             profundizar relación y programa tiempo mensual con cada una.
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="text-purple-600 font-bold">→</span>
+                          <span className="text-purple font-bold">→</span>
                           <div>
                             <strong>Experimento Social:</strong> Si eres introvertido, prueba una actividad grupal
                             nueva. Si eres extrovertido, pasa un día completo en soledad reflexiva.
@@ -1103,7 +1103,7 @@ export default function BigFiveResults() {
                   </CardContent>
                 </Card>
 
-                <div className="bg-gradient-to-r from-amber-600 to-orange-600 text-white p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-yellow to-orange-600 text-white p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-2">Próximo Paso</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Elige UNA oportunidad que resuene contigo y conviértela en un compromiso de 30 días. El cambio real
@@ -1121,13 +1121,13 @@ export default function BigFiveResults() {
             <Card className="border-l-4 border-l-indigo-500">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Brain className="h-6 w-6 text-indigo-600" />
+                  <Brain className="h-6 w-6 text-blue" />
                   Conexión con Otros Módulos DTC
                 </CardTitle>
                 <CardDescription>Cómo Big Five se integra con los demás tests del ecosistema DTC</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">El Mapa Completo de Tu Personalidad</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Big Five mide los rasgos profundos de tu personalidad, la base sobre la cual se construyen tus
@@ -1137,18 +1137,18 @@ export default function BigFiveResults() {
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
-                  <Card className="border-2 border-blue-300">
+                  <Card className="border-2 border-blue/30">
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
-                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-lg">
+                        <div className="w-8 h-8 bg-blue/10 rounded-full flex items-center justify-center text-lg">
                           💼
                         </div>
                         Despega Cerebral (DISC)
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="bg-blue-50 p-3 rounded text-sm">
-                        <strong className="text-blue-900">Conexión:</strong>
+                      <div className="bg-blue/5 p-3 rounded text-sm">
+                        <strong className="text-blue">Conexión:</strong>
                         <p className="text-blue-800 mt-1">
                           Big Five mide RASGOS profundos, DISC mide COMPORTAMIENTOS visibles. Tus rasgos influyen en
                           cómo te comportas.
@@ -1204,16 +1204,16 @@ export default function BigFiveResults() {
                   <Card className="border-2 border-purple-300">
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
-                        <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-lg">
+                        <div className="w-8 h-8 bg-purple/10 rounded-full flex items-center justify-center text-lg">
                           🧠
                         </div>
                         Mapa de Personalidad Despega (MBTI)
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="bg-purple-50 p-3 rounded text-sm">
-                        <strong className="text-purple-900">Conexión:</strong>
-                        <p className="text-purple-800 mt-1">
+                      <div className="bg-purple/5 p-3 rounded text-sm">
+                        <strong className="text-purple">Conexión:</strong>
+                        <p className="text-purple mt-1">
                           Big Five es DIMENSIONAL (grados), MBTI es TIPOLÓGICO (categorías). Se complementan, no
                           compiten.
                         </p>
@@ -1243,7 +1243,7 @@ export default function BigFiveResults() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="bg-green-50 p-3 rounded text-sm">
+                      <div className="bg-green/5 p-3 rounded text-sm">
                         <strong className="text-green-900">Conexión:</strong>
                         <p className="text-green-800 mt-1">
                           Big Five predice qué AMBIENTES laborales encajan contigo, RIASEC predice qué ACTIVIDADES te
@@ -1301,12 +1301,12 @@ export default function BigFiveResults() {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
-                      <Sparkles className="h-5 w-5 text-purple-600" />
+                      <Sparkles className="h-5 w-5 text-purple" />
                       Casos de Sinergia Big Five + Otros Tests
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 1: El Innovador Estructurado</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -1325,7 +1325,7 @@ export default function BigFiveResults() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-green/5 to-blue/5 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 2: El Líder Empático</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -1345,7 +1345,7 @@ export default function BigFiveResults() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-purple/5 to-pink-50 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 3: El Ejecutor Volátil</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -1366,7 +1366,7 @@ export default function BigFiveResults() {
                   </CardContent>
                 </Card>
 
-                <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-blue to-purple-600 text-white p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-2">Recomendación DTC</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Big Five es tu fundamento. Para obtener el mapa completo, combínalo con DISC (comportamiento
@@ -1384,13 +1384,13 @@ export default function BigFiveResults() {
             <Card className="border-l-4 border-l-pink-500">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Lightbulb className="h-6 w-6 text-pink-600" />
+                  <Lightbulb className="h-6 w-6 text-red" />
                   Preguntas de Reflexión Profunda
                 </CardTitle>
                 <CardDescription>Conecta tu perfil Big Five con tu vida real y propósito</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-pink-50 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-red/5 to-purple-50 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué reflexionar sobre tu perfil Big Five</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Big Five no es solo estadística, es el mapa de tu arquitectura psicológica. Estas preguntas te
@@ -1402,7 +1402,7 @@ export default function BigFiveResults() {
                 <div className="space-y-4">
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base text-purple-900">
+                      <CardTitle className="text-base text-purple">
                         1. ¿Cuál de los 5 factores siento que me define más auténticamente? ¿Por qué?
                       </CardTitle>
                     </CardHeader>
@@ -1420,7 +1420,7 @@ export default function BigFiveResults() {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base text-purple-900">
+                      <CardTitle className="text-base text-purple">
                         2. ¿En qué momentos de mi vida he actuado completamente FUERA de mi perfil Big Five natural?
                       </CardTitle>
                     </CardHeader>
@@ -1438,7 +1438,7 @@ export default function BigFiveResults() {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base text-purple-900">
+                      <CardTitle className="text-base text-purple">
                         3. Si pudiera "ajustar" UNO de mis rasgos Big Five, ¿cuál sería y hacia qué dirección?
                       </CardTitle>
                     </CardHeader>
@@ -1456,7 +1456,7 @@ export default function BigFiveResults() {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base text-purple-900">
+                      <CardTitle className="text-base text-purple">
                         4. ¿Cómo mi perfil Big Five ha afectado mis relaciones más importantes (pareja, familia,
                         amigos)?
                       </CardTitle>
@@ -1475,7 +1475,7 @@ export default function BigFiveResults() {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base text-purple-900">
+                      <CardTitle className="text-base text-purple">
                         5. ¿Qué decisiones importantes he tomado que fueron ALINEADAS vs. CONTRA mi perfil Big Five?
                       </CardTitle>
                     </CardHeader>
@@ -1493,7 +1493,7 @@ export default function BigFiveResults() {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base text-purple-900">
+                      <CardTitle className="text-base text-purple">
                         6. ¿Hay algún rasgo Big Five que la gente malinterpreta sobre mí?
                       </CardTitle>
                     </CardHeader>
@@ -1511,7 +1511,7 @@ export default function BigFiveResults() {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base text-purple-900">
+                      <CardTitle className="text-base text-purple">
                         7. ¿Qué tipo de persona admiro que tenga un perfil Big Five OPUESTO al mío?
                       </CardTitle>
                     </CardHeader>
@@ -1529,7 +1529,7 @@ export default function BigFiveResults() {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base text-purple-900">
+                      <CardTitle className="text-base text-purple">
                         8. ¿Mi trabajo actual me permite expresar mis rasgos Big Five naturales o me obliga a
                         reprimirlos?
                       </CardTitle>
@@ -1548,7 +1548,7 @@ export default function BigFiveResults() {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base text-purple-900">
+                      <CardTitle className="text-base text-purple">
                         9. ¿Cuál de mis rasgos Big Five ha sido mi mayor FORTALEZA y mi mayor DEBILIDAD simultáneamente?
                       </CardTitle>
                     </CardHeader>
@@ -1566,7 +1566,7 @@ export default function BigFiveResults() {
 
                   <Card>
                     <CardHeader>
-                      <CardTitle className="text-base text-purple-900">
+                      <CardTitle className="text-base text-purple">
                         10. ¿Si tuviera que diseñar mi vida IDEAL basándome únicamente en mi perfil Big Five, ¿cómo se
                         vería?
                       </CardTitle>
@@ -1584,7 +1584,7 @@ export default function BigFiveResults() {
                   </Card>
                 </div>
 
-                <div className="bg-gradient-to-r from-pink-600 to-purple-600 text-white p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-red to-purple-600 text-white p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-2">Comparte tu reflexión con tu Coach IA</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Las preguntas profundas se responden mejor en conversación. Habla con Sofia o Dani para explorar tus
@@ -1624,7 +1624,7 @@ export default function BigFiveResults() {
                   <AccordionItem value="mes-1">
                     <AccordionTrigger className="text-lg font-semibold">
                       <div className="flex items-center gap-2">
-                        <div className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                        <div className="bg-blue/50 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
                           1
                         </div>
                         Mes 1: Apertura a la Experiencia y Responsabilidad
@@ -1685,7 +1685,7 @@ export default function BigFiveResults() {
                         </Card>
                       </div>
 
-                      <div className="bg-blue-50 dark:bg-blue-950/20 p-3 rounded-lg">
+                      <div className="bg-blue/5 dark:bg-blue-950/20 p-3 rounded-lg">
                         <p className="text-sm">
                           <strong>KPI del Mes:</strong> Completar 3 experiencias nuevas y establecer sistema de
                           organización
@@ -1698,7 +1698,7 @@ export default function BigFiveResults() {
                   <AccordionItem value="mes-2">
                     <AccordionTrigger className="text-lg font-semibold">
                       <div className="flex items-center gap-2">
-                        <div className="bg-green-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                        <div className="bg-green/50 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
                           2
                         </div>
                         Mes 2: Extraversión y Amabilidad
@@ -1755,7 +1755,7 @@ export default function BigFiveResults() {
                         </Card>
                       </div>
 
-                      <div className="bg-green-50 dark:bg-green-950/20 p-3 rounded-lg">
+                      <div className="bg-green/5 dark:bg-green-950/20 p-3 rounded-lg">
                         <p className="text-sm">
                           <strong>KPI del Mes:</strong> Expandir red de contactos en 5 personas, 12 actos de bondad
                         </p>
@@ -1767,7 +1767,7 @@ export default function BigFiveResults() {
                   <AccordionItem value="mes-3">
                     <AccordionTrigger className="text-lg font-semibold">
                       <div className="flex items-center gap-2">
-                        <div className="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
+                        <div className="bg-purple/50 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm">
                           3
                         </div>
                         Mes 3: Estabilidad Emocional e Integración
@@ -1828,7 +1828,7 @@ export default function BigFiveResults() {
                         </Card>
                       </div>
 
-                      <div className="bg-purple-50 dark:bg-purple-950/20 p-3 rounded-lg">
+                      <div className="bg-purple/5 dark:bg-purple/20 p-3 rounded-lg">
                         <p className="text-sm">
                           <strong>KPI del Mes:</strong> Plan de manejo del estrés activo + perfil Big Five integrado
                         </p>
@@ -1845,7 +1845,7 @@ export default function BigFiveResults() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <BookOpen className="w-6 h-6 text-blue-600" />
+                  <BookOpen className="w-6 h-6 text-blue" />
                   Biblioteca DTC Recomendada para tu Perfil
                 </CardTitle>
                 <CardDescription>
@@ -1856,11 +1856,11 @@ export default function BigFiveResults() {
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse">
                     <thead>
-                      <tr className="bg-blue-50 border-b-2 border-blue-200">
-                        <th className="text-left p-4 font-semibold text-blue-900">Área de Desarrollo</th>
-                        <th className="text-left p-4 font-semibold text-blue-900">Recurso Recomendado</th>
-                        <th className="text-left p-4 font-semibold text-blue-900">Por qué es relevante</th>
-                        <th className="text-left p-4 font-semibold text-blue-900">Mini Desafío (7 días)</th>
+                      <tr className="bg-blue/5 border-b-2 border-blue/20">
+                        <th className="text-left p-4 font-semibold text-blue">Área de Desarrollo</th>
+                        <th className="text-left p-4 font-semibold text-blue">Recurso Recomendado</th>
+                        <th className="text-left p-4 font-semibold text-blue">Por qué es relevante</th>
+                        <th className="text-left p-4 font-semibold text-blue">Mini Desafío (7 días)</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -1887,7 +1887,7 @@ export default function BigFiveResults() {
                       <tr className="border-b border-gray-200 hover:bg-gray-50">
                         <td className="p-4 font-medium text-gray-900">
                           <div className="flex items-center gap-2">
-                            <Users className="w-4 h-4 text-purple-500" />
+                            <Users className="w-4 h-4 text-purple/50" />
                             Relaciones Interpersonales
                           </div>
                         </td>
@@ -1927,7 +1927,7 @@ export default function BigFiveResults() {
                       <tr className="border-b border-gray-200 hover:bg-gray-50">
                         <td className="p-4 font-medium text-gray-900">
                           <div className="flex items-center gap-2">
-                            <Target className="w-4 h-4 text-blue-500" />
+                            <Target className="w-4 h-4 text-blue/50" />
                             Organización Personal
                           </div>
                         </td>
@@ -1969,7 +1969,7 @@ export default function BigFiveResults() {
                       <tr className="border-b border-gray-200 hover:bg-gray-50">
                         <td className="p-4 font-medium text-gray-900">
                           <div className="flex items-center gap-2">
-                            <Sparkles className="w-4 h-4 text-pink-500" />
+                            <Sparkles className="w-4 h-4 text-red" />
                             Desarrollo Integral
                           </div>
                         </td>
@@ -1988,8 +1988,8 @@ export default function BigFiveResults() {
                   </table>
                 </div>
 
-                <div className="mt-6 bg-blue-50 rounded-lg p-6 border-l-4 border-blue-600">
-                  <h3 className="font-semibold text-lg mb-2 text-blue-900">💡 Enfoque DTC: Vida Personal Primero</h3>
+                <div className="mt-6 bg-blue/5 rounded-lg p-6 border-l-4 border-blue">
+                  <h3 className="font-semibold text-lg mb-2 text-blue">💡 Enfoque DTC: Vida Personal Primero</h3>
                   <p className="text-gray-700 leading-relaxed">
                     Estos recursos están diseñados para mejorar tu bienestar, tus relaciones y tu desarrollo personal
                     antes que tu productividad laboral. El éxito profesional es consecuencia de una vida personal

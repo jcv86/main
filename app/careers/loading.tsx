@@ -5,7 +5,7 @@ export default function CareersLoading() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section Skeleton */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 py-16">
+      <div className="bg-gradient-to-r from-blue to-purple-600 py-16">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <Skeleton className="h-12 w-3/4 mx-auto mb-6 bg-white/20" />

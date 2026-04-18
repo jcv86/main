@@ -22,7 +22,7 @@ export default function LearningFlowOnboarding() {
       icon: Zap,
       action: 'Iniciar Evaluación',
       path: '/personalized-learning',
-      color: 'from-blue-500 to-cyan-500',
+      color: 'from-blue/50 to-blue',
     },
     {
       title: 'Aprende',
@@ -30,7 +30,7 @@ export default function LearningFlowOnboarding() {
       icon: BookOpen,
       action: 'Explorar Biblioteca',
       path: '/biblioteca',
-      color: 'from-purple-500 to-pink-500',
+      color: 'from-purple/50 to-pink-500',
     },
     {
       title: 'Gana Puntos',
@@ -38,7 +38,7 @@ export default function LearningFlowOnboarding() {
       icon: Trophy,
       action: 'Ver Ranking',
       path: '/leaderboard',
-      color: 'from-amber-500 to-orange-500',
+      color: 'from-yellow/50 to-orange-500',
     },
     {
       title: 'Progresa',
@@ -46,7 +46,7 @@ export default function LearningFlowOnboarding() {
       icon: Lightbulb,
       action: 'Ver Dashboard',
       path: '/dashboard',
-      color: 'from-green-500 to-emerald-500',
+      color: 'from-green/50 to-green',
     },
   ]
 
@@ -86,7 +86,7 @@ export default function LearningFlowOnboarding() {
               <div
                 key={index}
                 className={`flex-1 h-2 rounded-full transition-all ${
-                  completed[index] ? 'bg-green-500' : index === currentStep ? 'bg-blue-500' : 'bg-muted'
+                  completed[index] ? 'bg-green/50' : index === currentStep ? 'bg-blue/50' : 'bg-muted'
                 }`}
               />
             ))}
@@ -114,7 +114,7 @@ export default function LearningFlowOnboarding() {
                   <div className="flex items-start gap-4">
                     <div
                       className={`h-12 w-12 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        isCompleted ? 'bg-green-500' : isActive ? 'bg-blue-500' : 'bg-muted'
+                        isCompleted ? 'bg-green/50' : isActive ? 'bg-blue/50' : 'bg-muted'
                       }`}
                     >
                       {isCompleted ? (
@@ -127,7 +127,7 @@ export default function LearningFlowOnboarding() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
                         <h3 className="text-xl font-semibold">{step.title}</h3>
-                        {isCompleted && <CheckCircle2 className="h-4 w-4 text-green-500" />}
+                        {isCompleted && <CheckCircle2 className="h-4 w-4 text-green" />}
                       </div>
                       <p className="text-muted-foreground mb-4">{step.description}</p>
 
@@ -145,7 +145,7 @@ export default function LearningFlowOnboarding() {
                       )}
 
                       {!isActive && isCompleted && (
-                        <p className="text-sm text-green-600 font-medium">✓ Completado</p>
+                        <p className="text-sm text-green font-medium">✓ Completado</p>
                       )}
 
                       {!isActive && !isCompleted && (
@@ -167,10 +167,10 @@ export default function LearningFlowOnboarding() {
 
         {/* Completion Message */}
         {allCompleted && (
-          <Card className="mt-8 border-green-200 bg-green-50 dark:bg-green-950">
+          <Card className="mt-8 border-green/20 bg-green/5 dark:bg-green-950">
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
-                <CheckCircle2 className="h-8 w-8 text-green-600" />
+                <CheckCircle2 className="h-8 w-8 text-green" />
                 <div>
                   <h3 className="font-semibold text-green-900 dark:text-green-100">
                     ¡Ruta de aprendizaje completada!
@@ -193,19 +193,19 @@ export default function LearningFlowOnboarding() {
             <CardContent>
               <ul className="space-y-2 text-sm">
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <CheckCircle2 className="h-4 w-4 text-green" />
                   Evaluación personalizada de tu nivel
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <CheckCircle2 className="h-4 w-4 text-green" />
                   Recomendaciones inteligentes de libros
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <CheckCircle2 className="h-4 w-4 text-green" />
                   Sistema de gamificación completo
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <CheckCircle2 className="h-4 w-4 text-green" />
                   Seguimiento visual de progreso
                 </li>
               </ul>
@@ -223,15 +223,15 @@ export default function LearningFlowOnboarding() {
                   Gana puntos por cada libro completado
                 </li>
                 <li className="flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-blue-500" />
+                  <Zap className="h-4 w-4 text-blue/50" />
                   Mantén rachas de lecturas diarias
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle2 className="h-4 w-4 text-green-500" />
+                  <CheckCircle2 className="h-4 w-4 text-green" />
                   Desbloquea badges por logros
                 </li>
                 <li className="flex items-center gap-2">
-                  <ArrowRight className="h-4 w-4 text-purple-500" />
+                  <ArrowRight className="h-4 w-4 text-purple/50" />
                   Compite en el ranking global
                 </li>
               </ul>

@@ -420,19 +420,19 @@ export default function RIASECTest() {
         <Card className="mt-8">
           <CardContent className="pt-6">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-              <div className="p-3 bg-blue-50 rounded-lg">
-                <h4 className="font-semibold text-blue-900 mb-1">Realista (R)</h4>
-                <p className="text-blue-700">Hands-on, practical work with tools and machinery</p>
+              <div className="p-3 bg-blue/5 rounded-lg">
+                <h4 className="font-semibold text-blue mb-1">Realista (R)</h4>
+                <p className="text-blue">Hands-on, practical work with tools and machinery</p>
               </div>
-              <div className="p-3 bg-purple-50 rounded-lg">
-                <h4 className="font-semibold text-purple-900 mb-1">Investigativo (I)</h4>
-                <p className="text-purple-700">Research, analysis, and problem-solving activities</p>
+              <div className="p-3 bg-purple/5 rounded-lg">
+                <h4 className="font-semibold text-purple mb-1">Investigativo (I)</h4>
+                <p className="text-purple">Research, analysis, and problem-solving activities</p>
               </div>
-              <div className="p-3 bg-pink-50 rounded-lg">
+              <div className="p-3 bg-red/5 rounded-lg">
                 <h4 className="font-semibold text-pink-900 mb-1">Artístico (A)</h4>
                 <p className="text-pink-700">Creative, expressive, and artistic activities</p>
               </div>
-              <div className="p-3 bg-green-50 rounded-lg">
+              <div className="p-3 bg-green/5 rounded-lg">
                 <h4 className="font-semibold text-green-900 mb-1">Social (S)</h4>
                 <p className="text-green-700">Helping, teaching, and serving others</p>
               </div>

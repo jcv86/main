@@ -43,17 +43,17 @@ export default function A3AnalyticsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900">
         <div className="text-center">
           <div className="w-12 h-12 rounded-full border-4 border-purple/30 border-t-purple-600 animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600 dark:text-slate-400">Cargando analytics...</p>
+          <p className="text-muted/60 dark:text-muted/40">Cargando analytics...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Header */}
         <Link href="/despega/a3">
@@ -67,13 +67,13 @@ export default function A3AnalyticsPage() {
           <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
             Mi Progreso en A3
           </h1>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-muted/60 dark:text-muted/40">
             Análisis detallado de tu desempeño, fortalezas y áreas de mejora
           </p>
         </div>
 
         {/* Overall Score */}
-        <Card className="bg-gradient-to-br from-purple to-blue-600 text-white border-0">
+        <Card className="bg-gradient-to-br from-purple to-blue text-white border-0">
           <CardContent className="pt-8 pb-6">
             <div className="flex items-center justify-between">
               <div>
@@ -109,7 +109,7 @@ export default function A3AnalyticsPage() {
               label: 'Mejora',
               value: '+12%',
               subtitle: 'última semana',
-              color: 'text-green-600'
+              color: 'text-green'
             },
             {
               icon: BarChart3,
@@ -126,12 +126,12 @@ export default function A3AnalyticsPage() {
                   <div className="flex items-start justify-between mb-4">
                     <Icon className={`w-6 h-6 ${metric.color}`} />
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{metric.label}</p>
+                  <p className="text-sm text-muted/60 dark:text-muted/40 mb-1">{metric.label}</p>
                   <p className="text-2xl font-bold text-slate-900 dark:text-white">
                     {metric.value}{metric.suffix}
                   </p>
                   {metric.subtitle && (
-                    <p className="text-xs text-slate-500 mt-1">{metric.subtitle}</p>
+                    <p className="text-xs text-muted/50 mt-1">{metric.subtitle}</p>
                   )}
                   {metric.total && (
                     <Progress value={(metric.value / metric.total) * 100} className="mt-2 h-1" />
@@ -148,16 +148,16 @@ export default function A3AnalyticsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-green-600" />
+                <TrendingUp className="w-5 h-5 text-green" />
                 Tus Fortalezas
               </CardTitle>
               <CardDescription>Lo que haces muy bien en entrevistas</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               {userData?.strengths.map((strength: string, idx: number) => (
-                <div key={idx} className="flex items-center gap-3 p-3 rounded-[28px] bg-green-50 dark:bg-green-900/20">
-                  <span className="text-green-600 dark:text-green-400 font-bold">+</span>
-                  <span className="text-slate-700 dark:text-slate-300">{strength}</span>
+                <div key={idx} className="flex items-center gap-3 p-3 rounded-[28px] bg-green/5 dark:bg-green-900/20">
+                  <span className="text-green dark:text-green-400 font-bold">+</span>
+                  <span className="text-muted/70 dark:text-muted/30">{strength}</span>
                 </div>
               ))}
             </CardContent>
@@ -176,7 +176,7 @@ export default function A3AnalyticsPage() {
               {userData?.improvements.map((improvement: string, idx: number) => (
                 <div key={idx} className="flex items-center gap-3 p-3 rounded-[28px] bg-orange/5 dark:bg-orange-900/20">
                   <span className="text-orange dark:text-orange-400 font-bold">→</span>
-                  <span className="text-slate-700 dark:text-slate-300">{improvement}</span>
+                  <span className="text-muted/70 dark:text-muted/30">{improvement}</span>
                 </div>
               ))}
             </CardContent>
@@ -198,7 +198,7 @@ export default function A3AnalyticsPage() {
               ].map((entry, idx) => (
                 <div key={idx} className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{entry.date}</span>
+                    <span className="text-sm font-medium text-muted/70 dark:text-muted/30">{entry.date}</span>
                     <Badge variant="secondary">{entry.level}</Badge>
                   </div>
                   <div className="flex items-center gap-3">
@@ -212,11 +212,11 @@ export default function A3AnalyticsPage() {
         </Card>
 
         {/* Recommendations */}
-        <Card className="bg-blue/5 dark:bg-blue-900/20 border-blue/30 dark:border-blue-800">
+        <Card className="bg-blue/5 dark:bg-blue/20 border-blue/30 dark:border-blue/10">
           <CardHeader>
             <CardTitle className="text-lg">Recomendaciones del Coach IA</CardTitle>
           </CardHeader>
-          <CardContent className="text-slate-700 dark:text-slate-300 space-y-3">
+          <CardContent className="text-muted/70 dark:text-muted/30 space-y-3">
             <p>
               Basado en tu análisis: Tu comunicación es excepcional, pero necesitas ser más específico con números.
             </p>
@@ -232,7 +232,7 @@ export default function A3AnalyticsPage() {
         {/* Next Steps */}
         <div className="flex gap-4 flex-wrap">
           <Link href="/despega/a3/simulaciones-guiado" className="flex-1">
-            <Button className="w-full bg-blue hover:bg-blue-700">
+            <Button className="w-full bg-blue hover:bg-blue">
               <Zap className="w-4 h-4 mr-2" />
               Siguiente Simulación
             </Button>

@@ -582,15 +582,15 @@ export default function TestVerificationSystem() {
 
   // Get status icon
   const getStatusIcon = (status: TestCheck["status"], isActive = false) => {
-    if (isActive) return <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+    if (isActive) return <Loader2 className="h-4 w-4 animate-spin text-blue/50" />
 
     switch (status) {
       case "passed":
-        return <CheckCircle2 className="h-4 w-4 text-green-500" />
+        return <CheckCircle2 className="h-4 w-4 text-green" />
       case "failed":
         return <XCircle className="h-4 w-4 text-red-500" />
       case "running":
-        return <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+        return <Loader2 className="h-4 w-4 animate-spin text-blue/50" />
       default:
         return <Clock className="h-4 w-4 text-gray-300" />
     }
@@ -608,14 +608,14 @@ export default function TestVerificationSystem() {
         )
       case "running":
         return (
-          <Badge className="bg-blue-500 text-white text-xs">
+          <Badge className="bg-blue/50 text-white text-xs">
             <Loader2 className="h-3 w-3 mr-1 animate-spin" />
             Running
           </Badge>
         )
       case "passed":
         return (
-          <Badge className="bg-green-500 text-white text-xs">
+          <Badge className="bg-green/50 text-white text-xs">
             <CheckCircle className="h-3 w-3 mr-1" />
             Passed
           </Badge>
@@ -667,22 +667,22 @@ export default function TestVerificationSystem() {
     <div className="min-h-screen bg-gray-50 p-2 sm:p-4">
       <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         {/* Header - Mobile Optimized */}
-        <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <Card className="border-blue/20 bg-gradient-to-r from-blue/5 to-indigo-50">
           <CardHeader className="pb-3 sm:pb-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-blue-100 rounded-lg">
+                <div className="p-2 bg-blue/10 rounded-lg">
                   {isMobile ? (
-                    <Smartphone className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                    <Smartphone className="h-5 w-5 sm:h-6 sm:w-6 text-blue" />
                   ) : (
-                    <Monitor className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                    <Monitor className="h-5 w-5 sm:h-6 sm:w-6 text-blue" />
                   )}
                 </div>
                 <div>
-                  <CardTitle className="text-lg sm:text-xl text-blue-900">
+                  <CardTitle className="text-lg sm:text-xl text-blue">
                     {isMobile ? "Mobile" : "Desktop"} Test Verification
                   </CardTitle>
-                  <p className="text-blue-700 text-xs sm:text-sm">
+                  <p className="text-blue text-xs sm:text-sm">
                     Live automated testing on {isMobile ? "mobile devices" : "desktop browsers"}
                   </p>
                 </div>
@@ -698,9 +698,9 @@ export default function TestVerificationSystem() {
             <div className="flex items-center justify-between p-3 bg-white rounded-lg border">
               <div className="flex items-center gap-2">
                 {isMobile ? (
-                  <Smartphone className="h-4 w-4 text-blue-600" />
+                  <Smartphone className="h-4 w-4 text-blue" />
                 ) : (
-                  <Laptop className="h-4 w-4 text-blue-600" />
+                  <Laptop className="h-4 w-4 text-blue" />
                 )}
                 <span className="text-sm font-medium">{isMobile ? "Mobile Device" : "Desktop Browser"}</span>
               </div>
@@ -712,7 +712,7 @@ export default function TestVerificationSystem() {
             {/* Stats Grid - Mobile Responsive */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
               <div className="text-center p-2 sm:p-3 bg-white rounded-lg border">
-                <div className="flex items-center justify-center gap-1 sm:gap-2 text-green-600 mb-1">
+                <div className="flex items-center justify-center gap-1 sm:gap-2 text-green mb-1">
                   <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span className="text-lg sm:text-2xl font-bold">{passedTests}</span>
                 </div>
@@ -726,7 +726,7 @@ export default function TestVerificationSystem() {
                 <p className="text-xs sm:text-sm text-gray-600">Failed</p>
               </div>
               <div className="text-center p-2 sm:p-3 bg-white rounded-lg border">
-                <div className="flex items-center justify-center gap-1 sm:gap-2 text-blue-600 mb-1">
+                <div className="flex items-center justify-center gap-1 sm:gap-2 text-blue mb-1">
                   <Loader2 className={`h-4 w-4 sm:h-5 sm:w-5 ${runningTests > 0 ? "animate-spin" : ""}`} />
                   <span className="text-lg sm:text-2xl font-bold">{runningTests}</span>
                 </div>
@@ -747,7 +747,7 @@ export default function TestVerificationSystem() {
                 <Button
                   onClick={runAllTests}
                   disabled={isRunning}
-                  className="bg-blue-600 hover:bg-blue-700 flex-1 sm:flex-none"
+                  className="bg-blue hover:bg-blue flex-1 sm:flex-none"
                   size={isMobile ? "sm" : "default"}
                 >
                   {isRunning ? (
@@ -769,8 +769,8 @@ export default function TestVerificationSystem() {
               </div>
               {currentTest && (
                 <div className="flex items-center gap-2 text-xs sm:text-sm bg-white p-2 rounded border">
-                  <Zap className="h-3 w-3 sm:h-4 sm:w-4 text-blue-500" />
-                  <span className="text-blue-600 font-medium truncate">
+                  <Zap className="h-3 w-3 sm:h-4 sm:w-4 text-blue/50" />
+                  <span className="text-blue font-medium truncate">
                     {testFlows.find((f) => f.testId === currentTest)?.testName}
                   </span>
                   {currentCheck && <span className="text-gray-500 hidden sm:inline">• {currentCheck}</span>}
@@ -806,11 +806,11 @@ export default function TestVerificationSystem() {
                     key={testFlow.testId}
                     className={`transition-all ${
                       testFlow.overallStatus === "passed"
-                        ? "border-green-200 bg-green-50"
+                        ? "border-green/20 bg-green/5"
                         : testFlow.overallStatus === "failed"
                           ? "border-red-200 bg-red-50"
                           : testFlow.overallStatus === "running"
-                            ? "border-blue-200 bg-blue-50 shadow-lg"
+                            ? "border-blue/20 bg-blue/5 shadow-lg"
                             : "border-gray-200"
                     }`}
                   >
@@ -824,7 +824,7 @@ export default function TestVerificationSystem() {
                                 : testFlow.overallStatus === "failed"
                                   ? "bg-red-100"
                                   : testFlow.overallStatus === "running"
-                                    ? "bg-blue-100"
+                                    ? "bg-blue/10"
                                     : "bg-gray-100"
                             }`}
                           >
@@ -931,7 +931,7 @@ export default function TestVerificationSystem() {
                               : log.includes("❌") || log.includes("💥")
                                 ? "text-red-400"
                                 : log.includes("🚀") || log.includes("🎉")
-                                  ? "text-blue-400"
+                                  ? "text-blue/40"
                                   : log.includes("⏳")
                                     ? "text-yellow-400"
                                     : "text-gray-300"
@@ -950,12 +950,12 @@ export default function TestVerificationSystem() {
 
         {/* Summary Results - Mobile Optimized */}
         {!isRunning && (passedTests > 0 || failedTests > 0) && (
-          <Card className={failedTests === 0 ? "border-green-200 bg-green-50" : "border-yellow-200 bg-yellow-50"}>
+          <Card className={failedTests === 0 ? "border-green/20 bg-green/5" : "border-yellow-200 bg-yellow-50"}>
             <CardContent className="p-4 sm:p-6">
               <div className="text-center space-y-3 sm:space-y-4">
                 {failedTests === 0 ? (
                   <>
-                    <CheckCircle className="h-12 w-12 sm:h-16 sm:w-16 text-green-500 mx-auto" />
+                    <CheckCircle className="h-12 w-12 sm:h-16 sm:w-16 text-green mx-auto" />
                     <div>
                       <h3 className="text-xl sm:text-2xl font-bold text-green-900 mb-2">
                         🎉 All {isMobile ? "Mobile" : "Desktop"} Tests Passed!

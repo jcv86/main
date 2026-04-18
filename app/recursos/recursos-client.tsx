@@ -32,7 +32,7 @@ const developmentAreas = [
     id: "autoconocimiento",
     name: "Autoconocimiento",
     icon: Brain,
-    color: "bg-purple-500",
+    color: "bg-purple/50",
     description: "Comprende tu personalidad, valores y motivaciones",
     relatedTests: ["disc", "mbti", "big-five"],
   },
@@ -48,7 +48,7 @@ const developmentAreas = [
     id: "liderazgo",
     name: "Liderazgo",
     icon: Users,
-    color: "bg-blue-500",
+    color: "bg-blue/50",
     description: "Desarrolla habilidades para liderar equipos",
     relatedTests: ["disc", "soft-skills"],
   },
@@ -56,7 +56,7 @@ const developmentAreas = [
     id: "carrera",
     name: "Desarrollo de Carrera",
     icon: Briefcase,
-    color: "bg-green-500",
+    color: "bg-green/50",
     description: "Planifica y acelera tu trayectoria profesional",
     relatedTests: ["riasec", "soft-skills"],
   },
@@ -502,7 +502,7 @@ export default function RecursosClient() {
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <BookOpen className="h-8 w-8 text-blue-600" />
+          <BookOpen className="h-8 w-8 text-blue" />
           <h1 className="text-3xl font-bold">Biblioteca de Recursos DTC</h1>
         </div>
         <p className="text-gray-600">
@@ -515,7 +515,7 @@ export default function RecursosClient() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <BarChart3 className="h-8 w-8 text-blue-600" />
+              <BarChart3 className="h-8 w-8 text-blue" />
               <div>
                 <p className="text-2xl font-bold">{testResults.length}</p>
                 <p className="text-sm text-gray-600">Tests Completados</p>
@@ -539,7 +539,7 @@ export default function RecursosClient() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <CheckCircle className="h-8 w-8 text-green-600" />
+              <CheckCircle className="h-8 w-8 text-green" />
               <div>
                 <p className="text-2xl font-bold">{completedChallenges.length}</p>
                 <p className="text-sm text-gray-600">Retos Completados</p>
@@ -551,7 +551,7 @@ export default function RecursosClient() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <Target className="h-8 w-8 text-purple-600" />
+              <Target className="h-8 w-8 text-purple" />
               <div>
                 <p className="text-2xl font-bold">{developmentAreas.length}</p>
                 <p className="text-sm text-gray-600">Áreas de Desarrollo</p>
@@ -563,11 +563,11 @@ export default function RecursosClient() {
 
       {/* Personalization Banner */}
       {testResults.length === 0 && (
-        <Card className="mb-8 border-2 border-blue-200 bg-gradient-to-r from-blue-50 to-purple-50">
+        <Card className="mb-8 border-2 border-blue/20 bg-gradient-to-r from-blue/5 to-purple-50">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <Sparkles className="h-10 w-10 text-blue-600" />
+                <Sparkles className="h-10 w-10 text-blue" />
                 <div>
                   <h3 className="font-bold text-lg">Personaliza tus Recomendaciones</h3>
                   <p className="text-gray-600">
@@ -575,7 +575,7 @@ export default function RecursosClient() {
                   </p>
                 </div>
               </div>
-              <Button onClick={() => router.push("/test")} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={() => router.push("/test")} className="bg-blue hover:bg-blue">
                 Hacer Tests
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
@@ -593,7 +593,7 @@ export default function RecursosClient() {
         <div className="flex flex-wrap gap-2">
           <Badge
             variant={selectedArea === "all" ? "default" : "outline"}
-            className="cursor-pointer hover:bg-blue-100 px-4 py-2"
+            className="cursor-pointer hover:bg-blue/10 px-4 py-2"
             onClick={() => setSelectedArea("all")}
           >
             Todas las Áreas
@@ -602,7 +602,7 @@ export default function RecursosClient() {
             <Badge
               key={area.id}
               variant={selectedArea === area.id ? "default" : "outline"}
-              className="cursor-pointer hover:bg-blue-100 px-4 py-2"
+              className="cursor-pointer hover:bg-blue/10 px-4 py-2"
               onClick={() => setSelectedArea(area.id)}
             >
               <area.icon className="h-4 w-4 mr-1" />
@@ -678,7 +678,7 @@ export default function RecursosClient() {
                       return (
                         <Card
                           key={challenge.id}
-                          className={`transition-all ${isCompleted ? "bg-green-50 border-green-200" : ""}`}
+                          className={`transition-all ${isCompleted ? "bg-green/5 border-green/20" : ""}`}
                         >
                           <CardContent className="pt-6">
                             <div className="flex items-start gap-4">
@@ -706,7 +706,7 @@ export default function RecursosClient() {
                                     variant="outline"
                                     className={
                                       challenge.difficulty === "Fácil"
-                                        ? "border-green-500 text-green-600"
+                                        ? "border-green-500 text-green"
                                         : challenge.difficulty === "Medio"
                                           ? "border-yellow-500 text-yellow-600"
                                           : "border-red-500 text-red-600"
@@ -730,7 +730,7 @@ export default function RecursosClient() {
       </div>
 
       {/* CTA Final */}
-      <Card className="mt-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+      <Card className="mt-8 bg-gradient-to-r from-blue to-purple-600 text-white">
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div>

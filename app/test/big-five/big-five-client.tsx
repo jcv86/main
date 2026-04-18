@@ -133,12 +133,12 @@ export default function BigFiveTestClient() {
   const progress = ((currentQuestion + 1) / bigFiveQuestions.length) * 100
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-900 dark:to-slate-800 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue/5 to-purple-50 dark:from-slate-900 dark:to-slate-800 p-4">
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <div className="flex items-center justify-between mb-4">
             <Badge variant="outline">{currentQuestion + 1} de {bigFiveQuestions.length}</Badge>
-            <Brain className="w-5 h-5 text-indigo-600" />
+            <Brain className="w-5 h-5 text-blue" />
           </div>
           <Progress value={progress} className="mb-4" />
           <CardTitle>{question.question}</CardTitle>
@@ -148,7 +148,7 @@ export default function BigFiveTestClient() {
           <RadioGroup value={answers[currentQuestion]?.toString() || ""} onValueChange={(v) => handleAnswer(parseInt(v))}>
             <div className="space-y-2">
               {["Totalmente en desacuerdo", "En desacuerdo", "Neutral", "De acuerdo", "Totalmente de acuerdo"].map((label, idx) => (
-                <Label key={idx} className="flex items-center gap-3 cursor-pointer p-2 rounded hover:bg-slate-100">
+                <Label key={idx} className="flex items-center gap-3 cursor-pointer p-2 rounded hover:bg-muted/10">
                   <RadioGroupItem value={(idx + 1).toString()} />
                   <span className="text-sm">{label}</span>
                 </Label>
@@ -166,7 +166,7 @@ export default function BigFiveTestClient() {
                 Siguiente <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             ) : (
-              <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-indigo-600 hover:bg-indigo-700">
+              <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-blue hover:bg-indigo-700">
                 {isSubmitting ? "Procesando..." : "Completar Test"}
               </Button>
             )}

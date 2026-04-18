@@ -17,7 +17,7 @@ export default function InvestorPitch() {
       {/* Header */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-4 max-w-7xl flex items-center justify-between">
-          <Link href="/" className="text-lg font-semibold text-purple-600 hover:text-purple-700">
+          <Link href="/" className="text-lg font-semibold text-purple hover:text-purple">
             ← Volver al Inicio
           </Link>
           <h1 className="text-xl font-bold text-gray-900">Presentación para Inversionistas</h1>
@@ -26,27 +26,27 @@ export default function InvestorPitch() {
 
       <main className="container mx-auto px-4 py-12 max-w-6xl">
         {/* Hero Section */}
-        <div className="bg-gradient-to-r from-purple-600 via-blue-600 to-emerald-600 rounded-3xl p-12 text-white mb-12 relative overflow-hidden">
+        <div className="bg-gradient-to-r from-purple via-blue to-emerald-600 rounded-3xl p-12 text-white mb-12 relative overflow-hidden">
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10">
-            <div className="text-purple-100 text-sm font-semibold mb-2 uppercase tracking-wide">
+            <div className="text-purple/10 text-sm font-semibold mb-2 uppercase tracking-wide">
               Oportunidad de Inversión
             </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-4">Despega Tu Carrera</h1>
-            <p className="text-2xl text-purple-100 mb-6">
+            <p className="text-2xl text-purple/10 mb-6">
               Democratizando el Desarrollo Profesional en América Latina mediante IA
             </p>
             <div className="flex flex-wrap gap-4">
               <div className="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-3">
-                <div className="text-sm text-purple-100">Fecha de Lanzamiento</div>
+                <div className="text-sm text-purple/10">Fecha de Lanzamiento</div>
                 <div className="text-2xl font-bold">Q1 2026</div>
               </div>
               <div className="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-3">
-                <div className="text-sm text-purple-100">Mercado</div>
+                <div className="text-sm text-purple/10">Mercado</div>
                 <div className="text-2xl font-bold">Chile (LATAM)</div>
               </div>
               <div className="bg-white/20 backdrop-blur-sm rounded-xl px-6 py-3">
-                <div className="text-sm text-purple-100">Etapa</div>
+                <div className="text-sm text-purple/10">Etapa</div>
                 <div className="text-2xl font-bold">Pre-Lanzamiento</div>
               </div>
             </div>
@@ -88,14 +88,14 @@ export default function InvestorPitch() {
 
         {/* The Solution */}
         <section className="mb-12">
-          <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 shadow-lg text-white">
+          <div className="bg-gradient-to-r from-purple to-blue rounded-2xl p-8 shadow-lg text-white">
             <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
               <span className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl backdrop-blur-sm">
                 ✨
               </span>
               Nuestra Solución
             </h2>
-            <p className="text-xl text-purple-100 mb-8">
+            <p className="text-xl text-purple/10 mb-8">
               Una plataforma de desarrollo profesional impulsada por IA que combina pruebas psicométricas validadas
               científicamente, contenido de clase mundial y coaching personalizado - accesible para todos.
             </p>
@@ -104,21 +104,21 @@ export default function InvestorPitch() {
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <div className="text-4xl mb-3">🧠</div>
                 <h3 className="font-bold text-lg mb-2">Sistema Cerebro AI</h3>
-                <p className="text-purple-100 text-sm">
+                <p className="text-purple/10 text-sm">
                   Coach impulsado por GPT-4 con búsqueda semántica en 120+ libros y 100+ recursos del mercado chileno
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <div className="text-4xl mb-3">📊</div>
                 <h3 className="font-bold text-lg mb-2">6 Pruebas Psicométricas</h3>
-                <p className="text-purple-100 text-sm">
+                <p className="text-purple/10 text-sm">
                   Pruebas DISC, MBTI, Big Five, RIASEC, EQ y Soft Skills con insights generados por IA
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <div className="text-4xl mb-3">📚</div>
                 <h3 className="font-bold text-lg mb-2">Biblioteca Profesional</h3>
-                <p className="text-purple-100 text-sm">
+                <p className="text-purple/10 text-sm">
                   120+ libros completos en texto sobre liderazgo, productividad, EQ y desarrollo de carrera
                 </p>
               </div>
@@ -135,29 +135,29 @@ export default function InvestorPitch() {
             </h2>
 
             <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div className="bg-gradient-to-br from-emerald-50 to-blue-50 rounded-xl p-6 border border-emerald-100">
+              <div className="bg-gradient-to-br from-green/5 to-blue/5 rounded-xl p-6 border border-emerald-100">
                 <h3 className="font-bold text-2xl mb-4 text-gray-900">Mercado de Chile</h3>
                 <ul className="space-y-3 text-gray-700">
                   <li className="flex items-start gap-3">
-                    <span className="w-2 h-2 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="w-2 h-2 bg-green rounded-full mt-2 flex-shrink-0"></span>
                     <span>
                       <strong>9.5M+ profesionales</strong> en el trabajo chileno
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="w-2 h-2 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="w-2 h-2 bg-green rounded-full mt-2 flex-shrink-0"></span>
                     <span>
                       <strong>$2.4B+ tamaño del mercado</strong> de desarrollo profesional
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="w-2 h-2 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="w-2 h-2 bg-green rounded-full mt-2 flex-shrink-0"></span>
                     <span>
                       <strong>73% penetración de internet</strong> con creciente adopción digital
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="w-2 h-2 bg-emerald-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="w-2 h-2 bg-green rounded-full mt-2 flex-shrink-0"></span>
                     <span>
                       <strong>Tasa de educación alta</strong> - 60%+ con educación universitaria
                     </span>
@@ -165,29 +165,29 @@ export default function InvestorPitch() {
                 </ul>
               </div>
 
-              <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-xl p-6 border border-blue-100">
+              <div className="bg-gradient-to-br from-blue/5 to-purple-50 rounded-xl p-6 border border-blue/10">
                 <h3 className="font-bold text-2xl mb-4 text-gray-900">Expansión en LATAM</h3>
                 <ul className="space-y-3 text-gray-700">
                   <li className="flex items-start gap-3">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="w-2 h-2 bg-blue rounded-full mt-2 flex-shrink-0"></span>
                     <span>
                       <strong>280M+ profesionales</strong> en la región de América Latina
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="w-2 h-2 bg-blue rounded-full mt-2 flex-shrink-0"></span>
                     <span>
                       <strong>$65B+ mercado</strong> para capacitación profesional en LATAM
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="w-2 h-2 bg-blue rounded-full mt-2 flex-shrink-0"></span>
                     <span>
                       <strong>15% CAGR</strong> en e-learning y educación digital
                     </span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full mt-2 flex-shrink-0"></span>
+                    <span className="w-2 h-2 bg-blue rounded-full mt-2 flex-shrink-0"></span>
                     <span>
                       <strong>Idioma y cultura compartidos</strong> facilitan la expansión rápida
                     </span>
@@ -196,19 +196,19 @@ export default function InvestorPitch() {
               </div>
             </div>
 
-            <div className="bg-purple-50 rounded-xl p-6 border border-purple-100">
+            <div className="bg-purple/5 rounded-xl p-6 border border-purple/10">
               <h3 className="font-bold text-xl mb-3 text-gray-900">Tendencias de Crecimiento</h3>
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-purple-600 mb-1">Primero en IA</div>
+                  <div className="text-3xl font-bold text-purple mb-1">Primero en IA</div>
                   <p className="text-sm text-gray-600">Gen Z y Millennials demandan soluciones impulsadas por IA</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-600 mb-1">Trabajo Remoto</div>
+                  <div className="text-3xl font-bold text-blue mb-1">Trabajo Remoto</div>
                   <p className="text-sm text-gray-600">Mayor necesidad de desarrollo profesional autodirigido</p>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-emerald-600 mb-1">Brecha de Habilidades</div>
+                  <div className="text-3xl font-bold text-green mb-1">Brecha de Habilidades</div>
                   <p className="text-sm text-gray-600">
                     Empresas invirtiendo fuertemente en el reforzamiento de empleados
                   </p>
@@ -222,14 +222,14 @@ export default function InvestorPitch() {
         <section className="mb-12">
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
-              <span className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-2xl">💰</span>
+              <span className="w-12 h-12 bg-blue/10 rounded-xl flex items-center justify-center text-2xl">💰</span>
               Modelo de Negocio
             </h2>
 
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-6 border border-purple-100">
+              <div className="bg-gradient-to-br from-purple/5 to-blue/5 rounded-xl p-6 border border-purple/10">
                 <h3 className="font-bold text-xl mb-4 text-gray-900">Freemium (Lanzamiento)</h3>
-                <div className="text-3xl font-bold text-purple-600 mb-2">$0</div>
+                <div className="text-3xl font-bold text-purple mb-2">$0</div>
                 <ul className="space-y-2 text-gray-700 text-sm mb-4">
                   <li>✓ Todas las 6 pruebas psicométricas</li>
                   <li>✓ Acceso completo a la biblioteca (120+ libros)</li>
@@ -241,9 +241,9 @@ export default function InvestorPitch() {
                 </p>
               </div>
 
-              <div className="bg-gradient-to-br from-blue-50 to-emerald-50 rounded-xl p-6 border border-blue-100">
+              <div className="bg-gradient-to-br from-blue/5 to-emerald-50 rounded-xl p-6 border border-blue/10">
                 <h3 className="font-bold text-xl mb-4 text-gray-900">Premium Individual</h3>
-                <div className="text-3xl font-bold text-blue-600 mb-2">$29/mes</div>
+                <div className="text-3xl font-bold text-blue mb-2">$29/mes</div>
                 <ul className="space-y-2 text-gray-700 text-sm mb-4">
                   <li>✓ Todo en Gratuito</li>
                   <li>✓ Sesiones de coaching de IA ilimitadas</li>
@@ -254,9 +254,9 @@ export default function InvestorPitch() {
                 <p className="text-xs text-gray-600">Objetivo: conversión de 5-10% de usuarios gratuitos</p>
               </div>
 
-              <div className="bg-gradient-to-br from-emerald-50 to-purple-50 rounded-xl p-6 border border-emerald-100">
+              <div className="bg-gradient-to-br from-green/5 to-purple-50 rounded-xl p-6 border border-emerald-100">
                 <h3 className="font-bold text-xl mb-4 text-gray-900">Empresarial (B2B)</h3>
-                <div className="text-3xl font-bold text-emerald-600 mb-2">Personalizado</div>
+                <div className="text-3xl font-bold text-green mb-2">Personalizado</div>
                 <ul className="space-y-2 text-gray-700 text-sm mb-4">
                   <li>✓ Dashboards y análisis de equipo</li>
                   <li>✓ Evaluaciones masivas</li>
@@ -280,7 +280,7 @@ export default function InvestorPitch() {
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <div className="bg-purple-50 rounded-lg p-5 border border-purple-100">
+                <div className="bg-purple/5 rounded-lg p-5 border border-purple/10">
                   <h3 className="font-bold text-lg mb-2 text-gray-900">🧠 Tecnología AI Avanzada</h3>
                   <p className="text-gray-700 text-sm">
                     Sistema Cerebro propio con búsqueda semántica en 120+ libros. Los competidores ofrecen chatbots
@@ -288,7 +288,7 @@ export default function InvestorPitch() {
                   </p>
                 </div>
 
-                <div className="bg-blue-50 rounded-lg p-5 border border-blue-100">
+                <div className="bg-blue/5 rounded-lg p-5 border border-blue/10">
                   <h3 className="font-bold text-lg mb-2 text-gray-900">🇨🇱 Expertise en el Mercado de Chile</h3>
                   <p className="text-gray-700 text-sm">
                     Construido específicamente para profesionales chilenos con datos del mercado laboral chileno,
@@ -297,7 +297,7 @@ export default function InvestorPitch() {
                   </p>
                 </div>
 
-                <div className="bg-emerald-50 rounded-lg p-5 border border-emerald-100">
+                <div className="bg-green/5 rounded-lg p-5 border border-emerald-100">
                   <h3 className="font-bold text-lg mb-2 text-gray-900">📊 Conjunto Completo de Evaluaciones</h3>
                   <p className="text-gray-700 text-sm">
                     6 pruebas validadas científicamente en una plataforma. Los competidores suelen ofrecer 1-2 pruebas,
@@ -315,7 +315,7 @@ export default function InvestorPitch() {
                   </p>
                 </div>
 
-                <div className="bg-pink-50 rounded-lg p-5 border border-pink-100">
+                <div className="bg-red/5 rounded-lg p-5 border border-pink-100">
                   <h3 className="font-bold text-lg mb-2 text-gray-900">⚡ Stack Tecnológico Moderno</h3>
                   <p className="text-gray-700 text-sm">
                     Construido con Next.js 15, React 19, PostgreSQL con pgvector. Los competidores utilizan tecnología
@@ -323,7 +323,7 @@ export default function InvestorPitch() {
                   </p>
                 </div>
 
-                <div className="bg-indigo-50 rounded-lg p-5 border border-indigo-100">
+                <div className="bg-blue/5 rounded-lg p-5 border border-indigo-100">
                   <h3 className="font-bold text-lg mb-2 text-gray-900">🎯 Acceso Freemium</h3>
                   <p className="text-gray-700 text-sm">
                     Acceso completo a las características principales de forma gratuita. Los competidores cobran $50-300
@@ -339,12 +339,12 @@ export default function InvestorPitch() {
         <section className="mb-12">
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
-              <span className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-2xl">📅</span>
+              <span className="w-12 h-12 bg-purple/10 rounded-xl flex items-center justify-center text-2xl">📅</span>
               Desarrollo y Roadmap
             </h2>
 
             <div className="space-y-6">
-              <div className="border-l-4 border-green-600 pl-6 bg-green-50 py-4 rounded-r-xl">
+              <div className="border-l-4 border-green-600 pl-6 bg-green/5 py-4 rounded-r-xl">
                 <h3 className="font-bold text-xl mb-2 text-gray-900">✅ Completado (Estado Actual)</h3>
                 <ul className="space-y-2 text-gray-700">
                   <li>• Desarrollo completo de la plataforma - 185 tablas de base de datos</li>
@@ -356,7 +356,7 @@ export default function InvestorPitch() {
                 </ul>
               </div>
 
-              <div className="border-l-4 border-purple-600 pl-6 py-4">
+              <div className="border-l-4 border-purple pl-6 py-4">
                 <h3 className="font-bold text-xl mb-2 text-gray-900">Q1 2026 - Lanzamiento Oficial</h3>
                 <ul className="space-y-2 text-gray-700">
                   <li>• Lanzamiento público de la plataforma en Chile</li>
@@ -366,7 +366,7 @@ export default function InvestorPitch() {
                 </ul>
               </div>
 
-              <div className="border-l-4 border-blue-600 pl-6 py-4">
+              <div className="border-l-4 border-blue pl-6 py-4">
                 <h3 className="font-bold text-xl mb-2 text-gray-900">Q2-Q4 2026</h3>
                 <ul className="space-y-2 text-gray-700">
                   <li>• Lanzamiento de la capa Premium Individual ($29/mes)</li>
@@ -394,48 +394,48 @@ export default function InvestorPitch() {
         <section className="mb-12">
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
-              <span className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center text-2xl">👥</span>
+              <span className="w-12 h-12 bg-purple/10 rounded-xl flex items-center justify-center text-2xl">👥</span>
               Equipo
             </h2>
 
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-xl p-6 border border-purple-100">
-                <div className="w-20 h-20 bg-purple-200 rounded-full flex items-center justify-center text-3xl font-bold text-purple-700 mb-4">
+              <div className="bg-gradient-to-br from-purple/5 to-blue/5 rounded-xl p-6 border border-purple/10">
+                <div className="w-20 h-20 bg-purple-200 rounded-full flex items-center justify-center text-3xl font-bold text-purple mb-4">
                   JC
                 </div>
                 <h3 className="font-bold text-2xl mb-2 text-gray-900">Joaquin Covarrubias</h3>
-                <div className="text-purple-600 font-semibold mb-3">Fundador y CEO</div>
+                <div className="text-purple font-semibold mb-3">Fundador y CEO</div>
                 <p className="text-gray-700 mb-4">
                   Emprendedor visionario con comprensión profunda del mercado de desarrollo profesional chileno. Ha
                   conseguido financiamiento inicial y ha proporcionado dirección estratégica para el desarrollo de la
                   plataforma.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+                  <span className="px-3 py-1 bg-purple/10 text-purple rounded-full text-sm">
                     Estrategia de Negocio
                   </span>
-                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">
+                  <span className="px-3 py-1 bg-purple/10 text-purple rounded-full text-sm">
                     Investigación de Mercado
                   </span>
-                  <span className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm">Financiamiento</span>
+                  <span className="px-3 py-1 bg-purple/10 text-purple rounded-full text-sm">Financiamiento</span>
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-blue-50 to-emerald-50 rounded-xl p-6 border border-blue-100">
-                <div className="w-20 h-20 bg-blue-200 rounded-full flex items-center justify-center text-3xl font-bold text-blue-700 mb-4">
+              <div className="bg-gradient-to-br from-blue/5 to-emerald-50 rounded-xl p-6 border border-blue/10">
+                <div className="w-20 h-20 bg-blue/20 rounded-full flex items-center justify-center text-3xl font-bold text-blue mb-4">
                   TC
                 </div>
                 <h3 className="font-bold text-2xl mb-2 text-gray-900">Travis Comber</h3>
-                <div className="text-blue-600 font-semibold mb-3">CTO y Desarrollador Líder</div>
+                <div className="text-blue font-semibold mb-3">CTO y Desarrollador Líder</div>
                 <p className="text-gray-700 mb-4">
                   Desarrollador Fullstack que diseñó y construyó toda la plataforma desde cero. Experto en Next.js,
                   React, integración de IA y diseño de sistemas escalables. Responsable de toda la implementación
                   técnica.
                 </p>
                 <div className="flex flex-wrap gap-2">
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Desarrollo Fullstack</span>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">Integración de IA</span>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-sm">
+                  <span className="px-3 py-1 bg-blue/10 text-blue rounded-full text-sm">Desarrollo Fullstack</span>
+                  <span className="px-3 py-1 bg-blue/10 text-blue rounded-full text-sm">Integración de IA</span>
+                  <span className="px-3 py-1 bg-blue/10 text-blue rounded-full text-sm">
                     Diseño de Arquitectura de Sistema
                   </span>
                 </div>
@@ -446,9 +446,9 @@ export default function InvestorPitch() {
 
         {/* The Ask */}
         <section className="mb-12">
-          <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-12 text-white shadow-xl">
+          <div className="bg-gradient-to-r from-purple to-blue rounded-2xl p-12 text-white shadow-xl">
             <h2 className="text-4xl font-bold mb-6">Oportunidad de Inversión</h2>
-            <p className="text-xl text-purple-100 mb-8">
+            <p className="text-xl text-purple/10 mb-8">
               Buscamos inversores estratégicos para acelerar el crecimiento, expandir nuestro equipo y escalar en
               América Latina.
             </p>
@@ -456,7 +456,7 @@ export default function InvestorPitch() {
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <h3 className="font-bold text-2xl mb-2">Uso de Fondos</h3>
-                <ul className="space-y-2 text-purple-100 text-sm">
+                <ul className="space-y-2 text-purple/10 text-sm">
                   <li>• Marketing y adquisición de usuarios (40%)</li>
                   <li>• Expansión del equipo (30%)</li>
                   <li>• Desarrollo del producto (20%)</li>
@@ -466,7 +466,7 @@ export default function InvestorPitch() {
 
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <h3 className="font-bold text-2xl mb-2">Objetivos a 12 Meses</h3>
-                <ul className="space-y-2 text-purple-100 text-sm">
+                <ul className="space-y-2 text-purple/10 text-sm">
                   <li>• 25,000 usuarios registrados</li>
                   <li>• 2,000 suscriptores pagos</li>
                   <li>• 10 clientes empresariales</li>
@@ -476,7 +476,7 @@ export default function InvestorPitch() {
 
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
                 <h3 className="font-bold text-2xl mb-2">Estrategia de Salida</h3>
-                <ul className="space-y-2 text-purple-100 text-sm">
+                <ul className="space-y-2 text-purple/10 text-sm">
                   <li>• Adquisición por líder de EdTech</li>
                   <li>• Objetivo de adquisición en HR Tech</li>
                   <li>• Posibles compradores estratégicos: LinkedIn, Coursera, Udemy</li>
@@ -491,7 +491,7 @@ export default function InvestorPitch() {
                   <span className="text-2xl">✓</span>
                   <div>
                     <div className="font-bold mb-1">Plataforma Completa Construida</div>
-                    <div className="text-purple-100 text-sm">
+                    <div className="text-purple/10 text-sm">
                       Sin riesgo de desarrollo - lista para lanzar y escalar de inmediato
                     </div>
                   </div>
@@ -500,14 +500,14 @@ export default function InvestorPitch() {
                   <span className="text-2xl">✓</span>
                   <div>
                     <div className="font-bold mb-1">Mercado Dirigible Grande</div>
-                    <div className="text-purple-100 text-sm">$65B+ mercado LATAM con crecimiento anual del 15%</div>
+                    <div className="text-purple/10 text-sm">$65B+ mercado LATAM con crecimiento anual del 15%</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <span className="text-2xl">✓</span>
                   <div>
                     <div className="font-bold mb-1">Monetización Clara</div>
-                    <div className="text-purple-100 text-sm">
+                    <div className="text-purple/10 text-sm">
                       Modelo freemium probado con oportunidad empresarial B2B
                     </div>
                   </div>
@@ -516,7 +516,7 @@ export default function InvestorPitch() {
                   <span className="text-2xl">✓</span>
                   <div>
                     <div className="font-bold mb-1">Ventaja Primero en IA</div>
-                    <div className="text-purple-100 text-sm">
+                    <div className="text-purple/10 text-sm">
                       Tecnología AI propia que los competidores llevarán años en replicar
                     </div>
                   </div>
@@ -536,7 +536,7 @@ export default function InvestorPitch() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="mailto:joaquin@despegatucarrera.cl"
-                className="px-8 py-4 bg-purple-600 text-white rounded-xl font-semibold hover:bg-purple-700 transition-colors"
+                className="px-8 py-4 bg-purple text-white rounded-xl font-semibold hover:bg-purple transition-colors"
               >
                 Contacta a Joaquin (CEO)
               </a>
