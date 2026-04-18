@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase-server"
+import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 
 // Rate limiting store (simple in-memory for now, can be upgraded to Redis)

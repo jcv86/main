@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase-server"
+import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
 import { performStatisticalTest, calculateConfidenceInterval, interpretEffectSize } from "@/lib/statistics"
 
