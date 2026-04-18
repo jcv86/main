@@ -104,12 +104,12 @@ export function ConversationalInterview({
       await updatePreferences({ interviewer_avatar_id: selectedInterviewerId })
     }
     setStage('interview')
-  }
-    setStage('interview')
     setCurrentQuestionIdx(0)
     const firstQuestion = INTERVIEW_QUESTIONS[level][0].replace('{role}', role)
     setInterviewerMessage(firstQuestion)
   }
+
+  const clearError = () => setError(null)
 
   const handleSendResponse = async (e: React.FormEvent) => {
     e.preventDefault()
