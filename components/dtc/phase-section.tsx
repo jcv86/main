@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 
 type Phase = 'ritual' | 'exploration' | 'training' | 'reality'
 
-interface PhaseSectionProps extends React.HTMLAttributes<HTMLDivElement> {
+interface PhaseSectionProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   phase?: Phase
   title?: React.ReactNode
   description?: React.ReactNode
