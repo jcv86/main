@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS interview_session_gamification (
   difficulty_level VARCHAR(50),
   total_tips_used_free INTEGER DEFAULT 0,
   total_tips_used_premium INTEGER DEFAULT 0,
-  total_questions INTEGERS DEFAULT 0,
+  total_questions INTEGER DEFAULT 0,
   time_spent_minutes INTEGER,
   overall_score INTEGER,
   tips_purchased_this_session INTEGER DEFAULT 0,
