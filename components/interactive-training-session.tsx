@@ -38,12 +38,23 @@ export function InteractiveTrainingSession({
   const handleStartRecording = async () => {
     try {
       setError(null)
+      console.log('[v0] Starting recording - requesting media devices')
+      
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { width: 1280, height: 720 },
-        audio: true
+        video: { 
+          width: { ideal: 1280 }, 
+          height: { ideal: 720 },
+          facingMode: 'user'
+        },
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true
+        }
       })
 
+      console.log('[v0] Stream obtained:', stream.getTracks())
       streamRef.current = stream
+      
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'video/webm;codecs=vp8,opus'
       })
@@ -52,10 +63,12 @@ export function InteractiveTrainingSession({
       mediaRecorderRef.current = mediaRecorder
 
       mediaRecorder.ondataavailable = (e) => {
+        console.log('[v0] Data available:', e.data.size)
         chunksRef.current.push(e.data)
       }
 
       mediaRecorder.onstop = () => {
+        console.log('[v0] Recording stopped, chunks:', chunksRef.current.length)
         const blob = new Blob(chunksRef.current, { type: 'video/webm' })
         setRecordedVideo(blob)
         setVideoUrl(URL.createObjectURL(blob))
@@ -66,12 +79,15 @@ export function InteractiveTrainingSession({
       setIsRecording(true)
       setStep('recording')
 
+      console.log('[v0] Setting video ref srcObject')
       if (videoRef.current) {
         videoRef.current.srcObject = stream
+        videoRef.current.play().catch(e => console.error('[v0] Play error:', e))
       }
     } catch (err) {
-      setError('No se pudo acceder a la cámara o micrófono. Verifica los permisos.')
+      const errorMsg = err instanceof Error ? err.message : 'Unknown error'
       console.error('[v0] Recording error:', err)
+      setError(`No se pudo acceder a la cámara o micrófono. Error: ${errorMsg}`)
     }
   }
 

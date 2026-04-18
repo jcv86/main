@@ -6,8 +6,9 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
-import { ArrowLeft, BookOpen, Play, Lock, CheckCircle2, Brain, Target, Video } from 'lucide-react'
+import { ArrowLeft, BookOpen, Play, Lock, CheckCircle2, Brain, Target, Video, Lightbulb, Loader2 } from 'lucide-react'
 import { InteractiveTrainingSession } from '@/components/interactive-training-session'
+import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 
 const TRAINING_MODULES = [
   {
@@ -81,11 +82,41 @@ export default function GuidedTrainingPage() {
   const [selectedModule, setSelectedModule] = useState<any>(null)
   const [currentLesson, setCurrentLesson] = useState(0)
   const [showVideoSession, setShowVideoSession] = useState(false)
+  const [aiTip, setAiTip] = useState<string | null>(null)
+  const [aiLoading, setAiLoading] = useState(false)
 
   const handleStartModule = (module: any) => {
     if (module.status !== 'locked') {
       setSelectedModule(module)
       setCurrentLesson(0)
+      setAiTip(null) // Reset tips when changing modules
+    }
+  }
+
+  const generateAiTip = async (lessonTitle: string, lessonDescription: string) => {
+    setAiLoading(true)
+    try {
+      const response = await fetch('/api/conozcamonos/ai-suggestion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question: `Explícame sobre: ${lessonTitle}. Contexto: ${lessonDescription}`,
+          currentResponse: ''
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to generate tip')
+      }
+
+      const data = await response.json()
+      setAiTip(data.suggestion)
+      console.log('[v0] AI tip generated for lesson:', lessonTitle)
+    } catch (error) {
+      console.error('[v0] Error generating AI tip:', error)
+      setAiTip('No se pudo generar la sugerencia en este momento. Intenta de nuevo.')
+    } finally {
+      setAiLoading(false)
     }
   }
 
@@ -132,45 +163,81 @@ export default function GuidedTrainingPage() {
             {/* Coach Content Area */}
             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-lg p-8 min-h-64 space-y-4">
               <div className="space-y-4 text-slate-700 dark:text-slate-300">
-                <p className="font-bold text-lg text-slate-900 dark:text-white">
-                  Tu Coach IA explica:
-                </p>
-                
-                {selectedModule.id === 1 && currentLesson === 2 && (
-                  <div className="space-y-3">
-                    <p>
-                      La Acción es donde demuestras TU impacto personal. No lo que el equipo hizo, sino específicamente qué HICISTE TÚ.
-                    </p>
-                    <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue-600">
-                      <p className="font-semibold mb-2">Ejemplo BUENO:</p>
-                      <p className="text-sm">
-                        "YO rediseñé la arquitectura, implementé testing automático, y mentoricé a 3 developers junior"
-                      </p>
-                    </div>
-                    <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-red-600">
-                      <p className="font-semibold mb-2 text-red-600">Ejemplo MALO:</p>
-                      <p className="text-sm">
-                        "El equipo trabajó duro y mejoramos el sistema"
-                      </p>
-                    </div>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 italic">
-                      Usa "yo", "decidí", "implementé", "resolví" - verbos de acción clara.
-                    </p>
-                  </div>
-                )}
+                <div className="flex items-center justify-between">
+                  <p className="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                    <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    Tu Coach IA explica:
+                  </p>
+                  <Button
+                    onClick={() => generateAiTip(lesson.title, lesson.description)}
+                    disabled={aiLoading}
+                    size="sm"
+                    variant="outline"
+                    className="gap-2"
+                  >
+                    {aiLoading ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Generando...
+                      </>
+                    ) : (
+                      <>
+                        <Lightbulb className="w-4 h-4" />
+                        Consejo IA
+                      </>
+                    )}
+                  </Button>
+                </div>
 
-                {currentLesson === 0 && (
-                  <div className="space-y-3">
-                    <p>
-                      STAR es una estructura que tu entrevistador reconoce y aprecia porque:
-                    </p>
-                    <ul className="list-disc list-inside space-y-2 text-sm">
-                      <li><strong>Situación:</strong> El contexto que valida por qué actuaste</li>
-                      <li><strong>Tarea:</strong> Tu responsabilidad específica</li>
-                      <li><strong>Acción:</strong> LO QUE HICISTE (aquí es tu turno)</li>
-                      <li><strong>Resultado:</strong> El impacto medible que dejó</li>
-                    </ul>
+                {aiTip ? (
+                  <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border-l-4 border-blue-600 space-y-3">
+                    <p className="text-slate-900 dark:text-white">{aiTip}</p>
                   </div>
+                ) : (
+                  <>
+                    {selectedModule.id === 1 && currentLesson === 2 && (
+                      <div className="space-y-3">
+                        <p>
+                          La Acción es donde demuestras TU impacto personal. No lo que el equipo hizo, sino específicamente qué HICISTE TÚ.
+                        </p>
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue-600">
+                          <p className="font-semibold mb-2">Ejemplo BUENO:</p>
+                          <p className="text-sm">
+                            "YO rediseñé la arquitectura, implementé testing automático, y mentoricé a 3 developers junior"
+                          </p>
+                        </div>
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-red-600">
+                          <p className="font-semibold mb-2 text-red-600">Ejemplo MALO:</p>
+                          <p className="text-sm">
+                            "El equipo trabajó duro y mejoramos el sistema"
+                          </p>
+                        </div>
+                        <p className="text-sm text-slate-600 dark:text-slate-400 italic">
+                          Usa "yo", "decidí", "implementé", "resolví" - verbos de acción clara.
+                        </p>
+                      </div>
+                    )}
+
+                    {currentLesson === 0 && (
+                      <div className="space-y-3">
+                        <p>
+                          STAR es una estructura que tu entrevistador reconoce y aprecia porque:
+                        </p>
+                        <ul className="list-disc list-inside space-y-2 text-sm">
+                          <li><strong>Situación:</strong> El contexto que valida por qué actuaste</li>
+                          <li><strong>Tarea:</strong> Tu responsabilidad específica</li>
+                          <li><strong>Acción:</strong> LO QUE HICISTE (aquí es tu turno)</li>
+                          <li><strong>Resultado:</strong> El impacto medible que dejó</li>
+                        </ul>
+                      </div>
+                    )}
+
+                    {!aiTip && selectedModule.id !== 1 && currentLesson !== 0 && (
+                      <div className="text-slate-500 italic">
+                        Haz clic en "Consejo IA" para obtener una sugerencia personalizada sobre este tema.
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
