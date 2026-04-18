@@ -589,7 +589,7 @@ export function ConversationalInterviewSimulator({
                     Enviar respuesta
                   </Button>
                   <Button
-                    onClick={goToNextQuestion}
+                    onClick={handleMoveNext}
                     variant="outline"
                     className="w-full border-slate-700"
                   >
