@@ -449,33 +449,33 @@ export function ConversationalInterviewSimulator({
             <CardDescription>Mira la pregunta, mantén contacto visual con la cámara y responde como en entrevista real</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Avatar Showcase */}
-            <div className="grid grid-cols-3 gap-4 p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 items-center">
-              {/* Interviewer Avatar */}
-              <div className="flex flex-col items-center justify-center py-4 px-2">
-                <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-2 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
+            {/* Interviewer Profile Card */}
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl p-8 space-y-4">
+              <div className="flex flex-col items-center text-center space-y-4">
+                {/* Interviewer Avatar */}
+                <div className={`w-24 h-24 rounded-full flex items-center justify-center text-5xl ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
                   {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
                 </div>
-                <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 text-center">
-                  {getAvatarName(selectedInterviewerId, 'interviewer')}
-                </p>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Entrevistador</p>
-              </div>
 
-              {/* VS */}
-              <div className="flex items-center justify-center">
-                <p className="text-3xl font-bold text-slate-400 dark:text-slate-600">VS</p>
-              </div>
-
-              {/* User Avatar */}
-              <div className="flex flex-col items-center justify-center py-4 px-2">
-                <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-2 ${getAvatarGradient(preferences.user_avatar_id)} shadow-lg`}>
-                  {getAvatarEmoji(preferences.user_avatar_id, 'user')}
+                {/* Interviewer Info */}
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-slate-900 dark:text-white">
+                    {getAvatarName(selectedInterviewerId, 'interviewer')}
+                  </h3>
+                  <p className="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                    {getInterviewerRole(selectedInterviewerId)}
+                  </p>
                 </div>
-                <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 text-center">
-                  {getAvatarName(preferences.user_avatar_id, 'user')}
-                </p>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Tú</p>
+
+                {/* What they look for */}
+                <div className="bg-white dark:bg-slate-900 rounded-lg p-4 border-l-4 border-blue-600 dark:border-blue-400 w-full text-left">
+                  <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide mb-2">
+                    Lo que busca:
+                  </p>
+                  <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+                    {getInterviewerFocus(selectedInterviewerId)}
+                  </p>
+                </div>
               </div>
             </div>
 
@@ -893,5 +893,29 @@ export function ConversationalInterviewSimulator({
       'interviewer-modern-2': 'bg-gradient-to-br from-orange-500 to-yellow-600',
     }
     return gradients[avatarId] || 'bg-gradient-to-br from-slate-500 to-slate-600'
+  }
+
+  function getInterviewerRole(interviewerId: string): string {
+    const roles: Record<string, string> = {
+      'interviewer-classic-1': 'Reclutadora de Talento',
+      'interviewer-classic-2': 'Manager Senior de Ingeniería',
+      'interviewer-classic-3': 'VP de Talento Estratégico',
+      'interviewer-classic-4': 'Tech Lead Senior',
+      'interviewer-modern-1': 'Product Manager',
+      'interviewer-modern-2': 'Consultor CEO',
+    }
+    return roles[interviewerId] || 'Entrevistador'
+  }
+
+  function getInterviewerFocus(interviewerId: string): string {
+    const focuses: Record<string, string> = {
+      'interviewer-classic-1': 'Sofia busca candidatos con habilidades de comunicación sólidas, empatía y capacidad de trabajo en equipo. Valora la autenticidad y cómo te relacionas con otros.',
+      'interviewer-classic-2': 'Marco se enfoca en tu arquitectura mental, resolución de problemas complejos y experiencia técnica. Quiere entender tu proceso de decisión.',
+      'interviewer-classic-3': 'Elena busca liderazgo potencial, visión estratégica y capacidad de influir en otros. Valora candidatos que piensan a largo plazo.',
+      'interviewer-classic-4': 'David evalúa tu competencia técnica, calidad del código y metodología de trabajo. Busca desarrolladores que practiquen buenos hábitos.',
+      'interviewer-modern-1': 'Alex se enfoca en pensamiento orientado al usuario, análisis de datos y capacidad de iterar. Valora candidatos que entienden el impacto comercial.',
+      'interviewer-modern-2': 'Jordan busca potencial de liderazgo, visión de negocio y capacidad de ejecutar bajo presión. Quiere entender tu motivación y ambición.',
+    }
+    return focuses[interviewerId] || 'Buscando candidatos con talento y potencial'
   }
 }
