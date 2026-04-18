@@ -63,7 +63,7 @@ export default function DashboardPage() {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center p-4">
         <Card className="p-8 max-w-md text-center space-y-4 bg-slate-900 border-slate-800">
-          <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-playfair-display)' }}>No hay datos</h2>
+          <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'Lora, serif' }}>No hay datos</h2>
           <p className="text-slate-400">
             Por favor, completa el onboarding primero
           </p>
@@ -88,7 +88,7 @@ export default function DashboardPage() {
 
         {/* Metrics */}
         <div>
-          <h2 className="text-3xl font-bold text-white mb-6" style={{ fontFamily: 'var(--font-playfair-display)' }}>
+          <h2 className="text-3xl font-bold text-white mb-6" style={{ fontFamily: 'Lora, serif' }}>
             Tu Progreso
           </h2>
           <DashboardMetrics 

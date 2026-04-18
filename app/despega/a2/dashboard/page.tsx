@@ -99,7 +99,7 @@ export default function A2DashboardPage() {
         {/* WELCOME SECTION */}
         <div className="bg-gradient-to-r from-orange/20 via-orange/10 to-transparent rounded-surface-lg p-8 border border-orange/30 text-white">
           <div className="max-w-3xl space-y-2">
-            <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair-display)' }}>Tu Misión de 90 Días</h1>
+            <h1 className="text-4xl font-bold" style={{ fontFamily: 'Lora, serif' }}>Tu Misión de 90 Días</h1>
             <p className="text-orange/80 text-lg">3 sprints diseñados para transformar tu perfil en plan concreto</p>
           </div>
         </div>
@@ -108,7 +108,7 @@ export default function A2DashboardPage() {
         {mission && (
           <Card className="bg-slate-900 border-slate-800 shadow-lg">
             <CardHeader>
-              <CardTitle className="text-2xl text-white" style={{ fontFamily: 'var(--font-playfair-display)' }}>Misión: {mission.mission_title}</CardTitle>
+              <CardTitle className="text-2xl text-white" style={{ fontFamily: 'Lora, serif' }}>Misión: {mission.mission_title}</CardTitle>
               <p className="text-sm text-slate-400 mt-2">{mission.mission_description}</p>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -132,7 +132,7 @@ export default function A2DashboardPage() {
 
         {/* SPRINTS SECTION */}
         <div>
-          <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-playfair-display)' }}>Los 3 Sprints</h2>
+          <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: 'Lora, serif' }}>Los 3 Sprints</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[1, 2, 3].map((sprintNum) => (
               <Link key={sprintNum} href={`/despega/a2/sprint-${sprintNum}`}>

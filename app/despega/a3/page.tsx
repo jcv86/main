@@ -116,7 +116,7 @@ export default function A3Page() {
         <div className="bg-gradient-to-r from-red/30 via-red/10 to-transparent border border-red/30 rounded-surface-lg p-8 text-white">
           <div className="max-w-3xl space-y-4">
             <p className="text-red/80 text-sm font-semibold uppercase tracking-wider">Fase A3: Entrenamiento Aplicado - Entrevista 0 + Preparación</p>
-            <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair-display)' }}>Entrena como Profesional. Verdaderamente.</h1>
+            <h1 className="text-4xl font-bold" style={{ fontFamily: 'Lora, serif' }}>Entrena como Profesional. Verdaderamente.</h1>
             <p className="text-lg text-slate-300">
               Empezamos con Entrevista 0: tu diagnóstico de preparación en luz, fondo, audio, postura, presencia, y lenguaje.
               Luego avanzas en 4 niveles: guiada → estructurada → desafiante → maestría. 
@@ -142,7 +142,7 @@ export default function A3Page() {
         {/* QUICK START GUIDE - A3 VERSION */}
         <Card className="border border-red/20 bg-slate-900">
           <CardHeader>
-            <CardTitle className="text-xl text-white" style={{ fontFamily: 'var(--font-playfair-display)' }}>Primeros Pasos en Entrenamientos</CardTitle>
+            <CardTitle className="text-xl text-white" style={{ fontFamily: 'Lora, serif' }}>Primeros Pasos en Entrenamientos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
