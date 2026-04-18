@@ -1,12 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Video, Zap, Crown, TrendingUp, BarChart3, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Mic, MicOff, BarChart3, AlertCircle, Crown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { InteractiveTrainingSession } from '@/components/interactive-training-session'
 
 const CHALLENGING_QUESTIONS = [
   {
@@ -65,16 +63,58 @@ export default function ChallensingTrainingPage() {
   const [scores, setScores] = useState<Record<number, number>>({})
   const [isRecording, setIsRecording] = useState(false)
   const [hasResponseBeenRecorded, setHasResponseBeenRecorded] = useState(false)
+  
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const streamRef = useRef<MediaStream | null>(null)
 
   const question = CHALLENGING_QUESTIONS[currentQuestion]
-  const progress = (completedQuestions.length / CHALLENGING_QUESTIONS.length) * 100
   const currentScore = scores[currentQuestion]
   const averageScore = completedQuestions.length > 0
     ? Math.round(completedQuestions.reduce((acc, idx) => acc + (scores[idx] || 0), 0) / completedQuestions.length)
     : 0
 
+  // Initialize camera on mount
+  useEffect(() => {
+    const initCamera = async () => {
+      try {
+        console.log('[v0] Initializing camera...')
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        })
+        console.log('[v0] Camera stream obtained:', stream)
+        streamRef.current = stream
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream
+          console.log('[v0] Stream assigned to video element')
+        }
+      } catch (err) {
+        console.error('[v0] Camera error:', err)
+      }
+    }
+
+    initCamera()
+
+    return () => {
+      if (streamRef.current) {
+        streamRef.current.getTracks().forEach(track => track.stop())
+        console.log('[v0] Camera stopped')
+      }
+    }
+  }, [])
+
+  const handleStartRecording = () => {
+    setIsRecording(true)
+    console.log('[v0] Recording started')
+  }
+
+  const handleStopRecording = () => {
+    setIsRecording(false)
+    setHasResponseBeenRecorded(true)
+    console.log('[v0] Recording stopped')
+  }
+
   const handleQuestionComplete = (score?: number) => {
-    // Don't advance if response hasn't been recorded
     if (!hasResponseBeenRecorded) {
       return
     }
@@ -85,7 +125,7 @@ export default function ChallensingTrainingPage() {
     if (!completedQuestions.includes(currentQuestion)) {
       setCompletedQuestions([...completedQuestions, currentQuestion])
     }
-    // Reset recording state for next question
+    
     setHasResponseBeenRecorded(false)
     setIsRecording(false)
     
@@ -97,6 +137,7 @@ export default function ChallensingTrainingPage() {
   const handlePreviousQuestion = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1)
+      setHasResponseBeenRecorded(false)
     }
   }
 
@@ -135,53 +176,71 @@ export default function ChallensingTrainingPage() {
         <div className="flex-1 overflow-hidden p-4">
           <div className="grid lg:grid-cols-5 gap-0 bg-black rounded-xl overflow-hidden shadow-2xl h-full">
             
-            {/* Left Panel: Training Area (60%) */}
+            {/* Left Panel: Video (60%) */}
             <div className="lg:col-span-3 relative bg-black overflow-y-auto flex flex-col">
-              <div className="p-6 space-y-6 flex-1">
-                <div className="space-y-3">
-                  <Badge className={`${getScoreColor(question.expectedScoreMin)} text-xs`}>
-                    {question.difficulty} - Puntuación Esperada: {question.expectedScoreMin}+
-                  </Badge>
-                  <h2 className="text-3xl font-bold flex items-center gap-3 text-white">
-                    <Crown className="w-8 h-8 text-purple-400" />
-                    Pregunta {currentQuestion + 1}
-                  </h2>
-                  <p className="text-lg text-slate-200 leading-relaxed">{question.question}</p>
-                </div>
-
-                {/* Competencies */}
-                <div className="bg-purple-900/30 border border-purple-500/20 rounded-lg p-4">
-                  <p className="text-sm font-semibold text-purple-300 mb-3">Competencias Evaluadas:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {question.competencies.map((comp) => (
-                      <Badge key={comp} variant="outline" className="border-purple-500/50 text-purple-300 text-xs">
-                        {comp}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Video Training Session */}
-                <InteractiveTrainingSession
-                  question={question.question}
-                  guidance={question.guidance}
-                  estimatedTime="5 minutos"
-                  trainingType="challenging"
-                  onComplete={() => {
-                    setHasResponseBeenRecorded(true)
-                    setIsRecording(false)
-                  }}
+              {/* Video Stream */}
+              <div className="flex-1 relative bg-black">
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  className="w-full h-full object-cover"
                 />
+                
+                {/* Recording indicator */}
+                {isRecording && (
+                  <div className="absolute top-4 left-4 flex items-center gap-2 bg-red-600 px-3 py-2 rounded-lg">
+                    <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                    <span className="text-xs text-white font-bold">GRABANDO</span>
+                  </div>
+                )}
               </div>
 
-              {/* Navigation Buttons - Bottom */}
-              <div className="flex-shrink-0 p-6 border-t border-slate-800 bg-slate-950 space-y-3">
+              {/* Bottom Section: Question & Controls */}
+              <div className="flex-shrink-0 bg-slate-950 border-t border-slate-800 p-6 space-y-4">
+                {/* Question Display */}
+                <div className="space-y-3">
+                  <Badge className={`${getScoreColor(question.expectedScoreMin)} text-xs w-fit`}>
+                    {question.difficulty} - Esperado: {question.expectedScoreMin}+
+                  </Badge>
+                  <p className="text-lg font-semibold text-white">{question.question}</p>
+                </div>
+
+                {/* Guidance */}
+                <div className="bg-blue-900/30 border border-blue-500/20 rounded-lg p-3">
+                  <p className="text-sm text-blue-300">{question.guidance}</p>
+                </div>
+
+                {/* Recording Status */}
                 {!hasResponseBeenRecorded && (
                   <div className="flex items-center gap-2 text-amber-600 text-sm bg-amber-950/40 border border-amber-700/40 rounded-lg px-4 py-2">
                     <AlertCircle className="w-4 h-4" />
-                    <span>Completa la grabación de tu respuesta antes de continuar</span>
+                    <span>Completa tu respuesta antes de continuar</span>
                   </div>
                 )}
+
+                {/* Recording Controls */}
+                <div className="flex gap-3">
+                  {!isRecording ? (
+                    <Button
+                      onClick={handleStartRecording}
+                      className="flex-1 bg-red-600 hover:bg-red-700 gap-2"
+                    >
+                      <Mic className="w-4 h-4" />
+                      Comenzar Grabación
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={handleStopRecording}
+                      className="flex-1 bg-red-600 hover:bg-red-700 gap-2"
+                    >
+                      <MicOff className="w-4 h-4" />
+                      Detener Grabación
+                    </Button>
+                  )}
+                </div>
+
+                {/* Navigation */}
                 <div className="flex gap-3">
                   <Button
                     onClick={handlePreviousQuestion}
@@ -192,7 +251,7 @@ export default function ChallensingTrainingPage() {
                     Anterior
                   </Button>
                   <Button
-                    onClick={() => handleQuestionComplete()}
+                    onClick={() => handleQuestionComplete(75)}
                     disabled={!hasResponseBeenRecorded || isRecording}
                     className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
@@ -276,7 +335,7 @@ export default function ChallensingTrainingPage() {
                 ))}
               </div>
 
-              {/* Warning */}
+              {/* Feedback */}
               {averageScore > 0 && averageScore < 75 && (
                 <div className="p-4 border-t border-slate-800 bg-yellow-950/20 flex-shrink-0">
                   <p className="text-xs font-bold text-yellow-400 mb-2 flex items-center gap-1">
@@ -284,7 +343,7 @@ export default function ChallensingTrainingPage() {
                     Retroalimentación
                   </p>
                   <p className="text-xs text-yellow-200">
-                    Enfócate en mejorar tu narrativa, ser más específico con ejemplos, y demostrar mayor impacto de negocio.
+                    Enfócate en demostrar mayor impacto, ser específico con ejemplos, y mostrar madurez ejecutiva en tus respuestas.
                   </p>
                 </div>
               )}
