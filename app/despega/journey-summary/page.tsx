@@ -37,12 +37,12 @@ export default function JourneySummaryPage() {
         
         {/* Header */}
         <div className="space-y-4">
-          <Link href="/despega/base" className="inline-flex items-center text-sm text-muted/60 hover:text-slate-900 dark:text-muted/40 dark:hover:text-slate-100">
+          <Link href="/despega/base" className="inline-flex items-center text-sm text-muted/60 hover:text-muted/90 dark:text-muted/40 dark:hover:text-muted/10">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Volver a Inicio
           </Link>
           <div>
-            <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-50">Tu Resumen del Viaje</h1>
+            <h1 className="text-4xl font-bold text-muted/90 dark:text-muted/5">Tu Resumen del Viaje</h1>
             <p className="text-lg text-muted/60 dark:text-muted/40 mt-2">Visualiza tu transformación de 90 días en DespegarTuCarrera</p>
           </div>
         </div>
@@ -73,7 +73,7 @@ export default function JourneySummaryPage() {
 
         {/* PHASES BREAKDOWN */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Las 4 Fases</h2>
+          <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5">Las 4 Fases</h2>
           
           {/* A1 */}
           <Card className="border-2 border-green-500 bg-green/5 dark:bg-green-950/20">
@@ -209,21 +209,21 @@ export default function JourneySummaryPage() {
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-green flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-medium text-slate-900 dark:text-slate-50">Mantiene ritmo consistente</p>
+                <p className="font-medium text-muted/90 dark:text-muted/5">Mantiene ritmo consistente</p>
                 <p className="text-sm text-muted/60 dark:text-muted/40">7 días de racha significa que estás comprometido diariamente</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-green flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-medium text-slate-900 dark:text-slate-50">Progreso en sprint actual</p>
+                <p className="font-medium text-muted/90 dark:text-muted/5">Progreso en sprint actual</p>
                 <p className="text-sm text-muted/60 dark:text-muted/40">Sprint 1 de 3 en marcha. Completaste 12 acciones y sigues adelante</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <Clock className="w-5 h-5 text-orange flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-medium text-slate-900 dark:text-slate-50">A3 comienza en 15 días</p>
+                <p className="font-medium text-muted/90 dark:text-muted/5">A3 comienza en 15 días</p>
                 <p className="text-sm text-muted/60 dark:text-muted/40">Prepárate para entrenamientos realistas. Este es el pico de intensidad</p>
               </div>
             </div>

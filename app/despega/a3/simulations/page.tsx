@@ -94,7 +94,7 @@ export default function SimulationsPage() {
         </Link>
 
         <div className="space-y-4">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 className="text-3xl font-bold text-muted/90 dark:text-muted/5">
             Entrenamiento de Entrevista
           </h1>
           <p className="text-lg text-muted/60 dark:text-muted/40">
@@ -137,7 +137,7 @@ export default function SimulationsPage() {
                   </p>
 
                   <div className="space-y-2">
-                    <div className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+                    <div className="text-sm font-semibold text-muted/90 dark:text-muted/5">
                       Incluye:
                     </div>
                     <ul className="text-sm space-y-1 text-muted/70 dark:text-muted/30">

@@ -250,15 +250,15 @@ export default function A1ResultadoPage() {
           <CardContent className="space-y-3">
             <div className="space-y-3">
               <div className="p-3 border-l-4 border-amber-600 bg-white dark:bg-background rounded">
-                <p className="font-semibold text-slate-900 dark:text-slate-100">Acción vs. Reflexión</p>
+                <p className="font-semibold text-muted/90 dark:text-muted/10">Acción vs. Reflexión</p>
                 <p className="text-sm text-muted/70 dark:text-muted/40 mt-1">Tu tendencia es lanzarse (Energía), pero tu mente pide tiempo para procesar (Enfoque). Esto crea un ritmo interno de "acelera-pausa-acelera".</p>
               </div>
               <div className="p-3 border-l-4 border-amber-600 bg-white dark:bg-background rounded">
-                <p className="font-semibold text-slate-900 dark:text-slate-100">Independencia vs. Interdependencia</p>
+                <p className="font-semibold text-muted/90 dark:text-muted/10">Independencia vs. Interdependencia</p>
                 <p className="text-sm text-muted/70 dark:text-muted/40 mt-1">Buscas autonomía (Plan Ejecutivo), pero necesitas relaciones sólidas para crecer (Relaciones). Tenés que aprender a no cargar todo solo.</p>
               </div>
               <div className="p-3 border-l-4 border-amber-600 bg-white dark:bg-background rounded">
-                <p className="font-semibold text-slate-900 dark:text-slate-100">Perfeccionismo vs. Pragmatismo</p>
+                <p className="font-semibold text-muted/90 dark:text-muted/10">Perfeccionismo vs. Pragmatismo</p>
                 <p className="text-sm text-muted/70 dark:text-muted/40 mt-1">Querés hacerlo bien (Enfoque), pero a veces necesitás soltar y iterar (Energía). El balance entre "listo" y "perfecto" es donde crecés.</p>
               </div>
             </div>

@@ -44,7 +44,7 @@ export default function A4Page() {
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <Link href="/despega">
-            <Button variant="ghost" size="sm" className="hover:bg-muted/20 dark:hover:bg-slate-700">
+            <Button variant="ghost" size="sm" className="hover:bg-muted/20 dark:hover:bg-muted/70">
               <ArrowLeft className="w-4 h-4 mr-2" />
               Volver
             </Button>

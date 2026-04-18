@@ -191,7 +191,7 @@ export default function GuidedInterviewPage() {
             <div className="w-24 h-24 mx-auto bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
               <Check className="w-12 h-12 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Entrevista Completada</h1>
+            <h1 className="text-3xl font-bold text-muted/90 dark:text-white">Entrevista Completada</h1>
             <div className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue">
               {score}%
             </div>
@@ -245,7 +245,7 @@ export default function GuidedInterviewPage() {
         {/* Progress */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
               Entrevista Guiada - Práctica Básica
             </h1>
             <Badge variant="secondary">
@@ -260,7 +260,7 @@ export default function GuidedInterviewPage() {
           <div className="space-y-6">
             {/* Question */}
             <div>
-              <p className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+              <p className="text-2xl font-bold text-muted/90 dark:text-white mb-4">
                 {currentQuestion.question}
               </p>
               <div className="bg-blue/5 dark:bg-blue/20 border border-blue/30 dark:border-blue/10 rounded-[28px] p-4">
@@ -344,7 +344,7 @@ export default function GuidedInterviewPage() {
             {/* Tags */}
             <div className="flex flex-wrap gap-2">
               {currentQuestion.tags.map((tag) => (
-                <Badge key={tag} variant="secondary" className="bg-muted/20 dark:bg-slate-700">
+                <Badge key={tag} variant="secondary" className="bg-muted/20 dark:bg-muted/70">
                   {tag}
                 </Badge>
               ))}

@@ -79,14 +79,14 @@ export default function BitacoraPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
       {/* Header */}
-      <div className="border-b border-muted/20 dark:border-slate-800 bg-white dark:bg-background">
+      <div className="border-b border-muted/20 dark:border-muted/80 bg-white dark:bg-background">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center gap-3 mb-2">
-            <Link href="/despega/a2/dashboard" className="p-2 hover:bg-muted/10 dark:hover:bg-slate-800 rounded-lg transition">
+            <Link href="/despega/a2/dashboard" className="p-2 hover:bg-muted/10 dark:hover:bg-muted/80 rounded-lg transition">
               <ChevronLeft className="w-5 h-5" />
             </Link>
             <BookOpen className="w-6 h-6 text-blue dark:text-blue/40" />
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Mi Bitácora</h1>
+            <h1 className="text-3xl font-bold text-muted/90 dark:text-muted/5">Mi Bitácora</h1>
           </div>
           <p className="text-muted/60 dark:text-muted/40 ml-11">
             Tu registro personal de aprendizaje, reflexiones e insights
@@ -125,7 +125,7 @@ export default function BitacoraPage() {
                 <CardContent className="pt-6">
                   <div className="space-y-2">
                     <p className="text-sm text-muted/60 dark:text-muted/40">Entradas Registradas</p>
-                    <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">{stats.total}</p>
+                    <p className="text-3xl font-bold text-muted/90 dark:text-muted/5">{stats.total}</p>
                     <p className="text-xs text-muted/50">Bitácora activa</p>
                   </div>
                 </CardContent>
@@ -135,7 +135,7 @@ export default function BitacoraPage() {
                 <CardContent className="pt-6">
                   <div className="space-y-2">
                     <p className="text-sm text-muted/60 dark:text-muted/40">Ánimo Promedio</p>
-                    <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">{stats.avgMood}/5</p>
+                    <p className="text-3xl font-bold text-muted/90 dark:text-muted/5">{stats.avgMood}/5</p>
                     <p className="text-xs text-muted/50">{stats.avgMood >= 4 ? 'Muy positivo' : stats.avgMood >= 3 ? 'Neutral' : 'Desafiante'}</p>
                   </div>
                 </CardContent>
@@ -145,7 +145,7 @@ export default function BitacoraPage() {
                 <CardContent className="pt-6">
                   <div className="space-y-2">
                     <p className="text-sm text-muted/60 dark:text-muted/40">Acciones Completadas</p>
-                    <p className="text-3xl font-bold text-slate-900 dark:text-slate-50">{stats.totalActions}</p>
+                    <p className="text-3xl font-bold text-muted/90 dark:text-muted/5">{stats.totalActions}</p>
                     <p className="text-xs text-muted/50">En total</p>
                   </div>
                 </CardContent>
@@ -155,14 +155,14 @@ export default function BitacoraPage() {
             {/* Create Entry Section */}
             {isCreating ? (
               <Card className="border-0 shadow-lg">
-                <CardHeader className="border-b border-muted/20 dark:border-slate-800">
+                <CardHeader className="border-b border-muted/20 dark:border-muted/80">
                   <CardTitle>Nueva Entrada en Bitácora</CardTitle>
                   <CardDescription>Comparte tu reflexión del día o semana</CardDescription>
                 </CardHeader>
                 <CardContent className="pt-6 space-y-6">
                   {/* Type Selection */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-900 dark:text-slate-100">Tipo de Entrada</label>
+                    <label className="text-sm font-medium text-muted/90 dark:text-muted/10">Tipo de Entrada</label>
                     <div className="flex gap-3">
                       {(['daily', 'weekly'] as const).map(type => (
                         <button
@@ -182,19 +182,19 @@ export default function BitacoraPage() {
 
                   {/* Title */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-900 dark:text-slate-100">Título</label>
+                    <label className="text-sm font-medium text-muted/90 dark:text-muted/10">Título</label>
                     <input
                       type="text"
                       placeholder="Ej: Día 3 - Aprendizaje clave"
                       value={newEntry.title}
                       onChange={e => setNewEntry({ ...newEntry, title: e.target.value })}
-                      className="w-full px-4 py-2 rounded-[28px] border border-muted/20 dark:border-card bg-white dark:bg-background text-slate-900 dark:text-slate-50"
+                      className="w-full px-4 py-2 rounded-[28px] border border-muted/20 dark:border-card bg-white dark:bg-background text-muted/90 dark:text-muted/5"
                     />
                   </div>
 
                   {/* Reflection */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-900 dark:text-slate-100">Reflexión</label>
+                    <label className="text-sm font-medium text-muted/90 dark:text-muted/10">Reflexión</label>
                     <Textarea
                       placeholder="¿Qué pasó hoy? ¿Cómo te sentiste? ¿Qué aprendiste?"
                       value={newEntry.reflection}
@@ -205,7 +205,7 @@ export default function BitacoraPage() {
 
                   {/* Insights */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-900 dark:text-slate-100">Insights Clave (uno por línea)</label>
+                    <label className="text-sm font-medium text-muted/90 dark:text-muted/10">Insights Clave (uno por línea)</label>
                     <Textarea
                       placeholder="Ej: La consistencia es más importante que perfección&#10;Los pequeños pasos generan momentum"
                       value={newEntry.insights}
@@ -217,7 +217,7 @@ export default function BitacoraPage() {
                   {/* Mood & Actions */}
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-slate-900 dark:text-slate-100">¿Cómo estuvo tu día?</label>
+                      <label className="text-sm font-medium text-muted/90 dark:text-muted/10">¿Cómo estuvo tu día?</label>
                       <div className="flex justify-between items-center">
                         {[1, 2, 3, 4, 5].map(i => (
                           <button
@@ -233,20 +233,20 @@ export default function BitacoraPage() {
                     </div>
 
                     <div className="space-y-2">
-                      <label className="text-sm font-medium text-slate-900 dark:text-slate-100">Acciones Completadas</label>
+                      <label className="text-sm font-medium text-muted/90 dark:text-muted/10">Acciones Completadas</label>
                       <input
                         type="number"
                         min="0"
                         value={newEntry.actionsTaken}
                         onChange={e => setNewEntry({ ...newEntry, actionsTaken: parseInt(e.target.value) || 0 })}
-                        className="w-full px-4 py-2 rounded-[28px] border border-muted/20 dark:border-card bg-white dark:bg-background text-slate-900 dark:text-slate-50"
+                        className="w-full px-4 py-2 rounded-[28px] border border-muted/20 dark:border-card bg-white dark:bg-background text-muted/90 dark:text-muted/5"
                       />
                     </div>
                   </div>
 
                   {/* Next Steps */}
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-slate-900 dark:text-slate-100">Próximos Pasos</label>
+                    <label className="text-sm font-medium text-muted/90 dark:text-muted/10">Próximos Pasos</label>
                     <Textarea
                       placeholder="¿Qué harás diferente mañana?"
                       value={newEntry.nextSteps}
@@ -290,7 +290,7 @@ export default function BitacoraPage() {
 
             {/* Entries List */}
             <div className="space-y-4">
-              <h2 className="text-xl font-bold text-slate-900 dark:text-slate-50">Historial de Reflexiones</h2>
+              <h2 className="text-xl font-bold text-muted/90 dark:text-muted/5">Historial de Reflexiones</h2>
               {entries.length === 0 ? (
                 <Card className="border-0 shadow-sm">
                   <CardContent className="py-12 text-center">
@@ -314,7 +314,7 @@ export default function BitacoraPage() {
                               {new Date(entry.date).toLocaleDateString('es-ES')}
                             </span>
                           </div>
-                          <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-50">{entry.title}</h3>
+                          <h3 className="text-lg font-semibold text-muted/90 dark:text-muted/5">{entry.title}</h3>
                         </div>
                         <div className={`px-3 py-2 rounded-lg font-medium text-sm ${getMoodColor(entry.mood)}`}>
                           {getMoodLabel(entry.mood)}
@@ -327,7 +327,7 @@ export default function BitacoraPage() {
                       {/* Insights */}
                       {entry.insights && entry.insights.length > 0 && (
                         <div className="space-y-2">
-                          <div className="flex items-center gap-2 text-sm font-medium text-slate-900 dark:text-slate-100">
+                          <div className="flex items-center gap-2 text-sm font-medium text-muted/90 dark:text-muted/10">
                             <Lightbulb className="w-4 h-4 text-yellow-500" />
                             Insights Clave
                           </div>
@@ -342,7 +342,7 @@ export default function BitacoraPage() {
                       )}
 
                       {/* Stats */}
-                      <div className="flex items-center gap-4 text-sm text-muted/60 dark:text-muted/40 pt-2 border-t border-muted/20 dark:border-slate-800">
+                      <div className="flex items-center gap-4 text-sm text-muted/60 dark:text-muted/40 pt-2 border-t border-muted/20 dark:border-muted/80">
                         <span className="flex items-center gap-1">
                           <TrendingUp className="w-4 h-4" />
                           {entry.actionsTaken} acción{entry.actionsTaken !== 1 ? 'es' : ''} completada{entry.actionsTaken !== 1 ? 's' : ''}

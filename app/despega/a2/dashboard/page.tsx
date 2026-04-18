@@ -106,22 +106,22 @@ export default function A2DashboardPage() {
 
         {/* MISSION OVERVIEW */}
         {mission && (
-          <Card className="bg-slate-900 border-slate-800 shadow-lg">
+          <Card className="bg-muted/90 border-muted/80 shadow-lg">
             <CardHeader>
               <CardTitle className="text-2xl text-white" style={{ fontFamily: 'Lora, serif' }}>Misión: {mission.mission_title}</CardTitle>
               <p className="text-sm text-muted/40 mt-2">{mission.mission_description}</p>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-3 gap-4">
-                <div className="text-center p-4 bg-slate-800 rounded-surface-lg border border-slate-700">
+                <div className="text-center p-4 bg-muted/80 rounded-surface-lg border border-muted/70">
                   <p className="text-3xl font-bold text-orange">90</p>
                   <p className="text-sm text-muted/40">Días</p>
                 </div>
-                <div className="text-center p-4 bg-slate-800 rounded-surface-lg border border-slate-700">
+                <div className="text-center p-4 bg-muted/80 rounded-surface-lg border border-muted/70">
                   <p className="text-3xl font-bold text-orange">3</p>
                   <p className="text-sm text-muted/40">Sprints</p>
                 </div>
-                <div className="text-center p-4 bg-slate-800 rounded-surface-lg border border-slate-700">
+                <div className="text-center p-4 bg-muted/80 rounded-surface-lg border border-muted/70">
                   <p className="text-3xl font-bold text-orange">0%</p>
                   <p className="text-sm text-muted/40">Progreso</p>
                 </div>
@@ -136,7 +136,7 @@ export default function A2DashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[1, 2, 3].map((sprintNum) => (
               <Link key={sprintNum} href={`/despega/a2/sprint-${sprintNum}`}>
-                <Card className="cursor-pointer hover:shadow-lg transition-shadow border-l-4 border-orange bg-slate-900 border-slate-800 hover:border-l-orange hover:bg-slate-800">
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow border-l-4 border-orange bg-muted/90 border-muted/80 hover:border-l-orange hover:bg-muted/80">
                   <CardHeader>
                     <CardTitle className="text-lg text-white">
                       Sprint {sprintNum}: {sprintNum === 1 ? "Fundamentos" : sprintNum === 2 ? "Profundización" : "Consolidación"}
@@ -155,7 +155,7 @@ export default function A2DashboardPage() {
         {/* ⭐ A2 V2: SMART CHECKPOINTS */}
         <div>
           <div className="mb-4">
-            <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-1">Checkpoints del Sprint Actual</h2>
+            <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5 mb-1">Checkpoints del Sprint Actual</h2>
             <p className="text-muted/60 dark:text-muted/40 text-sm">Hitos de verificación que marcan el avance real</p>
           </div>
           
@@ -256,15 +256,15 @@ export default function A2DashboardPage() {
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 <div className="p-3 bg-white dark:bg-background rounded border-l-4 border-indigo-600">
-                  <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">1. Evalúa: ¿Qué hizo clic?</p>
+                  <p className="font-semibold text-sm text-muted/90 dark:text-muted/10">1. Evalúa: ¿Qué hizo clic?</p>
                   <p className="text-xs text-muted/60 dark:text-muted/40 mt-1">¿Dónde avanzaste? ¿Qué energía sintió más real?</p>
                 </div>
                 <div className="p-3 bg-white dark:bg-background rounded border-l-4 border-indigo-600">
-                  <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">2. Identifica: ¿Qué frenó?</p>
+                  <p className="font-semibold text-sm text-muted/90 dark:text-muted/10">2. Identifica: ¿Qué frenó?</p>
                   <p className="text-xs text-muted/60 dark:text-muted/40 mt-1">¿Dónde se bloqueó? ¿Qué necesita ajuste?</p>
                 </div>
                 <div className="p-3 bg-white dark:bg-background rounded border-l-4 border-indigo-600">
-                  <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">3. Ajusta: ¿Qué cambia la próxima?</p>
+                  <p className="font-semibold text-sm text-muted/90 dark:text-muted/10">3. Ajusta: ¿Qué cambia la próxima?</p>
                   <p className="text-xs text-muted/60 dark:text-muted/40 mt-1">Pequeño cambio para semana 2. Una cosa. Máximo.</p>
                 </div>
               </div>

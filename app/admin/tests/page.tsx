@@ -136,7 +136,7 @@ export default function AdminTestsPage() {
       'Design': 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
       'Auth': 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
     }
-    return colors[category] || 'bg-muted/10 text-slate-800'
+    return colors[category] || 'bg-muted/10 text-muted/80'
   }
 
   return (
@@ -185,7 +185,7 @@ export default function AdminTestsPage() {
                   className={`px-4 py-2 rounded-lg font-medium transition-all ${
                     selectedCategory === category
                       ? 'bg-blue text-white dark:bg-blue'
-                      : 'bg-muted/20 text-slate-900 dark:bg-slate-700 dark:text-slate-100 hover:bg-muted/30 dark:hover:bg-slate-600'
+                      : 'bg-muted/20 text-muted/90 dark:bg-muted/70 dark:text-muted/10 hover:bg-muted/30 dark:hover:bg-muted/60'
                   }`}
                 >
                   {category.charAt(0).toUpperCase() + category.slice(1)}

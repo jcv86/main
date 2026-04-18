@@ -45,7 +45,7 @@ export default function A2CaminoPage() {
       <div className="max-w-4xl mx-auto py-12 space-y-8">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
             Elige Tu Camino
           </h1>
           <p className="text-lg text-muted/60 dark:text-muted/40">
@@ -81,7 +81,7 @@ export default function A2CaminoPage() {
                   <div className="space-y-2">
                     {camino.examples.map((example) => (
                       <div key={example} className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-[20px] bg-slate-400"></div>
+                        <div className="w-2 h-2 rounded-[20px] bg-muted/40"></div>
                         <span className="text-sm text-muted/60 dark:text-muted/40">
                           {example}
                         </span>
@@ -89,7 +89,7 @@ export default function A2CaminoPage() {
                     ))}
                   </div>
                   {selectedCamino === camino.id && (
-                    <div className="mt-4 p-2 bg-slate-900 dark:bg-muted/10 rounded text-white dark:text-slate-900 text-sm font-medium text-center">
+                    <div className="mt-4 p-2 bg-muted/90 dark:bg-muted/10 rounded text-white dark:text-muted/90 text-sm font-medium text-center">
                       Seleccionado
                     </div>
                   )}

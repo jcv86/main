@@ -132,7 +132,7 @@ export default function A3Page() {
               <Button className="bg-red text-white hover:bg-red/90 font-semibold" size="lg">
                 Comenzar Entrenamientos
               </Button>
-              <Button className="bg-slate-900 text-white border border-slate-700 hover:bg-slate-800 font-semibold" size="lg">
+              <Button className="bg-muted/90 text-white border border-muted/70 hover:bg-muted/80 font-semibold" size="lg">
                 Ver Guía
               </Button>
             </div>
@@ -140,7 +140,7 @@ export default function A3Page() {
         </div>
 
         {/* QUICK START GUIDE - A3 VERSION */}
-        <Card className="border border-red/20 bg-slate-900">
+        <Card className="border border-red/20 bg-muted/90">
           <CardHeader>
             <CardTitle className="text-xl text-white" style={{ fontFamily: 'Lora, serif' }}>Primeros Pasos en Entrenamientos</CardTitle>
           </CardHeader>
@@ -180,7 +180,7 @@ export default function A3Page() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-slate-900 border border-slate-800">
+          <Card className="bg-muted/90 border border-muted/80">
             <CardContent className="pt-6">
               <div className="text-3xl font-bold text-red">
                 {a3Progress?.sessions_completed || 0}
@@ -189,7 +189,7 @@ export default function A3Page() {
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-900 border border-slate-800">
+          <Card className="bg-muted/90 border border-muted/80">
             <CardContent className="pt-6">
               <div className="text-3xl font-bold text-red">
                 {a3Progress?.employability_score || 'Calcular'}
@@ -221,7 +221,7 @@ export default function A3Page() {
         {user?.id && (
           <>
             <div>
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Tu Progreso</h2>
+              <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Tu Progreso</h2>
               <p className="text-muted/60 dark:text-muted/40">Monitorea tu desarrollo y mejora continua</p>
             </div>
             <A3ProgressTracker userId={user.id} level="basico" />
@@ -230,7 +230,7 @@ export default function A3Page() {
 
         {/* TRAINING LEVELS SECTION */}
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">Módulo de Entrevistas</h2>
+          <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Módulo de Entrevistas</h2>
           <p className="text-muted/60 dark:text-muted/40 mb-6">
             Progresa a través de tres niveles de dificultad. Completa cada uno antes de avanzar al siguiente.
           </p>

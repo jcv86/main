@@ -27,7 +27,7 @@ export default function MultimodalAnalysisPage() {
       <div className="flex items-center gap-2 mb-6">
         <Zap className="w-6 h-6 text-blue" />
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-muted/90 dark:text-white">
             Análisis Multimodal
           </h1>
           <p className="text-sm text-muted/60 dark:text-muted/40">
@@ -56,7 +56,7 @@ export default function MultimodalAnalysisPage() {
 
       {/* Type Selection - Prominent */}
       <div>
-        <h2 className="text-sm font-semibold text-slate-900 dark:text-slate-100 mb-2">
+        <h2 className="text-sm font-semibold text-muted/90 dark:text-muted/10 mb-2">
           Tipo de Entrenamiento
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -67,7 +67,7 @@ export default function MultimodalAnalysisPage() {
               className={`p-3 rounded-[28px] border-2 transition-all text-left ${
                 entrenamillentoType === type.id
                   ? 'border-blue bg-blue/5 dark:bg-blue-950 shadow-md'
-                  : 'border-muted/20 dark:border-card hover:border-muted/30 dark:hover:border-slate-600'
+                  : 'border-muted/20 dark:border-card hover:border-muted/30 dark:hover:border-muted/60'
               }`}
             >
               <div className="flex items-start gap-2">
@@ -75,7 +75,7 @@ export default function MultimodalAnalysisPage() {
                   <Check className="w-4 h-4 text-blue mt-0.5 flex-shrink-0" />
                 )}
                 <div className="flex-1 min-w-0">
-                  <p className={`font-semibold text-sm ${entrenamillentoType === type.id ? 'text-blue dark:text-blue/10' : 'text-slate-900 dark:text-slate-100'}`}>
+                  <p className={`font-semibold text-sm ${entrenamillentoType === type.id ? 'text-blue dark:text-blue/10' : 'text-muted/90 dark:text-muted/10'}`}>
                     {type.label}
                   </p>
                   <p className="text-xs text-muted/50 dark:text-muted/40">{type.desc}</p>

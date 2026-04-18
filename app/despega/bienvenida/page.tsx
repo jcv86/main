@@ -59,7 +59,7 @@ export default function BienvenidaPage() {
                 <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-blue/10 dark:bg-blue mb-4">
                   <span className="text-xl font-bold text-blue dark:text-blue/30">1</span>
                 </div>
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Conozcámonos</h3>
+                <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Conozcámonos</h3>
                 <p className="text-sm text-muted/60 dark:text-muted/40">
                   Responde preguntas para entender tu perfil, objetivos y contexto laboral
                 </p>
@@ -74,7 +74,7 @@ export default function BienvenidaPage() {
                 <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-purple/10 dark:bg-purple mb-4">
                   <span className="text-xl font-bold text-purple dark:text-purple-300">2</span>
                 </div>
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Tu Plan A2</h3>
+                <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Tu Plan A2</h3>
                 <p className="text-sm text-muted/60 dark:text-muted/40">
                   Recibe un plan personalizado de 90 días adaptado a tu perfil
                 </p>
@@ -89,7 +89,7 @@ export default function BienvenidaPage() {
                 <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-cyan-100 dark:bg-cyan-900 mb-4">
                   <span className="text-xl font-bold text-blue dark:text-cyan-300">3</span>
                 </div>
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Entrena y Analiza</h3>
+                <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Entrena y Analiza</h3>
                 <p className="text-sm text-muted/60 dark:text-muted/40">
                   Practica entrenamientos y obtén análisis multimodal avanzado
                 </p>
@@ -100,33 +100,33 @@ export default function BienvenidaPage() {
 
         {/* Key Features */}
         <div className="bg-white dark:bg-card rounded-lg shadow-sm p-8 mb-8 border border-muted/20 dark:border-card">
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-6">Lo que conseguirás</h2>
+          <h2 className="text-lg font-semibold text-muted/90 dark:text-white mb-6">Lo que conseguirás</h2>
           <div className="grid sm:grid-cols-2 gap-4">
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-medium text-slate-900 dark:text-white">Análisis Completo</p>
+                <p className="font-medium text-muted/90 dark:text-white">Análisis Completo</p>
                 <p className="text-sm text-muted/60 dark:text-muted/40">Feedback detallado sobre postura, tono, gestos y coherencia</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-medium text-slate-900 dark:text-white">Plan Personalizado</p>
+                <p className="font-medium text-muted/90 dark:text-white">Plan Personalizado</p>
                 <p className="text-sm text-muted/60 dark:text-muted/40">Diseñado específicamente para tu perfil y objetivos</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-medium text-slate-900 dark:text-white">Entrenamientos Progresivos</p>
+                <p className="font-medium text-muted/90 dark:text-white">Entrenamientos Progresivos</p>
                 <p className="text-sm text-muted/60 dark:text-muted/40">De básico a maestría en 4 niveles de dificultad</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
               <div>
-                <p className="font-medium text-slate-900 dark:text-white">Contexto del Mercado</p>
+                <p className="font-medium text-muted/90 dark:text-white">Contexto del Mercado</p>
                 <p className="text-sm text-muted/60 dark:text-muted/40">Análisis en profundidad de tendencias y oportunidades</p>
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function BienvenidaPage() {
 
         {/* Timeline */}
         <div className="bg-blue/5 dark:bg-blue-950/30 rounded-[28px] p-6 border border-blue/30 dark:border-blue/10 mb-8">
-          <h3 className="font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
+          <h3 className="font-semibold text-muted/90 dark:text-white mb-3 flex items-center gap-2">
             <Target className="w-5 h-5 text-blue" />
             Tiempo Estimado
           </h3>

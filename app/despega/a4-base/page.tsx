@@ -164,28 +164,28 @@ export default function A4Page() {
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-[20px] bg-blue text-white flex items-center justify-center font-bold">1</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Revisa tu Radar Estratégico</h4>
+                  <h4 className="font-semibold text-muted/90 dark:text-muted/5">Revisa tu Radar Estratégico</h4>
                   <p className="text-sm text-muted/60 dark:text-muted/40">Detecta señales estructurales, tácticas y contextuales en tu industria. El Radar te muestra qué está pasando antes de que sea obvio.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-[20px] bg-blue text-white flex items-center justify-center font-bold">2</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Lee Noticias Personalizadas</h4>
+                  <h4 className="font-semibold text-muted/90 dark:text-muted/5">Lee Noticias Personalizadas</h4>
                   <p className="text-sm text-muted/60 dark:text-muted/40">Accede a noticias filtradas por tu perfil. No es ruido. Es context específico para tu transformación.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-[20px] bg-blue text-white flex items-center justify-center font-bold">3</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Estudia Módulos de Contexto</h4>
+                  <h4 className="font-semibold text-muted/90 dark:text-muted/5">Estudia Módulos de Contexto</h4>
                   <p className="text-sm text-muted/60 dark:text-muted/40">Entiende la cultura corporativa, dinámicas de industria, y como posicionarte estratégicamente.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-[20px] bg-blue text-white flex items-center justify-center font-bold">4</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Guarda Recursos y Crea tu Biblioteca</h4>
+                  <h4 className="font-semibold text-muted/90 dark:text-muted/5">Guarda Recursos y Crea tu Biblioteca</h4>
                   <p className="text-sm text-muted/60 dark:text-muted/40">Construye tu base de conocimiento. A4 es para referencia continua durante tu transformación.</p>
                 </div>
               </div>

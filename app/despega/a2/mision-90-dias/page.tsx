@@ -192,7 +192,7 @@ export default function Mision90DiasPage() {
           <Badge variant="outline" className="mx-auto">
             Define tu Objetivo
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
             Tu Misión 90 Días
           </h1>
           <p className="text-lg text-muted/60 dark:text-muted/40">

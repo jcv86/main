@@ -97,7 +97,7 @@ export default function FeedbackPage() {
         </Link>
 
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
             Feedback del Coach IA
           </h1>
           <p className="text-muted/60 dark:text-muted/40">
@@ -123,7 +123,7 @@ export default function FeedbackPage() {
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <p className="font-semibold text-slate-900 dark:text-white">{value.simulation}</p>
+                    <p className="font-semibold text-muted/90 dark:text-white">{value.simulation}</p>
                     <Badge className="bg-blue">{value.overallScore}%</Badge>
                   </div>
                   <p className="text-sm text-muted/60 dark:text-muted/40">{value.date}</p>
@@ -168,7 +168,7 @@ export default function FeedbackPage() {
                       }`} />
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
-                          <h3 className="font-bold text-slate-900 dark:text-white">
+                          <h3 className="font-bold text-muted/90 dark:text-white">
                             {item.title}
                           </h3>
                           {item.type === 'strength' && (
@@ -185,7 +185,7 @@ export default function FeedbackPage() {
                           {item.description}
                         </p>
                         <p className="text-xs text-muted/50 flex items-center gap-2">
-                          <span className="w-1 h-1 bg-slate-400 rounded-full" />
+                          <span className="w-1 h-1 bg-muted/40 rounded-full" />
                           Timestampv: {item.timestamp}
                         </p>
                       </div>
@@ -206,7 +206,7 @@ export default function FeedbackPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="space-y-2">
-                <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                <p className="text-sm font-semibold text-muted/90 dark:text-white">
                   Para tu próxima simulación, enfócate en:
                 </p>
                 <ol className="list-decimal list-inside space-y-2 text-sm text-muted/70 dark:text-muted/30">
@@ -245,19 +245,19 @@ export default function FeedbackPage() {
                 ].map((item, idx) => (
                   <div key={idx}>
                     <div className="flex justify-between text-sm mb-2">
-                      <span className="font-medium text-slate-900 dark:text-white">{item.metric}</span>
+                      <span className="font-medium text-muted/90 dark:text-white">{item.metric}</span>
                       <span className="text-green dark:text-green-400 font-bold">
                         +{item.after - item.before}%
                       </span>
                     </div>
                     <div className="flex gap-2 h-2">
-                      <div className="flex-1 bg-muted/20 dark:bg-slate-700 rounded overflow-hidden">
+                      <div className="flex-1 bg-muted/20 dark:bg-muted/70 rounded overflow-hidden">
                         <div
-                          className="bg-slate-400 dark:bg-muted/50 h-full"
+                          className="bg-muted/40 dark:bg-muted/50 h-full"
                           style={{ width: `${item.before}%` }}
                         />
                       </div>
-                      <div className="flex-1 bg-muted/20 dark:bg-slate-700 rounded overflow-hidden">
+                      <div className="flex-1 bg-muted/20 dark:bg-muted/70 rounded overflow-hidden">
                         <div
                           className="bg-green/50 h-full"
                           style={{ width: `${item.after}%` }}

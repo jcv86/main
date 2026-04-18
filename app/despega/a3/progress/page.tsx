@@ -60,7 +60,7 @@ export default function ProgressPage() {
         </Link>
 
         <div className="space-y-4">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 className="text-3xl font-bold text-muted/90 dark:text-muted/5">
             Tu Progreso en A3
           </h1>
           <p className="text-lg text-muted/60 dark:text-muted/40">
@@ -144,10 +144,10 @@ export default function ProgressPage() {
             ].map((item) => (
               <div key={item.skill} className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-slate-900 dark:text-slate-50">{item.skill}</span>
+                  <span className="font-semibold text-muted/90 dark:text-muted/5">{item.skill}</span>
                   <span className="text-sm font-semibold text-muted/60 dark:text-muted/40">{item.progress}%</span>
                 </div>
-                <div className="w-full bg-muted/20 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-muted/20 dark:bg-muted/70 h-2 rounded-full overflow-hidden">
                   <div
                     className={`h-full ${item.color} transition-all duration-300`}
                     style={{ width: `${item.progress}%` }}

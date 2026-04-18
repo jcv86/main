@@ -24,7 +24,7 @@ export default function AnalisisMercadoChilePage() {
 
         {/* Executive Summary */}
         <section className="mb-16 bg-white rounded-2xl shadow-lg p-8 border border-muted/20">
-          <h2 className="text-3xl font-bold text-slate-900 mb-6">Resumen Ejecutivo</h2>
+          <h2 className="text-3xl font-bold text-muted/90 mb-6">Resumen Ejecutivo</h2>
           <div className="prose prose-slate max-w-none">
             <p className="text-lg text-muted/70 leading-relaxed">
               El mercado chileno enfrenta una <strong>crisis de empleabilidad profesional sin precedentes</strong>, con
@@ -51,7 +51,7 @@ export default function AnalisisMercadoChilePage() {
 
         {/* Problema del Mercado */}
         <section className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8">1. Diagnóstico del Problema</h2>
+          <h2 className="text-3xl font-bold text-muted/90 mb-8">1. Diagnóstico del Problema</h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             {/* Crisis de Empleabilidad */}
@@ -137,31 +137,31 @@ export default function AnalisisMercadoChilePage() {
 
           {/* Causas Raíz */}
           <div className="bg-white rounded-2xl shadow-lg p-8 border border-muted/20">
-            <h3 className="text-2xl font-bold text-slate-900 mb-6">🔍 Causas Raíz del Problema</h3>
+            <h3 className="text-2xl font-bold text-muted/90 mb-6">🔍 Causas Raíz del Problema</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="border-l-4 border-blue pl-4">
-                <h4 className="font-bold text-slate-900 mb-2">Desajuste Educación-Mercado</h4>
+                <h4 className="font-bold text-muted/90 mb-2">Desajuste Educación-Mercado</h4>
                 <p className="text-muted/60 text-sm">
                   Exceso de profesionales en áreas no demandadas. Carreras tradicionales saturadas mientras sectores
                   tecnológicos carecen de talento.
                 </p>
               </div>
               <div className="border-l-4 border-purple pl-4">
-                <h4 className="font-bold text-slate-900 mb-2">Déficit de Soft Skills</h4>
+                <h4 className="font-bold text-muted/90 mb-2">Déficit de Soft Skills</h4>
                 <p className="text-muted/60 text-sm">
                   Universidades priorizan conocimientos técnicos. Estudiantes egresan sin habilidades de comunicación,
                   liderazgo o adaptabilidad.
                 </p>
               </div>
               <div className="border-l-4 border-green-600 pl-4">
-                <h4 className="font-bold text-slate-900 mb-2">Falta de Orientación Vocacional</h4>
+                <h4 className="font-bold text-muted/90 mb-2">Falta de Orientación Vocacional</h4>
                 <p className="text-muted/60 text-sm">
                   Decisiones de carrera basadas en mitos familiares o prestigio social, no en aptitudes reales o demanda
                   del mercado.
                 </p>
               </div>
               <div className="border-l-4 border-red-600 pl-4">
-                <h4 className="font-bold text-slate-900 mb-2">Herramientas Obsoletas</h4>
+                <h4 className="font-bold text-muted/90 mb-2">Herramientas Obsoletas</h4>
                 <p className="text-muted/60 text-sm">
                   Servicios universitarios de carrera sobrecargados, tests vocacionales estáticos, sin coaching
                   personalizado ni seguimiento continuo.
@@ -173,7 +173,7 @@ export default function AnalisisMercadoChilePage() {
 
         {/* Tamaño del Mercado */}
         <section className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8">2. Tamaño y Oportunidad de Mercado</h2>
+          <h2 className="text-3xl font-bold text-muted/90 mb-8">2. Tamaño y Oportunidad de Mercado</h2>
 
           <div className="bg-gradient-to-r from-blue to-indigo-600 rounded-2xl shadow-lg p-8 text-white mb-8">
             <h3 className="text-2xl font-bold mb-6">📊 Segmentos de Mercado Primarios</h3>
@@ -210,15 +210,15 @@ export default function AnalisisMercadoChilePage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-white rounded-2xl shadow-lg p-8 border border-muted/20">
-              <h3 className="text-xl font-bold text-slate-900 mb-4">🎯 Mercado B2B (Universidades)</h3>
+              <h3 className="text-xl font-bold text-muted/90 mb-4">🎯 Mercado B2B (Universidades)</h3>
               <div className="space-y-4">
                 <div className="flex justify-between items-center pb-3 border-b border-muted/20">
                   <span className="text-muted/60">Universidades tradicionales</span>
-                  <span className="font-bold text-slate-900">~60 instituciones</span>
+                  <span className="font-bold text-muted/90">~60 instituciones</span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b border-muted/20">
                   <span className="text-muted/60">Matrícula universitaria total</span>
-                  <span className="font-bold text-slate-900">814,692 estudiantes</span>
+                  <span className="font-bold text-muted/90">814,692 estudiantes</span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b border-muted/20">
                   <span className="text-muted/60">Valor contrato promedio/año</span>
@@ -233,15 +233,15 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             <div className="bg-white rounded-2xl shadow-lg p-8 border border-muted/20">
-              <h3 className="text-xl font-bold text-slate-900 mb-4">💰 Mercado B2C (Usuarios Directos)</h3>
+              <h3 className="text-xl font-bold text-muted/90 mb-4">💰 Mercado B2C (Usuarios Directos)</h3>
               <div className="space-y-4">
                 <div className="flex justify-between items-center pb-3 border-b border-muted/20">
                   <span className="text-muted/60">Estudiantes universitarios</span>
-                  <span className="font-bold text-slate-900">814K potenciales</span>
+                  <span className="font-bold text-muted/90">814K potenciales</span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b border-muted/20">
                   <span className="text-muted/60">Profesionales desempleados</span>
-                  <span className="font-bold text-slate-900">~370K (con ed. superior)</span>
+                  <span className="font-bold text-muted/90">~370K (con ed. superior)</span>
                 </div>
                 <div className="flex justify-between items-center pb-3 border-b border-muted/20">
                   <span className="text-muted/60">Precio premium mensual</span>
@@ -260,15 +260,15 @@ export default function AnalisisMercadoChilePage() {
 
         {/* Análisis Competitivo */}
         <section className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8">3. Análisis Competitivo</h2>
+          <h2 className="text-3xl font-bold text-muted/90 mb-8">3. Análisis Competitivo</h2>
 
           <div className="bg-white rounded-2xl shadow-lg p-8 border border-muted/20 mb-6">
-            <h3 className="text-xl font-bold text-slate-900 mb-6">Competidores Identificados</h3>
+            <h3 className="text-xl font-bold text-muted/90 mb-6">Competidores Identificados</h3>
             <div className="space-y-6">
               {/* Competidor 1 */}
               <div className="border-l-4 border-orange-500 pl-6 bg-orange-50 p-4 rounded-r-lg">
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-bold text-slate-900">Servicios Universitarios Tradicionales</h4>
+                  <h4 className="font-bold text-muted/90">Servicios Universitarios Tradicionales</h4>
                   <span className="text-xs bg-orange-200 text-orange-800 px-3 py-1 rounded-full">
                     Competencia Indirecta
                   </span>
@@ -300,7 +300,7 @@ export default function AnalisisMercadoChilePage() {
               {/* Competidor 2 */}
               <div className="border-l-4 border-yellow-500 pl-6 bg-yellow-50 p-4 rounded-r-lg">
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-bold text-slate-900">Plataformas de Orientación Vocacional</h4>
+                  <h4 className="font-bold text-muted/90">Plataformas de Orientación Vocacional</h4>
                   <span className="text-xs bg-yellow-200 text-yellow-800 px-3 py-1 rounded-full">
                     Competencia Directa
                   </span>
@@ -332,7 +332,7 @@ export default function AnalisisMercadoChilePage() {
               {/* Competidor 3 */}
               <div className="border-l-4 border-blue/50 pl-6 bg-blue/5 p-4 rounded-r-lg">
                 <div className="flex items-center justify-between mb-2">
-                  <h4 className="font-bold text-slate-900">Plataformas EdTech LATAM</h4>
+                  <h4 className="font-bold text-muted/90">Plataformas EdTech LATAM</h4>
                   <span className="text-xs bg-blue/20 text-blue-800 px-3 py-1 rounded-full">Competencia Lateral</span>
                 </div>
                 <p className="text-sm text-muted/60 mb-3">
@@ -435,13 +435,13 @@ export default function AnalisisMercadoChilePage() {
 
         {/* Tendencias del Mercado */}
         <section className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8">4. Tendencias Clave del Mercado</h2>
+          <h2 className="text-3xl font-bold text-muted/90 mb-8">4. Tendencias Clave del Mercado</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-muted/20">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-4xl">🤖</span>
-                <h3 className="text-xl font-bold text-slate-900">Adopción de IA en Empresas</h3>
+                <h3 className="text-xl font-bold text-muted/90">Adopción de IA en Empresas</h3>
               </div>
               <ul className="space-y-2 text-muted/70">
                 <li className="flex items-start gap-2">
@@ -476,7 +476,7 @@ export default function AnalisisMercadoChilePage() {
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-muted/20">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-4xl">📱</span>
-                <h3 className="text-xl font-bold text-slate-900">Crecimiento EdTech LATAM</h3>
+                <h3 className="text-xl font-bold text-muted/90">Crecimiento EdTech LATAM</h3>
               </div>
               <ul className="space-y-2 text-muted/70">
                 <li className="flex items-start gap-2">
@@ -511,7 +511,7 @@ export default function AnalisisMercadoChilePage() {
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-muted/20">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-4xl">🎯</span>
-                <h3 className="text-xl font-bold text-slate-900">Prioridad en Soft Skills</h3>
+                <h3 className="text-xl font-bold text-muted/90">Prioridad en Soft Skills</h3>
               </div>
               <ul className="space-y-2 text-muted/70">
                 <li className="flex items-start gap-2">
@@ -546,7 +546,7 @@ export default function AnalisisMercadoChilePage() {
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-muted/20">
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-4xl">💼</span>
-                <h3 className="text-xl font-bold text-slate-900">Demanda de Upskilling</h3>
+                <h3 className="text-xl font-bold text-muted/90">Demanda de Upskilling</h3>
               </div>
               <ul className="space-y-2 text-muted/70">
                 <li className="flex items-start gap-2">
@@ -584,7 +584,7 @@ export default function AnalisisMercadoChilePage() {
 
         {/* Recomendaciones Estratégicas */}
         <section className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8">
+          <h2 className="text-3xl font-bold text-muted/90 mb-8">
             5. Recomendaciones para Mejorar la Propuesta de Valor
           </h2>
 
@@ -848,7 +848,7 @@ export default function AnalisisMercadoChilePage() {
 
         {/* Plan de Acción Inmediato */}
         <section className="mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 mb-8">6. Plan de Acción Inmediato (Q1 2026)</h2>
+          <h2 className="text-3xl font-bold text-muted/90 mb-8">6. Plan de Acción Inmediato (Q1 2026)</h2>
 
           <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl shadow-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-6">🎯 Prioridades de Lanzamiento</h3>

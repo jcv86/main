@@ -129,7 +129,7 @@ export default function DemoPage() {
             </Button>
 
             {/* Features Preview */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12 pt-8 border-t border-muted/20 dark:border-slate-800">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-12 pt-8 border-t border-muted/20 dark:border-muted/80">
               <div className="text-left">
                 <h3 className="font-bold mb-2 flex items-center gap-2">
                   <Check className="w-5 h-5 text-green" />
@@ -178,7 +178,7 @@ export default function DemoPage() {
                         className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
                           demoAnswers[q.id] === option.value
                             ? 'border-purple bg-purple/5 dark:bg-purple'
-                            : 'border-muted/20 dark:border-card hover:border-slate-400 dark:hover:border-slate-600'
+                            : 'border-muted/20 dark:border-card hover:border-muted/40 dark:hover:border-muted/60'
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -263,7 +263,7 @@ export default function DemoPage() {
                   </div>
                 </div>
 
-                <div className="border-t border-muted/20 dark:border-slate-800 pt-4 space-y-2">
+                <div className="border-t border-muted/20 dark:border-muted/80 pt-4 space-y-2">
                   <Link href="/auth/signin">
                     <Button className="w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white py-6 text-lg">
                       Crear Mi Cuenta Gratuita

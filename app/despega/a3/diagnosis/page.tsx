@@ -24,7 +24,7 @@ export default function DiagnosisPage() {
         </Link>
 
         <div className="space-y-4">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 className="text-3xl font-bold text-muted/90 dark:text-muted/5">
             Diagnosis de Empleabilidad
           </h1>
           <p className="text-lg text-muted/60 dark:text-muted/40">

@@ -142,7 +142,7 @@ export default function GuidedTrainingPage() {
           <div className="space-y-2">
             <div className="flex items-center gap-3">
               <Icon className="w-8 h-8 text-blue dark:text-blue/40" />
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+              <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
                 {selectedModule.name}
               </h1>
             </div>
@@ -155,7 +155,7 @@ export default function GuidedTrainingPage() {
           {/* Lesson Content */}
           <Card className="p-8 space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+              <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">
                 {lesson.title}
               </h2>
               <p className="text-muted/60 dark:text-muted/40">{lesson.description}</p>
@@ -165,7 +165,7 @@ export default function GuidedTrainingPage() {
             <div className="bg-gradient-to-br from-blue/5 to-indigo-50 dark:from-blue/20 dark:to-indigo-900/20 border-2 border-blue/30 dark:border-blue/10 rounded-[28px] p-8 min-h-64 space-y-4">
               <div className="space-y-4 text-muted/70 dark:text-muted/30">
                 <div className="flex items-center justify-between">
-                  <p className="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                  <p className="font-bold text-lg text-muted/90 dark:text-white flex items-center gap-2">
                     <Lightbulb className="w-5 h-5 text-blue dark:text-blue/40" />
                     Tu Coach IA explica:
                   </p>
@@ -192,7 +192,7 @@ export default function GuidedTrainingPage() {
 
                 {aiTip ? (
                   <div className="bg-white dark:bg-background p-4 rounded-[28px] border-l-4 border-blue space-y-3">
-                    <p className="text-slate-900 dark:text-white">{aiTip}</p>
+                    <p className="text-muted/90 dark:text-white">{aiTip}</p>
                   </div>
                 ) : (
                   <div className="space-y-3">
@@ -334,7 +334,7 @@ export default function GuidedTrainingPage() {
               </div>
             ) : (
               <div className="fixed inset-0 bg-black z-50 flex flex-col h-screen">
-                <div className="flex-shrink-0 border-b border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 p-4">
+                <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-slate-900 to-slate-950 p-4">
                   <Button
                     onClick={() => setShowVideoSession(false)}
                     variant="outline"
@@ -400,7 +400,7 @@ export default function GuidedTrainingPage() {
         </Link>
 
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
             Entrenamiento Guiado
           </h1>
           <p className="text-muted/60 dark:text-muted/40">
@@ -451,7 +451,7 @@ export default function GuidedTrainingPage() {
                     {module.lessons.map((lesson, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-3 p-2 rounded hover:bg-muted/10 dark:hover:bg-slate-800/50"
+                        className="flex items-center gap-3 p-2 rounded hover:bg-muted/10 dark:hover:bg-muted/80/50"
                       >
                         {lesson.completed ? (
                           <CheckCircle2 className="w-5 h-5 text-green flex-shrink-0" />
@@ -459,7 +459,7 @@ export default function GuidedTrainingPage() {
                           <div className="w-5 h-5 border-2 border-muted/30 rounded-full flex-shrink-0" />
                         )}
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-slate-900 dark:text-white">
+                          <p className="text-sm font-medium text-muted/90 dark:text-white">
                             {lesson.title}
                           </p>
                           <p className="text-xs text-muted/50">{lesson.description}</p>
@@ -474,7 +474,7 @@ export default function GuidedTrainingPage() {
                     disabled={isLocked}
                     className={`w-full ${
                       isLocked
-                        ? 'bg-muted/30 dark:bg-slate-700 cursor-not-allowed'
+                        ? 'bg-muted/30 dark:bg-muted/70 cursor-not-allowed'
                         : 'bg-blue hover:bg-blue'
                     }`}
                   >

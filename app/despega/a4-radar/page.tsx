@@ -73,7 +73,7 @@ export default function A4RadarPage() {
       {/* FLUJO / PROCESO */}
       <ASectionPart title="Cómo Funciona el Radar" icon={<Radar />}>
         <div className="space-y-4">
-          <div className="p-4 bg-slate-800/30 border border-slate-700 rounded-lg space-y-3">
+          <div className="p-4 bg-muted/80/30 border border-muted/70 rounded-lg space-y-3">
             <div className="flex gap-3 items-start">
               <div className="w-8 h-8 rounded-[20px] bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">1</div>
               <div>
@@ -109,7 +109,7 @@ export default function A4RadarPage() {
       {/* RESULTADOS */}
       <ASectionPart title="Componentes del Radar" icon={<CheckCircle2 />}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="bg-slate-800/40 border-slate-700 hover:border-teal-500/50 transition-colors">
+          <Card className="bg-muted/80/40 border-muted/70 hover:border-teal-500/50 transition-colors">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <Newspaper className="w-5 h-5 text-teal-400" />
@@ -129,7 +129,7 @@ export default function A4RadarPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/40 border-slate-700 hover:border-teal-500/50 transition-colors">
+          <Card className="bg-muted/80/40 border-muted/70 hover:border-teal-500/50 transition-colors">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <TrendingUp className="w-5 h-5 text-emerald-400" />
@@ -149,7 +149,7 @@ export default function A4RadarPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/40 border-slate-700 hover:border-teal-500/50 transition-colors">
+          <Card className="bg-muted/80/40 border-muted/70 hover:border-teal-500/50 transition-colors">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <Radar className="w-5 h-5 text-cyan-400" />
@@ -169,7 +169,7 @@ export default function A4RadarPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/40 border-slate-700 hover:border-teal-500/50 transition-colors">
+          <Card className="bg-muted/80/40 border-muted/70 hover:border-teal-500/50 transition-colors">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <Zap className="w-5 h-5 text-yellow-400" />
@@ -195,7 +195,7 @@ export default function A4RadarPage() {
       <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-slate-800/40 border-slate-700 hover:border-teal-500/50 transition-colors">
+            <Card className="bg-muted/80/40 border-muted/70 hover:border-teal-500/50 transition-colors">
               <CardHeader>
                 <CardTitle className="text-lg">Tu Transformación Está Completa</CardTitle>
               </CardHeader>
@@ -215,7 +215,7 @@ export default function A4RadarPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-slate-800/40 border-slate-700 hover:border-teal-500/50 transition-colors">
+            <Card className="bg-muted/80/40 border-muted/70 hover:border-teal-500/50 transition-colors">
               <CardHeader>
                 <CardTitle className="text-lg">Sigue Monitoreando</CardTitle>
               </CardHeader>

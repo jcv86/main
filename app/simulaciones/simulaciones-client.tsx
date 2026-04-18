@@ -111,7 +111,7 @@ export default function EntrenamientoEntrevistasClient() {
             <select
               value={filtroTipo}
               onChange={(e) => setFiltroTipo(e.target.value)}
-              className="mt-1 px-3 py-2 border border-muted/30 dark:border-slate-600 rounded-lg bg-white dark:bg-card text-slate-900 dark:text-white"
+              className="mt-1 px-3 py-2 border border-muted/30 dark:border-muted/60 rounded-lg bg-white dark:bg-card text-muted/90 dark:text-white"
             >
               <option value="todas">Todas</option>
               <option value="entrevista">Entrevistas</option>
@@ -125,7 +125,7 @@ export default function EntrenamientoEntrevistasClient() {
             <select
               value={filtroDificultad}
               onChange={(e) => setFiltroDificultad(e.target.value)}
-              className="mt-1 px-3 py-2 border border-muted/30 dark:border-slate-600 rounded-lg bg-white dark:bg-card text-slate-900 dark:text-white"
+              className="mt-1 px-3 py-2 border border-muted/30 dark:border-muted/60 rounded-lg bg-white dark:bg-card text-muted/90 dark:text-white"
             >
               <option value="todas">Todas</option>
               <option value="fácil">Fácil</option>

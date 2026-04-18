@@ -315,10 +315,10 @@ export default function A1ReportPage() {
               { label: 'Estabilizador', score: profile.S, color: 'from-green to-blue', icon: '🛡️' },
               { label: 'Arquitecto', score: profile.C, color: 'from-blue to-purple-500', icon: '🏗️' }
             ].map((dim, idx) => (
-              <div key={idx} className="flex items-center gap-4 p-3 bg-slate-700/50 rounded-[28px] border border-slate-600 hover:border-slate-500 transition-colors">
+              <div key={idx} className="flex items-center gap-4 p-3 bg-muted/70/50 rounded-[28px] border border-muted/60 hover:border-muted/50 transition-colors">
                 <span className="text-2xl">{dim.icon}</span>
                 <p className="font-bold text-white w-32">{dim.label}</p>
-                <div className="flex-1 h-4 bg-slate-600 rounded-full overflow-hidden border border-slate-500">
+                <div className="flex-1 h-4 bg-muted/60 rounded-full overflow-hidden border border-muted/50">
                   <div className={`h-full bg-gradient-to-r ${dim.color} shadow-lg`} style={{ width: `${Math.max(0, dim.score)}%` }} />
                 </div>
                 <div className="flex items-center gap-2">
@@ -356,7 +356,7 @@ export default function A1ReportPage() {
             </div>
 
             {/* Introducción */}
-            <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 text-center">
+            <div className="bg-muted/80/50 border border-muted/70 rounded-xl p-6 text-center">
               <p className="text-muted/30 text-lg">
                 Basado en tu Perfil de El Ritual y tu contexto personal, aquí está tu análisis completo:
               </p>
@@ -399,13 +399,13 @@ export default function A1ReportPage() {
 
       <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="bg-slate-800/40 border-slate-700">
+          <Card className="bg-muted/80/40 border-muted/70">
             <CardHeader>
               <CardTitle className="text-lg">Entender Tus Patrones</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted/40 mb-4">Descubre cómo tu perfil te ayuda en entrevistas y equipos.</p>
-              <Button onClick={() => router.push('/despega/a1-patterns')} variant="outline" className="border-slate-600" size="sm">
+              <Button onClick={() => router.push('/despega/a1-patterns')} variant="outline" className="border-muted/60" size="sm">
                 Ver Detalles
               </Button>
             </CardContent>
@@ -428,7 +428,7 @@ export default function A1ReportPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/40 border-slate-700">
+          <Card className="bg-muted/80/40 border-muted/70">
             <CardHeader>
               <CardTitle className="text-lg">Avanzar a A2</CardTitle>
             </CardHeader>

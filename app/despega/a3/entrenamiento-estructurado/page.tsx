@@ -43,7 +43,7 @@ export default function StructuredTrainingPage() {
   return (
     <main className="min-h-screen bg-black">
       <div className="flex flex-col h-screen">
-        <div className="flex-shrink-0 border-b border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 p-4">
+        <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-slate-900 to-slate-950 p-4">
           <Link href="/despega/a3-dashboard" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300">
             <ArrowLeft className="w-4 h-4" />
             Volver al Dashboard

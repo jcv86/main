@@ -165,7 +165,7 @@ export default function A2IntroPage() {
           <Badge className="mx-auto" variant="secondary">
             A2: Rutas de Transformación
           </Badge>
-          <h1 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-slate-50 leading-tight">
+          <h1 className="text-5xl md:text-6xl font-bold text-muted/90 dark:text-muted/5 leading-tight">
             Tu Motor de Avance
           </h1>
           <p className="text-xl text-muted/60 dark:text-muted/40">
@@ -213,21 +213,21 @@ export default function A2IntroPage() {
                 <div className="flex gap-3">
                   <Zap className="w-6 h-6 text-amber-500 flex-shrink-0 mt-1" />
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">Micro-acciones diarias</p>
+                    <p className="font-semibold text-muted/90 dark:text-muted/10">Micro-acciones diarias</p>
                     <p className="text-sm text-muted/60 dark:text-muted/40">De 5 a 120 minutos, nunca abrumador</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <Target className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-1" />
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">3 Sprints estructurados</p>
+                    <p className="font-semibold text-muted/90 dark:text-muted/10">3 Sprints estructurados</p>
                     <p className="text-sm text-muted/60 dark:text-muted/40">30 días cada uno, con momentum progresivo</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <BookOpen className="w-6 h-6 text-blue/50 flex-shrink-0 mt-1" />
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">Bitácora de aprendizaje</p>
+                    <p className="font-semibold text-muted/90 dark:text-muted/10">Bitácora de aprendizaje</p>
                     <p className="text-sm text-muted/60 dark:text-muted/40">Reflexión semanal para consolidar progreso</p>
                   </div>
                 </div>

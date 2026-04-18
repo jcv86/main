@@ -166,7 +166,7 @@ export default function JourneyPage() {
           {phases.map((phase, idx) => (
             <div key={phase.phase}>
               <Link href={phase.href} className="block h-full">
-                <Card className={`bg-gradient-to-br ${phase.bgColor} border-2 border-transparent hover:border-muted/30 dark:hover:border-slate-700 transition-all cursor-pointer h-full flex flex-col`}>
+                <Card className={`bg-gradient-to-br ${phase.bgColor} border-2 border-transparent hover:border-muted/30 dark:hover:border-muted/70 transition-all cursor-pointer h-full flex flex-col`}>
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -227,7 +227,7 @@ export default function JourneyPage() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-slate-700 flex items-center justify-center font-bold text-muted/70 dark:text-muted/30">↓</div>
+                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-muted/70 flex items-center justify-center font-bold text-muted/70 dark:text-muted/30">↓</div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4 mb-4">
@@ -242,7 +242,7 @@ export default function JourneyPage() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-slate-700 flex items-center justify-center font-bold text-muted/70 dark:text-muted/30">↓</div>
+                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-muted/70 flex items-center justify-center font-bold text-muted/70 dark:text-muted/30">↓</div>
               </div>
 
               <div className="flex items-center gap-4">

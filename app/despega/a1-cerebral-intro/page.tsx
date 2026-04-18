@@ -105,21 +105,21 @@ export default function A1CerebralIntroPage() {
                 <div className="flex gap-4">
                   <div className="flex-shrink-0 w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center font-bold">1</div>
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-white">28 preguntas</p>
+                    <p className="font-semibold text-muted/90 dark:text-white">28 preguntas</p>
                     <p className="text-sm text-muted/60 dark:text-muted/40">Responde 28 preguntas simples sobre tu comportamiento</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
                   <div className="flex-shrink-0 w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center font-bold">2</div>
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-white">Dos selecciones por pregunta</p>
+                    <p className="font-semibold text-muted/90 dark:text-white">Dos selecciones por pregunta</p>
                     <p className="text-sm text-muted/60 dark:text-muted/40">Para cada pregunta, selecciona la opción que más y menos te describe</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
                   <div className="flex-shrink-0 w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center font-bold">3</div>
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-white">Análisis automático</p>
+                    <p className="font-semibold text-muted/90 dark:text-white">Análisis automático</p>
                     <p className="text-sm text-muted/60 dark:text-muted/40">Obtendrás tu perfil cerebral personalizado con insights sobre tu comunicación y liderazgo</p>
                   </div>
                 </div>
@@ -128,13 +128,13 @@ export default function A1CerebralIntroPage() {
           </Card>
 
           {/* Example Question */}
-          <Card className="border-0 shadow-lg bg-slate-900 dark:bg-card">
+          <Card className="border-0 shadow-lg bg-muted/90 dark:bg-card">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-white">Ejemplo Real de Pregunta</CardTitle>
               <CardDescription className="text-muted/40">Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="bg-slate-800 dark:bg-slate-700 p-8 rounded-[28px] border border-slate-700">
+              <div className="bg-muted/80 dark:bg-muted/70 p-8 rounded-[28px] border border-muted/70">
                 <p className="text-xl font-semibold text-white mb-8 text-center">
                   "Cuando enfrento un desafío importante, tiendo a ser más:"
                 </p>
@@ -151,15 +151,15 @@ export default function A1CerebralIntroPage() {
                         <p className="font-medium text-white">Decidido y directo</p>
                         <p className="text-xs text-muted/40 mt-1">Impulsor</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                      <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
                         <p className="text-muted/30">Optimista e inspirador</p>
                         <p className="text-xs text-muted/50 mt-1">Catalizador</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                      <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
                         <p className="text-muted/30">Paciente y considerado</p>
                         <p className="text-xs text-muted/50 mt-1">Estabilizador</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                      <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
                         <p className="text-muted/30">Analítico y preciso</p>
                         <p className="text-xs text-muted/50 mt-1">Arquitecto</p>
                       </button>
@@ -173,15 +173,15 @@ export default function A1CerebralIntroPage() {
                       MENOS como yo
                     </p>
                     <div className="space-y-3">
-                      <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                      <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
                         <p className="text-muted/30">Decidido y directo</p>
                         <p className="text-xs text-muted/50 mt-1">Impulsor</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                      <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
                         <p className="text-muted/30">Optimista e inspirador</p>
                         <p className="text-xs text-muted/50 mt-1">Catalizador</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-slate-600 rounded-lg text-left hover:bg-slate-700 transition-all">
+                      <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
                         <p className="text-muted/30">Paciente y considerado</p>
                         <p className="text-xs text-muted/50 mt-1">Estabilizador</p>
                       </button>

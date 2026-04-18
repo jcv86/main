@@ -140,7 +140,7 @@ export default function SignInPage() {
             <Button
               onClick={handleGoogleSignIn}
               disabled={isLoading}
-              className="w-full h-12 text-base gap-2 bg-white hover:bg-gray-50 border-2 border-gray-200 text-slate-900 hover:border-blue/30 hover:shadow-md transition-all duration-200 dark:bg-background dark:hover:bg-slate-800 dark:border-card dark:text-white dark:hover:border-blue/50"
+              className="w-full h-12 text-base gap-2 bg-white hover:bg-gray-50 border-2 border-gray-200 text-muted/90 hover:border-blue/30 hover:shadow-md transition-all duration-200 dark:bg-background dark:hover:bg-muted/80 dark:border-card dark:text-white dark:hover:border-blue/50"
             >
               {isLoadingGoogle ? (
                 <Loader2 className="h-5 w-5 animate-spin" />

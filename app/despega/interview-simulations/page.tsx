@@ -42,7 +42,7 @@ export default function InterviewSimulationsPage() {
       <div className="max-w-2xl mx-auto">
         <Card className="p-8 text-center">
           <Briefcase className="w-16 h-16 mx-auto text-purple mb-4 opacity-50" />
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+          <h1 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">
             Entrenamiento de Entrevista
           </h1>
           <p className="text-muted/60 dark:text-muted/40 mb-6">

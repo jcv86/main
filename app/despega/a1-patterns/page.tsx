@@ -87,7 +87,7 @@ export default function A1PatternsPage() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex flex-wrap gap-2 mb-8 bg-slate-800/50 p-4 rounded-[28px]">
+        <div className="flex flex-wrap gap-2 mb-8 bg-muted/80/50 p-4 rounded-[28px]">
           {(['strengths', 'challenges', 'interview', 'career'] as const).map((tab) => (
             <button
               key={tab}
@@ -95,7 +95,7 @@ export default function A1PatternsPage() {
               className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                 selectedTab === tab
                   ? 'bg-purple text-white shadow-lg'
-                  : 'bg-slate-700 text-muted/30 hover:bg-slate-600'
+                  : 'bg-muted/70 text-muted/30 hover:bg-muted/60'
               }`}
             >
               {tab === 'strengths' && '💪 Fortalezas'}
@@ -141,7 +141,7 @@ export default function A1PatternsPage() {
           <div className="space-y-6">
             <h3 className="text-2xl font-bold text-white mb-6">Cómo Destacar en Entrevistas</h3>
             
-            <Card className="bg-slate-800/50 border-slate-700 border-2">
+            <Card className="bg-muted/80/50 border-muted/70 border-2">
               <CardHeader>
                 <CardTitle className="text-cyan-300">Tu Ventaja Natural</CardTitle>
               </CardHeader>
@@ -208,7 +208,7 @@ export default function A1PatternsPage() {
         )}
 
         {/* Next Steps */}
-        <div className="mt-12 pt-8 border-t border-slate-700">
+        <div className="mt-12 pt-8 border-t border-muted/70">
           <h3 className="text-2xl font-bold text-white mb-6">Próximos Pasos</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="bg-gradient-to-br from-cyan-900/40 to-teal-900/20 border-cyan-600/30 border-2">
@@ -230,7 +230,7 @@ export default function A1PatternsPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-slate-800/40 border-slate-700">
+            <Card className="bg-muted/80/40 border-muted/70">
               <CardHeader>
                 <CardTitle>Ir a A2: Ruta</CardTitle>
               </CardHeader>

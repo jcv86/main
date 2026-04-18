@@ -113,7 +113,7 @@ export default function HowToEarnXPPage() {
         {/* MAIN RULES */}
         <div className="space-y-6">
           {xpRules.map((rule, idx) => (
-            <Card key={idx} className="bg-slate-800/50 border-slate-700 hover:border-cyan-500/50 transition-colors">
+            <Card key={idx} className="bg-muted/80/50 border-muted/70 hover:border-cyan-500/50 transition-colors">
               <CardHeader 
                 className="cursor-pointer"
                 onClick={() => setExpandedPhase(expandedPhase === rule.phase ? '' : rule.phase)}
@@ -139,7 +139,7 @@ export default function HowToEarnXPPage() {
                     return (
                       <div 
                         key={itemIdx}
-                        className="flex items-center justify-between p-3 rounded-[28px] bg-slate-700/30 border border-slate-600/50 hover:border-cyan-500/30 transition-colors"
+                        className="flex items-center justify-between p-3 rounded-[28px] bg-muted/70/30 border border-muted/60/50 hover:border-cyan-500/30 transition-colors"
                       >
                         <div className="flex items-center gap-3 flex-1">
                           <IconComponent className="w-5 h-5 text-cyan-400 flex-shrink-0" />
@@ -176,7 +176,7 @@ export default function HowToEarnXPPage() {
               {streakBenefits.map((benefit, idx) => (
                 <div 
                   key={idx}
-                  className="p-4 rounded-[28px] bg-slate-800/50 border border-orange-500/30 text-center"
+                  className="p-4 rounded-[28px] bg-muted/80/50 border border-orange-500/30 text-center"
                 >
                   <p className="font-bold text-lg text-orange-400">{benefit.days}</p>
                   <p className="text-sm text-muted/30">{benefit.bonus}</p>
@@ -209,7 +209,7 @@ export default function HowToEarnXPPage() {
         </Card>
 
         {/* LEVEL PROGRESSION */}
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-muted/80/50 border-muted/70">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-cyan-400" />
@@ -222,17 +222,17 @@ export default function HowToEarnXPPage() {
                 <span className="font-bold">1,000 XP = 1 Nivel</span>
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-3 rounded-[28px] bg-slate-700/50 border border-cyan-500/30">
+                <div className="p-3 rounded-[28px] bg-muted/70/50 border border-cyan-500/30">
                   <p className="text-xs text-muted/40">Novato</p>
                   <p className="text-lg font-bold">Niveles 1-5</p>
                   <p className="text-xs text-muted/40">0-5,000 XP</p>
                 </div>
-                <div className="p-3 rounded-[28px] bg-slate-700/50 border border-cyan-500/30">
+                <div className="p-3 rounded-[28px] bg-muted/70/50 border border-cyan-500/30">
                   <p className="text-xs text-muted/40">Intermedio</p>
                   <p className="text-lg font-bold">Niveles 6-15</p>
                   <p className="text-xs text-muted/40">5,000-15,000 XP</p>
                 </div>
-                <div className="p-3 rounded-[28px] bg-slate-700/50 border border-cyan-500/30">
+                <div className="p-3 rounded-[28px] bg-muted/70/50 border border-cyan-500/30">
                   <p className="text-xs text-muted/40">Experto</p>
                   <p className="text-lg font-bold">Niveles 16+</p>
                   <p className="text-xs text-muted/40">15,000+ XP</p>

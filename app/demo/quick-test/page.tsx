@@ -83,7 +83,7 @@ export default function QuickTestPage() {
             const isComplete = results[test.id]?.success
             
             return (
-              <Card key={test.id} className="border-2 hover:border-muted/30 dark:hover:border-slate-700 transition-all">
+              <Card key={test.id} className="border-2 hover:border-muted/30 dark:hover:border-muted/70 transition-all">
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">

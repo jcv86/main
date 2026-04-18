@@ -347,7 +347,7 @@ export default function SprintViewerPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between gap-4">
             <div className="space-y-2">
-              <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
+              <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
                 {sprint.theme}
               </h1>
               <p className="text-lg text-muted/60 dark:text-muted/40">
@@ -362,7 +362,7 @@ export default function SprintViewerPage() {
           {/* Progress Bar */}
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
-              <span className="font-medium text-slate-900 dark:text-slate-50">
+              <span className="font-medium text-muted/90 dark:text-muted/5">
                 Progreso del Sprint
               </span>
               <span className="text-muted/60 dark:text-muted/40">
@@ -384,7 +384,7 @@ export default function SprintViewerPage() {
 
         {/* Micro-Actions List */}
         <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 flex items-center gap-2">
+          <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5 flex items-center gap-2">
             <CheckCircle className="w-6 h-6 text-green" />
             Tu Checklist de Acciones
           </h2>
@@ -408,7 +408,7 @@ export default function SprintViewerPage() {
                         className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${
                           action.completed
                             ? "bg-green border-green-600"
-                            : "border-muted/30 dark:border-slate-600"
+                            : "border-muted/30 dark:border-muted/60"
                         }`}
                       >
                         {action.completed && (
@@ -422,7 +422,7 @@ export default function SprintViewerPage() {
                       <h3 className={`font-semibold text-base ${
                         action.completed
                           ? "line-through text-muted/60 dark:text-muted/40"
-                          : "text-slate-900 dark:text-slate-50"
+                          : "text-muted/90 dark:text-muted/5"
                       }`}>
                         {action.title}
                       </h3>
@@ -467,7 +467,7 @@ export default function SprintViewerPage() {
         {sprintNumber === 1 && (
           <Card className="border-0 shadow-md bg-gradient-to-r from-yellow/5 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-l-4 border-l-orange-500">
             <CardContent className="p-6 space-y-3">
-              <h3 className="font-bold text-lg text-slate-900 dark:text-slate-50 flex items-center gap-2">
+              <h3 className="font-bold text-lg text-muted/90 dark:text-muted/5 flex items-center gap-2">
                 <BookOpen className="w-5 h-5" />
                 Reflexión Semanal
               </h3>

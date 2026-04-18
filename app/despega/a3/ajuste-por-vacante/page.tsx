@@ -56,7 +56,7 @@ export default function JobMatchingPage() {
         </Link>
 
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Ajuste por Vacante</h1>
+          <h1 className="text-3xl font-bold text-muted/90 dark:text-white">Ajuste por Vacante</h1>
           <p className="text-muted/60 dark:text-muted/40">
             Pega la descripción de trabajo y obtén: análisis de match, CV personalizado, y respuestas optimizadas.
           </p>
@@ -185,7 +185,7 @@ export default function JobMatchingPage() {
                   <CardContent className="space-y-6">
                     {Object.entries(analysis.recommendedResponses).map(([question, response]: [string, any]) => (
                       <div key={question} className="space-y-2">
-                        <p className="font-semibold text-slate-900 dark:text-white">{question}</p>
+                        <p className="font-semibold text-muted/90 dark:text-white">{question}</p>
                         <div className="bg-muted/5 dark:bg-card p-4 rounded-[28px]">
                           <p className="text-sm text-muted/70 dark:text-muted/30">{response}</p>
                         </div>
@@ -202,7 +202,7 @@ export default function JobMatchingPage() {
                 <Card className="p-6">
                   <div className="text-center space-y-4">
                     <Zap className="w-12 h-12 text-blue dark:text-blue/40 mx-auto" />
-                    <h3 className="text-lg font-bold text-slate-900 dark:text-white">
+                    <h3 className="text-lg font-bold text-muted/90 dark:text-white">
                       Simulación Personalizada
                     </h3>
                     <p className="text-muted/60 dark:text-muted/40">

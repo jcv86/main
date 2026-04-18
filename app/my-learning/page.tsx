@@ -54,39 +54,39 @@ export default async function MyLearningPage() {
         <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <Link
             href="/leaderboard"
-            className="flex items-center gap-3 p-4 border-2 border-purple/20 dark:border-purple-900/50 rounded-lg bg-white dark:bg-background hover:bg-purple/5 dark:hover:bg-slate-800 transition-colors group shadow-sm"
+            className="flex items-center gap-3 p-4 border-2 border-purple/20 dark:border-purple-900/50 rounded-lg bg-white dark:bg-background hover:bg-purple/5 dark:hover:bg-muted/80 transition-colors group shadow-sm"
           >
             <div className="p-2 bg-purple/10 dark:bg-purple/30 rounded-lg group-hover:bg-purple-200 dark:group-hover:bg-purple/50 transition-colors">
               <Users className="h-5 w-5 text-purple dark:text-purple/40" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-sm text-slate-900 dark:text-white">Leaderboard</h3>
+              <h3 className="font-semibold text-sm text-muted/90 dark:text-white">Leaderboard</h3>
               <p className="text-xs text-muted/60 dark:text-muted/40">Compite con otros usuarios</p>
             </div>
           </Link>
 
           <Link
             href="/biblioteca"
-            className="flex items-center gap-3 p-4 border-2 border-blue/20 dark:border-blue/50 rounded-lg bg-white dark:bg-background hover:bg-blue/5 dark:hover:bg-slate-800 transition-colors group shadow-sm"
+            className="flex items-center gap-3 p-4 border-2 border-blue/20 dark:border-blue/50 rounded-lg bg-white dark:bg-background hover:bg-blue/5 dark:hover:bg-muted/80 transition-colors group shadow-sm"
           >
             <div className="p-2 bg-blue/10 dark:bg-blue/30 rounded-lg group-hover:bg-blue/20 dark:group-hover:bg-blue-800/50 transition-colors">
               <BookOpen className="h-5 w-5 text-blue dark:text-blue/40" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-sm text-slate-900 dark:text-white">Biblioteca</h3>
+              <h3 className="font-semibold text-sm text-muted/90 dark:text-white">Biblioteca</h3>
               <p className="text-xs text-muted/60 dark:text-muted/40">Explora 120+ libros</p>
             </div>
           </Link>
 
           <Link
             href="/library-recommendations"
-            className="flex items-center gap-3 p-4 border-2 border-blue/20 dark:border-cyan-900/50 rounded-lg bg-white dark:bg-background hover:bg-blue/5 dark:hover:bg-slate-800 transition-colors group shadow-sm"
+            className="flex items-center gap-3 p-4 border-2 border-blue/20 dark:border-cyan-900/50 rounded-lg bg-white dark:bg-background hover:bg-blue/5 dark:hover:bg-muted/80 transition-colors group shadow-sm"
           >
             <div className="p-2 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg group-hover:bg-cyan-200 dark:group-hover:bg-cyan-800/50 transition-colors">
               <TrendingUp className="h-5 w-5 text-cyan-700 dark:text-cyan-400" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-sm text-slate-900 dark:text-white">Próximos Pasos</h3>
+              <h3 className="font-semibold text-sm text-muted/90 dark:text-white">Próximos Pasos</h3>
               <p className="text-xs text-muted/60 dark:text-muted/40">Basados en tu nivel</p>
             </div>
           </Link>

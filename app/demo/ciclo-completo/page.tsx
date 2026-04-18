@@ -219,7 +219,7 @@ export default function CicloCompletoDemoPage() {
             const Icon = link.icon
             return (
               <Link key={link.route} href={link.route}>
-                <Card className="h-full hover:shadow-lg transition-all cursor-pointer border-2 hover:border-muted/30 dark:hover:border-slate-700">
+                <Card className="h-full hover:shadow-lg transition-all cursor-pointer border-2 hover:border-muted/30 dark:hover:border-muted/70">
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <CardTitle className="text-lg">{link.title}</CardTitle>

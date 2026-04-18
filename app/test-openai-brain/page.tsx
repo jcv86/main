@@ -91,7 +91,7 @@ export default function TestOpenAIInsightsPage() {
         {results && (
           <div className="space-y-6">
             {/* Performance Metrics */}
-            <Card className="bg-slate-900/50 border-slate-700">
+            <Card className="bg-muted/90/50 border-muted/70">
               <CardHeader>
                 <CardTitle className="text-green-400 flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5" />
@@ -100,15 +100,15 @@ export default function TestOpenAIInsightsPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  <div className="p-3 bg-slate-800 rounded">
+                  <div className="p-3 bg-muted/80 rounded">
                     <p className="text-xs text-muted/40">Tiempo Total</p>
                     <p className="text-lg font-bold text-white">{results.performance.total_ms}ms</p>
                   </div>
-                  <div className="p-3 bg-slate-800 rounded">
+                  <div className="p-3 bg-muted/80 rounded">
                     <p className="text-xs text-muted/40">Promedio Fase</p>
                     <p className="text-lg font-bold text-white">{results.performance.avg_phase_ms}ms</p>
                   </div>
-                  <div className="p-3 bg-slate-800 rounded">
+                  <div className="p-3 bg-muted/80 rounded">
                     <p className="text-xs text-muted/40">Fases</p>
                     <p className="text-lg font-bold text-white">{results.validation.insights_generated}</p>
                   </div>
@@ -117,7 +117,7 @@ export default function TestOpenAIInsightsPage() {
             </Card>
 
             {/* A1 Insights */}
-            <Card className="bg-slate-900/50 border-blue/50/30">
+            <Card className="bg-muted/90/50 border-blue/50/30">
               <CardHeader>
                 <CardTitle className="text-blue/40">Fase 1: Quién Eres Realmente (Despega Cerebral)</CardTitle>
                 <CardDescription className="text-blue/20">
@@ -125,14 +125,14 @@ export default function TestOpenAIInsightsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-base font-medium">
+                <p className="text-muted/10 leading-relaxed whitespace-pre-wrap text-base font-medium">
                   {results.results.a1_insights}
                 </p>
               </CardContent>
             </Card>
 
             {/* A2 Insights */}
-            <Card className="bg-slate-900/50 border-emerald-500/30">
+            <Card className="bg-muted/90/50 border-emerald-500/30">
               <CardHeader>
                 <CardTitle className="text-emerald-400">Fase 2: Tu Camino Claro (Ruta 90 Días)</CardTitle>
                 <CardDescription className="text-emerald-200">
@@ -140,14 +140,14 @@ export default function TestOpenAIInsightsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-base font-medium">
+                <p className="text-muted/10 leading-relaxed whitespace-pre-wrap text-base font-medium">
                   {results.results.a2_insights}
                 </p>
               </CardContent>
             </Card>
 
             {/* A3 Insights */}
-            <Card className="bg-slate-900/50 border-orange-500/30">
+            <Card className="bg-muted/90/50 border-orange-500/30">
               <CardHeader>
                 <CardTitle className="text-orange-400">Fase 3: Feedback Honesto (Entrenamientos)</CardTitle>
                 <CardDescription className="text-orange-200">
@@ -155,14 +155,14 @@ export default function TestOpenAIInsightsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-base font-medium">
+                <p className="text-muted/10 leading-relaxed whitespace-pre-wrap text-base font-medium">
                   {results.results.a3_insights}
                 </p>
               </CardContent>
             </Card>
 
             {/* A4 Insights */}
-            <Card className="bg-slate-900/50 border-purple/50/30">
+            <Card className="bg-muted/90/50 border-purple/50/30">
               <CardHeader>
                 <CardTitle className="text-purple-400">Fase 4: Tu Momento Ahora (Contexto de Mercado)</CardTitle>
                 <CardDescription className="text-purple-200">
@@ -170,7 +170,7 @@ export default function TestOpenAIInsightsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-base font-medium">
+                <p className="text-muted/10 leading-relaxed whitespace-pre-wrap text-base font-medium">
                   {results.results.a4_insights}
                 </p>
               </CardContent>
@@ -187,8 +187,8 @@ export default function TestOpenAIInsightsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="bg-slate-900/70 p-6 rounded-lg border-2 border-purple/40/50">
-                  <p className="text-slate-100 leading-relaxed whitespace-pre-wrap text-lg font-bold text-center">
+                <div className="bg-muted/90/70 p-6 rounded-lg border-2 border-purple/40/50">
+                  <p className="text-muted/10 leading-relaxed whitespace-pre-wrap text-lg font-bold text-center">
                     "{results.results.brain_chain}"
                   </p>
                 </div>
@@ -202,7 +202,7 @@ export default function TestOpenAIInsightsPage() {
             </Card>
 
             {/* Validation Summary */}
-            <Card className="bg-slate-900/50 border-slate-700">
+            <Card className="bg-muted/90/50 border-muted/70">
               <CardHeader>
                 <CardTitle>Resumen de Validación</CardTitle>
               </CardHeader>
@@ -231,12 +231,12 @@ export default function TestOpenAIInsightsPage() {
         )}
 
         {/* Instructions */}
-        <Card className="bg-slate-900/50 border-slate-700">
+        <Card className="bg-muted/90/50 border-muted/70">
           <CardHeader>
             <CardTitle>Cómo Funciona Tu Viaje de Descubrimiento</CardTitle>
           </CardHeader>
           <CardContent className="text-sm text-muted/30 space-y-3">
-            <p className="font-semibold text-slate-100">4 Fases. 1 Insight Maestro. Tu Transformación Comienza.</p>
+            <p className="font-semibold text-muted/10">4 Fases. 1 Insight Maestro. Tu Transformación Comienza.</p>
             <div className="space-y-2 text-muted/40">
               <p><span className="text-blue/30 font-semibold">Fase 1:</span> Descubrimos quién eres realmente (tu patrón natural)</p>
               <p><span className="text-emerald-300 font-semibold">Fase 2:</span> Creamos tu camino claro (qué hacer cada 30 días)</p>

@@ -207,7 +207,7 @@ export default function Conozcamonos2Page() {
               ? 'Paso 1: Define tu objetivo y contexto profesional'
               : 'Paso 2: Personaliza los detalles de tu desarrollo'}
           </p>
-          <Progress value={progress} className="h-2 bg-muted/20 dark:bg-slate-700" />
+          <Progress value={progress} className="h-2 bg-muted/20 dark:bg-muted/70" />
           <p className="text-sm text-muted/60 dark:text-muted/40 mt-3 font-medium">
             Progreso: {completedCount} de {totalQuestions} preguntas
           </p>
@@ -227,7 +227,7 @@ export default function Conozcamonos2Page() {
               }`}
             >
               <div className="flex items-start gap-3 mb-4">
-                <h3 className="text-lg font-semibold text-slate-900 dark:text-white flex-1">
+                <h3 className="text-lg font-semibold text-muted/90 dark:text-white flex-1">
                   {question.question}
                 </h3>
                 {isAnswered && <span className="text-green dark:text-green-400">✓</span>}
@@ -237,7 +237,7 @@ export default function Conozcamonos2Page() {
                 <select
                   value={responses[question.id] as string || ''}
                   onChange={(e) => handleAnswer(question.id, e.target.value)}
-                  className="w-full p-3 border border-muted/30 dark:border-slate-600 rounded-[28px] bg-white dark:bg-card text-slate-900 dark:text-white"
+                  className="w-full p-3 border border-muted/30 dark:border-muted/60 rounded-[28px] bg-white dark:bg-card text-muted/90 dark:text-white"
                 >
                   <option value="">-- Selecciona una opción --</option>
                   {question.options?.map((opt) => (
@@ -257,10 +257,10 @@ export default function Conozcamonos2Page() {
                       onBlur={(e) => validateTextResponse(question.id, question.question, e.target.value)}
                       placeholder={question.placeholder}
                       maxLength={question.maxLength}
-                      className={`flex-1 p-3 border rounded-[28px] bg-white dark:bg-card text-slate-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple disabled:opacity-50 transition-colors ${
+                      className={`flex-1 p-3 border rounded-[28px] bg-white dark:bg-card text-muted/90 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple disabled:opacity-50 transition-colors ${
                         error && !validatingIds.has(question.id) 
                           ? 'border-red-500 dark:border-red-500 bg-red-50 dark:bg-red-950/20' 
-                          : 'border-muted/30 dark:border-slate-600'
+                          : 'border-muted/30 dark:border-muted/60'
                       }`}
                       rows={3}
                       disabled={validatingIds.has(question.id)}
@@ -359,7 +359,7 @@ export default function Conozcamonos2Page() {
             <Button
               onClick={handleBack}
               disabled={currentStep === 'paso1' || loading}
-              className="bg-slate-700 hover:bg-slate-600 text-white font-semibold px-6 py-3 transition-colors"
+              className="bg-muted/70 hover:bg-muted/60 text-white font-semibold px-6 py-3 transition-colors"
             >
               ← Atrás
             </Button>

@@ -212,7 +212,7 @@ export default function Conozcamonos1Page() {
         </div>
 
         <div className="bg-white dark:bg-background border-2 border-purple/30 dark:border-purple-900/50 rounded-2xl p-8 mb-8 shadow-lg">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">{question.question}</h2>
+          <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-6">{question.question}</h2>
 
           {question.type === 'select' && (
             <div className="space-y-3">

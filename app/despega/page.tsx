@@ -207,7 +207,7 @@ export default function DespegazoDashboard() {
                 {readiness.overall_score}
               </div>
               <p className="text-muted/40 text-sm font-semibold">Readiness Score</p>
-              <div className="mt-4 w-full h-1 bg-slate-800 rounded-full overflow-hidden">
+              <div className="mt-4 w-full h-1 bg-muted/80 rounded-full overflow-hidden">
                 <div
                   className={`h-full bg-gradient-to-r ${scoreColor === 'text-emerald-400' ? 'from-green/50 to-teal-400' : scoreColor === 'text-yellow-400' ? 'from-yellow-500 to-orange-400' : 'from-orange-500 to-red-400'} transition-all duration-500`}
                   style={{ width: `${readiness.overall_score}%` }}
@@ -270,7 +270,7 @@ export default function DespegazoDashboard() {
             <div
               key={i}
               onClick={() => router.push(stage.href)}
-              className="group cursor-pointer bg-gradient-to-r from-slate-800/50 to-slate-700/30 border border-slate-700/50 hover:border-slate-600 rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
+              className="group cursor-pointer bg-gradient-to-r from-slate-800/50 to-slate-700/30 border border-muted/70/50 hover:border-muted/60 rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-4">
@@ -294,7 +294,7 @@ export default function DespegazoDashboard() {
               </div>
 
               <div className="space-y-2 mb-4">
-                <Progress value={stage.score} className="h-2 bg-slate-700" />
+                <Progress value={stage.score} className="h-2 bg-muted/70" />
               </div>
 
               <Button
@@ -304,7 +304,7 @@ export default function DespegazoDashboard() {
                 }}
                 className={`w-full group/btn ${
                   stage.completed
-                    ? 'bg-slate-700 hover:bg-slate-600 text-muted/30'
+                    ? 'bg-muted/70 hover:bg-muted/60 text-muted/30'
                     : `bg-gradient-to-r ${stage.color} hover:shadow-lg text-white font-semibold`
                 }`}
               >
@@ -320,7 +320,7 @@ export default function DespegazoDashboard() {
           <Button
             onClick={() => router.push('/despega/conozcamonos-1')}
             variant="outline"
-            className="h-12 border-slate-600 hover:border-purple/50 text-white hover:text-purple-400"
+            className="h-12 border-muted/60 hover:border-purple/50 text-white hover:text-purple-400"
           >
             <Clock className="w-4 h-4 mr-2" />
             Comenzar o Continuar
@@ -335,7 +335,7 @@ export default function DespegazoDashboard() {
         </div>
 
         {/* Footer Note */}
-        <div className="bg-slate-800/40 border border-slate-700 rounded-[28px] p-4 text-center">
+        <div className="bg-muted/80/40 border border-muted/70 rounded-[28px] p-4 text-center">
           <p className="text-muted/40 text-sm">
             💡 Tu score se actualiza automáticamente. Alcanza <span className="font-bold text-purple-400">80+</span> para estar completamente listo.
           </p>

@@ -145,7 +145,7 @@ export default function A2TestPage() {
       <div className="max-w-6xl mx-auto py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-50 mb-2">
+          <h1 className="text-4xl font-bold text-muted/90 dark:text-muted/5 mb-2">
             CANON A2 - Test Completo
           </h1>
           <p className="text-lg text-muted/60 dark:text-muted/40">

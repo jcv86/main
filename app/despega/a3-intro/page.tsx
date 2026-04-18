@@ -87,7 +87,7 @@ export default function A3IntroPage() {
                   <div className="flex gap-3">
                     <div className="flex-shrink-0 w-8 h-8 bg-green text-white rounded-full flex items-center justify-center font-bold">1</div>
                     <div>
-                      <p className="font-semibold text-slate-900 dark:text-white">Simulación Guiada</p>
+                      <p className="font-semibold text-muted/90 dark:text-white">Simulación Guiada</p>
                       <p className="text-sm text-muted/60 dark:text-muted/40">Con hints y orientación. Perfecto para aprender técnicas nuevas.</p>
                     </div>
                   </div>
@@ -96,7 +96,7 @@ export default function A3IntroPage() {
                   <div className="flex gap-3">
                     <div className="flex-shrink-0 w-8 h-8 bg-yellow-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
                     <div>
-                      <p className="font-semibold text-slate-900 dark:text-white">Simulación Estructurada</p>
+                      <p className="font-semibold text-muted/90 dark:text-white">Simulación Estructurada</p>
                       <p className="text-sm text-muted/60 dark:text-muted/40">Preguntas realistas sin ayuda. Te prepara para el verdadero escenario.</p>
                     </div>
                   </div>
@@ -105,7 +105,7 @@ export default function A3IntroPage() {
                   <div className="flex gap-3">
                     <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
                     <div>
-                      <p className="font-semibold text-slate-900 dark:text-white">Simulación Desafiante</p>
+                      <p className="font-semibold text-muted/90 dark:text-white">Simulación Desafiante</p>
                       <p className="text-sm text-muted/60 dark:text-muted/40">Preguntas difíciles bajo presión de tiempo. Máxima dificultad.</p>
                     </div>
                   </div>
@@ -114,7 +114,7 @@ export default function A3IntroPage() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-lg bg-slate-900 dark:bg-card">
+          <Card className="border-0 shadow-lg bg-muted/90 dark:bg-card">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-white flex items-center gap-2">
                 <MessageSquare className="w-6 h-6 text-cyan-400" />
@@ -124,22 +124,22 @@ export default function A3IntroPage() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="bg-slate-800/50 p-4 rounded-[28px] border border-slate-700 text-center">
+                <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
                   <div className="text-3xl font-bold text-cyan-400 mb-2">1</div>
                   <p className="text-sm font-semibold text-white mb-1">Responde</p>
                   <p className="text-xs text-muted/40">Simulación completa</p>
                 </div>
-                <div className="bg-slate-800/50 p-4 rounded-[28px] border border-slate-700 text-center">
+                <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
                   <div className="text-3xl font-bold text-cyan-400 mb-2">2</div>
                   <p className="text-sm font-semibold text-white mb-1">Analiza</p>
                   <p className="text-xs text-muted/40">Feedback de IA</p>
                 </div>
-                <div className="bg-slate-800/50 p-4 rounded-[28px] border border-slate-700 text-center">
+                <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
                   <div className="text-3xl font-bold text-cyan-400 mb-2">3</div>
                   <p className="text-sm font-semibold text-white mb-1">Ajusta</p>
                   <p className="text-xs text-muted/40">Mejora tu respuesta</p>
                 </div>
-                <div className="bg-slate-800/50 p-4 rounded-[28px] border border-slate-700 text-center">
+                <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
                   <div className="text-3xl font-bold text-cyan-400 mb-2">4</div>
                   <p className="text-sm font-semibold text-white mb-1">Repite</p>
                   <p className="text-xs text-muted/40">Vuelve a simular</p>
@@ -158,16 +158,16 @@ export default function A3IntroPage() {
             <CardContent className="space-y-3">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div className="p-3 bg-muted/5 dark:bg-card/30 rounded-[28px] border border-muted/20 dark:border-card">
-                  <p className="font-semibold text-slate-900 dark:text-white text-sm">Respuestas estructuradas STAR</p>
+                  <p className="font-semibold text-muted/90 dark:text-white text-sm">Respuestas estructuradas STAR</p>
                 </div>
                 <div className="p-3 bg-muted/5 dark:bg-card/30 rounded-[28px] border border-muted/20 dark:border-card">
-                  <p className="font-semibold text-slate-900 dark:text-white text-sm">Manejo de presión y tiempo</p>
+                  <p className="font-semibold text-muted/90 dark:text-white text-sm">Manejo de presión y tiempo</p>
                 </div>
                 <div className="p-3 bg-muted/5 dark:bg-card/30 rounded-[28px] border border-muted/20 dark:border-card">
-                  <p className="font-semibold text-slate-900 dark:text-white text-sm">Comunicación clara y concisa</p>
+                  <p className="font-semibold text-muted/90 dark:text-white text-sm">Comunicación clara y concisa</p>
                 </div>
                 <div className="p-3 bg-muted/5 dark:bg-card/30 rounded-[28px] border border-muted/20 dark:border-card">
-                  <p className="font-semibold text-slate-900 dark:text-white text-sm">Técnicas de cierre y preguntas</p>
+                  <p className="font-semibold text-muted/90 dark:text-white text-sm">Técnicas de cierre y preguntas</p>
                 </div>
               </div>
             </CardContent>

@@ -64,7 +64,7 @@ export default function A3AnalyticsPage() {
         </Link>
 
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
             Mi Progreso en A3
           </h1>
           <p className="text-muted/60 dark:text-muted/40">
@@ -127,7 +127,7 @@ export default function A3AnalyticsPage() {
                     <Icon className={`w-6 h-6 ${metric.color}`} />
                   </div>
                   <p className="text-sm text-muted/60 dark:text-muted/40 mb-1">{metric.label}</p>
-                  <p className="text-2xl font-bold text-slate-900 dark:text-white">
+                  <p className="text-2xl font-bold text-muted/90 dark:text-white">
                     {metric.value}{metric.suffix}
                   </p>
                   {metric.subtitle && (
@@ -203,7 +203,7 @@ export default function A3AnalyticsPage() {
                   </div>
                   <div className="flex items-center gap-3">
                     <Progress value={entry.score} className="flex-1 h-2" />
-                    <span className="font-bold text-slate-900 dark:text-white w-10 text-right">{entry.score}%</span>
+                    <span className="font-bold text-muted/90 dark:text-white w-10 text-right">{entry.score}%</span>
                   </div>
                 </div>
               ))}

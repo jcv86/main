@@ -82,16 +82,16 @@ export default function A2ChatCoachPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
       {/* Header */}
-      <div className="border-b border-muted/20 dark:border-slate-800 bg-white dark:bg-background sticky top-0 z-50">
+      <div className="border-b border-muted/20 dark:border-muted/80 bg-white dark:bg-background sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
-            <Link href="/despega/a2/dashboard" className="p-2 hover:bg-muted/10 dark:hover:bg-slate-800 rounded-lg transition">
+            <Link href="/despega/a2/dashboard" className="p-2 hover:bg-muted/10 dark:hover:bg-muted/80 rounded-lg transition">
               <ChevronLeft className="w-5 h-5" />
             </Link>
             <div className="flex-1">
               <div className="flex items-center gap-2">
                 <MessageCircle className="w-5 h-5 text-blue dark:text-blue/40" />
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Chat Coach</h1>
+                <h1 className="text-2xl font-bold text-muted/90 dark:text-muted/5">Chat Coach</h1>
               </div>
               <p className="text-sm text-muted/60 dark:text-muted/40">
                 Profundización Cognitiva - Sofía & Dani
@@ -133,7 +133,7 @@ export default function A2ChatCoachPage() {
                 <div className="flex items-start gap-3">
                   <Lightbulb className="w-5 h-5 text-yellow-500 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-slate-50">Profundización</p>
+                    <p className="font-medium text-muted/90 dark:text-muted/5">Profundización</p>
                     <p className="text-sm text-muted/60 dark:text-muted/40">
                       Exploramos cómo tu patrón se manifiesta en diferentes contextos
                     </p>
@@ -145,7 +145,7 @@ export default function A2ChatCoachPage() {
                 <div className="flex items-start gap-3">
                   <BookOpen className="w-5 h-5 text-blue/50 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-slate-50">Sin etiquetas</p>
+                    <p className="font-medium text-muted/90 dark:text-muted/5">Sin etiquetas</p>
                     <p className="text-sm text-muted/60 dark:text-muted/40">
                       No diagnosticamos, explicamos variaciones y flexibilidad
                     </p>
@@ -157,7 +157,7 @@ export default function A2ChatCoachPage() {
                 <div className="flex items-start gap-3">
                   <MessageCircle className="w-5 h-5 text-purple/50 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-slate-50">Conversacional</p>
+                    <p className="font-medium text-muted/90 dark:text-muted/5">Conversacional</p>
                     <p className="text-sm text-muted/60 dark:text-muted/40">
                       Haz preguntas libremente sobre tu patrón y contextos
                     </p>
@@ -173,7 +173,7 @@ export default function A2ChatCoachPage() {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <MessageCircle className="w-5 h-5 text-blue dark:text-blue/40" />
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">
+              <h2 className="text-lg font-semibold text-muted/90 dark:text-muted/5">
                 Sesión de Profundización
               </h2>
             </div>

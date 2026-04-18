@@ -387,7 +387,7 @@ export default function MetasSMARTClient() {
         <div className="mb-8">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-white flex items-center gap-3">
+              <h1 className="text-3xl font-bold text-muted/90 dark:text-white flex items-center gap-3">
                 <Target className="h-8 w-8 text-blue dark:text-indigo-400" />
                 Sistema de Metas SMART
               </h1>
@@ -422,7 +422,7 @@ export default function MetasSMARTClient() {
                       value={nuevaMeta.nombre}
                       onChange={(e) => setNuevaMeta({ ...nuevaMeta, nombre: e.target.value })}
                       placeholder="Ej: Mejorar liderazgo en equipo"
-                      className="dark:bg-slate-700 dark:border-slate-600"
+                      className="dark:bg-muted/70 dark:border-muted/60"
                     />
                   </div>
 
@@ -432,7 +432,7 @@ export default function MetasSMARTClient() {
                       id="tipo"
                       value={nuevaMeta.tipo}
                       onChange={(e) => setNuevaMeta({ ...nuevaMeta, tipo: e.target.value as any })}
-                      className="w-full px-3 py-2 border border-muted/30 rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+                      className="w-full px-3 py-2 border border-muted/30 rounded-lg dark:bg-muted/70 dark:border-muted/60 dark:text-white"
                     >
                       <option value="laboral">Laboral</option>
                       <option value="personal">Personal</option>
@@ -447,7 +447,7 @@ export default function MetasSMARTClient() {
                       value={nuevaMeta.motivoProfundo}
                       onChange={(e) => setNuevaMeta({ ...nuevaMeta, motivoProfundo: e.target.value })}
                       placeholder="¿Por qué es importante esta meta para ti?"
-                      className="w-full px-3 py-2 border border-muted/30 rounded-lg dark:bg-slate-700 dark:border-slate-600 dark:text-white min-h-20"
+                      className="w-full px-3 py-2 border border-muted/30 rounded-lg dark:bg-muted/70 dark:border-muted/60 dark:text-white min-h-20"
                     />
                   </div>
 
@@ -477,7 +477,7 @@ export default function MetasSMARTClient() {
           <TabsContent value="progreso" className="space-y-6">
             <Card className="dark:bg-card dark:border-card">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-white">
+                <CardTitle className="flex items-center gap-2 text-muted/90 dark:text-white">
                   <TrendingUp className="h-5 w-5 text-green dark:text-green-400" />
                   Resumen de Progreso
                 </CardTitle>
@@ -491,7 +491,7 @@ export default function MetasSMARTClient() {
                         <div className="flex justify-between items-center">
                           <div className="flex items-center gap-2">
                             {getIconoTipo(meta.tipo)}
-                            <span className="font-medium text-slate-800 dark:text-muted/20">{meta.nombre}</span>
+                            <span className="font-medium text-muted/80 dark:text-muted/20">{meta.nombre}</span>
                           </div>
                           <span className="text-sm font-bold text-blue dark:text-indigo-400">
                             {meta.progreso}%
@@ -518,7 +518,7 @@ export default function MetasSMARTClient() {
             {/* Conexión con tests */}
             <Card className="dark:bg-card dark:border-card">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-slate-900 dark:text-white">
+                <CardTitle className="flex items-center gap-2 text-muted/90 dark:text-white">
                   <Brain className="h-5 w-5 text-blue dark:text-indigo-400" />
                   Metas por Origen de Test
                 </CardTitle>
@@ -528,8 +528,8 @@ export default function MetasSMARTClient() {
                   {["DISC", "MBTI", "Big Five", "IE", "RIASEC", "Soft Skills"].map((test) => {
                     const metasDelTest = metas.filter((m) => m.origen.includes(test))
                     return (
-                      <div key={test} className="p-4 bg-muted/5 rounded-lg dark:bg-slate-700">
-                        <h4 className="font-medium mb-2 text-slate-800 dark:text-muted/20">{test}</h4>
+                      <div key={test} className="p-4 bg-muted/5 rounded-lg dark:bg-muted/70">
+                        <h4 className="font-medium mb-2 text-muted/80 dark:text-muted/20">{test}</h4>
                         <p className="text-2xl font-bold text-blue dark:text-indigo-400">{metasDelTest.length}</p>
                         <p className="text-xs text-muted/50 dark:text-muted/40">
                           {metasDelTest.filter((m) => m.estado === "activa").length} activas

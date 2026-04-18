@@ -62,7 +62,7 @@ export default function DashboardPage() {
   if (!userData) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center p-4">
-        <Card className="p-8 max-w-md text-center space-y-4 bg-slate-900 border-slate-800">
+        <Card className="p-8 max-w-md text-center space-y-4 bg-muted/90 border-muted/80">
           <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'Lora, serif' }}>No hay datos</h2>
           <p className="text-muted/40">
             Por favor, completa el onboarding primero
@@ -107,7 +107,7 @@ export default function DashboardPage() {
           <Card className="bg-gradient-to-r from-blue/5 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 border-2 border-blue/30 dark:border-blue/10 p-8">
             <div className="space-y-4">
               <div className="space-y-2">
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
+                <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5">
                   Tu Misión de 90 Días
                 </h2>
                 <h3 className="text-xl font-semibold text-blue dark:text-blue/40">
@@ -130,7 +130,7 @@ export default function DashboardPage() {
         ) : (
           <Card className="bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900 border-2 border-muted/30 dark:border-card p-8">
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
+              <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5">
                 Elige Tu Camino de Transformación
               </h2>
               <p className="text-muted/70 dark:text-muted/30">
@@ -202,7 +202,7 @@ export default function DashboardPage() {
             <div className="text-5xl">🤖</div>
             <div className="flex-1 space-y-4">
               <div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-slate-50 mb-2">
+                <h3 className="text-xl font-bold text-muted/90 dark:text-muted/5 mb-2">
                   Tu Coach IA: Sofía
                 </h3>
                 <p className="text-muted/70 dark:text-muted/30">
@@ -219,7 +219,7 @@ export default function DashboardPage() {
 
         {/* Quick Actions */}
         <div className="space-y-4">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-50">
+          <h2 className="text-xl font-bold text-muted/90 dark:text-muted/5">
             Acciones Rápidas
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

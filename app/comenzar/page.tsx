@@ -54,7 +54,7 @@ export default function ComenzarPage() {
               { label: 'Insights IA', value: 'OpenAI' }
             ].map((stat, idx) => (
               <div key={idx} className="bg-white/50 dark:bg-background/50 backdrop-blur rounded-lg p-4">
-                <div className="text-2xl font-bold text-slate-900 dark:text-white">{stat.value}</div>
+                <div className="text-2xl font-bold text-muted/90 dark:text-white">{stat.value}</div>
                 <div className="text-sm text-muted/60 dark:text-muted/40">{stat.label}</div>
               </div>
             ))}
@@ -295,7 +295,7 @@ export default function ComenzarPage() {
       </section>
 
       {/* Footer */}
-      <section className="container mx-auto px-4 py-12 text-center border-t border-muted/20 dark:border-slate-800">
+      <section className="container mx-auto px-4 py-12 text-center border-t border-muted/20 dark:border-muted/80">
         <p className="text-muted/60 dark:text-muted/40 mb-4">
           Sistema DTC - Transformación Profesional Integrada
         </p>

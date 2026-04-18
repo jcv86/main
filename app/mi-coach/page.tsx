@@ -265,7 +265,7 @@ export default function MiCoachPage() {
                           >
                             <div className="flex items-start justify-between gap-2">
                               <div>
-                                <p className="font-medium text-xs text-slate-900 dark:text-slate-100 group-hover:text-purple dark:group-hover:text-purple-300">{suggestion.title}</p>
+                                <p className="font-medium text-xs text-muted/90 dark:text-muted/10 group-hover:text-purple dark:group-hover:text-purple-300">{suggestion.title}</p>
                                 <p className="text-xs text-muted/60 dark:text-muted/20 mt-1">{suggestion.prompt.slice(0, 40)}...</p>
                               </div>
                               <ArrowRight className="w-4 h-4 text-muted/40 dark:text-muted/50 group-hover:text-purple dark:group-hover:text-purple-400 flex-shrink-0 mt-0.5" />
@@ -284,7 +284,7 @@ export default function MiCoachPage() {
                       onChange={(e) => setChatInput(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && !chatLoading && handleChatSubmit()}
                       disabled={chatLoading}
-                      className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder:text-muted/50 dark:placeholder:text-muted/40"
+                      className="bg-white dark:bg-slate-950 text-muted/90 dark:text-muted/10 placeholder:text-muted/50 dark:placeholder:text-muted/40"
                     />
                     <Button 
                       onClick={handleChatSubmit} 
@@ -316,7 +316,7 @@ export default function MiCoachPage() {
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && !searchLoading && handleSearch()}
                       disabled={searchLoading}
-                      className="bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 placeholder:text-muted/50 dark:placeholder:text-muted/40"
+                      className="bg-white dark:bg-slate-950 text-muted/90 dark:text-muted/10 placeholder:text-muted/50 dark:placeholder:text-muted/40"
                     />
                     <Button 
                       onClick={handleSearch} 
@@ -345,8 +345,8 @@ export default function MiCoachPage() {
                       </p>
                     ) : (
                       searchResults.map((book) => (
-                        <div key={book.id} className="border rounded-lg p-4 hover:bg-muted/5 dark:hover:bg-slate-800 transition">
-                          <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">{book.title}</h3>
+                        <div key={book.id} className="border rounded-lg p-4 hover:bg-muted/5 dark:hover:bg-muted/80 transition">
+                          <h3 className="font-bold text-sm text-muted/90 dark:text-muted/10">{book.title}</h3>
                           <p className="text-xs text-muted/60 dark:text-muted/40">{book.author}</p>
                           {book.description && (
                             <p className="text-xs mt-2 text-muted/70 dark:text-muted/30">{book.description.slice(0, 80)}...</p>
@@ -396,8 +396,8 @@ export default function MiCoachPage() {
                       <p className="text-muted/50 dark:text-muted/40 text-center py-8">No hay recomendaciones disponibles</p>
                     ) : (
                       recommendations.map((rec) => (
-                        <div key={rec.id} className="border rounded-lg p-4 hover:bg-muted/5 dark:hover:bg-slate-800 transition">
-                          <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">{rec.title}</h3>
+                        <div key={rec.id} className="border rounded-lg p-4 hover:bg-muted/5 dark:hover:bg-muted/80 transition">
+                          <h3 className="font-bold text-sm text-muted/90 dark:text-muted/10">{rec.title}</h3>
                           <p className="text-xs text-muted/60 dark:text-muted/40">{rec.author}</p>
                           <p className="text-xs text-purple dark:text-purple/40 mt-2 font-medium">{rec.reason}</p>
                         </div>

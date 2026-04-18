@@ -109,11 +109,11 @@ export default function A1SimulationPage() {
               <p className="text-lg text-muted/30">Completaste la simulación de entrevista</p>
             </div>
 
-            <div className="bg-slate-800/50 rounded-[28px] p-6 mb-6 text-left">
+            <div className="bg-muted/80/50 rounded-[28px] p-6 mb-6 text-left">
               <h3 className="font-semibold text-white mb-4">Tus Respuestas:</h3>
               <div className="space-y-3">
                 {responses.map((response, idx) => (
-                  <div key={idx} className="border border-slate-600 rounded p-3">
+                  <div key={idx} className="border border-muted/60 rounded p-3">
                     <p className="text-xs text-muted/40 mb-1">Pregunta {idx + 1}:</p>
                     <p className="text-muted/20">{response}</p>
                   </div>
@@ -170,7 +170,7 @@ export default function A1SimulationPage() {
             <p className="text-sm text-muted/40">Perfil: <span className="font-semibold text-cyan-300">{profileNames[profile]}</span></p>
             <p className="text-sm text-muted/40">{Math.round(progress)}%</p>
           </div>
-          <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+          <div className="h-2 bg-muted/70 rounded-full overflow-hidden">
             <div 
               className="h-full bg-gradient-to-r from-blue to-blue transition-all duration-500" 
               style={{ width: `${progress}%` }}
@@ -178,7 +178,7 @@ export default function A1SimulationPage() {
           </div>
         </div>
 
-        <Card className="bg-slate-800/40 border-slate-700 mb-8">
+        <Card className="bg-muted/80/40 border-muted/70 mb-8">
           <CardHeader>
             <CardTitle className="text-lg">{question.question}</CardTitle>
           </CardHeader>
@@ -215,7 +215,7 @@ export default function A1SimulationPage() {
               key={option.value}
               onClick={() => handleAnswer(option.label)}
               variant="outline"
-              className="h-auto py-4 px-4 flex items-start gap-3 justify-start border-slate-600 hover:border-cyan-500 hover:bg-cyan-950/20"
+              className="h-auto py-4 px-4 flex items-start gap-3 justify-start border-muted/60 hover:border-cyan-500 hover:bg-cyan-950/20"
             >
               <div className="text-left flex-1">
                 <p className="font-semibold text-white text-sm">{option.label}</p>
@@ -229,7 +229,7 @@ export default function A1SimulationPage() {
         <Button 
           onClick={() => router.push('/despega/a1-report')}
           variant="outline"
-          className="w-full border-slate-600"
+          className="w-full border-muted/60"
         >
           Salir de la Simulación
         </Button>

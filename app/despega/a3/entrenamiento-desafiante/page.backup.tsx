@@ -159,7 +159,7 @@ export default function ChallensingTrainingPage() {
     <main className="min-h-screen bg-black">
       <div className="flex flex-col h-screen">
         {/* Header */}
-        <div className="flex-shrink-0 border-b border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 p-4">
+        <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-slate-900 to-slate-950 p-4">
           <div className="flex items-center justify-between">
             <Link href="/despega/a3-dashboard" className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300">
               <ArrowLeft className="w-4 h-4" />
@@ -197,7 +197,7 @@ export default function ChallensingTrainingPage() {
               </div>
 
               {/* Bottom Section: Question & Controls */}
-              <div className="flex-shrink-0 bg-slate-950 border-t border-slate-800 p-6 space-y-4">
+              <div className="flex-shrink-0 bg-slate-950 border-t border-muted/80 p-6 space-y-4">
                 {/* Question Display */}
                 <div className="space-y-3">
                   <Badge className={`${getScoreColor(question.expectedScoreMin)} text-xs w-fit`}>
@@ -246,7 +246,7 @@ export default function ChallensingTrainingPage() {
                     onClick={handlePreviousQuestion}
                     disabled={currentQuestion === 0}
                     variant="outline"
-                    className="flex-1 border-slate-700 hover:bg-slate-800"
+                    className="flex-1 border-muted/70 hover:bg-muted/80"
                   >
                     Anterior
                   </Button>
@@ -262,10 +262,10 @@ export default function ChallensingTrainingPage() {
             </div>
 
             {/* Right Panel: Executive Dashboard (40%) */}
-            <div className="lg:col-span-2 bg-gradient-to-b from-slate-900 to-slate-950 border-l border-slate-800 flex flex-col overflow-y-auto">
+            <div className="lg:col-span-2 bg-gradient-to-b from-slate-900 to-slate-950 border-l border-muted/80 flex flex-col overflow-y-auto">
               
               {/* Score Overview */}
-              <div className="p-4 border-b border-slate-800 flex-shrink-0">
+              <div className="p-4 border-b border-muted/80 flex-shrink-0">
                 <h3 className="text-lg font-bold flex items-center gap-2 text-white mb-4">
                   <BarChart3 className="w-5 h-5 text-purple-400" />
                   Puntuación Ejecutiva
@@ -281,7 +281,7 @@ export default function ChallensingTrainingPage() {
                     </div>
                   </div>
                   {currentScore !== undefined && (
-                    <div className="pt-4 border-t border-slate-700">
+                    <div className="pt-4 border-t border-muted/70">
                       <p className="text-xs text-muted/40 mb-2">Respuesta Actual</p>
                       <div className="flex items-center justify-between">
                         <span className="text-3xl font-bold text-purple-400">{currentScore}</span>
@@ -309,7 +309,7 @@ export default function ChallensingTrainingPage() {
                         ? 'bg-purple/30 border border-purple/50/50'
                         : completedQuestions.includes(idx)
                         ? 'bg-green/20 border border-green-500/30'
-                        : 'bg-slate-800/50 border border-slate-700/30 hover:bg-slate-700/50'
+                        : 'bg-muted/80/50 border border-muted/70/30 hover:bg-muted/70/50'
                     }`}
                   >
                     <div className="flex items-start gap-2">
@@ -323,7 +323,7 @@ export default function ChallensingTrainingPage() {
                             <span className="text-xs text-white">✓</span>
                           </div>
                         ) : (
-                          <div className="w-6 h-6 rounded-full border-2 border-slate-500" />
+                          <div className="w-6 h-6 rounded-full border-2 border-muted/50" />
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -337,7 +337,7 @@ export default function ChallensingTrainingPage() {
 
               {/* Feedback */}
               {averageScore > 0 && averageScore < 75 && (
-                <div className="p-4 border-t border-slate-800 bg-yellow-950/20 flex-shrink-0">
+                <div className="p-4 border-t border-muted/80 bg-yellow-950/20 flex-shrink-0">
                   <p className="text-xs font-bold text-yellow-400 mb-2 flex items-center gap-1">
                     <AlertCircle className="w-4 h-4" />
                     Retroalimentación

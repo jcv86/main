@@ -226,7 +226,7 @@ export default function TrainingDashboardPage() {
             <p className="font-semibold text-white">Completado</p>
             <p className="text-2xl font-black text-cyan-400">{Math.round(completionPercentage)}%</p>
           </div>
-          <div className="h-3 bg-slate-700 rounded-full overflow-hidden">
+          <div className="h-3 bg-muted/70 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-blue to-blue rounded-full transition-all"
               style={{ width: `${completionPercentage}%` }}
@@ -239,7 +239,7 @@ export default function TrainingDashboardPage() {
           {activityCards.map((card, i) => {
             const isCompleted = card.status === 'completed'
             return (
-              <div key={i} className={`p-3 rounded-[28px] border ${isCompleted ? 'bg-emerald-900/20 border-emerald-500/30' : 'bg-slate-800/20 border-slate-700'}`}>
+              <div key={i} className={`p-3 rounded-[28px] border ${isCompleted ? 'bg-emerald-900/20 border-emerald-500/30' : 'bg-muted/80/20 border-muted/70'}`}>
                 <div className="flex items-center gap-2 mb-1">
                   {isCompleted ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-muted/40" />}
                   <p className="text-sm font-semibold text-white">{card.title}</p>
@@ -265,7 +265,7 @@ export default function TrainingDashboardPage() {
                     const isCompleted = card.status === 'completed'
 
                     return (
-                      <Card key={i} className="bg-slate-800/40 border-slate-700 hover:border-cyan-500/50 transition-colors group">
+                      <Card key={i} className="bg-muted/80/40 border-muted/70 hover:border-cyan-500/50 transition-colors group">
                         <CardHeader>
                           <div className="flex items-start justify-between mb-2">
                             <CardTitle className="text-lg flex items-center gap-2">
@@ -280,7 +280,7 @@ export default function TrainingDashboardPage() {
                           {isCompleted && <Badge className="bg-green/50/20 text-emerald-400 border border-emerald-500/50">✓ Completado</Badge>}
                           <Button 
                             onClick={() => router.push(card.href)}
-                            className={`w-full group/btn transition-all ${isCompleted ? 'bg-slate-700 hover:bg-slate-600' : 'bg-blue hover:bg-cyan-700'}`}
+                            className={`w-full group/btn transition-all ${isCompleted ? 'bg-muted/70 hover:bg-muted/60' : 'bg-blue hover:bg-cyan-700'}`}
                           >
                             {card.action}
                             <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
@@ -306,7 +306,7 @@ export default function TrainingDashboardPage() {
               <p className="text-3xl font-black text-cyan-400">{Math.round(completionPercentage)}%</p>
             </div>
           </div>
-          <div className="h-2 bg-slate-700 rounded-full overflow-hidden mb-4">
+          <div className="h-2 bg-muted/70 rounded-full overflow-hidden mb-4">
             <div
               className="h-full bg-gradient-to-r from-blue to-blue rounded-full transition-all"
               style={{ width: `${completionPercentage}%` }}
@@ -368,7 +368,7 @@ export default function TrainingDashboardPage() {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-slate-800/40 border-slate-700">
+            <Card className="bg-muted/80/40 border-muted/70">
               <CardHeader>
                 <CardTitle className="text-lg">4 Principios del Módulo de Entrenamiento</CardTitle>
               </CardHeader>
@@ -382,7 +382,7 @@ export default function TrainingDashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-slate-800/40 border-slate-700">
+            <Card className="bg-muted/80/40 border-muted/70">
               <CardHeader>
                 <CardTitle className="text-lg">Tips de Experto</CardTitle>
               </CardHeader>

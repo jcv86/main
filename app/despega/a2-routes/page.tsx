@@ -170,7 +170,7 @@ export default function A2RoutesPage() {
     return (
       <div className="min-h-screen bg-slate-950 p-8">
         <div className="max-w-2xl mx-auto">
-          <Card className="bg-slate-900 border-red-500/50 p-8">
+          <Card className="bg-muted/90 border-red-500/50 p-8">
             <div className="flex items-start gap-4">
               <AlertCircle className="h-6 w-6 text-red-500 flex-shrink-0 mt-1" />
               <div className="flex-1">
@@ -203,7 +203,7 @@ export default function A2RoutesPage() {
         </div>
 
         {/* What is A2 */}
-        <Card className="bg-slate-900 border-slate-800">
+        <Card className="bg-muted/90 border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <Zap className="w-5 h-5 text-yellow-500" />
@@ -223,7 +223,7 @@ export default function A2RoutesPage() {
         </Card>
 
         {/* Progress */}
-        <Card className="bg-slate-900 border-slate-800">
+        <Card className="bg-muted/90 border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <MapPin className="w-5 h-5 text-cyan-500" />
@@ -239,7 +239,7 @@ export default function A2RoutesPage() {
               </div>
             </div>
             
-            <div className="p-4 bg-slate-800/30 border border-slate-700 rounded-lg">
+            <div className="p-4 bg-muted/80/30 border border-muted/70 rounded-lg">
               <p className="text-muted/30 text-sm mb-3">Próximo: Continúa a <span className="font-semibold">Entrenamiento Intensivo</span> para prepararte para entrevistas</p>
               <Button 
                 onClick={() => router.push('/despega/a3-intro')}
@@ -253,7 +253,7 @@ export default function A2RoutesPage() {
         </Card>
 
         {/* 90-Day Timeline */}
-        <Card className="bg-slate-900 border-slate-800">
+        <Card className="bg-muted/90 border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <Calendar className="w-5 h-5 text-blue/50" />
@@ -266,7 +266,7 @@ export default function A2RoutesPage() {
               const isExpanded = expandedMilestone === days
               
               return (
-                <div key={days} className="bg-gradient-to-br from-slate-800/50 to-slate-700/30 border border-slate-700/50 rounded-xl overflow-hidden">
+                <div key={days} className="bg-gradient-to-br from-slate-800/50 to-slate-700/30 border border-muted/70/50 rounded-xl overflow-hidden">
                   <button
                     onClick={() => setExpandedMilestone(isExpanded ? null : days)}
                     className={`w-full p-6 text-left bg-gradient-to-r ${getMilestoneColor(days)} text-white hover:opacity-90 transition`}
@@ -284,11 +284,11 @@ export default function A2RoutesPage() {
                   </button>
 
                   {isExpanded && (
-                    <div className="p-6 space-y-4 bg-slate-800/20">
+                    <div className="p-6 space-y-4 bg-muted/80/20">
                       {data.tasks && data.tasks.length > 0 ? (
                         <div className="space-y-3">
                           {data.tasks.map((task, idx) => (
-                            <div key={idx} className="bg-slate-700/30 border border-slate-600/30 rounded-[28px] p-4 hover:border-slate-500/50 transition">
+                            <div key={idx} className="bg-muted/70/30 border border-muted/60/30 rounded-[28px] p-4 hover:border-muted/50/50 transition">
                               <div className="flex items-start gap-3">
                                 <div className="flex-shrink-0">
                                   {task.type === 'learning' && <span className="text-2xl">📚</span>}
@@ -300,7 +300,7 @@ export default function A2RoutesPage() {
                                 <div className="flex-1">
                                   <div className="flex items-center justify-between gap-2">
                                     <h4 className="font-semibold text-white text-sm">Día {task.day}: {task.title}</h4>
-                                    <span className="text-xs bg-slate-600/50 text-muted/30 px-2 py-1 rounded whitespace-nowrap">
+                                    <span className="text-xs bg-muted/60/50 text-muted/30 px-2 py-1 rounded whitespace-nowrap">
                                       {Math.round(task.timeEstimate / 60)}h
                                     </span>
                                   </div>
@@ -346,7 +346,7 @@ export default function A2RoutesPage() {
         </Card>
 
         {/* Next Steps */}
-        <Card className="bg-slate-900 border-slate-800">
+        <Card className="bg-muted/90 border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <CheckCircle2 className="w-5 h-5 text-purple/50" />
@@ -355,7 +355,7 @@ export default function A2RoutesPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <Card className="bg-slate-800/40 border-slate-700 hover:border-blue/50/50 transition-colors">
+              <Card className="bg-muted/80/40 border-muted/70 hover:border-blue/50/50 transition-colors">
                 <CardHeader>
                   <CardTitle className="text-lg">Ver Detalle del Plan</CardTitle>
                 </CardHeader>
@@ -366,7 +366,7 @@ export default function A2RoutesPage() {
                 </CardContent>
               </Card>
 
-              <Card className="bg-slate-800/40 border-slate-700 hover:border-blue/50/50 transition-colors">
+              <Card className="bg-muted/80/40 border-muted/70 hover:border-blue/50/50 transition-colors">
                 <CardHeader>
                   <CardTitle className="text-lg">Avanzar a A3</CardTitle>
                 </CardHeader>

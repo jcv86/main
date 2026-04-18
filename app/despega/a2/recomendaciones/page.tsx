@@ -215,7 +215,7 @@ export default function RecomendacionesPage() {
           <Badge variant="outline" className="mx-auto">
             Rutas Personalizadas para Ti
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
             Tus Rutas Recomendadas
           </h1>
           <p className="text-lg text-muted/60 dark:text-muted/40 max-w-2xl mx-auto">
@@ -243,7 +243,7 @@ export default function RecomendacionesPage() {
                       <div className="flex items-center gap-3">
                         <span className="text-3xl">{route.icon}</span>
                         <div>
-                          <h3 className="font-bold text-lg text-slate-900 dark:text-slate-50">
+                          <h3 className="font-bold text-lg text-muted/90 dark:text-muted/5">
                             {route.name}
                           </h3>
                           <p className="text-sm text-muted/60 dark:text-muted/40">
@@ -288,7 +288,7 @@ export default function RecomendacionesPage() {
                       <p className="text-xs font-semibold text-muted/60 dark:text-muted/40 mb-2">
                         Duración
                       </p>
-                      <p className="text-sm text-slate-900 dark:text-slate-50 font-medium">
+                      <p className="text-sm text-muted/90 dark:text-muted/5 font-medium">
                         {route.duration}
                       </p>
                     </div>
