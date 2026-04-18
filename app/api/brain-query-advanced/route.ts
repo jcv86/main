@@ -19,6 +19,20 @@ export async function POST(request: NextRequest) {
   try {
     const { message, userId = "demo-user", conversationId, context } = await request.json()
 
+    // Check for Supabase credentials
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.log('[v0] Supabase not configured, using fallback mode')
+      return NextResponse.json({
+        response: "Supabase no está configurado en este entorno",
+        conversationId: conversationId || "demo",
+        metadata: {
+          cacheHit: false,
+          responseTimeMs: Date.now() - startTime,
+          mode: 'fallback'
+        }
+      })
+    }
+
     const supabase = await createClient()
 
     // Generate cache key
