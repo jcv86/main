@@ -160,7 +160,7 @@ export class CerebroIntelligence {
   async learnUserPattern(userId: string, pattern: UserPattern): Promise<void> {
     try {
       // Check if pattern already exists
-      const { data: existing } = await this.supabase
+      const { data: existing } = await this.getSupabase()
         .from("cerebro_user_patterns")
         .select("*")
         .eq("user_id", userId)
@@ -169,7 +169,7 @@ export class CerebroIntelligence {
 
       if (existing) {
         // Update existing pattern
-        await this.supabase
+        await this.getSupabase()
           .from("cerebro_user_patterns")
           .update({
             pattern_data: pattern.patternData,
@@ -198,7 +198,7 @@ export class CerebroIntelligence {
    */
   async getUserPatterns(userId: string): Promise<UserPattern[]> {
     try {
-      const { data, error } = await this.supabase
+      const { data, error } = await this.getSupabase()
         .from("cerebro_user_patterns")
         .select("*")
         .eq("user_id", userId)
@@ -242,7 +242,7 @@ export class CerebroIntelligence {
    */
   async getPendingInsights(userId: string, limit = 5): Promise<PredictiveInsight[]> {
     try {
-      const { data, error } = await this.supabase
+      const { data, error } = await this.getSupabase()
         .from("cerebro_predictive_insights")
         .select("*")
         .eq("user_id", userId)
@@ -304,7 +304,7 @@ export class CerebroIntelligence {
    */
   async getUserContext(userId: string): Promise<any> {
     try {
-      const { data, error } = await this.supabase
+      const { data, error } = await this.getSupabase()
         .from("cerebro_user_context")
         .select("*")
         .eq("user_id", userId)
