@@ -1,92 +1,114 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import Link from 'next/link'
-import { ArrowLeft, Mic, MicOff, BarChart3, AlertCircle, Crown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import Link from 'next/link'
+import {
+  ArrowLeft,
+  Crown,
+  BarChart3,
+  AlertCircle,
+  Loader2,
+  Mic,
+  Square,
+  Send,
+  CheckCircle2,
+  TrendingUp
+} from 'lucide-react'
 
 const CHALLENGING_QUESTIONS = [
   {
     id: 1,
-    difficulty: 'Crítico',
+    number: 1,
     question: 'Describe la decisión más difícil que has tomado en tu carrera. ¿Por qué fue difícil y qué aprendiste?',
-    guidance: 'Demuestra pensamiento crítico, capacidad de decisión bajo presión, y madurez en reflexión. Muestra humildad pero también fortaleza de convicción.',
-    expectedScoreMin: 70,
-    competencies: ['Decisión Crítica', 'Madurez', 'Reflexión'],
+    difficulty: 'Crítico',
+    expectedScoreMin: 75,
+    competencies: ['Decisión Crítica', 'Madurez', 'Reflexión']
   },
   {
     id: 2,
+    number: 2,
+    question: '¿Cuéntame de un fracaso importante? ¿Qué pasó, cómo lo manejaste y qué lecciones sacaste?',
     difficulty: 'Crítico',
-    question: 'Cuéntame de un fracaso significativo. ¿Cómo lo manejaste y qué cambió después?',
-    guidance: 'La resiliencia y el aprendizaje de fracasos son críticos para liderazgo ejecutivo. Sé honesto pero enfócate en la lección y transformación.',
     expectedScoreMin: 75,
-    competencies: ['Resiliencia', 'Aprendizaje', 'Transformación'],
+    competencies: ['Resiliencia', 'Autorreflexión', 'Liderazgo']
   },
   {
     id: 3,
+    number: 3,
+    question: 'Describe una situación donde debiste gestionar un conflicto significativo con un colega o supervisor.',
     difficulty: 'Crítico',
-    question: '¿Cuál es tu mayor limitación como líder? ¿Cómo la estás abordando?',
-    guidance: 'Autoconocimiento es signo de madurez ejecutiva. Sé específico y muestra acciones concretas para mejorar. No digas limitaciones obvias.',
-    expectedScoreMin: 80,
-    competencies: ['Autoconocimiento', 'Crecimiento', 'Acción'],
+    expectedScoreMin: 70,
+    competencies: ['Gestión de Conflictos', 'Empatía', 'Comunicación']
   },
   {
     id: 4,
+    number: 4,
+    question: '¿Cuál es tu mayor debilidad profesional y cómo la estás abordando?',
     difficulty: 'Crítico',
-    question: 'Describe una situación donde tuviste que gestionar a alguien más experimentado o difícil que tú.',
-    guidance: 'Demuestra empatía, manejo de relaciones complejas, y diplomacia sin perder autoridad. Muestra inteligencia emocional.',
-    expectedScoreMin: 78,
-    competencies: ['Inteligencia Emocional', 'Diplomacia', 'Autoridad'],
+    expectedScoreMin: 70,
+    competencies: ['Autoconsciencia', 'Desarrollo', 'Honestidad']
   },
   {
     id: 5,
+    number: 5,
+    question: 'Cuéntame sobre una decisión empresarial importante que tomaste. ¿Cuál fue el impacto medible?',
     difficulty: 'Crítico',
-    question: '¿Cómo has impactado directamente en los resultados de negocio de tu organización?',
-    guidance: 'Conecta tus acciones a métricas de negocio: ingresos, eficiencia, crecimiento, retención. Sé específico con números y % de impacto.',
-    expectedScoreMin: 82,
-    competencies: ['Impacto de Negocio', 'Cuantificación', 'Liderazgo'],
+    expectedScoreMin: 80,
+    competencies: ['Impacto Empresarial', 'Decisión Estratégica', 'Liderazgo Transformacional']
   },
   {
     id: 6,
+    number: 6,
+    question: '¿Cómo defines liderazgo efectivo y cómo lo ejemplificas en tu propia carrera?',
     difficulty: 'Crítico',
-    question: '¿Por qué quieres esta posición y qué harías diferente en los primeros 100 días?',
-    guidance: 'Demuestra que has investigado profundamente. Ten un plan de 100 días concreto, ambicioso pero ejecutable. Muestra energía y visión.',
-    expectedScoreMin: 85,
-    competencies: ['Visión', 'Planificación', 'Ambición'],
-  },
+    expectedScoreMin: 75,
+    competencies: ['Visión de Liderazgo', 'Autoconocimiento', 'Inspiración']
+  }
 ]
 
 export default function ChallensingTrainingPage() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [completedQuestions, setCompletedQuestions] = useState<number[]>([])
   const [scores, setScores] = useState<Record<number, number>>({})
-  const [isRecording, setIsRecording] = useState(false)
-  const [hasResponseBeenRecorded, setHasResponseBeenRecorded] = useState(false)
   
+  // Recording state
+  const [isRecording, setIsRecording] = useState(false)
+  const [recordingTime, setRecordingTime] = useState(0)
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+  const audioChunksRef = useRef<Blob[]>([])
+  
+  // Response state
+  const [textResponse, setTextResponse] = useState('')
+  const [hasResponse, setHasResponse] = useState(false)
+  
+  // Evaluation state
+  const [isEvaluating, setIsEvaluating] = useState(false)
+  const [evaluation, setEvaluation] = useState<any>(null)
+  const [evaluationError, setEvaluationError] = useState<string | null>(null)
+  
+  // Video refs
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
 
   const question = CHALLENGING_QUESTIONS[currentQuestion]
-  const currentScore = scores[currentQuestion]
-  const averageScore = completedQuestions.length > 0
-    ? Math.round(completedQuestions.reduce((acc, idx) => acc + (scores[idx] || 0), 0) / completedQuestions.length)
+  const averageScore = scores && Object.values(scores).length > 0
+    ? Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / Object.values(scores).length)
     : 0
+  const currentScore = scores[currentQuestion]
 
-  // Initialize camera on mount
+  // Initialize camera
   useEffect(() => {
     const initCamera = async () => {
       try {
-        console.log('[v0] Initializing camera...')
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
-          audio: false
+          audio: true
         })
-        console.log('[v0] Camera stream obtained:', stream)
         streamRef.current = stream
         if (videoRef.current) {
           videoRef.current.srcObject = stream
-          console.log('[v0] Stream assigned to video element')
         }
       } catch (err) {
         console.error('[v0] Camera error:', err)
@@ -98,61 +120,115 @@ export default function ChallensingTrainingPage() {
     return () => {
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop())
-        console.log('[v0] Camera stopped')
       }
     }
   }, [])
 
-  const handleStartRecording = () => {
-    setIsRecording(true)
-    console.log('[v0] Recording started')
+  // Recording timer
+  useEffect(() => {
+    let interval: NodeJS.Timeout
+    if (isRecording) {
+      interval = setInterval(() => {
+        setRecordingTime(t => t + 1)
+      }, 1000)
+    }
+    return () => clearInterval(interval)
+  }, [isRecording])
+
+  const startRecording = async () => {
+    try {
+      if (!streamRef.current) {
+        console.error('[v0] No stream available')
+        return
+      }
+
+      audioChunksRef.current = []
+      const mediaRecorder = new MediaRecorder(streamRef.current)
+      
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data)
+        }
+      }
+
+      mediaRecorder.onstart = () => {
+        setIsRecording(true)
+        setRecordingTime(0)
+      }
+
+      mediaRecorder.onstop = () => {
+        setIsRecording(false)
+        setHasResponse(true)
+      }
+
+      mediaRecorderRef.current = mediaRecorder
+      mediaRecorder.start()
+    } catch (err) {
+      console.error('[v0] Recording error:', err)
+    }
   }
 
-  const handleStopRecording = () => {
-    setIsRecording(false)
-    setHasResponseBeenRecorded(true)
-    console.log('[v0] Recording stopped')
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop()
+    }
   }
 
-  const handleQuestionComplete = (score?: number) => {
-    if (!hasResponseBeenRecorded) {
+  const evaluateResponse = async () => {
+    if (!hasResponse && !textResponse.trim()) {
+      alert('Debes completar una respuesta (video o texto) antes de continuar')
       return
     }
-    
-    if (score) {
-      setScores({ ...scores, [currentQuestion]: score })
+
+    setIsEvaluating(true)
+    setEvaluationError(null)
+
+    try {
+      const response = await fetch('/api/challenging-evaluation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question: question.question,
+          userResponse: textResponse || '[Respuesta de audio grabada]',
+          difficulty: question.difficulty,
+          competencies: question.competencies
+        })
+      })
+
+      if (!response.ok) {
+        throw new Error('Failed to evaluate response')
+      }
+
+      const result = await response.json()
+      setEvaluation(result)
+      setScores({ ...scores, [currentQuestion]: result.score })
+      
+      if (!completedQuestions.includes(currentQuestion)) {
+        setCompletedQuestions([...completedQuestions, currentQuestion])
+      }
+    } catch (err) {
+      console.error('[v0] Evaluation error:', err)
+      setEvaluationError('Error al evaluar la respuesta. Intenta nuevamente.')
+    } finally {
+      setIsEvaluating(false)
     }
-    if (!completedQuestions.includes(currentQuestion)) {
-      setCompletedQuestions([...completedQuestions, currentQuestion])
-    }
-    
-    setHasResponseBeenRecorded(false)
-    setIsRecording(false)
+  }
+
+  const moveToNextQuestion = () => {
+    setEvaluation(null)
+    setTextResponse('')
+    setHasResponse(false)
+    setRecordingTime(0)
     
     if (currentQuestion < CHALLENGING_QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
     }
   }
 
-  const handlePreviousQuestion = () => {
-    if (currentQuestion > 0) {
-      setCurrentQuestion(currentQuestion - 1)
-      setHasResponseBeenRecorded(false)
-    }
-  }
-
-  const getScoreColor = (score: number) => {
-    if (score >= 85) return 'bg-green-600'
-    if (score >= 75) return 'bg-blue-600'
-    if (score >= 65) return 'bg-yellow-600'
-    return 'bg-red-600'
-  }
-
-  const getScoreLabel = (score: number) => {
-    if (score >= 85) return 'Excelente'
-    if (score >= 75) return 'Muy Bueno'
-    if (score >= 65) return 'Bueno'
-    return 'Necesita Mejora'
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
   }
 
   return (
@@ -166,103 +242,198 @@ export default function ChallensingTrainingPage() {
               Volver al Dashboard
             </Link>
             <div className="flex gap-4 items-center">
-              <Badge className="bg-red-600 text-xs">DESAFÍO MÁXIMO</Badge>
-              <Badge className="bg-purple-600 text-xs">{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
+              <Badge className="bg-red-600">DESAFÍO MÁXIMO</Badge>
+              <Badge className="bg-purple-600">{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
             </div>
           </div>
         </div>
 
-        {/* Main Split-Screen Layout */}
+        {/* Main Content */}
         <div className="flex-1 overflow-hidden p-4">
-          <div className="grid lg:grid-cols-5 gap-0 bg-black rounded-xl overflow-hidden shadow-2xl h-full">
+          <div className="grid lg:grid-cols-5 gap-4 h-full">
             
-            {/* Left Panel: Video (60%) */}
-            <div className="lg:col-span-3 relative bg-black overflow-y-auto flex flex-col">
-              {/* Video Stream */}
-              <div className="flex-1 relative bg-black">
+            {/* Left Panel: Training (60%) */}
+            <div className="lg:col-span-3 flex flex-col bg-slate-900/50 rounded-lg border border-slate-800 overflow-hidden">
+              
+              {/* Video Section */}
+              <div className="flex-1 bg-black relative overflow-hidden">
                 <video
                   ref={videoRef}
                   autoPlay
-                  playsInline
+                  muted
                   className="w-full h-full object-cover"
                 />
-                
-                {/* Recording indicator */}
                 {isRecording && (
-                  <div className="absolute top-4 left-4 flex items-center gap-2 bg-red-600 px-3 py-2 rounded-lg">
+                  <div className="absolute top-4 right-4 flex items-center gap-2 bg-red-600 px-3 py-2 rounded-lg">
                     <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                    <span className="text-xs text-white font-bold">GRABANDO</span>
+                    <span className="text-white text-sm font-mono">{formatTime(recordingTime)}</span>
                   </div>
                 )}
               </div>
 
-              {/* Bottom Section: Question & Controls */}
-              <div className="flex-shrink-0 bg-slate-950 border-t border-slate-800 p-6 space-y-4">
+              {/* Question & Controls */}
+              <div className="p-6 space-y-4 border-t border-slate-800 bg-slate-950">
+                
                 {/* Question Display */}
-                <div className="space-y-3">
-                  <Badge className={`${getScoreColor(question.expectedScoreMin)} text-xs w-fit`}>
-                    {question.difficulty} - Esperado: {question.expectedScoreMin}+
-                  </Badge>
-                  <p className="text-lg font-semibold text-white">{question.question}</p>
+                <div className="space-y-2">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-400 mb-2">Pregunta {currentQuestion + 1} de {CHALLENGING_QUESTIONS.length}</h3>
+                      <p className="text-lg text-white font-semibold">{question.question}</p>
+                    </div>
+                    <Badge className={question.difficulty === 'Crítico' ? 'bg-red-600' : 'bg-yellow-600'}>{question.difficulty}</Badge>
+                  </div>
                 </div>
 
-                {/* Guidance */}
-                <div className="bg-blue-900/30 border border-blue-500/20 rounded-lg p-3">
-                  <p className="text-sm text-blue-300">{question.guidance}</p>
-                </div>
+                {/* Response Options */}
+                {!evaluation ? (
+                  <>
+                    {/* Recording Controls */}
+                    <div className="space-y-3">
+                      <p className="text-sm font-semibold text-slate-300">Opción 1: Grabar tu respuesta</p>
+                      <div className="flex gap-2">
+                        {!isRecording ? (
+                          <Button
+                            onClick={startRecording}
+                            className="flex-1 bg-red-600 hover:bg-red-700 gap-2"
+                          >
+                            <Mic className="w-4 h-4" />
+                            Comenzar Grabación
+                          </Button>
+                        ) : (
+                          <Button
+                            onClick={stopRecording}
+                            className="flex-1 bg-slate-600 hover:bg-slate-700 gap-2"
+                          >
+                            <Square className="w-4 h-4" />
+                            Detener Grabación
+                          </Button>
+                        )}
+                      </div>
+                      {hasResponse && <p className="text-xs text-green-400 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />Respuesta grabada</p>}
+                    </div>
 
-                {/* Recording Status */}
-                {!hasResponseBeenRecorded && (
-                  <div className="flex items-center gap-2 text-amber-600 text-sm bg-amber-950/40 border border-amber-700/40 rounded-lg px-4 py-2">
-                    <AlertCircle className="w-4 h-4" />
-                    <span>Completa tu respuesta antes de continuar</span>
+                    {/* Text Input */}
+                    <div className="space-y-3 border-t border-slate-800 pt-4">
+                      <p className="text-sm font-semibold text-slate-300">Opción 2: Escribe tu respuesta</p>
+                      <textarea
+                        value={textResponse}
+                        onChange={(e) => {
+                          setTextResponse(e.target.value)
+                          setHasResponse(e.target.value.trim().length > 0)
+                        }}
+                        placeholder="Escribe aquí tu respuesta detallada... (mínimo 50 caracteres)"
+                        className="w-full h-24 bg-slate-800 text-white border border-slate-700 rounded-lg p-3 text-sm focus:border-purple-500 focus:outline-none resize-none"
+                      />
+                      {textResponse && <p className="text-xs text-green-400 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />Respuesta escrita ({textResponse.length} caracteres)</p>}
+                    </div>
+
+                    {/* Validation Message */}
+                    {!hasResponse && (
+                      <div className="flex items-start gap-2 text-amber-600 text-sm bg-amber-950/40 border border-amber-700/40 p-3 rounded-lg">
+                        <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                        <span>Completa tu respuesta (grabación o texto) antes de enviar para evaluación</span>
+                      </div>
+                    )}
+
+                    {/* Evaluate Button */}
+                    <Button
+                      onClick={evaluateResponse}
+                      disabled={!hasResponse || isEvaluating}
+                      className="w-full bg-purple-600 hover:bg-purple-700 disabled:opacity-50 gap-2"
+                    >
+                      {isEvaluating ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          Evaluando...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          Enviar para Evaluación
+                        </>
+                      )}
+                    </Button>
+
+                    {evaluationError && (
+                      <div className="flex items-start gap-2 text-red-600 text-sm bg-red-950/40 border border-red-700/40 p-3 rounded-lg">
+                        <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                        <span>{evaluationError}</span>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  /* Evaluation Results */
+                  <div className="space-y-4 border-t border-slate-800 pt-4">
+                    <div className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-500/30 rounded-lg p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <p className="text-sm font-semibold text-slate-300">Tu Puntuación</p>
+                        <div className="text-3xl font-bold text-purple-400">{evaluation.score}</div>
+                      </div>
+                      <p className="text-sm text-slate-300">{evaluation.scoreExplanation}</p>
+                    </div>
+
+                    {/* Strengths */}
+                    <div className="space-y-2">
+                      <p className="text-sm font-semibold text-green-400 flex items-center gap-2">
+                        <CheckCircle2 className="w-4 h-4" />
+                        Fortalezas Identificadas
+                      </p>
+                      <ul className="space-y-1 text-sm text-slate-300">
+                        {evaluation.strengths.map((s: string, i: number) => (
+                          <li key={i} className="flex gap-2">
+                            <span className="text-green-400">•</span>
+                            <span>{s}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Improvements */}
+                    <div className="space-y-2">
+                      <p className="text-sm font-semibold text-yellow-400 flex items-center gap-2">
+                        <TrendingUp className="w-4 h-4" />
+                        Áreas de Mejora
+                      </p>
+                      <ul className="space-y-1 text-sm text-slate-300">
+                        {evaluation.improvements.map((i: string, idx: number) => (
+                          <li key={idx} className="flex gap-2">
+                            <span className="text-yellow-400">•</span>
+                            <span>{i}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    {/* Feedback */}
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-3">
+                      <p className="text-xs font-semibold text-slate-400 mb-2">RETROALIMENTACIÓN</p>
+                      <p className="text-sm text-slate-300">{evaluation.feedback}</p>
+                    </div>
+
+                    {/* Next Question Button */}
+                    {currentQuestion < CHALLENGING_QUESTIONS.length - 1 ? (
+                      <Button
+                        onClick={moveToNextQuestion}
+                        className="w-full bg-purple-600 hover:bg-purple-700 gap-2"
+                      >
+                        Siguiente Pregunta
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={() => window.location.href = '/despega/a3-dashboard'}
+                        className="w-full bg-green-600 hover:bg-green-700 gap-2"
+                      >
+                        Completar Entrenamiento
+                      </Button>
+                    )}
                   </div>
                 )}
-
-                {/* Recording Controls */}
-                <div className="flex gap-3">
-                  {!isRecording ? (
-                    <Button
-                      onClick={handleStartRecording}
-                      className="flex-1 bg-red-600 hover:bg-red-700 gap-2"
-                    >
-                      <Mic className="w-4 h-4" />
-                      Comenzar Grabación
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={handleStopRecording}
-                      className="flex-1 bg-red-600 hover:bg-red-700 gap-2"
-                    >
-                      <MicOff className="w-4 h-4" />
-                      Detener Grabación
-                    </Button>
-                  )}
-                </div>
-
-                {/* Navigation */}
-                <div className="flex gap-3">
-                  <Button
-                    onClick={handlePreviousQuestion}
-                    disabled={currentQuestion === 0}
-                    variant="outline"
-                    className="flex-1 border-slate-700 hover:bg-slate-800"
-                  >
-                    Anterior
-                  </Button>
-                  <Button
-                    onClick={() => handleQuestionComplete(75)}
-                    disabled={!hasResponseBeenRecorded || isRecording}
-                    className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {currentQuestion === CHALLENGING_QUESTIONS.length - 1 ? 'Finalizar' : 'Siguiente Desafío'}
-                  </Button>
-                </div>
               </div>
             </div>
 
             {/* Right Panel: Executive Dashboard (40%) */}
-            <div className="lg:col-span-2 bg-gradient-to-b from-slate-900 to-slate-950 border-l border-slate-800 flex flex-col overflow-y-auto">
+            <div className="lg:col-span-2 bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-lg flex flex-col overflow-y-auto">
               
               {/* Score Overview */}
               <div className="p-4 border-b border-slate-800 flex-shrink-0">
@@ -274,7 +445,7 @@ export default function ChallensingTrainingPage() {
                   <div>
                     <p className="text-xs text-slate-400 mb-2">Promedio General</p>
                     <div className="flex items-end gap-2">
-                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green-400' : 'text-yellow-400'}`}>
+                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green-400' : averageScore >= 60 ? 'text-yellow-400' : 'text-red-400'}`}>
                         {averageScore}
                       </span>
                       <span className="text-xs text-slate-400 pb-2">/100</span>
@@ -282,13 +453,8 @@ export default function ChallensingTrainingPage() {
                   </div>
                   {currentScore !== undefined && (
                     <div className="pt-4 border-t border-slate-700">
-                      <p className="text-xs text-slate-400 mb-2">Respuesta Actual</p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-3xl font-bold text-purple-400">{currentScore}</span>
-                        <Badge className={`${getScoreColor(currentScore)} text-xs`}>
-                          {getScoreLabel(currentScore)}
-                        </Badge>
-                      </div>
+                      <p className="text-xs text-slate-400 mb-2">Esta Pregunta</p>
+                      <span className="text-2xl font-bold text-purple-400">{currentScore}</span>
                     </div>
                   )}
                 </div>
@@ -296,38 +462,45 @@ export default function ChallensingTrainingPage() {
 
               {/* Questions List */}
               <div className="flex-1 overflow-y-auto p-4 space-y-2">
-                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Desafíos</p>
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Preguntas</p>
                 {CHALLENGING_QUESTIONS.map((q, idx) => (
                   <button
                     key={q.id}
                     onClick={() => {
-                      setCurrentQuestion(idx)
-                      setHasResponseBeenRecorded(false)
+                      if (completedQuestions.includes(idx)) {
+                        setCurrentQuestion(idx)
+                        setEvaluation(null)
+                        setTextResponse('')
+                        setHasResponse(false)
+                      }
                     }}
-                    className={`w-full text-left p-3 rounded-lg transition-all text-xs ${
+                    disabled={!completedQuestions.includes(idx) && idx !== currentQuestion}
+                    className={`w-full text-left p-3 rounded-lg transition-all text-xs disabled:opacity-50 ${
                       idx === currentQuestion
                         ? 'bg-purple-600/30 border border-purple-500/50'
                         : completedQuestions.includes(idx)
-                        ? 'bg-green-600/20 border border-green-500/30'
-                        : 'bg-slate-800/50 border border-slate-700/30 hover:bg-slate-700/50'
+                        ? 'bg-green-600/20 border border-green-500/30 cursor-pointer hover:bg-green-600/30'
+                        : 'bg-slate-800/50 border border-slate-700/30'
                     }`}
                   >
                     <div className="flex items-start gap-2">
                       <div className="mt-0.5">
                         {completedQuestions.includes(idx) && scores[idx] ? (
-                          <div className={`w-6 h-6 rounded-full ${getScoreColor(scores[idx])} flex items-center justify-center text-white text-xs font-bold`}>
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold ${
+                            scores[idx] >= 75 ? 'bg-green-600' : scores[idx] >= 60 ? 'bg-yellow-600' : 'bg-red-600'
+                          }`}>
                             {scores[idx]}
                           </div>
                         ) : completedQuestions.includes(idx) ? (
                           <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center">
-                            <span className="text-xs text-white">✓</span>
+                            <CheckCircle2 className="w-4 h-4 text-white" />
                           </div>
                         ) : (
                           <div className="w-6 h-6 rounded-full border-2 border-slate-500" />
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-slate-400 mb-1">Pregunta {idx + 1}</p>
+                        <p className="text-slate-400 mb-1">P{idx + 1}</p>
                         <p className="text-slate-300 line-clamp-2">{q.question}</p>
                       </div>
                     </div>
@@ -335,18 +508,11 @@ export default function ChallensingTrainingPage() {
                 ))}
               </div>
 
-              {/* Feedback */}
-              {averageScore > 0 && averageScore < 75 && (
-                <div className="p-4 border-t border-slate-800 bg-yellow-950/20 flex-shrink-0">
-                  <p className="text-xs font-bold text-yellow-400 mb-2 flex items-center gap-1">
-                    <AlertCircle className="w-4 h-4" />
-                    Retroalimentación
-                  </p>
-                  <p className="text-xs text-yellow-200">
-                    Enfócate en demostrar mayor impacto, ser específico con ejemplos, y mostrar madurez ejecutiva en tus respuestas.
-                  </p>
-                </div>
-              )}
+              {/* Standard Info */}
+              <div className="p-4 border-t border-slate-800 bg-slate-950/50 flex-shrink-0">
+                <p className="text-xs font-bold text-slate-400 mb-2">ESTÁNDAR EJECUTIVO</p>
+                <p className="text-xs text-slate-300">75+ = Listo para entrevista executiva<br/>60-74 = Mejora necesaria<br/>{'<'}60 = Requiere trabajo</p>
+              </div>
             </div>
           </div>
         </div>
