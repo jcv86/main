@@ -5,11 +5,12 @@ import { useContextValidation } from '@/lib/hooks/use-context-validation'
 import { useAvatarPreferences } from '@/lib/hooks/use-avatar-preferences'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { InterviewerSelector } from '@/components/interviewer-selector'
+import { InterviewTips } from '@/components/interview-tips'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { Mic, MicOff, Video, VideoOff, RotateCcw, Send, Pause, Play, AlertCircle, AlertTriangle } from 'lucide-react'
+import { Mic, MicOff, Video, VideoOff, RotateCcw, Send, Pause, Play, AlertCircle, AlertTriangle, Zap, Lightbulb } from 'lucide-react'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 
 interface ConversationalInterviewProps {
@@ -59,6 +60,11 @@ export function ConversationalInterview({
   const [feedbackData, setFeedbackData] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
   const [selectedInterviewerId, setSelectedInterviewerId] = useState(preferences?.interviewer_avatar_id || 'interviewer-classic-1')
+  const [sessionStartTime, setSessionStartTime] = useState<number | null>(null)
+  const [freeTipsUsed, setFreeTipsUsed] = useState(0)
+  const [premiumTipsUsed, setPremiumTipsUsed] = useState(0)
+  const [dtcBalance, setDtcBalance] = useState(0)
+  const [sessionId] = useState(`session-${Date.now()}-${Math.random()}`)
   
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
@@ -376,6 +382,17 @@ export function ConversationalInterview({
               )}
               <div ref={messagesEndRef} />
             </div>
+
+            {/* AI Tips Panel */}
+            <InterviewTips
+              questionText={interviewerMessage}
+              userResponse={userResponses[currentQuestionIdx] || ''}
+              questionContext={`Role: ${role}, Industry: ${industry}, Level: ${level}`}
+              difficulty={level}
+              sessionId={sessionId}
+              userId={user?.id || ''}
+              onTipGenerated={(tip) => console.log('[v0] Tip generated:', tip)}
+            />
 
             {/* Input */}
             <form onSubmit={handleSendResponse} className="flex gap-2">
