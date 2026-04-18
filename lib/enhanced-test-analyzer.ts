@@ -138,11 +138,11 @@ export class EnhancedTestAnalyzer {
    * Get all test results for a user
    */
   private async getUserTestResults(userId: string): Promise<TestResult[]> {
-    const { data: profile } = await this.supabase.from("user_profiles").select("email").eq("id", userId).single()
+    const { data: profile } = await this.getSupabase().from("user_profiles").select("email").eq("id", userId).single()
 
     if (!profile?.email) return []
 
-    const { data, error } = await this.supabase
+    const { data, error } = await this.getSupabase()
       .from("test_results")
       .select("*")
       .eq("user_email", profile.email)
@@ -165,7 +165,7 @@ export class EnhancedTestAnalyzer {
    * Get Chilean market insights
    */
   private async getChileanMarketInsights(): Promise<any[]> {
-    const { data, error } = await this.supabase
+    const { data, error } = await this.getSupabase()
       .from("cerebro_market_insights")
       .select("*")
       .eq("region", "Chile")
@@ -186,7 +186,7 @@ export class EnhancedTestAnalyzer {
   private async getTestCombinationPattern(testTypes: string[]): Promise<any | null> {
     const combination = testTypes.sort().join("+")
 
-    const { data, error } = await this.supabase
+    const { data, error } = await this.getSupabase()
       .from("cerebro_test_combinations")
       .select("*")
       .eq("test_combination", combination)
