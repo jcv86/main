@@ -65,7 +65,7 @@ export function GamificationProfile({
     <div className="w-full space-y-6">
       {/* Main Level Card */}
       <Card className="relative overflow-hidden">
-        <div className={`absolute inset-0 bg-background
+        <div className="absolute inset-0 bg-background"></div>
         <div className="relative p-8">
           <div className="flex items-center justify-between mb-6">
             <div>

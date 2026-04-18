@@ -31,8 +31,7 @@ export function ASection({ title, subtitle, icon, colorClass, children }: ASecti
               <p className="text-lg text-muted/40 mt-2">{subtitle}</p>
             </div>
           </div>
-          <div className={`h-1 w-24 rounded-[20px] bg-background
-        </div>
+          <div className="h-1 w-24 rounded-[20px] bg-background"></div>
 
         {children}
       </div>

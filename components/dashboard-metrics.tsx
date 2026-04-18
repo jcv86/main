@@ -60,8 +60,9 @@ export function DashboardMetrics({
                   <p className="text-3xl font-bold">{metric.value}</p>
                   <p className="text-xs text-muted-foreground mt-1">{metric.suffix}</p>
                 </div>
-                <div className={`p-3 rounded-[28px] bg-background
+                <div className="p-3 rounded-[28px] bg-background">
                   <Icon className="w-6 h-6 text-white" />
+                </div>
                 </div>
               </div>
             </CardContent>
