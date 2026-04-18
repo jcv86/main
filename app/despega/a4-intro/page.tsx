@@ -105,16 +105,16 @@ export default function A4IntroPage() {
                 </div>
                 <div className="p-4 bg-red/5 dark:bg-red-950/30 rounded-[28px] border border-red/20 dark:border-red-800">
                   <div className="flex gap-3">
-                    <Brain className="w-6 h-6 text-red-600 flex-shrink-0" />
+                    <Brain className="w-6 h-6 text-red flex-shrink-0" />
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-white">Análisis de Mercado</p>
                       <p className="text-sm text-muted/60 dark:text-muted/40">Salarios, demanda de skills, tendencias de carrera.</p>
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-yellow-50 dark:bg-yellow-950/30 rounded-[28px] border border-yellow-200 dark:border-yellow-800">
+                <div className="p-4 bg-yellow/5 dark:bg-yellow/30 rounded-[28px] border border-yellow/20 dark:border-yellow">
                   <div className="flex gap-3">
-                    <Zap className="w-6 h-6 text-yellow-600 flex-shrink-0" />
+                    <Zap className="w-6 h-6 text-yellow flex-shrink-0" />
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-white">Benchmark Competitivo</p>
                       <p className="text-sm text-muted/60 dark:text-muted/40">Cómo te comparas con otros perfiles en el mercado.</p>

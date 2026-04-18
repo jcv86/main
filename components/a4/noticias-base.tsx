@@ -22,17 +22,17 @@ interface NoticiasBaseProps {
 }
 
 const categoryColors = {
-  economía: "bg-blue-500/10 text-blue-700 dark:text-blue-400",
-  empleo: "bg-green-500/10 text-green-700 dark:text-green-400",
+  economía: "bg-blue-500/10 text-blue dark:text-blue/40",
+  empleo: "bg-green-500/10 text-green dark:text-green/40",
   regulatorio: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
-  tecnología: "bg-purple-500/10 text-purple-700 dark:text-purple-400",
+  tecnología: "bg-purple-500/10 text-purple-700 dark:text-purple/40",
   cultura: "bg-pink-500/10 text-pink-700 dark:text-pink-400",
 }
 
 const impactBadges = {
   alta: "bg-red/50/10 text-red",
   media: "bg-amber-500/10 text-amber-700",
-  baja: "bg-green-500/10 text-green-700",
+  baja: "bg-green-500/10 text-green",
 }
 
 export function NoticiasBase({ 

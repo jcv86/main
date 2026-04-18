@@ -37,7 +37,7 @@ function FAQSection({ faqs, title = "Preguntas Frecuentes" }: FAQSectionProps) {
           </p>
           <a
             href="/faq"
-            className="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 font-medium"
+            className="inline-flex items-center gap-2 text-blue dark:text-blue/40 hover:text-blue dark:hover:text-blue-300 font-medium"
           >
             Ver todas las preguntas frecuentes
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -103,7 +103,7 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
               {index === items.length - 1 ? (
                 <span className="font-medium text-foreground">{item.name}</span>
               ) : (
-                <a href={item.url} className="hover:text-blue-600 dark:hover:text-blue-400">
+                <a href={item.url} className="hover:text-blue dark:hover:text-blue/40">
                   {item.name}
                 </a>
               )}

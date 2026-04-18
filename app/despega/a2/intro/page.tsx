@@ -143,7 +143,7 @@ export default function A2IntroPage() {
       <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 flex items-center justify-center p-4">
         <Card className="max-w-md">
           <CardContent className="pt-6">
-            <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
+            <p className="text-red dark:text-red-400 mb-4">{error}</p>
             <Button onClick={() => router.push('/despega/a1-cerebral')} className="w-full">
               Volver a A1
             </Button>
@@ -191,17 +191,17 @@ export default function A2IntroPage() {
 
               {/* Cerebro Profile Scores */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
-                <div className="bg-red/5 dark:bg-red-900/20 p-3 rounded-[28px] border border-red/20 dark:border-red-800">
-                  <p className="text-xs text-red-600 dark:text-red-400 font-semibold">Energía</p>
+                <div className="bg-red/5 dark:bg-red/20 p-3 rounded-[28px] border border-red/20 dark:border-red-800">
+                  <p className="text-xs text-red dark:text-red-400 font-semibold">Energía</p>
                   <p className="text-2xl font-bold text-red dark:text-red-300">{cerebroProfile?.energia}%</p>
                 </div>
-                <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-[28px] border border-yellow-200 dark:border-yellow-800">
-                  <p className="text-xs text-yellow-600 dark:text-yellow-400 font-semibold">Enfoque</p>
+                <div className="bg-yellow/5 dark:bg-yellow/20 p-3 rounded-[28px] border border-yellow/20 dark:border-yellow">
+                  <p className="text-xs text-yellow dark:text-yellow-400 font-semibold">Enfoque</p>
                   <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">{cerebroProfile?.enfoque}%</p>
                 </div>
-                <div className="bg-green/5 dark:bg-green-900/20 p-3 rounded-[28px] border border-green/20 dark:border-green-800">
-                  <p className="text-xs text-green dark:text-green-400 font-semibold">Relaciones</p>
-                  <p className="text-2xl font-bold text-green-700 dark:text-green-300">{cerebroProfile?.relaciones}%</p>
+                <div className="bg-green/5 dark:bg-green/20 p-3 rounded-[28px] border border-green/20 dark:border-green-800">
+                  <p className="text-xs text-green dark:text-green/40 font-semibold">Relaciones</p>
+                  <p className="text-2xl font-bold text-green dark:text-green-300">{cerebroProfile?.relaciones}%</p>
                 </div>
                 <div className="bg-blue/5 dark:bg-blue/20 p-3 rounded-[28px] border border-blue/30 dark:border-blue/10">
                   <p className="text-xs text-blue dark:text-blue/40 font-semibold">Plan Ejecutivo</p>

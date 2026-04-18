@@ -397,7 +397,7 @@ export default function BibliotecaPage() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <User className="h-5 w-5 text-orange-600" />
+              <User className="h-5 w-5 text-orange" />
               <span className="text-2xl font-bold">{stats.categories}</span>
             </div>
           </CardContent>
@@ -409,7 +409,7 @@ export default function BibliotecaPage() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-red-600" />
+              <TrendingUp className="h-5 w-5 text-red" />
               <span className="text-2xl font-bold">{stats.authors}</span>
             </div>
           </CardContent>
@@ -503,7 +503,7 @@ export default function BibliotecaPage() {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 font-medium transition-colors ${
-              activeTab === tab ? "text-blue border-b-2 border-blue" : "text-muted/60 hover:text-gray-900"
+              activeTab === tab ? "text-blue border-b-2 border-blue" : "text-muted/60 hover:text-foreground"
             }`}
           >
             {tab === "all" && `Todos (${books.length})`}

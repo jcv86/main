@@ -86,7 +86,7 @@ export function GlobalProgressSidebar() {
       <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-2 border-indigo-200 dark:border-indigo-800 shadow-lg">
         <div className="p-4 space-y-3">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold text-indigo-900 dark:text-indigo-100">Tu Transformación</h3>
+            <h3 className="text-sm font-bold text-indigo-900 dark:text-blue/10">Tu Transformación</h3>
             <Badge className="bg-indigo-600 text-white">{totalProgress}%</Badge>
           </div>
           <Progress value={totalProgress} className="h-2" />
@@ -105,9 +105,9 @@ export function GlobalProgressSidebar() {
                 <div className="group cursor-pointer">
                   <div className="flex items-center gap-2 p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                     {phase.status === 'completed' ? (
-                      <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" />
+                      <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0" />
                     ) : phase.status === 'in-progress' ? (
-                      <Circle className="w-4 h-4 text-blue-600 dark:text-blue-400 flex-shrink-0" />
+                      <Circle className="w-4 h-4 text-blue dark:text-blue/40 flex-shrink-0" />
                     ) : (
                       <Circle className="w-4 h-4 text-slate-400 dark:text-slate-600 flex-shrink-0" />
                     )}
@@ -133,12 +133,12 @@ export function GlobalProgressSidebar() {
           <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">Acceso Rápido</p>
           <div className="space-y-1">
             <Link href="/despega/journey">
-              <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-white/50 dark:hover:bg-slate-800 text-blue-600 dark:text-blue-400">
+              <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-white/50 dark:hover:bg-slate-800 text-blue dark:text-blue/40">
                 Dashboard Completo
               </button>
             </Link>
             <Link href="/despega/a2/coach">
-              <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-white/50 dark:hover:bg-slate-800 text-purple-600 dark:text-purple-400">
+              <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-white/50 dark:hover:bg-slate-800 text-purple-600 dark:text-purple/40">
                 Hablar con Coach
               </button>
             </Link>

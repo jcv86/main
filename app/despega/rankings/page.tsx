@@ -122,12 +122,12 @@ export default function RankingsPage() {
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/despega" className="inline-flex items-center text-sm text-purple-400 hover:text-purple-300 mb-4 font-medium">
+          <Link href="/despega" className="inline-flex items-center text-sm text-purple/40 hover:text-purple/30 mb-4 font-medium">
             <ArrowLeft className="w-4 h-4 mr-1" />
             Volver al Dashboard
           </Link>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-[28px] bg-gradient-to-br from-yellow-500 to-purple-600 flex items-center justify-center text-2xl">
+            <div className="w-12 h-12 rounded-[28px] bg-gradient-to-br from-yellow-500 to-purple flex items-center justify-center text-2xl">
               🏆
             </div>
             <div>

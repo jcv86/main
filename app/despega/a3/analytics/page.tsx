@@ -155,8 +155,8 @@ export default function A3AnalyticsPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               {userData?.strengths.map((strength: string, idx: number) => (
-                <div key={idx} className="flex items-center gap-3 p-3 rounded-[28px] bg-green/5 dark:bg-green-900/20">
-                  <span className="text-green dark:text-green-400 font-bold">+</span>
+                <div key={idx} className="flex items-center gap-3 p-3 rounded-[28px] bg-green/5 dark:bg-green/20">
+                  <span className="text-green dark:text-green/40 font-bold">+</span>
                   <span className="text-muted/70 dark:text-muted/30">{strength}</span>
                 </div>
               ))}
@@ -174,7 +174,7 @@ export default function A3AnalyticsPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               {userData?.improvements.map((improvement: string, idx: number) => (
-                <div key={idx} className="flex items-center gap-3 p-3 rounded-[28px] bg-orange/5 dark:bg-orange-900/20">
+                <div key={idx} className="flex items-center gap-3 p-3 rounded-[28px] bg-orange/5 dark:bg-orange/20">
                   <span className="text-orange dark:text-orange-400 font-bold">→</span>
                   <span className="text-muted/70 dark:text-muted/30">{improvement}</span>
                 </div>

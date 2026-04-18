@@ -257,10 +257,10 @@ export default function DespegaOnboarding() {
             <Card className="border-0 shadow-lg bg-gradient-to-br from-blue/5 to-blue/10 dark:from-blue-950 dark:to-blue-900">
               <CardContent className="pt-8">
                 <h3 className="text-xl font-bold text-blue dark:text-blue/10 mb-3">¿Qué es Despega Cerebral?</h3>
-                <p className="text-sm text-blue-800 dark:text-blue/20 leading-relaxed">
+                <p className="text-sm text-blue dark:text-blue/20 leading-relaxed">
                   Es la base de tu recorrido dentro de DespegaTuCarrera. Se inspira en marcos conductuales ampliamente estudiados, pero no busca encasillarte.
                 </p>
-                <p className="text-sm text-blue-800 dark:text-blue/20 leading-relaxed mt-3">
+                <p className="text-sm text-blue dark:text-blue/20 leading-relaxed mt-3">
                   Su objetivo es identificar tendencias de comportamiento que influyen en cómo tomas decisiones, enfrentas conflictos, lideras o colaboras.
                 </p>
               </CardContent>
@@ -332,25 +332,25 @@ export default function DespegaOnboarding() {
                 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <p className="text-sm font-semibold text-green dark:text-green-400">MÁS como yo</p>
+                    <p className="text-sm font-semibold text-green dark:text-green/40">MÁS como yo</p>
                     <div className="space-y-2">
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green-500 dark:hover:border-green-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
                         Decidido y directo
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green-500 dark:hover:border-green-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
                         Optimista e inspirador
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green-500 dark:hover:border-green-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
                         Paciente y considerado
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green-500 dark:hover:border-green-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
                         Analítico y preciso
                       </button>
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <p className="text-sm font-semibold text-red-600 dark:text-red-400">MENOS como yo</p>
+                    <p className="text-sm font-semibold text-red dark:text-red-400">MENOS como yo</p>
                     <div className="space-y-2">
                       <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
                         Decidido y directo
@@ -434,7 +434,7 @@ export default function DespegaOnboarding() {
 
             {onboardingAlreadyCompleted && (
               <div className="mt-6 p-4 bg-blue/10 border-l-4 border-blue/50 rounded">
-                <p className="text-blue-800 font-semibold">
+                <p className="text-blue font-semibold">
                   ✓ Ya has completado tu Despega Cerebral. Tus resultados están guardados.
                 </p>
                 <p className="text-blue text-sm mt-2">
@@ -472,7 +472,7 @@ export default function DespegaOnboarding() {
                 <div className="grid md:grid-cols-4 gap-6">
                   <div className="md:col-span-1">
                     <div className="text-6xl mb-3">⚡</div>
-                    <h3 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">D</h3>
+                    <h3 className="text-2xl font-bold text-red dark:text-red-400 mb-2">D</h3>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">IMPULSOR</p>
                     <div className="w-8 h-1 bg-red/50 rounded mt-2"></div>
                   </div>
@@ -484,19 +484,19 @@ export default function DespegaOnboarding() {
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
-                      <div className="p-3 bg-red/5 dark:bg-red-900/20 rounded">
+                      <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
                         <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Cómo Actúan</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Orientados a resultados, decisiones rápidas, lideran con confianza, directos y eficientes</p>
                       </div>
-                      <div className="p-3 bg-red/5 dark:bg-red-900/20 rounded">
+                      <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
                         <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Fortalezas</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Liderazgo, decisión, competencia, determinación, coraje, eficiencia</p>
                       </div>
-                      <div className="p-3 bg-red/5 dark:bg-red-900/20 rounded">
+                      <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
                         <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Motivación</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Resultados, control, desafíos, ambientes dinámicos, autonomía</p>
                       </div>
-                      <div className="p-3 bg-red/5 dark:bg-red-900/20 rounded">
+                      <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
                         <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Ambiente Ideal</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Liderazgo, emprendimiento, cambio, competencia, responsabilidad</p>
                       </div>
@@ -512,7 +512,7 @@ export default function DespegaOnboarding() {
                 <div className="grid md:grid-cols-4 gap-6">
                   <div className="md:col-span-1">
                     <div className="text-6xl mb-3">✨</div>
-                    <h3 className="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">I</h3>
+                    <h3 className="text-2xl font-bold text-yellow dark:text-yellow-400 mb-2">I</h3>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">CATALIZADOR</p>
                     <div className="w-8 h-1 bg-orange rounded mt-2"></div>
                   </div>
@@ -524,20 +524,20 @@ export default function DespegaOnboarding() {
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
-                      <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
-                        <p className="font-semibold text-yellow-900 dark:text-yellow-300 text-sm mb-1">Cómo Actúan</p>
+                      <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
+                        <p className="font-semibold text-yellow dark:text-yellow-300 text-sm mb-1">Cómo Actúan</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Entusiastas, carismáticos, conectan fácilmente, optimistas, energéticos</p>
                       </div>
-                      <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
-                        <p className="font-semibold text-yellow-900 dark:text-yellow-300 text-sm mb-1">Fortalezas</p>
+                      <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
+                        <p className="font-semibold text-yellow dark:text-yellow-300 text-sm mb-1">Fortalezas</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Comunicación, entusiasmo, carisma, persuasión, energía positiva</p>
                       </div>
-                      <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
-                        <p className="font-semibold text-yellow-900 dark:text-yellow-300 text-sm mb-1">Motivación</p>
+                      <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
+                        <p className="font-semibold text-yellow dark:text-yellow-300 text-sm mb-1">Motivación</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Reconocimiento, interacción social, diversión, visibilidad</p>
                       </div>
-                      <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
-                        <p className="font-semibold text-yellow-900 dark:text-yellow-300 text-sm mb-1">Ambiente Ideal</p>
+                      <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
+                        <p className="font-semibold text-yellow dark:text-yellow-300 text-sm mb-1">Ambiente Ideal</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Ventas, networking, equipo, creatividad, relaciones públicas</p>
                       </div>
                     </div>
@@ -552,7 +552,7 @@ export default function DespegaOnboarding() {
                 <div className="grid md:grid-cols-4 gap-6">
                   <div className="md:col-span-1">
                     <div className="text-6xl mb-3">🌱</div>
-                    <h3 className="text-2xl font-bold text-green dark:text-green-400 mb-2">S</h3>
+                    <h3 className="text-2xl font-bold text-green dark:text-green/40 mb-2">S</h3>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">ESTABILIZADOR</p>
                     <div className="w-8 h-1 bg-green/50 rounded mt-2"></div>
                   </div>
@@ -564,19 +564,19 @@ export default function DespegaOnboarding() {
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
-                      <div className="p-3 bg-green/5 dark:bg-green-900/20 rounded">
+                      <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
                         <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Cómo Actúan</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Confiables, pacientes, colaborativos, apoyan genuinamente, crean armonía</p>
                       </div>
-                      <div className="p-3 bg-green/5 dark:bg-green-900/20 rounded">
+                      <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
                         <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Fortalezas</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Empatía, paciencia, loyalidad, consistencia, confiabilidad, trabajo en equipo</p>
                       </div>
-                      <div className="p-3 bg-green/5 dark:bg-green-900/20 rounded">
+                      <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
                         <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Motivación</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Estabilidad, equipo, armonía, relaciones significativas, seguridad</p>
                       </div>
-                      <div className="p-3 bg-green/5 dark:bg-green-900/20 rounded">
+                      <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
                         <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Ambiente Ideal</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Apoyo, servicio, coaching, ambientes estables, relaciones duraderas</p>
                       </div>
@@ -628,7 +628,7 @@ export default function DespegaOnboarding() {
           </div>
 
           {/* Key Points */}
-          <Card className="bg-gradient-to-r from-purple/5 to-indigo-50 dark:from-purple dark:to-blue border-2 border-purple-300 dark:border-purple-700 shadow-lg">
+          <Card className="bg-gradient-to-r from-purple/5 to-blue/5 dark:from-purple dark:to-blue border-2 border-purple-300 dark:border-purple-700 shadow-lg">
             <CardContent className="pt-8">
               <h2 className="text-2xl font-bold mb-6 text-muted/90 dark:text-muted/5">Puntos Clave Importantes</h2>
               <div className="grid md:grid-cols-2 gap-6">
@@ -937,7 +937,7 @@ export default function DespegaOnboarding() {
             <div className="grid md:grid-cols-2 gap-6">
               {/* MÁS COMO YO */}
               <div className="space-y-3">
-                <h4 className="font-semibold text-green-700 bg-green/5 p-3 rounded">
+                <h4 className="font-semibold text-green bg-green/5 p-3 rounded">
                   ✓ MÁS como yo
                 </h4>
                 <div className="space-y-2">
@@ -958,14 +958,14 @@ export default function DespegaOnboarding() {
                           isDisabledInMas
                             ? "border-muted/20 bg-muted/10 opacity-50 cursor-not-allowed"
                             : selectedMas === option.dimension
-                            ? "border-green-500 bg-green/5"
+                            ? "border-green bg-green/5"
                             : "border-muted/20 hover:border-green-300"
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                             selectedMas === option.dimension
-                              ? "border-green-500 bg-green/50"
+                              ? "border-green bg-green/50"
                               : "border-muted/30"
                           }`}>
                             {selectedMas === option.dimension && (

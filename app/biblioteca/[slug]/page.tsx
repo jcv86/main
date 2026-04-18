@@ -3408,13 +3408,13 @@ export default function BookReaderPage() {
   const getDifficultyColor = (category: string) => {
     switch (category) {
       case "Productividad":
-        return "bg-green-100 text-green-800"
+        return "bg-green/10 text-green"
       case "Psicología":
-        return "bg-blue/10 text-blue-800"
+        return "bg-blue/10 text-blue"
       case "Desarrollo Personal":
         return "bg-purple/10 text-purple"
       case "Comunicación":
-        return "bg-orange-100 text-orange-800"
+        return "bg-orange/10 text-orange"
       default:
         return "bg-muted/10 text-gray-800"
     }
@@ -3522,7 +3522,7 @@ export default function BookReaderPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setIsLiked(!isLiked)}
-                className={isLiked ? "text-red-600" : ""}
+                className={isLiked ? "text-red" : ""}
               >
                 <Heart className="h-4 w-4" />
               </Button>
@@ -3645,11 +3645,11 @@ export default function BookReaderPage() {
               )}
 
               {ttsError && (
-                <div className="mt-3 p-2 bg-red-100 border border-red-300 rounded text-sm text-red">{ttsError}</div>
+                <div className="mt-3 p-2 bg-red/10 border border-red-300 rounded text-sm text-red">{ttsError}</div>
               )}
 
               {!isPlaying && !isPaused && availableVoices.length === 0 && (
-                <div className="mt-3 p-2 bg-yellow-100 border border-yellow-300 rounded text-sm text-yellow-700">
+                <div className="mt-3 p-2 bg-yellow/10 border border-yellow-300 rounded text-sm text-yellow-700">
                   Cargando voces disponibles...
                 </div>
               )}

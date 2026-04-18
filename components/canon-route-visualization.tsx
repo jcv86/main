@@ -23,7 +23,7 @@ interface CanonRouteVisualizationProps {
 const intensidadColors = {
   suave: { bg: "bg-accent/10 dark:bg-accent/5", border: "border-accent/30 dark:border-accent/40", badge: "bg-accent/20 dark:bg-accent/10 text-foreground" },
   moderada: { bg: "bg-purple/10 dark:bg-purple/5", border: "border-purple/30 dark:border-purple/40", badge: "bg-purple/20 dark:bg-purple/10 text-foreground" },
-  alta: { bg: "bg-orange-100/50 dark:bg-orange-950/30", border: "border-orange-300/50 dark:border-orange-700/50", badge: "bg-orange-200/70 dark:bg-orange-900/50 text-orange-900 dark:text-orange-100" }
+  alta: { bg: "bg-orange/10/50 dark:bg-orange-950/30", border: "border-orange-300/50 dark:border-orange-700/50", badge: "bg-orange-200/70 dark:bg-orange/50 text-orange-900 dark:text-orange/10" }
 }
 
 function MilestoneCard({ milestone, index }: { milestone: MilestoneCard; index: number }) {
@@ -128,7 +128,7 @@ export function CanonRouteVisualization({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-purple-800 dark:text-purple-200 font-semibold leading-relaxed">
+            <p className="text-lg text-purple-800 dark:text-purple/20 font-semibold leading-relaxed">
               "{masterInsight}"
             </p>
           </CardContent>
@@ -158,7 +158,7 @@ export function CanonRouteVisualization({
           <CardContent>
             <ul className="space-y-3">
               {recomendacionesPersonalizadas.map((rec, idx) => (
-                <li key={idx} className="flex gap-3 text-blue-800 dark:text-blue-200">
+                <li key={idx} className="flex gap-3 text-blue dark:text-blue-200">
                   <div className="w-1.5 h-1.5 rounded-[20px] bg-blue-500 dark:bg-blue-400 flex-shrink-0 mt-2" />
                   <span className="text-sm">{rec}</span>
                 </li>

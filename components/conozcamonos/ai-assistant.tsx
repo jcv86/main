@@ -59,7 +59,7 @@ export function AIAssistant({
         onClick={() => setIsOpen(true)}
         variant="outline"
         size="sm"
-        className="gap-2 text-blue-600 border-blue-200 hover:border-blue-300 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-800 dark:hover:bg-blue-950"
+        className="gap-2 text-blue border-blue-200 hover:border-blue-300 hover:bg-blue-50 dark:text-blue/40 dark:border-blue-800 dark:hover:bg-blue-950"
       >
         <Lightbulb className="w-4 h-4" />
         {buttonLabel}
@@ -71,10 +71,10 @@ export function AIAssistant({
     <div className="space-y-3 p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-2">
-          <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+          <Lightbulb className="w-5 h-5 text-blue dark:text-blue/40 mt-0.5 flex-shrink-0" />
           <div>
             <p className="font-semibold text-blue-900 dark:text-blue-100">{title}</p>
-            <p className="text-sm text-blue-800 dark:text-blue-200 mt-0.5">
+            <p className="text-sm text-blue dark:text-blue-200 mt-0.5">
               {suggestion ? 'Aquí está mi sugerencia:' : 'Obtén ayuda para responder esta pregunta'}
             </p>
           </div>
@@ -85,21 +85,21 @@ export function AIAssistant({
             setSuggestion(null)
             setError('')
           }}
-          className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+          className="text-blue hover:text-blue dark:text-blue/40 dark:hover:text-blue-300"
         >
           <X className="w-4 h-4" />
         </button>
       </div>
 
       {error && (
-        <div className="flex gap-2 p-2 bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-200 rounded text-sm">
+        <div className="flex gap-2 p-2 bg-red/10 dark:bg-red-950 text-red-800 dark:text-red/20 rounded text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
           <p>{error}</p>
         </div>
       )}
 
       {loading && (
-        <div className="flex gap-2 items-center text-blue-700 dark:text-blue-300">
+        <div className="flex gap-2 items-center text-blue dark:text-blue-300">
           <Loader2 className="w-4 h-4 animate-spin" />
           <p className="text-sm">Generando sugerencia...</p>
         </div>
@@ -118,7 +118,7 @@ export function AIAssistant({
               onClick={handleGetSuggestion}
               variant="outline"
               size="sm"
-              className="flex-1 text-blue-600 border-blue-200"
+              className="flex-1 text-blue border-blue-200"
             >
               Otra sugerencia
             </Button>

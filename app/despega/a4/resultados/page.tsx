@@ -119,7 +119,7 @@ export default function A4ResultadosPage() {
       <ASection title="A4: Radar" subtitle="Resultados Estratégicos" icon="📡" colorClass="from-blue/50 to-purple">
         <ASectionPart title="Error" icon={<Target />}>
           <div className="space-y-4">
-            <div className="p-6 bg-red/5 dark:bg-red-900/20 border-2 border-red/20 dark:border-red-900/50 rounded-lg">
+            <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red-900/50 rounded-lg">
               <p className="text-red dark:text-red-300 font-semibold text-lg">{error}</p>
             </div>
             <Button 

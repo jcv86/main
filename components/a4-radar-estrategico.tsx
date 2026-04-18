@@ -114,7 +114,7 @@ export function A4RadarEstrategico() {
       case 'medium':
         return 'bg-orange/20 text-yellow-700 dark:text-yellow-300 border-yellow-300'
       case 'low':
-        return 'bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-300'
+        return 'bg-blue-500/20 text-blue dark:text-blue-300 border-blue-300'
       default:
         return 'bg-muted/50/20'
     }
@@ -174,8 +174,8 @@ export function A4RadarEstrategico() {
                   <CardTitle className="text-xs text-muted-foreground">IMACEC</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-blue-600">{economicData.imacec.value}</div>
-                  <p className={`text-xs mt-2 font-medium ${economicData.imacec.variation_monthly < 0 ? 'text-red-600' : 'text-green-600'}`}>
+                  <div className="text-3xl font-bold text-blue">{economicData.imacec.value}</div>
+                  <p className={`text-xs mt-2 font-medium ${economicData.imacec.variation_monthly < 0 ? 'text-red' : 'text-green'}`}>
                     {economicData.imacec.variation_monthly > 0 ? '+' : ''}
                     {economicData.imacec.variation_monthly}% mes
                   </p>
@@ -188,8 +188,8 @@ export function A4RadarEstrategico() {
                   <CardTitle className="text-xs text-muted-foreground">IPC</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-orange-600">{economicData.ipc.value}</div>
-                  <p className={`text-xs mt-2 font-medium ${economicData.ipc.variation_annual > 3.5 ? 'text-red-600' : 'text-green-600'}`}>
+                  <div className="text-3xl font-bold text-orange">{economicData.ipc.value}</div>
+                  <p className={`text-xs mt-2 font-medium ${economicData.ipc.variation_annual > 3.5 ? 'text-red' : 'text-green'}`}>
                     +{economicData.ipc.variation_annual}% anual
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">Inflación</p>
@@ -202,7 +202,7 @@ export function A4RadarEstrategico() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold text-purple-600">{economicData.tpm.value}%</div>
-                  <p className={`text-xs mt-2 font-medium ${economicData.tpm.variation > 0 ? 'text-red-600' : 'text-green-600'}`}>
+                  <p className={`text-xs mt-2 font-medium ${economicData.tpm.variation > 0 ? 'text-red' : 'text-green'}`}>
                     {economicData.tpm.variation > 0 ? '+' : ''}
                     {economicData.tpm.variation}%
                   </p>
@@ -215,7 +215,7 @@ export function A4RadarEstrategico() {
                   <CardTitle className="text-xs text-muted-foreground">Desempleo</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-green-600">{economicData.unemployment_rate}%</div>
+                  <div className="text-3xl font-bold text-green">{economicData.unemployment_rate}%</div>
                   <p className="text-xs mt-2 text-muted-foreground font-medium">Mercado laboral</p>
                   <p className="text-xs text-muted-foreground mt-1">Competencia moderada</p>
                 </CardContent>
@@ -269,7 +269,7 @@ export function A4RadarEstrategico() {
               </CardHeader>
               <CardContent className="space-y-3">
                 {weakSignals.slice(0, 3).map((signal, idx) => (
-                  <div key={idx} className="border-l-4 border-l-yellow-500 pl-4 py-2 bg-yellow-50/30 dark:bg-yellow-950/10">
+                  <div key={idx} className="border-l-4 border-l-yellow-500 pl-4 py-2 bg-yellow/5/30 dark:bg-yellow/10">
                     <p className="text-sm font-medium">{signal.senal}</p>
                     <p className="text-xs text-muted-foreground mt-1">{signal.descripcion}</p>
                     <div className="flex gap-2 mt-2">
@@ -330,7 +330,7 @@ export function A4RadarEstrategico() {
                   <h3 className="font-semibold mb-3">Acciones Concretas Prioritarias</h3>
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="bg-blue-50/50 dark:bg-blue-950/20 p-4 rounded-[28px] border border-blue-200 dark:border-blue-800">
-                      <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-2">ESTA SEMANA</p>
+                      <p className="text-xs font-semibold text-blue dark:text-blue/40 mb-2">ESTA SEMANA</p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
                         <li>Mapear 5 sectores defensivos en tu industria</li>
                         <li>Identificar 3 skills en escasez laboral</li>

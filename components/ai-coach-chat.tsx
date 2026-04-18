@@ -240,11 +240,11 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
               <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
                   className={`max-w-[80%] rounded-lg px-3 py-2 ${
-                    message.role === "user" ? "bg-blue-500 text-white" : "bg-muted/10 text-gray-900"
+                    message.role === "user" ? "bg-blue-500 text-white" : "bg-muted/10 text-foreground"
                   }`}
                 >
                   {message.role === "assistant" && message.coachName && (
-                    <p className="text-xs font-semibold mb-1 text-blue-600">
+                    <p className="text-xs font-semibold mb-1 text-blue">
                       {message.coachName === "Sofia" ? "🌟 Sofia" : "🎯 Dani"}
                     </p>
                   )}

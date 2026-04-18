@@ -425,7 +425,7 @@ export function ConversationalInterviewSimulator({
             <Progress value={((currentQuestionIdx + 1) / questions.length) * 100} className="h-2" />
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-[28px] border border-blue-200 dark:border-blue-800">
+            <div className="bg-blue-50 dark:bg-blue/20 p-6 rounded-[28px] border border-blue-200 dark:border-blue-800">
               <p className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
                 {currentQuestion.text}
               </p>
@@ -483,7 +483,7 @@ export function ConversationalInterviewSimulator({
                       value={userResponse}
                       onChange={(e) => setUserResponse(e.target.value)}
                       placeholder="Escribe aquí o usa micrófono..."
-                      className="flex-1 bg-slate-950/80 border border-slate-700 rounded-[28px] p-2 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none backdrop-blur-sm"
+                      className="flex-1 bg-slate-950/80 border border-slate-700 rounded-[28px] p-2 text-xs text-white placeholder-slate-500 focus:border-blue/50 focus:ring-1 focus:ring-blue-500 resize-none backdrop-blur-sm"
                       rows={2}
                     />
                     {isSupported && (
@@ -516,7 +516,7 @@ export function ConversationalInterviewSimulator({
                       <h3 className="text-lg font-bold text-white truncate">
                         {getAvatarName(selectedInterviewerId, 'interviewer')}
                       </h3>
-                      <p className="text-sm font-semibold text-blue-400 truncate">
+                      <p className="text-sm font-semibold text-blue/40 truncate">
                         {getInterviewerRole(selectedInterviewerId)}
                       </p>
                       <p className="text-xs text-slate-400 mt-1">Entrevistador</p>
@@ -539,7 +539,7 @@ export function ConversationalInterviewSimulator({
                   <Card className="border border-slate-700 bg-slate-900/50">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-xs flex items-center gap-2 uppercase tracking-widest font-bold">
-                        <HelpCircle className="w-3.5 h-3.5 text-blue-400" />
+                        <HelpCircle className="w-3.5 h-3.5 text-blue/40" />
                         Pregunta
                       </CardTitle>
                     </CardHeader>
@@ -593,7 +593,7 @@ export function ConversationalInterviewSimulator({
                   <Button
                     onClick={handleSubmitResponse}
                     disabled={!userResponse.trim()}
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-sm font-semibold gap-2"
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue hover:from-blue-700 hover:to-blue-800 text-sm font-semibold gap-2"
                   >
                     <Send className="w-4 h-4" />
                     Enviar
@@ -610,9 +610,9 @@ export function ConversationalInterviewSimulator({
             </div>
 
             {error && (
-              <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red-900/20">
-                <AlertTriangle className="h-4 w-4 text-red-600" />
-                <AlertDescription className="text-red dark:text-red-200 ml-2">
+              <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red/20">
+                <AlertTriangle className="h-4 w-4 text-red" />
+                <AlertDescription className="text-red dark:text-red/20 ml-2">
                   {error}
                 </AlertDescription>
               </Alert>
@@ -657,11 +657,11 @@ export function ConversationalInterviewSimulator({
 
               <TabsContent value="feedback" className="space-y-4">
                 <div>
-                  <p className="font-semibold text-green-700 dark:text-green-300 mb-2">Fortalezas:</p>
+                  <p className="font-semibold text-green dark:text-green-300 mb-2">Fortalezas:</p>
                   <ul className="space-y-2">
                     {lastAttempt.feedback?.strengths.map((s, i) => (
                       <li key={i} className="flex gap-2 text-sm">
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                        <Check className="w-4 h-4 text-green flex-shrink-0 mt-0.5" />
                         <span>{s}</span>
                       </li>
                     ))}
@@ -685,7 +685,7 @@ export function ConversationalInterviewSimulator({
                   <>
                     {Object.entries(lastAttempt.feedback.staAnalysis).map(([key, value]) => (
                       <div key={key}>
-                        <p className="font-semibold text-blue-700 dark:text-blue-300 capitalize">{key}:</p>
+                        <p className="font-semibold text-blue dark:text-blue-300 capitalize">{key}:</p>
                         <p className="text-sm text-slate-700 dark:text-slate-300">{value}</p>
                       </div>
                     ))}
@@ -715,9 +715,9 @@ export function ConversationalInterviewSimulator({
 
             {/* Follow-up Question */}
             {lastAttempt.followUp && (
-              <Alert className="bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800">
+              <Alert className="bg-purple-50 dark:bg-purple/20 border-purple-200 dark:border-purple-800">
                 <MessageSquare className="h-4 w-4" />
-                <AlertDescription className="text-purple-900 dark:text-purple-200">
+                <AlertDescription className="text-purple-900 dark:text-purple/20">
                   <p className="font-semibold mb-1">Mi pregunta de seguimiento:</p>
                   <p>"{lastAttempt.followUp}"</p>
                 </AlertDescription>
@@ -765,10 +765,10 @@ export function ConversationalInterviewSimulator({
 
               {/* XP Rewards */}
               {gamification && (
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-[28px] space-y-2">
+                <div className="bg-blue-50 dark:bg-blue/20 p-4 rounded-[28px] space-y-2">
                   <div className="flex items-center justify-center gap-2">
-                    <Zap className="w-5 h-5 text-blue-600" />
-                    <span className="font-bold text-blue-600">+150 XP Ganados</span>
+                    <Zap className="w-5 h-5 text-blue" />
+                    <span className="font-bold text-blue">+150 XP Ganados</span>
                   </div>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
                     Nivel: {gamification.current_level} • Racha: {gamification.current_streak} días
@@ -847,14 +847,14 @@ export function ConversationalInterviewSimulator({
   function getAvatarGradient(avatarId: string): string {
     const gradients: Record<string, string> = {
       'professional-1': 'bg-gradient-to-br from-blue-500 to-blue-600',
-      'creative-1': 'bg-gradient-to-br from-purple-500 to-purple-600',
+      'creative-1': 'bg-gradient-to-br from-purple-500 to-purple',
       'tech-1': 'bg-gradient-to-br from-green-500 to-green-600',
-      'business-1': 'bg-gradient-to-br from-red-500 to-red-600',
+      'business-1': 'bg-gradient-to-br from-red to-red',
       'casual-1': 'bg-gradient-to-br from-orange-500 to-orange-600',
       'formal-1': 'bg-gradient-to-br from-slate-700 to-slate-900',
-      'interviewer-classic-1': 'bg-gradient-to-br from-purple-500 to-purple-600',
+      'interviewer-classic-1': 'bg-gradient-to-br from-purple-500 to-purple',
       'interviewer-classic-2': 'bg-gradient-to-br from-blue-500 to-blue-600',
-      'interviewer-classic-3': 'bg-gradient-to-br from-purple-500 to-indigo-600',
+      'interviewer-classic-3': 'bg-gradient-to-br from-purple-500 to-blue',
       'interviewer-classic-4': 'bg-gradient-to-br from-green-500 to-emerald-600',
       'interviewer-modern-1': 'bg-gradient-to-br from-red-500 to-rose-600',
       'interviewer-modern-2': 'bg-gradient-to-br from-orange-500 to-yellow-600',

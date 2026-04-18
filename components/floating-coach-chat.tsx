@@ -174,8 +174,8 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
                       <AvatarFallback
                         className={
                           message.coach === "sofia"
-                            ? "bg-pink-100 text-pink-700 text-xs"
-                            : "bg-blue-100 text-blue-700 text-xs"
+                            ? "bg-red/10 text-pink-700 text-xs"
+                            : "bg-blue/10 text-blue text-xs"
                         }
                       >
                         {message.coach === "sofia" ? "S" : "D"}

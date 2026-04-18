@@ -246,7 +246,7 @@ export default function A2DashboardPage() {
 
         {/* ⭐ A2 V2: WEEKLY REVIEW RITUAL */}
         <div>
-          <Card className="border-2 border-blue/30 dark:border-blue bg-blue/5/30 dark:bg-indigo-900/10">
+          <Card className="border-2 border-blue/30 dark:border-blue bg-blue/5/30 dark:bg-blue/10">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 📋 Tu Ritual Semanal de Revisión

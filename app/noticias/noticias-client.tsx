@@ -54,7 +54,7 @@ const categories: { id: Category; label: string; icon: React.ReactNode; color: s
   { id: "psicologia", label: "Psicología", icon: <Heart className="h-4 w-4" />, color: "bg-purple/50" },
   { id: "bienestar", label: "Bienestar", icon: <Heart className="h-4 w-4" />, color: "bg-green/50" },
   { id: "relaciones", label: "Relaciones", icon: <Users className="h-4 w-4" />, color: "bg-red/50" },
-  { id: "habitos", label: "Hábitos", icon: <Target className="h-4 w-4" />, color: "bg-orange-500" },
+  { id: "habitos", label: "Hábitos", icon: <Target className="h-4 w-4" />, color: "bg-orange/50" },
   { id: "dinero", label: "Dinero", icon: <DollarSign className="h-4 w-4" />, color: "bg-green/50" },
   { id: "proposito", label: "Propósito", icon: <Compass className="h-4 w-4" />, color: "bg-blue/50" },
 ]
@@ -491,7 +491,7 @@ export default function NoticiasClient() {
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+              <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
                 <Rocket className="h-6 w-6 text-amber-500" />
                 Tu Feed Personalizado
               </h1>
@@ -537,7 +537,7 @@ export default function NoticiasClient() {
       {/* Feed mode selector */}
       <div className="bg-white border-b border-muted/20">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <h3 className="text-sm font-semibold text-gray-700 mb-3">Modo de visualización</h3>
+          <h3 className="text-sm font-semibold text-muted mb-3">Modo de visualización</h3>
           <div className="flex flex-wrap gap-2">
             {feedModes.map((mode) => (
               <Button
@@ -854,7 +854,7 @@ export default function NoticiasClient() {
                 </Card>
 
                 {/* Recommendation */}
-                <Card className="bg-gradient-to-br from-blue/5 to-indigo-50 border-blue/20">
+                <Card className="bg-gradient-to-br from-blue/5 to-blue/5 border-blue/20">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Rocket className="h-5 w-5 text-amber-500" />
@@ -862,7 +862,7 @@ export default function NoticiasClient() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-gray-700 mb-3">
+                    <p className="text-sm text-muted mb-3">
                       Basado en tu perfil DISC, te recomendamos practicar la simulación de{" "}
                       <strong>Negociación Salarial</strong> para mejorar tu comunicación asertiva.
                     </p>
@@ -937,7 +937,7 @@ function ArticleCard({
                 </Badge>
               )}
             </div>
-            <h3 className="font-semibold text-gray-900 line-clamp-2 mb-1">{article.title}</h3>
+            <h3 className="font-semibold text-foreground line-clamp-2 mb-1">{article.title}</h3>
             <p className="text-sm text-muted/60 line-clamp-2">{article.summary}</p>
             <div className="flex items-center justify-between mt-2">
               <div className="flex items-center gap-3 text-xs text-muted/50">

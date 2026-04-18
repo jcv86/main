@@ -37,8 +37,8 @@ interface A4LearningModulesProps {
 
 const getNivelColor = (nivel: string) => {
   const colors: Record<string, string> = {
-    "basico": "bg-green-100 text-green-800",
-    "intermedio": "bg-blue-100 text-blue-800",
+    "basico": "bg-green/10 text-green",
+    "intermedio": "bg-blue/10 text-blue",
     "avanzado": "bg-purple-100 text-purple-800",
   }
   return colors[nivel] || "bg-muted/10"
@@ -147,7 +147,7 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
                             </CardDescription>
                           </div>
                           {isCompleted && (
-                            <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                            <CheckCircle2 className="w-5 h-5 text-green flex-shrink-0" />
                           )}
                         </div>
                       </CardHeader>

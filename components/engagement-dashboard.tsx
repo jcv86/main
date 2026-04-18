@@ -67,7 +67,7 @@ export function EngagementDashboard() {
                 <p className="text-xs text-muted-foreground">Guardados</p>
                 <p className="text-2xl font-bold mt-1">{metrics.resources_saved}</p>
               </div>
-              <Award className="w-8 h-8 text-green-500 opacity-50" />
+              <Award className="w-8 h-8 text-green/50 opacity-50" />
             </div>
           </CardContent>
         </Card>

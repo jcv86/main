@@ -40,12 +40,12 @@ export default function MultimodalAnalysisPage() {
       {error && (
         <Card className="border-red/20 bg-red/5 dark:bg-red-950">
           <CardContent className="pt-4 flex gap-3">
-            <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-4 h-4 text-red flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-sm font-medium text-red-900 dark:text-red-100">{error}</p>
+              <p className="text-sm font-medium text-red-900 dark:text-red/10">{error}</p>
               <button
                 onClick={() => setError('')}
-                className="text-xs text-red-600 hover:text-red dark:text-red-400 mt-1"
+                className="text-xs text-red hover:text-red dark:text-red-400 mt-1"
               >
                 Descartar
               </button>

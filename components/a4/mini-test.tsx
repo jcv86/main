@@ -32,7 +32,7 @@ export function MiniTest({
   const getDifficultyColor = (diff: string) => {
     switch (diff) {
       case "fácil":
-        return "bg-green-500/10 text-green-700"
+        return "bg-green-500/10 text-green"
       case "medio":
         return "bg-amber-500/10 text-amber-700"
       case "difícil":

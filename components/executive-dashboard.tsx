@@ -110,7 +110,7 @@ export function ExecutiveDashboard() {
               <div className="flex items-start justify-between mb-4">
                 <div>{metric.icon}</div>
                 {metric.trend && (
-                  <Badge className={metric.trend > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}>
+                  <Badge className={metric.trend > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red/10 text-red-800'}>
                     {metric.trend > 0 ? '+' : ''}{metric.trend}%
                   </Badge>
                 )}
@@ -172,7 +172,7 @@ export function ExecutiveDashboard() {
                       <Badge
                         className={
                           action.priority === 'Alta'
-                            ? 'bg-red-100 text-red-800'
+                            ? 'bg-red/10 text-red-800'
                             : 'bg-amber-100 text-amber-800'
                         }
                       >
@@ -187,7 +187,7 @@ export function ExecutiveDashboard() {
                     size="sm" 
                     variant="outline"
                     onClick={() => handleActionClick(action.route)}
-                    className="cursor-pointer hover:bg-cyan-50 dark:hover:bg-cyan-900/20"
+                    className="cursor-pointer hover:bg-cyan-50 dark:hover:bg-cyan/20"
                   >
                     Acceder
                   </Button>

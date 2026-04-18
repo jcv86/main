@@ -230,7 +230,7 @@ export default function Conozcamonos2Page() {
                 <h3 className="text-lg font-semibold text-muted/90 dark:text-white flex-1">
                   {question.question}
                 </h3>
-                {isAnswered && <span className="text-green dark:text-green-400">✓</span>}
+                {isAnswered && <span className="text-green dark:text-green/40">✓</span>}
               </div>
 
               {question.type === 'select' && (
@@ -275,7 +275,7 @@ export default function Conozcamonos2Page() {
                   )}
                   
                   {error && !validatingIds.has(question.id) && (
-                    <div className="text-xs text-red-600 dark:text-red-400 bg-red/5 dark:bg-red-950/30 p-2 rounded border border-red/20 dark:border-red-800">
+                    <div className="text-xs text-red dark:text-red-400 bg-red/5 dark:bg-red-950/30 p-2 rounded border border-red/20 dark:border-red-800">
                       {error}
                     </div>
                   )}
@@ -331,12 +331,12 @@ export default function Conozcamonos2Page() {
         </div>
 
         {error && (
-          <div className="bg-red/5 dark:bg-red-950 border-2 border-red/50 dark:border-red-600 rounded-[28px] p-6 mb-6 shadow-lg">
+          <div className="bg-red/5 dark:bg-red-950 border-2 border-red/50 dark:border-red rounded-[28px] p-6 mb-6 shadow-lg">
             <div className="flex items-start gap-3">
               <span className="text-2xl flex-shrink-0">⚠️</span>
               <div className="flex-1">
-                <h3 className="font-semibold text-red-900 dark:text-red-100 mb-1">Validación requerida</h3>
-                <p className="text-red-800 dark:text-red-200 text-sm">{error}</p>
+                <h3 className="font-semibold text-red-900 dark:text-red/10 mb-1">Validación requerida</h3>
+                <p className="text-red-800 dark:text-red/20 text-sm">{error}</p>
                 <p className="text-red dark:text-red-300 text-xs mt-2 font-medium">Corrige este campo antes de continuar →</p>
               </div>
             </div>
@@ -367,7 +367,7 @@ export default function Conozcamonos2Page() {
             <Button
               onClick={handleNext}
               disabled={!allStepAnswered || loading || !!error}
-              className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               title={
                 error 
                   ? 'Error de validación: ' + error

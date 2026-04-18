@@ -137,11 +137,11 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red-100 text-red-800"
+        return "bg-red/10 text-red-800"
       case "medium":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow/10 text-yellow"
       case "low":
-        return "bg-green-100 text-green-800"
+        return "bg-green/10 text-green"
       default:
         return "bg-muted/10 text-gray-800"
     }
@@ -150,7 +150,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
   const getDifficultyIcon = (difficulty: string) => {
     switch (difficulty) {
       case "fácil":
-        return <CheckCircle className="h-4 w-4 text-green-500" />
+        return <CheckCircle className="h-4 w-4 text-green/50" />
       case "moderado":
         return <AlertCircle className="h-4 w-4 text-orange" />
       case "difícil":
@@ -164,7 +164,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
     switch (source) {
       case "openai":
         return (
-          <Badge variant="outline" className="bg-blue-50 text-blue-700 text-xs">
+          <Badge variant="outline" className="bg-blue-50 text-blue text-xs">
             OpenAI
           </Badge>
         )
@@ -176,7 +176,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
         )
       case "hybrid":
         return (
-          <Badge variant="outline" className="bg-green-50 text-green-700 text-xs">
+          <Badge variant="outline" className="bg-green-50 text-green text-xs">
             Híbrido
           </Badge>
         )
@@ -248,14 +248,14 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                       )}
                     </CardHeader>
                     <CardContent className="pt-0">
-                      <p className="text-sm text-gray-700">{insight.description}</p>
+                      <p className="text-sm text-muted">{insight.description}</p>
                       {insight.actionableSteps && insight.actionableSteps.length > 0 && (
                         <div className="mt-3">
                           <p className="text-xs font-semibold text-muted/60 mb-1">Pasos Accionables:</p>
                           <ul className="space-y-1">
                             {insight.actionableSteps.map((step: string, i: number) => (
                               <li key={i} className="text-xs text-muted/60 flex items-start gap-1">
-                                <CheckCircle className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
+                                <CheckCircle className="h-3 w-3 text-green/50 mt-0.5 flex-shrink-0" />
                                 {step}
                               </li>
                             ))}
@@ -292,7 +292,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                       </div>
                     </CardHeader>
                     <CardContent className="pt-0">
-                      <p className="text-sm text-gray-700">{rec.description}</p>
+                      <p className="text-sm text-muted">{rec.description}</p>
                       <div className="flex items-center gap-2 mt-2">
                         <Badge variant="secondary" className="text-xs">
                           {rec.difficulty}
@@ -312,13 +312,13 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                   <>
                     <div>
                       <h3 className="font-medium text-sm mb-3 flex items-center gap-2">
-                        <TrendingUp className="h-4 w-4 text-green-500" />
+                        <TrendingUp className="h-4 w-4 text-green/50" />
                         Corto Plazo (1-3 meses)
                       </h3>
                       <div className="space-y-2">
                         {developmentPlan.shortTerm.map((item, index) => (
                           <div key={index} className="flex items-center gap-2 text-sm">
-                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <CheckCircle className="h-4 w-4 text-green/50" />
                             <span>{item}</span>
                           </div>
                         ))}

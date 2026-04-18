@@ -70,9 +70,9 @@ export function RecommendationEngine() {
   }
 
   const getDifficultyColor = (difficulty: string) => {
-    if (difficulty === 'beginner') return 'bg-green-100 text-green-800'
-    if (difficulty === 'intermediate') return 'bg-blue-100 text-blue-800'
-    return 'bg-red-100 text-red-800'
+    if (difficulty === 'beginner') return 'bg-green/10 text-green'
+    if (difficulty === 'intermediate') return 'bg-blue/10 text-blue'
+    return 'bg-red/10 text-red-800'
   }
 
   return (
@@ -94,7 +94,7 @@ export function RecommendationEngine() {
                 </div>
                 <div className="text-right">
                   <div className="flex items-center gap-1 text-sm font-bold">
-                    <TrendingUp className="w-4 h-4 text-green-600" />
+                    <TrendingUp className="w-4 h-4 text-green" />
                     {book.matchScore}% match
                   </div>
                 </div>

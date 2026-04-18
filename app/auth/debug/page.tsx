@@ -59,7 +59,7 @@ export default function AuthDebugPage() {
               </>
             ) : (
               <>
-                <XCircle className="h-5 w-5 text-red-600" />
+                <XCircle className="h-5 w-5 text-red" />
                 No autenticado
               </>
             )}
@@ -111,7 +111,7 @@ export default function AuthDebugPage() {
                 </>
               ) : (
                 <>
-                  <XCircle className="h-5 w-5 text-yellow-600" />
+                  <XCircle className="h-5 w-5 text-yellow" />
                   Perfil no enriquecido
                 </>
               )}

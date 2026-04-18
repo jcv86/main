@@ -115,7 +115,7 @@ export default function LearningPathsPage() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <Award className="h-8 w-8 mx-auto mb-2 text-orange-600" />
+                <Award className="h-8 w-8 mx-auto mb-2 text-orange" />
                 <p className="text-2xl font-bold">
                   {myPaths.reduce((total, path) => total + path.userProgress.streak_days, 0)}
                 </p>

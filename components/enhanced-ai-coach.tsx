@@ -371,21 +371,21 @@ ${
       case "online":
         return (
           <Badge variant="outline" className="text-xs">
-            <CheckCircle className="h-3 w-3 mr-1 text-green-600" />
+            <CheckCircle className="h-3 w-3 mr-1 text-green" />
             Cerebro Activo
           </Badge>
         )
       case "fallback":
         return (
           <Badge variant="outline" className="text-xs">
-            <AlertCircle className="h-3 w-3 mr-1 text-yellow-600" />
+            <AlertCircle className="h-3 w-3 mr-1 text-yellow" />
             Modo Básico
           </Badge>
         )
       case "offline":
         return (
           <Badge variant="outline" className="text-xs">
-            <AlertCircle className="h-3 w-3 mr-1 text-red-600" />
+            <AlertCircle className="h-3 w-3 mr-1 text-red" />
             Sin Conexión
           </Badge>
         )
@@ -692,7 +692,7 @@ ${
                   <div key={idx} className="border rounded-[28px] p-3 space-y-2 bg-blue-50">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Bookmark className="h-3 w-3 text-blue-600" />
+                        <Bookmark className="h-3 w-3 text-blue" />
                         <Badge variant="outline" className="text-xs">
                           {interaction.confidence_score}% confianza
                         </Badge>
@@ -702,7 +702,7 @@ ${
                       </span>
                     </div>
                     <div className="text-sm font-medium">{interaction.query}</div>
-                    <div className="text-xs text-gray-700">{interaction.response}</div>
+                    <div className="text-xs text-muted">{interaction.response}</div>
                     {interaction.user_rating && (
                       <div className="flex items-center gap-1">
                         {[...Array(5)].map((_, i) => (

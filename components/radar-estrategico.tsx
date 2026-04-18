@@ -115,10 +115,10 @@ export function RadarEstrategico() {
               </div>
             </div>
 
-            <div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-lg">
-              <h4 className="text-xs font-medium text-blue-700 dark:text-blue-400 mb-1">Consensus Score</h4>
+            <div className="p-3 bg-blue-500/5 border border-blue/50/20 rounded-lg">
+              <h4 className="text-xs font-medium text-blue dark:text-blue/40 mb-1">Consensus Score</h4>
               <div className="flex items-center gap-2">
-                <div className="flex-1 bg-blue-100 dark:bg-blue-900/30 rounded-full h-2">
+                <div className="flex-1 bg-blue/10 dark:bg-blue/30 rounded-full h-2">
                   <div
                     className="bg-blue-600 h-2 rounded-full"
                     style={{ width: `${(tesis.consensus_score || 0) * 100}%` }}
@@ -174,7 +174,7 @@ export function RadarEstrategico() {
           <CardHeader>
             <div className="flex items-center gap-3">
               <div className="p-3 bg-blue-500/10 rounded-lg">
-                <TrendingUp className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                <TrendingUp className="w-6 h-6 text-blue dark:text-blue/40" />
               </div>
               <CardTitle>Noticias del Análisis</CardTitle>
             </div>

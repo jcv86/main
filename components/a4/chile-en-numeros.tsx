@@ -72,7 +72,7 @@ export function ChileEnNumeros({
   isLoading = false
 }: ChileEnNumerosProps) {
   const getArrow = (change: number) => {
-    if (change > 0) return <ArrowUp className="w-4 h-4 text-green-500" />
+    if (change > 0) return <ArrowUp className="w-4 h-4 text-green/50" />
     if (change < 0) return <ArrowDown className="w-4 h-4 text-red" />
     return <Minus className="w-4 h-4 text-slate-400" />
   }
@@ -124,7 +124,7 @@ export function ChileEnNumeros({
                   </div>
                   <div className="flex items-center gap-1">
                     {getArrow(indicator.change)}
-                    <span className={`text-xs font-medium ${indicator.change > 0 ? 'text-green-600' : indicator.change < 0 ? 'text-red-600' : 'text-slate-600'}`}>
+                    <span className={`text-xs font-medium ${indicator.change > 0 ? 'text-green' : indicator.change < 0 ? 'text-red' : 'text-slate-600'}`}>
                       {indicator.change > 0 ? '+' : ''}{indicator.change}
                     </span>
                   </div>

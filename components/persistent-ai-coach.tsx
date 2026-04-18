@@ -621,7 +621,7 @@ export function PersistentAICoach() {
             {/* Chat Tab Guide */}
             <div className="bg-white dark:bg-slate-800 rounded-[28px] p-4 border border-blue-200 dark:border-blue-800">
               <div className="flex items-start gap-3 mb-2">
-                <MessageSquare className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                <MessageSquare className="h-5 w-5 text-blue dark:text-blue/40 flex-shrink-0 mt-0.5" />
                 <h3 className="font-semibold text-foreground">💬 Chat Personalizado</h3>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -633,7 +633,7 @@ export function PersistentAICoach() {
             {/* Suggestions Guide */}
             <div className="bg-white dark:bg-slate-800 rounded-[28px] p-4 border border-green-200 dark:border-green-800">
               <div className="flex items-start gap-3 mb-2">
-                <Lightbulb className="h-5 w-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+                <Lightbulb className="h-5 w-5 text-green dark:text-green/40 flex-shrink-0 mt-0.5" />
                 <h3 className="font-semibold text-foreground">💡 Sugerencias</h3>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -645,7 +645,7 @@ export function PersistentAICoach() {
             {/* Insights Guide */}
             <div className="bg-white dark:bg-slate-800 rounded-[28px] p-4 border border-purple-200 dark:border-purple-800">
               <div className="flex items-start gap-3 mb-2">
-                <Sparkles className="h-5 w-5 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5" />
+                <Sparkles className="h-5 w-5 text-purple-600 dark:text-purple/40 flex-shrink-0 mt-0.5" />
                 <h3 className="font-semibold text-foreground">✨ Insights</h3>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -667,15 +667,15 @@ export function PersistentAICoach() {
             <div className="flex gap-3">
               <div className="flex items-center gap-1">
                 <span className="text-slate-500">C1:</span>
-                <span className="font-semibold text-blue-400">{performanceContext.c1_score.toFixed(1)}</span>
+                <span className="font-semibold text-blue/40">{performanceContext.c1_score.toFixed(1)}</span>
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-slate-500">C2:</span>
-                <span className="font-semibold text-green-400">{performanceContext.c2_score.toFixed(1)}</span>
+                <span className="font-semibold text-green/40">{performanceContext.c2_score.toFixed(1)}</span>
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-slate-500">C3:</span>
-                <span className="font-semibold text-purple-400">{performanceContext.c3_score.toFixed(1)}</span>
+                <span className="font-semibold text-purple/40">{performanceContext.c3_score.toFixed(1)}</span>
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-slate-500">C4:</span>

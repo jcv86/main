@@ -355,10 +355,10 @@ export default function GamificationSystem() {
         <TabsContent value="achievements" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {achievements.map((achievement) => (
-              <Card key={achievement.id} className="border-2 border-yellow-200 bg-secondary">
+              <Card key={achievement.id} className="border-2 border-yellow/20 bg-secondary">
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-yellow-100 rounded-full flex items-center justify-center text-foreground">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-yellow/10 rounded-full flex items-center justify-center text-foreground">
                       {getAchievementIcon(achievement.achievement_type)}
                     </div>
                     <h3 className="font-bold text-lg mb-2">{achievement.achievement_name}</h3>
@@ -415,7 +415,7 @@ export default function GamificationSystem() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-yellow-50 rounded-[28px] border-2 border-yellow-200">
+                <div className="flex items-center justify-between p-4 bg-yellow/5 rounded-[28px] border-2 border-yellow/20">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-orange rounded-full flex items-center justify-center text-white font-bold">
                       1

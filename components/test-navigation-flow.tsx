@@ -88,7 +88,7 @@ const tests: TestInfo[] = [
     questions: 36,
     difficulty: "Intermediate",
     icon: Palette,
-    color: "bg-orange-500",
+    color: "bg-orange/50",
     path: "/test/riasec",
     prerequisites: ["mbti"],
   },
@@ -195,8 +195,8 @@ export default function TestNavigationFlow() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-blue-900">{recommendedTest.name}</h3>
-                  <p className="text-sm text-blue-700">{recommendedTest.description}</p>
-                  <div className="flex items-center gap-4 mt-1 text-xs text-blue-600">
+                  <p className="text-sm text-blue">{recommendedTest.description}</p>
+                  <div className="flex items-center gap-4 mt-1 text-xs text-blue">
                     <span className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       {recommendedTest.duration}
@@ -248,7 +248,7 @@ export default function TestNavigationFlow() {
                       </Badge>
                     </div>
                   </div>
-                  {isCompleted && <CheckCircle className="h-6 w-6 text-green-600" />}
+                  {isCompleted && <CheckCircle className="h-6 w-6 text-green" />}
                   {!isAvailable && <AlertCircle className="h-6 w-6 text-muted/40" />}
                 </div>
               </CardHeader>
@@ -282,7 +282,7 @@ export default function TestNavigationFlow() {
                       const prereqTest = tests.find((t) => t.id === prereq)
                       const isPrereqCompleted = completedTests.includes(prereq)
                       return (
-                        <span key={prereq} className={isPrereqCompleted ? "text-green-600" : "text-red"}>
+                        <span key={prereq} className={isPrereqCompleted ? "text-green" : "text-red"}>
                           {prereqTest?.name}
                           {test.prerequisites!.indexOf(prereq) < test.prerequisites!.length - 1 && ", "}
                         </span>
@@ -327,9 +327,9 @@ export default function TestNavigationFlow() {
       {completedTests.length === tests.length && (
         <Card className="border-green-200 bg-green-50">
           <CardContent className="p-6 text-center">
-            <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-4" />
+            <CheckCircle className="h-12 w-12 text-green mx-auto mb-4" />
             <h3 className="text-xl font-semibold text-green-900 mb-2">🎉 Todas las Evaluaciones Completadas!</h3>
-            <p className="text-green-700 mb-4">
+            <p className="text-green mb-4">
               Has completado todas las evaluaciones de personalidad y carrera. Visita tu panel de control para ver tu
               perfil completo.
             </p>

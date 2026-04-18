@@ -331,7 +331,7 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
     if (result.matchDetails.titleMatch > 0.4) {
       badges.push({
         label: `📖 ${(result.matchDetails.titleMatch * 100).toFixed(0)}%`,
-        color: "bg-blue-50 text-blue-700",
+        color: "bg-blue-50 text-blue",
       })
     }
     if (result.matchDetails.authorMatch > 0.4) {
@@ -343,13 +343,13 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
     if (result.matchDetails.tagMatch > 0.4) {
       badges.push({
         label: `🏷️ ${(result.matchDetails.tagMatch * 100).toFixed(0)}%`,
-        color: "bg-green-50 text-green-700",
+        color: "bg-green-50 text-green",
       })
     }
     if (result.matchDetails.contentMatch > 0.3) {
       badges.push({
         label: `📄 ${(result.matchDetails.contentMatch * 100).toFixed(0)}%`,
-        color: "bg-yellow-50 text-yellow-700",
+        color: "bg-yellow/5 text-yellow-700",
       })
     }
     if (result.matchDetails.popularityBoost > 0.5) {
@@ -374,7 +374,7 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
       <DialogContent className="max-w-6xl h-[90vh] p-0">
         <DialogHeader className="p-6 pb-4">
           <DialogTitle className="flex items-center gap-2">
-            <Zap className="h-5 w-5 text-blue-600" />
+            <Zap className="h-5 w-5 text-blue" />
             Acceso Rápido con Búsqueda Inteligente
             <Badge variant="secondary" className="ml-2">
               {searchResults.length} de {books.length}
@@ -598,7 +598,7 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
                             )}
                           </div>
 
-                          <h3 className="font-semibold text-gray-900 mb-1 line-clamp-1">{result.title}</h3>
+                          <h3 className="font-semibold text-foreground mb-1 line-clamp-1">{result.title}</h3>
 
                           <div className="flex items-center gap-4 text-sm text-muted/60 mb-2">
                             <div className="flex items-center gap-1">

@@ -16,27 +16,27 @@ const ROUTE_INFO = {
     name: "Energía y Vitalidad",
     icon: "⚡",
     color: "from-yellow-500 to-amber-500",
-    bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
-    textColor: "text-yellow-900 dark:text-yellow-100",
+    bgColor: "bg-yellow/5 dark:bg-yellow/20",
+    textColor: "text-yellow dark:text-yellow/10",
   },
   enfoque: {
     name: "Enfoque y Productividad",
     icon: "🎯",
     color: "from-green to-green",
-    bgColor: "bg-green/5 dark:bg-green-900/20",
+    bgColor: "bg-green/5 dark:bg-green/20",
     textColor: "text-green-900 dark:text-green-100",
   },
   relaciones: {
     name: "Relaciones Significativas",
     icon: "🤝",
     color: "from-red/50 to-rose-500",
-    bgColor: "bg-red/5 dark:bg-pink-900/20",
+    bgColor: "bg-red/5 dark:bg-red/20",
     textColor: "text-pink-900 dark:text-pink-100",
   },
   plan_ejecutivo: {
     name: "Plan Ejecutivo",
     icon: "📋",
-    color: "from-purple/50 to-indigo-500",
+    color: "from-purple/50 to-blue/50",
     bgColor: "bg-purple/5 dark:bg-purple/20",
     textColor: "text-purple dark:text-purple/10",
   },
@@ -175,7 +175,7 @@ export default function Mision90DiasPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green"></div>
           <p className="mt-4 text-muted/60 dark:text-muted/40">Preparando tu misión...</p>
         </div>
       </div>
@@ -232,7 +232,7 @@ export default function Mision90DiasPage() {
                 className="min-h-24 resize-none"
               />
               {errors.objective && (
-                <p className="text-sm text-red-600 dark:text-red-400">{errors.objective}</p>
+                <p className="text-sm text-red dark:text-red-400">{errors.objective}</p>
               )}
               <p className="text-xs text-muted/60 dark:text-muted/40">
                 {objective.length} caracteres | Mínimo: 10 caracteres
@@ -280,7 +280,7 @@ export default function Mision90DiasPage() {
                 className="min-h-24 resize-none"
               />
               {errors.successMetric && (
-                <p className="text-sm text-red-600 dark:text-red-400">{errors.successMetric}</p>
+                <p className="text-sm text-red dark:text-red-400">{errors.successMetric}</p>
               )}
               <p className="text-xs text-muted/60 dark:text-muted/40">
                 {successMetric.length} caracteres | Mínimo: 10 caracteres

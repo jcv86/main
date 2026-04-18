@@ -332,7 +332,7 @@ export default function BigFiveTest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Despega Brújula</h2>
+                <h2 className="text-2xl font-bold text-foreground">Despega Brújula</h2>
                 <p className="text-muted/60">
                   Question {currentQuestion + 1} of {bigFiveQuestions.length}
                 </p>
@@ -400,7 +400,7 @@ export default function BigFiveTest() {
                 <div className="flex items-center justify-between text-sm text-muted/50">
                   <span>{((answers[question.id] as string) || "").length} characters (minimum 50 required)</span>
                   {((answers[question.id] as string) || "").length >= 50 && (
-                    <Badge variant="secondary" className="bg-green-100 text-green-700">
+                    <Badge variant="secondary" className="bg-green/10 text-green">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       Complete
                     </Badge>

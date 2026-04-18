@@ -209,7 +209,7 @@ export default function A3Page() {
 
           <Card className="bg-white dark:bg-card shadow-md">
             <CardContent className="pt-6">
-              <div className="text-3xl font-bold text-green dark:text-green-400">
+              <div className="text-3xl font-bold text-green dark:text-green/40">
                 {a3Progress?.interviews_mastered || 0}
               </div>
               <p className="text-sm text-muted/60 dark:text-muted/40 mt-2">Entrevistas Dominadas</p>
@@ -255,7 +255,7 @@ export default function A3Page() {
             <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
               {['Luz', 'Fondo', 'Audio', 'Postura', 'Presencia', 'Lenguaje'].map((item) => (
                 <div key={item} className="p-2 bg-purple/5 dark:bg-purple/20 rounded text-center">
-                  <p className="text-xs font-semibold text-purple dark:text-purple-300">{item}</p>
+                  <p className="text-xs font-semibold text-purple dark:text-purple/30">{item}</p>
                 </div>
               ))}
             </div>
@@ -278,19 +278,19 @@ export default function A3Page() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex gap-3">
-                <CheckCircle2 className="w-4 h-4 text-green dark:text-green-400 flex-shrink-0 mt-1" />
+                <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
                 <p className="text-sm text-muted/60 dark:text-muted/40">Usa el método STAR: Situación, Tarea, Acción, Resultado</p>
               </div>
               <div className="flex gap-3">
-                <CheckCircle2 className="w-4 h-4 text-green dark:text-green-400 flex-shrink-0 mt-1" />
+                <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
                 <p className="text-sm text-muted/60 dark:text-muted/40">Practica frente a espejo antes de cada nivel</p>
               </div>
               <div className="flex gap-3">
-                <CheckCircle2 className="w-4 h-4 text-green dark:text-green-400 flex-shrink-0 mt-1" />
+                <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
                 <p className="text-sm text-muted/60 dark:text-muted/40">Registra tus respuestas para auto-análisis</p>
               </div>
               <div className="flex gap-3">
-                <CheckCircle2 className="w-4 h-4 text-green dark:text-green-400 flex-shrink-0 mt-1" />
+                <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
                 <p className="text-sm text-muted/60 dark:text-muted/40">Revisa retroalimentación después de cada intento</p>
               </div>
             </CardContent>

@@ -30,9 +30,9 @@ interface A4BadgesDisplayProps {
 
 const RARITY_COLORS = {
   common: 'bg-muted/10 text-gray-800 dark:bg-muted/90/30 dark:text-muted/30 border-muted/30',
-  uncommon: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 border-green-300',
-  rare: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border-blue-300',
-  legendary: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 border-purple-300',
+  uncommon: 'bg-green/10 text-green dark:bg-green/30 dark:text-green-300 border-green-300',
+  rare: 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-300 border-blue-300',
+  legendary: 'bg-purple-100 text-purple-800 dark:bg-purple/30 dark:text-purple/30 border-purple-300',
 }
 
 const BADGE_ICONS: Record<string, string> = {
@@ -67,7 +67,7 @@ export function A4BadgesDisplay({ data }: A4BadgesDisplayProps) {
               <p className="text-xs text-muted-foreground mt-1">Total</p>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600">{data.pointsThisWeek}</div>
+              <div className="text-3xl font-bold text-blue">{data.pointsThisWeek}</div>
               <p className="text-xs text-muted-foreground mt-1">Esta semana</p>
             </div>
             <div className="text-center">

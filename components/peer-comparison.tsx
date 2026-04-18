@@ -54,15 +54,15 @@ export function PeerComparison({
   const getComparisonColor = (comparison: string) => {
     switch (comparison) {
       case "excellent":
-        return "bg-green-100 text-green-800"
+        return "bg-green/10 text-green"
       case "above_average":
-        return "bg-blue-100 text-blue-800"
+        return "bg-blue/10 text-blue"
       case "average":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow/10 text-yellow"
       case "below_average":
-        return "bg-orange-100 text-orange-800"
+        return "bg-orange/10 text-orange"
       case "needs_improvement":
-        return "bg-red-100 text-red-800"
+        return "bg-red/10 text-red-800"
       default:
         return "bg-muted/10 text-gray-800"
     }
@@ -104,15 +104,15 @@ export function PeerComparison({
 
         <div className="grid grid-cols-2 gap-4">
           <div className="text-center p-3 bg-white rounded-[28px] border">
-            <div className="text-2xl font-bold text-gray-900">{comparisonData.benchmarks.p50}</div>
+            <div className="text-2xl font-bold text-foreground">{comparisonData.benchmarks.p50}</div>
             <div className="text-xs text-muted-foreground">Promedio (P50)</div>
           </div>
           <div className="text-center p-3 bg-white rounded-[28px] border">
-            <div className="text-2xl font-bold text-gray-900">{comparisonData.benchmarks.p75}</div>
+            <div className="text-2xl font-bold text-foreground">{comparisonData.benchmarks.p75}</div>
             <div className="text-xs text-muted-foreground">Top 25% (P75)</div>
           </div>
           <div className="text-center p-3 bg-white rounded-[28px] border">
-            <div className="text-2xl font-bold text-gray-900">{comparisonData.benchmarks.p90}</div>
+            <div className="text-2xl font-bold text-foreground">{comparisonData.benchmarks.p90}</div>
             <div className="text-xs text-muted-foreground">Top 10% (P90)</div>
           </div>
           <div className="text-center p-3 bg-purple-100 rounded-[28px] border border-purple-200">
@@ -122,7 +122,7 @@ export function PeerComparison({
         </div>
 
         <div className="flex items-center gap-2 text-sm text-muted-foreground bg-blue-50 p-3 rounded-lg">
-          <BarChart3 className="h-4 w-4 text-blue-600" />
+          <BarChart3 className="h-4 w-4 text-blue" />
           <span>Los datos se actualizan mensualmente con nuevos participantes</span>
         </div>
       </CardContent>

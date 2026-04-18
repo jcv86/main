@@ -153,7 +153,7 @@ export default function AdminProgressDashboard() {
   return (
     <div className="min-h-screen bg-muted/5 p-8">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl font-bold mb-8 text-gray-900">Despega Tu Carrera - Admin Progress Dashboard</h1>
+        <h1 className="text-4xl font-bold mb-8 text-foreground">Despega Tu Carrera - Admin Progress Dashboard</h1>
 
         {/* Summary Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
@@ -195,7 +195,7 @@ export default function AdminProgressDashboard() {
               <CardTitle className="text-sm font-medium text-muted/60">Stuck/Incomplete</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-orange-600">{stats.totalUsers - stats.fullyOnboarded}</div>
+              <div className="text-3xl font-bold text-orange">{stats.totalUsers - stats.fullyOnboarded}</div>
               <p className="text-xs text-muted/50 mt-1">still in progress</p>
             </CardContent>
           </Card>

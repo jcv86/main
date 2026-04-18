@@ -18,8 +18,8 @@ const RUTAS = [
     description: "Optimiza tu vitalidad física y mental",
     icon: "⚡",
     color: "bg-orange",
-    lightColor: "bg-yellow-100",
-    textColor: "text-yellow-800",
+    lightColor: "bg-yellow/10",
+    textColor: "text-yellow",
     camino: "persona",
     temas: ["Sueño reparador", "Nutrición energética", "Ejercicio estratégico", "Gestión del estrés"],
     librosRelacionados: ["Atomic Habits", "The Power of Full Engagement", "Why We Sleep"],
@@ -30,8 +30,8 @@ const RUTAS = [
     description: "Domina tu atención y productividad",
     icon: "🎯",
     color: "bg-green/50",
-    lightColor: "bg-green-100",
-    textColor: "text-green-800",
+    lightColor: "bg-green/10",
+    textColor: "text-green",
     camino: "ambos",
     temas: ["Deep Work", "Eliminación de distracciones", "Sistema de prioridades", "Bloques de tiempo"],
     librosRelacionados: ["Deep Work", "Getting Things Done", "Essentialism"],
@@ -42,8 +42,8 @@ const RUTAS = [
     description: "Construye conexiones significativas",
     icon: "🤝",
     color: "bg-red/50",
-    lightColor: "bg-pink-100",
-    textColor: "text-pink-800",
+    lightColor: "bg-red/10",
+    textColor: "text-red",
     camino: "persona",
     temas: ["Comunicación efectiva", "Networking estratégico", "Resolución de conflictos", "Liderazgo relacional"],
     librosRelacionados: ["How to Win Friends", "Crucial Conversations", "Never Split the Difference"],
@@ -205,7 +205,7 @@ export default function RutasPage() {
             Volver al Dashboard
           </Link>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-[28px] bg-green-100 flex items-center justify-center text-2xl">
+            <div className="w-12 h-12 rounded-[28px] bg-green/10 flex items-center justify-center text-2xl">
               🛤️
             </div>
             <div>
@@ -361,7 +361,7 @@ export default function RutasPage() {
                               Comenzar
                             </Button>
                           ) : (
-                            <Badge className="bg-green-100 text-green-800">
+                            <Badge className="bg-green/10 text-green">
                               Completado
                             </Badge>
                           )}

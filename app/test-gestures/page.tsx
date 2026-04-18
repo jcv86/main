@@ -105,10 +105,10 @@ export default function TestGesturesPage() {
                     </div>
                     <div className="text-center p-3 bg-green/5 rounded-lg border">
                       <div className="font-semibold text-green-900">Pinch Zoom</div>
-                      <div className="text-green-700">In & Out Scaling</div>
+                      <div className="text-green">In & Out Scaling</div>
                     </div>
-                    <div className="text-center p-3 bg-yellow-50 rounded-lg border">
-                      <div className="font-semibold text-yellow-900">Tap Gestures</div>
+                    <div className="text-center p-3 bg-yellow/5 rounded-lg border">
+                      <div className="font-semibold text-yellow">Tap Gestures</div>
                       <div className="text-yellow-700">Single, Double, Long</div>
                     </div>
                     <div className="text-center p-3 bg-purple/5 rounded-lg border">
@@ -151,7 +151,7 @@ export default function TestGesturesPage() {
                   <div className="text-sm text-muted/60">Passed</div>
                 </div>
                 <div className="text-center p-3 bg-white rounded-lg border">
-                  <div className="text-2xl font-bold text-red-600">
+                  <div className="text-2xl font-bold text-red">
                     {gestureResults.filter((r) => r.status === "failed").length}
                   </div>
                   <div className="text-sm text-muted/60">Failed</div>

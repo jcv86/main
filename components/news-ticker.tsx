@@ -76,7 +76,7 @@ export function NewsTicker() {
       <div className="flex items-center gap-4 px-6 py-3 h-14 max-w-7xl mx-auto">
         {/* Label */}
         <div className="flex items-center gap-2 flex-shrink-0 font-semibold whitespace-nowrap text-sm">
-          <TrendingUp className="w-4 h-4 text-blue-400" />
+          <TrendingUp className="w-4 h-4 text-blue/40" />
           <span className="text-slate-300">MERCADO</span>
         </div>
         
@@ -86,7 +86,7 @@ export function NewsTicker() {
             href={currentNews.url || '/despega/a4/noticias'}
             target="_blank"
             rel="noopener noreferrer"
-            className="block text-slate-100 hover:text-blue-400 transition-colors text-sm line-clamp-2 leading-snug"
+            className="block text-slate-100 hover:text-blue/40 transition-colors text-sm line-clamp-2 leading-snug"
           >
             {currentNews.title}
           </Link>
@@ -111,7 +111,7 @@ export function NewsTicker() {
         {/* Link a todas las noticias */}
         <Link
           href="/despega/a4/noticias"
-          className="flex-shrink-0 text-xs font-semibold text-slate-400 hover:text-blue-400 transition-colors whitespace-nowrap"
+          className="flex-shrink-0 text-xs font-semibold text-slate-400 hover:text-blue/40 transition-colors whitespace-nowrap"
         >
           Ver todas →
         </Link>

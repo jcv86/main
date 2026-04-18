@@ -273,7 +273,7 @@ export default function GuidedInterviewPage() {
             {/* Timer */}
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold">Tiempo disponible:</span>
-              <div className={`text-2xl font-bold ${timeLeft < 30 ? 'text-red-600' : 'text-muted/60 dark:text-muted/40'}`}>
+              <div className={`text-2xl font-bold ${timeLeft < 30 ? 'text-red' : 'text-muted/60 dark:text-muted/40'}`}>
                 {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
               </div>
             </div>
@@ -331,7 +331,7 @@ export default function GuidedInterviewPage() {
             <div className="bg-purple/5 dark:bg-purple/20 border border-purple/30 dark:border-purple rounded-[28px] p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Mic className="w-5 h-5 text-purple dark:text-purple/40" />
-                <span className="text-sm font-semibold text-purple dark:text-purple-200">
+                <span className="text-sm font-semibold text-purple dark:text-purple/20">
                   O practica hablando en voz alta (sin grabación aún)
                 </span>
               </div>

@@ -21,7 +21,7 @@ const ENTRENAMIENTO_TYPES = [
     ],
     duration: '15-20 min',
     difficulty: 'Básico',
-    difficultyColor: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200',
+    difficultyColor: 'bg-green/10 dark:bg-green/30 text-green dark:text-green-200',
     icon: Users,
     action: 'Comenzar'
   },
@@ -57,7 +57,7 @@ const ENTRENAMIENTO_TYPES = [
     ],
     duration: '25-30 min',
     difficulty: 'Avanzado',
-    difficultyColor: 'bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-200',
+    difficultyColor: 'bg-orange/10 dark:bg-orange/30 text-orange dark:text-orange-200',
     icon: Clock,
     action: 'Comenzar'
   },
@@ -75,7 +75,7 @@ const ENTRENAMIENTO_TYPES = [
     ],
     duration: '30-40 min',
     difficulty: 'Maestría',
-    difficultyColor: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200',
+    difficultyColor: 'bg-red/10 dark:bg-red/30 text-red-800 dark:text-red/20',
     icon: Play,
     action: 'Comenzar'
   }
@@ -164,12 +164,12 @@ export default function SimulationsPage() {
         </div>
 
         {/* Tips Card */}
-        <Card className="bg-gradient-to-r from-purple/5 to-indigo-50 dark:from-purple/20 dark:to-blue/20 border-0">
+        <Card className="bg-gradient-to-r from-purple/5 to-blue/5 dark:from-purple/20 dark:to-blue/20 border-0">
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-purple text-lg">💡</div>
             <div>
               <div className="font-semibold text-purple dark:text-purple/10 mb-2">Cómo progresar en entrenamiento de entrevistas</div>
-              <ul className="text-sm text-purple dark:text-purple-200 space-y-1">
+              <ul className="text-sm text-purple dark:text-purple/20 space-y-1">
                 <li>✓ Domina cada nivel antes de subir (practica hasta sentirte cómodo)</li>
                 <li>✓ Revisa el feedback del coach después de cada entrenamiento</li>
                 <li>✓ Identifica patrones en tus fortalezas y debilidades</li>

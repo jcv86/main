@@ -120,9 +120,9 @@ export function A3ProgressTracker({ userId, level }: A3ProgressTrackerProps) {
   if (!progress) return null
 
   const getScoreColor = (score: number) => {
-    if (score >= 85) return 'text-green-600 dark:text-green-400'
-    if (score >= 70) return 'text-blue-600 dark:text-blue-400'
-    return 'text-orange-600 dark:text-orange-400'
+    if (score >= 85) return 'text-green dark:text-green/40'
+    if (score >= 70) return 'text-blue dark:text-blue/40'
+    return 'text-orange dark:text-orange-400'
   }
 
   return (
@@ -132,7 +132,7 @@ export function A3ProgressTracker({ userId, level }: A3ProgressTrackerProps) {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
-              <TrendingUp className="w-6 h-6 mx-auto mb-2 text-blue-600 dark:text-blue-400" />
+              <TrendingUp className="w-6 h-6 mx-auto mb-2 text-blue dark:text-blue/40" />
               <div className={`text-2xl font-bold ${getScoreColor(progress.averageScore)}`}>
                 {progress.averageScore}
               </div>
@@ -168,7 +168,7 @@ export function A3ProgressTracker({ userId, level }: A3ProgressTrackerProps) {
         <Card>
           <CardContent className="pt-6">
             <div className="text-center">
-              <Clock className="w-6 h-6 mx-auto mb-2 text-purple-600 dark:text-purple-400" />
+              <Clock className="w-6 h-6 mx-auto mb-2 text-purple-600 dark:text-purple/40" />
               <div className="text-2xl font-bold text-slate-900 dark:text-white">
                 {progress.timeSpent}m
               </div>
@@ -216,7 +216,7 @@ export function A3ProgressTracker({ userId, level }: A3ProgressTrackerProps) {
         <Card>
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <Target className="w-5 h-5 text-green-600 dark:text-green-400" />
+              <Target className="w-5 h-5 text-green dark:text-green/40" />
               Fortalezas
             </CardTitle>
           </CardHeader>
@@ -225,7 +225,7 @@ export function A3ProgressTracker({ userId, level }: A3ProgressTrackerProps) {
               {progress.strengthAreas.length > 0 ? (
                 progress.strengthAreas.map((area, i) => (
                   <div key={i} className="flex items-center gap-2 p-2 rounded-[28px] bg-green-50 dark:bg-green-950/20">
-                    <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400 flex-shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0" />
                     <p className="text-sm text-slate-700 dark:text-slate-300">{area}</p>
                   </div>
                 ))
@@ -239,7 +239,7 @@ export function A3ProgressTracker({ userId, level }: A3ProgressTrackerProps) {
         <Card>
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              <Zap className="w-5 h-5 text-orange-600 dark:text-orange-400" />
+              <Zap className="w-5 h-5 text-orange dark:text-orange-400" />
               Áreas de Mejora
             </CardTitle>
           </CardHeader>
@@ -247,8 +247,8 @@ export function A3ProgressTracker({ userId, level }: A3ProgressTrackerProps) {
             <div className="space-y-2">
               {progress.improvementAreas.length > 0 ? (
                 progress.improvementAreas.map((area, i) => (
-                  <div key={i} className="flex items-center gap-2 p-2 rounded-[28px] bg-orange-50 dark:bg-orange-950/20">
-                    <Target className="w-4 h-4 text-orange-600 dark:text-orange-400 flex-shrink-0" />
+                  <div key={i} className="flex items-center gap-2 p-2 rounded-[28px] bg-orange/5 dark:bg-orange-950/20">
+                    <Target className="w-4 h-4 text-orange dark:text-orange-400 flex-shrink-0" />
                     <p className="text-sm text-slate-700 dark:text-slate-300">{area}</p>
                   </div>
                 ))

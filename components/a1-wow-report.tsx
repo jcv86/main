@@ -159,24 +159,24 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
           <CardDescription>La frase que resume cómo eres visto en contextos de presión</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-lg font-semibold text-gray-900 mb-4">{headline}</p>
-          <p className="text-gray-700 leading-relaxed">{insights.fortalezasPrincipales}</p>
+          <p className="text-lg font-semibold text-foreground mb-4">{headline}</p>
+          <p className="text-muted leading-relaxed">{insights.fortalezasPrincipales}</p>
         </CardContent>
       </Card>
 
       {/* Section 2: Tu Tensión Específica */}
-      <Card className="border-2 border-orange-500/50 bg-orange-50/50">
+      <Card className="border-2 border-orange/50 bg-orange/5/50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Lightbulb className="w-5 h-5 text-orange-600" />
+            <Lightbulb className="w-5 h-5 text-orange" />
             Tu Tensión Específica (La verdad incómoda)
           </CardTitle>
           <CardDescription>Dónde se quiebran los {profile.primary}s bajo presión</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-gray-900 font-semibold">{tension}</p>
-          <div className="bg-white p-4 rounded-[28px] border border-orange-200">
-            <p className="text-sm text-gray-700">{insights.areasDesarrollo}</p>
+          <p className="text-foreground font-semibold">{tension}</p>
+          <div className="bg-white p-4 rounded-[28px] border border-orange/20">
+            <p className="text-sm text-muted">{insights.areasDesarrollo}</p>
           </div>
           <p className="text-sm text-muted/60 italic">
             Esta tensión no es debilidad. Es el lado oscuro de tu fortaleza. La pregunta es: ¿la ves? ¿La gestionas?
@@ -185,10 +185,10 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
       </Card>
 
       {/* Section 3: Roles Analysis */}
-      <Card className="border-2 border-blue-500/50 bg-blue-50/50">
+      <Card className="border-2 border-blue/50/50 bg-blue-50/50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Briefcase className="w-5 h-5 text-blue-600" />
+            <Briefcase className="w-5 h-5 text-blue" />
             Roles Donde Brillas vs Drenas
           </CardTitle>
           <CardDescription>Dónde tu perfil es imprescindible vs donde se quiebra</CardDescription>
@@ -196,13 +196,13 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
         <CardContent>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold text-green-700 mb-3 flex items-center gap-2">
+              <h4 className="font-semibold text-green mb-3 flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4" />
                 Brillas En
               </h4>
               <div className="space-y-2">
                 {roles.brilla.map((role, idx) => (
-                  <Badge key={idx} variant="outline" className="bg-green-100 text-green-800 border-green-300">
+                  <Badge key={idx} variant="outline" className="bg-green/10 text-green border-green-300">
                     {role}
                   </Badge>
                 ))}
@@ -215,7 +215,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
               </h4>
               <div className="space-y-2">
                 {roles.drena.map((role, idx) => (
-                  <Badge key={idx} variant="outline" className="bg-red-100 text-red-800 border-red-300">
+                  <Badge key={idx} variant="outline" className="bg-red/10 text-red-800 border-red-300">
                     {role}
                   </Badge>
                 ))}
@@ -246,7 +246,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
               {roadmap['7dias'].map((item, idx) => (
                 <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple-200">
                   <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-gray-900">{item}</p>
+                  <p className="text-sm text-foreground">{item}</p>
                 </div>
               ))}
             </TabsContent>
@@ -255,7 +255,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
               {roadmap['30dias'].map((item, idx) => (
                 <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple-200">
                   <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-gray-900">{item}</p>
+                  <p className="text-sm text-foreground">{item}</p>
                 </div>
               ))}
             </TabsContent>
@@ -264,7 +264,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
               {roadmap['90dias'].map((item, idx) => (
                 <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple-200">
                   <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-gray-900">{item}</p>
+                  <p className="text-sm text-foreground">{item}</p>
                 </div>
               ))}
             </TabsContent>
@@ -292,8 +292,8 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
             <TabsContent value="linkedin" className="mt-4">
               <div className="space-y-3">
                 <div className="p-4 bg-white rounded-[28px] border border-pink-200">
-                  <p className="text-sm font-semibold text-gray-900 mb-2">Propuesta:</p>
-                  <p className="text-gray-900 font-medium">{language.linkedin}</p>
+                  <p className="text-sm font-semibold text-foreground mb-2">Propuesta:</p>
+                  <p className="text-foreground font-medium">{language.linkedin}</p>
                 </div>
                 <Button
                   size="sm"
@@ -310,8 +310,8 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
             <TabsContent value="interview" className="mt-4">
               <div className="space-y-3">
                 <div className="p-4 bg-white rounded-[28px] border border-pink-200">
-                  <p className="text-sm font-semibold text-gray-900 mb-2">Respuesta en Entrevista a "Cuéntame de ti":</p>
-                  <p className="text-gray-900">{language.interview}</p>
+                  <p className="text-sm font-semibold text-foreground mb-2">Respuesta en Entrevista a "Cuéntame de ti":</p>
+                  <p className="text-foreground">{language.interview}</p>
                 </div>
                 <Button
                   size="sm"
@@ -328,8 +328,8 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
             <TabsContent value="networking" className="mt-4">
               <div className="space-y-3">
                 <div className="p-4 bg-white rounded-[28px] border border-pink-200">
-                  <p className="text-sm font-semibold text-gray-900 mb-2">Pitch en Networking:</p>
-                  <p className="text-gray-900">{language.networking}</p>
+                  <p className="text-sm font-semibold text-foreground mb-2">Pitch en Networking:</p>
+                  <p className="text-foreground">{language.networking}</p>
                 </div>
                 <Button
                   size="sm"
@@ -350,8 +350,8 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
       <Card className="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-500">
         <CardContent className="pt-6">
           <div className="text-center space-y-4">
-            <h3 className="text-xl font-bold text-gray-900">El Siguiente Paso</h3>
-            <p className="text-gray-700 max-w-2xl mx-auto">
+            <h3 className="text-xl font-bold text-foreground">El Siguiente Paso</h3>
+            <p className="text-muted max-w-2xl mx-auto">
               Ahora tienes el mapa. Este reporte es tu brújula en los próximos 90 días. 
               La pregunta no es "¿soy {profile.primary}?" sino "¿qué hago con ello?"
             </p>

@@ -76,21 +76,21 @@ const RECURSOS_DEFAULT: Recurso[] = [
 
 const getTipoColor = (tipo: string) => {
   const colors: Record<string, { badge: string; icon: string }> = {
-    libro: { badge: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300', icon: '📚' },
-    articulo: { badge: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300', icon: '📄' },
-    podcast: { badge: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300', icon: '🎧' },
-    video: { badge: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300', icon: '🎬' },
-    reporte: { badge: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300', icon: '📊' },
+    libro: { badge: 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-300', icon: '📚' },
+    articulo: { badge: 'bg-purple-100 text-purple-800 dark:bg-purple/30 dark:text-purple/30', icon: '📄' },
+    podcast: { badge: 'bg-green/10 text-green dark:bg-green/30 dark:text-green-300', icon: '🎧' },
+    video: { badge: 'bg-red/10 text-red-800 dark:bg-red/30 dark:text-red-300', icon: '🎬' },
+    reporte: { badge: 'bg-orange/10 text-orange dark:bg-orange/30 dark:text-orange-300', icon: '📊' },
   }
   return colors[tipo] || { badge: 'bg-muted/10 text-gray-800', icon: '📖' }
 }
 
 const getCategoriaColor = (categoria: string) => {
   const colors: Record<string, string> = {
-    'Liderazgo': 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300',
-    'Emprendimiento': 'bg-pink-100 text-pink-800 dark:bg-pink-900/30 dark:text-pink-300',
-    'Negociación': 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300',
-    'Toma de Decisiones': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
+    'Liderazgo': 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-indigo-300',
+    'Emprendimiento': 'bg-red/10 text-red dark:bg-red/30 dark:text-pink-300',
+    'Negociación': 'bg-cyan/10 text-cyan dark:bg-cyan/30 dark:text-cyan-300',
+    'Toma de Decisiones': 'bg-yellow/10 text-yellow dark:bg-yellow/30 dark:text-yellow-300',
   }
   return colors[categoria] || 'bg-muted/10 text-gray-800'
 }
@@ -350,7 +350,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
       <div className="grid grid-cols-3 gap-4 py-4">
         <Card className="bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/20 dark:to-blue-900/10 border-0">
           <CardContent className="pt-4 text-center">
-            <div className="text-2xl font-bold text-blue-600">{recursos.length}</div>
+            <div className="text-2xl font-bold text-blue">{recursos.length}</div>
             <p className="text-xs text-muted-foreground mt-1">Recursos</p>
           </CardContent>
         </Card>
@@ -362,7 +362,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
         </Card>
         <Card className="bg-gradient-to-br from-green-50 to-green-100/50 dark:from-green-950/20 dark:to-green-900/10 border-0">
           <CardContent className="pt-4 text-center">
-            <div className="text-2xl font-bold text-green-600">{savedItems.size}</div>
+            <div className="text-2xl font-bold text-green">{savedItems.size}</div>
             <p className="text-xs text-muted-foreground mt-1">Guardados</p>
           </CardContent>
         </Card>

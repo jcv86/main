@@ -119,7 +119,7 @@ export function A2ChatCoach({
     <Card className="w-full flex flex-col h-full bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <MessageCircle className="w-5 h-5 text-blue-600" />
+          <MessageCircle className="w-5 h-5 text-blue" />
           Profundización Cognitiva
         </CardTitle>
         <CardDescription>
@@ -134,14 +134,14 @@ export function A2ChatCoach({
             <MessageCircle className="w-4 h-4" />
             Tu Patrón en A1
           </div>
-          <div className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">{a1Pattern}</div>
+          <div className="text-sm text-blue dark:text-blue-200 leading-relaxed">{a1Pattern}</div>
 
           {variantContexts.length > 0 && (
             <div className="pt-2 border-t border-blue-200 dark:border-blue-800 space-y-2">
               <div className="font-medium text-blue-900 dark:text-blue-100 text-sm">Contextos a explorar:</div>
               <div className="flex flex-wrap gap-2">
                 {variantContexts.map((context, i) => (
-                  <Badge key={i} variant="secondary" className="bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800">
+                  <Badge key={i} variant="secondary" className="bg-white dark:bg-slate-900 text-blue dark:text-blue-300 border-blue-200 dark:border-blue-800">
                     {context}
                   </Badge>
                 ))}
@@ -178,7 +178,7 @@ export function A2ChatCoach({
                   >
                     <div>{msg.content}</div>
                     {msg.type && (
-                      <div className={`text-xs mt-1 opacity-70 ${msg.role === "coach" ? "text-blue-600 dark:text-blue-400" : "text-blue-100"}`}>
+                      <div className={`text-xs mt-1 opacity-70 ${msg.role === "coach" ? "text-blue dark:text-blue/40" : "text-blue-100"}`}>
                         {msg.type}
                       </div>
                     )}
@@ -189,7 +189,7 @@ export function A2ChatCoach({
                 <div className="flex justify-start">
                   <div className="bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-50 border border-slate-200 dark:border-slate-700 px-4 py-3 rounded-xl rounded-bl-none">
                     <div className="flex gap-2 items-center">
-                      <Loader className="w-4 h-4 animate-spin text-blue-600 dark:text-blue-400" />
+                      <Loader className="w-4 h-4 animate-spin text-blue dark:text-blue/40" />
                       <span className="text-sm">El Coach reflexiona...</span>
                     </div>
                   </div>
@@ -201,17 +201,17 @@ export function A2ChatCoach({
 
         {/* Alert */}
         <Alert className="bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800">
-          <AlertCircle className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-          <AlertDescription className="text-blue-800 dark:text-blue-200 text-sm">
+          <AlertCircle className="w-4 h-4 text-blue dark:text-blue/40" />
+          <AlertDescription className="text-blue dark:text-blue-200 text-sm">
             A2 expande tu comprensión, no etiqueta. Tus respuestas son tuyas.
           </AlertDescription>
         </Alert>
 
         {/* Context Validation Error */}
         {error && (
-          <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red-900/20">
-            <AlertTriangle className="h-4 w-4 text-red-600" />
-            <AlertDescription className="text-red dark:text-red-200 ml-2">{error}</AlertDescription>
+          <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red/20">
+            <AlertTriangle className="h-4 w-4 text-red" />
+            <AlertDescription className="text-red dark:text-red/20 ml-2">{error}</AlertDescription>
           </Alert>
         )}
 

@@ -61,7 +61,7 @@ export default function AdminPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/despega" className="inline-flex items-center text-sm text-purple-400 hover:text-purple-300 mb-4 font-medium">
+          <Link href="/despega" className="inline-flex items-center text-sm text-purple/40 hover:text-purple/30 mb-4 font-medium">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Volver al Dashboard
           </Link>

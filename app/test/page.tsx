@@ -62,7 +62,7 @@ const tests: Test[] = [
     difficulty: "Beginner",
     category: "Intelligence",
     path: "/test/emotional-intelligence",
-    color: "bg-cyan-100 text-cyan-700 border-blue/20",
+    color: "bg-cyan/10 text-cyan-700 border-blue/20",
   },
   {
     id: "mbti",
@@ -88,7 +88,7 @@ const tests: Test[] = [
     difficulty: "Intermediate",
     category: "Personality",
     path: "/test/big-five",
-    color: "bg-green-100 text-green-700 border-green/20",
+    color: "bg-green/10 text-green border-green/20",
     prerequisites: ["disc", "emotional-intelligence"],
   },
   {
@@ -101,7 +101,7 @@ const tests: Test[] = [
     difficulty: "Intermediate",
     category: "Career",
     path: "/test/riasec",
-    color: "bg-orange-100 text-orange-700 border-orange-200",
+    color: "bg-orange/10 text-orange border-orange/20",
     prerequisites: ["mbti"],
   },
   {
@@ -114,7 +114,7 @@ const tests: Test[] = [
     difficulty: "Advanced",
     category: "Skills",
     path: "/test/soft-skills",
-    color: "bg-yellow-100 text-yellow-700 border-yellow-200",
+    color: "bg-yellow/10 text-yellow-700 border-yellow/20",
     prerequisites: ["big-five", "riasec"],
   },
 ]
@@ -224,7 +224,7 @@ export default function TestsPage() {
         </div>
 
         <div className="mb-6 sm:mb-8">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white mb-2">
             Evaluaciones de Personalidad
           </h1>
           <p className="text-muted/60 dark:text-muted/40 text-sm sm:text-base">
@@ -237,14 +237,14 @@ export default function TestsPage() {
           <Card className="mb-6 sm:mb-8 border-green/20 dark:border-green-800 bg-gradient-to-r from-green/5 dark:from-green-950 to-green/5 dark:to-green">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
-                  <Smartphone className="h-5 w-5 text-green dark:text-green-400" />
+                <div className="p-2 bg-green/10 dark:bg-green rounded-lg">
+                  <Smartphone className="h-5 w-5 text-green dark:text-green/40" />
                 </div>
                 <div className="flex-1">
                   <h3 className="font-semibold text-green-900 dark:text-green-300 text-sm">
                     Experiencia Optimizada para Móvil
                   </h3>
-                  <p className="text-xs text-green-700 dark:text-green-400">
+                  <p className="text-xs text-green dark:text-green/40">
                     Todos los tests están optimizados para dispositivos móviles con interfaces táctiles y diseños
                     responsivos.
                   </p>
@@ -255,7 +255,7 @@ export default function TestsPage() {
         )}
 
         {/* Verification Status Banner */}
-        <Card className="mb-6 sm:mb-8 border-blue/20 dark:border-blue/10 bg-gradient-to-r from-blue/5 dark:from-blue-950 to-indigo-50 dark:to-blue">
+        <Card className="mb-6 sm:mb-8 border-blue/20 dark:border-blue/10 bg-gradient-to-r from-blue/5 dark:from-blue-950 to-blue/5 dark:to-blue">
           <CardContent className="p-3 sm:p-4">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex items-center gap-3">
@@ -381,7 +381,7 @@ export default function TestsPage() {
               >
                 {isCompleted && (
                   <div className="absolute top-3 sm:top-4 right-3 sm:right-4">
-                    <Badge className="bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green/20 dark:border-green-800 text-xs">
+                    <Badge className="bg-green/10 dark:bg-green text-green dark:text-green-300 border-green/20 dark:border-green-800 text-xs">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       Completado
                     </Badge>
@@ -394,7 +394,7 @@ export default function TestsPage() {
                       <IconComponent className="h-5 w-5 sm:h-6 sm:w-6" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <CardTitle className="text-base sm:text-lg truncate text-gray-900 dark:text-white">
+                      <CardTitle className="text-base sm:text-lg truncate text-foreground dark:text-white">
                         {test.title}
                       </CardTitle>
                       <div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-1">
@@ -402,10 +402,10 @@ export default function TestsPage() {
                           variant="outline"
                           className={`text-xs ${
                             test.difficulty === "Beginner"
-                              ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green/20 dark:border-green-800"
+                              ? "bg-green/10 dark:bg-green text-green dark:text-green-300 border-green/20 dark:border-green-800"
                               : test.difficulty === "Intermediate"
-                                ? "bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800"
-                                : "bg-red-100 dark:bg-red-900 text-red dark:text-red-300 border-red/20 dark:border-red-800"
+                                ? "bg-yellow/10 dark:bg-yellow text-yellow-700 dark:text-yellow-300 border-yellow/20 dark:border-yellow"
+                                : "bg-red/10 dark:bg-red text-red dark:text-red-300 border-red/20 dark:border-red-800"
                           }`}
                         >
                           {test.difficulty === "Beginner"
@@ -456,7 +456,7 @@ export default function TestsPage() {
                             key={prereq}
                             className={
                               isPrereqCompleted
-                                ? "text-green dark:text-green-400"
+                                ? "text-green dark:text-green/40"
                                 : "text-red dark:text-red-400"
                             }
                           >
@@ -513,11 +513,11 @@ export default function TestsPage() {
         {completedTests.length === tests.length && (
           <Card className="mt-6 sm:mt-8 border-green/20 dark:border-green-800 bg-green/5 dark:bg-green-950">
             <CardContent className="p-6 sm:p-8 text-center">
-              <CheckCircle className="h-12 w-12 sm:h-16 sm:w-16 text-green dark:text-green-400 mx-auto mb-4" />
+              <CheckCircle className="h-12 w-12 sm:h-16 sm:w-16 text-green dark:text-green/40 mx-auto mb-4" />
               <h3 className="text-xl sm:text-2xl font-bold text-green-900 dark:text-green-300 mb-2">
                 🎉 ¡Todas las Evaluaciones Completadas!
               </h3>
-              <p className="text-green-700 dark:text-green-400 mb-4 sm:mb-6 text-sm sm:text-base">
+              <p className="text-green dark:text-green/40 mb-4 sm:mb-6 text-sm sm:text-base">
                 ¡Felicitaciones! Has completado todas las evaluaciones de personalidad y carrera. Visita tu dashboard
                 para explorar tu perfil completo y obtener recomendaciones personalizadas.
               </p>

@@ -153,7 +153,7 @@ export function InteractiveFAQ() {
                         {categoryInfo.label}
                       </span>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900">{faq.question}</h3>
+                    <h3 className="text-lg font-semibold text-foreground">{faq.question}</h3>
                   </div>
                   {isExpanded ? (
                     <ChevronUp className="w-5 h-5 text-muted/40 flex-shrink-0 mt-1" />
@@ -165,11 +165,11 @@ export function InteractiveFAQ() {
                 {isExpanded && (
                   <div className="px-6 pb-6">
                     <div className="pt-4 border-t border-muted/10">
-                      <p className="text-gray-700 leading-relaxed mb-4">{faq.answer}</p>
+                      <p className="text-muted leading-relaxed mb-4">{faq.answer}</p>
 
                       {relatedFAQs.length > 0 && (
                         <div className="mt-6 pt-4 border-t border-muted/10">
-                          <p className="text-sm font-medium text-gray-900 mb-3">Preguntas relacionadas:</p>
+                          <p className="text-sm font-medium text-foreground mb-3">Preguntas relacionadas:</p>
                           <div className="space-y-2">
                             {relatedFAQs.map((related) => (
                               <button
@@ -184,7 +184,7 @@ export function InteractiveFAQ() {
                                     })
                                   }, 100)
                                 }}
-                                className="block w-full text-left text-sm text-blue-600 hover:text-blue-700 hover:underline"
+                                className="block w-full text-left text-sm text-blue hover:text-blue hover:underline"
                               >
                                 → {related.question}
                               </button>
@@ -208,7 +208,7 @@ export function InteractiveFAQ() {
             <MessageCircle className="w-6 h-6 text-purple-600" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-gray-900">¿No encontraste tu respuesta?</h3>
+            <h3 className="text-xl font-bold text-foreground">¿No encontraste tu respuesta?</h3>
             <p className="text-muted/60">Pregúntale directamente a Sofia o Dani</p>
           </div>
         </div>

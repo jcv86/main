@@ -162,7 +162,7 @@ export default function GuidedTrainingPage() {
             </div>
 
             {/* Coach Content Area */}
-            <div className="bg-gradient-to-br from-blue/5 to-indigo-50 dark:from-blue/20 dark:to-blue/20 border-2 border-blue/30 dark:border-blue/10 rounded-[28px] p-8 min-h-64 space-y-4">
+            <div className="bg-gradient-to-br from-blue/5 to-blue/5 dark:from-blue/20 dark:to-blue/20 border-2 border-blue/30 dark:border-blue/10 rounded-[28px] p-8 min-h-64 space-y-4">
               <div className="space-y-4 text-muted/70 dark:text-muted/30">
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-lg text-muted/90 dark:text-white flex items-center gap-2">
@@ -239,8 +239,8 @@ export default function GuidedTrainingPage() {
                             "YO rediseñé la arquitectura, implementé testing automático, y mentoricé a 3 developers junior"
                           </p>
                         </div>
-                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-red-600">
-                          <p className="font-semibold mb-2 text-red-600">Ejemplo MALO:</p>
+                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-red">
+                          <p className="font-semibold mb-2 text-red">Ejemplo MALO:</p>
                           <p className="text-sm">
                             "El equipo trabajó duro y mejoramos el sistema"
                           </p>

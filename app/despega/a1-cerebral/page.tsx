@@ -121,14 +121,14 @@ export default function A1CerebralPage() {
           <h2 className="text-2xl font-bold mb-8 text-center">{q.pregunta}</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <p className="text-lg font-semibold text-green-700 dark:text-green-400 mb-4 text-center">MÁS como yo</p>
+              <p className="text-lg font-semibold text-green dark:text-green/40 mb-4 text-center">MÁS como yo</p>
               <div className="space-y-3">
                 {q.opciones.map((opt) => (
                   <button 
                     key={`more-${opt.texto}`} 
                     onClick={() => { setMore(p => ({ ...p, [q.id]: opt.texto })); setError('') }} 
                     disabled={less[q.id] === opt.texto}
-                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm ${more[q.id] === opt.texto ? 'border-green-600 bg-green/5 dark:bg-green-950' : less[q.id] === opt.texto ? 'border-muted/30 bg-muted/10 dark:bg-muted/90 opacity-50 cursor-not-allowed' : 'border-border'}`}>
+                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm ${more[q.id] === opt.texto ? 'border-green bg-green/5 dark:bg-green-950' : less[q.id] === opt.texto ? 'border-muted/30 bg-muted/10 dark:bg-muted/90 opacity-50 cursor-not-allowed' : 'border-border'}`}>
                     {opt.texto}
                   </button>
                 ))}
@@ -142,7 +142,7 @@ export default function A1CerebralPage() {
                     key={`less-${opt.texto}`} 
                     onClick={() => { setLess(p => ({ ...p, [q.id]: opt.texto })); setError('') }} 
                     disabled={more[q.id] === opt.texto}
-                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm ${less[q.id] === opt.texto ? 'border-red-600 bg-red/5 dark:bg-red-950' : more[q.id] === opt.texto ? 'border-muted/30 bg-muted/10 dark:bg-muted/90 opacity-50 cursor-not-allowed' : 'border-border'}`}>
+                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm ${less[q.id] === opt.texto ? 'border-red bg-red/5 dark:bg-red-950' : more[q.id] === opt.texto ? 'border-muted/30 bg-muted/10 dark:bg-muted/90 opacity-50 cursor-not-allowed' : 'border-border'}`}>
                     {opt.texto}
                   </button>
                 ))}

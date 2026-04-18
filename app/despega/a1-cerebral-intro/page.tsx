@@ -73,20 +73,20 @@ export default function A1CerebralIntroPage() {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-red/5 dark:bg-red-950 rounded-[28px] border border-red/20 dark:border-red-800">
-                  <p className="font-semibold text-red-900 dark:text-red-100 mb-1">Impulsor</p>
-                  <p className="text-sm text-red-800 dark:text-red-200">Enfocado en resultados, decisivo, impulsivo</p>
+                  <p className="font-semibold text-red-900 dark:text-red/10 mb-1">Impulsor</p>
+                  <p className="text-sm text-red-800 dark:text-red/20">Enfocado en resultados, decisivo, impulsivo</p>
                 </div>
-                <div className="p-4 bg-yellow-50 dark:bg-yellow-950 rounded-[28px] border border-yellow-200 dark:border-yellow-800">
-                  <p className="font-semibold text-yellow-900 dark:text-yellow-100 mb-1">Catalizador</p>
-                  <p className="text-sm text-yellow-800 dark:text-yellow-200">Comunicativo, entusiasta, orientado a personas</p>
+                <div className="p-4 bg-yellow/5 dark:bg-yellow rounded-[28px] border border-yellow/20 dark:border-yellow">
+                  <p className="font-semibold text-yellow dark:text-yellow/10 mb-1">Catalizador</p>
+                  <p className="text-sm text-yellow dark:text-yellow/20">Comunicativo, entusiasta, orientado a personas</p>
                 </div>
                 <div className="p-4 bg-green/5 dark:bg-green-950 rounded-[28px] border border-green/20 dark:border-green-800">
                   <p className="font-semibold text-green-900 dark:text-green-100 mb-1">Estabilizador</p>
-                  <p className="text-sm text-green-800 dark:text-green-200">Estable, cooperativo, confiable, paciente</p>
+                  <p className="text-sm text-green dark:text-green-200">Estable, cooperativo, confiable, paciente</p>
                 </div>
                 <div className="p-4 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue/10">
                   <p className="font-semibold text-blue dark:text-blue/10 mb-1">Arquitecto</p>
-                  <p className="text-sm text-blue-800 dark:text-blue/20">Analítico, detallista, exigente con calidad</p>
+                  <p className="text-sm text-blue dark:text-blue/20">Analítico, detallista, exigente con calidad</p>
                 </div>
               </div>
             </CardContent>
@@ -142,12 +142,12 @@ export default function A1CerebralIntroPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* MÁS column */}
                   <div>
-                    <p className="text-sm font-semibold text-green-400 mb-4 flex items-center gap-2">
+                    <p className="text-sm font-semibold text-green/40 mb-4 flex items-center gap-2">
                       <span className="bg-green text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">+</span>
                       MÁS como yo
                     </p>
                     <div className="space-y-3">
-                      <button className="w-full p-4 border-2 border-green-600 bg-green/20 rounded-lg text-left hover:bg-green/30 transition-all">
+                      <button className="w-full p-4 border-2 border-green bg-green/20 rounded-lg text-left hover:bg-green/30 transition-all">
                         <p className="font-medium text-white">Decidido y directo</p>
                         <p className="text-xs text-muted/40 mt-1">Impulsor</p>
                       </button>
@@ -185,7 +185,7 @@ export default function A1CerebralIntroPage() {
                         <p className="text-muted/30">Paciente y considerado</p>
                         <p className="text-xs text-muted/50 mt-1">Estabilizador</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-red-600 bg-red-600/20 rounded-lg text-left hover:bg-red-600/30 transition-all">
+                      <button className="w-full p-4 border-2 border-red bg-red-600/20 rounded-lg text-left hover:bg-red-600/30 transition-all">
                         <p className="font-medium text-white">Analítico y preciso</p>
                         <p className="text-xs text-muted/40 mt-1">Arquitecto</p>
                       </button>

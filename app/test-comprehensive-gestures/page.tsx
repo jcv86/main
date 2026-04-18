@@ -596,8 +596,8 @@ export default function ComprehensiveGestureTestPage() {
                               variant={result.success ? "default" : "destructive"}
                               className={`text-xs ${
                                 result.success
-                                  ? "bg-green-100 text-green-800 hover:bg-green-100"
-                                  : "bg-red-100 text-red-800 hover:bg-red-100"
+                                  ? "bg-green/10 text-green hover:bg-green/10"
+                                  : "bg-red/10 text-red-800 hover:bg-red/10"
                               }`}
                             >
                               {gesture}: {result.responseTime}ms
@@ -716,10 +716,10 @@ export default function ComprehensiveGestureTestPage() {
           <CardContent>
             <div className="space-y-3">
               {stats.successRate < 85 && (
-                <div className="flex items-start gap-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-yellow/5 border border-yellow/20 rounded-lg">
+                  <AlertCircle className="h-5 w-5 text-yellow flex-shrink-0 mt-0.5" />
                   <div>
-                    <div className="font-medium text-yellow-800">Tasa de Éxito Baja</div>
+                    <div className="font-medium text-yellow">Tasa de Éxito Baja</div>
                     <div className="text-sm text-yellow-700">
                       Considera optimizar la detección de gestos o ajustar la sensibilidad táctil.
                     </div>
@@ -728,11 +728,11 @@ export default function ComprehensiveGestureTestPage() {
               )}
 
               {stats.avgResponseTime > 150 && (
-                <div className="flex items-start gap-3 p-3 bg-orange-50 border border-orange-200 rounded-lg">
-                  <Clock className="h-5 w-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-orange/5 border border-orange/20 rounded-lg">
+                  <Clock className="h-5 w-5 text-orange flex-shrink-0 mt-0.5" />
                   <div>
-                    <div className="font-medium text-orange-800">Tiempo de Respuesta Alto</div>
-                    <div className="text-sm text-orange-700">
+                    <div className="font-medium text-orange">Tiempo de Respuesta Alto</div>
+                    <div className="text-sm text-orange">
                       Los gestos tardan más de 150ms en responder. Considera optimizar el rendimiento.
                     </div>
                   </div>
@@ -743,7 +743,7 @@ export default function ComprehensiveGestureTestPage() {
                 <div className="flex items-start gap-3 p-3 bg-blue/5 border border-blue/20 rounded-lg">
                   <Smartphone className="h-5 w-5 text-blue flex-shrink-0 mt-0.5" />
                   <div>
-                    <div className="font-medium text-blue-800">Sin Soporte Táctil</div>
+                    <div className="font-medium text-blue">Sin Soporte Táctil</div>
                     <div className="text-sm text-blue">
                       Este dispositivo no soporta gestos táctiles. Se usarán controles alternativos.
                     </div>
@@ -755,8 +755,8 @@ export default function ComprehensiveGestureTestPage() {
                 <div className="flex items-start gap-3 p-3 bg-green/5 border border-green/20 rounded-lg">
                   <CheckCircle className="h-5 w-5 text-green flex-shrink-0 mt-0.5" />
                   <div>
-                    <div className="font-medium text-green-800">Rendimiento Excelente</div>
-                    <div className="text-sm text-green-700">
+                    <div className="font-medium text-green">Rendimiento Excelente</div>
+                    <div className="text-sm text-green">
                       Todos los tests de personalidad tienen soporte completo de gestos móviles.
                     </div>
                   </div>

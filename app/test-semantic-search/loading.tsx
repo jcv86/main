@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export default function TestSemanticSearchLoading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-blue/5">
       <div className="container mx-auto py-8 px-4 max-w-7xl">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-3">

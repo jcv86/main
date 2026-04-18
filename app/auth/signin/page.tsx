@@ -96,9 +96,9 @@ export default function SignInPage() {
     <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple/5 via-blue/5 to-blue/5 dark:from-background dark:via-muted/90 dark:to-muted/90 px-4 py-8">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-200 dark:bg-purple/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple/20 dark:bg-purple/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue/20 dark:bg-blue/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse animation-delay-2000" />
-        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan-200 dark:bg-cyan-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30" />
+        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan-200 dark:bg-cyan/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30" />
       </div>
 
       <div className="relative w-full max-w-md space-y-6">
@@ -125,11 +125,11 @@ export default function SignInPage() {
           <CardContent className="pt-8 pb-8 space-y-5">
             {/* OAuth Error Alert */}
             {error && (
-              <div className="p-4 bg-red/5 dark:bg-red-900/20 border-l-4 border-red/50 rounded-r-lg">
+              <div className="p-4 bg-red/5 dark:bg-red/20 border-l-4 border-red/50 rounded-r-lg">
                 <div className="flex gap-3">
-                  <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-red dark:text-red-400 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-red-900 dark:text-red-200">Error de autenticacion</p>
+                    <p className="font-semibold text-red-900 dark:text-red/20">Error de autenticacion</p>
                     <p className="text-sm text-red-800 dark:text-red-300 mt-1">{error}</p>
                   </div>
                 </div>
@@ -154,7 +154,7 @@ export default function SignInPage() {
             <Button
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
-              className="w-full h-12 text-base gap-2 bg-gradient-to-r from-blue to-blue-700 hover:from-blue hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-200 dark:from-blue dark:to-blue-800 dark:hover:from-blue-800 dark:hover:to-blue-900"
+              className="w-full h-12 text-base gap-2 bg-gradient-to-r from-blue to-blue hover:from-blue hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-200 dark:from-blue dark:to-blue-800 dark:hover:from-blue-800 dark:hover:to-blue-900"
             >
               {isLoadingLinkedIn ? (
                 <Loader2 className="h-5 w-5 animate-spin" />

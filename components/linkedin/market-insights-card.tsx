@@ -116,7 +116,7 @@ export function MarketInsightsCard() {
                   <p className="text-xs font-semibold text-slate-700 mb-2">Your Strengths</p>
                   <div className="flex flex-wrap gap-2">
                     {skillGap.current_strengths.slice(0, 5).map((skill) => (
-                      <Badge key={skill} className="bg-green-100 text-green-800">
+                      <Badge key={skill} className="bg-green/10 text-green">
                         {skill}
                       </Badge>
                     ))}

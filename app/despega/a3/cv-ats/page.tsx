@@ -133,7 +133,7 @@ export default function CVATSPage() {
               <p className="text-muted/70 dark:text-muted/30 text-sm mb-3">{exp.description}</p>
               <div className="flex flex-wrap gap-2">
                 {exp.skills.map((skill) => (
-                  <span key={skill} className="text-xs bg-purple/10 dark:bg-purple/30 text-purple dark:text-purple-300 px-2 py-1 rounded">{skill}</span>
+                  <span key={skill} className="text-xs bg-purple/10 dark:bg-purple/30 text-purple dark:text-purple/30 px-2 py-1 rounded">{skill}</span>
                 ))}
               </div>
             </div>
@@ -209,7 +209,7 @@ export default function CVATSPage() {
             <div key={exp.id} className="flex gap-4">
               <div className="flex flex-col items-center">
                 <div className="w-4 h-4 rounded-[20px] bg-purple mt-1"></div>
-                {idx < cvData.experience.length - 1 && <div className="w-0.5 h-20 bg-purple-200 dark:bg-purple my-2"></div>}
+                {idx < cvData.experience.length - 1 && <div className="w-0.5 h-20 bg-purple/20 dark:bg-purple my-2"></div>}
               </div>
               <div className="pb-4">
                 <div className="flex justify-between items-start">
@@ -276,7 +276,7 @@ export default function CVATSPage() {
   const renderLinkedInFormat = () => (
     <div className="bg-white dark:bg-background p-8 text-muted/90 dark:text-white space-y-6">
       {/* LinkedIn Header */}
-      <div className="bg-gradient-to-r from-blue to-blue-700 text-white p-8 rounded-[28px] -mx-8 -mt-8 mb-4">
+      <div className="bg-gradient-to-r from-blue to-blue text-white p-8 rounded-[28px] -mx-8 -mt-8 mb-4">
         <h1 className="text-3xl font-bold">{cvData.personalInfo.name}</h1>
         <p className="text-lg mt-1">{cvData.personalInfo.title}</p>
         <p className="text-blue/10 mt-2">{cvData.personalInfo.location}</p>
@@ -333,7 +333,7 @@ export default function CVATSPage() {
         <h3 className="text-lg font-bold text-muted/90 dark:text-white mb-3">Competencias</h3>
         <div className="flex flex-wrap gap-2">
           {cvData.skills.map((skill) => (
-            <span key={skill} className="text-sm bg-blue/10 dark:bg-blue/30 text-blue-800 dark:text-blue/30 px-3 py-1 rounded-full">{skill}</span>
+            <span key={skill} className="text-sm bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue/30 px-3 py-1 rounded-full">{skill}</span>
           ))}
         </div>
       </div>
@@ -470,7 +470,7 @@ export default function CVATSPage() {
         <h2 className="text-xl font-bold mb-2">Technical Skills</h2>
         <div className="flex flex-wrap gap-2">
           {cvData.skills.map((skill) => (
-            <span key={skill} className="bg-blue/10 dark:bg-blue/30 text-blue-800 dark:text-blue/20 px-3 py-1 rounded-[20px] text-sm">
+            <span key={skill} className="bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue/20 px-3 py-1 rounded-[20px] text-sm">
               {skill}
             </span>
           ))}
@@ -629,7 +629,7 @@ export default function CVATSPage() {
         )}
 
         {format === 'standard' && (
-          <Card className="bg-green/5 dark:bg-green-900/20 border-green/20 dark:border-green-800">
+          <Card className="bg-green/5 dark:bg-green/20 border-green/20 dark:border-green-800">
             <CardHeader>
               <CardTitle className="text-base">✨ Formato Estándar</CardTitle>
             </CardHeader>

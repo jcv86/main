@@ -26,25 +26,25 @@ export function DashboardHero({
 }: DashboardHeroProps) {
   const profileDescriptions: { [key: string]: { color: string; bg: string; description: string; name: string } } = {
     D: { 
-      color: 'text-red-600 dark:text-red-400', 
+      color: 'text-red dark:text-red-400', 
       bg: 'bg-red/5 dark:bg-red-950/10', 
       description: 'Impulsor - Directo, decidido y orientado a resultados',
       name: 'Impulsor'
     },
     I: { 
-      color: 'text-yellow-600 dark:text-yellow-400', 
-      bg: 'bg-yellow-50 dark:bg-yellow-950/10', 
+      color: 'text-yellow dark:text-yellow-400', 
+      bg: 'bg-yellow/5 dark:bg-yellow/10', 
       description: 'Catalizador - Inspirador, influyente y orientado a personas',
       name: 'Catalizador'
     },
     S: { 
-      color: 'text-green-600 dark:text-green-400', 
+      color: 'text-green dark:text-green/40', 
       bg: 'bg-green-50 dark:bg-green-950/10', 
       description: 'Estabilizador - Estable, de apoyo y orientado al equipo',
       name: 'Estabilizador'
     },
     C: { 
-      color: 'text-blue-600 dark:text-blue-400', 
+      color: 'text-blue dark:text-blue/40', 
       bg: 'bg-blue-50 dark:bg-blue-950/10', 
       description: 'Arquitecto - Cuidadoso, cauteloso y orientado a la calidad',
       name: 'Arquitecto'
@@ -101,7 +101,7 @@ export function DashboardHero({
         <div className="space-y-2">
           <div className="flex justify-between items-center">
             <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">Progreso de 90 Días</span>
-            <span className={`text-sm font-bold ${progressPercent === 0 ? 'text-blue-600' : 'text-green-600'}`}>
+            <span className={`text-sm font-bold ${progressPercent === 0 ? 'text-blue' : 'text-green'}`}>
               {progressPercent}%
             </span>
           </div>

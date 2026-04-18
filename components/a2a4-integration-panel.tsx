@@ -40,11 +40,11 @@ export function A2A4IntegrationPanel() {
           {/* CONNECTION ARROW */}
           <div className="flex items-center justify-center">
             <div className="flex flex-col items-center gap-2">
-              <ArrowRight className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-              <span className="text-xs font-semibold text-purple-600 dark:text-purple-400 text-center">
+              <ArrowRight className="w-5 h-5 text-purple-600 dark:text-purple/40" />
+              <span className="text-xs font-semibold text-purple-600 dark:text-purple/40 text-center">
                 Se retroalimentan
               </span>
-              <ArrowRight className="w-5 h-5 text-purple-600 dark:text-purple-400 rotate-180" />
+              <ArrowRight className="w-5 h-5 text-purple-600 dark:text-purple/40 rotate-180" />
             </div>
           </div>
 
@@ -62,7 +62,7 @@ export function A2A4IntegrationPanel() {
         </div>
 
         {/* WHY TOGETHER */}
-        <div className="bg-purple-100 dark:bg-purple-900/30 rounded-[28px] p-3 text-sm text-slate-700 dark:text-slate-300 space-y-2">
+        <div className="bg-purple-100 dark:bg-purple/30 rounded-[28px] p-3 text-sm text-slate-700 dark:text-slate-300 space-y-2">
           <p className="font-semibold text-purple-900 dark:text-purple-100">Por qué funcionan mejor juntas:</p>
           <ul className="space-y-1 text-xs">
             <li>• Tu plan (A2) te enfoca en lo que QUIERES hacer</li>
@@ -73,7 +73,7 @@ export function A2A4IntegrationPanel() {
 
         <div className="flex gap-2 justify-center pt-2">
           <Link href="/despega/a2/dashboard">
-            <button className="text-xs font-semibold text-green-600 dark:text-green-400 hover:underline">
+            <button className="text-xs font-semibold text-green dark:text-green/40 hover:underline">
               Ir a A2
             </button>
           </Link>

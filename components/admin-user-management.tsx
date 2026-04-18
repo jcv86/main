@@ -135,7 +135,7 @@ export function AdminUserManagement() {
                     <td className="py-3 px-4">{user.displayName || '-'}</td>
                     <td className="py-3 px-4">
                       {user.a1_completed ? (
-                        <Badge className="bg-green-100 text-green-800">Completado</Badge>
+                        <Badge className="bg-green/10 text-green">Completado</Badge>
                       ) : (
                         <Badge variant="outline">Pendiente</Badge>
                       )}

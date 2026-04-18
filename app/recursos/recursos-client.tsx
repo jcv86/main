@@ -64,7 +64,7 @@ const developmentAreas = [
     id: "productividad",
     name: "Productividad",
     icon: TrendingUp,
-    color: "bg-orange-500",
+    color: "bg-orange/50",
     description: "Optimiza tu tiempo y resultados",
     relatedTests: ["disc", "big-five"],
   },
@@ -660,7 +660,7 @@ export default function RecursosClient() {
                           <p className="text-sm text-muted/60">{book.author}</p>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-sm text-gray-700 mb-4 italic">"{book.keyInsight}"</p>
+                          <p className="text-sm text-muted mb-4 italic">"{book.keyInsight}"</p>
                           <Button className="w-full" size="sm" onClick={() => router.push(`/biblioteca/${book.slug}`)}>
                             <BookOpen className="h-4 w-4 mr-2" />
                             Leer Libro
@@ -692,7 +692,7 @@ export default function RecursosClient() {
                                   <h4 className={`font-bold ${isCompleted ? "line-through text-muted/50" : ""}`}>
                                     {challenge.title}
                                   </h4>
-                                  <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
+                                  <Badge variant="secondary" className="bg-yellow/10 text-yellow">
                                     +{challenge.xp} XP
                                   </Badge>
                                 </div>
@@ -706,10 +706,10 @@ export default function RecursosClient() {
                                     variant="outline"
                                     className={
                                       challenge.difficulty === "Fácil"
-                                        ? "border-green-500 text-green"
+                                        ? "border-green text-green"
                                         : challenge.difficulty === "Medio"
-                                          ? "border-orange text-yellow-600"
-                                          : "border-red/50 text-red-600"
+                                          ? "border-orange text-yellow"
+                                          : "border-red/50 text-red"
                                     }
                                   >
                                     {challenge.difficulty}
@@ -730,7 +730,7 @@ export default function RecursosClient() {
       </div>
 
       {/* CTA Final */}
-      <Card className="mt-8 bg-gradient-to-r from-blue to-purple-600 text-white">
+      <Card className="mt-8 bg-gradient-to-r from-blue to-purple text-white">
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div>

@@ -328,13 +328,13 @@ export default function MetasSMARTClient() {
   const getColorEstado = (estado: string) => {
     switch (estado) {
       case "activa":
-        return "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
+        return "bg-green/10 dark:bg-green text-green dark:text-green-200"
       case "completada":
-        return "bg-blue/10 dark:bg-blue text-blue-800 dark:text-blue/20"
+        return "bg-blue/10 dark:bg-blue text-blue dark:text-blue/20"
       case "pausada":
-        return "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200"
+        return "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow/20"
       case "abandonada":
-        return "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
+        return "bg-red/10 dark:bg-red text-red-800 dark:text-red/20"
       default:
         return "bg-muted/10 dark:bg-gray-800 text-gray-800 dark:text-muted/20"
     }
@@ -478,7 +478,7 @@ export default function MetasSMARTClient() {
             <Card className="dark:bg-card dark:border-card">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-muted/90 dark:text-white">
-                  <TrendingUp className="h-5 w-5 text-green dark:text-green-400" />
+                  <TrendingUp className="h-5 w-5 text-green dark:text-green/40" />
                   Resumen de Progreso
                 </CardTitle>
               </CardHeader>

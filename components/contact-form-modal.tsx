@@ -80,7 +80,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
         <form onSubmit={handleSubmit} className="space-y-5 py-4">
           {/* Name Field */}
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-sm font-semibold text-gray-700">
+            <Label htmlFor="name" className="text-sm font-semibold text-muted">
               Nombre *
             </Label>
             <Input
@@ -96,7 +96,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
 
           {/* Email Field */}
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
+            <Label htmlFor="email" className="text-sm font-semibold text-muted">
               Email *
             </Label>
             <Input
@@ -113,7 +113,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
 
           {/* WhatsApp Field */}
           <div className="space-y-2">
-            <Label htmlFor="whatsapp" className="text-sm font-semibold text-gray-700">
+            <Label htmlFor="whatsapp" className="text-sm font-semibold text-muted">
               WhatsApp{" "}
               <span className="text-xs font-normal text-muted/50">(Opcional)</span>
             </Label>
@@ -130,7 +130,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
 
           {/* Message Field */}
           <div className="space-y-2">
-            <Label htmlFor="message" className="text-sm font-semibold text-gray-700">
+            <Label htmlFor="message" className="text-sm font-semibold text-muted">
               Tu Consulta *
             </Label>
             <Textarea
@@ -148,10 +148,10 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
           {/* Status Messages */}
           {status === "success" && (
             <div className="bg-green-50 border border-green-200 rounded-[28px] p-4 flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-green flex-shrink-0 mt-0.5" />
               <div>
                 <p className="text-sm font-semibold text-green-900">Mensaje enviado</p>
-                <p className="text-xs text-green-700 mt-1">
+                <p className="text-xs text-green mt-1">
                   Gracias por tu consulta. Nos pondremos en contacto pronto.
                 </p>
               </div>
@@ -160,7 +160,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
 
           {status === "error" && (
             <div className="bg-red/5 border border-red/20 rounded-[28px] p-4 flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-red flex-shrink-0 mt-0.5" />
               <div>
                 <p className="text-sm font-semibold text-red-900">Error</p>
                 <p className="text-xs text-red mt-1">{errorMessage}</p>
@@ -172,7 +172,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
           <Button
             type="submit"
             disabled={loading || status === "success"}
-            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue text-white font-semibold py-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             {loading ? (
               <>

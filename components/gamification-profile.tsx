@@ -23,7 +23,7 @@ const LEVEL_COLORS = {
   Silver: 'from-gray-400 to-gray-500',
   Gold: 'from-yellow-400 to-yellow-600',
   Platinum: 'from-cyan-400 to-blue-500',
-  Diamond: 'from-indigo-500 to-purple-600'
+  Diamond: 'from-indigo-500 to-purple'
 }
 
 const LEVEL_ICONS = {
@@ -73,13 +73,13 @@ export function GamificationProfile({
               <div className="flex items-center gap-3">
                 <span className="text-6xl">{LEVEL_ICONS[level as keyof typeof LEVEL_ICONS]}</span>
                 <div>
-                  <h2 className="text-3xl font-bold text-gray-900">{level}</h2>
+                  <h2 className="text-3xl font-bold text-foreground">{level}</h2>
                   <p className="text-muted/60">Total XP: {totalXp.toLocaleString()}</p>
                 </div>
               </div>
             </div>
             <div className="text-right">
-              <div className="text-4xl font-bold text-blue-600 mb-2">{interviewsCompleted}</div>
+              <div className="text-4xl font-bold text-blue mb-2">{interviewsCompleted}</div>
               <p className="text-sm text-muted/60">Interviews Completed</p>
             </div>
           </div>
@@ -87,8 +87,8 @@ export function GamificationProfile({
           {/* XP Progress */}
           <div className="mb-6">
             <div className="flex justify-between mb-2">
-              <p className="text-sm font-semibold text-gray-700">XP to Next Level</p>
-              <p className="text-sm font-semibold text-gray-700">{currentXp}/500</p>
+              <p className="text-sm font-semibold text-muted">XP to Next Level</p>
+              <p className="text-sm font-semibold text-muted">{currentXp}/500</p>
             </div>
             <Progress value={xpPercentage} className="h-3" />
           </div>
@@ -97,22 +97,22 @@ export function GamificationProfile({
           <div className="grid grid-cols-4 gap-4">
             <div className="bg-white/50 rounded-[28px] p-4 text-center">
               <Flame className="w-6 h-6 text-red mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{streak}</p>
+              <p className="text-2xl font-bold text-foreground">{streak}</p>
               <p className="text-xs text-muted/60">Current Streak</p>
             </div>
             <div className="bg-white/50 rounded-[28px] p-4 text-center">
               <Trophy className="w-6 h-6 text-orange mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{bestStreak}</p>
+              <p className="text-2xl font-bold text-foreground">{bestStreak}</p>
               <p className="text-xs text-muted/60">Best Streak</p>
             </div>
             <div className="bg-white/50 rounded-[28px] p-4 text-center">
               <Star className="w-6 h-6 text-amber-500 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{totalTipsEarned}</p>
+              <p className="text-2xl font-bold text-foreground">{totalTipsEarned}</p>
               <p className="text-xs text-muted/60">Tips Earned</p>
             </div>
             <div className="bg-white/50 rounded-[28px] p-4 text-center">
               <Award className="w-6 h-6 text-purple-500 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-gray-900">{badges.length}</p>
+              <p className="text-2xl font-bold text-foreground">{badges.length}</p>
               <p className="text-xs text-muted/60">Badges</p>
             </div>
           </div>
@@ -122,7 +122,7 @@ export function GamificationProfile({
       {/* Badges Section */}
       {badges.length > 0 && (
         <Card className="p-6">
-          <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+          <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
             <Award className="w-5 h-5 text-purple-500" />
             Your Achievements
           </h3>
@@ -135,7 +135,7 @@ export function GamificationProfile({
                 <span className="text-4xl">
                   {BADGE_ICONS[badge] || '🎖️'}
                 </span>
-                <p className="text-xs font-semibold text-center text-gray-900">
+                <p className="text-xs font-semibold text-center text-foreground">
                   {badge}
                 </p>
               </div>
@@ -146,7 +146,7 @@ export function GamificationProfile({
 
       {/* Progress Path */}
       <Card className="p-6">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Level Progression Path</h3>
+        <h3 className="text-lg font-bold text-foreground mb-4">Level Progression Path</h3>
         <div className="flex items-center justify-between mb-6">
           {['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'].map((lvl, idx) => (
             <div key={lvl} className="flex flex-col items-center">
@@ -173,8 +173,8 @@ export function GamificationProfile({
         <div className="flex items-start gap-4">
           <Flame className="w-8 h-8 text-red flex-shrink-0" />
           <div>
-            <h3 className="text-lg font-bold text-gray-900">Maintain Your Streak!</h3>
-            <p className="text-sm text-gray-700 mt-2">
+            <h3 className="text-lg font-bold text-foreground">Maintain Your Streak!</h3>
+            <p className="text-sm text-muted mt-2">
               {streak === 0
                 ? 'Complete an interview today to start your streak!'
                 : `You're on a ${streak}-day streak! Complete another interview tomorrow to keep it going.`}

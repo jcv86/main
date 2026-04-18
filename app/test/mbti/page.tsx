@@ -519,7 +519,7 @@ export default function MBTITest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Despega Resonancia</h2>
+                <h2 className="text-2xl font-bold text-foreground">Despega Resonancia</h2>
                 <p className="text-muted/60">
                   Pregunta {currentQuestion + 1} de {mbtiQuestions.length}
                 </p>

@@ -58,7 +58,7 @@ export default function QuickTestPage() {
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <Badge className="mb-4 bg-orange-100 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800">
+          <Badge className="mb-4 bg-orange/10 dark:bg-orange/40 text-orange dark:text-orange-300 border-orange/20 dark:border-orange-800">
             <Zap className="h-3 w-3 mr-2" />
             Quick Test Mode
           </Badge>
@@ -71,7 +71,7 @@ export default function QuickTestPage() {
         {/* Alert */}
         <Alert className="mb-8 border-blue/20 dark:border-blue/10 bg-blue/5 dark:bg-blue-950/30">
           <AlertCircle className="h-4 w-4 text-blue dark:text-blue/40" />
-          <AlertDescription className="text-blue-800 dark:text-blue/20">
+          <AlertDescription className="text-blue dark:text-blue/20">
             Este es un modo de testing. Todos los links abiertos sin requirir autenticación completa.
           </AlertDescription>
         </Alert>
@@ -89,7 +89,7 @@ export default function QuickTestPage() {
                     <div className="flex-1">
                       <CardTitle className="flex items-center gap-2">
                         {test.name}
-                        {isComplete && <CheckCircle2 className="h-5 w-5 text-green dark:text-green-400" />}
+                        {isComplete && <CheckCircle2 className="h-5 w-5 text-green dark:text-green/40" />}
                       </CardTitle>
                       <CardDescription className="mt-1">{test.description}</CardDescription>
                     </div>
@@ -127,7 +127,7 @@ export default function QuickTestPage() {
                 ✓ {Object.keys(results).length}/{tests.length} Pilares Probados
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-green-800 dark:text-green-200">
+            <CardContent className="text-green dark:text-green-200">
               <p>
                 El sistema A1-A4 está funcionando correctamente. Todos los pilares son accesibles y entregan resultados esperados.
               </p>

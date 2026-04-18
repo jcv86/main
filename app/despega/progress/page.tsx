@@ -161,7 +161,7 @@ export default function HowToEarnXPPage() {
         </div>
 
         {/* STREAK MULTIPLIER */}
-        <Card className="bg-gradient-to-r from-orange/30 to-red-900/30 border-orange-500/50">
+        <Card className="bg-gradient-to-r from-orange/30 to-red-900/30 border-orange/50">
           <CardHeader>
             <div className="flex items-center gap-2">
               <Flame className="w-6 h-6 text-orange-400" />
@@ -176,7 +176,7 @@ export default function HowToEarnXPPage() {
               {streakBenefits.map((benefit, idx) => (
                 <div 
                   key={idx}
-                  className="p-4 rounded-[28px] bg-muted/80/50 border border-orange-500/30 text-center"
+                  className="p-4 rounded-[28px] bg-muted/80/50 border border-orange/30 text-center"
                 >
                   <p className="font-bold text-lg text-orange-400">{benefit.days}</p>
                   <p className="text-sm text-muted/30">{benefit.bonus}</p>

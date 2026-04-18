@@ -87,7 +87,7 @@ export default function EmotionalIntelligenceResultsLoading() {
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-pink-50">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-red/50 mx-auto mb-4"></div>
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Cargando resultados...</h2>
+            <h2 className="text-xl font-semibold text-foreground mb-2">Cargando resultados...</h2>
             <p className="text-muted/60">Analizando tu perfil de inteligencia emocional</p>
           </div>
         </div>

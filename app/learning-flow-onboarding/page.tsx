@@ -175,7 +175,7 @@ export default function LearningFlowOnboarding() {
                   <h3 className="font-semibold text-green-900 dark:text-green-100">
                     ¡Ruta de aprendizaje completada!
                   </h3>
-                  <p className="text-sm text-green-700 dark:text-green-200">
+                  <p className="text-sm text-green dark:text-green-200">
                     Ahora tienes acceso a tu experiencia personalizada completa. Continúa en tu dashboard.
                   </p>
                 </div>

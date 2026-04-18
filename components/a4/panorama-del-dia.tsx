@@ -52,7 +52,7 @@ export function PanoramadelDia({
       case "warning":
         return <AlertCircle className="w-5 h-5 text-amber-500" />
       case "opportunity":
-        return <CheckCircle2 className="w-5 h-5 text-green-500" />
+        return <CheckCircle2 className="w-5 h-5 text-green/50" />
       default:
         return <TrendingDown className="w-5 h-5 text-slate-500" />
     }

@@ -88,9 +88,9 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
                   </h4>
                   <p className={`text-sm mt-1 ${
                     isCurrent
-                      ? "text-blue-700 dark:text-blue-200"
+                      ? "text-blue dark:text-blue-200"
                       : isCompleted
-                      ? "text-green-700 dark:text-green-200"
+                      ? "text-green dark:text-green-200"
                       : "text-slate-600 dark:text-slate-500"
                   }`}>
                     {step.description}

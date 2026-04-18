@@ -265,10 +265,10 @@ export default function MiCoachPage() {
                           >
                             <div className="flex items-start justify-between gap-2">
                               <div>
-                                <p className="font-medium text-xs text-muted/90 dark:text-muted/10 group-hover:text-purple dark:group-hover:text-purple-300">{suggestion.title}</p>
+                                <p className="font-medium text-xs text-muted/90 dark:text-muted/10 group-hover:text-purple dark:group-hover:text-purple/30">{suggestion.title}</p>
                                 <p className="text-xs text-muted/60 dark:text-muted/20 mt-1">{suggestion.prompt.slice(0, 40)}...</p>
                               </div>
-                              <ArrowRight className="w-4 h-4 text-muted/40 dark:text-muted/50 group-hover:text-purple dark:group-hover:text-purple-400 flex-shrink-0 mt-0.5" />
+                              <ArrowRight className="w-4 h-4 text-muted/40 dark:text-muted/50 group-hover:text-purple dark:group-hover:text-purple/40 flex-shrink-0 mt-0.5" />
                             </div>
                           </button>
                         ))}
@@ -439,7 +439,7 @@ export default function MiCoachPage() {
           <Card>
             <CardHeader className="pb-3">
               <CardTitle className="text-base flex items-center gap-2">
-                <Zap className="w-5 h-5 text-orange-600" />
+                <Zap className="w-5 h-5 text-orange" />
                 Sugerencias
               </CardTitle>
             </CardHeader>

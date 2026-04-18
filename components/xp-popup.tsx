@@ -57,7 +57,7 @@ export function XPPopup({
 
               {/* Multiplier Info */}
               {multiplier > 1 && (
-                <div className="flex items-center gap-2 text-xs text-cyan-100 bg-cyan-900/40 px-2 py-1 rounded">
+                <div className="flex items-center gap-2 text-xs text-cyan-100 bg-cyan/40 px-2 py-1 rounded">
                   <span>🔥</span>
                   <span>x{multiplier.toFixed(1)} multiplicador</span>
                 </div>

@@ -41,7 +41,7 @@ export function MilestoneAchievement({ milestone, userName, onClose }: Milestone
       title: '¡Plan + Contexto Listos!',
       message: 'Tu plan y el mercado se alinearon. A3 ahora tiene todo lo que necesita para entrenamientos realistas.',
       icon: Trophy,
-      color: 'from-purple-500 to-purple-600',
+      color: 'from-purple-500 to-purple',
       showConfetti: true,
     },
     a3_ready: {

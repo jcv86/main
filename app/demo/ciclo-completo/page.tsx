@@ -52,8 +52,8 @@ export default function CicloCompletoDemoPage() {
       name: 'Entrenamiento',
       subtitle: 'Practica Siendo',
       color: 'from-orange-600 to-orange-400',
-      bgColor: 'bg-orange-50 dark:bg-orange-950/30',
-      borderColor: 'border-orange-200 dark:border-orange-800',
+      bgColor: 'bg-orange/5 dark:bg-orange-950/30',
+      borderColor: 'border-orange/20 dark:border-orange-800',
       icon: Zap,
       description: 'Entrenamientos de entrevistas con escenarios realistas y feedback instantáneo del coach IA.',
       duration: '15-30 min por sesión',
@@ -130,7 +130,7 @@ export default function CicloCompletoDemoPage() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/despega/conozcamonos-1">
-              <Button size="lg" className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white">
+              <Button size="lg" className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white">
                 Comenzar el Ciclo <ChevronRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -147,7 +147,7 @@ export default function CicloCompletoDemoPage() {
           <div className="flex justify-between mb-4">
             {phases.map((phase) => (
               <div key={phase.id} className="flex-1 text-center">
-                <phase.icon className={`h-6 w-6 mx-auto mb-2 ${phase.id === 'a1' ? 'text-purple' : phase.id === 'a2' ? 'text-blue' : phase.id === 'a3' ? 'text-orange-600' : 'text-blue'}`} />
+                <phase.icon className={`h-6 w-6 mx-auto mb-2 ${phase.id === 'a1' ? 'text-purple' : phase.id === 'a2' ? 'text-blue' : phase.id === 'a3' ? 'text-orange' : 'text-blue'}`} />
                 <p className="text-xs font-medium text-muted/70 dark:text-muted/30">{phase.id.toUpperCase()}</p>
               </div>
             ))}
@@ -191,7 +191,7 @@ export default function CicloCompletoDemoPage() {
                       <ul className="space-y-1">
                         {phase.features.map((feature, idx) => (
                           <li key={idx} className="text-sm flex items-start gap-2">
-                            <CheckCircle2 className="h-4 w-4 text-green dark:text-green-400 mt-0.5 flex-shrink-0" />
+                            <CheckCircle2 className="h-4 w-4 text-green dark:text-green/40 mt-0.5 flex-shrink-0" />
                             <span>{feature}</span>
                           </li>
                         ))}
@@ -265,7 +265,7 @@ export default function CicloCompletoDemoPage() {
           Sistema completamente integrado. Resultados medibles. Acción clara.
         </p>
         <Link href="/despega/conozcamonos-1">
-          <Button size="lg" className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white">
+          <Button size="lg" className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white">
             Iniciar Tu Transformación Ahora
           </Button>
         </Link>

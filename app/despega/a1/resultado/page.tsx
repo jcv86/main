@@ -87,7 +87,7 @@ export default function A1ResultadoPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
+          <p className="text-red mb-4">{error}</p>
           <Button onClick={() => router.push('/despega/a1-cerebral')}>
             Volver al Test
           </Button>
@@ -103,7 +103,7 @@ export default function A1ResultadoPage() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-gradient-to-r from-purple/10 to-blue/10 dark:from-purple/30 dark:to-blue-900/30 rounded-full">
             <Brain className="w-4 h-4 text-purple dark:text-purple/40" />
-            <span className="text-sm font-semibold text-purple dark:text-purple-300">Tu Perfil Despega Cerebral</span>
+            <span className="text-sm font-semibold text-purple dark:text-purple/30">Tu Perfil Despega Cerebral</span>
           </div>
           <h1 className="text-5xl font-bold bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-4">
             Tu Mapa está Listo
@@ -184,7 +184,7 @@ export default function A1ResultadoPage() {
           <Card className="border-0 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-orange-500" />
+                <Sparkles className="w-5 h-5 text-orange" />
                 Áreas Para Crecer
               </CardTitle>
             </CardHeader>
@@ -218,16 +218,16 @@ export default function A1ResultadoPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="p-3 bg-red/5 dark:bg-red-900/20 rounded-[28px] border-l-4 border-red/50">
+              <div className="p-3 bg-red/5 dark:bg-red/20 rounded-[28px] border-l-4 border-red/50">
                 <p className="font-semibold text-red dark:text-red-300">Energía (Acción & Dinamismo)</p>
                 <p className="text-sm text-muted/70 dark:text-muted/30 mt-1">Tu capacidad para iniciar, moverte rápido y llevar momentum</p>
               </div>
-              <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-[28px] border-l-4 border-orange">
+              <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded-[28px] border-l-4 border-orange">
                 <p className="font-semibold text-yellow-700 dark:text-yellow-300">Plan Ejecutivo (Influencia & Visión)</p>
                 <p className="text-sm text-muted/70 dark:text-muted/30 mt-1">Tu capacidad para inspirar, comunicar dirección y llevar gente contigo</p>
               </div>
-              <div className="p-3 bg-green/5 dark:bg-green-900/20 rounded-[28px] border-l-4 border-green-500">
-                <p className="font-semibold text-green-700 dark:text-green-300">Relaciones (Estabilidad & Confianza)</p>
+              <div className="p-3 bg-green/5 dark:bg-green/20 rounded-[28px] border-l-4 border-green">
+                <p className="font-semibold text-green dark:text-green-300">Relaciones (Estabilidad & Confianza)</p>
                 <p className="text-sm text-muted/70 dark:text-muted/30 mt-1">Tu capacidad para conectar, sostener y ser confiable para otros</p>
               </div>
               <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded-[28px] border-l-4 border-blue/50">
@@ -325,24 +325,24 @@ export default function A1ResultadoPage() {
         </Card>
 
         {/* ⭐ A1 V2: PREDICTIVE INSIGHTS */}
-        <Card className="mb-8 border-0 shadow-lg border-2 border-blue/30 dark:border-blue bg-blue/5/50 dark:bg-indigo-900/20">
+        <Card className="mb-8 border-0 shadow-lg border-2 border-blue/30 dark:border-blue bg-blue/5/50 dark:bg-blue/20">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-indigo-900 dark:text-indigo-200">
+            <CardTitle className="flex items-center gap-2 text-indigo-900 dark:text-blue/20">
               <Target className="w-5 h-5 text-blue" />
               Lectura Predictiva: El Mercado Laboral y Vos
             </CardTitle>
-            <p className="text-sm text-indigo-800 dark:text-indigo-300 mt-2 font-normal">Cómo tu perfil se posiciona en oportunidades reales</p>
+            <p className="text-sm text-blue dark:text-indigo-300 mt-2 font-normal">Cómo tu perfil se posiciona en oportunidades reales</p>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="p-4 bg-white dark:bg-background rounded-[28px] border border-blue/30 dark:border-indigo-700">
-              <p className="font-semibold text-indigo-900 dark:text-indigo-200 mb-2">Roles Donde Brillás</p>
+              <p className="font-semibold text-indigo-900 dark:text-blue/20 mb-2">Roles Donde Brillás</p>
               <ul className="space-y-1 text-sm text-muted/70 dark:text-muted/40">
                 <li>• Liderazgo estratégico (startups, transformación digital)</li>
                 <li>• Project leadership en ambientes de cambio rápido</li>
                 <li>• Roles que requieren decisión rápida + visión clara</li>
               </ul>
             </div>
-            <div className="p-4 bg-white dark:bg-background rounded-[28px] border border-orange-200 dark:border-orange-700">
+            <div className="p-4 bg-white dark:bg-background rounded-[28px] border border-orange/20 dark:border-orange-700">
               <p className="font-semibold text-orange-900 dark:text-orange-200 mb-2">Roles a Evitar o Negociar</p>
               <ul className="space-y-1 text-sm text-muted/70 dark:text-muted/40">
                 <li>• Trabajo operativo puro (muy repetitivo)</li>
@@ -351,7 +351,7 @@ export default function A1ResultadoPage() {
               </ul>
             </div>
             <div className="p-4 bg-white dark:bg-background rounded-[28px] border border-red/20 dark:border-red-700">
-              <p className="font-semibold text-red-900 dark:text-red-200 mb-2">Señal de Alerta</p>
+              <p className="font-semibold text-red-900 dark:text-red/20 mb-2">Señal de Alerta</p>
               <p className="text-sm text-muted/70 dark:text-muted/40">Si después de 3-6 meses en un rol sigues sin autonomía clara o decisión, es probable que no es el lugar. Confía en eso.</p>
             </div>
           </CardContent>
@@ -383,7 +383,7 @@ export default function A1ResultadoPage() {
                 trackEvent('a1_bridge_cta_clicked', {})
                 router.push('/despega/a2/intro')
               }} 
-              className="gap-2 px-8 py-6 text-lg w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
+              className="gap-2 px-8 py-6 text-lg w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white font-semibold"
               size="lg"
             >
               Comenzar tu Misión de 90 Días

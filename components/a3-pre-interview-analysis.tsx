@@ -153,7 +153,7 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-green-600" />
+          <CheckCircle2 className="w-5 h-5 text-green" />
           Análisis Completado
         </CardTitle>
       </CardHeader>
@@ -167,7 +167,7 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
         )}
 
         {/* Readiness Score */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-[28px] border border-blue-200">
+        <div className="bg-gradient-to-r from-blue-50 to-blue/5 p-6 rounded-[28px] border border-blue-200">
           <div className="text-sm text-muted/60 mb-2">Preparación General</div>
           <div className="flex items-center gap-4">
             <div className="text-4xl font-bold text-indigo-600">
@@ -188,19 +188,19 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
         <div className="grid grid-cols-3 gap-4">
           <div className="p-4 bg-muted/5 rounded-lg">
             <div className="text-xs text-muted/60 mb-2">Vestimenta</div>
-            <div className="text-2xl font-bold text-gray-900">{analysis?.vestimenta_coherence}%</div>
+            <div className="text-2xl font-bold text-foreground">{analysis?.vestimenta_coherence}%</div>
             <p className="text-xs text-muted/60 mt-2">{analysis?.vestimenta_feedback}</p>
           </div>
 
           <div className="p-4 bg-muted/5 rounded-lg">
             <div className="text-xs text-muted/60 mb-2">Postura</div>
-            <div className="text-2xl font-bold text-gray-900">{analysis?.postura_score}%</div>
+            <div className="text-2xl font-bold text-foreground">{analysis?.postura_score}%</div>
             <p className="text-xs text-muted/60 mt-2">{analysis?.postura_notes}</p>
           </div>
 
           <div className="p-4 bg-muted/5 rounded-lg">
             <div className="text-xs text-muted/60 mb-2">Confianza</div>
-            <div className="text-2xl font-bold text-gray-900">{analysis?.expresion_facial_confidence}%</div>
+            <div className="text-2xl font-bold text-foreground">{analysis?.expresion_facial_confidence}%</div>
             <p className="text-xs text-muted/60 mt-2">{analysis?.expresion_notes}</p>
           </div>
         </div>
@@ -213,7 +213,7 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
           </div>
           <ul className="space-y-2">
             {analysis?.recommendations?.map((rec: string, idx: number) => (
-              <li key={idx} className="text-sm text-gray-700 flex items-start gap-2">
+              <li key={idx} className="text-sm text-muted flex items-start gap-2">
                 <span className="text-amber-600 font-bold">•</span>
                 {rec}
               </li>

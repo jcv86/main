@@ -20,7 +20,7 @@ export default function TestPerformancePage() {
     <div className="min-h-screen bg-muted/5 p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
-        <Card className="border-blue/20 bg-gradient-to-r from-blue/5 to-indigo-50">
+        <Card className="border-blue/20 bg-gradient-to-r from-blue/5 to-blue/5">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -63,10 +63,10 @@ export default function TestPerformancePage() {
                   </div>
                   <div className="text-center p-3 bg-green/5 rounded-lg">
                     <div className="font-semibold text-green-900">Success Rate</div>
-                    <div className="text-green-700">Target: &gt;90%</div>
+                    <div className="text-green">Target: &gt;90%</div>
                   </div>
-                  <div className="text-center p-3 bg-yellow-50 rounded-lg">
-                    <div className="font-semibold text-yellow-900">Accuracy</div>
+                  <div className="text-center p-3 bg-yellow/5 rounded-lg">
+                    <div className="font-semibold text-yellow">Accuracy</div>
                     <div className="text-yellow-700">Target: &gt;85%</div>
                   </div>
                   <div className="text-center p-3 bg-purple/5 rounded-lg">
@@ -111,23 +111,23 @@ export default function TestPerformancePage() {
                 </div>
               </div>
               <div>
-                <h4 className="font-semibold mb-3 text-yellow-900">Good Performance</h4>
+                <h4 className="font-semibold mb-3 text-yellow">Good Performance</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Response Time:</span>
-                    <span className="font-mono text-yellow-600">50-100ms</span>
+                    <span className="font-mono text-yellow">50-100ms</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Success Rate:</span>
-                    <span className="font-mono text-yellow-600">85-95%</span>
+                    <span className="font-mono text-yellow">85-95%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Accuracy:</span>
-                    <span className="font-mono text-yellow-600">75-90%</span>
+                    <span className="font-mono text-yellow">75-90%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>User Experience:</span>
-                    <span className="text-yellow-600">Acceptable</span>
+                    <span className="text-yellow">Acceptable</span>
                   </div>
                 </div>
               </div>
@@ -136,19 +136,19 @@ export default function TestPerformancePage() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Response Time:</span>
-                    <span className="font-mono text-red-600">&gt; 100ms</span>
+                    <span className="font-mono text-red">&gt; 100ms</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Success Rate:</span>
-                    <span className="font-mono text-red-600">&lt; 85%</span>
+                    <span className="font-mono text-red">&lt; 85%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Accuracy:</span>
-                    <span className="font-mono text-red-600">&lt; 75%</span>
+                    <span className="font-mono text-red">&lt; 75%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>User Experience:</span>
-                    <span className="text-red-600">Frustrating</span>
+                    <span className="text-red">Frustrating</span>
                   </div>
                 </div>
               </div>

@@ -68,7 +68,7 @@ export default function TestOpenAIInsightsPage() {
                 </>
               )}
             </Button>
-            <p className="text-center text-sm text-purple-200 mt-3">
+            <p className="text-center text-sm text-purple/20 mt-3">
               Responde 41 preguntas → obtén un plan personalizado de 90 días
             </p>
           </CardContent>
@@ -76,11 +76,11 @@ export default function TestOpenAIInsightsPage() {
 
         {/* Error Display */}
         {error && (
-          <Card className="bg-red-900/20 border-red/50/50">
+          <Card className="bg-red/20 border-red/50/50">
             <CardContent className="pt-6 flex gap-3">
               <AlertCircle className="w-6 h-6 text-red flex-shrink-0 mt-1" />
               <div className="flex-1">
-                <p className="font-semibold text-red-100">Test Fallido</p>
+                <p className="font-semibold text-red/10">Test Fallido</p>
                 <p className="text-red-200 text-sm mt-1">{error}</p>
               </div>
             </CardContent>
@@ -93,7 +93,7 @@ export default function TestOpenAIInsightsPage() {
             {/* Performance Metrics */}
             <Card className="bg-muted/90/50 border-muted/70">
               <CardHeader>
-                <CardTitle className="text-green-400 flex items-center gap-2">
+                <CardTitle className="text-green/40 flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5" />
                   Métricas de Rendimiento
                 </CardTitle>
@@ -147,7 +147,7 @@ export default function TestOpenAIInsightsPage() {
             </Card>
 
             {/* A3 Insights */}
-            <Card className="bg-muted/90/50 border-orange-500/30">
+            <Card className="bg-muted/90/50 border-orange/30">
               <CardHeader>
                 <CardTitle className="text-orange-400">Fase 3: Feedback Honesto (Entrenamientos)</CardTitle>
                 <CardDescription className="text-orange-200">
@@ -164,8 +164,8 @@ export default function TestOpenAIInsightsPage() {
             {/* A4 Insights */}
             <Card className="bg-muted/90/50 border-purple/50/30">
               <CardHeader>
-                <CardTitle className="text-purple-400">Fase 4: Tu Momento Ahora (Contexto de Mercado)</CardTitle>
-                <CardDescription className="text-purple-200">
+                <CardTitle className="text-purple/40">Fase 4: Tu Momento Ahora (Contexto de Mercado)</CardTitle>
+                <CardDescription className="text-purple/20">
                   Por qué ahora es tu mejor momento para actuar
                 </CardDescription>
               </CardHeader>
@@ -182,7 +182,7 @@ export default function TestOpenAIInsightsPage() {
                 <CardTitle className="text-2xl bg-gradient-to-r from-purple-300 to-red/30 bg-clip-text text-transparent">
                   Tu Insight Maestro: El Que Lo Cambia Todo
                 </CardTitle>
-                <CardDescription className="text-purple-200">
+                <CardDescription className="text-purple/20">
                   Una verdad poderosa que conecta los 3 Pilares
                 </CardDescription>
               </CardHeader>
@@ -193,7 +193,7 @@ export default function TestOpenAIInsightsPage() {
                   </p>
                 </div>
                 <div className="mt-4 p-4 bg-purple/50 rounded flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-purple-300 flex-shrink-0" />
+                  <CheckCircle2 className="w-5 h-5 text-purple/30 flex-shrink-0" />
                   <span className="text-sm text-purple/10">
                     Este es el insight que te guía en cada decisión los próximos 90 días
                   </span>
@@ -241,7 +241,7 @@ export default function TestOpenAIInsightsPage() {
               <p><span className="text-blue/30 font-semibold">Fase 1:</span> Descubrimos quién eres realmente (tu patrón natural)</p>
               <p><span className="text-emerald-300 font-semibold">Fase 2:</span> Creamos tu camino claro (qué hacer cada 30 días)</p>
               <p><span className="text-orange-300 font-semibold">Fase 3:</span> Te preparamos (feedback honesto sobre lo que necesitas cambiar)</p>
-              <p><span className="text-purple-300 font-semibold">Fase 4:</span> Te mostramos tu momento (por qué ahora es tu oportunidad)</p>
+              <p><span className="text-purple/30 font-semibold">Fase 4:</span> Te mostramos tu momento (por qué ahora es tu oportunidad)</p>
               <p className="pt-2"><span className="text-pink-300 font-semibold">Insight Maestro:</span> Una verdad que une los 3 Pilares y te guía cada día</p>
             </div>
           </CardContent>

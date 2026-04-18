@@ -92,9 +92,9 @@ export default function RecomendacionesPage() {
         description: "Optimiza tu energía física y mental para un rendimiento sostenible",
         icon: "⚡",
         color: "from-yellow-500 to-amber-500",
-        borderColor: "border-yellow-200 dark:border-yellow-800",
-        bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
-        textColor: "text-yellow-900 dark:text-yellow-100",
+        borderColor: "border-yellow/20 dark:border-yellow",
+        bgColor: "bg-yellow/5 dark:bg-yellow/20",
+        textColor: "text-yellow dark:text-yellow/10",
         duration: "30-90 días",
         skills: ["Gestión de energía", "Sueño reparador", "Nutrición inteligente", "Estrés"],
         matchScore: Math.round((100 - energiaScore) * 0.7 + 30),
@@ -109,7 +109,7 @@ export default function RecomendacionesPage() {
         icon: "🎯",
         color: "from-green to-green",
         borderColor: "border-green/20 dark:border-green-800",
-        bgColor: "bg-green/5 dark:bg-green-900/20",
+        bgColor: "bg-green/5 dark:bg-green/20",
         textColor: "text-green-900 dark:text-green-100",
         duration: "30-60 días",
         skills: ["Deep Work", "Priorización", "Bloques de tiempo", "Gestión de distracciones"],
@@ -125,7 +125,7 @@ export default function RecomendacionesPage() {
         icon: "🤝",
         color: "from-red/50 to-rose-500",
         borderColor: "border-red/20 dark:border-pink-800",
-        bgColor: "bg-red/5 dark:bg-pink-900/20",
+        bgColor: "bg-red/5 dark:bg-red/20",
         textColor: "text-pink-900 dark:text-pink-100",
         duration: "60-90 días",
         skills: ["Comunicación", "Empatía", "Resolución de conflictos", "Liderazgo relacional"],
@@ -139,7 +139,7 @@ export default function RecomendacionesPage() {
         name: "Plan Ejecutivo",
         description: "Ejecuta con precisión y consistencia tu estrategia",
         icon: "📋",
-        color: "from-purple/50 to-indigo-500",
+        color: "from-purple/50 to-blue/50",
         borderColor: "border-purple/30 dark:border-purple",
         bgColor: "bg-purple/5 dark:bg-purple/20",
         textColor: "text-purple dark:text-purple/10",
@@ -200,7 +200,7 @@ export default function RecomendacionesPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green"></div>
           <p className="mt-4 text-muted/60 dark:text-muted/40">Personalizando tus rutas...</p>
         </div>
       </div>

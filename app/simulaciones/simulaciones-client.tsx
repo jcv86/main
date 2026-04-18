@@ -76,11 +76,11 @@ export default function EntrenamientoEntrevistasClient() {
   const getColorDificultad = (dificultad: string) => {
     switch (dificultad) {
       case "fácil":
-        return "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
+        return "bg-green/10 dark:bg-green text-green dark:text-green-200"
       case "media":
-        return "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200"
+        return "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow/20"
       case "difícil":
-        return "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
+        return "bg-red/10 dark:bg-red text-red-800 dark:text-red/20"
       default:
         return "bg-muted/10 dark:bg-gray-800 text-gray-800 dark:text-muted/20"
     }
@@ -96,7 +96,7 @@ export default function EntrenamientoEntrevistasClient() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <Play className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+            <Play className="h-8 w-8 text-orange dark:text-orange-400" />
             Entrenamiento de Entrevistas
           </h1>
           <p className="text-muted/60 dark:text-muted/40 mt-2">
@@ -145,7 +145,7 @@ export default function EntrenamientoEntrevistasClient() {
                     {getIconoTipo(entrenamiento.tipo)}
                     <CardTitle className="text-lg">{entrenamiento.nombre}</CardTitle>
                   </div>
-                  {entrenamiento.completada && <CheckCircle2 className="h-5 w-5 text-green dark:text-green-400" />}
+                  {entrenamiento.completada && <CheckCircle2 className="h-5 w-5 text-green dark:text-green/40" />}
                 </div>
                 <Badge className={getColorDificultad(entrenamiento.dificultad)}>{entrenamiento.dificultad}</Badge>
               </CardHeader>

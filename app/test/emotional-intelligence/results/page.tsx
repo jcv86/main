@@ -113,10 +113,10 @@ const competencyInfo = {
 }
 
 const getScoreLevel = (score: number) => {
-  if (score >= 85) return { level: "Excelente", color: "text-green", bgColor: "bg-green-100" }
+  if (score >= 85) return { level: "Excelente", color: "text-green", bgColor: "bg-green/10" }
   if (score >= 70) return { level: "Bueno", color: "text-blue", bgColor: "bg-blue/10" }
-  if (score >= 55) return { level: "Promedio", color: "text-yellow-600", bgColor: "bg-yellow-100" }
-  return { level: "En Desarrollo", color: "text-orange-600", bgColor: "bg-orange-100" }
+  if (score >= 55) return { level: "Promedio", color: "text-yellow", bgColor: "bg-yellow/10" }
+  return { level: "En Desarrollo", color: "text-orange", bgColor: "bg-orange/10" }
 }
 
 const getRecommendations = (competencyScores: any) => {
@@ -247,7 +247,7 @@ export default function EmotionalIntelligenceResults() {
         <Card className="w-full max-w-md">
           <CardContent className="text-center p-8">
             <Heart className="h-16 w-16 mx-auto mb-6 text-red" />
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">No se encontraron resultados</h2>
+            <h2 className="text-2xl font-bold text-foreground mb-4">No se encontraron resultados</h2>
             <p className="text-xl text-muted/60 mb-6">
               Parece que aún no has completado el test de Inteligencia Emocional Despega.
             </p>
@@ -282,7 +282,7 @@ export default function EmotionalIntelligenceResults() {
         </Button>
 
         <div className="mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue to-purple-600 bg-clip-text text-transparent mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue to-purple bg-clip-text text-transparent mb-2">
             Despega Empatía
           </h1>
           <p className="text-muted/60">Tus resultados del test de Inteligencia Emocional</p>
@@ -298,7 +298,7 @@ export default function EmotionalIntelligenceResults() {
                 <Badge className={`${overallLevel.bgColor} ${overallLevel.color} text-lg px-4 py-2`}>
                   {overallLevel.level}
                 </Badge>
-                <p className="text-red-100 mt-4 text-lg">
+                <p className="text-red/10 mt-4 text-lg">
                   {results.overall_score >= 85
                     ? "¡Excelente! Tienes una inteligencia emocional muy desarrollada que te permite navegar efectivamente las situaciones sociales y profesionales."
                     : results.overall_score >= 70
@@ -311,15 +311,15 @@ export default function EmotionalIntelligenceResults() {
               <div className="text-center">
                 <div className="bg-white bg-opacity-20 rounded-2xl p-8">
                   <div className="text-4xl font-bold mb-2">{overallLevel.level}</div>
-                  <div className="text-red-100 mb-4">Inteligencia Emocional</div>
+                  <div className="text-red/10 mb-4">Inteligencia Emocional</div>
                   <div className="flex justify-center space-x-4 text-sm">
                     <div className="text-center">
                       <div className="text-2xl font-bold">{Object.keys(results.competency_scores).length}</div>
-                      <div className="text-red-100">Competencias</div>
+                      <div className="text-red/10">Competencias</div>
                     </div>
                     <div className="text-center">
                       <div className="text-2xl font-bold">{results.duration || 25}m</div>
-                      <div className="text-red-100">Duración</div>
+                      <div className="text-red/10">Duración</div>
                     </div>
                   </div>
                 </div>
@@ -361,7 +361,7 @@ export default function EmotionalIntelligenceResults() {
               </div>
 
               {/* Cómo Llegas */}
-              <div className="p-4 bg-white dark:bg-background rounded-lg border-l-4 border-green-500">
+              <div className="p-4 bg-white dark:bg-background rounded-lg border-l-4 border-green">
                 <h4 className="font-semibold text-lg mb-2">Cómo Llegas</h4>
                 <p className="text-sm text-muted-foreground mb-3">El puente práctico</p>
                 <ul className="text-xs space-y-1">
@@ -515,7 +515,7 @@ export default function EmotionalIntelligenceResults() {
                     <Card className="border-l-4 border-l-purple-500">
                       <CardContent className="pt-6">
                         <h4 className="font-semibold text-purple mb-2">1. Autoconciencia Emocional</h4>
-                        <p className="text-gray-700">
+                        <p className="text-muted">
                           {(testResults?.competencies?.find((c) => c.name === "Autoconciencia")?.score ?? 0) >= 70
                             ? "Tienes una excelente capacidad para identificar tus emociones en tiempo real y entender sus causas."
                             : "Estás desarrollando tu habilidad para reconocer tus emociones. Practicar el registro emocional diario te ayudará."}
@@ -524,8 +524,8 @@ export default function EmotionalIntelligenceResults() {
                     </Card>
                     <Card className="border-l-4 border-l-pink-500">
                       <CardContent className="pt-6">
-                        <h4 className="font-semibold text-pink-800 mb-2">2. Regulación Emocional</h4>
-                        <p className="text-gray-700">
+                        <h4 className="font-semibold text-red mb-2">2. Regulación Emocional</h4>
+                        <p className="text-muted">
                           {(testResults?.competencies?.find((c) => c.name === "Autorregulación")?.score ?? 0) >= 70
                             ? "Manejas bien tus emociones intensas y sabes calmarte cuando es necesario."
                             : "Fortalecer tu capacidad de regulación emocional te ayudará en momentos de estrés. Técnicas de respiración son ideales."}
@@ -534,8 +534,8 @@ export default function EmotionalIntelligenceResults() {
                     </Card>
                     <Card className="border-l-4 border-l-blue-500">
                       <CardContent className="pt-6">
-                        <h4 className="font-semibold text-blue-800 mb-2">3. Empatía y Conexión</h4>
-                        <p className="text-gray-700">
+                        <h4 className="font-semibold text-blue mb-2">3. Empatía y Conexión</h4>
+                        <p className="text-muted">
                           {(testResults?.competencies?.find((c) => c.name === "Empatía")?.score ?? 0) >= 70
                             ? "Tu capacidad empática te permite conectar profundamente con otros y entender sus perspectivas."
                             : "Desarrollar tu empatía fortalecerá tus relaciones. Practica la escucha activa sin juzgar."}
@@ -544,8 +544,8 @@ export default function EmotionalIntelligenceResults() {
                     </Card>
                     <Card className="border-l-4 border-l-green-500">
                       <CardContent className="pt-6">
-                        <h4 className="font-semibold text-green-800 mb-2">4. Habilidades Sociales</h4>
-                        <p className="text-gray-700">
+                        <h4 className="font-semibold text-green mb-2">4. Habilidades Sociales</h4>
+                        <p className="text-muted">
                           {(testResults?.competencies?.find((c) => c.name === "Habilidades Sociales")?.score ?? 0) >= 70
                             ? "Te relacionas con facilidad y sabes comunicar tus emociones de forma efectiva."
                             : "Mejorar tu comunicación emocional fortalecerá tus vínculos. Practica expresar lo que sientes con claridad."}
@@ -554,8 +554,8 @@ export default function EmotionalIntelligenceResults() {
                     </Card>
                     <Card className="border-l-4 border-l-orange">
                       <CardContent className="pt-6">
-                        <h4 className="font-semibold text-orange-800 mb-2">5. Motivación Interna</h4>
-                        <p className="text-gray-700">
+                        <h4 className="font-semibold text-orange mb-2">5. Motivación Interna</h4>
+                        <p className="text-muted">
                           {(testResults?.competencies?.find((c) => c.name === "Motivación")?.score ?? 0) >= 70
                             ? "Tu motivación interna es sólida y te impulsa a alcanzar tus metas personales."
                             : "Conectar con tus valores y propósito fortalecerá tu motivación. Reflexiona sobre qué te mueve realmente."}
@@ -577,7 +577,7 @@ export default function EmotionalIntelligenceResults() {
                           <Heart className="h-5 w-5" />
                           <span>Vida Personal</span>
                         </h4>
-                        <ul className="space-y-2 text-sm text-gray-700">
+                        <ul className="space-y-2 text-sm text-muted">
                           <li className="flex items-start space-x-2">
                             <CheckCircle2 className="h-4 w-4 text-red mt-0.5 flex-shrink-0" />
                             <span>Relaciones familiares más profundas y auténticas</span>
@@ -599,7 +599,7 @@ export default function EmotionalIntelligenceResults() {
                           <Users className="h-5 w-5" />
                           <span>Relaciones</span>
                         </h4>
-                        <ul className="space-y-2 text-sm text-gray-700">
+                        <ul className="space-y-2 text-sm text-muted">
                           <li className="flex items-start space-x-2">
                             <CheckCircle2 className="h-4 w-4 text-purple/50 mt-0.5 flex-shrink-0" />
                             <span>Comunicación más clara y empática con tu pareja</span>
@@ -617,11 +617,11 @@ export default function EmotionalIntelligenceResults() {
                     </Card>
                     <Card className="bg-gradient-to-br from-blue/5 to-white">
                       <CardContent className="pt-6 space-y-3">
-                        <h4 className="font-semibold text-blue-800 flex items-center space-x-2">
+                        <h4 className="font-semibold text-blue flex items-center space-x-2">
                           <Target className="h-5 w-5" />
                           <span>Trabajo</span>
                         </h4>
-                        <ul className="space-y-2 text-sm text-gray-700">
+                        <ul className="space-y-2 text-sm text-muted">
                           <li className="flex items-start space-x-2">
                             <CheckCircle2 className="h-4 w-4 text-blue/50 mt-0.5 flex-shrink-0" />
                             <span>Liderazgo más efectivo y colaborativo</span>
@@ -649,7 +649,7 @@ export default function EmotionalIntelligenceResults() {
                     <Card className="border-l-4 border-l-rose-500">
                       <CardContent className="pt-6">
                         <h4 className="font-semibold text-rose-800 mb-2">1. Movimiento Personal</h4>
-                        <p className="text-gray-700 mb-3">
+                        <p className="text-muted mb-3">
                           <strong>Registro emocional diario:</strong> Durante 5 minutos cada noche, escribe cómo te
                           sentiste hoy y por qué. Esto fortalecerá tu autoconciencia emocional.
                         </p>
@@ -661,7 +661,7 @@ export default function EmotionalIntelligenceResults() {
                     <Card className="border-l-4 border-l-purple-500">
                       <CardContent className="pt-6">
                         <h4 className="font-semibold text-purple mb-2">2. Movimiento Relacional</h4>
-                        <p className="text-gray-700 mb-3">
+                        <p className="text-muted mb-3">
                           <strong>Conversaciones profundas semanales:</strong> Agenda 1 hora semanal con alguien
                           importante para hablar sin distracciones sobre cómo se sienten ambos. Practica la escucha
                           activa.
@@ -673,8 +673,8 @@ export default function EmotionalIntelligenceResults() {
                     </Card>
                     <Card className="border-l-4 border-l-blue-500">
                       <CardContent className="pt-6">
-                        <h4 className="font-semibold text-blue-800 mb-2">3. Movimiento Laboral</h4>
-                        <p className="text-gray-700 mb-3">
+                        <h4 className="font-semibold text-blue mb-2">3. Movimiento Laboral</h4>
+                        <p className="text-muted mb-3">
                           <strong>Técnica del semáforo emocional:</strong> Antes de reaccionar en situaciones tensas,
                           identifica tu emoción (rojo=detente, amarillo=reflexiona, verde=actúa con calma).
                         </p>
@@ -721,7 +721,7 @@ export default function EmotionalIntelligenceResults() {
                       <Users className="w-5 h-5" />
                       Relaciones Personales
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       Tu nivel de empatía ({results.competency_scores.empathy || 0}%) determina qué tan profundas son
                       tus conexiones. Una alta IE te permite entender las emociones de tu pareja, familia y amigos,
                       creando vínculos más auténticos y duraderos.
@@ -733,7 +733,7 @@ export default function EmotionalIntelligenceResults() {
                       <Home className="w-5 h-5" />
                       Vida Familiar
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       Tu habilidad para regular emociones ({results.competency_scores.self_regulation || 0}%) impacta
                       directamente el ambiente familiar. Manejar el estrés sin descargarlo en tu familia crea un hogar
                       más armonioso y seguro.
@@ -745,7 +745,7 @@ export default function EmotionalIntelligenceResults() {
                       <Heart className="w-5 h-5" />
                       Bienestar Emocional
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       Tu autoconciencia emocional ({results.competency_scores.self_awareness || 0}%) es la base de tu
                       salud mental. Reconocer y nombrar tus emociones te permite procesarlas en lugar de reprimirlas,
                       reduciendo ansiedad y mejorando tu bienestar general.
@@ -757,7 +757,7 @@ export default function EmotionalIntelligenceResults() {
                       <Sparkles className="w-5 h-5" />
                       Desarrollo Personal
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       Tus habilidades sociales ({results.competency_scores.social_skills || 0}%) te ayudan en el
                       trabajo, pero más importante aún, enriquecen tu vida personal permitiéndote construir una red de
                       apoyo sólida y relaciones significativas.
@@ -769,7 +769,7 @@ export default function EmotionalIntelligenceResults() {
                   <h3 className="font-semibold text-lg mb-3 text-purple">
                     💡 Recuerda: Tu inteligencia emocional es para tu vida, no solo para tu trabajo
                   </h3>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-muted leading-relaxed">
                     La IE es la base para relaciones sanas con tu pareja, familia y amigos. Una alta IE mejora tu
                     bienestar mental, reduce conflictos personales y te ayuda a crear una vida más feliz y plena. El
                     éxito laboral es solo un beneficio secundario.
@@ -789,7 +789,7 @@ export default function EmotionalIntelligenceResults() {
                     <CardHeader className="pb-4">
                       <div className="flex items-center justify-between mb-4">
                         <div className={`p-3 rounded-lg ${competency.color} bg-opacity-20`}>
-                          <IconComponent className="h-8 w-8 text-gray-700" />
+                          <IconComponent className="h-8 w-8 text-muted" />
                         </div>
                         <Badge className={`${level.bgColor} ${level.color}`}>{level.level}</Badge>
                       </div>
@@ -799,7 +799,7 @@ export default function EmotionalIntelligenceResults() {
                     <CardContent>
                       <div className="space-y-4">
                         <div className="flex justify-between items-center">
-                          <span className="text-2xl font-bold text-gray-900">{score}%</span>
+                          <span className="text-2xl font-bold text-foreground">{score}%</span>
                           <span className="text-sm text-muted/50">de 100</span>
                         </div>
                         <Progress value={score} className="h-3" />
@@ -838,12 +838,12 @@ export default function EmotionalIntelligenceResults() {
                         const IconComponent = competency.icon
                         return (
                           <div key={key} className="flex items-center space-x-3 p-3 bg-green/5 rounded-lg">
-                            <div className="flex items-center justify-center w-8 h-8 bg-green-100 rounded-full text-green font-bold text-sm">
+                            <div className="flex items-center justify-center w-8 h-8 bg-green/10 rounded-full text-green font-bold text-sm">
                               {index + 1}
                             </div>
                             <IconComponent className="h-6 w-6 text-green" />
                             <div className="flex-1">
-                              <div className="font-semibold text-gray-900">{competency.name}</div>
+                              <div className="font-semibold text-foreground">{competency.name}</div>
                               <div className="text-sm text-muted/60">
                                 {score}% - {getScoreLevel(score).level}
                               </div>
@@ -858,7 +858,7 @@ export default function EmotionalIntelligenceResults() {
               <Card className="shadow-lg">
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
-                    <Target className="h-6 w-6 text-orange-500" />
+                    <Target className="h-6 w-6 text-orange" />
                     <span>Áreas de Oportunidad</span>
                   </CardTitle>
                 </CardHeader>
@@ -871,13 +871,13 @@ export default function EmotionalIntelligenceResults() {
                         const competency = competencyInfo[key as keyof typeof competencyInfo]
                         const IconComponent = competency.icon
                         return (
-                          <div key={key} className="flex items-center space-x-3 p-3 bg-orange-50 rounded-lg">
-                            <div className="flex items-center justify-center w-8 h-8 bg-orange-100 rounded-full text-orange-600 font-bold text-sm">
+                          <div key={key} className="flex items-center space-x-3 p-3 bg-orange/5 rounded-lg">
+                            <div className="flex items-center justify-center w-8 h-8 bg-orange/10 rounded-full text-orange font-bold text-sm">
                               {index + 1}
                             </div>
-                            <IconComponent className="h-6 w-6 text-orange-600" />
+                            <IconComponent className="h-6 w-6 text-orange" />
                             <div className="flex-1">
-                              <div className="font-semibold text-gray-900">{competency.name}</div>
+                              <div className="font-semibold text-foreground">{competency.name}</div>
                               <div className="text-sm text-muted/60">{score}% - Potencial de mejora</div>
                             </div>
                           </div>
@@ -904,10 +904,10 @@ export default function EmotionalIntelligenceResults() {
                     return (
                       <div key={key} className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="font-medium text-gray-900">{competency.name}</span>
+                          <span className="font-medium text-foreground">{competency.name}</span>
                           <div className="flex items-center space-x-2">
                             <Badge className={`${level.bgColor} ${level.color} text-xs`}>{level.level}</Badge>
-                            <span className="font-bold text-gray-900">{score}%</span>
+                            <span className="font-bold text-foreground">{score}%</span>
                           </div>
                         </div>
                         <Progress value={score} className="h-2" />
@@ -929,7 +929,7 @@ export default function EmotionalIntelligenceResults() {
                     <CardHeader>
                       <div className="flex items-center space-x-3 mb-2">
                         <div className="p-2 rounded-lg bg-muted/20 bg-opacity-20">
-                          <IconComponent className="h-6 w-6 text-gray-700" />
+                          <IconComponent className="h-6 w-6 text-muted" />
                         </div>
                         <Badge
                           variant={
@@ -963,7 +963,7 @@ export default function EmotionalIntelligenceResults() {
                       1
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Esta Semana</h4>
+                      <h4 className="font-semibold text-foreground">Esta Semana</h4>
                       <p className="text-muted/60">Comienza un diario emocional para aumentar tu autoconciencia</p>
                     </div>
                   </div>
@@ -972,7 +972,7 @@ export default function EmotionalIntelligenceResults() {
                       2
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Este Mes</h4>
+                      <h4 className="font-semibold text-foreground">Este Mes</h4>
                       <p className="text-muted/60">Practica técnicas de respiración y mindfulness diariamente</p>
                     </div>
                   </div>
@@ -981,7 +981,7 @@ export default function EmotionalIntelligenceResults() {
                       3
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-900">Próximos 3 Meses</h4>
+                      <h4 className="font-semibold text-foreground">Próximos 3 Meses</h4>
                       <p className="text-muted/60">Busca oportunidades de liderazgo y feedback de colegas</p>
                     </div>
                   </div>
@@ -1003,7 +1003,7 @@ export default function EmotionalIntelligenceResults() {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="p-4 bg-green/5 rounded-lg">
-                      <h4 className="font-semibold text-gray-900 mb-2">Libros</h4>
+                      <h4 className="font-semibold text-foreground mb-2">Libros</h4>
                       <ul className="text-sm text-muted/60 space-y-1">
                         <li>• "Inteligencia Emocional" - Daniel Goleman</li>
                         <li>• "Emotional Intelligence 2.0" - Travis Bradberry</li>
@@ -1011,7 +1011,7 @@ export default function EmotionalIntelligenceResults() {
                       </ul>
                     </div>
                     <div className="p-4 bg-blue/5 rounded-lg">
-                      <h4 className="font-semibold text-gray-900 mb-2">Cursos Online</h4>
+                      <h4 className="font-semibold text-foreground mb-2">Cursos Online</h4>
                       <ul className="text-sm text-muted/60 space-y-1">
                         <li>• Mindfulness y Meditación</li>
                         <li>• Comunicación Efectiva</li>
@@ -1032,15 +1032,15 @@ export default function EmotionalIntelligenceResults() {
                 <CardContent>
                   <div className="space-y-4">
                     <div className="p-4 bg-purple/5 rounded-lg">
-                      <h4 className="font-semibold text-gray-900 mb-2">Diarios</h4>
+                      <h4 className="font-semibold text-foreground mb-2">Diarios</h4>
                       <ul className="text-sm text-muted/60 space-y-1">
                         <li>• Diario de emociones diario</li>
                         <li>• Registro de desencadenantes</li>
                         <li>• Reflexiones de interacciones sociales</li>
                       </ul>
                     </div>
-                    <div className="p-4 bg-yellow-50 rounded-lg">
-                      <h4 className="font-semibold text-gray-900 mb-2">Técnicas</h4>
+                    <div className="p-4 bg-yellow/5 rounded-lg">
+                      <h4 className="font-semibold text-foreground mb-2">Técnicas</h4>
                       <ul className="text-sm text-muted/60 space-y-1">
                         <li>• Respiración 4-7-8</li>
                         <li>• Escucha activa</li>
@@ -1108,7 +1108,7 @@ export default function EmotionalIntelligenceResults() {
               <CardContent className="space-y-6">
                 <div className="bg-gradient-to-r from-yellow/5 to-orange/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué estas oportunidades son relevantes para ti</h3>
-                  <p className="text-sm text-gray-700 mb-4">
+                  <p className="text-sm text-muted mb-4">
                     Tu perfil de Inteligencia Emocional con puntuaciones específicas en cada competencia revela patrones
                     únicos de fortalezas emocionales y áreas de crecimiento. Estas oportunidades están diseñadas para
                     ayudarte a desarrollar una vida más consciente, equilibrada y auténtica emocionalmente.
@@ -1126,7 +1126,7 @@ export default function EmotionalIntelligenceResults() {
                   <CardContent className="space-y-4">
                     <div className="bg-blue/5 p-4 rounded-lg">
                       <h4 className="font-semibold text-blue mb-2">Oportunidad Principal</h4>
-                      <p className="text-sm text-blue-800">
+                      <p className="text-sm text-blue">
                         {results.competency_scores.self_awareness >= 80
                           ? "Expandir tu ya desarrollada autoconciencia hacia la comprensión de patrones emocionales inconscientes y triggers profundos."
                           : results.competency_scores.self_awareness >= 60
@@ -1162,7 +1162,7 @@ export default function EmotionalIntelligenceResults() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-blue to-blue-700 text-white p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-blue to-blue text-white p-4 rounded-lg">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-semibold mb-1">Recurso Recomendado</p>
@@ -1184,7 +1184,7 @@ export default function EmotionalIntelligenceResults() {
                   <CardContent className="space-y-4">
                     <div className="bg-green/5 p-4 rounded-lg">
                       <h4 className="font-semibold text-green-900 mb-2">Oportunidad Principal</h4>
-                      <p className="text-sm text-green-800">
+                      <p className="text-sm text-green">
                         {results.competency_scores.self_regulation >= 80
                           ? "Refinar tu capacidad de regulación para responder (no reaccionar) incluso en situaciones de alta presión."
                           : results.competency_scores.self_regulation >= 60
@@ -1275,14 +1275,14 @@ export default function EmotionalIntelligenceResults() {
                 <Card className="border-l-4 border-l-orange">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center space-x-2">
-                      <Shield className="h-5 w-5 text-orange-600" />
+                      <Shield className="h-5 w-5 text-orange" />
                       <span>4. Resiliencia y Recuperación Emocional</span>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-orange-50 p-4 rounded-lg">
+                    <div className="bg-orange/5 p-4 rounded-lg">
                       <h4 className="font-semibold text-orange-900 mb-2">Oportunidad Principal</h4>
-                      <p className="text-sm text-orange-800">
+                      <p className="text-sm text-orange">
                         Desarrollar la capacidad de recuperarte rápidamente de adversidades emocionales y encontrar
                         significado incluso en experiencias dolorosas.
                       </p>
@@ -1292,21 +1292,21 @@ export default function EmotionalIntelligenceResults() {
                       <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
                       <ul className="space-y-2">
                         <li className="flex gap-3">
-                          <span className="text-orange-600 font-bold">→</span>
+                          <span className="text-orange font-bold">→</span>
                           <div>
                             <strong>Ritual de Cierre Diario:</strong> Antes de dormir, escribe 3 cosas por las que estás
                             agradecido y 1 aprendizaje del día (incluso si fue difícil).
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="text-orange-600 font-bold">→</span>
+                          <span className="text-orange font-bold">→</span>
                           <div>
                             <strong>Red de Apoyo Emocional:</strong> Identifica 3 personas a quienes puedas llamar
                             cuando estés en crisis emocional.
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="text-orange-600 font-bold">→</span>
+                          <span className="text-orange font-bold">→</span>
                           <div>
                             <strong>Reencuadre Activo:</strong> Ante cada problema, pregúntate: "¿Qué oportunidad de
                             crecimiento esconde esto?"
@@ -1342,7 +1342,7 @@ export default function EmotionalIntelligenceResults() {
               <CardContent className="space-y-6">
                 <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">El Rol de la IE en Tu Desarrollo Integral</h3>
-                  <p className="text-sm text-gray-700 mb-4">
+                  <p className="text-sm text-muted mb-4">
                     La Inteligencia Emocional es el "sistema operativo" de tu vida. Mientras que DISC mide tu
                     comportamiento, MBTI tus preferencias, y RIASEC tus intereses, la IE determina qué tan efectivamente
                     navegas todas esas dimensiones cuando las emociones están involucradas.
@@ -1363,7 +1363,7 @@ export default function EmotionalIntelligenceResults() {
                     <CardContent className="space-y-3">
                       <div className="bg-blue/5 p-3 rounded text-sm">
                         <strong className="text-blue">Conexión:</strong>
-                        <p className="text-blue-800 mt-1">
+                        <p className="text-blue mt-1">
                           DISC muestra cómo actúas, IE muestra qué tan consciente estás de tus emociones al actuar así.
                         </p>
                       </div>
@@ -1419,7 +1419,7 @@ export default function EmotionalIntelligenceResults() {
                   <Card className="border-2 border-green-300">
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
-                        <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-lg">
+                        <div className="w-8 h-8 bg-green/10 rounded-full flex items-center justify-center text-lg">
                           ⭐
                         </div>
                         5 Dimensiones (Big Five)
@@ -1428,7 +1428,7 @@ export default function EmotionalIntelligenceResults() {
                     <CardContent className="space-y-3">
                       <div className="bg-green/5 p-3 rounded text-sm">
                         <strong className="text-green-900">Conexión:</strong>
-                        <p className="text-green-800 mt-1">
+                        <p className="text-green mt-1">
                           Big Five mide rasgos estables, IE mide habilidades entrenables. IE puede compensar rasgos
                           desafiantes.
                         </p>
@@ -1452,16 +1452,16 @@ export default function EmotionalIntelligenceResults() {
                   <Card className="border-2 border-orange-300">
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
-                        <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center text-lg">
+                        <div className="w-8 h-8 bg-orange/10 rounded-full flex items-center justify-center text-lg">
                           💼
                         </div>
                         Brújula Vocacional (RIASEC)
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="bg-orange-50 p-3 rounded text-sm">
+                      <div className="bg-orange/5 p-3 rounded text-sm">
                         <strong className="text-orange-900">Conexión:</strong>
-                        <p className="text-orange-800 mt-1">
+                        <p className="text-orange mt-1">
                           RIASEC muestra qué tipo de trabajo te motiva, IE determina qué tan bien manejas el estrés y
                           relaciones en ese trabajo.
                         </p>
@@ -1485,7 +1485,7 @@ export default function EmotionalIntelligenceResults() {
                   <Card className="border-2 border-pink-300">
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
-                        <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center text-lg">
+                        <div className="w-8 h-8 bg-red/10 rounded-full flex items-center justify-center text-lg">
                           💡
                         </div>
                         Competencias Blandas
@@ -1494,7 +1494,7 @@ export default function EmotionalIntelligenceResults() {
                     <CardContent className="space-y-3">
                       <div className="bg-red/5 p-3 rounded text-sm">
                         <strong className="text-pink-900">Conexión:</strong>
-                        <p className="text-pink-800 mt-1">
+                        <p className="text-red mt-1">
                           IE es la base de TODAS las soft skills. Comunicación, liderazgo, trabajo en equipo dependen de
                           tu inteligencia emocional.
                         </p>
@@ -1552,7 +1552,7 @@ export default function EmotionalIntelligenceResults() {
                   </CardContent>
                 </Card>
 
-                <div className="bg-gradient-to-r from-blue to-purple-600 text-white p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-blue to-purple text-white p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-2">Recomendación DTC</h3>
                   <p className="text-sm opacity-90 mb-4">
                     La Inteligencia Emocional es la competencia más importante para el éxito en vida y carrera. Te
@@ -1579,13 +1579,13 @@ export default function EmotionalIntelligenceResults() {
               <CardContent className="space-y-6">
                 <div className="bg-gradient-to-r from-red/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">La importancia de la reflexión emocional</h3>
-                  <p className="text-sm text-gray-700 mb-4">
+                  <p className="text-sm text-muted mb-4">
                     La verdadera inteligencia emocional no se mide solo con un test, sino con la capacidad de
                     reflexionar honestamente sobre tu vida emocional. Estas preguntas te invitan a explorar dimensiones
                     que ningún cuestionario puede capturar completamente.
                   </p>
                   <div className="bg-white p-4 rounded border-l-4 border-pink-500">
-                    <p className="text-sm italic text-gray-700">
+                    <p className="text-sm italic text-muted">
                       Tip: Escribe tus respuestas sin juzgarte. La honestidad emocional es el primer paso hacia la
                       madurez emocional.
                     </p>
@@ -1654,7 +1654,7 @@ export default function EmotionalIntelligenceResults() {
                   </AccordionItem>
 
                   <AccordionItem value="regulacion">
-                    <AccordionTrigger className="bg-green/5 px-4 rounded-lg hover:bg-green-100">
+                    <AccordionTrigger className="bg-green/5 px-4 rounded-lg hover:bg-green/10">
                       <div className="flex items-center gap-3">
                         <span className="text-2xl">⚖️</span>
                         <span className="font-semibold">Regulación y Gestión Emocional</span>
@@ -1770,7 +1770,7 @@ export default function EmotionalIntelligenceResults() {
                   </AccordionItem>
 
                   <AccordionItem value="impacto">
-                    <AccordionTrigger className="bg-orange-50 px-4 rounded-lg hover:bg-orange-100">
+                    <AccordionTrigger className="bg-orange/5 px-4 rounded-lg hover:bg-orange/10">
                       <div className="flex items-center gap-3">
                         <span className="text-2xl">🌊</span>
                         <span className="font-semibold">Impacto Emocional en Otros</span>
@@ -1828,7 +1828,7 @@ export default function EmotionalIntelligenceResults() {
                   </AccordionItem>
                 </Accordion>
 
-                <div className="bg-gradient-to-r from-red to-purple-600 text-white p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-red to-purple text-white p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-2">Comparte tu reflexión con tu Coach IA</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Las reflexiones más profundas emergen en conversación. Habla con Sofia o Dani para explorar tus
@@ -1856,10 +1856,10 @@ export default function EmotionalIntelligenceResults() {
               <CardContent className="space-y-6">
                 <div className="bg-gradient-to-r from-green/5 to-blue/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Plan de 90 Días Estructurado</h3>
-                  <p className="text-sm text-gray-700 mb-4">
+                  <p className="text-sm text-muted mb-4">
                     Este plan está diseñado para tu perfil de Inteligencia Emocional con enfoque en:
                   </p>
-                  <ul className="space-y-2 text-sm text-gray-700">
+                  <ul className="space-y-2 text-sm text-muted">
                     <li>
                       • <strong>Mes 1 (Semanas 1-4):</strong> Autoconciencia Emocional - Conoce y nombra tus emociones
                     </li>
@@ -1986,11 +1986,11 @@ export default function EmotionalIntelligenceResults() {
                             <p className="text-sm text-muted/60">Libro • Psicología</p>
                           </div>
                         </td>
-                        <td className="border border-purple/20 p-3 text-gray-700">
+                        <td className="border border-purple/20 p-3 text-muted">
                           Te enseña a identificar tus emociones en tiempo real y entender cómo influyen en tus
                           decisiones y relaciones personales.
                         </td>
-                        <td className="border border-purple/20 p-3 text-sm text-gray-700">
+                        <td className="border border-purple/20 p-3 text-sm text-muted">
                           Lleva un "diario emocional" durante 7 días: cada noche escribe 3 emociones que sentiste y qué
                           las provocó.
                         </td>
@@ -2005,11 +2005,11 @@ export default function EmotionalIntelligenceResults() {
                             <p className="text-sm text-muted/60">Libro • Mindfulness</p>
                           </div>
                         </td>
-                        <td className="border border-purple/20 p-3 text-gray-700">
+                        <td className="border border-purple/20 p-3 text-muted">
                           Aprenderás a no dejarte arrastrar por emociones intensas, observándolas sin juzgarlas ni
                           reaccionar impulsivamente.
                         </td>
-                        <td className="border border-purple/20 p-3 text-sm text-gray-700">
+                        <td className="border border-purple/20 p-3 text-sm text-muted">
                           Cuando sientas una emoción intensa, haz una pausa de 5 respiraciones profundas antes de
                           responder.
                         </td>
@@ -2022,11 +2022,11 @@ export default function EmotionalIntelligenceResults() {
                             <p className="text-sm text-muted/60">Libro • Comunicación</p>
                           </div>
                         </td>
-                        <td className="border border-purple/20 p-3 text-gray-700">
+                        <td className="border border-purple/20 p-3 text-muted">
                           Te muestra cómo entender las emociones de otros sin juzgar, creando conexiones más profundas
                           con familia, pareja y amigos.
                         </td>
-                        <td className="border border-purple/20 p-3 text-sm text-gray-700">
+                        <td className="border border-purple/20 p-3 text-sm text-muted">
                           En tu próxima conversación, practica reformular lo que la otra persona dice para confirmar que
                           entendiste.
                         </td>
@@ -2041,11 +2041,11 @@ export default function EmotionalIntelligenceResults() {
                             <p className="text-sm text-muted/60">Libro • Comunicación</p>
                           </div>
                         </td>
-                        <td className="border border-purple/20 p-3 text-gray-700">
+                        <td className="border border-purple/20 p-3 text-muted">
                           Herramientas prácticas para comunicar tus emociones en situaciones difíciles sin romper la
                           relación.
                         </td>
-                        <td className="border border-purple/20 p-3 text-sm text-gray-700">
+                        <td className="border border-purple/20 p-3 text-sm text-muted">
                           Elige una conversación pendiente y prepárala usando el modelo "Cuando [X], yo sentí [Y],
                           necesito [Z]".
                         </td>
@@ -2058,11 +2058,11 @@ export default function EmotionalIntelligenceResults() {
                             <p className="text-sm text-muted/60">Libro • Psicología Positiva</p>
                           </div>
                         </td>
-                        <td className="border border-purple/20 p-3 text-gray-700">
+                        <td className="border border-purple/20 p-3 text-muted">
                           Conecta con actividades que te generan satisfacción genuina, fortaleciendo tu motivación desde
                           adentro.
                         </td>
-                        <td className="border border-purple/20 p-3 text-sm text-gray-700">
+                        <td className="border border-purple/20 p-3 text-sm text-muted">
                           Identifica 3 actividades que te hacen "perder la noción del tiempo" y dedícales al menos 2
                           horas semanales.
                         </td>
@@ -2077,10 +2077,10 @@ export default function EmotionalIntelligenceResults() {
                             <p className="text-sm text-muted/60">Libro • Relaciones</p>
                           </div>
                         </td>
-                        <td className="border border-purple/20 p-3 text-gray-700">
+                        <td className="border border-purple/20 p-3 text-muted">
                           Aprende a manejar conversaciones tensas con pareja, familia o jefe sin escalar el conflicto.
                         </td>
-                        <td className="border border-purple/20 p-3 text-sm text-gray-700">
+                        <td className="border border-purple/20 p-3 text-sm text-muted">
                           Practica el ejercicio de "tercera historia": describe un conflicto sin culpar a nadie, solo
                           hechos observables.
                         </td>
@@ -2105,7 +2105,7 @@ export default function EmotionalIntelligenceResults() {
 
         {/* Footer Actions */}
         <div className="text-center mt-12 space-y-6">
-          <h2 className="text-2xl font-bold text-gray-900">¿Qué sigue?</h2>
+          <h2 className="text-2xl font-bold text-foreground">¿Qué sigue?</h2>
           <p className="text-muted/60 max-w-2xl mx-auto">
             Usa estos resultados para desarrollar tu inteligencia emocional y mejorar tus relaciones personales y
             profesionales.

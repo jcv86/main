@@ -77,9 +77,9 @@ const statusSteps = [
 const getStatusColor = (status: string) => {
   switch (status) {
     case "submitted":
-      return "bg-blue-100 text-blue-800"
+      return "bg-blue/10 text-blue"
     case "under_review":
-      return "bg-yellow-100 text-yellow-800"
+      return "bg-yellow/10 text-yellow"
     case "phone_screening":
     case "interview_scheduled":
     case "technical_interview":
@@ -87,13 +87,13 @@ const getStatusColor = (status: string) => {
       return "bg-purple-100 text-purple-800"
     case "reference_check":
     case "offer_pending":
-      return "bg-orange-100 text-orange-800"
+      return "bg-orange/10 text-orange"
     case "offer_extended":
-      return "bg-green-100 text-green-800"
+      return "bg-green/10 text-green"
     case "hired":
       return "bg-green-200 text-green-900"
     case "rejected":
-      return "bg-red-100 text-red-800"
+      return "bg-red/10 text-red-800"
     default:
       return "bg-muted/10 text-gray-800"
   }
@@ -101,13 +101,13 @@ const getStatusColor = (status: string) => {
 
 const getStatusIcon = (status: string, isActive: boolean, isCompleted: boolean) => {
   if (status === "rejected") {
-    return <AlertCircle className="h-5 w-5 text-red-600" />
+    return <AlertCircle className="h-5 w-5 text-red" />
   }
   if (isCompleted) {
-    return <CheckCircle className="h-5 w-5 text-green-600" />
+    return <CheckCircle className="h-5 w-5 text-green" />
   }
   if (isActive) {
-    return <Clock className="h-5 w-5 text-blue-600" />
+    return <Clock className="h-5 w-5 text-blue" />
   }
   return <div className="h-5 w-5 rounded-full border-2 border-muted/30" />
 }
@@ -404,9 +404,9 @@ export default function ApplicationStatusTracker() {
                             <h3
                               className={`font-medium ${
                                 isActive
-                                  ? "text-blue-600"
+                                  ? "text-blue"
                                   : isCompleted || isRejected
-                                    ? "text-green-600"
+                                    ? "text-green"
                                     : "text-muted/60"
                               }`}
                             >

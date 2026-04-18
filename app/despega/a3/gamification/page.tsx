@@ -50,7 +50,7 @@ export default function GamificationPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900">Interview Mastery</h1>
+            <h1 className="text-4xl font-bold text-foreground">Interview Mastery</h1>
             <p className="text-muted/60 mt-2">Track your progress and unlock achievements</p>
           </div>
           <Link href="/despega/a3/dtc-shop">

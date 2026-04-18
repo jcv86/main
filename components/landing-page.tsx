@@ -10,7 +10,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple text-white">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative container mx-auto px-4 py-24">
           <div className="max-w-4xl mx-auto text-center">
@@ -27,7 +27,7 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="bg-white text-blue-600 hover:bg-blue-50 text-lg px-8 py-4"
+                className="bg-white text-blue hover:bg-blue-50 text-lg px-8 py-4"
                 onClick={() => (window.location.href = "/auth")}
               >
                 Comenzar Gratis
@@ -36,7 +36,7 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-4 bg-transparent"
+                className="border-white text-white hover:bg-white hover:text-blue text-lg px-8 py-4 bg-transparent"
                 onClick={() => (window.location.href = "/demo")}
               >
                 Ver Demo
@@ -50,7 +50,7 @@ export default function LandingPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-foreground mb-4">
               Todo lo que Necesitas para Crecer Profesionalmente
             </h2>
             <p className="text-xl text-muted/60 max-w-3xl mx-auto">
@@ -62,8 +62,8 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="text-center hover:shadow-lg transition-shadow">
               <CardHeader>
-                <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                  <Brain className="h-8 w-8 text-blue-600" />
+                <div className="mx-auto w-16 h-16 bg-blue/10 rounded-full flex items-center justify-center mb-4">
+                  <Brain className="h-8 w-8 text-blue" />
                 </div>
                 <CardTitle className="text-2xl">Evaluaciones Psicométricas</CardTitle>
               </CardHeader>
@@ -92,8 +92,8 @@ export default function LandingPage() {
 
             <Card className="text-center hover:shadow-lg transition-shadow">
               <CardHeader>
-                <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <BookOpen className="h-8 w-8 text-green-600" />
+                <div className="mx-auto w-16 h-16 bg-green/10 rounded-full flex items-center justify-center mb-4">
+                  <BookOpen className="h-8 w-8 text-green" />
                 </div>
                 <CardTitle className="text-2xl">Biblioteca Digital</CardTitle>
               </CardHeader>
@@ -111,7 +111,7 @@ export default function LandingPage() {
       <section className="py-20 bg-muted/5">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Historias de Éxito</h2>
+            <h2 className="text-4xl font-bold text-foreground mb-4">Historias de Éxito</h2>
             <p className="text-xl text-muted/60">
               Profesionales que han transformado sus carreras con nuestra plataforma
             </p>
@@ -195,7 +195,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Sobre Nosotros</h2>
+              <h2 className="text-4xl font-bold text-foreground mb-4">Sobre Nosotros</h2>
               <p className="text-xl text-muted/60">
                 Somos expertos en desarrollo profesional con base en Santiago de Chile
               </p>
@@ -203,7 +203,7 @@ export default function LandingPage() {
 
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Nuestra Misión</h3>
+                <h3 className="text-2xl font-bold text-foreground mb-6">Nuestra Misión</h3>
                 <p className="text-muted/60 mb-6 text-lg">
                   Democratizar el acceso al desarrollo profesional de calidad mundial, combinando la sabiduría de la
                   psicología organizacional con el poder de la inteligencia artificial.
@@ -214,7 +214,7 @@ export default function LandingPage() {
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-600">10,000+</div>
+                    <div className="text-3xl font-bold text-blue">10,000+</div>
                     <div className="text-muted/60">Profesionales Evaluados</div>
                   </div>
                   <div className="text-center">
@@ -240,7 +240,7 @@ export default function LandingPage() {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center">
-                      <TrendingUp className="h-6 w-6 text-green-500 mr-2" />
+                      <TrendingUp className="h-6 w-6 text-green/50 mr-2" />
                       Resultados Comprobados
                     </CardTitle>
                   </CardHeader>
@@ -262,7 +262,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Preguntas Frecuentes</h2>
+              <h2 className="text-4xl font-bold text-foreground mb-4">Preguntas Frecuentes</h2>
               <p className="text-xl text-muted/60">Resolvemos las dudas más comunes sobre nuestra plataforma</p>
             </div>
 
@@ -336,7 +336,7 @@ export default function LandingPage() {
       </section>
 
       {/* Company Culture & Careers Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple text-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">Únete a Nuestro Equipo en Santiago</h2>
@@ -362,7 +362,7 @@ export default function LandingPage() {
 
             <Button
               size="lg"
-              className="bg-white text-blue-600 hover:bg-blue-50 text-lg px-8 py-4"
+              className="bg-white text-blue hover:bg-blue-50 text-lg px-8 py-4"
               onClick={() => (window.location.href = "/careers")}
             >
               Ver Oportunidades de Trabajo
@@ -376,7 +376,7 @@ export default function LandingPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">¿Listo para Transformar tu Carrera?</h2>
+            <h2 className="text-4xl font-bold text-foreground mb-6">¿Listo para Transformar tu Carrera?</h2>
             <p className="text-xl text-muted/60 mb-8">
               Únete a miles de profesionales que ya están acelerando su crecimiento con nuestra plataforma de desarrollo
               profesional.
@@ -384,7 +384,7 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4"
+                className="bg-gradient-to-r from-blue-600 to-purple hover:from-blue-700 hover:to-purple text-lg px-8 py-4"
                 onClick={() => (window.location.href = "/auth")}
               >
                 Comenzar Evaluación Gratuita

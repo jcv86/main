@@ -92,7 +92,7 @@ export default function A3IntroPage() {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-yellow-50 dark:bg-yellow-950/30 rounded-[28px] border border-yellow-200 dark:border-yellow-800">
+                <div className="p-4 bg-yellow/5 dark:bg-yellow/30 rounded-[28px] border border-yellow/20 dark:border-yellow">
                   <div className="flex gap-3">
                     <div className="flex-shrink-0 w-8 h-8 bg-yellow-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
                     <div>
@@ -151,7 +151,7 @@ export default function A3IntroPage() {
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2">
-                <Zap className="w-6 h-6 text-yellow-600" />
+                <Zap className="w-6 h-6 text-yellow" />
                 Lo que Practicarás
               </CardTitle>
             </CardHeader>

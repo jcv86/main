@@ -227,7 +227,7 @@ export function ABTestResultsDashboard() {
                         <div
                           key={variant.version_id}
                           className={`p-4 rounded-[28px] border-2 ${
-                            isWinner ? "border-green-500 bg-green-50 dark:bg-green-950" : "border-border"
+                            isWinner ? "border-green bg-green-50 dark:bg-green-950" : "border-border"
                           }`}
                         >
                           <div className="flex items-center justify-between mb-3">

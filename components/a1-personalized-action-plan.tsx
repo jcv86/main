@@ -26,8 +26,8 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
       score: results.score_energia,
       icon: "⚡",
       color: "bg-blue-500",
-      lightColor: "bg-blue-100",
-      textColor: "text-blue-800",
+      lightColor: "bg-blue/10",
+      textColor: "text-blue",
       description: "Gestión de sueño, vitalidad y consistencia",
       recommendations: results.score_energia < 50
         ? ["Establecer hora de dormir fija", "Ejercicio matutino de 15 min", "Hidratación consciente"]
@@ -41,8 +41,8 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
       score: results.score_enfoque,
       icon: "🎯",
       color: "bg-green-500",
-      lightColor: "bg-green-100",
-      textColor: "text-green-800",
+      lightColor: "bg-green/10",
+      textColor: "text-green",
       description: "Concentración, productividad y priorización",
       recommendations: results.score_enfoque < 50
         ? ["Técnica Pomodoro básica", "Desactivar notificaciones", "Definir 3 tareas diarias"]
@@ -55,9 +55,9 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
       name: "Relaciones",
       score: results.score_relaciones,
       icon: "🤝",
-      color: "bg-orange-500",
-      lightColor: "bg-orange-100",
-      textColor: "text-orange-800",
+      color: "bg-orange/50",
+      lightColor: "bg-orange/10",
+      textColor: "text-orange",
       description: "Comunicación, vínculos y networking",
       recommendations: results.score_relaciones < 50
         ? ["Contactar a 1 persona importante semanal", "Practicar escucha activa", "Expresar gratitud regularmente"]
@@ -83,9 +83,9 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
   ]
 
   const getScoreLevel = (score: number) => {
-    if (score >= 80) return { label: "Avanzado", color: "text-green-600" }
-    if (score >= 60) return { label: "Intermedio", color: "text-blue-600" }
-    return { label: "Fundamental", color: "text-orange-600" }
+    if (score >= 80) return { label: "Avanzado", color: "text-green" }
+    if (score >= 60) return { label: "Intermedio", color: "text-blue" }
+    return { label: "Fundamental", color: "text-orange" }
   }
 
   const getPriorityOrder = () => {
@@ -171,9 +171,9 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
 
                   {/* Status Alert */}
                   {pilar.score < 50 && (
-                    <div className="bg-orange-50 border border-orange-200 rounded-[28px] p-3 flex gap-2">
-                      <AlertCircle className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
-                      <div className="text-sm text-orange-700">
+                    <div className="bg-orange/5 border border-orange/20 rounded-[28px] p-3 flex gap-2">
+                      <AlertCircle className="w-4 h-4 text-orange flex-shrink-0 mt-0.5" />
+                      <div className="text-sm text-orange">
                         Esta área tiene la mayor fricción. Podrías empezar aquí si quieres explorar.
                       </div>
                     </div>

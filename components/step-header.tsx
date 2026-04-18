@@ -13,15 +13,15 @@ interface StepHeaderProps {
 
 const pillarColors = {
   purple: "bg-purple-600 text-purple-600 border-purple-200 dark:border-purple-900/30",
-  blue: "bg-blue-600 text-blue-600 border-blue-200 dark:border-blue-900/30",
-  orange: "bg-orange-600 text-orange-600 border-orange-200 dark:border-orange-900/30",
+  blue: "bg-blue-600 text-blue border-blue-200 dark:border-blue-900/30",
+  orange: "bg-orange-600 text-orange border-orange/20 dark:border-orange-900/30",
   cyan: "bg-cyan-600 text-cyan-600 border-cyan-200 dark:border-cyan-900/30",
 }
 
 const pillarBgLight = {
   purple: "bg-purple-50 dark:bg-purple-950/30",
   blue: "bg-blue-50 dark:bg-blue-950/30",
-  orange: "bg-orange-50 dark:bg-orange-950/30",
+  orange: "bg-orange/5 dark:bg-orange-950/30",
   cyan: "bg-cyan-50 dark:bg-cyan-950/30",
 }
 

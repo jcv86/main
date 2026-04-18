@@ -218,10 +218,10 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
 
           {/* RACHA TAB */}
           <TabsContent value="racha" className="space-y-4">
-            <Card className="bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 border-orange-200 dark:border-orange-800">
+            <Card className="bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 border-orange/20 dark:border-orange-800">
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
-                  <Flame className="w-5 h-5 text-orange-500" />
+                  <Flame className="w-5 h-5 text-orange" />
                   Bonificación por Racha Diaria
                 </CardTitle>
               </CardHeader>
@@ -229,11 +229,11 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                 {streakBonuses.map((streak, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-between p-3 rounded-[28px] bg-white dark:bg-slate-900/50 border border-orange-200 dark:border-orange-800"
+                    className="flex items-center justify-between p-3 rounded-[28px] bg-white dark:bg-slate-900/50 border border-orange/20 dark:border-orange-800"
                   >
                     <div className="flex items-center gap-3">
                       <div className="text-center">
-                        <div className="text-2xl font-black text-orange-600">
+                        <div className="text-2xl font-black text-orange">
                           {streak.days}
                         </div>
                         <div className="text-xs text-slate-500 dark:text-slate-400">
@@ -254,7 +254,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                     </Badge>
                   </div>
                 ))}
-                <div className="mt-4 p-4 bg-orange-100 dark:bg-orange-900/30 border border-orange-300 dark:border-orange-700 rounded-lg text-sm text-orange-900 dark:text-orange-100">
+                <div className="mt-4 p-4 bg-orange/10 dark:bg-orange/30 border border-orange-300 dark:border-orange-700 rounded-lg text-sm text-orange-900 dark:text-orange/10">
                   <strong>💡 Tip:</strong> Cada día que visitas la plataforma suma a tu racha. ¡No la rompas para maximizar tus ganancias de XP!
                 </div>
               </CardContent>

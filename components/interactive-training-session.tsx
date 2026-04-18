@@ -162,7 +162,7 @@ export function InteractiveTrainingSession({
             </div>
 
             {/* Guía */}
-            <div className="bg-blue-950/30 p-6 rounded-[28px] border border-blue-500/20">
+            <div className="bg-blue-950/30 p-6 rounded-[28px] border border-blue/50/20">
               <h3 className="text-sm font-semibold text-blue-300 mb-3 flex items-center gap-2">
                 <span>💡 GUÍA PARA RESPONDER:</span>
               </h3>
@@ -264,7 +264,7 @@ export function InteractiveTrainingSession({
 
       {/* Paso 3: Revisión */}
       {step === 'review' && recordedVideo && (
-        <Card className="border-green-500/30 bg-gradient-to-br from-green-900/10 to-slate-900/10">
+        <Card className="border-green/30 bg-gradient-to-br from-green-900/10 to-slate-900/10">
           <CardHeader>
             <CardTitle className="text-green-300 flex items-center gap-2">
               <span>✓</span>
@@ -321,7 +321,7 @@ export function InteractiveTrainingSession({
             </Button>
 
             {sessionId && (
-              <Alert className="bg-green-950/20 border-green-500/30">
+              <Alert className="bg-green-950/20 border-green/30">
                 <AlertDescription className="text-green-300">
                   Sesión guardada: {sessionId}
                 </AlertDescription>

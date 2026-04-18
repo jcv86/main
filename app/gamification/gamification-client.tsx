@@ -169,18 +169,18 @@ export default function GamificationClient() {
     const colors = {
       daily: "bg-blue/50",
       weekly: "bg-purple/50",
-      monthly: "bg-orange-500",
+      monthly: "bg-orange/50",
     }
     return colors[type]
   }
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      tests: "bg-blue/10 text-blue-800",
-      lectura: "bg-green-100 text-green-800",
+      tests: "bg-blue/10 text-blue",
+      lectura: "bg-green/10 text-green",
       simulaciones: "bg-purple/10 text-purple",
-      metas: "bg-orange-100 text-orange-800",
-      engagement: "bg-red-100 text-red-800",
+      metas: "bg-orange/10 text-orange",
+      engagement: "bg-red/10 text-red-800",
     }
     return colors[category] || "bg-muted/10 text-gray-800"
   }
@@ -205,7 +205,7 @@ export default function GamificationClient() {
       <div className="container mx-auto p-6 max-w-7xl">
         <div className="mb-8">
           <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple/10 to-blue/10 dark:from-purple/30 dark:to-blue-900/30 rounded-full mb-4">
-            <p className="text-sm font-semibold text-purple dark:text-purple-300">Tu Progreso y Logros</p>
+            <p className="text-sm font-semibold text-purple dark:text-purple/30">Tu Progreso y Logros</p>
           </div>
           <h1 className="text-5xl font-bold bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">Gamificación DTC</h1>
           <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">
@@ -241,7 +241,7 @@ export default function GamificationClient() {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-green-100 rounded-lg">
+              <div className="p-2 bg-green/10 rounded-lg">
                 <Trophy className="w-5 h-5 text-green" />
               </div>
               <CardTitle className="text-lg">Logros</CardTitle>
@@ -277,8 +277,8 @@ export default function GamificationClient() {
         <Card>
           <CardHeader className="pb-3">
             <div className="flex items-center gap-2">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <Star className="w-5 h-5 text-orange-600" />
+              <div className="p-2 bg-orange/10 rounded-lg">
+                <Star className="w-5 h-5 text-orange" />
               </div>
               <CardTitle className="text-lg">Racha</CardTitle>
             </div>
@@ -390,7 +390,7 @@ export default function GamificationClient() {
           {/* Monthly Missions */}
           <div>
             <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <span className="p-1.5 bg-orange-100 rounded">🗓️</span>
+              <span className="p-1.5 bg-orange/10 rounded">🗓️</span>
               Misiones Mensuales
             </h3>
             <div className="grid gap-4">
@@ -417,7 +417,7 @@ export default function GamificationClient() {
                                 {mission.progress} / {mission.target}
                               </p>
                             </div>
-                            <div className="flex items-center gap-1 text-sm font-medium text-orange-600">
+                            <div className="flex items-center gap-1 text-sm font-medium text-orange">
                               <Zap className="w-4 h-4" />+{mission.xp_reward} XP
                             </div>
                           </div>

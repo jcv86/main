@@ -44,7 +44,7 @@ export function DailyCareerTip({ careerStage = "all" }: { careerStage?: string }
       <Card className="border-border bg-gradient-to-br from-purple-50 to-blue-50 dark:from-slate-800 dark:to-slate-700">
         <CardContent className="pt-6">
           <div className="flex items-center gap-3">
-            <Lightbulb className="h-5 w-5 animate-pulse text-purple-600 dark:text-purple-400" />
+            <Lightbulb className="h-5 w-5 animate-pulse text-purple-600 dark:text-purple/40" />
             <p className="text-sm text-muted-foreground dark:text-slate-400">Cargando consejo del día...</p>
           </div>
         </CardContent>
@@ -58,12 +58,12 @@ export function DailyCareerTip({ careerStage = "all" }: { careerStage?: string }
     <Card className="border-purple-200 dark:border-slate-700 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-slate-800 dark:to-slate-700">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-semibold text-purple-900 dark:text-purple-200 flex items-center gap-2">
-            <Lightbulb className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+          <CardTitle className="text-base font-semibold text-purple-900 dark:text-purple/20 flex items-center gap-2">
+            <Lightbulb className="h-5 w-5 text-purple-600 dark:text-purple/40" />
             Consejo del Día
           </CardTitle>
           <Button variant="ghost" size="sm" onClick={fetchTip} className="h-8 w-8 p-0">
-            <RefreshCw className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+            <RefreshCw className="h-4 w-4 text-purple-600 dark:text-purple/40" />
           </Button>
         </div>
       </CardHeader>

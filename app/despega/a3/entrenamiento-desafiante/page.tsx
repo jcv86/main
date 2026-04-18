@@ -310,7 +310,7 @@ export default function ChallensingTrainingPage() {
                           </Button>
                         )}
                       </div>
-                      {hasResponse && <p className="text-xs text-green-400 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />Respuesta grabada</p>}
+                      {hasResponse && <p className="text-xs text-green/40 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />Respuesta grabada</p>}
                     </div>
 
                     {/* Text Input */}
@@ -325,7 +325,7 @@ export default function ChallensingTrainingPage() {
                         placeholder="Escribe aquí tu respuesta detallada... (mínimo 50 caracteres)"
                         className="w-full h-24 bg-muted/80 text-white border border-muted/70 rounded-[28px] p-3 text-sm focus:border-purple/50 focus:outline-none resize-none"
                       />
-                      {textResponse && <p className="text-xs text-green-400 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />Respuesta escrita ({textResponse.length} caracteres)</p>}
+                      {textResponse && <p className="text-xs text-green/40 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />Respuesta escrita ({textResponse.length} caracteres)</p>}
                     </div>
 
                     {/* Validation Message */}
@@ -356,7 +356,7 @@ export default function ChallensingTrainingPage() {
                     </Button>
 
                     {evaluationError && (
-                      <div className="flex items-start gap-2 text-red-600 text-sm bg-red-950/40 border border-red-700/40 p-3 rounded-lg">
+                      <div className="flex items-start gap-2 text-red text-sm bg-red-950/40 border border-red-700/40 p-3 rounded-lg">
                         <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                         <span>{evaluationError}</span>
                       </div>
@@ -368,21 +368,21 @@ export default function ChallensingTrainingPage() {
                     <div className="bg-gradient-to-r from-purple/30 to-pink-900/30 border border-purple/50/30 rounded-[28px] p-4 space-y-3">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-semibold text-muted/30">Tu Puntuación</p>
-                        <div className="text-3xl font-bold text-purple-400">{evaluation.score}</div>
+                        <div className="text-3xl font-bold text-purple/40">{evaluation.score}</div>
                       </div>
                       <p className="text-sm text-muted/30">{evaluation.scoreExplanation}</p>
                     </div>
 
                     {/* Strengths */}
                     <div className="space-y-2">
-                      <p className="text-sm font-semibold text-green-400 flex items-center gap-2">
+                      <p className="text-sm font-semibold text-green/40 flex items-center gap-2">
                         <CheckCircle2 className="w-4 h-4" />
                         Fortalezas Identificadas
                       </p>
                       <ul className="space-y-1 text-sm text-muted/30">
                         {evaluation.strengths.map((s: string, i: number) => (
                           <li key={i} className="flex gap-2">
-                            <span className="text-green-400">•</span>
+                            <span className="text-green/40">•</span>
                             <span>{s}</span>
                           </li>
                         ))}
@@ -438,14 +438,14 @@ export default function ChallensingTrainingPage() {
               {/* Score Overview */}
               <div className="p-4 border-b border-muted/80 flex-shrink-0">
                 <h3 className="text-lg font-bold flex items-center gap-2 text-white mb-4">
-                  <BarChart3 className="w-5 h-5 text-purple-400" />
+                  <BarChart3 className="w-5 h-5 text-purple/40" />
                   Puntuación Ejecutiva
                 </h3>
                 <div className="space-y-4">
                   <div>
                     <p className="text-xs text-muted/40 mb-2">Promedio General</p>
                     <div className="flex items-end gap-2">
-                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green-400' : averageScore >= 60 ? 'text-yellow-400' : 'text-red-400'}`}>
+                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green/40' : averageScore >= 60 ? 'text-yellow-400' : 'text-red-400'}`}>
                         {averageScore}
                       </span>
                       <span className="text-xs text-muted/40 pb-2">/100</span>
@@ -454,7 +454,7 @@ export default function ChallensingTrainingPage() {
                   {currentScore !== undefined && (
                     <div className="pt-4 border-t border-muted/70">
                       <p className="text-xs text-muted/40 mb-2">Esta Pregunta</p>
-                      <span className="text-2xl font-bold text-purple-400">{currentScore}</span>
+                      <span className="text-2xl font-bold text-purple/40">{currentScore}</span>
                     </div>
                   )}
                 </div>
@@ -479,7 +479,7 @@ export default function ChallensingTrainingPage() {
                       idx === currentQuestion
                         ? 'bg-purple/30 border border-purple/50/50'
                         : completedQuestions.includes(idx)
-                        ? 'bg-green/20 border border-green-500/30 cursor-pointer hover:bg-green/30'
+                        ? 'bg-green/20 border border-green/30 cursor-pointer hover:bg-green/30'
                         : 'bg-muted/80/50 border border-muted/70/30'
                     }`}
                   >

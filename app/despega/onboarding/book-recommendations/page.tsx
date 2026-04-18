@@ -131,7 +131,7 @@ export default function BookRecommendationsPage() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl font-bold text-foreground mb-2">
             Tus Insights Personalizados
           </h1>
         </div>
@@ -183,14 +183,14 @@ export default function BookRecommendationsPage() {
                 <CardTitle className="text-lg">Tu Ruta de Desarrollo</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-muted">
                   Basado en tu perfil DISC y 120+ libros de desarrollo profesional.
                 </p>
                 <div className="bg-white p-3 rounded-[28px] border border-blue/30">
                   <p className="text-xs font-semibold text-indigo-700 mb-1">
                     📍 Enfoque Prioritario
                   </p>
-                  <p className="text-xs text-gray-700">
+                  <p className="text-xs text-muted">
                     Inteligencia emocional en tu estilo de liderazgo.
                   </p>
                 </div>
@@ -200,7 +200,7 @@ export default function BookRecommendationsPage() {
 
           {/* Right Column - 2 Books */}
           <div className="lg:col-span-2 space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">Tus 2 Libros Recomendados</h2>
+            <h2 className="text-2xl font-bold text-foreground">Tus 2 Libros Recomendados</h2>
             
             {books.length > 0 ? (
               <div className="grid gap-6">
@@ -220,7 +220,7 @@ export default function BookRecommendationsPage() {
                           className="object-cover h-full w-full"
                         />
                       ) : (
-                        <BookOpen className="h-16 w-16 text-purple-400" />
+                        <BookOpen className="h-16 w-16 text-purple/40" />
                       )}
                       <div className="absolute top-3 right-3 bg-purple text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
                         {index + 1}
@@ -230,7 +230,7 @@ export default function BookRecommendationsPage() {
                     {/* Book Info */}
                     <CardContent className="flex-1 p-6 flex flex-col justify-between">
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-2">
+                        <h3 className="text-lg font-bold text-foreground mb-1 line-clamp-2">
                           {book.title}
                         </h3>
                         <p className="text-sm text-purple font-semibold mb-3">
@@ -243,7 +243,7 @@ export default function BookRecommendationsPage() {
 
                         {book.key_takeaways && book.key_takeaways.length > 0 && (
                           <div className="space-y-1">
-                            <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                            <p className="text-xs font-semibold text-muted uppercase tracking-wide">
                               Puntos Clave
                             </p>
                             <ul className="space-y-1">

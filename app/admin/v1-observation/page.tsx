@@ -131,7 +131,7 @@ export default function V1ObservationDashboard() {
             {Object.entries(metrics.dropOffPoints).map(([point, rate]) => (
               <div key={point} className="flex items-center justify-between p-3 bg-muted/5 rounded">
                 <span className="font-medium">{point}</span>
-                <span className={`font-bold ${parseFloat(rate as string) < 30 ? 'text-red-600' : 'text-green'}`}>
+                <span className={`font-bold ${parseFloat(rate as string) < 30 ? 'text-red' : 'text-green'}`}>
                   {rate}
                 </span>
               </div>
@@ -170,7 +170,7 @@ export default function V1ObservationDashboard() {
             <div className="text-sm text-muted/60">Sesiones únicas</div>
           </div>
           <div className="p-4 bg-red/5 rounded text-center">
-            <div className="text-3xl font-bold text-red-600">{metrics.totalErrors}</div>
+            <div className="text-3xl font-bold text-red">{metrics.totalErrors}</div>
             <div className="text-sm text-muted/60">Errores detectados</div>
           </div>
           <div className="p-4 bg-yellow/5 rounded text-center">
@@ -203,7 +203,7 @@ export default function V1ObservationDashboard() {
             </div>
           )}
           {metrics.byStage.a3 === 0 && (
-            <div className="p-3 bg-yellow-50 text-yellow-700 rounded">
+            <div className="p-3 bg-yellow/5 text-yellow-700 rounded">
               ℹ️ Nadie ha llegado a A3 aún - Esperar más datos o revisar A2
             </div>
           )}

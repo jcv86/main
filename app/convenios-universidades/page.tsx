@@ -8,11 +8,11 @@ export const metadata: Metadata = {
 
 export default function UniversityPartnershipsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-muted/5 via-blue/5 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-muted/5 via-blue/5 to-blue/5">
       <div className="container mx-auto px-4 py-16 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-16">
-          <div className="inline-block px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full text-sm font-semibold mb-4">
+          <div className="inline-block px-4 py-2 bg-blue/10 text-indigo-700 rounded-full text-sm font-semibold mb-4">
             Propuesta de Alianzas Estratégicas
           </div>
           <h1 className="text-5xl font-bold text-muted/90 mb-6 text-balance">Convenios Universitarios</h1>
@@ -55,7 +55,7 @@ export default function UniversityPartnershipsPage() {
             </div>
 
             <div className="bg-white rounded-xl p-6">
-              <h3 className="text-xl font-bold text-orange-700 mb-3">Déficit en Habilidades Blandas</h3>
+              <h3 className="text-xl font-bold text-orange mb-3">Déficit en Habilidades Blandas</h3>
               <p className="text-muted/70 mb-2">
                 Integración <strong>limitada</strong> de soft skills en planes de estudio
               </p>
@@ -98,14 +98,14 @@ export default function UniversityPartnershipsPage() {
         </div>
 
         {/* La Solución DTC */}
-        <div className="bg-gradient-to-br from-blue/5 to-indigo-50 rounded-2xl shadow-lg p-8 mb-8 border-2 border-blue/10">
+        <div className="bg-gradient-to-br from-blue/5 to-blue/5 rounded-2xl shadow-lg p-8 mb-8 border-2 border-blue/10">
           <h2 className="text-3xl font-bold text-muted/90 mb-6">✨ Despega Tu Carrera: La Solución Integral</h2>
 
           <div className="space-y-6">
             {/* Cerebro */}
             <div className="bg-white rounded-xl p-6">
               <div className="flex items-start gap-4">
-                <div className="bg-indigo-100 rounded-lg p-3 shrink-0">
+                <div className="bg-blue/10 rounded-lg p-3 shrink-0">
                   <svg className="w-8 h-8 text-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path
                       strokeLinecap="round"
@@ -239,7 +239,7 @@ export default function UniversityPartnershipsPage() {
 
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white rounded-xl p-6">
-              <h3 className="text-xl font-bold text-green-700 mb-4">📈 Mejora en Rankings</h3>
+              <h3 className="text-xl font-bold text-green mb-4">📈 Mejora en Rankings</h3>
               <ul className="space-y-2 text-muted/70">
                 <li className="flex items-start gap-2">
                   <span className="text-green">✓</span>
@@ -549,7 +549,7 @@ export default function UniversityPartnershipsPage() {
 
           <div className="space-y-4">
             <div className="flex items-start gap-4">
-              <div className="bg-indigo-100 rounded-full w-12 h-12 flex items-center justify-center font-bold text-indigo-700 shrink-0">
+              <div className="bg-blue/10 rounded-full w-12 h-12 flex items-center justify-center font-bold text-indigo-700 shrink-0">
                 1
               </div>
               <div>
@@ -587,7 +587,7 @@ export default function UniversityPartnershipsPage() {
             </div>
 
             <div className="flex items-start gap-4">
-              <div className="bg-green-100 rounded-full w-12 h-12 flex items-center justify-center font-bold text-green-700 shrink-0">
+              <div className="bg-green/10 rounded-full w-12 h-12 flex items-center justify-center font-bold text-green shrink-0">
                 4
               </div>
               <div>
@@ -620,15 +620,15 @@ export default function UniversityPartnershipsPage() {
         </div>
 
         {/* Próximos Pasos */}
-        <div className="bg-gradient-to-br from-blue to-purple-600 rounded-2xl shadow-lg p-8 text-white mb-8">
+        <div className="bg-gradient-to-br from-blue to-purple rounded-2xl shadow-lg p-8 text-white mb-8">
           <h2 className="text-3xl font-bold mb-6">📞 Próximos Pasos</h2>
 
           <div className="space-y-4 mb-8">
-            <p className="text-lg text-indigo-100">
+            <p className="text-lg text-blue/10">
               Estamos listos para agendar una reunión de presentación ejecutiva con autoridades de su institución.
             </p>
-            <p className="text-lg text-indigo-100">Durante la reunión, profundizaremos en:</p>
-            <ul className="space-y-2 text-indigo-100 ml-6">
+            <p className="text-lg text-blue/10">Durante la reunión, profundizaremos en:</p>
+            <ul className="space-y-2 text-blue/10 ml-6">
               <li>• Demo en vivo de la plataforma completa</li>
               <li>• Casos de uso específicos para su universidad</li>
               <li>• Propuesta de valor cuantificada (ROI esperado)</li>
@@ -646,7 +646,7 @@ export default function UniversityPartnershipsPage() {
               <p>
                 <strong>Travis Comber</strong> - CTO & Lead Developer
               </p>
-              <p className="text-indigo-100 mt-4">
+              <p className="text-blue/10 mt-4">
                 Para agendar reunión o solicitar más información, contáctenos a través de la plataforma.
               </p>
             </div>

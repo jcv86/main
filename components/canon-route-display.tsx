@@ -53,9 +53,9 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
-      case 'easy': return 'bg-green-100 text-green-800'
-      case 'medium': return 'bg-yellow-100 text-yellow-800'
-      case 'hard': return 'bg-red-100 text-red-800'
+      case 'easy': return 'bg-green/10 text-green'
+      case 'medium': return 'bg-yellow/10 text-yellow'
+      case 'hard': return 'bg-red/10 text-red-800'
       default: return 'bg-slate-100 text-slate-800'
     }
   }
@@ -82,7 +82,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
             <Card key={phase} className="bg-slate-800 border-slate-700">
               <CardContent className="pt-6">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-blue-400 mb-2">{phaseMissions.length}</div>
+                  <div className="text-3xl font-bold text-blue/40 mb-2">{phaseMissions.length}</div>
                   <p className="text-sm text-slate-400">Misiones Día {phase}</p>
                   <div className="mt-3 text-2xl">
                     {phase === '30' ? '🎯' : phase === '60' ? '🔥' : '🏆'}
@@ -157,23 +157,23 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
                   <CardContent className="border-t border-slate-700 pt-4">
                     <div className="space-y-4 bg-slate-900 rounded-[28px] p-4">
                       <div>
-                        <h4 className="text-sm font-semibold text-blue-400 mb-2">¿Por qué esta misión?</h4>
+                        <h4 className="text-sm font-semibold text-blue/40 mb-2">¿Por qué esta misión?</h4>
                         <p className="text-sm text-slate-300">
                           Generada por la regla: <span className="font-semibold text-yellow-400">{mission.sourceRule}</span>
                         </p>
                       </div>
 
                       <div className="space-y-3">
-                        <h4 className="text-sm font-semibold text-blue-400">Tus respuestas que la generaron:</h4>
+                        <h4 className="text-sm font-semibold text-blue/40">Tus respuestas que la generaron:</h4>
                         {mission.sourceResponses.map((response, idx) => (
-                          <div key={idx} className="bg-slate-800 rounded p-3 border-l-4 border-blue-500">
+                          <div key={idx} className="bg-slate-800 rounded p-3 border-l-4 border-blue/50">
                             <p className="text-xs text-slate-400 mb-1">Tu respuesta a:</p>
                             <p className="text-sm text-white font-medium mb-2">{response.questionText}</p>
                             <div className="bg-slate-700 rounded p-2 mb-2">
                               <p className="text-sm text-slate-200 italic">"{response.userAnswer}"</p>
                             </div>
                             <p className="text-xs text-slate-300">
-                              <span className="text-green-400">→</span> {response.ruleLogic}
+                              <span className="text-green/40">→</span> {response.ruleLogic}
                             </p>
                           </div>
                         ))}
@@ -198,17 +198,17 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
             <div>
               <div className="flex justify-between mb-2">
                 <span className="text-sm font-medium text-slate-300">Misiones totales</span>
-                <span className="text-sm font-medium text-blue-400">{missions.length}</span>
+                <span className="text-sm font-medium text-blue/40">{missions.length}</span>
               </div>
               <Progress value={(missions.filter(m => m.phase === '30').length / missions.length) * 100} className="h-2" />
             </div>
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
-                <p className="text-2xl font-bold text-blue-400">{missionsByPhase['30'].length}</p>
+                <p className="text-2xl font-bold text-blue/40">{missionsByPhase['30'].length}</p>
                 <p className="text-xs text-slate-400">Días 1-30</p>
               </div>
               <div>
-                <p className="text-2xl font-bold text-purple-400">{missionsByPhase['60'].length}</p>
+                <p className="text-2xl font-bold text-purple/40">{missionsByPhase['60'].length}</p>
                 <p className="text-xs text-slate-400">Días 31-60</p>
               </div>
               <div>

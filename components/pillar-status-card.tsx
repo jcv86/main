@@ -87,7 +87,7 @@ export function PillarStatusCard({
       {results && (
         <div className="mt-4 ml-16 p-3 bg-white/50 dark:bg-slate-900/50 rounded-[28px] border border-slate-200 dark:border-slate-800">
           <p className="text-sm font-semibold text-foreground mb-1">Resultado:</p>
-          <p className="text-lg font-bold text-blue-600">{results.dimension}</p>
+          <p className="text-lg font-bold text-blue">{results.dimension}</p>
           <p className="text-xs text-foreground/70">Puntuación: {results.score}%</p>
         </div>
       )}

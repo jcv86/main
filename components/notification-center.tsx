@@ -88,7 +88,7 @@ export function NotificationCenter() {
   const getMilestoneIcon = (type?: string) => {
     switch (type) {
       case 'a1_completed':
-        return <CheckCircle className="w-5 h-5 text-green-500" />
+        return <CheckCircle className="w-5 h-5 text-green/50" />
       case 'achievement_unlock':
         return <Zap className="w-5 h-5 text-orange" />
       default:
@@ -101,7 +101,7 @@ export function NotificationCenter() {
       case 'a1_completed':
         return 'bg-green-50 border-green-200'
       case 'achievement_unlock':
-        return 'bg-yellow-50 border-yellow-200'
+        return 'bg-yellow/5 border-yellow/20'
       default:
         return 'bg-blue-50 border-blue-200'
     }

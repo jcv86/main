@@ -176,7 +176,7 @@ export default function DocumentsPage() {
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center gap-3 mb-3">
             <Brain className="w-10 h-10 text-blue" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue to-purple-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue to-purple bg-clip-text text-transparent">
               Cerebro de Conocimiento
             </h1>
           </div>
@@ -374,7 +374,7 @@ export default function DocumentsPage() {
                             className={`max-w-[80%] p-4 rounded-lg shadow-sm ${
                               msg.role === "user"
                                 ? "bg-gradient-to-r from-blue/50 to-blue text-white"
-                                : "bg-white border border-muted/20 text-gray-900"
+                                : "bg-white border border-muted/20 text-foreground"
                             }`}
                           >
                             <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.content}</p>

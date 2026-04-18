@@ -49,7 +49,7 @@ export default function LeaderboardPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple/10 to-yellow-100 dark:from-purple/30 dark:to-yellow-900/30 rounded-full mb-4">
-            <p className="text-sm font-semibold text-purple dark:text-purple-300">Compite y Crece</p>
+            <p className="text-sm font-semibold text-purple dark:text-purple/30">Compite y Crece</p>
           </div>
           <div className="flex items-center gap-3 mb-4">
             <Trophy className="h-10 w-10 text-orange" />
@@ -81,7 +81,7 @@ export default function LeaderboardPage() {
               {stats?.topUsers && stats.topUsers.length > 0 ? (
                 <div className="space-y-2">
                   {stats.topUsers.slice(0, 20).map((user, index) => (
-                    <Card key={index} className={index < 3 ? 'border-yellow-200 bg-yellow-50/30 dark:bg-yellow-950/20' : ''}>
+                    <Card key={index} className={index < 3 ? 'border-yellow/20 bg-yellow/5/30 dark:bg-yellow/20' : ''}>
                       <CardContent className="flex items-center justify-between p-4">
                         <div className="flex items-center gap-4 flex-1">
                           <div className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg

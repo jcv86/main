@@ -310,7 +310,7 @@ export default function RIASECTest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Despega Rumbo</h2>
+                <h2 className="text-2xl font-bold text-foreground">Despega Rumbo</h2>
                 <p className="text-muted/60">
                   Question {currentQuestion + 1} of {riasecQuestions.length}
                 </p>
@@ -434,15 +434,15 @@ export default function RIASECTest() {
               </div>
               <div className="p-3 bg-green/5 rounded-lg">
                 <h4 className="font-semibold text-green-900 mb-1">Social (S)</h4>
-                <p className="text-green-700">Helping, teaching, and serving others</p>
+                <p className="text-green">Helping, teaching, and serving others</p>
               </div>
-              <div className="p-3 bg-orange-50 rounded-lg">
+              <div className="p-3 bg-orange/5 rounded-lg">
                 <h4 className="font-semibold text-orange-900 mb-1">Emprendedor (E)</h4>
-                <p className="text-orange-700">Leading, persuading, and managing others</p>
+                <p className="text-orange">Leading, persuading, and managing others</p>
               </div>
               <div className="p-3 bg-muted/5 rounded-lg">
-                <h4 className="font-semibold text-gray-900 mb-1">Convencional (C)</h4>
-                <p className="text-gray-700">Organizing, data management, and detail work</p>
+                <h4 className="font-semibold text-foreground mb-1">Convencional (C)</h4>
+                <p className="text-muted">Organizing, data management, and detail work</p>
               </div>
             </div>
           </CardContent>

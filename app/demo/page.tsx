@@ -122,7 +122,7 @@ export default function DemoPage() {
 
             <Button 
               onClick={() => setStep('questions')}
-              className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white text-lg px-8 py-6"
+              className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white text-lg px-8 py-6"
             >
               Comenzar Demo
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -197,7 +197,7 @@ export default function DemoPage() {
             <Button 
               onClick={() => setStep('results')}
               disabled={!allAnswered}
-              className="w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white text-lg py-6"
+              className="w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white text-lg py-6"
             >
               Ver Mi Perfil
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -265,7 +265,7 @@ export default function DemoPage() {
 
                 <div className="border-t border-muted/20 dark:border-muted/80 pt-4 space-y-2">
                   <Link href="/auth/signin">
-                    <Button className="w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white py-6 text-lg">
+                    <Button className="w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white py-6 text-lg">
                       Crear Mi Cuenta Gratuita
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>

@@ -357,7 +357,7 @@ export function GestureEnhancedTestInterface({
                   onClick={() => handleAnswerSelection(option.id)}
                   className={`w-full p-4 text-left rounded-[28px] border-2 transition-all touch-manipulation ${
                     answers[currentQuestion.id] === option.id
-                      ? "border-blue-500 bg-blue-50 text-blue-900"
+                      ? "border-blue/50 bg-blue-50 text-blue-900"
                       : "border-muted/20 bg-white hover:border-muted/30 hover:bg-muted/5"
                   }`}
                   style={{ minHeight: "60px" }} // Touch-friendly size
@@ -365,7 +365,7 @@ export function GestureEnhancedTestInterface({
                   <div className="flex items-center gap-3">
                     <div
                       className={`w-4 h-4 rounded-full border-2 ${
-                        answers[currentQuestion.id] === option.id ? "border-blue-500 bg-blue-500" : "border-muted/30"
+                        answers[currentQuestion.id] === option.id ? "border-blue/50 bg-blue-500" : "border-muted/30"
                       }`}
                     >
                       {answers[currentQuestion.id] === option.id && (
@@ -427,9 +427,9 @@ export function GestureEnhancedTestInterface({
                       key={index}
                       className={`${
                         log.includes("detected")
-                          ? "text-green-400"
+                          ? "text-green/40"
                           : log.includes("zoom")
-                            ? "text-blue-400"
+                            ? "text-blue/40"
                             : log.includes("swipe")
                               ? "text-yellow-400"
                               : "text-muted/30"

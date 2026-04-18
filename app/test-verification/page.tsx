@@ -667,7 +667,7 @@ export default function TestVerificationSystem() {
     <div className="min-h-screen bg-muted/5 p-2 sm:p-4">
       <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         {/* Header - Mobile Optimized */}
-        <Card className="border-blue/20 bg-gradient-to-r from-blue/5 to-indigo-50">
+        <Card className="border-blue/20 bg-gradient-to-r from-blue/5 to-blue/5">
           <CardHeader className="pb-3 sm:pb-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex items-center gap-3">
@@ -719,7 +719,7 @@ export default function TestVerificationSystem() {
                 <p className="text-xs sm:text-sm text-muted/60">Passed</p>
               </div>
               <div className="text-center p-2 sm:p-3 bg-white rounded-lg border">
-                <div className="flex items-center justify-center gap-1 sm:gap-2 text-red-600 mb-1">
+                <div className="flex items-center justify-center gap-1 sm:gap-2 text-red mb-1">
                   <XCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span className="text-lg sm:text-2xl font-bold">{failedTests}</span>
                 </div>
@@ -795,7 +795,7 @@ export default function TestVerificationSystem() {
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
           {/* Test Results - Mobile First */}
           <div className="flex-1 space-y-3 sm:space-y-4">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900">Test Results</h3>
+            <h3 className="text-base sm:text-lg font-semibold text-foreground">Test Results</h3>
             <div className="grid gap-3 sm:gap-4">
               {testFlows.map((testFlow) => {
                 const IconComponent = testFlow.icon
@@ -820,9 +820,9 @@ export default function TestVerificationSystem() {
                           <div
                             className={`p-1.5 sm:p-2 rounded-lg ${
                               testFlow.overallStatus === "passed"
-                                ? "bg-green-100"
+                                ? "bg-green/10"
                                 : testFlow.overallStatus === "failed"
-                                  ? "bg-red-100"
+                                  ? "bg-red/10"
                                   : testFlow.overallStatus === "running"
                                     ? "bg-blue/10"
                                     : "bg-muted/10"
@@ -859,7 +859,7 @@ export default function TestVerificationSystem() {
                               <p className="text-xs text-muted/60 truncate max-w-20 sm:max-w-none">{check.details}</p>
                             )}
                             {check.error && (
-                              <p className="text-xs text-red-600 flex items-center gap-1">
+                              <p className="text-xs text-red flex items-center gap-1">
                                 <AlertTriangle className="h-3 w-3 flex-shrink-0" />
                                 <span className="truncate max-w-16 sm:max-w-none">{check.error}</span>
                               </p>
@@ -908,7 +908,7 @@ export default function TestVerificationSystem() {
 
           {/* Execution Log - Mobile Optimized */}
           <div className="lg:w-96 space-y-3 sm:space-y-4">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900">Execution Log</h3>
+            <h3 className="text-base sm:text-lg font-semibold text-foreground">Execution Log</h3>
             <Card className="h-64 sm:h-80 lg:h-[600px]">
               <CardHeader className="pb-2 sm:pb-3">
                 <CardTitle className="text-sm sm:text-base flex items-center gap-2">
@@ -927,7 +927,7 @@ export default function TestVerificationSystem() {
                           key={index}
                           className={`break-words ${
                             log.includes("✅")
-                              ? "text-green-400"
+                              ? "text-green/40"
                               : log.includes("❌") || log.includes("💥")
                                 ? "text-red-400"
                                 : log.includes("🚀") || log.includes("🎉")
@@ -950,7 +950,7 @@ export default function TestVerificationSystem() {
 
         {/* Summary Results - Mobile Optimized */}
         {!isRunning && (passedTests > 0 || failedTests > 0) && (
-          <Card className={failedTests === 0 ? "border-green/20 bg-green/5" : "border-yellow-200 bg-yellow-50"}>
+          <Card className={failedTests === 0 ? "border-green/20 bg-green/5" : "border-yellow/20 bg-yellow/5"}>
             <CardContent className="p-4 sm:p-6">
               <div className="text-center space-y-3 sm:space-y-4">
                 {failedTests === 0 ? (
@@ -960,31 +960,31 @@ export default function TestVerificationSystem() {
                       <h3 className="text-xl sm:text-2xl font-bold text-green-900 mb-2">
                         🎉 All {isMobile ? "Mobile" : "Desktop"} Tests Passed!
                       </h3>
-                      <p className="text-green-700 mb-4 text-sm sm:text-base">
+                      <p className="text-green mb-4 text-sm sm:text-base">
                         All {passedTests} personality tests have been verified successfully on{" "}
                         {isMobile ? "mobile devices" : "desktop browsers"}. Navigation flows, question progression,
                         validation, completion, and results generation are all working correctly.
                       </p>
                       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4 text-xs sm:text-sm">
-                        <div className="bg-green-100 p-2 sm:p-3 rounded-lg">
+                        <div className="bg-green/10 p-2 sm:p-3 rounded-lg">
                           <div className="font-semibold text-green-900">Navigation</div>
-                          <div className="text-green-700">✅ {isMobile ? "Touch-friendly" : "Mouse-friendly"}</div>
+                          <div className="text-green">✅ {isMobile ? "Touch-friendly" : "Mouse-friendly"}</div>
                         </div>
-                        <div className="bg-green-100 p-2 sm:p-3 rounded-lg">
+                        <div className="bg-green/10 p-2 sm:p-3 rounded-lg">
                           <div className="font-semibold text-green-900">Questions</div>
-                          <div className="text-green-700">✅ {isMobile ? "Mobile UI" : "Desktop UI"}</div>
+                          <div className="text-green">✅ {isMobile ? "Mobile UI" : "Desktop UI"}</div>
                         </div>
-                        <div className="bg-green-100 p-2 sm:p-3 rounded-lg">
+                        <div className="bg-green/10 p-2 sm:p-3 rounded-lg">
                           <div className="font-semibold text-green-900">Validation</div>
-                          <div className="text-green-700">✅ {isMobile ? "Touch input" : "Keyboard input"}</div>
+                          <div className="text-green">✅ {isMobile ? "Touch input" : "Keyboard input"}</div>
                         </div>
-                        <div className="bg-green-100 p-2 sm:p-3 rounded-lg">
+                        <div className="bg-green/10 p-2 sm:p-3 rounded-lg">
                           <div className="font-semibold text-green-900">Completion</div>
-                          <div className="text-green-700">✅ {isMobile ? "Mobile network" : "Fast network"}</div>
+                          <div className="text-green">✅ {isMobile ? "Mobile network" : "Fast network"}</div>
                         </div>
-                        <div className="bg-green-100 p-2 sm:p-3 rounded-lg col-span-2 sm:col-span-1">
+                        <div className="bg-green/10 p-2 sm:p-3 rounded-lg col-span-2 sm:col-span-1">
                           <div className="font-semibold text-green-900">Results</div>
-                          <div className="text-green-700">✅ {isMobile ? "Mobile display" : "Desktop display"}</div>
+                          <div className="text-green">✅ {isMobile ? "Mobile display" : "Desktop display"}</div>
                         </div>
                       </div>
                     </div>
@@ -993,7 +993,7 @@ export default function TestVerificationSystem() {
                   <>
                     <AlertTriangle className="h-12 w-12 sm:h-16 sm:w-16 text-orange mx-auto" />
                     <div>
-                      <h3 className="text-xl sm:text-2xl font-bold text-yellow-900 mb-2">Issues Detected</h3>
+                      <h3 className="text-xl sm:text-2xl font-bold text-yellow mb-2">Issues Detected</h3>
                       <p className="text-yellow-700 mb-4 text-sm sm:text-base">
                         {failedTests} test(s) failed verification on {isMobile ? "mobile" : "desktop"}. {passedTests}{" "}
                         test(s) passed successfully. Please review the error details above and fix the identified

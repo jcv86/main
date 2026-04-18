@@ -31,10 +31,10 @@ export default function ApiConfigPage() {
             </AlertDescription>
           </Alert>
         ) : (
-          <Alert className="border-green-500 bg-green/5">
+          <Alert className="border-green bg-green/5">
             <CheckCircle2 className="h-4 w-4 text-green" />
-            <AlertTitle className="text-green-800">Sistema Configurado Correctamente</AlertTitle>
-            <AlertDescription className="text-green-700">
+            <AlertTitle className="text-green">Sistema Configurado Correctamente</AlertTitle>
+            <AlertDescription className="text-green">
               Todas las variables de entorno necesarias están configuradas y listas para usar.
             </AlertDescription>
           </Alert>

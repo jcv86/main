@@ -17,7 +17,7 @@ const MODULOS_ATERRIZAJE = [
     icon: FileText,
     color: "bg-blue/50",
     lightColor: "bg-blue/10",
-    textColor: "text-blue-800",
+    textColor: "text-blue",
     contenido: [
       "Estructura óptima de CV",
       "Palabras clave por industria",
@@ -46,8 +46,8 @@ const MODULOS_ATERRIZAJE = [
     description: "Domina cualquier entrevista",
     icon: Users,
     color: "bg-green/50",
-    lightColor: "bg-green-100",
-    textColor: "text-green-800",
+    lightColor: "bg-green/10",
+    textColor: "text-green",
     contenido: [
       "Método STAR",
       "Preguntas difíciles",
@@ -116,7 +116,7 @@ export default function AterrizajePage() {
             Volver al Dashboard
           </Link>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-[28px] bg-orange-100 flex items-center justify-center text-2xl">
+            <div className="w-12 h-12 rounded-[28px] bg-orange/10 flex items-center justify-center text-2xl">
               🎯
             </div>
             <div>

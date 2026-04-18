@@ -126,15 +126,15 @@ export default function AdminTestsPage() {
 
   const getCategoryColor = (category) => {
     const colors = {
-      'Core': 'bg-blue/10 text-blue-800 dark:bg-blue dark:text-blue/20',
-      'Backend': 'bg-purple/10 text-purple dark:bg-purple dark:text-purple-200',
-      'AI': 'bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200',
-      'UX': 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
-      'Mobile': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
-      'Analytics': 'bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200',
-      'Performance': 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
-      'Design': 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900 dark:text-cyan-200',
-      'Auth': 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200'
+      'Core': 'bg-blue/10 text-blue dark:bg-blue dark:text-blue/20',
+      'Backend': 'bg-purple/10 text-purple dark:bg-purple dark:text-purple/20',
+      'AI': 'bg-red/10 text-red dark:bg-red dark:text-red/20',
+      'UX': 'bg-green/10 text-green dark:bg-green dark:text-green-200',
+      'Mobile': 'bg-yellow/10 text-yellow dark:bg-yellow dark:text-yellow/20',
+      'Analytics': 'bg-blue/10 text-blue dark:bg-blue dark:text-blue/20',
+      'Performance': 'bg-red/10 text-red-800 dark:bg-red dark:text-red/20',
+      'Design': 'bg-cyan/10 text-cyan dark:bg-cyan dark:text-cyan/20',
+      'Auth': 'bg-orange/10 text-orange dark:bg-orange dark:text-orange-200'
     }
     return colors[category] || 'bg-muted/10 text-muted/80'
   }
@@ -149,12 +149,12 @@ export default function AdminTestsPage() {
         </div>
 
         {/* Access Notice */}
-        <Card className="mb-8 border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-950/20">
+        <Card className="mb-8 border-yellow/20 dark:border-yellow bg-yellow/5 dark:bg-yellow/20">
           <CardContent className="flex gap-3 pt-6">
-            <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-orange flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-yellow dark:text-orange flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="font-semibold text-yellow-900 dark:text-yellow-100">Admin-Only Dashboard</h3>
-              <p className="text-sm text-yellow-800 dark:text-yellow-200">This page consolidates internal testing & debugging tools. Not visible to regular users.</p>
+              <h3 className="font-semibold text-yellow dark:text-yellow/10">Admin-Only Dashboard</h3>
+              <p className="text-sm text-yellow dark:text-yellow/20">This page consolidates internal testing & debugging tools. Not visible to regular users.</p>
             </div>
           </CardContent>
         </Card>
@@ -205,7 +205,7 @@ export default function AdminTestsPage() {
                     <CardTitle className="text-lg">{test.name}</CardTitle>
                     <CardDescription className="mt-1">{test.path}</CardDescription>
                   </div>
-                  <CheckCircle2 className="w-5 h-5 text-green dark:text-green-400 flex-shrink-0 mt-1" />
+                  <CheckCircle2 className="w-5 h-5 text-green dark:text-green/40 flex-shrink-0 mt-1" />
                 </div>
               </CardHeader>
 
@@ -222,7 +222,7 @@ export default function AdminTestsPage() {
 
                 {/* Action Button */}
                 <Link href={test.path} className="block">
-                  <Button className="w-full bg-blue hover:bg-blue dark:bg-blue dark:hover:bg-blue-800 text-white">
+                  <Button className="w-full bg-blue hover:bg-blue dark:bg-blue dark:hover:bg-blue text-white">
                     <Beaker className="w-4 h-4 mr-2" />
                     Run Test
                   </Button>
@@ -270,7 +270,7 @@ export default function AdminTestsPage() {
               <CardTitle className="text-sm font-medium">Status</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="text-3xl font-bold text-green dark:text-green-400">100%</div>
+              <div className="text-3xl font-bold text-green dark:text-green/40">100%</div>
               <p className="text-xs text-foreground/50 mt-1">Tests operational</p>
             </CardContent>
           </Card>

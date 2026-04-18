@@ -146,11 +146,11 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
   const getDeviceColor = () => {
     switch (deviceInfo.type) {
       case "mobile":
-        return "bg-blue-100 text-blue-700 border-blue-200"
+        return "bg-blue/10 text-blue border-blue-200"
       case "tablet":
         return "bg-purple-100 text-purple-700 border-purple-200"
       default:
-        return "bg-green-100 text-green-700 border-green-200"
+        return "bg-green/10 text-green border-green-200"
     }
   }
 
@@ -320,13 +320,13 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
         <div className="grid grid-cols-3 gap-2 text-xs">
           <div className="text-center p-2 bg-blue-50 rounded">
             <div className="font-semibold text-blue-900">Touch Latency</div>
-            <div className="text-blue-700">
+            <div className="text-blue">
               {deviceInfo.touchSupport ? (deviceInfo.type === "mobile" ? "~10ms" : "~15ms") : "N/A"}
             </div>
           </div>
           <div className="text-center p-2 bg-green-50 rounded">
             <div className="font-semibold text-green-900">Gesture Accuracy</div>
-            <div className="text-green-700">
+            <div className="text-green">
               {deviceInfo.touchSupport ? (deviceInfo.maxTouchPoints >= 5 ? "High" : "Medium") : "Low"}
             </div>
           </div>

@@ -259,9 +259,9 @@ export default function DISCResultsPage() {
 
   const getContentTag = (priority: "now" | "next" | "later") => {
     const tags = {
-      now: { label: "FOCO ACTUAL", color: "bg-red-100 text-red-800 border-red-300" },
+      now: { label: "FOCO ACTUAL", color: "bg-red/10 text-red-800 border-red-300" },
       next: { label: "PRÓXIMA MISIÓN", color: "bg-amber-100 text-amber-800 border-amber-300" },
-      later: { label: "PARA CUANDO QUIERAS", color: "bg-blue/10 text-blue-800 border-blue/30" },
+      later: { label: "PARA CUANDO QUIERAS", color: "bg-blue/10 text-blue border-blue/30" },
     }
     const tag = tags[priority]
     return (
@@ -559,7 +559,7 @@ export default function DISCResultsPage() {
               </div>
 
               {/* Cómo Llegas */}
-              <div className="p-4 bg-white dark:bg-background rounded-lg border-l-4 border-green-500">
+              <div className="p-4 bg-white dark:bg-background rounded-lg border-l-4 border-green">
                 <h4 className="font-semibold text-lg mb-2">Cómo Llegas</h4>
                 <p className="text-sm text-muted-foreground mb-3">El puente práctico</p>
                 <ul className="text-xs space-y-1">
@@ -754,7 +754,7 @@ export default function DISCResultsPage() {
                     <Card>
                       <CardContent className="pt-4">
                         <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 flex items-center justify-center font-bold text-green-700">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green/10 flex items-center justify-center font-bold text-green">
                             3
                           </div>
                           <div>
@@ -785,7 +785,7 @@ export default function DISCResultsPage() {
                     <Card>
                       <CardContent className="pt-4">
                         <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center font-bold text-yellow-700">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-yellow/10 flex items-center justify-center font-bold text-yellow-700">
                             4
                           </div>
                           <div>
@@ -808,7 +808,7 @@ export default function DISCResultsPage() {
                     <Card>
                       <CardContent className="pt-4">
                         <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-100 flex items-center justify-center font-bold text-red">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red/10 flex items-center justify-center font-bold text-red">
                             5
                           </div>
                           <div>
@@ -833,7 +833,7 @@ export default function DISCResultsPage() {
                 {/* Mapa de impacto */}
                 <div>
                   <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <Target className="h-5 w-5 text-orange-600" />
+                    <Target className="h-5 w-5 text-orange" />
                     Mapa de Impacto: Cómo tu estilo afecta hoy
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
@@ -869,7 +869,7 @@ export default function DISCResultsPage() {
 
                     <Card className="border-l-4 border-l-green-500">
                       <CardContent className="pt-4">
-                        <h4 className="font-semibold text-green-700 mb-2">Proyectos/Decisiones</h4>
+                        <h4 className="font-semibold text-green mb-2">Proyectos/Decisiones</h4>
                         <p className="text-sm text-muted/60">
                           {discResult.d_score > 70
                             ? "Inicias muchos proyectos con energía, pero necesitas trabajar en la paciencia y el refinamiento."
@@ -885,15 +885,15 @@ export default function DISCResultsPage() {
                 </div>
 
                 {/* Tres movimientos clave */}
-                <div className="bg-gradient-to-r from-orange/5 to-red-50 p-6 rounded-lg border-l-4 border-orange-500">
+                <div className="bg-gradient-to-r from-orange/5 to-red-50 p-6 rounded-lg border-l-4 border-orange">
                   <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-orange-600" />
+                    <TrendingUp className="h-5 w-5 text-orange" />
                     Tres Movimientos Clave para los próximos 90 días
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div>
-                      <div className="text-sm font-semibold text-orange-700 mb-1">1. Cambio Personal</div>
-                      <p className="text-sm text-gray-700">
+                      <div className="text-sm font-semibold text-orange mb-1">1. Cambio Personal</div>
+                      <p className="text-sm text-muted">
                         {discResult.d_score > 70
                           ? "Practica pausar 5 segundos antes de responder en situaciones tensas."
                           : discResult.i_score > 70
@@ -904,8 +904,8 @@ export default function DISCResultsPage() {
                       </p>
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-orange-700 mb-1">2. Cambio Relacional</div>
-                      <p className="text-sm text-gray-700">
+                      <div className="text-sm font-semibold text-orange mb-1">2. Cambio Relacional</div>
+                      <p className="text-sm text-muted">
                         {discResult.d_score > 70
                           ? "Pregunta 'Qué opinas tú?' antes de dar tu opinión en conversaciones importantes."
                           : discResult.i_score > 70
@@ -916,8 +916,8 @@ export default function DISCResultsPage() {
                       </p>
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-orange-700 mb-1">3. Cambio Laboral</div>
-                      <p className="text-sm text-gray-700">
+                      <div className="text-sm font-semibold text-orange mb-1">3. Cambio Laboral</div>
+                      <p className="text-sm text-muted">
                         {discResult.d_score > 70
                           ? "Delega 1 tarea importante sin micro-gestionar el proceso."
                           : discResult.i_score > 70
@@ -942,11 +942,11 @@ export default function DISCResultsPage() {
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="p-4 bg-red/5 rounded-lg text-center">
-                    <div className="text-3xl font-bold text-red-600">{discResult.d_score}%</div>
+                    <div className="text-3xl font-bold text-red">{discResult.d_score}%</div>
                     <div className="font-semibold mt-1">Dominancia</div>
                   </div>
-                  <div className="p-4 bg-yellow-50 rounded-lg text-center">
-                    <div className="text-3xl font-bold text-yellow-600">{discResult.i_score}%</div>
+                  <div className="p-4 bg-yellow/5 rounded-lg text-center">
+                    <div className="text-3xl font-bold text-yellow">{discResult.i_score}%</div>
                     <div className="font-semibold mt-1">Influencia</div>
                   </div>
                   <div className="p-4 bg-green/5 rounded-lg text-center">
@@ -986,7 +986,7 @@ export default function DISCResultsPage() {
                   <ul className="space-y-2">
                     {styleInfo.challenges.map((challenge, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <Target className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                        <Target className="h-5 w-5 text-orange mt-0.5 flex-shrink-0" />
                         <span>{challenge}</span>
                       </li>
                     ))}
@@ -1012,7 +1012,7 @@ export default function DISCResultsPage() {
                       <Users className="w-5 h-5" />
                       Relaciones Personales
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       {discResult.primary_type === "Dominance"
                         ? "En tu familia y pareja, tu estilo directo puede ser percibido como autoritario. Practica escucha activa y cede el control en decisiones cotidianas."
                         : discResult.primary_type === "Influence"
@@ -1028,7 +1028,7 @@ export default function DISCResultsPage() {
                       <Home className="w-5 h-5" />
                       Vida Familiar
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       {discResult.primary_type === "Dominance"
                         ? "Con tu familia, delega responsabilidades y permite que otros lideren. Pregunta '¿Qué opinas?' antes de decidir."
                         : discResult.primary_type === "Influence"
@@ -1044,7 +1044,7 @@ export default function DISCResultsPage() {
                       <Heart className="w-5 h-5" />
                       Bienestar Emocional
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       {discResult.primary_type === "Dominance"
                         ? "Tu ritmo acelerado puede llevarte al burnout. Programa momentos de descanso no negociables y practica mindfulness."
                         : discResult.primary_type === "Influence"
@@ -1060,7 +1060,7 @@ export default function DISCResultsPage() {
                       <Sparkles className="w-5 h-5" />
                       Desarrollo Personal
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       {discResult.primary_type === "Dominance"
                         ? "Enfócate en desarrollar paciencia y empatía. Lee sobre inteligencia emocional y practica puterte en los zapatos de otros."
                         : discResult.primary_type === "Influence"
@@ -1076,7 +1076,7 @@ export default function DISCResultsPage() {
                   <h3 className="font-semibold text-lg mb-3 text-purple">
                     💡 Recuerda: Tu trabajo es solo una parte de tu vida
                   </h3>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-muted leading-relaxed">
                     Este test te ayuda primero a mejorar tus relaciones personales, tu bienestar emocional y tu vida
                     familiar. Las mejoras en el ámbito laboral son una consecuencia natural de tu crecimiento personal
                     integral.
@@ -1092,7 +1092,7 @@ export default function DISCResultsPage() {
                 <CardTitle>Análisis Detallado</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-700">{discResult.analysis}</p>
+                <p className="text-muted">{discResult.analysis}</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -1101,7 +1101,7 @@ export default function DISCResultsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Lightbulb className="h-5 w-5 text-yellow-600" />
+                  <Lightbulb className="h-5 w-5 text-yellow" />
                   Oportunidades de Desarrollo
                 </CardTitle>
                 <CardDescription>
@@ -1193,13 +1193,13 @@ export default function DISCResultsPage() {
                     <CardContent>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-2xl font-bold text-green-700">{calculateMonthProgress("m2")}%</span>
+                          <span className="text-2xl font-bold text-green">{calculateMonthProgress("m2")}%</span>
                           <Badge variant={calculateMonthProgress("m2") >= 75 ? "default" : "secondary"}>
                             {calculateMonthProgress("m2") >= 75 ? "En curso" : "Próximo"}
                           </Badge>
                         </div>
-                        <Progress value={calculateMonthProgress("m2")} className="h-2 bg-green-100" />
-                        <p className="text-xs text-green-700 mt-2">Objetivo: Practicar nuevos comportamientos</p>
+                        <Progress value={calculateMonthProgress("m2")} className="h-2 bg-green/10" />
+                        <p className="text-xs text-green mt-2">Objetivo: Practicar nuevos comportamientos</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -1276,7 +1276,7 @@ export default function DISCResultsPage() {
                   <h3 className="text-xl font-bold text-purple mb-3">
                     Desarrollar mi versatilidad conductual consciente
                   </h3>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-muted leading-relaxed">
                     En los próximos 3 meses, voy a profundizar en mi autoconocimiento DISC para entender cómo mi perfil{" "}
                     <strong>{discResult.primary_type}</strong> me ayuda y me limita en mi vida personal y profesional.
                     Voy a experimentar conscientemente con comportamientos fuera de mi zona de confort, especialmente en
@@ -1299,7 +1299,7 @@ export default function DISCResultsPage() {
                       <CardTitle className="text-sm text-blue">Por qué esta misión</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-muted">
                         Porque mi perfil {discResult.primary_type} es una fortaleza en muchas situaciones, pero puede
                         volverse un patrón automático que me limita. Quiero tener más opciones de respuesta y elegir
                         conscientemente.
@@ -1312,7 +1312,7 @@ export default function DISCResultsPage() {
                       <CardTitle className="text-sm text-green-900">Cómo sabré que lo logré</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <ul className="text-sm text-gray-700 space-y-1">
+                      <ul className="text-sm text-muted space-y-1">
                         <li>✓ Habré completado 3+ tests DTC</li>
                         <li>✓ Tendré 10+ experimentos documentados</li>
                         <li>✓ Habré recibido feedback positivo sobre mi versatilidad</li>
@@ -1326,7 +1326,7 @@ export default function DISCResultsPage() {
                       <CardTitle className="text-sm text-purple">Qué gano con esto</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-muted">
                         Más libertad para ser quien necesito ser en cada momento. Mejores relaciones porque entiendo
                         mejor a los demás. Más efectividad porque puedo adaptar mi estilo al contexto.
                       </p>
@@ -1341,7 +1341,7 @@ export default function DISCResultsPage() {
                   <CardContent className="space-y-3">
                     <div>
                       <h4 className="font-medium text-sm mb-1">En tu vida personal:</h4>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-muted">
                         {discResult.primary_type === "D" &&
                           "Aprenderás a ser más paciente y presente con tu familia y pareja, sin perder tu determinación."}
                         {discResult.primary_type === "I" &&
@@ -1354,7 +1354,7 @@ export default function DISCResultsPage() {
                     </div>
                     <div>
                       <h4 className="font-medium text-sm mb-1">En tu trabajo/estudio:</h4>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-muted">
                         {discResult.primary_type === "D" &&
                           "Aprenderás a delegar más y confiar en el proceso, siendo más efectivo como líder."}
                         {discResult.primary_type === "I" &&
@@ -1376,7 +1376,7 @@ export default function DISCResultsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Rocket className="h-5 w-5 text-orange-600" />
+                  <Rocket className="h-5 w-5 text-orange" />
                   Semana Despegue: Tus Primeros 7 Días
                 </CardTitle>
                 <CardDescription>
@@ -1384,10 +1384,10 @@ export default function DISCResultsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Alert className="bg-orange-50 border-orange-200">
-                  <AlertCircle className="h-4 w-4 text-orange-600" />
+                <Alert className="bg-orange/5 border-orange/20">
+                  <AlertCircle className="h-4 w-4 text-orange" />
                   <AlertTitle className="text-orange-900">Regla de Oro</AlertTitle>
-                  <AlertDescription className="text-orange-800">
+                  <AlertDescription className="text-orange">
                     Esta semana es de observación sin juicio. No intentes cambiar nada todavía, solo nota y registra.
                   </AlertDescription>
                 </Alert>
@@ -1472,7 +1472,7 @@ export default function DISCResultsPage() {
                             <CardTitle className="text-sm font-semibold text-orange-900">{day.day}</CardTitle>
                             <CardDescription className="text-xs">{day.title}</CardDescription>
                           </div>
-                          <Badge variant="outline" className="text-orange-700 border-orange-300">
+                          <Badge variant="outline" className="text-orange border-orange-300">
                             {day.time}
                           </Badge>
                         </div>
@@ -1480,8 +1480,8 @@ export default function DISCResultsPage() {
                       <CardContent>
                         <ul className="space-y-1">
                           {day.actions.map((action, aIdx) => (
-                            <li key={aIdx} className="text-sm text-gray-700 flex items-start gap-2">
-                              <span className="text-orange-500 font-bold">•</span>
+                            <li key={aIdx} className="text-sm text-muted flex items-start gap-2">
+                              <span className="text-orange font-bold">•</span>
                               <span>{action}</span>
                             </li>
                           ))}
@@ -1494,7 +1494,7 @@ export default function DISCResultsPage() {
                 <Alert className="bg-green/5 border-green/20">
                   <CheckCircle2 className="h-4 w-4 text-green" />
                   <AlertTitle className="text-green-900">Al final de esta semana</AlertTitle>
-                  <AlertDescription className="text-green-800">
+                  <AlertDescription className="text-green">
                     Tendrás: observaciones concretas de tu comportamiento, feedback externo, un mini experimento
                     completado, y tu segundo test DTC hecho. Estarás 10x más consciente de tu estilo DISC.
                   </AlertDescription>
@@ -1551,7 +1551,7 @@ export default function DISCResultsPage() {
                           </tr>
                           <tr className="border-b hover:bg-muted/5">
                             <td className="p-3">
-                              <Badge variant="outline" className="bg-orange-50">
+                              <Badge variant="outline" className="bg-orange/5">
                                 Paciencia y escucha
                               </Badge>
                             </td>
@@ -1577,7 +1577,7 @@ export default function DISCResultsPage() {
                         <>
                           <tr className="border-b hover:bg-muted/5">
                             <td className="p-3">
-                              <Badge variant="outline" className="bg-yellow-50">
+                              <Badge variant="outline" className="bg-yellow/5">
                                 {discResult.i_score > 70 ? "Seguimiento y profundidad" : "Conexión significativa"}
                               </Badge>
                             </td>
@@ -1940,7 +1940,7 @@ export default function DISCResultsPage() {
                         <Progress value={calculateMonthProgress("m2")} className="h-2" />
                         {plan90Days.month2.weeks.map((week, wIdx) => (
                           <div key={wIdx} className="border rounded-lg p-4">
-                            <h4 className="font-medium text-green-700">
+                            <h4 className="font-medium text-green">
                               {week.week}: {week.focus}
                             </h4>
                             <ul className="mt-2 space-y-2">
@@ -2096,7 +2096,7 @@ export default function DISCResultsPage() {
                   <Card className="bg-green/5 border-green/20">
                     <CardHeader>
                       <CardTitle className="text-base text-green-900">✓ Día 60: Checkpoint "Experimentación"</CardTitle>
-                      <CardDescription className="text-sm text-green-700">
+                      <CardDescription className="text-sm text-green">
                         Ya debes haber salido de tu zona de confort varias veces
                       </CardDescription>
                     </CardHeader>
@@ -2252,10 +2252,10 @@ export default function DISCResultsPage() {
                   </Card>
                 </div>
 
-                <Alert className="bg-yellow-50 border-yellow-200">
-                  <AlertCircle className="h-4 w-4 text-yellow-600" />
-                  <AlertTitle className="text-yellow-900">Importante</AlertTitle>
-                  <AlertDescription className="text-yellow-800">
+                <Alert className="bg-yellow/5 border-yellow/20">
+                  <AlertCircle className="h-4 w-4 text-yellow" />
+                  <AlertTitle className="text-yellow">Importante</AlertTitle>
+                  <AlertDescription className="text-yellow">
                     Estos checkpoints son indicadores, no requisitos rígidos. El desarrollo personal no es lineal. Si
                     algún checkpoint no lo cumpliste al 100%, está bien - lo importante es que sigas avanzando a tu
                     ritmo.

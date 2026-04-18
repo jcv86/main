@@ -49,10 +49,10 @@ export function PromptBankDashboard() {
   }
 
   const categoryColors = {
-    autoconocimiento_proposito: "bg-purple-500/10 text-purple-700 dark:text-purple-300",
-    cv_linkedin_marca: "bg-blue-500/10 text-blue-700 dark:text-blue-300",
-    entrevistas_comunicacion: "bg-green-500/10 text-green-700 dark:text-green-300",
-    crecimiento_salarial: "bg-orange-500/10 text-orange-700 dark:text-orange-300",
+    autoconocimiento_proposito: "bg-purple-500/10 text-purple-700 dark:text-purple/30",
+    cv_linkedin_marca: "bg-blue-500/10 text-blue dark:text-blue-300",
+    entrevistas_comunicacion: "bg-green-500/10 text-green dark:text-green-300",
+    crecimiento_salarial: "bg-orange/50/10 text-orange dark:text-orange-300",
     reinvencion_transicion: "bg-pink-500/10 text-pink-700 dark:text-pink-300",
   }
 

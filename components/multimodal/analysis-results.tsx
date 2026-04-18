@@ -43,7 +43,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
     return (
       <Card>
         <CardContent className="pt-6 flex flex-col items-center justify-center gap-4">
-          <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-blue" />
           <div className="text-center">
             <p className="font-semibold">Analyzing your interview...</p>
             <p className="text-sm text-muted/60">This may take 2-5 minutes</p>
@@ -158,14 +158,14 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
             <span className="text-sm font-medium">Alineación Visual-Audio</span>
             <Badge className="bg-yellow-600">{analysis.coherence_analysis.visual_audio_alignment}%</Badge>
           </div>
-          <p className="text-sm text-gray-700">{analysis.coherence_analysis.message_consistency}</p>
+          <p className="text-sm text-muted">{analysis.coherence_analysis.message_consistency}</p>
         </CardContent>
       </Card>
 
       {/* Key Strengths */}
       <Card className="border-2 border-green-200">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-green-700">
+          <CardTitle className="flex items-center gap-2 text-green">
             <CheckCircle2 className="w-5 h-5" />
             Fortalezas Principales
           </CardTitle>
@@ -174,7 +174,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
           <ul className="space-y-2">
             {analysis.key_strengths.map((strength: string, i: number) => (
               <li key={i} className="flex gap-2 text-sm">
-                <span className="text-green-600 font-bold">✓</span>
+                <span className="text-green font-bold">✓</span>
                 <span>{strength}</span>
               </li>
             ))}
@@ -183,9 +183,9 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
       </Card>
 
       {/* Areas for Improvement */}
-      <Card className="border-2 border-orange-200">
+      <Card className="border-2 border-orange/20">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-orange-700">
+          <CardTitle className="flex items-center gap-2 text-orange">
             <AlertCircle className="w-5 h-5" />
             Áreas a Mejorar
           </CardTitle>
@@ -194,7 +194,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
           <ul className="space-y-2">
             {analysis.areas_for_improvement.map((area: string, i: number) => (
               <li key={i} className="flex gap-2 text-sm">
-                <span className="text-orange-600 font-bold">•</span>
+                <span className="text-orange font-bold">•</span>
                 <span>{area}</span>
               </li>
             ))}
@@ -205,7 +205,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
       {/* Personalized Recommendations */}
       <Card className="border-2 border-blue-200">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-blue-700">
+          <CardTitle className="flex items-center gap-2 text-blue">
             <TrendingUp className="w-5 h-5" />
             Recomendaciones Personalizadas
           </CardTitle>
@@ -213,8 +213,8 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
         <CardContent className="space-y-3">
           {analysis.personalized_recommendations.map((rec: string, i: number) => (
             <div key={i} className="flex gap-3 p-3 bg-blue-50 rounded-lg">
-              <span className="font-bold text-blue-600 flex-shrink-0">{i + 1}.</span>
-              <p className="text-sm text-gray-700">{rec}</p>
+              <span className="font-bold text-blue flex-shrink-0">{i + 1}.</span>
+              <p className="text-sm text-muted">{rec}</p>
             </div>
           ))}
         </CardContent>
@@ -226,7 +226,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
           <CardTitle className="text-lg">Feedback Detallado</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-700 leading-relaxed">{analysis.detailed_feedback}</p>
+          <p className="text-muted leading-relaxed">{analysis.detailed_feedback}</p>
         </CardContent>
       </Card>
     </div>

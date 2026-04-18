@@ -28,7 +28,7 @@ export function AdminNavbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="text-2xl font-bold text-blue-600">DESPEGA</div>
+            <div className="text-2xl font-bold text-blue">DESPEGA</div>
             <span className="text-sm text-slate-600 dark:text-slate-400">Tu Carrera</span>
           </Link>
 

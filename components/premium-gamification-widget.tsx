@@ -112,16 +112,16 @@ export function PremiumGamificationWidget() {
           {/* STREAK & ACHIEVEMENTS ROW */}
           <div className="grid grid-cols-3 gap-2">
             {/* DAILY STREAK */}
-            <div className="bg-white/80 dark:bg-slate-900/50 rounded-[28px] p-2 text-center border border-orange-200 dark:border-orange-800/30">
+            <div className="bg-white/80 dark:bg-slate-900/50 rounded-[28px] p-2 text-center border border-orange/20 dark:border-orange-800/30">
               <div className="flex items-center justify-center gap-0.5 mb-1">
-                <Flame className={`w-3 h-3 ${isStreakActive ? 'text-orange-500' : 'text-slate-400'}`} />
+                <Flame className={`w-3 h-3 ${isStreakActive ? 'text-orange' : 'text-slate-400'}`} />
               </div>
-              <p className="text-lg font-black text-orange-600 dark:text-orange-400">
+              <p className="text-lg font-black text-orange dark:text-orange-400">
                 {gamification.daily_streak}
               </p>
               <p className="text-xs text-slate-600 dark:text-slate-400">días</p>
               {streakMultiplier > 1 && (
-                <Badge className="text-xs bg-orange-500/20 text-orange-600 dark:text-orange-400 border-0 mt-1">
+                <Badge className="text-xs bg-orange/50/20 text-orange dark:text-orange-400 border-0 mt-1">
                   {streakMultiplier.toFixed(1)}x
                 </Badge>
               )}
@@ -130,7 +130,7 @@ export function PremiumGamificationWidget() {
             {/* CHALLENGES */}
             <div className="bg-white/80 dark:bg-slate-900/50 rounded-[28px] p-2 text-center border border-purple-200 dark:border-purple-800/30">
               <Target className="w-3 h-3 text-purple-500 mx-auto mb-1" />
-              <p className="text-lg font-black text-purple-600 dark:text-purple-400">
+              <p className="text-lg font-black text-purple-600 dark:text-purple/40">
                 {gamification.daily_challenges_completed}/3
               </p>
               <p className="text-xs text-slate-600 dark:text-slate-400">hoy</p>
@@ -138,8 +138,8 @@ export function PremiumGamificationWidget() {
 
             {/* ACHIEVEMENTS */}
             <div className="bg-white/80 dark:bg-slate-900/50 rounded-[28px] p-2 text-center border border-green-200 dark:border-green-800/30">
-              <Trophy className="w-3 h-3 text-green-500 mx-auto mb-1" />
-              <p className="text-lg font-black text-green-600 dark:text-green-400">
+              <Trophy className="w-3 h-3 text-green/50 mx-auto mb-1" />
+              <p className="text-lg font-black text-green dark:text-green/40">
                 {gamification.total_achievements}
               </p>
               <p className="text-xs text-slate-600 dark:text-slate-400">badges</p>

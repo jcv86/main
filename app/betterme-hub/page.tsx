@@ -80,7 +80,7 @@ export default function BetterMeHubPage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-4">
-                  <div className="border-l-4 border-green-500 pl-4 py-2">
+                  <div className="border-l-4 border-green pl-4 py-2">
                     <p className="font-semibold">✓ Paso 1: Completa tu Perfil</p>
                     <p className="text-sm text-muted-foreground">Define tus intereses y objetivos</p>
                   </div>

@@ -13,7 +13,7 @@ export default function PrivacyPage() {
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         {/* Header */}
         <div className="mb-12">
-          <Link href="/" className="inline-flex items-center gap-2 mb-8 text-purple-400 hover:text-purple-300 transition-colors">
+          <Link href="/" className="inline-flex items-center gap-2 mb-8 text-purple/40 hover:text-purple/30 transition-colors">
             <Brain className="w-5 h-5" />
             <span>Volver al inicio</span>
           </Link>
@@ -76,7 +76,7 @@ export default function PrivacyPage() {
             <h2 className="text-2xl font-bold text-white mb-4">6. Contacto</h2>
             <p className="text-muted/30 leading-relaxed">
               Para preguntas sobre esta política, contáctanos en{" "}
-              <a href="mailto:contacto@despegatucarrera.cl" className="text-purple-400 hover:text-purple-300 transition-colors font-semibold">
+              <a href="mailto:contacto@despegatucarrera.cl" className="text-purple/40 hover:text-purple/30 transition-colors font-semibold">
                 contacto@despegatucarrera.cl
               </a>
             </p>

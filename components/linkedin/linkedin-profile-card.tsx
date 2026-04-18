@@ -79,7 +79,7 @@ export function LinkedInProfileCard() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <Linkedin className="w-5 h-5 text-blue-600" />
+            <Linkedin className="w-5 h-5 text-blue" />
             LinkedIn Profile
           </CardTitle>
           <Button
@@ -97,7 +97,7 @@ export function LinkedInProfileCard() {
 
       <CardContent className="space-y-4">
         {error && hasAttemptedSync && (
-          <div className="p-3 bg-red-100 text-red-800 rounded-lg flex gap-2">
+          <div className="p-3 bg-red/10 text-red-800 rounded-lg flex gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
             <span className="text-sm">{error}</span>
           </div>
@@ -131,7 +131,7 @@ export function LinkedInProfileCard() {
                   href={profile.linkedin_url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-blue-600 hover:underline mt-1 inline-block"
+                  className="text-xs text-blue hover:underline mt-1 inline-block"
                 >
                   View on LinkedIn →
                 </a>
@@ -142,7 +142,7 @@ export function LinkedInProfileCard() {
             {profile.skills && profile.skills.length > 0 && (
               <div>
                 <h4 className="font-semibold text-sm mb-2 flex items-center gap-1">
-                  <CheckCircle2 className="w-4 h-4 text-green-600" />
+                  <CheckCircle2 className="w-4 h-4 text-green" />
                   Skills ({profile.skills.length})
                 </h4>
                 <div className="flex flex-wrap gap-2">

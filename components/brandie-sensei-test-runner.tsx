@@ -133,11 +133,11 @@ export function BrandieSenseiTestRunner() {
   const getVerdictIcon = (verdict: string) => {
     switch (verdict) {
       case "pasa":
-        return <CheckCircle2 className="w-5 h-5 text-green-600" />
+        return <CheckCircle2 className="w-5 h-5 text-green" />
       case "pasa_con_advertencias":
-        return <AlertTriangle className="w-5 h-5 text-yellow-600" />
+        return <AlertTriangle className="w-5 h-5 text-yellow" />
       case "falla":
-        return <XCircle className="w-5 h-5 text-red-600" />
+        return <XCircle className="w-5 h-5 text-red" />
       default:
         return null
     }
@@ -148,7 +148,7 @@ export function BrandieSenseiTestRunner() {
       case "pasa":
         return "bg-green-50 border-green-200"
       case "pasa_con_advertencias":
-        return "bg-yellow-50 border-yellow-200"
+        return "bg-yellow/5 border-yellow/20"
       case "falla":
         return "bg-red/5 border-red/20"
       default:
@@ -226,7 +226,7 @@ export function BrandieSenseiTestRunner() {
 
                       {result.redFlags.length > 0 && (
                         <Alert className="bg-red/5 border-red/20">
-                          <AlertTriangle className="h-4 w-4 text-red-600" />
+                          <AlertTriangle className="h-4 w-4 text-red" />
                           <AlertDescription className="text-red-800">
                             <strong>Red Flags:</strong> {result.redFlags.join(", ")}
                           </AlertDescription>
@@ -234,7 +234,7 @@ export function BrandieSenseiTestRunner() {
                       )}
 
                       {result.criticalFailure && (
-                        <Alert className="bg-red-100 border-red-300">
+                        <Alert className="bg-red/10 border-red-300">
                           <XCircle className="h-4 w-4 text-red" />
                           <AlertDescription className="text-red font-semibold">
                             FALLA CRÍTICA: {result.criticalFailureReason}
@@ -291,8 +291,8 @@ export function BrandieSenseiTestRunner() {
             </div>
 
             {results.redFlags.length > 0 && (
-              <Alert className="bg-yellow-50 border-yellow-200">
-                <AlertTriangle className="h-4 w-4 text-yellow-600" />
+              <Alert className="bg-yellow/5 border-yellow/20">
+                <AlertTriangle className="h-4 w-4 text-yellow" />
                 <AlertDescription>
                   <strong>Red Flags detectadas:</strong>
                   <ul className="list-disc ml-4 mt-2">

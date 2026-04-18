@@ -150,7 +150,7 @@ export default function SocialReadingFeatures() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <Users className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue-600" />
+          <Users className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue" />
           <p>Cargando comunidad...</p>
         </div>
       </div>
@@ -232,7 +232,7 @@ export default function SocialReadingFeatures() {
                           {new Date(discussion.created_at).toLocaleString()}
                         </span>
                       </div>
-                      <p className="text-gray-700 mb-3">{discussion.content}</p>
+                      <p className="text-muted mb-3">{discussion.content}</p>
                       <div className="flex items-center gap-4">
                         <Button variant="ghost" size="sm" onClick={() => likeDiscussion(discussion.id)}>
                           <Heart className="h-4 w-4 mr-1" />
@@ -420,7 +420,7 @@ export default function SocialReadingFeatures() {
                     </p>
                     <p className="text-xs text-muted/50">Hace 2 horas</p>
                   </div>
-                  <ThumbsUp className="h-4 w-4 text-blue-600" />
+                  <ThumbsUp className="h-4 w-4 text-blue" />
                 </div>
 
                 <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
@@ -435,7 +435,7 @@ export default function SocialReadingFeatures() {
                     </p>
                     <p className="text-xs text-muted/50">Hace 4 horas</p>
                   </div>
-                  <UserPlus className="h-4 w-4 text-green-600" />
+                  <UserPlus className="h-4 w-4 text-green" />
                 </div>
 
                 <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
@@ -453,7 +453,7 @@ export default function SocialReadingFeatures() {
                   <Star className="h-4 w-4 text-purple-600" />
                 </div>
 
-                <div className="flex items-center gap-3 p-3 bg-orange-50 rounded-lg">
+                <div className="flex items-center gap-3 p-3 bg-orange/5 rounded-lg">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src="https://api.dicebear.com/7.x/initials/svg?seed=Travis" />
                     <AvatarFallback>T</AvatarFallback>
@@ -465,10 +465,10 @@ export default function SocialReadingFeatures() {
                     </p>
                     <p className="text-xs text-muted/50">Hace 1 día</p>
                   </div>
-                  <MessageCircle className="h-4 w-4 text-orange-600" />
+                  <MessageCircle className="h-4 w-4 text-orange" />
                 </div>
 
-                <div className="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg">
+                <div className="flex items-center gap-3 p-3 bg-yellow/5 rounded-lg">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src="https://api.dicebear.com/7.x/initials/svg?seed=Demo" />
                     <AvatarFallback>D</AvatarFallback>
@@ -480,7 +480,7 @@ export default function SocialReadingFeatures() {
                     </p>
                     <p className="text-xs text-muted/50">Hace 2 días</p>
                   </div>
-                  <Award className="h-4 w-4 text-yellow-600" />
+                  <Award className="h-4 w-4 text-yellow" />
                 </div>
               </div>
             </CardContent>

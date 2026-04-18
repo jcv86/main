@@ -54,7 +54,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
     C: {
       name: 'Arquitecto - Analítico',
       emoji: '🧠',
-      color: 'from-blue-600 to-indigo-500',
+      color: 'from-blue-600 to-blue/50',
       tagColor: 'bg-blue-600',
       description: 'Eres detallista, metódico y buscas precisión. Te importa que todo esté bien hecho y entiendes la importancia de los detalles.',
       whatItMeans: 'Te destacas por tu pensamiento estructurado y tu atención a los detalles. Eres alguien que se asegura de que las cosas se hagan correctamente.',
@@ -193,7 +193,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
             </CardHeader>
             <CardContent className="space-y-3">
               {c1Context[3] && (
-                <div className="bg-slate-700/50 p-4 rounded-[28px] border-l-4 border-blue-500">
+                <div className="bg-slate-700/50 p-4 rounded-[28px] border-l-4 border-blue/50">
                   <p className="text-xs text-slate-400 font-semibold mb-1">Tu Desafío Actual</p>
                   <p className="text-white">{c1Context[3]}</p>
                 </div>

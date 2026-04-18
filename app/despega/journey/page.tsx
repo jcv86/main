@@ -69,7 +69,7 @@ export default function JourneyPage() {
             description: 'Define tu transformación en 90 días',
             status: 'in-progress',
             progress: 40,
-            color: 'text-green dark:text-green-400',
+            color: 'text-green dark:text-green/40',
             bgColor: 'from-green/5 to-green-100 dark:from-green-950 dark:to-green-900',
             icon: <Circle className="w-6 h-6" />,
             href: '/despega/a2/dashboard',
@@ -147,7 +147,7 @@ export default function JourneyPage() {
           <div className="bg-gradient-to-r from-blue/5 to-purple/5 dark:from-blue dark:to-purple rounded-[28px] p-6 border border-blue/30 dark:border-blue">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-sm font-semibold text-indigo-900 dark:text-indigo-100">Progreso General</h3>
+                <h3 className="text-sm font-semibold text-indigo-900 dark:text-blue/10">Progreso General</h3>
                 <p className="text-xs text-indigo-700 dark:text-indigo-300">A través de todas las fases</p>
               </div>
               <Badge className="bg-blue text-white text-lg px-4 py-2">{overallProgress}%</Badge>
@@ -232,11 +232,11 @@ export default function JourneyPage() {
 
               <div className="grid md:grid-cols-2 gap-4 mb-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-[28px] bg-green-100 dark:bg-green-900 flex items-center justify-center font-bold text-green-700 dark:text-green-300">A2</div>
+                  <div className="w-20 h-20 rounded-[28px] bg-green/10 dark:bg-green flex items-center justify-center font-bold text-green dark:text-green-300">A2</div>
                   <p className="text-sm text-muted/60 dark:text-muted/40">Tu Plan Personalizado</p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-[28px] bg-cyan-100 dark:bg-cyan-900 flex items-center justify-center font-bold text-cyan-700 dark:text-cyan-300">A4</div>
+                  <div className="w-20 h-20 rounded-[28px] bg-cyan/10 dark:bg-cyan flex items-center justify-center font-bold text-cyan-700 dark:text-cyan-300">A4</div>
                   <p className="text-sm text-muted/60 dark:text-muted/40">Contexto del Mercado</p>
                 </div>
               </div>
@@ -246,7 +246,7 @@ export default function JourneyPage() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-[28px] bg-orange-100 dark:bg-orange-900 flex items-center justify-center font-bold text-orange-700 dark:text-orange-300">A3</div>
+                <div className="w-20 h-20 rounded-[28px] bg-orange/10 dark:bg-orange flex items-center justify-center font-bold text-orange dark:text-orange-300">A3</div>
                 <div className="flex-1">
                   <p className="text-sm font-semibold">Entrenamientos Inteligentes</p>
                   <p className="text-xs text-muted/60 dark:text-muted/40">Usando tu plan + contexto de mercado</p>
@@ -257,11 +257,11 @@ export default function JourneyPage() {
         </Card>
 
         {/* NEXT STEPS */}
-        <div className="mt-12 bg-gradient-to-r from-blue/5 to-indigo-50 dark:from-blue-950 dark:to-blue rounded-[28px] p-8 border border-blue/30 dark:border-blue/10">
+        <div className="mt-12 bg-gradient-to-r from-blue/5 to-blue/5 dark:from-blue-950 dark:to-blue rounded-[28px] p-8 border border-blue/30 dark:border-blue/10">
           <h3 className="text-lg font-semibold mb-4">Próximos Pasos</h3>
           <ul className="space-y-3 text-sm">
             <li className="flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-green dark:text-green-400 flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-green dark:text-green/40 flex-shrink-0 mt-0.5" />
               <span>Ya completaste A1 y descubriste tu perfil</span>
             </li>
             <li className="flex gap-3">

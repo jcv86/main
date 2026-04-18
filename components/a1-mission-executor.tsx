@@ -40,7 +40,7 @@ const getTipoConfig = (tipo: string) => {
     lectura: { icon: "📖", color: "bg-blue-50 border-blue-200", label: "Lectura" },
     reflexion: { icon: "🤔", color: "bg-purple-50 border-purple-200", label: "Reflexión" },
     accion: { icon: "⚡", color: "bg-green-50 border-green-200", label: "Acción" },
-    quiz: { icon: "❓", color: "bg-orange-50 border-orange-200", label: "Quiz" },
+    quiz: { icon: "❓", color: "bg-orange/5 border-orange/20", label: "Quiz" },
     habito: { icon: "🔄", color: "bg-indigo-50 border-indigo-200", label: "Hábito" },
     proyecto: { icon: "🎯", color: "bg-pink-50 border-pink-200", label: "Proyecto" },
   }
@@ -104,7 +104,7 @@ export function A1MissionExecutor({
               <div className="text-sm text-muted-foreground">Misiones completadas</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-green-600">{completedPoints}</div>
+              <div className="text-2xl font-bold text-green">{completedPoints}</div>
               <div className="text-sm text-muted-foreground">Puntos acumulados</div>
             </div>
           </div>
@@ -134,7 +134,7 @@ export function A1MissionExecutor({
                         <div>
                           <div className="font-medium flex items-center gap-2">
                             {mision.titulo}
-                            {isCompleted && <CheckCircle2 className="w-4 h-4 text-green-600" />}
+                            {isCompleted && <CheckCircle2 className="w-4 h-4 text-green" />}
                           </div>
                           <div className="text-sm text-muted-foreground">{mision.descripcion}</div>
                         </div>
@@ -251,7 +251,7 @@ export function A1MissionExecutor({
                         </DialogContent>
                       </Dialog>
                     ) : (
-                      <Badge className="bg-green-100 text-green-800 flex-shrink-0">
+                      <Badge className="bg-green/10 text-green flex-shrink-0">
                         <CheckCircle2 className="w-3 h-3 mr-1" />
                         Completada
                       </Badge>
@@ -267,10 +267,10 @@ export function A1MissionExecutor({
       {/* Coaching Tip */}
       <Card className="bg-blue-50 border-blue-200">
         <CardContent className="pt-6 flex gap-4">
-          <Sparkles className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+          <Sparkles className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
           <div>
             <div className="font-medium text-blue-900 mb-1">Consejo del Coach</div>
-            <div className="text-sm text-blue-800">
+            <div className="text-sm text-blue">
               La consistencia es clave. Completa al menos 1 misión diaria para mantener el momentum y ver resultados en 30 días.
             </div>
           </div>

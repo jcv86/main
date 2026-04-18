@@ -75,9 +75,9 @@ export default function FeedbackPage() {
   const getFeedbackColor = (type: string) => {
     switch (type) {
       case 'strength':
-        return 'border-l-4 border-green-500 bg-green/5 dark:bg-green-900/20'
+        return 'border-l-4 border-green bg-green/5 dark:bg-green/20'
       case 'improvement':
-        return 'border-l-4 border-orange-500 bg-orange/5 dark:bg-orange-900/20'
+        return 'border-l-4 border-orange bg-orange/5 dark:bg-orange/20'
       case 'insight':
         return 'border-l-4 border-blue/50 bg-blue/5 dark:bg-blue/20'
       default:
@@ -136,7 +136,7 @@ export default function FeedbackPage() {
         {/* Feedback Content */}
         <div className="space-y-6">
           {/* Overall Score */}
-          <Card className="bg-gradient-to-r from-blue to-indigo-600 text-white border-0">
+          <Card className="bg-gradient-to-r from-blue to-blue text-white border-0">
             <CardContent className="pt-6 pb-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -161,7 +161,7 @@ export default function FeedbackPage() {
                     <div className="flex gap-4">
                       <Icon className={`w-6 h-6 flex-shrink-0 ${
                         item.type === 'strength'
-                          ? 'text-green dark:text-green-400'
+                          ? 'text-green dark:text-green/40'
                           : item.type === 'improvement'
                           ? 'text-orange dark:text-orange-400'
                           : 'text-blue dark:text-blue/40'
@@ -246,7 +246,7 @@ export default function FeedbackPage() {
                   <div key={idx}>
                     <div className="flex justify-between text-sm mb-2">
                       <span className="font-medium text-muted/90 dark:text-white">{item.metric}</span>
-                      <span className="text-green dark:text-green-400 font-bold">
+                      <span className="text-green dark:text-green/40 font-bold">
                         +{item.after - item.before}%
                       </span>
                     </div>

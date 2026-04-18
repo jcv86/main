@@ -275,7 +275,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
       <DialogContent className="max-w-6xl h-[90vh] p-0">
         <DialogHeader className="p-6 pb-4">
           <DialogTitle className="flex items-center gap-2">
-            <Search className="h-5 w-5 text-blue-600" />
+            <Search className="h-5 w-5 text-blue" />
             Búsqueda Avanzada con IA
             <Badge variant="secondary" className="ml-2">
               {searchResults.length} resultados
@@ -472,7 +472,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
                           )}
                         </div>
 
-                        <h3 className="font-semibold text-gray-900 mb-1 line-clamp-1">{result.title}</h3>
+                        <h3 className="font-semibold text-foreground mb-1 line-clamp-1">{result.title}</h3>
 
                         <div className="flex items-center gap-4 text-sm text-muted/60 mb-2">
                           <div className="flex items-center gap-1">
@@ -512,7 +512,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
                               </Badge>
                             )}
                             {result.matchDetails.contentMatch > 0.3 && (
-                              <Badge variant="outline" className="text-xs bg-yellow-50">
+                              <Badge variant="outline" className="text-xs bg-yellow/5">
                                 📄 Contenido: {(result.matchDetails.contentMatch * 100).toFixed(0)}%
                               </Badge>
                             )}

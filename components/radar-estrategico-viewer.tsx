@@ -68,11 +68,11 @@ export function RadarEstrategico() {
       {tesisDia && (
         <div className="space-y-6">
           <div className="flex items-center gap-3">
-            <Radar className="w-8 h-8 text-blue-400" />
+            <Radar className="w-8 h-8 text-blue/40" />
             <h1 className="text-4xl font-bold text-balance">Lectura Estratégica del Día</h1>
           </div>
 
-          <Card className="bg-slate-800 border-blue-500/30">
+          <Card className="bg-slate-800 border-blue/50/30">
             <CardHeader>
               <CardTitle className="text-2xl">{tesisDia.tesis_estrategica}</CardTitle>
             </CardHeader>
@@ -103,7 +103,7 @@ export function RadarEstrategico() {
                       tesisDia.nivel_energía === 'Alta'
                         ? 'bg-red/50/20 text-red-300 border-red/50/50'
                         : tesisDia.nivel_energía === 'Confirmación'
-                          ? 'bg-blue-500/20 text-blue-300 border-blue-500/50'
+                          ? 'bg-blue-500/20 text-blue-300 border-blue/50/50'
                           : 'bg-slate-500/20 text-slate-300 border-slate-500/50'
                     }`}
                   >
@@ -112,13 +112,13 @@ export function RadarEstrategico() {
                 </div>
                 <div>
                   <p className="text-xs text-slate-400 uppercase">Ritmo Narrativo</p>
-                  <Badge variant="outline" className="mt-2 bg-purple-500/20 text-purple-300 border-purple-500/50">
+                  <Badge variant="outline" className="mt-2 bg-purple-500/20 text-purple/30 border-purple-500/50">
                     {tesisDia.ritmo_narrativo}
                   </Badge>
                 </div>
                 <div>
                   <p className="text-xs text-slate-400 uppercase">Impacto</p>
-                  <Badge variant="outline" className="mt-2 bg-green-500/20 text-green-300 border-green-500/50">
+                  <Badge variant="outline" className="mt-2 bg-green-500/20 text-green-300 border-green/50">
                     {tesisDia.impacto_plazo} Plazo
                   </Badge>
                 </div>
@@ -236,14 +236,14 @@ interface RadarNoticiaCardProps {
 function RadarNoticiaCard({ noticia, isSelected, onSelect }: RadarNoticiaCardProps) {
   const getNivelColor = (nivel: string) => {
     if (nivel === 'Alta') return 'bg-red/50/20 text-red-300 border-red/50/50'
-    if (nivel === 'Confirmación') return 'bg-blue-500/20 text-blue-300 border-blue-500/50'
+    if (nivel === 'Confirmación') return 'bg-blue-500/20 text-blue-300 border-blue/50/50'
     return 'bg-slate-500/20 text-slate-300 border-slate-500/50'
   }
 
   return (
     <Card
       onClick={() => onSelect(noticia)}
-      className={`bg-slate-800 border-slate-700 cursor-pointer transition-all hover:border-blue-500/50 ${
+      className={`bg-slate-800 border-slate-700 cursor-pointer transition-all hover:border-blue/50/50 ${
         isSelected ? 'ring-2 ring-blue-500' : ''
       }`}
     >
@@ -263,10 +263,10 @@ function RadarNoticiaCard({ noticia, isSelected, onSelect }: RadarNoticiaCardPro
             <Badge variant="outline" className={getNivelColor(noticia.capa_3_nivel_energia)}>
               {noticia.capa_3_nivel_energia}
             </Badge>
-            <Badge variant="outline" className="bg-purple-500/20 text-purple-300 border-purple-500/50">
+            <Badge variant="outline" className="bg-purple-500/20 text-purple/30 border-purple-500/50">
               {noticia.capa_6_ritmo_narrativo.slice(0, 10)}
             </Badge>
-            <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500/50">
+            <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green/50">
               {noticia.capa_7_impacto_plazo}
             </Badge>
             <Badge variant="outline" className="bg-cyan-500/20 text-cyan-300 border-cyan-500/50">

@@ -71,7 +71,7 @@ export function JobRecommendationsCard() {
 
       <CardContent className="space-y-4">
         {error && hasAttemptedLoad && (
-          <div className="p-3 bg-red-100 text-red-800 rounded-lg text-sm">
+          <div className="p-3 bg-red/10 text-red-800 rounded-lg text-sm">
             {error}
           </div>
         )}
@@ -97,9 +97,9 @@ export function JobRecommendationsCard() {
                     <Badge
                       className={
                         job.match_score >= 75
-                          ? 'bg-green-100 text-green-800'
+                          ? 'bg-green/10 text-green'
                           : job.match_score >= 50
-                            ? 'bg-yellow-100 text-yellow-800'
+                            ? 'bg-yellow/10 text-yellow'
                             : 'bg-slate-100 text-slate-800'
                       }
                     >
@@ -145,7 +145,7 @@ export function JobRecommendationsCard() {
                   href={job.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                  className="text-xs text-blue hover:underline flex items-center gap-1"
                 >
                   View on {job.source}
                   <ExternalLink className="w-3 h-3" />

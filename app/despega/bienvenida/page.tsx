@@ -72,7 +72,7 @@ export default function BienvenidaPage() {
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
                 <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-purple/10 dark:bg-purple mb-4">
-                  <span className="text-xl font-bold text-purple dark:text-purple-300">2</span>
+                  <span className="text-xl font-bold text-purple dark:text-purple/30">2</span>
                 </div>
                 <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Tu Plan A2</h3>
                 <p className="text-sm text-muted/60 dark:text-muted/40">
@@ -86,7 +86,7 @@ export default function BienvenidaPage() {
           <Card className="border-0 shadow-sm bg-white dark:bg-card">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
-                <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-cyan-100 dark:bg-cyan-900 mb-4">
+                <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-cyan/10 dark:bg-cyan mb-4">
                   <span className="text-xl font-bold text-blue dark:text-cyan-300">3</span>
                 </div>
                 <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Entrena y Analiza</h3>

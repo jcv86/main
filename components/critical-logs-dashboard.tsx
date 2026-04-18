@@ -85,7 +85,7 @@ export function CriticalLogsDashboard() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <TrendingDown className="h-5 w-5 text-orange-500" />
+              <TrendingDown className="h-5 w-5 text-orange" />
               <span className="text-3xl font-bold">{data.summary.low_satisfaction_count}</span>
             </div>
             <p className="text-xs text-slate-500 mt-1">{"< 4.3★"}</p>

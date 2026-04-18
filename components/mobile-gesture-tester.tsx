@@ -505,7 +505,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
 
     switch (status) {
       case "passed":
-        return <CheckCircle className="h-4 w-4 text-green-500" />
+        return <CheckCircle className="h-4 w-4 text-green/50" />
       case "failed":
         return <XCircle className="h-4 w-4 text-red" />
       case "testing":
@@ -545,21 +545,21 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
           {/* Device Capabilities */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div className="text-center p-3 bg-white rounded-[28px] border">
-              <div className="flex items-center justify-center gap-2 text-green-600 mb-1">
+              <div className="flex items-center justify-center gap-2 text-green mb-1">
                 <CheckCircle className="h-5 w-5" />
                 <span className="text-2xl font-bold">{passedTests}</span>
               </div>
               <p className="text-sm text-muted/60">Passed</p>
             </div>
             <div className="text-center p-3 bg-white rounded-[28px] border">
-              <div className="flex items-center justify-center gap-2 text-red-600 mb-1">
+              <div className="flex items-center justify-center gap-2 text-red mb-1">
                 <XCircle className="h-5 w-5" />
                 <span className="text-2xl font-bold">{failedTests}</span>
               </div>
               <p className="text-sm text-muted/60">Failed</p>
             </div>
             <div className="text-center p-3 bg-white rounded-[28px] border">
-              <div className="flex items-center justify-center gap-2 text-blue-600 mb-1">
+              <div className="flex items-center justify-center gap-2 text-blue mb-1">
                 <Loader2 className={`h-5 w-5 ${testingTests > 0 ? "animate-spin" : ""}`} />
                 <span className="text-2xl font-bold">{testingTests}</span>
               </div>
@@ -615,7 +615,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Gesture Tests */}
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900">Gesture Tests</h3>
+          <h3 className="text-lg font-semibold text-foreground">Gesture Tests</h3>
           <div className="grid gap-3">
             {gestureTests.map((test) => {
               const IconComponent = test.icon
@@ -640,11 +640,11 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                         <div
                           className={`p-2 rounded-lg ${
                             test.status === "passed"
-                              ? "bg-green-100"
+                              ? "bg-green/10"
                               : test.status === "failed"
-                                ? "bg-red-100"
+                                ? "bg-red/10"
                                 : test.status === "testing"
-                                  ? "bg-blue-100"
+                                  ? "bg-blue/10"
                                   : "bg-muted/10"
                           }`}
                         >
@@ -659,10 +659,10 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                     </div>
 
                     {test.result && (
-                      <div className="text-sm text-green-700 bg-green-100 p-2 rounded">✅ {test.result}</div>
+                      <div className="text-sm text-green bg-green/10 p-2 rounded">✅ {test.result}</div>
                     )}
 
-                    {test.error && <div className="text-sm text-red bg-red-100 p-2 rounded">❌ {test.error}</div>}
+                    {test.error && <div className="text-sm text-red bg-red/10 p-2 rounded">❌ {test.error}</div>}
 
                     {test.events.length > 0 && (
                       <div className="mt-2 text-xs text-muted/60">Events detected: {test.events.length}</div>
@@ -676,7 +676,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
 
         {/* Interactive Test Area & Log */}
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900">Interactive Test Area</h3>
+          <h3 className="text-lg font-semibold text-foreground">Interactive Test Area</h3>
 
           {/* Test Area */}
           <Card className="border-dashed border-2 border-purple-300">
@@ -687,13 +687,13 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                 style={{ touchAction: "none" }}
               >
                 <div className="space-y-2">
-                  <Hand className="h-12 w-12 text-purple-400 mx-auto" />
+                  <Hand className="h-12 w-12 text-purple/40 mx-auto" />
                   <h4 className="text-lg font-semibold text-purple-700">Touch Test Area</h4>
                   <p className="text-sm text-purple-600 max-w-xs">
                     Try different gestures here: tap, double-tap, long press, swipe, pinch, drag
                   </p>
                   {!touchSupport && (
-                    <p className="text-xs text-red-600 bg-red-100 p-2 rounded">
+                    <p className="text-xs text-red bg-red/10 p-2 rounded">
                       ⚠️ Touch events not supported on this device
                     </p>
                   )}
@@ -721,11 +721,11 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                         key={index}
                         className={`${
                           log.includes("✅")
-                            ? "text-green-400"
+                            ? "text-green/40"
                             : log.includes("❌")
                               ? "text-red-400"
                               : log.includes("🚀") || log.includes("🏁")
-                                ? "text-blue-400"
+                                ? "text-blue/40"
                                 : log.includes("Gesture detected")
                                   ? "text-yellow-400"
                                   : "text-muted/30"
@@ -750,29 +750,29 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
               <div className="bg-white p-3 rounded-[28px] border">
                 <div className="font-semibold text-purple-900">Touch Events</div>
-                <div className={touchSupport ? "text-green-700" : "text-red"}>
+                <div className={touchSupport ? "text-green" : "text-red"}>
                   {touchSupport ? "✅ Supported" : "❌ Not Supported"}
                 </div>
               </div>
               <div className="bg-white p-3 rounded-[28px] border">
                 <div className="font-semibold text-purple-900">Multi-Touch</div>
-                <div className={multiTouchSupport ? "text-green-700" : "text-red"}>
+                <div className={multiTouchSupport ? "text-green" : "text-red"}>
                   {multiTouchSupport ? "✅ Supported" : "❌ Not Supported"}
                 </div>
               </div>
               <div className="bg-white p-3 rounded-[28px] border">
                 <div className="font-semibold text-purple-900">Swipe Gestures</div>
-                <div className="text-green-700">✅ All Directions</div>
+                <div className="text-green">✅ All Directions</div>
               </div>
               <div className="bg-white p-3 rounded-[28px] border">
                 <div className="font-semibold text-purple-900">Pinch Zoom</div>
-                <div className={multiTouchSupport ? "text-green-700" : "text-yellow-700"}>
+                <div className={multiTouchSupport ? "text-green" : "text-yellow-700"}>
                   {multiTouchSupport ? "✅ In/Out" : "⚠️ Limited"}
                 </div>
               </div>
               <div className="bg-white p-3 rounded-[28px] border">
                 <div className="font-semibold text-purple-900">Tap Gestures</div>
-                <div className="text-green-700">✅ Single/Double/Long</div>
+                <div className="text-green">✅ Single/Double/Long</div>
               </div>
             </div>
           </div>

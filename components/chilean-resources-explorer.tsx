@@ -132,7 +132,7 @@ export function ChileanResourcesExplorer() {
                     <CardTitle className="text-lg">{resource.name}</CardTitle>
                     <CardDescription>{resource.category}</CardDescription>
                   </div>
-                  <div className="text-sm font-semibold text-blue-600">
+                  <div className="text-sm font-semibold text-blue">
                     {(resource.relevance_score * 100).toFixed(0)}%
                   </div>
                 </div>
@@ -145,7 +145,7 @@ export function ChileanResourcesExplorer() {
                     {resource.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded"
+                        className="px-2 py-1 bg-blue/10 dark:bg-blue text-blue dark:text-blue-200 text-xs rounded"
                       >
                         {tag}
                       </span>

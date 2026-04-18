@@ -7,11 +7,11 @@ export const metadata: Metadata = {
 
 export default function AnalisisMercadoChilePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-muted/5 via-blue/5 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-muted/5 via-blue/5 to-blue/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue via-indigo-600 to-purple-600 bg-clip-text text-transparent mb-6">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue via-blue to-purple bg-clip-text text-transparent mb-6">
             Análisis del Mercado Chileno
           </h1>
           <p className="text-xl text-muted/60 max-w-3xl mx-auto">
@@ -34,16 +34,16 @@ export default function AnalisisMercadoChilePage() {
             </p>
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-red/5 p-4 rounded-lg border border-red/20">
-                <div className="text-3xl font-bold text-red-600 mb-2">917K</div>
+                <div className="text-3xl font-bold text-red mb-2">917K</div>
                 <div className="text-sm text-red-800">Desempleados totales (Q2 2025)</div>
               </div>
-              <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-                <div className="text-3xl font-bold text-orange-600 mb-2">60%</div>
-                <div className="text-sm text-orange-800">Empresas con escasez de talento</div>
+              <div className="bg-orange/5 p-4 rounded-lg border border-orange/20">
+                <div className="text-3xl font-bold text-orange mb-2">60%</div>
+                <div className="text-sm text-orange">Empresas con escasez de talento</div>
               </div>
               <div className="bg-blue/5 p-4 rounded-lg border border-blue/20">
                 <div className="text-3xl font-bold text-blue mb-2">1.39M</div>
-                <div className="text-sm text-blue-800">Estudiantes educación superior (2024)</div>
+                <div className="text-sm text-blue">Estudiantes educación superior (2024)</div>
               </div>
             </div>
           </div>
@@ -55,7 +55,7 @@ export default function AnalisisMercadoChilePage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             {/* Crisis de Empleabilidad */}
-            <div className="bg-gradient-to-br from-red-500 to-red-600 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-gradient-to-br from-red to-red rounded-2xl shadow-lg p-8 text-white">
               <h3 className="text-2xl font-bold mb-4">🚨 Crisis de Empleabilidad</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
@@ -63,7 +63,7 @@ export default function AnalisisMercadoChilePage() {
                   <div>
                     <strong>8.1%</strong> desempleo profesional (Q1 2025) - máximo histórico
                     <br />
-                    <span className="text-red-100 text-sm">+1.4 puntos vs 2024 (+76,229 personas)</span>
+                    <span className="text-red/10 text-sm">+1.4 puntos vs 2024 (+76,229 personas)</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -71,7 +71,7 @@ export default function AnalisisMercadoChilePage() {
                   <div>
                     <strong>21.4%</strong> desempleo juvenil (&lt;25 años)
                     <br />
-                    <span className="text-red-100 text-sm">2.4x la tasa nacional (8.9%)</span>
+                    <span className="text-red/10 text-sm">2.4x la tasa nacional (8.9%)</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -79,7 +79,7 @@ export default function AnalisisMercadoChilePage() {
                   <div>
                     <strong>+69.1%</strong> aumento desempleo de larga duración
                     <br />
-                    <span className="text-red-100 text-sm">24,800 profesionales cesantes &gt;6 meses</span>
+                    <span className="text-red/10 text-sm">24,800 profesionales cesantes &gt;6 meses</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -87,7 +87,7 @@ export default function AnalisisMercadoChilePage() {
                   <div>
                     <strong>41%</strong> de la fuerza laboral tiene educación superior
                     <br />
-                    <span className="text-red-100 text-sm">vs 22.4% en 2010 - sobrecalificación</span>
+                    <span className="text-red/10 text-sm">vs 22.4% en 2010 - sobrecalificación</span>
                   </div>
                 </li>
               </ul>
@@ -102,7 +102,7 @@ export default function AnalisisMercadoChilePage() {
                   <div>
                     <strong>60%</strong> de empleadores no encuentra talento calificado
                     <br />
-                    <span className="text-orange-100 text-sm">Estudio ManpowerGroup 2025</span>
+                    <span className="text-orange/10 text-sm">Estudio ManpowerGroup 2025</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -110,7 +110,7 @@ export default function AnalisisMercadoChilePage() {
                   <div>
                     Sectores más afectados:
                     <br />
-                    <span className="text-orange-100 text-sm">Salud (77%), Industria (64%), Energía (63%)</span>
+                    <span className="text-orange/10 text-sm">Salud (77%), Industria (64%), Energía (63%)</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -118,7 +118,7 @@ export default function AnalisisMercadoChilePage() {
                   <div>
                     Habilidades más escasas:
                     <br />
-                    <span className="text-orange-100 text-sm">
+                    <span className="text-orange/10 text-sm">
                       TI/Data (21%), Ingenierías (21%), Atención Cliente (23%)
                     </span>
                   </div>
@@ -128,7 +128,7 @@ export default function AnalisisMercadoChilePage() {
                   <div>
                     <strong>85%</strong> del éxito laboral depende de soft skills
                     <br />
-                    <span className="text-orange-100 text-sm">92% de reclutadores priorizan soft skills</span>
+                    <span className="text-orange/10 text-sm">92% de reclutadores priorizan soft skills</span>
                   </div>
                 </li>
               </ul>
@@ -153,14 +153,14 @@ export default function AnalisisMercadoChilePage() {
                   liderazgo o adaptabilidad.
                 </p>
               </div>
-              <div className="border-l-4 border-green-600 pl-4">
+              <div className="border-l-4 border-green pl-4">
                 <h4 className="font-bold text-muted/90 mb-2">Falta de Orientación Vocacional</h4>
                 <p className="text-muted/60 text-sm">
                   Decisiones de carrera basadas en mitos familiares o prestigio social, no en aptitudes reales o demanda
                   del mercado.
                 </p>
               </div>
-              <div className="border-l-4 border-red-600 pl-4">
+              <div className="border-l-4 border-red pl-4">
                 <h4 className="font-bold text-muted/90 mb-2">Herramientas Obsoletas</h4>
                 <p className="text-muted/60 text-sm">
                   Servicios universitarios de carrera sobrecargados, tests vocacionales estáticos, sin coaching
@@ -175,7 +175,7 @@ export default function AnalisisMercadoChilePage() {
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-muted/90 mb-8">2. Tamaño y Oportunidad de Mercado</h2>
 
-          <div className="bg-gradient-to-r from-blue to-indigo-600 rounded-2xl shadow-lg p-8 text-white mb-8">
+          <div className="bg-gradient-to-r from-blue to-blue rounded-2xl shadow-lg p-8 text-white mb-8">
             <h3 className="text-2xl font-bold mb-6">📊 Segmentos de Mercado Primarios</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
@@ -266,10 +266,10 @@ export default function AnalisisMercadoChilePage() {
             <h3 className="text-xl font-bold text-muted/90 mb-6">Competidores Identificados</h3>
             <div className="space-y-6">
               {/* Competidor 1 */}
-              <div className="border-l-4 border-orange-500 pl-6 bg-orange-50 p-4 rounded-r-lg">
+              <div className="border-l-4 border-orange pl-6 bg-orange/5 p-4 rounded-r-lg">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-bold text-muted/90">Servicios Universitarios Tradicionales</h4>
-                  <span className="text-xs bg-orange-200 text-orange-800 px-3 py-1 rounded-full">
+                  <span className="text-xs bg-orange-200 text-orange px-3 py-1 rounded-full">
                     Competencia Indirecta
                   </span>
                 </div>
@@ -298,10 +298,10 @@ export default function AnalisisMercadoChilePage() {
               </div>
 
               {/* Competidor 2 */}
-              <div className="border-l-4 border-orange pl-6 bg-yellow-50 p-4 rounded-r-lg">
+              <div className="border-l-4 border-orange pl-6 bg-yellow/5 p-4 rounded-r-lg">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-bold text-muted/90">Plataformas de Orientación Vocacional</h4>
-                  <span className="text-xs bg-yellow-200 text-yellow-800 px-3 py-1 rounded-full">
+                  <span className="text-xs bg-yellow-200 text-yellow px-3 py-1 rounded-full">
                     Competencia Directa
                   </span>
                 </div>
@@ -333,7 +333,7 @@ export default function AnalisisMercadoChilePage() {
               <div className="border-l-4 border-blue/50 pl-6 bg-blue/5 p-4 rounded-r-lg">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-bold text-muted/90">Plataformas EdTech LATAM</h4>
-                  <span className="text-xs bg-blue/20 text-blue-800 px-3 py-1 rounded-full">Competencia Lateral</span>
+                  <span className="text-xs bg-blue/20 text-blue px-3 py-1 rounded-full">Competencia Lateral</span>
                 </div>
                 <p className="text-sm text-muted/60 mb-3">
                   Ej: Colegium, Lifebox, MÜUD, plataformas de upskilling como Coursera/Platzi
@@ -362,7 +362,7 @@ export default function AnalisisMercadoChilePage() {
           </div>
 
           {/* Ventaja Competitiva de DTC */}
-          <div className="bg-gradient-to-br from-green/50 to-emerald-600 rounded-2xl shadow-lg p-8 text-white">
+          <div className="bg-gradient-to-br from-green to-green rounded-2xl shadow-lg p-8 text-white">
             <h3 className="text-2xl font-bold mb-6">🏆 Ventaja Competitiva de Despega Tu Carrera</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
@@ -370,7 +370,7 @@ export default function AnalisisMercadoChilePage() {
                   <span className="text-3xl">🧠</span>
                   <div>
                     <strong className="text-lg">Sistema Cerebro Único</strong>
-                    <p className="text-green-50 text-sm mt-1">
+                    <p className="text-green/5 text-sm mt-1">
                       120+ libros procesados con RAG, búsqueda semántica con pgvector. Ningún competidor integra
                       conocimiento masivo + IA conversacional.
                     </p>
@@ -380,7 +380,7 @@ export default function AnalisisMercadoChilePage() {
                   <span className="text-3xl">🤖</span>
                   <div>
                     <strong className="text-lg">Coach IA Personalizado 24/7</strong>
-                    <p className="text-green-50 text-sm mt-1">
+                    <p className="text-green/5 text-sm mt-1">
                       GPT-4 integrado, respuestas basadas en perfil psicométrico del usuario. Competidores tienen
                       chatbots simples o nada.
                     </p>
@@ -390,7 +390,7 @@ export default function AnalisisMercadoChilePage() {
                   <span className="text-3xl">📊</span>
                   <div>
                     <strong className="text-lg">6 Tests Psicométricos Profesionales</strong>
-                    <p className="text-green-50 text-sm mt-1">
+                    <p className="text-green/5 text-sm mt-1">
                       DISC, MBTI, Big Five, RIASEC, Soft Skills, Inteligencia Emocional. Competidores ofrecen 1-2 tests
                       básicos.
                     </p>
@@ -402,7 +402,7 @@ export default function AnalisisMercadoChilePage() {
                   <span className="text-3xl">🔗</span>
                   <div>
                     <strong className="text-lg">Plataforma Integrada Todo-en-Uno</strong>
-                    <p className="text-green-50 text-sm mt-1">
+                    <p className="text-green/5 text-sm mt-1">
                       Tests → Biblioteca → Coach IA en un solo ecosistema. Competidores son fragmentados, usuario debe
                       usar múltiples herramientas.
                     </p>
@@ -412,7 +412,7 @@ export default function AnalisisMercadoChilePage() {
                   <span className="text-3xl">🎓</span>
                   <div>
                     <strong className="text-lg">Modelo B2B + B2C Híbrido</strong>
-                    <p className="text-green-50 text-sm mt-1">
+                    <p className="text-green/5 text-sm mt-1">
                       Convenios universitarios (ingresos estables) + usuarios directos (escalabilidad). Competidores son
                       solo B2C o solo B2B.
                     </p>
@@ -422,7 +422,7 @@ export default function AnalisisMercadoChilePage() {
                   <span className="text-3xl">⚡</span>
                   <div>
                     <strong className="text-lg">Tecnología de Punta (Next.js 16, Supabase, OpenAI)</strong>
-                    <p className="text-green-50 text-sm mt-1">
+                    <p className="text-green/5 text-sm mt-1">
                       Stack moderno, escalable, serverless. Listo para 100K+ usuarios. Competidores tienen tecnología
                       legacy o limitada.
                     </p>
@@ -461,7 +461,7 @@ export default function AnalisisMercadoChilePage() {
                   <span>Chile lidera LATAM en capacidades de IA (ILIA 2024)</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-600 mt-1">⚠</span>
+                  <span className="text-orange mt-1">⚠</span>
                   <span>Brecha: falta capacitación trabajadores para IA</span>
                 </li>
               </ul>
@@ -527,11 +527,11 @@ export default function AnalisisMercadoChilePage() {
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-600 mt-1">⚠</span>
+                  <span className="text-orange mt-1">⚠</span>
                   <span>Universidades no integran soft skills en currículum</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-red-600 mt-1">✗</span>
+                  <span className="text-red mt-1">✗</span>
                   <span>Brecha crítica: profesionales sin comunicación efectiva, liderazgo, adaptabilidad</span>
                 </li>
               </ul>
@@ -568,11 +568,11 @@ export default function AnalisisMercadoChilePage() {
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-orange-600 mt-1">⚠</span>
+                  <span className="text-orange mt-1">⚠</span>
                   <span>Escasez en TI/Data (21%), Ingenierías (21%), ESG (21%)</span>
                 </li>
               </ul>
-              <div className="mt-4 p-3 bg-orange-50 rounded-lg">
+              <div className="mt-4 p-3 bg-orange/5 rounded-lg">
                 <p className="text-sm text-muted/70">
                   <strong>Implicancia para DTC:</strong> Oportunidad B2B Enterprise - vender paquetes de upskilling a
                   empresas para sus empleados (mercado adicional de miles de profesionales).
@@ -590,7 +590,7 @@ export default function AnalisisMercadoChilePage() {
 
           <div className="space-y-6">
             {/* Recomendación 1 */}
-            <div className="bg-gradient-to-r from-blue to-blue-700 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-gradient-to-r from-blue to-blue rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">🎯</span>
                 <div>
@@ -631,7 +631,7 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Recomendación 2 */}
-            <div className="bg-gradient-to-r from-purple to-purple-700 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-gradient-to-r from-purple to-purple rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">🚀</span>
                 <div>
@@ -667,7 +667,7 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Recomendación 3 */}
-            <div className="bg-gradient-to-r from-green-600 to-emerald-700 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-gradient-to-r from-green-600 to-green rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">💼</span>
                 <div>
@@ -680,7 +680,7 @@ export default function AnalisisMercadoChilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">Propuesta para Empresas:</h4>
-                  <ul className="text-sm space-y-1 text-green-50">
+                  <ul className="text-sm space-y-1 text-green/5">
                     <li>
                       • <strong>Licencias corporativas:</strong> $X por empleado/año
                     </li>
@@ -697,7 +697,7 @@ export default function AnalisisMercadoChilePage() {
                 </div>
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">Targets Primarios:</h4>
-                  <ul className="text-sm space-y-1 text-green-50">
+                  <ul className="text-sm space-y-1 text-green/5">
                     <li>
                       • <strong>Sectores con escasez de talento:</strong> Salud (77%), Industria (64%), Energía (63%)
                     </li>
@@ -718,7 +718,7 @@ export default function AnalisisMercadoChilePage() {
                 <span className="text-5xl">📊</span>
                 <div>
                   <h3 className="text-2xl font-bold">4. Profundizar Datos y Métricas de Impacto</h3>
-                  <p className="text-orange-100 mt-1">
+                  <p className="text-orange/10 mt-1">
                     Construir casos de éxito medibles para validar ROI a universidades/empresas
                   </p>
                 </div>
@@ -759,12 +759,12 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Recomendación 5 */}
-            <div className="bg-gradient-to-r from-blue to-blue-700 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-gradient-to-r from-blue to-blue rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">🎓</span>
                 <div>
                   <h3 className="text-2xl font-bold">5. Crear Programa de Certificación "DTC Career Specialist"</h3>
-                  <p className="text-indigo-100 mt-1">
+                  <p className="text-blue/10 mt-1">
                     Formar a orientadores universitarios en el uso de DTC - efecto multiplicador
                   </p>
                 </div>
@@ -772,7 +772,7 @@ export default function AnalisisMercadoChilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">Programa de Certificación:</h4>
-                  <ul className="text-sm space-y-1 text-indigo-50">
+                  <ul className="text-sm space-y-1 text-blue/5">
                     <li>
                       • <strong>Curso online 8 horas:</strong> Cómo interpretar tests, usar coach IA, guiar estudiantes
                     </li>
@@ -786,7 +786,7 @@ export default function AnalisisMercadoChilePage() {
                 </div>
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">Beneficios:</h4>
-                  <ul className="text-sm space-y-1 text-indigo-50">
+                  <ul className="text-sm space-y-1 text-blue/5">
                     <li>
                       • <strong>Para universidades:</strong> Orientadores capacitados, mejor servicio a estudiantes
                     </li>
@@ -802,7 +802,7 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Recomendación 6 */}
-            <div className="bg-gradient-to-r from-red to-rose-600 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-gradient-to-r from-red to-red rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">🌎</span>
                 <div>
@@ -817,7 +817,7 @@ export default function AnalisisMercadoChilePage() {
               <div className="space-y-4">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">Por qué estos países:</h4>
-                  <ul className="text-sm space-y-1 text-pink-50">
+                  <ul className="text-sm space-y-1 text-red/5">
                     <li>
                       • <strong>Colombia:</strong> 2.5M estudiantes universitarios, crisis empleabilidad similar
                     </li>
@@ -835,7 +835,7 @@ export default function AnalisisMercadoChilePage() {
                 </div>
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">Estrategia de Entrada:</h4>
-                  <p className="text-sm text-pink-50">
+                  <p className="text-sm text-red/5">
                     <strong>2027:</strong> Post-validación en Chile, lanzar en 1-2 países con alianzas estratégicas.
                     Adaptar biblioteca (agregar libros locales), ajustar pricing regional, establecer partnerships con
                     universidades top (UNAM, ITESM en México; U. de los Andes en Colombia; UBA en Argentina).
@@ -881,17 +881,17 @@ export default function AnalisisMercadoChilePage() {
                 </div>
                 <ul className="text-muted/20 space-y-2 ml-6">
                   <li className="flex items-start gap-2">
-                    <span className="text-purple-400 mt-1">→</span>
+                    <span className="text-purple/40 mt-1">→</span>
                     <span>Tier Freemium: 1 test gratis + 5 consultas coach IA/mes + búsqueda biblioteca limitada</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-purple-400 mt-1">→</span>
+                    <span className="text-purple/40 mt-1">→</span>
                     <span>
                       Tier Premium: $19,990 CLP/mes - todos los tests ilimitados + coach IA 24/7 + biblioteca completa
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-purple-400 mt-1">→</span>
+                    <span className="text-purple/40 mt-1">→</span>
                     <span>
                       Campaña marketing digital: Instagram/TikTok targeting estudiantes 20-25 años, LinkedIn para
                       profesionales desempleados
@@ -907,17 +907,17 @@ export default function AnalisisMercadoChilePage() {
                 </div>
                 <ul className="text-muted/20 space-y-2 ml-6">
                   <li className="flex items-start gap-2">
-                    <span className="text-green-400 mt-1">→</span>
+                    <span className="text-green/40 mt-1">→</span>
                     <span>
                       Incorporar 10-15 libros sobre IA, futuro del trabajo, prompt engineering a la biblioteca
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-green-400 mt-1">→</span>
+                    <span className="text-green/40 mt-1">→</span>
                     <span>Crear test "AI Readiness" - 20 preguntas evaluando preparación para trabajos con IA</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-green-400 mt-1">→</span>
+                    <span className="text-green/40 mt-1">→</span>
                     <span>Coach IA entrenado para dar consejos específicos sobre upskilling en habilidades IA</span>
                   </li>
                 </ul>
@@ -951,7 +951,7 @@ export default function AnalisisMercadoChilePage() {
 
         {/* Conclusión */}
         <section className="mb-16">
-          <div className="bg-gradient-to-r from-blue via-indigo-600 to-purple-600 rounded-2xl shadow-2xl p-12 text-white text-center">
+          <div className="bg-gradient-to-r from-blue via-blue to-purple rounded-2xl shadow-2xl p-12 text-white text-center">
             <h2 className="text-4xl font-bold mb-6">Conclusión</h2>
             <p className="text-xl text-blue/5 max-w-4xl mx-auto leading-relaxed mb-8">
               Chile enfrenta una crisis estructural de empleabilidad con <strong>8.1% de desempleo profesional</strong>y{" "}

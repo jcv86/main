@@ -36,17 +36,17 @@ export function AvatarPicker({
 
   const userAvatars: AvatarOption[] = [
     { id: 'professional-1', name: 'Professional', description: 'Classic professional look', emoji: '👔', color: 'from-blue-500 to-blue-600' },
-    { id: 'creative-1', name: 'Creative', description: 'Modern creative style', emoji: '🎨', color: 'from-purple-500 to-purple-600' },
+    { id: 'creative-1', name: 'Creative', description: 'Modern creative style', emoji: '🎨', color: 'from-purple-500 to-purple' },
     { id: 'tech-1', name: 'Tech', description: 'Tech-savvy appearance', emoji: '💻', color: 'from-green-500 to-green-600' },
-    { id: 'business-1', name: 'Business', description: 'Corporate executive', emoji: '🏢', color: 'from-red-500 to-red-600' },
+    { id: 'business-1', name: 'Business', description: 'Corporate executive', emoji: '🏢', color: 'from-red to-red' },
     { id: 'casual-1', name: 'Casual', description: 'Relaxed casual style', emoji: '😎', color: 'from-orange-500 to-orange-600' },
     { id: 'formal-1', name: 'Formal', description: 'Formal business attire', emoji: '🎩', color: 'from-slate-700 to-slate-900' },
   ]
 
   const interviewerAvatars: AvatarOption[] = [
-    { id: 'interviewer-classic-1', name: 'Sofia', description: 'HR Specialist', emoji: '👩‍💼', color: 'from-purple-500 to-purple-600' },
+    { id: 'interviewer-classic-1', name: 'Sofia', description: 'HR Specialist', emoji: '👩‍💼', color: 'from-purple-500 to-purple' },
     { id: 'interviewer-classic-2', name: 'Marco', description: 'Tech Lead', emoji: '👨‍💻', color: 'from-blue-500 to-blue-600' },
-    { id: 'interviewer-classic-3', name: 'Elena', description: 'Executive', emoji: '👩‍💼', color: 'from-purple-500 to-indigo-600' },
+    { id: 'interviewer-classic-3', name: 'Elena', description: 'Executive', emoji: '👩‍💼', color: 'from-purple-500 to-blue' },
     { id: 'interviewer-classic-4', name: 'David', description: 'Team Manager', emoji: '👨‍💼', color: 'from-green-500 to-emerald-600' },
     { id: 'interviewer-modern-1', name: 'Alex', description: 'Career Coach', emoji: '🧑‍🏫', color: 'from-red-500 to-rose-600' },
     { id: 'interviewer-modern-2', name: 'Jordan', description: 'Recruiter', emoji: '🎯', color: 'from-orange-500 to-yellow-600' },
@@ -111,7 +111,7 @@ export function AvatarPicker({
                 
                 {selectedAvatar === avatar.id && (
                   <div className="absolute top-1 right-1 bg-white dark:bg-slate-900 rounded-full p-1">
-                    <Check className="w-4 h-4 text-green-600" />
+                    <Check className="w-4 h-4 text-green" />
                   </div>
                 )}
 
@@ -125,7 +125,7 @@ export function AvatarPicker({
 
         {/* Info */}
         <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-[28px] border border-blue-200 dark:border-blue-800">
-          <p className="text-xs text-blue-800 dark:text-blue-200">
+          <p className="text-xs text-blue dark:text-blue-200">
             💡 Tu avatar {type === 'user' ? 'aparecerá en tus respuestas y feedback' : 'conducirá la entrevista y mostrará expresiones realistas'}
           </p>
         </div>

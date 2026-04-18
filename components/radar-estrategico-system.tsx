@@ -380,9 +380,9 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
 
   const getPriorityBadge = (prioridad: string) => {
     const config = {
-      estructural: { bg: 'bg-red-900/30', text: 'text-red-300', label: 'Estructural', icon: AlertTriangle },
-      tactico: { bg: 'bg-yellow-900/30', text: 'text-yellow-300', label: 'Táctico', icon: TrendingUp },
-      contextual: { bg: 'bg-green-900/30', text: 'text-green-300', label: 'Contextual', icon: Eye }
+      estructural: { bg: 'bg-red/30', text: 'text-red-300', label: 'Estructural', icon: AlertTriangle },
+      tactico: { bg: 'bg-yellow/30', text: 'text-yellow-300', label: 'Táctico', icon: TrendingUp },
+      contextual: { bg: 'bg-green/30', text: 'text-green-300', label: 'Contextual', icon: Eye }
     }
     return config[prioridad as keyof typeof config] || config.contextual
   }
@@ -427,7 +427,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
               <p className="text-slate-300 text-sm">{radarData.lecturaBas.riesgoPrincipal}</p>
             </div>
             <div>
-              <h4 className="text-sm font-semibold text-green-400 mb-1">🟢 Oportunidad Principal</h4>
+              <h4 className="text-sm font-semibold text-green/40 mb-1">🟢 Oportunidad Principal</h4>
               <p className="text-slate-300 text-sm">{radarData.lecturaBas.oportunidadPrincipal}</p>
             </div>
           </div>
@@ -500,7 +500,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
                       <div className="bg-slate-900/50 p-3 rounded border border-slate-700/50">
                         <h4 className="text-xs font-semibold text-slate-300 uppercase mb-2">📊 Impacto temporal</h4>
                         <div className="space-y-1 text-xs">
-                          <p><span className="text-green-400">Corto:</span> {noticia.impactoTemporal.corto}</p>
+                          <p><span className="text-green/40">Corto:</span> {noticia.impactoTemporal.corto}</p>
                           <p><span className="text-yellow-400">Medio:</span> {noticia.impactoTemporal.medio}</p>
                           <p><span className="text-red-400">Largo:</span> {noticia.impactoTemporal.largo}</p>
                         </div>
@@ -515,8 +515,8 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
                         <h4 className="text-xs font-semibold text-slate-300 uppercase mb-2">🗺️ Mapa de exposición</h4>
                         <div className="space-y-1 text-xs">
                           <p><span className="text-emerald-400">🇨🇱 Chile:</span> {noticia.mapeoExposicion.chile}</p>
-                          <p><span className="text-blue-400">🌍 Global:</span> {noticia.mapeoExposicion.global}</p>
-                          <p><span className="text-purple-400">👤 Personal:</span> {noticia.mapeoExposicion.personal}</p>
+                          <p><span className="text-blue/40">🌍 Global:</span> {noticia.mapeoExposicion.global}</p>
+                          <p><span className="text-purple/40">👤 Personal:</span> {noticia.mapeoExposicion.personal}</p>
                         </div>
                       </div>
 

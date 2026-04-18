@@ -110,7 +110,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
 
       {/* Feedback Title */}
       <div className="flex items-center gap-2">
-        <Zap className="w-5 h-5 text-yellow-600" />
+        <Zap className="w-5 h-5 text-yellow" />
         <h3 className="font-semibold">Feedback en Tiempo Real</h3>
         {isProcessing && (
           <Badge variant="outline" className="ml-auto animate-pulse">
@@ -133,13 +133,13 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
                 item.severity === 'critical'
                   ? 'bg-red/5 border-red/50'
                   : item.severity === 'warning'
-                  ? 'bg-yellow-50 border-orange'
-                  : 'bg-blue-50 border-blue-500'
+                  ? 'bg-yellow/5 border-orange'
+                  : 'bg-blue-50 border-blue/50'
               }`}
             >
               <div className="flex items-start gap-2">
                 {item.severity === 'critical' && (
-                  <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="w-4 h-4 text-red flex-shrink-0 mt-0.5" />
                 )}
                 <div className="flex-1">
                   <p className="text-sm font-medium">
@@ -154,7 +154,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
       </div>
 
       {/* Tips */}
-      <div className="bg-blue-50 border border-blue-200 rounded-[28px] p-3 text-xs text-blue-700">
+      <div className="bg-blue-50 border border-blue-200 rounded-[28px] p-3 text-xs text-blue">
         <p className="font-medium mb-1">Consejo:</p>
         <p>
           El feedback se actualiza cada 3 segundos. Intenta aplicar las sugerencias en tiempo real para mejorar tu desempeño.

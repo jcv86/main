@@ -510,7 +510,7 @@ export default function RIASECResults() {
               <div>
                 <CardTitle className="text-3xl font-bold text-blue mb-2">
                   Resultados Despega Rumbo
-                  <Badge className="ml-3 bg-gradient-to-r from-blue to-indigo-600 text-white">
+                  <Badge className="ml-3 bg-gradient-to-r from-blue to-blue text-white">
                     Código Holland: {results.holland_code}
                   </Badge>
                   {isDemoMode && (
@@ -556,7 +556,7 @@ export default function RIASECResults() {
                   <p>• Roles m��s integrados</p>
                 </div>
               </div>
-              <div className="p-4 bg-white dark:bg-background rounded-lg border-l-4 border-green-500">
+              <div className="p-4 bg-white dark:bg-background rounded-lg border-l-4 border-green">
                 <h4 className="font-semibold text-lg mb-2">Cómo Llegas</h4>
                 <p className="text-sm text-muted-foreground mb-3">Tu puente de carrera</p>
                 <ul className="text-xs space-y-1">
@@ -629,7 +629,7 @@ export default function RIASECResults() {
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
-            <Card className="mb-8 border-2 border-blue/20 bg-gradient-to-br from-blue/5 to-indigo-50">
+            <Card className="mb-8 border-2 border-blue/20 bg-gradient-to-br from-blue/5 to-blue/5">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Sparkles className="w-6 h-6 text-blue" />
@@ -643,8 +643,8 @@ export default function RIASECResults() {
                   <h3 className="font-semibold text-lg mb-4 text-blue">📸 Tu Foto 360° Vocacional</h3>
                   <div className="grid md:grid-cols-3 gap-4 text-sm">
                     <div>
-                      <span className="font-semibold text-blue-800">Código Holland:</span>
-                      <p className="text-gray-700">
+                      <span className="font-semibold text-blue">Código Holland:</span>
+                      <p className="text-muted">
                         {results.holland_code} -{" "}
                         {results.holland_code
                           .split("")
@@ -653,15 +653,15 @@ export default function RIASECResults() {
                       </p>
                     </div>
                     <div>
-                      <span className="font-semibold text-blue-800">Interés dominante:</span>
-                      <p className="text-gray-700">
+                      <span className="font-semibold text-blue">Interés dominante:</span>
+                      <p className="text-muted">
                         {getCategoryName(results.holland_code[0])} (
                         {String(results[results.holland_code[0] as keyof typeof results] || 0)}/100)
                       </p>
                     </div>
                     <div>
-                      <span className="font-semibold text-blue-800">Perfil:</span>
-                      <p className="text-gray-700">
+                      <span className="font-semibold text-blue">Perfil:</span>
+                      <p className="text-muted">
                         {results.holland_code.includes("R") && results.holland_code.includes("I")
                           ? "Pensador práctico"
                           : results.holland_code.includes("A") && results.holland_code.includes("S")
@@ -680,7 +680,7 @@ export default function RIASECResults() {
                   <div className="space-y-3">
                     <div className="flex gap-3">
                       <Badge className="bg-blue">1</Badge>
-                      <p className="text-gray-700">
+                      <p className="text-muted">
                         <strong>Qué te energiza:</strong>{" "}
                         {results.holland_code[0] === "R"
                           ? "Trabajar con las manos, resolver problemas prácticos, ver resultados tangibles"
@@ -697,7 +697,7 @@ export default function RIASECResults() {
                     </div>
                     <div className="flex gap-3">
                       <Badge className="bg-blue">2</Badge>
-                      <p className="text-gray-700">
+                      <p className="text-muted">
                         <strong>Cómo te ves:</strong> Como alguien que{" "}
                         {results.holland_code.includes("A")
                           ? "ve el mundo diferente y aporta creatividad"
@@ -710,7 +710,7 @@ export default function RIASECResults() {
                     </div>
                     <div className="flex gap-3">
                       <Badge className="bg-blue">3</Badge>
-                      <p className="text-gray-700">
+                      <p className="text-muted">
                         <strong>Cómo te ven:</strong>{" "}
                         {results.holland_code.includes("R")
                           ? "Práctico, confiable, alguien que resuelve problemas reales"
@@ -723,7 +723,7 @@ export default function RIASECResults() {
                     </div>
                     <div className="flex gap-3">
                       <Badge className="bg-blue">4</Badge>
-                      <p className="text-gray-700">
+                      <p className="text-muted">
                         <strong>Tu impacto natural:</strong>{" "}
                         {results.holland_code.includes("S")
                           ? "Mejoras el bienestar y desarrollo de las personas a tu alrededor"
@@ -736,7 +736,7 @@ export default function RIASECResults() {
                     </div>
                     <div className="flex gap-3">
                       <Badge className="bg-blue">5</Badge>
-                      <p className="text-gray-700">
+                      <p className="text-muted">
                         <strong>Tu zona de fricción:</strong>{" "}
                         {results.holland_code.includes("A") && !results.holland_code.includes("C")
                           ? "Estructuras rígidas y rutinas repetitivas te agotan"
@@ -759,7 +759,7 @@ export default function RIASECResults() {
                         Vida Personal
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="text-sm text-gray-700">
+                    <CardContent className="text-sm text-muted">
                       <p>
                         Dedica tiempo a hobbies y actividades que reflejen tu código Holland. Tu vocación no es solo
                         trabajo, es tu forma de vivir.
@@ -773,7 +773,7 @@ export default function RIASECResults() {
                         Relaciones
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="text-sm text-gray-700">
+                    <CardContent className="text-sm text-muted">
                       <p>
                         Comparte tus pasiones con otros. Busca personas que compartan tus intereses para conexiones más
                         profundas.
@@ -787,7 +787,7 @@ export default function RIASECResults() {
                         Trabajo
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="text-sm text-gray-700">
+                    <CardContent className="text-sm text-muted">
                       <p>Busca roles que honren tu código Holland. El trabajo correcto no se siente como trabajo.</p>
                     </CardContent>
                   </Card>
@@ -795,7 +795,7 @@ export default function RIASECResults() {
 
                 {/* 3 movimientos clave */}
                 <div className="bg-white rounded-lg p-6 border border-muted/20">
-                  <h3 className="font-semibold text-lg mb-4 text-gray-900">🎯 Tus 3 Movimientos Clave (90 días)</h3>
+                  <h3 className="font-semibold text-lg mb-4 text-foreground">🎯 Tus 3 Movimientos Clave (90 días)</h3>
                   <div className="space-y-4">
                     <div className="flex gap-3">
                       <div className="w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-semibold flex-shrink-0">
@@ -803,7 +803,7 @@ export default function RIASECResults() {
                       </div>
                       <div>
                         <p className="font-semibold text-purple">Personal:</p>
-                        <p className="text-gray-700 text-sm">
+                        <p className="text-muted text-sm">
                           Dedica 3 horas semanales a una actividad que refleje tu interés dominante (
                           {getCategoryName(results.holland_code[0])})
                         </p>
@@ -815,7 +815,7 @@ export default function RIASECResults() {
                       </div>
                       <div>
                         <p className="font-semibold text-blue">Relacional:</p>
-                        <p className="text-gray-700 text-sm">
+                        <p className="text-muted text-sm">
                           Conecta con 2-3 personas que compartan tu código Holland para aprender y crecer juntos
                         </p>
                       </div>
@@ -826,7 +826,7 @@ export default function RIASECResults() {
                       </div>
                       <div>
                         <p className="font-semibold text-green-900">Laboral:</p>
-                        <p className="text-gray-700 text-sm">
+                        <p className="text-muted text-sm">
                           Evalúa si tu trabajo actual honra tu perfil. Si no, explora opciones más alineadas
                         </p>
                       </div>
@@ -853,7 +853,7 @@ export default function RIASECResults() {
                       <Users className="w-5 h-5" />
                       Propósito y Satisfacción
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       {results.holland_code.includes("S")
                         ? "Tu perfil Social significa que encuentras satisfacción ayudando a otros. Busca formas de servir en tu comunidad, familia y círculo cercano, no solo en el trabajo."
                         : results.holland_code.includes("A")
@@ -867,7 +867,7 @@ export default function RIASECResults() {
                       <Home className="w-5 h-5" />
                       Relaciones y Familia
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       {results.holland_code.includes("E")
                         ? "Tu perfil Emprendedor puede llevar a priorizar logros sobre relaciones. Recuerda que el éxito sin conexión humana está vacío."
                         : results.holland_code.includes("C")
@@ -881,7 +881,7 @@ export default function RIASECResults() {
                       <Heart className="w-5 h-5" />
                       Bienestar Personal
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       {results.holland_code.includes("I")
                         ? "Tu perfil Investigador necesita tiempo de reflexión y aprendizaje constante. Dedica tiempo a la lectura y exploración intelectual para tu salud mental."
                         : results.holland_code.includes("R")
@@ -895,7 +895,7 @@ export default function RIASECResults() {
                       <Sparkles className="w-5 h-5" />
                       Desarrollo Personal
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       Tu código Holland ({results.holland_code}) no solo define tu carrera ideal, sino el tipo de
                       persona que estás destinado a ser. Desarrolla estas facetas en TODOS los aspectos de tu vida:
                       voluntariado, hobbies, relaciones, aprendizaje.
@@ -907,7 +907,7 @@ export default function RIASECResults() {
                   <h3 className="font-semibold text-lg mb-3 text-purple">
                     Tu vocación es más que un trabajo, es tu forma de vivir
                   </h3>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-muted leading-relaxed">
                     El test RIASEC no es solo para elegir carrera. Es para entender qué te da energía, qué te hace
                     sentir vivo, y cómo puedes diseñar una vida completa que honre tus intereses genuinos. Integra tu
                     código Holland en tus relaciones, tu tiempo libre, y tu crecimiento personal, no solo en tu CV.
@@ -958,7 +958,7 @@ export default function RIASECResults() {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Star className="h-5 w-5 text-yellow-600" />
+                    <Star className="h-5 w-5 text-yellow" />
                     Fortalezas Principales
                   </CardTitle>
                 </CardHeader>
@@ -967,7 +967,7 @@ export default function RIASECResults() {
                     {strengths.slice(0, 4).map((strength, index) => (
                       <div key={index} className="flex items-start gap-3">
                         <CheckCircle className="h-5 w-5 text-green mt-0.5 flex-shrink-0" />
-                        <span className="text-sm text-gray-700">{strength}</span>
+                        <span className="text-sm text-muted">{strength}</span>
                       </div>
                     ))}
                   </div>
@@ -992,7 +992,7 @@ export default function RIASECResults() {
                   {careerRecommendations.map((career, index) => (
                     <div
                       key={index}
-                      className="p-4 bg-gradient-to-r from-blue/5 to-indigo-50 rounded-lg border border-blue/20"
+                      className="p-4 bg-gradient-to-r from-blue/5 to-blue/5 rounded-lg border border-blue/20"
                     >
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center text-sm font-semibold">
@@ -1010,7 +1010,7 @@ export default function RIASECResults() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <TrendingDown className="h-5 w-5 text-orange-600" />
+                  <TrendingDown className="h-5 w-5 text-orange" />
                   Áreas de Desarrollo
                 </CardTitle>
                 <CardDescription>Aspectos en los que puedes enfocar tu crecimiento profesional</CardDescription>
@@ -1020,10 +1020,10 @@ export default function RIASECResults() {
                   {developmentAreas.map((area, index) => (
                     <div
                       key={index}
-                      className="flex items-start gap-3 p-3 bg-orange-50 rounded-lg border border-orange-200"
+                      className="flex items-start gap-3 p-3 bg-orange/5 rounded-lg border border-orange/20"
                     >
-                      <AlertCircle className="h-5 w-5 text-orange-500 mt-0.5 flex-shrink-0" />
-                      <span className="text-sm text-orange-800">{area}</span>
+                      <AlertCircle className="h-5 w-5 text-orange mt-0.5 flex-shrink-0" />
+                      <span className="text-sm text-orange">{area}</span>
                     </div>
                   ))}
                 </div>
@@ -1143,7 +1143,7 @@ export default function RIASECResults() {
                 <CardContent className="space-y-4">
                   <div>
                     <h4 className="font-semibold text-lg mb-2">Tu Perfil {results.holland_code}</h4>
-                    <p className="text-gray-700 text-sm leading-relaxed">
+                    <p className="text-muted text-sm leading-relaxed">
                       {getHollandCodeDescription(results.holland_code)}
                     </p>
                   </div>
@@ -1154,7 +1154,7 @@ export default function RIASECResults() {
                       {strengths.map((strength, index) => (
                         <div key={index} className="flex items-start gap-2">
                           <Star className="h-4 w-4 text-orange mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{strength}</span>
+                          <span className="text-sm text-muted">{strength}</span>
                         </div>
                       ))}
                     </div>
@@ -1166,7 +1166,7 @@ export default function RIASECResults() {
                       {developmentAreas.map((area, index) => (
                         <div key={index} className="flex items-start gap-2">
                           <TrendingUp className="h-4 w-4 text-blue/50 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{area}</span>
+                          <span className="text-sm text-muted">{area}</span>
                         </div>
                       ))}
                     </div>
@@ -1243,8 +1243,8 @@ export default function RIASECResults() {
                       }
                       return (
                         <div key={questionKey} className="p-4 bg-muted/5 rounded-lg border">
-                          <h4 className="font-semibold text-gray-900 mb-2">{questionTexts[questionKey]}</h4>
-                          <p className="text-gray-700 text-sm leading-relaxed">{response}</p>
+                          <h4 className="font-semibold text-foreground mb-2">{questionTexts[questionKey]}</h4>
+                          <p className="text-muted text-sm leading-relaxed">{response}</p>
                         </div>
                       )
                     })}
@@ -1532,7 +1532,7 @@ export default function RIASECResults() {
                           className="flex items-center gap-2 p-2 bg-green/5 rounded border border-green/20"
                         >
                           <CheckCircle className="h-4 w-4 text-green flex-shrink-0" />
-                          <span className="text-sm text-green-800">{career}</span>
+                          <span className="text-sm text-green">{career}</span>
                         </div>
                       ),
                     )}
@@ -1561,7 +1561,7 @@ export default function RIASECResults() {
                           className="flex items-center gap-2 p-2 bg-blue/5 rounded border border-blue/20"
                         >
                           <ArrowRight className="h-4 w-4 text-blue flex-shrink-0" />
-                          <span className="text-sm text-blue-800">{career}</span>
+                          <span className="text-sm text-blue">{career}</span>
                         </div>
                       ),
                     )}
@@ -1603,7 +1603,7 @@ export default function RIASECResults() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5 text-orange-600" />
+                  <BookOpen className="h-5 w-5 text-orange" />
                   Plan de Acción Personalizado
                 </CardTitle>
                 <CardDescription>
@@ -1618,7 +1618,7 @@ export default function RIASECResults() {
                       {developmentAreas.map((area, index) => (
                         <div key={index} className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-green mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{area}</span>
+                          <span className="text-sm text-muted">{area}</span>
                         </div>
                       ))}
                     </div>
@@ -1635,7 +1635,7 @@ export default function RIASECResults() {
                       ].map((step, index) => (
                         <div key={index} className="flex items-start gap-2">
                           <ArrowRight className="h-4 w-4 text-blue/50 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{step}</span>
+                          <span className="text-sm text-muted">{step}</span>
                         </div>
                       ))}
                     </div>
@@ -1659,7 +1659,7 @@ export default function RIASECResults() {
               <CardContent className="space-y-6">
                 <div className="bg-gradient-to-r from-yellow/5 to-orange/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué estas oportunidades son relevantes para ti</h3>
-                  <p className="text-sm text-gray-700 mb-4">
+                  <p className="text-sm text-muted mb-4">
                     Tu perfil vocacional {results.holland_code} con puntuaciones R:{results.R}, I:{results.I}, A:
                     {results.A}, S:{results.S}, E:{results.E}, C:{results.C} indica tus intereses naturales. Estas
                     oportunidades están diseñadas para expandir tu potencial más allá de tu zona de confort.
@@ -1677,7 +1677,7 @@ export default function RIASECResults() {
                   <CardContent className="space-y-4">
                     <div className="bg-blue/5 p-4 rounded-lg">
                       <h4 className="font-semibold text-blue mb-2">Oportunidad Principal</h4>
-                      <p className="text-sm text-blue-800">
+                      <p className="text-sm text-blue">
                         {results.holland_code[0] === "R"
                           ? "Explora el lado artístico o social de tu trabajo técnico. Considera proyectos que combinen tu habilidad práctica con creatividad."
                           : results.holland_code[0] === "I"
@@ -1720,7 +1720,7 @@ export default function RIASECResults() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-blue to-blue-700 text-white p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-blue to-blue text-white p-4 rounded-lg">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-semibold mb-1">Recurso Recomendado DTC</p>
@@ -1747,7 +1747,7 @@ export default function RIASECResults() {
                   <CardContent className="space-y-4">
                     <div className="bg-green/5 p-4 rounded-lg">
                       <h4 className="font-semibold text-green-900 mb-2">Oportunidad Principal</h4>
-                      <p className="text-sm text-green-800">
+                      <p className="text-sm text-green">
                         Identifica las 3 carreras sugeridas que más te interesan y crea un plan de desarrollo de 2 años
                         para llegar a la primera de ellas.
                       </p>
@@ -1832,14 +1832,14 @@ export default function RIASECResults() {
                 <Card className="border-l-4 border-l-orange">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
-                      <Rocket className="h-5 w-5 text-orange-600" />
+                      <Rocket className="h-5 w-5 text-orange" />
                       4. Emprendimiento Vocacional
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-orange-50 p-4 rounded-lg">
+                    <div className="bg-orange/5 p-4 rounded-lg">
                       <h4 className="font-semibold text-orange-900 mb-2">Oportunidad Principal</h4>
-                      <p className="text-sm text-orange-800">
+                      <p className="text-sm text-orange">
                         No esperes a que alguien te contrate. Crea tu propia oportunidad alineada con tu código Holland.
                       </p>
                     </div>
@@ -1848,21 +1848,21 @@ export default function RIASECResults() {
                       <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
                       <ul className="space-y-2">
                         <li className="flex gap-3">
-                          <span className="text-orange-600 font-bold">→</span>
+                          <span className="text-orange font-bold">→</span>
                           <div>
                             <strong>Proyecto Freelance:</strong> Ofrece tus servicios en Upwork, Fiverr o plataformas
                             locales en tu área de interés vocacional.
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="text-orange-600 font-bold">→</span>
+                          <span className="text-orange font-bold">→</span>
                           <div>
                             <strong>Side Project de 90 días:</strong> Dedica 5 horas/semana a un proyecto personal que
                             aplique tu código Holland (blog, app, consultoria, arte, etc.).
                           </div>
                         </li>
                         <li className="flex gap-3">
-                          <span className="text-orange-600 font-bold">→</span>
+                          <span className="text-orange font-bold">→</span>
                           <div>
                             <strong>Validación de Idea:</strong> Identifica un problema en tu campo de interés y propón
                             una solución. Valídala con 10 personas.
@@ -1901,7 +1901,7 @@ export default function RIASECResults() {
               <CardContent className="space-y-6">
                 <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">El Ecosistema Completo de Orientación Vocacional</h3>
-                  <p className="text-sm text-gray-700 mb-4">
+                  <p className="text-sm text-muted mb-4">
                     RIASEC te muestra QUÉ te interesa, pero necesitas los otros tests para saber CÓMO lo harías, CON
                     QUIÉN trabajarías mejor, y POR QUÉ te motivaría. Juntosthey crear un mapa completo de tu carrera
                     ideal.
@@ -1932,7 +1932,7 @@ export default function RIASECResults() {
                         <CardContent className="space-y-3">
                           <div className="bg-blue/5 p-3 rounded text-sm">
                             <strong className="text-blue">Conexión:</strong>
-                            <p className="text-blue-800 mt-1">
+                            <p className="text-blue mt-1">
                               RIASEC te dice QUÉ tipo de trabajo te interesa, DISC te dice CÓMO te comportas en ese
                               trabajo.
                             </p>
@@ -1957,7 +1957,7 @@ export default function RIASECResults() {
                       <Card className="border-2 border-red-300">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
-                            <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-lg">
+                            <div className="w-8 h-8 bg-red/10 rounded-full flex items-center justify-center text-lg">
                               ❤️
                             </div>
                             Inteligencia Emocional Despega
@@ -2022,16 +2022,16 @@ export default function RIASECResults() {
                       <Card className="border-2 border-yellow-300">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
-                            <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center text-lg">
+                            <div className="w-8 h-8 bg-yellow/10 rounded-full flex items-center justify-center text-lg">
                               ⭐
                             </div>
                             5 Dimensiones Despega
                           </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3">
-                          <div className="bg-yellow-50 p-3 rounded text-sm">
-                            <strong className="text-yellow-900">Conexión:</strong>
-                            <p className="text-yellow-800 mt-1">
+                          <div className="bg-yellow/5 p-3 rounded text-sm">
+                            <strong className="text-yellow">Conexión:</strong>
+                            <p className="text-yellow mt-1">
                               Big Five predice si tendrás éxito sostenible en las carreras que RIASEC sugiere.
                             </p>
                           </div>
@@ -2055,7 +2055,7 @@ export default function RIASECResults() {
                       <Card className="border-2 border-pink-300">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
-                            <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center text-lg">
+                            <div className="w-8 h-8 bg-red/10 rounded-full flex items-center justify-center text-lg">
                               💡
                             </div>
                             Competencias Blandas Despega
@@ -2064,7 +2064,7 @@ export default function RIASECResults() {
                         <CardContent className="space-y-3">
                           <div className="bg-red/5 p-3 rounded text-sm">
                             <strong className="text-pink-900">Conexión:</strong>
-                            <p className="text-pink-800 mt-1">
+                            <p className="text-red mt-1">
                               RIASEC muestra intereses naturales, Soft Skills muestra habilidades entrenables que puedes
                               desarrollar.
                             </p>
@@ -2174,7 +2174,7 @@ export default function RIASECResults() {
                   </CardContent>
                 </Card>
 
-                <div className="bg-gradient-to-r from-blue to-purple-600 text-white p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-blue to-purple text-white p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-2">Recomendación DTC</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Para una orientación vocacional completa, combina RIASEC (intereses) + DISC (comportamiento laboral)
@@ -2202,13 +2202,13 @@ export default function RIASECResults() {
               <CardContent className="space-y-6">
                 <div className="bg-gradient-to-r from-red/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué reflexionar sobre tu vocación es crucial</h3>
-                  <p className="text-sm text-gray-700 mb-4">
+                  <p className="text-sm text-muted mb-4">
                     RIASEC te muestra tus intereses, pero tu vocación real emerge cuando reflexionas sobre POR QUÉ te
                     interesan, QUÉ significan para ti, y CÓMO se conectan con tu propósito de vida. Estas preguntas
                     están diseñadas para convertir números en claridad vocacional.
                   </p>
                   <div className="bg-white p-4 rounded border-l-4 border-pink-500">
-                    <p className="text-sm italic text-gray-700">
+                    <p className="text-sm italic text-muted">
                       Tip: Responde con honestidad brutal. No escribas lo que crees que deberías sentir, sino lo que
                       realmente sientes.
                     </p>
@@ -2276,7 +2276,7 @@ export default function RIASECResults() {
                   </AccordionItem>
 
                   <AccordionItem value="barreras">
-                    <AccordionTrigger className="bg-orange-50 px-4 rounded-lg hover:bg-orange-100">
+                    <AccordionTrigger className="bg-orange/5 px-4 rounded-lg hover:bg-orange/10">
                       <div className="flex items-center gap-3">
                         <span className="text-2xl">🚧</span>
                         <span className="font-semibold">Barreras y Creencias Limitantes</span>
@@ -2392,7 +2392,7 @@ export default function RIASECResults() {
                   </AccordionItem>
 
                   <AccordionItem value="accion">
-                    <AccordionTrigger className="bg-green/5 px-4 rounded-lg hover:bg-green-100">
+                    <AccordionTrigger className="bg-green/5 px-4 rounded-lg hover:bg-green/10">
                       <div className="flex items-center gap-3">
                         <span className="text-2xl">🚀</span>
                         <span className="font-semibold">Plan de Acción</span>
@@ -2418,7 +2418,7 @@ export default function RIASECResults() {
                   </AccordionItem>
                 </Accordion>
 
-                <div className="bg-gradient-to-r from-red to-purple-600 text-white p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-red to-purple text-white p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-2">Habla con tu Coach IA sobre tu vocación</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Las mejores decisiones vocacionales emergen del diálogo. Comparte tus reflexiones con Dani para
@@ -2587,7 +2587,7 @@ export default function RIASECResults() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5 text-orange-600" />
+                  <BookOpen className="h-5 w-5 text-orange" />
                   Plan de Acción Personalizado
                 </CardTitle>
                 <CardDescription>
@@ -2602,7 +2602,7 @@ export default function RIASECResults() {
                       {developmentAreas.map((area, index) => (
                         <div key={index} className="flex items-start gap-2">
                           <CheckCircle className="h-4 w-4 text-green mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{area}</span>
+                          <span className="text-sm text-muted">{area}</span>
                         </div>
                       ))}
                     </div>
@@ -2619,7 +2619,7 @@ export default function RIASECResults() {
                       ].map((step, index) => (
                         <div key={index} className="flex items-start gap-2">
                           <ArrowRight className="h-4 w-4 text-blue/50 mt-0.5 flex-shrink-0" />
-                          <span className="text-sm text-gray-700">{step}</span>
+                          <span className="text-sm text-muted">{step}</span>
                         </div>
                       ))}
                     </div>

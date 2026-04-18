@@ -88,7 +88,7 @@ export default function ConversationalInterviewPage() {
                   onClick={() => setSelectedRole(role)}
                   className={`p-3 rounded-[28px] border-2 transition ${
                     selectedRole === role
-                      ? 'border-blue bg-blue/5 dark:bg-cyan-900/20'
+                      ? 'border-blue bg-blue/5 dark:bg-cyan/20'
                       : 'border-muted/20 dark:border-card hover:border-cyan-400'
                   }`}
                 >
@@ -109,7 +109,7 @@ export default function ConversationalInterviewPage() {
                     onClick={() => setSelectedIndustry(industry)}
                     className={`p-3 rounded-[28px] border-2 transition ${
                       selectedIndustry === industry
-                        ? 'border-blue bg-blue/5 dark:bg-cyan-900/20'
+                        ? 'border-blue bg-blue/5 dark:bg-cyan/20'
                         : 'border-muted/20 dark:border-card hover:border-cyan-400'
                     }`}
                   >
@@ -131,7 +131,7 @@ export default function ConversationalInterviewPage() {
                     onClick={() => setSelectedLevel(level.id as any)}
                     className={`w-full p-4 rounded-[28px] border-2 transition text-left ${
                       selectedLevel === level.id
-                        ? 'border-blue bg-blue/5 dark:bg-cyan-900/20'
+                        ? 'border-blue bg-blue/5 dark:bg-cyan/20'
                         : 'border-muted/20 dark:border-card hover:border-cyan-400'
                     }`}
                   >

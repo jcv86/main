@@ -58,10 +58,10 @@ export function SkillGapAnalysis({ userEmail }: SkillGapAnalysisProps) {
   }
 
   const getPriorityColor = (score: number) => {
-    if (score >= 8) return "text-red-600 bg-red-100"
-    if (score >= 5) return "text-orange-600 bg-orange-100"
-    if (score >= 3) return "text-yellow-600 bg-yellow-100"
-    return "text-green-600 bg-green-100"
+    if (score >= 8) return "text-red bg-red/10"
+    if (score >= 5) return "text-orange bg-orange/10"
+    if (score >= 3) return "text-yellow bg-yellow/10"
+    return "text-green bg-green/10"
   }
 
   const getPriorityLabel = (score: number) => {
@@ -72,9 +72,9 @@ export function SkillGapAnalysis({ userEmail }: SkillGapAnalysisProps) {
   }
 
   const getPercentileMessage = (percentile: number) => {
-    if (percentile >= 75) return { message: "¡Excelente! Estás en el top 25%", color: "text-green-600", icon: Award }
-    if (percentile >= 50) return { message: "Por encima del promedio", color: "text-blue-600", icon: TrendingUp }
-    return { message: "Oportunidad de mejora", color: "text-orange-600", icon: TrendingDown }
+    if (percentile >= 75) return { message: "¡Excelente! Estás en el top 25%", color: "text-green", icon: Award }
+    if (percentile >= 50) return { message: "Por encima del promedio", color: "text-blue", icon: TrendingUp }
+    return { message: "Oportunidad de mejora", color: "text-orange", icon: TrendingDown }
   }
 
   if (loading) {
@@ -137,11 +137,11 @@ export function SkillGapAnalysis({ userEmail }: SkillGapAnalysisProps) {
             <p className="text-xs text-muted-foreground">Brechas Identificadas</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold text-orange-600">{gaps.filter((g) => g.priority_score >= 5).length}</p>
+            <p className="text-2xl font-bold text-orange">{gaps.filter((g) => g.priority_score >= 5).length}</p>
             <p className="text-xs text-muted-foreground">Prioridad Alta</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold text-green-600">{Object.keys(percentiles).length}</p>
+            <p className="text-2xl font-bold text-green">{Object.keys(percentiles).length}</p>
             <p className="text-xs text-muted-foreground">Con Benchmark</p>
           </div>
         </div>
@@ -173,7 +173,7 @@ export function SkillGapAnalysis({ userEmail }: SkillGapAnalysisProps) {
                       <div className="relative">
                         <Progress value={(gap.current_level / 10) * 100} className="h-3" />
                         <div
-                          className="absolute top-0 h-3 border-r-2 border-dashed border-blue-500"
+                          className="absolute top-0 h-3 border-r-2 border-dashed border-blue/50"
                           style={{ left: `${(gap.target_level / 10) * 100}%` }}
                         />
                       </div>

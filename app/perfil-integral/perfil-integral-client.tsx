@@ -200,7 +200,7 @@ export function PerfilIntegralClient() {
             <Card className={!ieResult ? "opacity-50" : ""}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Heart className="h-8 w-8 text-red-600" />
+                  <Heart className="h-8 w-8 text-red" />
                   {ieResult && <Badge variant="secondary">Completado</Badge>}
                 </div>
                 <CardTitle>Inteligencia Emocional</CardTitle>
@@ -209,7 +209,7 @@ export function PerfilIntegralClient() {
               <CardContent>
                 {ieResult ? (
                   <div>
-                    <p className="text-2xl font-bold text-red-600 mb-2">{ieResult.score || "N/A"}%</p>
+                    <p className="text-2xl font-bold text-red mb-2">{ieResult.score || "N/A"}%</p>
                     <p className="text-sm text-muted-foreground">Nivel de inteligencia emocional</p>
                   </div>
                 ) : (
@@ -222,7 +222,7 @@ export function PerfilIntegralClient() {
             <Card className={!riasecResult ? "opacity-50" : ""}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Target className="h-8 w-8 text-orange-600" />
+                  <Target className="h-8 w-8 text-orange" />
                   {riasecResult && <Badge variant="secondary">Completado</Badge>}
                 </div>
                 <CardTitle>RIASEC</CardTitle>
@@ -355,7 +355,7 @@ export function PerfilIntegralClient() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Heart className="h-6 w-6 text-red-600" />
+                <Heart className="h-6 w-6 text-red" />
                 Cómo Sientes y Gestionas tus Emociones
               </CardTitle>
               <CardDescription>Tu relación con tus emociones y tu capacidad de regularlas</CardDescription>
@@ -469,7 +469,7 @@ export function PerfilIntegralClient() {
 
                   <div className="bg-blue/5 border border-blue/10 rounded-lg p-4">
                     <p className="text-sm font-medium text-blue mb-2">💡 En tu vida diaria</p>
-                    <p className="text-sm text-blue-800">
+                    <p className="text-sm text-blue">
                       Tu estilo DISC influye en cómo te comunicas con tu familia, manejas el estrés en casa, y organizas
                       tu vida personal. Entenderlo te ayuda a mejorar tus relaciones y bienestar.
                     </p>
@@ -490,7 +490,7 @@ export function PerfilIntegralClient() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Target className="h-6 w-6 text-orange-600" />
+                <Target className="h-6 w-6 text-orange" />
                 Qué te Motiva y Apasiona
               </CardTitle>
               <CardDescription>Tus intereses vocacionales y qué actividades te energizan</CardDescription>
@@ -502,7 +502,7 @@ export function PerfilIntegralClient() {
                     <h3 className="font-semibold text-lg mb-3">Intereses Dominantes</h3>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                       {riasecResult.results?.topInterests?.map((interest: string, idx: number) => (
-                        <div key={idx} className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                        <div key={idx} className="bg-orange/5 border border-orange/20 rounded-lg p-3">
                           <p className="font-medium text-orange-900">{interest}</p>
                         </div>
                       )) || <p className="text-sm text-muted-foreground col-span-3">Perfil de intereses evaluado</p>}
@@ -518,9 +518,9 @@ export function PerfilIntegralClient() {
                     </p>
                   </div>
 
-                  <div className="bg-orange-50 border border-orange-100 rounded-lg p-4">
+                  <div className="bg-orange/5 border border-orange-100 rounded-lg p-4">
                     <p className="text-sm font-medium text-orange-900 mb-2">💡 Más allá del trabajo</p>
-                    <p className="text-sm text-orange-800">
+                    <p className="text-sm text-orange">
                       Estos intereses también pueden guiar tus hobbies, voluntariados y cómo contribuyes a tu comunidad.
                       No se trata solo de trabajo, sino de cómo quieres vivir tu vida.
                     </p>

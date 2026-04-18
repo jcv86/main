@@ -42,27 +42,27 @@ function LLMOOptimizedFooter() {
             {/* Contact Info */}
             <div className="space-y-3 mb-6">
               <div className="flex items-center gap-3 text-sm">
-                <Mail className="h-4 w-4 text-purple-400" />
+                <Mail className="h-4 w-4 text-purple/40" />
                 <button 
                   onClick={() => setContactOpen(true)}
-                  className="hover:text-purple-400 transition-colors cursor-pointer"
+                  className="hover:text-purple/40 transition-colors cursor-pointer"
                 >
                   info@despegatucarrera.com
                 </button>
               </div>
               <div className="flex items-center gap-3 text-sm">
-                <MessageCircle className="h-4 w-4 text-green-400" />
+                <MessageCircle className="h-4 w-4 text-green/40" />
                 <a 
                   href="https://wa.me/56963160187?text=Hola%2C%20me%20gustar%C3%ADa%20conocer%20m%C3%A1s%20sobre%20Despega%20Tu%20Carrera" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="hover:text-green-400 transition-colors"
+                  className="hover:text-green/40 transition-colors"
                 >
                   +56 9 6316 0187
                 </a>
               </div>
               <div className="flex items-center gap-3 text-sm">
-                <MapPin className="h-4 w-4 text-purple-400" />
+                <MapPin className="h-4 w-4 text-purple/40" />
                 <span>Santiago, Chile</span>
               </div>
             </div>
@@ -112,24 +112,24 @@ function LLMOOptimizedFooter() {
             <h3 className="text-white font-semibold mb-4 text-lg">Tests Psicométricos</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/test/disc" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                <Link href="/test/disc" className="hover:text-purple/40 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
                   Despega Cerebral™
                 </Link>
               </li>
               <li>
-                <Link href="/test/mbti" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                <Link href="/test/mbti" className="hover:text-purple/40 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
                   Mapa de Personalidad
                 </Link>
               </li>
               <li>
-                <Link href="/test/big-five" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                <Link href="/test/big-five" className="hover:text-purple/40 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>5 Dimensiones
                 </Link>
               </li>
               <li>
-                <Link href="/test/riasec" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                <Link href="/test/riasec" className="hover:text-purple/40 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
                   Brújula Vocacional
                 </Link>
@@ -137,7 +137,7 @@ function LLMOOptimizedFooter() {
               <li>
                 <Link
                   href="/test/emotional-intelligence"
-                  className="hover:text-purple-400 transition-colors flex items-center gap-2"
+                  className="hover:text-purple/40 transition-colors flex items-center gap-2"
                 >
                   <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
                   Inteligencia Emocional
@@ -146,7 +146,7 @@ function LLMOOptimizedFooter() {
               <li>
                 <Link
                   href="/test/soft-skills"
-                  className="hover:text-purple-400 transition-colors flex items-center gap-2"
+                  className="hover:text-purple/40 transition-colors flex items-center gap-2"
                 >
                   <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
                   Competencias Profesionales
@@ -160,19 +160,19 @@ function LLMOOptimizedFooter() {
             <h3 className="text-white font-semibold mb-4 text-lg">Recursos</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/biblioteca" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                <Link href="/biblioteca" className="hover:text-purple/40 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
                   Biblioteca
                 </Link>
               </li>
               <li>
-                <Link href="/cerebro" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                <Link href="/cerebro" className="hover:text-purple/40 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
                   Coach con IA
                 </Link>
               </li>
               <li>
-                <Link href="/faq" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                <Link href="/faq" className="hover:text-purple/40 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
                   Preguntas Frecuentes
                 </Link>
@@ -185,13 +185,13 @@ function LLMOOptimizedFooter() {
             <h3 className="text-white font-semibold mb-4 text-lg">Legal</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <Link href="/privacy" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                <Link href="/privacy" className="hover:text-purple/40 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
                   Privacidad
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-purple-400 transition-colors flex items-center gap-2">
+                <Link href="/terms" className="hover:text-purple/40 transition-colors flex items-center gap-2">
                   <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
                   Términos de Servicio
                 </Link>
@@ -199,7 +199,7 @@ function LLMOOptimizedFooter() {
               <li>
                 <button 
                   onClick={() => setContactOpen(true)}
-                  className="hover:text-purple-400 transition-colors flex items-center gap-2 cursor-pointer"
+                  className="hover:text-purple/40 transition-colors flex items-center gap-2 cursor-pointer"
                 >
                   <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
                   Contacto
@@ -224,7 +224,7 @@ function LLMOOptimizedFooter() {
                   href="https://www.n3uralia.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-purple-400 hover:text-purple-300 transition-colors font-medium"
+                  className="text-purple/40 hover:text-purple/30 transition-colors font-medium"
                 >
                   n3uralia
                 </a>

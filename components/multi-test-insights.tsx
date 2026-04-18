@@ -142,20 +142,20 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-blue-600" />
+                <Users className="h-5 w-5 text-blue" />
                 Tu Perfil Profesional Completo
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="bg-blue-50 p-4 rounded-[28px]">
                 <h4 className="font-semibold text-blue-900 mb-2">Resumen</h4>
-                <p className="text-sm text-blue-800">{analysis.professionalProfile?.summary}</p>
+                <p className="text-sm text-blue">{analysis.professionalProfile?.summary}</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-green-600" />
+                  <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-green" />
                     Fortalezas Clave
                   </h4>
                   <ul className="space-y-2">
@@ -169,8 +169,8 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                    <Target className="h-4 w-4 text-orange-600" />
+                  <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <Target className="h-4 w-4 text-orange" />
                     Áreas de Desarrollo
                   </h4>
                   <ul className="space-y-2">
@@ -185,8 +185,8 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-3">Estilo de Trabajo</h4>
-                <p className="text-sm text-gray-700">{analysis.professionalProfile?.workStyle}</p>
+                <h4 className="font-semibold text-foreground mb-3">Estilo de Trabajo</h4>
+                <p className="text-sm text-muted">{analysis.professionalProfile?.workStyle}</p>
               </div>
             </CardContent>
           </Card>
@@ -214,7 +214,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
 
                   <div className="space-y-2">
                     <div>
-                      <span className="text-sm font-medium text-gray-700">Tests considerados:</span>
+                      <span className="text-sm font-medium text-muted">Tests considerados:</span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {combo.test_combination.map((test, idx) => (
                           <Badge key={idx} variant="outline" className="text-xs">
@@ -225,7 +225,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                     </div>
 
                     <div>
-                      <span className="text-sm font-medium text-gray-700">Habilidades recomendadas:</span>
+                      <span className="text-sm font-medium text-muted">Habilidades recomendadas:</span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {combo.recommended_skills.map((skill, idx) => (
                           <Badge key={idx} variant="secondary" className="text-xs">
@@ -236,8 +236,8 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                     </div>
 
                     <div className="flex items-center gap-2 text-sm">
-                      <TrendingUp className="h-4 w-4 text-green-600" />
-                      <span className="text-gray-700">Demanda: {combo.market_demand}</span>
+                      <TrendingUp className="h-4 w-4 text-green" />
+                      <span className="text-muted">Demanda: {combo.market_demand}</span>
                     </div>
                   </div>
 
@@ -253,7 +253,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-red-600" />
+                <MapPin className="h-5 w-5 text-red" />
                 Insights del Mercado Laboral Chileno
               </CardTitle>
               <CardDescription>Oportunidades específicas para tu perfil en Chile</CardDescription>
@@ -276,9 +276,9 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                       }
                       className={
                         insight.demand_level === "Alta"
-                          ? "bg-green-100 text-green-700"
+                          ? "bg-green/10 text-green"
                           : insight.demand_level === "Media"
-                            ? "bg-yellow-100 text-yellow-700"
+                            ? "bg-yellow/10 text-yellow-700"
                             : ""
                       }
                     >
@@ -288,17 +288,17 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
 
                   <div className="flex items-center gap-4 text-sm">
                     <div className="flex items-center gap-2">
-                      <DollarSign className="h-4 w-4 text-green-600" />
+                      <DollarSign className="h-4 w-4 text-green" />
                       <span className="font-medium">${insight.avg_salary_clp.toLocaleString("es-CL")} CLP/mes</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4 text-blue-600" />
+                      <TrendingUp className="h-4 w-4 text-blue" />
                       <span>{insight.growth_projection}</span>
                     </div>
                   </div>
 
                   <div>
-                    <span className="text-sm font-medium text-gray-700">Habilidades requeridas:</span>
+                    <span className="text-sm font-medium text-muted">Habilidades requeridas:</span>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {insight.required_skills.map((skill, idx) => (
                         <Badge key={idx} variant="outline" className="text-xs">
@@ -333,7 +333,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                       : insight.category === "skills"
                         ? "border-l-green-500 bg-green-50"
                         : insight.category === "development"
-                          ? "border-l-orange-500 bg-orange-50"
+                          ? "border-l-orange-500 bg-orange/5"
                           : "border-l-purple-500 bg-purple-50"
                   }`}
                 >

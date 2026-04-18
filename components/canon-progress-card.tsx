@@ -31,7 +31,7 @@ export function CanonProgressCard({
       <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/30 dark:to-blue-950/30">
         <CardHeader>
           <CardTitle className="text-2xl flex items-center gap-2">
-            <Target className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+            <Target className="w-6 h-6 text-purple-600 dark:text-purple/40" />
             Tu Viaje CANON
           </CardTitle>
           <CardDescription>
@@ -63,7 +63,7 @@ export function CanonProgressCard({
             <div className="flex items-start gap-4 p-4 bg-white dark:bg-slate-800 rounded-lg">
               <div className="flex-shrink-0">
                 {c1Completed ? (
-                  <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
+                  <CheckCircle2 className="w-6 h-6 text-green dark:text-green/40" />
                 ) : (
                   <div className="w-6 h-6 rounded-full border-2 border-slate-300 dark:border-slate-600" />
                 )}
@@ -76,7 +76,7 @@ export function CanonProgressCard({
                   Captura tu contexto profesional y personal
                 </p>
                 {c1CompletedAt && (
-                  <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                  <p className="text-xs text-green dark:text-green/40 mt-1">
                     ✓ Completado {new Date(c1CompletedAt).toLocaleDateString()}
                   </p>
                 )}
@@ -87,7 +87,7 @@ export function CanonProgressCard({
             <div className="flex items-start gap-4 p-4 bg-white dark:bg-slate-800 rounded-lg">
               <div className="flex-shrink-0">
                 {a1Completed ? (
-                  <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
+                  <CheckCircle2 className="w-6 h-6 text-green dark:text-green/40" />
                 ) : (
                   <div className={`w-6 h-6 rounded-full border-2 ${c1Completed ? "border-purple-600" : "border-slate-300 dark:border-slate-600"}`} />
                 )}
@@ -100,7 +100,7 @@ export function CanonProgressCard({
                   Descubre tu patrón natural de liderazgo
                 </p>
                 {a1CompletedAt && (
-                  <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                  <p className="text-xs text-green dark:text-green/40 mt-1">
                     ✓ Completado {new Date(a1CompletedAt).toLocaleDateString()}
                   </p>
                 )}
@@ -111,7 +111,7 @@ export function CanonProgressCard({
             <div className="flex items-start gap-4 p-4 bg-white dark:bg-slate-800 rounded-lg">
               <div className="flex-shrink-0">
                 {c2Completed ? (
-                  <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
+                  <CheckCircle2 className="w-6 h-6 text-green dark:text-green/40" />
                 ) : (
                   <div className={`w-6 h-6 rounded-full border-2 ${a1Completed ? "border-purple-600" : "border-slate-300 dark:border-slate-600"}`} />
                 )}
@@ -124,7 +124,7 @@ export function CanonProgressCard({
                   Plan 30/60/90 adaptado a tu realidad
                 </p>
                 {c2CompletedAt && (
-                  <p className="text-xs text-green-600 dark:text-green-400 mt-1">
+                  <p className="text-xs text-green dark:text-green/40 mt-1">
                     ✓ Completado {new Date(c2CompletedAt).toLocaleDateString()}
                   </p>
                 )}
@@ -150,7 +150,7 @@ export function CanonProgressCard({
                 <ul className="space-y-2">
                   {generatedRoute.recomendaciones_personalizadas.map((rec, idx) => (
                     <li key={idx} className="flex gap-2 text-sm">
-                      <span className="text-purple-600 dark:text-purple-400 font-bold">•</span>
+                      <span className="text-purple-600 dark:text-purple/40 font-bold">•</span>
                       <span className="text-slate-700 dark:text-slate-300">{rec}</span>
                     </li>
                   ))}
@@ -161,17 +161,17 @@ export function CanonProgressCard({
 
           {/* Advertencias */}
           {generatedRoute.contradicciones_detectadas.length > 0 && (
-            <Card className="border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-950/20">
+            <Card className="border-yellow/20 dark:border-yellow bg-yellow/5 dark:bg-yellow/20">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-orange" />
+                  <AlertCircle className="w-5 h-5 text-yellow dark:text-orange" />
                   Puntos de Atención
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
                   {generatedRoute.contradicciones_detectadas.map((adv, idx) => (
-                    <li key={idx} className="text-sm text-yellow-800 dark:text-yellow-200">
+                    <li key={idx} className="text-sm text-yellow dark:text-yellow/20">
                       {adv}
                     </li>
                   ))}
@@ -184,7 +184,7 @@ export function CanonProgressCard({
           {generatedRoute.factores_exito.length > 0 && (
             <Card className="border-green-200 dark:border-green-800">
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2 text-green-700 dark:text-green-400">
+                <CardTitle className="text-lg flex items-center gap-2 text-green dark:text-green/40">
                   <CheckCircle2 className="w-5 h-5" />
                   Factores de Éxito Detectados
                 </CardTitle>
@@ -193,7 +193,7 @@ export function CanonProgressCard({
                 <ul className="space-y-2">
                   {generatedRoute.factores_exito.map((factor, idx) => (
                     <li key={idx} className="flex gap-2 text-sm">
-                      <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
+                      <Badge className="bg-green/10 text-green dark:bg-green dark:text-green-200">
                         ✓
                       </Badge>
                       <span className="text-slate-700 dark:text-slate-300">{factor}</span>

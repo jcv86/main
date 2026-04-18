@@ -272,7 +272,7 @@ export default function DISCTestClient() {
       <div className="min-h-screen bg-muted/5 flex items-center justify-center p-4">
         <Card className="w-full max-w-2xl">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
+            <div className="mx-auto mb-4 w-16 h-16 bg-green/10 rounded-full flex items-center justify-center">
               <CheckCircle className="h-8 w-8 text-green" />
             </div>
             <CardTitle className="text-2xl">¡Test Despega Cerebral Completado!</CardTitle>

@@ -64,9 +64,9 @@ export default function BitacoraPage() {
   }
 
   const getMoodColor = (mood: number) => {
-    if (mood <= 2) return 'bg-red-100 text-red-800'
-    if (mood === 3) return 'bg-yellow-100 text-yellow-800'
-    return 'bg-green-100 text-green-800'
+    if (mood <= 2) return 'bg-red/10 text-red-800'
+    if (mood === 3) return 'bg-yellow/10 text-yellow'
+    return 'bg-green/10 text-green'
   }
 
   const getMoodLabel = (mood: number) => {
@@ -108,9 +108,9 @@ export default function BitacoraPage() {
 
         {/* Error State */}
         {error && (
-          <Card className="border-0 shadow-md bg-red/5 dark:bg-red-900/20 border-l-4 border-l-red-500">
+          <Card className="border-0 shadow-md bg-red/5 dark:bg-red/20 border-l-4 border-l-red-500">
             <CardContent className="p-4">
-              <p className="text-sm text-red-800 dark:text-red-200">
+              <p className="text-sm text-red-800 dark:text-red/20">
                 <strong>Error:</strong> {error}
               </p>
             </CardContent>
@@ -333,7 +333,7 @@ export default function BitacoraPage() {
                           </div>
                           <div className="flex flex-wrap gap-2">
                             {entry.insights.map((insight, i) => (
-                              <Badge key={i} variant="outline" className="bg-yellow-50 dark:bg-yellow-950 border-yellow-200 dark:border-yellow-800">
+                              <Badge key={i} variant="outline" className="bg-yellow/5 dark:bg-yellow border-yellow/20 dark:border-yellow">
                                 {insight}
                               </Badge>
                             ))}
@@ -353,7 +353,7 @@ export default function BitacoraPage() {
                       {entry.nextSteps && (
                         <div className="p-3 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue/10">
                           <p className="text-sm font-medium text-blue dark:text-blue/10 mb-1">Próximos Pasos</p>
-                          <p className="text-sm text-blue-800 dark:text-blue/20">{entry.nextSteps}</p>
+                          <p className="text-sm text-blue dark:text-blue/20">{entry.nextSteps}</p>
                         </div>
                       )}
                     </CardContent>

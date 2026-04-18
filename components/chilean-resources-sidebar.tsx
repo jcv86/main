@@ -108,17 +108,17 @@ export default function ChileanResourcesSidebar({
                   href={resource.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-sm font-semibold text-blue dark:text-blue/40 hover:underline"
                 >
                   {resource.title}
                 </a>
                 <p className="text-xs text-muted/60 dark:text-muted/40 mt-1">{resource.category}</p>
                 {resource.reason && (
-                  <p className="text-xs text-gray-700 dark:text-muted/30 mt-2 italic">"{resource.reason}"</p>
+                  <p className="text-xs text-muted dark:text-muted/30 mt-2 italic">"{resource.reason}"</p>
                 )}
               </div>
               {resource.matchScore && (
-                <div className="text-xs font-semibold text-green-600 dark:text-green-400 whitespace-nowrap">
+                <div className="text-xs font-semibold text-green dark:text-green/40 whitespace-nowrap">
                   {Math.round(resource.matchScore * 100)}% match
                 </div>
               )}

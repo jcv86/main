@@ -182,7 +182,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
       case "running":
         return <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
       case "passed":
-        return <CheckCircle className="h-4 w-4 text-green-500" />
+        return <CheckCircle className="h-4 w-4 text-green/50" />
       case "failed":
         return <XCircle className="h-4 w-4 text-red" />
       default:
@@ -208,7 +208,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-6 text-sm">
               <span className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-green/50" />
                 <span className="font-medium">{passedTests}</span> Passed
               </span>
               <span className="flex items-center gap-2">
@@ -294,12 +294,12 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
               {/* Errors */}
               {metric.errors.length > 0 && (
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1 text-xs text-red-600">
+                  <div className="flex items-center gap-1 text-xs text-red">
                     <AlertTriangle className="h-3 w-3" />
                     Errors ({metric.errors.length})
                   </div>
                   {metric.errors.slice(0, 2).map((error, index) => (
-                    <p key={index} className="text-xs text-red-600 truncate">
+                    <p key={index} className="text-xs text-red truncate">
                       {error}
                     </p>
                   ))}

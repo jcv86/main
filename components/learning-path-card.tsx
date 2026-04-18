@@ -32,10 +32,10 @@ export function LearningPathCard({ path, userProgress, onStart, onContinue }: Le
   const isCompleted = userProgress?.status === "completed"
 
   const difficultyColors = {
-    beginner: "bg-green-100 text-green-700",
-    intermediate: "bg-blue-100 text-blue-700",
+    beginner: "bg-green/10 text-green",
+    intermediate: "bg-blue/10 text-blue",
     advanced: "bg-purple-100 text-purple-700",
-    expert: "bg-red-100 text-red",
+    expert: "bg-red/10 text-red",
   }
 
   return (
@@ -67,7 +67,7 @@ export function LearningPathCard({ path, userProgress, onStart, onContinue }: Le
             </div>
             <Progress value={userProgress.completion_percentage} className="h-2" />
             {userProgress.streak_days > 0 && (
-              <div className="flex items-center gap-1 text-sm text-orange-600">
+              <div className="flex items-center gap-1 text-sm text-orange">
                 <Award className="h-4 w-4" />
                 <span>{userProgress.streak_days} días de racha 🔥</span>
               </div>

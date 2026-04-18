@@ -375,18 +375,18 @@ export default function AICoachTestScenarios() {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "easy":
-        return "bg-green-100 text-green-800 border-green-200"
+        return "bg-green/10 text-green border-green-200"
       case "medium":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200"
+        return "bg-yellow/10 text-yellow border-yellow/20"
       case "hard":
-        return "bg-red-100 text-red-800 border-red/20"
+        return "bg-red/10 text-red-800 border-red/20"
       default:
         return "bg-muted/10 text-gray-800 border-muted/20"
     }
   }
 
   const getResultIcon = (success: boolean) => {
-    return success ? <CheckCircle className="h-4 w-4 text-green-600" /> : <Target className="h-4 w-4 text-red-600" />
+    return success ? <CheckCircle className="h-4 w-4 text-green" /> : <Target className="h-4 w-4 text-red" />
   }
 
   const filteredScenarios = testScenarios.filter((scenario) => scenario.category === activeCategory)
@@ -399,7 +399,7 @@ export default function AICoachTestScenarios() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Brain className="h-6 w-6 text-blue-600" />
+            <Brain className="h-6 w-6 text-blue" />
             AI Coach - Escenarios de Testing
           </CardTitle>
           <p className="text-muted/60">Prueba diferentes tipos de preguntas para validar las respuestas del AI Coach</p>
@@ -516,7 +516,7 @@ export default function AICoachTestScenarios() {
                           </div>
 
                           <div className="bg-muted/5 rounded p-3 mb-2">
-                            <p className="text-xs text-gray-700 whitespace-pre-wrap">
+                            <p className="text-xs text-muted whitespace-pre-wrap">
                               {result.actualResponse.substring(0, 200)}
                               {result.actualResponse.length > 200 && "..."}
                             </p>
@@ -555,15 +555,15 @@ export default function AICoachTestScenarios() {
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">{testResults.length}</div>
+                <div className="text-2xl font-bold text-blue">{testResults.length}</div>
                 <div className="text-sm text-muted/60">Tests Ejecutados</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">{testResults.filter((r) => r.success).length}</div>
+                <div className="text-2xl font-bold text-green">{testResults.filter((r) => r.success).length}</div>
                 <div className="text-sm text-muted/60">Exitosos</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-orange-600">
+                <div className="text-2xl font-bold text-orange">
                   {testResults.length > 0
                     ? Math.round(testResults.reduce((sum, r) => sum + r.responseTime, 0) / testResults.length)
                     : 0}

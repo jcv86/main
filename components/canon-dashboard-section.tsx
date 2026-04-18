@@ -111,7 +111,7 @@ export function CanonDashboardSection() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue/40" />
       </div>
     )
   }
@@ -132,10 +132,10 @@ export function CanonDashboardSection() {
               <span className="font-semibold text-emerald-400">✓ Ya completaste:</span> Test A1 (Perfil DISC)
             </p>
             <p className="text-sm text-slate-300">
-              <span className="font-semibold text-blue-400">→ Siguiente:</span> Conozcámonos 2 - Paso 1 (Contexto de ejecución)
+              <span className="font-semibold text-blue/40">→ Siguiente:</span> Conozcámonos 2 - Paso 1 (Contexto de ejecución)
             </p>
             <p className="text-sm text-slate-300">
-              <span className="font-semibold text-purple-400">📊 Resultado:</span> Ruta 30/60/90 personalizada con trazabilidad
+              <span className="font-semibold text-purple/40">📊 Resultado:</span> Ruta 30/60/90 personalizada con trazabilidad
             </p>
           </div>
           <Link href="/despega/onboarding" className="block mt-6">

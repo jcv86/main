@@ -104,10 +104,10 @@ export function A3DifficultyProgression({
           <div className="text-center">
             <div className="text-5xl font-bold mb-2">
               <span className={
-                pSuccessPercentage >= 70 ? "text-green-600" :
-                pSuccessPercentage >= 50 ? "text-blue-600" :
+                pSuccessPercentage >= 70 ? "text-green" :
+                pSuccessPercentage >= 50 ? "text-blue" :
                 pSuccessPercentage >= 30 ? "text-amber-600" :
-                "text-red-600"
+                "text-red"
               }>
                 {pSuccessPercentage}%
               </span>
@@ -126,9 +126,9 @@ export function A3DifficultyProgression({
           </div>
 
           {highDifficultyWarning && (
-            <Alert className="border-orange-300 bg-orange-50">
-              <AlertTriangle className="h-4 w-4 text-orange-600" />
-              <AlertDescription className="text-orange-800">
+            <Alert className="border-orange-300 bg-orange/5">
+              <AlertTriangle className="h-4 w-4 text-orange" />
+              <AlertDescription className="text-orange">
                 <div className="font-medium mb-1">⚠️ Desafío Difícil</div>
                 <p className="text-sm">
                   Este desafío es difícil para tu nivel actual (P_success ≤ 15%). Si decides intentarlo, el riesgo vale más la recompensa. 
@@ -140,7 +140,7 @@ export function A3DifficultyProgression({
 
           <div className="bg-blue-50 p-4 rounded-[28px] border border-blue-200">
             <div className="text-sm text-muted/60 mb-2">Factores considerados:</div>
-            <ul className="text-sm text-gray-700 space-y-1">
+            <ul className="text-sm text-muted space-y-1">
               <li>• Historial de completación: 85%</li>
               <li>• Nivel actual: {currentConfig.name}</li>
               <li>• Capacidad efectiva: 72/100</li>
@@ -155,7 +155,7 @@ export function A3DifficultyProgression({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-green-600" />
+            <CheckCircle2 className="w-5 h-5 text-green" />
             Nivel Actual: {currentConfig.name}
           </CardTitle>
           <CardDescription>{currentConfig.description}</CardDescription>
@@ -183,7 +183,7 @@ export function A3DifficultyProgression({
         <Card className="border-2 border-green-200">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Zap className="w-5 h-5 text-green-600" />
+              <Zap className="w-5 h-5 text-green" />
               Próximo Nivel: {nextConfig.name}
             </CardTitle>
             <CardDescription>{nextConfig.description}</CardDescription>
@@ -191,7 +191,7 @@ export function A3DifficultyProgression({
           <CardContent className="space-y-4">
             <div className="bg-green-50 p-4 rounded-[28px] border border-green-200">
               <div className="font-medium text-sm mb-2">Requisitos para avanzar:</div>
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-muted">
                 {nextConfig.solidExecutions} ejecuciones sólidas sin abandono temprano ni señales fuertes de frustración
               </p>
             </div>
@@ -226,7 +226,7 @@ export function A3DifficultyProgression({
           <CardTitle className="text-sm">Regla de Progresión A3</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-gray-700 italic">
+          <p className="text-sm text-muted italic">
             "En A3 no se avanza por insistir. Se avanza por sostener."
           </p>
           <p className="text-xs text-muted/60 mt-2">
@@ -237,7 +237,7 @@ export function A3DifficultyProgression({
 
       {/* Frustration Protection */}
       <Alert className="border-red-300 bg-red/5">
-        <AlertTriangle className="h-4 w-4 text-red-600" />
+        <AlertTriangle className="h-4 w-4 text-red" />
         <AlertDescription className="text-red-800">
           <div className="font-medium mb-1">Protección Contra Frustración</div>
           <p className="text-sm">

@@ -274,7 +274,7 @@ export function MiniPrueba() {
                   className="flex items-center gap-3 p-3 rounded-[28px] bg-card/70 backdrop-blur-sm"
                 >
                   {isCorrect ? (
-                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-green/50 flex-shrink-0" />
                   ) : (
                     <XCircle className="w-5 h-5 text-red flex-shrink-0" />
                   )}
@@ -288,7 +288,7 @@ export function MiniPrueba() {
                     variant="outline"
                     className={
                       isCorrect
-                        ? "bg-green-500/10 text-green-700 dark:text-green-400"
+                        ? "bg-green-500/10 text-green dark:text-green/40"
                         : "bg-red/50/10 text-red dark:text-red-400"
                     }
                   >
@@ -340,7 +340,7 @@ export function MiniPrueba() {
             <Badge
               className={
                 currentQuestion.difficulty === "fácil"
-                  ? "bg-green-500/10 text-green-700 dark:text-green-400"
+                  ? "bg-green-500/10 text-green dark:text-green/40"
                   : currentQuestion.difficulty === "medio"
                     ? "bg-amber-500/10 text-amber-700 dark:text-amber-400"
                     : "bg-red/50/10 text-red dark:text-red-400"
@@ -361,7 +361,7 @@ export function MiniPrueba() {
                 !isAnswered
                   ? "border-border hover:border-purple/50 hover:bg-purple/5 cursor-pointer"
                   : idx === currentQuestion.correctAnswer
-                    ? "border-green-500 bg-green-500/10"
+                    ? "border-green bg-green-500/10"
                     : idx === userAnswer && !isCorrect
                       ? "border-red/50 bg-red/50/10"
                       : "border-border opacity-50"
@@ -371,7 +371,7 @@ export function MiniPrueba() {
                 <div
                   className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-sm font-medium ${
                     isAnswered && idx === currentQuestion.correctAnswer
-                      ? "bg-green-500 border-green-500 text-white"
+                      ? "bg-green-500 border-green text-white"
                       : isAnswered && idx === userAnswer && !isCorrect
                         ? "bg-red/50 border-red/50 text-white"
                         : "border-current"
@@ -402,7 +402,7 @@ export function MiniPrueba() {
           }`}
         >
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription className={isCorrect ? "text-green-700 dark:text-green-400" : "text-red dark:text-red-400"}>
+          <AlertDescription className={isCorrect ? "text-green dark:text-green/40" : "text-red dark:text-red-400"}>
             <p className="font-semibold mb-2">
               {isCorrect ? "¡Correcto!" : "Respuesta incorrecta"}
             </p>

@@ -97,14 +97,14 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
       <div className="text-center mb-12">
         <div className="flex items-center justify-center gap-2 mb-4">
           <Sparkles className="w-8 h-8 text-amber-500" />
-          <h1 className="text-4xl font-bold text-gray-900">DTC Points Shop</h1>
+          <h1 className="text-4xl font-bold text-foreground">DTC Points Shop</h1>
           <Sparkles className="w-8 h-8 text-amber-500" />
         </div>
         <p className="text-muted/60 mb-4">
           Unlock premium interview tips and accelerate your career growth
         </p>
         <div className="inline-block bg-blue-50 rounded-lg px-4 py-2">
-          <p className="text-lg font-semibold text-blue-700">
+          <p className="text-lg font-semibold text-blue">
             Current Balance: {currentBalance} DTC Points
           </p>
         </div>
@@ -139,14 +139,14 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
               <div className="mb-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Zap className="w-5 h-5 text-orange" />
-                  <span className="text-3xl font-bold text-gray-900">
+                  <span className="text-3xl font-bold text-foreground">
                     {pkg.dtcAmount + pkg.bonus}
                   </span>
                 </div>
                 <p className="text-sm text-muted/60">
                   DTC Points
                   {pkg.bonus > 0 && (
-                    <span className="block text-green-600 font-semibold">
+                    <span className="block text-green font-semibold">
                       +{pkg.bonus} bonus
                     </span>
                   )}
@@ -156,25 +156,25 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
               {/* Benefits */}
               <div className="space-y-2">
                 <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span className="text-sm text-gray-700">
+                  <Check className="w-4 h-4 text-green/50 mt-0.5 flex-shrink-0" />
+                  <span className="text-sm text-muted">
                     {Math.floor((pkg.dtcAmount + pkg.bonus) / 150)} premium tips
                   </span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span className="text-sm text-gray-700">Lifetime access</span>
+                  <Check className="w-4 h-4 text-green/50 mt-0.5 flex-shrink-0" />
+                  <span className="text-sm text-muted">Lifetime access</span>
                 </div>
                 <div className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span className="text-sm text-gray-700">Never expires</span>
+                  <Check className="w-4 h-4 text-green/50 mt-0.5 flex-shrink-0" />
+                  <span className="text-sm text-muted">Never expires</span>
                 </div>
               </div>
             </div>
 
             {/* Price & Button */}
             <div>
-              <div className="text-2xl font-bold text-gray-900 mb-4">
+              <div className="text-2xl font-bold text-foreground mb-4">
                 ${pkg.price}
               </div>
               <Button
@@ -191,24 +191,24 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
       </div>
 
       {/* Value Proposition */}
-      <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 p-8">
-        <h3 className="text-lg font-bold text-gray-900 mb-4">Why Choose Premium Tips?</h3>
+      <Card className="bg-gradient-to-r from-blue-50 to-blue/5 p-8">
+        <h3 className="text-lg font-bold text-foreground mb-4">Why Choose Premium Tips?</h3>
         <div className="grid md:grid-cols-3 gap-6">
           <div>
-            <div className="font-semibold text-gray-900 mb-2">AI-Powered Coaching</div>
-            <p className="text-sm text-gray-700">
+            <div className="font-semibold text-foreground mb-2">AI-Powered Coaching</div>
+            <p className="text-sm text-muted">
               Get personalized, context-aware tips from our advanced AI interviewer coach
             </p>
           </div>
           <div>
-            <div className="font-semibold text-gray-900 mb-2">Immediate Improvement</div>
-            <p className="text-sm text-gray-700">
+            <div className="font-semibold text-foreground mb-2">Immediate Improvement</div>
+            <p className="text-sm text-muted">
               Apply tips in real-time and see measurable score improvements
             </p>
           </div>
           <div>
-            <div className="font-semibold text-gray-900 mb-2">Duolingo-Style Progress</div>
-            <p className="text-sm text-gray-700">
+            <div className="font-semibold text-foreground mb-2">Duolingo-Style Progress</div>
+            <p className="text-sm text-muted">
               Track streaks, unlock badges, and celebrate your interview mastery journey
             </p>
           </div>
@@ -217,7 +217,7 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
 
       {/* FAQ */}
       <div className="mt-12">
-        <h3 className="text-2xl font-bold text-gray-900 mb-6">Frequently Asked Questions</h3>
+        <h3 className="text-2xl font-bold text-foreground mb-6">Frequently Asked Questions</h3>
         <div className="grid md:grid-cols-2 gap-6">
           {[
             {
@@ -238,8 +238,8 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
             }
           ].map((item, i) => (
             <div key={i} className="p-4 bg-muted/5 rounded-lg">
-              <p className="font-semibold text-gray-900 mb-2">{item.q}</p>
-              <p className="text-sm text-gray-700">{item.a}</p>
+              <p className="font-semibold text-foreground mb-2">{item.q}</p>
+              <p className="text-sm text-muted">{item.a}</p>
             </div>
           ))}
         </div>

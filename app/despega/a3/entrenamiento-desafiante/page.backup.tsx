@@ -267,14 +267,14 @@ export default function ChallensingTrainingPage() {
               {/* Score Overview */}
               <div className="p-4 border-b border-muted/80 flex-shrink-0">
                 <h3 className="text-lg font-bold flex items-center gap-2 text-white mb-4">
-                  <BarChart3 className="w-5 h-5 text-purple-400" />
+                  <BarChart3 className="w-5 h-5 text-purple/40" />
                   Puntuación Ejecutiva
                 </h3>
                 <div className="space-y-4">
                   <div>
                     <p className="text-xs text-muted/40 mb-2">Promedio General</p>
                     <div className="flex items-end gap-2">
-                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green-400' : 'text-yellow-400'}`}>
+                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green/40' : 'text-yellow-400'}`}>
                         {averageScore}
                       </span>
                       <span className="text-xs text-muted/40 pb-2">/100</span>
@@ -284,7 +284,7 @@ export default function ChallensingTrainingPage() {
                     <div className="pt-4 border-t border-muted/70">
                       <p className="text-xs text-muted/40 mb-2">Respuesta Actual</p>
                       <div className="flex items-center justify-between">
-                        <span className="text-3xl font-bold text-purple-400">{currentScore}</span>
+                        <span className="text-3xl font-bold text-purple/40">{currentScore}</span>
                         <Badge className={`${getScoreColor(currentScore)} text-xs`}>
                           {getScoreLabel(currentScore)}
                         </Badge>
@@ -308,7 +308,7 @@ export default function ChallensingTrainingPage() {
                       idx === currentQuestion
                         ? 'bg-purple/30 border border-purple/50/50'
                         : completedQuestions.includes(idx)
-                        ? 'bg-green/20 border border-green-500/30'
+                        ? 'bg-green/20 border border-green/30'
                         : 'bg-muted/80/50 border border-muted/70/30 hover:bg-muted/70/50'
                     }`}
                   >
@@ -337,12 +337,12 @@ export default function ChallensingTrainingPage() {
 
               {/* Feedback */}
               {averageScore > 0 && averageScore < 75 && (
-                <div className="p-4 border-t border-muted/80 bg-yellow-950/20 flex-shrink-0">
+                <div className="p-4 border-t border-muted/80 bg-yellow/20 flex-shrink-0">
                   <p className="text-xs font-bold text-yellow-400 mb-2 flex items-center gap-1">
                     <AlertCircle className="w-4 h-4" />
                     Retroalimentación
                   </p>
-                  <p className="text-xs text-yellow-200">
+                  <p className="text-xs text-yellow/20">
                     Enfócate en demostrar mayor impacto, ser específico con ejemplos, y mostrar madurez ejecutiva en tus respuestas.
                   </p>
                 </div>

@@ -219,7 +219,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                     className={`max-w-[80%] rounded-[28px] p-4 ${
                       message.sender === "user"
                         ? "bg-blue-600 text-white"
-                        : "bg-muted/10 text-gray-900 border border-muted/20"
+                        : "bg-muted/10 text-foreground border border-muted/20"
                     }`}
                   >
                     <div className="flex items-start gap-3">
@@ -228,7 +228,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                           <Avatar className="h-8 w-8">
                             <AvatarFallback
                               className={
-                                message.coach === "sofia" ? "bg-pink-100 text-pink-700" : "bg-blue-100 text-blue-700"
+                                message.coach === "sofia" ? "bg-red/10 text-pink-700" : "bg-blue/10 text-blue"
                               }
                             >
                               {message.coach === "sofia" ? "S" : "D"}
@@ -237,7 +237,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                           <Badge
                             variant="secondary"
                             className={`text-[10px] px-1 py-0 ${
-                              message.coach === "sofia" ? "bg-pink-100 text-pink-700" : "bg-blue-100 text-blue-700"
+                              message.coach === "sofia" ? "bg-red/10 text-pink-700" : "bg-blue/10 text-blue"
                             }`}
                           >
                             {message.coach === "sofia" ? "Sofía" : "Dani"}
@@ -293,7 +293,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                     {conversationCategory === "autoconocimiento" ? (
                       <Lightbulb className="h-3 w-3 mr-2 flex-shrink-0 text-pink-600" />
                     ) : (
-                      <Target className="h-3 w-3 mr-2 flex-shrink-0 text-blue-600" />
+                      <Target className="h-3 w-3 mr-2 flex-shrink-0 text-blue" />
                     )}
                     <span className="text-xs">{question}</span>
                   </Button>

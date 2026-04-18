@@ -492,7 +492,7 @@ export default function SoftSkillsTest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Competencias Blandas Despega</h2>
+                <h2 className="text-2xl font-bold text-foreground">Competencias Blandas Despega</h2>
                 <p className="text-muted/60">
                   Pregunta {currentQuestion + 1} de {softSkillsQuestions.length}
                 </p>
@@ -585,7 +585,7 @@ export default function SoftSkillsTest() {
                 <div className="flex items-center justify-between text-sm text-muted/50">
                   <span>{((currentAnswer as string) || "").length} caracteres (mínimo 50 requeridos)</span>
                   {((currentAnswer as string) || "").length >= 50 && (
-                    <Badge variant="secondary" className="bg-green-100 text-green-700">
+                    <Badge variant="secondary" className="bg-green/10 text-green">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       Completo
                     </Badge>
@@ -666,9 +666,9 @@ export default function SoftSkillsTest() {
               <div className="p-2 bg-blue/5 rounded text-blue">Comunicación</div>
               <div className="p-2 bg-purple/5 rounded text-purple">Liderazgo</div>
               <div className="p-2 bg-green/5 rounded text-green-900">Trabajo en Equipo</div>
-              <div className="p-2 bg-orange-50 rounded text-orange-900">Resolución de Problemas</div>
+              <div className="p-2 bg-orange/5 rounded text-orange-900">Resolución de Problemas</div>
               <div className="p-2 bg-red/5 rounded text-pink-900">Adaptabilidad</div>
-              <div className="p-2 bg-yellow-50 rounded text-yellow-900">Gestión del Tiempo</div>
+              <div className="p-2 bg-yellow/5 rounded text-yellow">Gestión del Tiempo</div>
               <div className="p-2 bg-red/5 rounded text-red-900">Inteligencia Emocional</div>
               <div className="p-2 bg-blue/5 rounded text-indigo-900">Creatividad</div>
             </div>

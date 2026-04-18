@@ -27,7 +27,7 @@ export function AchievementBadge({
     }
     const IconComponent = iconMap[icon] || Trophy
     const sizeMap = { sm: "h-4 w-4", md: "h-5 w-5", lg: "h-6 w-6" }
-    return <IconComponent className={`${sizeMap[size]} text-yellow-600`} />
+    return <IconComponent className={`${sizeMap[size]} text-yellow`} />
   }
 
   const sizeClasses = {
@@ -39,7 +39,7 @@ export function AchievementBadge({
   return (
     <div className="flex flex-col items-center gap-2">
       <div
-        className={`${sizeClasses[size]} bg-yellow-100 rounded-full flex items-center justify-center border-2 border-yellow-300`}
+        className={`${sizeClasses[size]} bg-yellow/10 rounded-full flex items-center justify-center border-2 border-yellow-300`}
       >
         {getIcon()}
       </div>

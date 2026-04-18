@@ -222,15 +222,15 @@ export default function A1ReportPage() {
       <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple/50 to-blue">
         <ASectionPart title="Completar Evaluación" icon={<Zap />}>
           <div className="space-y-4">
-            <div className="p-6 bg-red/5 dark:bg-red-900/20 border-2 border-red/20 dark:border-red-900/50 rounded-lg">
+            <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red-900/50 rounded-lg">
               <p className="text-red dark:text-red-300 font-semibold text-lg">{error}</p>
-              <p className="text-red-600 dark:text-red-400 text-sm mt-2">
+              <p className="text-red dark:text-red-400 text-sm mt-2">
                 Por favor completa la evaluación de Perfil Cerebral para ver tus resultados. El proceso toma aproximadamente 10-15 minutos.
               </p>
             </div>
             <Button 
               onClick={() => router.push('/despega/a1-cerebral')} 
-              className="w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-6 text-lg"
+              className="w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white font-semibold py-6 text-lg"
             >
               <Target className="w-5 h-5 mr-2" />
               Comenzar Evaluación de Perfil Cerebral
@@ -374,7 +374,7 @@ export default function A1ReportPage() {
             />
           </div>
         ) : (
-          <div className="bg-red-900/20 border-2 border-red-600/50 rounded-xl p-8 text-center">
+          <div className="bg-red/20 border-2 border-red/50 rounded-xl p-8 text-center">
             <p className="text-red-300 text-lg font-semibold">Los insights no pudieron ser generados</p>
             <p className="text-red-400 text-sm mt-2">Por favor intenta de nuevo. Si el problema persiste, contacta con soporte.</p>
           </div>

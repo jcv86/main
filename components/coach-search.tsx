@@ -98,7 +98,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
           ) : (
             <div className="space-y-4">
               {reasoning && (
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900/50 rounded-[28px] p-4">
+                <div className="bg-blue-50 dark:bg-blue/20 border border-blue-200 dark:border-blue-900/50 rounded-[28px] p-4">
                   <p className="text-sm text-blue-900 dark:text-blue-100">
                     <strong>Búsqueda:</strong> {reasoning}
                   </p>
@@ -112,7 +112,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
                     className="border border-slate-200 dark:border-slate-700 rounded-[28px] p-4 hover:shadow-md transition-shadow"
                   >
                     <div className="flex items-start gap-3">
-                      <BookOpen className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
+                      <BookOpen className="w-5 h-5 text-blue mt-1 flex-shrink-0" />
                       <div className="flex-1">
                         <h4 className="font-semibold">{book.title}</h4>
                         <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
@@ -130,7 +130,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
                             </span>
                           )}
                           {(book.key_topics || book.tags)?.slice(0, 2).map((tag) => (
-                            <span key={tag} className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded">
+                            <span key={tag} className="text-xs bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue-300 px-2 py-1 rounded">
                               {tag}
                             </span>
                           ))}

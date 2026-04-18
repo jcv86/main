@@ -201,7 +201,7 @@ export function SuperSmartBrainChat() {
                         </div>
                       </div>
                       <div className="flex items-start gap-2">
-                        <Target className="h-4 w-4 text-blue-600 mt-0.5" />
+                        <Target className="h-4 w-4 text-blue mt-0.5" />
                         <div>
                           <p className="font-medium">Personalización profunda</p>
                           <p className="text-xs text-muted-foreground">Basado en tu perfil y historial</p>
@@ -278,7 +278,7 @@ export function SuperSmartBrainChat() {
 
                           {/* Personalization level */}
                           <div className="flex items-center gap-2">
-                            <Target className="h-3 w-3 text-blue-600" />
+                            <Target className="h-3 w-3 text-blue" />
                             <span className="text-xs">
                               Nivel de personalización:{" "}
                               <span className="font-semibold capitalize">{message.metadata.personalizationLevel}</span>
@@ -457,7 +457,7 @@ export function SuperSmartBrainChat() {
                         {source.sourceType === "book" ? (
                           <BookOpen className="h-4 w-4 text-purple-600 mt-0.5" />
                         ) : (
-                          <Globe className="h-4 w-4 text-blue-600 mt-0.5" />
+                          <Globe className="h-4 w-4 text-blue mt-0.5" />
                         )}
                         <div className="flex-1">
                           <p className="text-xs font-medium">{source.title}</p>

@@ -42,7 +42,7 @@ export function DashboardMetrics({
       label: 'Racha Actual',
       value: currentStreak,
       icon: TrendingUp,
-      color: 'from-purple-500 to-purple-600',
+      color: 'from-purple-500 to-purple',
       suffix: 'días',
     },
   ]

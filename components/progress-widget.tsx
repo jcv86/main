@@ -56,7 +56,7 @@ export function ProgressWidget() {
     return null
   }
 
-  const streakBadgeColor = stats.current_streak >= 30 ? "bg-orange" : stats.current_streak >= 7 ? "bg-orange-500" : "bg-blue-500"
+  const streakBadgeColor = stats.current_streak >= 30 ? "bg-orange" : stats.current_streak >= 7 ? "bg-orange/50" : "bg-blue-500"
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

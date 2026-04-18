@@ -238,13 +238,13 @@ export default function AIReadingCompanion() {
   const getInsightColor = (type: string) => {
     switch (type) {
       case "summary":
-        return "text-blue-600"
+        return "text-blue"
       case "question":
         return "text-purple-600"
       case "connection":
-        return "text-green-600"
+        return "text-green"
       case "application":
-        return "text-orange-600"
+        return "text-orange"
       default:
         return "text-muted/60"
     }
@@ -254,7 +254,7 @@ export default function AIReadingCompanion() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <Bot className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue-600" />
+          <Bot className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue" />
           <p>Inicializando compañero de lectura IA...</p>
         </div>
       </div>
@@ -280,7 +280,7 @@ export default function AIReadingCompanion() {
           <Card className="h-[600px] flex flex-col">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Bot className="h-5 w-5 text-blue-600" />
+                <Bot className="h-5 w-5 text-blue" />
                 Chat con tu Compañero IA
               </CardTitle>
             </CardHeader>
@@ -389,7 +389,7 @@ export default function AIReadingCompanion() {
                   <p className="text-sm text-muted/60">{insight.book_title}</p>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700 mb-4">{insight.content}</p>
+                  <p className="text-muted mb-4">{insight.content}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-muted/50">{new Date(insight.created_at).toLocaleString()}</span>
                     <div className="flex gap-2">
@@ -412,7 +412,7 @@ export default function AIReadingCompanion() {
             <Card key={plan.id}>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-green-600" />
+                  <Target className="h-5 w-5 text-green" />
                   Plan de Estudio: {plan.book_title}
                 </CardTitle>
                 <div className="flex items-center justify-between">
@@ -430,7 +430,7 @@ export default function AIReadingCompanion() {
                   {/* Current Session */}
                   <div className="space-y-4">
                     <h4 className="font-semibold text-lg flex items-center gap-2">
-                      <Clock className="h-5 w-5 text-blue-600" />
+                      <Clock className="h-5 w-5 text-blue" />
                       Sesión Actual
                     </h4>
                     <div className="bg-blue-50 p-4 rounded-[28px]">
@@ -493,7 +493,7 @@ export default function AIReadingCompanion() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Brain className="h-5 w-5 text-green-600" />
+                <Brain className="h-5 w-5 text-green" />
                 Recomendaciones Personalizadas
               </CardTitle>
               <p className="text-sm text-muted/60">Basadas en tu historial de lectura y preferencias</p>
@@ -515,7 +515,7 @@ export default function AIReadingCompanion() {
                       <Badge variant="outline">{rec.category}</Badge>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-gray-700 mb-4">{rec.reason}</p>
+                      <p className="text-sm text-muted mb-4">{rec.reason}</p>
                       <div className="flex gap-2">
                         <Button size="sm" className="flex-1">
                           <BookOpen className="h-4 w-4 mr-1" />

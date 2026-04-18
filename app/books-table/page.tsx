@@ -136,9 +136,9 @@ export default function BooksTablePage() {
               <p className="text-sm text-muted/60 mb-1">Total Páginas (est.)</p>
               <p className="text-2xl font-bold text-purple">{totalPages.toLocaleString()}</p>
             </div>
-            <div className="bg-orange-50 p-4 rounded-lg">
+            <div className="bg-orange/5 p-4 rounded-lg">
               <p className="text-sm text-muted/60 mb-1">Tiempo Total (horas)</p>
-              <p className="text-2xl font-bold text-orange-600">{Math.round(totalReadingTime / 60)}</p>
+              <p className="text-2xl font-bold text-orange">{Math.round(totalReadingTime / 60)}</p>
             </div>
           </div>
 
@@ -167,7 +167,7 @@ export default function BooksTablePage() {
                       <TableCell className="font-medium">{book.title}</TableCell>
                       <TableCell>{book.author}</TableCell>
                       <TableCell>
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue/10 text-blue-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue/10 text-blue">
                           {book.category}
                         </span>
                       </TableCell>

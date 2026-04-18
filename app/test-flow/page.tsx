@@ -398,7 +398,7 @@ export default function TestFlowVerification() {
                         Errors Found
                       </div>
                       {check.errors.map((error, index) => (
-                        <p key={index} className="text-red-600 text-xs">
+                        <p key={index} className="text-red text-xs">
                           {error}
                         </p>
                       ))}
@@ -435,7 +435,7 @@ export default function TestFlowVerification() {
                   <div className="space-y-2">
                     <CheckCircle className="h-12 w-12 text-green mx-auto" />
                     <h3 className="text-xl font-semibold text-green-900">All Tests Passed! ✅</h3>
-                    <p className="text-green-700">
+                    <p className="text-green">
                       All {passedTests} personality tests have proper navigation flow and completion processes.
                     </p>
                   </div>

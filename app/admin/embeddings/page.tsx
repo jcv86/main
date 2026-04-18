@@ -140,7 +140,7 @@ export default function EmbeddingsAdminPage() {
               </div>
               <div className="flex justify-between text-sm">
                 <span>Faltantes:</span>
-                <span className="font-bold text-orange-600">{stats?.books.missing}</span>
+                <span className="font-bold text-orange">{stats?.books.missing}</span>
               </div>
               <Progress value={stats?.books.percentage || 0} className="mt-2" />
               <p className="text-xs text-center text-muted-foreground">
@@ -169,7 +169,7 @@ export default function EmbeddingsAdminPage() {
               </div>
               <div className="flex justify-between text-sm">
                 <span>Faltantes:</span>
-                <span className="font-bold text-orange-600">{stats?.webResources.missing}</span>
+                <span className="font-bold text-orange">{stats?.webResources.missing}</span>
               </div>
               <Progress value={stats?.webResources.percentage || 0} className="mt-2" />
               <p className="text-xs text-center text-muted-foreground">
@@ -198,7 +198,7 @@ export default function EmbeddingsAdminPage() {
               </div>
               <div className="flex justify-between text-sm">
                 <span>Faltantes:</span>
-                <span className="font-bold text-orange-600">{stats?.overall.missing}</span>
+                <span className="font-bold text-orange">{stats?.overall.missing}</span>
               </div>
               <Progress value={stats?.overall.percentage || 0} className="mt-2" />
               <p className="text-xs text-center text-muted-foreground">

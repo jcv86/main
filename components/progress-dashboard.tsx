@@ -32,7 +32,7 @@ export function ProgressDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-6 text-center">
-            <Flame className="w-8 h-8 mx-auto mb-2 text-orange-500" />
+            <Flame className="w-8 h-8 mx-auto mb-2 text-orange" />
             <p className="text-sm text-muted-foreground">Racha Actual</p>
             <p className="text-3xl font-bold">{stats.streak}</p>
             <p className="text-xs text-muted-foreground mt-1">días seguidos</p>
@@ -59,7 +59,7 @@ export function ProgressDashboard() {
 
         <Card>
           <CardContent className="pt-6 text-center">
-            <Trophy className="w-8 h-8 mx-auto mb-2 text-yellow-600" />
+            <Trophy className="w-8 h-8 mx-auto mb-2 text-yellow" />
             <p className="text-sm text-muted-foreground">Tu Posición</p>
             <p className="text-3xl font-bold">#{stats.ranking}</p>
             <p className="text-xs text-muted-foreground mt-1">en leaderboard</p>

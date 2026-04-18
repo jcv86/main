@@ -302,9 +302,9 @@ interface ProfileCardProps {
 
 function ProfileCard({ profile, isFavorite, onFavorite, onSelect }: ProfileCardProps) {
   const demandColor = {
-    alto: 'bg-red-100 text-red-800',
-    medio: 'bg-yellow-100 text-yellow-800',
-    bajo: 'bg-green-100 text-green-800',
+    alto: 'bg-red/10 text-red-800',
+    medio: 'bg-yellow/10 text-yellow',
+    bajo: 'bg-green/10 text-green',
   }
 
   return (
@@ -402,8 +402,8 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
                 key={idx}
                 className={`p-2 rounded text-center ${
                   gap.estado === 'acquired'
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-yellow-100 text-yellow-800'
+                    ? 'bg-green/10 text-green'
+                    : 'bg-yellow/10 text-yellow'
                 }`}
               >
                 {gap.competencia}
@@ -417,9 +417,9 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
 
         {/* Missing Competencies Alert */}
         {match.gapAnalysis.some(g => g.estado === 'missing') && (
-          <div className="flex gap-2 items-start mt-4 p-3 bg-yellow-50 rounded-[28px] border border-yellow-200">
-            <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-yellow-800">
+          <div className="flex gap-2 items-start mt-4 p-3 bg-yellow/5 rounded-[28px] border border-yellow/20">
+            <AlertCircle className="h-4 w-4 text-yellow mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-yellow">
               {match.gapAnalysis.filter(g => g.estado === 'missing').length} competencias
               por desarrollar
             </p>

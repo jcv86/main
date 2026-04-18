@@ -79,7 +79,7 @@ export default function ProgressPage() {
                     {a3Progress?.sessions_completed || 0}
                   </div>
                 </div>
-                <TrendingUp className="w-8 h-8 text-purple-300" />
+                <TrendingUp className="w-8 h-8 text-purple/30" />
               </div>
             </CardContent>
           </Card>
@@ -183,12 +183,12 @@ export default function ProgressPage() {
         </Card>
 
         {/* Tips */}
-        <Card className="bg-gradient-to-r from-purple/5 to-indigo-50 dark:from-purple/20 dark:to-blue/20 border-0">
+        <Card className="bg-gradient-to-r from-purple/5 to-blue/5 dark:from-purple/20 dark:to-blue/20 border-0">
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-purple text-lg">💡</div>
             <div>
               <div className="font-semibold text-purple dark:text-purple/10 mb-2">Cómo acelerar tu progreso</div>
-              <ul className="text-sm text-purple dark:text-purple-200 space-y-1">
+              <ul className="text-sm text-purple dark:text-purple/20 space-y-1">
                 <li>✓ Realiza al menos 1 simulación diaria</li>
                 <li>✓ Revisa el feedback del coach en detalle</li>
                 <li>✓ Practica específicamente los gaps identificados</li>

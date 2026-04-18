@@ -184,7 +184,7 @@ export function QueSignificaParaTi() {
                             ? "bg-red/50/10 text-red dark:text-red-400"
                             : area.severity === "medio"
                               ? "bg-amber-500/10 text-amber-700 dark:text-amber-400"
-                              : "bg-green-500/10 text-green-700 dark:text-green-400"
+                              : "bg-green-500/10 text-green dark:text-green/40"
                         }
                         variant="outline"
                       >

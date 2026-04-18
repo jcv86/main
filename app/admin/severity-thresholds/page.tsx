@@ -113,7 +113,7 @@ export default function SeverityThresholdsPage() {
       case "engagement":
         return "bg-green/50/10 text-green"
       case "quality":
-        return "bg-orange-500/10 text-orange-500"
+        return "bg-orange/50/10 text-orange"
       default:
         return "bg-muted/50/10 text-muted/50"
     }
@@ -144,7 +144,7 @@ export default function SeverityThresholdsPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Alertas Activas</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-orange-500" />
+              <AlertTriangle className="h-4 w-4 text-orange" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{summary.active}</div>

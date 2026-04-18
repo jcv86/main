@@ -67,12 +67,12 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
 
   const getTypeConfig = (tipo: string) => {
     const configs: Record<string, { icon: string; color: string; label: string }> = {
-      decision: { icon: "🤔", color: "bg-blue-100", label: "Toma de Decisión" },
-      comunicacion: { icon: "💬", color: "bg-green-100", label: "Comunicación" },
-      negociacion: { icon: "🤝", color: "bg-orange-100", label: "Negociación" },
+      decision: { icon: "🤔", color: "bg-blue/10", label: "Toma de Decisión" },
+      comunicacion: { icon: "💬", color: "bg-green/10", label: "Comunicación" },
+      negociacion: { icon: "🤝", color: "bg-orange/10", label: "Negociación" },
       liderazgo: { icon: "👥", color: "bg-purple-100", label: "Liderazgo" },
-      crisis: { icon: "🚨", color: "bg-red-100", label: "Gestión de Crisis" },
-      planificacion: { icon: "📋", color: "bg-indigo-100", label: "Planificación" },
+      crisis: { icon: "🚨", color: "bg-red/10", label: "Gestión de Crisis" },
+      planificacion: { icon: "📋", color: "bg-blue/10", label: "Planificación" },
     }
     return configs[tipo] || configs.decision
   }
@@ -157,7 +157,7 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
         <CardContent className="space-y-6">
           <div className="bg-blue-50 border border-blue-200 rounded-[28px] p-4">
             <div className="flex gap-3">
-              <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+              <AlertCircle className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
               <div className="text-sm text-blue-900">{scenario.contexto}</div>
             </div>
           </div>

@@ -149,7 +149,7 @@ He revisado tu diagnóstico A1 y tengo algunas recomendaciones personalizadas pa
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Avatar>
-              <AvatarFallback className="bg-blue-100 text-blue-800">
+              <AvatarFallback className="bg-blue/10 text-blue">
                 {messages.length > 0 && messages[0].sender === "coach" 
                   ? messages[0].content.includes("Sofia") ? "SF" : "DN"
                   : "🤖"}
@@ -204,9 +204,9 @@ He revisado tu diagnóstico A1 y tengo algunas recomendaciones personalizadas pa
 
       <div className="border-t p-4 space-y-2">
         {error && (
-          <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red-900/20">
-            <AlertTriangle className="h-4 w-4 text-red-600" />
-            <AlertDescription className="text-red dark:text-red-200 ml-2">{error}</AlertDescription>
+          <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red/20">
+            <AlertTriangle className="h-4 w-4 text-red" />
+            <AlertDescription className="text-red dark:text-red/20 ml-2">{error}</AlertDescription>
           </Alert>
         )}
 

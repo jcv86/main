@@ -39,18 +39,18 @@ const getResourceIcon = (tipo: string) => {
 
 const getResourceColor = (tipo: string) => {
   const colors: Record<string, string> = {
-    articulo: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
-    video: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
-    podcast: "bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300",
-    libro: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
+    articulo: "bg-blue/10 text-blue dark:bg-blue/40 dark:text-blue-300",
+    video: "bg-red/10 text-red-800 dark:bg-red/40 dark:text-red-300",
+    podcast: "bg-purple-100 text-purple-800 dark:bg-purple/40 dark:text-purple/30",
+    libro: "bg-green/10 text-green dark:bg-green/40 dark:text-green-300",
   }
   return colors[tipo] || "bg-muted/10"
 }
 
 const getNivelColor = (nivel: string) => {
   const colors: Record<string, string> = {
-    "basico": "bg-green-50 text-green-700 border-green-200",
-    "intermedio": "bg-blue-50 text-blue-700 border-blue-200",
+    "basico": "bg-green-50 text-green border-green-200",
+    "intermedio": "bg-blue-50 text-blue border-blue-200",
     "avanzado": "bg-purple-50 text-purple-700 border-purple-200",
   }
   return colors[nivel] || "bg-muted/5"
@@ -93,7 +93,7 @@ export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource 
     <div className="w-full space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Bookmark className="w-8 h-8 text-green-600" />
+        <Bookmark className="w-8 h-8 text-green" />
         <div>
           <h2 className="text-2xl font-bold">Biblioteca Curada</h2>
           <p className="text-sm text-muted-foreground">

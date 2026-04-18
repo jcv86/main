@@ -327,14 +327,14 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                   currentStage === stage.id
                     ? "bg-purple/10 text-purple"
                     : stage.completed
-                      ? "text-green-600"
+                      ? "text-green"
                       : "text-muted-foreground hover:bg-muted"
                 }`}
               >
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     stage.completed
-                      ? "bg-green-100 text-green-600"
+                      ? "bg-green/10 text-green"
                       : currentStage === stage.id
                         ? "bg-purple text-purple-foreground"
                         : "bg-muted"
@@ -409,8 +409,8 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                               <AvatarFallback
                                 className={
                                   message.coach === "sofia"
-                                    ? "bg-pink-100 text-pink-700 text-xs"
-                                    : "bg-blue-100 text-blue-700 text-xs"
+                                    ? "bg-red/10 text-pink-700 text-xs"
+                                    : "bg-blue/10 text-blue text-xs"
                                 }
                               >
                                 {message.coach === "sofia" ? "S" : "D"}
@@ -559,7 +559,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Target className="h-5 w-5 text-green-500" />
+                <Target className="h-5 w-5 text-green/50" />
                 Metas Definidas
               </CardTitle>
               <CardDescription>Objetivos concretos basados en tus resultados</CardDescription>
@@ -569,7 +569,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                 <div className="space-y-3">
                   {userGoals.map((goal, index) => (
                     <div key={index} className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                      <Target className="h-4 w-4 text-green-500 mt-0.5" />
+                      <Target className="h-4 w-4 text-green/50 mt-0.5" />
                       <div className="flex-1">
                         <p className="text-sm font-medium">{goal}</p>
                         <div className="flex items-center gap-2 mt-2">
@@ -654,12 +654,12 @@ Vamos a seguir un proceso estructurado de 6 etapas:
         <Card className="border-green-200 bg-green-50">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-[20px] bg-green-100 flex items-center justify-center">
-                <CheckCircle2 className="h-5 w-5 text-green-600" />
+              <div className="w-10 h-10 rounded-[20px] bg-green/10 flex items-center justify-center">
+                <CheckCircle2 className="h-5 w-5 text-green" />
               </div>
               <div>
-                <p className="font-medium text-green-800">¡Excelente progreso!</p>
-                <p className="text-sm text-green-600">
+                <p className="font-medium text-green">¡Excelente progreso!</p>
+                <p className="text-sm text-green">
                   Has completado {completedStages.length} de 6 etapas del coaching estructurado
                 </p>
               </div>

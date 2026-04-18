@@ -112,7 +112,7 @@ export default function A1PatternsPage() {
             <h3 className="text-2xl font-bold text-white mb-6">Tus Fortalezas Naturales</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {details.strengths.map((strength, idx) => (
-                <Card key={idx} className="bg-gradient-to-br from-green-900/40 to-green/20 border-green-500/30 border-2">
+                <Card key={idx} className="bg-gradient-to-br from-green-900/40 to-green/20 border-green/30 border-2">
                   <CardContent className="pt-6">
                     <p className="text-green-300 font-semibold">✓ {strength}</p>
                   </CardContent>
@@ -199,7 +199,7 @@ export default function A1PatternsPage() {
               {details.career.map((role, idx) => (
                 <Card key={idx} className="bg-gradient-to-br from-purple/40 to-blue-900/20 border-purple/50/30 border-2 hover:border-purple/40/50 transition-colors">
                   <CardContent className="pt-6">
-                    <p className="text-purple-300 font-semibold text-lg">🎯 {role}</p>
+                    <p className="text-purple/30 font-semibold text-lg">🎯 {role}</p>
                   </CardContent>
                 </Card>
               ))}

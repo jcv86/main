@@ -29,7 +29,7 @@ export default function ComenzarPage() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Link href="/demo/ciclo-completo">
-              <Button size="lg" className="bg-gradient-to-r from-purple to-blue text-white hover:from-purple-700 hover:to-blue-700">
+              <Button size="lg" className="bg-gradient-to-r from-purple to-blue text-white hover:from-purple-700 hover:to-blue">
                 Ver Demo (5 min)
               </Button>
             </Link>
@@ -110,7 +110,7 @@ export default function ComenzarPage() {
                 </p>
                 <div className="space-y-2">
                   <Link href="/despega/conozcamonos-1">
-                    <Button className="w-full bg-gradient-to-r from-purple to-blue text-white hover:from-purple-700 hover:to-blue-700 justify-between">
+                    <Button className="w-full bg-gradient-to-r from-purple to-blue text-white hover:from-purple-700 hover:to-blue justify-between">
                       Comenzar Ahora <Rocket className="h-4 w-4" />
                     </Button>
                   </Link>
@@ -185,7 +185,7 @@ export default function ComenzarPage() {
           </Card>
 
           {/* A3 */}
-          <Card className="border-orange-200 dark:border-orange-800">
+          <Card className="border-orange/20 dark:border-orange-800">
             <CardHeader>
               <CardTitle className="text-lg">Pilar 3: Entrenamiento</CardTitle>
             </CardHeader>
@@ -259,7 +259,7 @@ export default function ComenzarPage() {
 
             <Card>
               <CardHeader>
-                <CheckCircle2 className="h-8 w-8 text-green dark:text-green-400 mb-2" />
+                <CheckCircle2 className="h-8 w-8 text-green dark:text-green/40 mb-2" />
                 <CardTitle className="text-lg">Production Checklist</CardTitle>
               </CardHeader>
               <CardContent>

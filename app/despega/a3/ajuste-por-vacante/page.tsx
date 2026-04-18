@@ -96,12 +96,12 @@ export default function JobMatchingPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted/60 dark:text-muted/40">Tu Match con esta Vacante</p>
-                    <p className="text-5xl font-bold text-green dark:text-green-400 mt-2">
+                    <p className="text-5xl font-bold text-green dark:text-green/40 mt-2">
                       {analysis.matchPercentage}%
                     </p>
                   </div>
                   <div className="text-center">
-                    <CheckCircle2 className="w-16 h-16 text-green dark:text-green-400" />
+                    <CheckCircle2 className="w-16 h-16 text-green dark:text-green/40" />
                   </div>
                 </div>
               </CardContent>
@@ -138,7 +138,7 @@ export default function JobMatchingPage() {
                       <p className="text-sm font-semibold mb-2">Habilidades que falta:</p>
                       <div className="flex flex-wrap gap-2">
                         {analysis.missingSkills.map((skill: string) => (
-                          <Badge key={skill} variant="outline" className="border-orange-300 text-orange-700 dark:text-orange-300">
+                          <Badge key={skill} variant="outline" className="border-orange-300 text-orange dark:text-orange-300">
                             <AlertCircle className="w-3 h-3 mr-1" />
                             {skill}
                           </Badge>

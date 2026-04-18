@@ -45,7 +45,7 @@ export default function ContentLicensesPage() {
       case "pending_review":
         return "bg-orange"
       case "needs_documentation":
-        return "bg-orange-500"
+        return "bg-orange/50"
       case "at_risk":
         return "bg-red/50"
       case "non_compliant":

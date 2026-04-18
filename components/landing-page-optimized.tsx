@@ -121,8 +121,8 @@ export default function LandingPageOptimized() {
           <div className="grid grid-cols-1 gap-4">
             <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-red/20 dark:border-red-900/30 hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center">
-                  <span className="text-xl font-bold text-red-600 dark:text-red-400">01</span>
+                <div className="w-12 h-12 bg-red/10 dark:bg-red/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-red dark:text-red-400">01</span>
                 </div>
               </div>
               <div>
@@ -143,10 +143,10 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-orange-200 dark:border-orange-900/30 hover:shadow-lg transition-shadow">
+            <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-orange/20 dark:border-orange-900/30 hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center">
-                  <span className="text-xl font-bold text-orange-600 dark:text-orange-400">03</span>
+                <div className="w-12 h-12 bg-orange/10 dark:bg-orange/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-orange dark:text-orange-400">03</span>
                 </div>
               </div>
               <div>
@@ -157,8 +157,8 @@ export default function LandingPageOptimized() {
 
             <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-blue-200 dark:border-blue-900/30 hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center">
-                  <span className="text-xl font-bold text-blue-600 dark:text-blue-400">04</span>
+                <div className="w-12 h-12 bg-blue/10 dark:bg-blue/30 rounded-lg flex items-center justify-center">
+                  <span className="text-xl font-bold text-blue dark:text-blue/40">04</span>
                 </div>
               </div>
               <div>
@@ -181,7 +181,7 @@ export default function LandingPageOptimized() {
 
             <div className="flex gap-4 p-6 bg-white dark:bg-slate-800 rounded-xl border border-cyan-200 dark:border-cyan-900/30 hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-cyan/10 dark:bg-cyan/30 rounded-lg flex items-center justify-center">
                   <span className="text-lg font-bold text-cyan-600 dark:text-cyan-400">→</span>
                 </div>
               </div>
@@ -387,7 +387,7 @@ export default function LandingPageOptimized() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-purple-600 dark:text-purple/40" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Te sientes estancado
@@ -397,9 +397,9 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-l-4 border-blue/50 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-blue dark:text-blue/40" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Estás en transición
@@ -409,9 +409,9 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-l-4 border-green hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-green dark:text-green/40" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Quieres reenfocarte
@@ -433,9 +433,9 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-l-4 border-orange-500 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-l-4 border-orange hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-orange-600 dark:text-orange-400" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-orange dark:text-orange-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Quieres entrenar entrevistas
@@ -458,7 +458,7 @@ export default function LandingPageOptimized() {
             </div>
           </div>
 
-          <div className="mt-12 p-8 bg-blue-50 dark:bg-blue-900/20 rounded-[28px] border border-blue-200 dark:border-blue-800">
+          <div className="mt-12 p-8 bg-blue-50 dark:bg-blue/20 rounded-[28px] border border-blue-200 dark:border-blue-800">
             <p className="text-center text-foreground text-lg">
               Si alguna de estas situaciones es tuya, <span className="font-bold">DTC está diseñado para ti</span>.
             </p>
@@ -553,7 +553,7 @@ export default function LandingPageOptimized() {
             <Link href="/auth/signin" prefetch={true}>
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
+                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
               >
                 Quiero empezar mi proceso
                 <ArrowRight className="ml-2 h-5 w-5" />

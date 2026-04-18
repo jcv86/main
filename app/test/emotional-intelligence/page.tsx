@@ -459,7 +459,7 @@ export default function EmotionalIntelligenceTest() {
 
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Despega Empatía</h1>
+              <h1 className="text-2xl font-bold text-foreground">Despega Empatía</h1>
               <div className="flex items-center gap-2 text-sm text-muted/60 mt-1">
                 <Heart className="h-4 w-4" />
                 <span>Reconocer, comprender y gestionar emociones</span>
@@ -485,7 +485,7 @@ export default function EmotionalIntelligenceTest() {
             <CardTitle className="text-lg">Pregunta {currentQuestion + 1}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <p className="text-gray-700 text-lg leading-relaxed">{question.text}</p>
+            <p className="text-muted text-lg leading-relaxed">{question.text}</p>
 
             <RadioGroup
               value={selectedAnswer?.toString() || ""}
@@ -495,7 +495,7 @@ export default function EmotionalIntelligenceTest() {
               {question.options.map((option, index) => (
                 <div key={index} className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-muted/5">
                   <RadioGroupItem value={option.value.toString()} id={`option-${index}`} />
-                  <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-gray-700">
+                  <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-muted">
                     {option.text}
                   </Label>
                 </div>

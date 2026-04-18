@@ -119,7 +119,7 @@ export default function TestSemanticSearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-blue/5">
       <div className="container mx-auto py-8 px-4 max-w-7xl">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-3">
@@ -393,7 +393,7 @@ export default function TestSemanticSearchPage() {
               </CardHeader>
               <CardContent className="space-y-3 text-sm">
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-200 flex items-center justify-center text-purple font-bold text-xs">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple/20 flex items-center justify-center text-purple font-bold text-xs">
                     1
                   </div>
                   <p className="text-purple">Ingresa tu pregunta o tema en lenguaje natural (español o inglés)</p>
@@ -413,7 +413,7 @@ export default function TestSemanticSearchPage() {
                   <p className="text-purple">Busca en 120+ libros y 100+ recursos web usando similitud de coseno</p>
                 </div>
                 <div className="flex gap-3">
-                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple-200 flex items-center justify-center text-purple font-bold text-xs">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-purple/20 flex items-center justify-center text-purple font-bold text-xs">
                     4
                   </div>
                   <p className="text-purple">Recibe resultados ordenados por relevancia con scores de similitud</p>

@@ -21,8 +21,8 @@ interface BadgesDisplayProps {
 
 const RARITY_COLORS: Record<string, string> = {
   common: 'bg-slate-100 dark:bg-slate-800 border-slate-300',
-  rare: 'bg-blue-100 dark:bg-blue-900/30 border-blue-300',
-  epic: 'bg-purple-100 dark:bg-purple-900/30 border-purple-300',
+  rare: 'bg-blue/10 dark:bg-blue/30 border-blue-300',
+  epic: 'bg-purple-100 dark:bg-purple/30 border-purple-300',
   legendary: 'bg-amber-100 dark:bg-amber-900/30 border-amber-300'
 }
 

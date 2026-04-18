@@ -48,7 +48,7 @@ export default function JourneySummaryPage() {
         </div>
 
         {/* OVERALL PROGRESS */}
-        <Card className="border-0 shadow-lg bg-gradient-to-r from-blue to-purple-600 text-white">
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-blue to-purple text-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Target className="w-6 h-6" />
@@ -59,15 +59,15 @@ export default function JourneySummaryPage() {
             <div className="flex items-end justify-between">
               <div>
                 <div className="text-5xl font-bold mb-2">50%</div>
-                <p className="text-indigo-100">Completado en 45 días</p>
+                <p className="text-blue/10">Completado en 45 días</p>
               </div>
               <div className="text-right">
                 <div className="text-3xl font-bold mb-2">45/90</div>
-                <p className="text-indigo-100">días en el programa</p>
+                <p className="text-blue/10">días en el programa</p>
               </div>
             </div>
             <Progress value={50} className="h-3 bg-white/30" />
-            <p className="text-sm text-indigo-100">Ritmo: 1 fase cada 22.5 días. A3 y A4 por completar.</p>
+            <p className="text-sm text-blue/10">Ritmo: 1 fase cada 22.5 días. A3 y A4 por completar.</p>
           </CardContent>
         </Card>
 
@@ -76,7 +76,7 @@ export default function JourneySummaryPage() {
           <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5">Las 4 Fases</h2>
           
           {/* A1 */}
-          <Card className="border-2 border-green-500 bg-green/5 dark:bg-green-950/20">
+          <Card className="border-2 border-green bg-green/5 dark:bg-green-950/20">
             <CardContent className="pt-6">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
@@ -100,7 +100,7 @@ export default function JourneySummaryPage() {
           </Card>
 
           {/* A2 */}
-          <Card className="border-2 border-orange bg-yellow-50 dark:bg-yellow-950/20">
+          <Card className="border-2 border-orange bg-yellow/5 dark:bg-yellow/20">
             <CardContent className="pt-6">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
@@ -183,8 +183,8 @@ export default function JourneySummaryPage() {
           </Card>
           <Card>
             <CardContent className="pt-6 text-center">
-              <Zap className="w-8 h-8 mx-auto text-yellow-600 mb-3" />
-              <div className="text-3xl font-bold text-yellow-600">12</div>
+              <Zap className="w-8 h-8 mx-auto text-yellow mb-3" />
+              <div className="text-3xl font-bold text-yellow">12</div>
               <p className="text-sm text-muted/60 dark:text-muted/40 mt-2">Acciones Completadas</p>
             </CardContent>
           </Card>
@@ -231,7 +231,7 @@ export default function JourneySummaryPage() {
         </Card>
 
         {/* NEXT STEPS */}
-        <Card className="border-2 border-green-500 bg-green/5 dark:bg-green-950/30">
+        <Card className="border-2 border-green bg-green/5 dark:bg-green-950/30">
           <CardHeader>
             <CardTitle>Tu Próximo Paso</CardTitle>
           </CardHeader>

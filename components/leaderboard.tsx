@@ -82,7 +82,7 @@ export function Leaderboard() {
         </Card>
         <Card>
           <CardContent className="pt-6 text-center">
-            <Flame className="w-8 h-8 mx-auto mb-2 text-orange-500" />
+            <Flame className="w-8 h-8 mx-auto mb-2 text-orange" />
             <p className="text-sm text-muted-foreground">Tu Racha</p>
             <p className="text-3xl font-bold">12 días</p>
           </CardContent>

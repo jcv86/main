@@ -100,11 +100,11 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red-100 text-red-800"
+        return "bg-red/10 text-red-800"
       case "medium":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow/10 text-yellow"
       case "low":
-        return "bg-green-100 text-green-800"
+        return "bg-green/10 text-green"
       default:
         return "bg-muted/10 text-gray-800"
     }
@@ -113,9 +113,9 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "completed":
-        return <CheckCircle className="h-5 w-5 text-green-600" />
+        return <CheckCircle className="h-5 w-5 text-green" />
       case "in_progress":
-        return <Clock className="h-5 w-5 text-blue-600" />
+        return <Clock className="h-5 w-5 text-blue" />
       default:
         return <AlertCircle className="h-5 w-5 text-muted/60" />
     }

@@ -38,7 +38,7 @@ const achievements: Achievement[] = [
     name: 'Maestro de Entrenamientos',
     description: 'Completa 10 entrenamientos',
     icon: Trophy,
-    color: 'from-purple-500 to-purple-600',
+    color: 'from-purple-500 to-purple',
     unlocked: false,
     points: 50,
   },

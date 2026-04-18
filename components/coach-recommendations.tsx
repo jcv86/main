@@ -75,7 +75,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
   const colors = [
     'from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border-purple-200 dark:border-purple-900/50',
     'from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-blue-200 dark:border-blue-900/50',
-    'from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-orange-200 dark:border-orange-900/50',
+    'from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-orange/20 dark:border-orange-900/50',
     'from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-900/50',
     'from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 border-pink-200 dark:border-pink-900/50',
   ]
@@ -117,7 +117,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
                       </span>
                     )}
                     {rec.book.rating && (
-                      <span className="text-xs bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 px-2 py-1 rounded">
+                      <span className="text-xs bg-yellow/10 dark:bg-yellow/30 text-yellow-700 dark:text-yellow-300 px-2 py-1 rounded">
                         ★ {rec.book.rating}
                       </span>
                     )}
@@ -136,7 +136,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
             </div>
           )}
 
-          <Button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+          <Button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue">
             Ver Todas Mis Sugerencias Personalizadas
           </Button>
         </div>

@@ -155,7 +155,7 @@ export default function A2TestPage() {
 
         {/* Control Panel */}
         <Card className="mb-8 border-0 shadow-lg">
-          <CardHeader className="bg-gradient-to-r from-blue to-blue-700 text-white rounded-t-lg">
+          <CardHeader className="bg-gradient-to-r from-blue to-blue text-white rounded-t-lg">
             <CardTitle>Panel de Control</CardTitle>
             <CardDescription className="text-blue/10">
               Haz clic para probar cada fase del flujo CANON
@@ -211,7 +211,7 @@ export default function A2TestPage() {
                 onClick={runFullTest}
                 disabled={isRunning}
                 size="lg"
-                className="h-14 text-lg font-bold bg-gradient-to-r from-blue to-blue-700 hover:from-blue hover:to-blue-800"
+                className="h-14 text-lg font-bold bg-gradient-to-r from-blue to-blue hover:from-blue hover:to-blue-800"
               >
                 {isRunning ? (
                   <>
@@ -256,12 +256,12 @@ export default function A2TestPage() {
                         {result.status === "success" && (
                           <>
                             <CheckCircle2 className="w-5 h-5 text-green" />
-                            <Badge variant="outline" className="bg-green/5 text-green-700">Éxito</Badge>
+                            <Badge variant="outline" className="bg-green/5 text-green">Éxito</Badge>
                           </>
                         )}
                         {result.status === "error" && (
                           <>
-                            <AlertCircle className="w-5 h-5 text-red-600" />
+                            <AlertCircle className="w-5 h-5 text-red" />
                             <Badge variant="outline" className="bg-red/5 text-red">Error</Badge>
                           </>
                         )}
@@ -278,7 +278,7 @@ export default function A2TestPage() {
 
                       {/* Error Message */}
                       {result.error && (
-                        <div className="bg-red/5 dark:bg-red-950 border border-red/20 dark:border-red-800 text-red dark:text-red-200 p-4 rounded-[28px]">
+                        <div className="bg-red/5 dark:bg-red-950 border border-red/20 dark:border-red-800 text-red dark:text-red/20 p-4 rounded-[28px]">
                           <p className="font-semibold mb-1">Error:</p>
                           <p className="text-sm">{result.error}</p>
                         </div>

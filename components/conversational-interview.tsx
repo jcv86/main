@@ -363,9 +363,9 @@ export function ConversationalInterview({
 
         {/* Error */}
         {error && (
-          <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red-900/20">
-            <AlertTriangle className="h-4 w-4 text-red-600" />
-            <AlertDescription className="text-red dark:text-red-200 ml-2">{error}</AlertDescription>
+          <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red/20">
+            <AlertTriangle className="h-4 w-4 text-red" />
+            <AlertDescription className="text-red dark:text-red/20 ml-2">{error}</AlertDescription>
           </Alert>
         )}
 
@@ -485,14 +485,14 @@ function getAvatarName(avatarId: string, type: 'user' | 'interviewer'): string {
 function getAvatarGradient(avatarId: string): string {
   const gradients: Record<string, string> = {
     'professional-1': 'bg-gradient-to-br from-blue-500 to-blue-600',
-    'creative-1': 'bg-gradient-to-br from-purple-500 to-purple-600',
+    'creative-1': 'bg-gradient-to-br from-purple-500 to-purple',
     'tech-1': 'bg-gradient-to-br from-green-500 to-green-600',
-    'business-1': 'bg-gradient-to-br from-red-500 to-red-600',
+    'business-1': 'bg-gradient-to-br from-red to-red',
     'casual-1': 'bg-gradient-to-br from-orange-500 to-orange-600',
     'formal-1': 'bg-gradient-to-br from-slate-700 to-slate-900',
-    'interviewer-classic-1': 'bg-gradient-to-br from-purple-500 to-purple-600',
+    'interviewer-classic-1': 'bg-gradient-to-br from-purple-500 to-purple',
     'interviewer-classic-2': 'bg-gradient-to-br from-blue-500 to-blue-600',
-    'interviewer-classic-3': 'bg-gradient-to-br from-purple-500 to-indigo-600',
+    'interviewer-classic-3': 'bg-gradient-to-br from-purple-500 to-blue',
     'interviewer-classic-4': 'bg-gradient-to-br from-green-500 to-emerald-600',
     'interviewer-modern-1': 'bg-gradient-to-br from-red-500 to-rose-600',
     'interviewer-modern-2': 'bg-gradient-to-br from-orange-500 to-yellow-600',

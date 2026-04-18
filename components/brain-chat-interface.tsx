@@ -268,7 +268,7 @@ export function BrainChatInterface() {
                           {message.confidence !== undefined && (
                             <div className="flex items-center gap-4 mt-4 pt-3 border-t border-muted/20 dark:border-gray-700 text-xs">
                               <div className="flex items-center gap-1.5">
-                                <TrendingUp className="h-3.5 w-3.5 text-green-600" />
+                                <TrendingUp className="h-3.5 w-3.5 text-green" />
                                 <span className="font-medium">Confianza: {Math.round(message.confidence)}%</span>
                               </div>
                               {message.processingTime && (
@@ -283,7 +283,7 @@ export function BrainChatInterface() {
                           {message.sources && message.sources.length > 0 && (
                             <div className="mt-4 space-y-2">
                               <Separator className="my-2" />
-                              <div className="text-xs font-semibold text-gray-700 dark:text-muted/30 mb-2">
+                              <div className="text-xs font-semibold text-muted dark:text-muted/30 mb-2">
                                 📚 Fuentes consultadas:
                               </div>
                               <div className="space-y-2">
@@ -294,9 +294,9 @@ export function BrainChatInterface() {
                                   >
                                     <div className="mt-0.5">
                                       {source.sourceType === "book" ? (
-                                        <BookOpen className="h-4 w-4 text-blue-600" />
+                                        <BookOpen className="h-4 w-4 text-blue" />
                                       ) : (
-                                        <Globe className="h-4 w-4 text-green-600" />
+                                        <Globe className="h-4 w-4 text-green" />
                                       )}
                                     </div>
                                     <div className="flex-1 min-w-0">
@@ -369,7 +369,7 @@ export function BrainChatInterface() {
                   key={idx}
                   variant="outline"
                   size="sm"
-                  className="w-full justify-start text-left h-auto py-3 hover:bg-purple-50 dark:hover:bg-purple-900/20 bg-transparent"
+                  className="w-full justify-start text-left h-auto py-3 hover:bg-purple-50 dark:hover:bg-purple/20 bg-transparent"
                   onClick={() => handleQuickQuestion(q.text)}
                   disabled={isLoading}
                 >
@@ -389,8 +389,8 @@ export function BrainChatInterface() {
             </CardHeader>
             <CardContent className="space-y-3 text-xs">
               <div className="flex items-start gap-2">
-                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-green-100 dark:bg-green-900/20 flex items-center justify-center shrink-0">
-                  <BookOpen className="h-3 w-3 text-green-600" />
+                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-green/10 dark:bg-green/20 flex items-center justify-center shrink-0">
+                  <BookOpen className="h-3 w-3 text-green" />
                 </div>
                 <div>
                   <div className="font-semibold">120+ Libros</div>
@@ -399,8 +399,8 @@ export function BrainChatInterface() {
               </div>
 
               <div className="flex items-start gap-2">
-                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center shrink-0">
-                  <Sparkles className="h-3 w-3 text-blue-600" />
+                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-blue/10 dark:bg-blue/20 flex items-center justify-center shrink-0">
+                  <Sparkles className="h-3 w-3 text-blue" />
                 </div>
                 <div>
                   <div className="font-semibold">Búsqueda Semántica</div>
@@ -409,7 +409,7 @@ export function BrainChatInterface() {
               </div>
 
               <div className="flex items-start gap-2">
-                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center shrink-0">
+                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-purple-100 dark:bg-purple/20 flex items-center justify-center shrink-0">
                   <TrendingUp className="h-3 w-3 text-purple-600" />
                 </div>
                 <div>
@@ -419,8 +419,8 @@ export function BrainChatInterface() {
               </div>
 
               <div className="flex items-start gap-2">
-                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center shrink-0">
-                  <Clock className="h-3 w-3 text-orange-600" />
+                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-orange/10 dark:bg-orange/20 flex items-center justify-center shrink-0">
+                  <Clock className="h-3 w-3 text-orange" />
                 </div>
                 <div>
                   <div className="font-semibold">Respuestas Rápidas</div>

@@ -314,7 +314,7 @@ export default function SprintViewerPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green"></div>
           <p className="mt-4 text-muted/60 dark:text-muted/40">Cargando tu sprint...</p>
         </div>
       </div>
@@ -335,9 +335,9 @@ export default function SprintViewerPage() {
 
   const progressPercentage = Math.round((completedCount / actions.length) * 100)
   const difficultyColors = {
-    fácil: "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200",
+    fácil: "bg-green/10 dark:bg-green/30 text-green dark:text-green-200",
     medio: "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200",
-    desafiante: "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200"
+    desafiante: "bg-red/10 dark:bg-red/30 text-red-800 dark:text-red/20"
   }
 
   return (
@@ -395,7 +395,7 @@ export default function SprintViewerPage() {
                 key={action.id}
                 className={`border-0 transition-all cursor-pointer hover:shadow-md ${
                   action.completed
-                    ? "bg-green/5 dark:bg-green-900/10 border-l-4 border-l-green-500"
+                    ? "bg-green/5 dark:bg-green/10 border-l-4 border-l-green-500"
                     : "bg-white dark:bg-card"
                 }`}
                 onClick={() => toggleAction(action.id)}
@@ -407,7 +407,7 @@ export default function SprintViewerPage() {
                       <div
                         className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${
                           action.completed
-                            ? "bg-green border-green-600"
+                            ? "bg-green border-green"
                             : "border-muted/30 dark:border-muted/60"
                         }`}
                       >

@@ -427,7 +427,7 @@ export default function A4Page() {
             <div className="w-5 h-5 flex-shrink-0 text-blue text-lg">💡</div>
             <div>
               <div className="font-semibold text-cyan-900 dark:text-cyan-100 mb-2">A4 - El Contexto Real: Tu Nueva Identidad en Acción</div>
-              <ul className="text-sm text-cyan-800 dark:text-cyan-200 space-y-1">
+              <ul className="text-sm text-cyan dark:text-cyan/20 space-y-1">
                 <li>✓ <strong>Dashboard:</strong> Tu progreso, puntos y logros en tiempo real</li>
                 <li>✓ <strong>Noticias:</strong> Contexto del mercado donde vivirá tu nueva identidad</li>
                 <li>✓ <strong>Módulos:</strong> Aprende habilidades específicas para tu transformación</li>

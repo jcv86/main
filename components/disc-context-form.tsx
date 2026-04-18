@@ -35,7 +35,7 @@ export function DISCContextForm({ onSubmit, onSkip, attemptNumber }: DISCContext
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
         <div className="flex items-center gap-2 mb-2">
-          <Sparkles className="h-6 w-6 text-blue-600" />
+          <Sparkles className="h-6 w-6 text-blue" />
           <CardTitle>
             {isFirstTime
               ? "¡Bienvenido a tu Informe Despega Cerebral!"

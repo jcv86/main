@@ -41,7 +41,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
       focus: ['Claridad', 'Presencia', 'Estructura'],
       nextSkills: ['Respiración', 'Contacto visual', 'Tono'],
       icon: <Zap className="w-6 h-6" />,
-      color: 'text-blue-600 dark:text-blue-400',
+      color: 'text-blue dark:text-blue/40',
       bgColor: 'bg-blue-50 dark:bg-blue-950/20',
       isLocked: false
     },
@@ -55,7 +55,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
       focus: ['Análisis', 'Decisiones', 'Impacto'],
       nextSkills: ['Storytelling', 'Métricas', 'Liderazgo'],
       icon: <TrendingUp className="w-6 h-6" />,
-      color: 'text-purple-600 dark:text-purple-400',
+      color: 'text-purple-600 dark:text-purple/40',
       bgColor: 'bg-purple-50 dark:bg-purple-950/20',
       isLocked: !userProgress?.basico?.completed || userProgress.basico.completed === 0
     },
@@ -145,7 +145,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
                 <p className="text-sm font-semibold text-green-900 dark:text-green-200">
                   Score: {userProgress[level.id].score}
                 </p>
-                <p className="text-xs text-green-700 dark:text-green-300">
+                <p className="text-xs text-green dark:text-green-300">
                   {userProgress[level.id].completed} intento{userProgress[level.id].completed !== 1 ? 's' : ''}
                 </p>
               </div>

@@ -17,7 +17,7 @@ export default function CareersPage() {
             <CardTitle className="text-3xl">Estamos Construyendo</CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-6">
-            <p className="text-lg text-gray-700">
+            <p className="text-lg text-muted">
               La sección de carreras está en desarrollo. Estamos definiendo nuestro equipo y estructura organizacional de la mano con nuestros usuarios.
             </p>
             

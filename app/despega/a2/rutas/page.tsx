@@ -31,9 +31,9 @@ const routeIcons: Record<string, any> = {
 
 const routeColors: Record<string, string> = {
   'liderazgo': 'from-blue to-blue',
-  'comunicacion': 'from-green/50 to-emerald-600',
+  'comunicacion': 'from-green to-green',
   'emprendimiento': 'from-yellow/50 to-amber-600',
-  'transformacion': 'from-purple/50 to-purple-600',
+  'transformacion': 'from-purple/50 to-purple',
 }
 
 export default function A2RoutasPage() {
@@ -197,7 +197,7 @@ export default function A2RoutasPage() {
       <div className="min-h-screen bg-gradient-to-b from-background to-muted/50 flex items-center justify-center p-4">
         <Card className="max-w-md border-red/20">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-red-600">
+            <CardTitle className="flex items-center gap-2 text-red">
               <AlertCircle className="w-5 h-5" />
               Error
             </CardTitle>
@@ -282,7 +282,7 @@ export default function A2RoutasPage() {
                   <div className="p-3 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue/10">
                     <p className="text-sm">
                       <span className="font-semibold text-blue dark:text-blue/10">Por qué para ti: </span>
-                      <span className="text-blue-800 dark:text-blue/20">{route.razon_seleccion}</span>
+                      <span className="text-blue dark:text-blue/20">{route.razon_seleccion}</span>
                     </p>
                   </div>
 

@@ -171,7 +171,7 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
 
           <div className="p-4 bg-amber-50 border border-amber-200 rounded">
             <div className="font-medium text-sm mb-2">Instrucciones</div>
-            <ul className="text-sm space-y-1 text-gray-700">
+            <ul className="text-sm space-y-1 text-muted">
               <li>• Recibirás {questions.length} preguntas</li>
               <li>• Tienes 60-90 segundos por respuesta</li>
               <li>• La cámara estará encendida durante toda la entrevista</li>
@@ -234,9 +234,9 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
           </div>
 
           {recordingTime > 90 && (
-            <Alert className="bg-orange-50 border-orange-300">
-              <AlertTriangle className="h-4 w-4 text-orange-600" />
-              <AlertDescription className="text-orange-800">
+            <Alert className="bg-orange/5 border-orange-300">
+              <AlertTriangle className="h-4 w-4 text-orange" />
+              <AlertDescription className="text-orange">
                 Estás excediendo el tiempo recomendado (60-90s). Intenta ser más conciso.
               </AlertDescription>
             </Alert>
@@ -254,7 +254,7 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Score Visualization */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-[28px] border border-blue-200">
+          <div className="bg-gradient-to-r from-blue-50 to-blue/5 p-6 rounded-[28px] border border-blue-200">
             <div className="text-sm text-muted/60 mb-2">Desempeño en esta respuesta</div>
             <div className="text-4xl font-bold text-indigo-600 mb-2">
               {feedback.performance_score}%
@@ -292,7 +292,7 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
             <div className="font-medium text-sm mb-2">✓ Lo que funcionó</div>
             <ul className="space-y-1">
               {feedback.strengths.map((str: string, idx: number) => (
-                <li key={idx} className="text-sm text-gray-700">• {str}</li>
+                <li key={idx} className="text-sm text-muted">• {str}</li>
               ))}
             </ul>
           </div>
@@ -302,7 +302,7 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
             <div className="font-medium text-sm mb-2">→ Áreas para mejorar</div>
             <ul className="space-y-1">
               {feedback.improvements.map((imp: string, idx: number) => (
-                <li key={idx} className="text-sm text-gray-700">• {imp}</li>
+                <li key={idx} className="text-sm text-muted">• {imp}</li>
               ))}
             </ul>
           </div>

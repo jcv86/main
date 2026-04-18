@@ -56,9 +56,9 @@ export function A4NewsCard7Layers({ news, onEngagement }: Props) {
 
   const getRelevanceColor = (score: number) => {
     if (score >= 8) return 'bg-red/50/20 text-red dark:text-red-400 border-red-300'
-    if (score >= 6) return 'bg-orange-500/20 text-orange-700 dark:text-orange-400 border-orange-300'
+    if (score >= 6) return 'bg-orange/50/20 text-orange dark:text-orange-400 border-orange-300'
     if (score >= 4) return 'bg-orange/20 text-yellow-700 dark:text-yellow-400 border-yellow-300'
-    return 'bg-blue-500/20 text-blue-700 dark:text-blue-400 border-blue-300'
+    return 'bg-blue-500/20 text-blue dark:text-blue/40 border-blue-300'
   }
 
   const getCategoryEmoji = (cat: string) => {

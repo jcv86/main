@@ -37,7 +37,7 @@ export default async function MyLearningPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple/10 to-blue/10 dark:from-purple/30 dark:to-blue-900/30 rounded-full mb-4">
-            <p className="text-sm font-semibold text-purple dark:text-purple-300">Tu Progreso de Aprendizaje</p>
+            <p className="text-sm font-semibold text-purple dark:text-purple/30">Tu Progreso de Aprendizaje</p>
           </div>
           <h1 className="text-5xl font-bold mb-2 bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Tu Aprendizaje</h1>
           <p className="text-lg text-muted/70 dark:text-muted/30">
@@ -56,7 +56,7 @@ export default async function MyLearningPage() {
             href="/leaderboard"
             className="flex items-center gap-3 p-4 border-2 border-purple/20 dark:border-purple/50 rounded-lg bg-white dark:bg-background hover:bg-purple/5 dark:hover:bg-muted/80 transition-colors group shadow-sm"
           >
-            <div className="p-2 bg-purple/10 dark:bg-purple/30 rounded-lg group-hover:bg-purple-200 dark:group-hover:bg-purple/50 transition-colors">
+            <div className="p-2 bg-purple/10 dark:bg-purple/30 rounded-lg group-hover:bg-purple/20 dark:group-hover:bg-purple/50 transition-colors">
               <Users className="h-5 w-5 text-purple dark:text-purple/40" />
             </div>
             <div className="flex-1">
@@ -82,7 +82,7 @@ export default async function MyLearningPage() {
             href="/library-recommendations"
             className="flex items-center gap-3 p-4 border-2 border-blue/20 dark:border-cyan-900/50 rounded-lg bg-white dark:bg-background hover:bg-blue/5 dark:hover:bg-muted/80 transition-colors group shadow-sm"
           >
-            <div className="p-2 bg-cyan-100 dark:bg-cyan-900/30 rounded-lg group-hover:bg-cyan-200 dark:group-hover:bg-cyan-800/50 transition-colors">
+            <div className="p-2 bg-cyan/10 dark:bg-cyan/30 rounded-lg group-hover:bg-cyan-200 dark:group-hover:bg-cyan-800/50 transition-colors">
               <TrendingUp className="h-5 w-5 text-cyan-700 dark:text-cyan-400" />
             </div>
             <div className="flex-1">

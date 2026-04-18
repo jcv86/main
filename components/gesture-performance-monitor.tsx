@@ -193,7 +193,7 @@ export function GesturePerformanceMonitor() {
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case "improving":
-        return <TrendingUp className="h-4 w-4 text-green-500" />
+        return <TrendingUp className="h-4 w-4 text-green/50" />
       case "declining":
         return <TrendingDown className="h-4 w-4 text-red" />
       default:
@@ -203,25 +203,25 @@ export function GesturePerformanceMonitor() {
 
   const getPerformanceColor = (value: number, type: "time" | "rate") => {
     if (type === "time") {
-      return value < 100 ? "text-green-600" : value < 200 ? "text-yellow-600" : "text-red-600"
+      return value < 100 ? "text-green" : value < 200 ? "text-yellow" : "text-red"
     } else {
-      return value >= 90 ? "text-green-600" : value >= 70 ? "text-yellow-600" : "text-red-600"
+      return value >= 90 ? "text-green" : value >= 70 ? "text-yellow" : "text-red"
     }
   }
 
   return (
     <div className="space-y-6">
       {/* Control Panel */}
-      <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+      <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-blue/5">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Activity className="h-6 w-6 text-blue-600" />
+              <div className="p-2 bg-blue/10 rounded-lg">
+                <Activity className="h-6 w-6 text-blue" />
               </div>
               <div>
                 <CardTitle className="text-xl text-blue-900">Gesture Performance Monitor</CardTitle>
-                <p className="text-blue-700 text-sm">Real-time gesture performance tracking and analytics</p>
+                <p className="text-blue text-sm">Real-time gesture performance tracking and analytics</p>
               </div>
             </div>
             <div className="flex gap-2">
@@ -253,7 +253,7 @@ export function GesturePerformanceMonitor() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <Activity className={`h-5 w-5 ${isMonitoring ? "text-green-500 animate-pulse" : "text-muted/40"}`} />
+                <Activity className={`h-5 w-5 ${isMonitoring ? "text-green/50 animate-pulse" : "text-muted/40"}`} />
                 <span className="font-semibold">Status</span>
               </div>
               <Badge variant={isMonitoring ? "default" : "outline"}>
@@ -278,7 +278,7 @@ export function GesturePerformanceMonitor() {
             </div>
             <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <TrendingUp className="h-5 w-5 text-green-500" />
+                <TrendingUp className="h-5 w-5 text-green/50" />
                 <span className="font-semibold">Success Rate</span>
               </div>
               <span className={`text-2xl font-bold ${getPerformanceColor(stats?.successRate || 0, "rate")}`}>
@@ -423,25 +423,25 @@ export function GesturePerformanceMonitor() {
                 <h4 className="font-medium text-green-900">Strengths</h4>
                 <div className="space-y-2 text-sm">
                   {stats.successRate >= 90 && (
-                    <div className="flex items-center gap-2 text-green-700">
+                    <div className="flex items-center gap-2 text-green">
                       <span>✅</span>
                       <span>Excellent gesture recognition rate ({stats.successRate}%)</span>
                     </div>
                   )}
                   {stats.averageResponseTime < 100 && (
-                    <div className="flex items-center gap-2 text-green-700">
+                    <div className="flex items-center gap-2 text-green">
                       <span>⚡</span>
                       <span>Fast response times (avg {stats.averageResponseTime}ms)</span>
                     </div>
                   )}
                   {stats.performanceTrend === "improving" && (
-                    <div className="flex items-center gap-2 text-green-700">
+                    <div className="flex items-center gap-2 text-green">
                       <span>📈</span>
                       <span>Performance is improving over time</span>
                     </div>
                   )}
                   {Object.values(stats.gestureBreakdown).some((g) => g.successRate >= 95) && (
-                    <div className="flex items-center gap-2 text-green-700">
+                    <div className="flex items-center gap-2 text-green">
                       <span>🎯</span>
                       <span>Some gestures have near-perfect accuracy</span>
                     </div>
@@ -469,7 +469,7 @@ export function GesturePerformanceMonitor() {
                       <span>Focus on improving low-performing gestures</span>
                     </div>
                   )}
-                  <div className="flex items-center gap-2 text-blue-700">
+                  <div className="flex items-center gap-2 text-blue">
                     <span>📊</span>
                     <span>Continue monitoring for trend analysis</span>
                   </div>

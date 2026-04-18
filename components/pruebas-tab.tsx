@@ -131,7 +131,7 @@ export function PruebasTab() {
 
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-green-500" />
+              <TrendingUp className="w-5 h-5 text-green/50" />
               <h3 className="text-lg font-semibold">Los Resultados</h3>
             </div>
             <p className="text-muted-foreground">{selectedCase.results}</p>
@@ -187,7 +187,7 @@ export function PruebasTab() {
                   <p className="text-xs text-muted-foreground mt-2 line-clamp-2">{caseStudy.description}</p>
                 </div>
                 {completed.has(caseStudy.id) && (
-                  <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0 mt-1" />
+                  <CheckCircle className="w-5 h-5 text-green/50 flex-shrink-0 mt-1" />
                 )}
               </div>
             </CardHeader>

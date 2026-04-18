@@ -31,7 +31,7 @@ const activityTypeColors = {
   sport: "bg-green-500",
   study: "bg-purple-500",
   personal: "bg-pink-500",
-  work: "bg-orange-500",
+  work: "bg-orange/50",
 }
 
 const activityTypeLabels = {
@@ -264,20 +264,20 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
       </div>
 
       {/* WhatsApp Status */}
-      <Card className={`p-4 ${phoneNumber ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200"}`}>
+      <Card className={`p-4 ${phoneNumber ? "bg-green-50 border-green-200" : "bg-yellow/5 border-yellow/20"}`}>
         <div className="flex items-center gap-3">
-          <MessageCircle className={`w-5 h-5 ${phoneNumber ? "text-green-600" : "text-yellow-600"}`} />
+          <MessageCircle className={`w-5 h-5 ${phoneNumber ? "text-green" : "text-yellow"}`} />
           <div className="flex-1">
             {phoneNumber ? (
               <>
                 <p className="font-medium text-green-900">WhatsApp Web Configurado</p>
-                <p className="text-sm text-green-700">
+                <p className="text-sm text-green">
                   Número: {phoneNumber} • Haz clic en "Recordar" para enviar mensajes por WhatsApp Web
                 </p>
               </>
             ) : (
               <>
-                <p className="font-medium text-yellow-900">Configura tu Número de WhatsApp</p>
+                <p className="font-medium text-yellow">Configura tu Número de WhatsApp</p>
                 <p className="text-sm text-yellow-700">
                   Agrega tu número para recibir recordatorios automáticos por WhatsApp Web
                 </p>

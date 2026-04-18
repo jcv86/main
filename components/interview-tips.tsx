@@ -127,7 +127,7 @@ export function InterviewTips({
   const canNavigateNext = currentTipIndex !== null && currentTipIndex < tipHistory.length - 1
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
+    <Card className="p-6 bg-gradient-to-br from-blue-50 to-blue/5 dark:from-blue-900/20 dark:to-indigo-900/20">
       <div className="space-y-6">
         {/* Tips Counter */}
         <div className="flex items-center justify-between">
@@ -148,7 +148,7 @@ export function InterviewTips({
           <div className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
             Saldo DTC: {dtcBalance !== null ? dtcBalance : '...'} 
             {dtcBalance !== null && dtcBalance < 150 && !canUseFreeTip && (
-              <span className="text-red-600 ml-2">({150 - dtcBalance} para premium)</span>
+              <span className="text-red ml-2">({150 - dtcBalance} para premium)</span>
             )}
           </div>
         </div>
@@ -177,16 +177,16 @@ export function InterviewTips({
         {/* Current Tip Display with Navigation */}
         {currentTip && (
           <div className="space-y-3">
-            <div className="p-4 bg-white dark:bg-slate-900 rounded-[28px] border-l-4 border-blue-500">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-[28px] border-l-4 border-blue/50">
               <div className="flex items-start justify-between mb-2">
-                <h4 className="font-semibold text-sm text-gray-900 dark:text-white">
+                <h4 className="font-semibold text-sm text-foreground dark:text-white">
                   Consejo IA {currentTip.isPremium ? '(Premium)' : '(Gratis)'}:
                 </h4>
                 <span className="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">
                   {(currentTipIndex || 0) + 1}/{tipHistory.length}
                 </span>
               </div>
-              <p className="text-sm text-gray-700 dark:text-muted/30">{currentTip.tip}</p>
+              <p className="text-sm text-muted dark:text-muted/30">{currentTip.tip}</p>
             </div>
 
             {/* Navigation buttons */}
@@ -258,16 +258,16 @@ export function InterviewTips({
 
         {/* Information */}
         {!canUseFreeTip && (
-          <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-[28px] border border-yellow-200 dark:border-yellow-800">
-            <p className="text-sm text-yellow-800 dark:text-yellow-200">
+          <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded-[28px] border border-yellow/20 dark:border-yellow">
+            <p className="text-sm text-yellow dark:text-yellow/20">
               Usaste los 3 tips gratis. Obtén tips premium con puntos DTC o gana más tips completando entrevistas.
             </p>
           </div>
         )}
 
         {dtcBalance !== null && !canUsePremiumTip && premiumTipsUsed === 0 && canUseFreeTip && (
-          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-[28px] border border-blue-200 dark:border-blue-800">
-            <p className="text-sm text-blue-800 dark:text-blue-200">
+          <div className="p-3 bg-blue-50 dark:bg-blue/20 rounded-[28px] border border-blue-200 dark:border-blue-800">
+            <p className="text-sm text-blue dark:text-blue-200">
               Después de usar los 3 tips gratis, puedes comprar puntos DTC en la tienda para tips premium.
             </p>
           </div>

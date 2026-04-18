@@ -32,7 +32,7 @@ export function MultimodalAnalyticsDashboard() {
     return (
       <Card>
         <CardContent className="pt-6 flex justify-center">
-          <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+          <Loader2 className="w-6 h-6 animate-spin text-blue" />
         </CardContent>
       </Card>
     )
@@ -69,7 +69,7 @@ export function MultimodalAnalyticsDashboard() {
         <Card>
           <CardContent className="pt-6">
             <p className="text-sm text-muted/60 mb-1">Mejora Detectada</p>
-            <p className={`text-3xl font-bold ${metrics.improvement_trend >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+            <p className={`text-3xl font-bold ${metrics.improvement_trend >= 0 ? 'text-green' : 'text-red'}`}>
               {metrics.improvement_trend >= 0 ? '+' : ''}{metrics.improvement_trend}%
             </p>
           </CardContent>
@@ -126,7 +126,7 @@ export function MultimodalAnalyticsDashboard() {
             <CardTitle className="text-lg">Audio</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-green-600">{metrics.audio_average}%</p>
+            <p className="text-3xl font-bold text-green">{metrics.audio_average}%</p>
             <p className="text-sm text-muted/60 mt-2">Tono, claridad, confianza</p>
           </CardContent>
         </Card>
@@ -136,7 +136,7 @@ export function MultimodalAnalyticsDashboard() {
             <CardTitle className="text-lg">Coherencia</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-orange-600">{metrics.coherence_average}%</p>
+            <p className="text-3xl font-bold text-orange">{metrics.coherence_average}%</p>
             <p className="text-sm text-muted/60 mt-2">Visual + Audio alineados</p>
           </CardContent>
         </Card>
@@ -146,7 +146,7 @@ export function MultimodalAnalyticsDashboard() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-green-600" />
+            <TrendingUp className="w-5 h-5 text-green" />
             Fortalezas Principales
           </CardTitle>
         </CardHeader>
@@ -155,7 +155,7 @@ export function MultimodalAnalyticsDashboard() {
             {metrics.top_strengths.map((item: any, i: number) => (
               <div key={i} className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
                 <span className="text-sm">{item.strength}</span>
-                <span className="text-xs bg-green-200 text-green-800 px-2 py-1 rounded">{item.count}x</span>
+                <span className="text-xs bg-green-200 text-green px-2 py-1 rounded">{item.count}x</span>
               </div>
             ))}
           </div>
@@ -170,9 +170,9 @@ export function MultimodalAnalyticsDashboard() {
         <CardContent>
           <div className="space-y-2">
             {metrics.top_improvements.map((item: any, i: number) => (
-              <div key={i} className="flex justify-between items-center p-3 bg-orange-50 rounded-lg">
+              <div key={i} className="flex justify-between items-center p-3 bg-orange/5 rounded-lg">
                 <span className="text-sm">{item.improvement}</span>
-                <span className="text-xs bg-orange-200 text-orange-800 px-2 py-1 rounded">{item.count}x</span>
+                <span className="text-xs bg-orange-200 text-orange px-2 py-1 rounded">{item.count}x</span>
               </div>
             ))}
           </div>

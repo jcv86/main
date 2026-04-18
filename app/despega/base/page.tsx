@@ -17,7 +17,7 @@ const CATEGORIAS_BASE = [
     description: "Mantente informado de lo relevante",
     icon: Newspaper,
     color: "bg-red/50",
-    lightColor: "bg-red-100",
+    lightColor: "bg-red/10",
     textColor: "text-red-800",
   },
   {
@@ -27,7 +27,7 @@ const CATEGORIAS_BASE = [
     icon: Globe,
     color: "bg-blue/50",
     lightColor: "bg-blue/10",
-    textColor: "text-blue-800",
+    textColor: "text-blue",
   },
   {
     id: "lecturas",
@@ -35,8 +35,8 @@ const CATEGORIAS_BASE = [
     description: "Libros y artículos clave",
     icon: BookOpen,
     color: "bg-green/50",
-    lightColor: "bg-green-100",
-    textColor: "text-green-800",
+    lightColor: "bg-green/10",
+    textColor: "text-green",
   },
   {
     id: "tendencias",
@@ -119,9 +119,9 @@ export default function BasePage() {
       <div className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
         
         {/* JOURNEY PROGRESS - BIG VISUAL */}
-        <div className="bg-gradient-to-r from-blue to-purple-600 dark:from-blue dark:to-purple rounded-xl p-8 text-white shadow-xl">
+        <div className="bg-gradient-to-r from-blue to-purple dark:from-blue dark:to-purple rounded-xl p-8 text-white shadow-xl">
           <h1 className="text-3xl font-bold mb-2">Tu Viaje DespegarTuCarrera</h1>
-          <p className="text-indigo-100 mb-6">90 días de transformación profesional. Aquí está dónde estás:</p>
+          <p className="text-blue/10 mb-6">90 días de transformación profesional. Aquí está dónde estás:</p>
           
           {/* Journey Map */}
           <div className="space-y-4">
@@ -131,7 +131,7 @@ export default function BasePage() {
                 <div className="bg-white/20 backdrop-blur hover:bg-white/30 transition-all p-4 rounded-[28px] cursor-pointer border border-white/30 text-center">
                   <div className="text-2xl mb-2">🧠</div>
                   <h3 className="font-bold text-sm">A1: Autoconocimiento</h3>
-                  <p className="text-xs text-indigo-100 mt-1">Descubre tu perfil DISC</p>
+                  <p className="text-xs text-blue/10 mt-1">Descubre tu perfil DISC</p>
                   <Badge className="mt-2 bg-white text-indigo-700 text-xs">Completado</Badge>
                 </div>
               </Link>
@@ -144,8 +144,8 @@ export default function BasePage() {
                 <div className="bg-white/20 backdrop-blur hover:bg-white/30 transition-all p-4 rounded-[28px] cursor-pointer border-2 border-white/70 text-center ring-2 ring-white/50">
                   <div className="text-2xl mb-2">🏗️</div>
                   <h3 className="font-bold text-sm">A2: Exploración</h3>
-                  <p className="text-xs text-indigo-100 mt-1">Construye tu plan de 90 días</p>
-                  <Badge className="mt-2 bg-yellow-400 text-yellow-900 text-xs">En Progreso</Badge>
+                  <p className="text-xs text-blue/10 mt-1">Construye tu plan de 90 días</p>
+                  <Badge className="mt-2 bg-yellow-400 text-yellow text-xs">En Progreso</Badge>
                 </div>
               </Link>
               
@@ -184,12 +184,12 @@ export default function BasePage() {
               <span className="text-sm font-bold">50%</span>
             </div>
             <Progress value={50} className="h-2 bg-white/30" />
-            <p className="text-xs text-indigo-100 mt-2">Completaste A1. Actualmente en A2. Te faltan A3 y A4.</p>
+            <p className="text-xs text-blue/10 mt-2">Completaste A1. Actualmente en A2. Te faltan A3 y A4.</p>
           </div>
         </div>
 
         {/* NEXT STEPS - PROMINENT */}
-        <Card className="border-2 border-green-500 bg-green/5 dark:bg-green-950/30 shadow-lg">
+        <Card className="border-2 border-green bg-green/5 dark:bg-green-950/30 shadow-lg">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <span className="text-2xl">🎯</span> Tu Próximo Paso
@@ -224,7 +224,7 @@ export default function BasePage() {
           </Card>
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
-              <div className="text-3xl font-bold text-yellow-600">5/30</div>
+              <div className="text-3xl font-bold text-yellow">5/30</div>
               <p className="text-xs text-muted/60 dark:text-muted/40 mt-2">Días Sprint 1</p>
             </CardContent>
           </Card>

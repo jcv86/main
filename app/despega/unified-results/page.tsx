@@ -82,7 +82,7 @@ export default function UnifiedTestDashboard() {
       blue: "text-blue dark:text-blue/40",
       purple: "text-purple dark:text-purple/40",
       indigo: "text-blue dark:text-indigo-400",
-      red: "text-red-600 dark:text-red-400",
+      red: "text-red dark:text-red-400",
       teal: "text-blue dark:text-teal-400",
     }
     return colors[color] || colors.blue
@@ -198,7 +198,7 @@ export default function UnifiedTestDashboard() {
                   <Share2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold text-purple dark:text-purple/10">Compartir Resultados</p>
-                    <p className="text-sm text-purple dark:text-purple-300">Exporta tu perfil completo en PDF</p>
+                    <p className="text-sm text-purple dark:text-purple/30">Exporta tu perfil completo en PDF</p>
                   </div>
                 </div>
               </CardContent>
@@ -233,7 +233,7 @@ export default function UnifiedTestDashboard() {
         </Tabs>
 
         {/* Footer CTA */}
-        <div className="mt-8 p-6 bg-gradient-to-r from-blue to-purple-600 rounded-lg text-white">
+        <div className="mt-8 p-6 bg-gradient-to-r from-blue to-purple rounded-lg text-white">
           <h2 className="text-2xl font-bold mb-2">Siguiente Fase: A2 - Tu Plan</h2>
           <p className="mb-4 opacity-90">
             Usa todos tus resultados para crear un plan personalizado de 90 días con sprints semanales

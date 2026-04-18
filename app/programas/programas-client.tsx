@@ -131,7 +131,7 @@ export default function ProgramasClient() {
   return (
     <div className="space-y-8">
       <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue to-purple bg-clip-text text-transparent">
           Programas Guiados DTC
         </h1>
         <p className="text-xl text-muted/60 max-w-2xl mx-auto">
@@ -247,7 +247,7 @@ export default function ProgramasClient() {
               {selectedProgram.outcomes.map((outcome, i) => (
                 <li key={i} className="flex items-start gap-2">
                   <CheckCircle2 className="h-5 w-5 text-green mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">{outcome}</span>
+                  <span className="text-muted">{outcome}</span>
                 </li>
               ))}
             </ul>

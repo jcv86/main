@@ -44,7 +44,7 @@ export function ASectionPart({ title, icon, children, defaultOpen = true }: ASec
   return (
     <div className="mb-12">
       <div className="flex items-center gap-3 mb-6">
-        <div className="text-2xl text-purple-400">{icon}</div>
+        <div className="text-2xl text-purple/40">{icon}</div>
         <h2 className="text-3xl font-bold text-white">{title}</h2>
       </div>
       

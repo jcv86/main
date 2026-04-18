@@ -156,7 +156,7 @@ export default function OnboardingIntereses({ onComplete }: { onComplete: (prefe
                   <Check className="h-5 w-5 text-green" />
                   <h4 className="font-semibold text-green-900">Configuración completa</h4>
                 </div>
-                <p className="text-sm text-green-700">
+                <p className="text-sm text-green">
                   Has seleccionado {selectedAreas.size} áreas y {selectedSubtopics.size} subtemas específicos
                 </p>
               </div>
@@ -164,7 +164,7 @@ export default function OnboardingIntereses({ onComplete }: { onComplete: (prefe
                 <h4 className="font-medium mb-2">Tus áreas de interés:</h4>
                 <div className="flex flex-wrap gap-2">
                   {Array.from(selectedAreas).map((area) => (
-                    <span key={area} className="px-3 py-1 bg-blue/10 text-blue-800 rounded-full text-sm capitalize">
+                    <span key={area} className="px-3 py-1 bg-blue/10 text-blue rounded-full text-sm capitalize">
                       {area}
                     </span>
                   ))}

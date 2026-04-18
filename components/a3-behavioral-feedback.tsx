@@ -16,9 +16,9 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
   const [expandedSection, setExpandedSection] = useState<string | null>(null)
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-600"
+    if (score >= 80) return "text-green"
     if (score >= 60) return "text-amber-600"
-    return "text-red-600"
+    return "text-red"
   }
 
   return (
@@ -79,8 +79,8 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
             </div>
             <div className="p-3 bg-blue-50 border border-blue-200 rounded">
               <div className="text-sm font-medium mb-2">Observaciones</div>
-              <p className="text-sm text-gray-700">{observations?.postura_changes}</p>
-              <p className="text-sm text-gray-700 mt-2">{observations?.eye_contact_pattern}</p>
+              <p className="text-sm text-muted">{observations?.postura_changes}</p>
+              <p className="text-sm text-muted mt-2">{observations?.eye_contact_pattern}</p>
             </div>
             {observations?.repetitive_movements?.length > 0 && (
               <Alert>
@@ -127,7 +127,7 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
             </Alert>
             <div className="p-3 bg-amber-50 border border-amber-200 rounded">
               <div className="text-sm font-medium mb-2">Recomendación</div>
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-muted">
                 Practica respiración profunda antes de responder preguntas difíciles. Pausa 2-3 segundos antes de empezar.
               </p>
             </div>
@@ -173,7 +173,7 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
 
               <div className="p-3 bg-amber-50 border border-amber-200 rounded">
                 <div className="text-sm font-medium mb-2">Área a Trabajar</div>
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-muted">
                   Ciertas respuestas fueron muy largas. Practica la regla: responde en 60-90 segundos máximo.
                 </p>
               </div>
@@ -189,16 +189,16 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
         </CardHeader>
         <CardContent className="space-y-3">
           {observations?.silence_count > 0 ? (
-            <div className="p-3 bg-orange-50 border border-orange-200 rounded">
+            <div className="p-3 bg-orange/5 border border-orange/20 rounded">
               <div className="font-medium text-sm mb-2">Detectamos {observations?.silence_count} silencios prolongados</div>
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-muted">
                 Los silencios son datos valiosos. Indican que el usuario está pensando. La regla: pausas de 2-3 segundos son normales. 
                 Más de 5 segundos requiere práctica en pensar en voz alta.
               </p>
             </div>
           ) : (
             <Alert>
-              <CheckCircle2 className="h-4 w-4 text-green-600" />
+              <CheckCircle2 className="h-4 w-4 text-green" />
               <AlertDescription>
                 Excelente fluidez sin bloqueos prolongados.
               </AlertDescription>
@@ -229,7 +229,7 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
             </div>
             <div className="p-3 bg-muted/5 rounded">
               <div className="text-sm text-muted/60">Pico Máximo</div>
-              <div className="text-2xl font-bold text-red-600">{emotionalState?.max_anxiety_during}%</div>
+              <div className="text-2xl font-bold text-red">{emotionalState?.max_anxiety_during}%</div>
             </div>
           </div>
 
@@ -245,7 +245,7 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
 
           <div className="p-3 bg-green-50 border border-green-200 rounded">
             <div className="text-sm font-medium mb-2">Fortaleza Emocional</div>
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-muted">
               Capacidad de regulación: {emotionalState?.emotional_regulation_score}%. 
               Recuperación post-error: {emotionalState?.recovery_after_mistake_score}%.
             </p>

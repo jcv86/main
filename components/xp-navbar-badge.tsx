@@ -71,9 +71,9 @@ export function XPNavbarBadge() {
 
         {/* Streak Indicator */}
         {xpData.daily_streak > 0 && (
-          <div className="flex items-center gap-0.5 px-2 py-0.5 rounded bg-orange-500/20 border border-orange-500/30">
+          <div className="flex items-center gap-0.5 px-2 py-0.5 rounded bg-orange/50/20 border border-orange/30">
             <span className="text-lg">🔥</span>
-            <span className="text-xs font-semibold text-orange-600">{xpData.daily_streak}</span>
+            <span className="text-xs font-semibold text-orange">{xpData.daily_streak}</span>
           </div>
         )}
       </div>
