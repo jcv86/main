@@ -136,7 +136,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
     <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header Hero */}
-        <div className={`bg-background
+        <div className="bg-background rounded-xl border border-foreground/10 p-8">
           <div className="space-y-4">
             <div className="flex items-center gap-4">
               <span className="text-6xl md:text-7xl">{pData.emoji}</span>
