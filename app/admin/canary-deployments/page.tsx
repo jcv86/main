@@ -241,7 +241,7 @@ export default function CanaryDeploymentsPage() {
                     {deployment.stages?.map((stage) => (
                       <div
                         key={stage.id}
-                        className={`p-2 rounded border text-center text-xs ${`}
+                        className={`p-2 rounded border text-center text-xs ${
                           stage.status === "completed"
                             ? "bg-green/5 border-green/20"
                             : stage.status === "active"
