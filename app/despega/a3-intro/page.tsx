@@ -43,7 +43,7 @@ export default function A3IntroPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-teal-50 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
+    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-blue/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <StepHeader
           stepNumber={3}

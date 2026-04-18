@@ -104,7 +104,7 @@ export default function DashboardPage() {
 
         {/* Misión Section */}
         {userData.a2_mission ? (
-          <Card className="bg-gradient-to-r from-blue/5 to-cyan-50 dark:from-blue/10 dark:to-cyan-950/30 border-2 border-blue/30 dark:border-blue/10 p-8">
+          <Card className="bg-gradient-to-r from-blue/5 to-blue/5 dark:from-blue/10 dark:to-blue/30 border-2 border-blue/30 dark:border-blue/10 p-8">
             <div className="space-y-4">
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5">

@@ -40,7 +40,7 @@ export default function TestOpenAIInsightsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950 to-slate-950 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-background via-purple to-background p-6">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="space-y-3">

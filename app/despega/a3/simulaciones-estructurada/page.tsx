@@ -16,7 +16,7 @@ export default function StructuredSimulationPage() {
 
   if (isComplete) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-slate-950 via-muted/90 to-slate-950">
+      <main className="min-h-screen bg-gradient-to-br from-background via-muted/90 to-background">
         <div className="container max-w-3xl mx-auto px-4 py-8">
           <Link href="/despega/a3-dashboard" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 mb-8">
             <ArrowLeft className="w-4 h-4" />
@@ -43,7 +43,7 @@ export default function StructuredSimulationPage() {
   return (
     <main className="min-h-screen bg-black">
       <div className="flex flex-col h-screen">
-        <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-slate-950 p-4">
+        <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-background p-4">
           <Link href="/despega/a3-dashboard" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300">
             <ArrowLeft className="w-4 h-4" />
             Volver al Dashboard

@@ -93,7 +93,7 @@ export default function SignInPage() {
   const isLoading = isLoadingGoogle || isLoadingLinkedIn
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple/5 via-blue/5 to-cyan-50 dark:from-background dark:via-muted/90 dark:to-muted/90 px-4 py-8">
+    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple/5 via-blue/5 to-blue/5 dark:from-background dark:via-muted/90 dark:to-muted/90 px-4 py-8">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-200 dark:bg-purple/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />

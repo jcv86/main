@@ -201,7 +201,7 @@ export default function DespegaOnboarding() {
   // STEP 1: Intro - Despega Cerebral
   if (step === "intro") {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-muted/5 via-muted/5 to-muted/10 dark:from-background dark:via-slate-950 dark:to-muted/90 p-4 overflow-y-auto">
+      <div className="min-h-screen bg-gradient-to-b from-muted/5 via-muted/5 to-muted/10 dark:from-background dark:via-background dark:to-muted/90 p-4 overflow-y-auto">
         <div className="max-w-3xl mx-auto py-12 space-y-8">
           {/* Hero Section */}
           <div className="text-center space-y-4">

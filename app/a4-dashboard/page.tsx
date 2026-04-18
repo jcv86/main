@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
 export default function A4DashboardPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-teal-950 via-slate-950 to-emerald-950">
+    <main className="min-h-screen bg-gradient-to-br from-blue via-background to-green">
       <div className="container max-w-6xl py-8 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 space-y-2">

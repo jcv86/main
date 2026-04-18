@@ -130,7 +130,7 @@ export default function RIASECTestClient() {
   const progress = ((currentQuestion + 1) / riasecQuestions.length) * 100
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-muted/90 dark:to-muted/80 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue/5 to-blue/5 dark:from-muted/90 dark:to-muted/80 p-4">
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <div className="flex items-center justify-between mb-4">

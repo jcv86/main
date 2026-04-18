@@ -56,7 +56,7 @@ export default function A4RadarPage() {
       title="A4: Radar"
       subtitle="Monitoreo continuo y oportunidades"
       icon="📡"
-      colorClass="from-teal-500 to-green"
+      colorClass="from-blue/50 to-green"
     >
       {/* EXPLICACIÓN */}
       <ASectionPart title="¿Qué es A4: Radar?" icon={<Zap />}>

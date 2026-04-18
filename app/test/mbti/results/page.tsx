@@ -567,7 +567,7 @@ export default function MBTIResultsPage() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-br from-blue/5 to-cyan-50 rounded-lg p-5 border border-blue/20">
+                    <div className="bg-gradient-to-br from-blue/5 to-blue/5 rounded-lg p-5 border border-blue/20">
                       <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-blue">
                         <Users className="w-5 h-5" />
                         Relaciones

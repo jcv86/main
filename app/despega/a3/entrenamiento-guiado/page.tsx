@@ -334,7 +334,7 @@ export default function GuidedTrainingPage() {
               </div>
             ) : (
               <div className="fixed inset-0 bg-black z-50 flex flex-col h-screen">
-                <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-slate-950 p-4">
+                <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-background p-4">
                   <Button
                     onClick={() => setShowVideoSession(false)}
                     variant="outline"

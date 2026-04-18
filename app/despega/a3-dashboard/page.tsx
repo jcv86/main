@@ -78,7 +78,7 @@ export default function TrainingDashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-cyan-950 to-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue to-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-cyan-500" />
           <p className="text-muted/30">Cargando tu progreso de entrenamiento...</p>

@@ -111,14 +111,14 @@ export default function RankingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-950 to-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-purple to-background flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple/50" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-slate-950 to-muted/90">
+    <div className="min-h-screen bg-gradient-to-br from-purple via-background to-muted/90">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="mb-8">

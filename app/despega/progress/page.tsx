@@ -98,7 +98,7 @@ export default function HowToEarnXPPage() {
   ]
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-muted/90 to-slate-950 p-4 md:p-8">
+    <main className="min-h-screen bg-gradient-to-b from-muted/90 to-background p-4 md:p-8">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* HEADER */}
         <div className="space-y-4 text-center">

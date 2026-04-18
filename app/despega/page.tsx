@@ -121,7 +121,7 @@ export default function DespegazoDashboard() {
 
   if (loading || !progress || !readiness) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-950 to-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple to-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-purple/50" />
           <p className="text-muted/30">Cargando tu dashboard...</p>
@@ -168,7 +168,7 @@ export default function DespegazoDashboard() {
       href: '/despega/a4-radar',
       score: readiness.a4_completeness,
       icon: '📡',
-      color: 'from-teal-500 to-green'
+      color: 'from-blue/50 to-green'
     }
   ]
 
@@ -180,7 +180,7 @@ export default function DespegazoDashboard() {
       : 'text-orange-400'
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-slate-950 to-muted/90 text-white p-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-purple via-background to-muted/90 text-white p-4 py-12">
       <div className="max-w-6xl mx-auto">
         {/* Hero Header */}
         <div className="mb-16">

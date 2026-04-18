@@ -12,7 +12,7 @@ export default function Interview0Page() {
 
   if (isComplete) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-muted/90 to-slate-950 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-background via-muted/90 to-background flex items-center justify-center p-4">
         <div className="text-center max-w-md">
           <h1 className="text-4xl font-bold text-cyan-400 mb-4">¡Interview 0 Completado!</h1>
           <p className="text-muted/30 mb-8">
@@ -41,7 +41,7 @@ export default function Interview0Page() {
   return (
     <main className="min-h-screen bg-black">
       <div className="flex flex-col h-screen">
-        <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-slate-950 p-4">
+        <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-background p-4">
           <button
             onClick={() => router.back()}
             className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300"
