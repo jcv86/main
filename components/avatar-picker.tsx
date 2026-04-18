@@ -35,21 +35,21 @@ export function AvatarPicker({
   const [loading, setLoading] = useState(true)
 
   const userAvatars: AvatarOption[] = [
-    { id: 'professional-1', name: 'Professional', description: 'Classic professional look', emoji: '👔', color: 'from-blue-500600' },
-    { id: 'creative-1', name: 'Creative', description: 'Modern creative style', emoji: '🎨', color: 'from-purple-500' },
-    { id: 'tech-1', name: 'Tech', description: 'Tech-savvy appearance', emoji: '💻', color: 'from-green-500600' },
-    { id: 'business-1', name: 'Business', description: 'Corporate executive', emoji: '🏢', color: 'from-red' },
-    { id: 'casual-1', name: 'Casual', description: 'Relaxed casual style', emoji: '😎', color: 'from-orange-500600' },
-    { id: 'formal-1', name: 'Formal', description: 'Formal business attire', emoji: '🎩', color: 'from-slate-700900' },
+    { id: 'professional-1', name: 'Professional', description: 'Classic professional look', emoji: '👔', color: 'bg-blue' },
+    { id: 'creative-1', name: 'Creative', description: 'Modern creative style', emoji: '🎨', color: 'bg-purple' },
+    { id: 'tech-1', name: 'Tech', description: 'Tech-savvy appearance', emoji: '💻', color: 'bg-green' },
+    { id: 'business-1', name: 'Business', description: 'Corporate executive', emoji: '🏢', color: 'bg-red' },
+    { id: 'casual-1', name: 'Casual', description: 'Relaxed casual style', emoji: '😎', color: 'bg-orange' },
+    { id: 'formal-1', name: 'Formal', description: 'Formal business attire', emoji: '🎩', color: 'bg-muted' },
   ]
 
   const interviewerAvatars: AvatarOption[] = [
-    { id: 'interviewer-classic-1', name: 'Sofia', description: 'HR Specialist', emoji: '👩‍💼', color: 'from-purple-500' },
-    { id: 'interviewer-classic-2', name: 'Marco', description: 'Tech Lead', emoji: '👨‍💻', color: 'from-blue-500600' },
-    { id: 'interviewer-classic-3', name: 'Elena', description: 'Executive', emoji: '👩‍💼', color: 'from-purple-500' },
-    { id: 'interviewer-classic-4', name: 'David', description: 'Team Manager', emoji: '👨‍💼', color: 'from-green-500600' },
-    { id: 'interviewer-modern-1', name: 'Alex', description: 'Career Coach', emoji: '🧑‍🏫', color: 'from-red-500600' },
-    { id: 'interviewer-modern-2', name: 'Jordan', description: 'Recruiter', emoji: '🎯', color: 'from-orange-500600' },
+    { id: 'interviewer-classic-1', name: 'Sofia', description: 'HR Specialist', emoji: '👩‍💼', color: 'bg-purple' },
+    { id: 'interviewer-classic-2', name: 'Marco', description: 'Tech Lead', emoji: '👨‍💻', color: 'bg-blue' },
+    { id: 'interviewer-classic-3', name: 'Elena', description: 'Executive', emoji: '👩‍💼', color: 'bg-purple' },
+    { id: 'interviewer-classic-4', name: 'David', description: 'Team Manager', emoji: '👨‍💼', color: 'bg-green' },
+    { id: 'interviewer-modern-1', name: 'Alex', description: 'Career Coach', emoji: '🧑‍🏫', color: 'bg-red' },
+    { id: 'interviewer-modern-2', name: 'Jordan', description: 'Recruiter', emoji: '🎯', color: 'bg-orange' },
   ]
 
   useEffect(() => {
