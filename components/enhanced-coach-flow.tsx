@@ -667,6 +667,3 @@ Vamos a seguir un proceso estructurado de 6 etapas:
           </CardContent>
         </Card>
       )}
-    </div>
-  )
-}
