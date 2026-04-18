@@ -31,31 +31,31 @@ export function PillarCard({
 }: PillarCardProps) {
   const colorMap = {
     red: {
-      bg: 'bg-red/5 dark:bg-red/10',
-      border: 'border-red/20 dark:border-red/50',
+      bg: 'bg-transparent',
+      border: 'border-red/40 dark:border-red/60',
       icon: 'text-red dark:text-red',
-      badge: 'bg-red/10 dark:bg-red/30 text-red dark:text-red',
+      badge: 'bg-red/15 dark:bg-red/25 text-red dark:text-red',
       button: 'bg-red hover:bg-red/80',
     },
     blue: {
-      bg: 'bg-blue/5 dark:bg-blue/10',
-      border: 'border-blue/20 dark:border-blue/50',
+      bg: 'bg-transparent',
+      border: 'border-blue/40 dark:border-blue/60',
       icon: 'text-blue dark:text-blue',
-      badge: 'bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue',
+      badge: 'bg-blue/15 dark:bg-blue/25 text-blue dark:text-blue',
       button: 'bg-blue hover:bg-blue/80',
     },
     green: {
-      bg: 'bg-green/5 dark:bg-green/10',
-      border: 'border-green/20 dark:border-green/50',
+      bg: 'bg-transparent',
+      border: 'border-green/40 dark:border-green/60',
       icon: 'text-green dark:text-green',
-      badge: 'bg-green/10 dark:bg-green/30 text-green dark:text-green',
+      badge: 'bg-green/15 dark:bg-green/25 text-green dark:text-green',
       button: 'bg-green hover:bg-green/80',
     },
     purple: {
-      bg: 'bg-purple/5 dark:bg-purple/10',
-      border: 'border-purple/20 dark:border-purple/50',
+      bg: 'bg-transparent',
+      border: 'border-purple/40 dark:border-purple/60',
       icon: 'text-purple dark:text-purple',
-      badge: 'bg-purple/10 dark:bg-purple/30 text-purple dark:text-purple',
+      badge: 'bg-purple/15 dark:bg-purple/25 text-purple dark:text-purple',
       button: 'bg-purple hover:bg-purple/80',
     },
   }
