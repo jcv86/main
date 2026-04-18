@@ -132,7 +132,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Insight ID is required" }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
     const { error } = await supabase.from("ai_insights").delete().eq("id", id)
 
     if (error) {
