@@ -92,7 +92,7 @@ export default function A1PatternsPage() {
             <button
               key={tab}
               onClick={() => setSelectedTab(tab)}
-              className={`px-4 py-2 rounded-lg font-semibold transition-all ${`}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                 selectedTab === tab
                   ? 'bg-purple text-white shadow-lg'
                   : 'bg-muted/70 text-muted/30 hover:bg-muted/60'

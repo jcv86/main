@@ -168,7 +168,7 @@ export default function BitacoraPage() {
                         <button
                           key={type}
                           onClick={() => setNewEntry({ ...newEntry, type })}
-                          className={`px-4 py-2 rounded-lg font-medium transition ${`}
+                          className={`px-4 py-2 rounded-lg font-medium transition ${
                             newEntry.type === type
                               ? 'bg-blue text-white'
                               : 'bg-muted/10 dark:bg-card text-muted/70 dark:text-muted/30'
