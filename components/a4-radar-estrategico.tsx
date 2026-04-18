@@ -103,8 +103,6 @@ export function A4RadarEstrategico() {
         setLoading(false)
       }
     }
-
-    loadData()
   }, [user])
 
   const getIntensityColor = (intensity: string) => {
