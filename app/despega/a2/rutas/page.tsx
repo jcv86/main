@@ -244,16 +244,16 @@ export default function A2RoutasPage() {
             {routes.map((route) => (
               <Card 
                 key={route.id} 
-                className={`group border-2 cursor-pointer transition-all duration-300 ${`}
+                className={`group border-2 cursor-pointer transition-all duration-300 ${
                   selectedRoute === route.id
                     ? 'border-purple bg-purple/5 shadow-lg'
-                    : 'border-border hover:border-purple/50 hover:shadow-md'`}
+                    : 'border-border hover:border-purple/50 hover:shadow-md'
                 }`}
                 onClick={() => selectRoute(route.id)}
               >
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`p-3 rounded-[28px] bg-background`}
+                    <div className={`p-3 rounded-[28px] bg-background`}>
                       {route.icon && createElement(route.icon, { className: 'w-6 h-6 text-white' })}
                     </div>
                   </div>

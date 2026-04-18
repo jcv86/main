@@ -228,8 +228,8 @@ export default function RecomendacionesPage() {
           {routes.map((route) => (
             <Card
               key={route.id}
-              className={`cursor-pointer transition-all border-2 overflow-hidden hover:shadow-md ${`}
-                selectedRoute === route.id`}
+              className={`cursor-pointer transition-all border-2 overflow-hidden hover:shadow-md ${
+                selectedRoute === route.id
                   ? `${route.borderColor} shadow-lg`
                   : "border-muted/20 dark:border-card"
               }`}
