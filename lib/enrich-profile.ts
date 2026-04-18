@@ -1,9 +1,21 @@
 import { createClient } from "@supabase/supabase-js"
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Lazy initialization to avoid build-time errors
+let supabaseClient: ReturnType<typeof createClient> | null = null
+
+function getSupabaseClient() {
+  if (!supabaseClient) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+    if (!url || !key) {
+      throw new Error("Missing Supabase environment variables")
+    }
+
+    supabaseClient = createClient(url, key)
+  }
+  return supabaseClient
+}
 
 /**
  * Enriquece el perfil del usuario con datos de Google
@@ -19,6 +31,8 @@ export async function enrichProfileFromGoogle(
 ) {
   try {
     console.log("[v0] Enriching profile from Google for user:", userId)
+
+    const supabase = getSupabaseClient()
 
     // Obtener o crear perfil enriquecido
     const { data: existingProfile, error: fetchError } = await supabase
@@ -79,6 +93,8 @@ export async function enrichProfileFromLinkedIn(
 ) {
   try {
     console.log("[v0] Enriching profile from LinkedIn for user:", userId)
+
+    const supabase = getSupabaseClient()
 
     // Obtener datos completos de LinkedIn usando Access Token
     const linkedInData = await fetchLinkedInProfile(accessToken)
@@ -261,6 +277,8 @@ export async function enrichA1A4FromLinkedInProfile(
 ) {
   try {
     console.log("[v0] Enriching A1-A4 from LinkedIn profile for user:", userId)
+
+    const supabase = getSupabaseClient()
 
     const contextData = {
       user_id: userId,
