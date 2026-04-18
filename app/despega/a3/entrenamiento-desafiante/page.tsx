@@ -167,12 +167,9 @@ export default function ChallensingTrainingPage() {
                   guidance={question.guidance}
                   estimatedTime="5 minutos"
                   trainingType="challenging"
-                  onRecordingStart={() => {
-                    setIsRecording(true)
-                  }}
-                  onRecordingComplete={() => {
-                    setIsRecording(false)
+                  onComplete={() => {
                     setHasResponseBeenRecorded(true)
+                    setIsRecording(false)
                   }}
                 />
               </div>
