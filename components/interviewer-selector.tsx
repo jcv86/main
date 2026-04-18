@@ -8,11 +8,11 @@ import { ChevronRight } from 'lucide-react'
 
 const INTERVIEWERS = [
   { id: 'interviewer-classic-1', name: 'Sofia', role: 'Reclutadora', color: 'from-purple-400 to-pink-400' },
-  { id: 'interviewer-sofia-1', name: 'Marco', role: 'Manager Senior', color: 'from-blue-400 to-cyan-400' },
-  { id: 'interviewer-marco-1', name: 'Elena', role: 'VP Talent', color: 'from-emerald-400 to-teal-400' },
-  { id: 'interviewer-elena-1', name: 'David', role: 'Tech Lead', color: 'from-orange-400 to-red-400' },
-  { id: 'interviewer-david-1', name: 'Alex', role: 'Product Manager', color: 'from-indigo-400 to-purple-400' },
-  { id: 'interviewer-alex-1', name: 'Jordan', role: 'Consultor CEO', color: 'from-pink-400 to-rose-400' }
+  { id: 'interviewer-classic-2', name: 'Marco', role: 'Manager Senior', color: 'from-blue-400 to-cyan-400' },
+  { id: 'interviewer-classic-3', name: 'Elena', role: 'VP Talent', color: 'from-emerald-400 to-teal-400' },
+  { id: 'interviewer-classic-4', name: 'David', role: 'Tech Lead', color: 'from-orange-400 to-red-400' },
+  { id: 'interviewer-modern-1', name: 'Alex', role: 'Product Manager', color: 'from-indigo-400 to-purple-400' },
+  { id: 'interviewer-modern-2', name: 'Jordan', role: 'Consultor CEO', color: 'from-pink-400 to-rose-400' }
 ]
 
 interface InterviewerSelectorProps {

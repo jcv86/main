@@ -450,14 +450,14 @@ export function ConversationalInterviewSimulator({
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Avatar Showcase */}
-            <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+            <div className="grid grid-cols-3 gap-4 p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 items-center">
               {/* Interviewer Avatar */}
               <div className="flex flex-col items-center justify-center py-4 px-2">
-                <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-2 ${getAvatarGradient(preferences.interviewer_avatar_id)} shadow-lg`}>
-                  {getAvatarEmoji(preferences.interviewer_avatar_id, 'interviewer')}
+                <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-2 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
+                  {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
                 </div>
                 <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 text-center">
-                  {getAvatarName(preferences.interviewer_avatar_id, 'interviewer')}
+                  {getAvatarName(selectedInterviewerId, 'interviewer')}
                 </p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">Entrevistador</p>
               </div>
@@ -468,7 +468,7 @@ export function ConversationalInterviewSimulator({
               </div>
 
               {/* User Avatar */}
-              <div className="flex flex-col items-center justify-center py-4 px-2 col-start-2">
+              <div className="flex flex-col items-center justify-center py-4 px-2">
                 <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-2 ${getAvatarGradient(preferences.user_avatar_id)} shadow-lg`}>
                   {getAvatarEmoji(preferences.user_avatar_id, 'user')}
                 </div>
@@ -476,11 +476,6 @@ export function ConversationalInterviewSimulator({
                   {getAvatarName(preferences.user_avatar_id, 'user')}
                 </p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">Tú</p>
-              </div>
-
-              {/* You Avatar Info */}
-              <div className="flex items-center justify-center col-start-1">
-                <p className="text-sm text-slate-700 dark:text-slate-300">Tu presentación</p>
               </div>
             </div>
 
