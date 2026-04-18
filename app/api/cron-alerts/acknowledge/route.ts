@@ -10,8 +10,6 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Alert ID is required" }, { status: 400 })
     }
 
-    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
-
     const { data, error } = await supabase
       .from("cron_job_alerts")
       .update({
