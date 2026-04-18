@@ -53,6 +53,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient()
     const body = await request.json()
     const { user_email, title, description, event_type, start_time, end_time } = body
 
