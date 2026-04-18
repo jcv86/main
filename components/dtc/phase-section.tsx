@@ -14,32 +14,32 @@ interface PhaseSectionProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
 
 const phaseConfig: Record<Phase, { accent: string; label: string; bgGradient: string; borderColor: string; accentBg: string }> = {
   ritual: {
-    accent: 'yellow',
+    accent: 'purple',
     label: 'Ritual',
-    bgGradient: 'from-yellow/5 to-transparent',
-    borderColor: 'border-yellow/30',
-    accentBg: 'bg-yellow',
+    bgGradient: 'from-purple/5 to-transparent',
+    borderColor: 'border-purple/30',
+    accentBg: 'bg-purple',
   },
   exploration: {
-    accent: 'orange',
+    accent: 'blue',
     label: 'Exploración',
+    bgGradient: 'from-blue/5 to-transparent',
+    borderColor: 'border-blue/30',
+    accentBg: 'bg-blue',
+  },
+  training: {
+    accent: 'orange',
+    label: 'Entrenamiento',
     bgGradient: 'from-orange/5 to-transparent',
     borderColor: 'border-orange/30',
     accentBg: 'bg-orange',
   },
-  training: {
-    accent: 'red',
-    label: 'Entrenamiento',
-    bgGradient: 'from-red/5 to-transparent',
-    borderColor: 'border-red/30',
-    accentBg: 'bg-red',
-  },
   reality: {
-    accent: 'blue',
+    accent: 'cyan',
     label: 'Realidad',
-    bgGradient: 'from-blue/5 to-transparent',
-    borderColor: 'border-blue/30',
-    accentBg: 'bg-blue',
+    bgGradient: 'from-cyan/5 to-transparent',
+    borderColor: 'border-cyan/30',
+    accentBg: 'bg-cyan',
   },
 }
 
@@ -69,7 +69,7 @@ export const PhaseSection = React.forwardRef<HTMLDivElement, PhaseSectionProps>(
             <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-playfair-display)' }}>
               {title}
             </h2>
-            {description && <p className="text-slate-400 text-sm mt-2">{description}</p>}
+            {description && <p className="text-muted text-sm mt-2">{description}</p>}
           </div>
         )}
 

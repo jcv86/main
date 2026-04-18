@@ -31,32 +31,32 @@ export function PillarCard({
 }: PillarCardProps) {
   const colorMap = {
     red: {
-      bg: 'bg-red/5/50 dark:bg-red-950/10',
-      border: 'border-red/20/50 dark:border-red-800/50',
-      icon: 'text-red dark:text-red-400',
-      badge: 'bg-red/10/50 dark:bg-red/30 text-red dark:text-red-300',
-      button: 'bg-red-600 hover:bg-red',
+      bg: 'bg-red/5 dark:bg-red/10',
+      border: 'border-red/20 dark:border-red/50',
+      icon: 'text-red dark:text-red',
+      badge: 'bg-red/10 dark:bg-red/30 text-red dark:text-red',
+      button: 'bg-red hover:bg-red/80',
     },
     blue: {
-      bg: 'bg-blue-50/50 dark:bg-blue-950/10',
-      border: 'border-blue-200/50 dark:border-blue-800/50',
-      icon: 'text-blue dark:text-blue/40',
-      badge: 'bg-blue/10/50 dark:bg-blue/30 text-blue dark:text-blue-300',
-      button: 'bg-blue-600 hover:bg-blue-700',
+      bg: 'bg-blue/5 dark:bg-blue/10',
+      border: 'border-blue/20 dark:border-blue/50',
+      icon: 'text-blue dark:text-blue',
+      badge: 'bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue',
+      button: 'bg-blue hover:bg-blue/80',
     },
     green: {
-      bg: 'bg-green-50/50 dark:bg-green-950/10',
-      border: 'border-green-200/50 dark:border-green-800/50',
-      icon: 'text-green dark:text-green/40',
-      badge: 'bg-green/10/50 dark:bg-green/30 text-green dark:text-green-300',
-      button: 'bg-green-600 hover:bg-green-700',
+      bg: 'bg-green/5 dark:bg-green/10',
+      border: 'border-green/20 dark:border-green/50',
+      icon: 'text-green dark:text-green',
+      badge: 'bg-green/10 dark:bg-green/30 text-green dark:text-green',
+      button: 'bg-green hover:bg-green/80',
     },
     purple: {
-      bg: 'bg-purple-50/50 dark:bg-purple-950/10',
-      border: 'border-purple-200/50 dark:border-purple-800/50',
-      icon: 'text-purple-600 dark:text-purple/40',
-      badge: 'bg-purple-100/50 dark:bg-purple/30 text-purple-700 dark:text-purple/30',
-      button: 'bg-purple-600 hover:bg-purple-700',
+      bg: 'bg-purple/5 dark:bg-purple/10',
+      border: 'border-purple/20 dark:border-purple/50',
+      icon: 'text-purple dark:text-purple',
+      badge: 'bg-purple/10 dark:bg-purple/30 text-purple dark:text-purple',
+      button: 'bg-purple hover:bg-purple/80',
     },
   }
 
@@ -64,11 +64,11 @@ export function PillarCard({
 
   const getStatusIcon = () => {
     if (status === 'completed') {
-      return <CheckCircle2 className="w-5 h-5 text-green dark:text-green/40" />
+      return <CheckCircle2 className="w-5 h-5 text-green dark:text-green" />
     } else if (status === 'active') {
-      return <Clock className="w-5 h-5 text-blue dark:text-blue/40 animate-spin" />
+      return <Clock className="w-5 h-5 text-blue dark:text-blue animate-spin" />
     } else {
-      return <ArrowRight className="w-5 h-5 text-slate-400 dark:text-slate-500" />
+      return <ArrowRight className="w-5 h-5 text-muted dark:text-muted" />
     }
   }
 
@@ -85,8 +85,8 @@ export function PillarCard({
         <div className="flex items-start gap-3">
           <div className={`${colors.icon} mt-1`}>{icon}</div>
           <div className="space-y-1">
-            <h3 className="text-sm font-semibold text-slate-600 dark:text-slate-400">{pillar}: {pillarName}</h3>
-            <h2 className="text-xl font-bold text-slate-900 dark:text-white">{title}</h2>
+            <h3 className="text-sm font-semibold text-muted">{pillar}: {pillarName}</h3>
+            <h2 className="text-xl font-bold text-foreground">{title}</h2>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -113,7 +113,7 @@ export function PillarCard({
       </div>
 
       {/* Description */}
-      <p className="text-sm text-slate-700 dark:text-slate-300">
+      <p className="text-sm text-muted">
         {description}
       </p>
 
@@ -125,7 +125,7 @@ export function PillarCard({
       {/* Next Step */}
       {nextStep && (
         <div className="pt-2">
-          <p className="text-xs text-slate-600 dark:text-slate-400 mb-2">
+          <p className="text-xs text-muted mb-2">
             <strong>Próximo:</strong> {nextStep}
           </p>
         </div>
