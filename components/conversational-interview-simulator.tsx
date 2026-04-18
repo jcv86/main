@@ -885,3 +885,4 @@ export function ConversationalInterviewSimulator({
     }
     return focuses[interviewerId] || 'Buscando candidatos con talento y potencial'
   }
+}

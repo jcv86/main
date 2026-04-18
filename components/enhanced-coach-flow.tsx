@@ -670,3 +670,5 @@ Vamos a seguir un proceso estructurado de 6 etapas:
     </div>
   )
 }
+
+export default EnhancedCoachFlow
