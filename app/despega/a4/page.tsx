@@ -29,7 +29,7 @@ export default function A4Page() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue"></div>
       </div>
     )
   }
@@ -56,7 +56,7 @@ export default function A4Page() {
 
         {/* Hero */}
         <div className="mb-12 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance bg-gradient-to-r from-blue to-emerald-600 bg-clip-text text-transparent dark:from-teal-400 dark:to-emerald-400">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance bg-gradient-to-r from-blue to-emerald-600 bg-clip-text text-transparent dark:from-blue/40 dark:to-emerald-400">
             Tu Dashboard Ejecutivo
           </h1>
           <p className="text-xl text-muted/70 dark:text-muted/30 mb-2">

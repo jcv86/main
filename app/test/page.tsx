@@ -182,7 +182,7 @@ export default function TestsPage() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gray-50 dark:bg-background flex items-center justify-center p-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-b-2 border-gray-900 dark:border-gray-100 mx-auto mb-4"></div>
           <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">Cargando evaluaciones...</p>
@@ -193,7 +193,7 @@ export default function TestsPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-slate-950 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gray-50 dark:bg-background flex items-center justify-center p-4">
         <div className="text-center">
           <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">Redirigiendo...</p>
         </div>
@@ -202,7 +202,7 @@ export default function TestsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
+    <div className="min-h-screen bg-gray-50 dark:bg-background">
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
         {/* Header - Mobile Optimized */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-6 sm:mb-8">
@@ -234,7 +234,7 @@ export default function TestsPage() {
 
         {/* Mobile Device Banner */}
         {isMobile && (
-          <Card className="mb-6 sm:mb-8 border-green/20 dark:border-green-800 bg-gradient-to-r from-green/5 dark:from-green-950 to-emerald-50 dark:to-emerald-950">
+          <Card className="mb-6 sm:mb-8 border-green/20 dark:border-green-800 bg-gradient-to-r from-green/5 dark:from-green-950 to-green/5 dark:to-green">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
@@ -255,7 +255,7 @@ export default function TestsPage() {
         )}
 
         {/* Verification Status Banner */}
-        <Card className="mb-6 sm:mb-8 border-blue/20 dark:border-blue/10 bg-gradient-to-r from-blue/5 dark:from-blue-950 to-indigo-50 dark:to-indigo-950">
+        <Card className="mb-6 sm:mb-8 border-blue/20 dark:border-blue/10 bg-gradient-to-r from-blue/5 dark:from-blue-950 to-indigo-50 dark:to-blue">
           <CardContent className="p-3 sm:p-4">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex items-center gap-3">

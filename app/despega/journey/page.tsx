@@ -82,7 +82,7 @@ export default function JourneyPage() {
             status: 'in-progress',
             progress: 30,
             color: 'text-blue dark:text-cyan-400',
-            bgColor: 'from-blue/5 to-cyan-100 dark:from-cyan-950 dark:to-cyan-900',
+            bgColor: 'from-blue/5 to-blue/10 dark:from-blue dark:to-blue',
             icon: <Circle className="w-6 h-6" />,
             href: '/despega/a4-base',
             weeks: 'Semanas 2-5',
@@ -94,7 +94,7 @@ export default function JourneyPage() {
             status: 'upcoming',
             progress: 0,
             color: 'text-orange dark:text-orange-400',
-            bgColor: 'from-orange-50 to-orange-100 dark:from-orange-950 dark:to-orange-900',
+            bgColor: 'from-orange/5 to-orange-100 dark:from-orange-950 dark:to-orange',
             icon: <Lock className="w-6 h-6" />,
             href: '/despega/a3',
             weeks: 'Semanas 6-13',
@@ -144,7 +144,7 @@ export default function JourneyPage() {
           </p>
 
           {/* OVERALL PROGRESS */}
-          <div className="bg-gradient-to-r from-blue/5 to-purple-50 dark:from-indigo-950 dark:to-purple-950 rounded-[28px] p-6 border border-blue/30 dark:border-indigo-800">
+          <div className="bg-gradient-to-r from-blue/5 to-purple/5 dark:from-blue dark:to-purple rounded-[28px] p-6 border border-blue/30 dark:border-blue">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-sm font-semibold text-indigo-900 dark:text-indigo-100">Progreso General</h3>
@@ -257,7 +257,7 @@ export default function JourneyPage() {
         </Card>
 
         {/* NEXT STEPS */}
-        <div className="mt-12 bg-gradient-to-r from-blue/5 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 rounded-[28px] p-8 border border-blue/30 dark:border-blue/10">
+        <div className="mt-12 bg-gradient-to-r from-blue/5 to-indigo-50 dark:from-blue-950 dark:to-blue rounded-[28px] p-8 border border-blue/30 dark:border-blue/10">
           <h3 className="text-lg font-semibold mb-4">Próximos Pasos</h3>
           <ul className="space-y-3 text-sm">
             <li className="flex gap-3">

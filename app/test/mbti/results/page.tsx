@@ -333,7 +333,7 @@ export default function MBTIResultsPage() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple-950 dark:to-blue-950">
+        <Card className="border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -542,7 +542,7 @@ export default function MBTIResultsPage() {
                     Mapa de impacto: Dónde te juegas la vida
                   </h3>
                   <div className="grid md:grid-cols-3 gap-6">
-                    <div className="bg-gradient-to-br from-red/5 to-purple-50 rounded-lg p-5 border border-red/20">
+                    <div className="bg-gradient-to-br from-red/5 to-purple/5 rounded-lg p-5 border border-red/20">
                       <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-pink-900">
                         <Heart className="w-5 h-5" />
                         Vida Personal
@@ -592,7 +592,7 @@ export default function MBTIResultsPage() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-br from-green/5 to-emerald-50 rounded-lg p-5 border border-green/20">
+                    <div className="bg-gradient-to-br from-green/5 to-green/5 rounded-lg p-5 border border-green/20">
                       <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-green-900">
                         <Briefcase className="w-5 h-5" />
                         Trabajo
@@ -931,7 +931,7 @@ export default function MBTIResultsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-yellow/5 to-orange-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-yellow/5 to-orange/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué estas oportunidades son relevantes para ti</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Tu tipo {mbtiResult.type} ({typeInfo.title}) tiene preferencias naturales que son fortalezas, pero
@@ -1022,7 +1022,7 @@ export default function MBTIResultsPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-l-4 border-l-orange-500">
+                <Card className="border-l-4 border-l-orange">
                   <CardHeader>
                     <CardTitle className="text-lg">4. Alinear Carrera con Personalidad</CardTitle>
                   </CardHeader>
@@ -1059,7 +1059,7 @@ export default function MBTIResultsPage() {
                 <CardDescription>Cómo MBTI se relaciona con los demás tests del ecosistema DTC</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">El Mapa Completo de Tu Personalidad</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     MBTI revela tus preferencias cognitivas naturales (cómo procesas información y tomas decisiones).
@@ -1162,7 +1162,7 @@ export default function MBTIResultsPage() {
                     <CardTitle>Ejemplos de Sinergia MBTI + Otros Tests</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 1: El Estratega Empático</h4>
                       <ul className="space-y-1 text-sm">
                         <li>• MBTI: INFJ (Visionario idealista)</li>
@@ -1208,7 +1208,7 @@ export default function MBTIResultsPage() {
                 <CardDescription>Explora tu tipo MBTI más allá de los resultados del test</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-red/5 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-red/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué reflexionar es tan importante</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Tu tipo MBTI es una brújula, no una caja. Estas preguntas te ayudan a entender cómo tu tipo se
@@ -1775,7 +1775,7 @@ export default function MBTIResultsPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-l-4 border-l-orange-500">
+                <Card className="border-l-4 border-l-orange">
                   <CardContent className="pt-6">
                     <div className="flex items-start gap-4">
                       <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-100">
@@ -1799,7 +1799,7 @@ export default function MBTIResultsPage() {
           </TabsContent>
 
           <TabsContent value="biblioteca" className="space-y-6">
-            <Card className="border-2 border-blue/20 bg-gradient-to-br from-blue/5 to-purple-50">
+            <Card className="border-2 border-blue/20 bg-gradient-to-br from-blue/5 to-purple/5">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-3">
                   <BookOpen className="w-7 h-7 text-blue" />
@@ -1979,7 +1979,7 @@ export default function MBTIResultsPage() {
                   </table>
                 </div>
 
-                <div className="mt-6 bg-gradient-to-r from-blue/5 to-purple-50 rounded-lg p-6 border border-blue/20">
+                <div className="mt-6 bg-gradient-to-r from-blue/5 to-purple/5 rounded-lg p-6 border border-blue/20">
                   <h3 className="font-bold text-lg mb-3 flex items-center gap-2 text-blue">
                     <Lightbulb className="w-5 h-5" />
                     Cómo usar estos recursos

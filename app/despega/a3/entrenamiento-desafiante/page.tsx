@@ -272,7 +272,7 @@ export default function ChallensingTrainingPage() {
               </div>
 
               {/* Question & Controls */}
-              <div className="p-6 space-y-4 border-t border-muted/80 bg-slate-950">
+              <div className="p-6 space-y-4 border-t border-muted/80 bg-background">
                 
                 {/* Question Display */}
                 <div className="space-y-2">
@@ -509,7 +509,7 @@ export default function ChallensingTrainingPage() {
               </div>
 
               {/* Standard Info */}
-              <div className="p-4 border-t border-muted/80 bg-slate-950/50 flex-shrink-0">
+              <div className="p-4 border-t border-muted/80 bg-background/50 flex-shrink-0">
                 <p className="text-xs font-bold text-muted/40 mb-2">ESTÁNDAR EJECUTIVO</p>
                 <p className="text-xs text-muted/30">75+ = Listo para entrevista executiva<br/>60-74 = Mejora necesaria<br/>{'<'}60 = Requiere trabajo</p>
               </div>

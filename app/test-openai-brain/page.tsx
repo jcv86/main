@@ -132,7 +132,7 @@ export default function TestOpenAIInsightsPage() {
             </Card>
 
             {/* A2 Insights */}
-            <Card className="bg-muted/90/50 border-emerald-500/30">
+            <Card className="bg-muted/90/50 border-green/30">
               <CardHeader>
                 <CardTitle className="text-emerald-400">Fase 2: Tu Camino Claro (Ruta 90 Días)</CardTitle>
                 <CardDescription className="text-emerald-200">

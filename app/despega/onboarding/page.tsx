@@ -266,7 +266,7 @@ export default function DespegaOnboarding() {
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-green/5 to-emerald-100 dark:from-emerald-950 dark:to-emerald-900">
+            <Card className="border-0 shadow-lg bg-gradient-to-br from-green/5 to-green/10 dark:from-green dark:to-green">
               <CardContent className="pt-8">
                 <h3 className="text-xl font-bold text-emerald-900 dark:text-emerald-100 mb-3">¿Por qué empezar por aquí?</h3>
                 <p className="text-sm text-emerald-800 dark:text-emerald-200 leading-relaxed font-semibold">
@@ -628,7 +628,7 @@ export default function DespegaOnboarding() {
           </div>
 
           {/* Key Points */}
-          <Card className="bg-gradient-to-r from-purple/5 to-indigo-50 dark:from-purple-950 dark:to-indigo-950 border-2 border-purple-300 dark:border-purple-700 shadow-lg">
+          <Card className="bg-gradient-to-r from-purple/5 to-indigo-50 dark:from-purple dark:to-blue border-2 border-purple-300 dark:border-purple-700 shadow-lg">
             <CardContent className="pt-8">
               <h2 className="text-2xl font-bold mb-6 text-muted/90 dark:text-muted/5">Puntos Clave Importantes</h2>
               <div className="grid md:grid-cols-2 gap-6">
@@ -673,11 +673,11 @@ export default function DespegaOnboarding() {
           </Card>
 
           {/* What You'll Get */}
-          <Card className="bg-gradient-to-r from-green/5 to-teal-50 dark:from-emerald-950 dark:to-teal-950 border-2 border-emerald-300 dark:border-emerald-700 shadow-lg">
+          <Card className="bg-gradient-to-r from-green/5 to-blue/5 dark:from-green dark:to-blue border-2 border-green/30 dark:border-green shadow-lg">
             <CardContent className="pt-8">
               <h2 className="text-2xl font-bold mb-6 text-muted/90 dark:text-muted/5">Qué Obtendrás de Este Test</h2>
               <div className="space-y-4">
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-emerald-500">
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
                   <div className="text-3xl min-w-fit">📊</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Tu Perfil Personalizado</p>
@@ -691,7 +691,7 @@ export default function DespegaOnboarding() {
                     <p className="text-sm text-muted/60 dark:text-muted/40">Cómo comunicar mejor, trabajar más efectivamente y liderar según tu estilo</p>
                   </div>
                 </div>
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-emerald-500">
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
                   <div className="text-3xl min-w-fit">📚</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Libros Recomendados</p>
@@ -1326,7 +1326,7 @@ export default function DespegaOnboarding() {
           <Card className="w-full max-w-2xl">
             <CardContent className="pt-12 pb-12 space-y-6 text-center">
               <div className="flex justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500" />
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green" />
               </div>
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-green">¡Excelente!</h2>

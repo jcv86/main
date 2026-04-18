@@ -39,7 +39,7 @@ export default function UniversityPartnershipsPage() {
         </div>
 
         {/* El Desafío */}
-        <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl shadow-lg p-8 mb-8 border-2 border-red-100">
+        <div className="bg-gradient-to-br from-red-50 to-orange/5 rounded-2xl shadow-lg p-8 mb-8 border-2 border-red-100">
           <h2 className="text-3xl font-bold text-muted/90 mb-6">🎯 El Desafío de la Empleabilidad en Chile</h2>
 
           <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -234,7 +234,7 @@ export default function UniversityPartnershipsPage() {
         </div>
 
         {/* Propuesta de Valor para Universidades */}
-        <div className="bg-gradient-to-br from-green/5 to-emerald-50 rounded-2xl shadow-lg p-8 mb-8 border-2 border-green-100">
+        <div className="bg-gradient-to-br from-green/5 to-green/5 rounded-2xl shadow-lg p-8 mb-8 border-2 border-green-100">
           <h2 className="text-3xl font-bold text-muted/90 mb-6">🎁 Propuesta de Valor para Universidades</h2>
 
           <div className="grid md:grid-cols-2 gap-6">

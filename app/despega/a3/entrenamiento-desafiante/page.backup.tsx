@@ -197,7 +197,7 @@ export default function ChallensingTrainingPage() {
               </div>
 
               {/* Bottom Section: Question & Controls */}
-              <div className="flex-shrink-0 bg-slate-950 border-t border-muted/80 p-6 space-y-4">
+              <div className="flex-shrink-0 bg-background border-t border-muted/80 p-6 space-y-4">
                 {/* Question Display */}
                 <div className="space-y-3">
                   <Badge className={`${getScoreColor(question.expectedScoreMin)} text-xs w-fit`}>

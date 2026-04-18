@@ -208,7 +208,7 @@ export default function DemoPage() {
         {step === 'results' && allAnswered && (
           <div className="space-y-8">
             {/* Profile Card */}
-            <Card className="border-4 border-purple/50 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple-950/30 dark:to-blue-950/30">
+            <Card className="border-4 border-purple/50 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple/30 dark:to-blue-950/30">
               <CardHeader>
                 <CardTitle className="text-3xl mb-2">Tu Perfil: {profileNames[primary]} + {profileNames[secondary]}</CardTitle>
                 <CardDescription className="text-lg">{profileDescriptions[primary]}</CardDescription>

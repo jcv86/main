@@ -146,7 +146,7 @@ export default function AuthDebugPage() {
                   </div>
                 )}
 
-                <div className="bg-muted/5 dark:bg-slate-950 p-4 rounded-lg max-h-96 overflow-auto">
+                <div className="bg-muted/5 dark:bg-background p-4 rounded-lg max-h-96 overflow-auto">
                   <h3 className="font-semibold mb-2">Raw Profile Data</h3>
                   <pre className="text-xs">{JSON.stringify(profile, null, 2)}</pre>
                 </div>

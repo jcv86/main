@@ -249,7 +249,7 @@ export default function SoftSkillsResults() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="mb-8 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple-950 dark:to-blue-950">
+        <Card className="mb-8 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -440,7 +440,7 @@ export default function SoftSkillsResults() {
                         <p>• Límites más claros y sanos</p>
                       </CardContent>
                     </Card>
-                    <Card className="bg-gradient-to-br from-purple/5 to-background dark:from-purple-950/20">
+                    <Card className="bg-gradient-to-br from-purple/5 to-background dark:from-purple/20">
                       <CardHeader className="pb-3">
                         <CardTitle className="text-base flex items-center gap-2">
                           <Users className="h-4 w-4 text-purple" />
@@ -790,7 +790,7 @@ export default function SoftSkillsResults() {
                 <CardDescription>Cómo expandir tus competencias blandas más allá del trabajo</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-yellow/5 to-orange-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-yellow/5 to-orange/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué las Soft Skills trascienden lo laboral</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Las competencias blandas no son solo habilidades profesionales, son capacidades de vida que afectan
@@ -847,7 +847,7 @@ export default function SoftSkillsResults() {
                 </Card>
 
                 {/* Área 2: Competencias en Desarrollo */}
-                <Card className="border-l-4 border-l-orange-500">
+                <Card className="border-l-4 border-l-orange">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Target className="h-5 w-5 text-orange-600" />
@@ -1008,7 +1008,7 @@ export default function SoftSkillsResults() {
                 <CardDescription>Cómo Soft Skills se relaciona con los demás tests del ecosistema DTC</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Soft Skills: Las Habilidades que Multiplican Todo</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Los otros tests te dicen QUIÉN ERES (personalidad, emociones, intereses). Soft Skills te dice QUÉ
@@ -1206,7 +1206,7 @@ export default function SoftSkillsResults() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 1: El Líder Técnico que No Conecta</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -1296,7 +1296,7 @@ export default function SoftSkillsResults() {
                 <CardDescription>Convierte tus resultados de Soft Skills en autoconocimiento aplicado</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-red/5 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-red/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">De Números a Narrativa Personal</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Un test te da puntuaciones, pero solo la reflexión profunda convierte esos números en transformación
@@ -1355,7 +1355,7 @@ export default function SoftSkillsResults() {
                 </Card>
 
                 {/* Reflexión sobre Áreas de Mejora */}
-                <Card className="border-l-4 border-l-orange-500">
+                <Card className="border-l-4 border-l-orange">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <TrendingUp className="h-5 w-5 text-orange-600" />

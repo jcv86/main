@@ -196,10 +196,10 @@ export default function Conozcamonos2Page() {
       <div className="max-w-3xl mx-auto">
         {/* Header with brandbook styling */}
         <div className="text-center mb-8">
-          <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue/10 to-cyan-100 dark:from-blue/30 dark:to-cyan-900/30 rounded-full mb-4">
+          <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue/10 to-blue/10 dark:from-blue/30 dark:to-blue/30 rounded-full mb-4">
             <p className="text-sm font-semibold text-blue dark:text-blue/30">Conozcámonos 2: Tu Ruta</p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue via-cyan-600 to-teal-600 bg-clip-text text-transparent dark:from-blue/40 dark:via-cyan-400 dark:to-teal-400 mb-2">
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue via-cyan-600 to-blue bg-clip-text text-transparent dark:from-blue/40 dark:via-cyan-400 dark:to-blue/40 mb-2">
             Explora y Diseña Tu Ruta
           </h1>
           <p className="text-muted/70 dark:text-muted/30 mb-4">

@@ -395,7 +395,7 @@ export default function GuidedInterviewPage() {
         </div>
 
         {/* Tips */}
-        <Card className="bg-yellow/5 dark:bg-amber-900/20 border-yellow/30 dark:border-amber-800">
+        <Card className="bg-yellow/5 dark:bg-amber-900/20 border-yellow/30 dark:border-yellow">
           <CardContent className="pt-6 text-sm text-amber-900 dark:text-amber-200 space-y-2">
             <p className="font-semibold">Consejos de la Entrevista Guiada:</p>
             <ul className="list-disc list-inside space-y-1">

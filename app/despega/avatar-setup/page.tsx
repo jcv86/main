@@ -225,7 +225,7 @@ export default function AvatarSetupPage() {
         </div>
 
         {/* Info */}
-        <Card className="border-yellow/30 dark:border-amber-800 bg-yellow/5 dark:bg-amber-950/20">
+        <Card className="border-yellow/30 dark:border-yellow bg-yellow/5 dark:bg-amber-950/20">
           <CardContent className="pt-6">
             <p className="text-sm text-amber-800 dark:text-amber-200">
               💡 Puedes cambiar tu entrevistador en cualquier momento. Los cambios se aplican inmediatamente a tus nuevos entrenamientos.

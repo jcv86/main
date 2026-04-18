@@ -465,7 +465,7 @@ export default function SprintViewerPage() {
 
         {/* Check-in Prompt */}
         {sprintNumber === 1 && (
-          <Card className="border-0 shadow-md bg-gradient-to-r from-yellow/5 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-l-4 border-l-orange-500">
+          <Card className="border-0 shadow-md bg-gradient-to-r from-yellow/5 to-orange/5 dark:from-yellow/20 dark:to-orange/20 border-l-4 border-l-orange">
             <CardContent className="p-6 space-y-3">
               <h3 className="font-bold text-lg text-muted/90 dark:text-muted/5 flex items-center gap-2">
                 <BookOpen className="w-5 h-5" />

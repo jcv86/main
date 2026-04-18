@@ -232,7 +232,7 @@ export default function BigFiveResults() {
         <p className="text-gray-600 mb-8">Tu perfil completo de personalidad según las cinco grandes dimensiones</p>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <div className="mb-8 p-6 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple-950 dark:to-blue-950 rounded-lg">
+        <div className="mb-8 p-6 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950 rounded-lg">
           <div className="flex items-center gap-2 mb-4">
             <Sparkles className="h-5 w-5 text-purple" />
             <h2 className="text-2xl font-bold">Tu Puente de Transición</h2>
@@ -402,7 +402,7 @@ export default function BigFiveResults() {
                 <div>
                   <h3 className="font-semibold text-lg mb-3 text-blue">🗺️ Mapa de Impacto en tu Vida</h3>
                   <div className="grid md:grid-cols-3 gap-4">
-                    <div className="bg-gradient-to-br from-green/5 to-emerald-50 rounded-lg p-4 border border-green/20">
+                    <div className="bg-gradient-to-br from-green/5 to-green/5 rounded-lg p-4 border border-green/20">
                       <h4 className="font-semibold text-green-800 mb-2 flex items-center gap-2">
                         <Heart className="w-4 h-4" />
                         Vida Personal
@@ -885,7 +885,7 @@ export default function BigFiveResults() {
                 <CardDescription>Áreas específicas donde puedes crecer basadas en tu perfil Big Five</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-yellow/5 to-orange-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-yellow/5 to-orange/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué estas oportunidades son relevantes para ti</h3>
                   <p className="text-sm text-gray-700">
                     Tu perfil Big Five con Apertura: {results.O}%, Responsabilidad: {results.C}%, Extraversión:{" "}
@@ -1039,7 +1039,7 @@ export default function BigFiveResults() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-l-4 border-l-orange-500">
+                <Card className="border-l-4 border-l-orange">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Brain className="h-5 w-5 text-orange-600" />
@@ -1127,7 +1127,7 @@ export default function BigFiveResults() {
                 <CardDescription>Cómo Big Five se integra con los demás tests del ecosistema DTC</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">El Mapa Completo de Tu Personalidad</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Big Five mide los rasgos profundos de tu personalidad, la base sobre la cual se construyen tus
@@ -1306,7 +1306,7 @@ export default function BigFiveResults() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 1: El Innovador Estructurado</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -1390,7 +1390,7 @@ export default function BigFiveResults() {
                 <CardDescription>Conecta tu perfil Big Five con tu vida real y propósito</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-red/5 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-red/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué reflexionar sobre tu perfil Big Five</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Big Five no es solo estadística, es el mapa de tu arquitectura psicológica. Estas preguntas te

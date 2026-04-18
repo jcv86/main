@@ -307,7 +307,7 @@ export default function A4Page() {
               </CardContent>
             </Card>
             
-            <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20">
+            <Card className="bg-gradient-to-br from-orange/5 to-orange-100 dark:from-orange/20 dark:to-orange-800/20">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -321,7 +321,7 @@ export default function A4Page() {
           </div>
 
           {/* Welcome Card */}
-          <Card className="border-2 border-blue/30 bg-gradient-to-r from-blue/5 via-blue/5 to-purple-50 dark:from-cyan-900/30 dark:via-blue-900/30 dark:to-purple-900/30">
+          <Card className="border-2 border-blue/30 bg-gradient-to-r from-blue/5 via-blue/5 to-purple/5 dark:from-blue/30 dark:via-blue-900/30 dark:to-purple/30">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <span className="text-2xl">🌍</span>
@@ -422,7 +422,7 @@ export default function A4Page() {
       </Tabs>
 
         {/* Tips */}
-        <Card className="mt-8 bg-gradient-to-r from-blue/5 to-blue/5 dark:from-cyan-900/20 dark:to-blue-900/20 border-blue/30 dark:border-cyan-800">
+        <Card className="mt-8 bg-gradient-to-r from-blue/5 to-blue/5 dark:from-blue/20 dark:to-blue-900/20 border-blue/30 dark:border-cyan-800">
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-blue text-lg">💡</div>
             <div>

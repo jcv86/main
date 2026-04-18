@@ -525,7 +525,7 @@ export default function DISCResultsPage() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="mb-6 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple-950 dark:to-blue-950">
+        <Card className="mb-6 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -641,7 +641,7 @@ export default function DISCResultsPage() {
 
           <TabsContent value="overview" className="space-y-6">
             <Card className="border-2 border-blue/50">
-              <CardHeader className="bg-gradient-to-r from-blue/5 to-purple-50">
+              <CardHeader className="bg-gradient-to-r from-blue/5 to-purple/5">
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Sparkles className="h-6 w-6 text-blue" />
                   Resumen Ejecutivo Integral DTC
@@ -885,7 +885,7 @@ export default function DISCResultsPage() {
                 </div>
 
                 {/* Tres movimientos clave */}
-                <div className="bg-gradient-to-r from-orange-50 to-red-50 p-6 rounded-lg border-l-4 border-orange-500">
+                <div className="bg-gradient-to-r from-orange/5 to-red-50 p-6 rounded-lg border-l-4 border-orange-500">
                   <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                     <TrendingUp className="h-5 w-5 text-orange-600" />
                     Tres Movimientos Clave para los próximos 90 días
@@ -1764,7 +1764,7 @@ export default function DISCResultsPage() {
                   </table>
                 </div>
 
-                <div className="mt-6 p-4 bg-gradient-to-r from-blue/5 to-purple-50 rounded-lg">
+                <div className="mt-6 p-4 bg-gradient-to-r from-blue/5 to-purple/5 rounded-lg">
                   <h4 className="font-semibold mb-2 flex items-center gap-2">
                     <BookOpen className="h-5 w-5 text-blue" />
                     Accede a la biblioteca completa

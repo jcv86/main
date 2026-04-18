@@ -304,7 +304,7 @@ export default function A3Page() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="p-4 bg-gradient-to-r from-green/5 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20 rounded-lg">
+              <div className="p-4 bg-gradient-to-r from-green/5 to-blue/5 dark:from-green/20 dark:to-blue/20 rounded-lg">
                 <p className="text-3xl font-bold text-emerald-700 dark:text-emerald-300">
                   {a3Progress?.employability_score || 'Iniciar'}
                 </p>

@@ -61,14 +61,14 @@ export default function InvestorPitch() {
               El Problema
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-xl p-6 border border-red-100">
+              <div className="bg-gradient-to-br from-red-50 to-orange/5 rounded-xl p-6 border border-red-100">
                 <h3 className="font-bold text-lg mb-3 text-gray-900">Acceso Limitado</h3>
                 <p className="text-gray-700">
                   Las herramientas de desarrollo profesional son caras e inaccesibles para la mayoría de los
                   profesionales chilenos. La coaching de carrera cuesta $100-300+ por sesión.
                 </p>
               </div>
-              <div className="bg-gradient-to-br from-orange-50 to-yellow-50 rounded-xl p-6 border border-orange-100">
+              <div className="bg-gradient-to-br from-orange/5 to-yellow-50 rounded-xl p-6 border border-orange-100">
                 <h3 className="font-bold text-lg mb-3 text-gray-900">Soluciones Fragmentadas</h3>
                 <p className="text-gray-700">
                   Las pruebas, libros y coaching están dispersos en múltiples plataformas. No existe una solución
@@ -165,7 +165,7 @@ export default function InvestorPitch() {
                 </ul>
               </div>
 
-              <div className="bg-gradient-to-br from-blue/5 to-purple-50 rounded-xl p-6 border border-blue/10">
+              <div className="bg-gradient-to-br from-blue/5 to-purple/5 rounded-xl p-6 border border-blue/10">
                 <h3 className="font-bold text-2xl mb-4 text-gray-900">Expansión en LATAM</h3>
                 <ul className="space-y-3 text-gray-700">
                   <li className="flex items-start gap-3">
@@ -241,7 +241,7 @@ export default function InvestorPitch() {
                 </p>
               </div>
 
-              <div className="bg-gradient-to-br from-blue/5 to-emerald-50 rounded-xl p-6 border border-blue/10">
+              <div className="bg-gradient-to-br from-blue/5 to-green/5 rounded-xl p-6 border border-blue/10">
                 <h3 className="font-bold text-xl mb-4 text-gray-900">Premium Individual</h3>
                 <div className="text-3xl font-bold text-blue mb-2">$29/mes</div>
                 <ul className="space-y-2 text-gray-700 text-sm mb-4">
@@ -254,7 +254,7 @@ export default function InvestorPitch() {
                 <p className="text-xs text-gray-600">Objetivo: conversión de 5-10% de usuarios gratuitos</p>
               </div>
 
-              <div className="bg-gradient-to-br from-green/5 to-purple-50 rounded-xl p-6 border border-emerald-100">
+              <div className="bg-gradient-to-br from-green/5 to-purple/5 rounded-xl p-6 border border-emerald-100">
                 <h3 className="font-bold text-xl mb-4 text-gray-900">Empresarial (B2B)</h3>
                 <div className="text-3xl font-bold text-green mb-2">Personalizado</div>
                 <ul className="space-y-2 text-gray-700 text-sm mb-4">
@@ -421,7 +421,7 @@ export default function InvestorPitch() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-blue/5 to-emerald-50 rounded-xl p-6 border border-blue/10">
+              <div className="bg-gradient-to-br from-blue/5 to-green/5 rounded-xl p-6 border border-blue/10">
                 <div className="w-20 h-20 bg-blue/20 rounded-full flex items-center justify-center text-3xl font-bold text-blue mb-4">
                   TC
                 </div>

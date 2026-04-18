@@ -109,7 +109,7 @@ export default function SignInPage() {
               <Sparkles className="w-6 h-6 text-white" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple via-blue to-blue bg-clip-text text-transparent dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple via-blue to-blue bg-clip-text text-transparent dark:from-purple-400 dark:via-blue-400 dark:to-blue/40">
             Despega Tu Carrera
           </h1>
           <p className="text-lg text-muted/60 dark:text-muted/30">
@@ -121,7 +121,7 @@ export default function SignInPage() {
         </div>
 
         {/* Main Card */}
-        <Card className="border-2 border-purple/20/50 dark:border-purple-900/50 shadow-xl backdrop-blur-sm bg-white/80 dark:bg-slate-950/80">
+        <Card className="border-2 border-purple/20/50 dark:border-purple-900/50 shadow-xl backdrop-blur-sm bg-white/80 dark:bg-background/80">
           <CardContent className="pt-8 pb-8 space-y-5">
             {/* OAuth Error Alert */}
             {error && (
@@ -170,7 +170,7 @@ export default function SignInPage() {
                 <div className="w-full border-t border-muted/20 dark:border-card" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="px-2 bg-white dark:bg-slate-950 text-muted/50 dark:text-muted/40">o</span>
+                <span className="px-2 bg-white dark:bg-background text-muted/50 dark:text-muted/40">o</span>
               </div>
             </div>
 

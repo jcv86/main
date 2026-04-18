@@ -179,7 +179,7 @@ export function WhitepaperClient() {
 
             {/* Additional Platform Features */}
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-orange-50 to-red-50 rounded-lg p-6 border border-orange-200">
+              <div className="bg-gradient-to-br from-orange/5 to-red-50 rounded-lg p-6 border border-orange-200">
                 <h4 className="text-lg font-bold mb-3 text-orange-600">📚 Professional Library</h4>
                 <p className="text-gray-700 text-sm">
                   120+ professional development books with full-text access, progress tracking, highlights, notes, and
@@ -187,7 +187,7 @@ export function WhitepaperClient() {
                 </p>
               </div>
 
-              <div className="bg-gradient-to-br from-red/5 to-purple-50 rounded-lg p-6 border border-red/20">
+              <div className="bg-gradient-to-br from-red/5 to-purple/5 rounded-lg p-6 border border-red/20">
                 <h4 className="text-lg font-bold mb-3 text-red">🎯 Personalized Insights</h4>
                 <p className="text-gray-700 text-sm">
                   AI-generated career analysis, percentile rankings, radar charts, development plans, and tailored
@@ -234,7 +234,7 @@ export function WhitepaperClient() {
 
           <h3 className="text-2xl font-semibold mb-4 text-gray-800">Technology Stack</h3>
           <div className="grid md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-gradient-to-br from-blue/5 to-purple-50 rounded-lg p-6 border border-blue/10">
+            <div className="bg-gradient-to-br from-blue/5 to-purple/5 rounded-lg p-6 border border-blue/10">
               <h4 className="font-bold text-lg mb-3 text-gray-900">Frontend</h4>
               <ul className="space-y-2 text-gray-700">
                 <li>• Next.js 15.2.4 (React 19)</li>
@@ -565,7 +565,7 @@ export function WhitepaperClient() {
             ].map((cat, i) => (
               <div
                 key={i}
-                className="bg-gradient-to-br from-blue/5 to-purple-50 rounded-lg p-4 border border-blue/10 text-center"
+                className="bg-gradient-to-br from-blue/5 to-purple/5 rounded-lg p-4 border border-blue/10 text-center"
               >
                 <div className="text-3xl font-bold text-purple mb-1">{cat.count}</div>
                 <div className="text-gray-700 font-medium">{cat.category}</div>
@@ -638,7 +638,7 @@ export function WhitepaperClient() {
         <section id="section-7" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">7. Database Architecture</h2>
 
-          <div className="bg-gradient-to-r from-blue/5 to-purple-50 rounded-lg p-6 border border-blue/10 mb-6">
+          <div className="bg-gradient-to-r from-blue/5 to-purple/5 rounded-lg p-6 border border-blue/10 mb-6">
             <div className="text-4xl font-bold text-purple mb-2">185 Tables</div>
             <p className="text-gray-700">Comprehensive PostgreSQL database with pgvector for semantic search</p>
           </div>

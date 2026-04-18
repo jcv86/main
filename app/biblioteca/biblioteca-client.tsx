@@ -222,7 +222,7 @@ export default function BibliotecaPage() {
 
       {/* Personalized Recommendations Section */}
       {user && (
-        <Card className="mb-8 border-2 border-blue/20 dark:border-blue bg-gradient-to-r from-blue/5 to-purple-50 dark:from-slate-900 dark:to-slate-800">
+        <Card className="mb-8 border-2 border-blue/20 dark:border-blue bg-gradient-to-r from-blue/5 to-purple/5 dark:from-slate-900 dark:to-slate-800">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">

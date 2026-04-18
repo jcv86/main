@@ -211,7 +211,7 @@ export default function A1ReportPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="h-8 w-8 animate-spin text-purple" />
       </div>
     )
@@ -299,7 +299,7 @@ export default function A1ReportPage() {
             <div className="text-4xl font-black text-white mb-3">{secondaryLabel}</div>
             <p className="font-semibold text-blue/5 mb-4 text-sm">{despegaLabels[secondaryLabel as keyof typeof despegaLabels]}</p>
             <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/30 mb-2">
-              <div className="h-full bg-gradient-to-r from-cyan-300 to-white" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
+              <div className="h-full bg-gradient-to-r from-blue/30 to-white" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
             </div>
             <p className="text-xs text-blue/10 font-bold">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
           </div>
@@ -310,10 +310,10 @@ export default function A1ReportPage() {
           <h3 className="font-bold text-2xl text-white mb-6">Tu Perfil Cerebral Completo</h3>
           <div className="space-y-4">
             {[
-              { label: 'Impulsor', score: profile.D, color: 'from-red-500 to-orange-500', icon: '⚡' },
+              { label: 'Impulsor', score: profile.D, color: 'from-red-500 to-orange/50', icon: '⚡' },
               { label: 'Catalizador', score: profile.I, color: 'from-yellow-500 to-orange-400', icon: '🔥' },
               { label: 'Estabilizador', score: profile.S, color: 'from-green to-blue', icon: '🛡️' },
-              { label: 'Arquitecto', score: profile.C, color: 'from-blue to-purple-500', icon: '🏗️' }
+              { label: 'Arquitecto', score: profile.C, color: 'from-blue to-purple/50', icon: '🏗️' }
             ].map((dim, idx) => (
               <div key={idx} className="flex items-center gap-4 p-3 bg-muted/70/50 rounded-[28px] border border-muted/60 hover:border-muted/50 transition-colors">
                 <span className="text-2xl">{dim.icon}</span>
@@ -411,7 +411,7 @@ export default function A1ReportPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-cyan-900/40 to-teal-900/20 border-cyan-600/30 border-2">
+          <Card className="bg-gradient-to-br from-blue/40 to-blue/20 border-blue/30 border-2">
             <CardHeader>
               <CardTitle className="text-lg text-cyan-300">📞 Call Entrena</CardTitle>
             </CardHeader>
@@ -419,7 +419,7 @@ export default function A1ReportPage() {
               <p className="text-sm text-muted/30 mb-4">Practica entrevistas con un entrenamiento personalizado para tu perfil {primaryLabel}.</p>
               <Button 
                 onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile.primary}`)} 
-                className="w-full bg-gradient-to-r from-blue to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white" 
+                className="w-full bg-gradient-to-r from-blue to-blue hover:from-blue hover:to-blue text-white" 
                 size="sm"
               >
                 <Phone className="w-3 h-3 mr-1" />

@@ -94,7 +94,7 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Escasez de Talento */}
-            <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-gradient-to-br from-orange/50 to-orange-600 rounded-2xl shadow-lg p-8 text-white">
               <h3 className="text-2xl font-bold mb-4">💼 Escasez Crítica de Talento</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">

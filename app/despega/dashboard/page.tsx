@@ -197,7 +197,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Coach Section */}
-        <Card className="bg-gradient-to-r from-yellow/5 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border-2 border-yellow/30 dark:border-amber-800 p-8">
+        <Card className="bg-gradient-to-r from-yellow/5 to-orange/5 dark:from-amber-950/30 dark:to-orange-950/30 border-2 border-yellow/30 dark:border-yellow p-8">
           <div className="flex items-start gap-6">
             <div className="text-5xl">🤖</div>
             <div className="flex-1 space-y-4">

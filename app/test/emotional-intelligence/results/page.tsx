@@ -329,7 +329,7 @@ export default function EmotionalIntelligenceResults() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="mb-8 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple-950 dark:to-blue-950">
+        <Card className="mb-8 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -552,7 +552,7 @@ export default function EmotionalIntelligenceResults() {
                         </p>
                       </CardContent>
                     </Card>
-                    <Card className="border-l-4 border-l-orange-500">
+                    <Card className="border-l-4 border-l-orange">
                       <CardContent className="pt-6">
                         <h4 className="font-semibold text-orange-800 mb-2">5. Motivación Interna</h4>
                         <p className="text-gray-700">
@@ -949,7 +949,7 @@ export default function EmotionalIntelligenceResults() {
               })}
             </div>
 
-            <Card className="shadow-lg bg-gradient-to-r from-blue/5 to-purple-50">
+            <Card className="shadow-lg bg-gradient-to-r from-blue/5 to-purple/5">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2">
                   <Zap className="h-6 w-6 text-blue/50" />
@@ -1106,7 +1106,7 @@ export default function EmotionalIntelligenceResults() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-yellow/5 to-orange-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-yellow/5 to-orange/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué estas oportunidades son relevantes para ti</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Tu perfil de Inteligencia Emocional con puntuaciones específicas en cada competencia revela patrones
@@ -1272,7 +1272,7 @@ export default function EmotionalIntelligenceResults() {
                 </Card>
 
                 {/* Área 4: Resiliencia Emocional */}
-                <Card className="border-l-4 border-l-orange-500">
+                <Card className="border-l-4 border-l-orange">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center space-x-2">
                       <Shield className="h-5 w-5 text-orange-600" />
@@ -1340,7 +1340,7 @@ export default function EmotionalIntelligenceResults() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">El Rol de la IE en Tu Desarrollo Integral</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     La Inteligencia Emocional es el "sistema operativo" de tu vida. Mientras que DISC mide tu
@@ -1523,7 +1523,7 @@ export default function EmotionalIntelligenceResults() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 1: El Líder Técnico que Quiere Crecer</h4>
                       <ul className="space-y-1 text-sm">
                         <li>• DISC: Alto C+D = Analítico y decisivo</li>
@@ -1577,7 +1577,7 @@ export default function EmotionalIntelligenceResults() {
                 <CardDescription>Explora tu inteligencia emocional más allá de los números del test</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-red/5 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-red/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">La importancia de la reflexión emocional</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     La verdadera inteligencia emocional no se mide solo con un test, sino con la capacidad de
@@ -1854,7 +1854,7 @@ export default function EmotionalIntelligenceResults() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-green/5 to-teal-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-green/5 to-blue/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Plan de 90 Días Estructurado</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Este plan está diseñado para tu perfil de Inteligencia Emocional con enfoque en:
@@ -1916,7 +1916,7 @@ export default function EmotionalIntelligenceResults() {
                   </Card>
                 </div>
 
-                <div className="bg-gradient-to-r from-green to-teal-600 text-white p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-green to-blue text-white p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Próximos Pasos</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Visita tu Dashboard para trackear tu progreso semanal y acceder al plan detallado con checkboxes

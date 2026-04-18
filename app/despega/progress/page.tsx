@@ -102,7 +102,7 @@ export default function HowToEarnXPPage() {
       <div className="max-w-4xl mx-auto space-y-8">
         {/* HEADER */}
         <div className="space-y-4 text-center">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue/40 to-blue/40 bg-clip-text text-transparent">
             ¿Cómo Ganar Puntos (XP)?
           </h1>
           <p className="text-xl text-muted/40">
@@ -113,7 +113,7 @@ export default function HowToEarnXPPage() {
         {/* MAIN RULES */}
         <div className="space-y-6">
           {xpRules.map((rule, idx) => (
-            <Card key={idx} className="bg-muted/80/50 border-muted/70 hover:border-cyan-500/50 transition-colors">
+            <Card key={idx} className="bg-muted/80/50 border-muted/70 hover:border-blue/50 transition-colors">
               <CardHeader 
                 className="cursor-pointer"
                 onClick={() => setExpandedPhase(expandedPhase === rule.phase ? '' : rule.phase)}
@@ -126,7 +126,7 @@ export default function HowToEarnXPPage() {
                       <p className="text-sm text-muted/40">{rule.category}</p>
                     </div>
                   </div>
-                  <Badge className="bg-blue/50/20 text-cyan-300 border-cyan-500/50">
+                  <Badge className="bg-blue/50/20 text-cyan-300 border-blue/50">
                     {rule.items.length} acciones
                   </Badge>
                 </div>
@@ -139,7 +139,7 @@ export default function HowToEarnXPPage() {
                     return (
                       <div 
                         key={itemIdx}
-                        className="flex items-center justify-between p-3 rounded-[28px] bg-muted/70/30 border border-muted/60/50 hover:border-cyan-500/30 transition-colors"
+                        className="flex items-center justify-between p-3 rounded-[28px] bg-muted/70/30 border border-muted/60/50 hover:border-blue/30 transition-colors"
                       >
                         <div className="flex items-center gap-3 flex-1">
                           <IconComponent className="w-5 h-5 text-cyan-400 flex-shrink-0" />
@@ -161,7 +161,7 @@ export default function HowToEarnXPPage() {
         </div>
 
         {/* STREAK MULTIPLIER */}
-        <Card className="bg-gradient-to-r from-orange-900/30 to-red-900/30 border-orange-500/50">
+        <Card className="bg-gradient-to-r from-orange/30 to-red-900/30 border-orange-500/50">
           <CardHeader>
             <div className="flex items-center gap-2">
               <Flame className="w-6 h-6 text-orange-400" />
@@ -187,7 +187,7 @@ export default function HowToEarnXPPage() {
         </Card>
 
         {/* TIPS */}
-        <Card className="bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border-cyan-500/50">
+        <Card className="bg-gradient-to-r from-blue/30 to-blue/30 border-blue/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Trophy className="w-5 h-5 text-cyan-400" />
@@ -222,17 +222,17 @@ export default function HowToEarnXPPage() {
                 <span className="font-bold">1,000 XP = 1 Nivel</span>
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-3 rounded-[28px] bg-muted/70/50 border border-cyan-500/30">
+                <div className="p-3 rounded-[28px] bg-muted/70/50 border border-blue/30">
                   <p className="text-xs text-muted/40">Novato</p>
                   <p className="text-lg font-bold">Niveles 1-5</p>
                   <p className="text-xs text-muted/40">0-5,000 XP</p>
                 </div>
-                <div className="p-3 rounded-[28px] bg-muted/70/50 border border-cyan-500/30">
+                <div className="p-3 rounded-[28px] bg-muted/70/50 border border-blue/30">
                   <p className="text-xs text-muted/40">Intermedio</p>
                   <p className="text-lg font-bold">Niveles 6-15</p>
                   <p className="text-xs text-muted/40">5,000-15,000 XP</p>
                 </div>
-                <div className="p-3 rounded-[28px] bg-muted/70/50 border border-cyan-500/30">
+                <div className="p-3 rounded-[28px] bg-muted/70/50 border border-blue/30">
                   <p className="text-xs text-muted/40">Experto</p>
                   <p className="text-lg font-bold">Niveles 16+</p>
                   <p className="text-xs text-muted/40">15,000+ XP</p>

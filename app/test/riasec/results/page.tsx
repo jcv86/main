@@ -530,7 +530,7 @@ export default function RIASECResults() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="mb-6 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple-950 dark:to-blue-950">
+        <Card className="mb-6 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -675,7 +675,7 @@ export default function RIASECResults() {
                 </div>
 
                 {/* Top 5 ideas sobre ti */}
-                <div className="bg-gradient-to-r from-blue/5 to-purple-50 rounded-lg p-6">
+                <div className="bg-gradient-to-r from-blue/5 to-purple/5 rounded-lg p-6">
                   <h3 className="font-semibold text-lg mb-4 text-blue">💡 Top 5 Ideas Sobre Ti</h3>
                   <div className="space-y-3">
                     <div className="flex gap-3">
@@ -1657,7 +1657,7 @@ export default function RIASECResults() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-yellow/5 to-orange-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-yellow/5 to-orange/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué estas oportunidades son relevantes para ti</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     Tu perfil vocacional {results.holland_code} con puntuaciones R:{results.R}, I:{results.I}, A:
@@ -1829,7 +1829,7 @@ export default function RIASECResults() {
                 </Card>
 
                 {/* Área 4: Emprendimiento Vocacional */}
-                <Card className="border-l-4 border-l-orange-500">
+                <Card className="border-l-4 border-l-orange">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Rocket className="h-5 w-5 text-orange-600" />
@@ -1899,7 +1899,7 @@ export default function RIASECResults() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">El Ecosistema Completo de Orientación Vocacional</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     RIASEC te muestra QUÉ te interesa, pero necesitas los otros tests para saber CÓMO lo harías, CON
@@ -1909,7 +1909,7 @@ export default function RIASECResults() {
                 </div>
 
                 {/* Connection Map */}
-                <Card className="bg-gradient-to-br from-blue/5 to-purple-50">
+                <Card className="bg-gradient-to-br from-blue/5 to-purple/5">
                   <CardContent className="pt-6">
                     <div className="text-center mb-6">
                       <div className="inline-block bg-green text-white px-6 py-3 rounded-full font-bold text-lg">
@@ -2114,7 +2114,7 @@ export default function RIASECResults() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue/5 to-purple-50 p-4 rounded-lg">
+                    <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-4 rounded-lg">
                       <h4 className="font-semibold mb-2">Caso 1: El Investigador Emprendedor</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -2200,7 +2200,7 @@ export default function RIASECResults() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-red/5 to-purple-50 p-6 rounded-lg">
+                <div className="bg-gradient-to-r from-red/5 to-purple/5 p-6 rounded-lg">
                   <h3 className="text-lg font-semibold mb-3">Por qué reflexionar sobre tu vocación es crucial</h3>
                   <p className="text-sm text-gray-700 mb-4">
                     RIASEC te muestra tus intereses, pero tu vocación real emerge cuando reflexionas sobre POR QUÉ te

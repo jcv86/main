@@ -69,7 +69,7 @@ export default function CicloCompletoDemoPage() {
       id: 'a4',
       name: 'La Realidad',
       subtitle: 'Vive Tu Nueva Identidad',
-      color: 'from-blue to-cyan-400',
+      color: 'from-blue to-blue/40',
       bgColor: 'bg-blue/5 dark:bg-cyan-950/30',
       borderColor: 'border-blue/20 dark:border-cyan-800',
       icon: Globe,

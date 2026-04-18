@@ -183,7 +183,7 @@ export default function A2DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-yellow/30 dark:border-amber-800">
+            <Card className="border-2 border-yellow/30 dark:border-yellow">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
                   <div className="w-6 h-6 rounded-[20px] bg-yellow/50 flex items-center justify-center text-white text-xs font-bold">2</div>
@@ -246,7 +246,7 @@ export default function A2DashboardPage() {
 
         {/* ⭐ A2 V2: WEEKLY REVIEW RITUAL */}
         <div>
-          <Card className="border-2 border-blue/30 dark:border-indigo-800 bg-blue/5/30 dark:bg-indigo-900/10">
+          <Card className="border-2 border-blue/30 dark:border-blue bg-blue/5/30 dark:bg-indigo-900/10">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 📋 Tu Ritual Semanal de Revisión

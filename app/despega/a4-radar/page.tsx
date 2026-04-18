@@ -42,7 +42,7 @@ export default function A4RadarPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
           <p className="text-muted/30">Activando tu Radar...</p>
@@ -233,7 +233,7 @@ export default function A4RadarPage() {
             </Card>
           </div>
 
-          <div className="p-6 bg-gradient-to-r from-teal-900/30 to-emerald-900/30 border border-teal-500/30 rounded-lg">
+          <div className="p-6 bg-gradient-to-r from-blue/30 to-green/30 border border-teal-500/30 rounded-lg">
             <p className="text-muted/30 mb-4">
               <strong>¿Listo para empezar?</strong> Ve al dashboard principal para ver todas las oportunidades 
               que el Radar ha identificado para ti. Tu search ha comenzado.

@@ -239,7 +239,7 @@ export default function TrainingDashboardPage() {
           {activityCards.map((card, i) => {
             const isCompleted = card.status === 'completed'
             return (
-              <div key={i} className={`p-3 rounded-[28px] border ${isCompleted ? 'bg-emerald-900/20 border-emerald-500/30' : 'bg-muted/80/20 border-muted/70'}`}>
+              <div key={i} className={`p-3 rounded-[28px] border ${isCompleted ? 'bg-emerald-900/20 border-green/30' : 'bg-muted/80/20 border-muted/70'}`}>
                 <div className="flex items-center gap-2 mb-1">
                   {isCompleted ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-muted/40" />}
                   <p className="text-sm font-semibold text-white">{card.title}</p>
@@ -265,19 +265,19 @@ export default function TrainingDashboardPage() {
                     const isCompleted = card.status === 'completed'
 
                     return (
-                      <Card key={i} className="bg-muted/80/40 border-muted/70 hover:border-cyan-500/50 transition-colors group">
+                      <Card key={i} className="bg-muted/80/40 border-muted/70 hover:border-blue/50 transition-colors group">
                         <CardHeader>
                           <div className="flex items-start justify-between mb-2">
                             <CardTitle className="text-lg flex items-center gap-2">
                               <Icon className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300" />
                               {card.title}
                             </CardTitle>
-                            {card.badge && <Badge className="text-xs bg-blue/50/20 text-cyan-300 border-cyan-500/50">{card.badge}</Badge>}
+                            {card.badge && <Badge className="text-xs bg-blue/50/20 text-cyan-300 border-blue/50">{card.badge}</Badge>}
                           </div>
                         </CardHeader>
                         <CardContent className="space-y-4">
                           <p className="text-sm text-muted/40">{card.description}</p>
-                          {isCompleted && <Badge className="bg-green/50/20 text-emerald-400 border border-emerald-500/50">✓ Completado</Badge>}
+                          {isCompleted && <Badge className="bg-green/50/20 text-emerald-400 border border-green/50">✓ Completado</Badge>}
                           <Button 
                             onClick={() => router.push(card.href)}
                             className={`w-full group/btn transition-all ${isCompleted ? 'bg-muted/70 hover:bg-muted/60' : 'bg-blue hover:bg-cyan-700'}`}
@@ -296,7 +296,7 @@ export default function TrainingDashboardPage() {
         </div>
 
         {/* PROGRESO RESUMEN */}
-        <div className="mt-8 p-6 bg-gradient-to-r from-cyan-900/20 to-teal-900/20 border border-cyan-500/30 rounded-lg">
+        <div className="mt-8 p-6 bg-gradient-to-r from-blue/20 to-blue/20 border border-blue/30 rounded-lg">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h4 className="text-white font-semibold mb-1">Tu Progreso General</h4>
@@ -320,7 +320,7 @@ export default function TrainingDashboardPage() {
       <ASectionPart title="Tu Camino de Entrenamiento Recomendado" icon={<Target />}>
         <div className="space-y-6">
           {completionPercentage === 0 && (
-            <div className="p-6 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border border-cyan-500/30 rounded-lg">
+            <div className="p-6 bg-gradient-to-r from-blue/30 to-blue/30 border border-blue/30 rounded-lg">
               <h4 className="text-white font-semibold mb-2">Comienza aquí</h4>
               <p className="text-muted/30 text-sm mb-4">
                 La base es fundamental. Completa Interview 0 primero - es la piedra angular de todas tus entrevistas.
@@ -333,7 +333,7 @@ export default function TrainingDashboardPage() {
           )}
 
           {completionPercentage > 0 && completionPercentage < 50 && (
-            <div className="p-6 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border border-cyan-500/30 rounded-lg">
+            <div className="p-6 bg-gradient-to-r from-blue/30 to-blue/30 border border-blue/30 rounded-lg">
               <h4 className="text-white font-semibold mb-2">Siguiente: Entrenamiento Guiado</h4>
               <p className="text-muted/30 text-sm mb-4">
                 Ya tienes tu base. Ahora practica con guía. Los Entrenamientos Guiados te enseñan la metodología STAR y te dan feedback IA en tiempo real.
@@ -346,7 +346,7 @@ export default function TrainingDashboardPage() {
           )}
 
           {completionPercentage >= 50 && completionPercentage < 100 && (
-            <div className="p-6 bg-gradient-to-r from-cyan-900/30 to-teal-900/30 border border-cyan-500/30 rounded-lg">
+            <div className="p-6 bg-gradient-to-r from-blue/30 to-blue/30 border border-blue/30 rounded-lg">
               <h4 className="text-white font-semibold mb-2">Intensifica: Desafío Máximo</h4>
               <p className="text-muted/30 text-sm mb-4">
                 Estás en buena forma. Es momento de desafiarte. Los Entrenamientos Desafiantes te preparan para presión real de entrevista ejecutiva.

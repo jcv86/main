@@ -121,7 +121,7 @@ export default function QuickTestPage() {
 
         {/* Summary */}
         {Object.keys(results).length > 0 && (
-          <Card className="bg-gradient-to-r from-green/5 to-emerald-50 dark:from-green-950/30 dark:to-emerald-950/30 border-green/20 dark:border-green-800">
+          <Card className="bg-gradient-to-r from-green/5 to-green/5 dark:from-green-950/30 dark:to-green/30 border-green/20 dark:border-green-800">
             <CardHeader>
               <CardTitle className="text-green-900 dark:text-green-100">
                 ✓ {Object.keys(results).length}/{tests.length} Pilares Probados

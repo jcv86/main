@@ -663,7 +663,7 @@ export default function CVATSPage() {
         )}
 
         {format === 'modern' && (
-          <Card className="bg-yellow/5 dark:bg-amber-900/20 border-yellow/30 dark:border-amber-800">
+          <Card className="bg-yellow/5 dark:bg-amber-900/20 border-yellow/30 dark:border-yellow">
             <CardHeader>
               <CardTitle className="text-base">⚡ Formato Moderno</CardTitle>
             </CardHeader>

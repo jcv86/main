@@ -178,7 +178,7 @@ export default function BookRecommendationsPage() {
             )}
 
             {/* Development Path Section */}
-            <Card className="bg-gradient-to-br from-blue/5 to-purple-50 border-0 shadow-lg">
+            <Card className="bg-gradient-to-br from-blue/5 to-purple/5 border-0 shadow-lg">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg">Tu Ruta de Desarrollo</CardTitle>
               </CardHeader>

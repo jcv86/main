@@ -67,7 +67,7 @@ export default function A1ResultadoPage() {
 
   const getDimensionColor = (letter: string) => {
     const colors: Record<string, string> = {
-      'D': 'from-red-500 to-orange-500',
+      'D': 'from-red-500 to-orange/50',
       'I': 'from-yellow-500 to-amber-500',
       'S': 'from-green to-green',
       'C': 'from-blue to-blue'
@@ -239,7 +239,7 @@ export default function A1ResultadoPage() {
         </div>
 
         {/* ⭐ A1 V2: INTERNAL TENSIONS */}
-        <Card className="mb-8 border-0 shadow-lg border-2 border-yellow/30 dark:border-amber-800 bg-yellow/5/50 dark:bg-amber-900/20">
+        <Card className="mb-8 border-0 shadow-lg border-2 border-yellow/30 dark:border-yellow bg-yellow/5/50 dark:bg-amber-900/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-amber-900 dark:text-amber-200">
               <Sparkles className="w-5 h-5 text-yellow" />
@@ -325,7 +325,7 @@ export default function A1ResultadoPage() {
         </Card>
 
         {/* ⭐ A1 V2: PREDICTIVE INSIGHTS */}
-        <Card className="mb-8 border-0 shadow-lg border-2 border-blue/30 dark:border-indigo-800 bg-blue/5/50 dark:bg-indigo-900/20">
+        <Card className="mb-8 border-0 shadow-lg border-2 border-blue/30 dark:border-blue bg-blue/5/50 dark:bg-indigo-900/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-indigo-900 dark:text-indigo-200">
               <Target className="w-5 h-5 text-blue" />

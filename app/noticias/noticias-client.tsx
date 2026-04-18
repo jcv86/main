@@ -485,7 +485,7 @@ export default function NoticiasClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-white to-purple-50">
+    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-white to-purple/5">
       {/* Header */}
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4">

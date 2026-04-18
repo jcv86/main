@@ -38,7 +38,7 @@ export default function LearningFlowOnboarding() {
       icon: Trophy,
       action: 'Ver Ranking',
       path: '/leaderboard',
-      color: 'from-yellow/50 to-orange-500',
+      color: 'from-yellow/50 to-orange/50',
     },
     {
       title: 'Progresa',

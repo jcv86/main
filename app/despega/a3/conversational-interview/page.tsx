@@ -24,7 +24,7 @@ export default function ConversationalInterviewPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-cyan-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue"></div>
       </div>
     )
   }
@@ -88,7 +88,7 @@ export default function ConversationalInterviewPage() {
                   onClick={() => setSelectedRole(role)}
                   className={`p-3 rounded-[28px] border-2 transition ${
                     selectedRole === role
-                      ? 'border-cyan-600 bg-blue/5 dark:bg-cyan-900/20'
+                      ? 'border-blue bg-blue/5 dark:bg-cyan-900/20'
                       : 'border-muted/20 dark:border-card hover:border-cyan-400'
                   }`}
                 >
@@ -109,7 +109,7 @@ export default function ConversationalInterviewPage() {
                     onClick={() => setSelectedIndustry(industry)}
                     className={`p-3 rounded-[28px] border-2 transition ${
                       selectedIndustry === industry
-                        ? 'border-cyan-600 bg-blue/5 dark:bg-cyan-900/20'
+                        ? 'border-blue bg-blue/5 dark:bg-cyan-900/20'
                         : 'border-muted/20 dark:border-card hover:border-cyan-400'
                     }`}
                   >
@@ -131,7 +131,7 @@ export default function ConversationalInterviewPage() {
                     onClick={() => setSelectedLevel(level.id as any)}
                     className={`w-full p-4 rounded-[28px] border-2 transition text-left ${
                       selectedLevel === level.id
-                        ? 'border-cyan-600 bg-blue/5 dark:bg-cyan-900/20'
+                        ? 'border-blue bg-blue/5 dark:bg-cyan-900/20'
                         : 'border-muted/20 dark:border-card hover:border-cyan-400'
                     }`}
                   >

@@ -162,7 +162,7 @@ export default function GuidedTrainingPage() {
             </div>
 
             {/* Coach Content Area */}
-            <div className="bg-gradient-to-br from-blue/5 to-indigo-50 dark:from-blue/20 dark:to-indigo-900/20 border-2 border-blue/30 dark:border-blue/10 rounded-[28px] p-8 min-h-64 space-y-4">
+            <div className="bg-gradient-to-br from-blue/5 to-indigo-50 dark:from-blue/20 dark:to-blue/20 border-2 border-blue/30 dark:border-blue/10 rounded-[28px] p-8 min-h-64 space-y-4">
               <div className="space-y-4 text-muted/70 dark:text-muted/30">
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-lg text-muted/90 dark:text-white flex items-center gap-2">
@@ -315,7 +315,7 @@ export default function GuidedTrainingPage() {
 
             {/* Practice Section */}
             {!showVideoSession ? (
-              <div className="bg-yellow/5 dark:bg-amber-900/20 border border-yellow/30 dark:border-amber-800 rounded-[28px] p-6 space-y-4">
+              <div className="bg-yellow/5 dark:bg-amber-900/20 border border-yellow/30 dark:border-yellow rounded-[28px] p-6 space-y-4">
                 <p className="font-bold text-amber-900 dark:text-amber-200">
                   Practica conmigo:
                 </p>

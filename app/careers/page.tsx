@@ -7,7 +7,7 @@ import Link from "next/link"
 
 export default function CareersPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 to-purple-50 py-20">
+    <div className="min-h-screen bg-gradient-to-br from-blue/5 to-purple/5 py-20">
       <div className="container mx-auto px-4 max-w-2xl">
         <Card className="border-2 border-blue/20">
           <CardHeader className="text-center">

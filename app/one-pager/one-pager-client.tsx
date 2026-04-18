@@ -130,7 +130,7 @@ export default function OnePagerClient() {
 
               {/* Technology Stack */}
               <section>
-                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-emerald-500 pl-3">Tecnología</h2>
+                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-green pl-3">Tecnología</h2>
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="bg-gray-50 rounded p-2 border border-gray-200">
                     <div className="font-bold text-gray-900 mb-1">Frontend</div>
@@ -156,7 +156,7 @@ export default function OnePagerClient() {
             <div className="space-y-6">
               {/* Market Opportunity */}
               <section>
-                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-emerald-500 pl-3">
+                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-green pl-3">
                   Oportunidad de Mercado
                 </h2>
                 <div className="bg-green/5 rounded-lg p-4 border border-emerald-100 mb-3">

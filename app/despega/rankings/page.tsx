@@ -147,7 +147,7 @@ export default function RankingsPage() {
               </div>
               <div className="text-right">
                 <p className="text-sm text-muted/30 font-medium">Puntos</p>
-                <p className="text-4xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text">
+                <p className="text-4xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-blue/40 bg-clip-text">
                   {getCurrentUserScore(RANKING_TABS.find(t => t.id === activeTab)?.scoreKey || "score_general")}
                 </p>
               </div>

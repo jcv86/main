@@ -41,7 +41,7 @@ const insightCards = [
     key: 'areasGrowth',
     icon: '📈',
     title: 'Áreas de Crecimiento',
-    color: 'from-yellow/50 to-orange-500'
+    color: 'from-yellow/50 to-orange/50'
   },
   {
     key: 'hitosExito',
@@ -136,7 +136,7 @@ export default function A2ResultadosPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <Loader2 className="h-8 w-8 animate-spin text-blue" />
       </div>
     )

@@ -173,7 +173,7 @@ export default function A3IntroPage() {
             </CardContent>
           </Card>
 
-          <div className="p-6 bg-gradient-to-r from-blue to-teal-600 rounded-lg shadow-lg">
+          <div className="p-6 bg-gradient-to-r from-blue to-blue rounded-lg shadow-lg">
             <h3 className="text-xl font-bold text-white mb-2">Listo para entrenar?</h3>
             <p className="text-cyan-100 mb-6">Entra al dashboard y elige tu modalidad de entrenamiento.</p>
             <Button 

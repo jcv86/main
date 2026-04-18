@@ -34,7 +34,7 @@ export default function A2RoutesPage() {
   const getMilestoneColor = (days: 30 | 60 | 90) => {
     const colorsMap = {
       30: 'from-blue to-blue',
-      60: 'from-purple to-purple-500',
+      60: 'from-purple to-purple/50',
       90: 'from-green to-green'
     }
     return colorsMap[days]
@@ -157,7 +157,7 @@ export default function A2RoutesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-purple/50" />
           <p className="text-muted/30">Generando tu ruta personalizada...</p>
@@ -168,7 +168,7 @@ export default function A2RoutesPage() {
 
   if (error || !route) {
     return (
-      <div className="min-h-screen bg-slate-950 p-8">
+      <div className="min-h-screen bg-background p-8">
         <div className="max-w-2xl mx-auto">
           <Card className="bg-muted/90 border-red-500/50 p-8">
             <div className="flex items-start gap-4">
@@ -192,7 +192,7 @@ export default function A2RoutesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 p-8">
+    <div className="min-h-screen bg-background p-8">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="space-y-2">
@@ -231,7 +231,7 @@ export default function A2RoutesPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center gap-4 p-4 bg-emerald-900/20 border border-emerald-500/30 rounded-lg">
+            <div className="flex items-center gap-4 p-4 bg-emerald-900/20 border border-green/30 rounded-lg">
               <CheckCircle2 className="w-6 h-6 text-emerald-400 flex-shrink-0" />
               <div>
                 <p className="font-semibold text-emerald-400">Ruta Generada</p>
@@ -329,7 +329,7 @@ export default function A2RoutesPage() {
             })}
 
             {/* Success Metrics */}
-            <div className="bg-gradient-to-br from-emerald-900/20 to-emerald-800/10 border border-emerald-500/30 rounded-[28px] p-6">
+            <div className="bg-gradient-to-br from-green/20 to-green/10 border border-green/30 rounded-[28px] p-6">
               <h3 className="text-lg font-bold text-emerald-400 mb-4">Métricas de Éxito</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex gap-3">
@@ -386,7 +386,7 @@ export default function A2RoutesPage() {
               </Card>
             </div>
 
-            <div className="p-6 bg-gradient-to-r from-blue/30 to-cyan-900/30 border border-blue/50/30 rounded-lg">
+            <div className="p-6 bg-gradient-to-r from-blue/30 to-blue/30 border border-blue/50/30 rounded-lg">
               <p className="text-muted/30 mb-4">
                 <strong>Este es tu plan. Adáptalo según sea necesario.</strong> La vida acontece, y el plan puede cambiar. 
                 Si necesitas ajustes o tienes preguntas, habla con el coach.

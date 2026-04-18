@@ -14,10 +14,10 @@ export default function RecursosPublicosPage() {
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Header */}
           <div className="text-center space-y-3">
-            <div className="inline-block px-4 py-2 bg-gradient-to-r from-cyan-100 to-teal-100 dark:from-cyan-900/30 dark:to-teal-900/30 rounded-full mb-4">
+            <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue/10 to-blue/10 dark:from-blue/30 dark:to-blue/30 rounded-full mb-4">
               <p className="text-sm font-semibold text-cyan-700 dark:text-cyan-300">Recursos del Sector Público</p>
             </div>
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue to-teal-600 bg-clip-text text-transparent dark:from-cyan-400 dark:to-teal-400">Recursos Públicos Chilenos</h1>
+            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue to-blue bg-clip-text text-transparent dark:from-blue/40 dark:to-blue/40">Recursos Públicos Chilenos</h1>
             <p className="text-xl text-muted/70 dark:text-muted/30 font-medium">
               Accede a 46+ bases de datos y recursos del gobierno chileno para tu desarrollo profesional
             </p>

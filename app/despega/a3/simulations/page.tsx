@@ -164,7 +164,7 @@ export default function SimulationsPage() {
         </div>
 
         {/* Tips Card */}
-        <Card className="bg-gradient-to-r from-purple/5 to-indigo-50 dark:from-purple/20 dark:to-indigo-900/20 border-0">
+        <Card className="bg-gradient-to-r from-purple/5 to-indigo-50 dark:from-purple/20 dark:to-blue/20 border-0">
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-purple text-lg">💡</div>
             <div>

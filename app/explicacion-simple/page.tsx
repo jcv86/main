@@ -27,7 +27,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 2: The Problem */}
-          <div className="bg-gradient-to-br from-red-50 to-orange-50 rounded-2xl p-8 border border-red-200">
+          <div className="bg-gradient-to-br from-red-50 to-orange/5 rounded-2xl p-8 border border-red-200">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">El Problema que Resuelve</h2>
             <p className="text-lg text-gray-700 mb-4">
               El mercado laboral chileno enfrenta desafíos críticos de empleabilidad y desarrollo profesional:
@@ -74,7 +74,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 3: How it works - 3 Core Tools */}
-          <div className="bg-gradient-to-br from-blue/5 to-purple-50 rounded-2xl p-8 border border-blue/20">
+          <div className="bg-gradient-to-br from-blue/5 to-purple/5 rounded-2xl p-8 border border-blue/20">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">¿Cómo Funciona? Tres Pilares Integrados</h2>
 
             <div className="space-y-6">
@@ -117,7 +117,7 @@ export default function ExplicacionSimplePage() {
               </div>
 
               {/* Tool 3 */}
-              <div className="bg-white rounded-xl p-6 border-l-4 border-emerald-500">
+              <div className="bg-white rounded-xl p-6 border-l-4 border-green">
                 <h3 className="text-2xl font-bold text-emerald-700 mb-3">3. Coach IA Personalizado</h3>
                 <p className="text-lg text-gray-700 mb-3">
                   <strong>Asistente inteligente con contexto completo:</strong>
@@ -162,7 +162,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 5: Value Proposition */}
-          <div className="bg-gradient-to-br from-blue/5 to-purple-50 rounded-2xl p-8 border border-blue/20">
+          <div className="bg-gradient-to-br from-blue/5 to-purple/5 rounded-2xl p-8 border border-blue/20">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Propuesta de Valor</h2>
             <div className="space-y-4">
               <div className="bg-white rounded-xl p-6">
@@ -295,7 +295,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 8: Team */}
-          <div className="bg-gradient-to-br from-red/5 to-orange-50 rounded-2xl p-8 border border-red/20">
+          <div className="bg-gradient-to-br from-red/5 to-orange/5 rounded-2xl p-8 border border-red/20">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Equipo</h2>
             <div className="space-y-4">
               <div className="bg-white rounded-xl p-6 border-l-4 border-rose-500">
@@ -319,7 +319,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 9: Launch & Roadmap */}
-          <div className="bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl p-8 border border-orange-200">
+          <div className="bg-gradient-to-br from-orange/5 to-amber-50 rounded-2xl p-8 border border-orange-200">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Lanzamiento y Roadmap</h2>
             <div className="bg-white rounded-xl p-6 text-center mb-6">
               <p className="text-sm text-gray-500 mb-2">LANZAMIENTO PÚBLICO</p>

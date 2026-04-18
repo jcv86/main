@@ -188,7 +188,7 @@ export default function DespegazoDashboard() {
             <Zap className="w-8 h-8 text-purple-400" />
             <h1 className="text-5xl md:text-6xl font-black text-white leading-tight">
               Tu Transformación <br />
-              <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-blue/40 bg-clip-text text-transparent">
                 Despega
               </span>
             </h1>
@@ -209,7 +209,7 @@ export default function DespegazoDashboard() {
               <p className="text-muted/40 text-sm font-semibold">Readiness Score</p>
               <div className="mt-4 w-full h-1 bg-muted/80 rounded-full overflow-hidden">
                 <div
-                  className={`h-full bg-gradient-to-r ${scoreColor === 'text-emerald-400' ? 'from-green/50 to-teal-400' : scoreColor === 'text-yellow-400' ? 'from-yellow-500 to-orange-400' : 'from-orange-500 to-red-400'} transition-all duration-500`}
+                  className={`h-full bg-gradient-to-r ${scoreColor === 'text-emerald-400' ? 'from-green/50 to-blue/40' : scoreColor === 'text-yellow-400' ? 'from-yellow-500 to-orange-400' : 'from-orange/50 to-red-400'} transition-all duration-500`}
                   style={{ width: `${readiness.overall_score}%` }}
                 />
               </div>
@@ -231,7 +231,7 @@ export default function DespegazoDashboard() {
 
         {/* Strengths & Gaps */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-          <div className="bg-gradient-to-br from-emerald-900/40 to-teal-900/40 border border-emerald-500/20 rounded-xl p-6">
+          <div className="bg-gradient-to-br from-green/40 to-blue/40 border border-green/20 rounded-xl p-6">
             <h3 className="text-lg font-bold text-emerald-400 mb-4 flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5" /> Fortalezas
             </h3>
@@ -246,7 +246,7 @@ export default function DespegazoDashboard() {
             </ul>
           </div>
 
-          <div className="bg-gradient-to-br from-orange-900/40 to-red-900/40 border border-orange-500/20 rounded-xl p-6">
+          <div className="bg-gradient-to-br from-orange/40 to-red-900/40 border border-orange-500/20 rounded-xl p-6">
             <h3 className="text-lg font-bold text-orange-400 mb-4 flex items-center gap-2">
               <AlertCircle className="w-5 h-5" /> Áreas de Mejora
             </h3>
@@ -283,7 +283,7 @@ export default function DespegazoDashboard() {
                   </div>
                 </div>
                 {stage.completed ? (
-                  <Badge className="bg-green/50/20 text-emerald-400 border border-emerald-500/50 ml-4">
+                  <Badge className="bg-green/50/20 text-emerald-400 border border-green/50 ml-4">
                     ✓ Completo
                   </Badge>
                 ) : (

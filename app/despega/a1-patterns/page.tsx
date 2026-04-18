@@ -112,7 +112,7 @@ export default function A1PatternsPage() {
             <h3 className="text-2xl font-bold text-white mb-6">Tus Fortalezas Naturales</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {details.strengths.map((strength, idx) => (
-                <Card key={idx} className="bg-gradient-to-br from-green-900/40 to-emerald-900/20 border-green-500/30 border-2">
+                <Card key={idx} className="bg-gradient-to-br from-green-900/40 to-green/20 border-green-500/30 border-2">
                   <CardContent className="pt-6">
                     <p className="text-green-300 font-semibold">✓ {strength}</p>
                   </CardContent>
@@ -127,7 +127,7 @@ export default function A1PatternsPage() {
             <h3 className="text-2xl font-bold text-white mb-6">Desafíos a Considerar</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {details.challenges.map((challenge, idx) => (
-                <Card key={idx} className="bg-gradient-to-br from-yellow-900/40 to-orange-900/20 border-yellow-500/30 border-2">
+                <Card key={idx} className="bg-gradient-to-br from-yellow-900/40 to-orange/20 border-yellow-500/30 border-2">
                   <CardContent className="pt-6">
                     <p className="text-yellow-300 font-semibold">⚠️ {challenge}</p>
                   </CardContent>
@@ -150,7 +150,7 @@ export default function A1PatternsPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-cyan-900/30 to-teal-900/20 border-cyan-500/30 border-2">
+            <Card className="bg-gradient-to-br from-blue/30 to-blue/20 border-blue/30 border-2">
               <CardHeader>
                 <CardTitle>Consejos de Entrevista</CardTitle>
               </CardHeader>
@@ -211,7 +211,7 @@ export default function A1PatternsPage() {
         <div className="mt-12 pt-8 border-t border-muted/70">
           <h3 className="text-2xl font-bold text-white mb-6">Próximos Pasos</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-gradient-to-br from-cyan-900/40 to-teal-900/20 border-cyan-600/30 border-2">
+            <Card className="bg-gradient-to-br from-blue/40 to-blue/20 border-blue/30 border-2">
               <CardHeader>
                 <CardTitle className="text-cyan-300 flex items-center gap-2">
                   <Phone className="w-5 h-5" />
@@ -222,7 +222,7 @@ export default function A1PatternsPage() {
                 <p className="text-muted/30 mb-4">Practica entrevistas específicas para tu perfil</p>
                 <Button 
                   onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile}`)}
-                  className="w-full bg-gradient-to-r from-blue to-teal-600 hover:from-cyan-700 hover:to-teal-700"
+                  className="w-full bg-gradient-to-r from-blue to-blue hover:from-blue hover:to-blue"
                 >
                   Comenzar Práctica
                   <ArrowRight className="w-4 h-4 ml-2" />

@@ -171,7 +171,7 @@ export default function DocumentsPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-white to-purple-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-white to-purple/5 py-8">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center gap-3 mb-3">

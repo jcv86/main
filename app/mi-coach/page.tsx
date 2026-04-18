@@ -284,7 +284,7 @@ export default function MiCoachPage() {
                       onChange={(e) => setChatInput(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && !chatLoading && handleChatSubmit()}
                       disabled={chatLoading}
-                      className="bg-white dark:bg-slate-950 text-muted/90 dark:text-muted/10 placeholder:text-muted/50 dark:placeholder:text-muted/40"
+                      className="bg-white dark:bg-background text-muted/90 dark:text-muted/10 placeholder:text-muted/50 dark:placeholder:text-muted/40"
                     />
                     <Button 
                       onClick={handleChatSubmit} 
@@ -316,7 +316,7 @@ export default function MiCoachPage() {
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && !searchLoading && handleSearch()}
                       disabled={searchLoading}
-                      className="bg-white dark:bg-slate-950 text-muted/90 dark:text-muted/10 placeholder:text-muted/50 dark:placeholder:text-muted/40"
+                      className="bg-white dark:bg-background text-muted/90 dark:text-muted/10 placeholder:text-muted/50 dark:placeholder:text-muted/40"
                     />
                     <Button 
                       onClick={handleSearch} 
