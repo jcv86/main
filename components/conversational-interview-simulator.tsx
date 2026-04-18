@@ -149,7 +149,7 @@ export function ConversationalInterviewSimulator({
     silenceTimeout: 2000
   })
   
-  const [stage, setStage] = useState<'setup' | 'question' | 'response' | 'feedback' | 'complete'>('setup')
+  const [stage, setStage] = useState<'setup' | 'question' | 'response' | 'feedback' | 'complete'>('response')
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
   const [videoEnabled, setVideoEnabled] = useState(true)
   const [userResponse, setUserResponse] = useState('')
