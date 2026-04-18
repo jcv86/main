@@ -10,6 +10,7 @@ import {
 } from "@/lib/performance-optimizer"
 
 export const maxDuration = 30
+export const dynamic = "force-dynamic"
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now()
