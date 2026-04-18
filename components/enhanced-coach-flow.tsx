@@ -399,7 +399,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                       className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                     >
                       <div
-                        className={`max-w-[85%] rounded-[28px] p-3 ${`}
+                        className={`max-w-[85%] rounded-[28px] p-3 ${
                           message.sender === "user" ? "bg-purple text-purple-foreground" : "bg-muted"
                         }`}
                       >
@@ -420,8 +420,8 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                           <div className="flex-1 min-w-0">
                             <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
                             <p
-                              className={`text-[10px] mt-1 ${`}
-                                message.sender === "user" ? "text-purple-foreground/70" : "text-muted-foreground"`}
+                              className={`text-[10px] mt-1 ${
+                                message.sender === "user" ? "text-purple-foreground/70" : "text-muted-foreground"
                               }`}
                             >
                               {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}

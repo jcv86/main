@@ -489,10 +489,10 @@ export function ConversationalInterviewSimulator({
                     {isSupported && (
                       <button
                         onClick={isListening ? stopListening : startListening}
-                        className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${`}
+                        className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
                           isListening
                             ? 'bg-red hover:bg-red text-white'
-                            : 'bg-blue hover:bg-blue text-white'
+                            : 'bg-muted/20 hover:bg-muted/30 text-muted/60 hover:text-muted/80'
                         }`}
                         title={isListening ? 'Detener' : 'Grabar'}
                       >

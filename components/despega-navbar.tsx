@@ -130,7 +130,7 @@ export function DespeganNavbar() {
                         <Button
                           variant={pathname === route.href ? 'default' : 'ghost'}
                           size="sm"
-                          className={`w-full justify-start rounded-none first:rounded-t-surface-lg last:rounded-b-surface-lg ${`}
+                          className={`w-full justify-start rounded-none first:rounded-t-surface-lg last:rounded-b-surface-lg ${
                             pathname === route.href ? 'bg-muted/80 text-white' : 'text-muted/30 hover:text-white hover:bg-muted/80'
                           }`}
                         >
