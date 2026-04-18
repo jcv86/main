@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import { useContextValidation } from '@/lib/hooks/use-context-validation'
 import { useAvatarPreferences } from '@/lib/hooks/use-avatar-preferences'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
+import { InterviewerSelector } from '@/components/interviewer-selector'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -43,8 +44,8 @@ export function ConversationalInterview({
   onComplete
 }: ConversationalInterviewProps) {
   const { user } = useAuthRedirect()
-  const { validateContextRelevance, validationError, clearError } = useContextValidation()
-  const { preferences } = useAvatarPreferences(user?.id)
+  const { validateContextRelevance } = useContextValidation()
+  const { preferences, updatePreferences } = useAvatarPreferences(user?.id)
   const [stage, setStage] = useState<'setup' | 'interview' | 'feedback'>('setup')
   const [videoEnabled, setVideoEnabled] = useState(true)
   const [audioEnabled, setAudioEnabled] = useState(true)
@@ -57,6 +58,7 @@ export function ConversationalInterview({
   const [isLoading, setIsLoading] = useState(false)
   const [feedbackData, setFeedbackData] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
+  const [selectedInterviewerId, setSelectedInterviewerId] = useState(preferences?.interviewer_avatar_id || 'interviewer-classic-1')
   
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
@@ -96,7 +98,13 @@ export function ConversationalInterview({
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [interviewerMessage])
 
-  const startInterview = () => {
+  const startInterview = async () => {
+    // Save selected interviewer to preferences
+    if (selectedInterviewerId !== preferences?.interviewer_avatar_id) {
+      await updatePreferences({ interviewer_avatar_id: selectedInterviewerId })
+    }
+    setStage('interview')
+  }
     setStage('interview')
     setCurrentQuestionIdx(0)
     const firstQuestion = INTERVIEW_QUESTIONS[level][0].replace('{role}', role)
@@ -203,7 +211,7 @@ export function ConversationalInterview({
 
   if (stage === 'setup') {
     return (
-      <div className="max-w-2xl mx-auto p-6">
+      <div className="max-w-4xl mx-auto p-6 space-y-6">
         <Card>
           <CardHeader>
             <CardTitle>Entrevista Conversacional</CardTitle>
@@ -246,12 +254,18 @@ export function ConversationalInterview({
                 Se te harán preguntas una a una. Tómate tu tiempo para responder de forma clara y profesional.
               </AlertDescription>
             </Alert>
-
-            <Button onClick={startInterview} className="w-full" size="lg">
-              Comenzar Entrevista
-            </Button>
           </CardContent>
         </Card>
+
+        {/* Interviewer Selector */}
+        <InterviewerSelector
+          value={selectedInterviewerId}
+          onChange={setSelectedInterviewerId}
+        />
+
+        <Button onClick={startInterview} className="w-full" size="lg">
+          Comenzar Entrevista
+        </Button>
       </div>
     )
   }
@@ -418,7 +432,7 @@ export function ConversationalInterview({
 function getAvatarEmoji(avatarId: string, type: 'user' | 'interviewer'): string {
   const emojiMap: Record<string, string> = {
     'professional-1': '👔',
-    'creative-1': '🎨',
+    'creative-1': '��',
     'tech-1': '💻',
     'business-1': '🏢',
     'casual-1': '😎',

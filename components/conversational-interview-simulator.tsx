@@ -6,6 +6,7 @@ import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { useContextValidation } from '@/lib/hooks/use-context-validation'
 import { useSpeechRecognition } from '@/lib/hooks/use-speech-recognition'
 import { useAvatarPreferences } from '@/lib/hooks/use-avatar-preferences'
+import { InterviewerSelector } from '@/components/interviewer-selector'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -135,7 +136,7 @@ export function ConversationalInterviewSimulator({
   const { user } = useAuthRedirect()
   const supabase = createClient()
   const { validateContextRelevance, isValidating, validationError, clearError } = useContextValidation()
-  const { preferences } = useAvatarPreferences(user?.id)
+  const { preferences, updatePreferences } = useAvatarPreferences(user?.id)
   
   // STT Hook - usar como en C1
   const { isListening, isSupported, transcript, isFinal, startListening, stopListening, resetTranscript } = useSpeechRecognition({
@@ -154,6 +155,7 @@ export function ConversationalInterviewSimulator({
   const [copied, setCopied] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showCoachTip, setShowCoachTip] = useState(true)
+  const [selectedInterviewerId, setSelectedInterviewerId] = useState(preferences?.interviewer_avatar_id || 'interviewer-classic-1')
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
@@ -215,6 +217,10 @@ export function ConversationalInterviewSimulator({
   const handleStartInterview = () => {
     setStage('question')
     setCurrentQuestionIdx(0)
+    // Save selected interviewer to preferences
+    if (selectedInterviewerId !== preferences?.interviewer_avatar_id) {
+      updatePreferences?.({ interviewer_avatar_id: selectedInterviewerId })
+    }
   }
 
   const handleSubmitResponse = async () => {
@@ -346,47 +352,55 @@ export function ConversationalInterviewSimulator({
     <div className="space-y-6">
       {/* Setup Stage */}
       {stage === 'setup' && (
-        <Card className="border-2 border-emerald-500/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Zap className="w-5 h-5 text-emerald-600" />
-              Simulador Conversacional de Entrevista
-            </CardTitle>
-            <CardDescription>
-              Entrena con un entrevistador adaptativo que hace follow-ups reales basado en tus respuestas
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-lg border border-emerald-200 dark:border-emerald-800 space-y-3">
-              <p className="font-bold text-emerald-900 dark:text-emerald-200">Aquí está el diferencial:</p>
-              <ul className="space-y-2 text-sm text-emerald-800 dark:text-emerald-300">
-                <li className="flex gap-2">
-                  <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                  <span><strong>Respuestas vagas?</strong> Te pediré ejemplo. <strong>Demasiado largo?</strong> Te interrumpiré.</span>
-                </li>
-                <li className="flex gap-2">
-                  <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                  <span><strong>Segundo intento inmediato.</strong> Las mejores respuestas salen en el segundo round.</span>
-                </li>
-                <li className="flex gap-2">
-                  <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                  <span><strong>Debrief STAR detallado:</strong> Dónde ganaste puntos, dónde perdiste, y cómo sonarías mejor.</span>
-                </li>
-                <li className="flex gap-2">
-                  <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                  <span><strong>Lenguaje para copiar-pegar.</strong> Frases exactas que sonarían mejor en esa situación.</span>
-                </li>
-              </ul>
-            </div>
+        <div className="space-y-6">
+          <Card className="border-2 border-emerald-500/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="w-5 h-5 text-emerald-600" />
+                Simulador Conversacional de Entrevista
+              </CardTitle>
+              <CardDescription>
+                Entrena con un entrevistador adaptativo que hace follow-ups reales basado en tus respuestas
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-lg border border-emerald-200 dark:border-emerald-800 space-y-3">
+                <p className="font-bold text-emerald-900 dark:text-emerald-200">Aquí está el diferencial:</p>
+                <ul className="space-y-2 text-sm text-emerald-800 dark:text-emerald-300">
+                  <li className="flex gap-2">
+                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span><strong>Respuestas vagas?</strong> Te pediré ejemplo. <strong>Demasiado largo?</strong> Te interrumpiré.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span><strong>Segundo intento inmediato.</strong> Las mejores respuestas salen en el segundo round.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span><strong>Debrief STAR detallado:</strong> Dónde ganaste puntos, dónde perdiste, y cómo sonarías mejor.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span><strong>Lenguaje para copiar-pegar.</strong> Frases exactas que sonarían mejor en esa situación.</span>
+                  </li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
 
-            <Button
-              onClick={handleStartInterview}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12 text-lg"
-            >
-              Comenzar Simulación
-            </Button>
-          </CardContent>
-        </Card>
+          {/* Interviewer Selector */}
+          <InterviewerSelector
+            value={selectedInterviewerId}
+            onChange={setSelectedInterviewerId}
+          />
+
+          <Button
+            onClick={handleStartInterview}
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12 text-lg"
+          >
+            Comenzar Simulación
+          </Button>
+        </div>
       )}
 
       {/* Question Display Stage */}
