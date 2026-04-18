@@ -55,14 +55,20 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
-        // DTC Brand colors - PER BRANDBOOK
-        purple: "hsl(var(--purple))",  // El Ritual (A1)
-        blue: "hsl(var(--blue))",      // Exploración (A2)
-        orange: "hsl(var(--orange))",  // Entrenamiento (A3)
-        cyan: "hsl(var(--cyan))",      // La Realidad (A4)
-        yellow: "hsl(var(--yellow))",  // Support/Accent
-        red: "hsl(var(--red))",        // Error
-        green: "hsl(var(--green))",    // Success
+        // 6-Color Psychology System
+        yellow: "hsl(var(--yellow))",    // Activates Memory
+        orange: "hsl(var(--orange))",    // Stimulates Appetite
+        red: "hsl(var(--red))",          // Encourages Action
+        green: "hsl(var(--green))",      // Relaxes Mentally
+        purple: "hsl(var(--purple))",    // Encourages Creativity
+        blue: "hsl(var(--blue))",        // Increases Productivity
+        
+        // 4-Pillar System (for UI phases)
+        ritual: "hsl(var(--ritual))",        // El Ritual (A1)
+        exploration: "hsl(var(--exploration))",  // Exploración (A2)
+        training: "hsl(var(--training))",    // Entrenamiento (A3)
+        reality: "hsl(var(--reality))",      // La Realidad (A4)
+        cyan: "hsl(var(--cyan))",           // La Realidad support
       },
       borderRadius: {
         DEFAULT: "20px",

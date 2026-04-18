@@ -13,14 +13,22 @@
     --card: 0 0% 2%;                 /* #050505 */
     --muted: 40 5% 72%;              /* #B8B8B2 */
     
-    /* Brand accent colors - PER BRANDBOOK.md */
-    --purple: 264 85% 54%;           /* #A855F7 - El Ritual (A1) */
-    --blue: 217 91% 60%;             /* #3B82F6 - Exploración (A2) */
-    --orange: 17 96% 61%;            /* #F97316 - Entrenamiento (A3) */
-    --cyan: 186 100% 42%;            /* #06B6D4 - La Realidad (A4) */
-    --yellow: 46 78% 44%;            /* #E4BF37 - Support/Accent */
-    --red: 0 84% 60%;                /* #EF4444 - Error */
-    --green: 142 71% 45%;            /* #22C55E - Success */
+    /* 6-Color Psychology System - PER BRANDBOOK IMAGE */
+    --yellow: 47 100% 50%;           /* #FFD700 - Activates Memory */
+    --orange: 24 100% 50%;           /* #FF7F00 - Stimulates Appetite */
+    --red: 0 100% 50%;               /* #FF0000 - Encourages Action */
+    --green: 120 100% 25%;           /* #008000 - Relaxes Mentally */
+    --purple: 270 100% 50%;          /* #8000FF - Encourages Creativity */
+    --blue: 240 100% 50%;            /* #0000FF - Increases Productivity */
+    
+    /* Pillar System (4 phases) - for UI navigation */
+    --ritual: 264 85% 54%;           /* #A855F7 - El Ritual (A1) */
+    --exploration: 217 91% 60%;      /* #3B82F6 - Exploración (A2) */
+    --training: 17 96% 61%;          /* #F97316 - Entrenamiento (A3) */
+    --reality: 186 100% 42%;         /* #06B6D4 - La Realidad (A4) */
+    
+    /* Support Colors */
+    --cyan: 186 100% 42%;            /* #06B6D4 - Cyan (La Realidad) */
     
     /* Borders - elevated subtlety */
     --border: rgba(255, 255, 255, 0.10);
