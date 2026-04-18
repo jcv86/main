@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server"
 
 export async function POST(request: Request) {
   try {
+    const supabase = await createClient()
     const { alertId, acknowledgedBy, resolutionNotes } = await request.json()
 
     if (!alertId) {
