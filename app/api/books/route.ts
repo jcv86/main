@@ -72,6 +72,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: Request) {
   try {
+    const supabase = await createClient()
     const body = await request.json()
     const { title, category, description, author, tags, rating, pages, published_year, difficulty, reading_time, key_topics, is_recommended } = body
 
