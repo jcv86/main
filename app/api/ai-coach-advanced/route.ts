@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase/server"
 import { OPENAI_API_KEY } from "@/lib/config"
 
 export async function POST(request: NextRequest) {
