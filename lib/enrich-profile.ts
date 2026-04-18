@@ -53,7 +53,6 @@ export async function enrichProfileFromGoogle(
 
     if (existingProfile) {
       // Actualizar
-      // @ts-expect-error - Table may not exist at build time, will work at runtime
       const { error: updateError } = await supabase
         .from("user_profiles_enriched")
         .update(profileData)
@@ -149,7 +148,6 @@ export async function enrichProfileFromLinkedIn(
         updated_at: new Date().toISOString(),
       }
 
-      // @ts-expect-error - Table may not exist at build time, will work at runtime
       const { error: updateError } = await supabase
         .from("user_profiles_enriched")
         .update(merged)
