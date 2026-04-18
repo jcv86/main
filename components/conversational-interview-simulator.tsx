@@ -245,33 +245,33 @@ export function ConversationalInterviewSimulator({
         return
       }
 
-      // Simulate scoring - in production would call AI API
-      const score = Math.floor(Math.random() * 35 + 65) // 65-100
-      const followUp = generateFollowUp(userResponse, currentQuestion)
+      // Call smart interviewer agent API for intelligent feedback
+      console.log('[v0] Calling interviewer agent for:', selectedInterviewerId)
+      const evaluatorResponse = await fetch('/api/interview/evaluator', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          interviewerId: selectedInterviewerId,
+          question: currentQuestion.text,
+          userResponse,
+          questionCategory: currentQuestion.category,
+          difficulty: level
+        })
+      })
+
+      if (!evaluatorResponse.ok) {
+        throw new Error('Failed to generate interviewer feedback')
+      }
+
+      const evaluatorData = await evaluatorResponse.json()
+      const { score, feedback, followUp } = evaluatorData
 
       const newAttempt: AttemptResult = {
         attemptNumber: currentAttempts.length + 1,
         userResponse,
         score,
         followUp,
-        feedback: {
-          strengths: [
-            'Respuesta clara y estructurada',
-            'Uso de ejemplos concretos',
-            'Impacto medible'
-          ],
-          improvements: [
-            'Profundizar en el resultado',
-            'Reducir el tiempo de respuesta',
-            'Conectar con los valores de la empresa'
-          ],
-          staAnalysis: {
-            situation: 'Bien planteado el contexto',
-            task: 'Tu responsabilidad es clara',
-            action: 'Acciones específicas mencionadas',
-            result: 'Impacto demostrado'
-          }
-        }
+        feedback
       }
 
       setAttempts({
