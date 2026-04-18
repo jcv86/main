@@ -80,7 +80,14 @@ const CrossTestAnalysisSchema = z.object({
 })
 
 export class EnhancedTestAnalyzer {
-  private supabase = createClient()
+  private supabaseInstance: any = null
+
+  private getSupabase() {
+    if (!this.supabaseInstance) {
+      this.supabaseInstance = createClient()
+    }
+    return this.supabaseInstance
+  }
 
   /**
    * Analyze multiple test results together for comprehensive insights
@@ -326,14 +333,14 @@ Enfócate en:
    */
   private async storeCrossTestAnalysis(userId: string, testResults: TestResult[], analysis: CrossTestAnalysis) {
     try {
-      const { data: profile } = await this.supabase.from("user_profiles").select("email").eq("id", userId).single()
+    const { data: profile } = await this.getSupabase().from("user_profiles").select("email").eq("id", userId).single()
 
       if (!profile?.email) {
         console.error("User profile not found")
         return
       }
 
-      await this.supabase.from("cerebro_cross_test_analysis").insert({
+      await this.getSupabase().from("cerebro_cross_test_analysis").insert({
         user_email: profile.email,
         test_types: testResults.map((t) => t.testType),
         combined_profile: {
@@ -397,11 +404,11 @@ Enfócate en:
    * Get latest cross-test analysis for user
    */
   async getLatestCrossTestAnalysis(userId: string): Promise<CrossTestAnalysis | null> {
-    const { data: profile } = await this.supabase.from("user_profiles").select("email").eq("id", userId).single()
+    const { data: profile } = await this.getSupabase().from("user_profiles").select("email").eq("id", userId).single()
 
     if (!profile?.email) return null
 
-    const { data, error } = await this.supabase
+    const { data, error } = await this.getSupabase()
       .from("cerebro_cross_test_analysis")
       .select("*")
       .eq("user_email", profile.email)
