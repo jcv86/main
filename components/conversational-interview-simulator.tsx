@@ -181,21 +181,31 @@ export function ConversationalInterviewSimulator({
 
   // Initialize camera - keep running for entire session
   useEffect(() => {
+    console.log('[v0] useEffect camera triggered - videoEnabled:', videoEnabled)
     if (videoEnabled) {
+      console.log('[v0] Calling initializeCamera...')
       initializeCamera()
-      return () => stopCamera()
+      return () => {
+        console.log('[v0] Cleanup: stopping camera')
+        stopCamera()
+      }
     }
   }, [videoEnabled])
 
   const initializeCamera = async () => {
     try {
+      console.log('[v0] initializeCamera called, videoRef:', videoRef?.current)
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
         audio: false // Audio handled by Web Speech API, not MediaRecorder
       })
+      console.log('[v0] getUserMedia success, stream:', stream)
       streamRef.current = stream
       if (videoRef.current) {
         videoRef.current.srcObject = stream
+        console.log('[v0] Stream assigned to video element')
+      } else {
+        console.log('[v0] ERROR: videoRef.current is null!')
       }
       console.log('[v0] Camera initialized, ready for user to start STT')
     } catch (err) {
