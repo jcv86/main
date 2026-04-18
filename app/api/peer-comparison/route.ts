@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server"
 
 export async function GET(request: NextRequest) {
   try {
+    const supabase = await createClient()
     const { searchParams } = new URL(request.url)
     const testType = searchParams.get("testType")
     const score = Number.parseInt(searchParams.get("score") || "0")
