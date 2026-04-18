@@ -4,13 +4,17 @@ import { useEffect, useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
 interface AvatarPreferences {
-  user_avatar_id: string
+  user_avatar_id?: string // Legacy field, kept for backwards compatibility
+  user_avatar_url?: string | null // User's profile photo URL
+  user_avatar_source?: string // 'profile' | 'camera' | 'google' | 'linkedin'
   interviewer_avatar_id: string
 }
 
 export function useAvatarPreferences(userId?: string) {
   const [preferences, setPreferences] = useState<AvatarPreferences>({
-    user_avatar_id: 'professional-1',
+    user_avatar_id: 'professional-1', // Kept for backwards compatibility
+    user_avatar_url: null,
+    user_avatar_source: 'profile',
     interviewer_avatar_id: 'interviewer-classic-1'
   })
   const [loading, setLoading] = useState(true)
@@ -27,7 +31,7 @@ export function useAvatarPreferences(userId?: string) {
         const supabase = createClient()
         const { data, error: fetchError } = await supabase
           .from('avatar_preferences')
-          .select('user_avatar_id, interviewer_avatar_id')
+          .select('user_avatar_id, user_avatar_url, user_avatar_source, interviewer_avatar_id')
           .eq('user_id', userId)
           .single()
 
@@ -38,6 +42,8 @@ export function useAvatarPreferences(userId?: string) {
         if (data) {
           setPreferences({
             user_avatar_id: data.user_avatar_id,
+            user_avatar_url: data.user_avatar_url,
+            user_avatar_source: data.user_avatar_source,
             interviewer_avatar_id: data.interviewer_avatar_id
           })
         }
