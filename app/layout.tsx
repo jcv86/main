@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Montserrat, Playfair_Display } from "next/font/google"
 import "./globals.css"
 import { Providers } from "./providers"
 import { Toaster } from "@/components/ui/toaster"
@@ -14,7 +14,18 @@ if (typeof window === "undefined") {
   validateEnvironment()
 }
 
-const inter = Inter({ subsets: ["latin"] })
+// DTC Brand Typography
+const montserrat = Montserrat({ 
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  weight: ["400", "500", "600", "700"],
+})
+
+const playfairDisplay = Playfair_Display({ 
+  subsets: ["latin"],
+  variable: "--font-playfair-display",
+  weight: ["700"],
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://despegatucarrera.cl"),
@@ -119,7 +130,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#7c3aed" />
+        <meta name="theme-color" content="#000000" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <script
@@ -137,7 +148,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={`${montserrat.className} ${playfairDisplay.variable}`} suppressHydrationWarning>
         <Providers>
           {children}
           <LLMOOptimizedFooter />
