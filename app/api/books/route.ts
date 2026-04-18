@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server"
 
 export async function GET(request: NextRequest) {
   try {
+    const supabase = await createClient()
     // Extract query parameters for advanced filtering
     const searchParams = request.nextUrl.searchParams
     const category = searchParams.get('category')

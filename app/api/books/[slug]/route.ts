@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   try {
+    const supabase = await createClient()
     const { slug } = await params
 
     console.log("[v0] Searching for book with slug:", slug)
