@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { ArrowLeft, BookOpen, Play, Lock, CheckCircle2, Brain, Target, Video, Lightbulb, Loader2 } from 'lucide-react'
 import { InteractiveTrainingSession } from '@/components/interactive-training-session'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
+import { ConversationalInterviewSimulator } from '@/components/conversational-interview-simulator'
 
 const TRAINING_MODULES = [
   {
@@ -275,15 +276,9 @@ export default function GuidedTrainingPage() {
                 </div>
                 
                 <div className="flex-1 overflow-hidden p-4">
-                  <InteractiveTrainingSession
-                    question={currentLesson === 0 
-                      ? "Cuéntame sobre un proyecto importante que lideraste. Usa STAR: Situación, Tarea, Acción (qué específicamente HICISTE), Resultado."
-                      : "Cuéntame la sección 'Acción' de tu historia. ¿Qué fue lo específico que TÚ hiciste? Sé detallado."}
-                    guidance={currentLesson === 0 
-                      ? "1. Empieza describiendo el contexto (Situación)\n2. Explica tu responsabilidad (Tarea)\n3. Detalla exactamente qué acciones tomaste (Acción - usa 'yo', 'decidí', 'implementé')\n4. Termina con el resultado medible que obtuviste\n\nRecuerda: Habla claro, mantén contacto visual con la cámara, y sé específico con números/impacto."
-                      : "Enfócate en la parte Acción:\n1. Usa verbos de acción: implementé, diseñé, lideré, resolví\n2. Sé específico - no digas 'el equipo trabajó', sino 'yo investigué X, propuse Y, implementé Z'\n3. Cuantifica si es posible (líneas de código, % de mejora, tiempo ahorrado)\n4. Muestra liderazgo o iniciativa\n\nIntenta responder en 1-2 minutos."}
-                    estimatedTime="2-3 minutos"
-                    trainingType="guided"
+                  <ConversationalInterviewSimulator
+                    level="basico"
+                    onComplete={() => setShowVideoSession(false)}
                   />
                 </div>
               </div>
