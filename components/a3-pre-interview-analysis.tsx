@@ -167,7 +167,7 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
         )}
 
         {/* Readiness Score */}
-        <div className="bg-gradient-to-r from-blue-50 to-blue/5 p-6 rounded-[28px] border border-blue/20">
+        <div className="bg-background">
           <div className="text-sm text-muted/60 mb-2">Preparación General</div>
           <div className="flex items-center gap-4">
             <div className="text-4xl font-bold text-indigo-600">

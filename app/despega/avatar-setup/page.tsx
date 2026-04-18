@@ -175,7 +175,7 @@ export default function AvatarSetupPage() {
         </div>
 
         {/* Benefits */}
-        <Card className="border-muted/20 dark:border-muted/80 bg-gradient-to-br from-white to-muted/5">
+        <Card className="border-muted/20 dark:border-muted/80 bg-background">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5 text-green" />

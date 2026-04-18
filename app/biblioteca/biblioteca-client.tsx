@@ -201,16 +201,16 @@ export default function BibliotecaPage() {
   const filteredBooks = getFilteredBooks()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 bg-gradient-to-br from-purple/50 to-blue rounded-xl">
+            <div className="p-3 bg-background">
               <BookOpen className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-5xl font-bold bg-purple bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Biblioteca Digital</h1>
+              <h1 className="text-5xl font-bold text-purple400400">Biblioteca Digital</h1>
               <p className="text-muted/70 dark:text-muted/30 font-medium">
                 {user
                   ? `Hola ${user.email?.split("@")[0]}, aquí están tus recursos personalizados`
@@ -222,7 +222,7 @@ export default function BibliotecaPage() {
 
       {/* Personalized Recommendations Section */}
       {user && (
-        <Card className="mb-8 border-2 border-blue/20 dark:border-blue bg-gradient-to-r from-blue/5 to-purple/5 dark:from-muted/90 dark:to-muted/80">
+        <Card className="mb-8 border-2 border-blue/20 dark:border-blue bg-background">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">

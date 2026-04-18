@@ -20,35 +20,35 @@ export function MilestoneAchievement({ milestone, userName, onClose }: Milestone
       title: '¡Fase A1 Completada!',
       message: `Excelente, ${userName}. Ahora te conoces mejor. Es hora de decidir quién quieres ser.`,
       icon: Trophy,
-      color: 'from-blue-500 to-blue-600',
+      color: 'from-blue-500600',
       showConfetti: true,
     },
     a2_started: {
       title: 'Bienvenido a A2',
       message: 'Tu plan de 90 días comienza aquí. Cada semana, una acción más cercana a tu transformación.',
       icon: Zap,
-      color: 'from-green-500 to-green-600',
+      color: 'from-green-500600',
       showConfetti: false,
     },
     a4_started: {
       title: 'Contexto Desbloqueado',
       message: 'Ahora ves el panorama completo. Noticias, oportunidades y tendencias que importan.',
       icon: Star,
-      color: 'from-cyan-500 to-cyan-600',
+      color: 'from-cyan-500600',
       showConfetti: false,
     },
     a2a4_completed: {
       title: '¡Plan + Contexto Listos!',
       message: 'Tu plan y el mercado se alinearon. A3 ahora tiene todo lo que necesita para entrenamientos realistas.',
       icon: Trophy,
-      color: 'from-purple-500 to-purple',
+      color: 'from-purple-500',
       showConfetti: true,
     },
     a3_ready: {
       title: 'A3: La Práctica Comienza',
       message: `${userName}, estás listo para entrenamientos personalizados. Prepárate para brillar.`,
       icon: Zap,
-      color: 'from-orange-500 to-orange-600',
+      color: 'from-orange-500600',
       showConfetti: true,
     },
   }
@@ -71,7 +71,7 @@ export function MilestoneAchievement({ milestone, userName, onClose }: Milestone
       >
         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShow(false)} />
         
-        <Card className={`relative bg-gradient-to-br ${current.color} text-white max-w-md w-full shadow-2xl overflow-hidden`}>
+        <Card className={`relative bg-background
           <motion.div
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}

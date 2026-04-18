@@ -30,10 +30,10 @@ const routeIcons: Record<string, any> = {
 }
 
 const routeColors: Record<string, string> = {
-  'liderazgo': 'from-blue to-blue',
-  'comunicacion': 'from-green to-green',
-  'emprendimiento': 'from-yellow/50 to-amber-600',
-  'transformacion': 'from-purple/50 to-purple',
+  'liderazgo': 'from-blue',
+  'comunicacion': 'from-green',
+  'emprendimiento': 'from-yellow/50600',
+  'transformacion': 'from-purple/50',
 }
 
 export default function A2RoutasPage() {
@@ -141,7 +141,7 @@ export default function A2RoutasPage() {
         beneficios: route.beneficios || [],
         razon_seleccion: route.razon_seleccion,
         icon: routeIcons[route.tipo] || Target,
-        color: routeColors[route.tipo] || 'from-muted/50 to-muted/60'
+        color: routeColors[route.tipo] || 'from-muted/50/60'
       }))
 
       setRoutes(formattedRoutes)
@@ -183,7 +183,7 @@ export default function A2RoutasPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/50 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center">
           <Loader2 className="h-12 w-12 animate-spin mx-auto text-purple mb-4" />
           <p className="text-lg text-muted-foreground">Generando tus rutas personalizadas...</p>
@@ -194,7 +194,7 @@ export default function A2RoutasPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background">
         <Card className="max-w-md border-red/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-red">
@@ -214,11 +214,11 @@ export default function A2RoutasPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/50 py-12">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 max-w-5xl">
         {/* Header */}
         <div className="mb-12 text-center">
-          <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+          <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-background">
             Tu Ruta Personalizada
           </h1>
           <p className="text-lg text-muted-foreground mb-6">
@@ -253,7 +253,7 @@ export default function A2RoutasPage() {
               >
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`p-3 rounded-[28px] bg-gradient-to-br ${route.color}`}>
+                    <div className={`p-3 rounded-[28px] bg-background
                       {route.icon && createElement(route.icon, { className: 'w-6 h-6 text-white' })}
                     </div>
                   </div>

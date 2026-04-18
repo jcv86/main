@@ -61,7 +61,7 @@ export function JobRecommendationsCard() {
   }
 
   return (
-    <Card className="border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20">
+    <Card className="border-amber-200 bg-background">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Briefcase className="w-5 h-5 text-amber-600" />

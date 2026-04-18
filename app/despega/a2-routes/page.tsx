@@ -33,9 +33,9 @@ export default function A2RoutesPage() {
   // Milestone color helper
   const getMilestoneColor = (days: 30 | 60 | 90) => {
     const colorsMap = {
-      30: 'from-blue to-blue',
-      60: 'from-purple to-purple/50',
-      90: 'from-green to-green'
+      30: 'from-blue',
+      60: 'from-purple/50',
+      90: 'from-green'
     }
     return colorsMap[days]
   }
@@ -266,10 +266,10 @@ export default function A2RoutesPage() {
               const isExpanded = expandedMilestone === days
               
               return (
-                <div key={days} className="bg-gradient-to-br from-muted/80/50 to-muted/70/30 border border-muted/70/50 rounded-xl overflow-hidden">
+                <div key={days} className="bg-background">
                   <button
                     onClick={() => setExpandedMilestone(isExpanded ? null : days)}
-                    className={`w-full p-6 text-left bg-gradient-to-r ${getMilestoneColor(days)} text-white hover:opacity-90 transition`}
+                    className={`w-full p-6 text-left bg-background
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
@@ -329,7 +329,7 @@ export default function A2RoutesPage() {
             })}
 
             {/* Success Metrics */}
-            <div className="bg-gradient-to-br from-green/20 to-green/10 border border-green/30 rounded-[28px] p-6">
+            <div className="bg-background">
               <h3 className="text-lg font-bold text-emerald-400 mb-4">Métricas de Éxito</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex gap-3">
@@ -386,7 +386,7 @@ export default function A2RoutesPage() {
               </Card>
             </div>
 
-            <div className="p-6 bg-gradient-to-r from-blue/30 to-blue/30 border border-blue/50/30 rounded-lg">
+            <div className="p-6 bg-background">
               <p className="text-muted/30 mb-4">
                 <strong>Este es tu plan. Adáptalo según sea necesario.</strong> La vida acontece, y el plan puede cambiar. 
                 Si necesitas ajustes o tienes preguntas, habla con el coach.

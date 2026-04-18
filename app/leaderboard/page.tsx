@@ -44,16 +44,16 @@ export default function LeaderboardPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
+    <div className="min-h-screen bg-background">
       <div className="container max-w-5xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple/10 to-yellow-100 dark:from-purple/30 dark:to-yellow-900/30 rounded-full mb-4">
+          <div className="inline-block px-4 py-2 bg-background">
             <p className="text-sm font-semibold text-purple dark:text-purple/30">Compite y Crece</p>
           </div>
           <div className="flex items-center gap-3 mb-4">
             <Trophy className="h-10 w-10 text-orange" />
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-purple via-blue to-yellow-500 bg-clip-text text-transparent dark:from-purple-400 dark:via-blue-400 dark:to-yellow-400">Ranking de Lectores</h1>
+            <h1 className="text-5xl font-bold bg-background">Ranking de Lectores</h1>
           </div>
           <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">
             Compite con otros usuarios y sube en el ranking

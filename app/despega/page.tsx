@@ -121,7 +121,7 @@ export default function DespegazoDashboard() {
 
   if (loading || !progress || !readiness) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple to-background">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-purple/50" />
           <p className="text-muted/30">Cargando tu dashboard...</p>
@@ -138,7 +138,7 @@ export default function DespegazoDashboard() {
       href: '/despega/a1-report',
       score: readiness.a1_completeness,
       icon: '🎯',
-      color: 'from-purple/50 to-blue'
+      color: 'from-purple/50'
     },
     {
       name: 'A2: Exploración',
@@ -147,7 +147,7 @@ export default function DespegazoDashboard() {
       href: '/despega/a2-routes',
       score: readiness.a2_completeness,
       icon: '🗺️',
-      color: 'from-blue to-blue'
+      color: 'from-blue'
     },
     {
       name: 'A3: Entrenamiento',
@@ -159,7 +159,7 @@ export default function DespegazoDashboard() {
       href: '/despega/a3-dashboard',
       score: readiness.a3_completeness,
       icon: '⚡',
-      color: 'from-blue to-blue'
+      color: 'from-blue'
     },
     {
       name: 'A4: La Realidad',
@@ -168,7 +168,7 @@ export default function DespegazoDashboard() {
       href: '/despega/a4-radar',
       score: readiness.a4_completeness,
       icon: '📡',
-      color: 'from-blue/50 to-green'
+      color: 'from-blue/50'
     }
   ]
 
@@ -180,7 +180,7 @@ export default function DespegazoDashboard() {
       : 'text-orange/40'
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple via-background to-muted/90 text-white p-4 py-12">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto">
         {/* Hero Header */}
         <div className="mb-16">
@@ -188,7 +188,7 @@ export default function DespegazoDashboard() {
             <Zap className="w-8 h-8 text-purple/40" />
             <h1 className="text-5xl md:text-6xl font-black text-white leading-tight">
               Tu Transformación <br />
-              <span className="bg-gradient-to-r from-purple-400 via-blue-400 to-blue/40 bg-clip-text text-transparent">
+              <span className="bg-background">
                 Despega
               </span>
             </h1>
@@ -200,7 +200,7 @@ export default function DespegazoDashboard() {
         </div>
 
         {/* Readiness Score - Premium */}
-        <div className="mb-16 bg-gradient-to-br from-purple/40 to-blue-900/40 border border-purple/50/20 rounded-2xl p-12 backdrop-blur">
+        <div className="mb-16 bg-background">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div className="flex flex-col items-center justify-center">
               <div className={`text-7xl font-black ${scoreColor} mb-2`}>
@@ -209,7 +209,7 @@ export default function DespegazoDashboard() {
               <p className="text-muted/40 text-sm font-semibold">Readiness Score</p>
               <div className="mt-4 w-full h-1 bg-muted/80 rounded-full overflow-hidden">
                 <div
-                  className={`h-full bg-gradient-to-r ${scoreColor === 'text-emerald-400' ? 'from-green/50 to-blue/40' : scoreColor === 'text-yellow/40' ? 'from-yellow-500 to-orange-400' : 'from-orange/50 to-red-400'} transition-all duration-500`}
+                  className={`h-full bg-background
                   style={{ width: `${readiness.overall_score}%` }}
                 />
               </div>
@@ -231,7 +231,7 @@ export default function DespegazoDashboard() {
 
         {/* Strengths & Gaps */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-          <div className="bg-gradient-to-br from-green/40 to-blue/40 border border-green/20 rounded-xl p-6">
+          <div className="bg-background">
             <h3 className="text-lg font-bold text-emerald-400 mb-4 flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5" /> Fortalezas
             </h3>
@@ -246,7 +246,7 @@ export default function DespegazoDashboard() {
             </ul>
           </div>
 
-          <div className="bg-gradient-to-br from-orange/40 to-red-900/40 border border-orange/20 rounded-xl p-6">
+          <div className="bg-background">
             <h3 className="text-lg font-bold text-orange/40 mb-4 flex items-center gap-2">
               <AlertCircle className="w-5 h-5" /> Áreas de Mejora
             </h3>
@@ -270,7 +270,7 @@ export default function DespegazoDashboard() {
             <div
               key={i}
               onClick={() => router.push(stage.href)}
-              className="group cursor-pointer bg-gradient-to-r from-muted/80/50 to-muted/70/30 border border-muted/70/50 hover:border-muted/60 rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
+              className="group cursor-pointer bg-background"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-4">
@@ -305,7 +305,7 @@ export default function DespegazoDashboard() {
                 className={`w-full group/btn ${
                   stage.completed
                     ? 'bg-muted/70 hover:bg-muted/60 text-muted/30'
-                    : `bg-gradient-to-r ${stage.color} hover:shadow-lg text-white font-semibold`
+                    : `bg-background
                 }`}
               >
                 {stage.completed ? 'Ver Detalles' : 'Continuar'}

@@ -6,11 +6,11 @@ import { MessageCircle, Crown, Users, Puzzle, RotateCcw, Heart, Clock, Target, S
 
 export default function SoftSkillsResultsLoading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red/5 via-purple-50 to-blue/5 p-4">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="h-8 bg-gradient-to-r from-red/30 to-purple-300 rounded-lg mb-4 animate-pulse"></div>
+          <div className="h-8 bg-background"></div>
           <div className="h-4 bg-muted/20 rounded-lg w-2/3 mx-auto animate-pulse"></div>
         </div>
 

@@ -41,7 +41,7 @@ export function DailyCareerTip({ careerStage = "all" }: { careerStage?: string }
 
   if (loading) {
     return (
-      <Card className="border-border bg-gradient-to-br from-purple-50 to-blue-50 dark:from-slate-800 dark:to-slate-700">
+      <Card className="border-border bg-background">
         <CardContent className="pt-6">
           <div className="flex items-center gap-3">
             <Lightbulb className="h-5 w-5 animate-pulse text-purple dark:text-purple/40" />
@@ -55,7 +55,7 @@ export function DailyCareerTip({ careerStage = "all" }: { careerStage?: string }
   if (!tip) return null
 
   return (
-    <Card className="border-purple/20 dark:border-muted/70 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-slate-800 dark:to-slate-700">
+    <Card className="border-purple/20 dark:border-muted/70 bg-background">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <CardTitle className="text-base font-semibold text-purple dark:text-purple/20 flex items-center gap-2">

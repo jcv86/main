@@ -41,7 +41,7 @@ export function MiniTest({
   }
 
   return (
-    <Card className="border-0 bg-gradient-to-br from-purple-500/5 to-blue-500/5 backdrop-blur-sm">
+    <Card className="border-0 bg-background">
       <CardHeader>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">

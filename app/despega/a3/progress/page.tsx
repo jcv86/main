@@ -49,7 +49,7 @@ export default function ProgressPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-muted/90 dark:via-purple-900/20 dark:to-muted/90 p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <Link href="/despega/a3">
@@ -171,7 +171,7 @@ export default function ProgressPage() {
                 { badge: '✨ Consistencia', desc: '5 entrenamientos completados' },
                 { badge: '🚀 Progresista', desc: 'Alcanza nivel Intermedio' },
               ].map((item) => (
-                <Card key={item.badge} className="bg-gradient-to-br from-yellow/5 to-orange/5 dark:from-yellow/20 dark:to-orange/20 border-yellow/30 dark:border-yellow">
+                <Card key={item.badge} className="bg-background">
                   <CardContent className="pt-6 text-center">
                     <div className="text-3xl mb-2">{item.badge}</div>
                     <p className="text-sm text-muted/70 dark:text-muted/30">{item.desc}</p>
@@ -183,7 +183,7 @@ export default function ProgressPage() {
         </Card>
 
         {/* Tips */}
-        <Card className="bg-gradient-to-r from-purple/5 to-blue/5 dark:from-purple/20 dark:to-blue/20 border-0">
+        <Card className="bg-background">
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-purple text-lg">💡</div>
             <div>

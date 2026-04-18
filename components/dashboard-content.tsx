@@ -116,10 +116,10 @@ export function DashboardContent() {
     : 0
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 space-y-6 p-6">
+    <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="mb-8 px-2">
-        <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">
+        <h1 className="text-5xl font-bold bg-background">
           Tu Dashboard
         </h1>
         <p className="text-lg text-muted/70 dark:text-muted/30">Bienvenido a tu centro de comando Despega</p>
@@ -251,7 +251,7 @@ export function DashboardContent() {
 
               {/* Dominant Profile */}
               {testResults.test_results.dominant_profile && (
-                <div className="p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-[28px] border border-purple/30">
+                <div className="p-4 bg-background">
                   <p className="text-sm font-medium text-muted-foreground mb-2">Tu Perfil Dominante</p>
                   <p className="text-2xl font-bold text-purple">{testResults.test_results.dominant_profile}</p>
                   {testResults.test_results.secondary_profile && (

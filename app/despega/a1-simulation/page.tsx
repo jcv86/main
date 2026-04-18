@@ -98,12 +98,12 @@ export default function A1SimulationPage() {
         title="A1: Origen" 
         subtitle="Simulación Completada" 
         icon="🎭" 
-        colorClass="from-blue to-blue"
+        colorClass="from-blue"
       >
         <ASectionPart title="¡Excelente!" icon={<CheckCircle2 />}>
-          <div className="bg-gradient-to-br from-blue/30 to-blue/20 border border-blue/30 rounded-[28px] p-8 text-center mb-8">
+          <div className="bg-background">
             <div className="mb-4">
-              <div className="text-5xl font-black text-transparent bg-gradient-to-r from-blue/40 to-blue/40 bg-clip-text mb-2">
+              <div className="text-5xl font-black text-transparent bg-background">
                 {profileNames[profile]}
               </div>
               <p className="text-lg text-muted/30">Completaste la simulación de entrevista</p>
@@ -162,7 +162,7 @@ export default function A1SimulationPage() {
       title="A1: Origen" 
       subtitle="Simulación de Entrevista" 
       icon="🎭" 
-      colorClass="from-blue to-blue"
+      colorClass="from-blue"
     >
       <ASectionPart title={`Pregunta ${currentQuestion + 1} de ${SIMULATION_QUESTIONS.length}`} icon={<Zap />}>
         <div className="mb-6">

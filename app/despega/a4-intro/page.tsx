@@ -43,7 +43,7 @@ export default function A4IntroPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-green/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <StepHeader
           stepNumber={4}
@@ -190,7 +190,7 @@ export default function A4IntroPage() {
             </CardContent>
           </Card>
 
-          <div className="p-6 bg-gradient-to-r from-blue to-emerald-600 rounded-lg shadow-lg">
+          <div className="p-6 bg-background">
             <h3 className="text-xl font-bold text-white mb-2">Bienvenido a La Realidad</h3>
             <p className="text-teal-100 mb-6">Aquí es donde todo tu trabajo cobra vida. Entra al dashboard y comienza tu ejecución estratégica.</p>
             <Button 

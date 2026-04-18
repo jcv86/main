@@ -107,7 +107,7 @@ export function DashboardHero({
           </div>
           <div className="w-full h-3 bg-muted/20 dark:bg-muted/70 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-500"
+              className="h-full bg-background"
               style={{ width: `${Math.max(progressPercent, 3)}%` }}
             />
           </div>

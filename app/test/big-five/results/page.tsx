@@ -161,7 +161,7 @@ export default function BigFiveResults() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple/5 to-pink-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <Card className="w-96">
           <CardContent className="p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
@@ -175,7 +175,7 @@ export default function BigFiveResults() {
 
   if (!testResult) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple/5 to-pink-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <Card className="w-96">
           <CardContent className="p-8 text-center">
             <AlertCircle className="h-12 w-12 text-orange mx-auto mb-4" />
@@ -232,7 +232,7 @@ export default function BigFiveResults() {
         <p className="text-muted/60 mb-8">Tu perfil completo de personalidad según las cinco grandes dimensiones</p>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <div className="mb-8 p-6 border-2 border-purple/30 bg-background dark:from-purple dark:to-blue-950 rounded-lg">
+        <div className="mb-8 p-6 border-2 border-purple/30 bg-background950 rounded-lg">
           <div className="flex items-center gap-2 mb-4">
             <Sparkles className="h-5 w-5 text-purple" />
             <h2 className="text-2xl font-bold">Tu Puente de Transición</h2>
@@ -285,7 +285,7 @@ export default function BigFiveResults() {
 
           <TabsContent value="summary" className="space-y-6">
             {/* CHANGE: Adding Resumen Ejecutivo Integral DTC at the beginning */}
-            <Card className="mb-8 border-2 border-blue/20 bg-gradient-to-br from-blue/5 to-blue/5">
+            <Card className="mb-8 border-2 border-blue/20 bg-background">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Target className="w-6 h-6 text-blue" />
@@ -402,7 +402,7 @@ export default function BigFiveResults() {
                 <div>
                   <h3 className="font-semibold text-lg mb-3 text-blue">🗺️ Mapa de Impacto en tu Vida</h3>
                   <div className="grid md:grid-cols-3 gap-4">
-                    <div className="bg-gradient-to-br from-green/5 to-green/5 rounded-lg p-4 border border-green/20">
+                    <div className="bg-background">
                       <h4 className="font-semibold text-green mb-2 flex items-center gap-2">
                         <Heart className="w-4 h-4" />
                         Vida Personal
@@ -412,7 +412,7 @@ export default function BigFiveResults() {
                         y satisfacción personal.
                       </p>
                     </div>
-                    <div className="bg-gradient-to-br from-purple/5 to-pink-50 rounded-lg p-4 border border-purple/20">
+                    <div className="bg-background">
                       <h4 className="font-semibold text-purple mb-2 flex items-center gap-2">
                         <Users className="w-4 h-4" />
                         Relaciones
@@ -422,7 +422,7 @@ export default function BigFiveResults() {
                         con familia, pareja y amigos.
                       </p>
                     </div>
-                    <div className="bg-gradient-to-br from-blue/5 to-blue/5 rounded-lg p-4 border border-blue/20">
+                    <div className="bg-background">
                       <h4 className="font-semibold text-blue mb-2 flex items-center gap-2">
                         <Briefcase className="w-4 h-4" />
                         Trabajo
@@ -485,7 +485,7 @@ export default function BigFiveResults() {
               </CardContent>
             </Card>
 
-            <Card className="mb-8 border-2 border-purple/20 bg-gradient-to-br from-purple/5 to-pink-50">
+            <Card className="mb-8 border-2 border-purple/20 bg-background">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Heart className="w-6 h-6 text-purple" />
@@ -885,7 +885,7 @@ export default function BigFiveResults() {
                 <CardDescription>Áreas específicas donde puedes crecer basadas en tu perfil Big Five</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-yellow/5 to-orange/5 p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-3">Por qué estas oportunidades son relevantes para ti</h3>
                   <p className="text-sm text-muted">
                     Tu perfil Big Five con Apertura: {results.O}%, Responsabilidad: {results.C}%, Extraversión:{" "}
@@ -1085,7 +1085,7 @@ export default function BigFiveResults() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-red-600 to-pink-600 text-white p-4 rounded-lg">
+                    <div className="bg-background">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-semibold mb-1">Recurso Recomendado DTC</p>
@@ -1103,7 +1103,7 @@ export default function BigFiveResults() {
                   </CardContent>
                 </Card>
 
-                <div className="bg-gradient-to-r from-yellow to-orange-600 text-white p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-2">Próximo Paso</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Elige UNA oportunidad que resuene contigo y conviértela en un compromiso de 30 días. El cambio real
@@ -1127,7 +1127,7 @@ export default function BigFiveResults() {
                 <CardDescription>Cómo Big Five se integra con los demás tests del ecosistema DTC</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-3">El Mapa Completo de Tu Personalidad</h3>
                   <p className="text-sm text-muted mb-4">
                     Big Five mide los rasgos profundos de tu personalidad, la base sobre la cual se construyen tus
@@ -1306,7 +1306,7 @@ export default function BigFiveResults() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-4 rounded-lg">
+                    <div className="bg-background">
                       <h4 className="font-semibold mb-2">Caso 1: El Innovador Estructurado</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -1325,7 +1325,7 @@ export default function BigFiveResults() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-green/5 to-blue/5 p-4 rounded-lg">
+                    <div className="bg-background">
                       <h4 className="font-semibold mb-2">Caso 2: El Líder Empático</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -1345,7 +1345,7 @@ export default function BigFiveResults() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-purple/5 to-pink-50 p-4 rounded-lg">
+                    <div className="bg-background">
                       <h4 className="font-semibold mb-2">Caso 3: El Ejecutor Volátil</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -1366,7 +1366,7 @@ export default function BigFiveResults() {
                   </CardContent>
                 </Card>
 
-                <div className="bg-gradient-to-r from-blue to-purple text-white p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-2">Recomendación DTC</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Big Five es tu fundamento. Para obtener el mapa completo, combínalo con DISC (comportamiento
@@ -1390,7 +1390,7 @@ export default function BigFiveResults() {
                 <CardDescription>Conecta tu perfil Big Five con tu vida real y propósito</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-red/5 to-purple/5 p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-3">Por qué reflexionar sobre tu perfil Big Five</h3>
                   <p className="text-sm text-muted mb-4">
                     Big Five no es solo estadística, es el mapa de tu arquitectura psicológica. Estas preguntas te
@@ -1584,7 +1584,7 @@ export default function BigFiveResults() {
                   </Card>
                 </div>
 
-                <div className="bg-gradient-to-r from-red to-purple text-white p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-2">Comparte tu reflexión con tu Coach IA</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Las preguntas profundas se responden mejor en conversación. Habla con Sofia o Dani para explorar tus
@@ -1611,7 +1611,7 @@ export default function BigFiveResults() {
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Progress Overview */}
-                <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg p-4">
+                <div className="bg-background">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-medium">Progreso Total del Plan</span>
                     <span className="text-sm text-muted-foreground">0/12 semanas completadas</span>

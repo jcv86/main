@@ -8,7 +8,7 @@ import { Rocket, CheckCircle2, PlayCircle, FileText, Zap } from 'lucide-react'
 
 export default function ComenzarPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-muted/5 via-purple-50 to-blue/5 dark:from-background dark:via-purple dark:to-blue-950">
+    <div className="min-h-screen bg-background">
       {/* Hero */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center max-w-3xl mx-auto">

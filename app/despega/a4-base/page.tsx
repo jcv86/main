@@ -134,7 +134,7 @@ export default function A4Page() {
       <div className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
         
         {/* WELCOME HERO - A4 VERSION */}
-        <div className="bg-blue dark:from-blue dark:to-blue-800 rounded-[28px] p-8 text-white shadow-lg">
+        <div className="bg-blue800 rounded-[28px] p-8 text-white shadow-lg">
           <div className="max-w-3xl">
             <p className="text-cyan/10 text-sm font-semibold uppercase tracking-wider mb-2">Fase A4: La Realidad y Contexto Estratégico</p>
             <h1 className="text-4xl font-bold mb-3">Entiende el mundo en el que compites</h1>
@@ -196,7 +196,7 @@ export default function A4Page() {
         {/* Original Header - Simplified */}
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-[28px] bg-gradient-to-br from-blue to-blue flex items-center justify-center text-sm font-bold text-white">
+            <div className="w-12 h-12 rounded-[28px] bg-background">
               A4
             </div>
             <div>
@@ -271,7 +271,7 @@ export default function A4Page() {
         <TabsContent value="dashboard" className="space-y-6">
           {/* Advanced Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card className="bg-gradient-to-br from-blue/5 to-blue/10 dark:from-blue/20 dark:to-blue-800/20">
+            <Card className="bg-background">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -283,7 +283,7 @@ export default function A4Page() {
               </CardContent>
             </Card>
             
-            <Card className="bg-gradient-to-br from-purple/5 to-purple-100 dark:from-purple/20 dark:to-purple/20">
+            <Card className="bg-background">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -295,7 +295,7 @@ export default function A4Page() {
               </CardContent>
             </Card>
             
-            <Card className="bg-gradient-to-br from-green/5 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
+            <Card className="bg-background">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -307,7 +307,7 @@ export default function A4Page() {
               </CardContent>
             </Card>
             
-            <Card className="bg-gradient-to-br from-orange/5 to-orange-100 dark:from-orange/20 dark:to-orange-800/20">
+            <Card className="bg-background">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -321,7 +321,7 @@ export default function A4Page() {
           </div>
 
           {/* Welcome Card */}
-          <Card className="border-2 border-blue/30 bg-gradient-to-r from-blue/5 via-blue/5 to-purple/5 dark:from-blue/30 dark:via-blue-900/30 dark:to-purple/30">
+          <Card className="border-2 border-blue/30 bg-background">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <span className="text-2xl">🌍</span>
@@ -422,7 +422,7 @@ export default function A4Page() {
       </Tabs>
 
         {/* Tips */}
-        <Card className="mt-8 bg-gradient-to-r from-blue/5 to-blue/5 dark:from-blue/20 dark:to-blue-900/20 border-blue/30 dark:border-cyan">
+        <Card className="mt-8 bg-background">
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-blue text-lg">💡</div>
             <div>

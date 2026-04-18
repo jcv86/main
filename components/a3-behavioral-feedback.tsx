@@ -37,7 +37,7 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
           </div>
           <div className="bg-muted/20 rounded-full h-3">
             <div
-              className="bg-gradient-to-r from-red-500 to-green-500 h-3 rounded-full transition-all"
+              className="bg-background"
               style={{ width: `${performanceScore}%` }}
             />
           </div>

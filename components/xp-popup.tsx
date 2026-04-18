@@ -44,7 +44,7 @@ export function XPPopup({
           exit={{ opacity: 0, y: -20, scale: 0.8 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="bg-gradient-to-r from-cyan-600 to-teal-600 rounded-lg shadow-2xl p-4 border border-cyan/30/50">
+          <div className="bg-background">
             <div className="space-y-2">
               {/* XP Gained */}
               <div className="flex items-center gap-2">
@@ -66,7 +66,7 @@ export function XPPopup({
               {/* Level Up */}
               {levelUp && newLevel && (
                 <motion.div
-                  className="flex items-center gap-2 text-xs font-bold text-white bg-gradient-to-r from-yellow-500 to-orange-500 px-2 py-1 rounded"
+                  className="flex items-center gap-2 text-xs font-bold text-white bg-background"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.2, type: 'spring' }}

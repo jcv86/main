@@ -39,7 +39,7 @@ export default function A4Page() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-green/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -56,7 +56,7 @@ export default function A4Page() {
 
         {/* Hero */}
         <div className="mb-12 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance bg-gradient-to-r from-blue to-emerald-600 bg-clip-text text-transparent dark:from-blue/40 dark:to-emerald-400">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance bg-background">
             Tu Dashboard Ejecutivo
           </h1>
           <p className="text-xl text-muted/70 dark:text-muted/30 mb-2">

@@ -667,7 +667,7 @@ export default function TestVerificationSystem() {
     <div className="min-h-screen bg-muted/5 p-2 sm:p-4">
       <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         {/* Header - Mobile Optimized */}
-        <Card className="border-blue/20 bg-gradient-to-r from-blue/5 to-blue/5">
+        <Card className="border-blue/20 bg-background">
           <CardHeader className="pb-3 sm:pb-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex items-center gap-3">

@@ -219,7 +219,7 @@ export default function A1ReportPage() {
 
   if (error) {
     return (
-      <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple/50 to-blue">
+      <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple/50">
         <ASectionPart title="Completar Evaluación" icon={<Zap />}>
           <div className="space-y-4">
             <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
@@ -256,7 +256,7 @@ export default function A1ReportPage() {
           </div>
         ) : insights ? (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-purple/20 to-blue/20 border-2 border-purple/50/50 rounded-xl p-6">
+            <div className="bg-background">
               <p className="text-muted/30 text-center text-lg">
                 Basado en tu perfil de El Ritual y contexto personal, aquí está tu análisis completo:
               </p>
@@ -279,47 +279,47 @@ export default function A1ReportPage() {
   const secondaryLabel = discToDespega[profile.secondary as keyof typeof discToDespega]
 
   return (
-    <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple/50 to-blue">
+    <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple/50">
       <ASectionPart title="Tu Perfil Cerebral" icon={<Target />}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Primary Profile Card */}
-          <div className="bg-gradient-to-br from-purple via-purple-500 to-purple-400 rounded-xl p-6 shadow-lg border-2 border-purple/30">
+          <div className="bg-background">
             <p className="text-purple/10 text-sm mb-2 font-semibold">Tu Tipo Dominante</p>
             <div className="text-4xl font-black text-white mb-3">{primaryLabel}</div>
             <p className="font-semibold text-purple/5 mb-4 text-sm">{despegaLabels[primaryLabel as keyof typeof despegaLabels]}</p>
             <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/30 mb-2">
-              <div className="h-full bg-gradient-to-r from-yellow-300 to-white" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
+              <div className="h-full bg-background" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
             </div>
             <p className="text-xs text-purple/10 font-bold">{Math.max(0, Math.round(profile.primaryScore))}%</p>
           </div>
 
           {/* Secondary Profile Card */}
-          <div className="bg-gradient-to-br from-blue via-blue to-blue-400 rounded-xl p-6 shadow-lg border-2 border-blue/30">
+          <div className="bg-background">
             <p className="text-blue/10 text-sm mb-2 font-semibold">Tu Tipo Secundario</p>
             <div className="text-4xl font-black text-white mb-3">{secondaryLabel}</div>
             <p className="font-semibold text-blue/5 mb-4 text-sm">{despegaLabels[secondaryLabel as keyof typeof despegaLabels]}</p>
             <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/30 mb-2">
-              <div className="h-full bg-gradient-to-r from-blue/30 to-white" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
+              <div className="h-full bg-background" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
             </div>
             <p className="text-xs text-blue/10 font-bold">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
           </div>
         </div>
 
         {/* All 4 Profiles Breakdown */}
-        <div className="bg-gradient-to-br from-muted/80 to-muted/70 rounded-xl p-6 mb-8 border-2 border-purple/50/30 shadow-lg">
+        <div className="bg-background">
           <h3 className="font-bold text-2xl text-white mb-6">Tu Perfil Cerebral Completo</h3>
           <div className="space-y-4">
             {[
-              { label: 'Impulsor', score: profile.D, color: 'from-red-500 to-orange/50', icon: '⚡' },
-              { label: 'Catalizador', score: profile.I, color: 'from-yellow-500 to-orange-400', icon: '🔥' },
-              { label: 'Estabilizador', score: profile.S, color: 'from-green to-blue', icon: '🛡️' },
-              { label: 'Arquitecto', score: profile.C, color: 'from-blue to-purple/50', icon: '🏗️' }
+              { label: 'Impulsor', score: profile.D, color: 'from-red-500/50', icon: '⚡' },
+              { label: 'Catalizador', score: profile.I, color: 'from-yellow-500400', icon: '🔥' },
+              { label: 'Estabilizador', score: profile.S, color: 'from-green', icon: '🛡️' },
+              { label: 'Arquitecto', score: profile.C, color: 'from-blue/50', icon: '🏗️' }
             ].map((dim, idx) => (
               <div key={idx} className="flex items-center gap-4 p-3 bg-muted/70/50 rounded-[28px] border border-muted/60 hover:border-muted/50 transition-colors">
                 <span className="text-2xl">{dim.icon}</span>
                 <p className="font-bold text-white w-32">{dim.label}</p>
                 <div className="flex-1 h-4 bg-muted/60 rounded-full overflow-hidden border border-muted/50">
-                  <div className={`h-full bg-gradient-to-r ${dim.color} shadow-lg`} style={{ width: `${Math.max(0, dim.score)}%` }} />
+                  <div className={`h-full bg-background
                 </div>
                 <div className="flex items-center gap-2">
                   <p className="w-16 text-right font-bold text-lg text-white">{Math.max(0, Math.round(dim.score))}%</p>
@@ -341,7 +341,7 @@ export default function A1ReportPage() {
         ) : insights ? (
           <div className="space-y-8">
             {/* Resumen Ejecutivo */}
-            <div className="bg-gradient-to-r from-purple/40 via-blue-900/40 to-purple-900/40 border-2 border-purple/50/50 rounded-xl p-8 shadow-xl">
+            <div className="bg-background">
               <div className="flex items-start gap-4">
                 <div className="text-4xl">🎯</div>
                 <div className="flex-1">
@@ -411,7 +411,7 @@ export default function A1ReportPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-blue/40 to-blue/20 border-blue/30 border-2">
+          <Card className="bg-background">
             <CardHeader>
               <CardTitle className="text-lg text-cyan/30">📞 Call Entrena</CardTitle>
             </CardHeader>

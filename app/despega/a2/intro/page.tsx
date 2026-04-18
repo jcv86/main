@@ -129,7 +129,7 @@ export default function A2IntroPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center">
           <Loader2 className="h-12 w-12 animate-spin mx-auto text-purple dark:text-purple/40" />
           <p className="mt-4 text-muted/60 dark:text-muted/40">Cargando tu A2...</p>
@@ -140,7 +140,7 @@ export default function A2IntroPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background">
         <Card className="max-w-md">
           <CardContent className="pt-6">
             <p className="text-red dark:text-red/40 mb-4">{error}</p>
@@ -158,7 +158,7 @@ export default function A2IntroPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 p-4">
+    <div className="min-h-screen bg-background">
       <div className="max-w-3xl mx-auto py-12 space-y-8">
         {/* Hero Section */}
         <div className="text-center space-y-4">

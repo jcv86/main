@@ -33,7 +33,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
     // EL RITUAL (A1)
     {
       category: 'El Ritual',
-      color: 'from-blue-500 to-cyan-500',
+      color: 'from-blue-500500',
       activities: [
         {
           action: 'Completar Conozcámonos 1',
@@ -58,7 +58,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
     // EXPLORACIÓN (A2)
     {
       category: 'Exploración',
-      color: 'from-cyan-500 to-teal-500',
+      color: 'from-cyan-500500',
       activities: [
         {
           action: 'Completar Define Tus Objetivos',
@@ -83,7 +83,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
     // ENTRENAMIENTO (A3)
     {
       category: 'Entrenamiento',
-      color: 'from-teal-500 to-emerald-500',
+      color: 'from-teal-500500',
       activities: [
         {
           action: 'Completar Interview 0',
@@ -126,7 +126,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
     // LA REALIDAD (A4)
     {
       category: 'La Realidad',
-      color: 'from-emerald-500 to-teal-500',
+      color: 'from-emerald-500500',
       activities: [
         {
           action: 'Revisar Contexto del Mercado',
@@ -184,7 +184,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                 <CardHeader>
                   <CardTitle className="text-base flex items-center gap-2">
                     <div
-                      className={`w-3 h-3 rounded-[20px] bg-gradient-to-r ${phase.color}`}
+                      className={`w-3 h-3 rounded-[20px] bg-background
                     />
                     {phase.category}
                   </CardTitle>
@@ -218,7 +218,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
 
           {/* RACHA TAB */}
           <TabsContent value="racha" className="space-y-4">
-            <Card className="bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 border-orange/20 dark:border-orange">
+            <Card className="bg-background">
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
                   <Flame className="w-5 h-5 text-orange" />
@@ -249,7 +249,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                         </p>
                       </div>
                     </div>
-                    <Badge className="bg-gradient-to-r from-orange-500 to-amber-500 text-white">
+                    <Badge className="bg-background">
                       {streak.bonus}
                     </Badge>
                   </div>

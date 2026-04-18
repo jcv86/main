@@ -53,7 +53,7 @@ export function A4BadgesDisplay({ data }: A4BadgesDisplayProps) {
   return (
     <div className="space-y-6">
       {/* Points and Level Section */}
-      <Card className="border-0 bg-gradient-to-br from-primary/10 to-primary/5">
+      <Card className="border-0 bg-background">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <Zap className="w-5 h-5 text-purple" />

@@ -127,7 +127,7 @@ export function InterviewTips({
   const canNavigateNext = currentTipIndex !== null && currentTipIndex < tipHistory.length - 1
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-blue-50 to-blue/5 dark:from-blue-900/20 dark:to-indigo-900/20">
+    <Card className="p-6 bg-background">
       <div className="space-y-6">
         {/* Tips Counter */}
         <div className="flex items-center justify-between">

@@ -199,7 +199,7 @@ export function ExecutiveDashboard() {
       </div>
 
       {/* Progress Overview */}
-      <Card className="bg-gradient-to-r from-cyan-50 to-teal-50 dark:from-cyan-900/10 dark:to-teal-900/10 border-2 border-cyan/20 dark:border-cyan">
+      <Card className="bg-background">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <CheckCircle2 className="w-5 h-5 text-cyan" />

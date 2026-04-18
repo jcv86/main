@@ -15,7 +15,7 @@ export default function CicloCompletoDemoPage() {
       id: 'a1',
       name: 'El Ritual',
       subtitle: 'Quién Eres Ahora',
-      color: 'from-purple to-purple-400',
+      color: 'from-purple400',
       bgColor: 'bg-purple/5 dark:bg-purple/30',
       borderColor: 'border-purple/20 dark:border-purple',
       icon: Brain,
@@ -33,7 +33,7 @@ export default function CicloCompletoDemoPage() {
       id: 'a2',
       name: 'Exploración',
       subtitle: 'Aprende Nuevas Formas',
-      color: 'from-blue to-blue-400',
+      color: 'from-blue400',
       bgColor: 'bg-blue/5 dark:bg-blue/30',
       borderColor: 'border-blue/20 dark:border-blue/10',
       icon: BookOpen,
@@ -51,7 +51,7 @@ export default function CicloCompletoDemoPage() {
       id: 'a3',
       name: 'Entrenamiento',
       subtitle: 'Practica Siendo',
-      color: 'from-orange-600 to-orange-400',
+      color: 'from-orange-600400',
       bgColor: 'bg-orange/5 dark:bg-orange/30',
       borderColor: 'border-orange/20 dark:border-orange',
       icon: Zap,
@@ -69,7 +69,7 @@ export default function CicloCompletoDemoPage() {
       id: 'a4',
       name: 'La Realidad',
       subtitle: 'Vive Tu Nueva Identidad',
-      color: 'from-blue to-blue/40',
+      color: 'from-blue/40',
       bgColor: 'bg-blue/5 dark:bg-cyan-950/30',
       borderColor: 'border-blue/20 dark:border-cyan',
       icon: Globe,
@@ -107,7 +107,7 @@ export default function CicloCompletoDemoPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="text-center max-w-3xl mx-auto mb-16">
@@ -153,7 +153,7 @@ export default function CicloCompletoDemoPage() {
             ))}
           </div>
           <div className="w-full h-2 bg-muted/20 dark:bg-card rounded-full overflow-hidden">
-            <div className="h-full w-0 bg-gradient-to-r from-purple via-blue to-blue rounded-full transition-all duration-500" />
+            <div className="h-full w-0 bg-background" />
           </div>
         </div>
       </section>
@@ -170,7 +170,7 @@ export default function CicloCompletoDemoPage() {
                 onClick={() => setSelectedPhase(selectedPhase === phase.id ? null : phase.id)}
               >
                 <CardHeader>
-                  <div className={`w-12 h-12 rounded-lg bg-gradient-to-br ${phase.color} flex items-center justify-center mb-4`}>
+                  <div className={`w-12 h-12 rounded-lg bg-background
                     <Icon className="h-6 w-6 text-white" />
                   </div>
                   <div className="space-y-1">

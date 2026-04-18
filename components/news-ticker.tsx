@@ -72,7 +72,7 @@ export function NewsTicker() {
   const currentNews = news[currentIndex]
 
   return (
-    <div className="w-full bg-gradient-to-r from-slate-800 to-slate-900 text-white border-b border-muted/70">
+    <div className="w-full bg-background">
       <div className="flex items-center gap-4 px-6 py-3 h-14 max-w-7xl mx-auto">
         {/* Label */}
         <div className="flex items-center gap-2 flex-shrink-0 font-semibold whitespace-nowrap text-sm">

@@ -91,7 +91,7 @@ export function A2RecommendationBridge({
         </div>
 
         {/* A1 Results Summary */}
-        <Card className="bg-gradient-to-r from-blue-50 to-blue/5 border-blue/20">
+        <Card className="bg-background">
           <CardContent className="pt-6">
             <div className="space-y-4">
               <div className="text-sm font-medium text-muted-foreground">Tu Diagnóstico A1</div>

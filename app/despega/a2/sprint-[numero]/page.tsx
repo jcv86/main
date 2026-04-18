@@ -312,7 +312,7 @@ export default function SprintViewerPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green"></div>
           <p className="mt-4 text-muted/60 dark:text-muted/40">Cargando tu sprint...</p>
@@ -341,7 +341,7 @@ export default function SprintViewerPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto py-12 space-y-8">
         {/* Header */}
         <div className="space-y-4">
@@ -465,7 +465,7 @@ export default function SprintViewerPage() {
 
         {/* Check-in Prompt */}
         {sprintNumber === 1 && (
-          <Card className="border-0 shadow-md bg-gradient-to-r from-yellow/5 to-orange/5 dark:from-yellow/20 dark:to-orange/20 border-l-4 border-l-orange">
+          <Card className="border-0 shadow-md bg-background">
             <CardContent className="p-6 space-y-3">
               <h3 className="font-bold text-lg text-muted/90 dark:text-muted/5 flex items-center gap-2">
                 <BookOpen className="w-5 h-5" />

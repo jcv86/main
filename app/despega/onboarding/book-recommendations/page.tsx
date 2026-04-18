@@ -117,7 +117,7 @@ export default function BookRecommendationsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-purple/5 to-blue/5 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center">
           <Sparkles className="h-12 w-12 text-purple mx-auto mb-4 animate-spin" />
           <p className="text-lg text-muted/60">Personalizando tus recomendaciones...</p>
@@ -127,7 +127,7 @@ export default function BookRecommendationsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple/5 to-blue/5 py-12 px-4">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
@@ -178,7 +178,7 @@ export default function BookRecommendationsPage() {
             )}
 
             {/* Development Path Section */}
-            <Card className="bg-gradient-to-br from-blue/5 to-purple/5 border-0 shadow-lg">
+            <Card className="bg-background">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg">Tu Ruta de Desarrollo</CardTitle>
               </CardHeader>
@@ -210,7 +210,7 @@ export default function BookRecommendationsPage() {
                     className="overflow-hidden hover:shadow-lg transition-shadow border-0 bg-white flex flex-row h-64"
                   >
                     {/* Book Cover */}
-                    <div className="relative w-40 flex-shrink-0 bg-gradient-to-br from-purple/10 to-blue/10 flex items-center justify-center">
+                    <div className="relative w-40 flex-shrink-0 bg-background">
                       {book.cover_url ? (
                         <Image
                           src={book.cover_url}

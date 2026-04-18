@@ -19,11 +19,11 @@ interface GamificationProfileProps {
 }
 
 const LEVEL_COLORS = {
-  Bronze: 'from-amber-600 to-amber-700',
-  Silver: 'from-gray-400 to-gray-500',
-  Gold: 'from-yellow-400 to-yellow-600',
-  Platinum: 'from-cyan-400 to-blue-500',
-  Diamond: 'from-indigo-500 to-purple'
+  Bronze: 'from-amber-600700',
+  Silver: 'from-gray-400500',
+  Gold: 'from-yellow-400600',
+  Platinum: 'from-cyan-400500',
+  Diamond: 'from-indigo-500'
 }
 
 const LEVEL_ICONS = {
@@ -65,7 +65,7 @@ export function GamificationProfile({
     <div className="w-full space-y-6">
       {/* Main Level Card */}
       <Card className="relative overflow-hidden">
-        <div className={`absolute inset-0 bg-gradient-to-r ${LEVEL_COLORS[level as keyof typeof LEVEL_COLORS]} opacity-10`} />
+        <div className={`absolute inset-0 bg-background
         <div className="relative p-8">
           <div className="flex items-center justify-between mb-6">
             <div>
@@ -130,7 +130,7 @@ export function GamificationProfile({
             {badges.map((badge) => (
               <div
                 key={badge}
-                className="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-purple-50 to-blue-50 rounded-[28px] border border-purple/20"
+                className="flex flex-col items-center gap-2 p-4 bg-background"
               >
                 <span className="text-4xl">
                   {BADGE_ICONS[badge] || '🎖️'}
@@ -153,7 +153,7 @@ export function GamificationProfile({
               <div
                 className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold ${
                   ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'].indexOf(level) >= idx
-                    ? `bg-gradient-to-r ${LEVEL_COLORS[lvl as keyof typeof LEVEL_COLORS]} text-white`
+                    ? `bg-background
                     : 'bg-muted/20 text-muted/40'
                 }`}
               >
@@ -169,7 +169,7 @@ export function GamificationProfile({
       </Card>
 
       {/* Streak Information */}
-      <Card className="p-6 bg-gradient-to-r from-orange-50 to-red-50">
+      <Card className="p-6 bg-background">
         <div className="flex items-start gap-4">
           <Flame className="w-8 h-8 text-red flex-shrink-0" />
           <div>

@@ -71,7 +71,7 @@ export function WeeklyResourceDigest() {
   )
 
   return (
-    <Card className="bg-gradient-to-br from-blue-50 to-blue/5 dark:from-slate-900 dark:to-slate-800 border-blue/20 dark:border-muted/70">
+    <Card className="bg-background">
       <CardHeader>
         <CardTitle>Tu Resumen de Recursos de la Semana</CardTitle>
         <CardDescription>7 recursos públicos chilenos seleccionados para ti</CardDescription>

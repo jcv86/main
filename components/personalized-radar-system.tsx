@@ -61,7 +61,7 @@ export function PersonalizedRadarSystem() {
     <div className="space-y-6">
       {/* Personalization Info Card */}
       {personalization && (
-        <Card className="bg-gradient-to-r from-cyan-900/20 to-teal-900/20 border-cyan/50/30">
+        <Card className="bg-background">
           <CardHeader className="pb-3">
             <div className="flex items-start justify-between">
               <div>

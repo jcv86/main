@@ -45,7 +45,7 @@ export default function JobMatchingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-muted/90 dark:via-purple-900/20 dark:to-muted/90 p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <Link href="/despega/a3">
@@ -91,7 +91,7 @@ export default function JobMatchingPage() {
         ) : (
           <div className="space-y-6">
             {/* Match Score */}
-            <Card className="bg-gradient-to-br from-green/5 to-blue/5 dark:from-green-900/20 dark:to-blue-900/20 border-2 border-green/20 dark:border-green">
+            <Card className="bg-background">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>

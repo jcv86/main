@@ -212,7 +212,7 @@ export function GesturePerformanceMonitor() {
   return (
     <div className="space-y-6">
       {/* Control Panel */}
-      <Card className="border-blue/20 bg-gradient-to-r from-blue-50 to-blue/5">
+      <Card className="border-blue/20 bg-background">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">

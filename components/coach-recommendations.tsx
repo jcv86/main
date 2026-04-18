@@ -73,11 +73,11 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
   }
 
   const colors = [
-    'from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border-purple/20 dark:border-purple/50',
-    'from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-blue/20 dark:border-blue/50',
-    'from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-orange/20 dark:border-orange/50',
-    'from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green/20 dark:border-green/50',
-    'from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 border-pink-200 dark:border-pink-900/50',
+    'from-purple-5050900/20900/20 border-purple/20 dark:border-purple/50',
+    'from-blue-5050900/20900/20 border-blue/20 dark:border-blue/50',
+    'from-orange-5050900/20900/20 border-orange/20 dark:border-orange/50',
+    'from-green-5050900/20900/20 border-green/20 dark:border-green/50',
+    'from-pink-5050900/20900/20 border-pink-200 dark:border-pink-900/50',
   ]
 
   return (
@@ -89,7 +89,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
       <CardContent>
         <div className="space-y-4">
           {keyInsight && (
-            <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border border-purple/20 dark:border-purple/50 rounded-[28px] p-4">
+            <div className="bg-background">
               <p className="text-sm text-purple dark:text-purple/10">
                 <strong>Insight Principal:</strong> {keyInsight}
               </p>
@@ -101,7 +101,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
               {recommendations.map((rec, idx) => (
                 <div
                   key={`${rec.book.id}-${idx}`}
-                  className={`bg-gradient-to-r ${colors[idx % colors.length]} border rounded-[28px] p-6`}
+                  className={`bg-background
                 >
                   <h3 className="font-bold mb-2 flex items-center gap-2">
                     <Zap className="w-5 h-5" />
@@ -136,7 +136,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
             </div>
           )}
 
-          <Button className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue">
+          <Button className="w-full bg-background">
             Ver Todas Mis Sugerencias Personalizadas
           </Button>
         </div>

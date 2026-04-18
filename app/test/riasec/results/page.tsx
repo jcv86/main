@@ -468,7 +468,7 @@ export default function RIASECResults() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue/5 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <Card className="w-full max-w-md">
           <CardContent className="p-6">
             <div className="flex items-center justify-center">
@@ -483,7 +483,7 @@ export default function RIASECResults() {
 
   if (!results) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue/5 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background">
         <Card className="w-full max-w-md">
           <CardContent className="p-6 text-center">
             <AlertCircle className="h-12 w-12 text-orange mx-auto mb-4" />
@@ -501,7 +501,7 @@ export default function RIASECResults() {
   const developmentAreas = getDevelopmentAreas(results)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 to-indigo-100 p-4">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <Card className="mb-6">
@@ -530,7 +530,7 @@ export default function RIASECResults() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="mb-6 border-2 border-purple/30 bg-background dark:from-purple dark:to-blue-950">
+        <Card className="mb-6 border-2 border-purple/30 bg-background950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -629,7 +629,7 @@ export default function RIASECResults() {
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
-            <Card className="mb-8 border-2 border-blue/20 bg-gradient-to-br from-blue/5 to-blue/5">
+            <Card className="mb-8 border-2 border-blue/20 bg-background">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Sparkles className="w-6 h-6 text-blue" />
@@ -675,7 +675,7 @@ export default function RIASECResults() {
                 </div>
 
                 {/* Top 5 ideas sobre ti */}
-                <div className="bg-gradient-to-r from-blue/5 to-purple/5 rounded-lg p-6">
+                <div className="bg-background">
                   <h3 className="font-semibold text-lg mb-4 text-blue">💡 Top 5 Ideas Sobre Ti</h3>
                   <div className="space-y-3">
                     <div className="flex gap-3">
@@ -836,7 +836,7 @@ export default function RIASECResults() {
               </CardContent>
             </Card>
 
-            <Card className="mb-8 border-2 border-purple/20 bg-gradient-to-br from-purple/5 to-pink-50">
+            <Card className="mb-8 border-2 border-purple/20 bg-background">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Heart className="w-6 h-6 text-purple" />
@@ -992,7 +992,7 @@ export default function RIASECResults() {
                   {careerRecommendations.map((career, index) => (
                     <div
                       key={index}
-                      className="p-4 bg-gradient-to-r from-blue/5 to-blue/5 rounded-lg border border-blue/20"
+                      className="p-4 bg-background"
                     >
                       <div className="flex items-center gap-2">
                         <div className="w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center text-sm font-semibold">
@@ -1266,7 +1266,7 @@ export default function RIASECResults() {
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Progress Overview */}
-                <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg p-4">
+                <div className="bg-background">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-medium">Progreso Total del Plan</span>
                     <span className="text-sm text-muted-foreground">0/12 semanas completadas</span>
@@ -1657,7 +1657,7 @@ export default function RIASECResults() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-yellow/5 to-orange/5 p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-3">Por qué estas oportunidades son relevantes para ti</h3>
                   <p className="text-sm text-muted mb-4">
                     Tu perfil vocacional {results.holland_code} con puntuaciones R:{results.R}, I:{results.I}, A:
@@ -1873,7 +1873,7 @@ export default function RIASECResults() {
                   </CardContent>
                 </Card>
 
-                <div className="bg-gradient-to-r from-yellow to-orange-600 text-white p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-2">Próximo Paso</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Elige UNA oportunidad de desarrollo vocacional y conviértela en una meta específica con plazo en la
@@ -1899,7 +1899,7 @@ export default function RIASECResults() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-3">El Ecosistema Completo de Orientación Vocacional</h3>
                   <p className="text-sm text-muted mb-4">
                     RIASEC te muestra QUÉ te interesa, pero necesitas los otros tests para saber CÓMO lo harías, CON
@@ -1909,7 +1909,7 @@ export default function RIASECResults() {
                 </div>
 
                 {/* Connection Map */}
-                <Card className="bg-gradient-to-br from-blue/5 to-purple/5">
+                <Card className="bg-background">
                   <CardContent className="pt-6">
                     <div className="text-center mb-6">
                       <div className="inline-block bg-green text-white px-6 py-3 rounded-full font-bold text-lg">
@@ -2114,7 +2114,7 @@ export default function RIASECResults() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-4 rounded-lg">
+                    <div className="bg-background">
                       <h4 className="font-semibold mb-2">Caso 1: El Investigador Emprendedor</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -2134,7 +2134,7 @@ export default function RIASECResults() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-green/5 to-blue/5 p-4 rounded-lg">
+                    <div className="bg-background">
                       <h4 className="font-semibold mb-2">Caso 2: El Artista Realista</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -2153,7 +2153,7 @@ export default function RIASECResults() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-purple/5 to-pink-50 p-4 rounded-lg">
+                    <div className="bg-background">
                       <h4 className="font-semibold mb-2">Caso 3: El Líder Social</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -2174,7 +2174,7 @@ export default function RIASECResults() {
                   </CardContent>
                 </Card>
 
-                <div className="bg-gradient-to-r from-blue to-purple text-white p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-2">Recomendación DTC</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Para una orientación vocacional completa, combina RIASEC (intereses) + DISC (comportamiento laboral)
@@ -2200,7 +2200,7 @@ export default function RIASECResults() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-red/5 to-purple/5 p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-3">Por qué reflexionar sobre tu vocación es crucial</h3>
                   <p className="text-sm text-muted mb-4">
                     RIASEC te muestra tus intereses, pero tu vocación real emerge cuando reflexionas sobre POR QUÉ te
@@ -2418,7 +2418,7 @@ export default function RIASECResults() {
                   </AccordionItem>
                 </Accordion>
 
-                <div className="bg-gradient-to-r from-red to-purple text-white p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-2">Habla con tu Coach IA sobre tu vocación</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Las mejores decisiones vocacionales emergen del diálogo. Comparte tus reflexiones con Dani para
@@ -2645,7 +2645,7 @@ export default function RIASECResults() {
               </Button>
               <Button
                 onClick={() => router.push("/test/soft-skills")}
-                className="bg-gradient-to-r from-green-600 to-emerald-600"
+                className="bg-background"
               >
                 Siguiente: Test de Soft Skills
               </Button>

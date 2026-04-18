@@ -77,7 +77,7 @@ export function PremiumGamificationWidget() {
   return (
     <div className="fixed bottom-4 right-4 w-80 z-40 space-y-3">
       {/* MAIN GAMIFICATION CARD */}
-      <Card className="bg-gradient-to-br from-cyan-50 to-teal-50 dark:from-cyan-950/40 dark:to-teal-950/40 border-2 border-cyan/20 dark:border-cyan shadow-xl hover:shadow-2xl transition-shadow">
+      <Card className="bg-background">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -161,7 +161,7 @@ export function PremiumGamificationWidget() {
           </div>
 
           {/* WEEKLY RANK */}
-          <div className="bg-gradient-to-r from-amber-100 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-900/30 rounded-[28px] p-2 border border-amber-200 dark:border-amber-800/30">
+          <div className="bg-background">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Crown className="w-4 h-4 text-amber-600 dark:text-amber-400" />

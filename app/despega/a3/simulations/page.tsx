@@ -83,7 +83,7 @@ const ENTRENAMIENTO_TYPES = [
 
 export default function SimulationsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-muted/90 dark:via-purple-900/20 dark:to-muted/90 p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <Link href="/despega/a3">
@@ -164,7 +164,7 @@ export default function SimulationsPage() {
         </div>
 
         {/* Tips Card */}
-        <Card className="bg-gradient-to-r from-purple/5 to-blue/5 dark:from-purple/20 dark:to-blue/20 border-0">
+        <Card className="bg-background">
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-purple text-lg">💡</div>
             <div>

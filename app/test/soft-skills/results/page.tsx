@@ -211,7 +211,7 @@ export default function SoftSkillsResults() {
   const topSkills = sortedSkills
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-white to-blue/5 py-8">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -233,7 +233,7 @@ export default function SoftSkillsResults() {
         </div>
 
         {/* Overall Score Card */}
-        <Card className="mb-8 bg-gradient-to-r from-blue/5 to-blue/5 border-blue/20">
+        <Card className="mb-8 bg-background">
           <CardContent className="pt-6">
             <div className="text-center">
               <div className="text-6xl font-bold text-blue mb-2">{results.overall_score}%</div>
@@ -249,7 +249,7 @@ export default function SoftSkillsResults() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="mb-8 border-2 border-purple/30 bg-background dark:from-purple dark:to-blue-950">
+        <Card className="mb-8 border-2 border-purple/30 bg-background950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -321,7 +321,7 @@ export default function SoftSkillsResults() {
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
-            <Card className="border-2 border-purple/20 bg-gradient-to-br from-primary/5 via-background to-background">
+            <Card className="border-2 border-purple/20 bg-background">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Sparkles className="h-6 w-6 text-purple" />
@@ -427,7 +427,7 @@ export default function SoftSkillsResults() {
                     Mapa de Impacto en tu Vida
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
-                    <Card className="bg-gradient-to-br from-blue/5 to-background dark:from-blue-950/20">
+                    <Card className="bg-background">
                       <CardHeader className="pb-3">
                         <CardTitle className="text-base flex items-center gap-2">
                           <Heart className="h-4 w-4 text-blue" />
@@ -440,7 +440,7 @@ export default function SoftSkillsResults() {
                         <p>• Límites más claros y sanos</p>
                       </CardContent>
                     </Card>
-                    <Card className="bg-gradient-to-br from-purple/5 to-background dark:from-purple/20">
+                    <Card className="bg-background">
                       <CardHeader className="pb-3">
                         <CardTitle className="text-base flex items-center gap-2">
                           <Users className="h-4 w-4 text-purple" />
@@ -453,7 +453,7 @@ export default function SoftSkillsResults() {
                         <p>• Capacidad de resolver conflictos</p>
                       </CardContent>
                     </Card>
-                    <Card className="bg-gradient-to-br from-green/5 to-background dark:from-green-950/20">
+                    <Card className="bg-background">
                       <CardHeader className="pb-3">
                         <CardTitle className="text-base flex items-center gap-2">
                           <Briefcase className="h-4 w-4 text-green" />
@@ -790,7 +790,7 @@ export default function SoftSkillsResults() {
                 <CardDescription>Cómo expandir tus competencias blandas más allá del trabajo</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-yellow/5 to-orange/5 p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-3">Por qué las Soft Skills trascienden lo laboral</h3>
                   <p className="text-sm text-muted mb-4">
                     Las competencias blandas no son solo habilidades profesionales, son capacidades de vida que afectan
@@ -984,7 +984,7 @@ export default function SoftSkillsResults() {
                   </CardContent>
                 </Card>
 
-                <div className="bg-gradient-to-r from-yellow to-orange-600 text-white p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-2">Próximo Paso</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Elige UNA oportunidad de las 4 áreas que más resuene contigo y comprométete a trabajarla durante 30
@@ -1008,7 +1008,7 @@ export default function SoftSkillsResults() {
                 <CardDescription>Cómo Soft Skills se relaciona con los demás tests del ecosistema DTC</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-3">Soft Skills: Las Habilidades que Multiplican Todo</h3>
                   <p className="text-sm text-muted mb-4">
                     Los otros tests te dicen QUIÉN ERES (personalidad, emociones, intereses). Soft Skills te dice QUÉ
@@ -1018,7 +1018,7 @@ export default function SoftSkillsResults() {
                 </div>
 
                 {/* Connection Map */}
-                <Card className="bg-gradient-to-br from-purple/5 to-pink-50">
+                <Card className="bg-background">
                   <CardContent className="pt-6">
                     <div className="text-center mb-6">
                       <div className="inline-block bg-purple text-white px-6 py-3 rounded-full font-bold text-lg">
@@ -1206,7 +1206,7 @@ export default function SoftSkillsResults() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-4 rounded-lg">
+                    <div className="bg-background">
                       <h4 className="font-semibold mb-2">Caso 1: El Líder Técnico que No Conecta</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -1227,7 +1227,7 @@ export default function SoftSkillsResults() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-green/5 to-blue/5 p-4 rounded-lg">
+                    <div className="bg-background">
                       <h4 className="font-semibold mb-2">Caso 2: El Creativo Sin Estructura</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -1248,7 +1248,7 @@ export default function SoftSkillsResults() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-purple/5 to-pink-50 p-4 rounded-lg">
+                    <div className="bg-background">
                       <h4 className="font-semibold mb-2">Caso 3: El Colaborador Invisible</h4>
                       <ul className="space-y-1 text-sm">
                         <li>
@@ -1271,7 +1271,7 @@ export default function SoftSkillsResults() {
                   </CardContent>
                 </Card>
 
-                <div className="bg-gradient-to-r from-blue to-purple text-white p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-2">La Clave del Desarrollo Integral</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Soft Skills son las únicas que puedes entrenar directamente. Tu personalidad (MBTI, Big Five) es
@@ -1296,7 +1296,7 @@ export default function SoftSkillsResults() {
                 <CardDescription>Convierte tus resultados de Soft Skills en autoconocimiento aplicado</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-red/5 to-purple/5 p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-3">De Números a Narrativa Personal</h3>
                   <p className="text-sm text-muted mb-4">
                     Un test te da puntuaciones, pero solo la reflexión profunda convierte esos números en transformación
@@ -1482,7 +1482,7 @@ export default function SoftSkillsResults() {
                   </CardContent>
                 </Card>
 
-                <div className="bg-gradient-to-r from-red to-purple text-white p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-2">Convierte Reflexión en Acción</h3>
                   <p className="text-sm opacity-90 mb-4">
                     Tus respuestas son solo el inicio. Compártelas con tu Coach IA para diseñar un plan de acción
@@ -1509,7 +1509,7 @@ export default function SoftSkillsResults() {
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Progress Overview */}
-                <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg p-4">
+                <div className="bg-background">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-medium">Progreso Total del Plan</span>
                     <span className="text-sm text-muted-foreground">0/12 semanas completadas</span>

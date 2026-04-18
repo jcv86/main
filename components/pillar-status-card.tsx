@@ -21,19 +21,19 @@ interface PillarStatusCardProps {
 
 const statusColors = {
   completed: {
-    bg: "bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20",
+    bg: "bg-background",
     border: "border-green/20 dark:border-green/30",
     badge: "bg-green text-white",
     badgeIcon: CheckCircle2,
   },
   current: {
-    bg: "bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20",
+    bg: "bg-background",
     border: "border-blue/20 dark:border-blue/30",
     badge: "bg-blue text-white",
     badgeIcon: Clock,
   },
   locked: {
-    bg: "bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900/30 dark:to-slate-800/30",
+    bg: "bg-background",
     border: "border-muted/20 dark:border-muted/80",
     badge: "bg-muted/40 text-white",
     badgeIcon: Lock,

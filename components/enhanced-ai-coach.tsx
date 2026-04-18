@@ -397,7 +397,7 @@ ${
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg">
+            <div className="p-2 bg-background">
               <Brain className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -440,7 +440,7 @@ ${
                   >
                     {message.role === "assistant" && (
                       <Avatar className="h-8 w-8">
-                        <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white text-xs">
+                        <AvatarFallback className="bg-background">
                           AI
                         </AvatarFallback>
                       </Avatar>
@@ -567,7 +567,7 @@ ${
                 {isTyping && (
                   <div className="flex gap-3 justify-start">
                     <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white text-xs">
+                      <AvatarFallback className="bg-background">
                         AI
                       </AvatarFallback>
                     </Avatar>

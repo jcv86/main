@@ -147,7 +147,7 @@ export function InteractiveTrainingSession({
     <div className="space-y-6">
       {/* Paso 1: Intro */}
       {step === 'intro' && (
-        <Card className="border-cyan/50/30 bg-gradient-to-br from-cyan-900/10 to-slate-900/10">
+        <Card className="border-cyan/50/30 bg-background">
           <CardHeader>
             <CardTitle className="text-xl flex items-center gap-2">
               <Video className="w-5 h-5 text-cyan/40" />
@@ -215,7 +215,7 @@ export function InteractiveTrainingSession({
 
       {/* Paso 2: Grabación */}
       {step === 'recording' && (
-        <Card className="border-cyan/50/50 bg-gradient-to-br from-slate-900 to-slate-950">
+        <Card className="border-cyan/50/50 bg-background">
           <CardHeader>
             <CardTitle className="text-white flex items-center justify-between">
               <span className="flex items-center gap-2">
@@ -264,7 +264,7 @@ export function InteractiveTrainingSession({
 
       {/* Paso 3: Revisión */}
       {step === 'review' && recordedVideo && (
-        <Card className="border-green/30 bg-gradient-to-br from-green-900/10 to-slate-900/10">
+        <Card className="border-green/30 bg-background">
           <CardHeader>
             <CardTitle className="text-green/30 flex items-center gap-2">
               <span>✓</span>

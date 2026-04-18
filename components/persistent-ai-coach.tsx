@@ -611,7 +611,7 @@ export function PersistentAICoach() {
       </div>
 
       {messages.length <= 1 && (
-        <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-[28px] border border-blue/20 dark:border-blue">
+        <div className="mb-8 p-6 bg-background">
           <h2 className="text-xl font-semibold text-foreground mb-2">¿Eres nuevo aquí? Te mostramos cómo funciona</h2>
           <p className="text-sm text-muted-foreground mb-4">
             Tu Coach de Carrera IA está diseñado para apoyarte en tres formas:

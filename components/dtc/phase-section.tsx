@@ -16,28 +16,28 @@ const phaseConfig: Record<Phase, { accent: string; label: string; bgGradient: st
   ritual: {
     accent: 'purple',
     label: 'Ritual',
-    bgGradient: 'from-purple/5 to-transparent',
+    bgGradient: 'from-purple/5',
     borderColor: 'border-purple/30',
     accentBg: 'bg-purple',
   },
   exploration: {
     accent: 'blue',
     label: 'Exploración',
-    bgGradient: 'from-blue/5 to-transparent',
+    bgGradient: 'from-blue/5',
     borderColor: 'border-blue/30',
     accentBg: 'bg-blue',
   },
   training: {
     accent: 'orange',
     label: 'Entrenamiento',
-    bgGradient: 'from-orange/5 to-transparent',
+    bgGradient: 'from-orange/5',
     borderColor: 'border-orange/30',
     accentBg: 'bg-orange',
   },
   reality: {
     accent: 'cyan',
     label: 'Realidad',
-    bgGradient: 'from-cyan/5 to-transparent',
+    bgGradient: 'from-cyan/5',
     borderColor: 'border-cyan/30',
     accentBg: 'bg-cyan',
   },
@@ -52,7 +52,7 @@ export const PhaseSection = React.forwardRef<HTMLDivElement, PhaseSectionProps>(
         ref={ref}
         className={cn(
           'relative rounded-surface-lg border p-6 md:p-8',
-          `bg-gradient-to-br ${config.bgGradient}`,
+          `bg-background
           config.borderColor,
           'backdrop-blur-sm',
           'transition-all duration-300',

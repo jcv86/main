@@ -233,7 +233,7 @@ export default function UnifiedTestDashboard() {
         </Tabs>
 
         {/* Footer CTA */}
-        <div className="mt-8 p-6 bg-gradient-to-r from-blue to-purple rounded-lg text-white">
+        <div className="mt-8 p-6 bg-background">
           <h2 className="text-2xl font-bold mb-2">Siguiente Fase: A2 - Tu Plan</h2>
           <p className="mb-4 opacity-90">
             Usa todos tus resultados para crear un plan personalizado de 90 días con sprints semanales

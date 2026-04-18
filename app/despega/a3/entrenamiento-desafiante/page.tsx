@@ -235,7 +235,7 @@ export default function ChallensingTrainingPage() {
     <main className="min-h-screen bg-black">
       <div className="flex flex-col h-screen">
         {/* Header */}
-        <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-background p-4">
+        <div className="flex-shrink-0 border-b border-muted/80 bg-background">
           <div className="flex items-center justify-between">
             <Link href="/despega/a3-dashboard" className="flex items-center gap-2 text-cyan/40 hover:text-cyan/30">
               <ArrowLeft className="w-4 h-4" />
@@ -365,7 +365,7 @@ export default function ChallensingTrainingPage() {
                 ) : (
                   /* Evaluation Results */
                   <div className="space-y-4 border-t border-muted/80 pt-4">
-                    <div className="bg-gradient-to-r from-purple/30 to-pink-900/30 border border-purple/50/30 rounded-[28px] p-4 space-y-3">
+                    <div className="bg-background">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-semibold text-muted/30">Tu Puntuación</p>
                         <div className="text-3xl font-bold text-purple/40">{evaluation.score}</div>
@@ -433,7 +433,7 @@ export default function ChallensingTrainingPage() {
             </div>
 
             {/* Right Panel: Executive Dashboard (40%) */}
-            <div className="lg:col-span-2 bg-gradient-to-b from-muted/90 to-background border border-muted/80 rounded-lg flex flex-col overflow-y-auto">
+            <div className="lg:col-span-2 bg-background">
               
               {/* Score Overview */}
               <div className="p-4 border-b border-muted/80 flex-shrink-0">

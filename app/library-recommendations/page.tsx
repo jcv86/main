@@ -62,16 +62,16 @@ export default async function RecommendedBooksPage() {
   const { data: recommendations } = await query.limit(50)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-cyan-50 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
+    <div className="min-h-screen bg-background">
       <div className="container max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue/10 to-blue/10 dark:from-blue/30 dark:to-blue/30 rounded-full mb-4">
+          <div className="inline-block px-4 py-2 bg-background">
             <p className="text-sm font-semibold text-blue dark:text-blue/30">Personalizadas para ti</p>
           </div>
           <div className="flex items-center gap-2 mb-4">
             <Star className="h-8 w-8 fill-yellow-500 text-orange" />
-            <h1 className="text-5xl font-bold bg-blue bg-clip-text text-transparent dark:from-blue/40 dark:to-blue/40">Libros Recomendados</h1>
+            <h1 className="text-5xl font-bold bg-blue bg-clip-text text-transparent/40/40">Libros Recomendados</h1>
           </div>
           <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">
             Basado en tu nivel <span className="font-semibold capitalize">{profile.current_level}</span> y tus intereses en {profile.preferred_categories?.join(", ") || "varias categorías"}

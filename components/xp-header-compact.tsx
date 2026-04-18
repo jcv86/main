@@ -59,7 +59,7 @@ export function XPHeaderCompact({ onInfoClick }: XPHeaderProps) {
   }
 
   return (
-    <div className="flex items-center gap-3 px-4 py-2 rounded-[28px] bg-gradient-to-r from-cyan-50 to-teal-50 dark:from-cyan-950/30 dark:to-teal-950/30 border border-cyan/20 dark:border-cyan">
+    <div className="flex items-center gap-3 px-4 py-2 rounded-[28px] bg-background">
       {/* XP DISPLAY */}
       <div className="flex items-center gap-2">
         <Zap className="w-4 h-4 text-amber-500" />
@@ -72,14 +72,14 @@ export function XPHeaderCompact({ onInfoClick }: XPHeaderProps) {
       </div>
 
       {/* LEVEL BADGE */}
-      <Badge className="bg-gradient-to-r from-cyan-600 to-teal-600 text-white text-xs">
+      <Badge className="bg-background">
         Nivel {xpData.current_level}
       </Badge>
 
       {/* PROGRESS BAR */}
       <div className="flex-1 h-1.5 bg-muted/30 dark:bg-muted/70 rounded-full overflow-hidden">
         <div
-          className="h-full bg-gradient-to-r from-cyan-500 to-teal-500 rounded-full transition-all duration-500"
+          className="h-full bg-background"
           style={{ width: `${Math.min(xpData.xp_progress_percent, 100)}%` }}
         />
       </div>

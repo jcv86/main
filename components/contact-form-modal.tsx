@@ -63,11 +63,11 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
       <DialogContent className="sm:max-w-[500px] bg-white border-0 shadow-2xl">
         <DialogHeader className="space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-background">
               <Mail className="w-6 h-6 text-white" />
             </div>
             <div>
-              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <DialogTitle className="text-2xl font-bold bg-background">
                 Contáctanos
               </DialogTitle>
               <DialogDescription className="text-sm text-muted/60 mt-1">
@@ -172,7 +172,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
           <Button
             type="submit"
             disabled={loading || status === "success"}
-            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue text-white font-semibold py-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="w-full bg-background"
           >
             {loading ? (
               <>

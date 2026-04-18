@@ -9,15 +9,15 @@ export const metadata = {
 
 export default function RecursosPublicosPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-blue/5 via-blue/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
+    <main className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Header */}
           <div className="text-center space-y-3">
-            <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue/10 to-blue/10 dark:from-blue/30 dark:to-blue/30 rounded-full mb-4">
+            <div className="inline-block px-4 py-2 bg-background">
               <p className="text-sm font-semibold text-cyan dark:text-cyan/30">Recursos del Sector Público</p>
             </div>
-            <h1 className="text-5xl font-bold bg-blue bg-clip-text text-transparent dark:from-blue/40 dark:to-blue/40">Recursos Públicos Chilenos</h1>
+            <h1 className="text-5xl font-bold bg-blue bg-clip-text text-transparent/40/40">Recursos Públicos Chilenos</h1>
             <p className="text-xl text-muted/70 dark:text-muted/30 font-medium">
               Accede a 46+ bases de datos y recursos del gobierno chileno para tu desarrollo profesional
             </p>

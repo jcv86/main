@@ -15,28 +15,28 @@ const ROUTE_INFO = {
   energia: {
     name: "Energía y Vitalidad",
     icon: "⚡",
-    color: "from-yellow-500 to-amber-500",
+    color: "from-yellow-500500",
     bgColor: "bg-yellow/5 dark:bg-yellow/20",
     textColor: "text-yellow dark:text-yellow/10",
   },
   enfoque: {
     name: "Enfoque y Productividad",
     icon: "🎯",
-    color: "from-green to-green",
+    color: "from-green",
     bgColor: "bg-green/5 dark:bg-green/20",
     textColor: "text-green dark:text-green/10",
   },
   relaciones: {
     name: "Relaciones Significativas",
     icon: "🤝",
-    color: "from-red/50 to-rose-500",
+    color: "from-red/50500",
     bgColor: "bg-red/5 dark:bg-red/20",
     textColor: "text-pink-900 dark:text-pink-100",
   },
   plan_ejecutivo: {
     name: "Plan Ejecutivo",
     icon: "📋",
-    color: "from-purple/50 to-blue/50",
+    color: "from-purple/50/50",
     bgColor: "bg-purple/5 dark:bg-purple/20",
     textColor: "text-purple dark:text-purple/10",
   },
@@ -173,7 +173,7 @@ export default function Mision90DiasPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green"></div>
           <p className="mt-4 text-muted/60 dark:text-muted/40">Preparando tu misión...</p>
@@ -185,7 +185,7 @@ export default function Mision90DiasPage() {
   const routeInfo = ROUTE_INFO[routeSelected as keyof typeof ROUTE_INFO] || ROUTE_INFO.energia
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-background">
       <div className="max-w-3xl mx-auto py-12 space-y-8">
         {/* Header */}
         <div className="text-center space-y-3">
@@ -201,7 +201,7 @@ export default function Mision90DiasPage() {
         </div>
 
         {/* Route Display */}
-        <div className={`p-6 rounded-[28px] bg-gradient-to-r ${routeInfo.color} text-white`}>
+        <div className={`p-6 rounded-[28px] bg-background
           <div className="flex items-center gap-3">
             <span className="text-4xl">{routeInfo.icon}</span>
             <div>

@@ -98,11 +98,11 @@ export default function HowToEarnXPPage() {
   ]
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-muted/90 to-background p-4 md:p-8">
+    <main className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* HEADER */}
         <div className="space-y-4 text-center">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue/40 to-blue/40 bg-clip-text text-transparent">
+          <h1 className="text-5xl font-bold bg-background">
             ¿Cómo Ganar Puntos (XP)?
           </h1>
           <p className="text-xl text-muted/40">
@@ -161,7 +161,7 @@ export default function HowToEarnXPPage() {
         </div>
 
         {/* STREAK MULTIPLIER */}
-        <Card className="bg-gradient-to-r from-orange/30 to-red-900/30 border-orange/50">
+        <Card className="bg-background">
           <CardHeader>
             <div className="flex items-center gap-2">
               <Flame className="w-6 h-6 text-orange/40" />
@@ -187,7 +187,7 @@ export default function HowToEarnXPPage() {
         </Card>
 
         {/* TIPS */}
-        <Card className="bg-gradient-to-r from-blue/30 to-blue/30 border-blue/50">
+        <Card className="bg-background">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Trophy className="w-5 h-5 text-cyan/40" />

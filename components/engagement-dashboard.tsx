@@ -22,7 +22,7 @@ export function EngagementDashboard() {
   return (
     <div className="space-y-4">
       {/* Points Card */}
-      <Card className="border-0 bg-gradient-to-r from-primary/10 to-primary/5 backdrop-blur-sm">
+      <Card className="border-0 bg-background">
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div>

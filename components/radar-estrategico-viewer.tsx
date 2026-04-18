@@ -63,7 +63,7 @@ export function RadarEstrategico() {
   if (loading) return <div className="min-h-screen animate-pulse" />
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-muted/5 p-6 space-y-8">
+    <div className="min-h-screen bg-background">
       {/* Tesis del Día - Main Strategic Statement */}
       {tesisDia && (
         <div className="space-y-6">
@@ -127,7 +127,7 @@ export function RadarEstrategico() {
                   <div className="mt-2 flex items-center gap-2">
                     <div className="w-full h-2 bg-muted/70 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-cyan-400"
+                        className="h-full bg-background"
                         style={{ width: `${tesisDia.consensus_score * 100}%` }}
                       />
                     </div>

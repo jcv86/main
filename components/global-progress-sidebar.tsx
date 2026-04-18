@@ -83,7 +83,7 @@ export function GlobalProgressSidebar() {
   return (
     <div className="fixed right-4 top-4 w-72 z-30 space-y-3">
       {/* MAIN PROGRESS CARD */}
-      <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 border-2 border-indigo-200 dark:border-indigo-800 shadow-lg">
+      <Card className="bg-background">
         <div className="p-4 space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-bold text-indigo-900 dark:text-blue/10">Tu Transformación</h3>
@@ -128,7 +128,7 @@ export function GlobalProgressSidebar() {
       </Card>
 
       {/* QUICK ACTIONS */}
-      <Card className="bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 border border-green/20 dark:border-green shadow-md">
+      <Card className="bg-background">
         <div className="p-3 space-y-2">
           <p className="text-xs font-semibold text-muted/70 dark:text-muted/30">Acceso Rápido</p>
           <div className="space-y-1">

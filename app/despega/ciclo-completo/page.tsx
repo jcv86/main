@@ -121,7 +121,7 @@ export default function CycleCompletionPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center">
           <div className="w-12 h-12 border-4 border-purple/20 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-muted-foreground">Consolidando tu ciclo...</p>
@@ -138,7 +138,7 @@ export default function CycleCompletionPage() {
   const overallProgress = calculateProgress()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50 py-12 px-4">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center space-y-4">

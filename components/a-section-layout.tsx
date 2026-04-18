@@ -31,7 +31,7 @@ export function ASection({ title, subtitle, icon, colorClass, children }: ASecti
               <p className="text-lg text-muted/40 mt-2">{subtitle}</p>
             </div>
           </div>
-          <div className={`h-1 w-24 rounded-[20px] bg-gradient-to-r ${colorClass}`} />
+          <div className={`h-1 w-24 rounded-[20px] bg-background
         </div>
 
         {children}
@@ -48,7 +48,7 @@ export function ASectionPart({ title, icon, children, defaultOpen = true }: ASec
         <h2 className="text-3xl font-bold text-white">{title}</h2>
       </div>
       
-      <div className="bg-gradient-to-br from-slate-800/50 to-slate-700/30 border border-muted/70/50 rounded-2xl p-8">
+      <div className="bg-background">
         {children}
       </div>
     </div>

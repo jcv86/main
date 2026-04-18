@@ -95,7 +95,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
       </div>
 
       {/* WOW Moment Explanation */}
-      <Card className="bg-gradient-to-r from-purple-900 to-indigo-900 border-purple">
+      <Card className="bg-background">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
             <Link2 className="w-5 h-5" />

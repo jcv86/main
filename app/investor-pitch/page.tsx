@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function InvestorPitch() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-white border-b border-muted/20 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-4 max-w-7xl flex items-center justify-between">
@@ -26,7 +26,7 @@ export default function InvestorPitch() {
 
       <main className="container mx-auto px-4 py-12 max-w-6xl">
         {/* Hero Section */}
-        <div className="bg-gradient-to-r from-purple via-blue to-emerald-600 rounded-3xl p-12 text-white mb-12 relative overflow-hidden">
+        <div className="bg-background">
           <div className="absolute inset-0 bg-black/10"></div>
           <div className="relative z-10">
             <div className="text-purple/10 text-sm font-semibold mb-2 uppercase tracking-wide">
@@ -61,21 +61,21 @@ export default function InvestorPitch() {
               El Problema
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-gradient-to-br from-red-50 to-orange/5 rounded-xl p-6 border border-red/10">
+              <div className="bg-background">
                 <h3 className="font-bold text-lg mb-3 text-foreground">Acceso Limitado</h3>
                 <p className="text-muted">
                   Las herramientas de desarrollo profesional son caras e inaccesibles para la mayoría de los
                   profesionales chilenos. La coaching de carrera cuesta $100-300+ por sesión.
                 </p>
               </div>
-              <div className="bg-gradient-to-br from-orange/5 to-yellow-50 rounded-xl p-6 border border-orange/10">
+              <div className="bg-background">
                 <h3 className="font-bold text-lg mb-3 text-foreground">Soluciones Fragmentadas</h3>
                 <p className="text-muted">
                   Las pruebas, libros y coaching están dispersos en múltiples plataformas. No existe una solución
                   unificada para un desarrollo de carrera completo.
                 </p>
               </div>
-              <div className="bg-gradient-to-br from-yellow-50 to-red-50 rounded-xl p-6 border border-yellow/10">
+              <div className="bg-background">
                 <h3 className="font-bold text-lg mb-3 text-foreground">Sin Personalización</h3>
                 <p className="text-muted">
                   El consejo genérico no considera las personalidades individuales, las fortalezas o las condiciones del
@@ -135,7 +135,7 @@ export default function InvestorPitch() {
             </h2>
 
             <div className="grid md:grid-cols-2 gap-8 mb-8">
-              <div className="bg-gradient-to-br from-green/5 to-blue/5 rounded-xl p-6 border border-emerald-100">
+              <div className="bg-background">
                 <h3 className="font-bold text-2xl mb-4 text-foreground">Mercado de Chile</h3>
                 <ul className="space-y-3 text-muted">
                   <li className="flex items-start gap-3">
@@ -165,7 +165,7 @@ export default function InvestorPitch() {
                 </ul>
               </div>
 
-              <div className="bg-gradient-to-br from-blue/5 to-purple/5 rounded-xl p-6 border border-blue/10">
+              <div className="bg-background">
                 <h3 className="font-bold text-2xl mb-4 text-foreground">Expansión en LATAM</h3>
                 <ul className="space-y-3 text-muted">
                   <li className="flex items-start gap-3">
@@ -241,7 +241,7 @@ export default function InvestorPitch() {
                 </p>
               </div>
 
-              <div className="bg-gradient-to-br from-blue/5 to-green/5 rounded-xl p-6 border border-blue/10">
+              <div className="bg-background">
                 <h3 className="font-bold text-xl mb-4 text-foreground">Premium Individual</h3>
                 <div className="text-3xl font-bold text-blue mb-2">$29/mes</div>
                 <ul className="space-y-2 text-muted text-sm mb-4">
@@ -254,7 +254,7 @@ export default function InvestorPitch() {
                 <p className="text-xs text-muted/60">Objetivo: conversión de 5-10% de usuarios gratuitos</p>
               </div>
 
-              <div className="bg-gradient-to-br from-green/5 to-purple/5 rounded-xl p-6 border border-emerald-100">
+              <div className="bg-background">
                 <h3 className="font-bold text-xl mb-4 text-foreground">Empresarial (B2B)</h3>
                 <div className="text-3xl font-bold text-green mb-2">Personalizado</div>
                 <ul className="space-y-2 text-muted text-sm mb-4">
@@ -421,7 +421,7 @@ export default function InvestorPitch() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-blue/5 to-green/5 rounded-xl p-6 border border-blue/10">
+              <div className="bg-background">
                 <div className="w-20 h-20 bg-blue/20 rounded-full flex items-center justify-center text-3xl font-bold text-blue mb-4">
                   TC
                 </div>

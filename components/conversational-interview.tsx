@@ -280,7 +280,7 @@ export function ConversationalInterview({
     return (
       <div className="max-w-4xl mx-auto p-6 space-y-4">
         {/* Avatar Showcase */}
-        <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-[28px] border border-muted/20 dark:border-muted/70">
+        <div className="grid grid-cols-2 gap-4 p-4 bg-background">
           {/* Interviewer Avatar */}
           <div className="flex flex-col items-center justify-center py-4 px-2">
             <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-2 ${getAvatarGradient(preferences.interviewer_avatar_id)} shadow-lg`}>
@@ -484,18 +484,18 @@ function getAvatarName(avatarId: string, type: 'user' | 'interviewer'): string {
 
 function getAvatarGradient(avatarId: string): string {
   const gradients: Record<string, string> = {
-    'professional-1': 'bg-gradient-to-br from-blue-500 to-blue-600',
-    'creative-1': 'bg-gradient-to-br from-purple-500 to-purple',
-    'tech-1': 'bg-gradient-to-br from-green-500 to-green-600',
+    'professional-1': 'bg-background
+    'creative-1': 'bg-background
+    'tech-1': 'bg-background
     'business-1': 'bg-red',
-    'casual-1': 'bg-gradient-to-br from-orange-500 to-orange-600',
-    'formal-1': 'bg-gradient-to-br from-slate-700 to-slate-900',
-    'interviewer-classic-1': 'bg-gradient-to-br from-purple-500 to-purple',
-    'interviewer-classic-2': 'bg-gradient-to-br from-blue-500 to-blue-600',
-    'interviewer-classic-3': 'bg-gradient-to-br from-purple-500 to-blue',
-    'interviewer-classic-4': 'bg-gradient-to-br from-green-500 to-emerald-600',
-    'interviewer-modern-1': 'bg-gradient-to-br from-red-500 to-rose-600',
-    'interviewer-modern-2': 'bg-gradient-to-br from-orange-500 to-yellow-600',
+    'casual-1': 'bg-background
+    'formal-1': 'bg-background
+    'interviewer-classic-1': 'bg-background
+    'interviewer-classic-2': 'bg-background
+    'interviewer-classic-3': 'bg-background
+    'interviewer-classic-4': 'bg-background
+    'interviewer-modern-1': 'bg-background
+    'interviewer-modern-2': 'bg-background
   }
-  return gradients[avatarId] || 'bg-gradient-to-br from-slate-500 to-slate-600'
+  return gradients[avatarId] || 'bg-background
 }

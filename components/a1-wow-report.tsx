@@ -347,7 +347,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
       </Card>
 
       {/* CTA Section */}
-      <Card className="bg-gradient-to-r from-emerald-50 to-teal-50 border-2 border-emerald-500">
+      <Card className="bg-background">
         <CardContent className="pt-6">
           <div className="text-center space-y-4">
             <h3 className="text-xl font-bold text-foreground">El Siguiente Paso</h3>

@@ -42,7 +42,7 @@ export function XPNotificationCenter() {
           key={notification.id}
           className="animate-in fade-in slide-in-from-top-2 animate-out fade-out slide-out-to-top-2 duration-300"
         >
-          <div className="flex items-center gap-3 px-4 py-3 rounded-[28px] bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg border border-amber-400 pointer-events-auto">
+          <div className="flex items-center gap-3 px-4 py-3 rounded-[28px] bg-background">
             <div className="flex items-center justify-center w-6 h-6 rounded-[20px] bg-white/20">
               <Zap className="w-4 h-4" />
             </div>

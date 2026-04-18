@@ -20,7 +20,7 @@ export default function TestPerformancePage() {
     <div className="min-h-screen bg-muted/5 p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
-        <Card className="border-blue/20 bg-gradient-to-r from-blue/5 to-blue/5">
+        <Card className="border-blue/20 bg-background">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">

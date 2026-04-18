@@ -171,12 +171,12 @@ export default function DocumentsPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-white to-purple/5 py-8">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center gap-3 mb-3">
             <Brain className="w-10 h-10 text-blue" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue to-purple bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold bg-background">
               Cerebro de Conocimiento
             </h1>
           </div>
@@ -373,7 +373,7 @@ export default function DocumentsPage() {
                           <div
                             className={`max-w-[80%] p-4 rounded-lg shadow-sm ${
                               msg.role === "user"
-                                ? "bg-gradient-to-r from-blue/50 to-blue text-white"
+                                ? "bg-background"
                                 : "bg-white border border-muted/20 text-foreground"
                             }`}
                           >

@@ -131,7 +131,7 @@ export function QueSignificaParaTi() {
 
   if (loading) {
     return (
-      <Card className="bg-gradient-to-br from-primary/5 via-transparent to-accent/5 border-0">
+      <Card className="bg-background">
         <CardContent className="pt-12 pb-12 flex items-center justify-center">
           <div className="text-center">
             <Loader2 className="w-8 h-8 animate-spin text-purple mx-auto mb-2" />
@@ -210,7 +210,7 @@ export function QueSignificaParaTi() {
         <TabsContent value="interpretacion" className="space-y-4">
           {interpretations.map((interp, idx) => (
             <Card key={idx} className="border-0 bg-card/70 backdrop-blur-sm overflow-hidden">
-              <CardHeader className="bg-gradient-to-r from-primary/10 to-accent/10">
+              <CardHeader className="bg-background">
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-[28px] bg-purple/20">{interp.icon}</div>
                   <CardTitle className="text-xl">{interp.heading}</CardTitle>
@@ -236,7 +236,7 @@ export function QueSignificaParaTi() {
       </Tabs>
 
       {/* Key Takeaway */}
-      <Card className="border-purple/20 bg-gradient-to-r from-primary/5 to-accent/5">
+      <Card className="border-purple/20 bg-background">
         <CardHeader>
           <CardTitle className="text-lg">Lo Más Importante</CardTitle>
         </CardHeader>

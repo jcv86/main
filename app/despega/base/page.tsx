@@ -115,11 +115,11 @@ export default function BasePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
         
         {/* JOURNEY PROGRESS - BIG VISUAL */}
-        <div className="bg-gradient-to-r from-blue to-purple dark:from-blue dark:to-purple rounded-xl p-8 text-white shadow-xl">
+        <div className="bg-background">
           <h1 className="text-3xl font-bold mb-2">Tu Viaje DespegarTuCarrera</h1>
           <p className="text-blue/10 mb-6">90 días de transformación profesional. Aquí está dónde estás:</p>
           

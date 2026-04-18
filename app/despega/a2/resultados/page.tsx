@@ -23,37 +23,37 @@ const insightCards = [
     key: 'alineacionMision',
     icon: '🎯',
     title: 'Alineación de Misión',
-    color: 'from-green/50 to-blue'
+    color: 'from-green/50'
   },
   {
     key: 'rutaAprendizaje',
     icon: '📚',
     title: 'Ruta de Aprendizaje',
-    color: 'from-blue to-blue'
+    color: 'from-blue'
   },
   {
     key: 'dinamicasEquipo',
     icon: '👥',
     title: 'Dinámicas de Equipo',
-    color: 'from-purple/50 to-pink-500'
+    color: 'from-purple/50500'
   },
   {
     key: 'areasGrowth',
     icon: '📈',
     title: 'Áreas de Crecimiento',
-    color: 'from-yellow/50 to-orange/50'
+    color: 'from-yellow/50/50'
   },
   {
     key: 'hitosExito',
     icon: '🏆',
     title: 'Hitos de Éxito',
-    color: 'from-red/50 to-red-500'
+    color: 'from-red/50500'
   },
   {
     key: 'riesgosOportunidades',
     icon: '⚡',
     title: 'Riesgos & Oportunidades',
-    color: 'from-blue/50 to-purple'
+    color: 'from-blue/50'
   }
 ]
 
@@ -144,7 +144,7 @@ export default function A2ResultadosPage() {
 
   if (error) {
     return (
-      <ASection title="A2: Camino" subtitle="Resultados de tu Misión" icon="🗺️" colorClass="from-blue to-blue">
+      <ASection title="A2: Camino" subtitle="Resultados de tu Misión" icon="🗺️" colorClass="from-blue">
         <ASectionPart title="Error" icon={<Target />}>
           <div className="space-y-4">
             <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
@@ -164,12 +164,12 @@ export default function A2ResultadosPage() {
   }
 
   return (
-    <ASection title="A2: Camino" subtitle="Resultados de tu Misión" icon="🗺️" colorClass="from-blue to-blue">
+    <ASection title="A2: Camino" subtitle="Resultados de tu Misión" icon="🗺️" colorClass="from-blue">
       <ASectionPart title="Insights Generados" icon={<Zap />}>
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {insightCards.map((card) => (
-              <Card key={card.key} className={`bg-gradient-to-br ${card.color} border-0 text-white`}>
+              <Card key={card.key} className={`bg-background
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>

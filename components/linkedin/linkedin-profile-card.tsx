@@ -75,7 +75,7 @@ export function LinkedInProfileCard() {
   }
 
   return (
-    <Card className="border-blue/20 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20">
+    <Card className="border-blue/20 bg-background">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">

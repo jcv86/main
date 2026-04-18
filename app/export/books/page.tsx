@@ -105,7 +105,7 @@ export default function BooksExportPage() {
   const bookCount = csvData.split("\n").length - 1 // Subtract 1 for header
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 to-indigo-100 p-4">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">Exportar Biblioteca Completa</h1>

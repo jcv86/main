@@ -90,7 +90,7 @@ export default function OnboardingIntereses({ onComplete }: { onComplete: (prefe
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 to-purple/5 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background">
       <Card className="w-full max-w-3xl">
         <CardHeader>
           <Progress value={progress} className="mb-4" />

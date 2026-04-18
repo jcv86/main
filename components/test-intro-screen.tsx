@@ -45,7 +45,7 @@ export function TestIntroScreen({
               Evaluación DTC
             </Badge>
           </div>
-          <CardTitle className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+          <CardTitle className="text-4xl font-bold bg-background">
             {displayName}
           </CardTitle>
           <CardDescription className="text-lg">{displayDescription}</CardDescription>

@@ -167,7 +167,7 @@ export function SuperSmartBrainChat() {
         <CardHeader className="border-b">
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
-              <div className="p-2 bg-gradient-to-br from-purple-500 via-blue-600 to-cyan-500 rounded-lg">
+              <div className="p-2 bg-background">
                 <Brain className="h-5 w-5 text-white" />
               </div>
               Cerebro Avanzado
@@ -186,7 +186,7 @@ export function SuperSmartBrainChat() {
           <ScrollArea className="flex-1 p-6" ref={scrollRef}>
             {showSuggestions && messages.length === 0 ? (
               <div className="space-y-4">
-                <Alert className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple/20">
+                <Alert className="bg-background">
                   <Brain className="h-5 w-5" />
                   <AlertDescription>
                     <p className="font-semibold mb-3">🚀 Cerebro Avanzado de IA</p>
@@ -231,11 +231,11 @@ export function SuperSmartBrainChat() {
                     <Button
                       key={index}
                       variant="outline"
-                      className="w-full justify-start h-auto py-4 px-4 hover:bg-gradient-to-r hover:from-purple-50 hover:to-blue-50 transition-all bg-transparent"
+                      className="w-full justify-start h-auto py-4 px-4 hover:bg-background"
                       onClick={() => sendMessage(suggestion.text)}
                     >
                       <div className="flex items-start gap-3 w-full">
-                        <div className="p-2 bg-gradient-to-br from-purple-100 to-blue-100 rounded-lg">
+                        <div className="p-2 bg-background">
                           {suggestion.icon}
                         </div>
                         <div className="text-left flex-1">
@@ -257,8 +257,8 @@ export function SuperSmartBrainChat() {
                     <div
                       className={`max-w-[85%] rounded-2xl p-5 ${
                         message.role === "user"
-                          ? "bg-gradient-to-br from-purple-500 via-blue-600 to-cyan-500 text-white shadow-lg"
-                          : "bg-gradient-to-br from-gray-50 to-gray-100 border border-muted/20"
+                          ? "bg-background"
+                          : "bg-background"
                       }`}
                     >
                       <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
@@ -345,7 +345,7 @@ export function SuperSmartBrainChat() {
 
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 border border-muted/20 rounded-2xl p-5">
+                    <div className="bg-background">
                       <div className="flex items-center gap-3">
                         <Loader2 className="h-5 w-5 animate-spin text-purple" />
                         <div className="space-y-1">
@@ -363,7 +363,7 @@ export function SuperSmartBrainChat() {
           </ScrollArea>
 
           {/* Input area */}
-          <div className="border-t p-4 bg-gradient-to-r from-purple-50/50 to-blue-50/50">
+          <div className="border-t p-4 bg-background">
             <form
               onSubmit={(e) => {
                 e.preventDefault()
@@ -381,7 +381,7 @@ export function SuperSmartBrainChat() {
               <Button
                 type="submit"
                 disabled={isLoading || !input.trim()}
-                className="bg-gradient-to-r from-purple-600 to-blue-600"
+                className="bg-background"
               >
                 {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
               </Button>

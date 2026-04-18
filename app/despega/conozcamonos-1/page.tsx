@@ -199,13 +199,13 @@ export default function Conozcamonos1Page() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <div className="mb-8">
-          <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple/10 to-blue/10 dark:from-purple/30 dark:to-blue-900/30 rounded-full mb-4">
+          <div className="inline-block px-4 py-2 bg-background">
             <p className="text-sm font-semibold text-purple dark:text-purple/30">El Ritual: Paso 1 - Conocámonos</p>
           </div>
-          <h1 className="text-4xl font-bold bg-purple bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">
+          <h1 className="text-4xl font-bold text-purple400400 mb-2">
             Antes de Empezar, Cuéntame Tu Historia
           </h1>
           <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>

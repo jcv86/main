@@ -97,7 +97,7 @@ export function PhaseTransitionHandler({
 
   // Phase complete - show transition card
   return (
-    <Card className="border-2 border-emerald-500/50 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950/20 dark:to-teal-950/20">
+    <Card className="border-2 border-emerald-500/50 bg-background">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>

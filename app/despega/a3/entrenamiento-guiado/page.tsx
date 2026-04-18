@@ -126,7 +126,7 @@ export default function GuidedTrainingPage() {
     const Icon = selectedModule.icon
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-muted/90 dark:via-purple-900/20 dark:to-muted/90 p-6">
+      <div className="min-h-screen bg-background">
         <div className="max-w-3xl mx-auto space-y-6">
           {/* Header */}
           <Button
@@ -162,7 +162,7 @@ export default function GuidedTrainingPage() {
             </div>
 
             {/* Coach Content Area */}
-            <div className="bg-gradient-to-br from-blue/5 to-blue/5 dark:from-blue/20 dark:to-blue/20 border-2 border-blue/30 dark:border-blue/10 rounded-[28px] p-8 min-h-64 space-y-4">
+            <div className="bg-background">
               <div className="space-y-4 text-muted/70 dark:text-muted/30">
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-lg text-muted/90 dark:text-white flex items-center gap-2">
@@ -334,7 +334,7 @@ export default function GuidedTrainingPage() {
               </div>
             ) : (
               <div className="fixed inset-0 bg-black z-50 flex flex-col h-screen">
-                <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-background p-4">
+                <div className="flex-shrink-0 border-b border-muted/80 bg-background">
                   <Button
                     onClick={() => setShowVideoSession(false)}
                     variant="outline"
@@ -389,7 +389,7 @@ export default function GuidedTrainingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-muted/90 dark:via-purple-900/20 dark:to-muted/90 p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Header */}
         <Link href="/despega/a3">

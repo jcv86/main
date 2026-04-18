@@ -35,21 +35,21 @@ export function AvatarPicker({
   const [loading, setLoading] = useState(true)
 
   const userAvatars: AvatarOption[] = [
-    { id: 'professional-1', name: 'Professional', description: 'Classic professional look', emoji: '👔', color: 'from-blue-500 to-blue-600' },
-    { id: 'creative-1', name: 'Creative', description: 'Modern creative style', emoji: '🎨', color: 'from-purple-500 to-purple' },
-    { id: 'tech-1', name: 'Tech', description: 'Tech-savvy appearance', emoji: '💻', color: 'from-green-500 to-green-600' },
-    { id: 'business-1', name: 'Business', description: 'Corporate executive', emoji: '🏢', color: 'from-red to-red' },
-    { id: 'casual-1', name: 'Casual', description: 'Relaxed casual style', emoji: '😎', color: 'from-orange-500 to-orange-600' },
-    { id: 'formal-1', name: 'Formal', description: 'Formal business attire', emoji: '🎩', color: 'from-slate-700 to-slate-900' },
+    { id: 'professional-1', name: 'Professional', description: 'Classic professional look', emoji: '👔', color: 'from-blue-500600' },
+    { id: 'creative-1', name: 'Creative', description: 'Modern creative style', emoji: '🎨', color: 'from-purple-500' },
+    { id: 'tech-1', name: 'Tech', description: 'Tech-savvy appearance', emoji: '💻', color: 'from-green-500600' },
+    { id: 'business-1', name: 'Business', description: 'Corporate executive', emoji: '🏢', color: 'from-red' },
+    { id: 'casual-1', name: 'Casual', description: 'Relaxed casual style', emoji: '😎', color: 'from-orange-500600' },
+    { id: 'formal-1', name: 'Formal', description: 'Formal business attire', emoji: '🎩', color: 'from-slate-700900' },
   ]
 
   const interviewerAvatars: AvatarOption[] = [
-    { id: 'interviewer-classic-1', name: 'Sofia', description: 'HR Specialist', emoji: '👩‍💼', color: 'from-purple-500 to-purple' },
-    { id: 'interviewer-classic-2', name: 'Marco', description: 'Tech Lead', emoji: '👨‍💻', color: 'from-blue-500 to-blue-600' },
-    { id: 'interviewer-classic-3', name: 'Elena', description: 'Executive', emoji: '👩‍💼', color: 'from-purple-500 to-blue' },
-    { id: 'interviewer-classic-4', name: 'David', description: 'Team Manager', emoji: '👨‍💼', color: 'from-green-500 to-emerald-600' },
-    { id: 'interviewer-modern-1', name: 'Alex', description: 'Career Coach', emoji: '🧑‍🏫', color: 'from-red-500 to-rose-600' },
-    { id: 'interviewer-modern-2', name: 'Jordan', description: 'Recruiter', emoji: '🎯', color: 'from-orange-500 to-yellow-600' },
+    { id: 'interviewer-classic-1', name: 'Sofia', description: 'HR Specialist', emoji: '👩‍💼', color: 'from-purple-500' },
+    { id: 'interviewer-classic-2', name: 'Marco', description: 'Tech Lead', emoji: '👨‍💻', color: 'from-blue-500600' },
+    { id: 'interviewer-classic-3', name: 'Elena', description: 'Executive', emoji: '👩‍💼', color: 'from-purple-500' },
+    { id: 'interviewer-classic-4', name: 'David', description: 'Team Manager', emoji: '👨‍💼', color: 'from-green-500600' },
+    { id: 'interviewer-modern-1', name: 'Alex', description: 'Career Coach', emoji: '🧑‍🏫', color: 'from-red-500600' },
+    { id: 'interviewer-modern-2', name: 'Jordan', description: 'Recruiter', emoji: '🎯', color: 'from-orange-500600' },
   ]
 
   useEffect(() => {
@@ -85,8 +85,8 @@ export function AvatarPicker({
 
       <CardContent className="space-y-6">
         {/* Preview Section */}
-        <div className="flex flex-col items-center justify-center py-8 px-6 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-xl border border-muted/20 dark:border-muted/70">
-          <div className={`w-32 h-32 rounded-full flex items-center justify-center text-6xl mb-4 bg-gradient-to-br ${selected?.color} shadow-lg ring-4 ring-offset-2 ring-slate-200 dark:ring-slate-700 ring-offset-slate-50 dark:ring-offset-slate-900 transition-all duration-300`}>
+        <div className="flex flex-col items-center justify-center py-8 px-6 bg-background">
+          <div className={`w-32 h-32 rounded-full flex items-center justify-center text-6xl mb-4 bg-background
             {selected?.emoji}
           </div>
           <h3 className="text-2xl font-bold text-muted/90 dark:text-white">{selected?.name}</h3>
@@ -103,7 +103,7 @@ export function AvatarPicker({
                 onClick={() => handleSelect(avatar.id)}
                 className={`relative group flex flex-col items-center gap-2 p-3 rounded-lg transition-all duration-200 ${
                   selectedAvatar === avatar.id
-                    ? `bg-gradient-to-br ${avatar.color} text-white shadow-lg ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-900`
+                    ? `bg-background
                     : 'bg-muted/10 dark:bg-transparent hover:bg-muted/20 dark:hover:bg-muted/70'
                 }`}
               >

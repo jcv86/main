@@ -1,6 +1,6 @@
 export default function ExplicacionSimplePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16 max-w-5xl">
         {/* Header */}
         <div className="text-center mb-16">
@@ -27,7 +27,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 2: The Problem */}
-          <div className="bg-gradient-to-br from-red-50 to-orange/5 rounded-2xl p-8 border border-red/20">
+          <div className="bg-background">
             <h2 className="text-3xl font-bold text-foreground mb-4">El Problema que Resuelve</h2>
             <p className="text-lg text-muted mb-4">
               El mercado laboral chileno enfrenta desafíos críticos de empleabilidad y desarrollo profesional:
@@ -74,7 +74,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 3: How it works - 3 Core Tools */}
-          <div className="bg-gradient-to-br from-blue/5 to-purple/5 rounded-2xl p-8 border border-blue/20">
+          <div className="bg-background">
             <h2 className="text-3xl font-bold text-foreground mb-6">¿Cómo Funciona? Tres Pilares Integrados</h2>
 
             <div className="space-y-6">
@@ -137,7 +137,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 4: Target Audience */}
-          <div className="bg-gradient-to-br from-green/5 to-blue/5 rounded-2xl p-8 border border-green/20">
+          <div className="bg-background">
             <h2 className="text-3xl font-bold text-foreground mb-4">¿Para Quién es?</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-xl p-6">
@@ -162,7 +162,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 5: Value Proposition */}
-          <div className="bg-gradient-to-br from-blue/5 to-purple/5 rounded-2xl p-8 border border-blue/20">
+          <div className="bg-background">
             <h2 className="text-3xl font-bold text-foreground mb-4">Propuesta de Valor</h2>
             <div className="space-y-4">
               <div className="bg-white rounded-xl p-6">
@@ -203,7 +203,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 6: How to Use */}
-          <div className="bg-gradient-to-br from-purple/5 to-pink-50 rounded-2xl p-8 border border-purple/20">
+          <div className="bg-background">
             <h2 className="text-3xl font-bold text-foreground mb-6">Proceso de Uso</h2>
             <div className="space-y-4">
               <div className="flex items-start gap-4 bg-white rounded-xl p-5 border-l-4 border-purple/50">
@@ -255,7 +255,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 7: Technology Stack */}
-          <div className="bg-gradient-to-br from-muted/5 to-gray-50 rounded-2xl p-8 border border-muted/20">
+          <div className="bg-background">
             <h2 className="text-3xl font-bold text-foreground mb-4">Stack Tecnológico</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-xl p-6">
@@ -295,7 +295,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 8: Team */}
-          <div className="bg-gradient-to-br from-red/5 to-orange/5 rounded-2xl p-8 border border-red/20">
+          <div className="bg-background">
             <h2 className="text-3xl font-bold text-foreground mb-6">Equipo</h2>
             <div className="space-y-4">
               <div className="bg-white rounded-xl p-6 border-l-4 border-rose-500">
@@ -319,7 +319,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 9: Launch & Roadmap */}
-          <div className="bg-gradient-to-br from-orange/5 to-amber-50 rounded-2xl p-8 border border-orange/20">
+          <div className="bg-background">
             <h2 className="text-3xl font-bold text-foreground mb-6">Lanzamiento y Roadmap</h2>
             <div className="bg-white rounded-xl p-6 text-center mb-6">
               <p className="text-sm text-muted/50 mb-2">LANZAMIENTO PÚBLICO</p>
@@ -344,7 +344,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Final Summary */}
-          <div className="bg-gradient-to-br from-gray-900 to-purple-900 text-white rounded-2xl p-10">
+          <div className="bg-background">
             <h2 className="text-4xl font-bold mb-6 text-center">Resumen Ejecutivo</h2>
             <p className="text-xl leading-relaxed text-center mb-6">
               <strong>Despega Tu Carrera</strong> es la primera plataforma integral de desarrollo profesional en Chile

@@ -32,7 +32,7 @@ export default function JourneySummaryPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 p-6">
+    <main className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto space-y-8">
         
         {/* Header */}
@@ -48,7 +48,7 @@ export default function JourneySummaryPage() {
         </div>
 
         {/* OVERALL PROGRESS */}
-        <Card className="border-0 shadow-lg bg-gradient-to-r from-blue to-purple text-white">
+        <Card className="border-0 shadow-lg bg-background">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Target className="w-6 h-6" />

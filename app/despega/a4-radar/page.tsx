@@ -56,7 +56,7 @@ export default function A4RadarPage() {
       title="A4: Radar"
       subtitle="Monitoreo continuo y oportunidades"
       icon="📡"
-      colorClass="from-blue/50 to-green"
+      colorClass="from-blue/50"
     >
       {/* EXPLICACIÓN */}
       <ASectionPart title="¿Qué es A4: Radar?" icon={<Zap />}>
@@ -233,7 +233,7 @@ export default function A4RadarPage() {
             </Card>
           </div>
 
-          <div className="p-6 bg-gradient-to-r from-blue/30 to-green/30 border border-teal-500/30 rounded-lg">
+          <div className="p-6 bg-background">
             <p className="text-muted/30 mb-4">
               <strong>¿Listo para empezar?</strong> Ve al dashboard principal para ver todas las oportunidades 
               que el Radar ha identificado para ti. Tu search ha comenzado.

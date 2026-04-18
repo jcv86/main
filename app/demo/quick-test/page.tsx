@@ -54,7 +54,7 @@ export default function QuickTestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 p-4">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
         <div className="text-center mb-12">
@@ -121,7 +121,7 @@ export default function QuickTestPage() {
 
         {/* Summary */}
         {Object.keys(results).length > 0 && (
-          <Card className="bg-gradient-to-r from-green/5 to-green/5 dark:from-green-950/30 dark:to-green/30 border-green/20 dark:border-green">
+          <Card className="bg-background">
             <CardHeader>
               <CardTitle className="text-green dark:text-green/10">
                 ✓ {Object.keys(results).length}/{tests.length} Pilares Probados

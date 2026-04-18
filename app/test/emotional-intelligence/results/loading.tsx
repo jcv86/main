@@ -2,12 +2,12 @@ import { Heart, Brain, Users, Target, Lightbulb } from "lucide-react"
 
 export default function EmotionalIntelligenceResultsLoading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-red-50 to-pink-50 p-4">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header Skeleton */}
         <div className="text-center mb-12">
           <div className="flex justify-center mb-6">
-            <div className="p-6 bg-gradient-to-r from-red-500 to-pink-500 rounded-full shadow-lg">
+            <div className="p-6 bg-background">
               <Heart className="h-16 w-16 text-white animate-pulse" />
             </div>
           </div>
@@ -16,7 +16,7 @@ export default function EmotionalIntelligenceResultsLoading() {
         </div>
 
         {/* Overall Score Skeleton */}
-        <div className="bg-gradient-to-r from-red-500 to-pink-500 rounded-lg p-8 mb-8 shadow-xl">
+        <div className="bg-background">
           <div className="grid md:grid-cols-3 gap-6 items-center">
             <div className="text-center">
               <div className="h-20 w-20 bg-white bg-opacity-20 rounded-lg mx-auto mb-2 animate-pulse"></div>
@@ -84,7 +84,7 @@ export default function EmotionalIntelligenceResultsLoading() {
         </div>
 
         {/* Loading Indicator */}
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-pink-50">
+        <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-red/50 mx-auto mb-4"></div>
             <h2 className="text-xl font-semibold text-foreground mb-2">Cargando resultados...</h2>

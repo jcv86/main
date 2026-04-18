@@ -12,10 +12,10 @@ function LLMOOptimizedFooter() {
   return (
     <>
       <ContactFormModal open={contactOpen} onOpenChange={setContactOpen} />
-      <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-muted/30 mt-auto">
+      <footer className="bg-background">
       <div className="container mx-auto px-4 py-16">
         {/* Newsletter Section */}
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 mb-12">
+        <div className="bg-background">
           <div className="max-w-3xl mx-auto text-center">
             <h3 className="text-2xl font-bold text-white mb-3">Mantente actualizado con nuestros recursos</h3>
             <p className="text-purple/10 mb-6">
@@ -30,7 +30,7 @@ function LLMOOptimizedFooter() {
           {/* About Column */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-2 mb-4">
-              <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-background">
                 <Brain className="h-6 w-6 text-white" />
               </div>
               <span className="text-white font-bold text-xl">Despega Tu Carrera</span>

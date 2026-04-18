@@ -14,7 +14,7 @@ export default function LandingPageOptimized() {
           <ThemeToggle />
         </div>
         <div className="text-center max-w-5xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-purple via-blue to-cyan bg-clip-text text-transparent leading-tight">
+          <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-background">
             Entiende cómo funcionas.<br />Ordena tu camino.<br />Avanza con más claridad.
           </h1>
           <p className="text-xl md:text-2xl text-foreground/70 mb-12 max-w-3xl mx-auto leading-relaxed">
@@ -195,7 +195,7 @@ export default function LandingPageOptimized() {
       </section>
 
       {/* HOW IT WORKS 60 SECONDS - PILLARS */}
-      <section className="container mx-auto px-4 py-20 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900/50 dark:to-slate-900/20 rounded-3xl my-16">
+      <section className="container mx-auto px-4 py-20 bg-background">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-4xl md:text-5xl font-bold text-center mb-16">
             Tu Transformación en 4 Fases
@@ -541,7 +541,7 @@ export default function LandingPageOptimized() {
       </section>
 
       {/* FINAL CTA */}
-      <section className="container mx-auto px-4 py-20 bg-gradient-to-r from-purple-600/10 to-blue-600/10 dark:from-purple-600/5 dark:to-blue-600/5 rounded-3xl my-16">
+      <section className="container mx-auto px-4 py-20 bg-background">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-4">
             ¿Listo para entenderte mejor?
@@ -553,7 +553,7 @@ export default function LandingPageOptimized() {
             <Link href="/auth/signin" prefetch={true}>
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
+                className="bg-background"
               >
                 Quiero empezar mi proceso
                 <ArrowRight className="ml-2 h-5 w-5" />

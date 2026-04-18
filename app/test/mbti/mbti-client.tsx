@@ -139,7 +139,7 @@ export default function MBTITestClient() {
   const progress = ((currentQuestion + 1) / mbtiQuestions.length) * 100
 
   return (
-    <div className="min-h-screen bg-background dark:from-muted/90 dark:to-muted/80 p-4">
+    <div className="min-h-screen bg-background/90/80 p-4">
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <div className="flex items-center justify-between mb-4">

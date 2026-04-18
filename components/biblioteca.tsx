@@ -78,7 +78,7 @@ export function Biblioteca() {
   return (
     <div className="space-y-4">
       {/* Header */}
-      <Card className="border-0 bg-gradient-to-br from-blue-500/5 to-blue-500/10 backdrop-blur-sm">
+      <Card className="border-0 bg-background">
         <CardHeader>
           <div className="flex items-center gap-3">
             <div className="p-3 bg-blue/50/10 rounded-lg">

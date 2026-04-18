@@ -169,7 +169,7 @@ export function A4RadarEstrategico() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Indicadores Económicos</h3>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <Card className="border-0 bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20">
+              <Card className="border-0 bg-background">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xs text-muted-foreground">IMACEC</CardTitle>
                 </CardHeader>
@@ -183,7 +183,7 @@ export function A4RadarEstrategico() {
                 </CardContent>
               </Card>
 
-              <Card className="border-0 bg-gradient-to-br from-orange-50 to-orange-100/50 dark:from-orange-950/30 dark:to-orange-900/20">
+              <Card className="border-0 bg-background">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xs text-muted-foreground">IPC</CardTitle>
                 </CardHeader>
@@ -196,7 +196,7 @@ export function A4RadarEstrategico() {
                 </CardContent>
               </Card>
 
-              <Card className="border-0 bg-gradient-to-br from-purple-50 to-purple-100/50 dark:from-purple-950/30 dark:to-purple-900/20">
+              <Card className="border-0 bg-background">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xs text-muted-foreground">TPM</CardTitle>
                 </CardHeader>
@@ -210,7 +210,7 @@ export function A4RadarEstrategico() {
                 </CardContent>
               </Card>
 
-              <Card className="border-0 bg-gradient-to-br from-green-50 to-green-100/50 dark:from-green-950/30 dark:to-green-900/20">
+              <Card className="border-0 bg-background">
                 <CardHeader className="pb-2">
                   <CardTitle className="text-xs text-muted-foreground">Desempleo</CardTitle>
                 </CardHeader>

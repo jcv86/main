@@ -123,11 +123,11 @@ export default function TestSemanticSearchPage() {
       <div className="container mx-auto py-8 px-4 max-w-7xl">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-3">
-            <div className="p-3 bg-gradient-to-br from-purple/50 to-blue rounded-2xl">
+            <div className="p-3 bg-background">
               <Brain className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold bg-purple bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold text-purple">
                 Búsqueda Semántica
               </h1>
               <p className="text-muted-foreground">Encuentra contenido relevante usando inteligencia artificial</p>

@@ -21,28 +21,28 @@ export function DashboardMetrics({
       label: 'Días Completados',
       value: daysCompleted,
       icon: Calendar,
-      color: 'from-blue-500 to-blue-600',
+      color: 'from-blue-500600',
       suffix: '/90',
     },
     {
       label: 'Entrenamientos',
       value: trainingsCompleted,
       icon: Award,
-      color: 'from-emerald-500 to-emerald-600',
+      color: 'from-emerald-500600',
       suffix: 'completados',
     },
     {
       label: 'Artículos Leídos',
       value: articlesRead,
       icon: Zap,
-      color: 'from-amber-500 to-amber-600',
+      color: 'from-amber-500600',
       suffix: 'noticias',
     },
     {
       label: 'Racha Actual',
       value: currentStreak,
       icon: TrendingUp,
-      color: 'from-purple-500 to-purple',
+      color: 'from-purple-500',
       suffix: 'días',
     },
   ]
@@ -60,7 +60,7 @@ export function DashboardMetrics({
                   <p className="text-3xl font-bold">{metric.value}</p>
                   <p className="text-xs text-muted-foreground mt-1">{metric.suffix}</p>
                 </div>
-                <div className={`p-3 rounded-[28px] bg-gradient-to-br ${metric.color}`}>
+                <div className={`p-3 rounded-[28px] bg-background
                   <Icon className="w-6 h-6 text-white" />
                 </div>
               </div>

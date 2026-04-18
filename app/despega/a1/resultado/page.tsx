@@ -67,12 +67,12 @@ export default function A1ResultadoPage() {
 
   const getDimensionColor = (letter: string) => {
     const colors: Record<string, string> = {
-      'D': 'from-red-500 to-orange/50',
-      'I': 'from-yellow-500 to-amber-500',
-      'S': 'from-green to-green',
-      'C': 'from-blue to-blue'
+      'D': 'from-red-500/50',
+      'I': 'from-yellow-500500',
+      'S': 'from-green',
+      'C': 'from-blue'
     }
-    return colors[letter] || 'from-muted/50 to-muted/60'
+    return colors[letter] || 'from-muted/50/60'
   }
 
   if (loading) {
@@ -97,15 +97,15 @@ export default function A1ResultadoPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80 py-12">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 max-w-3xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-gradient-to-r from-purple/10 to-blue/10 dark:from-purple/30 dark:to-blue-900/30 rounded-full">
+          <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-background">
             <Brain className="w-4 h-4 text-purple dark:text-purple/40" />
             <span className="text-sm font-semibold text-purple dark:text-purple/30">Tu Perfil Despega Cerebral</span>
           </div>
-          <h1 className="text-5xl font-bold bg-purple bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-4">
+          <h1 className="text-5xl font-bold text-purple400400 mb-4">
             Tu Mapa está Listo
           </h1>
           <p className="text-lg text-muted/70 dark:text-muted/30">
@@ -114,19 +114,19 @@ export default function A1ResultadoPage() {
         </div>
 
         {/* Primary Profile */}
-        <Card className="mb-8 border-0 shadow-lg bg-gradient-to-r from-white to-muted/5 dark:from-muted/90 dark:to-muted/80">
+        <Card className="mb-8 border-0 shadow-lg bg-background">
           <CardHeader className="pb-4">
             <CardTitle className="text-2xl">Tu Dimensión Dominante</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className={`p-6 bg-gradient-to-r ${getDimensionColor(profile.dominant_pattern)} rounded-lg text-white`}>
+            <div className={`p-6 bg-background
               <p className="text-sm opacity-90 mb-1">Patrón Dominante</p>
               <p className="text-4xl font-bold">{getDimensionName(profile.dominant_pattern)}</p>
               <p className="text-sm opacity-90 mt-2">Tu estilo natural de energía y acción</p>
             </div>
             
             {profile.secondary_pattern && (
-              <div className={`p-4 bg-gradient-to-r ${getDimensionColor(profile.secondary_pattern)} rounded-lg text-white opacity-80`}>
+              <div className={`p-4 bg-background
                 <p className="text-sm opacity-90 mb-1">Patrón Secundario</p>
                 <p className="text-xl font-semibold">{getDimensionName(profile.secondary_pattern)}</p>
               </div>
@@ -358,7 +358,7 @@ export default function A1ResultadoPage() {
         </Card>
 
         {/* Final Bridge to A2 */}
-        <Card className="mb-8 border-0 shadow-lg bg-gradient-to-r from-purple/50/10 to-blue/10 dark:from-purple/20 dark:to-blue-900/20">
+        <Card className="mb-8 border-0 shadow-lg bg-background">
           <CardHeader>
             <CardTitle className="text-xl">Por Qué Esto Importa Para Tu Ruta</CardTitle>
           </CardHeader>
@@ -374,7 +374,7 @@ export default function A1ResultadoPage() {
           </CardContent>
         </Card>
         <div className="text-center space-y-4">
-          <div className="p-4 bg-gradient-to-r from-purple/10 to-blue/10 dark:from-purple/30 dark:to-blue-900/30 rounded-lg">
+          <div className="p-4 bg-background">
             <p className="text-sm text-muted/70 dark:text-muted/30 mb-3 font-medium">
               Ya entiendes cómo funcionas. Los próximos 90 días son la prueba real.
             </p>

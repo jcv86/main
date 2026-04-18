@@ -118,7 +118,7 @@ export function CanonDashboardSection() {
 
   if (!missions || missions.length === 0) {
     return (
-      <Card className="bg-gradient-to-br from-slate-800 to-slate-700 border-muted/60">
+      <Card className="bg-background">
         <CardHeader>
           <CardTitle className="text-white text-2xl">Ruta no generada</CardTitle>
           <CardDescription className="text-muted/30">Completa Conozcámonos 2 para generar tu ruta personalizada</CardDescription>
@@ -139,7 +139,7 @@ export function CanonDashboardSection() {
             </p>
           </div>
           <Link href="/despega/onboarding" className="block mt-6">
-            <Button className="w-full h-12 text-base font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg">
+            <Button className="w-full h-12 text-base font-semibold bg-background">
               Generar mi Ruta Personalizada →
             </Button>
           </Link>

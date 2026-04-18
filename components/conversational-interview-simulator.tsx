@@ -476,7 +476,7 @@ export function ConversationalInterviewSimulator({
                 </div>
 
                 {/* Response Input - Bottom of Video */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent p-4 z-20">
+                <div className="absolute bottom-0 left-0 right-0 bg-background">
                   <label className="text-xs font-semibold text-white/80 mb-2 block">Tu respuesta:</label>
                   <div className="flex gap-2">
                     <textarea
@@ -504,7 +504,7 @@ export function ConversationalInterviewSimulator({
               </div>
 
               {/* Right Panel: Interviewer (40%) */}
-              <div className="lg:col-span-2 bg-gradient-to-b from-slate-900 to-slate-950 border-l border-muted/80 flex flex-col overflow-y-auto">
+              <div className="lg:col-span-2 bg-background">
                 
                 {/* Interviewer Header Card */}
                 <div className="p-4 border-b border-muted/80 space-y-3 flex-shrink-0">
@@ -593,7 +593,7 @@ export function ConversationalInterviewSimulator({
                   <Button
                     onClick={handleSubmitResponse}
                     disabled={!userResponse.trim()}
-                    className="w-full bg-gradient-to-r from-blue-600 to-blue hover:from-blue-700 hover:to-blue-800 text-sm font-semibold gap-2"
+                    className="w-full bg-background"
                   >
                     <Send className="w-4 h-4" />
                     Enviar
@@ -846,20 +846,20 @@ export function ConversationalInterviewSimulator({
 
   function getAvatarGradient(avatarId: string): string {
     const gradients: Record<string, string> = {
-      'professional-1': 'bg-gradient-to-br from-blue-500 to-blue-600',
-      'creative-1': 'bg-gradient-to-br from-purple-500 to-purple',
-      'tech-1': 'bg-gradient-to-br from-green-500 to-green-600',
+      'professional-1': 'bg-background
+      'creative-1': 'bg-background
+      'tech-1': 'bg-background
       'business-1': 'bg-red',
-      'casual-1': 'bg-gradient-to-br from-orange-500 to-orange-600',
-      'formal-1': 'bg-gradient-to-br from-slate-700 to-slate-900',
-      'interviewer-classic-1': 'bg-gradient-to-br from-purple-500 to-purple',
-      'interviewer-classic-2': 'bg-gradient-to-br from-blue-500 to-blue-600',
-      'interviewer-classic-3': 'bg-gradient-to-br from-purple-500 to-blue',
-      'interviewer-classic-4': 'bg-gradient-to-br from-green-500 to-emerald-600',
-      'interviewer-modern-1': 'bg-gradient-to-br from-red-500 to-rose-600',
-      'interviewer-modern-2': 'bg-gradient-to-br from-orange-500 to-yellow-600',
+      'casual-1': 'bg-background
+      'formal-1': 'bg-background
+      'interviewer-classic-1': 'bg-background
+      'interviewer-classic-2': 'bg-background
+      'interviewer-classic-3': 'bg-background
+      'interviewer-classic-4': 'bg-background
+      'interviewer-modern-1': 'bg-background
+      'interviewer-modern-2': 'bg-background
     }
-    return gradients[avatarId] || 'bg-gradient-to-br from-slate-500 to-slate-600'
+    return gradients[avatarId] || 'bg-background
   }
 
   function getInterviewerRole(interviewerId: string): string {

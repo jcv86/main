@@ -78,7 +78,7 @@ export default function TrainingDashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue to-background">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-cyan/50" />
           <p className="text-muted/30">Cargando tu progreso de entrenamiento...</p>
@@ -205,7 +205,7 @@ export default function TrainingDashboardPage() {
       title="Entrenamiento Intensivo"
       subtitle="Práctica y Feedback Realista para Entrevistas"
       icon="🎯"
-      colorClass="from-blue to-blue"
+      colorClass="from-blue"
     >
       {/* EXPLICACIÓN */}
       <ASectionPart title="¿Qué es Entrenamiento Intensivo?" icon={<Zap />}>
@@ -296,7 +296,7 @@ export default function TrainingDashboardPage() {
         </div>
 
         {/* PROGRESO RESUMEN */}
-        <div className="mt-8 p-6 bg-gradient-to-r from-blue/20 to-blue/20 border border-blue/30 rounded-lg">
+        <div className="mt-8 p-6 bg-background">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h4 className="text-white font-semibold mb-1">Tu Progreso General</h4>
@@ -320,7 +320,7 @@ export default function TrainingDashboardPage() {
       <ASectionPart title="Tu Camino de Entrenamiento Recomendado" icon={<Target />}>
         <div className="space-y-6">
           {completionPercentage === 0 && (
-            <div className="p-6 bg-gradient-to-r from-blue/30 to-blue/30 border border-blue/30 rounded-lg">
+            <div className="p-6 bg-background">
               <h4 className="text-white font-semibold mb-2">Comienza aquí</h4>
               <p className="text-muted/30 text-sm mb-4">
                 La base es fundamental. Completa Interview 0 primero - es la piedra angular de todas tus entrevistas.
@@ -333,7 +333,7 @@ export default function TrainingDashboardPage() {
           )}
 
           {completionPercentage > 0 && completionPercentage < 50 && (
-            <div className="p-6 bg-gradient-to-r from-blue/30 to-blue/30 border border-blue/30 rounded-lg">
+            <div className="p-6 bg-background">
               <h4 className="text-white font-semibold mb-2">Siguiente: Entrenamiento Guiado</h4>
               <p className="text-muted/30 text-sm mb-4">
                 Ya tienes tu base. Ahora practica con guía. Los Entrenamientos Guiados te enseñan la metodología STAR y te dan feedback IA en tiempo real.
@@ -346,7 +346,7 @@ export default function TrainingDashboardPage() {
           )}
 
           {completionPercentage >= 50 && completionPercentage < 100 && (
-            <div className="p-6 bg-gradient-to-r from-blue/30 to-blue/30 border border-blue/30 rounded-lg">
+            <div className="p-6 bg-background">
               <h4 className="text-white font-semibold mb-2">Intensifica: Desafío Máximo</h4>
               <p className="text-muted/30 text-sm mb-4">
                 Estás en buena forma. Es momento de desafiarte. Los Entrenamientos Desafiantes te preparan para presión real de entrevista ejecutiva.

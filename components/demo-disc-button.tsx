@@ -9,7 +9,7 @@ export default function DemoDISCButton() {
   const router = useRouter()
 
   return (
-    <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue/20">
+    <Card className="bg-background">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-blue">
           <BarChart3 className="h-6 w-6" />

@@ -27,7 +27,7 @@ const PROGRAMAS = [
     duration: 90,
     description: "Desarrolla tu capacidad de liderazgo con inteligencia emocional y propósito",
     icon: Brain,
-    color: "from-blue/50 to-purple/50",
+    color: "from-blue/50/50",
     level: "Intermedio",
     modules: 12,
     testsRequired: ["DISC", "Inteligencia Emocional"],
@@ -44,7 +44,7 @@ const PROGRAMAS = [
     duration: 60,
     description: "Construye conexiones auténticas en pareja, familia y amistades",
     icon: Heart,
-    color: "from-red/50 to-red-500",
+    color: "from-red/50500",
     level: "Básico",
     modules: 8,
     testsRequired: ["Inteligencia Emocional"],
@@ -61,7 +61,7 @@ const PROGRAMAS = [
     duration: 90,
     description: "Domina tus emociones y desarrolla resiliencia emocional",
     icon: Target,
-    color: "from-green/50 to-blue",
+    color: "from-green/50",
     level: "Básico",
     modules: 12,
     testsRequired: ["Inteligencia Emocional", "Big Five"],
@@ -78,7 +78,7 @@ const PROGRAMAS = [
     duration: 90,
     description: "Descubre tu vocación y diseña una carrera con significado",
     icon: Lightbulb,
-    color: "from-yellow-500 to-orange/50",
+    color: "from-yellow-500/50",
     level: "Intermedio",
     modules: 12,
     testsRequired: ["RIASEC", "MBTI", "Soft Skills"],
@@ -95,7 +95,7 @@ const PROGRAMAS = [
     duration: 60,
     description: "Comunica con claridad, empatía e impacto en cualquier contexto",
     icon: Users,
-    color: "from-blue/50 to-blue/50",
+    color: "from-blue/50/50",
     level: "Básico",
     modules: 8,
     testsRequired: ["DISC", "Soft Skills"],
@@ -112,7 +112,7 @@ const PROGRAMAS = [
     duration: 90,
     description: "Construye rutinas que cambien tu vida personal y profesional",
     icon: TrendingUp,
-    color: "from-purple/50 to-pink-500",
+    color: "from-purple/50500",
     level: "Básico",
     modules: 12,
     testsRequired: ["Big Five"],
@@ -131,7 +131,7 @@ export default function ProgramasClient() {
   return (
     <div className="space-y-8">
       <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue to-purple bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold bg-background">
           Programas Guiados DTC
         </h1>
         <p className="text-xl text-muted/60 max-w-2xl mx-auto">
@@ -151,7 +151,7 @@ export default function ProgramasClient() {
             >
               <CardHeader>
                 <div
-                  className={`h-12 w-12 rounded-lg bg-gradient-to-r ${programa.color} flex items-center justify-center mb-4`}
+                  className={`h-12 w-12 rounded-lg bg-background
                 >
                   <Icon className="h-6 w-6 text-white" />
                 </div>
@@ -184,7 +184,7 @@ export default function ProgramasClient() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div
-                className={`h-16 w-16 rounded-lg bg-gradient-to-r ${selectedProgram.color} flex items-center justify-center`}
+                className={`h-16 w-16 rounded-lg bg-background
               >
                 {(() => {
                   const Icon = selectedProgram.icon
@@ -263,7 +263,7 @@ export default function ProgramasClient() {
           </Alert>
 
           <div className="flex gap-4">
-            <Button size="lg" className={`bg-gradient-to-r ${selectedProgram.color} flex-1`}>
+            <Button size="lg" className={`bg-background
               <Play className="mr-2 h-4 w-4" />
               Iniciar Programa
             </Button>

@@ -631,7 +631,7 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Recomendación 2 */}
-            <div className="bg-gradient-to-r from-purple to-purple rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-background">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">🚀</span>
                 <div>

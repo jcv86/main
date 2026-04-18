@@ -8,15 +8,15 @@ import Image from "next/image"
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple text-white">
+      <section className="relative overflow-hidden bg-background">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative container mx-auto px-4 py-24">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
               Transforma tu Carrera con
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300">
+              <span className="block text-transparent bg-clip-text bg-background">
                 Inteligencia Artificial
               </span>
             </h1>
@@ -336,7 +336,7 @@ export default function LandingPage() {
       </section>
 
       {/* Company Culture & Careers Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple text-white">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">Únete a Nuestro Equipo en Santiago</h2>
@@ -384,7 +384,7 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple hover:from-blue-700 hover:to-purple text-lg px-8 py-4"
+                className="bg-background"
                 onClick={() => (window.location.href = "/auth")}
               >
                 Comenzar Evaluación Gratuita

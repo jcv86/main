@@ -58,7 +58,7 @@ export default function JourneyPage() {
             status: 'completed',
             progress: 100,
             color: 'text-blue dark:text-blue/40',
-            bgColor: 'from-blue/5 to-blue/10 dark:from-blue-950 dark:to-blue-900',
+            bgColor: 'from-blue/5/10950900',
             icon: <CheckCircle2 className="w-6 h-6" />,
             href: '/despega/a1-cerebral',
             weeks: 'Semana 1',
@@ -70,7 +70,7 @@ export default function JourneyPage() {
             status: 'in-progress',
             progress: 40,
             color: 'text-green dark:text-green/40',
-            bgColor: 'from-green/5 to-green-100 dark:from-green-950 dark:to-green-900',
+            bgColor: 'from-green/5100950900',
             icon: <Circle className="w-6 h-6" />,
             href: '/despega/a2/dashboard',
             weeks: 'Semanas 2-5',
@@ -82,7 +82,7 @@ export default function JourneyPage() {
             status: 'in-progress',
             progress: 30,
             color: 'text-blue dark:text-cyan/40',
-            bgColor: 'from-blue/5 to-blue/10 dark:from-blue dark:to-blue',
+            bgColor: 'from-blue/5/10',
             icon: <Circle className="w-6 h-6" />,
             href: '/despega/a4-base',
             weeks: 'Semanas 2-5',
@@ -94,7 +94,7 @@ export default function JourneyPage() {
             status: 'upcoming',
             progress: 0,
             color: 'text-orange dark:text-orange/40',
-            bgColor: 'from-orange/5 to-orange-100 dark:from-orange-950 dark:to-orange',
+            bgColor: 'from-orange/5100950',
             icon: <Lock className="w-6 h-6" />,
             href: '/despega/a3',
             weeks: 'Semanas 6-13',
@@ -134,7 +134,7 @@ export default function JourneyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-white p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto">
         {/* HERO SECTION */}
         <div className="mb-12">
@@ -144,7 +144,7 @@ export default function JourneyPage() {
           </p>
 
           {/* OVERALL PROGRESS */}
-          <div className="bg-gradient-to-r from-blue/5 to-purple/5 dark:from-blue dark:to-purple rounded-[28px] p-6 border border-blue/30 dark:border-blue">
+          <div className="bg-background">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-sm font-semibold text-indigo-900 dark:text-blue/10">Progreso General</h3>
@@ -166,7 +166,7 @@ export default function JourneyPage() {
           {phases.map((phase, idx) => (
             <div key={phase.phase}>
               <Link href={phase.href} className="block h-full">
-                <Card className={`bg-gradient-to-br ${phase.bgColor} border-2 border-transparent hover:border-muted/30 dark:hover:border-muted/70 transition-all cursor-pointer h-full flex flex-col`}>
+                <Card className={`bg-background
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -223,7 +223,7 @@ export default function JourneyPage() {
             <div className="space-y-4">
               <div className="flex items-center gap-4">
                 <div className="w-20 h-20 rounded-[28px] bg-blue/10 dark:bg-blue flex items-center justify-center font-bold text-blue dark:text-blue/30">A1</div>
-                <div className="flex-1 h-1 bg-gradient-to-r from-blue/30 to-muted/30 dark:from-blue dark:to-muted/70"></div>
+                <div className="flex-1 h-1 bg-background"></div>
               </div>
 
               <div className="flex items-center gap-4">
@@ -257,7 +257,7 @@ export default function JourneyPage() {
         </Card>
 
         {/* NEXT STEPS */}
-        <div className="mt-12 bg-gradient-to-r from-blue/5 to-blue/5 dark:from-blue-950 dark:to-blue rounded-[28px] p-8 border border-blue/30 dark:border-blue/10">
+        <div className="mt-12 bg-background">
           <h3 className="text-lg font-semibold mb-4">Próximos Pasos</h3>
           <ul className="space-y-3 text-sm">
             <li className="flex gap-3">

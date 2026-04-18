@@ -234,7 +234,7 @@ export default function TestsPage() {
 
         {/* Mobile Device Banner */}
         {isMobile && (
-          <Card className="mb-6 sm:mb-8 border-green/20 dark:border-green bg-gradient-to-r from-green/5 dark:from-green-950 to-green/5 dark:to-green">
+          <Card className="mb-6 sm:mb-8 border-green/20 dark:border-green bg-background">
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div className="p-2 bg-green/10 dark:bg-green rounded-lg">
@@ -255,7 +255,7 @@ export default function TestsPage() {
         )}
 
         {/* Verification Status Banner */}
-        <Card className="mb-6 sm:mb-8 border-blue/20 dark:border-blue/10 bg-gradient-to-r from-blue/5 dark:from-blue-950 to-blue/5 dark:to-blue">
+        <Card className="mb-6 sm:mb-8 border-blue/20 dark:border-blue/10 bg-background">
           <CardContent className="p-3 sm:p-4">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
               <div className="flex items-center gap-3">

@@ -39,7 +39,7 @@ export default function UniversityPartnershipsPage() {
         </div>
 
         {/* El Desafío */}
-        <div className="bg-gradient-to-br from-red-50 to-orange/5 rounded-2xl shadow-lg p-8 mb-8 border-2 border-red/10">
+        <div className="bg-background">
           <h2 className="text-3xl font-bold text-muted/90 mb-6">🎯 El Desafío de la Empleabilidad en Chile</h2>
 
           <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -98,7 +98,7 @@ export default function UniversityPartnershipsPage() {
         </div>
 
         {/* La Solución DTC */}
-        <div className="bg-gradient-to-br from-blue/5 to-blue/5 rounded-2xl shadow-lg p-8 mb-8 border-2 border-blue/10">
+        <div className="bg-background">
           <h2 className="text-3xl font-bold text-muted/90 mb-6">✨ Despega Tu Carrera: La Solución Integral</h2>
 
           <div className="space-y-6">
@@ -234,7 +234,7 @@ export default function UniversityPartnershipsPage() {
         </div>
 
         {/* Propuesta de Valor para Universidades */}
-        <div className="bg-gradient-to-br from-green/5 to-green/5 rounded-2xl shadow-lg p-8 mb-8 border-2 border-green/10">
+        <div className="bg-background">
           <h2 className="text-3xl font-bold text-muted/90 mb-6">🎁 Propuesta de Valor para Universidades</h2>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -485,7 +485,7 @@ export default function UniversityPartnershipsPage() {
         </div>
 
         {/* Casos de Éxito Potenciales */}
-        <div className="bg-gradient-to-br from-yellow/5 to-yellow-50 rounded-2xl shadow-lg p-8 mb-8 border-2 border-amber-100">
+        <div className="bg-background">
           <h2 className="text-3xl font-bold text-muted/90 mb-6">🌟 Casos de Uso y Beneficiarios</h2>
 
           <div className="space-y-4">
@@ -620,7 +620,7 @@ export default function UniversityPartnershipsPage() {
         </div>
 
         {/* Próximos Pasos */}
-        <div className="bg-gradient-to-br from-blue to-purple rounded-2xl shadow-lg p-8 text-white mb-8">
+        <div className="bg-background">
           <h2 className="text-3xl font-bold mb-6">📞 Próximos Pasos</h2>
 
           <div className="space-y-4 mb-8">

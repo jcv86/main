@@ -54,7 +54,7 @@ export function RadarEstrategico() {
     <div className="space-y-4">
       {/* Tesis del Día */}
       {tesis && (
-        <Card className="border-0 bg-gradient-to-br from-primary/5 to-primary/10 backdrop-blur-sm">
+        <Card className="border-0 bg-background">
           <CardHeader>
             <div className="flex items-center gap-3">
               <div className="p-3 bg-purple/10 rounded-lg">

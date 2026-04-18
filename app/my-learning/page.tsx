@@ -32,14 +32,14 @@ export default async function MyLearningPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
+    <div className="min-h-screen bg-background">
       <div className="container max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple/10 to-blue/10 dark:from-purple/30 dark:to-blue-900/30 rounded-full mb-4">
+          <div className="inline-block px-4 py-2 bg-background">
             <p className="text-sm font-semibold text-purple dark:text-purple/30">Tu Progreso de Aprendizaje</p>
           </div>
-          <h1 className="text-5xl font-bold mb-2 bg-purple bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Tu Aprendizaje</h1>
+          <h1 className="text-5xl font-bold mb-2 text-purple400400">Tu Aprendizaje</h1>
           <p className="text-lg text-muted/70 dark:text-muted/30">
             Nivel: <span className="font-bold text-purple dark:text-purple/40">{profile.current_level}</span>
           </p>

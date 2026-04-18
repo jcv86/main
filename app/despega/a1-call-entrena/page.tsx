@@ -98,12 +98,12 @@ export default function A1CallEntrenaPage() {
         title="A1: Origen" 
         subtitle="Call Entrena Completado" 
         icon="📞" 
-        colorClass="from-blue to-blue"
+        colorClass="from-blue"
       >
         <ASectionPart title="¡Excelente!" icon={<CheckCircle2 />}>
-          <div className="bg-gradient-to-br from-blue/30 to-blue/20 border border-blue/30 rounded-[28px] p-8 text-center mb-8">
+          <div className="bg-background">
             <div className="mb-4">
-              <div className="text-5xl font-black text-transparent bg-gradient-to-r from-blue/40 to-blue/40 bg-clip-text mb-2">
+              <div className="text-5xl font-black text-transparent bg-background">
                 {profileNames[profile]}
               </div>
               <p className="text-lg text-muted/30">Completaste tu Call Entrena</p>
@@ -163,7 +163,7 @@ export default function A1CallEntrenaPage() {
       title="A1: Origen" 
       subtitle="Call Entrena - Entrenamiento de Entrevista" 
       icon="📞" 
-      colorClass="from-blue to-blue"
+      colorClass="from-blue"
     >
       <ASectionPart title={`Pregunta ${currentQuestion + 1} de ${CALL_ENTRENA_QUESTIONS.length}`} icon={<Phone />}>
         <div className="mb-6">

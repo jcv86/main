@@ -289,7 +289,7 @@ export default function DISCTestClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue/5 to-white">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <Button variant="outline" onClick={() => router.push("/test")}>

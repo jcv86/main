@@ -76,16 +76,16 @@ export default function LearningPathsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-purple-50 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8 px-4">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-3 bg-gradient-to-br from-purple/50 to-blue rounded-xl">
+            <div className="p-3 bg-background">
               <BookOpen className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-5xl font-bold bg-purple bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Rutas de Aprendizaje</h1>
+              <h1 className="text-5xl font-bold text-purple400400">Rutas de Aprendizaje</h1>
               <p className="text-muted/70 dark:text-muted/30 font-medium">Caminos estructurados para el desarrollo profesional continuo</p>
             </div>
           </div>
@@ -190,7 +190,7 @@ export default function LearningPathsPage() {
         </TabsList>
 
         <TabsContent value="recommended" className="space-y-6">
-          <Card className="bg-gradient-to-r from-purple/5 to-blue/5 border-purple/20">
+          <Card className="bg-background">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-lg">
                 <Sparkles className="h-5 w-5 text-purple" />

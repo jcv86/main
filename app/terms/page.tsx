@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-muted/90 to-background">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         {/* Header */}
         <div className="mb-12">
@@ -39,7 +39,7 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">3. Responsabilidades del Usuario</h2>
-            <div className="bg-gradient-to-r from-purple/10 to-blue/10 border border-purple/50/20 rounded-lg p-6">
+            <div className="bg-background">
               <ul className="list-disc list-inside text-muted/30 space-y-2">
                 <li>Mantener la confidencialidad de tu cuenta</li>
                 <li>Proporcionar información precisa y completa</li>
@@ -77,7 +77,7 @@ export default function TermsPage() {
             </p>
           </section>
 
-          <section className="bg-gradient-to-r from-blue/10 to-blue/10 border border-blue/50/20 rounded-lg p-6">
+          <section className="bg-background">
             <h2 className="text-2xl font-bold text-white mb-4">8. Contacto</h2>
             <p className="text-muted/30 leading-relaxed">
               Para preguntas sobre estos términos, contáctanos en{" "}

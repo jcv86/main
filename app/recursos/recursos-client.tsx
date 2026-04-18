@@ -563,7 +563,7 @@ export default function RecursosClient() {
 
       {/* Personalization Banner */}
       {testResults.length === 0 && (
-        <Card className="mb-8 border-2 border-blue/20 bg-gradient-to-r from-blue/5 to-purple/5">
+        <Card className="mb-8 border-2 border-blue/20 bg-background">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -730,7 +730,7 @@ export default function RecursosClient() {
       </div>
 
       {/* CTA Final */}
-      <Card className="mt-8 bg-gradient-to-r from-blue to-purple text-white">
+      <Card className="mt-8 bg-background">
         <CardContent className="pt-6">
           <div className="flex items-center justify-between">
             <div>

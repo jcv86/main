@@ -97,7 +97,7 @@ export default function CVATSPage() {
   )
 
   const renderCreativeFormat = () => (
-    <div className="bg-background dark:from-muted/80 dark:to-muted/90 p-12 text-muted/90 dark:text-white space-y-6">
+    <div className="bg-background/80/90 p-12 text-muted/90 dark:text-white space-y-6">
       {/* Header with gradient accent */}
       <div className="border-l-4 border-purple pl-6">
         <h1 className="text-4xl font-black bg-clip-text text-transparent bg-purple">{cvData.personalInfo.name}</h1>
@@ -174,7 +174,7 @@ export default function CVATSPage() {
         <h3 className="text-sm font-bold text-purple dark:text-purple/40 uppercase tracking-wide mb-4">Competencias Técnicas</h3>
         <div className="flex flex-wrap gap-2">
           {cvData.skills.map((skill) => (
-            <span key={skill} className="bg-gradient-to-r from-purple/50 to-blue text-white px-4 py-2 rounded-[20px] text-sm font-medium">{skill}</span>
+            <span key={skill} className="bg-background">{skill}</span>
           ))}
         </div>
       </div>
@@ -185,7 +185,7 @@ export default function CVATSPage() {
     <div className="bg-white dark:bg-background p-10 text-muted/90 dark:text-white space-y-8">
       {/* Header */}
       <div className="flex gap-6 items-start">
-        <div className="w-20 h-20 rounded-[20px] bg-gradient-to-br from-purple to-blue flex items-center justify-center text-white text-2xl font-bold">
+        <div className="w-20 h-20 rounded-[20px] bg-background">
           {cvData.personalInfo.name.charAt(0)}
         </div>
         <div>
@@ -489,7 +489,7 @@ export default function CVATSPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-muted/90 dark:via-purple-900/20 dark:to-muted/90 p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <Link href="/despega/a3">

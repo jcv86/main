@@ -22,7 +22,7 @@ export default function LearningFlowOnboarding() {
       icon: Zap,
       action: 'Iniciar Evaluación',
       path: '/personalized-learning',
-      color: 'from-blue/50 to-blue',
+      color: 'from-blue/50',
     },
     {
       title: 'Aprende',
@@ -30,7 +30,7 @@ export default function LearningFlowOnboarding() {
       icon: BookOpen,
       action: 'Explorar Biblioteca',
       path: '/biblioteca',
-      color: 'from-purple/50 to-pink-500',
+      color: 'from-purple/50500',
     },
     {
       title: 'Gana Puntos',
@@ -38,7 +38,7 @@ export default function LearningFlowOnboarding() {
       icon: Trophy,
       action: 'Ver Ranking',
       path: '/leaderboard',
-      color: 'from-yellow/50 to-orange/50',
+      color: 'from-yellow/50/50',
     },
     {
       title: 'Progresa',
@@ -46,7 +46,7 @@ export default function LearningFlowOnboarding() {
       icon: Lightbulb,
       action: 'Ver Dashboard',
       path: '/dashboard',
-      color: 'from-green/50 to-green',
+      color: 'from-green/50',
     },
   ]
 
@@ -65,7 +65,7 @@ export default function LearningFlowOnboarding() {
   const allCompleted = completed.every(c => c)
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted p-4 md:p-8">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">

@@ -40,7 +40,7 @@ export default function TestOpenAIInsightsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-purple to-background p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="space-y-3">
@@ -49,12 +49,12 @@ export default function TestOpenAIInsightsPage() {
         </div>
 
         {/* Main Test Button */}
-        <Card className="bg-gradient-to-r from-purple/50 to-pink-900/50 border-purple/40/50 shadow-2xl">
+        <Card className="bg-background">
           <CardContent className="pt-8 pb-8">
             <Button 
               onClick={runTest} 
               disabled={loading}
-              className="w-full h-14 bg-gradient-to-r from-purple to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all"
+              className="w-full h-14 bg-background"
             >
               {loading ? (
                 <>
@@ -177,9 +177,9 @@ export default function TestOpenAIInsightsPage() {
             </Card>
 
             {/* Brain Chain - The Master Insight */}
-            <Card className="bg-gradient-to-r from-purple/50 to-pink-900/50 border-purple/40/50 shadow-2xl">
+            <Card className="bg-background">
               <CardHeader>
-                <CardTitle className="text-2xl bg-gradient-to-r from-purple-300 to-red/30 bg-clip-text text-transparent">
+                <CardTitle className="text-2xl bg-background">
                   Tu Insight Maestro: El Que Lo Cambia Todo
                 </CardTitle>
                 <CardDescription className="text-purple/20">

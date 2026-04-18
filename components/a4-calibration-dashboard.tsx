@@ -29,7 +29,7 @@ export function A4CalibrationDashboard() {
   return (
     <div className="space-y-6">
       {/* Header with Strategic Score */}
-      <Card className="border-0 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
+      <Card className="border-0 bg-background">
         <CardHeader>
           <div className="flex items-start justify-between">
             <div>

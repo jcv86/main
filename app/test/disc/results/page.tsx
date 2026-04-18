@@ -172,7 +172,7 @@ export default function DISCResultsPage() {
 
   if (showContextForm && !loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue/5 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background">
         <DISCContextForm
           onSubmit={handleContextSubmit}
           onSkip={() => setShowContextForm(false)}
@@ -184,7 +184,7 @@ export default function DISCResultsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue/5 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto mb-4"></div>
           <p className="text-muted/60">Cargando resultados...</p>
@@ -195,7 +195,7 @@ export default function DISCResultsPage() {
 
   if (!discResult) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue/5 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle>No se encontraron resultados</CardTitle>
@@ -474,7 +474,7 @@ export default function DISCResultsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 to-indigo-100 py-12 px-4">
+    <div className="min-h-screen bg-background">
       <main className="container mx-auto max-w-6xl">
         <div className="flex items-center justify-between mb-6">
           <Button variant="outline" onClick={() => router.push(isDemoMode ? "/" : "/dashboard")}>
@@ -525,7 +525,7 @@ export default function DISCResultsPage() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="mb-6 border-2 border-purple/30 bg-background dark:from-purple dark:to-blue-950">
+        <Card className="mb-6 border-2 border-purple/30 bg-background950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -641,7 +641,7 @@ export default function DISCResultsPage() {
 
           <TabsContent value="overview" className="space-y-6">
             <Card className="border-2 border-blue/50">
-              <CardHeader className="bg-gradient-to-r from-blue/5 to-purple/5">
+              <CardHeader className="bg-background">
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Sparkles className="h-6 w-6 text-blue" />
                   Resumen Ejecutivo Integral DTC
@@ -683,7 +683,7 @@ export default function DISCResultsPage() {
                 />
 
                 {/* Foto rápida del perfil */}
-                <div className="bg-gradient-to-r from-blue/10 to-purple-100 p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-xl font-bold text-blue mb-2">Tu perfil: {discResult.primary_type}</h3>
                   <p className="text-lg text-gray-800 italic">
                     "
@@ -885,7 +885,7 @@ export default function DISCResultsPage() {
                 </div>
 
                 {/* Tres movimientos clave */}
-                <div className="bg-gradient-to-r from-orange/5 to-red-50 p-6 rounded-lg border-l-4 border-orange">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
                     <TrendingUp className="h-5 w-5 text-orange" />
                     Tres Movimientos Clave para los próximos 90 días
@@ -995,7 +995,7 @@ export default function DISCResultsPage() {
               </Card>
             </div>
 
-            <Card className="mb-8 border-2 border-purple/20 bg-gradient-to-br from-purple/5 to-pink-50">
+            <Card className="mb-8 border-2 border-purple/20 bg-background">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Heart className="w-6 h-6 text-purple" />
@@ -1272,7 +1272,7 @@ export default function DISCResultsPage() {
                 <CardDescription>El marco integrador que guiará tu desarrollo personal y profesional</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-purple/5 to-blue/5 p-6 rounded-lg border-2 border-purple/20">
+                <div className="bg-background">
                   <h3 className="text-xl font-bold text-purple mb-3">
                     Desarrollar mi versatilidad conductual consciente
                   </h3>
@@ -1764,7 +1764,7 @@ export default function DISCResultsPage() {
                   </table>
                 </div>
 
-                <div className="mt-6 p-4 bg-gradient-to-r from-blue/5 to-purple/5 rounded-lg">
+                <div className="mt-6 p-4 bg-background">
                   <h4 className="font-semibold mb-2 flex items-center gap-2">
                     <BookOpen className="h-5 w-5 text-blue" />
                     Accede a la biblioteca completa
@@ -1810,7 +1810,7 @@ export default function DISCResultsPage() {
                   ))}
                 </div>
 
-                <div className="mt-6 p-4 bg-gradient-to-r from-purple/10 to-blue/10 rounded-lg">
+                <div className="mt-6 p-4 bg-background">
                   <h4 className="font-semibold mb-2">Completa tu Perfil 360°</h4>
                   <p className="text-sm text-muted/60 mb-3">
                     Mientras más tests completes, más precisa será tu ruta de desarrollo personalizada.

@@ -59,7 +59,7 @@ export function BadgesDisplay({ earnedBadges, totalBadgesAvailable = 24 }: Badge
           </div>
           <div className="h-3 bg-muted/20 dark:bg-transparent rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-emerald-400 to-blue-500 transition-all duration-300"
+              className="h-full bg-background"
               style={{ width: `${completionPercentage}%` }}
             />
           </div>

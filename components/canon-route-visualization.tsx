@@ -104,7 +104,7 @@ function MilestoneCard({ milestone, index }: { milestone: MilestoneCard; index: 
 
       {/* Connector */}
       {index < 2 && (
-        <div className="hidden lg:block absolute -right-8 top-1/2 w-8 h-0.5 bg-gradient-to-r from-slate-300 to-slate-200 dark:from-slate-700 dark:to-slate-800 transform -translate-y-1/2" />
+        <div className="hidden lg:block absolute -right-8 top-1/2 w-8 h-0.5 bg-background" />
       )}
     </div>
   )
@@ -121,7 +121,7 @@ export function CanonRouteVisualization({
     <div className="w-full space-y-8">
       {/* Master Insight */}
       {masterInsight && (
-        <Card className="border-2 border-gradient-to-r from-purple-300 to-pink-300 dark:from-purple-700 dark:to-pink-700 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20">
+        <Card className="border-2 border-gradient-to-r300300700700 bg-background">
           <CardHeader>
             <CardTitle className="text-2xl text-purple dark:text-purple/10">
               Tu Insight Maestro

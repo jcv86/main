@@ -485,7 +485,7 @@ export default function NoticiasClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-white to-purple/5">
+    <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4">
@@ -854,7 +854,7 @@ export default function NoticiasClient() {
                 </Card>
 
                 {/* Recommendation */}
-                <Card className="bg-gradient-to-br from-blue/5 to-blue/5 border-blue/20">
+                <Card className="bg-background">
                   <CardHeader>
                     <CardTitle className="text-lg flex items-center gap-2">
                       <Rocket className="h-5 w-5 text-amber-500" />

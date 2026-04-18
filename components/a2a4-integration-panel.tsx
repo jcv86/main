@@ -14,7 +14,7 @@ export function A2A4IntegrationPanel() {
   }
 
   return (
-    <Card className="border-2 border-dashed border-purple/30 dark:border-purple bg-gradient-to-r from-green-50 to-cyan-50 dark:from-green-950/30 dark:to-cyan-950/30">
+    <Card className="border-2 border-dashed border-purple/30 dark:border-purple bg-background">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           Tu Plan + Contexto del Mercado

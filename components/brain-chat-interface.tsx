@@ -214,7 +214,7 @@ export function BrainChatInterface() {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 max-w-[1600px] mx-auto">
         <div className="lg:col-span-3">
           <Card className="h-[calc(100vh-8rem)] flex flex-col shadow-xl">
-            <CardHeader className="border-b bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+            <CardHeader className="border-b bg-background">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-white/20 rounded-lg backdrop-blur">
@@ -257,7 +257,7 @@ export function BrainChatInterface() {
                     <div
                       className={`max-w-[85%] rounded-2xl p-4 ${
                         message.role === "user"
-                          ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg"
+                          ? "bg-background"
                           : "bg-muted/10 dark:bg-gray-800 border border-muted/20 dark:border-gray-700"
                       }`}
                     >

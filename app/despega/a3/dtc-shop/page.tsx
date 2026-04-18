@@ -43,7 +43,7 @@ export default function DTCShopPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12">
+    <main className="min-h-screen bg-background">
       <DTCShop
         userId={user?.id || ''}
         currentBalance={dtcBalance}

@@ -44,7 +44,7 @@ export function BetterMeQuickWidget() {
   if (loading || !stats) return null
 
   return (
-    <Card className="w-full bg-gradient-to-br from-primary/10 to-primary/5 border-purple/20">
+    <Card className="w-full bg-background">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center gap-2">
           <Star className="h-5 w-5 fill-yellow-500 text-orange" />

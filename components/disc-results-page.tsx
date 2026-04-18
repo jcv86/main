@@ -30,7 +30,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
     D: {
       name: 'Impulsor - Orientado a Resultados',
       emoji: '⚡',
-      color: 'from-red-600 to-orange-500',
+      color: 'from-red-600500',
       tagColor: 'bg-red',
       description: 'Eres directo, decidido y enfocado en lograr objetivos. Te mueves rápido, tomas decisiones firmes y no te detienes ante obstáculos.',
       whatItMeans: 'Te caracterizas por tu impulso para actuar y hacer cosas. Eres alguien que toma el control de situaciones y avanza sin dudar.',
@@ -38,7 +38,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
     I: {
       name: 'Catalizador - Influyente',
       emoji: '✨',
-      color: 'from-yellow-500 to-orange-400',
+      color: 'from-yellow-500400',
       tagColor: 'bg-orange',
       description: 'Eres entusiasta, comunicativo y motivador. Te encanta conectar con las personas y contagiar tu energía positiva.',
       whatItMeans: 'Te destacas por tu capacidad de influir y motivar a otros. Eres alguien que genera entusiasmo y hace que las personas se sientan involucradas.',
@@ -46,7 +46,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
     S: {
       name: 'Estabilizador - Constante',
       emoji: '🛡️',
-      color: 'from-green-600 to-teal-500',
+      color: 'from-green-600500',
       tagColor: 'bg-green',
       description: 'Eres leal, paciente y confiable. Te gusta la estabilidad y trabajar en equipo de manera consistente.',
       whatItMeans: 'Te caracterizas por tu confiabilidad y tu capacidad de mantener la calma. Eres alguien que otros pueden seguir contando con que estará ahí.',
@@ -54,7 +54,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
     C: {
       name: 'Arquitecto - Analítico',
       emoji: '🧠',
-      color: 'from-blue-600 to-blue/50',
+      color: 'from-blue-600/50',
       tagColor: 'bg-blue',
       description: 'Eres detallista, metódico y buscas precisión. Te importa que todo esté bien hecho y entiendes la importancia de los detalles.',
       whatItMeans: 'Te destacas por tu pensamiento estructurado y tu atención a los detalles. Eres alguien que se asegura de que las cosas se hagan correctamente.',
@@ -133,10 +133,10 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header Hero */}
-        <div className={`bg-gradient-to-br ${pData.color} rounded-2xl p-8 md:p-12 text-white shadow-2xl`}>
+        <div className={`bg-background
           <div className="space-y-4">
             <div className="flex items-center gap-4">
               <span className="text-6xl md:text-7xl">{pData.emoji}</span>
@@ -252,7 +252,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
 
         {/* CTA Section */}
         {onContinue && (
-          <Card className="bg-gradient-to-r from-emerald-900/40 to-teal-900/40 border-emerald-700/40">
+          <Card className="bg-background">
             <CardContent className="pt-8 pb-8 space-y-4 text-center">
               <h3 className="text-xl font-semibold text-white">
                 Ahora vamos a crear tu ruta personalizada
@@ -262,7 +262,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
               </p>
               <Button
                 onClick={onContinue}
-                className="w-full h-12 text-base font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg"
+                className="w-full h-12 text-base font-semibold bg-background"
               >
                 Generar mi Ruta Personalizada →
               </Button>

@@ -292,7 +292,7 @@ export default function MBTIResultsPage() {
   const mbtiType = mbtiResult.type
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple/5 to-white">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto p-4 md:p-8 space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -313,7 +313,7 @@ export default function MBTIResultsPage() {
         </div>
 
         {/* Hero Section */}
-        <Card className="border-l-4 border-l-purple-500 bg-gradient-to-r from-purple/5 to-blue/5">
+        <Card className="border-l-4 border-l-purple-500 bg-background">
           <CardHeader>
             <div className="flex items-center gap-4">
               <div className="h-16 w-16 bg-purple rounded-full flex items-center justify-center">
@@ -333,7 +333,7 @@ export default function MBTIResultsPage() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="border-2 border-purple/30 bg-background dark:from-purple dark:to-blue-950">
+        <Card className="border-2 border-purple/30 bg-background950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -401,7 +401,7 @@ export default function MBTIResultsPage() {
 
           {/* Resumen Ejecutivo */}
           <TabsContent value="resumen-ejecutivo" className="space-y-6">
-            <Card className="border-2 border-blue/20 bg-gradient-to-br from-blue/5 via-purple-50 to-pink-50">
+            <Card className="border-2 border-blue/20 bg-background">
               <CardHeader>
                 <CardTitle className="text-3xl font-bold flex items-center gap-3">
                   <Lightbulb className="w-8 h-8 text-blue" />
@@ -482,7 +482,7 @@ export default function MBTIResultsPage() {
                 </div>
 
                 {/* Top 5 ideas sobre tu forma de ser */}
-                <div className="bg-gradient-to-r from-purple/5 to-blue/5 rounded-xl p-6 border border-purple/20">
+                <div className="bg-background">
                   <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-purple">
                     <Sparkles className="w-6 h-6" />
                     Top 5 ideas sobre tu forma de ser
@@ -542,7 +542,7 @@ export default function MBTIResultsPage() {
                     Mapa de impacto: Dónde te juegas la vida
                   </h3>
                   <div className="grid md:grid-cols-3 gap-6">
-                    <div className="bg-gradient-to-br from-red/5 to-purple/5 rounded-lg p-5 border border-red/20">
+                    <div className="bg-background">
                       <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-pink-900">
                         <Heart className="w-5 h-5" />
                         Vida Personal
@@ -567,7 +567,7 @@ export default function MBTIResultsPage() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-br from-blue/5 to-blue/5 rounded-lg p-5 border border-blue/20">
+                    <div className="bg-background">
                       <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-blue">
                         <Users className="w-5 h-5" />
                         Relaciones
@@ -592,7 +592,7 @@ export default function MBTIResultsPage() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-br from-green/5 to-green/5 rounded-lg p-5 border border-green/20">
+                    <div className="bg-background">
                       <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-green">
                         <Briefcase className="w-5 h-5" />
                         Trabajo
@@ -616,7 +616,7 @@ export default function MBTIResultsPage() {
                 </div>
 
                 {/* 3 movimientos clave próximos 90 días */}
-                <div className="bg-gradient-to-br from-yellow/5 via-orange-50 to-red-50 rounded-xl p-6 border-2 border-yellow/20">
+                <div className="bg-background">
                   <h3 className="text-xl font-bold mb-4 flex items-center gap-2 text-amber-900">
                     <Trophy className="w-6 h-6" />3 movimientos clave para los próximos 90 días
                   </h3>
@@ -659,7 +659,7 @@ export default function MBTIResultsPage() {
               </CardContent>
             </Card>
 
-            <Card className="mb-8 border-2 border-purple/20 bg-gradient-to-br from-purple/5 to-pink-50">
+            <Card className="mb-8 border-2 border-purple/20 bg-background">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
                   <Heart className="w-6 h-6 text-purple" />
@@ -931,7 +931,7 @@ export default function MBTIResultsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-yellow/5 to-orange/5 p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-3">Por qué estas oportunidades son relevantes para ti</h3>
                   <p className="text-sm text-muted mb-4">
                     Tu tipo {mbtiResult.type} ({typeInfo.title}) tiene preferencias naturales que son fortalezas, pero
@@ -1059,7 +1059,7 @@ export default function MBTIResultsPage() {
                 <CardDescription>Cómo MBTI se relaciona con los demás tests del ecosistema DTC</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-3">El Mapa Completo de Tu Personalidad</h3>
                   <p className="text-sm text-muted mb-4">
                     MBTI revela tus preferencias cognitivas naturales (cómo procesas información y tomas decisiones).
@@ -1162,7 +1162,7 @@ export default function MBTIResultsPage() {
                     <CardTitle>Ejemplos de Sinergia MBTI + Otros Tests</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <div className="bg-gradient-to-r from-blue/5 to-purple/5 p-4 rounded-lg">
+                    <div className="bg-background">
                       <h4 className="font-semibold mb-2">Caso 1: El Estratega Empático</h4>
                       <ul className="space-y-1 text-sm">
                         <li>• MBTI: INFJ (Visionario idealista)</li>
@@ -1172,7 +1172,7 @@ export default function MBTIResultsPage() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-green/5 to-blue/5 p-4 rounded-lg">
+                    <div className="bg-background">
                       <h4 className="font-semibold mb-2">Caso 2: El Innovador Práctico</h4>
                       <ul className="space-y-1 text-sm">
                         <li>• MBTI: ENTP (Visionario debatidor)</li>
@@ -1182,7 +1182,7 @@ export default function MBTIResultsPage() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-purple/5 to-pink-50 p-4 rounded-lg">
+                    <div className="bg-background">
                       <h4 className="font-semibold mb-2">Caso 3: El Ejecutor Sistemático</h4>
                       <ul className="space-y-1 text-sm">
                         <li>• MBTI: ISTJ (Organizado confiable)</li>
@@ -1208,7 +1208,7 @@ export default function MBTIResultsPage() {
                 <CardDescription>Explora tu tipo MBTI más allá de los resultados del test</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-red/5 to-purple/5 p-6 rounded-lg">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-3">Por qué reflexionar es tan importante</h3>
                   <p className="text-sm text-muted mb-4">
                     Tu tipo MBTI es una brújula, no una caja. Estas preguntas te ayudan a entender cómo tu tipo se
@@ -1447,7 +1447,7 @@ export default function MBTIResultsPage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Progress Overview */}
-                <div className="bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg p-4">
+                <div className="bg-background">
                   <div className="flex justify-between items-center mb-2">
                     <span className="font-medium">Progreso Total del Plan</span>
                     <span className="text-sm text-muted-foreground">0/12 semanas completadas</span>
@@ -1799,7 +1799,7 @@ export default function MBTIResultsPage() {
           </TabsContent>
 
           <TabsContent value="biblioteca" className="space-y-6">
-            <Card className="border-2 border-blue/20 bg-gradient-to-br from-blue/5 to-purple/5">
+            <Card className="border-2 border-blue/20 bg-background">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-3">
                   <BookOpen className="w-7 h-7 text-blue" />
@@ -1979,7 +1979,7 @@ export default function MBTIResultsPage() {
                   </table>
                 </div>
 
-                <div className="mt-6 bg-gradient-to-r from-blue/5 to-purple/5 rounded-lg p-6 border border-blue/20">
+                <div className="mt-6 bg-background">
                   <h3 className="font-bold text-lg mb-3 flex items-center gap-2 text-blue">
                     <Lightbulb className="w-5 h-5" />
                     Cómo usar estos recursos

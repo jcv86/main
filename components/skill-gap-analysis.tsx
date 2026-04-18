@@ -131,7 +131,7 @@ export function SkillGapAnalysis({ userEmail }: SkillGapAnalysisProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Summary Stats */}
-        <div className="grid grid-cols-3 gap-4 p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg">
+        <div className="grid grid-cols-3 gap-4 p-4 bg-background">
           <div className="text-center">
             <p className="text-2xl font-bold text-purple">{gaps.length}</p>
             <p className="text-xs text-muted-foreground">Brechas Identificadas</p>
@@ -210,7 +210,7 @@ export function SkillGapAnalysis({ userEmail }: SkillGapAnalysisProps) {
         </div>
 
         {/* Action CTA */}
-        <Alert className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple/20">
+        <Alert className="bg-background">
           <Zap className="h-4 w-4" />
           <AlertDescription>
             <p className="font-semibold mb-2">💡 Recomendación del Sistema</p>

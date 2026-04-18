@@ -100,7 +100,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
   return (
     <div className="space-y-6">
       {/* Header Card */}
-      <Card className="bg-gradient-to-r from-purple-50 to-blue-50">
+      <Card className="bg-background">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>

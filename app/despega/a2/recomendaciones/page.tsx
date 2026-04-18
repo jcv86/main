@@ -91,7 +91,7 @@ export default function RecomendacionesPage() {
         name: "Energía y Vitalidad",
         description: "Optimiza tu energía física y mental para un rendimiento sostenible",
         icon: "⚡",
-        color: "from-yellow-500 to-amber-500",
+        color: "from-yellow-500500",
         borderColor: "border-yellow/20 dark:border-yellow",
         bgColor: "bg-yellow/5 dark:bg-yellow/20",
         textColor: "text-yellow dark:text-yellow/10",
@@ -107,7 +107,7 @@ export default function RecomendacionesPage() {
         name: "Enfoque y Productividad",
         description: "Domina tu atención y logra resultados con precisión",
         icon: "🎯",
-        color: "from-green to-green",
+        color: "from-green",
         borderColor: "border-green/20 dark:border-green",
         bgColor: "bg-green/5 dark:bg-green/20",
         textColor: "text-green dark:text-green/10",
@@ -123,7 +123,7 @@ export default function RecomendacionesPage() {
         name: "Relaciones Significativas",
         description: "Construye conexiones profundas y comunicación efectiva",
         icon: "🤝",
-        color: "from-red/50 to-rose-500",
+        color: "from-red/50500",
         borderColor: "border-red/20 dark:border-pink-800",
         bgColor: "bg-red/5 dark:bg-red/20",
         textColor: "text-pink-900 dark:text-pink-100",
@@ -139,7 +139,7 @@ export default function RecomendacionesPage() {
         name: "Plan Ejecutivo",
         description: "Ejecuta con precisión y consistencia tu estrategia",
         icon: "📋",
-        color: "from-purple/50 to-blue/50",
+        color: "from-purple/50/50",
         borderColor: "border-purple/30 dark:border-purple",
         bgColor: "bg-purple/5 dark:bg-purple/20",
         textColor: "text-purple dark:text-purple/10",
@@ -198,7 +198,7 @@ export default function RecomendacionesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green"></div>
           <p className="mt-4 text-muted/60 dark:text-muted/40">Personalizando tus rutas...</p>
@@ -208,7 +208,7 @@ export default function RecomendacionesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto py-12 space-y-8">
         {/* Header */}
         <div className="text-center space-y-3">

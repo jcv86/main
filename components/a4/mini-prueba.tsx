@@ -187,7 +187,7 @@ export function MiniPrueba() {
 
   if (loading) {
     return (
-      <Card className="bg-gradient-to-br from-primary/5 via-transparent to-accent/5 border-0">
+      <Card className="bg-background">
         <CardContent className="pt-12 pb-12 flex items-center justify-center">
           <div className="text-center">
             <Loader2 className="w-8 h-8 animate-spin text-purple mx-auto mb-2" />
@@ -206,11 +206,11 @@ export function MiniPrueba() {
 
     return (
       <div className="space-y-6">
-        <Card className="border-0 bg-gradient-to-br from-primary/10 via-accent/5 to-primary/5">
+        <Card className="border-0 bg-background">
           <CardContent className="pt-12 pb-12 text-center">
             <div className="flex justify-center mb-6">
               <div className="relative">
-                <div className="w-24 h-24 rounded-[20px] bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                <div className="w-24 h-24 rounded-[20px] bg-background">
                   {isPerfect ? (
                     <Trophy className="w-12 h-12 text-white" />
                   ) : isGood ? (

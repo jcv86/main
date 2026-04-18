@@ -523,7 +523,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
   return (
     <div className="space-y-4">
       {/* Header */}
-      <Card className="border-purple/20 bg-gradient-to-r from-purple-50 to-pink-50">
+      <Card className="border-purple/20 bg-background">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -683,7 +683,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
             <CardContent className="p-0">
               <div
                 ref={testAreaRef}
-                className="h-64 bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center text-center touch-none select-none"
+                className="h-64 bg-background"
                 style={{ touchAction: "none" }}
               >
                 <div className="space-y-2">

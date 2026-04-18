@@ -390,7 +390,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-950 dark:to-slate-900 p-6 rounded-[28px] border border-cyan/50/20">
+      <div className="bg-background">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-2xl font-bold text-cyan/40 flex items-center gap-2">
@@ -409,7 +409,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
       </div>
 
       {/* Lectura Base - Capa 1 */}
-      <Card className="border-cyan/50/30 bg-gradient-to-br from-cyan-950/20 to-slate-950">
+      <Card className="border-cyan/50/30 bg-background">
         <CardHeader>
           <CardTitle className="text-xl flex items-center gap-2">
             <Target className="w-5 h-5 text-cyan/40" />

@@ -22,37 +22,37 @@ const insightCards = [
     key: 'retroalimentacionAudio',
     icon: '🎤',
     title: 'Retroalimentación de Audio',
-    color: 'from-green/50 to-blue'
+    color: 'from-green/50'
   },
   {
     key: 'retroalimentacionVideo',
     icon: '📹',
     title: 'Lenguaje Corporal',
-    color: 'from-blue to-blue'
+    color: 'from-blue'
   },
   {
     key: 'calidadRespuestas',
     icon: '💬',
     title: 'Calidad de Respuestas',
-    color: 'from-purple/50 to-pink-500'
+    color: 'from-purple/50500'
   },
   {
     key: 'siguientesAntes',
     icon: '🔄',
     title: 'Próximas Prácticas',
-    color: 'from-yellow/50 to-orange/50'
+    color: 'from-yellow/50/50'
   },
   {
     key: 'fortalezasAplicar',
     icon: '💪',
     title: 'Fortalezas a Aplicar',
-    color: 'from-red/50 to-red-500'
+    color: 'from-red/50500'
   },
   {
     key: 'estrategiaIntegracion',
     icon: '🎯',
     title: 'Estrategia de Integración',
-    color: 'from-blue/50 to-purple'
+    color: 'from-blue/50'
   }
 ]
 
@@ -115,7 +115,7 @@ export default function A3ResultadosPage() {
 
   if (error) {
     return (
-      <ASection title="A3: Entrena" subtitle="Resultados de Simulación" icon="🎬" colorClass="from-purple/50 to-pink-500">
+      <ASection title="A3: Entrena" subtitle="Resultados de Simulación" icon="🎬" colorClass="from-purple/50500">
         <ASectionPart title="Error" icon={<Target />}>
           <div className="space-y-4">
             <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
@@ -123,7 +123,7 @@ export default function A3ResultadosPage() {
             </div>
             <Button 
               onClick={() => router.push('/despega/a3')} 
-              className="w-full bg-gradient-to-r from-purple to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-6 text-lg"
+              className="w-full bg-background"
             >
               <ArrowRight className="w-5 h-5 mr-2" />
               Volver a A3
@@ -135,12 +135,12 @@ export default function A3ResultadosPage() {
   }
 
   return (
-    <ASection title="A3: Entrena" subtitle="Resultados de Simulación" icon="🎬" colorClass="from-purple/50 to-pink-500">
+    <ASection title="A3: Entrena" subtitle="Resultados de Simulación" icon="🎬" colorClass="from-purple/50500">
       <ASectionPart title="Retroalimentación Detallada" icon={<Zap />}>
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {insightCards.map((card) => (
-              <Card key={card.key} className={`bg-gradient-to-br ${card.color} border-0 text-white`}>
+              <Card key={card.key} className={`bg-background
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
@@ -161,7 +161,7 @@ export default function A3ResultadosPage() {
           <div className="mt-8 flex gap-4 justify-center">
             <Button 
               onClick={() => router.push('/despega/a3')}
-              className="bg-gradient-to-r from-purple to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-6 px-8"
+              className="bg-background"
             >
               <Target className="w-5 h-5 mr-2" />
               Siguiente Simulación

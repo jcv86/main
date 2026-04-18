@@ -58,7 +58,7 @@ export function MarketInsightsCard() {
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       {/* Trending Skills Card */}
-      <Card className="border-cyan/20 bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-950/20 dark:to-blue-950/20">
+      <Card className="border-cyan/20 bg-background">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <TrendingUp className="w-5 h-5 text-cyan" />
@@ -86,7 +86,7 @@ export function MarketInsightsCard() {
       </Card>
 
       {/* Skill Gap Analysis Card */}
-      <Card className="border-purple/20 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20">
+      <Card className="border-purple/20 bg-background">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <Target className="w-5 h-5 text-purple" />
@@ -104,7 +104,7 @@ export function MarketInsightsCard() {
                 </div>
                 <div className="w-full bg-muted/20 rounded-full h-3">
                   <div
-                    className="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full"
+                    className="bg-background"
                     style={{ width: `${skillGap.gap_percentage}%` }}
                   />
                 </div>
@@ -145,7 +145,7 @@ export function MarketInsightsCard() {
       </Card>
 
       {/* Market Snapshot Card */}
-      <Card className="border-teal-200 bg-gradient-to-br from-teal-50 to-green-50 dark:from-teal-950/20 dark:to-green-950/20 lg:col-span-2">
+      <Card className="border-teal-200 bg-background">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
             <AlertCircle className="w-5 h-5 text-teal-600" />

@@ -79,7 +79,7 @@ export function DespeganNavbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/despega" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 bg-gradient-to-br from-purple to-purple/60 rounded-surface-lg flex items-center justify-center">
+            <div className="w-8 h-8 bg-background">
               <Home className="w-4 h-4 text-white" />
             </div>
             <span className="font-bold text-lg text-white" style={{ fontFamily: 'var(--font-playfair-display)' }}>

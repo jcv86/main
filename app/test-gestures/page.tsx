@@ -55,7 +55,7 @@ export default function TestGesturesPage() {
     <div className="min-h-screen bg-muted/5 p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
-        <Card className="border-purple/20 bg-gradient-to-r from-purple/5 to-pink-50">
+        <Card className="border-purple/20 bg-background">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">

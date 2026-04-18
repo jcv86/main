@@ -191,7 +191,7 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
       </div>
 
       {/* Value Proposition */}
-      <Card className="bg-gradient-to-r from-blue-50 to-blue/5 p-8">
+      <Card className="bg-background">
         <h3 className="text-lg font-bold text-foreground mb-4">Why Choose Premium Tips?</h3>
         <div className="grid md:grid-cols-3 gap-6">
           <div>

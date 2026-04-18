@@ -173,7 +173,7 @@ export function ConozcamonosDosComponent({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-background">
       <div className="max-w-3xl mx-auto py-8">
         {/* Header */}
         <div className="mb-8">

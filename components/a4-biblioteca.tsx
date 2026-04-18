@@ -348,19 +348,19 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
       </div>
 
       <div className="grid grid-cols-3 gap-4 py-4">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/20 dark:to-blue-900/10 border-0">
+        <Card className="bg-background">
           <CardContent className="pt-4 text-center">
             <div className="text-2xl font-bold text-blue">{recursos.length}</div>
             <p className="text-xs text-muted-foreground mt-1">Recursos</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-950/20 dark:to-amber-900/10 border-0">
+        <Card className="bg-background">
           <CardContent className="pt-4 text-center">
             <div className="text-2xl font-bold text-amber-600">{tipos.length}</div>
             <p className="text-xs text-muted-foreground mt-1">Tipos</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-50 to-green-100/50 dark:from-green-950/20 dark:to-green-900/10 border-0">
+        <Card className="bg-background">
           <CardContent className="pt-4 text-center">
             <div className="text-2xl font-bold text-green">{savedItems.size}</div>
             <p className="text-xs text-muted-foreground mt-1">Guardados</p>

@@ -7,12 +7,12 @@ import { Badge } from '@/components/ui/badge'
 import { ChevronRight } from 'lucide-react'
 
 const INTERVIEWERS = [
-  { id: 'interviewer-classic-1', name: 'Sofia', role: 'Reclutadora', color: 'from-purple-400 to-pink-400' },
-  { id: 'interviewer-classic-2', name: 'Marco', role: 'Manager Senior', color: 'from-blue-400 to-cyan-400' },
-  { id: 'interviewer-classic-3', name: 'Elena', role: 'VP Talent', color: 'from-emerald-400 to-teal-400' },
-  { id: 'interviewer-classic-4', name: 'David', role: 'Tech Lead', color: 'from-orange-400 to-red-400' },
-  { id: 'interviewer-modern-1', name: 'Alex', role: 'Product Manager', color: 'from-indigo-400 to-purple-400' },
-  { id: 'interviewer-modern-2', name: 'Jordan', role: 'Consultor CEO', color: 'from-pink-400 to-rose-400' }
+  { id: 'interviewer-classic-1', name: 'Sofia', role: 'Reclutadora', color: 'from-purple-400400' },
+  { id: 'interviewer-classic-2', name: 'Marco', role: 'Manager Senior', color: 'from-blue-400400' },
+  { id: 'interviewer-classic-3', name: 'Elena', role: 'VP Talent', color: 'from-emerald-400400' },
+  { id: 'interviewer-classic-4', name: 'David', role: 'Tech Lead', color: 'from-orange-400400' },
+  { id: 'interviewer-modern-1', name: 'Alex', role: 'Product Manager', color: 'from-indigo-400400' },
+  { id: 'interviewer-modern-2', name: 'Jordan', role: 'Consultor CEO', color: 'from-pink-400400' }
 ]
 
 interface InterviewerSelectorProps {
@@ -39,7 +39,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
                   : 'hover:bg-transparent dark:hover:bg-muted/80'
               }`}
             >
-              <div className={`w-8 h-8 rounded-full mx-auto mb-1 bg-gradient-to-br ${interviewer.color}`}></div>
+              <div className={`w-8 h-8 rounded-full mx-auto mb-1 bg-background
               <div className="text-xs font-semibold text-muted/90 dark:text-white">{interviewer.name}</div>
               <div className="text-[10px] text-muted/60 dark:text-muted/40">{interviewer.role}</div>
             </button>
@@ -50,7 +50,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
   }
 
   return (
-    <Card className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 border-muted/20 dark:border-muted/70">
+    <Card className="bg-background">
       <div className="p-6 space-y-4">
         <div className="space-y-2">
           <label className="text-sm font-semibold text-muted/70 dark:text-muted/30">Elige tu Entrevistador</label>
@@ -70,9 +70,9 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
                   : 'hover:scale-102 hover:shadow-lg'
               }`}
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${interviewer.color} opacity-20`}></div>
+              <div className={`absolute inset-0 bg-background
               <div className="relative space-y-2 text-center">
-                <div className={`w-12 h-12 rounded-full mx-auto bg-gradient-to-br ${interviewer.color} shadow-lg group-hover:scale-110 transition-transform`}></div>
+                <div className={`w-12 h-12 rounded-full mx-auto bg-background
                 <div>
                   <div className="font-bold text-muted/90 dark:text-white">{interviewer.name}</div>
                   <div className="text-xs text-muted/60 dark:text-muted/40">{interviewer.role}</div>
@@ -91,7 +91,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
             <div className="space-y-1">
               <p className="text-sm text-muted/60 dark:text-muted/40">Entrevistador seleccionado:</p>
               <p className="font-semibold text-muted/90 dark:text-white flex items-center gap-2">
-                <span className={`w-3 h-3 rounded-[20px] bg-gradient-to-br ${selected.color}`}></span>
+                <span className={`w-3 h-3 rounded-[20px] bg-background
                 {selected.name} - {selected.role}
               </p>
             </div>

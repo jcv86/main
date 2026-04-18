@@ -98,7 +98,7 @@ export function PointsBadgesSystem() {
   return (
     <div className="space-y-4">
       {/* Ranking Card */}
-      <Card className="border-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/5 backdrop-blur-sm">
+      <Card className="border-0 bg-background">
         <CardContent className="pt-6">
           <div className="grid grid-cols-3 gap-4">
             <div className="text-center">

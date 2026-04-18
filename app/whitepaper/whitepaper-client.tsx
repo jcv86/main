@@ -33,7 +33,7 @@ export function WhitepaperClient() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="bg-white border-b border-muted/20 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-4 max-w-7xl flex items-center justify-between">
@@ -75,7 +75,7 @@ export function WhitepaperClient() {
             professional library, and advanced AI coaching to provide personalized career guidance at scale.
           </p>
 
-          <div className="bg-gradient-to-r from-purple/5 to-blue/5 rounded-xl p-8 border border-purple/10">
+          <div className="bg-background">
             <h3 className="text-2xl font-bold mb-6 text-foreground">Platform Capabilities</h3>
 
             <div className="grid md:grid-cols-3 gap-6 mb-8">
@@ -179,7 +179,7 @@ export function WhitepaperClient() {
 
             {/* Additional Platform Features */}
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-orange/5 to-red-50 rounded-lg p-6 border border-orange/20">
+              <div className="bg-background">
                 <h4 className="text-lg font-bold mb-3 text-orange">📚 Professional Library</h4>
                 <p className="text-muted text-sm">
                   120+ professional development books with full-text access, progress tracking, highlights, notes, and
@@ -187,7 +187,7 @@ export function WhitepaperClient() {
                 </p>
               </div>
 
-              <div className="bg-gradient-to-br from-red/5 to-purple/5 rounded-lg p-6 border border-red/20">
+              <div className="bg-background">
                 <h4 className="text-lg font-bold mb-3 text-red">🎯 Personalized Insights</h4>
                 <p className="text-muted text-sm">
                   AI-generated career analysis, percentile rankings, radar charts, development plans, and tailored
@@ -234,7 +234,7 @@ export function WhitepaperClient() {
 
           <h3 className="text-2xl font-semibold mb-4 text-gray-800">Technology Stack</h3>
           <div className="grid md:grid-cols-3 gap-6 mb-8">
-            <div className="bg-gradient-to-br from-blue/5 to-purple/5 rounded-lg p-6 border border-blue/10">
+            <div className="bg-background">
               <h4 className="font-bold text-lg mb-3 text-foreground">Frontend</h4>
               <ul className="space-y-2 text-muted">
                 <li>• Next.js 15.2.4 (React 19)</li>
@@ -244,7 +244,7 @@ export function WhitepaperClient() {
                 <li>• SWR for data fetching</li>
               </ul>
             </div>
-            <div className="bg-gradient-to-br from-green/5 to-blue/5 rounded-lg p-6 border border-emerald-100">
+            <div className="bg-background">
               <h4 className="font-bold text-lg mb-3 text-foreground">Backend</h4>
               <ul className="space-y-2 text-muted">
                 <li>• Node.js (Next.js API)</li>
@@ -254,7 +254,7 @@ export function WhitepaperClient() {
                 <li>• OpenAI GPT-4</li>
               </ul>
             </div>
-            <div className="bg-gradient-to-br from-purple/5 to-pink-50 rounded-lg p-6 border border-purple/10">
+            <div className="bg-background">
               <h4 className="font-bold text-lg mb-3 text-foreground">Infrastructure</h4>
               <ul className="space-y-2 text-muted">
                 <li>• Vercel Edge Network</li>
@@ -394,7 +394,7 @@ export function WhitepaperClient() {
             ))}
           </div>
 
-          <div className="mt-8 bg-gradient-to-r from-purple/5 to-blue/5 rounded-lg p-6 border border-purple/10">
+          <div className="mt-8 bg-background">
             <h3 className="text-xl font-semibold mb-3 text-foreground">Results Visualization & Analysis</h3>
             <p className="text-muted mb-4">
               Each assessment provides comprehensive results with AI-powered insights:
@@ -440,7 +440,7 @@ export function WhitepaperClient() {
         <section id="section-4" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-foreground">4. AI Coaching System</h2>
 
-          <div className="bg-gradient-to-r from-blue to-purple rounded-lg p-8 text-white mb-6">
+          <div className="bg-background">
             <h3 className="text-2xl font-bold mb-4">Cerebro AI (Brain System)</h3>
             <p className="text-lg text-blue/5 mb-4">
               Advanced AI reasoning system powered by GPT-4 with Retrieval-Augmented Generation (RAG)
@@ -509,7 +509,7 @@ export function WhitepaperClient() {
             ))}
           </div>
 
-          <div className="mt-6 bg-gradient-to-br from-green/5 to-blue/5 rounded-lg p-6 border border-emerald-100">
+          <div className="mt-6 bg-background">
             <h3 className="text-xl font-semibold mb-3 text-foreground">Technical Implementation</h3>
             <ul className="space-y-2 text-muted">
               <li className="flex items-start gap-2">
@@ -565,7 +565,7 @@ export function WhitepaperClient() {
             ].map((cat, i) => (
               <div
                 key={i}
-                className="bg-gradient-to-br from-blue/5 to-purple/5 rounded-lg p-4 border border-blue/10 text-center"
+                className="bg-background"
               >
                 <div className="text-3xl font-bold text-purple mb-1">{cat.count}</div>
                 <div className="text-muted font-medium">{cat.category}</div>
@@ -638,7 +638,7 @@ export function WhitepaperClient() {
         <section id="section-7" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-foreground">7. Database Architecture</h2>
 
-          <div className="bg-gradient-to-r from-blue/5 to-purple/5 rounded-lg p-6 border border-blue/10 mb-6">
+          <div className="bg-background">
             <div className="text-4xl font-bold text-purple mb-2">185 Tables</div>
             <p className="text-muted">Comprehensive PostgreSQL database with pgvector for semantic search</p>
           </div>
@@ -705,7 +705,7 @@ export function WhitepaperClient() {
             </div>
           </div>
 
-          <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg p-8 text-white">
+          <div className="bg-background">
             <h3 className="text-2xl font-bold mb-4">GDPR Compliance</h3>
             <p className="text-green/10 mb-4">The platform is fully GDPR-compliant with:</p>
             <div className="grid md:grid-cols-2 gap-4">
@@ -771,7 +771,7 @@ export function WhitepaperClient() {
         <section id="section-10" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-foreground">10. Future Roadmap</h2>
 
-          <div className="bg-gradient-to-r from-purple/10 to-blue/10 rounded-xl p-6 mb-8 border border-purple/20">
+          <div className="bg-background">
             <div className="flex items-center gap-3 mb-3">
               <svg className="w-6 h-6 text-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />

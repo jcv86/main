@@ -263,7 +263,7 @@ export function GestureEnhancedTestInterface({
     >
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header with Gesture Controls */}
-        <Card className="border-purple/20 bg-gradient-to-r from-purple-50 to-pink-50">
+        <Card className="border-purple/20 bg-background">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">

@@ -28,7 +28,7 @@ export function CanonProgressCard({
   return (
     <div className="space-y-6">
       {/* Main Progress Card */}
-      <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/30 dark:to-blue-950/30">
+      <Card className="border-0 shadow-lg bg-background">
         <CardHeader>
           <CardTitle className="text-2xl flex items-center gap-2">
             <Target className="w-6 h-6 text-purple dark:text-purple/40" />
@@ -51,7 +51,7 @@ export function CanonProgressCard({
             </div>
             <div className="w-full bg-muted/20 dark:bg-muted/70 rounded-full h-3 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-purple-600 to-blue-600 h-full transition-all duration-500"
+                className="bg-background"
                 style={{ width: `${progress}%` }}
               />
             </div>

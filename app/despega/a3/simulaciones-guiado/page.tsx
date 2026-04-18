@@ -185,14 +185,14 @@ export default function GuidedInterviewPage() {
 
   if (submitted && score !== null) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-muted/90 dark:via-purple-900/20 dark:to-muted/90 p-6">
+      <div className="min-h-screen bg-background">
         <div className="max-w-2xl mx-auto space-y-8">
           <div className="text-center space-y-4">
-            <div className="w-24 h-24 mx-auto bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+            <div className="w-24 h-24 mx-auto bg-background">
               <Check className="w-12 h-12 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-muted/90 dark:text-white">Entrevista Completada</h1>
-            <div className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue">
+            <div className="text-6xl font-bold text-transparent bg-clip-text bg-background">
               {score}%
             </div>
             <p className="text-lg text-muted/60 dark:text-muted/40">
@@ -232,7 +232,7 @@ export default function GuidedInterviewPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-muted/90 dark:via-purple-900/20 dark:to-muted/90 p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-3xl mx-auto space-y-6">
         {/* Header */}
         <Link href="/despega/a3/simulations">

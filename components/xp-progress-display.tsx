@@ -26,14 +26,14 @@ const LEVEL_TITLES: Record<number, string> = {
 }
 
 const LEVEL_COLORS: Record<number, { bg: string; text: string; accent: string }> = {
-  1: { bg: 'bg-muted/10 dark:bg-transparent', text: 'text-muted/70 dark:text-muted/30', accent: 'from-slate-400 to-slate-600' },
-  2: { bg: 'bg-green/10 dark:bg-green/30', text: 'text-green dark:text-green/30', accent: 'from-green-400 to-green-600' },
-  3: { bg: 'bg-blue/10 dark:bg-blue/30', text: 'text-blue dark:text-blue/30', accent: 'from-blue-400 to-blue-600' },
-  4: { bg: 'bg-purple/10 dark:bg-purple/30', text: 'text-purple dark:text-purple/30', accent: 'from-purple-400 to-purple' },
-  5: { bg: 'bg-orange/10 dark:bg-orange/30', text: 'text-orange dark:text-orange/30', accent: 'from-orange-400 to-orange-600' },
-  6: { bg: 'bg-amber-100 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-300', accent: 'from-amber-400 to-amber-600' },
-  7: { bg: 'bg-rose-100 dark:bg-rose-900/30', text: 'text-rose-700 dark:text-rose-300', accent: 'from-rose-400 to-rose-600' },
-  8: { bg: 'bg-fuchsia-100 dark:bg-fuchsia-900/30', text: 'text-fuchsia-700 dark:text-fuchsia-300', accent: 'from-fuchsia-400 to-fuchsia-600' }
+  1: { bg: 'bg-muted/10 dark:bg-transparent', text: 'text-muted/70 dark:text-muted/30', accent: 'from-slate-400600' },
+  2: { bg: 'bg-green/10 dark:bg-green/30', text: 'text-green dark:text-green/30', accent: 'from-green-400600' },
+  3: { bg: 'bg-blue/10 dark:bg-blue/30', text: 'text-blue dark:text-blue/30', accent: 'from-blue-400600' },
+  4: { bg: 'bg-purple/10 dark:bg-purple/30', text: 'text-purple dark:text-purple/30', accent: 'from-purple-400' },
+  5: { bg: 'bg-orange/10 dark:bg-orange/30', text: 'text-orange dark:text-orange/30', accent: 'from-orange-400600' },
+  6: { bg: 'bg-amber-100 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-300', accent: 'from-amber-400600' },
+  7: { bg: 'bg-rose-100 dark:bg-rose-900/30', text: 'text-rose-700 dark:text-rose-300', accent: 'from-rose-400600' },
+  8: { bg: 'bg-fuchsia-100 dark:bg-fuchsia-900/30', text: 'text-fuchsia-700 dark:text-fuchsia-300', accent: 'from-fuchsia-400600' }
 }
 
 export function XPProgressDisplay({
@@ -130,7 +130,7 @@ export function XPProgressDisplay({
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
                       isCurrent
-                        ? `bg-gradient-to-br ${LEVEL_COLORS[level].accent} text-white shadow-lg`
+                        ? `bg-background
                         : isReached
                         ? `${LEVEL_COLORS[level].bg} ${LEVEL_COLORS[level].text}`
                         : 'bg-muted/20 dark:bg-muted/70 text-muted/40'

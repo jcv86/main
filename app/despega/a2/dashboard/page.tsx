@@ -97,7 +97,7 @@ export default function A2DashboardPage() {
       <div className="max-w-6xl mx-auto py-8 space-y-8">
         
         {/* WELCOME SECTION */}
-        <div className="bg-gradient-to-r from-orange/20 via-orange/10 to-transparent rounded-surface-lg p-8 border border-orange/30 text-white">
+        <div className="bg-background">
           <div className="max-w-3xl space-y-2">
             <h1 className="text-4xl font-bold" style={{ fontFamily: 'Lora, serif' }}>Tu Misión de 90 Días</h1>
             <p className="text-orange/80 text-lg">3 sprints diseñados para transformar tu perfil en plan concreto</p>

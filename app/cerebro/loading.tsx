@@ -4,11 +4,11 @@ import { Brain, Loader2 } from "lucide-react"
 
 export default function CerebroLoading() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-white to-blue/5 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-gradient-to-br from-purple to-blue rounded-xl shadow-lg">
+            <div className="p-3 bg-background">
               <Brain className="h-8 w-8 text-white animate-pulse" />
             </div>
             <Skeleton className="h-10 w-64" />

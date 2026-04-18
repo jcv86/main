@@ -10,7 +10,7 @@ import { BookOpen, TrendingUp, Trophy, Lightbulb } from 'lucide-react'
 
 export default function BetterMeHubPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted p-4 md:p-8">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto space-y-8">
         {/* Header */}
         <div className="space-y-2">

@@ -68,7 +68,7 @@ export default function A1PatternsPage() {
 
   if (loading) {
     return (
-      <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple/50 to-blue">
+      <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple/50">
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-purple/50" />
         </div>
@@ -77,7 +77,7 @@ export default function A1PatternsPage() {
   }
 
   return (
-    <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple/50 to-blue">
+    <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple/50">
       <ASectionPart title={`Tu Perfil: ${label}`} icon={<Target />}>
         {/* Profile Header */}
         <div className="bg-purple rounded-xl p-8 text-white mb-8 shadow-lg">
@@ -112,7 +112,7 @@ export default function A1PatternsPage() {
             <h3 className="text-2xl font-bold text-white mb-6">Tus Fortalezas Naturales</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {details.strengths.map((strength, idx) => (
-                <Card key={idx} className="bg-gradient-to-br from-green-900/40 to-green/20 border-green/30 border-2">
+                <Card key={idx} className="bg-background">
                   <CardContent className="pt-6">
                     <p className="text-green/30 font-semibold">✓ {strength}</p>
                   </CardContent>
@@ -127,7 +127,7 @@ export default function A1PatternsPage() {
             <h3 className="text-2xl font-bold text-white mb-6">Desafíos a Considerar</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {details.challenges.map((challenge, idx) => (
-                <Card key={idx} className="bg-gradient-to-br from-yellow-900/40 to-orange/20 border-orange/30 border-2">
+                <Card key={idx} className="bg-background">
                   <CardContent className="pt-6">
                     <p className="text-yellow/30 font-semibold">⚠️ {challenge}</p>
                   </CardContent>
@@ -150,7 +150,7 @@ export default function A1PatternsPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-blue/30 to-blue/20 border-blue/30 border-2">
+            <Card className="bg-background">
               <CardHeader>
                 <CardTitle>Consejos de Entrevista</CardTitle>
               </CardHeader>
@@ -197,7 +197,7 @@ export default function A1PatternsPage() {
             <h3 className="text-2xl font-bold text-white mb-6">Carreras Ideales para Ti</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {details.career.map((role, idx) => (
-                <Card key={idx} className="bg-gradient-to-br from-purple/40 to-blue-900/20 border-purple/50/30 border-2 hover:border-purple/40/50 transition-colors">
+                <Card key={idx} className="bg-background">
                   <CardContent className="pt-6">
                     <p className="text-purple/30 font-semibold text-lg">🎯 {role}</p>
                   </CardContent>
@@ -211,7 +211,7 @@ export default function A1PatternsPage() {
         <div className="mt-12 pt-8 border-t border-muted/70">
           <h3 className="text-2xl font-bold text-white mb-6">Próximos Pasos</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-gradient-to-br from-blue/40 to-blue/20 border-blue/30 border-2">
+            <Card className="bg-background">
               <CardHeader>
                 <CardTitle className="text-cyan/30 flex items-center gap-2">
                   <Phone className="w-5 h-5" />
