@@ -217,7 +217,7 @@ export default function DemoPage() {
                 <div className="grid grid-cols-4 gap-2 mb-6">
                   {Object.entries(profileNames).map(([key, name]) => (
                     <div key={key} className="text-center">
-                      <div className={`font-bold text-2xl mb-2 ${
+                      <div className={`font-bold text-2xl mb-2 ${`}
                         key === primary ? 'text-purple' : key === secondary ? 'text-blue' : 'text-muted/40'`}
                       }`}>
                         {scores[key]}/5

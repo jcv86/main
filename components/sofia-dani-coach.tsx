@@ -236,7 +236,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                           </Avatar>
                           <Badge
                             variant="secondary"
-                            className={`text-[10px] px-1 py-0 ${
+                            className={`text-[10px] px-1 py-0 ${`}
                               message.coach === "sofia" ? "bg-red/10 text-pink-700" : "bg-blue/10 text-blue"`}
                             }`}
                           >

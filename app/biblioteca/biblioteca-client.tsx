@@ -502,7 +502,7 @@ export default function BibliotecaPage() {
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-4 py-2 font-medium transition-colors ${
+            className={`px-4 py-2 font-medium transition-colors ${`}
               activeTab === tab ? "text-blue border-b-2 border-blue" : "text-muted/60 hover:text-foreground"`}
             }`}
           >

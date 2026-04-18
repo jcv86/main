@@ -101,7 +101,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
               {recommendations.map((rec, idx) => (
                 <div
                   key={`${rec.book.id}-${idx}`}
-                  className={`bg-background
+                  className={`bg-background`}
                 >
                   <h3 className="font-bold mb-2 flex items-center gap-2">
                     <Zap className="w-5 h-5" />`}

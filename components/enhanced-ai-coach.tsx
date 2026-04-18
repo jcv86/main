@@ -447,7 +447,7 @@ ${
                     )}
 
                     <div
-                      className={`max-w-[85%] ${
+                      className={`max-w-[85%] ${`}
                         message.role === "user"
                           ? "bg-blue text-white rounded-lg rounded-br-sm"
                           : "bg-muted/5 rounded-lg rounded-bl-sm border"`}
@@ -543,7 +543,7 @@ ${
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`h-3 w-3 ${
+                              className={`h-3 w-3 ${`}
                                 i < message.rating! ? "text-yellow/40 fill-current" : "text-muted/30"`}
                               }`}
                             />
@@ -708,7 +708,7 @@ ${
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
-                            className={`h-3 w-3 ${
+                            className={`h-3 w-3 ${`}
                               i < interaction.user_rating ? "text-yellow/40 fill-current" : "text-muted/30"`}
                             }`}
                           />

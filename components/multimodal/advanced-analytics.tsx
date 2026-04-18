@@ -98,7 +98,7 @@ export function AdvancedAnalyticsReporting() {
                 <CardTitle className="text-sm font-medium">Mejora Detectada</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className={`text-3xl font-bold ${analytics.improvement_trend >= 0 ? 'text-green' : 'text-red'}`}>
+                <p className={`text-3xl font-bold ${analytics.improvement_trend`} >= 0 ? 'text-green' : 'text-red'}`}>
                   {analytics.improvement_trend >= 0 ? '+' : ''}{analytics.improvement_trend}%
                 </p>
                 <p className="text-xs text-muted/50 mt-1">vs. período anterior</p>

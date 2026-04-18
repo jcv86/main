@@ -244,7 +244,7 @@ export default function A2RoutasPage() {
             {routes.map((route) => (
               <Card 
                 key={route.id} 
-                className={`group border-2 cursor-pointer transition-all duration-300 ${
+                className={`group border-2 cursor-pointer transition-all duration-300 ${`}
                   selectedRoute === route.id
                     ? 'border-purple bg-purple/5 shadow-lg'
                     : 'border-border hover:border-purple/50 hover:shadow-md'`}

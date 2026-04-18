@@ -99,7 +99,7 @@ export function RadarEstrategico() {
                   <p className="text-xs text-muted/40 uppercase">Nivel de Energía</p>
                   <Badge
                     variant="outline"
-                    className={`mt-2 ${
+                    className={`mt-2 ${`}
                       tesisDia.nivel_energía === 'Alta'
                         ? 'bg-red/50/20 text-red/30 border-red/50/50'
                         : tesisDia.nivel_energía === 'Confirmación'
@@ -243,7 +243,7 @@ function RadarNoticiaCard({ noticia, isSelected, onSelect }: RadarNoticiaCardPro
   return (
     <Card
       onClick={() => onSelect(noticia)}
-      className={`bg-transparent border-muted/70 cursor-pointer transition-all hover:border-blue/50/50 ${
+      className={`bg-transparent border-muted/70 cursor-pointer transition-all hover:border-blue/50/50 ${`}
         isSelected ? 'ring-2 ring-blue-500' : ''`}
       }`}
     >

@@ -392,7 +392,7 @@ export default function ApplicationStatusTracker() {
                     return (
                       <div
                         key={step.key}
-                        className={`flex items-start gap-4 pb-4 ${
+                        className={`flex items-start gap-4 pb-4 ${`}
                           index < statusSteps.length - 1 ? "border-b border-muted/10" : ""`}
                         }`}
                       >
@@ -402,7 +402,7 @@ export default function ApplicationStatusTracker() {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <h3
-                              className={`font-medium ${
+                              className={`font-medium ${`}
                                 isActive
                                   ? "text-blue"
                                   : isCompleted || isRejected

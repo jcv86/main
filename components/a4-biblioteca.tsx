@@ -307,7 +307,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
                       onClick={() => handleSave(recurso.id)}
                     >
                       <Bookmark
-                        className={`w-3 h-3 mr-1 ${
+                        className={`w-3 h-3 mr-1 ${`}
                           isSaved ? 'fill-primary text-purple' : 'text-muted-foreground'`}
                         }`}
                       />

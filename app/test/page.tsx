@@ -371,7 +371,7 @@ export default function TestsPage() {
             return (
               <Card
                 key={test.id}
-                className={`relative transition-all hover:shadow-lg ${
+                className={`relative transition-all hover:shadow-lg ${`}
                   isCompleted
                     ? "border-green/20 dark:border-green bg-green/5 dark:bg-green"
                     : isAvailable
@@ -400,7 +400,7 @@ export default function TestsPage() {
                       <div className="flex flex-wrap items-center gap-1 sm:gap-2 mt-1">
                         <Badge
                           variant="outline"
-                          className={`text-xs ${
+                          className={`text-xs ${`}
                             test.difficulty === "Beginner"
                               ? "bg-green/10 dark:bg-green text-green dark:text-green/30 border-green/20 dark:border-green"
                               : test.difficulty === "Intermediate"

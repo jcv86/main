@@ -131,7 +131,7 @@ export function CoachingFeedbackDialog({
                   className="transition-transform hover:scale-110"
                 >
                   <Star
-                    className={`h-8 w-8 ${
+                    className={`h-8 w-8 ${`}
                       star <= (hoveredRating || rating) ? "fill-yellow-400 text-yellow/40" : "text-muted/30"`}
                     }`}
                   />

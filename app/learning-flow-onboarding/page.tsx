@@ -106,7 +106,7 @@ export default function LearningFlowOnboarding() {
             return (
               <Card
                 key={index}
-                className={`transition-all ${
+                className={`transition-all ${`}
                   isActive ? 'ring-2 ring-blue-500' : ''`}
                 } ${isCompleted ? 'opacity-75' : ''}`}
               >

@@ -263,7 +263,7 @@ export default function ProgramasClient() {
           </Alert>
 
           <div className="flex gap-4">
-            <Button size="lg" className={`bg-background
+            <Button size="lg" className={`bg-background`}
               <Play className="mr-2 h-4 w-4" />
               Iniciar Programa
             </Button>

@@ -425,7 +425,7 @@ export function GestureEnhancedTestInterface({
                   {gestureLog.map((log, index) => (
                     <div
                       key={index}
-                      className={`${
+                      className={`${`}
                         log.includes("detected")
                           ? "text-green/40"
                           : log.includes("zoom")

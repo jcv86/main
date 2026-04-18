@@ -227,7 +227,7 @@ export default function TestNavigationFlow() {
           return (
             <Card
               key={test.id}
-              className={`relative ${
+              className={`relative ${`}
                 isCompleted
                   ? "border-green/20 bg-green/5"
                   : isAvailable

@@ -123,7 +123,7 @@ export function XPProgressDisplay({
               return (
                 <div
                   key={level}
-                  className={`flex flex-col items-center gap-1 min-w-fit ${
+                  className={`flex flex-col items-center gap-1 min-w-fit ${`}
                     isReached ? 'opacity-100' : 'opacity-50'`}
                   }`}
                 >

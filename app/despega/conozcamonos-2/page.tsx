@@ -220,7 +220,7 @@ export default function Conozcamonos2Page() {
             return (
             <Card 
               key={question.id} 
-              className={`p-6 transition-all ${
+              className={`p-6 transition-all ${`}
                 isAnswered 
                   ? 'border-green/20 dark:border-green/50' 
                   : 'border-muted/20 dark:border-card'`}

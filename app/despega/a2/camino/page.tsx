@@ -59,14 +59,14 @@ export default function A2CaminoPage() {
             <div
               key={camino.id}
               onClick={() => setSelectedCamino(camino.id)}
-              className={`cursor-pointer transition-all ${
+              className={`cursor-pointer transition-all ${`}
                 selectedCamino === camino.id
                   ? "ring-2 ring-slate-900 dark:ring-slate-50"
                   : ""`}
               }`}
             >
               <Card
-                className={`h-full hover:shadow-lg transition-shadow ${
+                className={`h-full hover:shadow-lg transition-shadow ${`}
                   selectedCamino === camino.id
                     ? "bg-muted/10 dark:bg-card"
                     : ""`}

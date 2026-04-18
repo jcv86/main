@@ -242,7 +242,7 @@ export function A4NewsFeed({ items }: A4NewsFeedProps) {
                           }}
                         >
                           <Bookmark
-                            className={`w-4 h-4 ${
+                            className={`w-4 h-4 ${`}
                               savedItems.has(item.id)
                                 ? "fill-primary text-purple"
                                 : "text-muted-foreground"`}

@@ -420,7 +420,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                           <div className="flex-1 min-w-0">
                             <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
                             <p
-                              className={`text-[10px] mt-1 ${
+                              className={`text-[10px] mt-1 ${`}
                                 message.sender === "user" ? "text-purple-foreground/70" : "text-muted-foreground"`}
                               }`}
                             >

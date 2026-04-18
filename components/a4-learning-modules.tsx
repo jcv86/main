@@ -133,7 +133,7 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
                 }}>
                   <DialogTrigger asChild>
                     <Card
-                      className={`cursor-pointer transition-all hover:shadow-md ${
+                      className={`cursor-pointer transition-all hover:shadow-md ${`}
                         isCompleted ? "opacity-60 bg-muted" : ""`}
                       }`}
                       onClick={() => setSelectedModule(module)}

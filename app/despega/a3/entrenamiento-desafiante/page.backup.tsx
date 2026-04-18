@@ -274,7 +274,7 @@ export default function ChallensingTrainingPage() {
                   <div>
                     <p className="text-xs text-muted/40 mb-2">Promedio General</p>
                     <div className="flex items-end gap-2">
-                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green/40' : 'text-yellow/40'}`}>
+                      <span className={`text-4xl font-bold ${averageScore`} >= 75 ? 'text-green/40' : 'text-yellow/40'}`}>
                         {averageScore}
                       </span>
                       <span className="text-xs text-muted/40 pb-2">/100</span>

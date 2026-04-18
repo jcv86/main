@@ -228,7 +228,7 @@ export default function RecomendacionesPage() {
           {routes.map((route) => (
             <Card
               key={route.id}
-              className={`cursor-pointer transition-all border-2 overflow-hidden hover:shadow-md ${
+              className={`cursor-pointer transition-all border-2 overflow-hidden hover:shadow-md ${`}
                 selectedRoute === route.id`}
                   ? `${route.borderColor} shadow-lg`
                   : "border-muted/20 dark:border-card"
@@ -310,7 +310,7 @@ export default function RecomendacionesPage() {
                   <Button
                     onClick={() => handleSelectRoute(route.id)}
                     disabled={submitting}
-                    className={`w-full ${
+                    className={`w-full ${`}
                       selectedRoute === route.id
                         ? "bg-green hover:bg-green dark:bg-green dark:hover:bg-green"
                         : ""`}

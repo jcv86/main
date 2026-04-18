@@ -316,7 +316,7 @@ export function SmartRecommendations({
             {recommendations.map((rec, idx) => (
               <Card
                 key={rec.id}
-                className={`cursor-pointer transition-all ${
+                className={`cursor-pointer transition-all ${`}
                   idx === activeStep ? 'border-purple bg-purple/5' : ''`}
                 }`}
                 onClick={() => setActiveStep(idx)}

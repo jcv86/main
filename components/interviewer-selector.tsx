@@ -70,7 +70,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
                   : 'hover:scale-102 hover:shadow-lg'
               }`}
             >
-              <div className={`absolute inset-0 bg-background
+              <div className={`absolute inset-0 bg-background`}
               <div className="relative space-y-2 text-center">`}
                 <div className={`w-12 h-12 rounded-full mx-auto bg-background`}
                 <div>

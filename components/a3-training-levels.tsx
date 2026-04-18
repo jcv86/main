@@ -80,7 +80,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
       {levels.map((level) => (
         <Card
           key={level.id}
-          className={`relative overflow-hidden transition-all hover:shadow-lg ${
+          className={`relative overflow-hidden transition-all hover:shadow-lg ${`}
             level.isLocked ? 'opacity-60' : 'hover:border-muted/40'`}
           }`}
         >
@@ -155,7 +155,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
             <Button
               asChild
               disabled={level.isLocked}
-              className={`w-full gap-2 ${
+              className={`w-full gap-2 ${`}
                 level.isLocked
                   ? 'opacity-50 cursor-not-allowed'
                   : userProgress?.[level.id]?.completed

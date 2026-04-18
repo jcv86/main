@@ -107,7 +107,7 @@ export default function OnboardingIntereses({ onComplete }: { onComplete: (prefe
               {mainAreas.map((area) => (
                 <Card
                   key={area.id}
-                  className={`cursor-pointer transition-all ${
+                  className={`cursor-pointer transition-all ${`}
                     selectedAreas.has(area.id) ? "border-blue/50 bg-blue/5" : "hover:border-muted/30"`}
                   }`}
                   onClick={() => toggleArea(area.id)}

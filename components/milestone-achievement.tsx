@@ -71,7 +71,7 @@ export function MilestoneAchievement({ milestone, userName, onClose }: Milestone
       >
         <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShow(false)} />
         
-        <Card className={`relative bg-background
+        <Card className={`relative bg-background`}
           <motion.div`}
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}

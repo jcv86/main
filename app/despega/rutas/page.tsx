@@ -328,7 +328,7 @@ export default function RutasPage() {
                 return (
                   <Card
                     key={scenario.id}
-                    className={`cursor-pointer transition-all hover:shadow-md ${
+                    className={`cursor-pointer transition-all hover:shadow-md ${`}
                       isCompleted ? "opacity-60 bg-muted" : ""`}
                     }`}
                   >

@@ -77,7 +77,7 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
                     ? "border-accent/50 bg-accent/5"
                     : "border-border bg-card"
                 }`}>
-                  <h4 className={`font-semibold ${
+                  <h4 className={`font-semibold ${`}
                     isCurrent
                       ? "text-blue dark:text-blue/10"
                       : isCompleted
@@ -86,7 +86,7 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
                   }`}>
                     {step.label}
                   </h4>
-                  <p className={`text-sm mt-1 ${
+                  <p className={`text-sm mt-1 ${`}
                     isCurrent
                       ? "text-blue dark:text-blue/20"
                       : isCompleted

@@ -269,7 +269,7 @@ export default function A2RoutesPage() {
                 <div key={days} className="bg-background">
                   <button
                     onClick={() => setExpandedMilestone(isExpanded ? null : days)}
-                    className={`w-full p-6 text-left bg-background
+                    className={`w-full p-6 text-left bg-background`}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">

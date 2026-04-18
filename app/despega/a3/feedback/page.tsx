@@ -159,7 +159,7 @@ export default function FeedbackPage() {
                 <Card key={idx} className={getFeedbackColor(item.type)}>
                   <CardContent className="pt-6">
                     <div className="flex gap-4">
-                      <Icon className={`w-6 h-6 flex-shrink-0 ${
+                      <Icon className={`w-6 h-6 flex-shrink-0 ${`}
                         item.type === 'strength'
                           ? 'text-green dark:text-green/40'
                           : item.type === 'improvement'

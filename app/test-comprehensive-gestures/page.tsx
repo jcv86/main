@@ -594,7 +594,7 @@ export default function ComprehensiveGestureTestPage() {
                             <Badge
                               key={gesture}
                               variant={result.success ? "default" : "destructive"}
-                              className={`text-xs ${
+                              className={`text-xs ${`}
                                 result.success
                                   ? "bg-green/10 text-green hover:bg-green/10"
                                   : "bg-red/10 text-red hover:bg-red/10"`}

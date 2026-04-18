@@ -395,7 +395,7 @@ export function MiniPrueba() {
       {/* Explanation */}
       {showExplanation && (
         <Alert
-          className={`border-0 ${
+          className={`border-0 ${`}
             isCorrect
               ? "bg-green/50/10"
               : "bg-red/50/10"`}

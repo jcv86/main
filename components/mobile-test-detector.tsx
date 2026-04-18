@@ -253,7 +253,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
                 <span className="text-muted/60 font-mono">{deviceInfo.battery}%</span>
                 <div className="w-8 h-2 bg-muted/20 rounded-full overflow-hidden">
                   <div
-                    className={`h-full transition-all ${
+                    className={`h-full transition-all ${`}
                       deviceInfo.battery > 50
                         ? "bg-green/50"
                         : deviceInfo.battery > 20

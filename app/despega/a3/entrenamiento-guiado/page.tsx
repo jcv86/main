@@ -417,7 +417,7 @@ export default function GuidedTrainingPage() {
             return (
               <Card
                 key={module.id}
-                className={`cursor-pointer transition-all hover:shadow-lg ${
+                className={`cursor-pointer transition-all hover:shadow-lg ${`}
                   isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:border-blue/40'`}
                 }`}
               >
@@ -472,7 +472,7 @@ export default function GuidedTrainingPage() {
                   <Button
                     onClick={() => handleStartModule(module)}
                     disabled={isLocked}
-                    className={`w-full ${
+                    className={`w-full ${`}
                       isLocked
                         ? 'bg-muted/30 dark:bg-muted/70 cursor-not-allowed'
                         : 'bg-blue hover:bg-blue'`}

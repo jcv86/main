@@ -560,7 +560,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
             </div>
             <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 text-blue mb-1">
-                <Loader2 className={`h-5 w-5 ${testingTests > 0 ? "animate-spin" : ""}`} />
+                <Loader2 className={`h-5 w-5 ${testingTests`} > 0 ? "animate-spin" : ""}`} />
                 <span className="text-2xl font-bold">{testingTests}</span>
               </div>
               <p className="text-sm text-muted/60">Testing</p>
@@ -624,7 +624,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
               return (
                 <Card
                   key={test.id}
-                  className={`transition-all ${
+                  className={`transition-all ${`}
                     test.status === "passed"
                       ? "border-green/20 bg-green/5"
                       : test.status === "failed"
@@ -719,7 +719,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                     {gestureLog.map((log, index) => (
                       <div
                         key={index}
-                        className={`${
+                        className={`${`}
                           log.includes("✅")
                             ? "text-green/40"
                             : log.includes("❌")

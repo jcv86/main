@@ -189,7 +189,7 @@ export function A4RadarEstrategico() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold text-orange">{economicData.ipc.value}</div>
-                  <p className={`text-xs mt-2 font-medium ${economicData.ipc.variation_annual > 3.5 ? 'text-red' : 'text-green'}`}>
+                  <p className={`text-xs mt-2 font-medium ${economicData.ipc.variation_annual`} > 3.5 ? 'text-red' : 'text-green'}`}>
                     +{economicData.ipc.variation_annual}% anual
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">Inflación</p>
@@ -202,7 +202,7 @@ export function A4RadarEstrategico() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold text-purple">{economicData.tpm.value}%</div>
-                  <p className={`text-xs mt-2 font-medium ${economicData.tpm.variation > 0 ? 'text-red' : 'text-green'}`}>
+                  <p className={`text-xs mt-2 font-medium ${economicData.tpm.variation`} > 0 ? 'text-red' : 'text-green'}`}>
                     {economicData.tpm.variation > 0 ? '+' : ''}
                     {economicData.tpm.variation}%
                   </p>

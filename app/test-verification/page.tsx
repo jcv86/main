@@ -727,7 +727,7 @@ export default function TestVerificationSystem() {
               </div>
               <div className="text-center p-2 sm:p-3 bg-white rounded-lg border">
                 <div className="flex items-center justify-center gap-1 sm:gap-2 text-blue mb-1">
-                  <Loader2 className={`h-4 w-4 sm:h-5 sm:w-5 ${runningTests > 0 ? "animate-spin" : ""}`} />
+                  <Loader2 className={`h-4 w-4 sm:h-5 sm:w-5 ${runningTests`} > 0 ? "animate-spin" : ""}`} />
                   <span className="text-lg sm:text-2xl font-bold">{runningTests}</span>
                 </div>
                 <p className="text-xs sm:text-sm text-muted/60">Running</p>
@@ -804,7 +804,7 @@ export default function TestVerificationSystem() {
                 return (
                   <Card
                     key={testFlow.testId}
-                    className={`transition-all ${
+                    className={`transition-all ${`}
                       testFlow.overallStatus === "passed"
                         ? "border-green/20 bg-green/5"
                         : testFlow.overallStatus === "failed"
@@ -925,7 +925,7 @@ export default function TestVerificationSystem() {
                       {executionLog.map((log, index) => (
                         <div
                           key={index}
-                          className={`break-words ${
+                          className={`break-words ${`}
                             log.includes("✅")
                               ? "text-green/40"
                               : log.includes("❌") || log.includes("💥")

@@ -283,7 +283,7 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
                   <button
                     key={star}
                     onClick={() => rateConversation(star)}
-                    className={`p-1 ${rating && rating >= star ? "text-yellow/40" : "text-muted/30"}`}
+                    className={`p-1 ${rating && rating`} >= star ? "text-yellow/40" : "text-muted/30"}`}
                   >
                     <Star className="h-4 w-4 fill-current" />
                   </button>

@@ -166,7 +166,7 @@ export default function JourneyPage() {
           {phases.map((phase, idx) => (
             <div key={phase.phase}>
               <Link href={phase.href} className="block h-full">
-                <Card className={`bg-background
+                <Card className={`bg-background`}
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">

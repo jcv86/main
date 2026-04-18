@@ -302,7 +302,7 @@ export default function DespegazoDashboard() {
                   e.stopPropagation()
                   router.push(stage.href)
                 }}
-                className={`w-full group/btn ${
+                className={`w-full group/btn ${`}
                   stage.completed
                     ? 'bg-muted/70 hover:bg-muted/60 text-muted/30'
                     : `bg-background`}

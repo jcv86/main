@@ -122,7 +122,7 @@ export function A1MissionExecutor({
             return (
               <Card
                 key={mision.id}
-                className={`cursor-pointer transition-all hover:shadow-md ${
+                className={`cursor-pointer transition-all hover:shadow-md ${`}
                   isCompleted ? "opacity-60 bg-muted" : tipoConfig.color`}
                 } border`}
               >

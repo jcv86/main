@@ -115,7 +115,7 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
         {DTC_PACKAGES.map((pkg) => (
           <Card
             key={pkg.id}
-            className={`relative p-6 flex flex-col transition-all ${
+            className={`relative p-6 flex flex-col transition-all ${`}
               pkg.popular ? 'ring-2 ring-blue-500 lg:scale-105' : ''`}
             }`}
           >
