@@ -5,6 +5,7 @@ import { WhatsAppService } from "@/lib/whatsapp-service"
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient()
     const { activityId, userEmail, reminderTime } = await request.json()
 
     if (!activityId || !userEmail) {
