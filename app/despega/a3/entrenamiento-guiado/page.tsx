@@ -195,7 +195,39 @@ export default function GuidedTrainingPage() {
                     <p className="text-slate-900 dark:text-white">{aiTip}</p>
                   </div>
                 ) : (
-                  <>
+                  <div className="space-y-3">
+                    {/* STAR Method Module Content */}
+                    {selectedModule.id === 1 && currentLesson === 0 && (
+                      <div className="space-y-3">
+                        <p>
+                          STAR es una estructura que tu entrevistador reconoce y aprecia porque:
+                        </p>
+                        <ul className="list-disc list-inside space-y-2 text-sm">
+                          <li><strong>Situación:</strong> El contexto que valida por qué actuaste</li>
+                          <li><strong>Tarea:</strong> Tu responsabilidad específica</li>
+                          <li><strong>Acción:</strong> LO QUE HICISTE (aquí es tu turno)</li>
+                          <li><strong>Resultado:</strong> El impacto medible que dejó</li>
+                        </ul>
+                      </div>
+                    )}
+
+                    {selectedModule.id === 1 && currentLesson === 1 && (
+                      <div className="space-y-3">
+                        <p>
+                          La Situación y Tarea son el contexto que da credibilidad a tu historia.
+                        </p>
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue-600">
+                          <p className="font-semibold mb-2">Ejemplo BUENO:</p>
+                          <p className="text-sm">
+                            "En mi anterior empresa, como Tech Lead de un equipo de 5 developers, nos asignaron migrar una base de datos legacy a PostgreSQL bajo presión..."
+                          </p>
+                        </div>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                          Sé específico: ¿Qué empresa? ¿Cuál era tu rol? ¿Cuál era el desafío? ¿Bajo qué presión estabas?
+                        </p>
+                      </div>
+                    )}
+
                     {selectedModule.id === 1 && currentLesson === 2 && (
                       <div className="space-y-3">
                         <p>
@@ -219,26 +251,64 @@ export default function GuidedTrainingPage() {
                       </div>
                     )}
 
-                    {currentLesson === 0 && (
+                    {selectedModule.id === 1 && currentLesson === 3 && (
                       <div className="space-y-3">
                         <p>
-                          STAR es una estructura que tu entrevistador reconoce y aprecia porque:
+                          El Resultado es el cierre que lo hace memorable. Cuantifica siempre que puedas.
                         </p>
-                        <ul className="list-disc list-inside space-y-2 text-sm">
-                          <li><strong>Situación:</strong> El contexto que valida por qué actuaste</li>
-                          <li><strong>Tarea:</strong> Tu responsabilidad específica</li>
-                          <li><strong>Acción:</strong> LO QUE HICISTE (aquí es tu turno)</li>
-                          <li><strong>Resultado:</strong> El impacto medible que dejó</li>
-                        </ul>
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue-600">
+                          <p className="font-semibold mb-2">Ejemplo BUENO:</p>
+                          <p className="text-sm">
+                            "La migración se completó 2 semanas antes, con zero downtime. Redujimos queries en un 40% y el equipo ganó confianza en nuevas tecnologías."
+                          </p>
+                        </div>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                          Números, porcentajes, tiempo ahorrado, mejoras medibles - eso es lo que recuerdan los entrevistadores.
+                        </p>
                       </div>
                     )}
 
-                    {!aiTip && selectedModule.id !== 1 && currentLesson !== 0 && (
-                      <div className="text-slate-500 italic">
-                        Haz clic en "Consejo IA" para obtener una sugerencia personalizada sobre este tema.
+                    {/* Behavioral Questions Module */}
+                    {selectedModule.id === 2 && (
+                      <div className="space-y-3">
+                        <p>
+                          Las preguntas de comportamiento buscan entender cómo REALMENTE actúas bajo presión.
+                        </p>
+                        <div className="space-y-2 text-sm">
+                          <p><strong>Tipos comunes:</strong></p>
+                          <ul className="list-disc list-inside space-y-1">
+                            <li>Conflictos: "Cuéntame de un desacuerdo con un colega"</li>
+                            <li>Fracasos: "Cuéntame de algo que no salió bien"</li>
+                            <li>Decisiones: "Cuéntame de una decisión difícil que tomaste"</li>
+                          </ul>
+                        </div>
+                        <p className="text-xs text-slate-600 dark:text-slate-400 italic">
+                          Usa STAR para todas. El entrevistador quiere ver madurez, aprendizaje y responsabilidad.
+                        </p>
                       </div>
                     )}
-                  </>
+
+                    {/* Technical Communication Module */}
+                    {selectedModule.id === 3 && (
+                      <div className="space-y-3">
+                        <p>
+                          Poder explicar conceptos técnicos complejos a non-technical people es un superpoder.
+                        </p>
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue-600">
+                          <p className="font-semibold mb-2">Ejemplo:</p>
+                          <p className="text-sm">
+                            En lugar de "Implementé microservicios con Docker y Kubernetes"...
+                          </p>
+                          <p className="text-sm mt-2">
+                            Intenta: "Dividimos el sistema en servicios independientes que pueden crecer y actualizarse por separado, como restaurantes en un mall"
+                          </p>
+                        </div>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">
+                          Usa analogías, evita jerga, explica el "por qué" y el impacto en negocio.
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
