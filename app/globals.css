@@ -22,13 +22,13 @@
     --blue: 240 100% 50%;            /* #0000FF - Increases Productivity */
     
     /* Pillar System (4 phases) - for UI navigation */
-    --ritual: 264 85% 54%;           /* #A855F7 - El Ritual (A1) */
-    --exploration: 217 91% 60%;      /* #3B82F6 - Exploración (A2) */
-    --training: 17 96% 61%;          /* #F97316 - Entrenamiento (A3) */
-    --reality: 186 100% 42%;         /* #06B6D4 - La Realidad (A4) */
+    --ritual: 264 85% 54%;           /* #A855F7 - El Ritual (A1) - Purple: Encourages Creativity */
+    --exploration: 217 91% 60%;      /* #3B82F6 - Exploración (A2) - Blue: Increases Productivity */
+    --training: 17 96% 61%;          /* #F97316 - Entrenamiento (A3) - Orange: Stimulates Appetite */
+    --reality: 0 100% 50%;           /* #FF0000 - La Realidad (A4) - Red: Encourages Action */
     
     /* Support Colors */
-    --cyan: 186 100% 42%;            /* #06B6D4 - Cyan (La Realidad) */
+    --cyan: 186 100% 42%;            /* #06B6D4 - Cyan (archived) */
     
     /* Borders - elevated subtlety */
     --border: rgba(255, 255, 255, 0.10);

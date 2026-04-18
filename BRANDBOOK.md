@@ -40,9 +40,10 @@
   - Coach IA: Acompañamiento personalizado en cada sesión de entrenamiento
 - **Outcome**: Confianza y preparación para enfrentar entrevistas reales
 
-### Pilar 4: **La Realidad - Vive Tu Nueva Identidad**
+### Pilar 4: **La Realidad - Ejecución y Contexto**
 - **Código Interno**: A4 (Contexto estratégico + Market intel)
-- **Color**: Turquesa (#06B6D4)
+- **Color**: Rojo (#FF0000)
+- **Psicología**: Encourages Action (de sistema de 6 colores)
 - **Icono**: Globo/Mercado
 - **Descripción**: Noticias del mercado, coaching IA 24/7 y plan de acción para materializar tu transición
 - **Componentes**:
@@ -57,10 +58,10 @@
 ## Paleta de Colores
 
 ### Pilares (Por fase)
-- **El Ritual** (#A855F7): Púrpura vibrante - Descubrimiento
-- **Exploración** (#3B82F6): Azul primario - Aprendizaje
-- **Entrenamiento** (#F97316): Naranja vibrante - Práctica
-- **La Realidad** (#06B6D4): Turquesa - Acción
+- **El Ritual** (#A855F7): Púrpura vibrante - Descubrimiento (Encourages Creativity)
+- **Exploración** (#3B82F6): Azul primario - Aprendizaje (Increases Productivity)
+- **Entrenamiento** (#F97316): Naranja vibrante - Práctica (Stimulates Appetite)
+- **La Realidad** (#FF0000): Rojo vibrante - Acción (Encourages Action)
 
 ### Sistema de Diseño (Semantic Tokens)
 - **Primario**: `text-foreground` (texto principal)

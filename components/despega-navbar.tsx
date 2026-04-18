@@ -111,7 +111,7 @@ export function DespeganNavbar() {
                 'ritual': 'text-purple hover:text-purple',
                 'exploration': 'text-blue hover:text-blue',
                 'training': 'text-orange hover:text-orange',
-                'reality': 'text-cyan hover:text-cyan',
+                'reality': 'text-red hover:text-red',
                 'info': 'text-muted hover:text-foreground'
               }[stagePhaseMap[stage.name as keyof typeof stagePhaseMap] || 'info']
               

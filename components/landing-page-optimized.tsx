@@ -86,9 +86,9 @@ export default function LandingPageOptimized() {
               <p className="text-sm text-foreground/70">Entrenamientos realistas con video, análisis de postura y tono, feedback IA inmediato y ajuste por vacante específica.</p>
             </div>
 
-            {/* Pilar 4: La Realidad - Vive Tu Nueva Identidad (Cyan #06B6D4) */}
-            <div className="bg-transparent border-2 border-cyan rounded-[28px] p-6 hover:shadow-lg transition-shadow hover:border-cyan/80">
-              <div className="w-12 h-12 bg-cyan rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
+            {/* Pilar 4: La Realidad - Acción y Mercado (Red #FF0000) */}
+            <div className="bg-transparent border-2 border-red rounded-[28px] p-6 hover:shadow-lg transition-shadow hover:border-red/80">
+              <div className="w-12 h-12 bg-red rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="2"/>
                   <circle cx="6" cy="9" r="2"/>
@@ -237,7 +237,7 @@ export default function LandingPageOptimized() {
 
             {/* Pilar 4: La Realidad */}
             <div className="text-center">
-              <div className="w-16 h-16 bg-cyan dark:bg-cyan rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#06B6D4' }}>
+              <div className="w-16 h-16 bg-red dark:bg-red rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#FF0000' }}>
                 <span className="text-2xl font-bold text-white">04</span>
               </div>
               <h3 className="font-bold text-xl mb-2 text-center">La Realidad - Ejecución y Contexto</h3>
