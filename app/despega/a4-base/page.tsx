@@ -134,7 +134,7 @@ export default function A4Page() {
       <div className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
         
         {/* WELCOME HERO - A4 VERSION */}
-        <div className="bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-800 dark:to-blue-800 rounded-lg p-8 text-white shadow-lg">
+        <div className="bg-gradient-to-r from-blue to-blue-600 dark:from-cyan-800 dark:to-blue-800 rounded-lg p-8 text-white shadow-lg">
           <div className="max-w-3xl">
             <p className="text-cyan-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A4: La Realidad y Contexto Estratégico</p>
             <h1 className="text-4xl font-bold mb-3">Entiende el mundo en el que compites</h1>
@@ -144,7 +144,7 @@ export default function A4Page() {
               en un momento específico. A4 te da esa inteligencia.
             </p>
             <div className="flex gap-3">
-              <Button className="bg-white text-cyan-700 hover:bg-cyan-50 font-semibold" size="lg">
+              <Button className="bg-white text-cyan-700 hover:bg-blue/5 font-semibold" size="lg">
                 Explorar Radar Estratégico
               </Button>
               <Button variant="outline" className="border-white text-white hover:bg-white/10" size="lg">
@@ -155,7 +155,7 @@ export default function A4Page() {
         </div>
 
         {/* QUICK START GUIDE - A4 VERSION */}
-        <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/20">
+        <Card className="border-2 border-blue/30 dark:border-blue-800 bg-blue/5 dark:bg-blue-950/20">
           <CardHeader>
             <CardTitle className="text-xl">Primeros Pasos</CardTitle>
           </CardHeader>
@@ -196,7 +196,7 @@ export default function A4Page() {
         {/* Original Header - Simplified */}
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-sm font-bold text-white">
+            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue to-blue-600 flex items-center justify-center text-sm font-bold text-white">
               A4
             </div>
             <div>
@@ -211,7 +211,7 @@ export default function A4Page() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <Newspaper className="w-8 h-8 mx-auto text-blue-600 mb-2" />
+                <Newspaper className="w-8 h-8 mx-auto text-blue mb-2" />
                 <div className="text-2xl font-bold">{newsItems.length}</div>
                 <div className="text-sm text-muted-foreground">Noticias activas</div>
               </div>
@@ -220,7 +220,7 @@ export default function A4Page() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <BookOpen className="w-8 h-8 mx-auto text-purple-600 mb-2" />
+                <BookOpen className="w-8 h-8 mx-auto text-purple mb-2" />
                 <div className="text-2xl font-bold">{modules.length}</div>
                 <div className="text-sm text-muted-foreground">Módulos de contexto</div>
               </div>
@@ -278,7 +278,7 @@ export default function A4Page() {
                     <p className="text-sm text-muted-foreground mb-1">Puntos Acumulados</p>
                     <div className="text-3xl font-bold">{userStats.pointsEarned}</div>
                   </div>
-                  <Zap className="w-8 h-8 text-blue-600" />
+                  <Zap className="w-8 h-8 text-blue" />
                 </div>
               </CardContent>
             </Card>
@@ -290,7 +290,7 @@ export default function A4Page() {
                     <p className="text-sm text-muted-foreground mb-1">Tests Completados</p>
                     <div className="text-3xl font-bold">{userStats.testsCompleted}</div>
                   </div>
-                  <Trophy className="w-8 h-8 text-purple-600" />
+                  <Trophy className="w-8 h-8 text-purple" />
                 </div>
               </CardContent>
             </Card>
@@ -314,14 +314,14 @@ export default function A4Page() {
                     <p className="text-sm text-muted-foreground mb-1">Racha Actual</p>
                     <div className="text-3xl font-bold">{userStats.streak} días</div>
                   </div>
-                  <TrendingUp className="w-8 h-8 text-orange-600" />
+                  <TrendingUp className="w-8 h-8 text-orange" />
                 </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Welcome Card */}
-          <Card className="border-2 border-cyan-200 bg-gradient-to-r from-cyan-50 via-blue-50 to-purple-50 dark:from-cyan-900/30 dark:via-blue-900/30 dark:to-purple-900/30">
+          <Card className="border-2 border-blue/30 bg-gradient-to-r from-cyan-50 via-blue-50 to-purple-50 dark:from-cyan-900/30 dark:via-blue-900/30 dark:to-purple-900/30">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <span className="text-2xl">🌍</span>
@@ -422,9 +422,9 @@ export default function A4Page() {
       </Tabs>
 
         {/* Tips */}
-        <Card className="mt-8 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border-cyan-200 dark:border-cyan-800">
+        <Card className="mt-8 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border-blue/30 dark:border-cyan-800">
           <CardContent className="pt-6 flex gap-3">
-            <div className="w-5 h-5 flex-shrink-0 text-cyan-600 text-lg">💡</div>
+            <div className="w-5 h-5 flex-shrink-0 text-blue text-lg">💡</div>
             <div>
               <div className="font-semibold text-cyan-900 dark:text-cyan-100 mb-2">A4 - El Contexto Real: Tu Nueva Identidad en Acción</div>
               <ul className="text-sm text-cyan-800 dark:text-cyan-200 space-y-1">

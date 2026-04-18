@@ -85,7 +85,7 @@ export default function BitacoraPage() {
             <Link href="/despega/a2/dashboard" className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition">
               <ChevronLeft className="w-5 h-5" />
             </Link>
-            <BookOpen className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <BookOpen className="w-6 h-6 text-blue dark:text-blue-400" />
             <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">Mi Bitácora</h1>
           </div>
           <p className="text-slate-600 dark:text-slate-400 ml-11">
@@ -100,7 +100,7 @@ export default function BitacoraPage() {
         {loading && (
           <div className="flex items-center justify-center py-12">
             <div className="text-center space-y-3">
-              <Loader className="w-8 h-8 animate-spin text-blue-600 mx-auto" />
+              <Loader className="w-8 h-8 animate-spin text-blue mx-auto" />
               <p className="text-slate-600 dark:text-slate-400">Cargando tu bitácora...</p>
             </div>
           </div>
@@ -170,7 +170,7 @@ export default function BitacoraPage() {
                           onClick={() => setNewEntry({ ...newEntry, type })}
                           className={`px-4 py-2 rounded-lg font-medium transition ${
                             newEntry.type === type
-                              ? 'bg-blue-600 text-white'
+                              ? 'bg-blue text-white'
                               : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'
                           }`}
                         >
@@ -351,7 +351,7 @@ export default function BitacoraPage() {
 
                       {/* Next Steps */}
                       {entry.nextSteps && (
-                        <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
+                        <div className="p-3 bg-blue/5 dark:bg-blue-950 rounded-lg border border-blue/30 dark:border-blue-800">
                           <p className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">Próximos Pasos</p>
                           <p className="text-sm text-blue-800 dark:text-blue-200">{entry.nextSteps}</p>
                         </div>

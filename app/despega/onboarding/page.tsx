@@ -322,7 +322,7 @@ export default function DespegaOnboarding() {
                 <span className="text-slate-500 dark:text-slate-400">1/28</span>
               </div>
               <div className="h-1 bg-blue-200 dark:bg-blue-900 rounded-full overflow-hidden">
-                <div className="h-full bg-blue-600 dark:bg-blue-500 rounded-full" style={{ width: '4%' }}></div>
+                <div className="h-full bg-blue dark:bg-blue/50 rounded-full" style={{ width: '4%' }}></div>
               </div>
               
               <div className="space-y-4">
@@ -381,7 +381,7 @@ export default function DespegaOnboarding() {
               <>
                 <Button 
                   onClick={() => router.push("/despega/a1/resultado")} 
-                  className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg bg-blue-600 hover:bg-blue-700"
+                  className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg bg-blue hover:bg-blue-700"
                 >
                   Ver mi resultado
                 </Button>
@@ -592,9 +592,9 @@ export default function DespegaOnboarding() {
                 <div className="grid md:grid-cols-4 gap-6">
                   <div className="md:col-span-1">
                     <div className="text-6xl mb-3">🏗️</div>
-                    <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">C</h3>
+                    <h3 className="text-2xl font-bold text-blue dark:text-blue-400 mb-2">C</h3>
                     <p className="font-semibold text-slate-900 dark:text-slate-100">ARQUITECTO</p>
-                    <div className="w-8 h-1 bg-blue-500 rounded mt-2"></div>
+                    <div className="w-8 h-1 bg-blue/50 rounded mt-2"></div>
                   </div>
                   <div className="md:col-span-3 space-y-3">
                     <div>
@@ -604,19 +604,19 @@ export default function DespegaOnboarding() {
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
-                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                      <div className="p-3 bg-blue/5 dark:bg-blue-900/20 rounded">
                         <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Cómo Actúan</p>
                         <p className="text-sm text-slate-700 dark:text-slate-300">Analíticos, precisos, orientados a calidad, detallistas, orientados a datos</p>
                       </div>
-                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                      <div className="p-3 bg-blue/5 dark:bg-blue-900/20 rounded">
                         <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Fortalezas</p>
                         <p className="text-sm text-slate-700 dark:text-slate-300">Precisión, análisis, atención al detalle, planificación, calidad, pensamiento crítico</p>
                       </div>
-                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                      <div className="p-3 bg-blue/5 dark:bg-blue-900/20 rounded">
                         <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Motivación</p>
                         <p className="text-sm text-slate-700 dark:text-slate-300">Precisión, datos, excelencia, estándares altos, competencia técnica</p>
                       </div>
-                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
+                      <div className="p-3 bg-blue/5 dark:bg-blue-900/20 rounded">
                         <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Ambiente Ideal</p>
                         <p className="text-sm text-slate-700 dark:text-slate-300">Análisis, investigación, procesos claros, documentación, roles técnicos</p>
                       </div>
@@ -917,7 +917,7 @@ export default function DespegaOnboarding() {
                   Para cada pregunta, elige cómo eres REALMENTE en la mayoría de las situaciones
                 </CardDescription>
               </div>
-              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800">
+              <div className="p-3 bg-blue/5 dark:bg-blue-900/20 rounded border border-blue/30 dark:border-blue-800">
                 <p className="text-xs text-foreground">
                   💡 <strong>Recuerda:</strong> No hay respuestas correctas. Sé honesto contigo mismo para obtener un análisis preciso.
                 </p>
@@ -1150,7 +1150,7 @@ export default function DespegaOnboarding() {
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+            <div className="bg-blue/5 dark:bg-blue-950 border border-blue/30 dark:border-blue-800 rounded-lg p-4">
               <p className="text-sm text-blue-900 dark:text-blue-100">
                 Basados en tu Despega Cerebral, vamos a crear acciones concretas para tu transformación.
               </p>
@@ -1329,12 +1329,12 @@ export default function DespegaOnboarding() {
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500" />
               </div>
               <div className="space-y-2">
-                <h2 className="text-2xl font-bold text-emerald-600">¡Excelente!</h2>
+                <h2 className="text-2xl font-bold text-green">¡Excelente!</h2>
                 <p className="text-slate-600 dark:text-slate-400">
                   Tu ruta personalizada se está generando...
                 </p>
               </div>
-              <div className="bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4 space-y-2">
+              <div className="bg-green/5 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4 space-y-2">
                 <p className="text-sm font-medium text-emerald-900 dark:text-emerald-100">
                   Se está creando tu plan personalizado de 30/60/90 días basado en:
                 </p>
@@ -1364,7 +1364,7 @@ export default function DespegaOnboarding() {
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
+              <div className="bg-green/5 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
                 <p className="text-sm text-emerald-900 dark:text-emerald-100">
                   Tu ruta de 30 días está lista. Responde 5 preguntas más para extender a 60 y 90 días.
                 </p>

@@ -107,7 +107,7 @@ export default function RecomendacionesPage() {
         name: "Enfoque y Productividad",
         description: "Domina tu atención y logra resultados con precisión",
         icon: "🎯",
-        color: "from-green-500 to-emerald-500",
+        color: "from-green to-green",
         borderColor: "border-green-200 dark:border-green-800",
         bgColor: "bg-green-50 dark:bg-green-900/20",
         textColor: "text-green-900 dark:text-green-100",
@@ -140,8 +140,8 @@ export default function RecomendacionesPage() {
         description: "Ejecuta con precisión y consistencia tu estrategia",
         icon: "📋",
         color: "from-purple-500 to-indigo-500",
-        borderColor: "border-purple-200 dark:border-purple-800",
-        bgColor: "bg-purple-50 dark:bg-purple-900/20",
+        borderColor: "border-purple/30 dark:border-purple-800",
+        bgColor: "bg-purple/5 dark:bg-purple-900/20",
         textColor: "text-purple-900 dark:text-purple-100",
         duration: "30-90 días",
         skills: ["Planificación", "Decisiones estratégicas", "Rituales", "Revisión semanal"],
@@ -333,7 +333,7 @@ export default function RecomendacionesPage() {
         </div>
 
         {/* Info Box */}
-        <Card className="border-0 bg-amber-50 dark:bg-amber-900/20 border-l-4 border-l-amber-500">
+        <Card className="border-0 bg-yellow/5 dark:bg-amber-900/20 border-l-4 border-l-amber-500">
           <CardContent className="p-4">
             <p className="text-sm text-slate-700 dark:text-slate-300">
               <strong>💡 Consejo:</strong> Todas estas rutas son poderosas. Elige la que resuena más con tu objetivo inmediato. Puedes explorar otras después.

@@ -143,7 +143,7 @@ export default function ChallensingTrainingPage() {
 
   const getScoreColor = (score: number) => {
     if (score >= 85) return 'bg-green-600'
-    if (score >= 75) return 'bg-blue-600'
+    if (score >= 75) return 'bg-blue'
     if (score >= 65) return 'bg-yellow-600'
     return 'bg-red-600'
   }
@@ -213,7 +213,7 @@ export default function ChallensingTrainingPage() {
 
                 {/* Recording Status */}
                 {!hasResponseBeenRecorded && (
-                  <div className="flex items-center gap-2 text-amber-600 text-sm bg-amber-950/40 border border-amber-700/40 rounded-lg px-4 py-2">
+                  <div className="flex items-center gap-2 text-yellow text-sm bg-amber-950/40 border border-amber-700/40 rounded-lg px-4 py-2">
                     <AlertCircle className="w-4 h-4" />
                     <span>Completa tu respuesta antes de continuar</span>
                   </div>

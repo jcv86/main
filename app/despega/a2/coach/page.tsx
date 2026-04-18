@@ -72,7 +72,7 @@ export default function A2ChatCoachPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
         <div className="text-center space-y-3">
-          <MessageCircle className="w-8 h-8 animate-pulse text-blue-600 mx-auto" />
+          <MessageCircle className="w-8 h-8 animate-pulse text-blue mx-auto" />
           <p className="text-slate-600 dark:text-slate-400">Iniciando tu sesión con el Coach...</p>
         </div>
       </div>
@@ -90,14 +90,14 @@ export default function A2ChatCoachPage() {
             </Link>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <MessageCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                <MessageCircle className="w-5 h-5 text-blue dark:text-blue-400" />
                 <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Chat Coach</h1>
               </div>
               <p className="text-sm text-slate-600 dark:text-slate-400">
                 Profundización Cognitiva - Sofía & Dani
               </p>
             </div>
-            <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-200 border-blue-200 dark:border-blue-800">
+            <Badge variant="outline" className="bg-blue/5 dark:bg-blue-950 text-blue-700 dark:text-blue-200 border-blue/30 dark:border-blue-800">
               A2 – Disponible 24/7
             </Badge>
           </div>
@@ -109,7 +109,7 @@ export default function A2ChatCoachPage() {
         
         {/* Info Cards */}
         {!a1Results && (
-          <Card className="border-0 shadow-sm bg-amber-50 dark:bg-amber-950/20 border-l-4 border-l-amber-500">
+          <Card className="border-0 shadow-sm bg-yellow/5 dark:bg-amber-950/20 border-l-4 border-l-amber-500">
             <CardContent className="p-4">
               <p className="text-sm text-amber-800 dark:text-amber-200">
                 <strong>Nota:</strong> Para acceder al Chat Coach, primero necesitas completar tu evaluación A1 (Despega Cerebral).
@@ -172,7 +172,7 @@ export default function A2ChatCoachPage() {
         {a1Results && (
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <MessageCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+              <MessageCircle className="w-5 h-5 text-blue dark:text-blue-400" />
               <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">
                 Sesión de Profundización
               </h2>

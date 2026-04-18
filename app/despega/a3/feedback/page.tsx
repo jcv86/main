@@ -77,9 +77,9 @@ export default function FeedbackPage() {
       case 'strength':
         return 'border-l-4 border-green-500 bg-green-50 dark:bg-green-900/20'
       case 'improvement':
-        return 'border-l-4 border-orange-500 bg-orange-50 dark:bg-orange-900/20'
+        return 'border-l-4 border-orange-500 bg-orange/5 dark:bg-orange-900/20'
       case 'insight':
-        return 'border-l-4 border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+        return 'border-l-4 border-blue-500 bg-blue/5 dark:bg-blue-900/20'
       default:
         return ''
     }
@@ -118,13 +118,13 @@ export default function FeedbackPage() {
                   onClick={() => setSelectedInterview(key)}
                   className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
                     selectedInterview === key
-                      ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                      ? 'border-blue-500 bg-blue/5 dark:bg-blue-900/20'
                       : 'border-slate-200 dark:border-slate-700 hover:border-blue-300'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <p className="font-semibold text-slate-900 dark:text-white">{value.simulation}</p>
-                    <Badge className="bg-blue-600">{value.overallScore}%</Badge>
+                    <Badge className="bg-blue">{value.overallScore}%</Badge>
                   </div>
                   <p className="text-sm text-slate-600 dark:text-slate-400">{value.date}</p>
                 </button>
@@ -136,7 +136,7 @@ export default function FeedbackPage() {
         {/* Feedback Content */}
         <div className="space-y-6">
           {/* Overall Score */}
-          <Card className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-0">
+          <Card className="bg-gradient-to-r from-blue to-indigo-600 text-white border-0">
             <CardContent className="pt-6 pb-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -163,8 +163,8 @@ export default function FeedbackPage() {
                         item.type === 'strength'
                           ? 'text-green-600 dark:text-green-400'
                           : item.type === 'improvement'
-                          ? 'text-orange-600 dark:text-orange-400'
-                          : 'text-blue-600 dark:text-blue-400'
+                          ? 'text-orange dark:text-orange-400'
+                          : 'text-blue dark:text-blue-400'
                       }`} />
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
@@ -178,7 +178,7 @@ export default function FeedbackPage() {
                             <Badge className="bg-orange-600">Mejorar</Badge>
                           )}
                           {item.type === 'insight' && (
-                            <Badge className="bg-blue-600">Insight</Badge>
+                            <Badge className="bg-blue">Insight</Badge>
                           )}
                         </div>
                         <p className="text-slate-700 dark:text-slate-300 mb-3">
@@ -197,10 +197,10 @@ export default function FeedbackPage() {
           </div>
 
           {/* Action Items */}
-          <Card className="border-2 border-purple-200 dark:border-purple-800">
+          <Card className="border-2 border-purple/30 dark:border-purple-800">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-purple-600" />
+                <Lightbulb className="w-5 h-5 text-purple" />
                 Tu Plan de Acción
               </CardTitle>
             </CardHeader>
@@ -217,7 +217,7 @@ export default function FeedbackPage() {
                 </ol>
               </div>
 
-              <div className="pt-4 border-t border-purple-200 dark:border-purple-800">
+              <div className="pt-4 border-t border-purple/30 dark:border-purple-800">
                 <p className="text-sm text-slate-700 dark:text-slate-300 mb-3">
                   Cuando estés listo, practica la siguiente dificultad:
                 </p>

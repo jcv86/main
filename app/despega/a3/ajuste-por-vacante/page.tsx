@@ -82,7 +82,7 @@ export default function JobMatchingPage() {
             <Button
               onClick={handleAnalyzeJD}
               disabled={loading || !jobDescription.trim()}
-              className="w-full bg-blue-600 hover:bg-blue-700 h-12"
+              className="w-full bg-blue hover:bg-blue-700 h-12"
             >
               {loading ? 'Analizando...' : 'Analizar Vacante'}
               <Zap className="w-4 h-4 ml-2" />
@@ -161,7 +161,7 @@ export default function JobMatchingPage() {
                     <ul className="space-y-3">
                       {analysis.resumeAdjustments.map((adjustment: string, idx: number) => (
                         <li key={idx} className="flex gap-3">
-                          <span className="text-blue-600 dark:text-blue-400 font-bold">{idx + 1}.</span>
+                          <span className="text-blue dark:text-blue-400 font-bold">{idx + 1}.</span>
                           <span className="text-slate-700 dark:text-slate-300">{adjustment}</span>
                         </li>
                       ))}
@@ -169,7 +169,7 @@ export default function JobMatchingPage() {
                   </CardContent>
                 </Card>
 
-                <Button className="w-full bg-blue-600 hover:bg-blue-700">
+                <Button className="w-full bg-blue hover:bg-blue-700">
                   Generar CV Personalizado para esta Vacante
                 </Button>
               </TabsContent>
@@ -201,14 +201,14 @@ export default function JobMatchingPage() {
               <TabsContent value="simulation" className="space-y-4">
                 <Card className="p-6">
                   <div className="text-center space-y-4">
-                    <Zap className="w-12 h-12 text-blue-600 dark:text-blue-400 mx-auto" />
+                    <Zap className="w-12 h-12 text-blue dark:text-blue-400 mx-auto" />
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                       Simulación Personalizada
                     </h3>
                     <p className="text-slate-600 dark:text-slate-400">
                       Práctica una entrevista simulada con preguntas específicas de esta vacante
                     </p>
-                    <Button className="bg-blue-600 hover:bg-blue-700">
+                    <Button className="bg-blue hover:bg-blue-700">
                       Iniciar Simulación
                     </Button>
                   </div>

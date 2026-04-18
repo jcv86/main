@@ -87,7 +87,7 @@ export default function A1SimulationPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <Loader2 className="h-8 w-8 animate-spin text-cyan-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-blue" />
       </div>
     )
   }
@@ -98,7 +98,7 @@ export default function A1SimulationPage() {
         title="A1: Origen" 
         subtitle="Simulación Completada" 
         icon="🎭" 
-        colorClass="from-cyan-500 to-teal-500"
+        colorClass="from-blue to-blue"
       >
         <ASectionPart title="¡Excelente!" icon={<CheckCircle2 />}>
           <div className="bg-gradient-to-br from-cyan-900/30 to-teal-900/20 border border-cyan-500/30 rounded-lg p-8 text-center mb-8">
@@ -129,7 +129,7 @@ export default function A1SimulationPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Button 
               onClick={handleRestart}
-              className="w-full bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white"
+              className="w-full bg-gradient-to-r from-blue to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white"
             >
               <Zap className="w-4 h-4 mr-2" />
               Repetir Simulación
@@ -162,7 +162,7 @@ export default function A1SimulationPage() {
       title="A1: Origen" 
       subtitle="Simulación de Entrevista" 
       icon="🎭" 
-      colorClass="from-cyan-500 to-teal-500"
+      colorClass="from-blue to-blue"
     >
       <ASectionPart title={`Pregunta ${currentQuestion + 1} de ${SIMULATION_QUESTIONS.length}`} icon={<Zap />}>
         <div className="mb-6">
@@ -172,7 +172,7 @@ export default function A1SimulationPage() {
           </div>
           <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-cyan-500 to-teal-500 transition-all duration-500" 
+              className="h-full bg-gradient-to-r from-blue to-blue transition-all duration-500" 
               style={{ width: `${progress}%` }}
             />
           </div>

@@ -15,7 +15,7 @@ const MODULOS_ATERRIZAJE = [
     name: "CV Profesional",
     description: "Crea un currículum que destaque",
     icon: FileText,
-    color: "bg-blue-500",
+    color: "bg-blue/50",
     lightColor: "bg-blue-100",
     textColor: "text-blue-800",
     contenido: [
@@ -60,7 +60,7 @@ const MODULOS_ATERRIZAJE = [
     name: "Negociación Salarial",
     description: "Obtén lo que mereces",
     icon: DollarSign,
-    color: "bg-emerald-500",
+    color: "bg-green/50",
     lightColor: "bg-emerald-100",
     textColor: "text-emerald-800",
     contenido: [

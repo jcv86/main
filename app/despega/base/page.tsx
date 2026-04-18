@@ -25,7 +25,7 @@ const CATEGORIAS_BASE = [
     name: "Cultura General",
     description: "Conocimiento que marca la diferencia",
     icon: Globe,
-    color: "bg-blue-500",
+    color: "bg-blue/50",
     lightColor: "bg-blue-100",
     textColor: "text-blue-800",
   },
@@ -43,7 +43,7 @@ const CATEGORIAS_BASE = [
     name: "Tendencias",
     description: "Lo que viene en tu industria",
     icon: TrendingUp,
-    color: "bg-purple-500",
+    color: "bg-purple/50",
     lightColor: "bg-purple-100",
     textColor: "text-purple-800",
   },
@@ -119,7 +119,7 @@ export default function BasePage() {
       <div className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
         
         {/* JOURNEY PROGRESS - BIG VISUAL */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-800 dark:to-purple-800 rounded-xl p-8 text-white shadow-xl">
+        <div className="bg-gradient-to-r from-blue to-purple-600 dark:from-indigo-800 dark:to-purple-800 rounded-xl p-8 text-white shadow-xl">
           <h1 className="text-3xl font-bold mb-2">Tu Viaje DespegarTuCarrera</h1>
           <p className="text-indigo-100 mb-6">90 días de transformación profesional. Aquí está dónde estás:</p>
           
@@ -218,7 +218,7 @@ export default function BasePage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
-              <div className="text-3xl font-bold text-indigo-600">1/4</div>
+              <div className="text-3xl font-bold text-blue">1/4</div>
               <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">Fases Completadas</p>
             </CardContent>
           </Card>
@@ -230,7 +230,7 @@ export default function BasePage() {
           </Card>
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
-              <div className="text-3xl font-bold text-purple-600">12</div>
+              <div className="text-3xl font-bold text-purple">12</div>
               <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">Acciones Totales</p>
             </CardContent>
           </Card>

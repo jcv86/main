@@ -208,11 +208,11 @@ export default function GuidedInterviewPage() {
                 <span>Revisa el feedback detallado de tu entrevista</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-blue-600 font-bold">2.</span>
+                <span className="text-blue font-bold">2.</span>
                 <span>Intenta la próxima dificultad (Entrevista Estructurada)</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-purple-600 font-bold">3.</span>
+                <span className="text-purple font-bold">3.</span>
                 <span>Trabaja los temas donde necesitas mejorar</span>
               </li>
             </ul>
@@ -222,7 +222,7 @@ export default function GuidedInterviewPage() {
             <Link href="/despega/a3/simulations" className="flex-1">
               <Button variant="outline" className="w-full">Volver a Entrenamientos</Button>
             </Link>
-            <Button onClick={() => handleNext()} className="flex-1 bg-blue-600 hover:bg-blue-700">
+            <Button onClick={() => handleNext()} className="flex-1 bg-blue hover:bg-blue-700">
               Ver Análisis Detallado
             </Button>
           </div>
@@ -256,14 +256,14 @@ export default function GuidedInterviewPage() {
         </div>
 
         {/* Question Card */}
-        <Card className="p-8 border-2 border-blue-200 dark:border-blue-800">
+        <Card className="p-8 border-2 border-blue/30 dark:border-blue-800">
           <div className="space-y-6">
             {/* Question */}
             <div>
               <p className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
                 {currentQuestion.question}
               </p>
-              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+              <div className="bg-blue/5 dark:bg-blue-900/20 border border-blue/30 dark:border-blue-800 rounded-lg p-4">
                 <p className="text-sm text-blue-900 dark:text-blue-200">
                   <strong>Guidance del Coach:</strong> {currentQuestion.guidance}
                 </p>
@@ -296,7 +296,7 @@ export default function GuidedInterviewPage() {
                     Palabras escritas: {(responses[currentQuestion.id] || '').split(/\s+/).filter(w => w).length}
                   </p>
                   {validatingIds.has(currentQuestion.id) && (
-                    <span className="text-xs text-blue-600 dark:text-blue-400 animate-pulse">
+                    <span className="text-xs text-blue dark:text-blue-400 animate-pulse">
                       Coach revisando...
                     </span>
                   )}
@@ -328,9 +328,9 @@ export default function GuidedInterviewPage() {
             </div>
 
             {/* Recording Option */}
-            <div className="bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-lg p-4 flex items-center justify-between">
+            <div className="bg-purple/5 dark:bg-purple-900/20 border border-purple/30 dark:border-purple-800 rounded-lg p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Mic className="w-5 h-5 text-purple-600 dark:text-purple-400" />
+                <Mic className="w-5 h-5 text-purple dark:text-purple-400" />
                 <span className="text-sm font-semibold text-purple-900 dark:text-purple-200">
                   O practica hablando en voz alta (sin grabación aún)
                 </span>
@@ -376,7 +376,7 @@ export default function GuidedInterviewPage() {
                 </Button>
                 <Button
                   onClick={handleNext}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-blue hover:bg-blue-700"
                 >
                   Siguiente
                   <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
@@ -395,7 +395,7 @@ export default function GuidedInterviewPage() {
         </div>
 
         {/* Tips */}
-        <Card className="bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800">
+        <Card className="bg-yellow/5 dark:bg-amber-900/20 border-yellow/30 dark:border-amber-800">
           <CardContent className="pt-6 text-sm text-amber-900 dark:text-amber-200 space-y-2">
             <p className="font-semibold">Consejos de la Entrevista Guiada:</p>
             <ul className="list-disc list-inside space-y-1">

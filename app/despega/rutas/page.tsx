@@ -53,7 +53,7 @@ const RUTAS = [
     name: "Ruta Plan Ejecutivo",
     description: "Ejecuta con precisión y consistencia",
     icon: "📋",
-    color: "bg-purple-500",
+    color: "bg-purple/50",
     lightColor: "bg-purple-100",
     textColor: "text-purple-800",
     camino: "profesional",

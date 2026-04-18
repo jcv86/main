@@ -205,7 +205,7 @@ export default function TrainingDashboardPage() {
       title="Entrenamiento Intensivo"
       subtitle="Práctica y Feedback Realista para Entrevistas"
       icon="🎯"
-      colorClass="from-cyan-500 to-teal-500"
+      colorClass="from-blue to-blue"
     >
       {/* EXPLICACIÓN */}
       <ASectionPart title="¿Qué es Entrenamiento Intensivo?" icon={<Zap />}>
@@ -228,7 +228,7 @@ export default function TrainingDashboardPage() {
           </div>
           <div className="h-3 bg-slate-700 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-cyan-500 to-teal-500 rounded-full transition-all"
+              className="h-full bg-gradient-to-r from-blue to-blue rounded-full transition-all"
               style={{ width: `${completionPercentage}%` }}
             />
           </div>
@@ -272,12 +272,12 @@ export default function TrainingDashboardPage() {
                               <Icon className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300" />
                               {card.title}
                             </CardTitle>
-                            {card.badge && <Badge className="text-xs bg-cyan-500/20 text-cyan-300 border-cyan-500/50">{card.badge}</Badge>}
+                            {card.badge && <Badge className="text-xs bg-blue/50/20 text-cyan-300 border-cyan-500/50">{card.badge}</Badge>}
                           </div>
                         </CardHeader>
                         <CardContent className="space-y-4">
                           <p className="text-sm text-slate-400">{card.description}</p>
-                          {isCompleted && <Badge className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/50">✓ Completado</Badge>}
+                          {isCompleted && <Badge className="bg-green/50/20 text-emerald-400 border border-emerald-500/50">✓ Completado</Badge>}
                           <Button 
                             onClick={() => router.push(card.href)}
                             className={`w-full group/btn transition-all ${isCompleted ? 'bg-slate-700 hover:bg-slate-600' : 'bg-cyan-600 hover:bg-cyan-700'}`}
@@ -308,7 +308,7 @@ export default function TrainingDashboardPage() {
           </div>
           <div className="h-2 bg-slate-700 rounded-full overflow-hidden mb-4">
             <div
-              className="h-full bg-gradient-to-r from-cyan-500 to-teal-500 rounded-full transition-all"
+              className="h-full bg-gradient-to-r from-blue to-blue rounded-full transition-all"
               style={{ width: `${completionPercentage}%` }}
             />
           </div>

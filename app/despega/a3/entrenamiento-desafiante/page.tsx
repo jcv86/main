@@ -330,7 +330,7 @@ export default function ChallensingTrainingPage() {
 
                     {/* Validation Message */}
                     {!hasResponse && (
-                      <div className="flex items-start gap-2 text-amber-600 text-sm bg-amber-950/40 border border-amber-700/40 p-3 rounded-lg">
+                      <div className="flex items-start gap-2 text-yellow text-sm bg-amber-950/40 border border-amber-700/40 p-3 rounded-lg">
                         <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                         <span>Completa tu respuesta (grabación o texto) antes de enviar para evaluación</span>
                       </div>

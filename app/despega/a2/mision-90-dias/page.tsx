@@ -22,7 +22,7 @@ const ROUTE_INFO = {
   enfoque: {
     name: "Enfoque y Productividad",
     icon: "🎯",
-    color: "from-green-500 to-emerald-500",
+    color: "from-green to-green",
     bgColor: "bg-green-50 dark:bg-green-900/20",
     textColor: "text-green-900 dark:text-green-100",
   },
@@ -37,7 +37,7 @@ const ROUTE_INFO = {
     name: "Plan Ejecutivo",
     icon: "📋",
     color: "from-purple-500 to-indigo-500",
-    bgColor: "bg-purple-50 dark:bg-purple-900/20",
+    bgColor: "bg-purple/5 dark:bg-purple-900/20",
     textColor: "text-purple-900 dark:text-purple-100",
   },
 }
@@ -289,7 +289,7 @@ export default function Mision90DiasPage() {
           </Card>
 
           {/* Info Box */}
-          <Card className="border-0 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500">
+          <Card className="border-0 bg-blue/5 dark:bg-blue-900/20 border-l-4 border-l-blue-500">
             <CardContent className="p-4">
               <p className="text-sm text-slate-700 dark:text-slate-300">
                 <strong>📅 Estructura de los 90 días:</strong> Dividiremos esta misión en 3 sprints de 30 días cada uno. Cada semana tendrá un desafío y micro-acciones específicas.

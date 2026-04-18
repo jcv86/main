@@ -212,14 +212,14 @@ export default function A1ReportPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-purple" />
       </div>
     )
   }
 
   if (error) {
     return (
-      <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple-500 to-blue-500">
+      <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple-500 to-blue">
         <ASectionPart title="Completar Evaluación" icon={<Zap />}>
           <div className="space-y-4">
             <div className="p-6 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-900/50 rounded-lg">
@@ -230,7 +230,7 @@ export default function A1ReportPage() {
             </div>
             <Button 
               onClick={() => router.push('/despega/a1-cerebral')} 
-              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-6 text-lg"
+              className="w-full bg-gradient-to-r from-purple to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-6 text-lg"
             >
               <Target className="w-5 h-5 mr-2" />
               Comenzar Evaluación de Perfil Cerebral
@@ -250,13 +250,13 @@ export default function A1ReportPage() {
       <ASectionPart title="✨ Tu Análisis Personalizado - ESE ERES TÚ" icon={<Sparkles />}>
         {insightsLoading ? (
           <div className="flex flex-col items-center justify-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-purple-600 mb-4" />
+            <Loader2 className="h-8 w-8 animate-spin text-purple mb-4" />
             <p className="text-slate-400 text-lg">Analizando tu perfil con IA...</p>
             <p className="text-slate-500 text-sm mt-2">Esto toma unos segundos</p>
           </div>
         ) : insights ? (
           <div className="space-y-6">
-            <div className="bg-gradient-to-r from-purple-600/20 to-blue-600/20 border-2 border-purple-500/50 rounded-xl p-6">
+            <div className="bg-gradient-to-r from-purple/20 to-blue-600/20 border-2 border-purple-500/50 rounded-xl p-6">
               <p className="text-slate-300 text-center text-lg">
                 Basado en tu perfil de El Ritual y contexto personal, aquí está tu análisis completo:
               </p>
@@ -279,11 +279,11 @@ export default function A1ReportPage() {
   const secondaryLabel = discToDespega[profile.secondary as keyof typeof discToDespega]
 
   return (
-    <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple-500 to-blue-500">
+    <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple-500 to-blue">
       <ASectionPart title="Tu Perfil Cerebral" icon={<Target />}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Primary Profile Card */}
-          <div className="bg-gradient-to-br from-purple-600 via-purple-500 to-purple-400 rounded-xl p-6 shadow-lg border-2 border-purple-300">
+          <div className="bg-gradient-to-br from-purple via-purple-500 to-purple-400 rounded-xl p-6 shadow-lg border-2 border-purple-300">
             <p className="text-purple-100 text-sm mb-2 font-semibold">Tu Tipo Dominante</p>
             <div className="text-4xl font-black text-white mb-3">{primaryLabel}</div>
             <p className="font-semibold text-purple-50 mb-4 text-sm">{despegaLabels[primaryLabel as keyof typeof despegaLabels]}</p>
@@ -294,7 +294,7 @@ export default function A1ReportPage() {
           </div>
 
           {/* Secondary Profile Card */}
-          <div className="bg-gradient-to-br from-blue-600 via-blue-500 to-blue-400 rounded-xl p-6 shadow-lg border-2 border-blue-300">
+          <div className="bg-gradient-to-br from-blue via-blue to-blue-400 rounded-xl p-6 shadow-lg border-2 border-blue-300">
             <p className="text-blue-100 text-sm mb-2 font-semibold">Tu Tipo Secundario</p>
             <div className="text-4xl font-black text-white mb-3">{secondaryLabel}</div>
             <p className="font-semibold text-blue-50 mb-4 text-sm">{despegaLabels[secondaryLabel as keyof typeof despegaLabels]}</p>
@@ -312,8 +312,8 @@ export default function A1ReportPage() {
             {[
               { label: 'Impulsor', score: profile.D, color: 'from-red-500 to-orange-500', icon: '⚡' },
               { label: 'Catalizador', score: profile.I, color: 'from-yellow-500 to-orange-400', icon: '🔥' },
-              { label: 'Estabilizador', score: profile.S, color: 'from-green-500 to-teal-500', icon: '🛡️' },
-              { label: 'Arquitecto', score: profile.C, color: 'from-blue-500 to-purple-500', icon: '🏗️' }
+              { label: 'Estabilizador', score: profile.S, color: 'from-green to-blue', icon: '🛡️' },
+              { label: 'Arquitecto', score: profile.C, color: 'from-blue to-purple-500', icon: '🏗️' }
             ].map((dim, idx) => (
               <div key={idx} className="flex items-center gap-4 p-3 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors">
                 <span className="text-2xl">{dim.icon}</span>
@@ -334,7 +334,7 @@ export default function A1ReportPage() {
       <ASectionPart title="✨ Tu Análisis Personalizado - ESE ERES TÚ" icon={<Sparkles />}>
         {insightsLoading ? (
           <div className="flex flex-col items-center justify-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-purple-600 mb-4" />
+            <Loader2 className="h-8 w-8 animate-spin text-purple mb-4" />
             <p className="text-slate-300 text-lg font-semibold">Generando tu análisis personalizado con IA...</p>
             <p className="text-slate-500 text-sm mt-2">Esto toma unos segundos mientras analizamos tu perfil</p>
           </div>
@@ -419,7 +419,7 @@ export default function A1ReportPage() {
               <p className="text-sm text-slate-300 mb-4">Practica entrevistas con un entrenamiento personalizado para tu perfil {primaryLabel}.</p>
               <Button 
                 onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile.primary}`)} 
-                className="w-full bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white" 
+                className="w-full bg-gradient-to-r from-blue to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white" 
                 size="sm"
               >
                 <Phone className="w-3 h-3 mr-1" />

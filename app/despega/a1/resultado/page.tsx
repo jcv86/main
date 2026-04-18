@@ -69,8 +69,8 @@ export default function A1ResultadoPage() {
     const colors: Record<string, string> = {
       'D': 'from-red-500 to-orange-500',
       'I': 'from-yellow-500 to-amber-500',
-      'S': 'from-green-500 to-emerald-500',
-      'C': 'from-blue-500 to-cyan-500'
+      'S': 'from-green to-green',
+      'C': 'from-blue to-blue'
     }
     return colors[letter] || 'from-slate-500 to-slate-600'
   }
@@ -102,10 +102,10 @@ export default function A1ResultadoPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-full">
-            <Brain className="w-4 h-4 text-purple-600 dark:text-purple-400" />
+            <Brain className="w-4 h-4 text-purple dark:text-purple-400" />
             <span className="text-sm font-semibold text-purple-700 dark:text-purple-300">Tu Perfil Despega Cerebral</span>
           </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-4">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-4">
             Tu Mapa está Listo
           </h1>
           <p className="text-lg text-slate-700 dark:text-slate-300">
@@ -191,19 +191,19 @@ export default function A1ResultadoPage() {
             <CardContent className="space-y-2">
               <ul className="space-y-2 text-slate-700 dark:text-slate-300">
                 <li className="flex gap-2">
-                  <span className="text-orange-600 font-bold">→</span>
+                  <span className="text-orange font-bold">→</span>
                   <span>Desarrollar más paciencia en procesos complejos</span>
                 </li>
                 <li className="flex gap-2">
-                  <span className="text-orange-600 font-bold">→</span>
+                  <span className="text-orange font-bold">→</span>
                   <span>Escuchar perspectivas distintas antes de decidir</span>
                 </li>
                 <li className="flex gap-2">
-                  <span className="text-orange-600 font-bold">→</span>
+                  <span className="text-orange font-bold">→</span>
                   <span>Adaptar tu ritmo al de tu equipo</span>
                 </li>
                 <li className="flex gap-2">
-                  <span className="text-orange-600 font-bold">→</span>
+                  <span className="text-orange font-bold">→</span>
                   <span>Reflexionar antes de actuar en situaciones críticas</span>
                 </li>
               </ul>
@@ -230,7 +230,7 @@ export default function A1ResultadoPage() {
                 <p className="font-semibold text-green-700 dark:text-green-300">Relaciones (Estabilidad & Confianza)</p>
                 <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">Tu capacidad para conectar, sostener y ser confiable para otros</p>
               </div>
-              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500">
+              <div className="p-3 bg-blue/5 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500">
                 <p className="font-semibold text-blue-700 dark:text-blue-300">Enfoque (Precisión & Profundidad)</p>
                 <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">Tu capacidad para analizar, refinar y asegurar calidad en lo que haces</p>
               </div>
@@ -239,10 +239,10 @@ export default function A1ResultadoPage() {
         </div>
 
         {/* ⭐ A1 V2: INTERNAL TENSIONS */}
-        <Card className="mb-8 border-0 shadow-lg border-2 border-amber-200 dark:border-amber-800 bg-amber-50/50 dark:bg-amber-900/20">
+        <Card className="mb-8 border-0 shadow-lg border-2 border-yellow/30 dark:border-amber-800 bg-yellow/5/50 dark:bg-amber-900/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-amber-900 dark:text-amber-200">
-              <Sparkles className="w-5 h-5 text-amber-600" />
+              <Sparkles className="w-5 h-5 text-yellow" />
               Tus Tensiones Internas
             </CardTitle>
             <p className="text-sm text-amber-800 dark:text-amber-300 mt-2 font-normal">Las dinámicas internas que viven en ti constantemente</p>
@@ -267,10 +267,10 @@ export default function A1ResultadoPage() {
         </Card>
 
         {/* ⭐ A1 V2: ADVANCEMENT PATTERN */}
-        <Card className="mb-8 border-0 shadow-lg border-2 border-emerald-200 dark:border-emerald-800 bg-emerald-50/50 dark:bg-emerald-900/20">
+        <Card className="mb-8 border-0 shadow-lg border-2 border-emerald-200 dark:border-emerald-800 bg-green/5/50 dark:bg-emerald-900/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-emerald-900 dark:text-emerald-200">
-              <TrendingUp className="w-5 h-5 text-emerald-600" />
+              <TrendingUp className="w-5 h-5 text-green" />
               Tu Patrón de Avance y Freno
             </CardTitle>
             <p className="text-sm text-emerald-800 dark:text-emerald-300 mt-2 font-normal">Dónde aceleras naturalmente vs. donde necesitas empujar</p>
@@ -281,19 +281,19 @@ export default function A1ResultadoPage() {
                 <p className="font-semibold text-emerald-900 dark:text-emerald-200">🚀 ACELERAS EN:</p>
                 <ul className="space-y-2 text-sm text-slate-700 dark:text-slate-400">
                   <li className="flex gap-2">
-                    <span className="text-emerald-600 font-bold">▸</span>
+                    <span className="text-green font-bold">▸</span>
                     <span>Decisiones bajo presión</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="text-emerald-600 font-bold">▸</span>
+                    <span className="text-green font-bold">▸</span>
                     <span>Liderar cambios grandes</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="text-emerald-600 font-bold">▸</span>
+                    <span className="text-green font-bold">▸</span>
                     <span>Comunicación directa</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="text-emerald-600 font-bold">▸</span>
+                    <span className="text-green font-bold">▸</span>
                     <span>Ejecutar con ambición</span>
                   </li>
                 </ul>
@@ -302,19 +302,19 @@ export default function A1ResultadoPage() {
                 <p className="font-semibold text-orange-900 dark:text-orange-200">⚠️ TE FRENA:</p>
                 <ul className="space-y-2 text-sm text-slate-700 dark:text-slate-400">
                   <li className="flex gap-2">
-                    <span className="text-orange-600 font-bold">■</span>
+                    <span className="text-orange font-bold">■</span>
                     <span>Detalles y preparación excesiva</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="text-orange-600 font-bold">■</span>
+                    <span className="text-orange font-bold">■</span>
                     <span>Falta de cierre o follow-up</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="text-orange-600 font-bold">■</span>
+                    <span className="text-orange font-bold">■</span>
                     <span>Resistencia de equipo</span>
                   </li>
                   <li className="flex gap-2">
-                    <span className="text-orange-600 font-bold">■</span>
+                    <span className="text-orange font-bold">■</span>
                     <span>Ambigüedad o cambios de plan</span>
                   </li>
                 </ul>
@@ -325,16 +325,16 @@ export default function A1ResultadoPage() {
         </Card>
 
         {/* ⭐ A1 V2: PREDICTIVE INSIGHTS */}
-        <Card className="mb-8 border-0 shadow-lg border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50/50 dark:bg-indigo-900/20">
+        <Card className="mb-8 border-0 shadow-lg border-2 border-blue/30 dark:border-indigo-800 bg-blue/5/50 dark:bg-indigo-900/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-indigo-900 dark:text-indigo-200">
-              <Target className="w-5 h-5 text-indigo-600" />
+              <Target className="w-5 h-5 text-blue" />
               Lectura Predictiva: El Mercado Laboral y Vos
             </CardTitle>
             <p className="text-sm text-indigo-800 dark:text-indigo-300 mt-2 font-normal">Cómo tu perfil se posiciona en oportunidades reales</p>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-indigo-200 dark:border-indigo-700">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-blue/30 dark:border-indigo-700">
               <p className="font-semibold text-indigo-900 dark:text-indigo-200 mb-2">Roles Donde Brillás</p>
               <ul className="space-y-1 text-sm text-slate-700 dark:text-slate-400">
                 <li>• Liderazgo estratégico (startups, transformación digital)</li>
@@ -358,7 +358,7 @@ export default function A1ResultadoPage() {
         </Card>
 
         {/* Final Bridge to A2 */}
-        <Card className="mb-8 border-0 shadow-lg bg-gradient-to-r from-purple-500/10 to-blue-500/10 dark:from-purple-900/20 dark:to-blue-900/20">
+        <Card className="mb-8 border-0 shadow-lg bg-gradient-to-r from-purple-500/10 to-blue/10 dark:from-purple-900/20 dark:to-blue-900/20">
           <CardHeader>
             <CardTitle className="text-xl">Por Qué Esto Importa Para Tu Ruta</CardTitle>
           </CardHeader>
@@ -383,7 +383,7 @@ export default function A1ResultadoPage() {
                 trackEvent('a1_bridge_cta_clicked', {})
                 router.push('/despega/a2/intro')
               }} 
-              className="gap-2 px-8 py-6 text-lg w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
+              className="gap-2 px-8 py-6 text-lg w-full bg-gradient-to-r from-purple to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
               size="lg"
             >
               Comenzar tu Misión de 90 Días

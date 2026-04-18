@@ -68,7 +68,7 @@ export default function A1PatternsPage() {
 
   if (loading) {
     return (
-      <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple-500 to-blue-500">
+      <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple-500 to-blue">
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-purple-500" />
         </div>
@@ -77,10 +77,10 @@ export default function A1PatternsPage() {
   }
 
   return (
-    <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple-500 to-blue-500">
+    <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple-500 to-blue">
       <ASectionPart title={`Tu Perfil: ${label}`} icon={<Target />}>
         {/* Profile Header */}
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl p-8 text-white mb-8 shadow-lg">
+        <div className="bg-gradient-to-r from-purple to-blue-600 rounded-xl p-8 text-white mb-8 shadow-lg">
           <p className="text-purple-100 text-sm mb-2 font-semibold">Perfil Cerebral Identificado</p>
           <h1 className="text-5xl font-black mb-3">{label}</h1>
           <p className="text-lg text-purple-100 font-medium">{description}</p>
@@ -222,7 +222,7 @@ export default function A1PatternsPage() {
                 <p className="text-slate-300 mb-4">Practica entrevistas específicas para tu perfil</p>
                 <Button 
                   onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile}`)}
-                  className="w-full bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700"
+                  className="w-full bg-gradient-to-r from-blue to-teal-600 hover:from-cyan-700 hover:to-teal-700"
                 >
                   Comenzar Práctica
                   <ArrowRight className="w-4 h-4 ml-2" />

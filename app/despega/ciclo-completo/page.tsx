@@ -105,7 +105,7 @@ export default function CycleCompletionPage() {
       case 'D': return 'bg-red-500/20 border-red-300 text-red-800'
       case 'I': return 'bg-yellow-500/20 border-yellow-300 text-yellow-800'
       case 'S': return 'bg-green-500/20 border-green-300 text-green-800'
-      case 'C': return 'bg-blue-500/20 border-blue-300 text-blue-800'
+      case 'C': return 'bg-blue/50/20 border-blue-300 text-blue-800'
       default: return 'bg-gray-500/20 border-gray-300 text-gray-800'
     }
   }

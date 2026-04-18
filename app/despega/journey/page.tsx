@@ -57,7 +57,7 @@ export default function JourneyPage() {
             description: 'Descubre quién eres realmente',
             status: 'completed',
             progress: 100,
-            color: 'text-blue-600 dark:text-blue-400',
+            color: 'text-blue dark:text-blue-400',
             bgColor: 'from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900',
             icon: <CheckCircle2 className="w-6 h-6" />,
             href: '/despega/a1-cerebral',
@@ -81,7 +81,7 @@ export default function JourneyPage() {
             description: 'Entiende tu contexto y oportunidades',
             status: 'in-progress',
             progress: 30,
-            color: 'text-cyan-600 dark:text-cyan-400',
+            color: 'text-blue dark:text-cyan-400',
             bgColor: 'from-cyan-50 to-cyan-100 dark:from-cyan-950 dark:to-cyan-900',
             icon: <Circle className="w-6 h-6" />,
             href: '/despega/a4-base',
@@ -93,7 +93,7 @@ export default function JourneyPage() {
             description: 'Entrena y practica tu transformación',
             status: 'upcoming',
             progress: 0,
-            color: 'text-orange-600 dark:text-orange-400',
+            color: 'text-orange dark:text-orange-400',
             bgColor: 'from-orange-50 to-orange-100 dark:from-orange-950 dark:to-orange-900',
             icon: <Lock className="w-6 h-6" />,
             href: '/despega/a3',
@@ -144,7 +144,7 @@ export default function JourneyPage() {
           </p>
 
           {/* OVERALL PROGRESS */}
-          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 rounded-lg p-6 border border-indigo-200 dark:border-indigo-800">
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 rounded-lg p-6 border border-blue/30 dark:border-indigo-800">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-sm font-semibold text-indigo-900 dark:text-indigo-100">Progreso General</h3>
@@ -257,7 +257,7 @@ export default function JourneyPage() {
         </Card>
 
         {/* NEXT STEPS */}
-        <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 rounded-lg p-8 border border-blue-200 dark:border-blue-800">
+        <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 rounded-lg p-8 border border-blue/30 dark:border-blue-800">
           <h3 className="text-lg font-semibold mb-4">Próximos Pasos</h3>
           <ul className="space-y-3 text-sm">
             <li className="flex gap-3">

@@ -119,7 +119,7 @@ export default function BookRecommendationsPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-purple-50 to-blue-50 flex items-center justify-center">
         <div className="text-center">
-          <Sparkles className="h-12 w-12 text-purple-600 mx-auto mb-4 animate-spin" />
+          <Sparkles className="h-12 w-12 text-purple mx-auto mb-4 animate-spin" />
           <p className="text-lg text-gray-600">Personalizando tus recomendaciones...</p>
         </div>
       </div>
@@ -186,7 +186,7 @@ export default function BookRecommendationsPage() {
                 <p className="text-sm text-gray-700">
                   Basado en tu perfil DISC y 120+ libros de desarrollo profesional.
                 </p>
-                <div className="bg-white p-3 rounded-lg border border-indigo-200">
+                <div className="bg-white p-3 rounded-lg border border-blue/30">
                   <p className="text-xs font-semibold text-indigo-700 mb-1">
                     📍 Enfoque Prioritario
                   </p>
@@ -233,7 +233,7 @@ export default function BookRecommendationsPage() {
                         <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-2">
                           {book.title}
                         </h3>
-                        <p className="text-sm text-purple-600 font-semibold mb-3">
+                        <p className="text-sm text-purple font-semibold mb-3">
                           {book.author}
                         </p>
 
@@ -252,7 +252,7 @@ export default function BookRecommendationsPage() {
                                   key={i}
                                   className="text-xs text-gray-600 flex items-start gap-2"
                                 >
-                                  <span className="text-purple-600 mt-0.5">•</span>
+                                  <span className="text-purple mt-0.5">•</span>
                                   <span className="line-clamp-1">{takeaway}</span>
                                 </li>
                               ))}
@@ -287,7 +287,7 @@ export default function BookRecommendationsPage() {
         <div className="text-center space-y-4 pt-8 border-t border-gray-200">
           <Button
             onClick={() => router.push("/dashboard?refetch=true")}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-base"
+            className="bg-blue hover:bg-blue-700 text-white px-8 py-3 text-base"
             size="lg"
           >
             Ir a mi Dashboard

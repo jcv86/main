@@ -183,10 +183,10 @@ export default function A2DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-amber-200 dark:border-amber-800">
+            <Card className="border-2 border-yellow/30 dark:border-amber-800">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-amber-500 flex items-center justify-center text-white text-xs font-bold">2</div>
+                  <div className="w-6 h-6 rounded-full bg-yellow/50 flex items-center justify-center text-white text-xs font-bold">2</div>
                   Semana 2: Profundización
                 </CardTitle>
               </CardHeader>
@@ -206,10 +206,10 @@ export default function A2DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-purple-200 dark:border-purple-800">
+            <Card className="border-2 border-purple/30 dark:border-purple-800">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center text-white text-xs font-bold">3</div>
+                  <div className="w-6 h-6 rounded-full bg-purple/50 flex items-center justify-center text-white text-xs font-bold">3</div>
                   Semana 3: Consolidación
                 </CardTitle>
               </CardHeader>
@@ -229,16 +229,16 @@ export default function A2DashboardPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-blue-200 dark:border-blue-800">
+            <Card className="border-2 border-blue/30 dark:border-blue-800">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs font-bold">✓</div>
+                  <div className="w-6 h-6 rounded-full bg-blue/50 flex items-center justify-center text-white text-xs font-bold">✓</div>
                   Revisión del Sprint 1
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 <p className="text-sm text-slate-600 dark:text-slate-400">Prepárate para la revisión con tu Coach. Trae datos de tu progreso y aprende qué ajustar.</p>
-                <Button className="w-full mt-2 bg-blue-600 hover:bg-blue-700">Programar Revisión</Button>
+                <Button className="w-full mt-2 bg-blue hover:bg-blue-700">Programar Revisión</Button>
               </CardContent>
             </Card>
           </div>
@@ -246,7 +246,7 @@ export default function A2DashboardPage() {
 
         {/* ⭐ A2 V2: WEEKLY REVIEW RITUAL */}
         <div>
-          <Card className="border-2 border-indigo-200 dark:border-indigo-800 bg-indigo-50/30 dark:bg-indigo-900/10">
+          <Card className="border-2 border-blue/30 dark:border-indigo-800 bg-blue/5/30 dark:bg-indigo-900/10">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
                 📋 Tu Ritual Semanal de Revisión

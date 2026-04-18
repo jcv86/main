@@ -205,13 +205,13 @@ export default function Conozcamonos1Page() {
           <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-full mb-4">
             <p className="text-sm font-semibold text-purple-700 dark:text-purple-300">El Ritual: Paso 1 - Conocámonos</p>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">
             Antes de Empezar, Cuéntame Tu Historia
           </h1>
           <p className="text-lg text-slate-700 dark:text-slate-300 font-medium">Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 border-2 border-purple-200 dark:border-purple-900/50 rounded-2xl p-8 mb-8 shadow-lg">
+        <div className="bg-white dark:bg-slate-900 border-2 border-purple/30 dark:border-purple-900/50 rounded-2xl p-8 mb-8 shadow-lg">
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">{question.question}</h2>
 
           {question.type === 'select' && (

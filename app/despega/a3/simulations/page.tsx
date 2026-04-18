@@ -166,7 +166,7 @@ export default function SimulationsPage() {
         {/* Tips Card */}
         <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border-0">
           <CardContent className="pt-6 flex gap-3">
-            <div className="w-5 h-5 flex-shrink-0 text-purple-600 text-lg">💡</div>
+            <div className="w-5 h-5 flex-shrink-0 text-purple text-lg">💡</div>
             <div>
               <div className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Cómo progresar en entrenamiento de entrevistas</div>
               <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">

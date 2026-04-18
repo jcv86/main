@@ -63,7 +63,7 @@ export default function A1CerebralIntroPage() {
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2">
-                <Zap className="w-6 h-6 text-purple-600" />
+                <Zap className="w-6 h-6 text-purple" />
                 ¿Qué es esta Evaluación?
               </CardTitle>
             </CardHeader>
@@ -84,7 +84,7 @@ export default function A1CerebralIntroPage() {
                   <p className="font-semibold text-green-900 dark:text-green-100 mb-1">Estabilizador</p>
                   <p className="text-sm text-green-800 dark:text-green-200">Estable, cooperativo, confiable, paciente</p>
                 </div>
-                <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
+                <div className="p-4 bg-blue/5 dark:bg-blue-950 rounded-lg border border-blue/30 dark:border-blue-800">
                   <p className="font-semibold text-blue-900 dark:text-blue-100 mb-1">Arquitecto</p>
                   <p className="text-sm text-blue-800 dark:text-blue-200">Analítico, detallista, exigente con calidad</p>
                 </div>
@@ -103,21 +103,21 @@ export default function A1CerebralIntroPage() {
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">1</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center font-bold">1</div>
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-white">28 preguntas</p>
                     <p className="text-sm text-slate-600 dark:text-slate-400">Responde 28 preguntas simples sobre tu comportamiento</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center font-bold">2</div>
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-white">Dos selecciones por pregunta</p>
                     <p className="text-sm text-slate-600 dark:text-slate-400">Para cada pregunta, selecciona la opción que más y menos te describe</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center font-bold">3</div>
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-white">Análisis automático</p>
                     <p className="text-sm text-slate-600 dark:text-slate-400">Obtendrás tu perfil cerebral personalizado con insights sobre tu comunicación y liderazgo</p>
@@ -194,7 +194,7 @@ export default function A1CerebralIntroPage() {
                 </div>
               </div>
 
-              <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+              <div className="bg-blue/5 dark:bg-blue-950 p-4 rounded-lg border border-blue/30 dark:border-blue-800">
                 <p className="text-sm text-blue-900 dark:text-blue-100">
                   <span className="font-semibold">¿Cómo funciona?</span> Cada pregunta tiene 4 opciones que representan los 4 estilos: Directo, Inspirador, Seguro y Consciente. Seleccionas cuál te describe MÁS y cuál te describe MENOS. El sistema cuenta tus selecciones y determina tu perfil dominante.
                 </p>
@@ -203,7 +203,7 @@ export default function A1CerebralIntroPage() {
           </Card>
 
           {/* Benefits */}
-          <Card className="border-0 shadow-lg bg-blue-50 dark:bg-blue-950">
+          <Card className="border-0 shadow-lg bg-blue/5 dark:bg-blue-950">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-blue-900 dark:text-blue-100">
                 ¿Por qué es importante?
@@ -211,19 +211,19 @@ export default function A1CerebralIntroPage() {
             </CardHeader>
             <CardContent className="space-y-3 text-blue-900 dark:text-blue-100">
               <div className="flex gap-3">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue-600" />
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue" />
                 <p>Entiende tu estilo de comunicación natural</p>
               </div>
               <div className="flex gap-3">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue-600" />
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue" />
                 <p>Identifica tus fortalezas en situaciones de entrevista</p>
               </div>
               <div className="flex gap-3">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue-600" />
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue" />
                 <p>Reconoce áreas de desarrollo personal</p>
               </div>
               <div className="flex gap-3">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue-600" />
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue" />
                 <p>Adapta tu comunicación según el contexto laboral</p>
               </div>
             </CardContent>
@@ -234,7 +234,7 @@ export default function A1CerebralIntroPage() {
             <Button
               onClick={() => router.push('/despega/a1-cerebral')}
               size="lg"
-              className="px-8 text-lg bg-blue-600 hover:bg-blue-700 text-white"
+              className="px-8 text-lg bg-blue hover:bg-blue-700 text-white"
             >
               Comenzar Análisis Cerebral
             </Button>

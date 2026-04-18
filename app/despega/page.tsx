@@ -138,7 +138,7 @@ export default function DespegazoDashboard() {
       href: '/despega/a1-report',
       score: readiness.a1_completeness,
       icon: '🎯',
-      color: 'from-purple-500 to-blue-500'
+      color: 'from-purple-500 to-blue'
     },
     {
       name: 'A2: Exploración',
@@ -147,7 +147,7 @@ export default function DespegazoDashboard() {
       href: '/despega/a2-routes',
       score: readiness.a2_completeness,
       icon: '🗺️',
-      color: 'from-blue-500 to-cyan-500'
+      color: 'from-blue to-blue'
     },
     {
       name: 'A3: Entrenamiento',
@@ -159,7 +159,7 @@ export default function DespegazoDashboard() {
       href: '/despega/a3-dashboard',
       score: readiness.a3_completeness,
       icon: '⚡',
-      color: 'from-cyan-500 to-teal-500'
+      color: 'from-blue to-blue'
     },
     {
       name: 'A4: La Realidad',
@@ -168,7 +168,7 @@ export default function DespegazoDashboard() {
       href: '/despega/a4-radar',
       score: readiness.a4_completeness,
       icon: '📡',
-      color: 'from-teal-500 to-emerald-500'
+      color: 'from-teal-500 to-green'
     }
   ]
 
@@ -283,11 +283,11 @@ export default function DespegazoDashboard() {
                   </div>
                 </div>
                 {stage.completed ? (
-                  <Badge className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/50 ml-4">
+                  <Badge className="bg-green/50/20 text-emerald-400 border border-emerald-500/50 ml-4">
                     ✓ Completo
                   </Badge>
                 ) : (
-                  <Badge className="bg-purple-500/20 text-purple-400 border border-purple-500/50 ml-4">
+                  <Badge className="bg-purple/50/20 text-purple-400 border border-purple-500/50 ml-4">
                     {Math.round(stage.score)}%
                   </Badge>
                 )}

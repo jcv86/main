@@ -126,7 +126,7 @@ export default function HowToEarnXPPage() {
                       <p className="text-sm text-slate-400">{rule.category}</p>
                     </div>
                   </div>
-                  <Badge className="bg-cyan-500/20 text-cyan-300 border-cyan-500/50">
+                  <Badge className="bg-blue/50/20 text-cyan-300 border-cyan-500/50">
                     {rule.items.length} acciones
                   </Badge>
                 </div>
@@ -148,7 +148,7 @@ export default function HowToEarnXPPage() {
                             {item.streak && <p className="text-xs text-cyan-300">{item.streak}</p>}
                           </div>
                         </div>
-                        <Badge className="bg-amber-500/20 text-amber-300 border-amber-500/50 font-bold">
+                        <Badge className="bg-yellow/50/20 text-amber-300 border-amber-500/50 font-bold">
                           +{item.xp} XP
                         </Badge>
                       </div>

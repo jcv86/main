@@ -85,18 +85,18 @@ export default function A4IntroPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
-                <div className="p-4 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+                <div className="p-4 bg-blue/5 dark:bg-blue-950/30 rounded-lg border border-blue/30 dark:border-blue-800">
                   <div className="flex gap-3">
-                    <Newspaper className="w-6 h-6 text-blue-600 flex-shrink-0" />
+                    <Newspaper className="w-6 h-6 text-blue flex-shrink-0" />
                     <div>
                       <p className="font-semibold text-slate-900 dark:text-white">Noticias y Tendencias</p>
                       <p className="text-sm text-slate-600 dark:text-slate-400">Alertas sobre industria, empresas y roles en tu área.</p>
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-purple-50 dark:bg-purple-950/30 rounded-lg border border-purple-200 dark:border-purple-800">
+                <div className="p-4 bg-purple/5 dark:bg-purple-950/30 rounded-lg border border-purple/30 dark:border-purple-800">
                   <div className="flex gap-3">
-                    <MapPin className="w-6 h-6 text-purple-600 flex-shrink-0" />
+                    <MapPin className="w-6 h-6 text-purple flex-shrink-0" />
                     <div>
                       <p className="font-semibold text-slate-900 dark:text-white">Radar de Oportunidades</p>
                       <p className="text-sm text-slate-600 dark:text-slate-400">Empresas contratando, posiciones abiertas, crecimiento de equipos.</p>
@@ -190,7 +190,7 @@ export default function A4IntroPage() {
             </CardContent>
           </Card>
 
-          <div className="p-6 bg-gradient-to-r from-teal-600 to-emerald-600 rounded-lg shadow-lg">
+          <div className="p-6 bg-gradient-to-r from-blue to-emerald-600 rounded-lg shadow-lg">
             <h3 className="text-xl font-bold text-white mb-2">Bienvenido a La Realidad</h3>
             <p className="text-teal-100 mb-6">Aquí es donde todo tu trabajo cobra vida. Entra al dashboard y comienza tu ejecución estratégica.</p>
             <Button 

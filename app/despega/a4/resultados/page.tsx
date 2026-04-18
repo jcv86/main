@@ -22,13 +22,13 @@ const insightCards = [
     key: 'posicionamientoEstrategico',
     icon: '🎯',
     title: 'Posicionamiento Estratégico',
-    color: 'from-emerald-500 to-teal-500'
+    color: 'from-emerald-500 to-blue'
   },
   {
     key: 'inteligenciaMercado',
     icon: '📊',
     title: 'Inteligencia de Mercado',
-    color: 'from-blue-500 to-cyan-500'
+    color: 'from-blue to-blue'
   },
   {
     key: 'nivelGamificacion',
@@ -109,7 +109,7 @@ export default function A4ResultadosPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-blue" />
       </div>
     )
   }
@@ -124,7 +124,7 @@ export default function A4ResultadosPage() {
             </div>
             <Button 
               onClick={() => router.push('/despega/a4')} 
-              className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-semibold py-6 text-lg"
+              className="w-full bg-gradient-to-r from-blue to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-semibold py-6 text-lg"
             >
               <ArrowRight className="w-5 h-5 mr-2" />
               Volver a A4
@@ -162,7 +162,7 @@ export default function A4ResultadosPage() {
           <div className="mt-8 flex gap-4 justify-center">
             <Button 
               onClick={() => router.push('/despega/a4')}
-              className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-semibold py-6 px-8"
+              className="bg-gradient-to-r from-blue to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-semibold py-6 px-8"
             >
               <Target className="w-5 h-5 mr-2" />
               Continuar en A4

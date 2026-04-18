@@ -200,7 +200,7 @@ export default function A3Page() {
 
           <Card className="bg-white dark:bg-slate-800 shadow-md">
             <CardContent className="pt-6">
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+              <div className="text-3xl font-bold text-blue dark:text-blue-400">
                 {a3Progress?.hours_trained || 0}h
               </div>
               <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Horas Entrenadas</p>
@@ -238,10 +238,10 @@ export default function A3Page() {
         {user?.id && <A3TrainingLevels userProgress={a3Progress?.levelProgress} />}
 
         {/* Diagnosis Card - Entrevista 0 */}
-        <Card className="border-2 border-purple-200 dark:border-purple-800 hover:shadow-lg transition">
+        <Card className="border-2 border-purple/30 dark:border-purple-800 hover:shadow-lg transition">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Brain className="w-5 h-5 text-purple-600" />
+              <Brain className="w-5 h-5 text-purple" />
               Entrevista 0: Tu Diagnóstico
             </CardTitle>
             <CardDescription>
@@ -254,7 +254,7 @@ export default function A3Page() {
             </p>
             <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
               {['Luz', 'Fondo', 'Audio', 'Postura', 'Presencia', 'Lenguaje'].map((item) => (
-                <div key={item} className="p-2 bg-purple-50 dark:bg-purple-900/20 rounded text-center">
+                <div key={item} className="p-2 bg-purple/5 dark:bg-purple-900/20 rounded text-center">
                   <p className="text-xs font-semibold text-purple-900 dark:text-purple-300">{item}</p>
                 </div>
               ))}
@@ -272,7 +272,7 @@ export default function A3Page() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-amber-600 dark:text-amber-400" />
+                <Lightbulb className="w-5 h-5 text-yellow dark:text-amber-400" />
                 Tips Profesionales
               </CardTitle>
             </CardHeader>
@@ -299,7 +299,7 @@ export default function A3Page() {
           <Card>
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                <TrendingUp className="w-5 h-5 text-green dark:text-emerald-400" />
                 Tu Empleabilidad
               </CardTitle>
             </CardHeader>
@@ -308,7 +308,7 @@ export default function A3Page() {
                 <p className="text-3xl font-bold text-emerald-700 dark:text-emerald-300">
                   {a3Progress?.employability_score || 'Iniciar'}
                 </p>
-                <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-1">Score de empleabilidad actual</p>
+                <p className="text-xs text-green dark:text-emerald-400 mt-1">Score de empleabilidad actual</p>
               </div>
               <p className="text-sm text-slate-600 dark:text-slate-400">
                 Tu score aumenta con cada sesión completada y cada mejora de feedback implementada.

@@ -38,14 +38,14 @@ export default function CVBuilderPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 py-12">
       <div className="max-w-2xl mx-auto">
         <Card className="p-8 text-center">
-          <FileText className="w-16 h-16 mx-auto text-purple-600 mb-4 opacity-50" />
+          <FileText className="w-16 h-16 mx-auto text-purple mb-4 opacity-50" />
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
             CV Builder
           </h1>
           <p className="text-slate-600 dark:text-slate-400 mb-6">
             Módulo de CV Builder con optimización ATS en desarrollo
           </p>
-          <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+          <div className="bg-blue/5 dark:bg-blue-950 border border-blue/30 dark:border-blue-800 rounded-lg p-4 mb-6">
             <p className="text-blue-900 dark:text-blue-200 text-sm">
               Este módulo permitirá crear y optimizar tu CV para aparecer en búsquedas ATS y captar recruiters
             </p>

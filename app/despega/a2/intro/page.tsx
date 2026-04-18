@@ -131,7 +131,7 @@ export default function A2IntroPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin mx-auto text-purple-600 dark:text-purple-400" />
+          <Loader2 className="h-12 w-12 animate-spin mx-auto text-purple dark:text-purple-400" />
           <p className="mt-4 text-slate-600 dark:text-slate-400">Cargando tu A2...</p>
         </div>
       </div>
@@ -203,8 +203,8 @@ export default function A2IntroPage() {
                   <p className="text-xs text-green-600 dark:text-green-400 font-semibold">Relaciones</p>
                   <p className="text-2xl font-bold text-green-700 dark:text-green-300">{cerebroProfile?.relaciones}%</p>
                 </div>
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <p className="text-xs text-blue-600 dark:text-blue-400 font-semibold">Plan Ejecutivo</p>
+                <div className="bg-blue/5 dark:bg-blue-900/20 p-3 rounded-lg border border-blue/30 dark:border-blue-800">
+                  <p className="text-xs text-blue dark:text-blue-400 font-semibold">Plan Ejecutivo</p>
                   <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{cerebroProfile?.plan_ejecutivo}%</p>
                 </div>
               </div>

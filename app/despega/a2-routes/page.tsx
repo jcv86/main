@@ -33,9 +33,9 @@ export default function A2RoutesPage() {
   // Milestone color helper
   const getMilestoneColor = (days: 30 | 60 | 90) => {
     const colorsMap = {
-      30: 'from-blue-600 to-blue-500',
-      60: 'from-purple-600 to-purple-500',
-      90: 'from-emerald-600 to-emerald-500'
+      30: 'from-blue to-blue',
+      60: 'from-purple to-purple-500',
+      90: 'from-green to-green'
     }
     return colorsMap[days]
   }
@@ -178,7 +178,7 @@ export default function A2RoutesPage() {
                 <p className="text-red-400 text-lg mb-6">{error || 'No se encontró ruta personalizada'}</p>
                 <Button 
                   onClick={() => loadAndGenerateRoute()}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                  className="bg-blue hover:bg-blue-700 text-white"
                 >
                   Reintentar
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -308,7 +308,7 @@ export default function A2RoutesPage() {
                                   {task.resources && task.resources.length > 0 && (
                                     <div className="flex flex-wrap gap-2 mt-2">
                                       {task.resources.map((resource, ridx) => (
-                                        <span key={ridx} className="text-xs bg-blue-500/20 text-blue-300 px-2 py-1 rounded">
+                                        <span key={ridx} className="text-xs bg-blue/50/20 text-blue-300 px-2 py-1 rounded">
                                           📌 {resource}
                                         </span>
                                       ))}
@@ -376,7 +376,7 @@ export default function A2RoutesPage() {
                   </p>
                   <Button 
                     onClick={() => router.push('/despega/a3-dashboard')}
-                    className="w-full bg-blue-600 hover:bg-blue-700 mt-2"
+                    className="w-full bg-blue hover:bg-blue-700 mt-2"
                     size="sm"
                   >
                     Ir a A3: Impulso

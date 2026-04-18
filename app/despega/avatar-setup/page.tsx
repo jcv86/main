@@ -75,7 +75,7 @@ export default function AvatarSetupPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto mb-4"></div>
           <p className="text-slate-600 dark:text-slate-400">Cargando configuración...</p>
         </div>
       </div>
@@ -147,7 +147,7 @@ export default function AvatarSetupPage() {
                       className="w-full rounded-lg bg-black"
                     />
                     <div className="flex gap-2">
-                      <Button onClick={capturePhoto} className="flex-1 bg-blue-600 hover:bg-blue-700">
+                      <Button onClick={capturePhoto} className="flex-1 bg-blue hover:bg-blue-700">
                         Capturar Foto
                       </Button>
                       <Button onClick={stopCamera} variant="outline" className="flex-1">
@@ -210,7 +210,7 @@ export default function AvatarSetupPage() {
             onClick={handleSave}
             disabled={!interviewerAvatar}
             size="lg"
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-blue hover:bg-blue-700 text-white"
           >
             <Sparkles className="w-4 h-4 mr-2" />
             {saved ? 'Configuración Guardada ✓' : 'Guardar Configuración'}
@@ -225,7 +225,7 @@ export default function AvatarSetupPage() {
         </div>
 
         {/* Info */}
-        <Card className="border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/20">
+        <Card className="border-yellow/30 dark:border-amber-800 bg-yellow/5 dark:bg-amber-950/20">
           <CardContent className="pt-6">
             <p className="text-sm text-amber-800 dark:text-amber-200">
               💡 Puedes cambiar tu entrevistador en cualquier momento. Los cambios se aplican inmediatamente a tus nuevos entrenamientos.

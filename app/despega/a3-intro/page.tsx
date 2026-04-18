@@ -58,7 +58,7 @@ export default function A3IntroPage() {
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2">
-                <Target className="w-6 h-6 text-cyan-600" />
+                <Target className="w-6 h-6 text-blue" />
                 ¿Qué es Entrenamiento Intensivo?
               </CardTitle>
             </CardHeader>
@@ -66,7 +66,7 @@ export default function A3IntroPage() {
               <p className="text-slate-700 dark:text-slate-300">
                 A3 es tu fase de práctica de alto impacto. Realizarás simulaciones de entrevistas estructuradas donde recibirás feedback inmediato de IA y podrás iterar tu desempeño hasta llegar a la confianza de nivel profesional.
               </p>
-              <div className="bg-cyan-50 dark:bg-cyan-950 p-4 rounded-lg border border-cyan-200 dark:border-cyan-800">
+              <div className="bg-blue/5 dark:bg-cyan-950 p-4 rounded-lg border border-blue/30 dark:border-cyan-800">
                 <p className="text-sm text-cyan-900 dark:text-cyan-100">
                   <span className="font-semibold">Tu objetivo en A3:</span> Pasar de "conozco las respuestas" a "puedo responder con seguridad bajo presión".
                 </p>
@@ -173,12 +173,12 @@ export default function A3IntroPage() {
             </CardContent>
           </Card>
 
-          <div className="p-6 bg-gradient-to-r from-cyan-600 to-teal-600 rounded-lg shadow-lg">
+          <div className="p-6 bg-gradient-to-r from-blue to-teal-600 rounded-lg shadow-lg">
             <h3 className="text-xl font-bold text-white mb-2">Listo para entrenar?</h3>
             <p className="text-cyan-100 mb-6">Entra al dashboard y elige tu modalidad de entrenamiento.</p>
             <Button 
               onClick={() => router.push('/despega/a3-dashboard')}
-              className="w-full bg-white text-cyan-700 hover:bg-cyan-50 font-semibold"
+              className="w-full bg-white text-cyan-700 hover:bg-blue/5 font-semibold"
             >
               Ir a Entrenamiento Intensivo
               <ArrowRight className="w-4 h-4 ml-2" />

@@ -22,13 +22,13 @@ const insightCards = [
     key: 'retroalimentacionAudio',
     icon: '🎤',
     title: 'Retroalimentación de Audio',
-    color: 'from-emerald-500 to-teal-500'
+    color: 'from-emerald-500 to-blue'
   },
   {
     key: 'retroalimentacionVideo',
     icon: '📹',
     title: 'Lenguaje Corporal',
-    color: 'from-blue-500 to-cyan-500'
+    color: 'from-blue to-blue'
   },
   {
     key: 'calidadRespuestas',
@@ -108,7 +108,7 @@ export default function A3ResultadosPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+        <Loader2 className="h-8 w-8 animate-spin text-purple" />
       </div>
     )
   }
@@ -123,7 +123,7 @@ export default function A3ResultadosPage() {
             </div>
             <Button 
               onClick={() => router.push('/despega/a3')} 
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-6 text-lg"
+              className="w-full bg-gradient-to-r from-purple to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-6 text-lg"
             >
               <ArrowRight className="w-5 h-5 mr-2" />
               Volver a A3
@@ -161,7 +161,7 @@ export default function A3ResultadosPage() {
           <div className="mt-8 flex gap-4 justify-center">
             <Button 
               onClick={() => router.push('/despega/a3')}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-6 px-8"
+              className="bg-gradient-to-r from-purple to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-semibold py-6 px-8"
             >
               <Target className="w-5 h-5 mr-2" />
               Siguiente Simulación

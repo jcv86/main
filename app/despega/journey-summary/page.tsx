@@ -48,7 +48,7 @@ export default function JourneySummaryPage() {
         </div>
 
         {/* OVERALL PROGRESS */}
-        <Card className="border-0 shadow-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white">
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-blue to-purple-600 text-white">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Target className="w-6 h-6" />
@@ -176,8 +176,8 @@ export default function JourneySummaryPage() {
         <div className="grid md:grid-cols-3 gap-4">
           <Card>
             <CardContent className="pt-6 text-center">
-              <Award className="w-8 h-8 mx-auto text-purple-600 mb-3" />
-              <div className="text-3xl font-bold text-purple-600">1/4</div>
+              <Award className="w-8 h-8 mx-auto text-purple mb-3" />
+              <div className="text-3xl font-bold text-purple">1/4</div>
               <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Fases Completadas</p>
             </CardContent>
           </Card>
@@ -221,7 +221,7 @@ export default function JourneySummaryPage() {
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <Clock className="w-5 h-5 text-orange-600 flex-shrink-0 mt-0.5" />
+              <Clock className="w-5 h-5 text-orange flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-slate-900 dark:text-slate-50">A3 comienza en 15 días</p>
                 <p className="text-sm text-slate-600 dark:text-slate-400">Prepárate para entrenamientos realistas. Este es el pico de intensidad</p>

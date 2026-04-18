@@ -141,7 +141,7 @@ export default function GuidedTrainingPage() {
           {/* Module Info */}
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <Icon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+              <Icon className="w-8 h-8 text-blue dark:text-blue-400" />
               <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
                 {selectedModule.name}
               </h1>
@@ -162,11 +162,11 @@ export default function GuidedTrainingPage() {
             </div>
 
             {/* Coach Content Area */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-lg p-8 min-h-64 space-y-4">
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue/30 dark:border-blue-800 rounded-lg p-8 min-h-64 space-y-4">
               <div className="space-y-4 text-slate-700 dark:text-slate-300">
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
-                    <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    <Lightbulb className="w-5 h-5 text-blue dark:text-blue-400" />
                     Tu Coach IA explica:
                   </p>
                   <Button
@@ -191,7 +191,7 @@ export default function GuidedTrainingPage() {
                 </div>
 
                 {aiTip ? (
-                  <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border-l-4 border-blue-600 space-y-3">
+                  <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border-l-4 border-blue space-y-3">
                     <p className="text-slate-900 dark:text-white">{aiTip}</p>
                   </div>
                 ) : (
@@ -216,7 +216,7 @@ export default function GuidedTrainingPage() {
                         <p>
                           La Situación y Tarea son el contexto que da credibilidad a tu historia.
                         </p>
-                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue-600">
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue">
                           <p className="font-semibold mb-2">Ejemplo BUENO:</p>
                           <p className="text-sm">
                             "En mi anterior empresa, como Tech Lead de un equipo de 5 developers, nos asignaron migrar una base de datos legacy a PostgreSQL bajo presión..."
@@ -233,7 +233,7 @@ export default function GuidedTrainingPage() {
                         <p>
                           La Acción es donde demuestras TU impacto personal. No lo que el equipo hizo, sino específicamente qué HICISTE TÚ.
                         </p>
-                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue-600">
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue">
                           <p className="font-semibold mb-2">Ejemplo BUENO:</p>
                           <p className="text-sm">
                             "YO rediseñé la arquitectura, implementé testing automático, y mentoricé a 3 developers junior"
@@ -256,7 +256,7 @@ export default function GuidedTrainingPage() {
                         <p>
                           El Resultado es el cierre que lo hace memorable. Cuantifica siempre que puedas.
                         </p>
-                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue-600">
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue">
                           <p className="font-semibold mb-2">Ejemplo BUENO:</p>
                           <p className="text-sm">
                             "La migración se completó 2 semanas antes, con zero downtime. Redujimos queries en un 40% y el equipo ganó confianza en nuevas tecnologías."
@@ -294,7 +294,7 @@ export default function GuidedTrainingPage() {
                         <p>
                           Poder explicar conceptos técnicos complejos a non-technical people es un superpoder.
                         </p>
-                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue-600">
+                        <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue">
                           <p className="font-semibold mb-2">Ejemplo:</p>
                           <p className="text-sm">
                             En lugar de "Implementé microservicios con Docker y Kubernetes"...
@@ -315,7 +315,7 @@ export default function GuidedTrainingPage() {
 
             {/* Practice Section */}
             {!showVideoSession ? (
-              <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-6 space-y-4">
+              <div className="bg-yellow/5 dark:bg-amber-900/20 border border-yellow/30 dark:border-amber-800 rounded-lg p-6 space-y-4">
                 <p className="font-bold text-amber-900 dark:text-amber-200">
                   Practica conmigo:
                 </p>
@@ -369,7 +369,7 @@ export default function GuidedTrainingPage() {
                 {currentLesson < selectedModule.lessons.length - 1 ? (
                   <Button
                     onClick={() => setCurrentLesson(currentLesson + 1)}
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-blue hover:bg-blue-700"
                   >
                     Siguiente
                     <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
@@ -424,7 +424,7 @@ export default function GuidedTrainingPage() {
                 <CardHeader>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <Icon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                      <Icon className="w-8 h-8 text-blue dark:text-blue-400" />
                       <div>
                         <CardTitle className="text-xl">{module.name}</CardTitle>
                         <CardDescription>{module.description}</CardDescription>
@@ -433,7 +433,7 @@ export default function GuidedTrainingPage() {
                     <div className="flex gap-2">
                       <Badge variant="secondary">{module.difficulty}</Badge>
                       {module.status === 'in-progress' && (
-                        <Badge className="bg-blue-600">En Progreso</Badge>
+                        <Badge className="bg-blue">En Progreso</Badge>
                       )}
                       {isLocked && <Lock className="w-5 h-5 text-slate-400" />}
                     </div>
@@ -475,7 +475,7 @@ export default function GuidedTrainingPage() {
                     className={`w-full ${
                       isLocked
                         ? 'bg-slate-300 dark:bg-slate-700 cursor-not-allowed'
-                        : 'bg-blue-600 hover:bg-blue-700'
+                        : 'bg-blue hover:bg-blue-700'
                     }`}
                   >
                     {isLocked ? (

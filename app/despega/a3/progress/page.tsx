@@ -41,7 +41,7 @@ export default function ProgressPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 rounded-full border-4 border-purple-200 border-t-purple-600 animate-spin mx-auto mb-4"></div>
+          <div className="w-12 h-12 rounded-full border-4 border-purple/30 border-t-purple-600 animate-spin mx-auto mb-4"></div>
           <p className="text-slate-600 dark:text-slate-400">Cargando progreso...</p>
         </div>
       </div>
@@ -75,7 +75,7 @@ export default function ProgressPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Sesiones Completadas</p>
-                  <div className="text-3xl font-bold text-purple-600">
+                  <div className="text-3xl font-bold text-purple">
                     {a3Progress?.sessions_completed || 0}
                   </div>
                 </div>
@@ -89,7 +89,7 @@ export default function ProgressPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Score de Empleabilidad</p>
-                  <div className="text-3xl font-bold text-indigo-600">
+                  <div className="text-3xl font-bold text-blue">
                     {a3Progress?.employability_score || 0}/100
                   </div>
                 </div>
@@ -103,7 +103,7 @@ export default function ProgressPage() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Horas Entrenadas</p>
-                  <div className="text-3xl font-bold text-blue-600">
+                  <div className="text-3xl font-bold text-blue">
                     {a3Progress?.hours_trained || 0}h
                   </div>
                 </div>
@@ -135,10 +135,10 @@ export default function ProgressPage() {
           </CardHeader>
           <CardContent className="space-y-6">
             {[
-              { skill: 'Comunicación Clara', progress: 75, color: 'bg-blue-500' },
-              { skill: 'Pensamiento Estratégico', progress: 60, color: 'bg-purple-500' },
-              { skill: 'Manejo de Presión', progress: 55, color: 'bg-orange-500' },
-              { skill: 'Storytelling', progress: 70, color: 'bg-indigo-500' },
+              { skill: 'Comunicación Clara', progress: 75, color: 'bg-blue/50' },
+              { skill: 'Pensamiento Estratégico', progress: 60, color: 'bg-purple/50' },
+              { skill: 'Manejo de Presión', progress: 55, color: 'bg-orange/50' },
+              { skill: 'Storytelling', progress: 70, color: 'bg-blue/50' },
               { skill: 'Confianza en Video', progress: 65, color: 'bg-green-500' },
               { skill: 'Coherencia Emocional', progress: 50, color: 'bg-pink-500' },
             ].map((item) => (
@@ -171,7 +171,7 @@ export default function ProgressPage() {
                 { badge: '✨ Consistencia', desc: '5 entrenamientos completados' },
                 { badge: '🚀 Progresista', desc: 'Alcanza nivel Intermedio' },
               ].map((item) => (
-                <Card key={item.badge} className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200 dark:border-amber-800">
+                <Card key={item.badge} className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-yellow/30 dark:border-amber-800">
                   <CardContent className="pt-6 text-center">
                     <div className="text-3xl mb-2">{item.badge}</div>
                     <p className="text-sm text-slate-700 dark:text-slate-300">{item.desc}</p>
@@ -185,7 +185,7 @@ export default function ProgressPage() {
         {/* Tips */}
         <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border-0">
           <CardContent className="pt-6 flex gap-3">
-            <div className="w-5 h-5 flex-shrink-0 text-purple-600 text-lg">💡</div>
+            <div className="w-5 h-5 flex-shrink-0 text-purple text-lg">💡</div>
             <div>
               <div className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Cómo acelerar tu progreso</div>
               <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">

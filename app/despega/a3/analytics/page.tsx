@@ -45,7 +45,7 @@ export default function A3AnalyticsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900">
         <div className="text-center">
-          <div className="w-12 h-12 rounded-full border-4 border-purple-200 border-t-purple-600 animate-spin mx-auto mb-4"></div>
+          <div className="w-12 h-12 rounded-full border-4 border-purple/30 border-t-purple-600 animate-spin mx-auto mb-4"></div>
           <p className="text-slate-600 dark:text-slate-400">Cargando analytics...</p>
         </div>
       </div>
@@ -73,7 +73,7 @@ export default function A3AnalyticsPage() {
         </div>
 
         {/* Overall Score */}
-        <Card className="bg-gradient-to-br from-purple-600 to-blue-600 text-white border-0">
+        <Card className="bg-gradient-to-br from-purple to-blue-600 text-white border-0">
           <CardContent className="pt-8 pb-6">
             <div className="flex items-center justify-between">
               <div>
@@ -94,7 +94,7 @@ export default function A3AnalyticsPage() {
               label: 'Entrenamientos',
               value: userData?.simulationAttempts,
               total: 10,
-              color: 'text-blue-600'
+              color: 'text-blue'
             },
             {
               icon: Target,
@@ -102,7 +102,7 @@ export default function A3AnalyticsPage() {
               value: userData?.trainingCompletion,
               total: 100,
               suffix: '%',
-              color: 'text-purple-600'
+              color: 'text-purple'
             },
             {
               icon: TrendingUp,
@@ -116,7 +116,7 @@ export default function A3AnalyticsPage() {
               label: 'Consistencia',
               value: '85%',
               subtitle: 'en respuestas',
-              color: 'text-amber-600'
+              color: 'text-yellow'
             }
           ].map((metric, idx) => {
             const Icon = metric.icon
@@ -167,15 +167,15 @@ export default function A3AnalyticsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-orange-600" />
+                <Target className="w-5 h-5 text-orange" />
                 Áreas de Mejora
               </CardTitle>
               <CardDescription>En qué debes enfocarte</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               {userData?.improvements.map((improvement: string, idx: number) => (
-                <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20">
-                  <span className="text-orange-600 dark:text-orange-400 font-bold">→</span>
+                <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-orange/5 dark:bg-orange-900/20">
+                  <span className="text-orange dark:text-orange-400 font-bold">→</span>
                   <span className="text-slate-700 dark:text-slate-300">{improvement}</span>
                 </div>
               ))}
@@ -212,7 +212,7 @@ export default function A3AnalyticsPage() {
         </Card>
 
         {/* Recommendations */}
-        <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+        <Card className="bg-blue/5 dark:bg-blue-900/20 border-blue/30 dark:border-blue-800">
           <CardHeader>
             <CardTitle className="text-lg">Recomendaciones del Coach IA</CardTitle>
           </CardHeader>
@@ -232,7 +232,7 @@ export default function A3AnalyticsPage() {
         {/* Next Steps */}
         <div className="flex gap-4 flex-wrap">
           <Link href="/despega/a3/simulaciones-guiado" className="flex-1">
-            <Button className="w-full bg-blue-600 hover:bg-blue-700">
+            <Button className="w-full bg-blue hover:bg-blue-700">
               <Zap className="w-4 h-4 mr-2" />
               Siguiente Simulación
             </Button>

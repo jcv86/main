@@ -25,7 +25,7 @@ export default function MultimodalAnalysisPage() {
     <div className="max-w-6xl mx-auto space-y-4 pb-8">
       {/* Header */}
       <div className="flex items-center gap-2 mb-6">
-        <Zap className="w-6 h-6 text-blue-600" />
+        <Zap className="w-6 h-6 text-blue" />
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
             Análisis Multimodal
@@ -66,13 +66,13 @@ export default function MultimodalAnalysisPage() {
               onClick={() => setEntrenamillentoType(type.id)}
               className={`p-3 rounded-lg border-2 transition-all text-left ${
                 entrenamillentoType === type.id
-                  ? 'border-blue-600 bg-blue-50 dark:bg-blue-950 shadow-md'
+                  ? 'border-blue bg-blue/5 dark:bg-blue-950 shadow-md'
                   : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'
               }`}
             >
               <div className="flex items-start gap-2">
                 {entrenamillentoType === type.id && (
-                  <Check className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                  <Check className="w-4 h-4 text-blue mt-0.5 flex-shrink-0" />
                 )}
                 <div className="flex-1 min-w-0">
                   <p className={`font-semibold text-sm ${entrenamillentoType === type.id ? 'text-blue-900 dark:text-blue-100' : 'text-slate-900 dark:text-slate-100'}`}>

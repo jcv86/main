@@ -104,13 +104,13 @@ export default function DashboardPage() {
 
         {/* Misión Section */}
         {userData.a2_mission ? (
-          <Card className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 border-2 border-blue-200 dark:border-blue-800 p-8">
+          <Card className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 border-2 border-blue/30 dark:border-blue-800 p-8">
             <div className="space-y-4">
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
                   Tu Misión de 90 Días
                 </h2>
-                <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400">
+                <h3 className="text-xl font-semibold text-blue dark:text-blue-400">
                   {userData.a2_mission.titulo}
                 </h3>
                 <p className="text-slate-700 dark:text-slate-300">
@@ -118,7 +118,7 @@ export default function DashboardPage() {
                 </p>
               </div>
               <div className="flex gap-4">
-                <Button className="bg-blue-600 hover:bg-blue-700">
+                <Button className="bg-blue hover:bg-blue-700">
                   Ver Detalles de Misión
                 </Button>
                 <Button variant="outline">
@@ -136,7 +136,7 @@ export default function DashboardPage() {
               <p className="text-slate-700 dark:text-slate-300">
                 Comienza eligiendo entre tu transformación personal o profesional
               </p>
-              <Button className="bg-blue-600 hover:bg-blue-700" size="lg">
+              <Button className="bg-blue hover:bg-blue-700" size="lg">
                 Comenzar Mi Misión
               </Button>
             </div>
@@ -197,7 +197,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Coach Section */}
-        <Card className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border-2 border-amber-200 dark:border-amber-800 p-8">
+        <Card className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border-2 border-yellow/30 dark:border-amber-800 p-8">
           <div className="flex items-start gap-6">
             <div className="text-5xl">🤖</div>
             <div className="flex-1 space-y-4">

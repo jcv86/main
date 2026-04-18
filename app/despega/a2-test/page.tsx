@@ -155,7 +155,7 @@ export default function A2TestPage() {
 
         {/* Control Panel */}
         <Card className="mb-8 border-0 shadow-lg">
-          <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
+          <CardHeader className="bg-gradient-to-r from-blue to-blue-700 text-white rounded-t-lg">
             <CardTitle>Panel de Control</CardTitle>
             <CardDescription className="text-blue-100">
               Haz clic para probar cada fase del flujo CANON
@@ -211,7 +211,7 @@ export default function A2TestPage() {
                 onClick={runFullTest}
                 disabled={isRunning}
                 size="lg"
-                className="h-14 text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                className="h-14 text-lg font-bold bg-gradient-to-r from-blue to-blue-700 hover:from-blue-700 hover:to-blue-800"
               >
                 {isRunning ? (
                   <>
@@ -249,7 +249,7 @@ export default function A2TestPage() {
                       <div className="flex items-center gap-2">
                         {result.status === "loading" && (
                           <>
-                            <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+                            <Loader2 className="w-5 h-5 animate-spin text-blue" />
                             <Badge variant="outline">Cargando...</Badge>
                           </>
                         )}
