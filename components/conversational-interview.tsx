@@ -2,6 +2,8 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { useContextValidation } from '@/lib/hooks/use-context-validation'
+import { useAvatarPreferences } from '@/lib/hooks/use-avatar-preferences'
+import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -40,7 +42,9 @@ export function ConversationalInterview({
   level,
   onComplete
 }: ConversationalInterviewProps) {
+  const { user } = useAuthRedirect()
   const { validateContextRelevance, validationError, clearError } = useContextValidation()
+  const { preferences } = useAvatarPreferences(user?.id)
   const [stage, setStage] = useState<'setup' | 'interview' | 'feedback'>('setup')
   const [videoEnabled, setVideoEnabled] = useState(true)
   const [audioEnabled, setAudioEnabled] = useState(true)
@@ -255,6 +259,41 @@ export function ConversationalInterview({
   if (stage === 'interview') {
     return (
       <div className="max-w-4xl mx-auto p-6 space-y-4">
+        {/* Avatar Showcase */}
+        <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+          {/* Interviewer Avatar */}
+          <div className="flex flex-col items-center justify-center py-4 px-2">
+            <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-2 ${getAvatarGradient(preferences.interviewer_avatar_id)} shadow-lg`}>
+              {getAvatarEmoji(preferences.interviewer_avatar_id, 'interviewer')}
+            </div>
+            <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 text-center">
+              {getAvatarName(preferences.interviewer_avatar_id, 'interviewer')}
+            </p>
+            <p className="text-xs text-slate-600 dark:text-slate-400">Entrevistador</p>
+          </div>
+
+          {/* VS */}
+          <div className="flex items-center justify-center">
+            <p className="text-3xl font-bold text-slate-400 dark:text-slate-600">VS</p>
+          </div>
+
+          {/* User Avatar */}
+          <div className="flex flex-col items-center justify-center py-4 px-2 col-start-2">
+            <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-2 ${getAvatarGradient(preferences.user_avatar_id)} shadow-lg`}>
+              {getAvatarEmoji(preferences.user_avatar_id, 'user')}
+            </div>
+            <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 text-center">
+              {getAvatarName(preferences.user_avatar_id, 'user')}
+            </p>
+            <p className="text-xs text-slate-600 dark:text-slate-400">Tú</p>
+          </div>
+
+          {/* You Avatar Info */}
+          <div className="flex items-center justify-center col-start-1">
+            <p className="text-sm text-slate-700 dark:text-slate-300">Tu presentación</p>
+          </div>
+        </div>
+
         {/* Video Feed */}
         <Card className="relative overflow-hidden">
           <CardContent className="p-0">
@@ -373,4 +412,59 @@ export function ConversationalInterview({
   }
 
   return null
+}
+
+// Helper functions for avatar data
+function getAvatarEmoji(avatarId: string, type: 'user' | 'interviewer'): string {
+  const emojiMap: Record<string, string> = {
+    'professional-1': '👔',
+    'creative-1': '🎨',
+    'tech-1': '💻',
+    'business-1': '🏢',
+    'casual-1': '😎',
+    'formal-1': '🎩',
+    'interviewer-classic-1': '👩‍💼',
+    'interviewer-classic-2': '👨‍💻',
+    'interviewer-classic-3': '👩‍💼',
+    'interviewer-classic-4': '👨‍💼',
+    'interviewer-modern-1': '🧑‍🏫',
+    'interviewer-modern-2': '🎯',
+  }
+  return emojiMap[avatarId] || (type === 'user' ? '👤' : '👥')
+}
+
+function getAvatarName(avatarId: string, type: 'user' | 'interviewer'): string {
+  const nameMap: Record<string, string> = {
+    'professional-1': 'Professional',
+    'creative-1': 'Creative',
+    'tech-1': 'Tech',
+    'business-1': 'Business',
+    'casual-1': 'Casual',
+    'formal-1': 'Formal',
+    'interviewer-classic-1': 'Sofia',
+    'interviewer-classic-2': 'Marco',
+    'interviewer-classic-3': 'Elena',
+    'interviewer-classic-4': 'David',
+    'interviewer-modern-1': 'Alex',
+    'interviewer-modern-2': 'Jordan',
+  }
+  return nameMap[avatarId] || 'Avatar'
+}
+
+function getAvatarGradient(avatarId: string): string {
+  const gradients: Record<string, string> = {
+    'professional-1': 'bg-gradient-to-br from-blue-500 to-blue-600',
+    'creative-1': 'bg-gradient-to-br from-purple-500 to-purple-600',
+    'tech-1': 'bg-gradient-to-br from-green-500 to-green-600',
+    'business-1': 'bg-gradient-to-br from-red-500 to-red-600',
+    'casual-1': 'bg-gradient-to-br from-orange-500 to-orange-600',
+    'formal-1': 'bg-gradient-to-br from-slate-700 to-slate-900',
+    'interviewer-classic-1': 'bg-gradient-to-br from-purple-500 to-purple-600',
+    'interviewer-classic-2': 'bg-gradient-to-br from-blue-500 to-blue-600',
+    'interviewer-classic-3': 'bg-gradient-to-br from-purple-500 to-indigo-600',
+    'interviewer-classic-4': 'bg-gradient-to-br from-green-500 to-emerald-600',
+    'interviewer-modern-1': 'bg-gradient-to-br from-red-500 to-rose-600',
+    'interviewer-modern-2': 'bg-gradient-to-br from-orange-500 to-yellow-600',
+  }
+  return gradients[avatarId] || 'bg-gradient-to-br from-slate-500 to-slate-600'
 }
