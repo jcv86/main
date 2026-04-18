@@ -88,7 +88,8 @@ export function DashboardHero({
                     key === 'S' ? 'bg-green' :
                     'bg-purple'
                   }`}>
-                  }`}>
+                    {key}
+                  </div>
                     {value}%
                   </div>
                   <span className="text-xs font-semibold text-muted/60 dark:text-muted/40">{key}</span>
