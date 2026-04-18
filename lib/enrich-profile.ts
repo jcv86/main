@@ -143,7 +143,7 @@ export async function enrichProfileFromLinkedIn(
     if (existingProfile) {
       // Mergear con datos existentes (Google, etc)
       const merged = {
-        ...existingProfile,
+        ...(existingProfile as any),
         ...enrichedData,
         updated_at: new Date().toISOString(),
       }
