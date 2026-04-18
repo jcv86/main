@@ -421,9 +421,9 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-cyan/50 hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-red/50 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-cyan dark:text-cyan/40" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-red dark:text-red/40" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Necesitas estructura
@@ -445,9 +445,9 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-pink-500 hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-yellow/50 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-pink-600 dark:text-pink-400" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-yellow dark:text-yellow/40" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Buscas avanzar con criterio
