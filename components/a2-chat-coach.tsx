@@ -170,7 +170,7 @@ export function A2ChatCoach({
                   className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   <div
-                    className={`max-w-sm px-4 py-3 rounded-xl text-sm leading-relaxed ${`}
+                    className={`max-w-sm px-4 py-3 rounded-xl text-sm leading-relaxed ${
                       msg.role === "user"
                         ? "bg-blue dark:bg-blue text-white rounded-br-none"
                         : "bg-transparent text-muted/90 dark:text-muted/5 border border-muted/20 dark:border-muted/70 rounded-bl-none"

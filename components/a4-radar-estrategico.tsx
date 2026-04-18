@@ -110,13 +110,13 @@ export function A4RadarEstrategico() {
   const getIntensityColor = (intensity: string) => {
     switch (intensity) {
       case 'high':
-        return 'bg-red/50/20 text-red dark:text-red/30 border-red/30'
+        return 'bg-red/20 text-red dark:text-red/30 border-red/30'
       case 'medium':
         return 'bg-orange/20 text-yellow dark:text-yellow/30 border-yellow/30'
       case 'low':
-        return 'bg-blue/50/20 text-blue dark:text-blue/30 border-blue/30'
+        return 'bg-blue/20 text-blue dark:text-blue/30 border-blue/30'
       default:
-        return 'bg-muted/50/20'
+        return 'bg-muted/20'
     }
   }
 
