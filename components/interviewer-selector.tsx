@@ -91,7 +91,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
             <div className="space-y-1">
               <p className="text-sm text-muted/60 dark:text-muted/40">Entrevistador seleccionado:</p>
               <p className="font-semibold text-muted/90 dark:text-white flex items-center gap-2">
-                <span className={`w-3 h-3 rounded-[20px] bg-background`}
+                <span className={`w-3 h-3 rounded-[20px] bg-background`} />
                 {selected.name} - {selected.role}
               </p>
             </div>
