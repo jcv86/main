@@ -65,6 +65,7 @@ function calculateSimilarity(str1: string, str2: string): number {
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient()
     const body: SearchParams = await request.json()
     const {
       query,
