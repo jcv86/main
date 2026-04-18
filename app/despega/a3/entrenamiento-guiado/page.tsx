@@ -262,26 +262,30 @@ export default function GuidedTrainingPage() {
                 </Button>
               </div>
             ) : (
-              <div className="space-y-4">
-                <Button
-                  onClick={() => setShowVideoSession(false)}
-                  variant="outline"
-                  className="mb-4"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Volver a la Lección
-                </Button>
+              <div className="fixed inset-0 bg-black z-50 flex flex-col h-screen">
+                <div className="flex-shrink-0 border-b border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 p-4">
+                  <Button
+                    onClick={() => setShowVideoSession(false)}
+                    variant="outline"
+                    className="text-cyan-400 hover:text-cyan-300"
+                  >
+                    <ArrowLeft className="w-4 h-4 mr-2" />
+                    Volver a la Lección
+                  </Button>
+                </div>
                 
-                <InteractiveTrainingSession
-                  question={currentLesson === 0 
-                    ? "Cuéntame sobre un proyecto importante que lideraste. Usa STAR: Situación, Tarea, Acción (qué específicamente HICISTE), Resultado."
-                    : "Cuéntame la sección 'Acción' de tu historia. ¿Qué fue lo específico que TÚ hiciste? Sé detallado."}
-                  guidance={currentLesson === 0 
-                    ? "1. Empieza describiendo el contexto (Situación)\n2. Explica tu responsabilidad (Tarea)\n3. Detalla exactamente qué acciones tomaste (Acción - usa 'yo', 'decidí', 'implementé')\n4. Termina con el resultado medible que obtuviste\n\nRecuerda: Habla claro, mantén contacto visual con la cámara, y sé específico con números/impacto."
-                    : "Enfócate en la parte Acción:\n1. Usa verbos de acción: implementé, diseñé, lideré, resolví\n2. Sé específico - no digas 'el equipo trabajó', sino 'yo investigué X, propuse Y, implementé Z'\n3. Cuantifica si es posible (líneas de código, % de mejora, tiempo ahorrado)\n4. Muestra liderazgo o iniciativa\n\nIntenta responder en 1-2 minutos."}
-                  estimatedTime="2-3 minutos"
-                  trainingType="guided"
-                />
+                <div className="flex-1 overflow-hidden p-4">
+                  <InteractiveTrainingSession
+                    question={currentLesson === 0 
+                      ? "Cuéntame sobre un proyecto importante que lideraste. Usa STAR: Situación, Tarea, Acción (qué específicamente HICISTE), Resultado."
+                      : "Cuéntame la sección 'Acción' de tu historia. ¿Qué fue lo específico que TÚ hiciste? Sé detallado."}
+                    guidance={currentLesson === 0 
+                      ? "1. Empieza describiendo el contexto (Situación)\n2. Explica tu responsabilidad (Tarea)\n3. Detalla exactamente qué acciones tomaste (Acción - usa 'yo', 'decidí', 'implementé')\n4. Termina con el resultado medible que obtuviste\n\nRecuerda: Habla claro, mantén contacto visual con la cámara, y sé específico con números/impacto."
+                      : "Enfócate en la parte Acción:\n1. Usa verbos de acción: implementé, diseñé, lideré, resolví\n2. Sé específico - no digas 'el equipo trabajó', sino 'yo investigué X, propuse Y, implementé Z'\n3. Cuantifica si es posible (líneas de código, % de mejora, tiempo ahorrado)\n4. Muestra liderazgo o iniciativa\n\nIntenta responder en 1-2 minutos."}
+                    estimatedTime="2-3 minutos"
+                    trainingType="guided"
+                  />
+                </div>
               </div>
             )}
 
