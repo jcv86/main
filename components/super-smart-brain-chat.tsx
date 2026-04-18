@@ -258,7 +258,7 @@ export function SuperSmartBrainChat() {
                       className={`max-w-[85%] rounded-2xl p-5 ${
                         message.role === "user"
                           ? "bg-gradient-to-br from-purple-500 via-blue-600 to-cyan-500 text-white shadow-lg"
-                          : "bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200"
+                          : "bg-gradient-to-br from-gray-50 to-gray-100 border border-muted/20"
                       }`}
                     >
                       <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
@@ -267,7 +267,7 @@ export function SuperSmartBrainChat() {
                       {message.role === "assistant" && message.metadata && (
                         <div className="mt-4 space-y-3">
                           {/* Confidence indicator */}
-                          <div className="flex items-center gap-2 pt-3 border-t border-gray-300">
+                          <div className="flex items-center gap-2 pt-3 border-t border-muted/30">
                             <Zap className="h-3 w-3 text-purple-600" />
                             <span className="text-xs font-medium">Confianza de respuesta:</span>
                             <div className="flex-1">
@@ -287,7 +287,7 @@ export function SuperSmartBrainChat() {
 
                           {/* Follow-up questions */}
                           {message.metadata.followUpQuestions.length > 0 && (
-                            <div className="space-y-2 pt-3 border-t border-gray-300">
+                            <div className="space-y-2 pt-3 border-t border-muted/30">
                               <p className="text-xs font-semibold flex items-center gap-2">
                                 <MessageSquare className="h-3 w-3" />
                                 Preguntas para profundizar:
@@ -310,8 +310,8 @@ export function SuperSmartBrainChat() {
 
                       {/* Feedback buttons */}
                       {message.role === "assistant" && (
-                        <div className="flex items-center gap-2 mt-4 pt-3 border-t border-gray-300">
-                          <span className="text-xs text-gray-600">¿Te ayudó esta respuesta?</span>
+                        <div className="flex items-center gap-2 mt-4 pt-3 border-t border-muted/30">
+                          <span className="text-xs text-muted/60">¿Te ayudó esta respuesta?</span>
                           <Button
                             variant="ghost"
                             size="sm"
@@ -345,7 +345,7 @@ export function SuperSmartBrainChat() {
 
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-2xl p-5">
+                    <div className="bg-gradient-to-br from-gray-50 to-gray-100 border border-muted/20 rounded-2xl p-5">
                       <div className="flex items-center gap-3">
                         <Loader2 className="h-5 w-5 animate-spin text-purple-600" />
                         <div className="space-y-1">
@@ -452,7 +452,7 @@ export function SuperSmartBrainChat() {
               <TabsContent value="sources">
                 <ScrollArea className="h-[400px]">
                   {selectedMessage.sources?.map((source, idx) => (
-                    <div key={idx} className="mb-3 p-3 bg-gray-50 rounded-lg">
+                    <div key={idx} className="mb-3 p-3 bg-muted/5 rounded-lg">
                       <div className="flex items-start gap-2">
                         {source.sourceType === "book" ? (
                           <BookOpen className="h-4 w-4 text-purple-600 mt-0.5" />

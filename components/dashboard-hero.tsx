@@ -27,7 +27,7 @@ export function DashboardHero({
   const profileDescriptions: { [key: string]: { color: string; bg: string; description: string; name: string } } = {
     D: { 
       color: 'text-red-600 dark:text-red-400', 
-      bg: 'bg-red-50 dark:bg-red-950/10', 
+      bg: 'bg-red/5 dark:bg-red-950/10', 
       description: 'Impulsor - Directo, decidido y orientado a resultados',
       name: 'Impulsor'
     },
@@ -83,7 +83,7 @@ export function DashboardHero({
               {Object.entries(discProfile).map(([key, value]) => (
                 <div key={key} className="flex flex-col items-center gap-1">
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white ${
-                    key === 'D' ? 'bg-red-500' :
+                    key === 'D' ? 'bg-red/50' :
                     key === 'I' ? 'bg-blue-500' :
                     key === 'S' ? 'bg-green-500' :
                     'bg-purple-500'

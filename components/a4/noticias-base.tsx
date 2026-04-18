@@ -30,7 +30,7 @@ const categoryColors = {
 }
 
 const impactBadges = {
-  alta: "bg-red-500/10 text-red-700",
+  alta: "bg-red/50/10 text-red",
   media: "bg-amber-500/10 text-amber-700",
   baja: "bg-green-500/10 text-green-700",
 }
@@ -95,7 +95,7 @@ export function NoticiasBase({
                   {/* Header */}
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-base mb-2 group-hover:text-primary transition-colors">
+                      <h3 className="font-semibold text-base mb-2 group-hover:text-purple transition-colors">
                         {noticia.title}
                       </h3>
                       <div className="flex items-center gap-2 flex-wrap">
@@ -125,7 +125,7 @@ export function NoticiasBase({
 
                   {/* Relevance & Actions */}
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-medium text-primary/70">
+                    <p className="text-xs font-medium text-purple/70">
                       📌 {noticia.relevance}
                     </p>
                     <div className="flex items-center gap-2">
@@ -134,18 +134,18 @@ export function NoticiasBase({
                           e.preventDefault()
                           e.stopPropagation()
                         }}
-                        className="p-1.5 hover:bg-primary/10 rounded transition-colors"
+                        className="p-1.5 hover:bg-purple/10 rounded transition-colors"
                       >
-                        <BookmarkPlus className="w-4 h-4 text-muted-foreground hover:text-primary" />
+                        <BookmarkPlus className="w-4 h-4 text-muted-foreground hover:text-purple" />
                       </button>
                       <button 
                         onClick={(e) => {
                           e.preventDefault()
                           e.stopPropagation()
                         }}
-                        className="p-1.5 hover:bg-primary/10 rounded transition-colors"
+                        className="p-1.5 hover:bg-purple/10 rounded transition-colors"
                       >
-                        <Share2 className="w-4 h-4 text-muted-foreground hover:text-primary" />
+                        <Share2 className="w-4 h-4 text-muted-foreground hover:text-purple" />
                       </button>
                     </div>
                   </div>

@@ -12,7 +12,7 @@ function LLMOOptimizedFooter() {
   return (
     <>
       <ContactFormModal open={contactOpen} onOpenChange={setContactOpen} />
-      <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-300 mt-auto">
+      <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-muted/30 mt-auto">
       <div className="container mx-auto px-4 py-16">
         {/* Newsletter Section */}
         <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 mb-12">
@@ -35,7 +35,7 @@ function LLMOOptimizedFooter() {
               </div>
               <span className="text-white font-bold text-xl">Despega Tu Carrera</span>
             </div>
-            <p className="text-sm mb-6 text-gray-400 leading-relaxed">
+            <p className="text-sm mb-6 text-muted/40 leading-relaxed">
               La plataforma en Chile para desarrollo profesional. Combina tests psicométricos científicos, recursos curados de aprendizaje y coaching personalizado con IA para transformar tu carrera.
             </p>
 
@@ -211,7 +211,7 @@ function LLMOOptimizedFooter() {
 
         {/* Bottom Bar */}
         <div className="border-t border-gray-800 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-gray-400">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted/40">
             <p>© 2025 Despega Tu Carrera. Todos los derechos reservados.</p>
             <div className="flex items-center gap-6">
               <span className="flex items-center gap-2">

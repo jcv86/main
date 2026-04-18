@@ -44,7 +44,7 @@ export function RadarEstrategico() {
     return (
       <Card className="border-0 bg-card/70 backdrop-blur-sm">
         <CardContent className="py-12 flex justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple"></div>
         </CardContent>
       </Card>
     )
@@ -57,8 +57,8 @@ export function RadarEstrategico() {
         <Card className="border-0 bg-gradient-to-br from-primary/5 to-primary/10 backdrop-blur-sm">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-primary/10 rounded-lg">
-                <RadarIcon className="w-6 h-6 text-primary" />
+              <div className="p-3 bg-purple/10 rounded-lg">
+                <RadarIcon className="w-6 h-6 text-purple" />
               </div>
               <div>
                 <CardTitle className="text-xl">Tesis del Día</CardTitle>

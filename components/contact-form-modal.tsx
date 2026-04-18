@@ -70,7 +70,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
                 Contáctanos
               </DialogTitle>
-              <DialogDescription className="text-sm text-gray-600 mt-1">
+              <DialogDescription className="text-sm text-muted/60 mt-1">
                 Cuéntanos sobre tu consulta y nos pondremos en contacto pronto
               </DialogDescription>
             </div>
@@ -89,7 +89,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              className="border-gray-200 focus:border-purple-500 focus:ring-purple-500 placeholder:text-gray-400"
+              className="border-muted/20 focus:border-purple-500 focus:ring-purple-500 placeholder:text-muted/40"
               disabled={loading}
             />
           </div>
@@ -106,7 +106,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
-              className="border-gray-200 focus:border-purple-500 focus:ring-purple-500 placeholder:text-gray-400"
+              className="border-muted/20 focus:border-purple-500 focus:ring-purple-500 placeholder:text-muted/40"
               disabled={loading}
             />
           </div>
@@ -115,7 +115,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
           <div className="space-y-2">
             <Label htmlFor="whatsapp" className="text-sm font-semibold text-gray-700">
               WhatsApp{" "}
-              <span className="text-xs font-normal text-gray-500">(Opcional)</span>
+              <span className="text-xs font-normal text-muted/50">(Opcional)</span>
             </Label>
             <Input
               id="whatsapp"
@@ -123,7 +123,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               type="tel"
               value={formData.whatsapp}
               onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-              className="border-gray-200 focus:border-purple-500 focus:ring-purple-500 placeholder:text-gray-400"
+              className="border-muted/20 focus:border-purple-500 focus:ring-purple-500 placeholder:text-muted/40"
               disabled={loading}
             />
           </div>
@@ -139,10 +139,10 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               required
-              className="min-h-[140px] border-gray-200 focus:border-purple-500 focus:ring-purple-500 placeholder:text-gray-400 resize-none"
+              className="min-h-[140px] border-muted/20 focus:border-purple-500 focus:ring-purple-500 placeholder:text-muted/40 resize-none"
               disabled={loading}
             />
-            <p className="text-xs text-gray-500">Mínimo 10 caracteres</p>
+            <p className="text-xs text-muted/50">Mínimo 10 caracteres</p>
           </div>
 
           {/* Status Messages */}
@@ -159,11 +159,11 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
           )}
 
           {status === "error" && (
-            <div className="bg-red-50 border border-red-200 rounded-[28px] p-4 flex items-start gap-3">
+            <div className="bg-red/5 border border-red/20 rounded-[28px] p-4 flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
               <div>
                 <p className="text-sm font-semibold text-red-900">Error</p>
-                <p className="text-xs text-red-700 mt-1">{errorMessage}</p>
+                <p className="text-xs text-red mt-1">{errorMessage}</p>
               </div>
             </div>
           )}
@@ -190,7 +190,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
           </Button>
 
           {/* Footer Note */}
-          <p className="text-xs text-gray-500 text-center">
+          <p className="text-xs text-muted/50 text-center">
             Nos comprometemos a responder dentro de 24 horas.{" "}
             <a href="/privacy" className="text-purple-600 hover:text-purple-700 font-medium">
               Revisa nuestra política de privacidad

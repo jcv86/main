@@ -425,10 +425,10 @@ export default function MBTITest() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando evaluación...</p>
+          <p className="text-muted/60">Cargando evaluación...</p>
         </div>
       </div>
     )
@@ -436,9 +436,9 @@ export default function MBTITest() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600">Redirigiendo...</p>
+          <p className="text-muted/60">Redirigiendo...</p>
         </div>
       </div>
     )
@@ -500,7 +500,7 @@ export default function MBTITest() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/5">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -520,11 +520,11 @@ export default function MBTITest() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">Despega Resonancia</h2>
-                <p className="text-gray-600">
+                <p className="text-muted/60">
                   Pregunta {currentQuestion + 1} de {mbtiQuestions.length}
                 </p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-muted/60">
                 <Clock className="h-4 w-4" />
                 <span>~18 minutos</span>
               </div>
@@ -542,13 +542,13 @@ export default function MBTITest() {
           <CardContent>
             <RadioGroup value={answers[question.id] || ""} onValueChange={(value) => handleAnswer(question.id, value)}>
               <div className="space-y-4">
-                <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-gray-50 border border-gray-200">
+                <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-muted/5 border border-muted/20">
                   <RadioGroupItem value="A" id="option-A" />
                   <Label htmlFor="option-A" className="flex-1 cursor-pointer">
                     {question.optionA}
                   </Label>
                 </div>
-                <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-gray-50 border border-gray-200">
+                <div className="flex items-center space-x-3 p-4 rounded-lg hover:bg-muted/5 border border-muted/20">
                   <RadioGroupItem value="B" id="option-B" />
                   <Label htmlFor="option-B" className="flex-1 cursor-pointer">
                     {question.optionB}
@@ -574,7 +574,7 @@ export default function MBTITest() {
             <Button
               onClick={submitTest}
               disabled={!canProceed || isSubmitting}
-              className="bg-gray-900 hover:bg-gray-800"
+              className="bg-muted/90 hover:bg-gray-800"
             >
               {isSubmitting ? (
                 <>
@@ -592,7 +592,7 @@ export default function MBTITest() {
             <Button
               onClick={() => setCurrentQuestion(Math.min(mbtiQuestions.length - 1, currentQuestion + 1))}
               disabled={!canProceed}
-              className="bg-gray-900 hover:bg-gray-800"
+              className="bg-muted/90 hover:bg-gray-800"
             >
               Next
               <ArrowRight className="h-4 w-4 ml-2" />
@@ -608,15 +608,15 @@ export default function MBTITest() {
                 key={index}
                 className={`w-2 h-2 rounded-full ${
                   index <= currentQuestion
-                    ? "bg-gray-900"
+                    ? "bg-muted/90"
                     : answers[mbtiQuestions[index].id]
-                      ? "bg-gray-300"
-                      : "bg-gray-200"
+                      ? "bg-muted/30"
+                      : "bg-muted/20"
                 }`}
               />
             ))}
           </div>
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="text-sm text-muted/60 mt-2">
             {Object.keys(answers).length} of {mbtiQuestions.length} questions answered
           </p>
         </div>

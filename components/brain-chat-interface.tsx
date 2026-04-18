@@ -258,7 +258,7 @@ export function BrainChatInterface() {
                       className={`max-w-[85%] rounded-2xl p-4 ${
                         message.role === "user"
                           ? "bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg"
-                          : "bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+                          : "bg-muted/10 dark:bg-gray-800 border border-muted/20 dark:border-gray-700"
                       }`}
                     >
                       <div className="whitespace-pre-wrap text-sm leading-relaxed">{message.content}</div>
@@ -266,13 +266,13 @@ export function BrainChatInterface() {
                       {message.role === "assistant" && (
                         <>
                           {message.confidence !== undefined && (
-                            <div className="flex items-center gap-4 mt-4 pt-3 border-t border-gray-200 dark:border-gray-700 text-xs">
+                            <div className="flex items-center gap-4 mt-4 pt-3 border-t border-muted/20 dark:border-gray-700 text-xs">
                               <div className="flex items-center gap-1.5">
                                 <TrendingUp className="h-3.5 w-3.5 text-green-600" />
                                 <span className="font-medium">Confianza: {Math.round(message.confidence)}%</span>
                               </div>
                               {message.processingTime && (
-                                <div className="flex items-center gap-1.5 text-gray-500">
+                                <div className="flex items-center gap-1.5 text-muted/50">
                                   <Clock className="h-3.5 w-3.5" />
                                   <span>{message.processingTime}ms</span>
                                 </div>
@@ -283,14 +283,14 @@ export function BrainChatInterface() {
                           {message.sources && message.sources.length > 0 && (
                             <div className="mt-4 space-y-2">
                               <Separator className="my-2" />
-                              <div className="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                              <div className="text-xs font-semibold text-gray-700 dark:text-muted/30 mb-2">
                                 📚 Fuentes consultadas:
                               </div>
                               <div className="space-y-2">
                                 {message.sources.map((source, idx) => (
                                   <div
                                     key={idx}
-                                    className="flex items-start gap-2 p-2 rounded-[28px] bg-white/50 dark:bg-gray-900/50"
+                                    className="flex items-start gap-2 p-2 rounded-[28px] bg-white/50 dark:bg-muted/90/50"
                                   >
                                     <div className="mt-0.5">
                                       {source.sourceType === "book" ? (
@@ -306,7 +306,7 @@ export function BrainChatInterface() {
                                           {Math.round(source.similarity * 100)}%
                                         </Badge>
                                       </div>
-                                      <div className="text-xs text-gray-600 dark:text-gray-400">{source.author}</div>
+                                      <div className="text-xs text-muted/60 dark:text-muted/40">{source.author}</div>
                                       {source.category && (
                                         <Badge variant="secondary" className="text-xs mt-1">
                                           {source.category}
@@ -321,23 +321,23 @@ export function BrainChatInterface() {
                         </>
                       )}
 
-                      <div className="text-xs text-gray-400 mt-2">{message.timestamp.toLocaleTimeString()}</div>
+                      <div className="text-xs text-muted/40 mt-2">{message.timestamp.toLocaleTimeString()}</div>
                     </div>
                   </div>
                 ))}
 
                 {isLoading && (
                   <div className="flex justify-start animate-in fade-in duration-500">
-                    <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-4 flex items-center gap-3">
+                    <div className="bg-muted/10 dark:bg-gray-800 rounded-2xl p-4 flex items-center gap-3">
                       <Loader2 className="h-5 w-5 animate-spin text-purple-600" />
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Pensando...</span>
+                      <span className="text-sm text-muted/60 dark:text-muted/40">Pensando...</span>
                     </div>
                   </div>
                 )}
               </div>
             </ScrollArea>
 
-            <CardContent className="border-t p-4 bg-gray-50 dark:bg-gray-900">
+            <CardContent className="border-t p-4 bg-muted/5 dark:bg-muted/90">
               <form onSubmit={handleSubmit} className="flex gap-2">
                 <Input
                   ref={inputRef}
@@ -359,7 +359,7 @@ export function BrainChatInterface() {
           <Card className="shadow-lg">
             <CardHeader className="pb-3">
               <CardTitle className="text-base flex items-center gap-2">
-                <Lightbulb className="h-5 w-5 text-yellow-500" />
+                <Lightbulb className="h-5 w-5 text-orange" />
                 Preguntas Rápidas
               </CardTitle>
             </CardHeader>
@@ -394,7 +394,7 @@ export function BrainChatInterface() {
                 </div>
                 <div>
                   <div className="font-semibold">120+ Libros</div>
-                  <div className="text-gray-600 dark:text-gray-400">Contenido expandido y detallado</div>
+                  <div className="text-muted/60 dark:text-muted/40">Contenido expandido y detallado</div>
                 </div>
               </div>
 
@@ -404,7 +404,7 @@ export function BrainChatInterface() {
                 </div>
                 <div>
                   <div className="font-semibold">Búsqueda Semántica</div>
-                  <div className="text-gray-600 dark:text-gray-400">Entiende el contexto de tus preguntas</div>
+                  <div className="text-muted/60 dark:text-muted/40">Entiende el contexto de tus preguntas</div>
                 </div>
               </div>
 
@@ -414,7 +414,7 @@ export function BrainChatInterface() {
                 </div>
                 <div>
                   <div className="font-semibold">Alta Precisión</div>
-                  <div className="text-gray-600 dark:text-gray-400">Respuestas basadas en fuentes verificadas</div>
+                  <div className="text-muted/60 dark:text-muted/40">Respuestas basadas en fuentes verificadas</div>
                 </div>
               </div>
 
@@ -424,7 +424,7 @@ export function BrainChatInterface() {
                 </div>
                 <div>
                   <div className="font-semibold">Respuestas Rápidas</div>
-                  <div className="text-gray-600 dark:text-gray-400">Procesamiento en menos de 2 segundos</div>
+                  <div className="text-muted/60 dark:text-muted/40">Procesamiento en menos de 2 segundos</div>
                 </div>
               </div>
             </CardContent>

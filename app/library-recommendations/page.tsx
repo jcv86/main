@@ -70,7 +70,7 @@ export default async function RecommendedBooksPage() {
             <p className="text-sm font-semibold text-blue dark:text-blue/30">Personalizadas para ti</p>
           </div>
           <div className="flex items-center gap-2 mb-4">
-            <Star className="h-8 w-8 fill-yellow-500 text-yellow-500" />
+            <Star className="h-8 w-8 fill-yellow-500 text-orange" />
             <h1 className="text-5xl font-bold bg-gradient-to-r from-blue to-blue bg-clip-text text-transparent dark:from-blue/40 dark:to-blue/40">Libros Recomendados</h1>
           </div>
           <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">
@@ -97,7 +97,7 @@ export default async function RecommendedBooksPage() {
                         {(100 - index * 3)}% match
                       </Badge>
                     </div>
-                    <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors">
+                    <CardTitle className="line-clamp-2 group-hover:text-purple transition-colors">
                       {book.title}
                     </CardTitle>
                   </CardHeader>

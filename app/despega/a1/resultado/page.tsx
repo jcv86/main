@@ -78,7 +78,7 @@ export default function A1ResultadoPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        <Loader2 className="w-8 h-8 animate-spin text-purple" />
       </div>
     )
   }
@@ -139,7 +139,7 @@ export default function A1ResultadoPage() {
           <Card className="border-0 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-yellow-500" />
+                <Sparkles className="w-5 h-5 text-orange" />
                 Cómo Te Comunicás
               </CardTitle>
             </CardHeader>
@@ -218,11 +218,11 @@ export default function A1ResultadoPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-[28px] border-l-4 border-red-500">
-                <p className="font-semibold text-red-700 dark:text-red-300">Energía (Acción & Dinamismo)</p>
+              <div className="p-3 bg-red/5 dark:bg-red-900/20 rounded-[28px] border-l-4 border-red/50">
+                <p className="font-semibold text-red dark:text-red-300">Energía (Acción & Dinamismo)</p>
                 <p className="text-sm text-muted/70 dark:text-muted/30 mt-1">Tu capacidad para iniciar, moverte rápido y llevar momentum</p>
               </div>
-              <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-[28px] border-l-4 border-yellow-500">
+              <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-[28px] border-l-4 border-orange">
                 <p className="font-semibold text-yellow-700 dark:text-yellow-300">Plan Ejecutivo (Influencia & Visión)</p>
                 <p className="text-sm text-muted/70 dark:text-muted/30 mt-1">Tu capacidad para inspirar, comunicar dirección y llevar gente contigo</p>
               </div>
@@ -350,7 +350,7 @@ export default function A1ResultadoPage() {
                 <li>• Ambientes con mucha burocracia o cambios de rumbo</li>
               </ul>
             </div>
-            <div className="p-4 bg-white dark:bg-background rounded-[28px] border border-red-200 dark:border-red-700">
+            <div className="p-4 bg-white dark:bg-background rounded-[28px] border border-red/20 dark:border-red-700">
               <p className="font-semibold text-red-900 dark:text-red-200 mb-2">Señal de Alerta</p>
               <p className="text-sm text-muted/70 dark:text-muted/40">Si después de 3-6 meses en un rol sigues sin autonomía clara o decisión, es probable que no es el lugar. Confía en eso.</p>
             </div>

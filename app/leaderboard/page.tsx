@@ -52,7 +52,7 @@ export default function LeaderboardPage() {
             <p className="text-sm font-semibold text-purple dark:text-purple-300">Compite y Crece</p>
           </div>
           <div className="flex items-center gap-3 mb-4">
-            <Trophy className="h-10 w-10 text-yellow-500" />
+            <Trophy className="h-10 w-10 text-orange" />
             <h1 className="text-5xl font-bold bg-gradient-to-r from-purple via-blue to-yellow-500 bg-clip-text text-transparent dark:from-purple-400 dark:via-blue-400 dark:to-yellow-400">Ranking de Lectores</h1>
           </div>
           <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">
@@ -85,7 +85,7 @@ export default function LeaderboardPage() {
                       <CardContent className="flex items-center justify-between p-4">
                         <div className="flex items-center gap-4 flex-1">
                           <div className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg
-                            ${index === 0 ? 'bg-yellow-500 text-white' : index === 1 ? 'bg-gray-400 text-white' : index === 2 ? 'bg-orange-400 text-white' : 'bg-muted text-muted-foreground'}`}>
+                            ${index === 0 ? 'bg-orange text-white' : index === 1 ? 'bg-muted/40 text-white' : index === 2 ? 'bg-orange-400 text-white' : 'bg-muted text-muted-foreground'}`}>
                             {index + 1}
                           </div>
                           <div>
@@ -119,24 +119,24 @@ export default function LeaderboardPage() {
               {stats?.topStreaks && stats.topStreaks.length > 0 ? (
                 <div className="space-y-2">
                   {stats.topStreaks.slice(0, 20).map((user, index) => (
-                    <Card key={index} className={index < 3 ? 'border-red-200 bg-red-50/30 dark:bg-red-950/20' : ''}>
+                    <Card key={index} className={index < 3 ? 'border-red/20 bg-red/5/30 dark:bg-red-950/20' : ''}>
                       <CardContent className="flex items-center justify-between p-4">
                         <div className="flex items-center gap-4 flex-1">
                           <div className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg
-                            ${index === 0 ? 'bg-red-500 text-white' : index === 1 ? 'bg-gray-400 text-white' : index === 2 ? 'bg-orange-400 text-white' : 'bg-muted text-muted-foreground'}`}>
+                            ${index === 0 ? 'bg-red/50 text-white' : index === 1 ? 'bg-muted/40 text-white' : index === 2 ? 'bg-orange-400 text-white' : 'bg-muted text-muted-foreground'}`}>
                             {index === 0 && user.streak > 0 ? <Flame className="h-6 w-6" /> : index + 1}
                           </div>
                           <div>
                             <p className="font-semibold flex items-center gap-2">
                               {user.name}
-                              {user.streak >= 7 && <Badge className="bg-red-500 text-xs">En Racha</Badge>}
+                              {user.streak >= 7 && <Badge className="bg-red/50 text-xs">En Racha</Badge>}
                             </p>
                           </div>
                         </div>
                         <div className="text-right">
                           <div className="text-2xl font-bold flex items-center gap-1">
                             {user.streak}
-                            {user.streak > 0 && <Flame className="h-5 w-5 text-red-500" />}
+                            {user.streak > 0 && <Flame className="h-5 w-5 text-red" />}
                           </div>
                           <p className="text-xs text-muted-foreground">días seguidos</p>
                         </div>

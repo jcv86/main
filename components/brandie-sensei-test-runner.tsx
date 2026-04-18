@@ -150,9 +150,9 @@ export function BrandieSenseiTestRunner() {
       case "pasa_con_advertencias":
         return "bg-yellow-50 border-yellow-200"
       case "falla":
-        return "bg-red-50 border-red-200"
+        return "bg-red/5 border-red/20"
       default:
-        return "bg-gray-50"
+        return "bg-muted/5"
     }
   }
 
@@ -225,7 +225,7 @@ export function BrandieSenseiTestRunner() {
                       </div>
 
                       {result.redFlags.length > 0 && (
-                        <Alert className="bg-red-50 border-red-200">
+                        <Alert className="bg-red/5 border-red/20">
                           <AlertTriangle className="h-4 w-4 text-red-600" />
                           <AlertDescription className="text-red-800">
                             <strong>Red Flags:</strong> {result.redFlags.join(", ")}
@@ -235,8 +235,8 @@ export function BrandieSenseiTestRunner() {
 
                       {result.criticalFailure && (
                         <Alert className="bg-red-100 border-red-300">
-                          <XCircle className="h-4 w-4 text-red-700" />
-                          <AlertDescription className="text-red-700 font-semibold">
+                          <XCircle className="h-4 w-4 text-red" />
+                          <AlertDescription className="text-red font-semibold">
                             FALLA CRÍTICA: {result.criticalFailureReason}
                           </AlertDescription>
                         </Alert>
@@ -258,7 +258,7 @@ export function BrandieSenseiTestRunner() {
           <CardContent className="space-y-6">
             <div>
               <h3 className="font-semibold mb-2">Mensaje del Usuario:</h3>
-              <p className="text-sm bg-gray-50 p-4 rounded">{TEST_SCENARIOS[selectedScenario].userMessage}</p>
+              <p className="text-sm bg-muted/5 p-4 rounded">{TEST_SCENARIOS[selectedScenario].userMessage}</p>
             </div>
 
             <div>

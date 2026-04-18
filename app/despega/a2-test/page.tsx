@@ -262,7 +262,7 @@ export default function A2TestPage() {
                         {result.status === "error" && (
                           <>
                             <AlertCircle className="w-5 h-5 text-red-600" />
-                            <Badge variant="outline" className="bg-red-50 text-red-700">Error</Badge>
+                            <Badge variant="outline" className="bg-red/5 text-red">Error</Badge>
                           </>
                         )}
                       </div>
@@ -278,7 +278,7 @@ export default function A2TestPage() {
 
                       {/* Error Message */}
                       {result.error && (
-                        <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-200 p-4 rounded-[28px]">
+                        <div className="bg-red/5 dark:bg-red-950 border border-red/20 dark:border-red-800 text-red dark:text-red-200 p-4 rounded-[28px]">
                           <p className="font-semibold mb-1">Error:</p>
                           <p className="text-sm">{result.error}</p>
                         </div>

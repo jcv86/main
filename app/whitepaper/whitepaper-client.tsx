@@ -35,7 +35,7 @@ export function WhitepaperClient() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+      <header className="bg-white border-b border-muted/20 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-4 max-w-7xl flex items-center justify-between">
           <Link href="/" className="text-lg font-semibold text-purple hover:text-purple">
             ← Volver a Inicio
@@ -66,7 +66,7 @@ export function WhitepaperClient() {
         </div>
 
         {/* Executive Summary */}
-        <section className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+        <section className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">Executive Summary</h2>
           <p className="text-lg text-gray-700 leading-relaxed mb-8">
             Despega Tu Carrera (DTC) is Chile's leading AI-powered professional development platform, designed to
@@ -86,7 +86,7 @@ export function WhitepaperClient() {
                 <p className="text-gray-700 mb-4 text-sm">
                   Advanced AI reasoning system powered by GPT-4 with semantic search capabilities
                 </p>
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-2 text-sm text-muted/60">
                   <li className="flex items-start gap-2">
                     <span className="text-purple mt-1">•</span>
                     <span>pgvector semantic search across 120+ books</span>
@@ -117,7 +117,7 @@ export function WhitepaperClient() {
                 <p className="text-gray-700 mb-4 text-sm">
                   Personalized career coaching powered by GPT-4 with deep psychological insights
                 </p>
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-2 text-sm text-muted/60">
                   <li className="flex items-start gap-2">
                     <span className="text-blue mt-1">•</span>
                     <span>Career path recommendations</span>
@@ -148,7 +148,7 @@ export function WhitepaperClient() {
                 <p className="text-gray-700 mb-4 text-sm">
                   Scientifically-validated assessments with AI-powered analysis
                 </p>
-                <ul className="space-y-2 text-sm text-gray-600">
+                <ul className="space-y-2 text-sm text-muted/60">
                   <li className="flex items-start gap-2">
                     <span className="text-green mt-1">•</span>
                     <span>DISC (Despega Cerebral)</span>
@@ -199,7 +199,7 @@ export function WhitepaperClient() {
         </section>
 
         {/* Table of Contents */}
-        <section className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+        <section className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">Table of Contents</h2>
           <nav className="grid md:grid-cols-2 gap-4">
             {[
@@ -229,7 +229,7 @@ export function WhitepaperClient() {
         </section>
 
         {/* Section 1: Technical Architecture */}
-        <section id="section-1" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+        <section id="section-1" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">1. Technical Architecture</h2>
 
           <h3 className="text-2xl font-semibold mb-4 text-gray-800">Technology Stack</h3>
@@ -267,7 +267,7 @@ export function WhitepaperClient() {
           </div>
 
           <h3 className="text-2xl font-semibold mb-4 text-gray-800">Architecture Patterns</h3>
-          <div className="bg-gray-50 rounded-lg p-6 border border-gray-200 mb-6">
+          <div className="bg-muted/5 rounded-lg p-6 border border-muted/20 mb-6">
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-start gap-3">
                 <span className="w-2 h-2 bg-purple rounded-full mt-2 flex-shrink-0"></span>
@@ -302,7 +302,7 @@ export function WhitepaperClient() {
         </section>
 
         {/* Section 2: Core Features */}
-        <section id="section-2" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+        <section id="section-2" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">2. Core Features</h2>
 
           <div className="space-y-6">
@@ -333,7 +333,7 @@ export function WhitepaperClient() {
         </section>
 
         {/* Section 3: Psychometric Assessment System */}
-        <section id="section-3" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+        <section id="section-3" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">3. Psychometric Assessment System</h2>
 
           <p className="text-lg text-gray-700 mb-6">
@@ -385,7 +385,7 @@ export function WhitepaperClient() {
                 <p className="text-gray-700 mb-4">{test.description}</p>
                 <div className="space-y-1">
                   {test.dimensions.map((dim, j) => (
-                    <div key={j} className="text-sm text-gray-600">
+                    <div key={j} className="text-sm text-muted/60">
                       • {dim}
                     </div>
                   ))}
@@ -437,7 +437,7 @@ export function WhitepaperClient() {
         </section>
 
         {/* Section 4: AI Coaching System */}
-        <section id="section-4" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+        <section id="section-4" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">4. AI Coaching System</h2>
 
           <div className="bg-gradient-to-r from-blue to-purple-600 rounded-lg p-8 text-white mb-6">
@@ -502,7 +502,7 @@ export function WhitepaperClient() {
                   "Leverages DISC, MBTI, Big Five, RIASEC, Emotional Intelligence, and Soft Skills results to provide deeply personalized and accurate recommendations",
               },
             ].map((feature, i) => (
-              <div key={i} className="bg-gray-50 rounded-lg p-5 border border-gray-200">
+              <div key={i} className="bg-muted/5 rounded-lg p-5 border border-muted/20">
                 <h4 className="font-bold text-lg mb-2 text-gray-900">{feature.title}</h4>
                 <p className="text-gray-700">{feature.description}</p>
               </div>
@@ -545,7 +545,7 @@ export function WhitepaperClient() {
         </section>
 
         {/* Section 5: Professional Library */}
-        <section id="section-5" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+        <section id="section-5" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">5. Professional Library</h2>
 
           <p className="text-lg text-gray-700 mb-6">
@@ -599,7 +599,7 @@ export function WhitepaperClient() {
         </section>
 
         {/* Section 6: Administrative Systems */}
-        <section id="section-6" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+        <section id="section-6" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">6. Administrative Systems</h2>
 
           <p className="text-lg text-gray-700 mb-6">
@@ -624,7 +624,7 @@ export function WhitepaperClient() {
               "DSAR Management",
               "Version History",
             ].map((system, i) => (
-              <div key={i} className="flex items-center gap-3 bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div key={i} className="flex items-center gap-3 bg-muted/5 rounded-lg p-4 border border-muted/20">
                 <span className="w-8 h-8 bg-purple/10 rounded-full flex items-center justify-center text-purple font-bold flex-shrink-0">
                   {i + 1}
                 </span>
@@ -635,7 +635,7 @@ export function WhitepaperClient() {
         </section>
 
         {/* Section 7: Database Architecture */}
-        <section id="section-7" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+        <section id="section-7" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">7. Database Architecture</h2>
 
           <div className="bg-gradient-to-r from-blue/5 to-purple/5 rounded-lg p-6 border border-blue/10 mb-6">
@@ -652,7 +652,7 @@ export function WhitepaperClient() {
               "Materialized Views: Pre-computed aggregations for performance",
               "JSONB Fields: Flexible storage for dynamic data",
             ].map((decision, i) => (
-              <div key={i} className="flex items-start gap-3 bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div key={i} className="flex items-start gap-3 bg-muted/5 rounded-lg p-4 border border-muted/20">
                 <span className="w-2 h-2 bg-purple rounded-full mt-2 flex-shrink-0"></span>
                 <span className="text-gray-700">{decision}</span>
               </div>
@@ -681,11 +681,11 @@ export function WhitepaperClient() {
         </section>
 
         {/* Section 8: Security & Compliance */}
-        <section id="section-8" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+        <section id="section-8" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">8. Security & Compliance</h2>
 
           <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div className="bg-red-50 rounded-lg p-6 border border-red-100">
+            <div className="bg-red/5 rounded-lg p-6 border border-red-100">
               <h3 className="text-xl font-bold mb-4 text-gray-900">Authentication & Authorization</h3>
               <ul className="space-y-2 text-gray-700">
                 <li>• JWT-based sessions</li>
@@ -728,7 +728,7 @@ export function WhitepaperClient() {
         </section>
 
         {/* Section 9: Performance & Monitoring */}
-        <section id="section-9" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+        <section id="section-9" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">9. Performance & Monitoring</h2>
 
           <div className="grid md:grid-cols-3 gap-4 mb-6">
@@ -741,14 +741,14 @@ export function WhitepaperClient() {
               { metric: "Time to Interactive", target: "< 3s", color: "indigo" },
             ].map((perf, i) => (
               <div key={i} className={`bg-${perf.color}-50 rounded-lg p-4 border border-${perf.color}-100 text-center`}>
-                <div className="text-sm text-gray-600 mb-1">{perf.metric}</div>
+                <div className="text-sm text-muted/60 mb-1">{perf.metric}</div>
                 <div className={`text-2xl font-bold text-${perf.color}-600`}>{perf.target}</div>
               </div>
             ))}
           </div>
 
           <h3 className="text-xl font-semibold mb-4 text-gray-800">Optimization Techniques</h3>
-          <div className="bg-gray-50 rounded-lg p-6 border border-gray-200">
+          <div className="bg-muted/5 rounded-lg p-6 border border-muted/20">
             <ul className="grid md:grid-cols-2 gap-3">
               {[
                 "Server-Side Rendering",
@@ -768,7 +768,7 @@ export function WhitepaperClient() {
         </section>
 
         {/* Section 10: Future Roadmap */}
-        <section id="section-10" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-gray-200">
+        <section id="section-10" className="mb-12 bg-white rounded-xl p-8 shadow-sm border border-muted/20">
           <h2 className="text-3xl font-bold mb-6 text-gray-900">10. Future Roadmap</h2>
 
           <div className="bg-gradient-to-r from-purple/10 to-blue/10 rounded-xl p-6 mb-8 border border-purple/20">
@@ -857,7 +857,7 @@ export function WhitepaperClient() {
         </section>
 
         {/* Footer */}
-        <footer className="mt-12 text-center text-gray-600 border-t border-gray-200 pt-8">
+        <footer className="mt-12 text-center text-muted/60 border-t border-muted/20 pt-8">
           <p className="mb-2">
             <strong>Document Version:</strong> 1.0 | <strong>Published:</strong> September 26, 2025
           </p>

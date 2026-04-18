@@ -68,7 +68,7 @@ export default function ApiConfigPage() {
             </div>
 
             {isOpenAIConfigured && (
-              <div className="p-3 bg-gray-50 rounded-md space-y-2">
+              <div className="p-3 bg-muted/5 rounded-md space-y-2">
                 <p className="text-xs font-mono text-muted-foreground">
                   sk-proj-{openaiKey?.substring(8, 12)}...{openaiKey?.substring(openaiKey.length - 4)}
                 </p>
@@ -87,8 +87,8 @@ export default function ApiConfigPage() {
               <Alert>
                 <AlertDescription className="text-sm">
                   <strong>Para configurar:</strong> Agrega{" "}
-                  <code className="bg-gray-100 px-2 py-1 rounded">OPENAI_API_KEY=tu-clave-aqui</code> a tu archivo{" "}
-                  <code className="bg-gray-100 px-2 py-1 rounded">.env.local</code>
+                  <code className="bg-muted/10 px-2 py-1 rounded">OPENAI_API_KEY=tu-clave-aqui</code> a tu archivo{" "}
+                  <code className="bg-muted/10 px-2 py-1 rounded">.env.local</code>
                 </AlertDescription>
               </Alert>
             )}
@@ -141,7 +141,7 @@ export default function ApiConfigPage() {
             </div>
 
             {isSupabaseConfigured && (
-              <div className="p-3 bg-gray-50 rounded-md">
+              <div className="p-3 bg-muted/5 rounded-md">
                 <p className="text-xs font-mono text-muted-foreground break-all">{supabaseUrl}</p>
               </div>
             )}

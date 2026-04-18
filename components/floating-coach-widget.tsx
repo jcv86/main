@@ -32,7 +32,7 @@ export function FloatingCoachWidget() {
           aria-label="Abrir chat con coach IA"
         >
           {hasUnread && (
-            <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full border-2 border-white animate-pulse" />
+            <span className="absolute -top-1 -right-1 h-4 w-4 bg-red/50 rounded-full border-2 border-white animate-pulse" />
           )}
           <MessageCircle className="h-6 w-6 text-white" />
         </button>

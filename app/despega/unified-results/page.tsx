@@ -71,7 +71,7 @@ export default function UnifiedTestDashboard() {
       blue: "bg-blue/5 border-blue/30 dark:bg-blue-950/20 dark:border-blue/10",
       purple: "bg-purple/5 border-purple/30 dark:bg-purple/20 dark:border-purple",
       indigo: "bg-blue/5 border-blue/30 dark:bg-indigo-950/20 dark:border-blue",
-      red: "bg-red-50 border-red-200 dark:bg-red-950/20 dark:border-red-800",
+      red: "bg-red/5 border-red/20 dark:bg-red-950/20 dark:border-red-800",
       teal: "bg-teal-50 border-blue/20 dark:bg-teal-950/20 dark:border-teal-800",
     }
     return colors[color] || colors.blue

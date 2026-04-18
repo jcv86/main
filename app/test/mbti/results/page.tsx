@@ -265,7 +265,7 @@ export default function MBTIResultsPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="h-8 w-8 animate-spin text-purple" />
       </div>
     )
   }
@@ -628,7 +628,7 @@ export default function MBTIResultsPage() {
                           ? "Acepta una invitación social por semana que normalmente rechazarías. Expande tu zona de confort."
                           : "Dedica 20 minutos diarios a estar solo en silencio. Fortalece tu mundo interno."}
                       </p>
-                      <p className="text-xs text-gray-600 italic">
+                      <p className="text-xs text-muted/60 italic">
                         Impacto: Mayor equilibrio emocional y autoconocimiento
                       </p>
                     </div>
@@ -640,7 +640,7 @@ export default function MBTIResultsPage() {
                           ? 'Practica decir "no" a peticiones que no te corresponden. Tus límites son sagrados.'
                           : "Comparte algo vulnerable con alguien cercano una vez por semana. La conexión requiere apertura."}
                       </p>
-                      <p className="text-xs text-gray-600 italic">
+                      <p className="text-xs text-muted/60 italic">
                         Impacto: Relaciones más auténticas y satisfactorias
                       </p>
                     </div>
@@ -652,7 +652,7 @@ export default function MBTIResultsPage() {
                           ? "Completa un proyecto concreto del inicio al fin. La ejecución también importa, no solo las ideas."
                           : "Dedica 1 hora semanal a pensar estrategia y visión. Sal de lo operativo y mira el panorama."}
                       </p>
-                      <p className="text-xs text-gray-600 italic">Impacto: Mejor equilibrio entre visión y ejecución</p>
+                      <p className="text-xs text-muted/60 italic">Impacto: Mejor equilibrio entre visión y ejecución</p>
                     </div>
                   </div>
                 </div>
@@ -1089,7 +1089,7 @@ export default function MBTIResultsPage() {
                       <CardTitle className="text-base">Inteligencia Emocional</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="bg-red-50 p-3 rounded text-sm">
+                      <div className="bg-red/5 p-3 rounded text-sm">
                         <strong>Conexión:</strong>
                         <p className="mt-1">
                           MBTI explica cómo prefieres procesar emociones, IE mide qué tan bien lo haces.
@@ -1438,7 +1438,7 @@ export default function MBTIResultsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-primary" />
+                  <Calendar className="h-5 w-5 text-purple" />
                   Plan de Acción 90 Días - Desarrollo de Tipo MBTI
                 </CardTitle>
                 <CardDescription>
@@ -1824,11 +1824,11 @@ export default function MBTIResultsPage() {
                       <tr className="hover:bg-blue/5 transition-colors">
                         <td className="p-4">
                           <div className="font-semibold text-gray-900">Autoconocimiento profundo</div>
-                          <div className="text-sm text-gray-600">Entender por qué haces lo que haces</div>
+                          <div className="text-sm text-muted/60">Entender por qué haces lo que haces</div>
                         </td>
                         <td className="p-4">
                           <div className="font-medium text-blue">Libro: "Gifts Differing"</div>
-                          <div className="text-sm text-gray-600">Por Isabel Briggs Myers</div>
+                          <div className="text-sm text-muted/60">Por Isabel Briggs Myers</div>
                         </td>
                         <td className="p-4 text-sm text-gray-700">
                           Explica a fondo tu tipo {mbtiType}: por qué piensas así, tus puntos ciegos y cómo crecer sin
@@ -1846,7 +1846,7 @@ export default function MBTIResultsPage() {
                           <div className="font-semibold text-gray-900">
                             {mbtiType.includes("I") ? "Comunicación asertiva" : "Escucha profunda"}
                           </div>
-                          <div className="text-sm text-gray-600">
+                          <div className="text-sm text-muted/60">
                             {mbtiType.includes("I") ? "Expresar tus ideas con claridad" : "Dar espacio a los demás"}
                           </div>
                         </td>
@@ -1856,7 +1856,7 @@ export default function MBTIResultsPage() {
                               ? 'Libro: "Quiet" de Susan Cain'
                               : 'Libro: "El arte de la comunicación consciente"'}
                           </div>
-                          <div className="text-sm text-gray-600">Comunicación efectiva</div>
+                          <div className="text-sm text-muted/60">Comunicación efectiva</div>
                         </td>
                         <td className="p-4 text-sm text-gray-700">
                           {mbtiType.includes("I")
@@ -1875,13 +1875,13 @@ export default function MBTIResultsPage() {
                       <tr className="hover:bg-blue/5 transition-colors">
                         <td className="p-4">
                           <div className="font-semibold text-gray-900">Relaciones personales</div>
-                          <div className="text-sm text-gray-600">Entender y conectar con otros tipos</div>
+                          <div className="text-sm text-muted/60">Entender y conectar con otros tipos</div>
                         </td>
                         <td className="p-4">
                           <div className="font-medium text-blue">
                             Curso: "MBTI en relaciones" (Udemy o Coursera)
                           </div>
-                          <div className="text-sm text-gray-600">Aplicación práctica</div>
+                          <div className="text-sm text-muted/60">Aplicación práctica</div>
                         </td>
                         <td className="p-4 text-sm text-gray-700">
                           Te explica cómo tu {mbtiType} se relaciona con otros tipos, qué conflictos son típicos y cómo
@@ -1900,7 +1900,7 @@ export default function MBTIResultsPage() {
                           <div className="font-semibold text-gray-900">
                             {mbtiType.includes("N") ? "Ejecución práctica" : "Pensamiento estratégico"}
                           </div>
-                          <div className="text-sm text-gray-600">
+                          <div className="text-sm text-muted/60">
                             {mbtiType.includes("N") ? "Bajar ideas a tierra" : "Ver el panorama completo"}
                           </div>
                         </td>
@@ -1910,7 +1910,7 @@ export default function MBTIResultsPage() {
                               ? 'Libro: "Getting Things Done" de David Allen'
                               : 'Libro: "Thinking, Fast and Slow" de Daniel Kahneman'}
                           </div>
-                          <div className="text-sm text-gray-600">Productividad y pensamiento</div>
+                          <div className="text-sm text-muted/60">Productividad y pensamiento</div>
                         </td>
                         <td className="p-4 text-sm text-gray-700">
                           {mbtiType.includes("N")
@@ -1929,7 +1929,7 @@ export default function MBTIResultsPage() {
                       <tr className="hover:bg-blue/5 transition-colors">
                         <td className="p-4">
                           <div className="font-semibold text-gray-900">Gestión emocional</div>
-                          <div className="text-sm text-gray-600">
+                          <div className="text-sm text-muted/60">
                             {mbtiType.includes("F") ? "Poner límites sanos" : "Conectar con emociones"}
                           </div>
                         </td>
@@ -1939,7 +1939,7 @@ export default function MBTIResultsPage() {
                               ? 'Libro: "Boundaries" de Henry Cloud'
                               : 'Libro: "Permission to Feel" de Marc Brackett'}
                           </div>
-                          <div className="text-sm text-gray-600">Inteligencia emocional</div>
+                          <div className="text-sm text-muted/60">Inteligencia emocional</div>
                         </td>
                         <td className="p-4 text-sm text-gray-700">
                           {mbtiType.includes("F")
@@ -1958,11 +1958,11 @@ export default function MBTIResultsPage() {
                       <tr className="hover:bg-blue/5 transition-colors">
                         <td className="p-4">
                           <div className="font-semibold text-gray-900">Desarrollo profesional</div>
-                          <div className="text-sm text-gray-600">Aprovechar tus fortalezas en el trabajo</div>
+                          <div className="text-sm text-muted/60">Aprovechar tus fortalezas en el trabajo</div>
                         </td>
                         <td className="p-4">
                           <div className="font-medium text-blue">Libro: "Do What You Are" de Paul Tieger</div>
-                          <div className="text-sm text-gray-600">Carrera y MBTI</div>
+                          <div className="text-sm text-muted/60">Carrera y MBTI</div>
                         </td>
                         <td className="p-4 text-sm text-gray-700">
                           Explica qué carreras y roles son naturales para {mbtiType}, cómo aprovechar tus fortalezas y

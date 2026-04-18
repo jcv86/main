@@ -70,19 +70,19 @@ export function ExecutiveSummary() {
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">4.7★</div>
+              <div className="text-3xl font-bold text-purple">4.7★</div>
               <div className="text-sm text-muted-foreground">Satisfacción</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">68%</div>
+              <div className="text-3xl font-bold text-purple">68%</div>
               <div className="text-sm text-muted-foreground">Acción Completada</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">72%</div>
+              <div className="text-3xl font-bold text-purple">72%</div>
               <div className="text-sm text-muted-foreground">Retención 30d</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">20k</div>
+              <div className="text-3xl font-bold text-purple">20k</div>
               <div className="text-sm text-muted-foreground">MAU</div>
             </div>
           </div>

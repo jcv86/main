@@ -100,7 +100,7 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
           <h1 className="text-4xl font-bold text-gray-900">DTC Points Shop</h1>
           <Sparkles className="w-8 h-8 text-amber-500" />
         </div>
-        <p className="text-gray-600 mb-4">
+        <p className="text-muted/60 mb-4">
           Unlock premium interview tips and accelerate your career growth
         </p>
         <div className="inline-block bg-blue-50 rounded-lg px-4 py-2">
@@ -131,19 +131,19 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
             {/* Package Info */}
             <div className="flex-1 mb-6">
               {pkg.label && (
-                <p className="text-xs font-semibold text-gray-500 uppercase mb-2">
+                <p className="text-xs font-semibold text-muted/50 uppercase mb-2">
                   {pkg.label}
                 </p>
               )}
 
               <div className="mb-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <Zap className="w-5 h-5 text-yellow-500" />
+                  <Zap className="w-5 h-5 text-orange" />
                   <span className="text-3xl font-bold text-gray-900">
                     {pkg.dtcAmount + pkg.bonus}
                   </span>
                 </div>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-muted/60">
                   DTC Points
                   {pkg.bonus > 0 && (
                     <span className="block text-green-600 font-semibold">
@@ -237,7 +237,7 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
               a: 'We offer a 7-day money-back guarantee for all DTC purchases if youre not satisfied.'
             }
           ].map((item, i) => (
-            <div key={i} className="p-4 bg-gray-50 rounded-lg">
+            <div key={i} className="p-4 bg-muted/5 rounded-lg">
               <p className="font-semibold text-gray-900 mb-2">{item.q}</p>
               <p className="text-sm text-gray-700">{item.a}</p>
             </div>

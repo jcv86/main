@@ -100,7 +100,7 @@ export function A1MissionExecutor({
           <Progress value={(completedCount / misiones.length) * 100} className="h-3" />
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <div className="text-2xl font-bold text-primary">{completedCount}</div>
+              <div className="text-2xl font-bold text-purple">{completedCount}</div>
               <div className="text-sm text-muted-foreground">Misiones completadas</div>
             </div>
             <div>
@@ -193,7 +193,7 @@ export function A1MissionExecutor({
                                   </div>
                                   <div>
                                     <div className="text-sm text-muted-foreground">Puntos</div>
-                                    <div className="font-medium text-primary">+{mision.puntos}</div>
+                                    <div className="font-medium text-purple">+{mision.puntos}</div>
                                   </div>
                                 </div>
                               </CardContent>

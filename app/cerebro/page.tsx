@@ -21,7 +21,7 @@ export default function CerebroPage() {
               Cerebro Inteligente
             </h1>
           </div>
-          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-muted/60 dark:text-muted/40 max-w-2xl mx-auto">
             Conversa con nuestro asistente inteligente. Hace preguntas sobre desarrollo profesional, liderazgo,
             productividad, comunicación, y más. Respuestas basadas en más de 120 libros especializados.
           </p>

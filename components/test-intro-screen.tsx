@@ -55,13 +55,13 @@ export function TestIntroScreen({
           {/* What it measures */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-primary" />
+              <CheckCircle2 className="w-5 h-5 text-purple" />
               <h3 className="font-semibold text-lg">¿Qué evalúa este test?</h3>
             </div>
             <ul className="space-y-2 ml-7">
               {whatItMeasures.map((measure, index) => (
                 <li key={index} className="text-muted-foreground flex items-start gap-2">
-                  <span className="text-primary mt-1">•</span>
+                  <span className="text-purple mt-1">•</span>
                   <span>{measure}</span>
                 </li>
               ))}
@@ -71,7 +71,7 @@ export function TestIntroScreen({
           {/* Why relevant */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <Lightbulb className="w-5 h-5 text-primary" />
+              <Lightbulb className="w-5 h-5 text-purple" />
               <h3 className="font-semibold text-lg">¿Por qué es relevante para ti?</h3>
             </div>
             <p className="text-muted-foreground ml-7">{whyRelevant}</p>

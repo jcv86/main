@@ -184,9 +184,9 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
       case "passed":
         return <CheckCircle className="h-4 w-4 text-green-500" />
       case "failed":
-        return <XCircle className="h-4 w-4 text-red-500" />
+        return <XCircle className="h-4 w-4 text-red" />
       default:
-        return <Clock className="h-4 w-4 text-gray-400" />
+        return <Clock className="h-4 w-4 text-muted/40" />
     }
   }
 
@@ -212,7 +212,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
                 <span className="font-medium">{passedTests}</span> Passed
               </span>
               <span className="flex items-center gap-2">
-                <XCircle className="h-4 w-4 text-red-500" />
+                <XCircle className="h-4 w-4 text-red" />
                 <span className="font-medium">{failedTests}</span> Failed
               </span>
               <span className="flex items-center gap-2">
@@ -260,7 +260,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
             key={metric.testId}
             className={`
             ${metric.status === "passed" ? "border-green-200 bg-green-50" : ""}
-            ${metric.status === "failed" ? "border-red-200 bg-red-50" : ""}
+            ${metric.status === "failed" ? "border-red/20 bg-red/5" : ""}
             ${metric.status === "running" ? "border-blue-200 bg-blue-50" : ""}
           `}
           >
@@ -270,7 +270,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
                   {getStatusIcon(metric.status)}
                   <div>
                     <CardTitle className="text-sm">{metric.testName}</CardTitle>
-                    <p className="text-xs text-gray-600">{metric.testId}</p>
+                    <p className="text-xs text-muted/60">{metric.testId}</p>
                   </div>
                 </div>
                 {getStatusBadge(metric.status)}
@@ -289,7 +289,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
               </div>
 
               {/* Duration */}
-              {metric.duration && <div className="text-xs text-gray-600">Duration: {metric.duration}ms</div>}
+              {metric.duration && <div className="text-xs text-muted/60">Duration: {metric.duration}ms</div>}
 
               {/* Errors */}
               {metric.errors.length > 0 && (

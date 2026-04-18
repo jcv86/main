@@ -108,7 +108,7 @@ export default function OnboardingIntereses({ onComplete }: { onComplete: (prefe
                 <Card
                   key={area.id}
                   className={`cursor-pointer transition-all ${
-                    selectedAreas.has(area.id) ? "border-blue/50 bg-blue/5" : "hover:border-gray-300"
+                    selectedAreas.has(area.id) ? "border-blue/50 bg-blue/5" : "hover:border-muted/30"
                   }`}
                   onClick={() => toggleArea(area.id)}
                 >
@@ -116,7 +116,7 @@ export default function OnboardingIntereses({ onComplete }: { onComplete: (prefe
                     <Checkbox checked={selectedAreas.has(area.id)} className="mt-1" />
                     <div>
                       <h4 className="font-medium">{area.label}</h4>
-                      <p className="text-sm text-gray-500">{area.description}</p>
+                      <p className="text-sm text-muted/50">{area.description}</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -170,7 +170,7 @@ export default function OnboardingIntereses({ onComplete }: { onComplete: (prefe
                   ))}
                 </div>
               </div>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted/60">
                 Puedes ajustar estas preferencias en cualquier momento desde la configuración de tu feed.
               </p>
             </div>

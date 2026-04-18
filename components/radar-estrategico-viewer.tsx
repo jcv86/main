@@ -101,7 +101,7 @@ export function RadarEstrategico() {
                     variant="outline"
                     className={`mt-2 ${
                       tesisDia.nivel_energía === 'Alta'
-                        ? 'bg-red-500/20 text-red-300 border-red-500/50'
+                        ? 'bg-red/50/20 text-red-300 border-red/50/50'
                         : tesisDia.nivel_energía === 'Confirmación'
                           ? 'bg-blue-500/20 text-blue-300 border-blue-500/50'
                           : 'bg-slate-500/20 text-slate-300 border-slate-500/50'
@@ -235,7 +235,7 @@ interface RadarNoticiaCardProps {
 
 function RadarNoticiaCard({ noticia, isSelected, onSelect }: RadarNoticiaCardProps) {
   const getNivelColor = (nivel: string) => {
-    if (nivel === 'Alta') return 'bg-red-500/20 text-red-300 border-red-500/50'
+    if (nivel === 'Alta') return 'bg-red/50/20 text-red-300 border-red/50/50'
     if (nivel === 'Confirmación') return 'bg-blue-500/20 text-blue-300 border-blue-500/50'
     return 'bg-slate-500/20 text-slate-300 border-slate-500/50'
   }

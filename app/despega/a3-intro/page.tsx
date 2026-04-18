@@ -101,7 +101,7 @@ export default function A3IntroPage() {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-red-50 dark:bg-red-950/30 rounded-[28px] border border-red-200 dark:border-red-800">
+                <div className="p-4 bg-red/5 dark:bg-red-950/30 rounded-[28px] border border-red/20 dark:border-red-800">
                   <div className="flex gap-3">
                     <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
                     <div>

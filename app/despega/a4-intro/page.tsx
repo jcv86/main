@@ -103,7 +103,7 @@ export default function A4IntroPage() {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-red-50 dark:bg-red-950/30 rounded-[28px] border border-red-200 dark:border-red-800">
+                <div className="p-4 bg-red/5 dark:bg-red-950/30 rounded-[28px] border border-red/20 dark:border-red-800">
                   <div className="flex gap-3">
                     <Brain className="w-6 h-6 text-red-600 flex-shrink-0" />
                     <div>

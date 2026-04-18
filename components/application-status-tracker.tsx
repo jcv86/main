@@ -95,7 +95,7 @@ const getStatusColor = (status: string) => {
     case "rejected":
       return "bg-red-100 text-red-800"
     default:
-      return "bg-gray-100 text-gray-800"
+      return "bg-muted/10 text-gray-800"
   }
 }
 
@@ -109,7 +109,7 @@ const getStatusIcon = (status: string, isActive: boolean, isCompleted: boolean) 
   if (isActive) {
     return <Clock className="h-5 w-5 text-blue-600" />
   }
-  return <div className="h-5 w-5 rounded-full border-2 border-gray-300" />
+  return <div className="h-5 w-5 rounded-full border-2 border-muted/30" />
 }
 
 const calculateProgress = (currentStatus: string) => {
@@ -260,7 +260,7 @@ export default function ApplicationStatusTracker() {
               <Search className="h-5 w-5" />
               Seguir mi Aplicación
             </CardTitle>
-            <p className="text-gray-600">
+            <p className="text-muted/60">
               Ingresa tu email y el ID de aplicación que recibiste para ver el estado de tu postulación.
             </p>
           </CardHeader>
@@ -287,7 +287,7 @@ export default function ApplicationStatusTracker() {
                   placeholder="APP-2024-123456"
                   required
                 />
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-muted/50 mt-1">
                   Encontrarás este ID en el email de confirmación que recibiste
                 </p>
               </div>
@@ -327,7 +327,7 @@ export default function ApplicationStatusTracker() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-2xl">Estado de tu Aplicación</CardTitle>
-              <p className="text-gray-600">
+              <p className="text-muted/60">
                 {applicationData.first_name} {applicationData.last_name} • {applicationData.job_title}
               </p>
             </div>
@@ -335,14 +335,14 @@ export default function ApplicationStatusTracker() {
               <Badge className={getStatusColor(applicationData.status)}>
                 {statusSteps.find((step) => step.key === applicationData.status)?.label || applicationData.status}
               </Badge>
-              <p className="text-sm text-gray-500 mt-1">ID: {applicationData.application_id}</p>
+              <p className="text-sm text-muted/50 mt-1">ID: {applicationData.application_id}</p>
             </div>
           </div>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div>
-              <div className="flex justify-between text-sm text-gray-600 mb-2">
+              <div className="flex justify-between text-sm text-muted/60 mb-2">
                 <span>Progreso</span>
                 <span>{Math.round(progress)}%</span>
               </div>
@@ -351,15 +351,15 @@ export default function ApplicationStatusTracker() {
 
             <div className="grid md:grid-cols-3 gap-4 text-sm">
               <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-gray-500" />
+                <Calendar className="h-4 w-4 text-muted/50" />
                 <span>Aplicado: {formatDate(applicationData.created_at)}</span>
               </div>
               <div className="flex items-center gap-2">
-                <RefreshCw className="h-4 w-4 text-gray-500" />
+                <RefreshCw className="h-4 w-4 text-muted/50" />
                 <span>Actualizado: {formatDate(applicationData.updated_at)}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Briefcase className="h-4 w-4 text-gray-500" />
+                <Briefcase className="h-4 w-4 text-muted/50" />
                 <span>{applicationData.job_title}</span>
               </div>
             </div>
@@ -393,7 +393,7 @@ export default function ApplicationStatusTracker() {
                       <div
                         key={step.key}
                         className={`flex items-start gap-4 pb-4 ${
-                          index < statusSteps.length - 1 ? "border-b border-gray-100" : ""
+                          index < statusSteps.length - 1 ? "border-b border-muted/10" : ""
                         }`}
                       >
                         <div className="flex-shrink-0 mt-1">
@@ -407,7 +407,7 @@ export default function ApplicationStatusTracker() {
                                   ? "text-blue-600"
                                   : isCompleted || isRejected
                                     ? "text-green-600"
-                                    : "text-gray-600"
+                                    : "text-muted/60"
                               }`}
                             >
                               {step.label}
@@ -418,13 +418,13 @@ export default function ApplicationStatusTracker() {
                               </Badge>
                             )}
                           </div>
-                          <p className="text-sm text-gray-600">{step.description}</p>
+                          <p className="text-sm text-muted/60">{step.description}</p>
 
                           {/* Show timestamp for completed steps */}
                           {applicationData.application_status_history
                             .filter((history) => history.status === step.key)
                             .map((history, historyIndex) => (
-                              <p key={historyIndex} className="text-xs text-gray-500 mt-1">
+                              <p key={historyIndex} className="text-xs text-muted/50 mt-1">
                                 {formatDate(history.created_at)}
                                 {history.notes && history.notes !== `Status changed automatically` && (
                                   <span className="ml-2">• {history.notes}</span>
@@ -474,7 +474,7 @@ export default function ApplicationStatusTracker() {
               <CardContent>
                 <div className="space-y-4">
                   {applicationData.application_interviews.map((interview, index) => (
-                    <div key={index} className="p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="p-3 bg-muted/5 rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="font-medium text-sm capitalize">{interview.interview_type.replace("_", " ")}</h4>
                         <Badge variant="outline" className="text-xs">
@@ -483,7 +483,7 @@ export default function ApplicationStatusTracker() {
                       </div>
 
                       {interview.scheduled_date && (
-                        <div className="space-y-1 text-sm text-gray-600">
+                        <div className="space-y-1 text-sm text-muted/60">
                           <div className="flex items-center gap-2">
                             <Calendar className="h-3 w-3" />
                             <span>{formatDate(interview.scheduled_date)}</span>
@@ -533,19 +533,19 @@ export default function ApplicationStatusTracker() {
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-gray-500" />
+                <Mail className="h-4 w-4 text-muted/50" />
                 <span>rrhh@empresa.com</span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-gray-500" />
+                <Phone className="h-4 w-4 text-muted/50" />
                 <span>+56 2 2345 6789</span>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-gray-500" />
+                <MapPin className="h-4 w-4 text-muted/50" />
                 <span>Santiago, Chile</span>
               </div>
               <Separator className="my-3" />
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-muted/60">
                 Si tienes preguntas sobre tu aplicación, no dudes en contactarnos. Nuestro horario de atención es de
                 lunes a viernes de 9:00 a 18:00.
               </p>

@@ -110,13 +110,13 @@ export function A4RadarEstrategico() {
   const getIntensityColor = (intensity: string) => {
     switch (intensity) {
       case 'high':
-        return 'bg-red-500/20 text-red-700 dark:text-red-300 border-red-300'
+        return 'bg-red/50/20 text-red dark:text-red-300 border-red-300'
       case 'medium':
-        return 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-300 border-yellow-300'
+        return 'bg-orange/20 text-yellow-700 dark:text-yellow-300 border-yellow-300'
       case 'low':
         return 'bg-blue-500/20 text-blue-700 dark:text-blue-300 border-blue-300'
       default:
-        return 'bg-gray-500/20'
+        return 'bg-muted/50/20'
     }
   }
 
@@ -149,7 +149,7 @@ export function A4RadarEstrategico() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center justify-center py-8">
-              <div className="w-8 h-8 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+              <div className="w-8 h-8 border-4 border-purple/20 border-t-primary rounded-full animate-spin"></div>
             </div>
           </CardContent>
         </Card>
@@ -247,7 +247,7 @@ export function A4RadarEstrategico() {
                     </div>
                     <p className="text-sm font-semibold mb-1">{signal.description}</p>
                     <div className="flex items-start gap-2 text-sm">
-                      <Target className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-primary" />
+                      <Target className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-purple" />
                       <p className="text-muted-foreground">
                         <strong>Acción:</strong> {signal.opportunity}
                       </p>
@@ -263,7 +263,7 @@ export function A4RadarEstrategico() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-yellow-500" />
+                  <Zap className="w-5 h-5 text-orange" />
                   Señales Débiles Emergentes
                 </CardTitle>
               </CardHeader>

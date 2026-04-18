@@ -72,7 +72,7 @@ export default function A1CerebralIntroPage() {
                 El Análisis Cerebral es una evaluación de comportamiento inspirada en metodologías reconocidas que identifica tu estilo natural de comunicación y liderazgo. Basado en cuatro dimensiones principales:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 bg-red-50 dark:bg-red-950 rounded-[28px] border border-red-200 dark:border-red-800">
+                <div className="p-4 bg-red/5 dark:bg-red-950 rounded-[28px] border border-red/20 dark:border-red-800">
                   <p className="font-semibold text-red-900 dark:text-red-100 mb-1">Impulsor</p>
                   <p className="text-sm text-red-800 dark:text-red-200">Enfocado en resultados, decisivo, impulsivo</p>
                 </div>

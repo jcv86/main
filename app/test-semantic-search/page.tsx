@@ -108,7 +108,7 @@ export default function TestSemanticSearchPage() {
     if (score >= 0.9) return "text-green bg-green/5 border-green/20"
     if (score >= 0.8) return "text-blue bg-blue/5 border-blue/20"
     if (score >= 0.7) return "text-purple bg-purple/5 border-purple/20"
-    return "text-gray-600 bg-gray-50 border-gray-200"
+    return "text-muted/60 bg-muted/5 border-muted/20"
   }
 
   const getSimilarityLabel = (score: number) => {
@@ -340,7 +340,7 @@ export default function TestSemanticSearchPage() {
                         <div className="space-y-2">
                           <h4 className="font-medium">Distribución por Tipo de Fuente</h4>
                           <div className="space-y-2">
-                            <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                            <div className="flex items-center justify-between p-2 bg-muted/5 rounded">
                               <span className="text-sm flex items-center gap-2">
                                 <BookOpen className="h-4 w-4" />
                                 Libros
@@ -349,7 +349,7 @@ export default function TestSemanticSearchPage() {
                                 {results.filter((r) => r.sourceType === "book").length}
                               </span>
                             </div>
-                            <div className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                            <div className="flex items-center justify-between p-2 bg-muted/5 rounded">
                               <span className="text-sm flex items-center gap-2">
                                 <Globe className="h-4 w-4" />
                                 Recursos Web

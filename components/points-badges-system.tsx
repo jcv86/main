@@ -38,7 +38,7 @@ const BADGE_DEFINITIONS: Record<string, { name: string; icon: string; color: str
   "100-points": {
     name: "Coleccionista de Puntos",
     icon: "💎",
-    color: "bg-yellow-500/10",
+    color: "bg-orange/10",
     requirement: "Acumula 100 puntos",
   },
   "social-butterfly": {
@@ -108,7 +108,7 @@ export function PointsBadgesSystem() {
             </div>
             <div className="text-center border-l border-r">
               <p className="text-xs text-muted-foreground mb-1">Puntos Totales</p>
-              <div className="text-3xl font-bold text-primary">{userPoints}</div>
+              <div className="text-3xl font-bold text-purple">{userPoints}</div>
               <p className="text-xs text-muted-foreground mt-1">Activos</p>
             </div>
             <div className="text-center">
@@ -198,7 +198,7 @@ export function PointsBadgesSystem() {
                   <div
                     key={entry.rank}
                     className={`flex items-center justify-between p-3 rounded-lg ${
-                      entry.isCurrent ? "bg-primary/10 border border-primary/20" : "bg-muted/50"
+                      entry.isCurrent ? "bg-purple/10 border border-purple/20" : "bg-muted/50"
                     }`}
                   >
                     <div className="flex items-center gap-3">

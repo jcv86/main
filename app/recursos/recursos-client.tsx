@@ -40,7 +40,7 @@ const developmentAreas = [
     id: "inteligencia-emocional",
     name: "Inteligencia Emocional",
     icon: Heart,
-    color: "bg-red-500",
+    color: "bg-red/50",
     description: "Gestiona tus emociones y relaciones interpersonales",
     relatedTests: ["emotional-intelligence", "soft-skills"],
   },
@@ -72,7 +72,7 @@ const developmentAreas = [
     id: "comunicacion",
     name: "Comunicación",
     icon: Zap,
-    color: "bg-yellow-500",
+    color: "bg-orange",
     description: "Mejora tu expresión verbal y escrita",
     relatedTests: ["disc", "soft-skills", "emotional-intelligence"],
   },
@@ -485,11 +485,11 @@ export default function RecursosClient() {
     return (
       <div className="container mx-auto px-4 py-8">
         <div className="animate-pulse space-y-4">
-          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
-          <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+          <div className="h-8 bg-muted/20 rounded w-1/3"></div>
+          <div className="h-4 bg-muted/20 rounded w-2/3"></div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="h-48 bg-gray-200 rounded"></div>
+              <div key={i} className="h-48 bg-muted/20 rounded"></div>
             ))}
           </div>
         </div>
@@ -505,7 +505,7 @@ export default function RecursosClient() {
           <BookOpen className="h-8 w-8 text-blue" />
           <h1 className="text-3xl font-bold">Biblioteca de Recursos DTC</h1>
         </div>
-        <p className="text-gray-600">
+        <p className="text-muted/60">
           Motor de recomendación personalizado basado en tus resultados de tests, metas y preferencias
         </p>
       </div>
@@ -518,7 +518,7 @@ export default function RecursosClient() {
               <BarChart3 className="h-8 w-8 text-blue" />
               <div>
                 <p className="text-2xl font-bold">{testResults.length}</p>
-                <p className="text-sm text-gray-600">Tests Completados</p>
+                <p className="text-sm text-muted/60">Tests Completados</p>
               </div>
             </div>
           </CardContent>
@@ -527,10 +527,10 @@ export default function RecursosClient() {
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center gap-3">
-              <Star className="h-8 w-8 text-yellow-500" />
+              <Star className="h-8 w-8 text-orange" />
               <div>
                 <p className="text-2xl font-bold">{totalXP}</p>
-                <p className="text-sm text-gray-600">XP Ganado</p>
+                <p className="text-sm text-muted/60">XP Ganado</p>
               </div>
             </div>
           </CardContent>
@@ -542,7 +542,7 @@ export default function RecursosClient() {
               <CheckCircle className="h-8 w-8 text-green" />
               <div>
                 <p className="text-2xl font-bold">{completedChallenges.length}</p>
-                <p className="text-sm text-gray-600">Retos Completados</p>
+                <p className="text-sm text-muted/60">Retos Completados</p>
               </div>
             </div>
           </CardContent>
@@ -554,7 +554,7 @@ export default function RecursosClient() {
               <Target className="h-8 w-8 text-purple" />
               <div>
                 <p className="text-2xl font-bold">{developmentAreas.length}</p>
-                <p className="text-sm text-gray-600">Áreas de Desarrollo</p>
+                <p className="text-sm text-muted/60">Áreas de Desarrollo</p>
               </div>
             </div>
           </CardContent>
@@ -570,7 +570,7 @@ export default function RecursosClient() {
                 <Sparkles className="h-10 w-10 text-blue" />
                 <div>
                   <h3 className="font-bold text-lg">Personaliza tus Recomendaciones</h3>
-                  <p className="text-gray-600">
+                  <p className="text-muted/60">
                     Completa al menos un test para recibir recomendaciones de recursos basadas en tu perfil único
                   </p>
                 </div>
@@ -587,7 +587,7 @@ export default function RecursosClient() {
       {/* Area Filter */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-4">
-          <Filter className="h-5 w-5 text-gray-600" />
+          <Filter className="h-5 w-5 text-muted/60" />
           <span className="font-medium">Filtrar por Área:</span>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -657,7 +657,7 @@ export default function RecursosClient() {
                             </Badge>
                           </div>
                           <CardTitle className="text-base leading-tight">{book.title}</CardTitle>
-                          <p className="text-sm text-gray-600">{book.author}</p>
+                          <p className="text-sm text-muted/60">{book.author}</p>
                         </CardHeader>
                         <CardContent>
                           <p className="text-sm text-gray-700 mb-4 italic">"{book.keyInsight}"</p>
@@ -689,15 +689,15 @@ export default function RecursosClient() {
                               />
                               <div className="flex-1">
                                 <div className="flex items-center justify-between mb-2">
-                                  <h4 className={`font-bold ${isCompleted ? "line-through text-gray-500" : ""}`}>
+                                  <h4 className={`font-bold ${isCompleted ? "line-through text-muted/50" : ""}`}>
                                     {challenge.title}
                                   </h4>
                                   <Badge variant="secondary" className="bg-yellow-100 text-yellow-800">
                                     +{challenge.xp} XP
                                   </Badge>
                                 </div>
-                                <p className="text-sm text-gray-600 mb-3">{challenge.description}</p>
-                                <div className="flex items-center gap-4 text-xs text-gray-500">
+                                <p className="text-sm text-muted/60 mb-3">{challenge.description}</p>
+                                <div className="flex items-center gap-4 text-xs text-muted/50">
                                   <span className="flex items-center gap-1">
                                     <Clock className="h-3 w-3" />
                                     {challenge.duration}
@@ -708,8 +708,8 @@ export default function RecursosClient() {
                                       challenge.difficulty === "Fácil"
                                         ? "border-green-500 text-green"
                                         : challenge.difficulty === "Medio"
-                                          ? "border-yellow-500 text-yellow-600"
-                                          : "border-red-500 text-red-600"
+                                          ? "border-orange text-yellow-600"
+                                          : "border-red/50 text-red-600"
                                     }
                                   >
                                     {challenge.difficulty}

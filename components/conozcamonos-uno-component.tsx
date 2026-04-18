@@ -144,10 +144,10 @@ export function ConozcamonosUnoComponent({ onComplete, onBack }: C1ComponentProp
         </Card>
 
         {/* Info Card */}
-        <Card className="mb-8 bg-primary/5 border-primary/30">
+        <Card className="mb-8 bg-purple/5 border-purple/30">
           <CardContent className="pt-6">
             <div className="flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
               <div>
                 <p className="text-sm font-semibold text-foreground mb-1">
                   ¿Por qué estas preguntas?

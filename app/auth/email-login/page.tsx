@@ -63,7 +63,7 @@ export default function EmailLoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && <p className="text-red text-sm">{error}</p>}
             <Button type="submit" disabled={loading} className="w-full">
               {loading ? 'Cargando...' : 'Ingresar'}
             </Button>

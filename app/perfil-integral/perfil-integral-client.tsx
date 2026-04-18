@@ -59,7 +59,7 @@ export function PerfilIntegralClient() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
           <p className="text-muted-foreground">Cargando tu perfil integral...</p>
         </div>
       </div>
@@ -392,7 +392,7 @@ export function PerfilIntegralClient() {
                     </div>
                   )}
 
-                  <div className="bg-red-50 border border-red-100 rounded-lg p-4">
+                  <div className="bg-red/5 border border-red-100 rounded-lg p-4">
                     <p className="text-sm font-medium text-red-900 mb-2">💡 Para tu vida personal</p>
                     <p className="text-sm text-red-800">
                       Tu nivel de inteligencia emocional impacta directamente en tus relaciones con pareja, familia y

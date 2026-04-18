@@ -102,11 +102,11 @@ export default function CycleCompletionPage() {
 
   const getDiscColor = (profile: string | undefined) => {
     switch (profile?.toUpperCase()) {
-      case 'D': return 'bg-red-500/20 border-red-300 text-red-800'
-      case 'I': return 'bg-yellow-500/20 border-yellow-300 text-yellow-800'
+      case 'D': return 'bg-red/50/20 border-red-300 text-red-800'
+      case 'I': return 'bg-orange/20 border-yellow-300 text-yellow-800'
       case 'S': return 'bg-green/50/20 border-green-300 text-green-800'
       case 'C': return 'bg-blue/50/20 border-blue/30 text-blue-800'
-      default: return 'bg-gray-500/20 border-gray-300 text-gray-800'
+      default: return 'bg-muted/50/20 border-muted/30 text-gray-800'
     }
   }
 
@@ -123,7 +123,7 @@ export default function CycleCompletionPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
+          <div className="w-12 h-12 border-4 border-purple/20 border-t-primary rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-muted-foreground">Consolidando tu ciclo...</p>
         </div>
       </div>
@@ -149,7 +149,7 @@ export default function CycleCompletionPage() {
         </div>
 
         {/* Overall Progress */}
-        <Card className="border-2 border-primary/20">
+        <Card className="border-2 border-purple/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5" />
@@ -165,19 +165,19 @@ export default function CycleCompletionPage() {
               <Progress value={overallProgress} className="h-3" />
             </div>
             <div className="grid grid-cols-4 gap-2 text-xs text-center">
-              <div className={`p-2 rounded ${a1Results ? 'bg-green/50/20' : 'bg-gray-500/20'}`}>
+              <div className={`p-2 rounded ${a1Results ? 'bg-green/50/20' : 'bg-muted/50/20'}`}>
                 <div className="font-semibold">A1</div>
                 <div className="text-xs">{a1Results ? 'Completo' : 'Pendiente'}</div>
               </div>
-              <div className={`p-2 rounded ${a2Route ? 'bg-green/50/20' : 'bg-gray-500/20'}`}>
+              <div className={`p-2 rounded ${a2Route ? 'bg-green/50/20' : 'bg-muted/50/20'}`}>
                 <div className="font-semibold">A2</div>
                 <div className="text-xs">{a2Route ? 'Completo' : 'Pendiente'}</div>
               </div>
-              <div className={`p-2 rounded ${a3Progress?.sessions_completed > 0 ? 'bg-green/50/20' : 'bg-gray-500/20'}`}>
+              <div className={`p-2 rounded ${a3Progress?.sessions_completed > 0 ? 'bg-green/50/20' : 'bg-muted/50/20'}`}>
                 <div className="font-semibold">A3</div>
                 <div className="text-xs">{a3Progress?.sessions_completed > 0 ? `${a3Progress.sessions_completed} sesiones` : 'Comenzar'}</div>
               </div>
-              <div className={`p-2 rounded ${a4Stats ? 'bg-green/50/20' : 'bg-gray-500/20'}`}>
+              <div className={`p-2 rounded ${a4Stats ? 'bg-green/50/20' : 'bg-muted/50/20'}`}>
                 <div className="font-semibold">A4</div>
                 <div className="text-xs">{a4Stats ? 'Activo' : 'Comenzar'}</div>
               </div>
@@ -226,7 +226,7 @@ export default function CycleCompletionPage() {
                     </div>
                   </div>
 
-                  <div className="p-3 bg-primary/5 rounded-[28px] border">
+                  <div className="p-3 bg-purple/5 rounded-[28px] border">
                     <p className="text-sm text-muted-foreground mb-2">Completado el</p>
                     <p className="font-semibold">
                       {new Date(a1Results.created_at).toLocaleDateString('es-ES', { 
@@ -287,7 +287,7 @@ export default function CycleCompletionPage() {
                     </div>
                   </div>
 
-                  <div className="p-3 bg-primary/5 rounded-[28px] border">
+                  <div className="p-3 bg-purple/5 rounded-[28px] border">
                     <p className="text-sm text-muted-foreground mb-2">Basada en tu contexto:</p>
                     <ul className="text-sm space-y-1 text-foreground">
                       <li>✓ Perfil DISC: {profileType}</li>
@@ -341,7 +341,7 @@ export default function CycleCompletionPage() {
                     </div>
                   </div>
 
-                  <div className="p-3 bg-primary/5 rounded-[28px] border">
+                  <div className="p-3 bg-purple/5 rounded-[28px] border">
                     <p className="text-sm text-muted-foreground mb-2">Tu enfoque de entrenamiento:</p>
                     <p className="text-sm font-semibold text-foreground">
                       Entrenamientos personalizados para perfil {profileType}
@@ -389,7 +389,7 @@ export default function CycleCompletionPage() {
                     </div>
                   </div>
 
-                  <div className="p-3 bg-primary/5 rounded-[28px] border">
+                  <div className="p-3 bg-purple/5 rounded-[28px] border">
                     <p className="text-sm text-muted-foreground mb-2">Contexto personalizado para ti:</p>
                     <ul className="text-sm space-y-1 text-foreground">
                       <li>✓ Noticias del mercado filtradas por tu perfil</li>
@@ -414,7 +414,7 @@ export default function CycleCompletionPage() {
         </Card>
 
         {/* Export & Summary */}
-        <Card className="border-2 border-primary/20 bg-primary/5">
+        <Card className="border-2 border-purple/20 bg-purple/5">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Download className="w-5 h-5" />

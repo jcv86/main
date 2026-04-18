@@ -125,7 +125,7 @@ export default function SignInPage() {
           <CardContent className="pt-8 pb-8 space-y-5">
             {/* OAuth Error Alert */}
             {error && (
-              <div className="p-4 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 rounded-r-lg">
+              <div className="p-4 bg-red/5 dark:bg-red-900/20 border-l-4 border-red/50 rounded-r-lg">
                 <div className="flex gap-3">
                   <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
                   <div>
@@ -140,7 +140,7 @@ export default function SignInPage() {
             <Button
               onClick={handleGoogleSignIn}
               disabled={isLoading}
-              className="w-full h-12 text-base gap-2 bg-white hover:bg-gray-50 border-2 border-gray-200 text-muted/90 hover:border-blue/30 hover:shadow-md transition-all duration-200 dark:bg-background dark:hover:bg-muted/80 dark:border-card dark:text-white dark:hover:border-blue/50"
+              className="w-full h-12 text-base gap-2 bg-white hover:bg-muted/5 border-2 border-muted/20 text-muted/90 hover:border-blue/30 hover:shadow-md transition-all duration-200 dark:bg-background dark:hover:bg-muted/80 dark:border-card dark:text-white dark:hover:border-blue/50"
             >
               {isLoadingGoogle ? (
                 <Loader2 className="h-5 w-5 animate-spin" />

@@ -107,7 +107,7 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
             <Card className="bg-muted">
               <CardContent className="pt-4">
                 <div className="text-sm text-muted-foreground">Puntos disponibles</div>
-                <div className="text-lg font-bold text-primary">+{scenario.puntos}</div>
+                <div className="text-lg font-bold text-purple">+{scenario.puntos}</div>
               </CardContent>
             </Card>
           </div>
@@ -118,7 +118,7 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
             <div className="space-y-2">
               {scenario.metricas_exito.map((metrica, idx) => (
                 <div key={idx} className="flex items-start gap-2">
-                  <div className="w-2 h-2 rounded-[20px] bg-primary mt-2 flex-shrink-0" />
+                  <div className="w-2 h-2 rounded-[20px] bg-purple mt-2 flex-shrink-0" />
                   <div>
                     <div className="font-medium text-sm">{metrica.label}</div>
                     <div className="text-xs text-muted-foreground">{metrica.description}</div>
@@ -216,7 +216,7 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
           <div className="space-y-3">
             <div className="flex justify-between">
               <span className="font-medium">Tu Desempeño</span>
-              <span className="text-2xl font-bold text-primary">{userScore}%</span>
+              <span className="text-2xl font-bold text-purple">{userScore}%</span>
             </div>
             <Progress value={userScore} className="h-3" />
           </div>

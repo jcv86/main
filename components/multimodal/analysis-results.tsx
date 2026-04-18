@@ -46,7 +46,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
           <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
           <div className="text-center">
             <p className="font-semibold">Analyzing your interview...</p>
-            <p className="text-sm text-gray-600">This may take 2-5 minutes</p>
+            <p className="text-sm text-muted/60">This may take 2-5 minutes</p>
           </div>
         </CardContent>
       </Card>
@@ -57,7 +57,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
     return (
       <Card>
         <CardContent className="pt-6">
-          <p className="text-center text-gray-600">Analysis not available yet</p>
+          <p className="text-center text-muted/60">Analysis not available yet</p>
         </CardContent>
       </Card>
     )
@@ -87,21 +87,21 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-[28px]">
-              <p className="text-sm text-gray-600 mb-2">Postura</p>
+              <p className="text-sm text-muted/60 mb-2">Postura</p>
               <div className="flex items-end gap-2">
                 <span className="text-2xl font-bold">{analysis.visual_analysis.posture_quality}</span>
-                <span className="text-gray-500">/100</span>
+                <span className="text-muted/50">/100</span>
               </div>
-              <p className="text-xs text-gray-600 mt-2">{analysis.visual_analysis.posture_feedback}</p>
+              <p className="text-xs text-muted/60 mt-2">{analysis.visual_analysis.posture_feedback}</p>
             </div>
 
             <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-[28px]">
-              <p className="text-sm text-gray-600 mb-2">Contacto Visual</p>
+              <p className="text-sm text-muted/60 mb-2">Contacto Visual</p>
               <div className="flex items-end gap-2">
                 <span className="text-2xl font-bold">{analysis.visual_analysis.eye_contact}</span>
-                <span className="text-gray-500">/100</span>
+                <span className="text-muted/50">/100</span>
               </div>
-              <p className="text-xs text-gray-600 mt-2">{analysis.visual_analysis.eye_contact_feedback}</p>
+              <p className="text-xs text-muted/60 mt-2">{analysis.visual_analysis.eye_contact_feedback}</p>
             </div>
           </div>
         </CardContent>
@@ -116,31 +116,31 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-[28px]">
-              <p className="text-sm text-gray-600 mb-2">Tono & Claridad</p>
+              <p className="text-sm text-muted/60 mb-2">Tono & Claridad</p>
               <div className="flex items-end gap-2">
                 <span className="text-2xl font-bold">
                   {Math.round((analysis.audio_analysis.tone_quality + analysis.audio_analysis.clarity) / 2)}
                 </span>
-                <span className="text-gray-500">/100</span>
+                <span className="text-muted/50">/100</span>
               </div>
             </div>
 
             <div className="bg-gradient-to-br from-cyan-50 to-cyan-100 p-4 rounded-[28px]">
-              <p className="text-sm text-gray-600 mb-2">Confianza</p>
+              <p className="text-sm text-muted/60 mb-2">Confianza</p>
               <div className="flex items-end gap-2">
                 <span className="text-2xl font-bold">{analysis.audio_analysis.confidence_level}</span>
-                <span className="text-gray-500">/100</span>
+                <span className="text-muted/50">/100</span>
               </div>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <p className="text-gray-600 mb-1">Velocidad del Habla</p>
+              <p className="text-muted/60 mb-1">Velocidad del Habla</p>
               <p className="font-semibold">{analysis.audio_analysis.speech_pace} PPM</p>
             </div>
             <div>
-              <p className="text-gray-600 mb-1">Palabras de Relleno</p>
+              <p className="text-muted/60 mb-1">Palabras de Relleno</p>
               <p className="font-semibold">{analysis.audio_analysis.filler_words}</p>
             </div>
           </div>
@@ -154,7 +154,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
           <CardDescription>Alineación entre lenguaje verbal y corporal</CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
-          <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+          <div className="flex justify-between items-center p-3 bg-muted/5 rounded-lg">
             <span className="text-sm font-medium">Alineación Visual-Audio</span>
             <Badge className="bg-yellow-600">{analysis.coherence_analysis.visual_audio_alignment}%</Badge>
           </div>

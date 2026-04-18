@@ -44,7 +44,7 @@ const getResourceColor = (tipo: string) => {
     podcast: "bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300",
     libro: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
   }
-  return colors[tipo] || "bg-gray-100"
+  return colors[tipo] || "bg-muted/10"
 }
 
 const getNivelColor = (nivel: string) => {
@@ -53,7 +53,7 @@ const getNivelColor = (nivel: string) => {
     "intermedio": "bg-blue-50 text-blue-700 border-blue-200",
     "avanzado": "bg-purple-50 text-purple-700 border-purple-200",
   }
-  return colors[nivel] || "bg-gray-50"
+  return colors[nivel] || "bg-muted/5"
 }
 
 export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource }: A4ResourceLibraryProps) {
@@ -254,7 +254,7 @@ export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource 
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 ${i < Math.round(resource.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                    className={`w-4 h-4 ${i < Math.round(resource.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-muted/30'}`}
                   />
                 ))}
                 <span className="text-sm text-muted-foreground ml-1">{resource.rating}/5</span>

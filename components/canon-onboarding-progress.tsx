@@ -33,7 +33,7 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
         </div>
         <div className="w-full h-2 bg-muted rounded-full overflow-hidden">
           <div
-            className="h-full bg-primary rounded-full transition-all duration-500"
+            className="h-full bg-purple rounded-full transition-all duration-500"
             style={{ width: `${progressPercentage}%` }}
           />
         </div>
@@ -59,8 +59,8 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
                       <CheckCircle2 className="w-6 h-6 text-accent" />
                     </div>
                   ) : isCurrent ? (
-                    <div className="flex items-center justify-center w-12 h-12 bg-primary/20 dark:bg-primary/10 rounded-full">
-                      <div className="w-6 h-6 rounded-[20px] bg-primary animate-pulse" />
+                    <div className="flex items-center justify-center w-12 h-12 bg-purple/20 dark:bg-purple/10 rounded-full">
+                      <div className="w-6 h-6 rounded-[20px] bg-purple animate-pulse" />
                     </div>
                   ) : (
                     <div className="flex items-center justify-center w-12 h-12 bg-muted rounded-full">
@@ -72,7 +72,7 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
                 {/* Content */}
                 <div className={`p-4 rounded-[28px] border ${
                   isCurrent
-                    ? "border-primary/50 bg-primary/5"
+                    ? "border-purple/50 bg-purple/5"
                     : isCompleted
                     ? "border-accent/50 bg-accent/5"
                     : "border-border bg-card"

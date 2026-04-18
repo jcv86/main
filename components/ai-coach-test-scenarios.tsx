@@ -379,9 +379,9 @@ export default function AICoachTestScenarios() {
       case "medium":
         return "bg-yellow-100 text-yellow-800 border-yellow-200"
       case "hard":
-        return "bg-red-100 text-red-800 border-red-200"
+        return "bg-red-100 text-red-800 border-red/20"
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200"
+        return "bg-muted/10 text-gray-800 border-muted/20"
     }
   }
 
@@ -402,7 +402,7 @@ export default function AICoachTestScenarios() {
             <Brain className="h-6 w-6 text-blue-600" />
             AI Coach - Escenarios de Testing
           </CardTitle>
-          <p className="text-gray-600">Prueba diferentes tipos de preguntas para validar las respuestas del AI Coach</p>
+          <p className="text-muted/60">Prueba diferentes tipos de preguntas para validar las respuestas del AI Coach</p>
         </CardHeader>
       </Card>
 
@@ -439,11 +439,11 @@ export default function AICoachTestScenarios() {
               <ScrollArea className="h-[500px]">
                 <div className="space-y-4">
                   {filteredScenarios.map((scenario) => (
-                    <div key={scenario.id} className="border rounded-[28px] p-4 hover:bg-gray-50 transition-colors">
+                    <div key={scenario.id} className="border rounded-[28px] p-4 hover:bg-muted/5 transition-colors">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
                           <h4 className="font-medium text-sm mb-2">{scenario.question}</h4>
-                          <p className="text-xs text-gray-600 mb-2">{scenario.expectedResponse}</p>
+                          <p className="text-xs text-muted/60 mb-2">{scenario.expectedResponse}</p>
                         </div>
                         <Badge className={`text-xs ml-2 ${getDifficultyColor(scenario.difficulty)}`}>
                           {scenario.difficulty}
@@ -509,20 +509,20 @@ export default function AICoachTestScenarios() {
                               {getResultIcon(result.success)}
                               <span className="font-medium text-sm">{scenario?.question}</span>
                             </div>
-                            <div className="flex items-center gap-2 text-xs text-gray-500">
+                            <div className="flex items-center gap-2 text-xs text-muted/50">
                               <Clock className="h-3 w-3" />
                               {result.responseTime}ms
                             </div>
                           </div>
 
-                          <div className="bg-gray-50 rounded p-3 mb-2">
+                          <div className="bg-muted/5 rounded p-3 mb-2">
                             <p className="text-xs text-gray-700 whitespace-pre-wrap">
                               {result.actualResponse.substring(0, 200)}
                               {result.actualResponse.length > 200 && "..."}
                             </p>
                           </div>
 
-                          <div className="flex items-center justify-between text-xs text-gray-500">
+                          <div className="flex items-center justify-between text-xs text-muted/50">
                             <span>{result.timestamp.toLocaleTimeString()}</span>
                             <Badge variant={result.success ? "default" : "destructive"} className="text-xs">
                               {result.success ? "Exitoso" : "Error"}
@@ -532,7 +532,7 @@ export default function AICoachTestScenarios() {
                       )
                     })
                   ) : (
-                    <div className="text-center py-8 text-gray-500">
+                    <div className="text-center py-8 text-muted/50">
                       <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
                       <p className="text-sm">No hay resultados de testing aún</p>
                       <p className="text-xs mt-2">Ejecuta algunos escenarios para ver los resultados</p>
@@ -556,11 +556,11 @@ export default function AICoachTestScenarios() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600">{testResults.length}</div>
-                <div className="text-sm text-gray-600">Tests Ejecutados</div>
+                <div className="text-sm text-muted/60">Tests Ejecutados</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-green-600">{testResults.filter((r) => r.success).length}</div>
-                <div className="text-sm text-gray-600">Exitosos</div>
+                <div className="text-sm text-muted/60">Exitosos</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-orange-600">
@@ -569,7 +569,7 @@ export default function AICoachTestScenarios() {
                     : 0}
                   ms
                 </div>
-                <div className="text-sm text-gray-600">Tiempo Promedio</div>
+                <div className="text-sm text-muted/60">Tiempo Promedio</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-purple-600">
@@ -578,7 +578,7 @@ export default function AICoachTestScenarios() {
                     : 0}
                   %
                 </div>
-                <div className="text-sm text-gray-600">Tasa de Éxito</div>
+                <div className="text-sm text-muted/60">Tasa de Éxito</div>
               </div>
             </div>
           </CardContent>

@@ -323,7 +323,7 @@ function ProfileCard({ profile, isFavorite, onFavorite, onSelect }: ProfileCardP
             className="p-2 hover:bg-accent rounded-lg"
           >
             <Heart
-              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`}
+              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red' : 'text-muted/40'}`}
             />
           </button>
         </div>
@@ -372,7 +372,7 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
           <div>
             <h3 className="font-semibold text-lg">{match.profile.nombre}</h3>
             <div className="flex items-center gap-2 mt-2">
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-muted/20 rounded-full h-2">
                 <div
                   className="bg-green-500 h-2 rounded-full"
                   style={{ width: `${match.matchPercentage}%` }}
@@ -388,7 +388,7 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
             }}
           >
             <Heart
-              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`}
+              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red' : 'text-muted/40'}`}
             />
           </button>
         </div>

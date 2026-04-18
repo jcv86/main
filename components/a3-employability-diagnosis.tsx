@@ -86,7 +86,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
                       className={`w-10 h-10 rounded-lg font-medium transition-all ${
                         responses[q.id] === score
                           ? "bg-blue-600 text-white"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          : "bg-muted/10 text-muted/60 hover:bg-muted/20"
                       }`}
                     >
                       {score}
@@ -97,7 +97,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
             ))}
           </div>
 
-          <div className="text-xs text-gray-500 text-center">
+          <div className="text-xs text-muted/50 text-center">
             1 = Completamente en desacuerdo | 5 = Completamente de acuerdo
           </div>
 
@@ -140,7 +140,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
             <Badge className="bg-green-600">{diagnosis?.prep_level?.toUpperCase()}</Badge>
           </div>
           <Progress value={diagnosis?.prep_level_score} className="mb-2" />
-          <p className="text-xs text-gray-600">Puntuación: {Math.round(diagnosis?.prep_level_score)}/100</p>
+          <p className="text-xs text-muted/60">Puntuación: {Math.round(diagnosis?.prep_level_score)}/100</p>
         </div>
 
         {/* Strengths */}
@@ -160,7 +160,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
         </div>
 
         {/* Gaps */}
-        <div className="bg-red-50 p-4 rounded-[28px] border border-red-200">
+        <div className="bg-red/5 p-4 rounded-[28px] border border-red/20">
           <div className="font-medium mb-3 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-red-600" />
             Brechas Principales

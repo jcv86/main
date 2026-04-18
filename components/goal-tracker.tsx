@@ -106,7 +106,7 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
       case "low":
         return "bg-green-100 text-green-800"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-muted/10 text-gray-800"
     }
   }
 
@@ -117,7 +117,7 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
       case "in_progress":
         return <Clock className="h-5 w-5 text-blue-600" />
       default:
-        return <AlertCircle className="h-5 w-5 text-gray-600" />
+        return <AlertCircle className="h-5 w-5 text-muted/60" />
     }
   }
 

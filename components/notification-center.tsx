@@ -90,7 +90,7 @@ export function NotificationCenter() {
       case 'a1_completed':
         return <CheckCircle className="w-5 h-5 text-green-500" />
       case 'achievement_unlock':
-        return <Zap className="w-5 h-5 text-yellow-500" />
+        return <Zap className="w-5 h-5 text-orange" />
       default:
         return <AlertCircle className="w-5 h-5 text-blue-500" />
     }
@@ -125,7 +125,7 @@ export function NotificationCenter() {
           <Bell className="w-5 h-5" />
           Notificaciones
           {unreadCount > 0 && (
-            <Badge className="bg-red-500">{unreadCount}</Badge>
+            <Badge className="bg-red/50">{unreadCount}</Badge>
           )}
         </h2>
       </div>

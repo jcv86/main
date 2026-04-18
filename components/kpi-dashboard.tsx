@@ -116,9 +116,9 @@ export function KPIDashboard() {
       case "success":
         return <CheckCircle2 className="h-5 w-5 text-green-500" />
       case "warning":
-        return <AlertCircle className="h-5 w-5 text-yellow-500" />
+        return <AlertCircle className="h-5 w-5 text-orange" />
       case "danger":
-        return <XCircle className="h-5 w-5 text-red-500" />
+        return <XCircle className="h-5 w-5 text-red" />
       default:
         return null
     }

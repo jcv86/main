@@ -41,7 +41,7 @@ export function ProgressDashboard() {
 
         <Card>
           <CardContent className="pt-6 text-center">
-            <Zap className="w-8 h-8 mx-auto mb-2 text-yellow-500" />
+            <Zap className="w-8 h-8 mx-auto mb-2 text-orange" />
             <p className="text-sm text-muted-foreground">Puntos Totales</p>
             <p className="text-3xl font-bold">{stats.points}</p>
             <p className="text-xs text-muted-foreground mt-1">experiencia</p>

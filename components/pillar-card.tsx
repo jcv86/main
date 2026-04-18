@@ -31,11 +31,11 @@ export function PillarCard({
 }: PillarCardProps) {
   const colorMap = {
     red: {
-      bg: 'bg-red-50/50 dark:bg-red-950/10',
-      border: 'border-red-200/50 dark:border-red-800/50',
+      bg: 'bg-red/5/50 dark:bg-red-950/10',
+      border: 'border-red/20/50 dark:border-red-800/50',
       icon: 'text-red-600 dark:text-red-400',
-      badge: 'bg-red-100/50 dark:bg-red-900/30 text-red-700 dark:text-red-300',
-      button: 'bg-red-600 hover:bg-red-700',
+      badge: 'bg-red-100/50 dark:bg-red-900/30 text-red dark:text-red-300',
+      button: 'bg-red-600 hover:bg-red',
     },
     blue: {
       bg: 'bg-blue-50/50 dark:bg-blue-950/10',

@@ -55,9 +55,9 @@ export function A4NewsCard7Layers({ news, onEngagement }: Props) {
   }
 
   const getRelevanceColor = (score: number) => {
-    if (score >= 8) return 'bg-red-500/20 text-red-700 dark:text-red-400 border-red-300'
+    if (score >= 8) return 'bg-red/50/20 text-red dark:text-red-400 border-red-300'
     if (score >= 6) return 'bg-orange-500/20 text-orange-700 dark:text-orange-400 border-orange-300'
-    if (score >= 4) return 'bg-yellow-500/20 text-yellow-700 dark:text-yellow-400 border-yellow-300'
+    if (score >= 4) return 'bg-orange/20 text-yellow-700 dark:text-yellow-400 border-yellow-300'
     return 'bg-blue-500/20 text-blue-700 dark:text-blue-400 border-blue-300'
   }
 
@@ -104,7 +104,7 @@ export function A4NewsCard7Layers({ news, onEngagement }: Props) {
           <div className="border-t pt-4 space-y-3">
             {/* Capa 1: Qué cambió */}
             <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-wide text-primary flex items-center gap-2">
+              <h4 className="text-xs font-bold uppercase tracking-wide text-purple flex items-center gap-2">
                 <TrendingUp className="w-3 h-3" />
                 Capa 1: Qué cambió
               </h4>
@@ -113,7 +113,7 @@ export function A4NewsCard7Layers({ news, onEngagement }: Props) {
 
             {/* Capa 2: Impacto Delta */}
             <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-wide text-primary flex items-center gap-2">
+              <h4 className="text-xs font-bold uppercase tracking-wide text-purple flex items-center gap-2">
                 <AlertCircle className="w-3 h-3" />
                 Capa 2: Impacto potencial
               </h4>
@@ -122,7 +122,7 @@ export function A4NewsCard7Layers({ news, onEngagement }: Props) {
 
             {/* Capa 3: Nivel de Energía */}
             <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-wide text-primary flex items-center gap-2">
+              <h4 className="text-xs font-bold uppercase tracking-wide text-purple flex items-center gap-2">
                 <Zap className="w-3 h-3" />
                 Capa 3: Nivel de energía
               </h4>
@@ -131,25 +131,25 @@ export function A4NewsCard7Layers({ news, onEngagement }: Props) {
 
             {/* Capa 4: Descuento Mercado */}
             <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-wide text-primary">Capa 4: Descuento del mercado</h4>
+              <h4 className="text-xs font-bold uppercase tracking-wide text-purple">Capa 4: Descuento del mercado</h4>
               <p className="text-sm text-muted-foreground bg-muted/50 p-2 rounded">{news.capa_4_descuento_mercado}</p>
             </div>
 
             {/* Capa 5: Tensión Narrativa */}
             <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-wide text-primary">Capa 5: Tensión narrativa</h4>
+              <h4 className="text-xs font-bold uppercase tracking-wide text-purple">Capa 5: Tensión narrativa</h4>
               <p className="text-sm text-muted-foreground bg-muted/50 p-2 rounded">{news.capa_5_tension_narrativa}</p>
             </div>
 
             {/* Capa 6: Ritmo Narrativo */}
             <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-wide text-primary">Capa 6: Ritmo narrativo</h4>
+              <h4 className="text-xs font-bold uppercase tracking-wide text-purple">Capa 6: Ritmo narrativo</h4>
               <p className="text-sm text-muted-foreground bg-muted/50 p-2 rounded">{news.capa_6_ritmo_narrativo}</p>
             </div>
 
             {/* Capa 7: Impacto Plazo */}
             <div className="space-y-2">
-              <h4 className="text-xs font-bold uppercase tracking-wide text-primary">Capa 7: Impacto a plazo</h4>
+              <h4 className="text-xs font-bold uppercase tracking-wide text-purple">Capa 7: Impacto a plazo</h4>
               <p className="text-sm text-muted-foreground bg-muted/50 p-2 rounded">{news.capa_7_impacto_plazo}</p>
             </div>
 
@@ -186,7 +186,7 @@ export function A4NewsCard7Layers({ news, onEngagement }: Props) {
             variant="ghost"
             size="sm"
             onClick={handleSave}
-            className={isSaved ? 'text-red-500' : ''}
+            className={isSaved ? 'text-red' : ''}
           >
             <Heart className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
           </Button>

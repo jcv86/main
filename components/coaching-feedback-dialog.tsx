@@ -132,7 +132,7 @@ export function CoachingFeedbackDialog({
                 >
                   <Star
                     className={`h-8 w-8 ${
-                      star <= (hoveredRating || rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                      star <= (hoveredRating || rating) ? "fill-yellow-400 text-yellow-400" : "text-muted/30"
                     }`}
                   />
                 </button>

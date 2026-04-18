@@ -118,7 +118,7 @@ export function DISCWidget({ profile, userName }: DISCWidgetProps) {
             <ul className="space-y-1 text-xs">
               {recommendations.slice(0, 3).map((rec, idx) => (
                 <li key={idx} className="flex items-start gap-2">
-                  <CheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0 text-primary" />
+                  <CheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0 text-purple" />
                   <span className="text-muted-foreground">{rec}</span>
                 </li>
               ))}

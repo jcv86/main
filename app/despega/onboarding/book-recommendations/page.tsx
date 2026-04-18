@@ -120,7 +120,7 @@ export default function BookRecommendationsPage() {
       <div className="min-h-screen bg-gradient-to-b from-purple/5 to-blue/5 flex items-center justify-center">
         <div className="text-center">
           <Sparkles className="h-12 w-12 text-purple mx-auto mb-4 animate-spin" />
-          <p className="text-lg text-gray-600">Personalizando tus recomendaciones...</p>
+          <p className="text-lg text-muted/60">Personalizando tus recomendaciones...</p>
         </div>
       </div>
     )
@@ -237,7 +237,7 @@ export default function BookRecommendationsPage() {
                           {book.author}
                         </p>
 
-                        <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                        <p className="text-muted/60 text-sm mb-3 line-clamp-2">
                           {book.description}
                         </p>
 
@@ -250,7 +250,7 @@ export default function BookRecommendationsPage() {
                               {book.key_takeaways.slice(0, 2).map((takeaway, i) => (
                                 <li
                                   key={i}
-                                  className="text-xs text-gray-600 flex items-start gap-2"
+                                  className="text-xs text-muted/60 flex items-start gap-2"
                                 >
                                   <span className="text-purple mt-0.5">•</span>
                                   <span className="line-clamp-1">{takeaway}</span>
@@ -261,8 +261,8 @@ export default function BookRecommendationsPage() {
                         )}
                       </div>
 
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                        <span className="text-xs text-gray-500">{book.pages} páginas</span>
+                      <div className="flex items-center justify-between pt-4 border-t border-muted/20">
+                        <span className="text-xs text-muted/50">{book.pages} páginas</span>
                         <Button
                           size="sm"
                           className="bg-purple hover:bg-purple text-white"
@@ -277,14 +277,14 @@ export default function BookRecommendationsPage() {
               </div>
             ) : (
               <Card className="p-8 border-0 bg-white text-center">
-                <p className="text-gray-500">Cargando recomendaciones...</p>
+                <p className="text-muted/50">Cargando recomendaciones...</p>
               </Card>
             )}
           </div>
         </div>
 
         {/* CTA Section */}
-        <div className="text-center space-y-4 pt-8 border-t border-gray-200">
+        <div className="text-center space-y-4 pt-8 border-t border-muted/20">
           <Button
             onClick={() => router.push("/dashboard?refetch=true")}
             className="bg-blue hover:bg-blue text-white px-8 py-3 text-base"
@@ -292,7 +292,7 @@ export default function BookRecommendationsPage() {
           >
             Ir a mi Dashboard
           </Button>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted/50">
             Explorar más libros en tu biblioteca en cualquier momento
           </p>
         </div>

@@ -170,9 +170,9 @@ export default function A2RoutesPage() {
     return (
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-2xl mx-auto">
-          <Card className="bg-muted/90 border-red-500/50 p-8">
+          <Card className="bg-muted/90 border-red/50/50 p-8">
             <div className="flex items-start gap-4">
-              <AlertCircle className="h-6 w-6 text-red-500 flex-shrink-0 mt-1" />
+              <AlertCircle className="h-6 w-6 text-red flex-shrink-0 mt-1" />
               <div className="flex-1">
                 <h2 className="text-xl font-bold text-white mb-2">Error en A2: Ruta</h2>
                 <p className="text-red-400 text-lg mb-6">{error || 'No se encontró ruta personalizada'}</p>
@@ -206,7 +206,7 @@ export default function A2RoutesPage() {
         <Card className="bg-muted/90 border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <Zap className="w-5 h-5 text-yellow-500" />
+              <Zap className="w-5 h-5 text-orange" />
               Tu Ruta de 90 Días (Fase de Visualización)
             </CardTitle>
           </CardHeader>

@@ -86,7 +86,7 @@ const competencyInfo = {
   motivation: {
     name: "Motivación",
     icon: Lightbulb,
-    color: "bg-yellow-500",
+    color: "bg-orange",
     description: "Impulso interno hacia el logro y la perseverancia",
     lowDescription: "Busca fuentes de motivación intrínseca",
     mediumDescription: "Buena motivación, mantén el enfoque en tus objetivos",
@@ -95,7 +95,7 @@ const competencyInfo = {
   empathy: {
     name: "Empatía",
     icon: Heart,
-    color: "bg-red-500",
+    color: "bg-red/50",
     description: "Capacidad para entender y conectar con las emociones de otros",
     lowDescription: "Practica la escucha activa y observación emocional",
     mediumDescription: "Buena empatía, sigue desarrollando la conexión emocional",
@@ -234,8 +234,8 @@ export default function EmotionalIntelligenceResults() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-pink-50">
         <div className="text-center">
-          <Heart className="h-12 w-12 animate-pulse mx-auto mb-4 text-red-500" />
-          <p className="text-gray-600">Cargando tus resultados...</p>
+          <Heart className="h-12 w-12 animate-pulse mx-auto mb-4 text-red" />
+          <p className="text-muted/60">Cargando tus resultados...</p>
         </div>
       </div>
     )
@@ -246,12 +246,12 @@ export default function EmotionalIntelligenceResults() {
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-pink-50">
         <Card className="w-full max-w-md">
           <CardContent className="text-center p-8">
-            <Heart className="h-16 w-16 mx-auto mb-6 text-red-500" />
+            <Heart className="h-16 w-16 mx-auto mb-6 text-red" />
             <h2 className="text-2xl font-bold text-gray-900 mb-4">No se encontraron resultados</h2>
-            <p className="text-xl text-gray-600 mb-6">
+            <p className="text-xl text-muted/60 mb-6">
               Parece que aún no has completado el test de Inteligencia Emocional Despega.
             </p>
-            <Button onClick={() => router.push("/test/emotional-intelligence")} className="bg-red-500 hover:bg-red-600">
+            <Button onClick={() => router.push("/test/emotional-intelligence")} className="bg-red/50 hover:bg-red-600">
               Realizar Test
             </Button>
           </CardContent>
@@ -285,7 +285,7 @@ export default function EmotionalIntelligenceResults() {
           <h1 className="text-4xl font-bold bg-gradient-to-r from-blue to-purple-600 bg-clip-text text-transparent mb-2">
             Despega Empatía
           </h1>
-          <p className="text-gray-600">Tus resultados del test de Inteligencia Emocional</p>
+          <p className="text-muted/60">Tus resultados del test de Inteligencia Emocional</p>
         </div>
 
         {/* Overall Score */}
@@ -457,7 +457,7 @@ export default function EmotionalIntelligenceResults() {
                   <Sparkles className="h-7 w-7 text-purple" />
                   <span>Resumen Ejecutivo Integral DTC</span>
                 </CardTitle>
-                <p className="text-gray-600 mt-2">
+                <p className="text-muted/60 mt-2">
                   Tu foto 360° de inteligencia emocional: cómo te relacionas con tus emociones y las de otros
                 </p>
               </CardHeader>
@@ -653,7 +653,7 @@ export default function EmotionalIntelligenceResults() {
                           <strong>Registro emocional diario:</strong> Durante 5 minutos cada noche, escribe cómo te
                           sentiste hoy y por qué. Esto fortalecerá tu autoconciencia emocional.
                         </p>
-                        <p className="text-sm text-gray-600 italic">
+                        <p className="text-sm text-muted/60 italic">
                           Meta: Identificar patrones emocionales que te ayuden a conocerte mejor
                         </p>
                       </CardContent>
@@ -666,7 +666,7 @@ export default function EmotionalIntelligenceResults() {
                           importante para hablar sin distracciones sobre cómo se sienten ambos. Practica la escucha
                           activa.
                         </p>
-                        <p className="text-sm text-gray-600 italic">
+                        <p className="text-sm text-muted/60 italic">
                           Meta: Fortalecer vínculos genuinos y desarrollar empatía
                         </p>
                       </CardContent>
@@ -678,7 +678,7 @@ export default function EmotionalIntelligenceResults() {
                           <strong>Técnica del semáforo emocional:</strong> Antes de reaccionar en situaciones tensas,
                           identifica tu emoción (rojo=detente, amarillo=reflexiona, verde=actúa con calma).
                         </p>
-                        <p className="text-sm text-gray-600 italic">
+                        <p className="text-sm text-muted/60 italic">
                           Meta: Mejorar tu regulación emocional en contextos laborales
                         </p>
                       </CardContent>
@@ -800,10 +800,10 @@ export default function EmotionalIntelligenceResults() {
                       <div className="space-y-4">
                         <div className="flex justify-between items-center">
                           <span className="text-2xl font-bold text-gray-900">{score}%</span>
-                          <span className="text-sm text-gray-500">de 100</span>
+                          <span className="text-sm text-muted/50">de 100</span>
                         </div>
                         <Progress value={score} className="h-3" />
-                        <p className="text-sm text-gray-600 leading-relaxed">
+                        <p className="text-sm text-muted/60 leading-relaxed">
                           {score >= 85
                             ? competency.highDescription
                             : score >= 70
@@ -844,7 +844,7 @@ export default function EmotionalIntelligenceResults() {
                             <IconComponent className="h-6 w-6 text-green" />
                             <div className="flex-1">
                               <div className="font-semibold text-gray-900">{competency.name}</div>
-                              <div className="text-sm text-gray-600">
+                              <div className="text-sm text-muted/60">
                                 {score}% - {getScoreLevel(score).level}
                               </div>
                             </div>
@@ -878,7 +878,7 @@ export default function EmotionalIntelligenceResults() {
                             <IconComponent className="h-6 w-6 text-orange-600" />
                             <div className="flex-1">
                               <div className="font-semibold text-gray-900">{competency.name}</div>
-                              <div className="text-sm text-gray-600">{score}% - Potencial de mejora</div>
+                              <div className="text-sm text-muted/60">{score}% - Potencial de mejora</div>
                             </div>
                           </div>
                         )
@@ -928,7 +928,7 @@ export default function EmotionalIntelligenceResults() {
                   <Card key={index} className="shadow-lg">
                     <CardHeader>
                       <div className="flex items-center space-x-3 mb-2">
-                        <div className="p-2 rounded-lg bg-gray-200 bg-opacity-20">
+                        <div className="p-2 rounded-lg bg-muted/20 bg-opacity-20">
                           <IconComponent className="h-6 w-6 text-gray-700" />
                         </div>
                         <Badge
@@ -942,7 +942,7 @@ export default function EmotionalIntelligenceResults() {
                       <CardTitle className="text-lg">{rec.title}</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-600 leading-relaxed">{rec.description}</p>
+                      <p className="text-muted/60 leading-relaxed">{rec.description}</p>
                     </CardContent>
                   </Card>
                 )
@@ -964,7 +964,7 @@ export default function EmotionalIntelligenceResults() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Esta Semana</h4>
-                      <p className="text-gray-600">Comienza un diario emocional para aumentar tu autoconciencia</p>
+                      <p className="text-muted/60">Comienza un diario emocional para aumentar tu autoconciencia</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
@@ -973,7 +973,7 @@ export default function EmotionalIntelligenceResults() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Este Mes</h4>
-                      <p className="text-gray-600">Practica técnicas de respiración y mindfulness diariamente</p>
+                      <p className="text-muted/60">Practica técnicas de respiración y mindfulness diariamente</p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
@@ -982,7 +982,7 @@ export default function EmotionalIntelligenceResults() {
                     </div>
                     <div>
                       <h4 className="font-semibold text-gray-900">Próximos 3 Meses</h4>
-                      <p className="text-gray-600">Busca oportunidades de liderazgo y feedback de colegas</p>
+                      <p className="text-muted/60">Busca oportunidades de liderazgo y feedback de colegas</p>
                     </div>
                   </div>
                 </div>
@@ -1004,7 +1004,7 @@ export default function EmotionalIntelligenceResults() {
                   <div className="space-y-4">
                     <div className="p-4 bg-green/5 rounded-lg">
                       <h4 className="font-semibold text-gray-900 mb-2">Libros</h4>
-                      <ul className="text-sm text-gray-600 space-y-1">
+                      <ul className="text-sm text-muted/60 space-y-1">
                         <li>• "Inteligencia Emocional" - Daniel Goleman</li>
                         <li>• "Emotional Intelligence 2.0" - Travis Bradberry</li>
                         <li>• "The EQ Edge" - Steven Stein</li>
@@ -1012,7 +1012,7 @@ export default function EmotionalIntelligenceResults() {
                     </div>
                     <div className="p-4 bg-blue/5 rounded-lg">
                       <h4 className="font-semibold text-gray-900 mb-2">Cursos Online</h4>
-                      <ul className="text-sm text-gray-600 space-y-1">
+                      <ul className="text-sm text-muted/60 space-y-1">
                         <li>• Mindfulness y Meditación</li>
                         <li>• Comunicación Efectiva</li>
                         <li>• Liderazgo Emocional</li>
@@ -1033,7 +1033,7 @@ export default function EmotionalIntelligenceResults() {
                   <div className="space-y-4">
                     <div className="p-4 bg-purple/5 rounded-lg">
                       <h4 className="font-semibold text-gray-900 mb-2">Diarios</h4>
-                      <ul className="text-sm text-gray-600 space-y-1">
+                      <ul className="text-sm text-muted/60 space-y-1">
                         <li>• Diario de emociones diario</li>
                         <li>• Registro de desencadenantes</li>
                         <li>• Reflexiones de interacciones sociales</li>
@@ -1041,7 +1041,7 @@ export default function EmotionalIntelligenceResults() {
                     </div>
                     <div className="p-4 bg-yellow-50 rounded-lg">
                       <h4 className="font-semibold text-gray-900 mb-2">Técnicas</h4>
-                      <ul className="text-sm text-gray-600 space-y-1">
+                      <ul className="text-sm text-muted/60 space-y-1">
                         <li>• Respiración 4-7-8</li>
                         <li>• Escucha activa</li>
                         <li>• Pausa antes de reaccionar</li>
@@ -1069,7 +1069,7 @@ export default function EmotionalIntelligenceResults() {
                   >
                     <Target className="h-8 w-8 text-blue/50" />
                     <span className="font-semibold">Test DISC</span>
-                    <span className="text-xs text-gray-500">Estilo de comportamiento</span>
+                    <span className="text-xs text-muted/50">Estilo de comportamiento</span>
                   </Button>
                   <Button
                     onClick={() => router.push("/test/big-five")}
@@ -1078,7 +1078,7 @@ export default function EmotionalIntelligenceResults() {
                   >
                     <Brain className="h-8 w-8 text-purple/50" />
                     <span className="font-semibold">Big Five</span>
-                    <span className="text-xs text-gray-500">Personalidad completa</span>
+                    <span className="text-xs text-muted/50">Personalidad completa</span>
                   </Button>
                   <Button
                     onClick={() => router.push("/test/soft-skills")}
@@ -1087,7 +1087,7 @@ export default function EmotionalIntelligenceResults() {
                   >
                     <Users className="h-8 w-8 text-green" />
                     <span className="font-semibold">Habilidades Blandas</span>
-                    <span className="text-xs text-gray-500">Competencias profesionales</span>
+                    <span className="text-xs text-muted/50">Competencias profesionales</span>
                   </Button>
                 </div>
               </CardContent>
@@ -1606,7 +1606,7 @@ export default function EmotionalIntelligenceResults() {
                           <h4 className="font-semibold text-blue">
                             1. ¿Cuál es la emoción que más me cuesta reconocer en mí mismo?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Muchas personas evitan sentir tristeza, miedo o vergüenza. Identificar qué emoción reprimes
                             te ayuda a recuperar partes negadas de ti.
                           </p>
@@ -1623,7 +1623,7 @@ export default function EmotionalIntelligenceResults() {
                             2. ¿En qué situaciones mi cuerpo me avisa que estoy emocionalmente sobrepasado (antes de que
                             mi mente lo reconozca)?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             El cuerpo siempre sabe primero: tensión en hombros, nudo en el estómago, mandíbula apretada.
                             Reconocer estas señales te da ventaja para actuar.
                           </p>
@@ -1640,7 +1640,7 @@ export default function EmotionalIntelligenceResults() {
                             3. ¿Qué historia me cuento sobre mis emociones? (ej: "No debo sentir miedo", "La tristeza es
                             debilidad")
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Todos tenemos creencias sobre qué emociones son "aceptables". Cuestionar esas creencias es
                             liberador.
                           </p>
@@ -1667,7 +1667,7 @@ export default function EmotionalIntelligenceResults() {
                             4. ¿Cuándo fue la última vez que reaccioné emocionalmente y me arrepentí? ¿Qué habría hecho
                             diferente?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Revisar errores emocionales sin culpa, solo con curiosidad, es cómo aprendes
                             autorregulación.
                           </p>
@@ -1683,7 +1683,7 @@ export default function EmotionalIntelligenceResults() {
                           <h4 className="font-semibold text-green-900">
                             5. ¿Qué técnicas uso actualmente para calmarme cuando estoy alterado? ¿Funcionan realmente?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Diferencia entre estrategias saludables (respirar, caminar, hablar) y evasivas (alcohol,
                             redes sociales, comer compulsivamente).
                           </p>
@@ -1700,7 +1700,7 @@ export default function EmotionalIntelligenceResults() {
                             6. ¿Qué emoción tiendo a reprimir o evitar sistemáticamente? ¿Qué temo que pase si la siento
                             plenamente?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Las emociones reprimidas no desaparecen, solo se acumulan. Sentirlas conscientemente las
                             libera.
                           </p>
@@ -1726,7 +1726,7 @@ export default function EmotionalIntelligenceResults() {
                           <h4 className="font-semibold text-purple">
                             7. ¿Con qué tipo de personas me cuesta más empatizar? ¿Por qué?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Todos tenemos "puntos ciegos" de empatía. Reconocerlos te permite expandir tu compasión.
                           </p>
                           <textarea
@@ -1741,7 +1741,7 @@ export default function EmotionalIntelligenceResults() {
                           <h4 className="font-semibold text-purple">
                             8. ¿Alguna vez alguien me ha dicho que "no entiendo" sus emociones? ¿Qué pasó?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Los momentos donde fallamos en empatizar son oportunidades de aprendizaje sobre nuestras
                             limitaciones emocionales.
                           </p>
@@ -1757,7 +1757,7 @@ export default function EmotionalIntelligenceResults() {
                           <h4 className="font-semibold text-purple">
                             9. ¿Cómo equilibro el cuidar de otros sin perder mi propio bienestar emocional?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             La empatía sin límites lleva al agotamiento. La compasión saludable incluye autocuidado.
                           </p>
                           <textarea
@@ -1782,7 +1782,7 @@ export default function EmotionalIntelligenceResults() {
                           <h4 className="font-semibold text-orange-900">
                             10. ¿Cómo crees que tu estado emocional afecta a las personas más cercanas a ti?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Las emociones son contagiosas. Tu ansiedad, alegría o irritación impactan directamente a
                             quienes te rodean.
                           </p>
@@ -1798,7 +1798,7 @@ export default function EmotionalIntelligenceResults() {
                           <h4 className="font-semibold text-orange-900">
                             11. ¿Alguna vez he dañado una relación importante por no gestionar bien mis emociones?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Reconocer el daño emocional que hemos causado (sin defensas) es un acto de madurez y
                             responsabilidad.
                           </p>
@@ -1814,7 +1814,7 @@ export default function EmotionalIntelligenceResults() {
                           <h4 className="font-semibold text-orange-900">
                             12. ¿Qué legado emocional quiero dejar en las personas que me importan?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Más allá de logros, ¿qué quieres que la gente sienta cuando piense en ti? ¿Seguridad?
                             ¿Inspiración? ¿Amor?
                           </p>
@@ -1952,7 +1952,7 @@ export default function EmotionalIntelligenceResults() {
                   <Book className="h-7 w-7 text-purple" />
                   <span>Biblioteca DTC Recomendada</span>
                 </CardTitle>
-                <p className="text-gray-600 mt-2">
+                <p className="text-muted/60 mt-2">
                   Recursos específicos para fortalecer tu inteligencia emocional en la vida real
                 </p>
               </CardHeader>
@@ -1983,7 +1983,7 @@ export default function EmotionalIntelligenceResults() {
                         <td className="border border-purple/20 p-3">
                           <div>
                             <p className="font-semibold text-gray-800">Inteligencia Emocional - Daniel Goleman</p>
-                            <p className="text-sm text-gray-600">Libro • Psicología</p>
+                            <p className="text-sm text-muted/60">Libro • Psicología</p>
                           </div>
                         </td>
                         <td className="border border-purple/20 p-3 text-gray-700">
@@ -2002,7 +2002,7 @@ export default function EmotionalIntelligenceResults() {
                         <td className="border border-purple/20 p-3">
                           <div>
                             <p className="font-semibold text-gray-800">El Poder del Ahora - Eckhart Tolle</p>
-                            <p className="text-sm text-gray-600">Libro • Mindfulness</p>
+                            <p className="text-sm text-muted/60">Libro • Mindfulness</p>
                           </div>
                         </td>
                         <td className="border border-purple/20 p-3 text-gray-700">
@@ -2019,7 +2019,7 @@ export default function EmotionalIntelligenceResults() {
                         <td className="border border-purple/20 p-3">
                           <div>
                             <p className="font-semibold text-gray-800">Comunicación No Violenta - Marshall Rosenberg</p>
-                            <p className="text-sm text-gray-600">Libro • Comunicación</p>
+                            <p className="text-sm text-muted/60">Libro • Comunicación</p>
                           </div>
                         </td>
                         <td className="border border-purple/20 p-3 text-gray-700">
@@ -2038,7 +2038,7 @@ export default function EmotionalIntelligenceResults() {
                         <td className="border border-purple/20 p-3">
                           <div>
                             <p className="font-semibold text-gray-800">Conversaciones Cruciales - Kerry Patterson</p>
-                            <p className="text-sm text-gray-600">Libro • Comunicación</p>
+                            <p className="text-sm text-muted/60">Libro • Comunicación</p>
                           </div>
                         </td>
                         <td className="border border-purple/20 p-3 text-gray-700">
@@ -2055,7 +2055,7 @@ export default function EmotionalIntelligenceResults() {
                         <td className="border border-purple/20 p-3">
                           <div>
                             <p className="font-semibold text-gray-800">Fluir (Flow) - Mihaly Csikszentmihalyi</p>
-                            <p className="text-sm text-gray-600">Libro • Psicología Positiva</p>
+                            <p className="text-sm text-muted/60">Libro • Psicología Positiva</p>
                           </div>
                         </td>
                         <td className="border border-purple/20 p-3 text-gray-700">
@@ -2074,7 +2074,7 @@ export default function EmotionalIntelligenceResults() {
                         <td className="border border-purple/20 p-3">
                           <div>
                             <p className="font-semibold text-gray-800">Conversaciones Difíciles - Douglas Stone</p>
-                            <p className="text-sm text-gray-600">Libro • Relaciones</p>
+                            <p className="text-sm text-muted/60">Libro • Relaciones</p>
                           </div>
                         </td>
                         <td className="border border-purple/20 p-3 text-gray-700">
@@ -2106,7 +2106,7 @@ export default function EmotionalIntelligenceResults() {
         {/* Footer Actions */}
         <div className="text-center mt-12 space-y-6">
           <h2 className="text-2xl font-bold text-gray-900">¿Qué sigue?</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-muted/60 max-w-2xl mx-auto">
             Usa estos resultados para desarrollar tu inteligencia emocional y mejorar tus relaciones personales y
             profesionales.
           </p>

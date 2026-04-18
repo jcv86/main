@@ -102,7 +102,7 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="bg-gray-100 rounded-[28px] p-8 aspect-video flex items-center justify-center">
+          <div className="bg-muted/10 rounded-[28px] p-8 aspect-video flex items-center justify-center">
             <video
               ref={videoRef}
               autoPlay
@@ -142,7 +142,7 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
     return (
       <div className="flex items-center justify-center p-8">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4" />
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4" />
           <p className="font-medium">Analizando tu presentación...</p>
         </div>
       </div>
@@ -168,13 +168,13 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
 
         {/* Readiness Score */}
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-[28px] border border-blue-200">
-          <div className="text-sm text-gray-600 mb-2">Preparación General</div>
+          <div className="text-sm text-muted/60 mb-2">Preparación General</div>
           <div className="flex items-center gap-4">
             <div className="text-4xl font-bold text-indigo-600">
               {analysis?.pre_interview_readiness}%
             </div>
             <div className="flex-1">
-              <div className="bg-gray-200 rounded-full h-2">
+              <div className="bg-muted/20 rounded-full h-2">
                 <div
                   className="bg-indigo-600 h-2 rounded-full transition-all"
                   style={{ width: `${analysis?.pre_interview_readiness}%` }}
@@ -186,22 +186,22 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
 
         {/* Detailed Metrics */}
         <div className="grid grid-cols-3 gap-4">
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="text-xs text-gray-600 mb-2">Vestimenta</div>
+          <div className="p-4 bg-muted/5 rounded-lg">
+            <div className="text-xs text-muted/60 mb-2">Vestimenta</div>
             <div className="text-2xl font-bold text-gray-900">{analysis?.vestimenta_coherence}%</div>
-            <p className="text-xs text-gray-600 mt-2">{analysis?.vestimenta_feedback}</p>
+            <p className="text-xs text-muted/60 mt-2">{analysis?.vestimenta_feedback}</p>
           </div>
 
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="text-xs text-gray-600 mb-2">Postura</div>
+          <div className="p-4 bg-muted/5 rounded-lg">
+            <div className="text-xs text-muted/60 mb-2">Postura</div>
             <div className="text-2xl font-bold text-gray-900">{analysis?.postura_score}%</div>
-            <p className="text-xs text-gray-600 mt-2">{analysis?.postura_notes}</p>
+            <p className="text-xs text-muted/60 mt-2">{analysis?.postura_notes}</p>
           </div>
 
-          <div className="p-4 bg-gray-50 rounded-lg">
-            <div className="text-xs text-gray-600 mb-2">Confianza</div>
+          <div className="p-4 bg-muted/5 rounded-lg">
+            <div className="text-xs text-muted/60 mb-2">Confianza</div>
             <div className="text-2xl font-bold text-gray-900">{analysis?.expresion_facial_confidence}%</div>
-            <p className="text-xs text-gray-600 mt-2">{analysis?.expresion_notes}</p>
+            <p className="text-xs text-muted/60 mt-2">{analysis?.expresion_notes}</p>
           </div>
         </div>
 

@@ -85,8 +85,8 @@ export default function RankingsPage() {
   }, [supabase])
 
   const getRankIcon = (position: number) => {
-    if (position === 1) return <Trophy className="w-5 h-5 text-yellow-500" />
-    if (position === 2) return <Medal className="w-5 h-5 text-gray-400" />
+    if (position === 1) return <Trophy className="w-5 h-5 text-orange" />
+    if (position === 2) return <Medal className="w-5 h-5 text-muted/40" />
     if (position === 3) return <Award className="w-5 h-5 text-yellow" />
     return <span className="w-5 h-5 flex items-center justify-center text-sm font-medium text-muted-foreground">#{position}</span>
   }
@@ -190,7 +190,7 @@ export default function RankingsPage() {
                           key={entry.user_id}
                           className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${
                             isCurrentUser 
-                              ? "bg-primary/10 border border-primary/20" 
+                              ? "bg-purple/10 border border-purple/20" 
                               : position <= 3 
                                 ? "bg-muted/50" 
                                 : "hover:bg-muted/30"
@@ -206,7 +206,7 @@ export default function RankingsPage() {
                             </AvatarFallback>
                           </Avatar>
                           <div className="flex-1 min-w-0">
-                            <p className={`font-medium truncate ${isCurrentUser ? "text-primary" : ""}`}>
+                            <p className={`font-medium truncate ${isCurrentUser ? "text-purple" : ""}`}>
                               {entry.profiles?.full_name || "Usuario Anónimo"}
                               {isCurrentUser && <Badge variant="outline" className="ml-2 text-xs">Tú</Badge>}
                             </p>

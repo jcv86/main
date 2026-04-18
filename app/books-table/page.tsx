@@ -93,7 +93,7 @@ export default function BooksTablePage() {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto mb-4"></div>
-            <p className="text-gray-600">Cargando libros...</p>
+            <p className="text-muted/60">Cargando libros...</p>
           </div>
         </div>
       </div>
@@ -125,19 +125,19 @@ export default function BooksTablePage() {
         <CardContent>
           <div className="grid grid-cols-4 gap-4 mb-6">
             <div className="bg-blue/5 p-4 rounded-lg">
-              <p className="text-sm text-gray-600 mb-1">Total Libros</p>
+              <p className="text-sm text-muted/60 mb-1">Total Libros</p>
               <p className="text-2xl font-bold text-blue">{books.length}</p>
             </div>
             <div className="bg-green/5 p-4 rounded-lg">
-              <p className="text-sm text-gray-600 mb-1">Total Palabras</p>
+              <p className="text-sm text-muted/60 mb-1">Total Palabras</p>
               <p className="text-2xl font-bold text-green">{totalWords.toLocaleString()}</p>
             </div>
             <div className="bg-purple/5 p-4 rounded-lg">
-              <p className="text-sm text-gray-600 mb-1">Total Páginas (est.)</p>
+              <p className="text-sm text-muted/60 mb-1">Total Páginas (est.)</p>
               <p className="text-2xl font-bold text-purple">{totalPages.toLocaleString()}</p>
             </div>
             <div className="bg-orange-50 p-4 rounded-lg">
-              <p className="text-sm text-gray-600 mb-1">Tiempo Total (horas)</p>
+              <p className="text-sm text-muted/60 mb-1">Tiempo Total (horas)</p>
               <p className="text-2xl font-bold text-orange-600">{Math.round(totalReadingTime / 60)}</p>
             </div>
           </div>
@@ -181,9 +181,9 @@ export default function BooksTablePage() {
             </Table>
           </div>
 
-          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+          <div className="mt-6 p-4 bg-muted/5 rounded-lg">
             <h3 className="font-semibold mb-2">Nota sobre los cálculos:</h3>
-            <ul className="text-sm text-gray-600 space-y-1">
+            <ul className="text-sm text-muted/60 space-y-1">
               <li>
                 • <strong>Palabras:</strong> Conteo real de palabras en el contenido de cada libro
               </li>

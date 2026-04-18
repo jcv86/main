@@ -180,7 +180,7 @@ export default function DocumentsPage() {
               Cerebro de Conocimiento
             </h1>
           </div>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-muted/60 max-w-2xl mx-auto">
             Chatea con nuestra base de conocimiento centralizada: {documents.length} documentos + {books.length} libros
             de la biblioteca
           </p>
@@ -192,7 +192,7 @@ export default function DocumentsPage() {
             <Card className="p-6">
               <div className="mb-4">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted/40 h-4 w-4" />
                   <Input
                     placeholder="Buscar en el cerebro..."
                     value={searchTerm}
@@ -219,10 +219,10 @@ export default function DocumentsPage() {
                   {loading ? (
                     <div className="text-center py-8">
                       <Loader2 className="w-6 h-6 animate-spin mx-auto text-blue/50" />
-                      <p className="text-sm text-gray-500 mt-2">Cargando documentos...</p>
+                      <p className="text-sm text-muted/50 mt-2">Cargando documentos...</p>
                     </div>
                   ) : filteredDocuments.length === 0 ? (
-                    <div className="text-center py-8 text-gray-500">
+                    <div className="text-center py-8 text-muted/50">
                       <FileText className="w-12 h-12 mx-auto opacity-50 mb-2" />
                       <p className="text-sm">No se encontraron documentos</p>
                     </div>
@@ -233,7 +233,7 @@ export default function DocumentsPage() {
                         className={`p-3 border rounded-lg cursor-pointer transition-all ${
                           isSourceSelected(doc.id, "document")
                             ? "bg-blue/5 border-blue/30 shadow-sm"
-                            : "hover:bg-gray-50 hover:border-gray-300"
+                            : "hover:bg-muted/5 hover:border-muted/30"
                         }`}
                         onClick={() => toggleSourceSelection(doc.id, "document")}
                       >
@@ -253,13 +253,13 @@ export default function DocumentsPage() {
                             {doc.tags && doc.tags.length > 0 && (
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {doc.tags.slice(0, 2).map((tag, i) => (
-                                  <span key={i} className="text-xs text-gray-500">
+                                  <span key={i} className="text-xs text-muted/50">
                                     #{tag}
                                   </span>
                                 ))}
                               </div>
                             )}
-                            <p className="text-xs text-gray-400 mt-1">{doc.chunk_count} chunks procesados</p>
+                            <p className="text-xs text-muted/40 mt-1">{doc.chunk_count} chunks procesados</p>
                           </div>
                           <FileText className="w-4 h-4 text-blue flex-shrink-0" />
                         </div>
@@ -273,10 +273,10 @@ export default function DocumentsPage() {
                   {loading ? (
                     <div className="text-center py-8">
                       <Loader2 className="w-6 h-6 animate-spin mx-auto text-green" />
-                      <p className="text-sm text-gray-500 mt-2">Cargando biblioteca...</p>
+                      <p className="text-sm text-muted/50 mt-2">Cargando biblioteca...</p>
                     </div>
                   ) : filteredBooks.length === 0 ? (
-                    <div className="text-center py-8 text-gray-500">
+                    <div className="text-center py-8 text-muted/50">
                       <BookOpen className="w-12 h-12 mx-auto opacity-50 mb-2" />
                       <p className="text-sm">No se encontraron libros</p>
                     </div>
@@ -287,20 +287,20 @@ export default function DocumentsPage() {
                         className={`p-3 border rounded-lg cursor-pointer transition-all ${
                           isSourceSelected(book.id, "book")
                             ? "bg-green/5 border-green-300 shadow-sm"
-                            : "hover:bg-gray-50 hover:border-gray-300"
+                            : "hover:bg-muted/5 hover:border-muted/30"
                         }`}
                         onClick={() => toggleSourceSelection(book.id, "book")}
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <p className="font-medium text-sm mb-1">{book.title}</p>
-                            <p className="text-xs text-gray-500 mb-1">{book.author}</p>
+                            <p className="text-xs text-muted/50 mb-1">{book.author}</p>
                             <div className="flex flex-wrap gap-1">
                               <Badge variant="outline" className="text-xs">
                                 {book.category}
                               </Badge>
                               {book.tags?.slice(0, 2).map((tag, i) => (
-                                <span key={i} className="text-xs text-gray-500">
+                                <span key={i} className="text-xs text-muted/50">
                                   #{tag}
                                 </span>
                               ))}
@@ -347,7 +347,7 @@ export default function DocumentsPage() {
               </div>
 
               {selectedSources.length === 0 ? (
-                <div className="flex-1 flex items-center justify-center text-gray-500">
+                <div className="flex-1 flex items-center justify-center text-muted/50">
                   <div className="text-center max-w-md">
                     <Brain className="w-16 h-16 mx-auto mb-4 opacity-50" />
                     <p className="font-medium mb-2 text-lg">Selecciona fuentes para comenzar</p>
@@ -362,7 +362,7 @@ export default function DocumentsPage() {
                   {/* Messages */}
                   <div className="flex-1 overflow-y-auto mb-4 space-y-4">
                     {chatMessages.length === 0 ? (
-                      <div className="text-center text-gray-500 py-8">
+                      <div className="text-center text-muted/50 py-8">
                         <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-50" />
                         <p className="font-medium mb-1">Haz tu primera pregunta</p>
                         <p className="text-sm">El cerebro analizará las fuentes seleccionadas para responderte</p>
@@ -374,7 +374,7 @@ export default function DocumentsPage() {
                             className={`max-w-[80%] p-4 rounded-lg shadow-sm ${
                               msg.role === "user"
                                 ? "bg-gradient-to-r from-blue/50 to-blue text-white"
-                                : "bg-white border border-gray-200 text-gray-900"
+                                : "bg-white border border-muted/20 text-gray-900"
                             }`}
                           >
                             <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.content}</p>
@@ -384,10 +384,10 @@ export default function DocumentsPage() {
                     )}
                     {chatting && (
                       <div className="flex justify-start">
-                        <div className="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
+                        <div className="bg-white border border-muted/20 p-4 rounded-lg shadow-sm">
                           <div className="flex items-center gap-2">
                             <Loader2 className="w-4 h-4 animate-spin text-blue/50" />
-                            <span className="text-sm text-gray-600">Analizando fuentes...</span>
+                            <span className="text-sm text-muted/60">Analizando fuentes...</span>
                           </div>
                         </div>
                       </div>

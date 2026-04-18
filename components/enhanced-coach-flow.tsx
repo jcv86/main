@@ -325,7 +325,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                 onClick={() => handleStageChange(stage.id)}
                 className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
                   currentStage === stage.id
-                    ? "bg-primary/10 text-primary"
+                    ? "bg-purple/10 text-purple"
                     : stage.completed
                       ? "text-green-600"
                       : "text-muted-foreground hover:bg-muted"
@@ -336,7 +336,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                     stage.completed
                       ? "bg-green-100 text-green-600"
                       : currentStage === stage.id
-                        ? "bg-primary text-primary-foreground"
+                        ? "bg-purple text-purple-foreground"
                         : "bg-muted"
                   }`}
                 >
@@ -400,7 +400,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                     >
                       <div
                         className={`max-w-[85%] rounded-[28px] p-3 ${
-                          message.sender === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
+                          message.sender === "user" ? "bg-purple text-purple-foreground" : "bg-muted"
                         }`}
                       >
                         <div className="flex items-start gap-2">
@@ -421,7 +421,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                             <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
                             <p
                               className={`text-[10px] mt-1 ${
-                                message.sender === "user" ? "text-primary-foreground/70" : "text-muted-foreground"
+                                message.sender === "user" ? "text-purple-foreground/70" : "text-muted-foreground"
                               }`}
                             >
                               {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
@@ -471,7 +471,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                           onClick={() => setInputMessage(question)}
                           className="text-left justify-start h-auto py-2 px-3"
                         >
-                          <Lightbulb className="h-3 w-3 mr-2 flex-shrink-0 text-yellow-500" />
+                          <Lightbulb className="h-3 w-3 mr-2 flex-shrink-0 text-orange" />
                           <span className="text-xs truncate">{question}</span>
                         </Button>
                       ))}
@@ -516,7 +516,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Heart className="h-5 w-5 text-red-500" />
+                <Heart className="h-5 w-5 text-red" />
                 Situaciones Identificadas
               </CardTitle>
               <CardDescription>Situaciones reales donde aplicarás lo aprendido</CardDescription>

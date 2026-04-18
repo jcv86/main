@@ -112,7 +112,7 @@ export function A3DifficultyProgression({
                 {pSuccessPercentage}%
               </span>
             </div>
-            <div className="bg-gray-200 rounded-full h-2 mb-4">
+            <div className="bg-muted/20 rounded-full h-2 mb-4">
               <div
                 className={`h-2 rounded-full transition-all ${
                   pSuccessPercentage >= 70 ? "bg-green-600" :
@@ -139,7 +139,7 @@ export function A3DifficultyProgression({
           )}
 
           <div className="bg-blue-50 p-4 rounded-[28px] border border-blue-200">
-            <div className="text-sm text-gray-600 mb-2">Factores considerados:</div>
+            <div className="text-sm text-muted/60 mb-2">Factores considerados:</div>
             <ul className="text-sm text-gray-700 space-y-1">
               <li>• Historial de completación: 85%</li>
               <li>• Nivel actual: {currentConfig.name}</li>
@@ -162,16 +162,16 @@ export function A3DifficultyProgression({
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
-            <div className="p-3 bg-gray-50 rounded">
-              <div className="text-xs text-gray-600">Presión</div>
+            <div className="p-3 bg-muted/5 rounded">
+              <div className="text-xs text-muted/60">Presión</div>
               <div className="text-sm font-medium">{currentConfig.pressure}</div>
             </div>
-            <div className="p-3 bg-gray-50 rounded">
-              <div className="text-xs text-gray-600">Guía</div>
+            <div className="p-3 bg-muted/5 rounded">
+              <div className="text-xs text-muted/60">Guía</div>
               <div className="text-sm font-medium">{currentConfig.guidance}</div>
             </div>
-            <div className="p-3 bg-gray-50 rounded">
-              <div className="text-xs text-gray-600">Feedback</div>
+            <div className="p-3 bg-muted/5 rounded">
+              <div className="text-xs text-muted/60">Feedback</div>
               <div className="text-sm font-medium">{currentConfig.feedbackFrequency}</div>
             </div>
           </div>
@@ -197,16 +197,16 @@ export function A3DifficultyProgression({
             </div>
 
             <div className="grid grid-cols-3 gap-4">
-              <div className="p-3 bg-gray-50 rounded">
-                <div className="text-xs text-gray-600">Presión</div>
+              <div className="p-3 bg-muted/5 rounded">
+                <div className="text-xs text-muted/60">Presión</div>
                 <div className="text-sm font-medium">{nextConfig.pressure}</div>
               </div>
-              <div className="p-3 bg-gray-50 rounded">
-                <div className="text-xs text-gray-600">Guía</div>
+              <div className="p-3 bg-muted/5 rounded">
+                <div className="text-xs text-muted/60">Guía</div>
                 <div className="text-sm font-medium">{nextConfig.guidance}</div>
               </div>
-              <div className="p-3 bg-gray-50 rounded">
-                <div className="text-xs text-gray-600">Feedback</div>
+              <div className="p-3 bg-muted/5 rounded">
+                <div className="text-xs text-muted/60">Feedback</div>
                 <div className="text-sm font-medium">{nextConfig.feedbackFrequency}</div>
               </div>
             </div>
@@ -229,14 +229,14 @@ export function A3DifficultyProgression({
           <p className="text-sm text-gray-700 italic">
             "En A3 no se avanza por insistir. Se avanza por sostener."
           </p>
-          <p className="text-xs text-gray-600 mt-2">
+          <p className="text-xs text-muted/60 mt-2">
             Cantidad + Calidad + Estabilidad. No es solo completar, es completar consistentemente con desempeño.
           </p>
         </CardContent>
       </Card>
 
       {/* Frustration Protection */}
-      <Alert className="border-red-300 bg-red-50">
+      <Alert className="border-red-300 bg-red/5">
         <AlertTriangle className="h-4 w-4 text-red-600" />
         <AlertDescription className="text-red-800">
           <div className="font-medium mb-1">Protección Contra Frustración</div>

@@ -34,8 +34,8 @@ export function Leaderboard() {
   }
 
   const getMedalColor = (rank: number) => {
-    if (rank === 1) return 'bg-yellow-500'
-    if (rank === 2) return 'bg-gray-400'
+    if (rank === 1) return 'bg-orange'
+    if (rank === 2) return 'bg-muted/40'
     if (rank === 3) return 'bg-orange-600'
     return 'bg-slate-300 dark:bg-slate-600'
   }
@@ -75,7 +75,7 @@ export function Leaderboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardContent className="pt-6 text-center">
-            <Trophy className="w-8 h-8 mx-auto mb-2 text-yellow-500" />
+            <Trophy className="w-8 h-8 mx-auto mb-2 text-orange" />
             <p className="text-sm text-muted-foreground">Tu Posición</p>
             <p className="text-3xl font-bold">#47</p>
           </CardContent>

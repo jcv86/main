@@ -231,10 +231,10 @@ export default function RIASECTest() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando Despega Rumbo...</p>
+          <p className="text-muted/60">Cargando Despega Rumbo...</p>
         </div>
       </div>
     )
@@ -242,9 +242,9 @@ export default function RIASECTest() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600">Redirecting...</p>
+          <p className="text-muted/60">Redirecting...</p>
         </div>
       </div>
     )
@@ -291,7 +291,7 @@ export default function RIASECTest() {
   const question = riasecQuestions[currentQuestion]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/5">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -311,11 +311,11 @@ export default function RIASECTest() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">Despega Rumbo</h2>
-                <p className="text-gray-600">
+                <p className="text-muted/60">
                   Question {currentQuestion + 1} of {riasecQuestions.length}
                 </p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-muted/60">
                 <Clock className="h-4 w-4" />
                 <span>~15 minutes</span>
               </div>
@@ -342,7 +342,7 @@ export default function RIASECTest() {
             >
               <div className="space-y-3">
                 {interestOptions.map((option) => (
-                  <div key={option.value} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50">
+                  <div key={option.value} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-muted/5">
                     <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} />
                     <Label htmlFor={`option-${option.value}`} className="flex-1 cursor-pointer">
                       {option.label}
@@ -369,7 +369,7 @@ export default function RIASECTest() {
             <Button
               onClick={submitTest}
               disabled={!currentAnswer || isSubmitting}
-              className="bg-gray-900 hover:bg-gray-800"
+              className="bg-muted/90 hover:bg-gray-800"
             >
               {isSubmitting ? (
                 <>
@@ -387,7 +387,7 @@ export default function RIASECTest() {
             <Button
               onClick={() => setCurrentQuestion(Math.min(riasecQuestions.length - 1, currentQuestion + 1))}
               disabled={!currentAnswer}
-              className="bg-gray-900 hover:bg-gray-800"
+              className="bg-muted/90 hover:bg-gray-800"
             >
               Next
               <ArrowRight className="h-4 w-4 ml-2" />
@@ -403,15 +403,15 @@ export default function RIASECTest() {
                 key={index}
                 className={`w-2 h-2 rounded-full ${
                   index <= currentQuestion
-                    ? "bg-gray-900"
+                    ? "bg-muted/90"
                     : answers[riasecQuestions[index].id]
-                      ? "bg-gray-300"
-                      : "bg-gray-200"
+                      ? "bg-muted/30"
+                      : "bg-muted/20"
                 }`}
               />
             ))}
           </div>
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="text-sm text-muted/60 mt-2">
             {Object.keys(answers).length} of {riasecQuestions.length} questions answered
           </p>
         </div>
@@ -440,7 +440,7 @@ export default function RIASECTest() {
                 <h4 className="font-semibold text-orange-900 mb-1">Emprendedor (E)</h4>
                 <p className="text-orange-700">Leading, persuading, and managing others</p>
               </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
+              <div className="p-3 bg-muted/5 rounded-lg">
                 <h4 className="font-semibold text-gray-900 mb-1">Convencional (C)</h4>
                 <p className="text-gray-700">Organizing, data management, and detail work</p>
               </div>

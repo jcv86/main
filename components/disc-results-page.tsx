@@ -39,7 +39,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
       name: 'Catalizador - Influyente',
       emoji: '✨',
       color: 'from-yellow-500 to-orange-400',
-      tagColor: 'bg-yellow-500',
+      tagColor: 'bg-orange',
       description: 'Eres entusiasta, comunicativo y motivador. Te encanta conectar con las personas y contagiar tu energía positiva.',
       whatItMeans: 'Te destacas por tu capacidad de influir y motivar a otros. Eres alguien que genera entusiasmo y hace que las personas se sientan involucradas.',
     },
@@ -161,7 +161,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {(['D', 'I', 'S', 'C'] as const).map((key) => {
             const names: Record<string, string> = { D: 'Impulsor', I: 'Catalizador', S: 'Estabilizador', C: 'Arquitecto' }
-            const colors: Record<string, string> = { D: 'bg-red-600', I: 'bg-yellow-500', S: 'bg-green-600', C: 'bg-blue-600' }
+            const colors: Record<string, string> = { D: 'bg-red-600', I: 'bg-orange', S: 'bg-green-600', C: 'bg-blue-600' }
             const isActive = profile === key
 
             return (

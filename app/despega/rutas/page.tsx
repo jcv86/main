@@ -17,7 +17,7 @@ const RUTAS = [
     name: "Ruta Energía",
     description: "Optimiza tu vitalidad física y mental",
     icon: "⚡",
-    color: "bg-yellow-500",
+    color: "bg-orange",
     lightColor: "bg-yellow-100",
     textColor: "text-yellow-800",
     camino: "persona",
@@ -190,7 +190,7 @@ export default function RutasPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple" />
       </div>
     )
   }
@@ -349,7 +349,7 @@ export default function RutasPage() {
                             <Badge variant="outline" className="capitalize">
                               {scenario.nivel}
                             </Badge>
-                            <Badge className="bg-primary">
+                            <Badge className="bg-purple">
                               +{scenario.puntos}
                             </Badge>
                           </div>

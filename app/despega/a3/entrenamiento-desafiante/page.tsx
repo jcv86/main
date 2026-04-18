@@ -295,7 +295,7 @@ export default function ChallensingTrainingPage() {
                         {!isRecording ? (
                           <Button
                             onClick={startRecording}
-                            className="flex-1 bg-red-600 hover:bg-red-700 gap-2"
+                            className="flex-1 bg-red-600 hover:bg-red gap-2"
                           >
                             <Mic className="w-4 h-4" />
                             Comenzar Grabación

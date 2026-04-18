@@ -143,7 +143,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
       case "low":
         return "bg-green-100 text-green-800"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-muted/10 text-gray-800"
     }
   }
 
@@ -152,11 +152,11 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
       case "fácil":
         return <CheckCircle className="h-4 w-4 text-green-500" />
       case "moderado":
-        return <AlertCircle className="h-4 w-4 text-yellow-500" />
+        return <AlertCircle className="h-4 w-4 text-orange" />
       case "difícil":
-        return <Target className="h-4 w-4 text-red-500" />
+        return <Target className="h-4 w-4 text-red" />
       default:
-        return <CheckCircle className="h-4 w-4 text-gray-500" />
+        return <CheckCircle className="h-4 w-4 text-muted/50" />
     }
   }
 
@@ -197,9 +197,9 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
         <CardContent>
           <div className="space-y-4">
             <div className="animate-pulse">
-              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
-              <div className="h-20 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-muted/20 rounded w-3/4 mb-2"></div>
+              <div className="h-4 bg-muted/20 rounded w-1/2 mb-4"></div>
+              <div className="h-20 bg-muted/20 rounded"></div>
             </div>
           </div>
         </CardContent>
@@ -235,8 +235,8 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                           {getSourceBadge(insight.source)}
                           <Badge className={getPriorityColor(insight.priority)}>{insight.priority}</Badge>
                           <div className="flex items-center gap-1">
-                            <Star className="h-3 w-3 text-yellow-500" />
-                            <span className="text-xs text-gray-600">{Math.round(insight.confidence * 100)}%</span>
+                            <Star className="h-3 w-3 text-orange" />
+                            <span className="text-xs text-muted/60">{Math.round(insight.confidence * 100)}%</span>
                           </div>
                         </div>
                       </div>
@@ -251,10 +251,10 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                       <p className="text-sm text-gray-700">{insight.description}</p>
                       {insight.actionableSteps && insight.actionableSteps.length > 0 && (
                         <div className="mt-3">
-                          <p className="text-xs font-semibold text-gray-600 mb-1">Pasos Accionables:</p>
+                          <p className="text-xs font-semibold text-muted/60 mb-1">Pasos Accionables:</p>
                           <ul className="space-y-1">
                             {insight.actionableSteps.map((step: string, i: number) => (
-                              <li key={i} className="text-xs text-gray-600 flex items-start gap-1">
+                              <li key={i} className="text-xs text-muted/60 flex items-start gap-1">
                                 <CheckCircle className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
                                 {step}
                               </li>
@@ -263,7 +263,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                         </div>
                       )}
                       <Progress value={insight.confidence * 100} className="mt-2 h-2" />
-                      <p className="text-xs text-gray-500 mt-1">Fuente: {insight.reasoningSource}</p>
+                      <p className="text-xs text-muted/50 mt-1">Fuente: {insight.reasoningSource}</p>
                     </CardContent>
                   </Card>
                 ))}
@@ -279,7 +279,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                     <CardHeader className="pb-2">
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-sm font-medium flex items-center gap-2">
-                          <Lightbulb className="h-4 w-4 text-yellow-500" />
+                          <Lightbulb className="h-4 w-4 text-orange" />
                           {rec.title}
                         </CardTitle>
                         <div className="flex items-center gap-2">

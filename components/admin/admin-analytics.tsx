@@ -31,7 +31,7 @@ export function AdminAnalytics() {
           <CardContent className="pt-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-primary" />
+                <Users className="w-4 h-4 text-purple" />
                 <p className="text-xs text-muted-foreground">Usuarios Activos</p>
               </div>
               <p className="text-3xl font-bold">1,234</p>
@@ -44,7 +44,7 @@ export function AdminAnalytics() {
           <CardContent className="pt-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-primary" />
+                <BookOpen className="w-4 h-4 text-purple" />
                 <p className="text-xs text-muted-foreground">Artículos Leídos</p>
               </div>
               <p className="text-3xl font-bold">5,847</p>
@@ -57,7 +57,7 @@ export function AdminAnalytics() {
           <CardContent className="pt-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-primary" />
+                <CheckCircle className="w-4 h-4 text-purple" />
                 <p className="text-xs text-muted-foreground">Pruebas Completadas</p>
               </div>
               <p className="text-3xl font-bold">892</p>
@@ -70,7 +70,7 @@ export function AdminAnalytics() {
           <CardContent className="pt-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-primary" />
+                <TrendingUp className="w-4 h-4 text-purple" />
                 <p className="text-xs text-muted-foreground">Puntos Distribuidos</p>
               </div>
               <p className="text-3xl font-bold">12,450</p>

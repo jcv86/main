@@ -511,42 +511,42 @@ export default function CVATSPage() {
           <Button
             onClick={() => setFormat('ats')}
             variant={format === 'ats' ? 'default' : 'outline'}
-            className={format === 'ats' ? 'bg-primary' : ''}
+            className={format === 'ats' ? 'bg-purple' : ''}
           >
             Formato ATS
           </Button>
           <Button
             onClick={() => setFormat('standard')}
             variant={format === 'standard' ? 'default' : 'outline'}
-            className={format === 'standard' ? 'bg-primary' : ''}
+            className={format === 'standard' ? 'bg-purple' : ''}
           >
             Estándar
           </Button>
           <Button
             onClick={() => setFormat('creative')}
             variant={format === 'creative' ? 'default' : 'outline'}
-            className={format === 'creative' ? 'bg-primary' : ''}
+            className={format === 'creative' ? 'bg-purple' : ''}
           >
             Creativo
           </Button>
           <Button
             onClick={() => setFormat('modern')}
             variant={format === 'modern' ? 'default' : 'outline'}
-            className={format === 'modern' ? 'bg-primary' : ''}
+            className={format === 'modern' ? 'bg-purple' : ''}
           >
             Moderno
           </Button>
           <Button
             onClick={() => setFormat('linkedin')}
             variant={format === 'linkedin' ? 'default' : 'outline'}
-            className={format === 'linkedin' ? 'bg-primary' : ''}
+            className={format === 'linkedin' ? 'bg-purple' : ''}
           >
             LinkedIn
           </Button>
           <Button
             onClick={() => setFormat('executive')}
             variant={format === 'executive' ? 'default' : 'outline'}
-            className={format === 'executive' ? 'bg-primary' : ''}
+            className={format === 'executive' ? 'bg-purple' : ''}
           >
             Ejecutivo
           </Button>
@@ -579,7 +579,7 @@ export default function CVATSPage() {
 
             {/* Action Buttons */}
             <div className="flex gap-3 flex-wrap">
-              <Button className="bg-primary hover:bg-primary/90">
+              <Button className="bg-purple hover:bg-purple/90">
                 <Download className="w-4 h-4 mr-2" />
                 Descargar PDF
               </Button>

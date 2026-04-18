@@ -101,7 +101,7 @@ export function AdvancedAnalyticsReporting() {
                 <p className={`text-3xl font-bold ${analytics.improvement_trend >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   {analytics.improvement_trend >= 0 ? '+' : ''}{analytics.improvement_trend}%
                 </p>
-                <p className="text-xs text-gray-500 mt-1">vs. período anterior</p>
+                <p className="text-xs text-muted/50 mt-1">vs. período anterior</p>
               </CardContent>
             </Card>
 
@@ -111,7 +111,7 @@ export function AdvancedAnalyticsReporting() {
               </CardHeader>
               <CardContent>
                 <p className="text-3xl font-bold text-blue-600">{analytics.consistency_score}%</p>
-                <p className="text-xs text-gray-500 mt-1">Variación mínima en sesiones</p>
+                <p className="text-xs text-muted/50 mt-1">Variación mínima en sesiones</p>
               </CardContent>
             </Card>
 
@@ -121,7 +121,7 @@ export function AdvancedAnalyticsReporting() {
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold">{analytics.strongest_area}</p>
-                <p className="text-xs text-gray-500 mt-1">{analytics.strongest_score}/100</p>
+                <p className="text-xs text-muted/50 mt-1">{analytics.strongest_score}/100</p>
               </CardContent>
             </Card>
           </div>
@@ -174,19 +174,19 @@ export function AdvancedAnalyticsReporting() {
                       <span className="text-sm font-medium">{item.metric}</span>
                       <div className="flex gap-2 text-sm">
                         <span className="text-blue-600 font-semibold">Tu: {item.your_score}%</span>
-                        <span className="text-gray-500">Benchmark: {item.benchmark}%</span>
+                        <span className="text-muted/50">Benchmark: {item.benchmark}%</span>
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="flex-1 h-2 bg-muted/20 rounded-full overflow-hidden">
                         <div
                           className="bg-blue-600 h-full rounded-full"
                           style={{ width: `${Math.min(item.your_score, 100)}%` }}
                         />
                       </div>
-                      <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden opacity-50">
+                      <div className="flex-1 h-2 bg-muted/20 rounded-full overflow-hidden opacity-50">
                         <div
-                          className="bg-gray-600 h-full rounded-full"
+                          className="bg-muted/60 h-full rounded-full"
                           style={{ width: `${Math.min(item.benchmark, 100)}%` }}
                         />
                       </div>
@@ -254,7 +254,7 @@ export function AdvancedAnalyticsReporting() {
                       <span className="text-2xl">{achievement.icon}</span>
                       <div>
                         <p className="font-medium text-sm">{achievement.title}</p>
-                        <p className="text-xs text-gray-600">{achievement.description}</p>
+                        <p className="text-xs text-muted/60">{achievement.description}</p>
                       </div>
                     </div>
                   ))}
@@ -275,9 +275,9 @@ export function AdvancedAnalyticsReporting() {
                     <div key={goal.id}>
                       <div className="flex justify-between mb-1">
                         <p className="text-sm font-medium">{goal.title}</p>
-                        <span className="text-xs text-gray-500">{goal.progress}%</span>
+                        <span className="text-xs text-muted/50">{goal.progress}%</span>
                       </div>
-                      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-2 bg-muted/20 rounded-full overflow-hidden">
                         <div
                           className="bg-blue-600 h-full rounded-full transition-all"
                           style={{ width: `${goal.progress}%` }}

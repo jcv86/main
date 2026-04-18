@@ -222,8 +222,8 @@ export default function A1ReportPage() {
       <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple/50 to-blue">
         <ASectionPart title="Completar Evaluación" icon={<Zap />}>
           <div className="space-y-4">
-            <div className="p-6 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-900/50 rounded-lg">
-              <p className="text-red-700 dark:text-red-300 font-semibold text-lg">{error}</p>
+            <div className="p-6 bg-red/5 dark:bg-red-900/20 border-2 border-red/20 dark:border-red-900/50 rounded-lg">
+              <p className="text-red dark:text-red-300 font-semibold text-lg">{error}</p>
               <p className="text-red-600 dark:text-red-400 text-sm mt-2">
                 Por favor completa la evaluación de Perfil Cerebral para ver tus resultados. El proceso toma aproximadamente 10-15 minutos.
               </p>

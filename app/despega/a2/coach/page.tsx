@@ -131,7 +131,7 @@ export default function A2ChatCoachPage() {
             <div className="grid md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <div className="flex items-start gap-3">
-                  <Lightbulb className="w-5 h-5 text-yellow-500 mt-0.5 flex-shrink-0" />
+                  <Lightbulb className="w-5 h-5 text-orange mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium text-muted/90 dark:text-muted/5">Profundización</p>
                     <p className="text-sm text-muted/60 dark:text-muted/40">

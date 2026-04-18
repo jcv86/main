@@ -127,7 +127,7 @@ export default function A1PatternsPage() {
             <h3 className="text-2xl font-bold text-white mb-6">Desafíos a Considerar</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {details.challenges.map((challenge, idx) => (
-                <Card key={idx} className="bg-gradient-to-br from-yellow-900/40 to-orange/20 border-yellow-500/30 border-2">
+                <Card key={idx} className="bg-gradient-to-br from-yellow-900/40 to-orange/20 border-orange/30 border-2">
                   <CardContent className="pt-6">
                     <p className="text-yellow-300 font-semibold">⚠️ {challenge}</p>
                   </CardContent>

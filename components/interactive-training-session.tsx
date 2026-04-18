@@ -197,7 +197,7 @@ export function InteractiveTrainingSession({
             </div>
 
             {error && (
-              <Alert className="bg-red-950/20 border-red-500/30">
+              <Alert className="bg-red-950/20 border-red/50/30">
                 <AlertDescription className="text-red-300">{error}</AlertDescription>
               </Alert>
             )}
@@ -219,7 +219,7 @@ export function InteractiveTrainingSession({
           <CardHeader>
             <CardTitle className="text-white flex items-center justify-between">
               <span className="flex items-center gap-2">
-                <span className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                <span className="w-3 h-3 bg-red/50 rounded-full animate-pulse" />
                 GRABANDO
               </span>
               <Badge className="bg-red-600">EN VIVO</Badge>
@@ -235,7 +235,7 @@ export function InteractiveTrainingSession({
                 className="w-full h-full object-cover mirror"
                 style={{ transform: 'scaleX(-1)' }}
               />
-              <div className="absolute inset-0 border-2 border-red-500/50 rounded-lg pointer-events-none" />
+              <div className="absolute inset-0 border-2 border-red/50/50 rounded-lg pointer-events-none" />
             </div>
 
             {/* Pregunta visible mientras grabas */}
@@ -247,7 +247,7 @@ export function InteractiveTrainingSession({
             <div className="flex gap-4">
               <Button
                 onClick={handleStopRecording}
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white h-12"
+                className="flex-1 bg-red-600 hover:bg-red text-white h-12"
                 disabled={!isRecording}
               >
                 <StopCircle className="w-5 h-5 mr-2" />

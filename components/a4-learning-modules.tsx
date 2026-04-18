@@ -41,7 +41,7 @@ const getNivelColor = (nivel: string) => {
     "intermedio": "bg-blue-100 text-blue-800",
     "avanzado": "bg-purple-100 text-purple-800",
   }
-  return colors[nivel] || "bg-gray-100"
+  return colors[nivel] || "bg-muted/10"
 }
 
 export function A4LearningModules({ modules, onCompleteModule }: A4LearningModulesProps) {
@@ -161,7 +161,7 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
                             <Clock className="w-3 h-3 mr-1" />
                             {module.duracion_minutos} min
                           </Badge>
-                          <Badge className="bg-primary text-xs">
+                          <Badge className="bg-purple text-xs">
                             <Zap className="w-3 h-3 mr-1" />
                             +{module.puntos} pts
                           </Badge>

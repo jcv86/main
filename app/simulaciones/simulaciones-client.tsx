@@ -82,7 +82,7 @@ export default function EntrenamientoEntrevistasClient() {
       case "difícil":
         return "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
       default:
-        return "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+        return "bg-muted/10 dark:bg-gray-800 text-gray-800 dark:text-muted/20"
     }
   }
 

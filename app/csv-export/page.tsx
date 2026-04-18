@@ -105,11 +105,11 @@ export default function CSVExportPage() {
   const bookCount = csvData.split("\n").length - 1
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-muted/5 p-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">📚 CSV Export - Biblioteca Completa</h1>
-          <p className="text-xl text-gray-600">{bookCount} libros de desarrollo profesional listos para descargar</p>
+          <p className="text-xl text-muted/60">{bookCount} libros de desarrollo profesional listos para descargar</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3 mb-8">
@@ -185,7 +185,7 @@ export default function CSVExportPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-gray-900 text-green-400 p-6 rounded-lg overflow-x-auto max-h-96 overflow-y-auto">
+            <div className="bg-muted/90 text-green-400 p-6 rounded-lg overflow-x-auto max-h-96 overflow-y-auto">
               <pre className="text-xs font-mono whitespace-pre-wrap">{csvData}</pre>
             </div>
             <div className="mt-4 p-4 bg-blue/5 rounded-lg">

@@ -32,19 +32,19 @@ export default function OnePagerClient() {
             <div className="flex flex-wrap gap-4 text-sm">
               <div className="flex items-center gap-2">
                 <span className="font-bold text-gray-700">Lanzamiento:</span>
-                <span className="text-gray-600">Q1 2026</span>
+                <span className="text-muted/60">Q1 2026</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-gray-700">Mercado:</span>
-                <span className="text-gray-600">Chile → LATAM</span>
+                <span className="text-muted/60">Chile → LATAM</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-gray-700">Fundador:</span>
-                <span className="text-gray-600">Joaquin Covarrubias</span>
+                <span className="text-muted/60">Joaquin Covarrubias</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-gray-700">CTO:</span>
-                <span className="text-gray-600">Travis Comber</span>
+                <span className="text-muted/60">Travis Comber</span>
               </div>
             </div>
           </div>
@@ -55,7 +55,7 @@ export default function OnePagerClient() {
             <div className="space-y-6">
               {/* The Problem */}
               <section>
-                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-red-500 pl-3">El Problema</h2>
+                <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-red/50 pl-3">El Problema</h2>
                 <ul className="space-y-2 text-sm text-gray-700">
                   <li>
                     • <strong>Costoso:</strong> La orientación profesional cuesta $100-300/sesión, inaccesible para la
@@ -85,17 +85,17 @@ export default function OnePagerClient() {
                     <div>
                       <div className="text-2xl mb-1">🧠</div>
                       <div className="font-bold text-gray-900">Cerebro AI</div>
-                      <div className="text-gray-600">GPT-4 Coach</div>
+                      <div className="text-muted/60">GPT-4 Coach</div>
                     </div>
                     <div>
                       <div className="text-2xl mb-1">📊</div>
                       <div className="font-bold text-gray-900">6 Pruebas</div>
-                      <div className="text-gray-600">Psicométricas</div>
+                      <div className="text-muted/60">Psicométricas</div>
                     </div>
                     <div>
                       <div className="text-2xl mb-1">📚</div>
                       <div className="font-bold text-gray-900">120+ Libros</div>
-                      <div className="text-gray-600">Profesionales</div>
+                      <div className="text-muted/60">Profesionales</div>
                     </div>
                   </div>
                 </div>
@@ -132,21 +132,21 @@ export default function OnePagerClient() {
               <section>
                 <h2 className="text-xl font-bold mb-3 text-gray-900 border-l-4 border-green pl-3">Tecnología</h2>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="bg-gray-50 rounded p-2 border border-gray-200">
+                  <div className="bg-muted/5 rounded p-2 border border-muted/20">
                     <div className="font-bold text-gray-900 mb-1">Frontend</div>
-                    <div className="text-gray-600">Next.js 15, React 19, TypeScript, Tailwind</div>
+                    <div className="text-muted/60">Next.js 15, React 19, TypeScript, Tailwind</div>
                   </div>
-                  <div className="bg-gray-50 rounded p-2 border border-gray-200">
+                  <div className="bg-muted/5 rounded p-2 border border-muted/20">
                     <div className="font-bold text-gray-900 mb-1">Backend</div>
-                    <div className="text-gray-600">Node.js, PostgreSQL, Supabase</div>
+                    <div className="text-muted/60">Node.js, PostgreSQL, Supabase</div>
                   </div>
-                  <div className="bg-gray-50 rounded p-2 border border-gray-200">
+                  <div className="bg-muted/5 rounded p-2 border border-muted/20">
                     <div className="font-bold text-gray-900 mb-1">IA</div>
-                    <div className="text-gray-600">OpenAI GPT-4, pgvector search</div>
+                    <div className="text-muted/60">OpenAI GPT-4, pgvector search</div>
                   </div>
-                  <div className="bg-gray-50 rounded p-2 border border-gray-200">
+                  <div className="bg-muted/5 rounded p-2 border border-muted/20">
                     <div className="font-bold text-gray-900 mb-1">Infraestructura</div>
-                    <div className="text-gray-600">Vercel Edge, Global CDN</div>
+                    <div className="text-muted/60">Vercel Edge, Global CDN</div>
                   </div>
                 </div>
               </section>
@@ -162,7 +162,7 @@ export default function OnePagerClient() {
                 <div className="bg-green/5 rounded-lg p-4 border border-emerald-100 mb-3">
                   <div className="text-center mb-3">
                     <div className="text-3xl font-bold text-green">$65B+</div>
-                    <div className="text-xs text-gray-600">Mercado de Desarrollo Profesional en LATAM</div>
+                    <div className="text-xs text-muted/60">Mercado de Desarrollo Profesional en LATAM</div>
                   </div>
                   <div className="grid grid-cols-2 gap-3 text-xs text-gray-700">
                     <div>
@@ -190,17 +190,17 @@ export default function OnePagerClient() {
                   <div className="bg-purple/5 rounded p-3 border border-purple/10">
                     <div className="font-bold text-gray-900 mb-1">Freemium</div>
                     <div className="text-2xl font-bold text-purple mb-1">$0</div>
-                    <div className="text-gray-600">Todas las pruebas + biblioteca + IA básica</div>
+                    <div className="text-muted/60">Todas las pruebas + biblioteca + IA básica</div>
                   </div>
                   <div className="bg-blue/5 rounded p-3 border border-blue/10">
                     <div className="font-bold text-gray-900 mb-1">Premium</div>
                     <div className="text-2xl font-bold text-blue mb-1">$29/mes</div>
-                    <div className="text-gray-600">IA ilimitada + análisis avanzados</div>
+                    <div className="text-muted/60">IA ilimitada + análisis avanzados</div>
                   </div>
                   <div className="bg-green/5 rounded p-3 border border-emerald-100">
                     <div className="font-bold text-gray-900 mb-1">Enterprise</div>
                     <div className="text-2xl font-bold text-green mb-1">Personalizado</div>
-                    <div className="text-gray-600">Tableros de equipo + integración con HR</div>
+                    <div className="text-muted/60">Tableros de equipo + integración con HR</div>
                   </div>
                 </div>
               </section>
@@ -263,21 +263,21 @@ export default function OnePagerClient() {
                   Métricas de Plataforma
                 </h2>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="bg-gray-50 rounded p-2 border border-gray-200">
+                  <div className="bg-muted/5 rounded p-2 border border-muted/20">
                     <div className="font-bold text-gray-900">185 Tablas de Base de Datos</div>
-                    <div className="text-gray-600">Arquitectura de datos completa</div>
+                    <div className="text-muted/60">Arquitectura de datos completa</div>
                   </div>
-                  <div className="bg-gray-50 rounded p-2 border border-gray-200">
+                  <div className="bg-muted/5 rounded p-2 border border-muted/20">
                     <div className="font-bold text-gray-900">~60% Cobertura RAG</div>
-                    <div className="text-gray-600">Consultas de búsqueda semántica</div>
+                    <div className="text-muted/60">Consultas de búsqueda semántica</div>
                   </div>
-                  <div className="bg-gray-50 rounded p-2 border border-gray-200">
+                  <div className="bg-muted/5 rounded p-2 border border-muted/20">
                     <div className="font-bold text-gray-900">GDPR Compliant</div>
-                    <div className="text-gray-600">Protección completa de datos</div>
+                    <div className="text-muted/60">Protección completa de datos</div>
                   </div>
-                  <div className="bg-gray-50 rounded p-2 border border-gray-200">
+                  <div className="bg-muted/5 rounded p-2 border border-muted/20">
                     <div className="font-bold text-gray-900">15+ Sistemas de Administración</div>
-                    <div className="text-gray-600">Monitoreo completo</div>
+                    <div className="text-muted/60">Monitoreo completo</div>
                   </div>
                 </div>
               </section>
@@ -285,7 +285,7 @@ export default function OnePagerClient() {
           </div>
 
           {/* Bottom Section - Full Width */}
-          <div className="border-t-2 border-gray-200 pt-6">
+          <div className="border-t-2 border-muted/20 pt-6">
             <div className="grid md:grid-cols-3 gap-6">
               {/* Team */}
               <section>
@@ -294,14 +294,14 @@ export default function OnePagerClient() {
                   <div>
                     <div className="font-bold text-gray-900">Joaquin Covarrubias</div>
                     <div className="text-purple text-xs">Fundador & CEO</div>
-                    <div className="text-gray-600 text-xs">
+                    <div className="text-muted/60 text-xs">
                       Estrategia de negocio, investigación de mercado, financiamiento
                     </div>
                   </div>
                   <div>
                     <div className="font-bold text-gray-900">Travis Comber</div>
                     <div className="text-blue text-xs">CTO & Desarrollador Líder</div>
-                    <div className="text-gray-600 text-xs">Desarrollo completo de la plataforma desde cero</div>
+                    <div className="text-muted/60 text-xs">Desarrollo completo de la plataforma desde cero</div>
                   </div>
                 </div>
               </section>
@@ -319,7 +319,7 @@ export default function OnePagerClient() {
                   <div>
                     <strong>Ubicación:</strong> Santiago, Chile
                   </div>
-                  <div className="text-xs text-gray-600 mt-3">
+                  <div className="text-xs text-muted/60 mt-3">
                     Para consultas de inversores, whitepaper técnico o demo de producto, por favor contacte a Joaquin
                     Covarrubias.
                   </div>
@@ -331,23 +331,23 @@ export default function OnePagerClient() {
                 <h2 className="text-lg font-bold mb-3 text-gray-900">Estadísticas Rápidas</h2>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Estado de la Plataforma:</span>
+                    <span className="text-muted/60">Estado de la Plataforma:</span>
                     <span className="font-bold text-green">✓ Completo</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Objetivo de Lanzamiento:</span>
+                    <span className="text-muted/60">Objetivo de Lanzamiento:</span>
                     <span className="font-bold text-purple">Q1 2026</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Mercado Objetivo:</span>
+                    <span className="text-muted/60">Mercado Objetivo:</span>
                     <span className="font-bold text-gray-900">9.5M+ pros</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Modelo de Ingresos:</span>
+                    <span className="text-muted/60">Modelo de Ingresos:</span>
                     <span className="font-bold text-gray-900">B2C + B2B</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Objetivo de 12 Meses:</span>
+                    <span className="text-muted/60">Objetivo de 12 Meses:</span>
                     <span className="font-bold text-green">$500K ARR</span>
                   </div>
                 </div>
@@ -356,7 +356,7 @@ export default function OnePagerClient() {
           </div>
 
           {/* Footer */}
-          <div className="mt-6 pt-4 border-t border-gray-200 text-center text-xs text-gray-600">
+          <div className="mt-6 pt-4 border-t border-muted/20 text-center text-xs text-muted/60">
             <p>
               <strong>Despega Tu Carrera</strong> - Democratizando el Desarrollo Profesional en América Latina
             </p>

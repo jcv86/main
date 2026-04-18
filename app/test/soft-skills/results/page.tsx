@@ -140,10 +140,10 @@ export default function SoftSkillsResults() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-muted/5">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando resultados...</p>
+          <p className="text-muted/60">Cargando resultados...</p>
         </div>
       </div>
     )
@@ -151,12 +151,12 @@ export default function SoftSkillsResults() {
 
   if (!testResult) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className="min-h-screen bg-muted/5 py-8">
         <div className="max-w-7xl mx-auto px-4">
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-2">Resultados: Competencias Blandas Despega</h1>
-            <p className="text-xl text-gray-600">No se encontraron resultados para esta evaluación.</p>
+            <p className="text-xl text-muted/60">No se encontraron resultados para esta evaluación.</p>
           </div>
         </div>
       </div>
@@ -227,7 +227,7 @@ export default function SoftSkillsResults() {
         {/* Title */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Resultados: Competencias Blandas Despega</h1>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg text-muted/60 max-w-3xl mx-auto">
             Tu perfil completo de competencias interpersonales y profesionales
           </p>
         </div>
@@ -321,10 +321,10 @@ export default function SoftSkillsResults() {
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
-            <Card className="border-2 border-primary/20 bg-gradient-to-br from-primary/5 via-background to-background">
+            <Card className="border-2 border-purple/20 bg-gradient-to-br from-primary/5 via-background to-background">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Sparkles className="h-6 w-6 text-primary" />
+                  <Sparkles className="h-6 w-6 text-purple" />
                   Resumen Ejecutivo Integral DTC
                 </CardTitle>
                 <CardDescription>
@@ -335,7 +335,7 @@ export default function SoftSkillsResults() {
                 {/* Foto 360° del Perfil */}
                 <div className="bg-muted/50 rounded-lg p-6 space-y-4">
                   <h3 className="font-semibold text-lg flex items-center gap-2">
-                    <Target className="h-5 w-5 text-primary" />
+                    <Target className="h-5 w-5 text-purple" />
                     Tu Perfil de Competencias
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
@@ -367,7 +367,7 @@ export default function SoftSkillsResults() {
                 {/* Top 5 Ideas Clave */}
                 <div className="space-y-3">
                   <h3 className="font-semibold text-lg flex items-center gap-2">
-                    <Lightbulb className="h-5 w-5 text-primary" />5 Ideas Clave sobre tus Competencias
+                    <Lightbulb className="h-5 w-5 text-purple" />5 Ideas Clave sobre tus Competencias
                   </h3>
                   <div className="space-y-2">
                     <div className="flex gap-3 items-start">
@@ -423,7 +423,7 @@ export default function SoftSkillsResults() {
                 {/* Mapa de Impacto */}
                 <div className="space-y-3">
                   <h3 className="font-semibold text-lg flex items-center gap-2">
-                    <MapPin className="h-5 w-5 text-primary" />
+                    <MapPin className="h-5 w-5 text-purple" />
                     Mapa de Impacto en tu Vida
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
@@ -472,7 +472,7 @@ export default function SoftSkillsResults() {
                 {/* 3 Movimientos Clave para 90 días */}
                 <div className="space-y-3">
                   <h3 className="font-semibold text-lg flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-primary" />3 Movimientos Clave para los Próximos 90 Días
+                    <TrendingUp className="h-5 w-5 text-purple" />3 Movimientos Clave para los Próximos 90 Días
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
                     <Card className="border-l-4 border-l-blue-500">
@@ -512,7 +512,7 @@ export default function SoftSkillsResults() {
                   </div>
                 </div>
 
-                <Alert className="bg-primary/5 border-primary/20">
+                <Alert className="bg-purple/5 border-purple/20">
                   <Sparkles className="h-4 w-4" />
                   <AlertTitle>Recuerda el enfoque DTC</AlertTitle>
                   <AlertDescription>
@@ -1024,7 +1024,7 @@ export default function SoftSkillsResults() {
                       <div className="inline-block bg-purple text-white px-6 py-3 rounded-full font-bold text-lg">
                         Soft Skills (Competencias Entrenables)
                       </div>
-                      <p className="text-sm text-gray-600 mt-2">Habilidades que puedes desarrollar con práctica</p>
+                      <p className="text-sm text-muted/60 mt-2">Habilidades que puedes desarrollar con práctica</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
@@ -1072,7 +1072,7 @@ export default function SoftSkillsResults() {
                           </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3">
-                          <div className="bg-red-50 p-3 rounded text-sm">
+                          <div className="bg-red/5 p-3 rounded text-sm">
                             <strong className="text-red-900">Conexión:</strong>
                             <p className="text-red-800 mt-1">
                               IE mide tu capacidad emocional innata, Soft Skills mide cómo la aplicas en el mundo real.
@@ -1385,7 +1385,7 @@ export default function SoftSkillsResults() {
                         <h4 className="font-semibold text-orange-900 mb-2">
                           5. ¿Qué creencias limitantes tienes sobre tu capacidad de mejorar estas áreas?
                         </h4>
-                        <p className="text-sm text-gray-600 mb-2">
+                        <p className="text-sm text-muted/60 mb-2">
                           (Ejemplo: "No soy bueno para comunicar", "Nunca he sido organizado", "Eso no es para mí")
                         </p>
                         <textarea
@@ -1422,7 +1422,7 @@ export default function SoftSkillsResults() {
                         <h4 className="font-semibold text-blue mb-2">
                           7. ¿Cómo cambiaría tu vida si tuvieras un 10/10 en TODAS las soft skills?
                         </h4>
-                        <p className="text-sm text-gray-600 mb-2">
+                        <p className="text-sm text-muted/60 mb-2">
                           (Qué lograrías, qué relaciones mejorarían, qué oportunidades aparecerían)
                         </p>
                         <textarea
@@ -1469,7 +1469,7 @@ export default function SoftSkillsResults() {
                           10. Si tuvieras que elegir UNA competencia para entrenar intensivamente los próximos 90 días,
                           ¿cuál sería y cuál sería tu primera acción mañana?
                         </h4>
-                        <p className="text-sm text-gray-600 mb-2">
+                        <p className="text-sm text-muted/60 mb-2">
                           (Sé ultra específico: no "mejorar comunicación", sino "practicar escucha activa 10 min/día con
                           mi pareja")
                         </p>
@@ -1500,7 +1500,7 @@ export default function SoftSkillsResults() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-primary" />
+                  <Calendar className="h-5 w-5 text-purple" />
                   Plan de Acción 90 Días - Desarrollo de Soft Skills
                 </CardTitle>
                 <CardDescription>
@@ -1750,7 +1750,7 @@ export default function SoftSkillsResults() {
             <Card>
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <BookOpen className="h-6 w-6 text-primary" />
+                  <BookOpen className="h-6 w-6 text-purple" />
                   Biblioteca DTC Recomendada
                 </CardTitle>
                 <CardDescription>
@@ -1941,7 +1941,7 @@ export default function SoftSkillsResults() {
                   </Table>
                 </div>
 
-                <Alert className="mt-6 bg-primary/5 border-primary/20">
+                <Alert className="mt-6 bg-purple/5 border-purple/20">
                   <BookOpen className="h-4 w-4" />
                   <AlertTitle>Enfoque DTC en Recursos</AlertTitle>
                   <AlertDescription>

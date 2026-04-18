@@ -151,7 +151,7 @@ export default function AdminTestsPage() {
         {/* Access Notice */}
         <Card className="mb-8 border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-950/20">
           <CardContent className="flex gap-3 pt-6">
-            <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-500 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-orange flex-shrink-0 mt-0.5" />
             <div>
               <h3 className="font-semibold text-yellow-900 dark:text-yellow-100">Admin-Only Dashboard</h3>
               <p className="text-sm text-yellow-800 dark:text-yellow-200">This page consolidates internal testing & debugging tools. Not visible to regular users.</p>

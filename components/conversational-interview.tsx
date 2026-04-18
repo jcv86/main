@@ -363,9 +363,9 @@ export function ConversationalInterview({
 
         {/* Error */}
         {error && (
-          <Alert variant="destructive" className="border-red-300 bg-red-50 dark:bg-red-900/20">
+          <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red-900/20">
             <AlertTriangle className="h-4 w-4 text-red-600" />
-            <AlertDescription className="text-red-700 dark:text-red-200 ml-2">{error}</AlertDescription>
+            <AlertDescription className="text-red dark:text-red-200 ml-2">{error}</AlertDescription>
           </Alert>
         )}
 

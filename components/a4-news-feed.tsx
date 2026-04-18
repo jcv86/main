@@ -33,7 +33,7 @@ const getCategoryColor = (category: string) => {
     "Tech": { badge: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300", bg: "bg-cyan-50/50" },
     "Finanzas": { badge: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300", bg: "bg-yellow-50/50" },
   }
-  return colors[category] || { badge: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300", bg: "bg-gray-50/50" }
+  return colors[category] || { badge: "bg-muted/10 text-gray-800 dark:bg-muted/90/30 dark:text-muted/30", bg: "bg-muted/5/50" }
 }
 
 const getRelevanceIcon = (score: number) => {
@@ -47,7 +47,7 @@ const getRelevanceBadge = (score: number) => {
   if (score >= 80) return { color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300", label: "Crítico" }
   if (score >= 60) return { color: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300", label: "Alto" }
   if (score >= 40) return { color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300", label: "Medio" }
-  return { color: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300", label: "Bajo" }
+  return { color: "bg-muted/10 text-gray-800 dark:bg-muted/90/30 dark:text-muted/30", label: "Bajo" }
 }
 
 export function A4NewsFeed({ items }: A4NewsFeedProps) {
@@ -195,7 +195,7 @@ export function A4NewsFeed({ items }: A4NewsFeedProps) {
                         {/* Top Row: Title and Relevance */}
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex-1">
-                            <div className="font-semibold group-hover:text-primary transition text-base">
+                            <div className="font-semibold group-hover:text-purple transition text-base">
                               {item.title}
                             </div>
                             <div className="text-sm text-muted-foreground mt-1.5 line-clamp-2">
@@ -244,7 +244,7 @@ export function A4NewsFeed({ items }: A4NewsFeedProps) {
                           <Bookmark
                             className={`w-4 h-4 ${
                               savedItems.has(item.id)
-                                ? "fill-primary text-primary"
+                                ? "fill-primary text-purple"
                                 : "text-muted-foreground"
                             }`}
                           />
@@ -255,7 +255,7 @@ export function A4NewsFeed({ items }: A4NewsFeedProps) {
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          className="h-8 w-8 p-0 text-primary" 
+                          className="h-8 w-8 p-0 text-purple" 
                           onClick={(e) => {
                             e.stopPropagation()
                             handleNewsClick(item.id)

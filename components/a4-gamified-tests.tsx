@@ -114,7 +114,7 @@ export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4Gamif
       "intermedio": "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
       "avanzado": "bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300",
     }
-    return colors[nivel] || "bg-gray-100"
+    return colors[nivel] || "bg-muted/10"
   }
 
   if (!selectedTest) {

@@ -134,7 +134,7 @@ export default function ProgramasClient() {
         <h1 className="text-4xl font-bold bg-gradient-to-r from-blue to-purple-600 bg-clip-text text-transparent">
           Programas Guiados DTC
         </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-xl text-muted/60 max-w-2xl mx-auto">
           Rutas estructuradas de 60-90 días para transformar áreas clave de tu vida personal y profesional
         </p>
       </div>
@@ -162,7 +162,7 @@ export default function ProgramasClient() {
                 <CardDescription>{programa.description}</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center justify-between text-sm text-gray-600">
+                <div className="flex items-center justify-between text-sm text-muted/60">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
                     <span>{programa.duration} días</span>
@@ -317,7 +317,7 @@ export default function ProgramasClient() {
                 <div>
                   <Badge className="mb-2">Paso {step}</Badge>
                   <h4 className="font-semibold">{title}</h4>
-                  <p className="text-sm text-gray-600">{description}</p>
+                  <p className="text-sm text-muted/60">{description}</p>
                 </div>
               </div>
             ))}

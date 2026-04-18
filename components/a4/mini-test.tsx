@@ -36,7 +36,7 @@ export function MiniTest({
       case "medio":
         return "bg-amber-500/10 text-amber-700"
       case "difícil":
-        return "bg-red-500/10 text-red-700"
+        return "bg-red/50/10 text-red"
     }
   }
 
@@ -48,7 +48,7 @@ export function MiniTest({
             <Brain className="w-6 h-6 text-purple-500" />
             <CardTitle className="text-xl">Mini Prueba: Entrenamiento Cognitivo</CardTitle>
           </div>
-          <Badge className="bg-yellow-500/20 text-yellow-700 dark:text-yellow-400">
+          <Badge className="bg-orange/20 text-yellow-700 dark:text-yellow-400">
             <Zap className="w-3 h-3 mr-1" />
             +{points} pts
           </Badge>
@@ -94,10 +94,10 @@ export function MiniTest({
                 <button
                   key={idx}
                   onClick={() => onAnswerSelect?.(idx)}
-                  className="w-full p-3 text-left text-sm rounded-[28px] border border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-colors group text-foreground hover:text-primary font-medium"
+                  className="w-full p-3 text-left text-sm rounded-[28px] border border-border/50 hover:border-purple/50 hover:bg-purple/5 transition-colors group text-foreground hover:text-purple font-medium"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-5 h-5 rounded border-2 border-border group-hover:border-primary flex items-center justify-center bg-background/50 group-hover:bg-primary/10">
+                    <div className="w-5 h-5 rounded border-2 border-border group-hover:border-purple flex items-center justify-center bg-background/50 group-hover:bg-purple/10">
                       <span className="text-xs">{String.fromCharCode(65 + idx)}</span>
                     </div>
                     <span>{option}</span>

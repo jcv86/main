@@ -165,7 +165,7 @@ export function AdvancedBrainInterface() {
           <CardHeader className="border-b">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Brain className="h-6 w-6 text-primary" />
+                <Brain className="h-6 w-6 text-purple" />
                 <div>
                   <CardTitle>Cerebro Avanzado</CardTitle>
                   <CardDescription>Búsqueda semántica con IA</CardDescription>
@@ -196,7 +196,7 @@ export function AdvancedBrainInterface() {
                 <div key={message.id} className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}>
                   <div
                     className={`max-w-[80%] rounded-[28px] p-4 ${
-                      message.type === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
+                      message.type === "user" ? "bg-purple text-purple-foreground" : "bg-muted"
                     }`}
                   >
                     <div className="whitespace-pre-wrap">{message.content}</div>

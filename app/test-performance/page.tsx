@@ -17,7 +17,7 @@ export default function TestPerformancePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-muted/5 p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <Card className="border-blue/20 bg-gradient-to-r from-blue/5 to-indigo-50">
@@ -83,7 +83,7 @@ export default function TestPerformancePage() {
         <GesturePerformanceMonitor />
 
         {/* Performance Guidelines */}
-        <Card className="border-gray-200">
+        <Card className="border-muted/20">
           <CardHeader>
             <CardTitle>Performance Guidelines & Benchmarks</CardTitle>
           </CardHeader>

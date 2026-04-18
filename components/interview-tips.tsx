@@ -133,7 +133,7 @@ export function InterviewTips({
         <div className="flex items-center justify-between">
           <div className="flex gap-4">
             <div className="flex items-center gap-2">
-              <Lightbulb className="w-5 h-5 text-yellow-500" />
+              <Lightbulb className="w-5 h-5 text-orange" />
               <span className="text-sm">
                 Tips Gratis: <span className="font-bold">{freeTipsUsed}/3</span>
               </span>
@@ -186,7 +186,7 @@ export function InterviewTips({
                   {(currentTipIndex || 0) + 1}/{tipHistory.length}
                 </span>
               </div>
-              <p className="text-sm text-gray-700 dark:text-gray-300">{currentTip.tip}</p>
+              <p className="text-sm text-gray-700 dark:text-muted/30">{currentTip.tip}</p>
             </div>
 
             {/* Navigation buttons */}

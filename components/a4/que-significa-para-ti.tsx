@@ -134,7 +134,7 @@ export function QueSignificaParaTi() {
       <Card className="bg-gradient-to-br from-primary/5 via-transparent to-accent/5 border-0">
         <CardContent className="pt-12 pb-12 flex items-center justify-center">
           <div className="text-center">
-            <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-2" />
+            <Loader2 className="w-8 h-8 animate-spin text-purple mx-auto mb-2" />
             <p className="text-sm text-muted-foreground">Analizando tu contexto personal...</p>
           </div>
         </CardContent>
@@ -153,7 +153,7 @@ export function QueSignificaParaTi() {
 
       {/* Profile-based Impact */}
       {userProfile && (
-        <Alert className="border-primary/20 bg-primary/5">
+        <Alert className="border-purple/20 bg-purple/5">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
             Como <strong>{userProfile.tipo_perfil}</strong>, los cambios económicos que ocurren hoy
@@ -181,7 +181,7 @@ export function QueSignificaParaTi() {
                       <Badge
                         className={
                           area.severity === "alto"
-                            ? "bg-red-500/10 text-red-700 dark:text-red-400"
+                            ? "bg-red/50/10 text-red dark:text-red-400"
                             : area.severity === "medio"
                               ? "bg-amber-500/10 text-amber-700 dark:text-amber-400"
                               : "bg-green-500/10 text-green-700 dark:text-green-400"
@@ -212,18 +212,18 @@ export function QueSignificaParaTi() {
             <Card key={idx} className="border-0 bg-card/70 backdrop-blur-sm overflow-hidden">
               <CardHeader className="bg-gradient-to-r from-primary/10 to-accent/10">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-[28px] bg-primary/20">{interp.icon}</div>
+                  <div className="p-2 rounded-[28px] bg-purple/20">{interp.icon}</div>
                   <CardTitle className="text-xl">{interp.heading}</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="pt-6">
                 <p className="text-sm mb-4 leading-relaxed">{interp.insight}</p>
                 <div>
-                  <h5 className="text-sm font-semibold mb-3 text-primary">Acciones Sugeridas:</h5>
+                  <h5 className="text-sm font-semibold mb-3 text-purple">Acciones Sugeridas:</h5>
                   <ul className="space-y-2">
                     {interp.actionableItems.map((item, aidx) => (
                       <li key={aidx} className="text-sm flex items-start gap-2">
-                        <div className="w-1.5 h-1.5 rounded-[20px] bg-primary mt-1.5 flex-shrink-0" />
+                        <div className="w-1.5 h-1.5 rounded-[20px] bg-purple mt-1.5 flex-shrink-0" />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -236,7 +236,7 @@ export function QueSignificaParaTi() {
       </Tabs>
 
       {/* Key Takeaway */}
-      <Card className="border-primary/20 bg-gradient-to-r from-primary/5 to-accent/5">
+      <Card className="border-purple/20 bg-gradient-to-r from-primary/5 to-accent/5">
         <CardHeader>
           <CardTitle className="text-lg">Lo Más Importante</CardTitle>
         </CardHeader>

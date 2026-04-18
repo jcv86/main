@@ -69,7 +69,7 @@ export default function NewsletterSignup({ className = '' }: NewsletterSignupPro
         <Button
           type="submit"
           disabled={loading}
-          className="bg-white text-purple-800 hover:bg-gray-100 font-semibold whitespace-nowrap"
+          className="bg-white text-purple-800 hover:bg-muted/10 font-semibold whitespace-nowrap"
         >
           {loading ? (
             <>

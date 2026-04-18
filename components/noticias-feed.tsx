@@ -120,7 +120,7 @@ export function NoticiasFeed() {
                 }}
                 className={`px-3 py-1 rounded-[20px] text-sm transition-colors ${
                   selectedCategory === ""
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-purple text-purple-foreground"
                     : "bg-muted hover:bg-muted/80"
                 }`}
               >
@@ -135,7 +135,7 @@ export function NoticiasFeed() {
                   }}
                   className={`px-3 py-1 rounded-[20px] text-sm transition-colors ${
                     selectedCategory === category
-                      ? "bg-primary text-primary-foreground"
+                      ? "bg-purple text-purple-foreground"
                       : "bg-muted hover:bg-muted/80"
                   }`}
                 >
@@ -152,7 +152,7 @@ export function NoticiasFeed() {
         {loading && (
           <Card className="border-0 bg-card/70 backdrop-blur-sm">
             <CardContent className="py-12 flex justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple"></div>
             </CardContent>
           </Card>
         )}

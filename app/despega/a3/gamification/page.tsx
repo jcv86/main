@@ -45,13 +45,13 @@ export default function GamificationPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gray-50 py-12">
+    <main className="min-h-screen bg-muted/5 py-12">
       <div className="max-w-6xl mx-auto px-4 space-y-8">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-4xl font-bold text-gray-900">Interview Mastery</h1>
-            <p className="text-gray-600 mt-2">Track your progress and unlock achievements</p>
+            <p className="text-muted/60 mt-2">Track your progress and unlock achievements</p>
           </div>
           <Link href="/despega/a3/dtc-shop">
             <Button>Get Premium Tips</Button>
@@ -74,7 +74,7 @@ export default function GamificationPage() {
         ) : (
           <Card>
             <CardContent className="p-8 text-center">
-              <p className="text-gray-600">
+              <p className="text-muted/60">
                 Start your first interview to unlock achievements and begin climbing the ranks!
               </p>
               <Link href="/despega/a3/simulaciones-estructurada">

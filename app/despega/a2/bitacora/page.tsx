@@ -108,7 +108,7 @@ export default function BitacoraPage() {
 
         {/* Error State */}
         {error && (
-          <Card className="border-0 shadow-md bg-red-50 dark:bg-red-900/20 border-l-4 border-l-red-500">
+          <Card className="border-0 shadow-md bg-red/5 dark:bg-red-900/20 border-l-4 border-l-red-500">
             <CardContent className="p-4">
               <p className="text-sm text-red-800 dark:text-red-200">
                 <strong>Error:</strong> {error}
@@ -328,7 +328,7 @@ export default function BitacoraPage() {
                       {entry.insights && entry.insights.length > 0 && (
                         <div className="space-y-2">
                           <div className="flex items-center gap-2 text-sm font-medium text-muted/90 dark:text-muted/10">
-                            <Lightbulb className="w-4 h-4 text-yellow-500" />
+                            <Lightbulb className="w-4 h-4 text-orange" />
                             Insights Clave
                           </div>
                           <div className="flex flex-wrap gap-2">

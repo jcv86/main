@@ -82,7 +82,7 @@ const getTipoColor = (tipo: string) => {
     video: { badge: 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300', icon: '🎬' },
     reporte: { badge: 'bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300', icon: '📊' },
   }
-  return colors[tipo] || { badge: 'bg-gray-100 text-gray-800', icon: '📖' }
+  return colors[tipo] || { badge: 'bg-muted/10 text-gray-800', icon: '📖' }
 }
 
 const getCategoriaColor = (categoria: string) => {
@@ -92,7 +92,7 @@ const getCategoriaColor = (categoria: string) => {
     'Negociación': 'bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300',
     'Toma de Decisiones': 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300',
   }
-  return colors[categoria] || 'bg-gray-100 text-gray-800'
+  return colors[categoria] || 'bg-muted/10 text-gray-800'
 }
 
 export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
@@ -267,7 +267,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
                 <CardContent className="pt-6 space-y-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
-                      <h3 className="font-bold text-sm group-hover:text-primary transition line-clamp-2">
+                      <h3 className="font-bold text-sm group-hover:text-purple transition line-clamp-2">
                         {recurso.titulo}
                       </h3>
                       <p className="text-xs text-muted-foreground mt-1">{recurso.autor}</p>
@@ -308,7 +308,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
                     >
                       <Bookmark
                         className={`w-3 h-3 mr-1 ${
-                          isSaved ? 'fill-primary text-primary' : 'text-muted-foreground'
+                          isSaved ? 'fill-primary text-purple' : 'text-muted-foreground'
                         }`}
                       />
                       {isSaved ? 'Guardado' : 'Guardar'}

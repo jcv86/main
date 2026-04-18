@@ -43,15 +43,15 @@ export default function ContentLicensesPage() {
       case "verified":
         return "bg-green/50"
       case "pending_review":
-        return "bg-yellow-500"
+        return "bg-orange"
       case "needs_documentation":
         return "bg-orange-500"
       case "at_risk":
-        return "bg-red-500"
+        return "bg-red/50"
       case "non_compliant":
-        return "bg-red-700"
+        return "bg-red"
       default:
-        return "bg-gray-500"
+        return "bg-muted/50"
     }
   }
 
@@ -75,7 +75,7 @@ export default function ContentLicensesPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
           <p className="text-muted-foreground">Cargando licencias...</p>
         </div>
       </div>
@@ -123,7 +123,7 @@ export default function ContentLicensesPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Pendientes</CardTitle>
-                <Clock className="h-4 w-4 text-yellow-500" />
+                <Clock className="h-4 w-4 text-orange" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
@@ -135,7 +135,7 @@ export default function ContentLicensesPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Sin Licencia</CardTitle>
-                <AlertCircle className="h-4 w-4 text-red-500" />
+                <AlertCircle className="h-4 w-4 text-red" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{unlicensed.length}</div>

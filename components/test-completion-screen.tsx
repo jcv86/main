@@ -55,8 +55,8 @@ export function TestCompletionScreen({
       <Card className="max-w-3xl w-full">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">
-            <div className="rounded-[20px] bg-primary/10 p-4">
-              <CheckCircle2 className="w-12 h-12 text-primary" />
+            <div className="rounded-[20px] bg-purple/10 p-4">
+              <CheckCircle2 className="w-12 h-12 text-purple" />
             </div>
           </div>
           <CardTitle className="text-4xl font-bold">¡Evaluación Completada!</CardTitle>
@@ -69,14 +69,14 @@ export function TestCompletionScreen({
           {/* Quick Summary */}
           <div className="bg-muted/50 rounded-[28px] p-6 space-y-3">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-primary" />
+              <Sparkles className="w-5 h-5 text-purple" />
               <h3 className="font-semibold text-lg">Resumen Rápido</h3>
             </div>
             <p className="text-muted-foreground">{quickSummary}</p>
           </div>
 
           {/* Highlighted Insight */}
-          <div className="border-l-4 border-primary pl-4 py-2">
+          <div className="border-l-4 border-purple pl-4 py-2">
             <p className="font-medium text-lg">💡 {keyInsight || highlightedInsight}</p>
           </div>
 

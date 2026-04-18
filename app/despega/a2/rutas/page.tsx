@@ -185,7 +185,7 @@ export default function A2RoutasPage() {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-muted/50 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin mx-auto text-primary mb-4" />
+          <Loader2 className="h-12 w-12 animate-spin mx-auto text-purple mb-4" />
           <p className="text-lg text-muted-foreground">Generando tus rutas personalizadas...</p>
         </div>
       </div>
@@ -195,7 +195,7 @@ export default function A2RoutasPage() {
   if (error) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-background to-muted/50 flex items-center justify-center p-4">
-        <Card className="max-w-md border-red-200">
+        <Card className="max-w-md border-red/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-red-600">
               <AlertCircle className="w-5 h-5" />
@@ -246,8 +246,8 @@ export default function A2RoutasPage() {
                 key={route.id} 
                 className={`group border-2 cursor-pointer transition-all duration-300 ${
                   selectedRoute === route.id
-                    ? 'border-primary bg-primary/5 shadow-lg'
-                    : 'border-border hover:border-primary/50 hover:shadow-md'
+                    ? 'border-purple bg-purple/5 shadow-lg'
+                    : 'border-border hover:border-purple/50 hover:shadow-md'
                 }`}
                 onClick={() => selectRoute(route.id)}
               >
@@ -257,7 +257,7 @@ export default function A2RoutasPage() {
                       {route.icon && createElement(route.icon, { className: 'w-6 h-6 text-white' })}
                     </div>
                   </div>
-                  <CardTitle className="text-2xl group-hover:text-primary transition-colors">
+                  <CardTitle className="text-2xl group-hover:text-purple transition-colors">
                     {route.nombre}
                   </CardTitle>
                   <CardDescription className="text-base mt-2">
@@ -293,7 +293,7 @@ export default function A2RoutasPage() {
                       <ul className="space-y-2">
                         {route.beneficios.slice(0, 4).map((benefit, idx) => (
                           <li key={idx} className="flex items-start gap-2 text-sm">
-                            <ChevronRight className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                            <ChevronRight className="w-4 h-4 text-purple flex-shrink-0 mt-0.5" />
                             <span>{benefit}</span>
                           </li>
                         ))}
@@ -336,7 +336,7 @@ export default function A2RoutasPage() {
           <p className="text-muted-foreground mb-4">
             Cada ruta está diseñada según tu perfil y tus respuestas específicas
           </p>
-          <Link href="/despega" className="inline-flex items-center text-primary hover:underline">
+          <Link href="/despega" className="inline-flex items-center text-purple hover:underline">
             Volver al Dashboard
             <ArrowRight className="w-4 h-4 ml-2" />
           </Link>

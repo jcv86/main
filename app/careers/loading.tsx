@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export default function CareersLoading() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/5">
       {/* Hero Section Skeleton */}
       <div className="bg-gradient-to-r from-blue to-purple-600 py-16">
         <div className="container mx-auto px-4">

@@ -195,7 +195,7 @@ export default function CanaryDeploymentsPage() {
                   id="auto_rollback"
                   checked={formData.auto_rollback_enabled}
                   onChange={(e) => setFormData({ ...formData, auto_rollback_enabled: e.target.checked })}
-                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                  className="h-4 w-4 rounded border-muted/30 text-purple focus:ring-purple"
                 />
                 <Label htmlFor="auto_rollback">Habilitar rollback automático</Label>
               </div>
@@ -232,7 +232,7 @@ export default function CanaryDeploymentsPage() {
 
                   <div className="w-full bg-secondary rounded-full h-2">
                     <div
-                      className="bg-primary h-2 rounded-full transition-all"
+                      className="bg-purple h-2 rounded-full transition-all"
                       style={{ width: `${(deployment.current_stage / deployment.total_stages) * 100}%` }}
                     />
                   </div>
@@ -247,8 +247,8 @@ export default function CanaryDeploymentsPage() {
                             : stage.status === "active"
                               ? "bg-blue/5 border-blue/20"
                               : stage.status === "failed"
-                                ? "bg-red-50 border-red-200"
-                                : "bg-gray-50 border-gray-200"
+                                ? "bg-red/5 border-red/20"
+                                : "bg-muted/5 border-muted/20"
                         }`}
                       >
                         <div className="font-semibold">{stage.traffic_percentage}%</div>

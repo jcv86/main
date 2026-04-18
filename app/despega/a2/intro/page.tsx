@@ -191,9 +191,9 @@ export default function A2IntroPage() {
 
               {/* Cerebro Profile Scores */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
-                <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-[28px] border border-red-200 dark:border-red-800">
+                <div className="bg-red/5 dark:bg-red-900/20 p-3 rounded-[28px] border border-red/20 dark:border-red-800">
                   <p className="text-xs text-red-600 dark:text-red-400 font-semibold">Energía</p>
-                  <p className="text-2xl font-bold text-red-700 dark:text-red-300">{cerebroProfile?.energia}%</p>
+                  <p className="text-2xl font-bold text-red dark:text-red-300">{cerebroProfile?.energia}%</p>
                 </div>
                 <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-[28px] border border-yellow-200 dark:border-yellow-800">
                   <p className="text-xs text-yellow-600 dark:text-yellow-400 font-semibold">Enfoque</p>

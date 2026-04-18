@@ -22,7 +22,7 @@ interface CanonRouteVisualizationProps {
 
 const intensidadColors = {
   suave: { bg: "bg-accent/10 dark:bg-accent/5", border: "border-accent/30 dark:border-accent/40", badge: "bg-accent/20 dark:bg-accent/10 text-foreground" },
-  moderada: { bg: "bg-primary/10 dark:bg-primary/5", border: "border-primary/30 dark:border-primary/40", badge: "bg-primary/20 dark:bg-primary/10 text-foreground" },
+  moderada: { bg: "bg-purple/10 dark:bg-purple/5", border: "border-purple/30 dark:border-purple/40", badge: "bg-purple/20 dark:bg-purple/10 text-foreground" },
   alta: { bg: "bg-orange-100/50 dark:bg-orange-950/30", border: "border-orange-300/50 dark:border-orange-700/50", badge: "bg-orange-200/70 dark:bg-orange-900/50 text-orange-900 dark:text-orange-100" }
 }
 

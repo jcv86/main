@@ -231,23 +231,23 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
             <h3 className="font-semibold">Cómo funciona:</h3>
             <ul className="space-y-2 text-sm">
               <li className="flex gap-2">
-                <span className="text-primary">✓</span>
+                <span className="text-purple">✓</span>
                 <span>Propongo un escenario realista</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-primary">✓</span>
+                <span className="text-purple">✓</span>
                 <span>Explores diferentes respuestas</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-primary">✓</span>
+                <span className="text-purple">✓</span>
                 <span>Pausamos para explicar patrones interesantes</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-primary">✓</span>
+                <span className="text-purple">✓</span>
                 <span>Probamos variaciones (micro-experimentos)</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-primary">✓</span>
+                <span className="text-purple">✓</span>
                 <span>Resumimos lo aprendido sin evaluación</span>
               </li>
             </ul>
@@ -302,7 +302,7 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
               <div
                 className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
                   message.role === "user"
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-purple text-purple-foreground"
                     : "bg-muted text-foreground"
                 }`}
               >
@@ -316,9 +316,9 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
         {/* User Input */}
         <form onSubmit={handleUserResponse} className="space-y-3">
           {error && (
-            <Alert variant="destructive" className="border-red-300 bg-red-50 dark:bg-red-900/20">
+            <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red-900/20">
               <AlertTriangle className="h-4 w-4 text-red-600" />
-              <AlertDescription className="text-red-700 dark:text-red-200 ml-2">{error}</AlertDescription>
+              <AlertDescription className="text-red dark:text-red-200 ml-2">{error}</AlertDescription>
             </Alert>
           )}
 

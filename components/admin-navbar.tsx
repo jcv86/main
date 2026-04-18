@@ -34,15 +34,15 @@ export function AdminNavbar() {
 
           {/* Navigation */}
           <div className="hidden md:flex items-center gap-6">
-            <Link href="/dashboard/tests" className="text-sm font-medium hover:text-primary">
+            <Link href="/dashboard/tests" className="text-sm font-medium hover:text-purple">
               <BarChart3 className="w-4 h-4 inline mr-2" />
               Tests
             </Link>
-            <Link href="/dashboard/biblioteca" className="text-sm font-medium hover:text-primary">
+            <Link href="/dashboard/biblioteca" className="text-sm font-medium hover:text-purple">
               <BookOpen className="w-4 h-4 inline mr-2" />
               Biblioteca
             </Link>
-            <Link href="/dashboard/coaching" className="text-sm font-medium hover:text-primary">
+            <Link href="/dashboard/coaching" className="text-sm font-medium hover:text-purple">
               <Brain className="w-4 h-4 inline mr-2" />
               Coaching
             </Link>

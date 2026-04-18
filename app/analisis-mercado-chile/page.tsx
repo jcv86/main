@@ -33,7 +33,7 @@ export default function AnalisisMercadoChilePage() {
               <strong> desajuste estructural entre formación y demanda laboral</strong>.
             </p>
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+              <div className="bg-red/5 p-4 rounded-lg border border-red/20">
                 <div className="text-3xl font-bold text-red-600 mb-2">917K</div>
                 <div className="text-sm text-red-800">Desempleados totales (Q2 2025)</div>
               </div>
@@ -298,7 +298,7 @@ export default function AnalisisMercadoChilePage() {
               </div>
 
               {/* Competidor 2 */}
-              <div className="border-l-4 border-yellow-500 pl-6 bg-yellow-50 p-4 rounded-r-lg">
+              <div className="border-l-4 border-orange pl-6 bg-yellow-50 p-4 rounded-r-lg">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-bold text-muted/90">Plataformas de Orientación Vocacional</h4>
                   <span className="text-xs bg-yellow-200 text-yellow-800 px-3 py-1 rounded-full">

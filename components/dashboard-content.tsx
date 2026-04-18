@@ -205,12 +205,12 @@ export function DashboardContent() {
               {/* Perfil Scores Grid */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {/* D Score - Impulsor */}
-                <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-[28px] border border-red-200 dark:border-red-800">
+                <div className="p-4 bg-red/5 dark:bg-red-900/20 rounded-[28px] border border-red/20 dark:border-red-800">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-2xl">⚡</span>
                     <span className="text-2xl font-bold text-red-600">{testResults.test_results.d_score || 0}%</span>
                   </div>
-                  <p className="text-sm font-medium text-red-700 dark:text-red-300">Impulsor</p>
+                  <p className="text-sm font-medium text-red dark:text-red-300">Impulsor</p>
                   <Progress value={testResults.test_results.d_score || 0} className="mt-2" />
                   <p className="text-xs text-red-600 dark:text-red-400 mt-1">Decisión y Resultados</p>
                 </div>
@@ -251,9 +251,9 @@ export function DashboardContent() {
 
               {/* Dominant Profile */}
               {testResults.test_results.dominant_profile && (
-                <div className="p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-[28px] border border-primary/30">
+                <div className="p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-[28px] border border-purple/30">
                   <p className="text-sm font-medium text-muted-foreground mb-2">Tu Perfil Dominante</p>
-                  <p className="text-2xl font-bold text-primary">{testResults.test_results.dominant_profile}</p>
+                  <p className="text-2xl font-bold text-purple">{testResults.test_results.dominant_profile}</p>
                   {testResults.test_results.secondary_profile && (
                     <p className="text-sm text-muted-foreground mt-2">
                       Perfil Secundario: <span className="font-semibold">{testResults.test_results.secondary_profile}</span>

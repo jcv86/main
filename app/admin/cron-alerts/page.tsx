@@ -116,13 +116,13 @@ export default function CronAlertsPage() {
       case "healthy":
         return <CheckCircle className="h-5 w-5 text-green" />
       case "warning":
-        return <AlertTriangle className="h-5 w-5 text-yellow-500" />
+        return <AlertTriangle className="h-5 w-5 text-orange" />
       case "degraded":
         return <AlertCircle className="h-5 w-5 text-orange-500" />
       case "critical":
-        return <AlertCircle className="h-5 w-5 text-red-500" />
+        return <AlertCircle className="h-5 w-5 text-red" />
       default:
-        return <Clock className="h-5 w-5 text-gray-500" />
+        return <Clock className="h-5 w-5 text-muted/50" />
     }
   }
 
@@ -161,10 +161,10 @@ export default function CronAlertsPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Críticas</CardTitle>
-            <AlertCircle className="h-4 w-4 text-red-500" />
+            <AlertCircle className="h-4 w-4 text-red" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-500">{criticalAlerts.length}</div>
+            <div className="text-2xl font-bold text-red">{criticalAlerts.length}</div>
           </CardContent>
         </Card>
 

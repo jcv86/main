@@ -182,10 +182,10 @@ export default function TestsPage() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-background flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted/5 dark:bg-background flex items-center justify-center p-4">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-b-2 border-gray-900 dark:border-gray-100 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">Cargando evaluaciones...</p>
+          <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-b-2 border-gray-900 dark:border-muted/10 mx-auto mb-4"></div>
+          <p className="text-muted/60 dark:text-muted/40 text-sm sm:text-base">Cargando evaluaciones...</p>
         </div>
       </div>
     )
@@ -193,16 +193,16 @@ export default function TestsPage() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-background flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted/5 dark:bg-background flex items-center justify-center p-4">
         <div className="text-center">
-          <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">Redirigiendo...</p>
+          <p className="text-muted/60 dark:text-muted/40 text-sm sm:text-base">Redirigiendo...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-background">
+    <div className="min-h-screen bg-muted/5 dark:bg-background">
       <div className="container mx-auto px-3 sm:px-4 py-4 sm:py-8">
         {/* Header - Mobile Optimized */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0 mb-6 sm:mb-8">
@@ -227,7 +227,7 @@ export default function TestsPage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-2">
             Evaluaciones de Personalidad
           </h1>
-          <p className="text-gray-600 dark:text-gray-400 text-sm sm:text-base">
+          <p className="text-muted/60 dark:text-muted/40 text-sm sm:text-base">
             Completa evaluaciones integrales para descubrir tu personalidad, habilidades e intereses profesionales.
           </p>
         </div>
@@ -299,7 +299,7 @@ export default function TestsPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-xs sm:text-sm font-medium">Progreso General</span>
-              <span className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+              <span className="text-xs sm:text-sm text-muted/60 dark:text-muted/40">
                 {completedTests.length} de {tests.length} completados
               </span>
             </div>
@@ -375,8 +375,8 @@ export default function TestsPage() {
                   isCompleted
                     ? "border-green/20 dark:border-green-800 bg-green/5 dark:bg-green-950"
                     : isAvailable
-                      ? "hover:border-gray-300 dark:hover:border-gray-600"
-                      : "opacity-60 bg-gray-50 dark:bg-background"
+                      ? "hover:border-muted/30 dark:hover:border-muted/60"
+                      : "opacity-60 bg-muted/5 dark:bg-background"
                 }`}
               >
                 {isCompleted && (
@@ -405,7 +405,7 @@ export default function TestsPage() {
                               ? "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 border-green/20 dark:border-green-800"
                               : test.difficulty === "Intermediate"
                                 ? "bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300 border-yellow-200 dark:border-yellow-800"
-                                : "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800"
+                                : "bg-red-100 dark:bg-red-900 text-red dark:text-red-300 border-red/20 dark:border-red-800"
                           }`}
                         >
                           {test.difficulty === "Beginner"
@@ -414,7 +414,7 @@ export default function TestsPage() {
                               ? "Intermedio"
                               : "Avanzado"}
                         </Badge>
-                        <Badge variant="outline" className="text-xs dark:border-gray-600 dark:text-gray-300">
+                        <Badge variant="outline" className="text-xs dark:border-muted/60 dark:text-muted/30">
                           {test.category === "Personality"
                             ? "Personalidad"
                             : test.category === "Skills"
@@ -428,13 +428,13 @@ export default function TestsPage() {
                       </div>
                     </div>
                   </div>
-                  <CardDescription className="text-xs sm:text-sm leading-relaxed text-gray-600 dark:text-gray-400">
+                  <CardDescription className="text-xs sm:text-sm leading-relaxed text-muted/60 dark:text-muted/40">
                     {test.description}
                   </CardDescription>
                 </CardHeader>
 
                 <CardContent className="space-y-3 sm:space-y-4">
-                  <div className="flex items-center justify-between text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                  <div className="flex items-center justify-between text-xs sm:text-sm text-muted/60 dark:text-muted/40">
                     <div className="flex items-center gap-1">
                       <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
                       <span>{test.duration}</span>
@@ -446,7 +446,7 @@ export default function TestsPage() {
                   </div>
 
                   {test.prerequisites && !isCompleted && (
-                    <div className="text-xs text-gray-500 dark:text-gray-400 p-2 bg-gray-100 dark:bg-card rounded">
+                    <div className="text-xs text-muted/50 dark:text-muted/40 p-2 bg-muted/10 dark:bg-card rounded">
                       <span className="font-medium">Requisitos previos:</span>{" "}
                       {test.prerequisites.map((prereq) => {
                         const prereqTest = tests.find((t) => t.id === prereq)
@@ -457,7 +457,7 @@ export default function TestsPage() {
                             className={
                               isPrereqCompleted
                                 ? "text-green dark:text-green-400"
-                                : "text-red-500 dark:text-red-400"
+                                : "text-red dark:text-red-400"
                             }
                           >
                             {prereqTest?.title}
@@ -492,7 +492,7 @@ export default function TestsPage() {
                       <Button
                         size="sm"
                         onClick={() => router.push(test.path)}
-                        className="flex-1 bg-gray-900 hover:bg-gray-800 dark:bg-blue dark:hover:bg-blue/50 text-xs sm:text-sm"
+                        className="flex-1 bg-muted/90 hover:bg-gray-800 dark:bg-blue dark:hover:bg-blue/50 text-xs sm:text-sm"
                       >
                         <PlayCircle className="h-3 w-3 sm:h-4 sm:w-4 mr-2" />
                         Iniciar Evaluación

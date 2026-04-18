@@ -420,7 +420,7 @@ export default function SoftSkillsTest() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
       </div>
     )
@@ -473,7 +473,7 @@ export default function SoftSkillsTest() {
   const canProceed = currentAnswer !== undefined && currentAnswer !== ""
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/5">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -493,11 +493,11 @@ export default function SoftSkillsTest() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">Competencias Blandas Despega</h2>
-                <p className="text-gray-600">
+                <p className="text-muted/60">
                   Pregunta {currentQuestion + 1} de {softSkillsQuestions.length}
                 </p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-muted/60">
                 <Clock className="h-4 w-4" />
                 <span>~20 minutos</span>
               </div>
@@ -545,7 +545,7 @@ export default function SoftSkillsTest() {
               >
                 <div className="space-y-3">
                   {likertOptions.map((option) => (
-                    <div key={option.value} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50">
+                    <div key={option.value} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-muted/5">
                       <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} />
                       <Label htmlFor={`option-${option.value}`} className="flex-1 cursor-pointer">
                         {option.label}
@@ -563,7 +563,7 @@ export default function SoftSkillsTest() {
               >
                 <div className="space-y-3">
                   {question.options.map((option, index) => (
-                    <div key={index} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50 border">
+                    <div key={index} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-muted/5 border">
                       <RadioGroupItem value={option} id={`option-${index}`} />
                       <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
                         {option}
@@ -582,7 +582,7 @@ export default function SoftSkillsTest() {
                   onChange={(e) => handleTextAnswer(question.id, e.target.value)}
                   className="min-h-[120px] resize-none"
                 />
-                <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center justify-between text-sm text-muted/50">
                   <span>{((currentAnswer as string) || "").length} caracteres (mínimo 50 requeridos)</span>
                   {((currentAnswer as string) || "").length >= 50 && (
                     <Badge variant="secondary" className="bg-green-100 text-green-700">
@@ -611,7 +611,7 @@ export default function SoftSkillsTest() {
             <Button
               onClick={submitTest}
               disabled={!canProceed || isSubmitting}
-              className="bg-gray-900 hover:bg-gray-800"
+              className="bg-muted/90 hover:bg-gray-800"
             >
               {isSubmitting ? (
                 <>
@@ -629,7 +629,7 @@ export default function SoftSkillsTest() {
             <Button
               onClick={() => setCurrentQuestion(Math.min(softSkillsQuestions.length - 1, currentQuestion + 1))}
               disabled={!canProceed}
-              className="bg-gray-900 hover:bg-gray-800"
+              className="bg-muted/90 hover:bg-gray-800"
             >
               Siguiente
               <ArrowRight className="h-4 w-4 ml-2" />
@@ -645,15 +645,15 @@ export default function SoftSkillsTest() {
                 key={index}
                 className={`w-2 h-2 rounded-full ${
                   index <= currentQuestion
-                    ? "bg-gray-900"
+                    ? "bg-muted/90"
                     : answers[softSkillsQuestions[index].id]
-                      ? "bg-gray-300"
-                      : "bg-gray-200"
+                      ? "bg-muted/30"
+                      : "bg-muted/20"
                 }`}
               />
             ))}
           </div>
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="text-sm text-muted/60 mt-2">
             {Object.keys(answers).length} de {softSkillsQuestions.length} preguntas respondidas
           </p>
         </div>
@@ -669,7 +669,7 @@ export default function SoftSkillsTest() {
               <div className="p-2 bg-orange-50 rounded text-orange-900">Resolución de Problemas</div>
               <div className="p-2 bg-red/5 rounded text-pink-900">Adaptabilidad</div>
               <div className="p-2 bg-yellow-50 rounded text-yellow-900">Gestión del Tiempo</div>
-              <div className="p-2 bg-red-50 rounded text-red-900">Inteligencia Emocional</div>
+              <div className="p-2 bg-red/5 rounded text-red-900">Inteligencia Emocional</div>
               <div className="p-2 bg-blue/5 rounded text-indigo-900">Creatividad</div>
             </div>
           </CardContent>

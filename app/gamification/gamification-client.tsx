@@ -182,7 +182,7 @@ export default function GamificationClient() {
       metas: "bg-orange-100 text-orange-800",
       engagement: "bg-red-100 text-red-800",
     }
-    return colors[category] || "bg-gray-100 text-gray-800"
+    return colors[category] || "bg-muted/10 text-gray-800"
   }
 
   const handleCompleteMission = (missionId: string) => {
@@ -479,7 +479,7 @@ export default function GamificationClient() {
                     <div className="flex items-center gap-4">
                       <div
                         className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${
-                          item.unlocked ? "bg-blue/50 text-white" : "bg-gray-200 text-gray-500"
+                          item.unlocked ? "bg-blue/50 text-white" : "bg-muted/20 text-muted/50"
                         }`}
                       >
                         {item.level}

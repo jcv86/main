@@ -118,8 +118,8 @@ export default function A3ResultadosPage() {
       <ASection title="A3: Entrena" subtitle="Resultados de Simulación" icon="🎬" colorClass="from-purple/50 to-pink-500">
         <ASectionPart title="Error" icon={<Target />}>
           <div className="space-y-4">
-            <div className="p-6 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-900/50 rounded-lg">
-              <p className="text-red-700 dark:text-red-300 font-semibold text-lg">{error}</p>
+            <div className="p-6 bg-red/5 dark:bg-red-900/20 border-2 border-red/20 dark:border-red-900/50 rounded-lg">
+              <p className="text-red dark:text-red-300 font-semibold text-lg">{error}</p>
             </div>
             <Button 
               onClick={() => router.push('/despega/a3')} 

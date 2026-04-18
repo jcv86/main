@@ -29,7 +29,7 @@ interface A4BadgesDisplayProps {
 }
 
 const RARITY_COLORS = {
-  common: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300 border-gray-300',
+  common: 'bg-muted/10 text-gray-800 dark:bg-muted/90/30 dark:text-muted/30 border-muted/30',
   uncommon: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 border-green-300',
   rare: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border-blue-300',
   legendary: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 border-purple-300',
@@ -56,14 +56,14 @@ export function A4BadgesDisplay({ data }: A4BadgesDisplayProps) {
       <Card className="border-0 bg-gradient-to-br from-primary/10 to-primary/5">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
-            <Zap className="w-5 h-5 text-primary" />
+            <Zap className="w-5 h-5 text-purple" />
             Puntos y Nivel
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">{data.currentPoints}</div>
+              <div className="text-3xl font-bold text-purple">{data.currentPoints}</div>
               <p className="text-xs text-muted-foreground mt-1">Total</p>
             </div>
             <div className="text-center">

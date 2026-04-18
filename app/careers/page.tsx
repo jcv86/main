@@ -21,12 +21,12 @@ export default function CareersPage() {
               La sección de carreras está en desarrollo. Estamos definiendo nuestro equipo y estructura organizacional de la mano con nuestros usuarios.
             </p>
             
-            <p className="text-gray-600">
+            <p className="text-muted/60">
               Si estás interesado en ser parte de Despega Tu Carrera, nos encantaría conectar contigo.
             </p>
 
             <div className="bg-blue/5 p-4 rounded-lg">
-              <p className="text-sm text-gray-600 mb-3">Envíanos tu interés a:</p>
+              <p className="text-sm text-muted/60 mb-3">Envíanos tu interés a:</p>
               <a 
                 href="mailto:equipo@despegatucarrera.cl"
                 className="inline-flex items-center gap-2 text-blue hover:text-blue font-semibold"

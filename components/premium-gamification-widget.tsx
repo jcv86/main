@@ -152,7 +152,7 @@ export function PremiumGamificationWidget() {
               Fase Actual - Nivel {gamification.phase_level['current']}
             </p>
             <div className="flex items-center gap-2">
-              <Star className="w-4 h-4 text-yellow-500 flex-shrink-0" />
+              <Star className="w-4 h-4 text-orange flex-shrink-0" />
               <Progress value={Math.min((gamification.phase_xp['current'] / 500) * 100, 100)} className="h-1.5 flex-1" />
               <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">
                 {gamification.phase_xp['current']}/500

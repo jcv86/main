@@ -109,7 +109,7 @@ export default function BooksExportPage() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Exportar Biblioteca Completa</h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-muted/60">
             Descarga todos los {bookCount} libros de desarrollo profesional en formato CSV
           </p>
         </div>
@@ -157,7 +157,7 @@ export default function BooksExportPage() {
             <CardDescription>Primeras líneas del archivo CSV ({bookCount} libros total)</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
+            <div className="bg-muted/5 p-4 rounded-lg overflow-x-auto">
               <pre className="text-sm text-gray-800 whitespace-pre-wrap">
                 {csvData.split("\n").slice(0, 10).join("\n")}
                 {bookCount > 9 && "\n... y " + (bookCount - 9) + " libros más"}

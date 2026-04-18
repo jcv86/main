@@ -8,13 +8,13 @@ export default function ExplicacionSimplePage() {
             <span className="text-purple font-bold text-lg">Explicación Clara y Directa</span>
           </div>
           <h1 className="text-5xl font-bold mb-6 text-gray-900">Despega Tu Carrera</h1>
-          <p className="text-2xl text-gray-600">Desarrollo profesional inteligente y personalizado</p>
+          <p className="text-2xl text-muted/60">Desarrollo profesional inteligente y personalizado</p>
         </div>
 
         {/* Main Content */}
         <div className="space-y-12">
           {/* Section 1: What is it */}
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-muted/20">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">¿Qué es Despega Tu Carrera?</h2>
             <p className="text-xl text-gray-700 leading-relaxed mb-4">
               Es una plataforma web que integra evaluaciones psicométricas, inteligencia artificial y una biblioteca
@@ -27,34 +27,34 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 2: The Problem */}
-          <div className="bg-gradient-to-br from-red-50 to-orange/5 rounded-2xl p-8 border border-red-200">
+          <div className="bg-gradient-to-br from-red-50 to-orange/5 rounded-2xl p-8 border border-red/20">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">El Problema que Resuelve</h2>
             <p className="text-lg text-gray-700 mb-4">
               El mercado laboral chileno enfrenta desafíos críticos de empleabilidad y desarrollo profesional:
             </p>
             <div className="bg-white rounded-xl p-6 mb-4">
-              <h3 className="font-bold text-red-700 text-xl mb-3">Datos del Mercado Chileno (2025):</h3>
+              <h3 className="font-bold text-red text-xl mb-3">Datos del Mercado Chileno (2025):</h3>
               <ul className="space-y-2 text-gray-700">
                 <li className="flex items-start gap-2">
-                  <span className="text-red-500 font-bold mt-1">•</span>
+                  <span className="text-red font-bold mt-1">•</span>
                   <span>
                     <strong>8.1%</strong> de desempleo entre profesionales (máximo histórico)
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-red-500 font-bold mt-1">•</span>
+                  <span className="text-red font-bold mt-1">•</span>
                   <span>
                     <strong>21.4%</strong> de desempleo juvenil (menores de 25 años)
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-red-500 font-bold mt-1">•</span>
+                  <span className="text-red font-bold mt-1">•</span>
                   <span>
                     <strong>60%</strong> de empresas no encuentran talento con las habilidades adecuadas
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-red-500 font-bold mt-1">•</span>
+                  <span className="text-red font-bold mt-1">•</span>
                   <span>
                     <strong>85%</strong> del éxito profesional depende de habilidades blandas (Harvard)
                   </span>
@@ -212,7 +212,7 @@ export default function ExplicacionSimplePage() {
                 </div>
                 <div>
                   <p className="text-lg font-bold text-gray-900">Registro</p>
-                  <p className="text-gray-600">Creación de cuenta con email. Proceso de onboarding guiado.</p>
+                  <p className="text-muted/60">Creación de cuenta con email. Proceso de onboarding guiado.</p>
                 </div>
               </div>
 
@@ -222,7 +222,7 @@ export default function ExplicacionSimplePage() {
                 </div>
                 <div>
                   <p className="text-lg font-bold text-gray-900">Evaluaciones Psicométricas</p>
-                  <p className="text-gray-600">
+                  <p className="text-muted/60">
                     Completa las 6 evaluaciones (15-20 min cada una). Total: 90-120 minutos.
                   </p>
                 </div>
@@ -234,7 +234,7 @@ export default function ExplicacionSimplePage() {
                 </div>
                 <div>
                   <p className="text-lg font-bold text-gray-900">Análisis de Resultados</p>
-                  <p className="text-gray-600">
+                  <p className="text-muted/60">
                     Perfil profesional detallado con visualizaciones, fortalezas, áreas de mejora y plan de acción.
                   </p>
                 </div>
@@ -246,7 +246,7 @@ export default function ExplicacionSimplePage() {
                 </div>
                 <div>
                   <p className="text-lg font-bold text-gray-900">Interacción Continua</p>
-                  <p className="text-gray-600">
+                  <p className="text-muted/60">
                     Conversa con el Coach IA, consulta la biblioteca, actualiza evaluaciones trimestralmente.
                   </p>
                 </div>
@@ -300,7 +300,7 @@ export default function ExplicacionSimplePage() {
             <div className="space-y-4">
               <div className="bg-white rounded-xl p-6 border-l-4 border-rose-500">
                 <p className="font-bold text-rose-700 text-2xl mb-2">Joaquin Covarrubias</p>
-                <p className="text-gray-600 font-semibold mb-3">Fundador & CEO</p>
+                <p className="text-muted/60 font-semibold mb-3">Fundador & CEO</p>
                 <p className="text-gray-700">
                   Visionario del proyecto. Responsable de la estrategia, financiamiento y dirección general. Define la
                   propuesta de valor y el modelo de negocio.
@@ -309,7 +309,7 @@ export default function ExplicacionSimplePage() {
 
               <div className="bg-white rounded-xl p-6 border-l-4 border-blue/50">
                 <p className="font-bold text-blue text-2xl mb-2">Travis Comber</p>
-                <p className="text-gray-600 font-semibold mb-3">CTO & Lead Developer</p>
+                <p className="text-muted/60 font-semibold mb-3">CTO & Lead Developer</p>
                 <p className="text-gray-700">
                   Arquitecto y desarrollador fullstack. Responsable de la construcción completa de la plataforma desde
                   cero: frontend, backend, integraciones IA, base de datos, seguridad y deployment.
@@ -322,7 +322,7 @@ export default function ExplicacionSimplePage() {
           <div className="bg-gradient-to-br from-orange/5 to-amber-50 rounded-2xl p-8 border border-orange-200">
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Lanzamiento y Roadmap</h2>
             <div className="bg-white rounded-xl p-6 text-center mb-6">
-              <p className="text-sm text-gray-500 mb-2">LANZAMIENTO PÚBLICO</p>
+              <p className="text-sm text-muted/50 mb-2">LANZAMIENTO PÚBLICO</p>
               <p className="text-6xl font-bold text-orange-600 mb-2">Q1 2026</p>
               <p className="text-xl text-gray-700">Enero - Marzo 2026</p>
             </div>

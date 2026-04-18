@@ -94,7 +94,7 @@ export default function ChileanResourcesSidebar({
   return (
     <Card className="p-4">
       <h3 className="font-semibold mb-3 text-lg">Recursos Públicos Chilenos</h3>
-      <p className="text-sm text-gray-600 mb-4">Datos oficiales para tu carrera</p>
+      <p className="text-sm text-muted/60 mb-4">Datos oficiales para tu carrera</p>
 
       <div className="space-y-3">
         {resources.map((resource) => (
@@ -112,9 +112,9 @@ export default function ChileanResourcesSidebar({
                 >
                   {resource.title}
                 </a>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{resource.category}</p>
+                <p className="text-xs text-muted/60 dark:text-muted/40 mt-1">{resource.category}</p>
                 {resource.reason && (
-                  <p className="text-xs text-gray-700 dark:text-gray-300 mt-2 italic">"{resource.reason}"</p>
+                  <p className="text-xs text-gray-700 dark:text-muted/30 mt-2 italic">"{resource.reason}"</p>
                 )}
               </div>
               {resource.matchScore && (

@@ -114,7 +114,7 @@ export function SuggestedQuestions({
             <Button
               key={q.id}
               variant="outline"
-              className="h-auto justify-start p-3 text-left hover:bg-primary/10 border-border/50 bg-transparent"
+              className="h-auto justify-start p-3 text-left hover:bg-purple/10 border-border/50 bg-transparent"
               onClick={() => onSelectQuestion?.(q)}
             >
               <div className="flex flex-col gap-1">

@@ -164,7 +164,7 @@ export function CanonProgressCard({
             <Card className="border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-950/20">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-yellow-500" />
+                  <AlertCircle className="w-5 h-5 text-yellow-600 dark:text-orange" />
                   Puntos de Atención
                 </CardTitle>
               </CardHeader>

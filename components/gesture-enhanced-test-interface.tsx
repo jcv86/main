@@ -258,7 +258,7 @@ export function GestureEnhancedTestInterface({
   return (
     <div
       ref={containerRef}
-      className="min-h-screen bg-gray-50 p-4"
+      className="min-h-screen bg-muted/5 p-4"
       style={{ fontSize: `${textSize}rem`, touchAction: "none" }}
     >
       <div className="max-w-4xl mx-auto space-y-6">
@@ -358,14 +358,14 @@ export function GestureEnhancedTestInterface({
                   className={`w-full p-4 text-left rounded-[28px] border-2 transition-all touch-manipulation ${
                     answers[currentQuestion.id] === option.id
                       ? "border-blue-500 bg-blue-50 text-blue-900"
-                      : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
+                      : "border-muted/20 bg-white hover:border-muted/30 hover:bg-muted/5"
                   }`}
                   style={{ minHeight: "60px" }} // Touch-friendly size
                 >
                   <div className="flex items-center gap-3">
                     <div
                       className={`w-4 h-4 rounded-full border-2 ${
-                        answers[currentQuestion.id] === option.id ? "border-blue-500 bg-blue-500" : "border-gray-300"
+                        answers[currentQuestion.id] === option.id ? "border-blue-500 bg-blue-500" : "border-muted/30"
                       }`}
                     >
                       {answers[currentQuestion.id] === option.id && (
@@ -412,7 +412,7 @@ export function GestureEnhancedTestInterface({
 
         {/* Gesture Activity Log */}
         {touchSupport && gestureLog.length > 0 && (
-          <Card className="border-gray-200">
+          <Card className="border-muted/20">
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 <Hand className="h-4 w-4" />
@@ -420,7 +420,7 @@ export function GestureEnhancedTestInterface({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-32 overflow-y-auto bg-gray-900 rounded-[28px] p-3 font-mono text-sm">
+              <div className="h-32 overflow-y-auto bg-muted/90 rounded-[28px] p-3 font-mono text-sm">
                 <div className="space-y-1">
                   {gestureLog.map((log, index) => (
                     <div
@@ -432,7 +432,7 @@ export function GestureEnhancedTestInterface({
                             ? "text-blue-400"
                             : log.includes("swipe")
                               ? "text-yellow-400"
-                              : "text-gray-300"
+                              : "text-muted/30"
                       }`}
                     >
                       {log}

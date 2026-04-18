@@ -469,7 +469,7 @@ export function ConversationalInterviewSimulator({
 
                 {/* Recording Status Badge - Top Left */}
                 <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
-                  <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red-500 animate-pulse' : 'bg-emerald-500'}`} />
+                  <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red/50 animate-pulse' : 'bg-emerald-500'}`} />
                   <span className="text-xs font-bold text-white bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full uppercase tracking-wide">
                     {isListening ? '🔴 Grabando' : '🎥 Listo'}
                   </span>
@@ -491,7 +491,7 @@ export function ConversationalInterviewSimulator({
                         onClick={isListening ? stopListening : startListening}
                         className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
                           isListening
-                            ? 'bg-red-600 hover:bg-red-700 text-white'
+                            ? 'bg-red-600 hover:bg-red text-white'
                             : 'bg-blue-600 hover:bg-blue-700 text-white'
                         }`}
                         title={isListening ? 'Detener' : 'Grabar'}
@@ -610,9 +610,9 @@ export function ConversationalInterviewSimulator({
             </div>
 
             {error && (
-              <Alert variant="destructive" className="border-red-300 bg-red-50 dark:bg-red-900/20">
+              <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red-900/20">
                 <AlertTriangle className="h-4 w-4 text-red-600" />
-                <AlertDescription className="text-red-700 dark:text-red-200 ml-2">
+                <AlertDescription className="text-red dark:text-red-200 ml-2">
                   {error}
                 </AlertDescription>
               </Alert>

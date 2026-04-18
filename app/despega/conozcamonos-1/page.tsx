@@ -227,7 +227,7 @@ export default function Conozcamonos1Page() {
                       onClick={() => handleAnswer(option)}
                       className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${
                         isSelected
-                          ? 'border-primary bg-primary/10'
+                          ? 'border-purple bg-purple/10'
                           : 'border-border hover:border-border/80'
                       }`}
                     >
@@ -311,7 +311,7 @@ export default function Conozcamonos1Page() {
           )}
 
           {error && (
-            <div className="mt-4 p-3 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
+            <div className="mt-4 p-3 bg-red/5 dark:bg-red-950 border border-red/20 dark:border-red-800 rounded-lg">
               <p className="text-sm text-red-900 dark:text-red-100">{error}</p>
             </div>
           )}

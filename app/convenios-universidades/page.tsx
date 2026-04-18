@@ -44,7 +44,7 @@ export default function UniversityPartnershipsPage() {
 
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div className="bg-white rounded-xl p-6">
-              <h3 className="text-xl font-bold text-red-700 mb-3">Brecha de Habilidades Crítica</h3>
+              <h3 className="text-xl font-bold text-red mb-3">Brecha de Habilidades Crítica</h3>
               <p className="text-muted/70 mb-2">
                 <strong>+50%</strong> de adultos en Chile están por debajo del nivel mínimo en lectura y matemáticas
               </p>

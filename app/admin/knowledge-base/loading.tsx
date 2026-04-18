@@ -78,7 +78,7 @@ export default function AdminKnowledgeBaseLoading() {
       <div className="flex items-center justify-center py-8">
         <div className="text-center">
           <BookOpen className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue" />
-          <p className="text-gray-600">Cargando panel de administración...</p>
+          <p className="text-muted/60">Cargando panel de administración...</p>
         </div>
       </div>
     </div>

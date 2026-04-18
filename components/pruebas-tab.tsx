@@ -115,7 +115,7 @@ export function PruebasTab() {
         <CardContent className="space-y-6">
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <AlertCircle className="w-5 h-5 text-red-500" />
+              <AlertCircle className="w-5 h-5 text-red" />
               <h3 className="text-lg font-semibold">El Desafío</h3>
             </div>
             <p className="text-muted-foreground">{selectedCase.challenge}</p>
@@ -145,7 +145,7 @@ export function PruebasTab() {
             <ul className="space-y-2">
               {selectedCase.keyLearnings.map((learning, idx) => (
                 <li key={idx} className="flex gap-2 text-sm text-muted-foreground">
-                  <span className="text-primary font-bold">•</span>
+                  <span className="text-purple font-bold">•</span>
                   {learning}
                 </li>
               ))}
@@ -153,9 +153,9 @@ export function PruebasTab() {
           </div>
 
           {selectedCase.relevantTesis && (
-            <div className="p-4 bg-primary/5 rounded-[28px] border border-primary/20">
+            <div className="p-4 bg-purple/5 rounded-[28px] border border-purple/20">
               <p className="text-sm text-muted-foreground mb-1">Tesis relacionada:</p>
-              <p className="font-semibold text-primary">"{selectedCase.relevantTesis}"</p>
+              <p className="font-semibold text-purple">"{selectedCase.relevantTesis}"</p>
             </div>
           )}
 

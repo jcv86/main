@@ -64,7 +64,7 @@ export function PeerComparison({
       case "needs_improvement":
         return "bg-red-100 text-red-800"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-muted/10 text-gray-800"
     }
   }
 

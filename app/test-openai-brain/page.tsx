@@ -76,9 +76,9 @@ export default function TestOpenAIInsightsPage() {
 
         {/* Error Display */}
         {error && (
-          <Card className="bg-red-900/20 border-red-500/50">
+          <Card className="bg-red-900/20 border-red/50/50">
             <CardContent className="pt-6 flex gap-3">
-              <AlertCircle className="w-6 h-6 text-red-500 flex-shrink-0 mt-1" />
+              <AlertCircle className="w-6 h-6 text-red flex-shrink-0 mt-1" />
               <div className="flex-1">
                 <p className="font-semibold text-red-100">Test Fallido</p>
                 <p className="text-red-200 text-sm mt-1">{error}</p>

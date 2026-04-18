@@ -128,21 +128,21 @@ export default function A1CerebralPage() {
                     key={`more-${opt.texto}`} 
                     onClick={() => { setMore(p => ({ ...p, [q.id]: opt.texto })); setError('') }} 
                     disabled={less[q.id] === opt.texto}
-                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm ${more[q.id] === opt.texto ? 'border-green-600 bg-green/5 dark:bg-green-950' : less[q.id] === opt.texto ? 'border-gray-300 bg-gray-100 dark:bg-gray-900 opacity-50 cursor-not-allowed' : 'border-border'}`}>
+                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm ${more[q.id] === opt.texto ? 'border-green-600 bg-green/5 dark:bg-green-950' : less[q.id] === opt.texto ? 'border-muted/30 bg-muted/10 dark:bg-muted/90 opacity-50 cursor-not-allowed' : 'border-border'}`}>
                     {opt.texto}
                   </button>
                 ))}
               </div>
             </div>
             <div>
-              <p className="text-lg font-semibold text-red-700 dark:text-red-400 mb-4 text-center">MENOS como yo</p>
+              <p className="text-lg font-semibold text-red dark:text-red-400 mb-4 text-center">MENOS como yo</p>
               <div className="space-y-3">
                 {q.opciones.map((opt) => (
                   <button 
                     key={`less-${opt.texto}`} 
                     onClick={() => { setLess(p => ({ ...p, [q.id]: opt.texto })); setError('') }} 
                     disabled={more[q.id] === opt.texto}
-                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm ${less[q.id] === opt.texto ? 'border-red-600 bg-red-50 dark:bg-red-950' : more[q.id] === opt.texto ? 'border-gray-300 bg-gray-100 dark:bg-gray-900 opacity-50 cursor-not-allowed' : 'border-border'}`}>
+                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm ${less[q.id] === opt.texto ? 'border-red-600 bg-red/5 dark:bg-red-950' : more[q.id] === opt.texto ? 'border-muted/30 bg-muted/10 dark:bg-muted/90 opacity-50 cursor-not-allowed' : 'border-border'}`}>
                     {opt.texto}
                   </button>
                 ))}

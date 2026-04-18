@@ -222,7 +222,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple mx-auto mb-4"></div>
           <p className="text-sm text-muted-foreground">Cargando calendario...</p>
         </div>
       </div>
@@ -302,7 +302,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
         {/* Today's Activities */}
         <Card className="p-6">
           <div className="flex items-center gap-2 mb-4">
-            <Calendar className="w-5 h-5 text-primary" />
+            <Calendar className="w-5 h-5 text-purple" />
             <h3 className="font-semibold">Hoy - {formatDate(selectedDate.toISOString())}</h3>
           </div>
 
@@ -356,7 +356,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
         {/* Upcoming Activities */}
         <Card className="p-6">
           <div className="flex items-center gap-2 mb-4">
-            <Clock className="w-5 h-5 text-primary" />
+            <Clock className="w-5 h-5 text-purple" />
             <h3 className="font-semibold">Próximas Actividades</h3>
           </div>
 

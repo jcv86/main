@@ -16,7 +16,7 @@ const CATEGORIAS_BASE = [
     name: "Noticias del Día",
     description: "Mantente informado de lo relevante",
     icon: Newspaper,
-    color: "bg-red-500",
+    color: "bg-red/50",
     lightColor: "bg-red-100",
     textColor: "text-red-800",
   },
@@ -109,7 +109,7 @@ export default function BasePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple" />
       </div>
     )
   }
@@ -292,7 +292,7 @@ export default function BasePage() {
                         <p className="text-sm text-muted-foreground mt-1">{noticia.resumen}</p>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-sm font-medium text-primary">+{noticia.puntos} pts</span>
+                        <span className="text-sm font-medium text-purple">+{noticia.puntos} pts</span>
                         {leida ? (
                           <Badge className="bg-green/50">Leído</Badge>
                         ) : (

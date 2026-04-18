@@ -52,7 +52,7 @@ const getPilarColor = (pilar: string) => {
     "relaciones": "bg-pink-100 text-pink-900",
     "plan_ejecutivo": "bg-purple-100 text-purple-900",
   }
-  return colors[pilar] || "bg-gray-100"
+  return colors[pilar] || "bg-muted/10"
 }
 
 const getPriorityLabel = (score: number) => {
@@ -151,7 +151,7 @@ export function A2RecommendationBridge({
                 <Card
                   key={rec.path.id}
                   className={`cursor-pointer transition-all hover:shadow-lg ${
-                    isPrimary ? "border-2 border-primary bg-primary/5" : ""
+                    isPrimary ? "border-2 border-purple bg-purple/5" : ""
                   }`}
                   onClick={() => onPathSelect?.(rec.path.id)}
                 >

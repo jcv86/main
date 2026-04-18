@@ -15,7 +15,7 @@ export default function InvestorPitch() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+      <header className="bg-white border-b border-muted/20 sticky top-0 z-50 shadow-sm">
         <div className="container mx-auto px-4 py-4 max-w-7xl flex items-center justify-between">
           <Link href="/" className="text-lg font-semibold text-purple hover:text-purple">
             ← Volver al Inicio
@@ -55,7 +55,7 @@ export default function InvestorPitch() {
 
         {/* The Problem */}
         <section className="mb-12">
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-muted/20">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
               <span className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-2xl">🎯</span>
               El Problema
@@ -128,7 +128,7 @@ export default function InvestorPitch() {
 
         {/* Market Opportunity */}
         <section className="mb-12">
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-muted/20">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
               <span className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center text-2xl">📈</span>
               Oportunidad de Mercado
@@ -201,15 +201,15 @@ export default function InvestorPitch() {
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-purple mb-1">Primero en IA</div>
-                  <p className="text-sm text-gray-600">Gen Z y Millennials demandan soluciones impulsadas por IA</p>
+                  <p className="text-sm text-muted/60">Gen Z y Millennials demandan soluciones impulsadas por IA</p>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-blue mb-1">Trabajo Remoto</div>
-                  <p className="text-sm text-gray-600">Mayor necesidad de desarrollo profesional autodirigido</p>
+                  <p className="text-sm text-muted/60">Mayor necesidad de desarrollo profesional autodirigido</p>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-green mb-1">Brecha de Habilidades</div>
-                  <p className="text-sm text-gray-600">
+                  <p className="text-sm text-muted/60">
                     Empresas invirtiendo fuertemente en el reforzamiento de empleados
                   </p>
                 </div>
@@ -220,7 +220,7 @@ export default function InvestorPitch() {
 
         {/* Business Model */}
         <section className="mb-12">
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-muted/20">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
               <span className="w-12 h-12 bg-blue/10 rounded-xl flex items-center justify-center text-2xl">💰</span>
               Modelo de Negocio
@@ -236,7 +236,7 @@ export default function InvestorPitch() {
                   <li>✓ Coaching básico de IA</li>
                   <li>✓ Resultados e insights</li>
                 </ul>
-                <p className="text-xs text-gray-600">
+                <p className="text-xs text-muted/60">
                   Construye base de usuarios y recopila datos para ajuste producto-mercado
                 </p>
               </div>
@@ -251,7 +251,7 @@ export default function InvestorPitch() {
                   <li>✓ Simulaciones de trayectoria de carrera</li>
                   <li>✓ Soporte prioritario</li>
                 </ul>
-                <p className="text-xs text-gray-600">Objetivo: conversión de 5-10% de usuarios gratuitos</p>
+                <p className="text-xs text-muted/60">Objetivo: conversión de 5-10% de usuarios gratuitos</p>
               </div>
 
               <div className="bg-gradient-to-br from-green/5 to-purple/5 rounded-xl p-6 border border-emerald-100">
@@ -264,7 +264,7 @@ export default function InvestorPitch() {
                   <li>✓ Integración con sistemas HR</li>
                   <li>✓ Soporte dedicado</li>
                 </ul>
-                <p className="text-xs text-gray-600">Objetivo: grandes empresas chilenas y consultorías de HR</p>
+                <p className="text-xs text-muted/60">Objetivo: grandes empresas chilenas y consultorías de HR</p>
               </div>
             </div>
           </div>
@@ -272,7 +272,7 @@ export default function InvestorPitch() {
 
         {/* Competitive Advantage */}
         <section className="mb-12">
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-muted/20">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
               <span className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center text-2xl">🚀</span>
               Ventaja Competitiva
@@ -337,7 +337,7 @@ export default function InvestorPitch() {
 
         {/* Traction & Roadmap */}
         <section className="mb-12">
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-muted/20">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
               <span className="w-12 h-12 bg-purple/10 rounded-xl flex items-center justify-center text-2xl">📅</span>
               Desarrollo y Roadmap
@@ -392,7 +392,7 @@ export default function InvestorPitch() {
 
         {/* Team */}
         <section className="mb-12">
-          <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-200">
+          <div className="bg-white rounded-2xl p-8 shadow-lg border border-muted/20">
             <h2 className="text-3xl font-bold mb-6 text-gray-900 flex items-center gap-3">
               <span className="w-12 h-12 bg-purple/10 rounded-xl flex items-center justify-center text-2xl">👥</span>
               Equipo
@@ -528,9 +528,9 @@ export default function InvestorPitch() {
 
         {/* Contact */}
         <section className="text-center">
-          <div className="bg-white rounded-2xl p-12 shadow-lg border border-gray-200">
+          <div className="bg-white rounded-2xl p-12 shadow-lg border border-muted/20">
             <h2 className="text-3xl font-bold mb-4 text-gray-900">Hablemos</h2>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="text-xl text-muted/60 mb-8">
               ¿Interesado en aprender más? Nos encantaría discutir esta oportunidad contigo.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -542,7 +542,7 @@ export default function InvestorPitch() {
               </a>
               <Link
                 href="/whitepaper"
-                className="px-8 py-4 bg-gray-100 text-gray-900 rounded-xl font-semibold hover:bg-gray-200 transition-colors"
+                className="px-8 py-4 bg-muted/10 text-gray-900 rounded-xl font-semibold hover:bg-muted/20 transition-colors"
               >
                 Ver Whitepaper Técnico
               </Link>
@@ -552,7 +552,7 @@ export default function InvestorPitch() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-12 py-8 text-center text-gray-600 border-t border-gray-200">
+      <footer className="mt-12 py-8 text-center text-muted/60 border-t border-muted/20">
         <p className="mb-2">
           <strong>Despega Tu Carrera</strong> - Democratizando el Desarrollo Profesional en LATAM
         </p>

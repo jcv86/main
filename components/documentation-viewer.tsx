@@ -179,7 +179,7 @@ export function DocumentationViewer({ type = "tecnica" }: DocumentationViewerPro
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
           <p className="text-muted-foreground">Cargando documentación...</p>
         </div>
       </div>
@@ -315,10 +315,10 @@ export function DocumentationViewer({ type = "tecnica" }: DocumentationViewerPro
                   </div>
                 ),
                 a: ({ node, ...props }) => (
-                  <a className="text-primary hover:underline cursor-pointer" onClick={handleLinkClick} {...props} />
+                  <a className="text-purple hover:underline cursor-pointer" onClick={handleLinkClick} {...props} />
                 ),
                 blockquote: ({ node, ...props }) => (
-                  <blockquote className="border-l-4 border-primary pl-4 italic my-4" {...props} />
+                  <blockquote className="border-l-4 border-purple pl-4 italic my-4" {...props} />
                 ),
                 ul: ({ node, ...props }) => <ul className="list-disc list-inside my-4 space-y-2" {...props} />,
                 ol: ({ node, ...props }) => <ol className="list-decimal list-inside my-4 space-y-2" {...props} />,

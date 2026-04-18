@@ -19,7 +19,7 @@ interface DISCProfile {
 const DISC_DESCRIPTIONS: Record<string, { name: string; color: string; description: string }> = {
   D: {
     name: "Dominancia",
-    color: "bg-red-500/10",
+    color: "bg-red/50/10",
     description: "Orientado a resultados, directo y decisivo",
   },
   I: {
@@ -79,9 +79,9 @@ export function PersonalizationProfile() {
           </div>
 
           {discProfile.dominant_pattern && (
-            <div className="p-4 bg-primary/5 rounded-[28px] border border-primary/20">
+            <div className="p-4 bg-purple/5 rounded-[28px] border border-purple/20">
               <div className="text-sm text-muted-foreground mb-1">Patrón Dominante:</div>
-              <div className="text-lg font-semibold text-primary">
+              <div className="text-lg font-semibold text-purple">
                 {DISC_DESCRIPTIONS[discProfile.dominant_pattern]?.name} (
                 {DISC_DESCRIPTIONS[discProfile.dominant_pattern]?.description})
               </div>

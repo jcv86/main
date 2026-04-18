@@ -241,10 +241,10 @@ export default function DISCTestClient() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading Despega Cerebral assessment...</p>
+          <p className="text-muted/60">Loading Despega Cerebral assessment...</p>
         </div>
       </div>
     )
@@ -252,9 +252,9 @@ export default function DISCTestClient() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600">Redirecting...</p>
+          <p className="text-muted/60">Redirecting...</p>
         </div>
       </div>
     )
@@ -269,7 +269,7 @@ export default function DISCTestClient() {
 
   if (isCompleted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center p-4">
         <Card className="w-full max-w-2xl">
           <CardHeader className="text-center">
             <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
@@ -304,8 +304,8 @@ export default function DISCTestClient() {
               </Badge>
             )}
             <div className="flex items-center space-x-2">
-              <Clock className="h-4 w-4 text-gray-500" />
-              <span className="text-sm text-gray-600">{Math.round((Date.now() - startTime) / 60000)} min</span>
+              <Clock className="h-4 w-4 text-muted/50" />
+              <span className="text-sm text-muted/60">{Math.round((Date.now() - startTime) / 60000)} min</span>
             </div>
           </div>
         </div>
@@ -325,12 +325,12 @@ export default function DISCTestClient() {
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-bold">Despega Cerebral</h2>
-            <span className="text-sm font-medium text-gray-600">
+            <span className="text-sm font-medium text-muted/60">
               {currentQuestion + 1} of {discQuestions.length}
             </span>
           </div>
           <Progress value={progress} className="h-2" />
-          <p className="text-xs text-gray-500 mt-1">{Math.round((Date.now() - startTime) / 60000)} minutes elapsed</p>
+          <p className="text-xs text-muted/50 mt-1">{Math.round((Date.now() - startTime) / 60000)} minutes elapsed</p>
         </div>
 
         <Card className="transition-all duration-300" style={{ transform: `scale(${Math.min(zoomLevel, 1.1)})` }}>
@@ -353,7 +353,7 @@ export default function DISCTestClient() {
                   {(question as any).options.map((option: string, index: number) => (
                     <div
                       key={index}
-                      className="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50 border border-gray-200 cursor-pointer transition-colors"
+                      className="flex items-center space-x-2 p-3 rounded-lg hover:bg-muted/5 border border-muted/20 cursor-pointer transition-colors"
                       onClick={() => handleAnswer(option)}
                     >
                       <RadioGroupItem value={option} id={`option-${index}`} />
@@ -374,7 +374,7 @@ export default function DISCTestClient() {
                   onChange={(e) => handleAnswer(e.target.value)}
                   className="min-h-[120px]"
                 />
-                <div className="flex items-center text-xs text-gray-500">
+                <div className="flex items-center text-xs text-muted/50">
                   <Brain className="h-3 w-3 mr-1 text-blue" />
                   This response will be analyzed for personalized insights
                 </div>
@@ -430,7 +430,7 @@ export default function DISCTestClient() {
               <Brain className="h-5 w-5 text-blue mt-0.5" />
               <div>
                 <h3 className="font-semibold text-sm">About the Despega Cerebral Assessment</h3>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-muted/60 mt-1">
                   The Despega Cerebral assessment evaluates four behavioral dimensions: Dominance (D), Influence (I),
                   Steadiness (S), and Compliance (C). Your responses will help identify your natural behavioral style
                   and communication preferences in professional settings.

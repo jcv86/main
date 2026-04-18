@@ -119,16 +119,16 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
 
         {/* Recording Status Indicator */}
         {isRecording && (
-          <div className="flex items-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-950 rounded-[28px] border border-red-200 dark:border-red-800">
+          <div className="flex items-center gap-2 px-3 py-2 bg-red/5 dark:bg-red-950 rounded-[28px] border border-red/20 dark:border-red-800">
             <span className="animate-pulse w-2 h-2 rounded-[20px] bg-red-600"></span>
-            <span className="text-xs font-medium text-red-700 dark:text-red-300">Grabando...</span>
+            <span className="text-xs font-medium text-red dark:text-red-300">Grabando...</span>
           </div>
         )}
 
         {/* Controls */}
         <div className="flex gap-2">
           {!isRecording && !recordedBlob && (
-            <Button onClick={startRecording} className="flex-1 bg-red-600 hover:bg-red-700 h-9 text-sm">
+            <Button onClick={startRecording} className="flex-1 bg-red-600 hover:bg-red h-9 text-sm">
               <Mic className="w-4 h-4 mr-1" />
               Empezar
             </Button>

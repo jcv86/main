@@ -38,7 +38,7 @@ export default function BetterMeHubPage() {
           </Card>
           <Card className="border-l-4 border-l-yellow-500">
             <CardContent className="pt-6">
-              <Trophy className="w-6 h-6 mb-2 text-yellow-500" />
+              <Trophy className="w-6 h-6 mb-2 text-orange" />
               <p className="text-sm text-muted-foreground">Posición</p>
               <p className="text-2xl font-bold">#47</p>
             </CardContent>
@@ -88,7 +88,7 @@ export default function BetterMeHubPage() {
                     <p className="font-semibold">→ Paso 2: Lee el Primer Libro</p>
                     <p className="text-sm text-muted-foreground">Comienza con una recomendación personalizada</p>
                   </div>
-                  <div className="border-l-4 border-yellow-500 pl-4 py-2">
+                  <div className="border-l-4 border-orange pl-4 py-2">
                     <p className="font-semibold">→ Paso 3: Mantén tu Racha</p>
                     <p className="text-sm text-muted-foreground">Lee todos los días para subir en el ranking</p>
                   </div>

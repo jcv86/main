@@ -98,7 +98,7 @@ export function AdvancedBookSearch({ onSearch, onFiltersChange }: AdvancedSearch
       {/* Search Input */}
       <div className="relative">
         <div className="relative flex items-center">
-          <Search className="absolute left-3 w-5 h-5 text-gray-400" />
+          <Search className="absolute left-3 w-5 h-5 text-muted/40" />
           <Input
             ref={inputRef}
             type="text"
@@ -119,7 +119,7 @@ export function AdvancedBookSearch({ onSearch, onFiltersChange }: AdvancedSearch
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="absolute right-3 text-gray-400 hover:text-gray-600"
+              className="absolute right-3 text-muted/40 hover:text-muted/60"
             >
               <X className="w-5 h-5" />
             </button>
@@ -130,21 +130,21 @@ export function AdvancedBookSearch({ onSearch, onFiltersChange }: AdvancedSearch
         {showSuggestions && suggestions.length > 0 && (
           <div
             ref={suggestionsRef}
-            className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-700 rounded-lg shadow-lg z-50"
+            className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-muted/20 dark:border-slate-700 rounded-lg shadow-lg z-50"
           >
             {suggestions.map((suggestion) => (
               <button
                 key={suggestion.id}
                 onClick={() => handleSearch(suggestion.title)}
-                className="w-full px-4 py-3 text-left hover:bg-gray-50 dark:hover:bg-slate-800 border-b border-gray-100 dark:border-slate-800 last:border-b-0 flex items-center justify-between group"
+                className="w-full px-4 py-3 text-left hover:bg-muted/5 dark:hover:bg-slate-800 border-b border-muted/10 dark:border-slate-800 last:border-b-0 flex items-center justify-between group"
               >
                 <div>
                   <div className="font-medium text-foreground">{suggestion.title}</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
+                  <div className="text-sm text-muted/60 dark:text-muted/40">
                     {suggestion.author} • {suggestion.category}
                   </div>
                 </div>
-                <Search className="w-4 h-4 text-gray-400 group-hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Search className="w-4 h-4 text-muted/40 group-hover:text-muted/60 opacity-0 group-hover:opacity-100 transition-opacity" />
               </button>
             ))}
           </div>

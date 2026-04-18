@@ -195,7 +195,7 @@ export function GesturePerformanceMonitor() {
       case "improving":
         return <TrendingUp className="h-4 w-4 text-green-500" />
       case "declining":
-        return <TrendingDown className="h-4 w-4 text-red-500" />
+        return <TrendingDown className="h-4 w-4 text-red" />
       default:
         return <BarChart3 className="h-4 w-4 text-blue-500" />
     }
@@ -253,7 +253,7 @@ export function GesturePerformanceMonitor() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <Activity className={`h-5 w-5 ${isMonitoring ? "text-green-500 animate-pulse" : "text-gray-400"}`} />
+                <Activity className={`h-5 w-5 ${isMonitoring ? "text-green-500 animate-pulse" : "text-muted/40"}`} />
                 <span className="font-semibold">Status</span>
               </div>
               <Badge variant={isMonitoring ? "default" : "outline"}>
@@ -269,7 +269,7 @@ export function GesturePerformanceMonitor() {
             </div>
             <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <Clock className="h-5 w-5 text-yellow-500" />
+                <Clock className="h-5 w-5 text-orange" />
                 <span className="font-semibold">Avg Response</span>
               </div>
               <span className={`text-2xl font-bold ${getPerformanceColor(stats?.averageResponseTime || 0, "time")}`}>
@@ -302,7 +302,7 @@ export function GesturePerformanceMonitor() {
             </CardHeader>
             <CardContent className="space-y-4">
               {/* Overall Performance */}
-              <div className="p-4 bg-gray-50 rounded-lg">
+              <div className="p-4 bg-muted/5 rounded-lg">
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-medium">Overall Performance</span>
                   <div className="flex items-center gap-2">
@@ -338,13 +338,13 @@ export function GesturePerformanceMonitor() {
                       </div>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <span className="text-gray-600">Avg Time:</span>
+                          <span className="text-muted/60">Avg Time:</span>
                           <span className={`ml-2 font-mono ${getPerformanceColor(data.avgTime, "time")}`}>
                             {data.avgTime}ms
                           </span>
                         </div>
                         <div>
-                          <span className="text-gray-600">Success:</span>
+                          <span className="text-muted/60">Success:</span>
                           <span className={`ml-2 font-mono ${getPerformanceColor(data.successRate, "rate")}`}>
                             {data.successRate}%
                           </span>
@@ -368,7 +368,7 @@ export function GesturePerformanceMonitor() {
             <CardContent>
               <div className="space-y-3">
                 {realtimeData.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500">
+                  <div className="text-center py-8 text-muted/50">
                     {isMonitoring ? "Waiting for gesture data..." : "Start monitoring to see real-time data"}
                   </div>
                 ) : (
@@ -376,7 +376,7 @@ export function GesturePerformanceMonitor() {
                     <div
                       key={`${metric.timestamp}-${index}`}
                       className={`p-3 rounded-[28px] border transition-all ${
-                        metric.success ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"
+                        metric.success ? "bg-green-50 border-green-200" : "bg-red/5 border-red/20"
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -386,18 +386,18 @@ export function GesturePerformanceMonitor() {
                           </Badge>
                           <div>
                             <span className="font-medium capitalize">{metric.gestureType}</span>
-                            <span className="text-sm text-gray-500 ml-2">on {metric.deviceType}</span>
+                            <span className="text-sm text-muted/50 ml-2">on {metric.deviceType}</span>
                           </div>
                         </div>
                         <div className="text-right text-sm">
                           <div className={`font-mono ${getPerformanceColor(metric.responseTime, "time")}`}>
                             {metric.responseTime}ms
                           </div>
-                          <div className="text-gray-500">{new Date(metric.timestamp).toLocaleTimeString()}</div>
+                          <div className="text-muted/50">{new Date(metric.timestamp).toLocaleTimeString()}</div>
                         </div>
                       </div>
                       <div className="mt-2">
-                        <div className="flex items-center justify-between text-xs text-gray-600">
+                        <div className="flex items-center justify-between text-xs text-muted/60">
                           <span>Accuracy: {metric.accuracy}%</span>
                           <Progress value={metric.accuracy} className="w-20 h-1" />
                         </div>

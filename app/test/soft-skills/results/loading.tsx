@@ -11,7 +11,7 @@ export default function SoftSkillsResultsLoading() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="h-8 bg-gradient-to-r from-red/30 to-purple-300 rounded-lg mb-4 animate-pulse"></div>
-          <div className="h-4 bg-gray-200 rounded-lg w-2/3 mx-auto animate-pulse"></div>
+          <div className="h-4 bg-muted/20 rounded-lg w-2/3 mx-auto animate-pulse"></div>
         </div>
 
         {/* Progress Section */}
@@ -58,7 +58,7 @@ export default function SoftSkillsResultsLoading() {
               <CardContent className="p-4 text-center">
                 <MessageCircle className="h-8 w-8 text-red mx-auto mb-2" />
                 <h4 className="font-semibold text-gray-800 mb-1">Análisis de Comunicación</h4>
-                <p className="text-sm text-gray-600">Evaluamos tu capacidad para transmitir ideas efectivamente</p>
+                <p className="text-sm text-muted/60">Evaluamos tu capacidad para transmitir ideas efectivamente</p>
               </CardContent>
             </Card>
 
@@ -66,7 +66,7 @@ export default function SoftSkillsResultsLoading() {
               <CardContent className="p-4 text-center">
                 <Crown className="h-8 w-8 text-purple mx-auto mb-2" />
                 <h4 className="font-semibold text-gray-800 mb-1">Potencial de Liderazgo</h4>
-                <p className="text-sm text-gray-600">Medimos tu habilidad para guiar y motivar equipos</p>
+                <p className="text-sm text-muted/60">Medimos tu habilidad para guiar y motivar equipos</p>
               </CardContent>
             </Card>
 
@@ -74,7 +74,7 @@ export default function SoftSkillsResultsLoading() {
               <CardContent className="p-4 text-center">
                 <Users className="h-8 w-8 text-blue mx-auto mb-2" />
                 <h4 className="font-semibold text-gray-800 mb-1">Colaboración</h4>
-                <p className="text-sm text-gray-600">Analizamos tu efectividad trabajando en equipo</p>
+                <p className="text-sm text-muted/60">Analizamos tu efectividad trabajando en equipo</p>
               </CardContent>
             </Card>
           </div>
@@ -93,22 +93,22 @@ export default function SoftSkillsResultsLoading() {
             { icon: Target, name: "Pensamiento Crítico", color: "gray" },
             { icon: Sparkles, name: "Creatividad", color: "orange" },
           ].map((competency, index) => (
-            <Card key={index} className="border-gray-200 shadow-sm">
+            <Card key={index} className="border-muted/20 shadow-sm">
               <CardContent className="p-6">
                 <div className="flex items-center gap-3 mb-4">
                   <div className={`p-2 rounded-lg bg-${competency.color}-100`}>
                     <competency.icon className={`h-6 w-6 text-${competency.color}-600`} />
                   </div>
                   <div className="flex-1">
-                    <div className="h-4 bg-gray-200 rounded animate-pulse mb-2"></div>
-                    <div className="h-3 bg-gray-100 rounded animate-pulse w-2/3"></div>
+                    <div className="h-4 bg-muted/20 rounded animate-pulse mb-2"></div>
+                    <div className="h-3 bg-muted/10 rounded animate-pulse w-2/3"></div>
                   </div>
                 </div>
 
                 <div className="space-y-3">
-                  <div className="h-2 bg-gray-200 rounded-full animate-pulse"></div>
-                  <div className="h-3 bg-gray-100 rounded animate-pulse"></div>
-                  <div className="h-3 bg-gray-100 rounded animate-pulse w-4/5"></div>
+                  <div className="h-2 bg-muted/20 rounded-full animate-pulse"></div>
+                  <div className="h-3 bg-muted/10 rounded animate-pulse"></div>
+                  <div className="h-3 bg-muted/10 rounded animate-pulse w-4/5"></div>
                 </div>
               </CardContent>
             </Card>
@@ -117,7 +117,7 @@ export default function SoftSkillsResultsLoading() {
 
         {/* Loading Animation */}
         <div className="text-center mt-8">
-          <div className="inline-flex items-center gap-2 text-gray-600">
+          <div className="inline-flex items-center gap-2 text-muted/60">
             <Loader2 className="h-5 w-5 animate-spin" />
             <span>Preparando tu análisis personalizado...</span>
           </div>

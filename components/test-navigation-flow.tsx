@@ -53,7 +53,7 @@ const tests: TestInfo[] = [
     questions: 20,
     difficulty: "Beginner",
     icon: Heart,
-    color: "bg-red-500",
+    color: "bg-red/50",
     path: "/test/emotional-intelligence",
   },
   {
@@ -164,12 +164,12 @@ export default function TestNavigationFlow() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Completado General</span>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-muted/60">
                 {completedTests.length}/{tests.length} evaluaciones
               </span>
             </div>
             <Progress value={overallProgress} className="h-2" />
-            <div className="flex items-center justify-between text-sm text-gray-600">
+            <div className="flex items-center justify-between text-sm text-muted/60">
               <span>Inicio</span>
               <span>{overallProgress}% completado</span>
               <span>Completo</span>
@@ -231,8 +231,8 @@ export default function TestNavigationFlow() {
                 isCompleted
                   ? "border-green-200 bg-green-50"
                   : isAvailable
-                    ? "border-gray-200 hover:border-gray-300"
-                    : "border-gray-100 bg-gray-50"
+                    ? "border-muted/20 hover:border-muted/30"
+                    : "border-muted/10 bg-muted/5"
               }`}
             >
               <CardHeader className="pb-3">
@@ -249,13 +249,13 @@ export default function TestNavigationFlow() {
                     </div>
                   </div>
                   {isCompleted && <CheckCircle className="h-6 w-6 text-green-600" />}
-                  {!isAvailable && <AlertCircle className="h-6 w-6 text-gray-400" />}
+                  {!isAvailable && <AlertCircle className="h-6 w-6 text-muted/40" />}
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-gray-600">{test.description}</p>
+                <p className="text-sm text-muted/60">{test.description}</p>
 
-                <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center justify-between text-sm text-muted/50">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
@@ -276,13 +276,13 @@ export default function TestNavigationFlow() {
                 )}
 
                 {test.prerequisites && !isCompleted && (
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-muted/50">
                     <span className="font-medium">Prerrequisitos:</span>{" "}
                     {test.prerequisites.map((prereq) => {
                       const prereqTest = tests.find((t) => t.id === prereq)
                       const isPrereqCompleted = completedTests.includes(prereq)
                       return (
-                        <span key={prereq} className={isPrereqCompleted ? "text-green-600" : "text-red-500"}>
+                        <span key={prereq} className={isPrereqCompleted ? "text-green-600" : "text-red"}>
                           {prereqTest?.name}
                           {test.prerequisites!.indexOf(prereq) < test.prerequisites!.length - 1 && ", "}
                         </span>

@@ -16,13 +16,13 @@ export function A4CalibrationDashboard() {
       case "beginner":
         return "bg-blue-500"
       case "intermediate":
-        return "bg-yellow-500"
+        return "bg-orange"
       case "advanced":
         return "bg-purple-500"
       case "expert":
-        return "bg-red-500"
+        return "bg-red/50"
       default:
-        return "bg-gray-500"
+        return "bg-muted/50"
     }
   }
 
@@ -86,7 +86,7 @@ export function A4CalibrationDashboard() {
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Target className="w-5 h-5 text-yellow-500" />
+              <Target className="w-5 h-5 text-orange" />
               <CardTitle className="text-lg">A2: Misiones</CardTitle>
             </div>
           </CardHeader>
@@ -98,7 +98,7 @@ export function A4CalibrationDashboard() {
                   <div
                     key={i}
                     className={`h-2 w-6 rounded ${
-                      i < calibration.a2_mission_difficulty ? "bg-yellow-500" : "bg-muted"
+                      i < calibration.a2_mission_difficulty ? "bg-orange" : "bg-muted"
                     }`}
                   />
                 ))}
@@ -137,7 +137,7 @@ export function A4CalibrationDashboard() {
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Activity className="w-5 h-5 text-red-500" />
+              <Activity className="w-5 h-5 text-red" />
               <CardTitle className="text-lg">Coach Estratégico</CardTitle>
             </div>
           </CardHeader>
@@ -176,7 +176,7 @@ export function A4CalibrationDashboard() {
                 </span>
               </li>
               <li className="flex gap-2">
-                <span className="text-yellow-500">•</span>
+                <span className="text-orange">•</span>
                 <span>
                   <strong>A2</strong> genera misiones de dificultad {calibration.a2_mission_difficulty}/5
                 </span>
@@ -188,7 +188,7 @@ export function A4CalibrationDashboard() {
                 </span>
               </li>
               <li className="flex gap-2">
-                <span className="text-red-500">•</span>
+                <span className="text-red">•</span>
                 <span>
                   <strong>Coach</strong> exige {calibration.coach_demand_level}% ({calibration.coach_directiveness})
                 </span>

@@ -73,14 +73,14 @@ export function ChileEnNumeros({
 }: ChileEnNumerosProps) {
   const getArrow = (change: number) => {
     if (change > 0) return <ArrowUp className="w-4 h-4 text-green-500" />
-    if (change < 0) return <ArrowDown className="w-4 h-4 text-red-500" />
+    if (change < 0) return <ArrowDown className="w-4 h-4 text-red" />
     return <Minus className="w-4 h-4 text-slate-400" />
   }
 
   const getImportanceColor = (importance: string) => {
     switch (importance) {
       case "Crítico":
-        return "bg-red-500/10 text-red-700 dark:text-red-400"
+        return "bg-red/50/10 text-red dark:text-red-400"
       case "Alto":
         return "bg-amber-500/10 text-amber-700 dark:text-amber-400"
       default:

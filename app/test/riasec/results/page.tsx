@@ -486,9 +486,9 @@ export default function RIASECResults() {
       <div className="min-h-screen bg-gradient-to-br from-blue/5 to-indigo-100 flex items-center justify-center p-4">
         <Card className="w-full max-w-md">
           <CardContent className="p-6 text-center">
-            <AlertCircle className="h-12 w-12 text-yellow-500 mx-auto mb-4" />
+            <AlertCircle className="h-12 w-12 text-orange mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No se encontraron resultados</h3>
-      <p className="text-gray-600 mb-4">Parece que aún no has completado el test Despega Rumbo.</p>
+      <p className="text-muted/60 mb-4">Parece que aún no has completado el test Despega Rumbo.</p>
       <Button onClick={() => router.push("/test/riasec")}>Realizar Test Despega Rumbo</Button>
           </CardContent>
         </Card>
@@ -523,7 +523,7 @@ export default function RIASECResults() {
               </div>
               <div className="text-right">
                 <div className="text-3xl font-bold text-blue">{results.overall_score}%</div>
-                <div className="text-sm text-gray-500">Puntuación General</div>
+                <div className="text-sm text-muted/50">Puntuación General</div>
               </div>
             </div>
           </CardHeader>
@@ -794,7 +794,7 @@ export default function RIASECResults() {
                 </div>
 
                 {/* 3 movimientos clave */}
-                <div className="bg-white rounded-lg p-6 border border-gray-200">
+                <div className="bg-white rounded-lg p-6 border border-muted/20">
                   <h3 className="font-semibold text-lg mb-4 text-gray-900">🎯 Tus 3 Movimientos Clave (90 días)</h3>
                   <div className="space-y-4">
                     <div className="flex gap-3">
@@ -1153,7 +1153,7 @@ export default function RIASECResults() {
                     <div className="space-y-2">
                       {strengths.map((strength, index) => (
                         <div key={index} className="flex items-start gap-2">
-                          <Star className="h-4 w-4 text-yellow-500 mt-0.5 flex-shrink-0" />
+                          <Star className="h-4 w-4 text-orange mt-0.5 flex-shrink-0" />
                           <span className="text-sm text-gray-700">{strength}</span>
                         </div>
                       ))}
@@ -1205,7 +1205,7 @@ export default function RIASECResults() {
                               </div>
                               <div className="text-right">
                                 <div className="font-semibold">{score}/100</div>
-                                <div className="text-xs text-gray-500">{percentage}%</div>
+                                <div className="text-xs text-muted/50">{percentage}%</div>
                               </div>
                             </div>
                             <Progress value={percentage} className="h-2" />
@@ -1242,7 +1242,7 @@ export default function RIASECResults() {
                         q35: "¿De qué manera contribuyes mejor en un equipo de trabajo?",
                       }
                       return (
-                        <div key={questionKey} className="p-4 bg-gray-50 rounded-lg border">
+                        <div key={questionKey} className="p-4 bg-muted/5 rounded-lg border">
                           <h4 className="font-semibold text-gray-900 mb-2">{questionTexts[questionKey]}</h4>
                           <p className="text-gray-700 text-sm leading-relaxed">{response}</p>
                         </div>
@@ -1257,7 +1257,7 @@ export default function RIASECResults() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-primary" />
+                  <Calendar className="h-5 w-5 text-purple" />
                   Plan de Acción 90 Días - Exploración Vocacional RIASEC
                 </CardTitle>
                 <CardDescription>
@@ -1915,7 +1915,7 @@ export default function RIASECResults() {
                       <div className="inline-block bg-green text-white px-6 py-3 rounded-full font-bold text-lg">
                         Brújula Vocacional (RIASEC)
                       </div>
-                      <p className="text-sm text-gray-600 mt-2">Tus intereses y vocación profesional</p>
+                      <p className="text-sm text-muted/60 mt-2">Tus intereses y vocación profesional</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
@@ -1964,7 +1964,7 @@ export default function RIASECResults() {
                           </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3">
-                          <div className="bg-red-50 p-3 rounded text-sm">
+                          <div className="bg-red/5 p-3 rounded text-sm">
                             <strong className="text-red-900">Conexión:</strong>
                             <p className="text-red-800 mt-1">
                               RIASEC te muestra tus intereses, IE muestra si tienes las competencias emocionales para
@@ -2086,17 +2086,17 @@ export default function RIASECResults() {
                       </Card>
 
                       {/* Placeholder */}
-                      <Card className="border-2 border-gray-300 opacity-60">
+                      <Card className="border-2 border-muted/30 opacity-60">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
-                            <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-lg">
+                            <div className="w-8 h-8 bg-muted/10 rounded-full flex items-center justify-center text-lg">
                               🔮
                             </div>
                             Más Tests Próximamente
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Próximamente: Test de Valores para alinear tu vocación con lo que realmente importa para ti.
                           </p>
                         </CardContent>
@@ -2231,7 +2231,7 @@ export default function RIASECResults() {
                             1. ¿Mi trabajo actual aprovecha mi código Holland {results.holland_code}? ¿En qué
                             porcentaje?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Si tu respuesta es menos del 50%, estás dejando más de la mitad de tu potencial sin usar.
                             ¿Qué cambios puedes hacer?
                           </p>
@@ -2247,7 +2247,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-blue">
                             2. ¿Qué me impide seguir las carreras sugeridas por mi código Holland?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Si tu respuesta es menos del 50%, estás dejando más de la mitad de tu potencial sin usar.
                             ¿Qué cambios puedes hacer?
                           </p>
@@ -2263,7 +2263,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-blue">
                             3. ¿Qué actividades del último mes me dieron más energía? ¿Coinciden con mi código Holland?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             La vocación auténtica te da energía, no te la quita. Si hay desconexión, ¿por qué?
                           </p>
                           <textarea
@@ -2288,7 +2288,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-orange-900">
                             4. ¿Qué me impide seguir las carreras sugeridas por mi código Holland?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Identifica si son barreras reales (falta de formación) o creencias limitantes ("no soy lo
                             suficientemente bueno").
                           </p>
@@ -2305,7 +2305,7 @@ export default function RIASECResults() {
                             5. ¿Qué dirían mis padres/pareja sobre las carreras que me interesan? ¿Me importa su opinión
                             más que la mía?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Muchas personas siguen carreras para complacer a otros, no a sí mismas. ¿Es tu caso?
                           </p>
                           <textarea
@@ -2320,7 +2320,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-orange-900">
                             6. ¿Tengo miedo de seguir mi vocación real? ¿De qué tengo miedo específicamente?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             El miedo más común: "no voy a ganar suficiente dinero". Pero, ¿es eso cierto o es una
                             excusa?
                           </p>
@@ -2346,7 +2346,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-purple">
                             7. ¿Qué problema del mundo me gustaría resolver usando mi código Holland?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             La vocación más satisfactoria conecta tus intereses con contribución significativa. ¿Cuál es
                             la tuya?
                           </p>
@@ -2362,7 +2362,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-purple">
                             8. Si tuviera éxito total en mi vocación, ¿cómo sería el mundo 10 años después?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Piensa en grande. Tu vocación no es solo un trabajo, es tu manera de dejar huella.
                           </p>
                           <textarea
@@ -2378,7 +2378,7 @@ export default function RIASECResults() {
                             9. ¿A quién admiro que tenga un código Holland similar al mío? ¿Qué puedo aprender de su
                             carrera?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             Estudiar trayectorias de éxito en tu área vocacional te muestra posibilidades que no habías
                             considerado.
                           </p>
@@ -2404,7 +2404,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-green-900">
                             10. Si tuviera que dar UN paso concreto hoy hacia mi vocación ideal, ¿cuál sería?
                           </h4>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted/60">
                             No pienses en grandes cambios. ¿Qué acción pequeña puedes tomar HOY que te acerque a tu
                             código Holland?
                           </p>
@@ -2446,7 +2446,7 @@ export default function RIASECResults() {
                 <div className="overflow-x-auto">
                   <table className="w-full border-collapse">
                     <thead>
-                      <tr className="bg-gray-100">
+                      <tr className="bg-muted/10">
                         <th className="border p-3 text-left font-semibold">Área de Desarrollo</th>
                         <th className="border p-3 text-left font-semibold">Recurso Recomendado</th>
                         <th className="border p-3 text-left font-semibold">Por qué te sirve</th>
@@ -2473,7 +2473,7 @@ export default function RIASECResults() {
                           Escribe 3 escenarios de vida posibles basados en tu código Holland. ¿Cuál te emociona más?
                         </td>
                       </tr>
-                      <tr className="bg-gray-50">
+                      <tr className="bg-muted/5">
                         <td className="border p-3 font-medium text-blue">Autoconocimiento Profundo</td>
                         <td className="border p-3">
                           <Link
@@ -2510,7 +2510,7 @@ export default function RIASECResults() {
                           por una semana.
                         </td>
                       </tr>
-                      <tr className="bg-gray-50">
+                      <tr className="bg-muted/5">
                         <td className="border p-3 font-medium text-orange-900">Fortalezas Personales</td>
                         <td className="border p-3">
                           <Link
@@ -2549,7 +2549,7 @@ export default function RIASECResults() {
                           Holland
                         </td>
                       </tr>
-                      <tr className="bg-gray-50">
+                      <tr className="bg-muted/5">
                         <td className="border p-3 font-medium text-indigo-900">Integración Vida-Trabajo</td>
                         <td className="border p-3">
                           <Link href="/recursos" className="text-blue hover:underline flex items-center gap-1">

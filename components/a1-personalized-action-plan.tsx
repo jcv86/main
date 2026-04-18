@@ -95,7 +95,7 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
   return (
     <div className="w-full space-y-8">
       {/* Overview Card */}
-      <Card className="border-2 border-primary">
+      <Card className="border-2 border-purple">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Target className="w-5 h-5" />
@@ -185,7 +185,7 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
                     <ul className="space-y-2">
                       {pilar.recommendations.map((rec, idx) => (
                         <li key={idx} className="text-sm flex gap-2">
-                          <span className="text-primary">○</span>
+                          <span className="text-purple">○</span>
                           <span>{rec}</span>
                         </li>
                       ))}

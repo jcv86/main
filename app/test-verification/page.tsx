@@ -588,11 +588,11 @@ export default function TestVerificationSystem() {
       case "passed":
         return <CheckCircle2 className="h-4 w-4 text-green" />
       case "failed":
-        return <XCircle className="h-4 w-4 text-red-500" />
+        return <XCircle className="h-4 w-4 text-red" />
       case "running":
         return <Loader2 className="h-4 w-4 animate-spin text-blue/50" />
       default:
-        return <Clock className="h-4 w-4 text-gray-300" />
+        return <Clock className="h-4 w-4 text-muted/30" />
     }
   }
 
@@ -601,7 +601,7 @@ export default function TestVerificationSystem() {
     switch (status) {
       case "pending":
         return (
-          <Badge variant="outline" className="text-gray-600 text-xs">
+          <Badge variant="outline" className="text-muted/60 text-xs">
             <Clock className="h-3 w-3 mr-1" />
             Pending
           </Badge>
@@ -652,7 +652,7 @@ export default function TestVerificationSystem() {
   // Show loading state during SSR
   if (!isClient) {
     return (
-      <div className="min-h-screen bg-gray-50 p-4 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 p-4 flex items-center justify-center">
         <Card>
           <CardContent className="p-8 text-center">
             <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
@@ -664,7 +664,7 @@ export default function TestVerificationSystem() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-2 sm:p-4">
+    <div className="min-h-screen bg-muted/5 p-2 sm:p-4">
       <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6">
         {/* Header - Mobile Optimized */}
         <Card className="border-blue/20 bg-gradient-to-r from-blue/5 to-indigo-50">
@@ -704,7 +704,7 @@ export default function TestVerificationSystem() {
                 )}
                 <span className="text-sm font-medium">{isMobile ? "Mobile Device" : "Desktop Browser"}</span>
               </div>
-              <span className="text-xs text-gray-600">
+              <span className="text-xs text-muted/60">
                 {window.innerWidth}x{window.innerHeight}
               </span>
             </div>
@@ -716,28 +716,28 @@ export default function TestVerificationSystem() {
                   <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span className="text-lg sm:text-2xl font-bold">{passedTests}</span>
                 </div>
-                <p className="text-xs sm:text-sm text-gray-600">Passed</p>
+                <p className="text-xs sm:text-sm text-muted/60">Passed</p>
               </div>
               <div className="text-center p-2 sm:p-3 bg-white rounded-lg border">
                 <div className="flex items-center justify-center gap-1 sm:gap-2 text-red-600 mb-1">
                   <XCircle className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span className="text-lg sm:text-2xl font-bold">{failedTests}</span>
                 </div>
-                <p className="text-xs sm:text-sm text-gray-600">Failed</p>
+                <p className="text-xs sm:text-sm text-muted/60">Failed</p>
               </div>
               <div className="text-center p-2 sm:p-3 bg-white rounded-lg border">
                 <div className="flex items-center justify-center gap-1 sm:gap-2 text-blue mb-1">
                   <Loader2 className={`h-4 w-4 sm:h-5 sm:w-5 ${runningTests > 0 ? "animate-spin" : ""}`} />
                   <span className="text-lg sm:text-2xl font-bold">{runningTests}</span>
                 </div>
-                <p className="text-xs sm:text-sm text-gray-600">Running</p>
+                <p className="text-xs sm:text-sm text-muted/60">Running</p>
               </div>
               <div className="text-center p-2 sm:p-3 bg-white rounded-lg border">
-                <div className="flex items-center justify-center gap-1 sm:gap-2 text-gray-600 mb-1">
+                <div className="flex items-center justify-center gap-1 sm:gap-2 text-muted/60 mb-1">
                   <Clock className="h-4 w-4 sm:h-5 sm:w-5" />
                   <span className="text-lg sm:text-2xl font-bold">{pendingTests}</span>
                 </div>
-                <p className="text-xs sm:text-sm text-gray-600">Pending</p>
+                <p className="text-xs sm:text-sm text-muted/60">Pending</p>
               </div>
             </div>
 
@@ -773,7 +773,7 @@ export default function TestVerificationSystem() {
                   <span className="text-blue font-medium truncate">
                     {testFlows.find((f) => f.testId === currentTest)?.testName}
                   </span>
-                  {currentCheck && <span className="text-gray-500 hidden sm:inline">• {currentCheck}</span>}
+                  {currentCheck && <span className="text-muted/50 hidden sm:inline">• {currentCheck}</span>}
                 </div>
               )}
             </div>
@@ -808,10 +808,10 @@ export default function TestVerificationSystem() {
                       testFlow.overallStatus === "passed"
                         ? "border-green/20 bg-green/5"
                         : testFlow.overallStatus === "failed"
-                          ? "border-red-200 bg-red-50"
+                          ? "border-red/20 bg-red/5"
                           : testFlow.overallStatus === "running"
                             ? "border-blue/20 bg-blue/5 shadow-lg"
-                            : "border-gray-200"
+                            : "border-muted/20"
                     }`}
                   >
                     <CardHeader className="pb-2 sm:pb-3">
@@ -825,14 +825,14 @@ export default function TestVerificationSystem() {
                                   ? "bg-red-100"
                                   : testFlow.overallStatus === "running"
                                     ? "bg-blue/10"
-                                    : "bg-gray-100"
+                                    : "bg-muted/10"
                             }`}
                           >
                             <IconComponent className="h-4 w-4 sm:h-5 sm:w-5" />
                           </div>
                           <div className="min-w-0 flex-1">
                             <CardTitle className="text-sm sm:text-base truncate">{testFlow.testName}</CardTitle>
-                            <p className="text-xs sm:text-sm text-gray-600 truncate">
+                            <p className="text-xs sm:text-sm text-muted/60 truncate">
                               {testFlow.expectedQuestions} questions
                             </p>
                           </div>
@@ -851,12 +851,12 @@ export default function TestVerificationSystem() {
                             {getStatusIcon(check.status, isCurrentTest && check.status === "running")}
                             <span className="font-medium truncate">{check.name}</span>
                             {check.duration && (
-                              <span className="text-xs text-gray-500 hidden sm:inline">({check.duration}ms)</span>
+                              <span className="text-xs text-muted/50 hidden sm:inline">({check.duration}ms)</span>
                             )}
                           </div>
                           <div className="text-right ml-2">
                             {check.details && (
-                              <p className="text-xs text-gray-600 truncate max-w-20 sm:max-w-none">{check.details}</p>
+                              <p className="text-xs text-muted/60 truncate max-w-20 sm:max-w-none">{check.details}</p>
                             )}
                             {check.error && (
                               <p className="text-xs text-red-600 flex items-center gap-1">
@@ -917,9 +917,9 @@ export default function TestVerificationSystem() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-2 sm:p-4">
-                <div className="h-48 sm:h-64 lg:h-[500px] overflow-y-auto bg-gray-900 rounded-lg p-2 sm:p-4 font-mono text-xs sm:text-sm">
+                <div className="h-48 sm:h-64 lg:h-[500px] overflow-y-auto bg-muted/90 rounded-lg p-2 sm:p-4 font-mono text-xs sm:text-sm">
                   {executionLog.length === 0 ? (
-                    <div className="text-gray-400 text-center py-4 sm:py-8">Waiting for test execution...</div>
+                    <div className="text-muted/40 text-center py-4 sm:py-8">Waiting for test execution...</div>
                   ) : (
                     <div className="space-y-1">
                       {executionLog.map((log, index) => (
@@ -934,7 +934,7 @@ export default function TestVerificationSystem() {
                                   ? "text-blue/40"
                                   : log.includes("⏳")
                                     ? "text-yellow-400"
-                                    : "text-gray-300"
+                                    : "text-muted/30"
                           }`}
                         >
                           {log}
@@ -991,7 +991,7 @@ export default function TestVerificationSystem() {
                   </>
                 ) : (
                   <>
-                    <AlertTriangle className="h-12 w-12 sm:h-16 sm:w-16 text-yellow-500 mx-auto" />
+                    <AlertTriangle className="h-12 w-12 sm:h-16 sm:w-16 text-orange mx-auto" />
                     <div>
                       <h3 className="text-xl sm:text-2xl font-bold text-yellow-900 mb-2">Issues Detected</h3>
                       <p className="text-yellow-700 mb-4 text-sm sm:text-base">

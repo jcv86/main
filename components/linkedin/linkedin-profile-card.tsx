@@ -150,7 +150,7 @@ export function LinkedInProfileCard() {
                     <Badge key={skill.name} variant="secondary" className="text-xs">
                       {skill.name}
                       {skill.endorsements > 0 && (
-                        <span className="ml-1 text-gray-500">+{skill.endorsements}</span>
+                        <span className="ml-1 text-muted/50">+{skill.endorsements}</span>
                       )}
                     </Badge>
                   ))}

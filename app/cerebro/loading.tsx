@@ -34,11 +34,11 @@ export default function CerebroLoading() {
               <div className="flex-1 flex items-center justify-center">
                 <div className="text-center space-y-4">
                   <Loader2 className="h-16 w-16 animate-spin text-purple mx-auto" />
-                  <p className="text-gray-600 dark:text-gray-400">Cargando cerebro inteligente...</p>
+                  <p className="text-muted/60 dark:text-muted/40">Cargando cerebro inteligente...</p>
                 </div>
               </div>
 
-              <CardContent className="border-t p-4 bg-gray-50 dark:bg-gray-900">
+              <CardContent className="border-t p-4 bg-muted/5 dark:bg-muted/90">
                 <div className="flex gap-2">
                   <Skeleton className="h-12 flex-1" />
                   <Skeleton className="h-12 w-20" />

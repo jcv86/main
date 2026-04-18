@@ -138,7 +138,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
                       </div>
                       {book.rating && (
                         <div className="text-right flex-shrink-0">
-                          <div className="text-2xl font-bold text-yellow-500">{book.rating}</div>
+                          <div className="text-2xl font-bold text-orange">{book.rating}</div>
                           <div className="text-xs text-slate-500">★</div>
                         </div>
                       )}

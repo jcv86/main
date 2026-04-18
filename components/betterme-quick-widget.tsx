@@ -44,10 +44,10 @@ export function BetterMeQuickWidget() {
   if (loading || !stats) return null
 
   return (
-    <Card className="w-full bg-gradient-to-br from-primary/10 to-primary/5 border-primary/20">
+    <Card className="w-full bg-gradient-to-br from-primary/10 to-primary/5 border-purple/20">
       <CardHeader className="pb-3">
         <CardTitle className="text-lg flex items-center gap-2">
-          <Star className="h-5 w-5 fill-yellow-500 text-yellow-500" />
+          <Star className="h-5 w-5 fill-yellow-500 text-orange" />
           Tu Progreso
         </CardTitle>
       </CardHeader>
@@ -56,7 +56,7 @@ export function BetterMeQuickWidget() {
           <div className="text-center p-2 bg-background/50 rounded-lg">
             <div className="flex items-center justify-center gap-1 text-2xl font-bold">
               {stats.streak}
-              {stats.streak > 0 && <Flame className="h-5 w-5 text-red-500" />}
+              {stats.streak > 0 && <Flame className="h-5 w-5 text-red" />}
             </div>
             <p className="text-xs text-muted-foreground">Racha</p>
           </div>

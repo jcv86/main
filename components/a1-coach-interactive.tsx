@@ -176,7 +176,7 @@ He revisado tu diagnóstico A1 y tengo algunas recomendaciones personalizadas pa
               <div
                 className={`max-w-xs lg:max-w-md rounded-lg px-4 py-2 ${
                   message.sender === "user"
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-purple text-purple-foreground"
                     : "bg-muted text-foreground border"
                 }`}
               >
@@ -204,9 +204,9 @@ He revisado tu diagnóstico A1 y tengo algunas recomendaciones personalizadas pa
 
       <div className="border-t p-4 space-y-2">
         {error && (
-          <Alert variant="destructive" className="border-red-300 bg-red-50 dark:bg-red-900/20">
+          <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red-900/20">
             <AlertTriangle className="h-4 w-4 text-red-600" />
-            <AlertDescription className="text-red-700 dark:text-red-200 ml-2">{error}</AlertDescription>
+            <AlertDescription className="text-red dark:text-red-200 ml-2">{error}</AlertDescription>
           </Alert>
         )}
 

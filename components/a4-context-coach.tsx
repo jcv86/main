@@ -174,7 +174,7 @@ Aquí traducimos lo que está pasando en el mercado chileno a tu carrera persona
                 className={`max-w-xs rounded-lg px-4 py-2 ${
                   message.sender === "user"
                     ? "bg-blue-500 text-white"
-                    : "bg-gray-100 text-gray-900"
+                    : "bg-muted/10 text-gray-900"
                 }`}
               >
                 <p className="text-sm">{message.content}</p>
@@ -192,8 +192,8 @@ Aquí traducimos lo que está pasando en el mercado chileno a tu carrera persona
               <Avatar className="h-8 w-8 bg-green-100">
                 <AvatarFallback>A4</AvatarFallback>
               </Avatar>
-              <div className="bg-gray-100 rounded-lg px-4 py-2">
-                <Loader className="w-4 h-4 animate-spin text-gray-600" />
+              <div className="bg-muted/10 rounded-lg px-4 py-2">
+                <Loader className="w-4 h-4 animate-spin text-muted/60" />
               </div>
             </div>
           )}

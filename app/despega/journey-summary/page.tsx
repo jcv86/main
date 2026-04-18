@@ -100,7 +100,7 @@ export default function JourneySummaryPage() {
           </Card>
 
           {/* A2 */}
-          <Card className="border-2 border-yellow-500 bg-yellow-50 dark:bg-yellow-950/20">
+          <Card className="border-2 border-orange bg-yellow-50 dark:bg-yellow-950/20">
             <CardContent className="pt-6">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">

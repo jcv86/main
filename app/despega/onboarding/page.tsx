@@ -352,16 +352,16 @@ export default function DespegaOnboarding() {
                   <div className="space-y-2">
                     <p className="text-sm font-semibold text-red-600 dark:text-red-400">MENOS como yo</p>
                     <div className="space-y-2">
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red-500 dark:hover:border-red-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
                         Decidido y directo
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red-500 dark:hover:border-red-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
                         Optimista e inspirador
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red-500 dark:hover:border-red-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
                         Paciente y considerado
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red-500 dark:hover:border-red-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red-400 transition text-left text-sm text-muted/70 dark:text-muted/30">
                         Analítico y preciso
                       </button>
                     </div>
@@ -474,7 +474,7 @@ export default function DespegaOnboarding() {
                     <div className="text-6xl mb-3">⚡</div>
                     <h3 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">D</h3>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">IMPULSOR</p>
-                    <div className="w-8 h-1 bg-red-500 rounded mt-2"></div>
+                    <div className="w-8 h-1 bg-red/50 rounded mt-2"></div>
                   </div>
                   <div className="md:col-span-3 space-y-3">
                     <div>
@@ -484,19 +484,19 @@ export default function DespegaOnboarding() {
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
-                      <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded">
+                      <div className="p-3 bg-red/5 dark:bg-red-900/20 rounded">
                         <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Cómo Actúan</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Orientados a resultados, decisiones rápidas, lideran con confianza, directos y eficientes</p>
                       </div>
-                      <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded">
+                      <div className="p-3 bg-red/5 dark:bg-red-900/20 rounded">
                         <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Fortalezas</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Liderazgo, decisión, competencia, determinación, coraje, eficiencia</p>
                       </div>
-                      <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded">
+                      <div className="p-3 bg-red/5 dark:bg-red-900/20 rounded">
                         <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Motivación</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Resultados, control, desafíos, ambientes dinámicos, autonomía</p>
                       </div>
-                      <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded">
+                      <div className="p-3 bg-red/5 dark:bg-red-900/20 rounded">
                         <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Ambiente Ideal</p>
                         <p className="text-sm text-muted/70 dark:text-muted/30">Liderazgo, emprendimiento, cambio, competencia, responsabilidad</p>
                       </div>
@@ -514,7 +514,7 @@ export default function DespegaOnboarding() {
                     <div className="text-6xl mb-3">✨</div>
                     <h3 className="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">I</h3>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">CATALIZADOR</p>
-                    <div className="w-8 h-1 bg-yellow-500 rounded mt-2"></div>
+                    <div className="w-8 h-1 bg-orange rounded mt-2"></div>
                   </div>
                   <div className="md:col-span-3 space-y-3">
                     <div>
@@ -852,7 +852,7 @@ export default function DespegaOnboarding() {
                     Siguiente
                   </Button>
                   {c1Responses[currentC1Q.id] && (c1Responses[currentC1Q.id] || "").trim().length < 5 && (
-                    <p className="text-sm text-red-500">La respuesta debe tener al menos 5 caracteres</p>
+                    <p className="text-sm text-red">La respuesta debe tener al menos 5 caracteres</p>
                   )}
                 </div>
               )}
@@ -956,23 +956,23 @@ export default function DespegaOnboarding() {
                         }}
                         className={`p-4 rounded-[28px] border-2 cursor-pointer transition-all ${
                           isDisabledInMas
-                            ? "border-gray-200 bg-gray-100 opacity-50 cursor-not-allowed"
+                            ? "border-muted/20 bg-muted/10 opacity-50 cursor-not-allowed"
                             : selectedMas === option.dimension
                             ? "border-green-500 bg-green/5"
-                            : "border-gray-200 hover:border-green-300"
+                            : "border-muted/20 hover:border-green-300"
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                             selectedMas === option.dimension
                               ? "border-green-500 bg-green/50"
-                              : "border-gray-300"
+                              : "border-muted/30"
                           }`}>
                             {selectedMas === option.dimension && (
                               <span className="text-white text-sm">✓</span>
                             )}
                           </div>
-                          <span className={`text-sm ${isDisabledInMas ? "text-gray-500" : ""}`}>
+                          <span className={`text-sm ${isDisabledInMas ? "text-muted/50" : ""}`}>
                             {option.texto}
                             {isDisabledInMas && " (Ya seleccionado en MENOS como yo)"}
                           </span>
@@ -985,7 +985,7 @@ export default function DespegaOnboarding() {
 
               {/* MENOS COMO YO */}
               <div className="space-y-3">
-                <h4 className="font-semibold text-red-700 bg-red-50 p-3 rounded">
+                <h4 className="font-semibold text-red bg-red/5 p-3 rounded">
                   ✗ MENOS como yo
                 </h4>
                 <div className="space-y-2">
@@ -1004,23 +1004,23 @@ export default function DespegaOnboarding() {
                         }}
                         className={`p-4 rounded-[28px] border-2 cursor-pointer transition-all ${
                           isDisabledInMenos
-                            ? "border-gray-200 bg-gray-100 opacity-50 cursor-not-allowed"
+                            ? "border-muted/20 bg-muted/10 opacity-50 cursor-not-allowed"
                             : selectedMenos === option.dimension
-                            ? "border-red-500 bg-red-50"
-                            : "border-gray-200 hover:border-red-300"
+                            ? "border-red/50 bg-red/5"
+                            : "border-muted/20 hover:border-red-300"
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                             selectedMenos === option.dimension
-                              ? "border-red-500 bg-red-500"
-                              : "border-gray-300"
+                              ? "border-red/50 bg-red/50"
+                              : "border-muted/30"
                           }`}>
                             {selectedMenos === option.dimension && (
                               <span className="text-white text-sm">✗</span>
                             )}
                           </div>
-                          <span className={`text-sm ${isDisabledInMenos ? "text-gray-500" : ""}`}>
+                          <span className={`text-sm ${isDisabledInMenos ? "text-muted/50" : ""}`}>
                             {option.texto}
                             {isDisabledInMenos && " (Ya seleccionado en MÁS como yo)"}
                           </span>
