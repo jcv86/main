@@ -8,6 +8,7 @@ import { useSpeechRecognition } from '@/lib/hooks/use-speech-recognition'
 import { useAvatarPreferences } from '@/lib/hooks/use-avatar-preferences'
 import { useGamification } from '@/lib/hooks/use-gamification'
 import { InterviewerSelector } from '@/components/interviewer-selector'
+import { InterviewTips } from '@/components/interview-tips'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -166,13 +167,6 @@ export function ConversationalInterviewSimulator({
   const questions = INTERVIEW_QUESTIONS[level]
   const currentQuestion = questions[currentQuestionIdx]
   const currentAttempts = attempts[currentQuestion.id] || []
-
-  // Coach tips contextuales basadas en la pregunta
-  const coachTips = {
-    behavioral: 'Usa STAR: Situación, Tarea, Acción, Resultado. Incluye números y impacto.',
-    situational: 'Sé específico con tu proceso de decisión. Muestra pensamiento estratégico.',
-    technical: 'Explica tu rol exactamente. Valida con métricas cuando sea posible.'
-  }
 
   // Handle speech recognition results like C1
   useEffect(() => {
@@ -518,14 +512,18 @@ export function ConversationalInterviewSimulator({
                   </CardContent>
                 </Card>
 
-                {/* Coach Tip */}
-                <Alert className="border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/30">
-                  <Lightbulb className="h-5 w-5 text-amber-600" />
-                  <AlertDescription className="text-amber-900 dark:text-amber-200 text-sm mt-2">
-                    <strong>Coach Tip:</strong>
-                    <p className="mt-1">{coachTips[currentQuestion.category]}</p>
-                  </AlertDescription>
-                </Alert>
+                {/* Coach Tip - Dynamic AI Tips */}
+                {user && (
+                  <InterviewTips
+                    questionText={currentQuestion.text}
+                    userResponse={userResponse}
+                    questionContext={currentQuestion.context}
+                    difficulty={level}
+                    sessionId={`interview-${level}-${Date.now()}`}
+                    userId={user.id}
+                    onTipGenerated={(tip) => console.log('[v0] Tip generated:', tip)}
+                  />
+                )}
 
                 {/* Progress */}
                 <div className="space-y-2">
