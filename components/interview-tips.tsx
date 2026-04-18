@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Lightbulb, Loader2, Lock, Zap } from 'lucide-react'
@@ -28,11 +28,36 @@ export function InterviewTips({
   const [premiumTipsUsed, setPremiumTipsUsed] = useState(0)
   const [currentTip, setCurrentTip] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [dtcBalance, setDtcBalance] = useState(0)
+  const [dtcBalance, setDtcBalance] = useState<number | null>(null)
   const [showPremiumOption, setShowPremiumOption] = useState(false)
 
+  // Fetch DTC balance on mount and when userId changes
+  useEffect(() => {
+    const fetchDTCBalance = async () => {
+      try {
+        console.log('[v0] Fetching DTC balance for user:', userId)
+        const response = await fetch(`/api/gamification/dtc-balance?userId=${userId}`)
+        if (response.ok) {
+          const data = await response.json()
+          setDtcBalance(data.balance || 0)
+          console.log('[v0] DTC balance:', data.balance)
+        } else {
+          console.error('[v0] Failed to fetch DTC balance')
+          setDtcBalance(0)
+        }
+      } catch (error) {
+        console.error('[v0] Error fetching DTC balance:', error)
+        setDtcBalance(0)
+      }
+    }
+
+    if (userId) {
+      fetchDTCBalance()
+    }
+  }, [userId])
+
   const canUseFreeTip = freeTipsUsed < 3
-  const canUsePremiumTip = dtcBalance >= 150
+  const canUsePremiumTip = dtcBalance !== null && dtcBalance >= 150
 
   const generateTip = async (isPremium: boolean) => {
     if (!canUseFreeTip && !isPremium) {
@@ -41,7 +66,7 @@ export function InterviewTips({
     }
 
     if (isPremium && !canUsePremiumTip) {
-      alert('Insufficient DTC balance. You need 150 DTC points for a premium tip.')
+      alert('No tienes suficientes puntos DTC. Necesitas 150 DTC para un tip premium.')
       return
     }
 
@@ -64,29 +89,32 @@ export function InterviewTips({
       const data = await response.json()
 
       if (!response.ok) {
-        alert(data.error || 'Failed to generate tip')
+        alert(data.error || 'Fallo al generar tip')
         return
       }
 
       setCurrentTip(data.tip)
       if (isPremium) {
         setPremiumTipsUsed(premiumTipsUsed + 1)
-        setDtcBalance(dtcBalance - 150)
+        // Update DTC balance after purchase
+        if (dtcBalance !== null) {
+          setDtcBalance(dtcBalance - 150)
+        }
       } else {
         setFreeTipsUsed(freeTipsUsed + 1)
       }
 
       onTipGenerated?.(data.tip)
     } catch (error) {
-      console.error('Error generating tip:', error)
-      alert('Failed to generate tip. Please try again.')
+      console.error('[v0] Error generating tip:', error)
+      alert('Fallo al generar tip. Intenta de nuevo.')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50">
+    <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
       <div className="space-y-6">
         {/* Tips Counter */}
         <div className="flex items-center justify-between">
@@ -94,7 +122,7 @@ export function InterviewTips({
             <div className="flex items-center gap-2">
               <Lightbulb className="w-5 h-5 text-yellow-500" />
               <span className="text-sm">
-                Free Tips: <span className="font-bold">{freeTipsUsed}/3</span>
+                Tips Gratis: <span className="font-bold">{freeTipsUsed}/3</span>
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -104,16 +132,19 @@ export function InterviewTips({
               </span>
             </div>
           </div>
-          <div className="text-sm font-semibold text-indigo-700">
-            DTC Balance: {dtcBalance}
+          <div className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
+            Saldo DTC: {dtcBalance !== null ? dtcBalance : '...'} 
+            {dtcBalance !== null && dtcBalance < 150 && !canUseFreeTip && (
+              <span className="text-red-600 ml-2">({150 - dtcBalance} para premium)</span>
+            )}
           </div>
         </div>
 
         {/* Current Tip Display */}
         {currentTip && (
-          <div className="p-4 bg-white rounded-lg border-l-4 border-blue-500">
-            <h4 className="font-semibold text-sm mb-2 text-gray-900">AI Coach Tip:</h4>
-            <p className="text-sm text-gray-700">{currentTip}</p>
+          <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500">
+            <h4 className="font-semibold text-sm mb-2 text-gray-900 dark:text-white">Consejo IA:</h4>
+            <p className="text-sm text-gray-700 dark:text-gray-300">{currentTip}</p>
           </div>
         )}
 
@@ -128,12 +159,12 @@ export function InterviewTips({
             {loading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Generating...
+                Generando...
               </>
             ) : (
               <>
                 <Lightbulb className="w-4 h-4 mr-2" />
-                Free Tip ({freeTipsUsed}/3)
+                Tip Gratis ({freeTipsUsed}/3)
               </>
             )}
           </Button>
@@ -141,18 +172,18 @@ export function InterviewTips({
           <Button
             onClick={() => generateTip(true)}
             disabled={!canUsePremiumTip || loading}
-            variant="secondary"
+            variant={canUsePremiumTip ? 'secondary' : 'outline'}
             className="flex-1"
           >
             {loading ? (
               <>
                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Generating...
+                Generando...
               </>
             ) : (
               <>
                 <Lock className="w-4 h-4 mr-2" />
-                Premium Tip (150 DTC)
+                Tip Premium (150 DTC)
               </>
             )}
           </Button>
@@ -160,17 +191,17 @@ export function InterviewTips({
 
         {/* Information */}
         {!canUseFreeTip && (
-          <div className="p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-            <p className="text-sm text-yellow-800">
-              You&apos;ve used all 3 free tips. Get premium tips with DTC points or earn more tips by completing interviews!
+          <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+            <p className="text-sm text-yellow-800 dark:text-yellow-200">
+              Usaste los 3 tips gratis. Obtén tips premium con puntos DTC o gana más tips completando entrevistas.
             </p>
           </div>
         )}
 
-        {!canUsePremiumTip && premiumTipsUsed === 0 && (
-          <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-            <p className="text-sm text-blue-800">
-              Don&apos;t have enough DTC points? Check out the DTC Shop to purchase points!
+        {dtcBalance !== null && !canUsePremiumTip && premiumTipsUsed === 0 && canUseFreeTip && (
+          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+            <p className="text-sm text-blue-800 dark:text-blue-200">
+              Después de usar los 3 tips gratis, puedes comprar puntos DTC en la tienda para tips premium.
             </p>
           </div>
         )}
