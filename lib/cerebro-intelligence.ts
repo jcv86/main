@@ -46,7 +46,14 @@ export interface PredictiveInsight {
  * Provides advanced AI capabilities with memory, reasoning, and learning
  */
 export class CerebroIntelligence {
-  private supabase = createClient()
+  private supabaseInstance: any = null
+
+  private getSupabase() {
+    if (!this.supabaseInstance) {
+      this.supabaseInstance = createClient()
+    }
+    return this.supabaseInstance
+  }
 
   /**
    * Store a memory for long-term context
@@ -56,7 +63,7 @@ export class CerebroIntelligence {
       // Generate embedding for semantic search
       const embedding = await generateEmbedding(memory.content)
 
-      await this.supabase.from("cerebro_conversation_memory").insert({
+      await this.getSupabase().from("cerebro_conversation_memory").insert({
         user_id: userId,
         conversation_id: conversationId,
         memory_type: memory.memoryType,
@@ -90,7 +97,7 @@ export class CerebroIntelligence {
       // Generate query embedding
       const queryEmbedding = await generateEmbedding(query)
 
-      const { data, error } = await this.supabase.rpc("search_cerebro_memory", {
+      const { data, error } = await this.getSupabase().rpc("search_cerebro_memory", {
         p_user_id: userId,
         p_query_embedding: queryEmbedding,
         p_similarity_threshold: similarityThreshold,
@@ -173,7 +180,7 @@ export class CerebroIntelligence {
           .eq("id", existing.id)
       } else {
         // Create new pattern
-        await this.supabase.from("cerebro_user_patterns").insert({
+        await this.getSupabase().from("cerebro_user_patterns").insert({
           user_id: userId,
           pattern_type: pattern.patternType,
           pattern_data: pattern.patternData,
@@ -217,7 +224,7 @@ export class CerebroIntelligence {
    */
   async generatePredictiveInsight(userId: string, insight: PredictiveInsight): Promise<void> {
     try {
-      await this.supabase.from("cerebro_predictive_insights").insert({
+      await this.getSupabase().from("cerebro_predictive_insights").insert({
         user_id: userId,
         insight_type: insight.insightType,
         prediction: insight.prediction,
@@ -276,7 +283,7 @@ export class CerebroIntelligence {
     },
   ): Promise<void> {
     try {
-      await this.supabase.from("cerebro_feedback_learning").insert({
+      await this.getSupabase().from("cerebro_feedback_learning").insert({
         user_id: userId,
         query,
         response,
@@ -323,7 +330,7 @@ export class CerebroIntelligence {
    */
   async getIntelligenceMetrics(days = 30): Promise<any[]> {
     try {
-      const { data, error } = await this.supabase.from("cerebro_intelligence_metrics").select("*").limit(days)
+      const { data, error } = await this.getSupabase().from("cerebro_intelligence_metrics").select("*").limit(days)
 
       if (error) throw error
       return data || []
