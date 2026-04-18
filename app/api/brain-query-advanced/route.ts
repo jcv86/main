@@ -1,13 +1,4 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { advancedBrain } from "@/lib/advanced-brain-engine"
-import { createClient } from "@/lib/supabase/server"
-import {
-  generateQueryHash,
-  getCachedResponse,
-  cacheResponse,
-  trackAPIUsage,
-  trackAnalyticsEvent,
-} from "@/lib/performance-optimizer"
 
 export const maxDuration = 30
 export const dynamic = "force-dynamic"
@@ -19,7 +10,7 @@ export async function POST(request: NextRequest) {
   try {
     const { message, userId = "demo-user", conversationId, context } = await request.json()
 
-    // Check for Supabase credentials
+    // Check for Supabase credentials before importing
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
       console.log('[v0] Supabase not configured, using fallback mode')
       return NextResponse.json({
@@ -32,6 +23,17 @@ export async function POST(request: NextRequest) {
         }
       })
     }
+
+    // Lazy load dependencies after config check
+    const { advancedBrain } = await import("@/lib/advanced-brain-engine")
+    const { createClient } = await import("@/lib/supabase/server")
+    const {
+      generateQueryHash,
+      getCachedResponse,
+      cacheResponse,
+      trackAPIUsage,
+      trackAnalyticsEvent,
+    } = await import("@/lib/performance-optimizer")
 
     const supabase = await createClient()
 
