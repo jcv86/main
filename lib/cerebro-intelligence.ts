@@ -132,7 +132,7 @@ export class CerebroIntelligence {
    */
   async storeReasoningChain(userId: string, chain: ReasoningChain, processingTimeMs: number): Promise<string | null> {
     try {
-      const { data, error } = await this.supabase
+      const { data, error } = await this.getSupabase()
         .from("cerebro_reasoning_chains")
         .insert({
           user_id: userId,
