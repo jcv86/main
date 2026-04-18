@@ -53,8 +53,8 @@ export async function enrichProfileFromGoogle(
 
     if (existingProfile) {
       // Actualizar
-      const { error: updateError } = await supabase
-        .from("user_profiles_enriched")
+      const { error: updateError } = await (supabase
+        .from("user_profiles_enriched") as any)
         .update(profileData)
         .eq("user_id", userId)
 
@@ -64,8 +64,8 @@ export async function enrichProfileFromGoogle(
       }
     } else {
       // Crear
-      const { error: insertError } = await supabase
-        .from("user_profiles_enriched")
+      const { error: insertError } = await (supabase
+        .from("user_profiles_enriched") as any)
         .insert([profileData])
 
       if (insertError) {
@@ -148,8 +148,8 @@ export async function enrichProfileFromLinkedIn(
         updated_at: new Date().toISOString(),
       }
 
-      const { error: updateError } = await supabase
-        .from("user_profiles_enriched")
+      const { error: updateError } = await (supabase
+        .from("user_profiles_enriched") as any)
         .update(merged)
         .eq("user_id", userId)
 
@@ -159,8 +159,8 @@ export async function enrichProfileFromLinkedIn(
       }
     } else {
       // Crear nuevo
-      const { error: insertError } = await supabase
-        .from("user_profiles_enriched")
+      const { error: insertError } = await (supabase
+        .from("user_profiles_enriched") as any)
         .insert([enrichedData])
 
       if (insertError) {
@@ -300,8 +300,8 @@ export async function enrichA1A4FromLinkedInProfile(
     }
 
     // Guardar contexto en tabla coach_context_snapshots
-    const { error } = await supabase
-      .from("coach_context_snapshots")
+    const { error } = await (supabase
+      .from("coach_context_snapshots") as any)
       .update({
         linkedin_context: contextData.linkedin_context,
         updated_at: new Date().toISOString(),
