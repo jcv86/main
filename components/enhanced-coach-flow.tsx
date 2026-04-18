@@ -323,7 +323,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
               <button
                 key={stage.id}
                 onClick={() => handleStageChange(stage.id)}
-                className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${`}
+                className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
                   currentStage === stage.id
                     ? "bg-purple/10 text-purple"
                     : stage.completed
@@ -332,7 +332,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                 }`}
               >
                 <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center ${`}
+                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     stage.completed
                       ? "bg-green/10 text-green"
                       : currentStage === stage.id
