@@ -4,7 +4,6 @@ import { NextResponse } from "next/server"
 export async function GET() {
   try {
     const supabase = await createClient()
-    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
     const [usersResult, testsResult, booksResult, coachingResult] = await Promise.all([
       supabase.from("users").select("id", { count: "exact", head: true }),
