@@ -47,7 +47,7 @@ export const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>
       <button
         ref={ref}
         className={cn(
-          'rounded-surface-lg transition-all duration-200 font-medium',
+          'rounded-[20px] transition-all duration-200 font-medium',
           variants[variant],
           sizes[size],
           loading && 'opacity-60 cursor-not-allowed',

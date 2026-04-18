@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Montserrat, Playfair_Display } from "next/font/google"
+import { Montserrat, Lora } from "next/font/google"
 import "./globals.css"
 import { Providers } from "./providers"
 import { Toaster } from "@/components/ui/toaster"
@@ -21,10 +21,10 @@ const montserrat = Montserrat({
   weight: ["400", "500", "600", "700"],
 })
 
-const playfairDisplay = Playfair_Display({ 
+const lora = Lora({ 
   subsets: ["latin"],
-  variable: "--font-playfair-display",
-  weight: ["700"],
+  variable: "--font-lora",
+  weight: ["400", "500", "600", "700"],
 })
 
 export const metadata: Metadata = {
@@ -148,7 +148,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${montserrat.className} ${playfairDisplay.variable}`} suppressHydrationWarning>
+      <body className={`${montserrat.className} ${lora.variable}`} suppressHydrationWarning>
         <Providers>
           {children}
           <LLMOOptimizedFooter />

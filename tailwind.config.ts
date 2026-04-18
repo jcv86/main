@@ -64,13 +64,14 @@ const config: Config = {
         blue: "hsl(var(--blue))",
       },
       borderRadius: {
+        DEFAULT: "20px",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
-        // DTC surface radii
+        // DTC surface radii (squared corners standard)
+        "surface": "20px",
         "surface-lg": "28px",
         "surface-xl": "36px",
-        "surface-pill": "999px",
       },
       keyframes: {
         "accordion-down": {

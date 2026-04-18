@@ -30,7 +30,7 @@ export const BrandCard = React.forwardRef<HTMLDivElement, BrandCardProps>(
       <div
         ref={ref}
         className={cn(
-          'rounded-surface-lg p-6 transition-all duration-300',
+          'rounded-[28px] p-6 transition-all duration-300',
           variants[variant],
           interactive && `cursor-pointer ${accentColors[accent]}`,
           className
