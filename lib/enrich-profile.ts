@@ -55,7 +55,7 @@ export async function enrichProfileFromGoogle(
       // Actualizar
       const { error: updateError } = await supabase
         .from("user_profiles_enriched")
-        .update(profileData as any)
+        .update(profileData as Record<string, unknown>)
         .eq("user_id", userId)
 
       if (updateError) {
@@ -150,7 +150,7 @@ export async function enrichProfileFromLinkedIn(
 
       const { error: updateError } = await supabase
         .from("user_profiles_enriched")
-        .update(merged as any)
+        .update(merged as Record<string, unknown>)
         .eq("user_id", userId)
 
       if (updateError) {
