@@ -41,17 +41,21 @@ export default function StructuredTrainingPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      <div className="container max-w-4xl mx-auto px-4 py-8">
-        <Link href="/despega/a3-dashboard" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 mb-8">
-          <ArrowLeft className="w-4 h-4" />
-          Volver al Dashboard
-        </Link>
+    <main className="min-h-screen bg-black">
+      <div className="flex flex-col h-screen">
+        <div className="flex-shrink-0 border-b border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 p-4">
+          <Link href="/despega/a3-dashboard" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300">
+            <ArrowLeft className="w-4 h-4" />
+            Volver al Dashboard
+          </Link>
+        </div>
 
-        <ConversationalInterviewSimulator 
-          level="intermedio"
-          onComplete={handleComplete}
-        />
+        <div className="flex-1 overflow-hidden p-4">
+          <ConversationalInterviewSimulator 
+            level="intermedio"
+            onComplete={handleComplete}
+          />
+        </div>
       </div>
     </main>
   )

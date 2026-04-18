@@ -39,23 +39,27 @@ export default function Interview0Page() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      <div className="container max-w-4xl mx-auto px-4 py-8">
-        <button
-          onClick={() => router.back()}
-          className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 mb-8"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Volver
-        </button>
+    <main className="min-h-screen bg-black">
+      <div className="flex flex-col h-screen">
+        <div className="flex-shrink-0 border-b border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 p-4">
+          <button
+            onClick={() => router.back()}
+            className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Volver
+          </button>
+        </div>
 
-        <ConversationalInterviewSimulator
-          level="basico"
-          onComplete={(result) => {
-            console.log('[v0] Interview 0 completed:', result)
-            setIsComplete(true)
-          }}
-        />
+        <div className="flex-1 overflow-hidden p-4">
+          <ConversationalInterviewSimulator
+            level="basico"
+            onComplete={(result) => {
+              console.log('[v0] Interview 0 completed:', result)
+              setIsComplete(true)
+            }}
+          />
+        </div>
       </div>
     </main>
   )
