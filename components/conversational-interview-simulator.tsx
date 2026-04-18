@@ -179,13 +179,13 @@ export function ConversationalInterviewSimulator({
     }
   }, [transcript, isFinal, stage, resetTranscript])
 
-  // Initialize camera only
+  // Initialize camera - keep running for entire session
   useEffect(() => {
-    if (stage === 'response' && videoEnabled) {
+    if (videoEnabled) {
       initializeCamera()
       return () => stopCamera()
     }
-  }, [stage, videoEnabled])
+  }, [videoEnabled])
 
   const initializeCamera = async () => {
     try {
