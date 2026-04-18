@@ -141,7 +141,7 @@ export function A2ChatCoach({
               <div className="font-medium text-blue dark:text-blue/10 text-sm">Contextos a explorar:</div>
               <div className="flex flex-wrap gap-2">
                 {variantContexts.map((context, i) => (
-                  <Badge key={i} variant="secondary" className="bg-white dark:bg-muted/90 text-blue dark:text-blue/30 border-blue/20 dark:border-blue">
+                  <Badge key={i} variant="secondary" className="bg-transparent text-blue dark:text-blue/30 border-blue/20 dark:border-blue">
                     {context}
                   </Badge>
                 ))}
@@ -153,7 +153,7 @@ export function A2ChatCoach({
         {/* Messages Container */}
         <div 
           data-messages-container
-          className="flex-1 space-y-3 overflow-y-auto bg-muted/5 dark:bg-muted/90/50 p-4 rounded-[28px] border border-muted/20 dark:border-muted/80"
+          className="flex-1 space-y-3 overflow-y-auto bg-muted/5 dark:bg-transparent/50 p-4 rounded-[28px] border border-muted/20 dark:border-muted/80"
         >
           {messages.length === 0 ? (
             <div className="h-full flex items-center justify-center">
@@ -173,7 +173,7 @@ export function A2ChatCoach({
                     className={`max-w-sm px-4 py-3 rounded-xl text-sm leading-relaxed ${
                       msg.role === "user"
                         ? "bg-blue dark:bg-blue text-white rounded-br-none"
-                        : "bg-white dark:bg-muted/80 text-muted/90 dark:text-muted/5 border border-muted/20 dark:border-muted/70 rounded-bl-none"
+                        : "bg-transparent text-muted/90 dark:text-muted/5 border border-muted/20 dark:border-muted/70 rounded-bl-none"
                     }`}
                   >
                     <div>{msg.content}</div>
@@ -187,7 +187,7 @@ export function A2ChatCoach({
               ))}
               {loading && (
                 <div className="flex justify-start">
-                  <div className="bg-white dark:bg-muted/80 text-muted/90 dark:text-muted/5 border border-muted/20 dark:border-muted/70 px-4 py-3 rounded-xl rounded-bl-none">
+                  <div className="bg-transparent text-muted/90 dark:text-muted/5 border border-muted/20 dark:border-muted/70 px-4 py-3 rounded-xl rounded-bl-none">
                     <div className="flex gap-2 items-center">
                       <Loader className="w-4 h-4 animate-spin text-blue dark:text-blue/40" />
                       <span className="text-sm">El Coach reflexiona...</span>

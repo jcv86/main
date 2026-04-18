@@ -145,7 +145,7 @@ export default function RIASECTestClient() {
           <RadioGroup value={answers[currentQuestion]?.toString() || ""} onValueChange={(v) => handleAnswer(parseInt(v))}>
             <div className="space-y-2">
               {["Totalmente en desacuerdo", "En desacuerdo", "Neutral", "De acuerdo", "Totalmente de acuerdo"].map((label, idx) => (
-                <Label key={idx} className="flex items-center gap-3 cursor-pointer p-2 rounded hover:bg-muted/10">
+                <Label key={idx} className="flex items-center gap-3 cursor-pointer p-2 rounded hover:bg-transparent">
                   <RadioGroupItem value={(idx + 1).toString()} />
                   <span className="text-sm">{label}</span>
                 </Label>

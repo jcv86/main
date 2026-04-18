@@ -21,7 +21,7 @@ export function QuestionProgress({
   const estimatedTimeRemaining = (totalQuestions - currentQuestion + 1) * estimatedTimePerQuestion
 
   return (
-    <div className="bg-muted/5 dark:bg-muted/90 rounded-[28px] p-4 mb-6 border border-muted/20 dark:border-muted/80">
+    <div className="bg-muted/5 dark:bg-transparent rounded-[28px] p-4 mb-6 border border-muted/20 dark:border-muted/80">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-4">
           <div>
@@ -38,7 +38,7 @@ export function QuestionProgress({
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-muted/20 dark:bg-muted/80 rounded-full h-2 overflow-hidden">
+      <div className="w-full bg-muted/20 dark:bg-transparent rounded-full h-2 overflow-hidden">
         <div
           className="bg-blue h-full transition-all duration-300 ease-out"
           style={{ width: `${progressPercentage}%` }}

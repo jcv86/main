@@ -77,7 +77,7 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
               Comenzar Mi Transformación
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="border border-muted/60 text-white font-semibold px-8 py-4 rounded-[20px] hover:bg-muted/90/50 transition-colors">
+            <button className="border border-muted/60 text-white font-semibold px-8 py-4 rounded-[20px] hover:bg-transparent/50 transition-colors">
               Ver Cómo Funciona
             </button>
           </div>

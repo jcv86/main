@@ -95,7 +95,7 @@ export function GlobalProgressSidebar() {
       </Card>
 
       {/* PHASES MICRO TRACKER */}
-      <Card className="bg-white dark:bg-muted/90 border border-muted/20 dark:border-muted/80 shadow-md">
+      <Card className="bg-transparent border border-muted/20 dark:border-muted/80 shadow-md">
         <div className="p-4 space-y-3">
           <p className="text-xs font-semibold text-muted/70 dark:text-muted/30 uppercase">Fases del Ciclo</p>
           
@@ -103,7 +103,7 @@ export function GlobalProgressSidebar() {
             {phases.map((phase, idx) => (
               <Link key={phase.phase} href={`/despega/${phase.phase === 'A1' ? 'a1-cerebral' : `${phase.phase.toLowerCase()}-base` || phase.phase.toLowerCase()}`}>
                 <div className="group cursor-pointer">
-                  <div className="flex items-center gap-2 p-2 rounded hover:bg-muted/10 dark:hover:bg-muted/80 transition-colors">
+                  <div className="flex items-center gap-2 p-2 rounded hover:bg-transparent dark:hover:bg-muted/80 transition-colors">
                     {phase.status === 'completed' ? (
                       <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0" />
                     ) : phase.status === 'in-progress' ? (

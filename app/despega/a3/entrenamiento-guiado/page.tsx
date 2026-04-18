@@ -451,7 +451,7 @@ export default function GuidedTrainingPage() {
                     {module.lessons.map((lesson, idx) => (
                       <div
                         key={idx}
-                        className="flex items-center gap-3 p-2 rounded hover:bg-muted/10 dark:hover:bg-muted/80/50"
+                        className="flex items-center gap-3 p-2 rounded hover:bg-transparent dark:hover:bg-muted/80/50"
                       >
                         {lesson.completed ? (
                           <CheckCircle2 className="w-5 h-5 text-green flex-shrink-0" />

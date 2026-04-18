@@ -86,7 +86,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
 
           {/* Results or Empty State */}
           {results.length === 0 ? (
-            <div className="bg-muted/5 dark:bg-muted/90 rounded-[28px] p-8 text-center">
+            <div className="bg-muted/5 dark:bg-transparent rounded-[28px] p-8 text-center">
               <Brain className="w-12 h-12 mx-auto mb-4 text-muted/40" />
               <p className="text-muted/50 mb-4">
                 {searchQuery ? `Buscando: "${searchQuery}"` : 'Empieza a buscar contenido personalizado'}

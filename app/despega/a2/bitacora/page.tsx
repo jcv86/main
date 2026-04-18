@@ -82,7 +82,7 @@ export default function BitacoraPage() {
       <div className="border-b border-muted/20 dark:border-muted/80 bg-white dark:bg-background">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center gap-3 mb-2">
-            <Link href="/despega/a2/dashboard" className="p-2 hover:bg-muted/10 dark:hover:bg-muted/80 rounded-lg transition">
+            <Link href="/despega/a2/dashboard" className="p-2 hover:bg-transparent dark:hover:bg-muted/80 rounded-lg transition">
               <ChevronLeft className="w-5 h-5" />
             </Link>
             <BookOpen className="w-6 h-6 text-blue dark:text-blue/40" />

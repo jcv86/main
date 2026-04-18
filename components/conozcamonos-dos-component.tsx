@@ -199,7 +199,7 @@ export function ConozcamonosDosComponent({
         </div>
 
         {/* Question Card */}
-        <Card className="mb-8 border-0 shadow-lg bg-white dark:bg-muted/90">
+        <Card className="mb-8 border-0 shadow-lg bg-transparent">
           <CardHeader className="pb-4">
             <CardTitle className="text-2xl text-muted/90 dark:text-muted/5">
               {question.question}
@@ -262,7 +262,7 @@ export function ConozcamonosDosComponent({
                 value={responses[question.key] || ""}
                 onChange={(e) => handleResponseChange(question.key, e.target.value)}
                 placeholder="Escribe tu respuesta..."
-                className="w-full min-h-32 p-4 rounded-[28px] border border-muted/30 dark:border-muted/60 bg-muted/5 dark:bg-muted/80 text-muted/90 dark:text-muted/10 resize-none"
+                className="w-full min-h-32 p-4 rounded-[28px] border border-muted/30 dark:border-muted/60 bg-muted/5 dark:bg-transparent text-muted/90 dark:text-muted/10 resize-none"
               />
             )}
           </CardContent>

@@ -38,7 +38,7 @@ export default function CerebroLoading() {
                 </div>
               </div>
 
-              <CardContent className="border-t p-4 bg-muted/5 dark:bg-muted/90">
+              <CardContent className="border-t p-4 bg-muted/5 dark:bg-transparent">
                 <div className="flex gap-2">
                   <Skeleton className="h-12 flex-1" />
                   <Skeleton className="h-12 w-20" />

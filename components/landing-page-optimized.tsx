@@ -34,7 +34,7 @@ export default function LandingPageOptimized() {
               <Button
                 size="lg"
                 variant="outline"
-                className="text-lg px-8 py-6 w-full sm:w-auto border-2 hover:bg-muted/10 dark:hover:bg-muted/90"
+                className="text-lg px-8 py-6 w-full sm:w-auto border-2 hover:bg-transparent dark:hover:bg-transparent"
               >
                 Ver cómo funciona DTC
               </Button>
@@ -179,7 +179,7 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            <div className="flex gap-4 p-6 bg-white dark:bg-muted/80 rounded-xl border border-cyan/20 dark:border-cyan/30 hover:shadow-lg transition-shadow">
+            <div className="flex gap-4 p-6 bg-transparent rounded-xl border border-cyan/20 dark:border-cyan/30 hover:shadow-lg transition-shadow">
               <div className="flex-shrink-0">
                 <div className="w-12 h-12 bg-cyan/10 dark:bg-cyan/30 rounded-lg flex items-center justify-center">
                   <span className="text-lg font-bold text-cyan dark:text-cyan/40">→</span>
@@ -375,7 +375,7 @@ export default function LandingPageOptimized() {
       </section>
 
       {/* PARA TI SI */}
-      <section className="container mx-auto px-4 py-20 bg-muted/5 dark:bg-muted/90/50 rounded-3xl">
+      <section className="container mx-auto px-4 py-20 bg-muted/5 dark:bg-transparent/50 rounded-3xl">
         <div className="max-w-5xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
             DTC es para ti si...
@@ -385,7 +385,7 @@ export default function LandingPageOptimized() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-muted/80 rounded-[28px] p-6 border-l-4 border-purple/50 hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-purple/50 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <svg className="w-5 h-5 text-purple dark:text-purple/40" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -397,7 +397,7 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-muted/80 rounded-[28px] p-6 border-l-4 border-blue/50 hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-blue/50 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <svg className="w-5 h-5 text-blue dark:text-blue/40" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -409,7 +409,7 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-muted/80 rounded-[28px] p-6 border-l-4 border-green hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-green hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <svg className="w-5 h-5 text-green dark:text-green/40" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -421,7 +421,7 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-muted/80 rounded-[28px] p-6 border-l-4 border-cyan/50 hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-cyan/50 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <svg className="w-5 h-5 text-cyan dark:text-cyan/40" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -433,7 +433,7 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-muted/80 rounded-[28px] p-6 border-l-4 border-orange hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-orange hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <svg className="w-5 h-5 text-orange dark:text-orange/40" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -445,7 +445,7 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-muted/80 rounded-[28px] p-6 border-l-4 border-pink-500 hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-pink-500 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <svg className="w-5 h-5 text-pink-600 dark:text-pink-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -477,7 +477,7 @@ export default function LandingPageOptimized() {
           </p>
 
           <div className="space-y-4">
-            <details className="group bg-white dark:bg-muted/80 rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
+            <details className="group bg-transparent rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
                 <span>¿Es DTC un test cualquiera o algo más?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
@@ -489,7 +489,7 @@ export default function LandingPageOptimized() {
               </div>
             </details>
 
-            <details className="group bg-white dark:bg-muted/80 rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
+            <details className="group bg-transparent rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
                 <span>¿Qué pasa si estoy estancado? ¿Realmente ayuda?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
@@ -501,7 +501,7 @@ export default function LandingPageOptimized() {
               </div>
             </details>
 
-            <details className="group bg-white dark:bg-muted/80 rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
+            <details className="group bg-transparent rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
                 <span>¿Es solo para buscar trabajo o también para crecimiento integral?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
@@ -513,7 +513,7 @@ export default function LandingPageOptimized() {
               </div>
             </details>
 
-            <details className="group bg-white dark:bg-muted/80 rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
+            <details className="group bg-transparent rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
                 <span>¿Cómo me diferencio realmente en el mercado?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
@@ -525,7 +525,7 @@ export default function LandingPageOptimized() {
               </div>
             </details>
 
-            <details className="group bg-white dark:bg-muted/80 rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
+            <details className="group bg-transparent rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
                 <span>¿Es útil si ya tengo experiencia o es solo para junior?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
@@ -563,7 +563,7 @@ export default function LandingPageOptimized() {
               <Button
                 size="lg"
                 variant="outline"
-                className="text-lg px-8 py-6 w-full sm:w-auto border-2 hover:bg-muted/10 dark:hover:bg-muted/90"
+                className="text-lg px-8 py-6 w-full sm:w-auto border-2 hover:bg-transparent dark:hover:bg-transparent"
               >
                 Despejar dudas primero
               </Button>

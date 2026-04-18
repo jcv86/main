@@ -286,7 +286,7 @@ export function DocumentationViewer({ type = "tecnica" }: DocumentationViewerPro
                     if (isInline) {
                       return (
                         <code
-                          className="bg-muted/10 dark:bg-muted/80 px-1.5 py-0.5 rounded text-sm font-mono"
+                          className="bg-muted/10 dark:bg-transparent px-1.5 py-0.5 rounded text-sm font-mono"
                           {...props}
                         >
                           {children}

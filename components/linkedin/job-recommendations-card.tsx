@@ -88,7 +88,7 @@ export function JobRecommendationsCard() {
             {jobs.slice(0, 5).map((job) => (
               <div
                 key={job.id}
-                className="p-3 bg-white dark:bg-muted/90 rounded-[28px] border border-muted/20 dark:border-muted/70 hover:border-amber-300 transition-colors"
+                className="p-3 bg-transparent rounded-[28px] border border-muted/20 dark:border-muted/70 hover:border-amber-300 transition-colors"
               >
                 {/* Match Score Badge */}
                 {job.match_score !== undefined && (

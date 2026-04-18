@@ -112,7 +112,7 @@ export function PremiumGamificationWidget() {
           {/* STREAK & ACHIEVEMENTS ROW */}
           <div className="grid grid-cols-3 gap-2">
             {/* DAILY STREAK */}
-            <div className="bg-white/80 dark:bg-muted/90/50 rounded-[28px] p-2 text-center border border-orange/20 dark:border-orange/30">
+            <div className="bg-white/80 dark:bg-transparent/50 rounded-[28px] p-2 text-center border border-orange/20 dark:border-orange/30">
               <div className="flex items-center justify-center gap-0.5 mb-1">
                 <Flame className={`w-3 h-3 ${isStreakActive ? 'text-orange' : 'text-muted/40'}`} />
               </div>
@@ -128,7 +128,7 @@ export function PremiumGamificationWidget() {
             </div>
 
             {/* CHALLENGES */}
-            <div className="bg-white/80 dark:bg-muted/90/50 rounded-[28px] p-2 text-center border border-purple/20 dark:border-purple/30">
+            <div className="bg-white/80 dark:bg-transparent/50 rounded-[28px] p-2 text-center border border-purple/20 dark:border-purple/30">
               <Target className="w-3 h-3 text-purple/50 mx-auto mb-1" />
               <p className="text-lg font-black text-purple dark:text-purple/40">
                 {gamification.daily_challenges_completed}/3
@@ -137,7 +137,7 @@ export function PremiumGamificationWidget() {
             </div>
 
             {/* ACHIEVEMENTS */}
-            <div className="bg-white/80 dark:bg-muted/90/50 rounded-[28px] p-2 text-center border border-green/20 dark:border-green/30">
+            <div className="bg-white/80 dark:bg-transparent/50 rounded-[28px] p-2 text-center border border-green/20 dark:border-green/30">
               <Trophy className="w-3 h-3 text-green/50 mx-auto mb-1" />
               <p className="text-lg font-black text-green dark:text-green/40">
                 {gamification.total_achievements}
@@ -189,7 +189,7 @@ export function PremiumGamificationWidget() {
           </Button>
 
           {/* NEXT UNLOCK */}
-          <div className="bg-muted/10 dark:bg-muted/80/50 rounded p-2">
+          <div className="bg-muted/10 dark:bg-transparent/50 rounded p-2">
             <div className="flex items-center gap-2 text-xs">
               <Unlock className="w-3 h-3 text-muted/60 dark:text-muted/40 flex-shrink-0" />
               <span className="text-muted/70 dark:text-muted/30">

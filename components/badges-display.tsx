@@ -20,7 +20,7 @@ interface BadgesDisplayProps {
 }
 
 const RARITY_COLORS: Record<string, string> = {
-  common: 'bg-muted/10 dark:bg-muted/80 border-muted/30',
+  common: 'bg-muted/10 dark:bg-transparent border-muted/30',
   rare: 'bg-blue/10 dark:bg-blue/30 border-blue/30',
   epic: 'bg-purple/10 dark:bg-purple/30 border-purple/30',
   legendary: 'bg-amber-100 dark:bg-amber-900/30 border-amber-300'
@@ -57,7 +57,7 @@ export function BadgesDisplay({ earnedBadges, totalBadgesAvailable = 24 }: Badge
             <span className="font-semibold">Progreso de Insignias</span>
             <span className="text-xs opacity-75">{Math.round(completionPercentage)}%</span>
           </div>
-          <div className="h-3 bg-muted/20 dark:bg-muted/80 rounded-full overflow-hidden">
+          <div className="h-3 bg-muted/20 dark:bg-transparent rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-emerald-400 to-blue-500 transition-all duration-300"
               style={{ width: `${completionPercentage}%` }}
@@ -79,7 +79,7 @@ export function BadgesDisplay({ earnedBadges, totalBadgesAvailable = 24 }: Badge
                       className={`relative aspect-square rounded-lg flex items-center justify-center cursor-pointer transition-all hover:scale-110 ${
                         isEarned
                           ? `${RARITY_COLORS[badge?.rarity || 'common']} ring-2 ${RARITY_RING[badge?.rarity || 'common']}`
-                          : 'bg-muted/20 dark:bg-muted/80 opacity-40'
+                          : 'bg-muted/20 dark:bg-transparent opacity-40'
                       }`}
                     >
                       {isEarned ? (

@@ -177,7 +177,7 @@ export function InterviewTips({
         {/* Current Tip Display with Navigation */}
         {currentTip && (
           <div className="space-y-3">
-            <div className="p-4 bg-white dark:bg-muted/90 rounded-[28px] border-l-4 border-blue/50">
+            <div className="p-4 bg-transparent rounded-[28px] border-l-4 border-blue/50">
               <div className="flex items-start justify-between mb-2">
                 <h4 className="font-semibold text-sm text-foreground dark:text-white">
                   Consejo IA {currentTip.isPremium ? '(Premium)' : '(Gratis)'}:

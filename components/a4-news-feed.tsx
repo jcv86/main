@@ -33,7 +33,7 @@ const getCategoryColor = (category: string) => {
     "Tech": { badge: "bg-cyan/10 text-cyan dark:bg-cyan/30 dark:text-cyan/30", bg: "bg-cyan/5/50" },
     "Finanzas": { badge: "bg-yellow/10 text-yellow dark:bg-yellow/30 dark:text-yellow/30", bg: "bg-yellow/5/50" },
   }
-  return colors[category] || { badge: "bg-muted/10 text-gray-800 dark:bg-muted/90/30 dark:text-muted/30", bg: "bg-muted/5/50" }
+  return colors[category] || { badge: "bg-muted/10 text-gray-800 dark:bg-transparent/30 dark:text-muted/30", bg: "bg-muted/5/50" }
 }
 
 const getRelevanceIcon = (score: number) => {
@@ -47,7 +47,7 @@ const getRelevanceBadge = (score: number) => {
   if (score >= 80) return { color: "bg-red/10 text-red dark:bg-red/30 dark:text-red/30", label: "Crítico" }
   if (score >= 60) return { color: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300", label: "Alto" }
   if (score >= 40) return { color: "bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue/30", label: "Medio" }
-  return { color: "bg-muted/10 text-gray-800 dark:bg-muted/90/30 dark:text-muted/30", label: "Bajo" }
+  return { color: "bg-muted/10 text-gray-800 dark:bg-transparent/30 dark:text-muted/30", label: "Bajo" }
 }
 
 export function A4NewsFeed({ items }: A4NewsFeedProps) {

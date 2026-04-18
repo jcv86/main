@@ -619,7 +619,7 @@ export function PersistentAICoach() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             {/* Chat Tab Guide */}
-            <div className="bg-white dark:bg-muted/80 rounded-[28px] p-4 border border-blue/20 dark:border-blue">
+            <div className="bg-transparent rounded-[28px] p-4 border border-blue/20 dark:border-blue">
               <div className="flex items-start gap-3 mb-2">
                 <MessageSquare className="h-5 w-5 text-blue dark:text-blue/40 flex-shrink-0 mt-0.5" />
                 <h3 className="font-semibold text-foreground">💬 Chat Personalizado</h3>
@@ -631,7 +631,7 @@ export function PersistentAICoach() {
             </div>
 
             {/* Suggestions Guide */}
-            <div className="bg-white dark:bg-muted/80 rounded-[28px] p-4 border border-green/20 dark:border-green">
+            <div className="bg-transparent rounded-[28px] p-4 border border-green/20 dark:border-green">
               <div className="flex items-start gap-3 mb-2">
                 <Lightbulb className="h-5 w-5 text-green dark:text-green/40 flex-shrink-0 mt-0.5" />
                 <h3 className="font-semibold text-foreground">💡 Sugerencias</h3>
@@ -643,7 +643,7 @@ export function PersistentAICoach() {
             </div>
 
             {/* Insights Guide */}
-            <div className="bg-white dark:bg-muted/80 rounded-[28px] p-4 border border-purple/20 dark:border-purple">
+            <div className="bg-transparent rounded-[28px] p-4 border border-purple/20 dark:border-purple">
               <div className="flex items-start gap-3 mb-2">
                 <Sparkles className="h-5 w-5 text-purple dark:text-purple/40 flex-shrink-0 mt-0.5" />
                 <h3 className="font-semibold text-foreground">✨ Insights</h3>
@@ -661,7 +661,7 @@ export function PersistentAICoach() {
       )}
 
       {performanceContext && (
-        <div className="bg-muted/90 border-b border-muted/70 px-4 py-3">
+        <div className="bg-transparent border-b border-muted/70 px-4 py-3">
           <div className="flex items-center gap-4 text-sm">
             <span className="text-muted/40">Tu Contexto de Performance:</span>
             <div className="flex gap-3">

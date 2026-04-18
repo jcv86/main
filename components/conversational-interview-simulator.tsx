@@ -642,7 +642,7 @@ export function ConversationalInterviewSimulator({
             {/* Your Response */}
             <div>
               <p className="font-semibold mb-2">Tu respuesta:</p>
-              <div className="bg-muted/5 dark:bg-muted/90 p-4 rounded-[28px] italic text-muted/70 dark:text-muted/30">
+              <div className="bg-muted/5 dark:bg-transparent p-4 rounded-[28px] italic text-muted/70 dark:text-muted/30">
                 {lastAttempt.userResponse}
               </div>
             </div>

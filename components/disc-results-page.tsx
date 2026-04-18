@@ -170,7 +170,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
                 className={`${
                   isActive
                     ? `${colors[key]} text-white border-2 border-white`
-                    : 'bg-muted/80 border-muted/70 text-muted/30'
+                    : 'bg-transparent border-muted/70 text-muted/30'
                 } transition-all`}
               >
                 <CardContent className="p-4 text-center">

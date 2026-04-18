@@ -325,7 +325,7 @@ export function ConversationalInterview({
               className="w-full bg-black aspect-video"
             />
             {!videoEnabled && (
-              <div className="w-full aspect-video bg-muted/20 dark:bg-muted/80 flex items-center justify-center">
+              <div className="w-full aspect-video bg-muted/20 dark:bg-transparent flex items-center justify-center">
                 <p className="text-muted/50">Cámara deshabilitada</p>
               </div>
             )}
@@ -375,7 +375,7 @@ export function ConversationalInterview({
             {/* Interviewer Messages */}
             <div className="space-y-3 max-h-64 overflow-y-auto">
               {interviewerMessage && (
-                <div className="bg-muted/10 dark:bg-muted/80 p-3 rounded-lg">
+                <div className="bg-muted/10 dark:bg-transparent p-3 rounded-lg">
                   <p className="text-sm font-semibold text-muted/70 dark:text-muted/30 mb-1">Entrevistador</p>
                   <p className="text-sm">{interviewerMessage}</p>
                 </div>
@@ -423,11 +423,11 @@ export function ConversationalInterview({
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-muted/10 dark:bg-muted/80 rounded-lg">
+              <div className="p-4 bg-muted/10 dark:bg-transparent rounded-lg">
                 <p className="text-sm text-muted/60 dark:text-muted/40">Puntuación</p>
                 <p className="text-3xl font-bold text-cyan">{feedbackData?.score}/100</p>
               </div>
-              <div className="p-4 bg-muted/10 dark:bg-muted/80 rounded-lg">
+              <div className="p-4 bg-muted/10 dark:bg-transparent rounded-lg">
                 <p className="text-sm text-muted/60 dark:text-muted/40">Respuestas Registradas</p>
                 <p className="text-3xl font-bold">{feedbackData?.totalResponses}</p>
               </div>

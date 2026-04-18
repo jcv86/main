@@ -85,7 +85,7 @@ export default function A2ChatCoachPage() {
       <div className="border-b border-muted/20 dark:border-muted/80 bg-white dark:bg-background sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
-            <Link href="/despega/a2/dashboard" className="p-2 hover:bg-muted/10 dark:hover:bg-muted/80 rounded-lg transition">
+            <Link href="/despega/a2/dashboard" className="p-2 hover:bg-transparent dark:hover:bg-muted/80 rounded-lg transition">
               <ChevronLeft className="w-5 h-5" />
             </Link>
             <div className="flex-1">

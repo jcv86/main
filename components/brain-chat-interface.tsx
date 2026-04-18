@@ -290,7 +290,7 @@ export function BrainChatInterface() {
                                 {message.sources.map((source, idx) => (
                                   <div
                                     key={idx}
-                                    className="flex items-start gap-2 p-2 rounded-[28px] bg-white/50 dark:bg-muted/90/50"
+                                    className="flex items-start gap-2 p-2 rounded-[28px] bg-white/50 dark:bg-transparent/50"
                                   >
                                     <div className="mt-0.5">
                                       {source.sourceType === "book" ? (
@@ -337,7 +337,7 @@ export function BrainChatInterface() {
               </div>
             </ScrollArea>
 
-            <CardContent className="border-t p-4 bg-muted/5 dark:bg-muted/90">
+            <CardContent className="border-t p-4 bg-muted/5 dark:bg-transparent">
               <form onSubmit={handleSubmit} className="flex gap-2">
                 <Input
                   ref={inputRef}

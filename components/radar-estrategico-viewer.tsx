@@ -72,7 +72,7 @@ export function RadarEstrategico() {
             <h1 className="text-4xl font-bold text-balance">Lectura Estratégica del Día</h1>
           </div>
 
-          <Card className="bg-muted/80 border-blue/50/30">
+          <Card className="bg-transparent border-blue/50/30">
             <CardHeader>
               <CardTitle className="text-2xl">{tesisDia.tesis_estrategica}</CardTitle>
             </CardHeader>
@@ -163,7 +163,7 @@ export function RadarEstrategico() {
         <h2 className="text-3xl font-bold">Señales del Radar</h2>
 
         <Tabs defaultValue="todas" className="space-y-4">
-          <TabsList className="bg-muted/80 border border-muted/70">
+          <TabsList className="bg-transparent border border-muted/70">
             <TabsTrigger value="todas">Todas ({noticias.length})</TabsTrigger>
             <TabsTrigger value="alta">Alta Energía</TabsTrigger>
             <TabsTrigger value="acelerando">Acelerando</TabsTrigger>
@@ -243,7 +243,7 @@ function RadarNoticiaCard({ noticia, isSelected, onSelect }: RadarNoticiaCardPro
   return (
     <Card
       onClick={() => onSelect(noticia)}
-      className={`bg-muted/80 border-muted/70 cursor-pointer transition-all hover:border-blue/50/50 ${
+      className={`bg-transparent border-muted/70 cursor-pointer transition-all hover:border-blue/50/50 ${
         isSelected ? 'ring-2 ring-blue-500' : ''
       }`}
     >

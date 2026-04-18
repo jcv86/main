@@ -57,7 +57,7 @@ export function InsightCard({ title, content, icon, index, color, emoji }: Insig
           <div className="flex items-start gap-4">
             <div className="flex flex-col items-center gap-2">
               {emoji && <span className="text-2xl">{emoji}</span>}
-              <div className={`p-2 rounded-[28px] bg-white dark:bg-muted/80 flex-shrink-0`}>
+              <div className={`p-2 rounded-[28px] bg-transparent flex-shrink-0`}>
                 <div className={`w-5 h-5 ${colorClasses.icon}`}>
                   {icon}
                 </div>

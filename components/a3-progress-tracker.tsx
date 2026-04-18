@@ -114,7 +114,7 @@ export function A3ProgressTracker({ userId, level }: A3ProgressTrackerProps) {
   }
 
   if (loading) {
-    return <div className="h-32 animate-pulse bg-muted/20 dark:bg-muted/80 rounded-lg" />
+    return <div className="h-32 animate-pulse bg-muted/20 dark:bg-transparent rounded-lg" />
   }
 
   if (!progress) return null

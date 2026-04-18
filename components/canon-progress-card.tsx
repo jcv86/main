@@ -60,7 +60,7 @@ export function CanonProgressCard({
           {/* Steps */}
           <div className="space-y-3">
             {/* Step 1: C1 */}
-            <div className="flex items-start gap-4 p-4 bg-white dark:bg-muted/80 rounded-lg">
+            <div className="flex items-start gap-4 p-4 bg-transparent rounded-lg">
               <div className="flex-shrink-0">
                 {c1Completed ? (
                   <CheckCircle2 className="w-6 h-6 text-green dark:text-green/40" />
@@ -84,7 +84,7 @@ export function CanonProgressCard({
             </div>
 
             {/* Step 2: A1 */}
-            <div className="flex items-start gap-4 p-4 bg-white dark:bg-muted/80 rounded-lg">
+            <div className="flex items-start gap-4 p-4 bg-transparent rounded-lg">
               <div className="flex-shrink-0">
                 {a1Completed ? (
                   <CheckCircle2 className="w-6 h-6 text-green dark:text-green/40" />
@@ -108,7 +108,7 @@ export function CanonProgressCard({
             </div>
 
             {/* Step 3: C2 */}
-            <div className="flex items-start gap-4 p-4 bg-white dark:bg-muted/80 rounded-lg">
+            <div className="flex items-start gap-4 p-4 bg-transparent rounded-lg">
               <div className="flex-shrink-0">
                 {c2Completed ? (
                   <CheckCircle2 className="w-6 h-6 text-green dark:text-green/40" />

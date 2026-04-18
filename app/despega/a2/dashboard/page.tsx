@@ -106,7 +106,7 @@ export default function A2DashboardPage() {
 
         {/* MISSION OVERVIEW */}
         {mission && (
-          <Card className="bg-muted/90 border-muted/80 shadow-lg">
+          <Card className="bg-transparent border-muted/80 shadow-lg">
             <CardHeader>
               <CardTitle className="text-2xl text-white" style={{ fontFamily: 'Lora, serif' }}>Misión: {mission.mission_title}</CardTitle>
               <p className="text-sm text-muted/40 mt-2">{mission.mission_description}</p>
@@ -136,7 +136,7 @@ export default function A2DashboardPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[1, 2, 3].map((sprintNum) => (
               <Link key={sprintNum} href={`/despega/a2/sprint-${sprintNum}`}>
-                <Card className="cursor-pointer hover:shadow-lg transition-shadow border-l-4 border-orange bg-muted/90 border-muted/80 hover:border-l-orange hover:bg-muted/80">
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow border-l-4 border-orange bg-transparent border-muted/80 hover:border-l-orange hover:bg-muted/80">
                   <CardHeader>
                     <CardTitle className="text-lg text-white">
                       Sprint {sprintNum}: {sprintNum === 1 ? "Fundamentos" : sprintNum === 2 ? "Profundización" : "Consolidación"}

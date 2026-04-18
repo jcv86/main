@@ -180,7 +180,7 @@ export default function A3Page() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-muted/90 border border-muted/80">
+          <Card className="bg-transparent border border-muted/80">
             <CardContent className="pt-6">
               <div className="text-3xl font-bold text-red">
                 {a3Progress?.sessions_completed || 0}
@@ -189,7 +189,7 @@ export default function A3Page() {
             </CardContent>
           </Card>
 
-          <Card className="bg-muted/90 border border-muted/80">
+          <Card className="bg-transparent border border-muted/80">
             <CardContent className="pt-6">
               <div className="text-3xl font-bold text-red">
                 {a3Progress?.employability_score || 'Calcular'}

@@ -118,7 +118,7 @@ export function NoticiasFeed() {
       'Educación': 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-indigo-300',
       'Oportunidades': 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300',
     }
-    return colors[category] || 'bg-muted/10 text-muted/80 dark:bg-muted/90/30 dark:text-muted/30'
+    return colors[category] || 'bg-muted/10 text-muted/80 dark:bg-transparent/30 dark:text-muted/30'
   }
 
   if (loading) {

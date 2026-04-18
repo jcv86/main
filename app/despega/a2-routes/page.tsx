@@ -170,7 +170,7 @@ export default function A2RoutesPage() {
     return (
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-2xl mx-auto">
-          <Card className="bg-muted/90 border-red/50/50 p-8">
+          <Card className="bg-transparent border-red/50/50 p-8">
             <div className="flex items-start gap-4">
               <AlertCircle className="h-6 w-6 text-red flex-shrink-0 mt-1" />
               <div className="flex-1">
@@ -203,7 +203,7 @@ export default function A2RoutesPage() {
         </div>
 
         {/* What is A2 */}
-        <Card className="bg-muted/90 border-muted/80">
+        <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <Zap className="w-5 h-5 text-orange" />
@@ -223,7 +223,7 @@ export default function A2RoutesPage() {
         </Card>
 
         {/* Progress */}
-        <Card className="bg-muted/90 border-muted/80">
+        <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <MapPin className="w-5 h-5 text-cyan/50" />
@@ -253,7 +253,7 @@ export default function A2RoutesPage() {
         </Card>
 
         {/* 90-Day Timeline */}
-        <Card className="bg-muted/90 border-muted/80">
+        <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <Calendar className="w-5 h-5 text-blue/50" />
@@ -346,7 +346,7 @@ export default function A2RoutesPage() {
         </Card>
 
         {/* Next Steps */}
-        <Card className="bg-muted/90 border-muted/80">
+        <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
               <CheckCircle2 className="w-5 h-5 text-purple/50" />

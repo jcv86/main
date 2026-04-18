@@ -36,7 +36,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
               className={`p-2 rounded-lg transition-all text-center ${
                 value === interviewer.id
                   ? 'ring-2 ring-blue-500 bg-blue/5 dark:bg-blue/30'
-                  : 'hover:bg-muted/10 dark:hover:bg-muted/80'
+                  : 'hover:bg-transparent dark:hover:bg-muted/80'
               }`}
             >
               <div className={`w-8 h-8 rounded-full mx-auto mb-1 bg-gradient-to-br ${interviewer.color}`}></div>

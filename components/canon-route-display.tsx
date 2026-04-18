@@ -79,7 +79,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
         
         <div className="grid grid-cols-3 gap-4">
           {Object.entries(missionsByPhase).map(([phase, phaseMissions]) => (
-            <Card key={phase} className="bg-muted/80 border-muted/70">
+            <Card key={phase} className="bg-transparent border-muted/70">
               <CardContent className="pt-6">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-blue/40 mb-2">{phaseMissions.length}</div>
@@ -121,7 +121,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
             {missionsByPhase[phase as keyof typeof missionsByPhase].map((mission, idx) => (
               <Card 
                 key={mission.missionId}
-                className="bg-muted/80 border-muted/70 hover:border-muted/60 transition-all cursor-pointer"
+                className="bg-transparent border-muted/70 hover:border-muted/60 transition-all cursor-pointer"
                 onClick={() => toggleExpand(mission.missionId)}
               >
                 <CardHeader className="pb-3">
@@ -188,7 +188,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
       ))}
 
       {/* Progress Tracking */}
-      <Card className="bg-muted/80 border-muted/70">
+      <Card className="bg-transparent border-muted/70">
         <CardHeader>
           <CardTitle className="text-white">Tu Progreso</CardTitle>
           <CardDescription>Completarás esta ruta en 90 días</CardDescription>

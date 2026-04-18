@@ -154,7 +154,7 @@ export default function MBTITestClient() {
           <RadioGroup value={answers[currentQuestion] || ""} onValueChange={handleAnswer}>
             <div className="space-y-3">
               {question.options?.map((option, idx) => (
-                <Label key={idx} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-muted/10 dark:hover:bg-muted/80">
+                <Label key={idx} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-transparent dark:hover:bg-muted/80">
                   <RadioGroupItem value={idx.toString()} />
                   <span>{option}</span>
                 </Label>

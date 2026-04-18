@@ -79,7 +79,7 @@ export function WeeklyResourceDigest() {
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {Object.entries(categoryCounts).map(([category, count]) => (
-            <div key={category} className="text-center p-3 bg-white dark:bg-muted/80 rounded-lg">
+            <div key={category} className="text-center p-3 bg-transparent rounded-lg">
               <div className="text-2xl font-bold text-blue">{count}</div>
               <div className="text-xs text-muted/60 dark:text-muted/40">{category}</div>
             </div>
@@ -90,7 +90,7 @@ export function WeeklyResourceDigest() {
           {resources.slice(0, 5).map((resource) => (
             <div
               key={resource.id}
-              className="flex items-center justify-between p-3 bg-white dark:bg-muted/80 rounded-lg"
+              className="flex items-center justify-between p-3 bg-transparent rounded-lg"
             >
               <div className="flex-1">
                 <p className="font-medium text-sm">{resource.name}</p>

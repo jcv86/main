@@ -193,7 +193,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                   {phase.activities.map((activity, idx) => (
                     <div
                       key={idx}
-                      className="flex items-start justify-between p-3 rounded-[28px] bg-muted/5 dark:bg-muted/90/50 border border-muted/20 dark:border-muted/80"
+                      className="flex items-start justify-between p-3 rounded-[28px] bg-muted/5 dark:bg-transparent/50 border border-muted/20 dark:border-muted/80"
                     >
                       <div className="flex items-start gap-3 flex-1">
                         <div className="text-muted/40 mt-0.5">{activity.icon}</div>
@@ -229,7 +229,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                 {streakBonuses.map((streak, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-between p-3 rounded-[28px] bg-white dark:bg-muted/90/50 border border-orange/20 dark:border-orange"
+                    className="flex items-center justify-between p-3 rounded-[28px] bg-transparent/50 border border-orange/20 dark:border-orange"
                   >
                     <div className="flex items-center gap-3">
                       <div className="text-center">
@@ -271,7 +271,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="p-4 bg-muted/5 dark:bg-muted/90/50 rounded-[28px] border border-muted/20 dark:border-muted/80">
+                <div className="p-4 bg-muted/5 dark:bg-transparent/50 rounded-[28px] border border-muted/20 dark:border-muted/80">
                   <p className="font-semibold text-sm mb-2">Nivel = 1,000 XP</p>
                   <p className="text-sm text-muted/60 dark:text-muted/40">
                     Cada nivel requiere 1,000 puntos. Con multiplicadores de racha, 

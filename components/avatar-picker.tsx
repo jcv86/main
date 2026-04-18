@@ -104,13 +104,13 @@ export function AvatarPicker({
                 className={`relative group flex flex-col items-center gap-2 p-3 rounded-lg transition-all duration-200 ${
                   selectedAvatar === avatar.id
                     ? `bg-gradient-to-br ${avatar.color} text-white shadow-lg ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-900`
-                    : 'bg-muted/10 dark:bg-muted/80 hover:bg-muted/20 dark:hover:bg-muted/70'
+                    : 'bg-muted/10 dark:bg-transparent hover:bg-muted/20 dark:hover:bg-muted/70'
                 }`}
               >
                 <div className="text-3xl">{avatar.emoji}</div>
                 
                 {selectedAvatar === avatar.id && (
-                  <div className="absolute top-1 right-1 bg-white dark:bg-muted/90 rounded-full p-1">
+                  <div className="absolute top-1 right-1 bg-transparent rounded-full p-1">
                     <Check className="w-4 h-4 text-green" />
                   </div>
                 )}

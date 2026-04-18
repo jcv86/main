@@ -26,7 +26,7 @@ const LEVEL_TITLES: Record<number, string> = {
 }
 
 const LEVEL_COLORS: Record<number, { bg: string; text: string; accent: string }> = {
-  1: { bg: 'bg-muted/10 dark:bg-muted/80', text: 'text-muted/70 dark:text-muted/30', accent: 'from-slate-400 to-slate-600' },
+  1: { bg: 'bg-muted/10 dark:bg-transparent', text: 'text-muted/70 dark:text-muted/30', accent: 'from-slate-400 to-slate-600' },
   2: { bg: 'bg-green/10 dark:bg-green/30', text: 'text-green dark:text-green/30', accent: 'from-green-400 to-green-600' },
   3: { bg: 'bg-blue/10 dark:bg-blue/30', text: 'text-blue dark:text-blue/30', accent: 'from-blue-400 to-blue-600' },
   4: { bg: 'bg-purple/10 dark:bg-purple/30', text: 'text-purple dark:text-purple/30', accent: 'from-purple-400 to-purple' },

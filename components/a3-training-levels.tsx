@@ -113,15 +113,15 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
           <CardContent className="space-y-4">
             {/* Level Stats */}
             <div className="grid grid-cols-3 gap-3 text-sm">
-              <div className="text-center p-2 rounded-[28px] bg-muted/5 dark:bg-muted/80">
+              <div className="text-center p-2 rounded-[28px] bg-muted/5 dark:bg-transparent">
                 <p className="font-semibold text-muted/90 dark:text-white">{level.questionsCount}</p>
                 <p className="text-xs text-muted/60 dark:text-muted/40">Preguntas</p>
               </div>
-              <div className="text-center p-2 rounded-[28px] bg-muted/5 dark:bg-muted/80">
+              <div className="text-center p-2 rounded-[28px] bg-muted/5 dark:bg-transparent">
                 <p className="font-semibold text-muted/90 dark:text-white">{level.estimatedTime}</p>
                 <p className="text-xs text-muted/60 dark:text-muted/40">Tiempo</p>
               </div>
-              <div className="text-center p-2 rounded-[28px] bg-muted/5 dark:bg-muted/80">
+              <div className="text-center p-2 rounded-[28px] bg-muted/5 dark:bg-transparent">
                 <p className="font-semibold text-muted/90 dark:text-white">{level.difficulty}</p>
                 <p className="text-xs text-muted/60 dark:text-muted/40">Nivel</p>
               </div>

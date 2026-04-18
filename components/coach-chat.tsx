@@ -137,7 +137,7 @@ export function CoachChat({ coachType, userProfile }: ChatProps) {
       <CardContent>
         <div className="space-y-6">
           {/* Chat Messages */}
-          <div className="bg-muted/5 dark:bg-muted/90 rounded-[28px] p-6 h-96 overflow-y-auto space-y-4">
+          <div className="bg-muted/5 dark:bg-transparent rounded-[28px] p-6 h-96 overflow-y-auto space-y-4">
             {messages.length === 0 ? (
               <div className="flex items-center justify-center h-full text-center">
                 <div>
@@ -156,7 +156,7 @@ export function CoachChat({ coachType, userProfile }: ChatProps) {
                     <div className={`max-w-sm px-4 py-2 rounded-lg whitespace-pre-wrap ${
                       msg.type === 'user'
                         ? 'bg-purple text-white'
-                        : 'bg-white dark:bg-muted/80 border border-muted/20 dark:border-muted/70'
+                        : 'bg-transparent border border-muted/20 dark:border-muted/70'
                     }`}>
                       {msg.content}
                     </div>
@@ -164,7 +164,7 @@ export function CoachChat({ coachType, userProfile }: ChatProps) {
                 ))}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-white dark:bg-muted/80 border border-muted/20 dark:border-muted/70 px-4 py-2 rounded-lg">
+                    <div className="bg-transparent border border-muted/20 dark:border-muted/70 px-4 py-2 rounded-lg">
                       <Loader2 className="w-4 h-4 animate-spin" />
                     </div>
                   </div>

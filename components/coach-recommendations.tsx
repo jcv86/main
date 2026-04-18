@@ -126,7 +126,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
               ))}
             </div>
           ) : (
-            <div className="bg-muted/5 dark:bg-muted/90 rounded-[28px] p-8 text-center">
+            <div className="bg-muted/5 dark:bg-transparent rounded-[28px] p-8 text-center">
               <BookOpen className="w-12 h-12 mx-auto mb-4 text-muted/40" />
               <p className="text-muted/50">
                 {userProfile

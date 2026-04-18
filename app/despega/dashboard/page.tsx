@@ -62,7 +62,7 @@ export default function DashboardPage() {
   if (!userData) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center p-4">
-        <Card className="p-8 max-w-md text-center space-y-4 bg-muted/90 border-muted/80">
+        <Card className="p-8 max-w-md text-center space-y-4 bg-transparent border-muted/80">
           <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'Lora, serif' }}>No hay datos</h2>
           <p className="text-muted/40">
             Por favor, completa el onboarding primero

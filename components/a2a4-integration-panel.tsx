@@ -26,7 +26,7 @@ export function A2A4IntegrationPanel() {
       <CardContent className="space-y-4">
         <div className="grid md:grid-cols-3 gap-4">
           {/* A2 SIDE */}
-          <div className="bg-white dark:bg-muted/90 rounded-[28px] p-4 border border-green/20 dark:border-green">
+          <div className="bg-transparent rounded-[28px] p-4 border border-green/20 dark:border-green">
             <h4 className="font-bold text-green dark:text-green/10 mb-2">Tu Plan (A2)</h4>
             {context.a2_mission ? (
               <p className="text-sm text-muted/60 dark:text-muted/40 line-clamp-2">
@@ -49,7 +49,7 @@ export function A2A4IntegrationPanel() {
           </div>
 
           {/* A4 SIDE */}
-          <div className="bg-white dark:bg-muted/90 rounded-[28px] p-4 border border-cyan/20 dark:border-cyan">
+          <div className="bg-transparent rounded-[28px] p-4 border border-cyan/20 dark:border-cyan">
             <h4 className="font-bold text-cyan dark:text-cyan/10 mb-2">Contexto (A4)</h4>
             {context.a4_relevant_news.length > 0 ? (
               <p className="text-sm text-muted/60 dark:text-muted/40 line-clamp-2">

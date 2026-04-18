@@ -143,7 +143,7 @@ export function DashboardContent() {
       {/* Main Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Tests Completados */}
-        <Card className="border-2 border-purple/20 dark:border-purple/50 bg-white dark:bg-muted/90 shadow-md">
+        <Card className="border-2 border-purple/20 dark:border-purple/50 bg-transparent shadow-md">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-purple dark:text-purple/30">Tests Completados</CardTitle>
           </CardHeader>
