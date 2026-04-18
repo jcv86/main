@@ -83,47 +83,47 @@ export default function A2DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500" />
-          <p className="mt-4 text-slate-600 dark:text-slate-400">Cargando tu dashboard...</p>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange"></div>
+          <p className="text-slate-400">Cargando tu exploración...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 p-4">
+    <div className="min-h-screen bg-black p-4">
       <div className="max-w-6xl mx-auto py-8 space-y-8">
         
         {/* WELCOME SECTION */}
-        <div className="bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 dark:from-blue-600 dark:via-cyan-600 dark:to-teal-600 rounded-lg p-8 text-white shadow-xl">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl font-bold mb-2">Tu Misión de 90 Días</h1>
-            <p className="text-blue-100 text-lg">3 sprints diseñados para transformar tu perfil en plan concreto</p>
+        <div className="bg-gradient-to-r from-orange/20 via-orange/10 to-transparent rounded-surface-lg p-8 border border-orange/30 text-white">
+          <div className="max-w-3xl space-y-2">
+            <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair-display)' }}>Tu Misión de 90 Días</h1>
+            <p className="text-orange/80 text-lg">3 sprints diseñados para transformar tu perfil en plan concreto</p>
           </div>
         </div>
 
         {/* MISSION OVERVIEW */}
         {mission && (
-          <Card className="border-0 shadow-lg">
+          <Card className="bg-slate-900 border-slate-800 shadow-lg">
             <CardHeader>
-              <CardTitle className="text-2xl">Misión: {mission.mission_title}</CardTitle>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">{mission.mission_description}</p>
+              <CardTitle className="text-2xl text-white" style={{ fontFamily: 'var(--font-playfair-display)' }}>Misión: {mission.mission_title}</CardTitle>
+              <p className="text-sm text-slate-400 mt-2">{mission.mission_description}</p>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-3 gap-4">
-                <div className="text-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
-                  <p className="text-3xl font-bold text-blue-600">90</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Días</p>
+                <div className="text-center p-4 bg-slate-800 rounded-surface-lg border border-slate-700">
+                  <p className="text-3xl font-bold text-orange">90</p>
+                  <p className="text-sm text-slate-400">Días</p>
                 </div>
-                <div className="text-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
-                  <p className="text-3xl font-bold text-cyan-600">3</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Sprints</p>
+                <div className="text-center p-4 bg-slate-800 rounded-surface-lg border border-slate-700">
+                  <p className="text-3xl font-bold text-orange">3</p>
+                  <p className="text-sm text-slate-400">Sprints</p>
                 </div>
-                <div className="text-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
-                  <p className="text-3xl font-bold text-teal-600">0%</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Progreso</p>
+                <div className="text-center p-4 bg-slate-800 rounded-surface-lg border border-slate-700">
+                  <p className="text-3xl font-bold text-orange">0%</p>
+                  <p className="text-sm text-slate-400">Progreso</p>
                 </div>
               </div>
             </CardContent>
@@ -132,19 +132,19 @@ export default function A2DashboardPage() {
 
         {/* SPRINTS SECTION */}
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-4">Los 3 Sprints</h2>
+          <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: 'var(--font-playfair-display)' }}>Los 3 Sprints</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[1, 2, 3].map((sprintNum) => (
               <Link key={sprintNum} href={`/despega/a2/sprint-${sprintNum}`}>
-                <Card className="cursor-pointer hover:shadow-lg transition-shadow border-l-4 border-blue-500">
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow border-l-4 border-orange bg-slate-900 border-slate-800 hover:border-l-orange hover:bg-slate-800">
                   <CardHeader>
-                    <CardTitle className="text-lg">
+                    <CardTitle className="text-lg text-white">
                       Sprint {sprintNum}: {sprintNum === 1 ? "Fundamentos" : sprintNum === 2 ? "Profundización" : "Consolidación"}
                     </CardTitle>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Días {(sprintNum - 1) * 30 + 1}-{sprintNum * 30}</p>
+                    <p className="text-sm text-slate-400">Días {(sprintNum - 1) * 30 + 1}-{sprintNum * 30}</p>
                   </CardHeader>
                   <CardContent>
-                    <Badge className="bg-blue-600">{sprintNum === 1 ? "En progreso" : sprintNum === 2 ? "Próximo" : "Futuro"}</Badge>
+                    <Badge className="bg-orange text-black">{sprintNum === 1 ? "En progreso" : sprintNum === 2 ? "Próximo" : "Futuro"}</Badge>
                   </CardContent>
                 </Card>
               </Link>

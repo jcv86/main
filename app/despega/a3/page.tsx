@@ -100,39 +100,39 @@ export default function A3Page() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-teal-50 to-emerald-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-12 h-12 rounded-full border-4 border-cyan-200 border-t-cyan-600 animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600 dark:text-slate-400">Cargando entrenamientos...</p>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="w-12 h-12 rounded-full border-4 border-red/30 border-t-red animate-spin mx-auto"></div>
+          <p className="text-slate-400">Cargando entrenamientos...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-black p-6">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* WELCOME HERO - A3 VERSION */}
-        <div className="bg-gradient-to-r from-orange-600 to-amber-600 dark:from-orange-800 dark:to-amber-800 rounded-lg p-8 text-white shadow-lg">
-          <div className="max-w-3xl">
-            <p className="text-orange-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A3: Entrenamiento Aplicado - Entrevista 0 + Preparación</p>
-            <h1 className="text-4xl font-bold mb-3">Entrena como Profesional. Verdaderamente.</h1>
-            <p className="text-lg text-orange-50 mb-4">
+        <div className="bg-gradient-to-r from-red/30 via-red/10 to-transparent border border-red/30 rounded-surface-lg p-8 text-white">
+          <div className="max-w-3xl space-y-4">
+            <p className="text-red/80 text-sm font-semibold uppercase tracking-wider">Fase A3: Entrenamiento Aplicado - Entrevista 0 + Preparación</p>
+            <h1 className="text-4xl font-bold" style={{ fontFamily: 'var(--font-playfair-display)' }}>Entrena como Profesional. Verdaderamente.</h1>
+            <p className="text-lg text-slate-300">
               Empezamos con Entrevista 0: tu diagnóstico de preparación en luz, fondo, audio, postura, presencia, y lenguaje.
               Luego avanzas en 4 niveles: guiada → estructurada → desafiante → maestría. 
               Cada sesión te prepara para situaciones reales.
             </p>
             {userDiscProfile && (
-              <div className="mb-4 p-3 bg-white/20 rounded-lg border border-white/30">
-                <p className="text-sm text-orange-100 font-semibold mb-1">Tu enfoque de entrenamiento:</p>
+              <div className="p-3 bg-red/10 rounded-surface-lg border border-red/20">
+                <p className="text-sm text-red/80 font-semibold mb-1">Tu enfoque de entrenamiento:</p>
                 <p className="text-base font-bold text-white">{getDiscDescription()}</p>
               </div>
             )}
             <div className="flex gap-3">
-              <Button className="bg-white text-orange-700 hover:bg-orange-50 font-semibold" size="lg">
+              <Button className="bg-red text-white hover:bg-red/90 font-semibold" size="lg">
                 Comenzar Entrenamientos
               </Button>
-              <Button className="bg-white/20 text-white border border-white hover:bg-white/30 font-semibold" size="lg">
+              <Button className="bg-slate-900 text-white border border-slate-700 hover:bg-slate-800 font-semibold" size="lg">
                 Ver Guía
               </Button>
             </div>
@@ -140,38 +140,38 @@ export default function A3Page() {
         </div>
 
         {/* QUICK START GUIDE - A3 VERSION */}
-        <Card className="border-2 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/20">
+        <Card className="border border-red/20 bg-slate-900">
           <CardHeader>
-            <CardTitle className="text-xl">Primeros Pasos en Entrenamientos</CardTitle>
+            <CardTitle className="text-xl text-white" style={{ fontFamily: 'var(--font-playfair-display)' }}>Primeros Pasos en Entrenamientos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center font-bold">1</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-red text-black flex items-center justify-center font-bold">1</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Entiende los Módulos de Entrenamiento</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">A3 tiene 3 módulos: Entrevistas, Presentaciones y Decisiones Estratégicas. Cada uno progresa del básico al experto.</p>
+                  <h4 className="font-semibold text-white">Entiende los Módulos de Entrenamiento</h4>
+                  <p className="text-sm text-slate-400">A3 tiene 3 módulos: Entrevistas, Presentaciones y Decisiones Estratégicas. Cada uno progresa del básico al experto.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center font-bold">2</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-red text-black flex items-center justify-center font-bold">2</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Comienza con el Módulo de Entrevistas</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Practica con entrevistadores reales simulados, recibe feedback instantáneo y mejora cada respuesta.</p>
+                  <h4 className="font-semibold text-white">Comienza con el Módulo de Entrevistas</h4>
+                  <p className="text-sm text-slate-400">Practica con entrevistadores reales simulados, recibe feedback instantáneo y mejora cada respuesta.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center font-bold">3</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-red text-black flex items-center justify-center font-bold">3</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Practica en Progresión</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">No saltes niveles. El progreso es acumulativo: básico → intermedio → avanzado → maestría.</p>
+                  <h4 className="font-semibold text-white">Practica en Progresión</h4>
+                  <p className="text-sm text-slate-400">No saltes niveles. El progreso es acumulativo: básico → intermedio → avanzado → maestría.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-orange-600 text-white flex items-center justify-center font-bold">4</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-red text-black flex items-center justify-center font-bold">4</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Registra tu Empleabilidad</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Tu score de empleabilidad mejora con cada sesión. Es un indicador real de qué tan preparado estás para el mercado.</p>
+                  <h4 className="font-semibold text-white">Registra tu Empleabilidad</h4>
+                  <p className="text-sm text-slate-400">Tu score de empleabilidad mejora con cada sesión. Es un indicador real de qué tan preparado estás para el mercado.</p>
                 </div>
               </div>
             </div>
@@ -180,21 +180,21 @@ export default function A3Page() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-white dark:bg-slate-800 shadow-md">
+          <Card className="bg-slate-900 border border-slate-800">
             <CardContent className="pt-6">
-              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400">
+              <div className="text-3xl font-bold text-red">
                 {a3Progress?.sessions_completed || 0}
               </div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Sesiones Completadas</p>
+              <p className="text-sm text-slate-400 mt-2">Sesiones Completadas</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-white dark:bg-slate-800 shadow-md">
+          <Card className="bg-slate-900 border border-slate-800">
             <CardContent className="pt-6">
-              <div className="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+              <div className="text-3xl font-bold text-red">
                 {a3Progress?.employability_score || 'Calcular'}
               </div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">Score de Empleabilidad</p>
+              <p className="text-sm text-slate-400 mt-2">Score de Empleabilidad</p>
             </CardContent>
           </Card>
 
