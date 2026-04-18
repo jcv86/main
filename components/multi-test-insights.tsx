@@ -327,7 +327,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
               {cerebroInsights.map((insight, index) => (
                 <div
                   key={index}
-                  className={`p-4 rounded-[28px] border-l-4 ${`}
+                  className={`p-4 rounded-[28px] border-l-4 ${
                     insight.category === "career"
                       ? "border-l-blue-500 bg-blue/5"
                       : insight.category === "skills"

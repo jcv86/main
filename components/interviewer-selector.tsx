@@ -33,7 +33,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
             <button
               key={interviewer.id}
               onClick={() => onChange(interviewer.id)}
-              className={`p-2 rounded-lg transition-all text-center ${`}
+              className={`p-2 rounded-lg transition-all text-center ${
                 value === interviewer.id
                   ? 'ring-2 ring-blue-500 bg-blue/5 dark:bg-blue/30'
                   : 'hover:bg-transparent dark:hover:bg-muted/80'
@@ -64,7 +64,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
             <button
               key={interviewer.id}
               onClick={() => onChange(interviewer.id)}
-              className={`group relative overflow-hidden rounded-xl p-4 transition-all duration-300 ${`}
+              className={`group relative overflow-hidden rounded-xl p-4 transition-all duration-300 ${
                 value === interviewer.id
                   ? 'ring-2 ring-blue-500 scale-105'
                   : 'hover:scale-102 hover:shadow-lg'
