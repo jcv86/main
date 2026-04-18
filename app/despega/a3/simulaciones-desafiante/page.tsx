@@ -372,7 +372,7 @@ export default function GuidedInterviewPage() {
               <Button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="bg-green hover:bg-green-700"
+                className="bg-green hover:bg-green"
               >
                 {loading ? 'Guardando...' : 'Completar y Enviar'}
               </Button>

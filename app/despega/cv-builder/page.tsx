@@ -45,7 +45,7 @@ export default function CVBuilderPage() {
           <p className="text-muted/60 dark:text-muted/40 mb-6">
             Módulo de CV Builder con optimización ATS en desarrollo
           </p>
-          <div className="bg-blue/5 dark:bg-blue-950 border border-blue/30 dark:border-blue/10 rounded-[28px] p-4 mb-6">
+          <div className="bg-blue/5 dark:bg-blue border border-blue/30 dark:border-blue/10 rounded-[28px] p-4 mb-6">
             <p className="text-blue dark:text-blue/20 text-sm">
               Este módulo permitirá crear y optimizar tu CV para aparecer en búsquedas ATS y captar recruiters
             </p>

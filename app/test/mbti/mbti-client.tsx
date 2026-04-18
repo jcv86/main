@@ -172,7 +172,7 @@ export default function MBTITestClient() {
                 Siguiente <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             ) : (
-              <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-green hover:bg-green-700">
+              <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-green hover:bg-green">
                 {isSubmitting ? "Procesando..." : "Completar Test"}
               </Button>
             )}

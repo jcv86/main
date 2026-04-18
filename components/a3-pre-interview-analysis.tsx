@@ -125,7 +125,7 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
             <Button onClick={handleCapturePhoto}>Capturar Foto</Button>
           </div>
 
-          <div className="bg-blue-50 p-4 rounded border border-blue-200">
+          <div className="bg-blue/5 p-4 rounded border border-blue/20">
             <div className="font-medium text-sm mb-2">Contexto de la Entrevista</div>
             <div className="space-y-1 text-sm">
               <div>Cargo: {scenarioContext.cargo}</div>
@@ -167,7 +167,7 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
         )}
 
         {/* Readiness Score */}
-        <div className="bg-gradient-to-r from-blue-50 to-blue/5 p-6 rounded-[28px] border border-blue-200">
+        <div className="bg-gradient-to-r from-blue-50 to-blue/5 p-6 rounded-[28px] border border-blue/20">
           <div className="text-sm text-muted/60 mb-2">Preparación General</div>
           <div className="flex items-center gap-4">
             <div className="text-4xl font-bold text-indigo-600">

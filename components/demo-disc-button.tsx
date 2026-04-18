@@ -9,7 +9,7 @@ export default function DemoDISCButton() {
   const router = useRouter()
 
   return (
-    <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+    <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue/20">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-blue">
           <BarChart3 className="h-6 w-6" />
@@ -32,8 +32,8 @@ export default function DemoDISCButton() {
           </div>
 
           <div className="flex items-center gap-3 p-3 bg-white/50 rounded-lg">
-            <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-              <Brain className="h-5 w-5 text-purple-600" />
+            <div className="w-10 h-10 bg-purple/10 rounded-full flex items-center justify-center">
+              <Brain className="h-5 w-5 text-purple" />
             </div>
             <div>
               <p className="font-medium text-sm">Análisis con IA</p>

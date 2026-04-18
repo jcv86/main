@@ -136,15 +136,15 @@ export default function A4Page() {
         {/* WELCOME HERO - A4 VERSION */}
         <div className="bg-gradient-to-r from-blue to-blue dark:from-blue dark:to-blue-800 rounded-[28px] p-8 text-white shadow-lg">
           <div className="max-w-3xl">
-            <p className="text-cyan-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A4: La Realidad y Contexto Estratégico</p>
+            <p className="text-cyan/10 text-sm font-semibold uppercase tracking-wider mb-2">Fase A4: La Realidad y Contexto Estratégico</p>
             <h1 className="text-4xl font-bold mb-3">Entiende el mundo en el que compites</h1>
-            <p className="text-lg text-cyan-50 mb-4">
+            <p className="text-lg text-cyan/5 mb-4">
               A4 es tu conexión con la realidad: datos económicos, tendencias del mercado, oportunidades ocultas y contexto cultural. 
               No estás transformándote en el vacío. Estás transformándote para un mercado específico, con desafíos específicos, 
               en un momento específico. A4 te da esa inteligencia.
             </p>
             <div className="flex gap-3">
-              <Button className="bg-white text-cyan-700 hover:bg-blue/5 font-semibold" size="lg">
+              <Button className="bg-white text-cyan hover:bg-blue/5 font-semibold" size="lg">
                 Explorar Radar Estratégico
               </Button>
               <Button variant="outline" className="border-white text-white hover:bg-white/10" size="lg">
@@ -155,7 +155,7 @@ export default function A4Page() {
         </div>
 
         {/* QUICK START GUIDE - A4 VERSION */}
-        <Card className="border-2 border-blue/30 dark:border-blue/10 bg-blue/5 dark:bg-blue-950/20">
+        <Card className="border-2 border-blue/30 dark:border-blue/10 bg-blue/5 dark:bg-blue/20">
           <CardHeader>
             <CardTitle className="text-xl">Primeros Pasos</CardTitle>
           </CardHeader>
@@ -422,11 +422,11 @@ export default function A4Page() {
       </Tabs>
 
         {/* Tips */}
-        <Card className="mt-8 bg-gradient-to-r from-blue/5 to-blue/5 dark:from-blue/20 dark:to-blue-900/20 border-blue/30 dark:border-cyan-800">
+        <Card className="mt-8 bg-gradient-to-r from-blue/5 to-blue/5 dark:from-blue/20 dark:to-blue-900/20 border-blue/30 dark:border-cyan">
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-blue text-lg">💡</div>
             <div>
-              <div className="font-semibold text-cyan-900 dark:text-cyan-100 mb-2">A4 - El Contexto Real: Tu Nueva Identidad en Acción</div>
+              <div className="font-semibold text-cyan dark:text-cyan/10 mb-2">A4 - El Contexto Real: Tu Nueva Identidad en Acción</div>
               <ul className="text-sm text-cyan dark:text-cyan/20 space-y-1">
                 <li>✓ <strong>Dashboard:</strong> Tu progreso, puntos y logros en tiempo real</li>
                 <li>✓ <strong>Noticias:</strong> Contexto del mercado donde vivirá tu nueva identidad</li>

@@ -31,7 +31,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
       name: 'Impulsor - Orientado a Resultados',
       emoji: '⚡',
       color: 'from-red-600 to-orange-500',
-      tagColor: 'bg-red-600',
+      tagColor: 'bg-red',
       description: 'Eres directo, decidido y enfocado en lograr objetivos. Te mueves rápido, tomas decisiones firmes y no te detienes ante obstáculos.',
       whatItMeans: 'Te caracterizas por tu impulso para actuar y hacer cosas. Eres alguien que toma el control de situaciones y avanza sin dudar.',
     },
@@ -47,7 +47,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
       name: 'Estabilizador - Constante',
       emoji: '🛡️',
       color: 'from-green-600 to-teal-500',
-      tagColor: 'bg-green-600',
+      tagColor: 'bg-green',
       description: 'Eres leal, paciente y confiable. Te gusta la estabilidad y trabajar en equipo de manera consistente.',
       whatItMeans: 'Te caracterizas por tu confiabilidad y tu capacidad de mantener la calma. Eres alguien que otros pueden seguir contando con que estará ahí.',
     },
@@ -55,7 +55,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
       name: 'Arquitecto - Analítico',
       emoji: '🧠',
       color: 'from-blue-600 to-blue/50',
-      tagColor: 'bg-blue-600',
+      tagColor: 'bg-blue',
       description: 'Eres detallista, metódico y buscas precisión. Te importa que todo esté bien hecho y entiendes la importancia de los detalles.',
       whatItMeans: 'Te destacas por tu pensamiento estructurado y tu atención a los detalles. Eres alguien que se asegura de que las cosas se hagan correctamente.',
     },
@@ -149,9 +149,9 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
         </div>
 
         {/* Quick Summary */}
-        <Card className="bg-slate-800/50 border-slate-700">
+        <Card className="bg-muted/80/50 border-muted/70">
           <CardContent className="pt-6">
-            <p className="text-slate-100 text-center text-lg leading-relaxed">
+            <p className="text-muted/10 text-center text-lg leading-relaxed">
               {pData.description}
             </p>
           </CardContent>
@@ -161,7 +161,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {(['D', 'I', 'S', 'C'] as const).map((key) => {
             const names: Record<string, string> = { D: 'Impulsor', I: 'Catalizador', S: 'Estabilizador', C: 'Arquitecto' }
-            const colors: Record<string, string> = { D: 'bg-red-600', I: 'bg-orange', S: 'bg-green-600', C: 'bg-blue-600' }
+            const colors: Record<string, string> = { D: 'bg-red', I: 'bg-orange', S: 'bg-green', C: 'bg-blue' }
             const isActive = profile === key
 
             return (
@@ -170,11 +170,11 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
                 className={`${
                   isActive
                     ? `${colors[key]} text-white border-2 border-white`
-                    : 'bg-slate-800 border-slate-700 text-slate-300'
+                    : 'bg-muted/80 border-muted/70 text-muted/30'
                 } transition-all`}
               >
                 <CardContent className="p-4 text-center">
-                  <div className={`text-4xl font-bold mb-1 ${isActive ? 'text-white' : 'text-slate-100'}`}>
+                  <div className={`text-4xl font-bold mb-1 ${isActive ? 'text-white' : 'text-muted/10'}`}>
                     {Math.round(results[key])}
                   </div>
                   <div className="text-sm font-semibold">{names[key]}</div>
@@ -187,20 +187,20 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
 
         {/* Context Display */}
         {c1Context && (Object.keys(c1Context).length > 0) && (
-          <Card className="bg-slate-800/50 border-slate-700">
+          <Card className="bg-muted/80/50 border-muted/70">
             <CardHeader>
               <CardTitle className="text-white text-lg">Tu Contexto Personal</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {c1Context[3] && (
-                <div className="bg-slate-700/50 p-4 rounded-[28px] border-l-4 border-blue/50">
-                  <p className="text-xs text-slate-400 font-semibold mb-1">Tu Desafío Actual</p>
+                <div className="bg-muted/70/50 p-4 rounded-[28px] border-l-4 border-blue/50">
+                  <p className="text-xs text-muted/40 font-semibold mb-1">Tu Desafío Actual</p>
                   <p className="text-white">{c1Context[3]}</p>
                 </div>
               )}
               {c1Context[4] && (
-                <div className="bg-slate-700/50 p-4 rounded-[28px] border-l-4 border-emerald-500">
-                  <p className="text-xs text-slate-400 font-semibold mb-1">Tu Objetivo para 90 Días</p>
+                <div className="bg-muted/70/50 p-4 rounded-[28px] border-l-4 border-emerald-500">
+                  <p className="text-xs text-muted/40 font-semibold mb-1">Tu Objetivo para 90 Días</p>
                   <p className="text-white">{c1Context[4]}</p>
                 </div>
               )}
@@ -213,7 +213,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
           {sections.map((section) => (
             <Card
               key={section.id}
-              className="bg-slate-800/50 border-slate-700 cursor-pointer hover:border-slate-600 transition-colors"
+              className="bg-muted/80/50 border-muted/70 cursor-pointer hover:border-muted/60 transition-colors"
               onClick={() => setExpandedSection(expandedSection === section.id ? null : section.id)}
             >
               <CardHeader className="pb-3">
@@ -223,7 +223,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
                     <CardTitle className="text-white text-lg">{section.title}</CardTitle>
                   </div>
                   <ChevronDown
-                    className={`w-5 h-5 text-slate-400 transition-transform ${
+                    className={`w-5 h-5 text-muted/40 transition-transform ${
                       expandedSection === section.id ? 'rotate-180' : ''
                     }`}
                   />
@@ -235,14 +235,14 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
                   {Array.isArray(section.content[profile]) ? (
                     <ul className="space-y-2">
                       {(section.content[profile] as string[]).map((item: string, idx: number) => (
-                        <li key={idx} className="flex gap-3 text-slate-200">
+                        <li key={idx} className="flex gap-3 text-muted/20">
                           <span className="text-emerald-500 font-bold flex-shrink-0">✓</span>
                           <span>{item}</span>
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-slate-200 leading-relaxed">{String(section.content[profile])}</p>
+                    <p className="text-muted/20 leading-relaxed">{String(section.content[profile])}</p>
                   )}
                 </CardContent>
               )}
@@ -257,7 +257,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
               <h3 className="text-xl font-semibold text-white">
                 Ahora vamos a crear tu ruta personalizada
               </h3>
-              <p className="text-slate-200 text-sm">
+              <p className="text-muted/20 text-sm">
                 Conocemos tu perfil DISC y contexto personal. Responde 9 preguntas más sobre tu ejecución para generar tu plan de 30/60/90 días con acciones específicas diseñadas para ti.
               </p>
               <Button
@@ -266,7 +266,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
               >
                 Generar mi Ruta Personalizada →
               </Button>
-              <p className="text-xs text-slate-400">Tiempo estimado: 3 minutos</p>
+              <p className="text-xs text-muted/40">Tiempo estimado: 3 minutos</p>
             </CardContent>
           </Card>
         )}

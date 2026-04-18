@@ -185,7 +185,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
       </Card>
 
       {/* Section 3: Roles Analysis */}
-      <Card className="border-2 border-blue/50/50 bg-blue-50/50">
+      <Card className="border-2 border-blue/50/50 bg-blue/5/50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-blue" />
@@ -202,7 +202,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
               </h4>
               <div className="space-y-2">
                 {roles.brilla.map((role, idx) => (
-                  <Badge key={idx} variant="outline" className="bg-green/10 text-green border-green-300">
+                  <Badge key={idx} variant="outline" className="bg-green/10 text-green border-green/30">
                     {role}
                   </Badge>
                 ))}
@@ -215,7 +215,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
               </h4>
               <div className="space-y-2">
                 {roles.drena.map((role, idx) => (
-                  <Badge key={idx} variant="outline" className="bg-red/10 text-red-800 border-red-300">
+                  <Badge key={idx} variant="outline" className="bg-red/10 text-red border-red/30">
                     {role}
                   </Badge>
                 ))}
@@ -226,10 +226,10 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
       </Card>
 
       {/* Section 4: 7/30/90 Roadmap */}
-      <Card className="border-2 border-purple-500/50 bg-purple-50/50">
+      <Card className="border-2 border-purple/50/50 bg-purple/5/50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-purple-600" />
+            <TrendingUp className="w-5 h-5 text-purple" />
             Tu Ruta 7/30/90: De Aquí a Imprescindible
           </CardTitle>
           <CardDescription>Acciones concretas mapeadas a conversaciones reales (LinkedIn, Entrevista, Career)</CardDescription>
@@ -244,8 +244,8 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
 
             <TabsContent value="7dias" className="space-y-3 mt-4">
               {roadmap['7dias'].map((item, idx) => (
-                <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple-200">
-                  <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple/20">
+                  <CheckCircle2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-foreground">{item}</p>
                 </div>
               ))}
@@ -253,8 +253,8 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
 
             <TabsContent value="30dias" className="space-y-3 mt-4">
               {roadmap['30dias'].map((item, idx) => (
-                <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple-200">
-                  <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple/20">
+                  <CheckCircle2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-foreground">{item}</p>
                 </div>
               ))}
@@ -262,8 +262,8 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
 
             <TabsContent value="90dias" className="space-y-3 mt-4">
               {roadmap['90dias'].map((item, idx) => (
-                <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple-200">
-                  <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple/20">
+                  <CheckCircle2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-foreground">{item}</p>
                 </div>
               ))}

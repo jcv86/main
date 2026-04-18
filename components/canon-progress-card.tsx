@@ -31,7 +31,7 @@ export function CanonProgressCard({
       <Card className="border-0 shadow-lg bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/30 dark:to-blue-950/30">
         <CardHeader>
           <CardTitle className="text-2xl flex items-center gap-2">
-            <Target className="w-6 h-6 text-purple-600 dark:text-purple/40" />
+            <Target className="w-6 h-6 text-purple dark:text-purple/40" />
             Tu Viaje CANON
           </CardTitle>
           <CardDescription>
@@ -42,14 +42,14 @@ export function CanonProgressCard({
           {/* Progress Bar */}
           <div>
             <div className="flex justify-between mb-2">
-              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <span className="text-sm font-semibold text-muted/70 dark:text-muted/30">
                 Progreso: {totalSteps}/3 pasos
               </span>
-              <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <span className="text-sm font-semibold text-muted/70 dark:text-muted/30">
                 {Math.round(progress)}%
               </span>
             </div>
-            <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-3 overflow-hidden">
+            <div className="w-full bg-muted/20 dark:bg-muted/70 rounded-full h-3 overflow-hidden">
               <div
                 className="bg-gradient-to-r from-purple-600 to-blue-600 h-full transition-all duration-500"
                 style={{ width: `${progress}%` }}
@@ -60,19 +60,19 @@ export function CanonProgressCard({
           {/* Steps */}
           <div className="space-y-3">
             {/* Step 1: C1 */}
-            <div className="flex items-start gap-4 p-4 bg-white dark:bg-slate-800 rounded-lg">
+            <div className="flex items-start gap-4 p-4 bg-white dark:bg-muted/80 rounded-lg">
               <div className="flex-shrink-0">
                 {c1Completed ? (
                   <CheckCircle2 className="w-6 h-6 text-green dark:text-green/40" />
                 ) : (
-                  <div className="w-6 h-6 rounded-full border-2 border-slate-300 dark:border-slate-600" />
+                  <div className="w-6 h-6 rounded-full border-2 border-muted/30 dark:border-muted/60" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-slate-900 dark:text-slate-100">
+                <p className="font-semibold text-muted/90 dark:text-muted/10">
                   Paso 1: Conozcámonos
                 </p>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-sm text-muted/60 dark:text-muted/40">
                   Captura tu contexto profesional y personal
                 </p>
                 {c1CompletedAt && (
@@ -84,19 +84,19 @@ export function CanonProgressCard({
             </div>
 
             {/* Step 2: A1 */}
-            <div className="flex items-start gap-4 p-4 bg-white dark:bg-slate-800 rounded-lg">
+            <div className="flex items-start gap-4 p-4 bg-white dark:bg-muted/80 rounded-lg">
               <div className="flex-shrink-0">
                 {a1Completed ? (
                   <CheckCircle2 className="w-6 h-6 text-green dark:text-green/40" />
                 ) : (
-                  <div className={`w-6 h-6 rounded-full border-2 ${c1Completed ? "border-purple-600" : "border-slate-300 dark:border-slate-600"}`} />
+                  <div className={`w-6 h-6 rounded-full border-2 ${c1Completed ? "border-purple" : "border-muted/30 dark:border-muted/60"}`} />
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-slate-900 dark:text-slate-100">
+                <p className="font-semibold text-muted/90 dark:text-muted/10">
                   Paso 2: Despega Cerebral
                 </p>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-sm text-muted/60 dark:text-muted/40">
                   Descubre tu patrón natural de liderazgo
                 </p>
                 {a1CompletedAt && (
@@ -108,19 +108,19 @@ export function CanonProgressCard({
             </div>
 
             {/* Step 3: C2 */}
-            <div className="flex items-start gap-4 p-4 bg-white dark:bg-slate-800 rounded-lg">
+            <div className="flex items-start gap-4 p-4 bg-white dark:bg-muted/80 rounded-lg">
               <div className="flex-shrink-0">
                 {c2Completed ? (
                   <CheckCircle2 className="w-6 h-6 text-green dark:text-green/40" />
                 ) : (
-                  <div className={`w-6 h-6 rounded-full border-2 ${a1Completed ? "border-purple-600" : "border-slate-300 dark:border-slate-600"}`} />
+                  <div className={`w-6 h-6 rounded-full border-2 ${a1Completed ? "border-purple" : "border-muted/30 dark:border-muted/60"}`} />
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-slate-900 dark:text-slate-100">
+                <p className="font-semibold text-muted/90 dark:text-muted/10">
                   Paso 3: Tu Ruta Personalizada
                 </p>
-                <p className="text-sm text-slate-600 dark:text-slate-400">
+                <p className="text-sm text-muted/60 dark:text-muted/40">
                   Plan 30/60/90 adaptado a tu realidad
                 </p>
                 {c2CompletedAt && (
@@ -150,8 +150,8 @@ export function CanonProgressCard({
                 <ul className="space-y-2">
                   {generatedRoute.recomendaciones_personalizadas.map((rec, idx) => (
                     <li key={idx} className="flex gap-2 text-sm">
-                      <span className="text-purple-600 dark:text-purple/40 font-bold">•</span>
-                      <span className="text-slate-700 dark:text-slate-300">{rec}</span>
+                      <span className="text-purple dark:text-purple/40 font-bold">•</span>
+                      <span className="text-muted/70 dark:text-muted/30">{rec}</span>
                     </li>
                   ))}
                 </ul>
@@ -182,7 +182,7 @@ export function CanonProgressCard({
 
           {/* Factores de Éxito */}
           {generatedRoute.factores_exito.length > 0 && (
-            <Card className="border-green-200 dark:border-green-800">
+            <Card className="border-green/20 dark:border-green">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2 text-green dark:text-green/40">
                   <CheckCircle2 className="w-5 h-5" />
@@ -193,10 +193,10 @@ export function CanonProgressCard({
                 <ul className="space-y-2">
                   {generatedRoute.factores_exito.map((factor, idx) => (
                     <li key={idx} className="flex gap-2 text-sm">
-                      <Badge className="bg-green/10 text-green dark:bg-green dark:text-green-200">
+                      <Badge className="bg-green/10 text-green dark:bg-green dark:text-green/20">
                         ✓
                       </Badge>
-                      <span className="text-slate-700 dark:text-slate-300">{factor}</span>
+                      <span className="text-muted/70 dark:text-muted/30">{factor}</span>
                     </li>
                   ))}
                 </ul>

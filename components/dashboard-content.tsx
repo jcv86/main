@@ -122,12 +122,12 @@ export function DashboardContent() {
         <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">
           Tu Dashboard
         </h1>
-        <p className="text-lg text-slate-700 dark:text-slate-300">Bienvenido a tu centro de comando Despega</p>
+        <p className="text-lg text-muted/70 dark:text-muted/30">Bienvenido a tu centro de comando Despega</p>
       </div>
 
       {/* Debug Info - Remove in production */}
       {process.env.NODE_ENV === 'development' && (
-        <Card className="bg-yellow/5 dark:bg-yellow/20 border-2 border-yellow/20 dark:border-yellow-900/50">
+        <Card className="bg-yellow/5 dark:bg-yellow/20 border-2 border-yellow/20 dark:border-yellow/50">
           <CardHeader>
             <CardTitle className="text-sm">DEBUG INFO</CardTitle>
           </CardHeader>
@@ -143,14 +143,14 @@ export function DashboardContent() {
       {/* Main Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         {/* Tests Completados */}
-        <Card className="border-2 border-purple-200 dark:border-purple-900/50 bg-white dark:bg-slate-900 shadow-md">
+        <Card className="border-2 border-purple/20 dark:border-purple/50 bg-white dark:bg-muted/90 shadow-md">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-purple-700 dark:text-purple/30">Tests Completados</CardTitle>
+            <CardTitle className="text-sm font-medium text-purple dark:text-purple/30">Tests Completados</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-purple-900 dark:text-purple/20">{userData?.tests_completed || 0}</div>
+            <div className="text-3xl font-bold text-purple dark:text-purple/20">{userData?.tests_completed || 0}</div>
             <Progress value={((userData?.tests_completed || 0) / 6) * 100} className="mt-2" />
-            <p className="text-xs text-slate-600 dark:text-slate-400 mt-1">de 6 tests disponibles</p>
+            <p className="text-xs text-muted/60 dark:text-muted/40 mt-1">de 6 tests disponibles</p>
           </CardContent>
         </Card>
 
@@ -205,14 +205,14 @@ export function DashboardContent() {
               {/* Perfil Scores Grid */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {/* D Score - Impulsor */}
-                <div className="p-4 bg-red/5 dark:bg-red/20 rounded-[28px] border border-red/20 dark:border-red-800">
+                <div className="p-4 bg-red/5 dark:bg-red/20 rounded-[28px] border border-red/20 dark:border-red">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-2xl">⚡</span>
                     <span className="text-2xl font-bold text-red">{testResults.test_results.d_score || 0}%</span>
                   </div>
-                  <p className="text-sm font-medium text-red dark:text-red-300">Impulsor</p>
+                  <p className="text-sm font-medium text-red dark:text-red/30">Impulsor</p>
                   <Progress value={testResults.test_results.d_score || 0} className="mt-2" />
-                  <p className="text-xs text-red dark:text-red-400 mt-1">Decisión y Resultados</p>
+                  <p className="text-xs text-red dark:text-red/40 mt-1">Decisión y Resultados</p>
                 </div>
 
                 {/* I Score - Catalizador */}
@@ -221,29 +221,29 @@ export function DashboardContent() {
                     <span className="text-2xl">✨</span>
                     <span className="text-2xl font-bold text-yellow">{testResults.test_results.i_score || 0}%</span>
                   </div>
-                  <p className="text-sm font-medium text-yellow-700 dark:text-yellow-300">Catalizador</p>
+                  <p className="text-sm font-medium text-yellow dark:text-yellow/30">Catalizador</p>
                   <Progress value={testResults.test_results.i_score || 0} className="mt-2" />
-                  <p className="text-xs text-yellow dark:text-yellow-400 mt-1">Entusiasmo y Conexión</p>
+                  <p className="text-xs text-yellow dark:text-yellow/40 mt-1">Entusiasmo y Conexión</p>
                 </div>
 
                 {/* S Score - Estabilizador */}
-                <div className="p-4 bg-green-50 dark:bg-green/20 rounded-[28px] border border-green-200 dark:border-green-800">
+                <div className="p-4 bg-green/5 dark:bg-green/20 rounded-[28px] border border-green/20 dark:border-green">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-2xl">🌱</span>
                     <span className="text-2xl font-bold text-green">{testResults.test_results.s_score || 0}%</span>
                   </div>
-                  <p className="text-sm font-medium text-green dark:text-green-300">Estabilizador</p>
+                  <p className="text-sm font-medium text-green dark:text-green/30">Estabilizador</p>
                   <Progress value={testResults.test_results.s_score || 0} className="mt-2" />
                   <p className="text-xs text-green dark:text-green/40 mt-1">Paciencia y Apoyo</p>
                 </div>
 
                 {/* C Score - Arquitecto */}
-                <div className="p-4 bg-blue-50 dark:bg-blue/20 rounded-[28px] border border-blue-200 dark:border-blue-800">
+                <div className="p-4 bg-blue/5 dark:bg-blue/20 rounded-[28px] border border-blue/20 dark:border-blue">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-2xl">🏗️</span>
                     <span className="text-2xl font-bold text-blue">{testResults.test_results.c_score || 0}%</span>
                   </div>
-                  <p className="text-sm font-medium text-blue dark:text-blue-300">Arquitecto</p>
+                  <p className="text-sm font-medium text-blue dark:text-blue/30">Arquitecto</p>
                   <Progress value={testResults.test_results.c_score || 0} className="mt-2" />
                   <p className="text-xs text-blue dark:text-blue/40 mt-1">Precisión y Análisis</p>
                 </div>
@@ -265,14 +265,14 @@ export function DashboardContent() {
               {/* Caminos Activos */}
               <div className="grid grid-cols-2 gap-4">
                 {testResults.test_results.camino_persona && (
-                  <div className="p-3 bg-purple-50 dark:bg-purple/20 rounded border border-purple-200 dark:border-purple-800">
-                    <p className="text-sm font-medium text-purple-700 dark:text-purple/30">Camino Personal</p>
-                    <p className="text-xs text-purple-600 dark:text-purple/40 mt-1">Activado</p>
+                  <div className="p-3 bg-purple/5 dark:bg-purple/20 rounded border border-purple/20 dark:border-purple">
+                    <p className="text-sm font-medium text-purple dark:text-purple/30">Camino Personal</p>
+                    <p className="text-xs text-purple dark:text-purple/40 mt-1">Activado</p>
                   </div>
                 )}
                 {testResults.test_results.camino_profesional && (
-                  <div className="p-3 bg-blue-50 dark:bg-blue/20 rounded border border-blue-200 dark:border-blue-800">
-                    <p className="text-sm font-medium text-blue dark:text-blue-300">Camino Profesional</p>
+                  <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded border border-blue/20 dark:border-blue">
+                    <p className="text-sm font-medium text-blue dark:text-blue/30">Camino Profesional</p>
                     <p className="text-xs text-blue dark:text-blue/40 mt-1">Activado</p>
                   </div>
                 )}

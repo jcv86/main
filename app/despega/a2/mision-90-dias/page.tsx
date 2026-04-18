@@ -24,7 +24,7 @@ const ROUTE_INFO = {
     icon: "🎯",
     color: "from-green to-green",
     bgColor: "bg-green/5 dark:bg-green/20",
-    textColor: "text-green-900 dark:text-green-100",
+    textColor: "text-green dark:text-green/10",
   },
   relaciones: {
     name: "Relaciones Significativas",
@@ -232,7 +232,7 @@ export default function Mision90DiasPage() {
                 className="min-h-24 resize-none"
               />
               {errors.objective && (
-                <p className="text-sm text-red dark:text-red-400">{errors.objective}</p>
+                <p className="text-sm text-red dark:text-red/40">{errors.objective}</p>
               )}
               <p className="text-xs text-muted/60 dark:text-muted/40">
                 {objective.length} caracteres | Mínimo: 10 caracteres
@@ -280,7 +280,7 @@ export default function Mision90DiasPage() {
                 className="min-h-24 resize-none"
               />
               {errors.successMetric && (
-                <p className="text-sm text-red dark:text-red-400">{errors.successMetric}</p>
+                <p className="text-sm text-red dark:text-red/40">{errors.successMetric}</p>
               )}
               <p className="text-xs text-muted/60 dark:text-muted/40">
                 {successMetric.length} caracteres | Mínimo: 10 caracteres

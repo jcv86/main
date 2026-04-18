@@ -85,7 +85,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
                       onClick={() => handleResponse(q.id, score)}
                       className={`w-10 h-10 rounded-lg font-medium transition-all ${
                         responses[q.id] === score
-                          ? "bg-blue-600 text-white"
+                          ? "bg-blue text-white"
                           : "bg-muted/10 text-muted/60 hover:bg-muted/20"
                       }`}
                     >
@@ -124,7 +124,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Profile Clarity */}
-        <div className="bg-blue-50 p-4 rounded-[28px] border border-blue-200">
+        <div className="bg-blue/5 p-4 rounded-[28px] border border-blue/20">
           <div className="flex items-center justify-between mb-2">
             <div className="font-medium">Claridad de Perfil</div>
             <Badge>{Math.round(diagnosis?.profile_clarity)}%</Badge>
@@ -134,10 +134,10 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
         </div>
 
         {/* Prep Level */}
-        <div className="bg-green-50 p-4 rounded-[28px] border border-green-200">
+        <div className="bg-green/5 p-4 rounded-[28px] border border-green/20">
           <div className="flex items-center justify-between mb-2">
             <div className="font-medium">Nivel de Preparación</div>
-            <Badge className="bg-green-600">{diagnosis?.prep_level?.toUpperCase()}</Badge>
+            <Badge className="bg-green">{diagnosis?.prep_level?.toUpperCase()}</Badge>
           </div>
           <Progress value={diagnosis?.prep_level_score} className="mb-2" />
           <p className="text-xs text-muted/60">Puntuación: {Math.round(diagnosis?.prep_level_score)}/100</p>
@@ -176,12 +176,12 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
         </div>
 
         {/* Focus Areas */}
-        <div className="bg-purple-50 p-4 rounded-[28px] border border-purple-200">
+        <div className="bg-purple/5 p-4 rounded-[28px] border border-purple/20">
           <div className="font-medium mb-3">Áreas de Enfoque para tu Entrenamiento</div>
           <ul className="space-y-2">
             {diagnosis?.focus_areas?.map((area: string, idx: number) => (
               <li key={idx} className="text-sm text-muted flex items-start gap-2">
-                <span className="text-purple-600 font-bold">→</span>
+                <span className="text-purple font-bold">→</span>
                 {area}
               </li>
             ))}

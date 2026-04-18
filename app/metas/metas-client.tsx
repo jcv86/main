@@ -328,13 +328,13 @@ export default function MetasSMARTClient() {
   const getColorEstado = (estado: string) => {
     switch (estado) {
       case "activa":
-        return "bg-green/10 dark:bg-green text-green dark:text-green-200"
+        return "bg-green/10 dark:bg-green text-green dark:text-green/20"
       case "completada":
         return "bg-blue/10 dark:bg-blue text-blue dark:text-blue/20"
       case "pausada":
         return "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow/20"
       case "abandonada":
-        return "bg-red/10 dark:bg-red text-red-800 dark:text-red/20"
+        return "bg-red/10 dark:bg-red text-red dark:text-red/20"
       default:
         return "bg-muted/10 dark:bg-gray-800 text-gray-800 dark:text-muted/20"
     }

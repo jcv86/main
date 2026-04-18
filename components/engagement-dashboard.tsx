@@ -43,7 +43,7 @@ export function EngagementDashboard() {
                 <p className="text-xs text-muted-foreground">Artículos Leídos</p>
                 <p className="text-2xl font-bold mt-1">{metrics.articles_read}</p>
               </div>
-              <Activity className="w-8 h-8 text-blue-500 opacity-50" />
+              <Activity className="w-8 h-8 text-blue/50 opacity-50" />
             </div>
           </CardContent>
         </Card>

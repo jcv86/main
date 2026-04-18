@@ -122,7 +122,7 @@ export default function AuthDebugPage() {
             {profile && (
               <div className="space-y-4">
                 {profile.linkedin_context && (
-                  <div className="bg-blue/5 dark:bg-blue-950 p-4 rounded-lg">
+                  <div className="bg-blue/5 dark:bg-blue p-4 rounded-lg">
                     <h3 className="font-semibold mb-2">LinkedIn Data</h3>
                     <ul className="space-y-2 text-sm">
                       <li>

@@ -316,7 +316,7 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
         {/* User Input */}
         <form onSubmit={handleUserResponse} className="space-y-3">
           {error && (
-            <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red/20">
+            <Alert variant="destructive" className="border-red/30 bg-red/5 dark:bg-red/20">
               <AlertTriangle className="h-4 w-4 text-red" />
               <AlertDescription className="text-red dark:text-red/20 ml-2">{error}</AlertDescription>
             </Alert>
@@ -364,9 +364,9 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
         </form>
 
         {isPaused && (
-          <Alert className="bg-blue-50 border-blue-200">
+          <Alert className="bg-blue/5 border-blue/20">
             <AlertTriangle className="h-4 w-4 text-blue" />
-            <AlertDescription className="text-blue-900">
+            <AlertDescription className="text-blue">
               Estamos en pausa para observar el patrón. Cuando estés listo, continúa escribiendo tu respuesta.
             </AlertDescription>
           </Alert>

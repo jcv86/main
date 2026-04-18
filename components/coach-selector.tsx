@@ -23,15 +23,15 @@ export function CoachSelector({ onSelect }: CoachSelectorProps) {
       icon: FileText,
       color: "text-blue",
       bgColor: "bg-blue/10",
-      borderColor: "hover:border-blue-300",
+      borderColor: "hover:border-blue/30",
       coach: "Dani",
     },
     {
       id: "entrevistas_comunicacion" as PromptCategoryId,
       icon: MessageSquare,
-      color: "text-purple-600",
-      bgColor: "bg-purple-100",
-      borderColor: "hover:border-purple-300",
+      color: "text-purple",
+      bgColor: "bg-purple/10",
+      borderColor: "hover:border-purple/30",
       coach: "Sofía & Dani",
     },
     {
@@ -39,7 +39,7 @@ export function CoachSelector({ onSelect }: CoachSelectorProps) {
       icon: TrendingUp,
       color: "text-green",
       bgColor: "bg-green/10",
-      borderColor: "hover:border-green-300",
+      borderColor: "hover:border-green/30",
       coach: "Sofía & Dani",
     },
     {
@@ -47,7 +47,7 @@ export function CoachSelector({ onSelect }: CoachSelectorProps) {
       icon: RefreshCw,
       color: "text-orange",
       bgColor: "bg-orange/10",
-      borderColor: "hover:border-orange-300",
+      borderColor: "hover:border-orange/30",
       coach: "Sofía & Dani",
     },
   ]

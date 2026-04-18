@@ -434,7 +434,7 @@ export default function TestFlowVerification() {
                 {failedTests === 0 ? (
                   <div className="space-y-2">
                     <CheckCircle className="h-12 w-12 text-green mx-auto" />
-                    <h3 className="text-xl font-semibold text-green-900">All Tests Passed! ✅</h3>
+                    <h3 className="text-xl font-semibold text-green">All Tests Passed! ✅</h3>
                     <p className="text-green">
                       All {passedTests} personality tests have proper navigation flow and completion processes.
                     </p>
@@ -442,7 +442,7 @@ export default function TestFlowVerification() {
                 ) : (
                   <div className="space-y-2">
                     <AlertTriangle className="h-12 w-12 text-red mx-auto" />
-                    <h3 className="text-xl font-semibold text-red-900">Issues Found</h3>
+                    <h3 className="text-xl font-semibold text-red">Issues Found</h3>
                     <p className="text-red">
                       {failedTests} test(s) failed verification. Please check the errors above.
                     </p>

@@ -338,7 +338,7 @@ export default function GuidedTrainingPage() {
                   <Button
                     onClick={() => setShowVideoSession(false)}
                     variant="outline"
-                    className="text-cyan-400 hover:text-cyan-300"
+                    className="text-cyan/40 hover:text-cyan/30"
                   >
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Volver a la Lección
@@ -375,7 +375,7 @@ export default function GuidedTrainingPage() {
                     <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
                   </Button>
                 ) : (
-                  <Button className="bg-green hover:bg-green-700">
+                  <Button className="bg-green hover:bg-green">
                     <CheckCircle2 className="w-4 h-4 mr-2" />
                     Completar Módulo
                   </Button>

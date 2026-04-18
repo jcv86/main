@@ -175,7 +175,7 @@ export default function A3AnalyticsPage() {
             <CardContent className="space-y-3">
               {userData?.improvements.map((improvement: string, idx: number) => (
                 <div key={idx} className="flex items-center gap-3 p-3 rounded-[28px] bg-orange/5 dark:bg-orange/20">
-                  <span className="text-orange dark:text-orange-400 font-bold">→</span>
+                  <span className="text-orange dark:text-orange/40 font-bold">→</span>
                   <span className="text-muted/70 dark:text-muted/30">{improvement}</span>
                 </div>
               ))}

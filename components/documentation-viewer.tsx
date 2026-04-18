@@ -278,7 +278,7 @@ export function DocumentationViewer({ type = "tecnica" }: DocumentationViewerPro
         {/* Content */}
         <ScrollArea className="flex-1 p-8">
           <div className="max-w-4xl mx-auto">
-            <div className="prose prose-slate dark:prose-invert max-w-none prose-pre:my-4 prose-pre:bg-slate-950 prose-pre:text-slate-50 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:border prose-pre:border-slate-800">
+            <div className="prose prose-slate dark:prose-invert max-w-none prose-pre:my-4 prose-pre:bg-slate-950 prose-pre:text-muted/5 prose-pre:p-4 prose-pre:rounded-lg prose-pre:overflow-x-auto prose-pre:border prose-pre:border-muted/80">
               <ReactMarkdown
                 components={{
                   code({ node, className, children, ...props }: any) {
@@ -286,7 +286,7 @@ export function DocumentationViewer({ type = "tecnica" }: DocumentationViewerPro
                     if (isInline) {
                       return (
                         <code
-                          className="bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 rounded text-sm font-mono"
+                          className="bg-muted/10 dark:bg-muted/80 px-1.5 py-0.5 rounded text-sm font-mono"
                           {...props}
                         >
                           {children}

@@ -141,7 +141,7 @@ export default function CSVExportPage() {
               <Button
                 onClick={copyToClipboard}
                 variant="outline"
-                className="w-full border-green-300 text-green hover:bg-green/10 bg-transparent"
+                className="w-full border-green/30 text-green hover:bg-green/10 bg-transparent"
                 size="lg"
               >
                 <Copy className="mr-2 h-4 w-4" />

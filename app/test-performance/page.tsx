@@ -62,12 +62,12 @@ export default function TestPerformancePage() {
                     <div className="text-blue">Target: &lt;100ms</div>
                   </div>
                   <div className="text-center p-3 bg-green/5 rounded-lg">
-                    <div className="font-semibold text-green-900">Success Rate</div>
+                    <div className="font-semibold text-green">Success Rate</div>
                     <div className="text-green">Target: &gt;90%</div>
                   </div>
                   <div className="text-center p-3 bg-yellow/5 rounded-lg">
                     <div className="font-semibold text-yellow">Accuracy</div>
-                    <div className="text-yellow-700">Target: &gt;85%</div>
+                    <div className="text-yellow">Target: &gt;85%</div>
                   </div>
                   <div className="text-center p-3 bg-purple/5 rounded-lg">
                     <div className="font-semibold text-purple">Reliability</div>
@@ -90,7 +90,7 @@ export default function TestPerformancePage() {
           <CardContent>
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               <div>
-                <h4 className="font-semibold mb-3 text-green-900">Excellent Performance</h4>
+                <h4 className="font-semibold mb-3 text-green">Excellent Performance</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Response Time:</span>
@@ -132,7 +132,7 @@ export default function TestPerformancePage() {
                 </div>
               </div>
               <div>
-                <h4 className="font-semibold mb-3 text-red-900">Needs Improvement</h4>
+                <h4 className="font-semibold mb-3 text-red">Needs Improvement</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Response Time:</span>

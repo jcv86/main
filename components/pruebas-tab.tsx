@@ -123,7 +123,7 @@ export function PruebasTab() {
 
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <ArrowRight className="w-5 h-5 text-blue-500" />
+              <ArrowRight className="w-5 h-5 text-blue/50" />
               <h3 className="text-lg font-semibold">La Estrategia</h3>
             </div>
             <p className="text-muted-foreground">{selectedCase.strategy}</p>
@@ -139,7 +139,7 @@ export function PruebasTab() {
 
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-purple-500" />
+              <CheckCircle className="w-5 h-5 text-purple/50" />
               <h3 className="text-lg font-semibold">Aprendizajes Clave</h3>
             </div>
             <ul className="space-y-2">

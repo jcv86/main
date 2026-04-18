@@ -21,7 +21,7 @@ const ENTRENAMIENTO_TYPES = [
     ],
     duration: '15-20 min',
     difficulty: 'Básico',
-    difficultyColor: 'bg-green/10 dark:bg-green/30 text-green dark:text-green-200',
+    difficultyColor: 'bg-green/10 dark:bg-green/30 text-green dark:text-green/20',
     icon: Users,
     action: 'Comenzar'
   },
@@ -57,7 +57,7 @@ const ENTRENAMIENTO_TYPES = [
     ],
     duration: '25-30 min',
     difficulty: 'Avanzado',
-    difficultyColor: 'bg-orange/10 dark:bg-orange/30 text-orange dark:text-orange-200',
+    difficultyColor: 'bg-orange/10 dark:bg-orange/30 text-orange dark:text-orange/20',
     icon: Clock,
     action: 'Comenzar'
   },
@@ -75,7 +75,7 @@ const ENTRENAMIENTO_TYPES = [
     ],
     duration: '30-40 min',
     difficulty: 'Maestría',
-    difficultyColor: 'bg-red/10 dark:bg-red/30 text-red-800 dark:text-red/20',
+    difficultyColor: 'bg-red/10 dark:bg-red/30 text-red dark:text-red/20',
     icon: Play,
     action: 'Comenzar'
   }

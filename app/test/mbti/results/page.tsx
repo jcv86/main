@@ -333,7 +333,7 @@ export default function MBTIResultsPage() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
+        <Card className="border-2 border-purple/30 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -377,7 +377,7 @@ export default function MBTIResultsPage() {
               </div>
             </div>
 
-            <div className="p-4 bg-purple/10 dark:bg-purple/30 rounded-lg border border-purple-300">
+            <div className="p-4 bg-purple/10 dark:bg-purple/30 rounded-lg border border-purple/30">
               <p className="text-sm text-foreground">
                 <strong>Tu Siguiente Paso:</strong> Identifica qué faceta de ti quieres expandir. Tu coach IA creará un plan para practicar una perspectiva complementaria a tu naturaleza.
               </p>
@@ -516,7 +516,7 @@ export default function MBTIResultsPage() {
                     </div>
 
                     <div className="bg-white rounded-lg p-4 border-l-4 border-green">
-                      <h4 className="font-semibold text-green-900 mb-2">4. Tu mayor impacto positivo</h4>
+                      <h4 className="font-semibold text-green mb-2">4. Tu mayor impacto positivo</h4>
                       <p className="text-muted">
                         {mbtiType.includes("F")
                           ? "Creas conexión, armonía y pertenencia. Tu empatía hace que las personas se sientan vistas y valoradas. Aportas humanidad a cualquier situación."
@@ -525,7 +525,7 @@ export default function MBTIResultsPage() {
                     </div>
 
                     <div className="bg-white rounded-lg p-4 border-l-4 border-orange">
-                      <h4 className="font-semibold text-orange-900 mb-2">5. Tu patrón bajo estrés</h4>
+                      <h4 className="font-semibold text-orange mb-2">5. Tu patrón bajo estrés</h4>
                       <p className="text-muted">
                         {mbtiType.includes("E")
                           ? "Bajo estrés tiendes a hablar más, buscar validación externa y dispersarte en actividades. Tu crecimiento está en aprender a estar en silencio y mirar hacia dentro."
@@ -593,7 +593,7 @@ export default function MBTIResultsPage() {
                     </div>
 
                     <div className="bg-gradient-to-br from-green/5 to-green/5 rounded-lg p-5 border border-green/20">
-                      <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-green-900">
+                      <h4 className="font-bold text-lg mb-3 flex items-center gap-2 text-green">
                         <Briefcase className="w-5 h-5" />
                         Trabajo
                       </h4>
@@ -646,7 +646,7 @@ export default function MBTIResultsPage() {
                     </div>
 
                     <div className="bg-white rounded-lg p-5 border-l-4 border-green">
-                      <h4 className="font-bold mb-2 text-green-900">Movimiento Laboral</h4>
+                      <h4 className="font-bold mb-2 text-green">Movimiento Laboral</h4>
                       <p className="text-muted text-sm mb-3">
                         {mbtiType.includes("N")
                           ? "Completa un proyecto concreto del inicio al fin. La ejecución también importa, no solo las ideas."
@@ -1084,7 +1084,7 @@ export default function MBTIResultsPage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="border-2 border-red-300">
+                  <Card className="border-2 border-red/30">
                     <CardHeader>
                       <CardTitle className="text-base">Inteligencia Emocional</CardTitle>
                     </CardHeader>
@@ -1102,7 +1102,7 @@ export default function MBTIResultsPage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="border-2 border-purple-300">
+                  <Card className="border-2 border-purple/30">
                     <CardHeader>
                       <CardTitle className="text-base">Big Five</CardTitle>
                     </CardHeader>
@@ -1120,7 +1120,7 @@ export default function MBTIResultsPage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="border-2 border-green-300">
+                  <Card className="border-2 border-green/30">
                     <CardHeader>
                       <CardTitle className="text-base">RIASEC</CardTitle>
                     </CardHeader>
@@ -1138,7 +1138,7 @@ export default function MBTIResultsPage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="border-2 border-yellow-300">
+                  <Card className="border-2 border-yellow/30">
                     <CardHeader>
                       <CardTitle className="text-base">Soft Skills</CardTitle>
                     </CardHeader>
@@ -1523,7 +1523,7 @@ export default function MBTIResultsPage() {
                         </Card>
                       </div>
 
-                      <div className="bg-blue/5 dark:bg-blue-950/20 p-3 rounded-lg">
+                      <div className="bg-blue/5 dark:bg-blue/20 p-3 rounded-lg">
                         <p className="text-sm">
                           <strong>KPI del Mes:</strong> Completar análisis de las 4 preferencias con ejemplos reales
                         </p>
@@ -1598,7 +1598,7 @@ export default function MBTIResultsPage() {
                         </Card>
                       </div>
 
-                      <div className="bg-green/5 dark:bg-green-950/20 p-3 rounded-lg">
+                      <div className="bg-green/5 dark:bg-green/20 p-3 rounded-lg">
                         <p className="text-sm">
                           <strong>KPI del Mes:</strong> Documentar 5 mejoras en el uso de tu función inferior
                         </p>

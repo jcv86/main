@@ -146,7 +146,7 @@ export function BrandieSenseiTestRunner() {
   const getVerdictColor = (verdict: string) => {
     switch (verdict) {
       case "pasa":
-        return "bg-green-50 border-green-200"
+        return "bg-green/5 border-green/20"
       case "pasa_con_advertencias":
         return "bg-yellow/5 border-yellow/20"
       case "falla":
@@ -227,14 +227,14 @@ export function BrandieSenseiTestRunner() {
                       {result.redFlags.length > 0 && (
                         <Alert className="bg-red/5 border-red/20">
                           <AlertTriangle className="h-4 w-4 text-red" />
-                          <AlertDescription className="text-red-800">
+                          <AlertDescription className="text-red">
                             <strong>Red Flags:</strong> {result.redFlags.join(", ")}
                           </AlertDescription>
                         </Alert>
                       )}
 
                       {result.criticalFailure && (
-                        <Alert className="bg-red/10 border-red-300">
+                        <Alert className="bg-red/10 border-red/30">
                           <XCircle className="h-4 w-4 text-red" />
                           <AlertDescription className="text-red font-semibold">
                             FALLA CRÍTICA: {result.criticalFailureReason}
@@ -263,7 +263,7 @@ export function BrandieSenseiTestRunner() {
 
             <div>
               <h3 className="font-semibold mb-2">Respuesta del Coach:</h3>
-              <p className="text-sm bg-blue-50 p-4 rounded">{coachResponse}</p>
+              <p className="text-sm bg-blue/5 p-4 rounded">{coachResponse}</p>
             </div>
 
             <div className="grid grid-cols-5 gap-4">

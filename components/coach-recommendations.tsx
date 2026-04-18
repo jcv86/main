@@ -66,17 +66,17 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
           <CardDescription>Ideas y recomendaciones basadas en tu perfil de El Ritual</CardDescription>
         </CardHeader>
         <CardContent className="flex items-center justify-center h-64">
-          <Loader2 className="w-8 h-8 animate-spin text-purple-600" />
+          <Loader2 className="w-8 h-8 animate-spin text-purple" />
         </CardContent>
       </Card>
     )
   }
 
   const colors = [
-    'from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border-purple-200 dark:border-purple-900/50',
-    'from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-blue-200 dark:border-blue-900/50',
-    'from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-orange/20 dark:border-orange-900/50',
-    'from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-900/50',
+    'from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border-purple/20 dark:border-purple/50',
+    'from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-blue/20 dark:border-blue/50',
+    'from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 border-orange/20 dark:border-orange/50',
+    'from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green/20 dark:border-green/50',
     'from-pink-50 to-rose-50 dark:from-pink-900/20 dark:to-rose-900/20 border-pink-200 dark:border-pink-900/50',
   ]
 
@@ -89,8 +89,8 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
       <CardContent>
         <div className="space-y-4">
           {keyInsight && (
-            <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border border-purple-200 dark:border-purple-900/50 rounded-[28px] p-4">
-              <p className="text-sm text-purple-900 dark:text-purple-100">
+            <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border border-purple/20 dark:border-purple/50 rounded-[28px] p-4">
+              <p className="text-sm text-purple dark:text-purple/10">
                 <strong>Insight Principal:</strong> {keyInsight}
               </p>
             </div>
@@ -117,7 +117,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
                       </span>
                     )}
                     {rec.book.rating && (
-                      <span className="text-xs bg-yellow/10 dark:bg-yellow/30 text-yellow-700 dark:text-yellow-300 px-2 py-1 rounded">
+                      <span className="text-xs bg-yellow/10 dark:bg-yellow/30 text-yellow dark:text-yellow/30 px-2 py-1 rounded">
                         ★ {rec.book.rating}
                       </span>
                     )}
@@ -126,9 +126,9 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
               ))}
             </div>
           ) : (
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-[28px] p-8 text-center">
-              <BookOpen className="w-12 h-12 mx-auto mb-4 text-slate-400" />
-              <p className="text-slate-500">
+            <div className="bg-muted/5 dark:bg-muted/90 rounded-[28px] p-8 text-center">
+              <BookOpen className="w-12 h-12 mx-auto mb-4 text-muted/40" />
+              <p className="text-muted/50">
                 {userProfile
                   ? 'Cargando sugerencias personalizadas...'
                   : 'Completa el test de El Ritual para obtener sugerencias personalizadas'}

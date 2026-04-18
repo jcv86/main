@@ -21,7 +21,7 @@ export default function Footer() {
   return (
     <>
       <ContactFormModal open={contactOpen} onOpenChange={setContactOpen} />
-      <footer className="w-full border-t border-slate-200 dark:border-slate-800 mt-20 py-12">
+      <footer className="w-full border-t border-muted/20 dark:border-muted/80 mt-20 py-12">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             {/* Brand */}
@@ -106,7 +106,7 @@ export default function Footer() {
           </div>
 
           {/* Divider */}
-          <div className="border-t border-slate-200 dark:border-slate-800 pt-8">
+          <div className="border-t border-muted/20 dark:border-muted/80 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center text-sm text-foreground/60">
               <p>&copy; {currentYear} Despega Tu Carrera. Todos los derechos reservados.</p>
               <p>Última actualización: {new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</p>

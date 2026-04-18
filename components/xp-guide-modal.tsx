@@ -180,7 +180,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
           {/* ACTIVIDADES TAB */}
           <TabsContent value="actividades" className="space-y-4">
             {xpActivities.map((phase) => (
-              <Card key={phase.category} className="border-slate-200 dark:border-slate-700">
+              <Card key={phase.category} className="border-muted/20 dark:border-muted/70">
                 <CardHeader>
                   <CardTitle className="text-base flex items-center gap-2">
                     <div
@@ -193,15 +193,15 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                   {phase.activities.map((activity, idx) => (
                     <div
                       key={idx}
-                      className="flex items-start justify-between p-3 rounded-[28px] bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800"
+                      className="flex items-start justify-between p-3 rounded-[28px] bg-muted/5 dark:bg-muted/90/50 border border-muted/20 dark:border-muted/80"
                     >
                       <div className="flex items-start gap-3 flex-1">
-                        <div className="text-slate-400 mt-0.5">{activity.icon}</div>
+                        <div className="text-muted/40 mt-0.5">{activity.icon}</div>
                         <div>
-                          <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">
+                          <p className="font-semibold text-sm text-muted/90 dark:text-muted/10">
                             {activity.action}
                           </p>
-                          <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                          <p className="text-xs text-muted/50 dark:text-muted/40 mt-0.5">
                             {activity.description}
                           </p>
                         </div>
@@ -218,7 +218,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
 
           {/* RACHA TAB */}
           <TabsContent value="racha" className="space-y-4">
-            <Card className="bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 border-orange/20 dark:border-orange-800">
+            <Card className="bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20 border-orange/20 dark:border-orange">
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
                   <Flame className="w-5 h-5 text-orange" />
@@ -229,22 +229,22 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                 {streakBonuses.map((streak, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-between p-3 rounded-[28px] bg-white dark:bg-slate-900/50 border border-orange/20 dark:border-orange-800"
+                    className="flex items-center justify-between p-3 rounded-[28px] bg-white dark:bg-muted/90/50 border border-orange/20 dark:border-orange"
                   >
                     <div className="flex items-center gap-3">
                       <div className="text-center">
                         <div className="text-2xl font-black text-orange">
                           {streak.days}
                         </div>
-                        <div className="text-xs text-slate-500 dark:text-slate-400">
+                        <div className="text-xs text-muted/50 dark:text-muted/40">
                           días
                         </div>
                       </div>
                       <div>
-                        <p className="font-semibold text-sm text-slate-900 dark:text-slate-100">
+                        <p className="font-semibold text-sm text-muted/90 dark:text-muted/10">
                           Multiplicador x{streak.multiplier.toFixed(2)}
                         </p>
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
+                        <p className="text-xs text-muted/50 dark:text-muted/40">
                           Todos tus XP se multiplican
                         </p>
                       </div>
@@ -254,7 +254,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                     </Badge>
                   </div>
                 ))}
-                <div className="mt-4 p-4 bg-orange/10 dark:bg-orange/30 border border-orange-300 dark:border-orange-700 rounded-lg text-sm text-orange-900 dark:text-orange/10">
+                <div className="mt-4 p-4 bg-orange/10 dark:bg-orange/30 border border-orange/30 dark:border-orange rounded-lg text-sm text-orange dark:text-orange/10">
                   <strong>💡 Tip:</strong> Cada día que visitas la plataforma suma a tu racha. ¡No la rompas para maximizar tus ganancias de XP!
                 </div>
               </CardContent>
@@ -266,18 +266,18 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
             <Card>
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-cyan-600" />
+                  <TrendingUp className="w-5 h-5 text-cyan" />
                   Sistema de Niveles
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-[28px] border border-slate-200 dark:border-slate-800">
+                <div className="p-4 bg-muted/5 dark:bg-muted/90/50 rounded-[28px] border border-muted/20 dark:border-muted/80">
                   <p className="font-semibold text-sm mb-2">Nivel = 1,000 XP</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                  <p className="text-sm text-muted/60 dark:text-muted/40">
                     Cada nivel requiere 1,000 puntos. Con multiplicadores de racha, 
                     puedes llegar más rápido. Por ejemplo, con racha de 7 días:
                   </p>
-                  <ul className="mt-3 space-y-2 text-sm text-slate-600 dark:text-slate-400">
+                  <ul className="mt-3 space-y-2 text-sm text-muted/60 dark:text-muted/40">
                     <li>• Simulación Desafiante: 300 XP → 450 XP con racha x1.5</li>
                     <li>• Análisis Multimodal: 250 XP → 375 XP con racha x1.5</li>
                     <li>• 3 Desafíos diarios → Subes casi un nivel completo</li>

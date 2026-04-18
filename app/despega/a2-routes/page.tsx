@@ -175,7 +175,7 @@ export default function A2RoutesPage() {
               <AlertCircle className="h-6 w-6 text-red flex-shrink-0 mt-1" />
               <div className="flex-1">
                 <h2 className="text-xl font-bold text-white mb-2">Error en A2: Ruta</h2>
-                <p className="text-red-400 text-lg mb-6">{error || 'No se encontró ruta personalizada'}</p>
+                <p className="text-red/40 text-lg mb-6">{error || 'No se encontró ruta personalizada'}</p>
                 <Button 
                   onClick={() => loadAndGenerateRoute()}
                   className="bg-blue hover:bg-blue text-white"
@@ -226,7 +226,7 @@ export default function A2RoutesPage() {
         <Card className="bg-muted/90 border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <MapPin className="w-5 h-5 text-cyan-500" />
+              <MapPin className="w-5 h-5 text-cyan/50" />
               Tu Progreso en A2
             </CardTitle>
           </CardHeader>
@@ -243,7 +243,7 @@ export default function A2RoutesPage() {
               <p className="text-muted/30 text-sm mb-3">Próximo: Continúa a <span className="font-semibold">Entrenamiento Intensivo</span> para prepararte para entrevistas</p>
               <Button 
                 onClick={() => router.push('/despega/a3-intro')}
-                className="w-full bg-blue hover:bg-cyan-700"
+                className="w-full bg-blue hover:bg-cyan"
               >
                 Ir a Entrenamiento Intensivo
                 <ArrowRight className="w-4 h-4 ml-2" />

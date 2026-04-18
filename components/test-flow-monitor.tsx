@@ -168,9 +168,9 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
       case "idle":
         return <Badge variant="outline">Idle</Badge>
       case "running":
-        return <Badge className="bg-blue-500">Running</Badge>
+        return <Badge className="bg-blue/50">Running</Badge>
       case "passed":
-        return <Badge className="bg-green-500">Passed</Badge>
+        return <Badge className="bg-green/50">Passed</Badge>
       case "failed":
         return <Badge variant="destructive">Failed</Badge>
     }
@@ -180,7 +180,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
   const getStatusIcon = (status: TestMetrics["status"]) => {
     switch (status) {
       case "running":
-        return <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+        return <Loader2 className="h-4 w-4 animate-spin text-blue/50" />
       case "passed":
         return <CheckCircle className="h-4 w-4 text-green/50" />
       case "failed":
@@ -216,7 +216,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
                 <span className="font-medium">{failedTests}</span> Failed
               </span>
               <span className="flex items-center gap-2">
-                <Loader2 className="h-4 w-4 text-blue-500" />
+                <Loader2 className="h-4 w-4 text-blue/50" />
                 <span className="font-medium">{runningTests}</span> Running
               </span>
             </div>
@@ -259,9 +259,9 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
           <Card
             key={metric.testId}
             className={`
-            ${metric.status === "passed" ? "border-green-200 bg-green-50" : ""}
+            ${metric.status === "passed" ? "border-green/20 bg-green/5" : ""}
             ${metric.status === "failed" ? "border-red/20 bg-red/5" : ""}
-            ${metric.status === "running" ? "border-blue-200 bg-blue-50" : ""}
+            ${metric.status === "running" ? "border-blue/20 bg-blue/5" : ""}
           `}
           >
             <CardHeader className="pb-3">

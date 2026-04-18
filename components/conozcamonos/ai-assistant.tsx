@@ -59,7 +59,7 @@ export function AIAssistant({
         onClick={() => setIsOpen(true)}
         variant="outline"
         size="sm"
-        className="gap-2 text-blue border-blue-200 hover:border-blue-300 hover:bg-blue-50 dark:text-blue/40 dark:border-blue-800 dark:hover:bg-blue-950"
+        className="gap-2 text-blue border-blue/20 hover:border-blue/30 hover:bg-blue/5 dark:text-blue/40 dark:border-blue dark:hover:bg-blue"
       >
         <Lightbulb className="w-4 h-4" />
         {buttonLabel}
@@ -68,13 +68,13 @@ export function AIAssistant({
   }
 
   return (
-    <div className="space-y-3 p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
+    <div className="space-y-3 p-4 bg-blue/5 dark:bg-blue border border-blue/20 dark:border-blue rounded-lg">
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-2">
           <Lightbulb className="w-5 h-5 text-blue dark:text-blue/40 mt-0.5 flex-shrink-0" />
           <div>
-            <p className="font-semibold text-blue-900 dark:text-blue-100">{title}</p>
-            <p className="text-sm text-blue dark:text-blue-200 mt-0.5">
+            <p className="font-semibold text-blue dark:text-blue/10">{title}</p>
+            <p className="text-sm text-blue dark:text-blue/20 mt-0.5">
               {suggestion ? 'Aquí está mi sugerencia:' : 'Obtén ayuda para responder esta pregunta'}
             </p>
           </div>
@@ -85,21 +85,21 @@ export function AIAssistant({
             setSuggestion(null)
             setError('')
           }}
-          className="text-blue hover:text-blue dark:text-blue/40 dark:hover:text-blue-300"
+          className="text-blue hover:text-blue dark:text-blue/40 dark:hover:text-blue/30"
         >
           <X className="w-4 h-4" />
         </button>
       </div>
 
       {error && (
-        <div className="flex gap-2 p-2 bg-red/10 dark:bg-red-950 text-red-800 dark:text-red/20 rounded text-sm">
+        <div className="flex gap-2 p-2 bg-red/10 dark:bg-red text-red dark:text-red/20 rounded text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
           <p>{error}</p>
         </div>
       )}
 
       {loading && (
-        <div className="flex gap-2 items-center text-blue dark:text-blue-300">
+        <div className="flex gap-2 items-center text-blue dark:text-blue/30">
           <Loader2 className="w-4 h-4 animate-spin" />
           <p className="text-sm">Generando sugerencia...</p>
         </div>
@@ -107,8 +107,8 @@ export function AIAssistant({
 
       {suggestion && (
         <div className="space-y-3">
-          <div className="p-3 bg-white dark:bg-slate-900 rounded border border-blue-100 dark:border-blue-800">
-            <p className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
+          <div className="p-3 bg-white dark:bg-muted/90 rounded border border-blue/10 dark:border-blue">
+            <p className="text-sm text-muted/70 dark:text-muted/30 whitespace-pre-wrap">
               {suggestion}
             </p>
           </div>
@@ -118,7 +118,7 @@ export function AIAssistant({
               onClick={handleGetSuggestion}
               variant="outline"
               size="sm"
-              className="flex-1 text-blue border-blue-200"
+              className="flex-1 text-blue border-blue/20"
             >
               Otra sugerencia
             </Button>
@@ -129,7 +129,7 @@ export function AIAssistant({
                   setIsOpen(false)
                 }}
                 size="sm"
-                className="flex-1 bg-blue-600 hover:bg-blue-700"
+                className="flex-1 bg-blue hover:bg-blue"
               >
                 Usar como base
               </Button>
@@ -141,7 +141,7 @@ export function AIAssistant({
       {!suggestion && !loading && !error && (
         <Button
           onClick={handleGetSuggestion}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+          className="w-full bg-blue hover:bg-blue text-white"
         >
           Obtener Sugerencia
         </Button>

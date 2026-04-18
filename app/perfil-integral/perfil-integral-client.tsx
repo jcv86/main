@@ -392,9 +392,9 @@ export function PerfilIntegralClient() {
                     </div>
                   )}
 
-                  <div className="bg-red/5 border border-red-100 rounded-lg p-4">
-                    <p className="text-sm font-medium text-red-900 mb-2">💡 Para tu vida personal</p>
-                    <p className="text-sm text-red-800">
+                  <div className="bg-red/5 border border-red/10 rounded-lg p-4">
+                    <p className="text-sm font-medium text-red mb-2">💡 Para tu vida personal</p>
+                    <p className="text-sm text-red">
                       Tu nivel de inteligencia emocional impacta directamente en tus relaciones con pareja, familia y
                       amigos. Una alta IE te permite conectar más profundamente, resolver conflictos de forma
                       constructiva y mantener vínculos sanos.
@@ -503,7 +503,7 @@ export function PerfilIntegralClient() {
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                       {riasecResult.results?.topInterests?.map((interest: string, idx: number) => (
                         <div key={idx} className="bg-orange/5 border border-orange/20 rounded-lg p-3">
-                          <p className="font-medium text-orange-900">{interest}</p>
+                          <p className="font-medium text-orange">{interest}</p>
                         </div>
                       )) || <p className="text-sm text-muted-foreground col-span-3">Perfil de intereses evaluado</p>}
                     </div>
@@ -518,8 +518,8 @@ export function PerfilIntegralClient() {
                     </p>
                   </div>
 
-                  <div className="bg-orange/5 border border-orange-100 rounded-lg p-4">
-                    <p className="text-sm font-medium text-orange-900 mb-2">💡 Más allá del trabajo</p>
+                  <div className="bg-orange/5 border border-orange/10 rounded-lg p-4">
+                    <p className="text-sm font-medium text-orange mb-2">💡 Más allá del trabajo</p>
                     <p className="text-sm text-orange">
                       Estos intereses también pueden guiar tus hobbies, voluntariados y cómo contribuyes a tu comunidad.
                       No se trata solo de trabajo, sino de cómo quieres vivir tu vida.

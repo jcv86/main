@@ -81,7 +81,7 @@ export default function TestOpenAIInsightsPage() {
               <AlertCircle className="w-6 h-6 text-red flex-shrink-0 mt-1" />
               <div className="flex-1">
                 <p className="font-semibold text-red/10">Test Fallido</p>
-                <p className="text-red-200 text-sm mt-1">{error}</p>
+                <p className="text-red/20 text-sm mt-1">{error}</p>
               </div>
             </CardContent>
           </Card>
@@ -149,8 +149,8 @@ export default function TestOpenAIInsightsPage() {
             {/* A3 Insights */}
             <Card className="bg-muted/90/50 border-orange/30">
               <CardHeader>
-                <CardTitle className="text-orange-400">Fase 3: Feedback Honesto (Entrenamientos)</CardTitle>
-                <CardDescription className="text-orange-200">
+                <CardTitle className="text-orange/40">Fase 3: Feedback Honesto (Entrenamientos)</CardTitle>
+                <CardDescription className="text-orange/20">
                   Lo que está bien + lo que necesitas cambiar para ser líder
                 </CardDescription>
               </CardHeader>
@@ -209,13 +209,13 @@ export default function TestOpenAIInsightsPage() {
               <CardContent className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-muted/30">Todas las fases completadas</span>
-                  <Badge className={results.validation.all_phases_completed ? 'bg-green' : 'bg-red-600'}>
+                  <Badge className={results.validation.all_phases_completed ? 'bg-green' : 'bg-red'}>
                     {results.validation.all_phases_completed ? 'EXITOSO' : 'FALLIDO'}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-muted/30">Cadena BRAIN conectada</span>
-                  <Badge className={results.validation.brain_connected ? 'bg-green' : 'bg-red-600'}>
+                  <Badge className={results.validation.brain_connected ? 'bg-green' : 'bg-red'}>
                     {results.validation.brain_connected ? 'EXITOSO' : 'FALLIDO'}
                   </Badge>
                 </div>
@@ -240,7 +240,7 @@ export default function TestOpenAIInsightsPage() {
             <div className="space-y-2 text-muted/40">
               <p><span className="text-blue/30 font-semibold">Fase 1:</span> Descubrimos quién eres realmente (tu patrón natural)</p>
               <p><span className="text-emerald-300 font-semibold">Fase 2:</span> Creamos tu camino claro (qué hacer cada 30 días)</p>
-              <p><span className="text-orange-300 font-semibold">Fase 3:</span> Te preparamos (feedback honesto sobre lo que necesitas cambiar)</p>
+              <p><span className="text-orange/30 font-semibold">Fase 3:</span> Te preparamos (feedback honesto sobre lo que necesitas cambiar)</p>
               <p><span className="text-purple/30 font-semibold">Fase 4:</span> Te mostramos tu momento (por qué ahora es tu oportunidad)</p>
               <p className="pt-2"><span className="text-pink-300 font-semibold">Insight Maestro:</span> Una verdad que une los 3 Pilares y te guía cada día</p>
             </div>

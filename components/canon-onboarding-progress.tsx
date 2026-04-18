@@ -79,19 +79,19 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
                 }`}>
                   <h4 className={`font-semibold ${
                     isCurrent
-                      ? "text-blue-900 dark:text-blue-100"
+                      ? "text-blue dark:text-blue/10"
                       : isCompleted
-                      ? "text-green-900 dark:text-green-100"
-                      : "text-slate-700 dark:text-slate-400"
+                      ? "text-green dark:text-green/10"
+                      : "text-muted/70 dark:text-muted/40"
                   }`}>
                     {step.label}
                   </h4>
                   <p className={`text-sm mt-1 ${
                     isCurrent
-                      ? "text-blue dark:text-blue-200"
+                      ? "text-blue dark:text-blue/20"
                       : isCompleted
-                      ? "text-green dark:text-green-200"
-                      : "text-slate-600 dark:text-slate-500"
+                      ? "text-green dark:text-green/20"
+                      : "text-muted/60 dark:text-muted/50"
                   }`}>
                     {step.description}
                   </p>

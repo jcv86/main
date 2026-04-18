@@ -22,20 +22,20 @@ interface PillarStatusCardProps {
 const statusColors = {
   completed: {
     bg: "bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-950/20 dark:to-emerald-950/20",
-    border: "border-green-200 dark:border-green-900/30",
-    badge: "bg-green-600 text-white",
+    border: "border-green/20 dark:border-green/30",
+    badge: "bg-green text-white",
     badgeIcon: CheckCircle2,
   },
   current: {
     bg: "bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20",
-    border: "border-blue-200 dark:border-blue-900/30",
-    badge: "bg-blue-600 text-white",
+    border: "border-blue/20 dark:border-blue/30",
+    badge: "bg-blue text-white",
     badgeIcon: Clock,
   },
   locked: {
     bg: "bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900/30 dark:to-slate-800/30",
-    border: "border-slate-200 dark:border-slate-800",
-    badge: "bg-slate-400 text-white",
+    border: "border-muted/20 dark:border-muted/80",
+    badge: "bg-muted/40 text-white",
     badgeIcon: Lock,
   },
 }
@@ -85,7 +85,7 @@ export function PillarStatusCard({
       )}
 
       {results && (
-        <div className="mt-4 ml-16 p-3 bg-white/50 dark:bg-slate-900/50 rounded-[28px] border border-slate-200 dark:border-slate-800">
+        <div className="mt-4 ml-16 p-3 bg-white/50 dark:bg-muted/90/50 rounded-[28px] border border-muted/20 dark:border-muted/80">
           <p className="text-sm font-semibold text-foreground mb-1">Resultado:</p>
           <p className="text-lg font-bold text-blue">{results.dimension}</p>
           <p className="text-xs text-foreground/70">Puntuación: {results.score}%</p>

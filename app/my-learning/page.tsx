@@ -69,7 +69,7 @@ export default async function MyLearningPage() {
             href="/biblioteca"
             className="flex items-center gap-3 p-4 border-2 border-blue/20 dark:border-blue/50 rounded-lg bg-white dark:bg-background hover:bg-blue/5 dark:hover:bg-muted/80 transition-colors group shadow-sm"
           >
-            <div className="p-2 bg-blue/10 dark:bg-blue/30 rounded-lg group-hover:bg-blue/20 dark:group-hover:bg-blue-800/50 transition-colors">
+            <div className="p-2 bg-blue/10 dark:bg-blue/30 rounded-lg group-hover:bg-blue/20 dark:group-hover:bg-blue/50 transition-colors">
               <BookOpen className="h-5 w-5 text-blue dark:text-blue/40" />
             </div>
             <div className="flex-1">
@@ -80,10 +80,10 @@ export default async function MyLearningPage() {
 
           <Link
             href="/library-recommendations"
-            className="flex items-center gap-3 p-4 border-2 border-blue/20 dark:border-cyan-900/50 rounded-lg bg-white dark:bg-background hover:bg-blue/5 dark:hover:bg-muted/80 transition-colors group shadow-sm"
+            className="flex items-center gap-3 p-4 border-2 border-blue/20 dark:border-cyan/50 rounded-lg bg-white dark:bg-background hover:bg-blue/5 dark:hover:bg-muted/80 transition-colors group shadow-sm"
           >
-            <div className="p-2 bg-cyan/10 dark:bg-cyan/30 rounded-lg group-hover:bg-cyan-200 dark:group-hover:bg-cyan-800/50 transition-colors">
-              <TrendingUp className="h-5 w-5 text-cyan-700 dark:text-cyan-400" />
+            <div className="p-2 bg-cyan/10 dark:bg-cyan/30 rounded-lg group-hover:bg-cyan/20 dark:group-hover:bg-cyan/50 transition-colors">
+              <TrendingUp className="h-5 w-5 text-cyan dark:text-cyan/40" />
             </div>
             <div className="flex-1">
               <h3 className="font-semibold text-sm text-muted/90 dark:text-white">Próximos Pasos</h3>

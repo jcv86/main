@@ -70,7 +70,7 @@ export function AvatarPicker({
   if (loading) return null
 
   return (
-    <Card className="w-full border-slate-200 dark:border-slate-800">
+    <Card className="w-full border-muted/20 dark:border-muted/80">
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-amber-500" />
@@ -85,17 +85,17 @@ export function AvatarPicker({
 
       <CardContent className="space-y-6">
         {/* Preview Section */}
-        <div className="flex flex-col items-center justify-center py-8 px-6 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-xl border border-slate-200 dark:border-slate-700">
+        <div className="flex flex-col items-center justify-center py-8 px-6 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-xl border border-muted/20 dark:border-muted/70">
           <div className={`w-32 h-32 rounded-full flex items-center justify-center text-6xl mb-4 bg-gradient-to-br ${selected?.color} shadow-lg ring-4 ring-offset-2 ring-slate-200 dark:ring-slate-700 ring-offset-slate-50 dark:ring-offset-slate-900 transition-all duration-300`}>
             {selected?.emoji}
           </div>
-          <h3 className="text-2xl font-bold text-slate-900 dark:text-white">{selected?.name}</h3>
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">{selected?.description}</p>
+          <h3 className="text-2xl font-bold text-muted/90 dark:text-white">{selected?.name}</h3>
+          <p className="text-sm text-muted/60 dark:text-muted/40 mt-1">{selected?.description}</p>
         </div>
 
         {/* Avatar Gallery */}
         <div>
-          <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Opciones disponibles</p>
+          <p className="text-sm font-semibold text-muted/70 dark:text-muted/30 mb-3">Opciones disponibles</p>
           <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
             {avatars.map((avatar) => (
               <button
@@ -104,18 +104,18 @@ export function AvatarPicker({
                 className={`relative group flex flex-col items-center gap-2 p-3 rounded-lg transition-all duration-200 ${
                   selectedAvatar === avatar.id
                     ? `bg-gradient-to-br ${avatar.color} text-white shadow-lg ring-2 ring-offset-2 ring-offset-slate-50 dark:ring-offset-slate-900`
-                    : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700'
+                    : 'bg-muted/10 dark:bg-muted/80 hover:bg-muted/20 dark:hover:bg-muted/70'
                 }`}
               >
                 <div className="text-3xl">{avatar.emoji}</div>
                 
                 {selectedAvatar === avatar.id && (
-                  <div className="absolute top-1 right-1 bg-white dark:bg-slate-900 rounded-full p-1">
+                  <div className="absolute top-1 right-1 bg-white dark:bg-muted/90 rounded-full p-1">
                     <Check className="w-4 h-4 text-green" />
                   </div>
                 )}
 
-                <span className="text-xs font-medium text-center leading-tight text-slate-700 dark:text-slate-300 group-hover:text-slate-900 dark:group-hover:text-white">
+                <span className="text-xs font-medium text-center leading-tight text-muted/70 dark:text-muted/30 group-hover:text-muted/90 dark:group-hover:text-white">
                   {avatar.name}
                 </span>
               </button>
@@ -124,8 +124,8 @@ export function AvatarPicker({
         </div>
 
         {/* Info */}
-        <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-[28px] border border-blue-200 dark:border-blue-800">
-          <p className="text-xs text-blue dark:text-blue-200">
+        <div className="p-3 bg-blue/5 dark:bg-blue/30 rounded-[28px] border border-blue/20 dark:border-blue">
+          <p className="text-xs text-blue dark:text-blue/20">
             💡 Tu avatar {type === 'user' ? 'aparecerá en tus respuestas y feedback' : 'conducirá la entrevista y mostrará expresiones realistas'}
           </p>
         </div>

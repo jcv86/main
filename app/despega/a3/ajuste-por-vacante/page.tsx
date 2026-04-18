@@ -91,7 +91,7 @@ export default function JobMatchingPage() {
         ) : (
           <div className="space-y-6">
             {/* Match Score */}
-            <Card className="bg-gradient-to-br from-green/5 to-blue/5 dark:from-green-900/20 dark:to-blue-900/20 border-2 border-green/20 dark:border-green-800">
+            <Card className="bg-gradient-to-br from-green/5 to-blue/5 dark:from-green-900/20 dark:to-blue-900/20 border-2 border-green/20 dark:border-green">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -126,7 +126,7 @@ export default function JobMatchingPage() {
                       <p className="text-sm font-semibold mb-2">Tus habilidades que piden:</p>
                       <div className="flex flex-wrap gap-2">
                         {analysis.topMatches.map((skill: string) => (
-                          <Badge key={skill} className="bg-green hover:bg-green-700">
+                          <Badge key={skill} className="bg-green hover:bg-green">
                             <CheckCircle2 className="w-3 h-3 mr-1" />
                             {skill}
                           </Badge>
@@ -138,7 +138,7 @@ export default function JobMatchingPage() {
                       <p className="text-sm font-semibold mb-2">Habilidades que falta:</p>
                       <div className="flex flex-wrap gap-2">
                         {analysis.missingSkills.map((skill: string) => (
-                          <Badge key={skill} variant="outline" className="border-orange-300 text-orange dark:text-orange-300">
+                          <Badge key={skill} variant="outline" className="border-orange/30 text-orange dark:text-orange/30">
                             <AlertCircle className="w-3 h-3 mr-1" />
                             {skill}
                           </Badge>

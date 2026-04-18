@@ -37,9 +37,9 @@ interface A1MissionExecutorProps {
 
 const getTipoConfig = (tipo: string) => {
   const configs: Record<string, { icon: string; color: string; label: string }> = {
-    lectura: { icon: "📖", color: "bg-blue-50 border-blue-200", label: "Lectura" },
-    reflexion: { icon: "🤔", color: "bg-purple-50 border-purple-200", label: "Reflexión" },
-    accion: { icon: "⚡", color: "bg-green-50 border-green-200", label: "Acción" },
+    lectura: { icon: "📖", color: "bg-blue/5 border-blue/20", label: "Lectura" },
+    reflexion: { icon: "🤔", color: "bg-purple/5 border-purple/20", label: "Reflexión" },
+    accion: { icon: "⚡", color: "bg-green/5 border-green/20", label: "Acción" },
     quiz: { icon: "❓", color: "bg-orange/5 border-orange/20", label: "Quiz" },
     habito: { icon: "🔄", color: "bg-indigo-50 border-indigo-200", label: "Hábito" },
     proyecto: { icon: "🎯", color: "bg-pink-50 border-pink-200", label: "Proyecto" },
@@ -265,11 +265,11 @@ export function A1MissionExecutor({
       </div>
 
       {/* Coaching Tip */}
-      <Card className="bg-blue-50 border-blue-200">
+      <Card className="bg-blue/5 border-blue/20">
         <CardContent className="pt-6 flex gap-4">
           <Sparkles className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
           <div>
-            <div className="font-medium text-blue-900 mb-1">Consejo del Coach</div>
+            <div className="font-medium text-blue mb-1">Consejo del Coach</div>
             <div className="text-sm text-blue">
               La consistencia es clave. Completa al menos 1 misión diaria para mantener el momentum y ver resultados en 30 días.
             </div>

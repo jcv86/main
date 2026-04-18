@@ -18,10 +18,10 @@ interface PhaseProgressData {
 export function GlobalProgressSidebar() {
   const supabase = createClient()
   const [phases, setPhases] = useState<PhaseProgressData[]>([
-    { phase: 'A1', progress: 100, status: 'completed', color: 'bg-blue-600' },
-    { phase: 'A2', progress: 0, status: 'in-progress', color: 'bg-green-600' },
-    { phase: 'A4', progress: 0, status: 'in-progress', color: 'bg-cyan-600' },
-    { phase: 'A3', progress: 0, status: 'upcoming', color: 'bg-orange-600' },
+    { phase: 'A1', progress: 100, status: 'completed', color: 'bg-blue' },
+    { phase: 'A2', progress: 0, status: 'in-progress', color: 'bg-green' },
+    { phase: 'A4', progress: 0, status: 'in-progress', color: 'bg-cyan' },
+    { phase: 'A3', progress: 0, status: 'upcoming', color: 'bg-orange' },
   ])
   const [totalProgress, setTotalProgress] = useState(25)
   const [loading, setLoading] = useState(true)
@@ -44,25 +44,25 @@ export function GlobalProgressSidebar() {
               phase: 'A1',
               progress: progressData.a1_progress || 0,
               status: progressData.a1_progress === 100 ? 'completed' : 'in-progress',
-              color: 'bg-blue-600',
+              color: 'bg-blue',
             },
             {
               phase: 'A2',
               progress: progressData.a2_progress || 0,
               status: progressData.a2_progress > 0 ? 'in-progress' : 'upcoming',
-              color: 'bg-green-600',
+              color: 'bg-green',
             },
             {
               phase: 'A4',
               progress: progressData.a4_progress || 0,
               status: progressData.a4_progress > 0 ? 'in-progress' : 'upcoming',
-              color: 'bg-cyan-600',
+              color: 'bg-cyan',
             },
             {
               phase: 'A3',
               progress: progressData.a3_progress || 0,
               status: progressData.a3_progress > 0 ? 'in-progress' : 'upcoming',
-              color: 'bg-orange-600',
+              color: 'bg-orange',
             },
           ]
 
@@ -95,27 +95,27 @@ export function GlobalProgressSidebar() {
       </Card>
 
       {/* PHASES MICRO TRACKER */}
-      <Card className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-md">
+      <Card className="bg-white dark:bg-muted/90 border border-muted/20 dark:border-muted/80 shadow-md">
         <div className="p-4 space-y-3">
-          <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 uppercase">Fases del Ciclo</p>
+          <p className="text-xs font-semibold text-muted/70 dark:text-muted/30 uppercase">Fases del Ciclo</p>
           
           <div className="space-y-2">
             {phases.map((phase, idx) => (
               <Link key={phase.phase} href={`/despega/${phase.phase === 'A1' ? 'a1-cerebral' : `${phase.phase.toLowerCase()}-base` || phase.phase.toLowerCase()}`}>
                 <div className="group cursor-pointer">
-                  <div className="flex items-center gap-2 p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                  <div className="flex items-center gap-2 p-2 rounded hover:bg-muted/10 dark:hover:bg-muted/80 transition-colors">
                     {phase.status === 'completed' ? (
                       <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0" />
                     ) : phase.status === 'in-progress' ? (
                       <Circle className="w-4 h-4 text-blue dark:text-blue/40 flex-shrink-0" />
                     ) : (
-                      <Circle className="w-4 h-4 text-slate-400 dark:text-slate-600 flex-shrink-0" />
+                      <Circle className="w-4 h-4 text-muted/40 dark:text-muted/60 flex-shrink-0" />
                     )}
                     
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="text-sm font-semibold text-slate-900 dark:text-slate-100">{phase.phase}</span>
-                        <span className="text-xs text-slate-600 dark:text-slate-400">{phase.progress}%</span>
+                        <span className="text-sm font-semibold text-muted/90 dark:text-muted/10">{phase.phase}</span>
+                        <span className="text-xs text-muted/60 dark:text-muted/40">{phase.progress}%</span>
                       </div>
                       <Progress value={phase.progress} className="h-1.5 mt-1" />
                     </div>
@@ -128,17 +128,17 @@ export function GlobalProgressSidebar() {
       </Card>
 
       {/* QUICK ACTIONS */}
-      <Card className="bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 border border-green-200 dark:border-green-800 shadow-md">
+      <Card className="bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-950/30 dark:to-blue-950/30 border border-green/20 dark:border-green shadow-md">
         <div className="p-3 space-y-2">
-          <p className="text-xs font-semibold text-slate-700 dark:text-slate-300">Acceso Rápido</p>
+          <p className="text-xs font-semibold text-muted/70 dark:text-muted/30">Acceso Rápido</p>
           <div className="space-y-1">
             <Link href="/despega/journey">
-              <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-white/50 dark:hover:bg-slate-800 text-blue dark:text-blue/40">
+              <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-white/50 dark:hover:bg-muted/80 text-blue dark:text-blue/40">
                 Dashboard Completo
               </button>
             </Link>
             <Link href="/despega/a2/coach">
-              <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-white/50 dark:hover:bg-slate-800 text-purple-600 dark:text-purple/40">
+              <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-white/50 dark:hover:bg-muted/80 text-purple dark:text-purple/40">
                 Hablar con Coach
               </button>
             </Link>

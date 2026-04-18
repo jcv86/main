@@ -20,9 +20,9 @@ interface BadgesDisplayProps {
 }
 
 const RARITY_COLORS: Record<string, string> = {
-  common: 'bg-slate-100 dark:bg-slate-800 border-slate-300',
-  rare: 'bg-blue/10 dark:bg-blue/30 border-blue-300',
-  epic: 'bg-purple-100 dark:bg-purple/30 border-purple-300',
+  common: 'bg-muted/10 dark:bg-muted/80 border-muted/30',
+  rare: 'bg-blue/10 dark:bg-blue/30 border-blue/30',
+  epic: 'bg-purple/10 dark:bg-purple/30 border-purple/30',
   legendary: 'bg-amber-100 dark:bg-amber-900/30 border-amber-300'
 }
 
@@ -57,7 +57,7 @@ export function BadgesDisplay({ earnedBadges, totalBadgesAvailable = 24 }: Badge
             <span className="font-semibold">Progreso de Insignias</span>
             <span className="text-xs opacity-75">{Math.round(completionPercentage)}%</span>
           </div>
-          <div className="h-3 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden">
+          <div className="h-3 bg-muted/20 dark:bg-muted/80 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-emerald-400 to-blue-500 transition-all duration-300"
               style={{ width: `${completionPercentage}%` }}
@@ -79,13 +79,13 @@ export function BadgesDisplay({ earnedBadges, totalBadgesAvailable = 24 }: Badge
                       className={`relative aspect-square rounded-lg flex items-center justify-center cursor-pointer transition-all hover:scale-110 ${
                         isEarned
                           ? `${RARITY_COLORS[badge?.rarity || 'common']} ring-2 ${RARITY_RING[badge?.rarity || 'common']}`
-                          : 'bg-slate-200 dark:bg-slate-800 opacity-40'
+                          : 'bg-muted/20 dark:bg-muted/80 opacity-40'
                       }`}
                     >
                       {isEarned ? (
                         <div className="text-2xl">{badge?.icon_url}</div>
                       ) : (
-                        <Lock className="w-4 h-4 text-slate-400" />
+                        <Lock className="w-4 h-4 text-muted/40" />
                       )}
                     </div>
                   </TooltipTrigger>

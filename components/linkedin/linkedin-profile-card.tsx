@@ -67,15 +67,15 @@ export function LinkedInProfileCard() {
     return (
       <Card>
         <CardContent className="py-8 flex items-center justify-center">
-          <Loader2 className="w-6 h-6 animate-spin text-blue-500" />
-          <span className="ml-2 text-slate-600">Loading LinkedIn profile...</span>
+          <Loader2 className="w-6 h-6 animate-spin text-blue/50" />
+          <span className="ml-2 text-muted/60">Loading LinkedIn profile...</span>
         </CardContent>
       </Card>
     )
   }
 
   return (
-    <Card className="border-blue-200 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20">
+    <Card className="border-blue/20 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
@@ -97,7 +97,7 @@ export function LinkedInProfileCard() {
 
       <CardContent className="space-y-4">
         {error && hasAttemptedSync && (
-          <div className="p-3 bg-red/10 text-red-800 rounded-lg flex gap-2">
+          <div className="p-3 bg-red/10 text-red rounded-lg flex gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
             <span className="text-sm">{error}</span>
           </div>
@@ -105,8 +105,8 @@ export function LinkedInProfileCard() {
 
         {!profile ? (
           <div className="text-center py-6">
-            <p className="text-slate-600 mb-4">No LinkedIn profile synced yet</p>
-            <Button onClick={handleSync} className="bg-blue-600 hover:bg-blue-700">
+            <p className="text-muted/60 mb-4">No LinkedIn profile synced yet</p>
+            <Button onClick={handleSync} className="bg-blue hover:bg-blue">
               <Linkedin className="w-4 h-4 mr-2" />
               Connect LinkedIn
             </Button>
@@ -126,7 +126,7 @@ export function LinkedInProfileCard() {
                 <h3 className="font-bold text-lg">
                   {profile.first_name} {profile.last_name}
                 </h3>
-                <p className="text-sm text-slate-600">{profile.headline}</p>
+                <p className="text-sm text-muted/60">{profile.headline}</p>
                 <a
                   href={profile.linkedin_url}
                   target="_blank"
@@ -171,13 +171,13 @@ export function LinkedInProfileCard() {
                   {profile.experience.slice(0, 3).map((exp, idx) => (
                     <div key={idx} className="text-sm">
                       <p className="font-medium">{exp.title}</p>
-                      <p className="text-xs text-slate-600">
+                      <p className="text-xs text-muted/60">
                         {exp.company} • {exp.startDate} - {exp.endDate}
                       </p>
                     </div>
                   ))}
                   {profile.experience.length > 3 && (
-                    <p className="text-xs text-slate-500 mt-2">
+                    <p className="text-xs text-muted/50 mt-2">
                       +{profile.experience.length - 3} more positions
                     </p>
                   )}
@@ -186,7 +186,7 @@ export function LinkedInProfileCard() {
             )}
 
             {/* Last Synced */}
-            <div className="text-xs text-slate-500 pt-2 border-t">
+            <div className="text-xs text-muted/50 pt-2 border-t">
               Last synced: {new Date(profile.last_synced_at).toLocaleDateString()}
             </div>
           </>

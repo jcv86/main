@@ -26,11 +26,11 @@ const LEVEL_TITLES: Record<number, string> = {
 }
 
 const LEVEL_COLORS: Record<number, { bg: string; text: string; accent: string }> = {
-  1: { bg: 'bg-slate-100 dark:bg-slate-800', text: 'text-slate-700 dark:text-slate-300', accent: 'from-slate-400 to-slate-600' },
-  2: { bg: 'bg-green/10 dark:bg-green/30', text: 'text-green dark:text-green-300', accent: 'from-green-400 to-green-600' },
-  3: { bg: 'bg-blue/10 dark:bg-blue/30', text: 'text-blue dark:text-blue-300', accent: 'from-blue-400 to-blue-600' },
-  4: { bg: 'bg-purple-100 dark:bg-purple/30', text: 'text-purple-700 dark:text-purple/30', accent: 'from-purple-400 to-purple' },
-  5: { bg: 'bg-orange/10 dark:bg-orange/30', text: 'text-orange dark:text-orange-300', accent: 'from-orange-400 to-orange-600' },
+  1: { bg: 'bg-muted/10 dark:bg-muted/80', text: 'text-muted/70 dark:text-muted/30', accent: 'from-slate-400 to-slate-600' },
+  2: { bg: 'bg-green/10 dark:bg-green/30', text: 'text-green dark:text-green/30', accent: 'from-green-400 to-green-600' },
+  3: { bg: 'bg-blue/10 dark:bg-blue/30', text: 'text-blue dark:text-blue/30', accent: 'from-blue-400 to-blue-600' },
+  4: { bg: 'bg-purple/10 dark:bg-purple/30', text: 'text-purple dark:text-purple/30', accent: 'from-purple-400 to-purple' },
+  5: { bg: 'bg-orange/10 dark:bg-orange/30', text: 'text-orange dark:text-orange/30', accent: 'from-orange-400 to-orange-600' },
   6: { bg: 'bg-amber-100 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-300', accent: 'from-amber-400 to-amber-600' },
   7: { bg: 'bg-rose-100 dark:bg-rose-900/30', text: 'text-rose-700 dark:text-rose-300', accent: 'from-rose-400 to-rose-600' },
   8: { bg: 'bg-fuchsia-100 dark:bg-fuchsia-900/30', text: 'text-fuchsia-700 dark:text-fuchsia-300', accent: 'from-fuchsia-400 to-fuchsia-600' }
@@ -133,7 +133,7 @@ export function XPProgressDisplay({
                         ? `bg-gradient-to-br ${LEVEL_COLORS[level].accent} text-white shadow-lg`
                         : isReached
                         ? `${LEVEL_COLORS[level].bg} ${LEVEL_COLORS[level].text}`
-                        : 'bg-slate-200 dark:bg-slate-700 text-slate-400'
+                        : 'bg-muted/20 dark:bg-muted/70 text-muted/40'
                     }`}
                   >
                     {level}

@@ -49,10 +49,10 @@ export function PromptBankDashboard() {
   }
 
   const categoryColors = {
-    autoconocimiento_proposito: "bg-purple-500/10 text-purple-700 dark:text-purple/30",
-    cv_linkedin_marca: "bg-blue-500/10 text-blue dark:text-blue-300",
-    entrevistas_comunicacion: "bg-green-500/10 text-green dark:text-green-300",
-    crecimiento_salarial: "bg-orange/50/10 text-orange dark:text-orange-300",
+    autoconocimiento_proposito: "bg-purple/50/10 text-purple dark:text-purple/30",
+    cv_linkedin_marca: "bg-blue/50/10 text-blue dark:text-blue/30",
+    entrevistas_comunicacion: "bg-green/50/10 text-green dark:text-green/30",
+    crecimiento_salarial: "bg-orange/50/10 text-orange dark:text-orange/30",
     reinvencion_transicion: "bg-pink-500/10 text-pink-700 dark:text-pink-300",
   }
 
@@ -241,7 +241,7 @@ export function PromptBankDashboard() {
                   {prompt.respuesta_sofia && (
                     <div className="space-y-2">
                       <p className="text-sm font-medium">Respuesta Sofia:</p>
-                      <p className="text-sm text-muted-foreground bg-purple-50 dark:bg-purple-950/20 p-3 rounded-lg">
+                      <p className="text-sm text-muted-foreground bg-purple/5 dark:bg-purple/20 p-3 rounded-lg">
                         {prompt.respuesta_sofia}
                       </p>
                     </div>
@@ -250,7 +250,7 @@ export function PromptBankDashboard() {
                   {prompt.respuesta_dani && (
                     <div className="space-y-2">
                       <p className="text-sm font-medium">Respuesta Dani:</p>
-                      <p className="text-sm text-muted-foreground bg-blue-50 dark:bg-blue-950/20 p-3 rounded-lg">
+                      <p className="text-sm text-muted-foreground bg-blue/5 dark:bg-blue/20 p-3 rounded-lg">
                         {prompt.respuesta_dani}
                       </p>
                     </div>

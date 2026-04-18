@@ -39,7 +39,7 @@ export function AchievementBadge({
   return (
     <div className="flex flex-col items-center gap-2">
       <div
-        className={`${sizeClasses[size]} bg-yellow/10 rounded-full flex items-center justify-center border-2 border-yellow-300`}
+        className={`${sizeClasses[size]} bg-yellow/10 rounded-full flex items-center justify-center border-2 border-yellow/30`}
       >
         {getIcon()}
       </div>

@@ -44,7 +44,7 @@ export function FloatingCoachWidget() {
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-purple-600" />
+              <Sparkles className="h-5 w-5 text-purple" />
               <h3 className="font-semibold text-sm">
                 {selectedCategory ? "Chat con Coach" : "Elige tu Coach"}
               </h3>

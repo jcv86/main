@@ -25,7 +25,7 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
       name: "Energía",
       score: results.score_energia,
       icon: "⚡",
-      color: "bg-blue-500",
+      color: "bg-blue/50",
       lightColor: "bg-blue/10",
       textColor: "text-blue",
       description: "Gestión de sueño, vitalidad y consistencia",
@@ -40,7 +40,7 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
       name: "Enfoque",
       score: results.score_enfoque,
       icon: "🎯",
-      color: "bg-green-500",
+      color: "bg-green/50",
       lightColor: "bg-green/10",
       textColor: "text-green",
       description: "Concentración, productividad y priorización",
@@ -70,9 +70,9 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
       name: "Plan Ejecutivo",
       score: results.score_plan_ejecutivo,
       icon: "📋",
-      color: "bg-purple-500",
-      lightColor: "bg-purple-100",
-      textColor: "text-purple-800",
+      color: "bg-purple/50",
+      lightColor: "bg-purple/10",
+      textColor: "text-purple",
       description: "Ejecución, prioridades y toma de decisiones",
       recommendations: results.score_plan_ejecutivo < 50
         ? ["Definir metas trimestrales claras", "Crear ritual matutino de 15-30 min", "Revisar y ajustar semanalmente"]
@@ -209,7 +209,7 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
       </div>
 
       {/* Next Steps */}
-      <Card className="bg-blue-50 border-blue-200">
+      <Card className="bg-blue/5 border-blue/20">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <TrendingUp className="w-5 h-5" />

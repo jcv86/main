@@ -130,13 +130,13 @@ export function AdvancedBookSearch({ onSearch, onFiltersChange }: AdvancedSearch
         {showSuggestions && suggestions.length > 0 && (
           <div
             ref={suggestionsRef}
-            className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-900 border border-muted/20 dark:border-slate-700 rounded-lg shadow-lg z-50"
+            className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-muted/90 border border-muted/20 dark:border-muted/70 rounded-lg shadow-lg z-50"
           >
             {suggestions.map((suggestion) => (
               <button
                 key={suggestion.id}
                 onClick={() => handleSearch(suggestion.title)}
-                className="w-full px-4 py-3 text-left hover:bg-muted/5 dark:hover:bg-slate-800 border-b border-muted/10 dark:border-slate-800 last:border-b-0 flex items-center justify-between group"
+                className="w-full px-4 py-3 text-left hover:bg-muted/5 dark:hover:bg-muted/80 border-b border-muted/10 dark:border-muted/80 last:border-b-0 flex items-center justify-between group"
               >
                 <div>
                   <div className="font-medium text-foreground">{suggestion.title}</div>

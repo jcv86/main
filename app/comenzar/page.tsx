@@ -69,7 +69,7 @@ export default function ComenzarPage() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Left: For Testing */}
-            <Card className="border-2 border-blue/20 dark:border-blue/10 bg-blue/5/50 dark:bg-blue-950/30">
+            <Card className="border-2 border-blue/20 dark:border-blue/10 bg-blue/5/50 dark:bg-blue/30">
               <CardHeader>
                 <PlayCircle className="h-8 w-8 text-blue dark:text-blue/40 mb-2" />
                 <CardTitle>Para Testing & QA</CardTitle>
@@ -185,7 +185,7 @@ export default function ComenzarPage() {
           </Card>
 
           {/* A3 */}
-          <Card className="border-orange/20 dark:border-orange-800">
+          <Card className="border-orange/20 dark:border-orange">
             <CardHeader>
               <CardTitle className="text-lg">Pilar 3: Entrenamiento</CardTitle>
             </CardHeader>
@@ -209,7 +209,7 @@ export default function ComenzarPage() {
           </Card>
 
           {/* A4 */}
-          <Card className="border-blue/20 dark:border-cyan-800">
+          <Card className="border-blue/20 dark:border-cyan">
             <CardHeader>
               <CardTitle className="text-lg">Pilar 4: La Realidad</CardTitle>
             </CardHeader>

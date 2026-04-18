@@ -72,12 +72,12 @@ export function NewsTicker() {
   const currentNews = news[currentIndex]
 
   return (
-    <div className="w-full bg-gradient-to-r from-slate-800 to-slate-900 text-white border-b border-slate-700">
+    <div className="w-full bg-gradient-to-r from-slate-800 to-slate-900 text-white border-b border-muted/70">
       <div className="flex items-center gap-4 px-6 py-3 h-14 max-w-7xl mx-auto">
         {/* Label */}
         <div className="flex items-center gap-2 flex-shrink-0 font-semibold whitespace-nowrap text-sm">
           <TrendingUp className="w-4 h-4 text-blue/40" />
-          <span className="text-slate-300">MERCADO</span>
+          <span className="text-muted/30">MERCADO</span>
         </div>
         
         {/* Noticia actual - estática */}
@@ -86,7 +86,7 @@ export function NewsTicker() {
             href={currentNews.url || '/despega/a4/noticias'}
             target="_blank"
             rel="noopener noreferrer"
-            className="block text-slate-100 hover:text-blue/40 transition-colors text-sm line-clamp-2 leading-snug"
+            className="block text-muted/10 hover:text-blue/40 transition-colors text-sm line-clamp-2 leading-snug"
           >
             {currentNews.title}
           </Link>
@@ -100,7 +100,7 @@ export function NewsTicker() {
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
                 className={`w-1.5 h-1.5 rounded-full transition-all ${
-                  idx === currentIndex ? 'bg-blue-400 w-3' : 'bg-slate-600 hover:bg-slate-500'
+                  idx === currentIndex ? 'bg-blue/40 w-3' : 'bg-muted/60 hover:bg-muted/50'
                 }`}
                 aria-label={`Go to news ${idx + 1}`}
               />
@@ -111,7 +111,7 @@ export function NewsTicker() {
         {/* Link a todas las noticias */}
         <Link
           href="/despega/a4/noticias"
-          className="flex-shrink-0 text-xs font-semibold text-slate-400 hover:text-blue/40 transition-colors whitespace-nowrap"
+          className="flex-shrink-0 text-xs font-semibold text-muted/40 hover:text-blue/40 transition-colors whitespace-nowrap"
         >
           Ver todas →
         </Link>

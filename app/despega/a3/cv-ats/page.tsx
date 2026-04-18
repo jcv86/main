@@ -629,7 +629,7 @@ export default function CVATSPage() {
         )}
 
         {format === 'standard' && (
-          <Card className="bg-green/5 dark:bg-green/20 border-green/20 dark:border-green-800">
+          <Card className="bg-green/5 dark:bg-green/20 border-green/20 dark:border-green">
             <CardHeader>
               <CardTitle className="text-base">✨ Formato Estándar</CardTitle>
             </CardHeader>

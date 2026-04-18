@@ -110,11 +110,11 @@ export function A4RadarEstrategico() {
   const getIntensityColor = (intensity: string) => {
     switch (intensity) {
       case 'high':
-        return 'bg-red/50/20 text-red dark:text-red-300 border-red-300'
+        return 'bg-red/50/20 text-red dark:text-red/30 border-red/30'
       case 'medium':
-        return 'bg-orange/20 text-yellow-700 dark:text-yellow-300 border-yellow-300'
+        return 'bg-orange/20 text-yellow dark:text-yellow/30 border-yellow/30'
       case 'low':
-        return 'bg-blue-500/20 text-blue dark:text-blue-300 border-blue-300'
+        return 'bg-blue/50/20 text-blue dark:text-blue/30 border-blue/30'
       default:
         return 'bg-muted/50/20'
     }
@@ -201,7 +201,7 @@ export function A4RadarEstrategico() {
                   <CardTitle className="text-xs text-muted-foreground">TPM</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-purple-600">{economicData.tpm.value}%</div>
+                  <div className="text-3xl font-bold text-purple">{economicData.tpm.value}%</div>
                   <p className={`text-xs mt-2 font-medium ${economicData.tpm.variation > 0 ? 'text-red' : 'text-green'}`}>
                     {economicData.tpm.variation > 0 ? '+' : ''}
                     {economicData.tpm.variation}%
@@ -329,7 +329,7 @@ export function A4RadarEstrategico() {
                 <div>
                   <h3 className="font-semibold mb-3">Acciones Concretas Prioritarias</h3>
                   <div className="grid md:grid-cols-2 gap-4">
-                    <div className="bg-blue-50/50 dark:bg-blue-950/20 p-4 rounded-[28px] border border-blue-200 dark:border-blue-800">
+                    <div className="bg-blue/5/50 dark:bg-blue/20 p-4 rounded-[28px] border border-blue/20 dark:border-blue">
                       <p className="text-xs font-semibold text-blue dark:text-blue/40 mb-2">ESTA SEMANA</p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
                         <li>Mapear 5 sectores defensivos en tu industria</li>

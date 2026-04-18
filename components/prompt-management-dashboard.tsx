@@ -134,7 +134,7 @@ export function PromptManagementDashboard() {
                 {prompt.version}
                 {prompt.is_control && <Badge variant="outline">Control</Badge>}
                 {prompt.is_active ? (
-                  <Badge className="bg-green-500">Activo</Badge>
+                  <Badge className="bg-green/50">Activo</Badge>
                 ) : (
                   <Badge variant="secondary">Inactivo</Badge>
                 )}

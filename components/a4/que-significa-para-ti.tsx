@@ -181,10 +181,10 @@ export function QueSignificaParaTi() {
                       <Badge
                         className={
                           area.severity === "alto"
-                            ? "bg-red/50/10 text-red dark:text-red-400"
+                            ? "bg-red/50/10 text-red dark:text-red/40"
                             : area.severity === "medio"
                               ? "bg-amber-500/10 text-amber-700 dark:text-amber-400"
-                              : "bg-green-500/10 text-green dark:text-green/40"
+                              : "bg-green/50/10 text-green dark:text-green/40"
                         }
                         variant="outline"
                       >

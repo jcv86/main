@@ -38,14 +38,14 @@ export default function MultimodalAnalysisPage() {
 
       {/* Error Alert */}
       {error && (
-        <Card className="border-red/20 bg-red/5 dark:bg-red-950">
+        <Card className="border-red/20 bg-red/5 dark:bg-red">
           <CardContent className="pt-4 flex gap-3">
             <AlertCircle className="w-4 h-4 text-red flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-sm font-medium text-red-900 dark:text-red/10">{error}</p>
+              <p className="text-sm font-medium text-red dark:text-red/10">{error}</p>
               <button
                 onClick={() => setError('')}
-                className="text-xs text-red hover:text-red dark:text-red-400 mt-1"
+                className="text-xs text-red hover:text-red dark:text-red/40 mt-1"
               >
                 Descartar
               </button>
@@ -66,7 +66,7 @@ export default function MultimodalAnalysisPage() {
               onClick={() => setEntrenamillentoType(type.id)}
               className={`p-3 rounded-[28px] border-2 transition-all text-left ${
                 entrenamillentoType === type.id
-                  ? 'border-blue bg-blue/5 dark:bg-blue-950 shadow-md'
+                  ? 'border-blue bg-blue/5 dark:bg-blue shadow-md'
                   : 'border-muted/20 dark:border-card hover:border-muted/30 dark:hover:border-muted/60'
               }`}
             >

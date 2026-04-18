@@ -180,7 +180,7 @@ export function AdvancedAnalyticsReporting() {
                     <div className="flex gap-2">
                       <div className="flex-1 h-2 bg-muted/20 rounded-full overflow-hidden">
                         <div
-                          className="bg-blue-600 h-full rounded-full"
+                          className="bg-blue h-full rounded-full"
                           style={{ width: `${Math.min(item.your_score, 100)}%` }}
                         />
                       </div>
@@ -279,7 +279,7 @@ export function AdvancedAnalyticsReporting() {
                       </div>
                       <div className="h-2 bg-muted/20 rounded-full overflow-hidden">
                         <div
-                          className="bg-blue-600 h-full rounded-full transition-all"
+                          className="bg-blue h-full rounded-full transition-all"
                           style={{ width: `${goal.progress}%` }}
                         />
                       </div>
@@ -296,7 +296,7 @@ export function AdvancedAnalyticsReporting() {
             </CardHeader>
             <CardContent className="space-y-3">
               {analytics.ai_insights && analytics.ai_insights.map((insight: string, idx: number) => (
-                <div key={idx} className="flex gap-3 p-3 bg-blue-50 rounded-lg">
+                <div key={idx} className="flex gap-3 p-3 bg-blue/5 rounded-lg">
                   <span className="text-blue font-bold flex-shrink-0">{idx + 1}.</span>
                   <p className="text-sm text-muted">{insight}</p>
                 </div>

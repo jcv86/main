@@ -240,7 +240,7 @@ export default function AIReadingCompanion() {
       case "summary":
         return "text-blue"
       case "question":
-        return "text-purple-600"
+        return "text-purple"
       case "connection":
         return "text-green"
       case "application":
@@ -290,7 +290,7 @@ export default function AIReadingCompanion() {
                   <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div
                       className={`max-w-[80%] p-3 rounded-lg ${
-                        message.role === "user" ? "bg-blue-600 text-white" : "bg-muted/10 text-gray-800"
+                        message.role === "user" ? "bg-blue text-white" : "bg-muted/10 text-gray-800"
                       }`}
                     >
                       <p className="text-sm">{message.content}</p>
@@ -301,7 +301,7 @@ export default function AIReadingCompanion() {
                   <div className="flex justify-start">
                     <div className="bg-muted/10 p-3 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue"></div>
                         <span className="text-sm text-muted/60">Pensando...</span>
                       </div>
                     </div>
@@ -339,7 +339,7 @@ export default function AIReadingCompanion() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-purple-600" />
+                <Sparkles className="h-5 w-5 text-purple" />
                 Generar Nuevo Insight
               </CardTitle>
             </CardHeader>
@@ -433,7 +433,7 @@ export default function AIReadingCompanion() {
                       <Clock className="h-5 w-5 text-blue" />
                       Sesión Actual
                     </h4>
-                    <div className="bg-blue-50 p-4 rounded-[28px]">
+                    <div className="bg-blue/5 p-4 rounded-[28px]">
                       <h5 className="font-semibold mb-2">{plan.current_session.title}</h5>
                       <p className="text-sm text-muted/60 mb-3">
                         Tiempo estimado: {plan.current_session.estimated_time} minutos
@@ -471,10 +471,10 @@ export default function AIReadingCompanion() {
                   {/* Next Session Preview */}
                   <div className="space-y-4">
                     <h4 className="font-semibold text-lg flex items-center gap-2">
-                      <TrendingUp className="h-5 w-5 text-purple-600" />
+                      <TrendingUp className="h-5 w-5 text-purple" />
                       Próxima Sesión
                     </h4>
-                    <div className="bg-purple-50 p-4 rounded-[28px]">
+                    <div className="bg-purple/5 p-4 rounded-[28px]">
                       <h5 className="font-semibold mb-2">{plan.next_session.title}</h5>
                       <p className="text-sm text-muted/60">{plan.next_session.preview}</p>
                       <Button variant="outline" className="w-full mt-4 bg-transparent" disabled>
@@ -501,14 +501,14 @@ export default function AIReadingCompanion() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {recommendations.map((rec) => (
-                  <Card key={rec.book_id} className="border-2 border-green-200">
+                  <Card key={rec.book_id} className="border-2 border-green/20">
                     <CardHeader>
                       <div className="flex items-start justify-between">
                         <div>
                           <CardTitle className="text-lg">{rec.title}</CardTitle>
                           <p className="text-sm text-muted/60">por {rec.author}</p>
                         </div>
-                        <Badge variant="default" className="bg-green-600">
+                        <Badge variant="default" className="bg-green">
                           {rec.match_score}% match
                         </Badge>
                       </div>

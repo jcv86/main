@@ -100,7 +100,7 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red/10 text-red-800"
+        return "bg-red/10 text-red"
       case "medium":
         return "bg-yellow/10 text-yellow"
       case "low":
@@ -130,14 +130,14 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
       <div className="flex justify-between items-center">
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-2">
-            <Target className="h-6 w-6 text-purple-600" />
+            <Target className="h-6 w-6 text-purple" />
             Mis Metas de Carrera
           </h2>
           <p className="text-muted-foreground">Establece y rastrea tus objetivos profesionales</p>
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-purple-600 hover:bg-purple-700">
+            <Button className="bg-purple hover:bg-purple">
               <Plus className="h-4 w-4 mr-2" />
               Nueva Meta
             </Button>
@@ -207,7 +207,7 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
                   onChange={(e) => setNewGoal({ ...newGoal, targetDate: e.target.value })}
                 />
               </div>
-              <Button onClick={createGoal} className="w-full bg-purple-600 hover:bg-purple-700">
+              <Button onClick={createGoal} className="w-full bg-purple hover:bg-purple">
                 Crear Meta
               </Button>
             </div>
@@ -223,7 +223,7 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
             <p className="text-muted-foreground mb-4">
               Crea tu primera meta profesional para comenzar a rastrear tu progreso
             </p>
-            <Button onClick={() => setIsDialogOpen(true)} className="bg-purple-600 hover:bg-purple-700">
+            <Button onClick={() => setIsDialogOpen(true)} className="bg-purple hover:bg-purple">
               <Plus className="h-4 w-4 mr-2" />
               Crear Primera Meta
             </Button>
@@ -271,7 +271,7 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
                       {goal.progress < 100 && (
                         <Button
                           size="sm"
-                          className="bg-green-600 hover:bg-green-700"
+                          className="bg-green hover:bg-green"
                           onClick={() => updateGoalProgress(goal.id, 100)}
                         >
                           <CheckCircle className="h-4 w-4 mr-1" />

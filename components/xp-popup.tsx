@@ -44,20 +44,20 @@ export function XPPopup({
           exit={{ opacity: 0, y: -20, scale: 0.8 }}
           transition={{ duration: 0.3 }}
         >
-          <div className="bg-gradient-to-r from-cyan-600 to-teal-600 rounded-lg shadow-2xl p-4 border border-cyan-300/50">
+          <div className="bg-gradient-to-r from-cyan-600 to-teal-600 rounded-lg shadow-2xl p-4 border border-cyan/30/50">
             <div className="space-y-2">
               {/* XP Gained */}
               <div className="flex items-center gap-2">
                 <Zap className="w-5 h-5 text-amber-300" />
                 <div>
                   <p className="text-sm font-bold text-white">{action}</p>
-                  <p className="text-xs text-cyan-100">{actualXP} XP ganados</p>
+                  <p className="text-xs text-cyan/10">{actualXP} XP ganados</p>
                 </div>
               </div>
 
               {/* Multiplier Info */}
               {multiplier > 1 && (
-                <div className="flex items-center gap-2 text-xs text-cyan-100 bg-cyan/40 px-2 py-1 rounded">
+                <div className="flex items-center gap-2 text-xs text-cyan/10 bg-cyan/40 px-2 py-1 rounded">
                   <span>🔥</span>
                   <span>x{multiplier.toFixed(1)} multiplicador</span>
                 </div>
@@ -82,7 +82,7 @@ export function XPPopup({
           {[...Array(3)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 bg-cyan-400 rounded-full"
+              className="absolute w-2 h-2 bg-cyan/40 rounded-full"
               initial={{ x: 0, y: 0, opacity: 1 }}
               animate={{
                 x: (Math.random() - 0.5) * 100,

@@ -42,7 +42,7 @@ const tests: TestInfo[] = [
     questions: 15,
     difficulty: "Beginner",
     icon: Target,
-    color: "bg-blue-500",
+    color: "bg-blue/50",
     path: "/test/disc",
   },
   {
@@ -64,7 +64,7 @@ const tests: TestInfo[] = [
     questions: 25,
     difficulty: "Intermediate",
     icon: Brain,
-    color: "bg-purple-500",
+    color: "bg-purple/50",
     path: "/test/mbti",
     prerequisites: ["disc"],
   },
@@ -76,7 +76,7 @@ const tests: TestInfo[] = [
     questions: 30,
     difficulty: "Intermediate",
     icon: Users,
-    color: "bg-green-500",
+    color: "bg-green/50",
     path: "/test/big-five",
     prerequisites: ["disc", "emotional-intelligence"],
   },
@@ -180,9 +180,9 @@ export default function TestNavigationFlow() {
 
       {/* Recommended Next Test */}
       {recommendedTest && (
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-blue/20 bg-blue/5">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-blue-900">
+            <CardTitle className="flex items-center gap-2 text-blue">
               <PlayCircle className="h-5 w-5" />
               Evaluación Recomendada Siguiente
             </CardTitle>
@@ -194,7 +194,7 @@ export default function TestNavigationFlow() {
                   <recommendedTest.icon className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-blue-900">{recommendedTest.name}</h3>
+                  <h3 className="font-semibold text-blue">{recommendedTest.name}</h3>
                   <p className="text-sm text-blue">{recommendedTest.description}</p>
                   <div className="flex items-center gap-4 mt-1 text-xs text-blue">
                     <span className="flex items-center gap-1">
@@ -208,7 +208,7 @@ export default function TestNavigationFlow() {
                   </div>
                 </div>
               </div>
-              <Button onClick={() => startTest(recommendedTest.id)} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={() => startTest(recommendedTest.id)} className="bg-blue hover:bg-blue">
                 Iniciar Evaluación
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
@@ -229,7 +229,7 @@ export default function TestNavigationFlow() {
               key={test.id}
               className={`relative ${
                 isCompleted
-                  ? "border-green-200 bg-green-50"
+                  ? "border-green/20 bg-green/5"
                   : isAvailable
                     ? "border-muted/20 hover:border-muted/30"
                     : "border-muted/10 bg-muted/5"
@@ -325,15 +325,15 @@ export default function TestNavigationFlow() {
 
       {/* Completion Summary */}
       {completedTests.length === tests.length && (
-        <Card className="border-green-200 bg-green-50">
+        <Card className="border-green/20 bg-green/5">
           <CardContent className="p-6 text-center">
             <CheckCircle className="h-12 w-12 text-green mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-green-900 mb-2">🎉 Todas las Evaluaciones Completadas!</h3>
+            <h3 className="text-xl font-semibold text-green mb-2">🎉 Todas las Evaluaciones Completadas!</h3>
             <p className="text-green mb-4">
               Has completado todas las evaluaciones de personalidad y carrera. Visita tu panel de control para ver tu
               perfil completo.
             </p>
-            <Button onClick={() => router.push("/dashboard")} className="bg-green-600 hover:bg-green-700">
+            <Button onClick={() => router.push("/dashboard")} className="bg-green hover:bg-green">
               Ver Perfil Completo
             </Button>
           </CardContent>

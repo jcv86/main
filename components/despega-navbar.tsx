@@ -124,14 +124,14 @@ export function DespeganNavbar() {
                   </Button>
 
                   {/* Dropdown */}
-                  <div className="absolute left-0 mt-0 w-48 bg-slate-900 border border-slate-700 rounded-surface-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  <div className="absolute left-0 mt-0 w-48 bg-muted/90 border border-muted/70 rounded-surface-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
                     {stage.routes.map((route) => (
                       <Link key={route.href} href={route.href}>
                         <Button
                           variant={pathname === route.href ? 'default' : 'ghost'}
                           size="sm"
                           className={`w-full justify-start rounded-none first:rounded-t-surface-lg last:rounded-b-surface-lg ${
-                            pathname === route.href ? 'bg-slate-800 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                            pathname === route.href ? 'bg-muted/80 text-white' : 'text-muted/30 hover:text-white hover:bg-muted/80'
                           }`}
                         >
                           {route.label}
@@ -147,7 +147,7 @@ export function DespeganNavbar() {
           {/* Desktop XP Badge + Logout */}
           <div className="hidden md:flex items-center gap-3">
             <XPNavbarBadge />
-            <Button onClick={handleLogout} variant="outline" size="sm" className="gap-2 border-slate-700 text-slate-300 hover:bg-slate-900 hover:text-white">
+            <Button onClick={handleLogout} variant="outline" size="sm" className="gap-2 border-muted/70 text-muted/30 hover:bg-muted/90 hover:text-white">
               <LogOut className="w-4 h-4" />
               Salir
             </Button>
@@ -155,7 +155,7 @@ export function DespeganNavbar() {
 
           {/* Mobile Menu Button */}
           <button 
-            className="md:hidden text-slate-300 hover:text-white"
+            className="md:hidden text-muted/30 hover:text-white"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -166,7 +166,7 @@ export function DespeganNavbar() {
         {isOpen && (
           <div className="md:hidden pb-4 space-y-2 max-h-96 overflow-y-auto">
             <Link href="/despega">
-              <Button variant="ghost" className="w-full justify-start mb-2 text-slate-300 hover:text-white hover:bg-slate-900">
+              <Button variant="ghost" className="w-full justify-start mb-2 text-muted/30 hover:text-white hover:bg-muted/90">
                 Dashboard
               </Button>
             </Link>
@@ -175,7 +175,7 @@ export function DespeganNavbar() {
               <div key={stage.name}>
                 <button
                   onClick={() => setExpandedStage(expandedStage === stage.name ? null : stage.name)}
-                  className="w-full flex items-center justify-between px-4 py-2 rounded-lg hover:bg-slate-800 font-semibold text-slate-300 hover:text-white"
+                  className="w-full flex items-center justify-between px-4 py-2 rounded-lg hover:bg-muted/80 font-semibold text-muted/30 hover:text-white"
                 >
                   <div className="flex items-center gap-2">
                     <stage.icon className="w-4 h-4" />
@@ -194,7 +194,7 @@ export function DespeganNavbar() {
                           variant={pathname === route.href ? 'default' : 'ghost'}
                           size="sm"
                           className={`w-full justify-start text-sm ${
-                            pathname === route.href ? 'bg-slate-800 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-900'
+                            pathname === route.href ? 'bg-muted/80 text-white' : 'text-muted/30 hover:text-white hover:bg-muted/90'
                           }`}
                           onClick={() => setIsOpen(false)}
                         >
@@ -210,7 +210,7 @@ export function DespeganNavbar() {
             <Button 
               onClick={handleLogout}
               variant="outline" 
-              className="w-full justify-start gap-2 mt-4 border-slate-700 text-slate-300 hover:bg-slate-900 hover:text-white"
+              className="w-full justify-start gap-2 mt-4 border-muted/70 text-muted/30 hover:bg-muted/90 hover:text-white"
             >
               <LogOut className="w-4 h-4" />
               Salir

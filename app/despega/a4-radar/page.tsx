@@ -152,7 +152,7 @@ export default function A4RadarPage() {
           <Card className="bg-muted/80/40 border-muted/70 hover:border-teal-500/50 transition-colors">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Radar className="w-5 h-5 text-cyan-400" />
+                <Radar className="w-5 h-5 text-cyan/40" />
                 Progress Tracking
               </CardTitle>
             </CardHeader>
@@ -172,7 +172,7 @@ export default function A4RadarPage() {
           <Card className="bg-muted/80/40 border-muted/70 hover:border-teal-500/50 transition-colors">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                <Zap className="w-5 h-5 text-yellow-400" />
+                <Zap className="w-5 h-5 text-yellow/40" />
                 Coach IA Transversal
               </CardTitle>
             </CardHeader>

@@ -116,14 +116,14 @@ export function PhaseTransitionHandler({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div className="p-4 bg-white dark:bg-slate-900 rounded-[28px] border border-slate-200 dark:border-slate-700">
-            <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+          <div className="p-4 bg-white dark:bg-muted/90 rounded-[28px] border border-muted/20 dark:border-muted/70">
+            <p className="text-sm font-semibold text-muted/70 dark:text-muted/30 mb-2">
               Próxima fase:
             </p>
             <p className="text-lg font-bold text-teal-600 dark:text-teal-400 mb-4">
               {nextPhaseLabel}
             </p>
-            <ul className="text-sm text-slate-600 dark:text-slate-400 space-y-1">
+            <ul className="text-sm text-muted/60 dark:text-muted/40 space-y-1">
               <li className="flex items-center gap-2">
                 <Zap className="w-4 h-4 text-amber-500" />
                 Nuevas herramientas y funcionalidades

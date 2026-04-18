@@ -157,11 +157,11 @@ export default function GamificationSystem() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-2xl">{userLevel.title}</CardTitle>
-              <p className="text-blue-100">Nivel {userLevel.level}</p>
+              <p className="text-blue/10">Nivel {userLevel.level}</p>
             </div>
             <div className="text-right">
               <div className="text-3xl font-bold">{userLevel.xp} XP</div>
-              <p className="text-blue-100">{userLevel.xp_to_next} XP para siguiente nivel</p>
+              <p className="text-blue/10">{userLevel.xp_to_next} XP para siguiente nivel</p>
             </div>
           </div>
         </CardHeader>
@@ -363,7 +363,7 @@ export default function GamificationSystem() {
                     </div>
                     <h3 className="font-bold text-lg mb-2">{achievement.achievement_name}</h3>
                     <p className="text-sm text-muted/60 mb-3">{achievement.description}</p>
-                    <Badge variant="default" className="bg-yellow-600 text-white">
+                    <Badge variant="default" className="bg-yellow text-white">
                       Desbloqueado
                     </Badge>
                     <p className="text-xs text-muted/50 mt-2">{new Date(achievement.earned_at).toLocaleDateString()}</p>
@@ -445,7 +445,7 @@ export default function GamificationSystem() {
 
                 <div className="flex items-center justify-between p-4 bg-muted/5 rounded-lg">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-orange-400 rounded-full flex items-center justify-center text-white font-bold">
+                    <div className="w-8 h-8 bg-orange/40 rounded-full flex items-center justify-center text-white font-bold">
                       3
                     </div>
                     <div>

@@ -54,18 +54,18 @@ export function XPHeaderCompact({ onInfoClick }: XPHeaderProps) {
 
   if (loading || !xpData) {
     return (
-      <div className="flex items-center gap-2 px-4 py-2 rounded-[28px] bg-slate-200 dark:bg-slate-700 animate-pulse w-48 h-10" />
+      <div className="flex items-center gap-2 px-4 py-2 rounded-[28px] bg-muted/20 dark:bg-muted/70 animate-pulse w-48 h-10" />
     )
   }
 
   return (
-    <div className="flex items-center gap-3 px-4 py-2 rounded-[28px] bg-gradient-to-r from-cyan-50 to-teal-50 dark:from-cyan-950/30 dark:to-teal-950/30 border border-cyan-200 dark:border-cyan-800">
+    <div className="flex items-center gap-3 px-4 py-2 rounded-[28px] bg-gradient-to-r from-cyan-50 to-teal-50 dark:from-cyan-950/30 dark:to-teal-950/30 border border-cyan/20 dark:border-cyan">
       {/* XP DISPLAY */}
       <div className="flex items-center gap-2">
         <Zap className="w-4 h-4 text-amber-500" />
         <div className="flex flex-col gap-0.5">
-          <span className="text-xs text-slate-600 dark:text-slate-400">XP</span>
-          <span className="text-sm font-bold text-cyan-700 dark:text-cyan-300">
+          <span className="text-xs text-muted/60 dark:text-muted/40">XP</span>
+          <span className="text-sm font-bold text-cyan dark:text-cyan/30">
             {xpData.total_xp.toLocaleString()}
           </span>
         </div>
@@ -77,7 +77,7 @@ export function XPHeaderCompact({ onInfoClick }: XPHeaderProps) {
       </Badge>
 
       {/* PROGRESS BAR */}
-      <div className="flex-1 h-1.5 bg-slate-300 dark:bg-slate-700 rounded-full overflow-hidden">
+      <div className="flex-1 h-1.5 bg-muted/30 dark:bg-muted/70 rounded-full overflow-hidden">
         <div
           className="h-full bg-gradient-to-r from-cyan-500 to-teal-500 rounded-full transition-all duration-500"
           style={{ width: `${Math.min(xpData.xp_progress_percent, 100)}%` }}
@@ -92,7 +92,7 @@ export function XPHeaderCompact({ onInfoClick }: XPHeaderProps) {
         onClick={onInfoClick}
         title="Ver cómo ganar XP"
       >
-        <Info className="w-4 h-4 text-cyan-600 dark:text-cyan-400" />
+        <Info className="w-4 h-4 text-cyan dark:text-cyan/40" />
       </Button>
     </div>
   )

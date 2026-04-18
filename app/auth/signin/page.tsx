@@ -98,7 +98,7 @@ export default function SignInPage() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple/20 dark:bg-purple/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue/20 dark:bg-blue/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse animation-delay-2000" />
-        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan-200 dark:bg-cyan/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30" />
+        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan/20 dark:bg-cyan/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30" />
       </div>
 
       <div className="relative w-full max-w-md space-y-6">
@@ -127,10 +127,10 @@ export default function SignInPage() {
             {error && (
               <div className="p-4 bg-red/5 dark:bg-red/20 border-l-4 border-red/50 rounded-r-lg">
                 <div className="flex gap-3">
-                  <AlertCircle className="h-5 w-5 text-red dark:text-red-400 flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-red dark:text-red/40 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-red-900 dark:text-red/20">Error de autenticacion</p>
-                    <p className="text-sm text-red-800 dark:text-red-300 mt-1">{error}</p>
+                    <p className="font-semibold text-red dark:text-red/20">Error de autenticacion</p>
+                    <p className="text-sm text-red dark:text-red/30 mt-1">{error}</p>
                   </div>
                 </div>
               </div>
@@ -185,7 +185,7 @@ export default function SignInPage() {
                 <p className="text-xs text-muted/70 dark:text-muted/40 font-medium">Recursos</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-cyan-700 dark:text-cyan-400">24/7</div>
+                <div className="text-2xl font-bold text-cyan dark:text-cyan/40">24/7</div>
                 <p className="text-xs text-muted/70 dark:text-muted/40 font-medium">Coach IA</p>
               </div>
             </div>

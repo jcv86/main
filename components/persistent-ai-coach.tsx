@@ -611,7 +611,7 @@ export function PersistentAICoach() {
       </div>
 
       {messages.length <= 1 && (
-        <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-[28px] border border-blue-200 dark:border-blue-800">
+        <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-[28px] border border-blue/20 dark:border-blue">
           <h2 className="text-xl font-semibold text-foreground mb-2">¿Eres nuevo aquí? Te mostramos cómo funciona</h2>
           <p className="text-sm text-muted-foreground mb-4">
             Tu Coach de Carrera IA está diseñado para apoyarte en tres formas:
@@ -619,7 +619,7 @@ export function PersistentAICoach() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             {/* Chat Tab Guide */}
-            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-4 border border-blue-200 dark:border-blue-800">
+            <div className="bg-white dark:bg-muted/80 rounded-[28px] p-4 border border-blue/20 dark:border-blue">
               <div className="flex items-start gap-3 mb-2">
                 <MessageSquare className="h-5 w-5 text-blue dark:text-blue/40 flex-shrink-0 mt-0.5" />
                 <h3 className="font-semibold text-foreground">💬 Chat Personalizado</h3>
@@ -631,7 +631,7 @@ export function PersistentAICoach() {
             </div>
 
             {/* Suggestions Guide */}
-            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-4 border border-green-200 dark:border-green-800">
+            <div className="bg-white dark:bg-muted/80 rounded-[28px] p-4 border border-green/20 dark:border-green">
               <div className="flex items-start gap-3 mb-2">
                 <Lightbulb className="h-5 w-5 text-green dark:text-green/40 flex-shrink-0 mt-0.5" />
                 <h3 className="font-semibold text-foreground">💡 Sugerencias</h3>
@@ -643,9 +643,9 @@ export function PersistentAICoach() {
             </div>
 
             {/* Insights Guide */}
-            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-4 border border-purple-200 dark:border-purple-800">
+            <div className="bg-white dark:bg-muted/80 rounded-[28px] p-4 border border-purple/20 dark:border-purple">
               <div className="flex items-start gap-3 mb-2">
-                <Sparkles className="h-5 w-5 text-purple-600 dark:text-purple/40 flex-shrink-0 mt-0.5" />
+                <Sparkles className="h-5 w-5 text-purple dark:text-purple/40 flex-shrink-0 mt-0.5" />
                 <h3 className="font-semibold text-foreground">✨ Insights</h3>
               </div>
               <p className="text-sm text-muted-foreground">
@@ -661,25 +661,25 @@ export function PersistentAICoach() {
       )}
 
       {performanceContext && (
-        <div className="bg-slate-900 border-b border-slate-700 px-4 py-3">
+        <div className="bg-muted/90 border-b border-muted/70 px-4 py-3">
           <div className="flex items-center gap-4 text-sm">
-            <span className="text-slate-400">Tu Contexto de Performance:</span>
+            <span className="text-muted/40">Tu Contexto de Performance:</span>
             <div className="flex gap-3">
               <div className="flex items-center gap-1">
-                <span className="text-slate-500">C1:</span>
+                <span className="text-muted/50">C1:</span>
                 <span className="font-semibold text-blue/40">{performanceContext.c1_score.toFixed(1)}</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-slate-500">C2:</span>
+                <span className="text-muted/50">C2:</span>
                 <span className="font-semibold text-green/40">{performanceContext.c2_score.toFixed(1)}</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-slate-500">C3:</span>
+                <span className="text-muted/50">C3:</span>
                 <span className="font-semibold text-purple/40">{performanceContext.c3_score.toFixed(1)}</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-slate-500">C4:</span>
-                <span className="font-semibold text-orange-400">{performanceContext.c4_score.toFixed(1)}</span>
+                <span className="text-muted/50">C4:</span>
+                <span className="font-semibold text-orange/40">{performanceContext.c4_score.toFixed(1)}</span>
               </div>
             </div>
           </div>

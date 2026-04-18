@@ -39,7 +39,7 @@ const getNivelColor = (nivel: string) => {
   const colors: Record<string, string> = {
     "basico": "bg-green/10 text-green",
     "intermedio": "bg-blue/10 text-blue",
-    "avanzado": "bg-purple-100 text-purple-800",
+    "avanzado": "bg-purple/10 text-purple",
   }
   return colors[nivel] || "bg-muted/10"
 }
@@ -81,7 +81,7 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
       {/* Header */}
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-[28px] bg-purple-100 flex items-center justify-center text-xl">
+          <div className="w-10 h-10 rounded-[28px] bg-purple/10 flex items-center justify-center text-xl">
             📚
           </div>
           <div>
@@ -206,7 +206,7 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
                           <div className="space-y-3">
                             <div className="font-medium">Casos de Estudio</div>
                             {module.casos_estudio.map((caso, idx) => (
-                              <Card key={idx} className="bg-blue-50">
+                              <Card key={idx} className="bg-blue/5">
                                 <CardContent className="pt-4">
                                   <div className="text-sm">{caso}</div>
                                 </CardContent>

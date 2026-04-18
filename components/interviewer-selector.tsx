@@ -27,7 +27,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
   if (compact) {
     return (
       <div className="space-y-3">
-        <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Tu Entrevistador</label>
+        <label className="text-sm font-semibold text-muted/70 dark:text-muted/30">Tu Entrevistador</label>
         <div className="grid grid-cols-3 gap-2">
           {INTERVIEWERS.map(interviewer => (
             <button
@@ -35,13 +35,13 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
               onClick={() => onChange(interviewer.id)}
               className={`p-2 rounded-lg transition-all text-center ${
                 value === interviewer.id
-                  ? 'ring-2 ring-blue-500 bg-blue-50 dark:bg-blue-950/30'
-                  : 'hover:bg-slate-100 dark:hover:bg-slate-800'
+                  ? 'ring-2 ring-blue-500 bg-blue/5 dark:bg-blue/30'
+                  : 'hover:bg-muted/10 dark:hover:bg-muted/80'
               }`}
             >
               <div className={`w-8 h-8 rounded-full mx-auto mb-1 bg-gradient-to-br ${interviewer.color}`}></div>
-              <div className="text-xs font-semibold text-slate-900 dark:text-white">{interviewer.name}</div>
-              <div className="text-[10px] text-slate-600 dark:text-slate-400">{interviewer.role}</div>
+              <div className="text-xs font-semibold text-muted/90 dark:text-white">{interviewer.name}</div>
+              <div className="text-[10px] text-muted/60 dark:text-muted/40">{interviewer.role}</div>
             </button>
           ))}
         </div>
@@ -50,11 +50,11 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
   }
 
   return (
-    <Card className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 border-slate-200 dark:border-slate-700">
+    <Card className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 border-muted/20 dark:border-muted/70">
       <div className="p-6 space-y-4">
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Elige tu Entrevistador</label>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <label className="text-sm font-semibold text-muted/70 dark:text-muted/30">Elige tu Entrevistador</label>
+          <p className="text-sm text-muted/60 dark:text-muted/40">
             Selecciona un perfil profesional diferente para tener perspectivas variadas
           </p>
         </div>
@@ -74,11 +74,11 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
               <div className="relative space-y-2 text-center">
                 <div className={`w-12 h-12 rounded-full mx-auto bg-gradient-to-br ${interviewer.color} shadow-lg group-hover:scale-110 transition-transform`}></div>
                 <div>
-                  <div className="font-bold text-slate-900 dark:text-white">{interviewer.name}</div>
-                  <div className="text-xs text-slate-600 dark:text-slate-400">{interviewer.role}</div>
+                  <div className="font-bold text-muted/90 dark:text-white">{interviewer.name}</div>
+                  <div className="text-xs text-muted/60 dark:text-muted/40">{interviewer.role}</div>
                 </div>
                 {value === interviewer.id && (
-                  <Badge className="mx-auto mt-2 bg-blue-500 text-white">Seleccionado</Badge>
+                  <Badge className="mx-auto mt-2 bg-blue/50 text-white">Seleccionado</Badge>
                 )}
               </div>
             </button>
@@ -86,16 +86,16 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
         </div>
 
         {/* Current selection info */}
-        <div className="mt-6 p-4 bg-white dark:bg-slate-950 rounded-[28px] border border-slate-200 dark:border-slate-700">
+        <div className="mt-6 p-4 bg-white dark:bg-muted-950 rounded-[28px] border border-muted/20 dark:border-muted/70">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
-              <p className="text-sm text-slate-600 dark:text-slate-400">Entrevistador seleccionado:</p>
-              <p className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
+              <p className="text-sm text-muted/60 dark:text-muted/40">Entrevistador seleccionado:</p>
+              <p className="font-semibold text-muted/90 dark:text-white flex items-center gap-2">
                 <span className={`w-3 h-3 rounded-[20px] bg-gradient-to-br ${selected.color}`}></span>
                 {selected.name} - {selected.role}
               </p>
             </div>
-            <ChevronRight className="w-5 h-5 text-slate-400" />
+            <ChevronRight className="w-5 h-5 text-muted/40" />
           </div>
         </div>
       </div>

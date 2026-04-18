@@ -92,18 +92,18 @@ export function NotificationCenter() {
       case 'achievement_unlock':
         return <Zap className="w-5 h-5 text-orange" />
       default:
-        return <AlertCircle className="w-5 h-5 text-blue-500" />
+        return <AlertCircle className="w-5 h-5 text-blue/50" />
     }
   }
 
   const getMilestoneColor = (type?: string) => {
     switch (type) {
       case 'a1_completed':
-        return 'bg-green-50 border-green-200'
+        return 'bg-green/5 border-green/20'
       case 'achievement_unlock':
         return 'bg-yellow/5 border-yellow/20'
       default:
-        return 'bg-blue-50 border-blue-200'
+        return 'bg-blue/5 border-blue/20'
     }
   }
 

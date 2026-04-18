@@ -200,7 +200,7 @@ export default function SoftSkillsResults() {
   const getScoreBadgeColor = (score: number) => {
     if (score >= 80) return "bg-green/10 text-green"
     if (score >= 60) return "bg-yellow/10 text-yellow"
-    return "bg-red/10 text-red-800"
+    return "bg-red/10 text-red"
   }
 
   // Dynamically determine top skills for overview and library sections
@@ -249,7 +249,7 @@ export default function SoftSkillsResults() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="mb-8 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
+        <Card className="mb-8 border-2 border-purple/30 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -614,7 +614,7 @@ export default function SoftSkillsResults() {
                               <p className="mb-2">{analysis.feedback}</p>
                               <div className="flex flex-wrap gap-1">
                                 {analysis.examples?.map((example: string, idx: number) => (
-                                  <Badge key={idx} variant="outline" className="text-xs border-green-300">
+                                  <Badge key={idx} variant="outline" className="text-xs border-green/30">
                                     {example}
                                   </Badge>
                                 ))}
@@ -661,7 +661,7 @@ export default function SoftSkillsResults() {
                               <p className="mb-2">{analysis.feedback}</p>
                               <div className="flex flex-wrap gap-1">
                                 {analysis.examples?.map((example: string, idx: number) => (
-                                  <Badge key={idx} variant="outline" className="text-xs border-orange-300">
+                                  <Badge key={idx} variant="outline" className="text-xs border-orange/30">
                                     {example}
                                   </Badge>
                                 ))}
@@ -705,7 +705,7 @@ export default function SoftSkillsResults() {
                               <p className="text-xs text-purple">{response.ai_analysis.feedback}</p>
                               <div className="flex flex-wrap gap-1">
                                 {response.ai_analysis.strengths?.map((strength: string, idx: number) => (
-                                  <Badge key={idx} variant="outline" className="text-xs border-purple-300">
+                                  <Badge key={idx} variant="outline" className="text-xs border-purple/30">
                                     {strength}
                                   </Badge>
                                 ))}
@@ -810,7 +810,7 @@ export default function SoftSkillsResults() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="bg-green/5 p-4 rounded-lg">
-                      <h4 className="font-semibold text-green-900 mb-2">Oportunidad Principal</h4>
+                      <h4 className="font-semibold text-green mb-2">Oportunidad Principal</h4>
                       <p className="text-sm text-green">
                         Tus fortalezas actuales en {results.strengths?.slice(0, 2).join(" y ")} son excelentes, pero
                         pueden evolucionar de habilidades personales a capacidades de impacto social y mentoría.
@@ -856,7 +856,7 @@ export default function SoftSkillsResults() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="bg-orange/5 p-4 rounded-lg">
-                      <h4 className="font-semibold text-orange-900 mb-2">Oportunidad Principal</h4>
+                      <h4 className="font-semibold text-orange mb-2">Oportunidad Principal</h4>
                       <p className="text-sm text-orange">
                         Las áreas de mejora ({results.areas_for_improvement?.slice(0, 2).join(", ")}) representan tus
                         mayores oportunidades de crecimiento exponencial.
@@ -1062,7 +1062,7 @@ export default function SoftSkillsResults() {
                       </Card>
 
                       {/* IE Connection */}
-                      <Card className="border-2 border-red-300">
+                      <Card className="border-2 border-red/30">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-red/10 rounded-full flex items-center justify-center text-lg">
@@ -1073,8 +1073,8 @@ export default function SoftSkillsResults() {
                         </CardHeader>
                         <CardContent className="space-y-3">
                           <div className="bg-red/5 p-3 rounded text-sm">
-                            <strong className="text-red-900">Conexión:</strong>
-                            <p className="text-red-800 mt-1">
+                            <strong className="text-red">Conexión:</strong>
+                            <p className="text-red mt-1">
                               IE mide tu capacidad emocional innata, Soft Skills mide cómo la aplicas en el mundo real.
                             </p>
                           </div>
@@ -1095,7 +1095,7 @@ export default function SoftSkillsResults() {
                       </Card>
 
                       {/* MBTI Connection */}
-                      <Card className="border-2 border-purple-300">
+                      <Card className="border-2 border-purple/30">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-purple/10 rounded-full flex items-center justify-center text-lg">
@@ -1128,7 +1128,7 @@ export default function SoftSkillsResults() {
                       </Card>
 
                       {/* Big Five Connection */}
-                      <Card className="border-2 border-green-300">
+                      <Card className="border-2 border-green/30">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-green/10 rounded-full flex items-center justify-center text-lg">
@@ -1139,7 +1139,7 @@ export default function SoftSkillsResults() {
                         </CardHeader>
                         <CardContent className="space-y-3">
                           <div className="bg-green/5 p-3 rounded text-sm">
-                            <strong className="text-green-900">Conexión:</strong>
+                            <strong className="text-green">Conexión:</strong>
                             <p className="text-green mt-1">
                               Big Five mide rasgos estables, Soft Skills mide habilidades que cambian con entrenamiento.
                             </p>
@@ -1161,7 +1161,7 @@ export default function SoftSkillsResults() {
                       </Card>
 
                       {/* RIASEC Connection */}
-                      <Card className="border-2 border-orange-300">
+                      <Card className="border-2 border-orange/30">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-orange/10 rounded-full flex items-center justify-center text-lg">
@@ -1172,7 +1172,7 @@ export default function SoftSkillsResults() {
                         </CardHeader>
                         <CardContent className="space-y-3">
                           <div className="bg-orange/5 p-3 rounded text-sm">
-                            <strong className="text-orange-900">Conexión:</strong>
+                            <strong className="text-orange">Conexión:</strong>
                             <p className="text-orange mt-1">
                               RIASEC muestra tus intereses vocacionales, Soft Skills muestra si tienes las competencias
                               para ejecutarlos.
@@ -1322,7 +1322,7 @@ export default function SoftSkillsResults() {
 
                     <div className="space-y-4">
                       <div>
-                        <h4 className="font-semibold text-green-900 mb-2">
+                        <h4 className="font-semibold text-green mb-2">
                           1. ¿Cómo desarrollaste estas fortalezas? ¿Fueron naturales o las entrenaste?
                         </h4>
                         <textarea
@@ -1332,7 +1332,7 @@ export default function SoftSkillsResults() {
                       </div>
 
                       <div>
-                        <h4 className="font-semibold text-green-900 mb-2">
+                        <h4 className="font-semibold text-green mb-2">
                           2. ¿Cuándo fue la última vez que usaste estas fortalezas para ayudar a alguien más?
                         </h4>
                         <textarea
@@ -1342,7 +1342,7 @@ export default function SoftSkillsResults() {
                       </div>
 
                       <div>
-                        <h4 className="font-semibold text-green-900 mb-2">
+                        <h4 className="font-semibold text-green mb-2">
                           3. ¿Cómo podrías llevar estas fortalezas al siguiente nivel de maestría?
                         </h4>
                         <textarea
@@ -1372,7 +1372,7 @@ export default function SoftSkillsResults() {
 
                     <div className="space-y-4">
                       <div>
-                        <h4 className="font-semibold text-orange-900 mb-2">
+                        <h4 className="font-semibold text-orange mb-2">
                           4. ¿Cuál de tus áreas débiles te ha costado más (oportunidades perdidas, conflictos, etc.)?
                         </h4>
                         <textarea
@@ -1382,7 +1382,7 @@ export default function SoftSkillsResults() {
                       </div>
 
                       <div>
-                        <h4 className="font-semibold text-orange-900 mb-2">
+                        <h4 className="font-semibold text-orange mb-2">
                           5. ¿Qué creencias limitantes tienes sobre tu capacidad de mejorar estas áreas?
                         </h4>
                         <p className="text-sm text-muted/60 mb-2">
@@ -1395,7 +1395,7 @@ export default function SoftSkillsResults() {
                       </div>
 
                       <div>
-                        <h4 className="font-semibold text-orange-900 mb-2">
+                        <h4 className="font-semibold text-orange mb-2">
                           6. Si dedicaras 15 minutos diarios durante 30 días a UNA competencia, ¿cuál elegirías y por
                           qué?
                         </h4>
@@ -1583,7 +1583,7 @@ export default function SoftSkillsResults() {
                         </Card>
                       </div>
 
-                      <div className="bg-blue/5 dark:bg-blue-950/20 p-3 rounded-lg">
+                      <div className="bg-blue/5 dark:bg-blue/20 p-3 rounded-lg">
                         <p className="text-sm">
                           <strong>KPI del Mes:</strong> 1 presentación completada, 3 feedbacks dados con modelo SBI
                         </p>
@@ -1658,7 +1658,7 @@ export default function SoftSkillsResults() {
                         </Card>
                       </div>
 
-                      <div className="bg-green/5 dark:bg-green-950/20 p-3 rounded-lg">
+                      <div className="bg-green/5 dark:bg-green/20 p-3 rounded-lg">
                         <p className="text-sm">
                           <strong>KPI del Mes:</strong> 1 persona mentoreada, 1 nueva herramienta dominada
                         </p>

@@ -66,8 +66,8 @@ export default function A3IntroPage() {
               <p className="text-muted/70 dark:text-muted/30">
                 A3 es tu fase de práctica de alto impacto. Realizarás simulaciones de entrevistas estructuradas donde recibirás feedback inmediato de IA y podrás iterar tu desempeño hasta llegar a la confianza de nivel profesional.
               </p>
-              <div className="bg-blue/5 dark:bg-cyan-950 p-4 rounded-[28px] border border-blue/30 dark:border-cyan-800">
-                <p className="text-sm text-cyan-900 dark:text-cyan-100">
+              <div className="bg-blue/5 dark:bg-cyan-950 p-4 rounded-[28px] border border-blue/30 dark:border-cyan">
+                <p className="text-sm text-cyan dark:text-cyan/10">
                   <span className="font-semibold">Tu objetivo en A3:</span> Pasar de "conozco las respuestas" a "puedo responder con seguridad bajo presión".
                 </p>
               </div>
@@ -83,7 +83,7 @@ export default function A3IntroPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
-                <div className="p-4 bg-green/5 dark:bg-green-950/30 rounded-[28px] border border-green/20 dark:border-green-800">
+                <div className="p-4 bg-green/5 dark:bg-green/30 rounded-[28px] border border-green/20 dark:border-green">
                   <div className="flex gap-3">
                     <div className="flex-shrink-0 w-8 h-8 bg-green text-white rounded-full flex items-center justify-center font-bold">1</div>
                     <div>
@@ -94,16 +94,16 @@ export default function A3IntroPage() {
                 </div>
                 <div className="p-4 bg-yellow/5 dark:bg-yellow/30 rounded-[28px] border border-yellow/20 dark:border-yellow">
                   <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-yellow-600 text-white rounded-full flex items-center justify-center font-bold">2</div>
+                    <div className="flex-shrink-0 w-8 h-8 bg-yellow text-white rounded-full flex items-center justify-center font-bold">2</div>
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-white">Simulación Estructurada</p>
                       <p className="text-sm text-muted/60 dark:text-muted/40">Preguntas realistas sin ayuda. Te prepara para el verdadero escenario.</p>
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-red/5 dark:bg-red-950/30 rounded-[28px] border border-red/20 dark:border-red-800">
+                <div className="p-4 bg-red/5 dark:bg-red/30 rounded-[28px] border border-red/20 dark:border-red">
                   <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red-600 text-white rounded-full flex items-center justify-center font-bold">3</div>
+                    <div className="flex-shrink-0 w-8 h-8 bg-red text-white rounded-full flex items-center justify-center font-bold">3</div>
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-white">Simulación Desafiante</p>
                       <p className="text-sm text-muted/60 dark:text-muted/40">Preguntas difíciles bajo presión de tiempo. Máxima dificultad.</p>
@@ -117,7 +117,7 @@ export default function A3IntroPage() {
           <Card className="border-0 shadow-lg bg-muted/90 dark:bg-card">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-white flex items-center gap-2">
-                <MessageSquare className="w-6 h-6 text-cyan-400" />
+                <MessageSquare className="w-6 h-6 text-cyan/40" />
                 El Ciclo de Mejora
               </CardTitle>
               <CardDescription className="text-muted/40">Cada simulación sigue este proceso</CardDescription>
@@ -125,22 +125,22 @@ export default function A3IntroPage() {
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">1</div>
+                  <div className="text-3xl font-bold text-cyan/40 mb-2">1</div>
                   <p className="text-sm font-semibold text-white mb-1">Responde</p>
                   <p className="text-xs text-muted/40">Simulación completa</p>
                 </div>
                 <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">2</div>
+                  <div className="text-3xl font-bold text-cyan/40 mb-2">2</div>
                   <p className="text-sm font-semibold text-white mb-1">Analiza</p>
                   <p className="text-xs text-muted/40">Feedback de IA</p>
                 </div>
                 <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">3</div>
+                  <div className="text-3xl font-bold text-cyan/40 mb-2">3</div>
                   <p className="text-sm font-semibold text-white mb-1">Ajusta</p>
                   <p className="text-xs text-muted/40">Mejora tu respuesta</p>
                 </div>
                 <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">4</div>
+                  <div className="text-3xl font-bold text-cyan/40 mb-2">4</div>
                   <p className="text-sm font-semibold text-white mb-1">Repite</p>
                   <p className="text-xs text-muted/40">Vuelve a simular</p>
                 </div>
@@ -175,10 +175,10 @@ export default function A3IntroPage() {
 
           <div className="p-6 bg-gradient-to-r from-blue to-blue rounded-lg shadow-lg">
             <h3 className="text-xl font-bold text-white mb-2">Listo para entrenar?</h3>
-            <p className="text-cyan-100 mb-6">Entra al dashboard y elige tu modalidad de entrenamiento.</p>
+            <p className="text-cyan/10 mb-6">Entra al dashboard y elige tu modalidad de entrenamiento.</p>
             <Button 
               onClick={() => router.push('/despega/a3-dashboard')}
-              className="w-full bg-white text-cyan-700 hover:bg-blue/5 font-semibold"
+              className="w-full bg-white text-cyan hover:bg-blue/5 font-semibold"
             >
               Ir a Entrenamiento Intensivo
               <ArrowRight className="w-4 h-4 ml-2" />

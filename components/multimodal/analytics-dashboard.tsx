@@ -98,7 +98,7 @@ export function MultimodalAnalyticsDashboard() {
                 </div>
                 <div className="w-full bg-muted/20 rounded-full h-2">
                   <div
-                    className="bg-blue-600 h-2 rounded-full"
+                    className="bg-blue h-2 rounded-full"
                     style={{ width: `${Math.min(data.average_score, 100)}%` }}
                   />
                 </div>
@@ -116,7 +116,7 @@ export function MultimodalAnalyticsDashboard() {
             <CardTitle className="text-lg">Visual</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-purple-600">{metrics.visual_average}%</p>
+            <p className="text-3xl font-bold text-purple">{metrics.visual_average}%</p>
             <p className="text-sm text-muted/60 mt-2">Postura, gestos, contacto visual</p>
           </CardContent>
         </Card>
@@ -153,9 +153,9 @@ export function MultimodalAnalyticsDashboard() {
         <CardContent>
           <div className="space-y-2">
             {metrics.top_strengths.map((item: any, i: number) => (
-              <div key={i} className="flex justify-between items-center p-3 bg-green-50 rounded-lg">
+              <div key={i} className="flex justify-between items-center p-3 bg-green/5 rounded-lg">
                 <span className="text-sm">{item.strength}</span>
-                <span className="text-xs bg-green-200 text-green px-2 py-1 rounded">{item.count}x</span>
+                <span className="text-xs bg-green/20 text-green px-2 py-1 rounded">{item.count}x</span>
               </div>
             ))}
           </div>
@@ -172,7 +172,7 @@ export function MultimodalAnalyticsDashboard() {
             {metrics.top_improvements.map((item: any, i: number) => (
               <div key={i} className="flex justify-between items-center p-3 bg-orange/5 rounded-lg">
                 <span className="text-sm">{item.improvement}</span>
-                <span className="text-xs bg-orange-200 text-orange px-2 py-1 rounded">{item.count}x</span>
+                <span className="text-xs bg-orange/20 text-orange px-2 py-1 rounded">{item.count}x</span>
               </div>
             ))}
           </div>

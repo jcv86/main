@@ -34,7 +34,7 @@ export function LearningPathCard({ path, userProgress, onStart, onContinue }: Le
   const difficultyColors = {
     beginner: "bg-green/10 text-green",
     intermediate: "bg-blue/10 text-blue",
-    advanced: "bg-purple-100 text-purple-700",
+    advanced: "bg-purple/10 text-purple",
     expert: "bg-red/10 text-red",
   }
 
@@ -46,7 +46,7 @@ export function LearningPathCard({ path, userProgress, onStart, onContinue }: Le
             {path.difficulty_level.charAt(0).toUpperCase() + path.difficulty_level.slice(1)}
           </Badge>
           {isCompleted && (
-            <Badge variant="default" className="bg-green-500">
+            <Badge variant="default" className="bg-green/50">
               <CheckCircle2 className="h-3 w-3 mr-1" />
               Completado
             </Badge>

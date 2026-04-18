@@ -186,13 +186,13 @@ export function SuperSmartBrainChat() {
           <ScrollArea className="flex-1 p-6" ref={scrollRef}>
             {showSuggestions && messages.length === 0 ? (
               <div className="space-y-4">
-                <Alert className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple-200">
+                <Alert className="bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 border-purple/20">
                   <Brain className="h-5 w-5" />
                   <AlertDescription>
                     <p className="font-semibold mb-3">🚀 Cerebro Avanzado de IA</p>
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div className="flex items-start gap-2">
-                        <Sparkles className="h-4 w-4 text-purple-600 mt-0.5" />
+                        <Sparkles className="h-4 w-4 text-purple mt-0.5" />
                         <div>
                           <p className="font-medium">Multi-nivel de búsqueda</p>
                           <p className="text-xs text-muted-foreground">
@@ -208,14 +208,14 @@ export function SuperSmartBrainChat() {
                         </div>
                       </div>
                       <div className="flex items-start gap-2">
-                        <BookOpen className="h-4 w-4 text-cyan-600 mt-0.5" />
+                        <BookOpen className="h-4 w-4 text-cyan mt-0.5" />
                         <div>
                           <p className="font-medium">220+ fuentes</p>
                           <p className="text-xs text-muted-foreground">Libros y recursos web verificados</p>
                         </div>
                       </div>
                       <div className="flex items-start gap-2">
-                        <BarChart3 className="h-4 w-4 text-purple-600 mt-0.5" />
+                        <BarChart3 className="h-4 w-4 text-purple mt-0.5" />
                         <div>
                           <p className="font-medium">Aprendizaje continuo</p>
                           <p className="text-xs text-muted-foreground">Mejora con cada interacción</p>
@@ -244,7 +244,7 @@ export function SuperSmartBrainChat() {
                             {suggestion.category}
                           </Badge>
                         </div>
-                        <Sparkles className="h-4 w-4 text-purple-500" />
+                        <Sparkles className="h-4 w-4 text-purple/50" />
                       </div>
                     </Button>
                   ))}
@@ -268,7 +268,7 @@ export function SuperSmartBrainChat() {
                         <div className="mt-4 space-y-3">
                           {/* Confidence indicator */}
                           <div className="flex items-center gap-2 pt-3 border-t border-muted/30">
-                            <Zap className="h-3 w-3 text-purple-600" />
+                            <Zap className="h-3 w-3 text-purple" />
                             <span className="text-xs font-medium">Confianza de respuesta:</span>
                             <div className="flex-1">
                               <Progress value={message.metadata.confidence} className="h-2" />
@@ -347,7 +347,7 @@ export function SuperSmartBrainChat() {
                   <div className="flex justify-start">
                     <div className="bg-gradient-to-br from-gray-50 to-gray-100 border border-muted/20 rounded-2xl p-5">
                       <div className="flex items-center gap-3">
-                        <Loader2 className="h-5 w-5 animate-spin text-purple-600" />
+                        <Loader2 className="h-5 w-5 animate-spin text-purple" />
                         <div className="space-y-1">
                           <span className="text-sm font-medium">Procesando con IA avanzada...</span>
                           <p className="text-xs text-muted-foreground">
@@ -441,7 +441,7 @@ export function SuperSmartBrainChat() {
                     <ul className="space-y-1">
                       {selectedMessage.metadata.reasoning.map((reason, idx) => (
                         <li key={idx} className="text-xs text-muted-foreground flex items-start gap-2">
-                          <span className="text-purple-600">•</span>
+                          <span className="text-purple">•</span>
                           {reason}
                         </li>
                       ))}
@@ -455,7 +455,7 @@ export function SuperSmartBrainChat() {
                     <div key={idx} className="mb-3 p-3 bg-muted/5 rounded-lg">
                       <div className="flex items-start gap-2">
                         {source.sourceType === "book" ? (
-                          <BookOpen className="h-4 w-4 text-purple-600 mt-0.5" />
+                          <BookOpen className="h-4 w-4 text-purple mt-0.5" />
                         ) : (
                           <Globe className="h-4 w-4 text-blue mt-0.5" />
                         )}
@@ -463,7 +463,7 @@ export function SuperSmartBrainChat() {
                           <p className="text-xs font-medium">{source.title}</p>
                           <p className="text-xs text-muted-foreground">{source.author}</p>
                           {source.relevanceReason && (
-                            <p className="text-xs text-purple-600 mt-1">{source.relevanceReason}</p>
+                            <p className="text-xs text-purple mt-1">{source.relevanceReason}</p>
                           )}
                           <Badge variant="outline" className="mt-2 text-xs">
                             {(source.similarityScore * 100).toFixed(0)}% relevancia

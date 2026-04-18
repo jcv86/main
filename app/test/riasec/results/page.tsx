@@ -530,7 +530,7 @@ export default function RIASECResults() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="mb-6 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
+        <Card className="mb-6 border-2 border-purple/30 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -825,7 +825,7 @@ export default function RIASECResults() {
                         3
                       </div>
                       <div>
-                        <p className="font-semibold text-green-900">Laboral:</p>
+                        <p className="font-semibold text-green">Laboral:</p>
                         <p className="text-muted text-sm">
                           Evalúa si tu trabajo actual honra tu perfil. Si no, explora opciones más alineadas
                         </p>
@@ -1342,7 +1342,7 @@ export default function RIASECResults() {
                         </Card>
                       </div>
 
-                      <div className="bg-blue/5 dark:bg-blue-950/20 p-3 rounded-lg">
+                      <div className="bg-blue/5 dark:bg-blue/20 p-3 rounded-lg">
                         <p className="text-sm">
                           <strong>KPI del Mes:</strong> 2 entrevistas informativas + 1 experiencia práctica exploratoria
                         </p>
@@ -1415,7 +1415,7 @@ export default function RIASECResults() {
                         </Card>
                       </div>
 
-                      <div className="bg-green/5 dark:bg-green-950/20 p-3 rounded-lg">
+                      <div className="bg-green/5 dark:bg-green/20 p-3 rounded-lg">
                         <p className="text-sm">
                           <strong>KPI del Mes:</strong> 1 curso iniciado + proyecto personal en marcha + mentor
                           identificado
@@ -1746,7 +1746,7 @@ export default function RIASECResults() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="bg-green/5 p-4 rounded-lg">
-                      <h4 className="font-semibold text-green-900 mb-2">Oportunidad Principal</h4>
+                      <h4 className="font-semibold text-green mb-2">Oportunidad Principal</h4>
                       <p className="text-sm text-green">
                         Identifica las 3 carreras sugeridas que más te interesan y crea un plan de desarrollo de 2 años
                         para llegar a la primera de ellas.
@@ -1838,7 +1838,7 @@ export default function RIASECResults() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="bg-orange/5 p-4 rounded-lg">
-                      <h4 className="font-semibold text-orange-900 mb-2">Oportunidad Principal</h4>
+                      <h4 className="font-semibold text-orange mb-2">Oportunidad Principal</h4>
                       <p className="text-sm text-orange">
                         No esperes a que alguien te contrate. Crea tu propia oportunidad alineada con tu código Holland.
                       </p>
@@ -1954,7 +1954,7 @@ export default function RIASECResults() {
                       </Card>
 
                       {/* IE */}
-                      <Card className="border-2 border-red-300">
+                      <Card className="border-2 border-red/30">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-red/10 rounded-full flex items-center justify-center text-lg">
@@ -1965,8 +1965,8 @@ export default function RIASECResults() {
                         </CardHeader>
                         <CardContent className="space-y-3">
                           <div className="bg-red/5 p-3 rounded text-sm">
-                            <strong className="text-red-900">Conexión:</strong>
-                            <p className="text-red-800 mt-1">
+                            <strong className="text-red">Conexión:</strong>
+                            <p className="text-red mt-1">
                               RIASEC te muestra tus intereses, IE muestra si tienes las competencias emocionales para
                               prosperar en ellos.
                             </p>
@@ -1987,7 +1987,7 @@ export default function RIASECResults() {
                       </Card>
 
                       {/* MBTI */}
-                      <Card className="border-2 border-purple-300">
+                      <Card className="border-2 border-purple/30">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-purple/10 rounded-full flex items-center justify-center text-lg">
@@ -2019,7 +2019,7 @@ export default function RIASECResults() {
                       </Card>
 
                       {/* Big Five */}
-                      <Card className="border-2 border-yellow-300">
+                      <Card className="border-2 border-yellow/30">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-yellow/10 rounded-full flex items-center justify-center text-lg">
@@ -2285,7 +2285,7 @@ export default function RIASECResults() {
                     <AccordionContent className="pt-4 space-y-4">
                       <Card>
                         <CardContent className="pt-6 space-y-3">
-                          <h4 className="font-semibold text-orange-900">
+                          <h4 className="font-semibold text-orange">
                             4. ¿Qué me impide seguir las carreras sugeridas por mi código Holland?
                           </h4>
                           <p className="text-sm text-muted/60">
@@ -2301,7 +2301,7 @@ export default function RIASECResults() {
 
                       <Card>
                         <CardContent className="pt-6 space-y-3">
-                          <h4 className="font-semibold text-orange-900">
+                          <h4 className="font-semibold text-orange">
                             5. ¿Qué dirían mis padres/pareja sobre las carreras que me interesan? ¿Me importa su opinión
                             más que la mía?
                           </h4>
@@ -2317,7 +2317,7 @@ export default function RIASECResults() {
 
                       <Card>
                         <CardContent className="pt-6 space-y-3">
-                          <h4 className="font-semibold text-orange-900">
+                          <h4 className="font-semibold text-orange">
                             6. ¿Tengo miedo de seguir mi vocación real? ¿De qué tengo miedo específicamente?
                           </h4>
                           <p className="text-sm text-muted/60">
@@ -2401,7 +2401,7 @@ export default function RIASECResults() {
                     <AccordionContent className="pt-4 space-y-4">
                       <Card>
                         <CardContent className="pt-6 space-y-3">
-                          <h4 className="font-semibold text-green-900">
+                          <h4 className="font-semibold text-green">
                             10. Si tuviera que dar UN paso concreto hoy hacia mi vocación ideal, ¿cuál sería?
                           </h4>
                           <p className="text-sm text-muted/60">
@@ -2492,7 +2492,7 @@ export default function RIASECResults() {
                         </td>
                       </tr>
                       <tr>
-                        <td className="border p-3 font-medium text-green-900">Diseño de Carrera</td>
+                        <td className="border p-3 font-medium text-green">Diseño de Carrera</td>
                         <td className="border p-3">
                           <Link
                             href="/biblioteca/designing-your-life"
@@ -2511,7 +2511,7 @@ export default function RIASECResults() {
                         </td>
                       </tr>
                       <tr className="bg-muted/5">
-                        <td className="border p-3 font-medium text-orange-900">Fortalezas Personales</td>
+                        <td className="border p-3 font-medium text-orange">Fortalezas Personales</td>
                         <td className="border p-3">
                           <Link
                             href="/biblioteca/gallup-strengthsfinder"
@@ -2530,7 +2530,7 @@ export default function RIASECResults() {
                         </td>
                       </tr>
                       <tr>
-                        <td className="border p-3 font-medium text-red-900">Toma de Decisiones</td>
+                        <td className="border p-3 font-medium text-red">Toma de Decisiones</td>
                         <td className="border p-3">
                           <Link
                             href="/biblioteca/the-defining-decade"

@@ -81,7 +81,7 @@ export default function JourneyPage() {
             description: 'Entiende tu contexto y oportunidades',
             status: 'in-progress',
             progress: 30,
-            color: 'text-blue dark:text-cyan-400',
+            color: 'text-blue dark:text-cyan/40',
             bgColor: 'from-blue/5 to-blue/10 dark:from-blue dark:to-blue',
             icon: <Circle className="w-6 h-6" />,
             href: '/despega/a4-base',
@@ -93,7 +93,7 @@ export default function JourneyPage() {
             description: 'Entrena y practica tu transformación',
             status: 'upcoming',
             progress: 0,
-            color: 'text-orange dark:text-orange-400',
+            color: 'text-orange dark:text-orange/40',
             bgColor: 'from-orange/5 to-orange-100 dark:from-orange-950 dark:to-orange',
             icon: <Lock className="w-6 h-6" />,
             href: '/despega/a3',
@@ -232,11 +232,11 @@ export default function JourneyPage() {
 
               <div className="grid md:grid-cols-2 gap-4 mb-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-[28px] bg-green/10 dark:bg-green flex items-center justify-center font-bold text-green dark:text-green-300">A2</div>
+                  <div className="w-20 h-20 rounded-[28px] bg-green/10 dark:bg-green flex items-center justify-center font-bold text-green dark:text-green/30">A2</div>
                   <p className="text-sm text-muted/60 dark:text-muted/40">Tu Plan Personalizado</p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-[28px] bg-cyan/10 dark:bg-cyan flex items-center justify-center font-bold text-cyan-700 dark:text-cyan-300">A4</div>
+                  <div className="w-20 h-20 rounded-[28px] bg-cyan/10 dark:bg-cyan flex items-center justify-center font-bold text-cyan dark:text-cyan/30">A4</div>
                   <p className="text-sm text-muted/60 dark:text-muted/40">Contexto del Mercado</p>
                 </div>
               </div>
@@ -246,7 +246,7 @@ export default function JourneyPage() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-[28px] bg-orange/10 dark:bg-orange flex items-center justify-center font-bold text-orange dark:text-orange-300">A3</div>
+                <div className="w-20 h-20 rounded-[28px] bg-orange/10 dark:bg-orange flex items-center justify-center font-bold text-orange dark:text-orange/30">A3</div>
                 <div className="flex-1">
                   <p className="text-sm font-semibold">Entrenamientos Inteligentes</p>
                   <p className="text-xs text-muted/60 dark:text-muted/40">Usando tu plan + contexto de mercado</p>

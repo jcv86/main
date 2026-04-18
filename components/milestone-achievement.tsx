@@ -107,7 +107,7 @@ export function MilestoneAchievement({ milestone, userName, onClose }: Milestone
                   setShow(false)
                   onClose()
                 }}
-                className="flex-1 bg-white text-slate-900 hover:bg-white/90 font-semibold"
+                className="flex-1 bg-white text-muted/90 hover:bg-white/90 font-semibold"
               >
                 Ir al Siguiente
               </Button>

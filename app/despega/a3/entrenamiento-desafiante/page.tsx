@@ -237,12 +237,12 @@ export default function ChallensingTrainingPage() {
         {/* Header */}
         <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-background p-4">
           <div className="flex items-center justify-between">
-            <Link href="/despega/a3-dashboard" className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300">
+            <Link href="/despega/a3-dashboard" className="flex items-center gap-2 text-cyan/40 hover:text-cyan/30">
               <ArrowLeft className="w-4 h-4" />
               Volver al Dashboard
             </Link>
             <div className="flex gap-4 items-center">
-              <Badge className="bg-red-600">DESAFÍO MÁXIMO</Badge>
+              <Badge className="bg-red">DESAFÍO MÁXIMO</Badge>
               <Badge className="bg-purple">{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
             </div>
           </div>
@@ -264,7 +264,7 @@ export default function ChallensingTrainingPage() {
                   className="w-full h-full object-cover"
                 />
                 {isRecording && (
-                  <div className="absolute top-4 right-4 flex items-center gap-2 bg-red-600 px-3 py-2 rounded-lg">
+                  <div className="absolute top-4 right-4 flex items-center gap-2 bg-red px-3 py-2 rounded-lg">
                     <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
                     <span className="text-white text-sm font-mono">{formatTime(recordingTime)}</span>
                   </div>
@@ -281,7 +281,7 @@ export default function ChallensingTrainingPage() {
                       <h3 className="text-sm font-bold text-muted/40 mb-2">Pregunta {currentQuestion + 1} de {CHALLENGING_QUESTIONS.length}</h3>
                       <p className="text-lg text-white font-semibold">{question.question}</p>
                     </div>
-                    <Badge className={question.difficulty === 'Crítico' ? 'bg-red-600' : 'bg-yellow-600'}>{question.difficulty}</Badge>
+                    <Badge className={question.difficulty === 'Crítico' ? 'bg-red' : 'bg-yellow'}>{question.difficulty}</Badge>
                   </div>
                 </div>
 
@@ -295,7 +295,7 @@ export default function ChallensingTrainingPage() {
                         {!isRecording ? (
                           <Button
                             onClick={startRecording}
-                            className="flex-1 bg-red-600 hover:bg-red gap-2"
+                            className="flex-1 bg-red hover:bg-red gap-2"
                           >
                             <Mic className="w-4 h-4" />
                             Comenzar Grabación
@@ -356,7 +356,7 @@ export default function ChallensingTrainingPage() {
                     </Button>
 
                     {evaluationError && (
-                      <div className="flex items-start gap-2 text-red text-sm bg-red-950/40 border border-red-700/40 p-3 rounded-lg">
+                      <div className="flex items-start gap-2 text-red text-sm bg-red/40 border border-red/40 p-3 rounded-lg">
                         <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                         <span>{evaluationError}</span>
                       </div>
@@ -391,14 +391,14 @@ export default function ChallensingTrainingPage() {
 
                     {/* Improvements */}
                     <div className="space-y-2">
-                      <p className="text-sm font-semibold text-yellow-400 flex items-center gap-2">
+                      <p className="text-sm font-semibold text-yellow/40 flex items-center gap-2">
                         <TrendingUp className="w-4 h-4" />
                         Áreas de Mejora
                       </p>
                       <ul className="space-y-1 text-sm text-muted/30">
                         {evaluation.improvements.map((i: string, idx: number) => (
                           <li key={idx} className="flex gap-2">
-                            <span className="text-yellow-400">•</span>
+                            <span className="text-yellow/40">•</span>
                             <span>{i}</span>
                           </li>
                         ))}
@@ -422,7 +422,7 @@ export default function ChallensingTrainingPage() {
                     ) : (
                       <Button
                         onClick={() => window.location.href = '/despega/a3-dashboard'}
-                        className="w-full bg-green hover:bg-green-700 gap-2"
+                        className="w-full bg-green hover:bg-green gap-2"
                       >
                         Completar Entrenamiento
                       </Button>
@@ -445,7 +445,7 @@ export default function ChallensingTrainingPage() {
                   <div>
                     <p className="text-xs text-muted/40 mb-2">Promedio General</p>
                     <div className="flex items-end gap-2">
-                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green/40' : averageScore >= 60 ? 'text-yellow-400' : 'text-red-400'}`}>
+                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green/40' : averageScore >= 60 ? 'text-yellow/40' : 'text-red/40'}`}>
                         {averageScore}
                       </span>
                       <span className="text-xs text-muted/40 pb-2">/100</span>
@@ -487,7 +487,7 @@ export default function ChallensingTrainingPage() {
                       <div className="mt-0.5">
                         {completedQuestions.includes(idx) && scores[idx] ? (
                           <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold ${
-                            scores[idx] >= 75 ? 'bg-green' : scores[idx] >= 60 ? 'bg-yellow-600' : 'bg-red-600'
+                            scores[idx] >= 75 ? 'bg-green' : scores[idx] >= 60 ? 'bg-yellow' : 'bg-red'
                           }`}>
                             {scores[idx]}
                           </div>

@@ -64,7 +64,7 @@ export default function BitacoraPage() {
   }
 
   const getMoodColor = (mood: number) => {
-    if (mood <= 2) return 'bg-red/10 text-red-800'
+    if (mood <= 2) return 'bg-red/10 text-red'
     if (mood === 3) return 'bg-yellow/10 text-yellow'
     return 'bg-green/10 text-green'
   }
@@ -110,7 +110,7 @@ export default function BitacoraPage() {
         {error && (
           <Card className="border-0 shadow-md bg-red/5 dark:bg-red/20 border-l-4 border-l-red-500">
             <CardContent className="p-4">
-              <p className="text-sm text-red-800 dark:text-red/20">
+              <p className="text-sm text-red dark:text-red/20">
                 <strong>Error:</strong> {error}
               </p>
             </CardContent>
@@ -351,7 +351,7 @@ export default function BitacoraPage() {
 
                       {/* Next Steps */}
                       {entry.nextSteps && (
-                        <div className="p-3 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue/10">
+                        <div className="p-3 bg-blue/5 dark:bg-blue rounded-[28px] border border-blue/30 dark:border-blue/10">
                           <p className="text-sm font-medium text-blue dark:text-blue/10 mb-1">Próximos Pasos</p>
                           <p className="text-sm text-blue dark:text-blue/20">{entry.nextSteps}</p>
                         </div>

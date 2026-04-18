@@ -56,7 +56,7 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
         <div className="mb-24">
           {/* Tagline */}
           <div className="mb-8 inline-block">
-            <p className="text-sm font-semibold tracking-widest text-slate-400 uppercase">
+            <p className="text-sm font-semibold tracking-widest text-muted/40 uppercase">
               Transformación Profesional Estructurada
             </p>
           </div>
@@ -67,7 +67,7 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg md:text-xl text-slate-300 max-w-3xl mb-8 leading-relaxed">
+          <p className="text-lg md:text-xl text-muted/30 max-w-3xl mb-8 leading-relaxed">
             No es coaching. No es motivación. Es un sistema científico y estructurado que te transforma desde el autoconocimiento hasta la ejecución en el mercado laboral real.
           </p>
 
@@ -77,28 +77,28 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
               Comenzar Mi Transformación
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </button>
-            <button className="border border-slate-600 text-white font-semibold px-8 py-4 rounded-[20px] hover:bg-slate-900/50 transition-colors">
+            <button className="border border-muted/60 text-white font-semibold px-8 py-4 rounded-[20px] hover:bg-muted/90/50 transition-colors">
               Ver Cómo Funciona
             </button>
           </div>
 
           {/* Stats Row */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-            <div className="p-6 rounded-[20px] bg-slate-900/40 border border-slate-800">
+            <div className="p-6 rounded-[20px] bg-muted/90/40 border border-muted/80">
               <p className="text-3xl font-bold text-yellow mb-2">4</p>
-              <p className="text-sm text-slate-400">Fases Estructuradas</p>
+              <p className="text-sm text-muted/40">Fases Estructuradas</p>
             </div>
-            <div className="p-6 rounded-[20px] bg-slate-900/40 border border-slate-800">
+            <div className="p-6 rounded-[20px] bg-muted/90/40 border border-muted/80">
               <p className="text-3xl font-bold text-orange mb-2">90</p>
-              <p className="text-sm text-slate-400">Días de Transformación</p>
+              <p className="text-sm text-muted/40">Días de Transformación</p>
             </div>
-            <div className="p-6 rounded-[20px] bg-slate-900/40 border border-slate-800">
+            <div className="p-6 rounded-[20px] bg-muted/90/40 border border-muted/80">
               <p className="text-3xl font-bold text-red mb-2">∞</p>
-              <p className="text-sm text-slate-400">Coach IA 24/7</p>
+              <p className="text-sm text-muted/40">Coach IA 24/7</p>
             </div>
-            <div className="p-6 rounded-[20px] bg-slate-900/40 border border-slate-800">
+            <div className="p-6 rounded-[20px] bg-muted/90/40 border border-muted/80">
               <p className="text-3xl font-bold text-blue mb-2">1:1</p>
-              <p className="text-sm text-slate-400">Personalizado</p>
+              <p className="text-sm text-muted/40">Personalizado</p>
             </div>
           </div>
         </div>
@@ -140,12 +140,12 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
                   </h3>
 
                   {/* Description */}
-                  <p className="text-slate-400 text-sm mb-4 font-medium">
+                  <p className="text-muted/40 text-sm mb-4 font-medium">
                     {phase.description}
                   </p>
 
                   {/* Content Line */}
-                  <p className="text-slate-300 text-sm leading-relaxed mb-6">
+                  <p className="text-muted/30 text-sm leading-relaxed mb-6">
                     {phase.content}
                   </p>
 
@@ -156,11 +156,11 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
                   <div className="space-y-3">
                     <div className="flex items-start gap-2">
                       <CheckCircle size={16} className={cn('mt-1 flex-shrink-0', colors.accent)} />
-                      <p className="text-xs text-slate-300">Autoevaluación científica</p>
+                      <p className="text-xs text-muted/30">Autoevaluación científica</p>
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle size={16} className={cn('mt-1 flex-shrink-0', colors.accent)} />
-                      <p className="text-xs text-slate-300">Feedback personalizado</p>
+                      <p className="text-xs text-muted/30">Feedback personalizado</p>
                     </div>
                   </div>
                 </div>
@@ -208,11 +208,11 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
                 accent: 'purple',
               },
             ].map((item, idx) => (
-              <div key={idx} className="p-8 rounded-[20px] bg-slate-900/30 border border-slate-800 hover:border-slate-700 transition-colors">
+              <div key={idx} className="p-8 rounded-[20px] bg-muted/90/30 border border-muted/80 hover:border-muted/70 transition-colors">
                 <div className={`text-lg font-bold mb-3 text-${item.accent}`}>
                   {item.title}
                 </div>
-                <p className="text-slate-400 text-sm leading-relaxed">
+                <p className="text-muted/40 text-sm leading-relaxed">
                   {item.description}
                 </p>
               </div>
@@ -221,8 +221,8 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
         </div>
 
         {/* Final CTA */}
-        <div className="text-center pt-12 border-t border-slate-800">
-          <p className="text-slate-400 mb-8">
+        <div className="text-center pt-12 border-t border-muted/80">
+          <p className="text-muted/40 mb-8">
             Tu transformación comienza hoy. Sin condiciones. Sin promesas vacías.
           </p>
           <button className="bg-red text-white font-semibold px-10 py-5 rounded-[20px] text-lg hover:bg-red/90 transition-colors inline-flex items-center gap-2 group">

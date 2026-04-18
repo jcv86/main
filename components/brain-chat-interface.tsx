@@ -222,18 +222,18 @@ export function BrainChatInterface() {
                   </div>
                   <div>
                     <CardTitle className="text-xl">Cerebro Inteligente</CardTitle>
-                    <p className="text-sm text-purple-100">Búsqueda semántica avanzada con IA</p>
+                    <p className="text-sm text-purple/10">Búsqueda semántica avanzada con IA</p>
                   </div>
                 </div>
                 {stats.queriesCount > 0 && (
                   <div className="flex gap-4 text-sm">
                     <div className="text-center">
                       <div className="font-bold text-lg">{stats.queriesCount}</div>
-                      <div className="text-xs text-purple-100">Consultas</div>
+                      <div className="text-xs text-purple/10">Consultas</div>
                     </div>
                     <div className="text-center">
                       <div className="font-bold text-lg">{Math.round(stats.avgConfidence)}%</div>
-                      <div className="text-xs text-purple-100">Confianza</div>
+                      <div className="text-xs text-purple/10">Confianza</div>
                     </div>
                   </div>
                 )}
@@ -329,7 +329,7 @@ export function BrainChatInterface() {
                 {isLoading && (
                   <div className="flex justify-start animate-in fade-in duration-500">
                     <div className="bg-muted/10 dark:bg-gray-800 rounded-2xl p-4 flex items-center gap-3">
-                      <Loader2 className="h-5 w-5 animate-spin text-purple-600" />
+                      <Loader2 className="h-5 w-5 animate-spin text-purple" />
                       <span className="text-sm text-muted/60 dark:text-muted/40">Pensando...</span>
                     </div>
                   </div>
@@ -369,11 +369,11 @@ export function BrainChatInterface() {
                   key={idx}
                   variant="outline"
                   size="sm"
-                  className="w-full justify-start text-left h-auto py-3 hover:bg-purple-50 dark:hover:bg-purple/20 bg-transparent"
+                  className="w-full justify-start text-left h-auto py-3 hover:bg-purple/5 dark:hover:bg-purple/20 bg-transparent"
                   onClick={() => handleQuickQuestion(q.text)}
                   disabled={isLoading}
                 >
-                  <q.icon className="h-4 w-4 mr-2 shrink-0 text-purple-600" />
+                  <q.icon className="h-4 w-4 mr-2 shrink-0 text-purple" />
                   <span className="text-xs">{q.text}</span>
                 </Button>
               ))}
@@ -383,7 +383,7 @@ export function BrainChatInterface() {
           <Card className="shadow-lg">
             <CardHeader className="pb-3">
               <CardTitle className="text-base flex items-center gap-2">
-                <Brain className="h-5 w-5 text-purple-600" />
+                <Brain className="h-5 w-5 text-purple" />
                 Capacidades
               </CardTitle>
             </CardHeader>
@@ -409,8 +409,8 @@ export function BrainChatInterface() {
               </div>
 
               <div className="flex items-start gap-2">
-                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-purple-100 dark:bg-purple/20 flex items-center justify-center shrink-0">
-                  <TrendingUp className="h-3 w-3 text-purple-600" />
+                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-purple/10 dark:bg-purple/20 flex items-center justify-center shrink-0">
+                  <TrendingUp className="h-3 w-3 text-purple" />
                 </div>
                 <div>
                   <div className="font-semibold">Alta Precisión</div>

@@ -85,7 +85,7 @@ export default function A4IntroPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
-                <div className="p-4 bg-blue/5 dark:bg-blue-950/30 rounded-[28px] border border-blue/30 dark:border-blue/10">
+                <div className="p-4 bg-blue/5 dark:bg-blue/30 rounded-[28px] border border-blue/30 dark:border-blue/10">
                   <div className="flex gap-3">
                     <Newspaper className="w-6 h-6 text-blue flex-shrink-0" />
                     <div>
@@ -103,7 +103,7 @@ export default function A4IntroPage() {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-red/5 dark:bg-red-950/30 rounded-[28px] border border-red/20 dark:border-red-800">
+                <div className="p-4 bg-red/5 dark:bg-red/30 rounded-[28px] border border-red/20 dark:border-red">
                   <div className="flex gap-3">
                     <Brain className="w-6 h-6 text-red flex-shrink-0" />
                     <div>
@@ -121,7 +121,7 @@ export default function A4IntroPage() {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-green/5 dark:bg-green-950/30 rounded-[28px] border border-green/20 dark:border-green-800">
+                <div className="p-4 bg-green/5 dark:bg-green/30 rounded-[28px] border border-green/20 dark:border-green">
                   <div className="flex gap-3">
                     <TrendingUp className="w-6 h-6 text-green flex-shrink-0" />
                     <div>

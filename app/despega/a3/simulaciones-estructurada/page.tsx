@@ -18,19 +18,19 @@ export default function StructuredSimulationPage() {
     return (
       <main className="min-h-screen bg-gradient-to-br from-background via-muted/90 to-background">
         <div className="container max-w-3xl mx-auto px-4 py-8">
-          <Link href="/despega/a3-dashboard" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 mb-8">
+          <Link href="/despega/a3-dashboard" className="inline-flex items-center gap-2 text-cyan/40 hover:text-cyan/30 mb-8">
             <ArrowLeft className="w-4 h-4" />
             Volver al Dashboard
           </Link>
           
           <div className="text-center py-12">
-            <h1 className="text-4xl font-bold text-cyan-400 mb-4">¡Simulación Completada!</h1>
+            <h1 className="text-4xl font-bold text-cyan/40 mb-4">¡Simulación Completada!</h1>
             <p className="text-muted/30 text-lg mb-8">
               Excelente trabajo. Ahora tienes el material para sonar como un profesional en tu próxima entrevista.
             </p>
             <Button 
               onClick={() => setIsComplete(false)}
-              className="bg-blue hover:bg-cyan-700 text-white h-12 px-8"
+              className="bg-blue hover:bg-cyan text-white h-12 px-8"
             >
               Hacer otra simulación
             </Button>
@@ -44,7 +44,7 @@ export default function StructuredSimulationPage() {
     <main className="min-h-screen bg-black">
       <div className="flex flex-col h-screen">
         <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-background p-4">
-          <Link href="/despega/a3-dashboard" className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300">
+          <Link href="/despega/a3-dashboard" className="inline-flex items-center gap-2 text-cyan/40 hover:text-cyan/30">
             <ArrowLeft className="w-4 h-4" />
             Volver al Dashboard
           </Link>

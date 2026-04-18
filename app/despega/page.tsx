@@ -176,8 +176,8 @@ export default function DespegazoDashboard() {
     readiness.overall_score >= 80
       ? 'text-emerald-400'
       : readiness.overall_score >= 60
-      ? 'text-yellow-400'
-      : 'text-orange-400'
+      ? 'text-yellow/40'
+      : 'text-orange/40'
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple via-background to-muted/90 text-white p-4 py-12">
@@ -209,7 +209,7 @@ export default function DespegazoDashboard() {
               <p className="text-muted/40 text-sm font-semibold">Readiness Score</p>
               <div className="mt-4 w-full h-1 bg-muted/80 rounded-full overflow-hidden">
                 <div
-                  className={`h-full bg-gradient-to-r ${scoreColor === 'text-emerald-400' ? 'from-green/50 to-blue/40' : scoreColor === 'text-yellow-400' ? 'from-yellow-500 to-orange-400' : 'from-orange/50 to-red-400'} transition-all duration-500`}
+                  className={`h-full bg-gradient-to-r ${scoreColor === 'text-emerald-400' ? 'from-green/50 to-blue/40' : scoreColor === 'text-yellow/40' ? 'from-yellow-500 to-orange-400' : 'from-orange/50 to-red-400'} transition-all duration-500`}
                   style={{ width: `${readiness.overall_score}%` }}
                 />
               </div>
@@ -247,7 +247,7 @@ export default function DespegazoDashboard() {
           </div>
 
           <div className="bg-gradient-to-br from-orange/40 to-red-900/40 border border-orange/20 rounded-xl p-6">
-            <h3 className="text-lg font-bold text-orange-400 mb-4 flex items-center gap-2">
+            <h3 className="text-lg font-bold text-orange/40 mb-4 flex items-center gap-2">
               <AlertCircle className="w-5 h-5" /> Áreas de Mejora
             </h3>
             <ul className="space-y-2">

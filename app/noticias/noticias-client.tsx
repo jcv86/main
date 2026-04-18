@@ -931,7 +931,7 @@ function ArticleCard({
                 </Badge>
               )}
               {read && (
-                <Badge variant="outline" className="text-xs text-green border-green-300">
+                <Badge variant="outline" className="text-xs text-green border-green/30">
                   <Heart className="h-3 w-3 mr-1" />
                   Leído
                 </Badge>

@@ -89,7 +89,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              className="border-muted/20 focus:border-purple-500 focus:ring-purple-500 placeholder:text-muted/40"
+              className="border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted/40"
               disabled={loading}
             />
           </div>
@@ -106,7 +106,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
-              className="border-muted/20 focus:border-purple-500 focus:ring-purple-500 placeholder:text-muted/40"
+              className="border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted/40"
               disabled={loading}
             />
           </div>
@@ -123,7 +123,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               type="tel"
               value={formData.whatsapp}
               onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-              className="border-muted/20 focus:border-purple-500 focus:ring-purple-500 placeholder:text-muted/40"
+              className="border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted/40"
               disabled={loading}
             />
           </div>
@@ -139,7 +139,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               required
-              className="min-h-[140px] border-muted/20 focus:border-purple-500 focus:ring-purple-500 placeholder:text-muted/40 resize-none"
+              className="min-h-[140px] border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted/40 resize-none"
               disabled={loading}
             />
             <p className="text-xs text-muted/50">Mínimo 10 caracteres</p>
@@ -147,10 +147,10 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
 
           {/* Status Messages */}
           {status === "success" && (
-            <div className="bg-green-50 border border-green-200 rounded-[28px] p-4 flex items-start gap-3">
+            <div className="bg-green/5 border border-green/20 rounded-[28px] p-4 flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-green flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-green-900">Mensaje enviado</p>
+                <p className="text-sm font-semibold text-green">Mensaje enviado</p>
                 <p className="text-xs text-green mt-1">
                   Gracias por tu consulta. Nos pondremos en contacto pronto.
                 </p>
@@ -162,7 +162,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
             <div className="bg-red/5 border border-red/20 rounded-[28px] p-4 flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-red flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-red-900">Error</p>
+                <p className="text-sm font-semibold text-red">Error</p>
                 <p className="text-xs text-red mt-1">{errorMessage}</p>
               </div>
             </div>
@@ -192,7 +192,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
           {/* Footer Note */}
           <p className="text-xs text-muted/50 text-center">
             Nos comprometemos a responder dentro de 24 horas.{" "}
-            <a href="/privacy" className="text-purple-600 hover:text-purple-700 font-medium">
+            <a href="/privacy" className="text-purple hover:text-purple font-medium">
               Revisa nuestra política de privacidad
             </a>
           </p>

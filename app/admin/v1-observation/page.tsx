@@ -203,7 +203,7 @@ export default function V1ObservationDashboard() {
             </div>
           )}
           {metrics.byStage.a3 === 0 && (
-            <div className="p-3 bg-yellow/5 text-yellow-700 rounded">
+            <div className="p-3 bg-yellow/5 text-yellow rounded">
               ℹ️ Nadie ha llegado a A3 aún - Esperar más datos o revisar A2
             </div>
           )}

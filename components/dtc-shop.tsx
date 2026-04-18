@@ -103,7 +103,7 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
         <p className="text-muted/60 mb-4">
           Unlock premium interview tips and accelerate your career growth
         </p>
-        <div className="inline-block bg-blue-50 rounded-lg px-4 py-2">
+        <div className="inline-block bg-blue/5 rounded-lg px-4 py-2">
           <p className="text-lg font-semibold text-blue">
             Current Balance: {currentBalance} DTC Points
           </p>
@@ -122,7 +122,7 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
             {/* Popular Badge */}
             {pkg.popular && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span className="bg-blue-500 text-white px-3 py-1 rounded-[20px] text-xs font-bold">
+                <span className="bg-blue/50 text-white px-3 py-1 rounded-[20px] text-xs font-bold">
                   MOST POPULAR
                 </span>
               </div>

@@ -929,11 +929,11 @@ export default function TestVerificationSystem() {
                             log.includes("✅")
                               ? "text-green/40"
                               : log.includes("❌") || log.includes("💥")
-                                ? "text-red-400"
+                                ? "text-red/40"
                                 : log.includes("🚀") || log.includes("🎉")
                                   ? "text-blue/40"
                                   : log.includes("⏳")
-                                    ? "text-yellow-400"
+                                    ? "text-yellow/40"
                                     : "text-muted/30"
                           }`}
                         >
@@ -957,7 +957,7 @@ export default function TestVerificationSystem() {
                   <>
                     <CheckCircle className="h-12 w-12 sm:h-16 sm:w-16 text-green mx-auto" />
                     <div>
-                      <h3 className="text-xl sm:text-2xl font-bold text-green-900 mb-2">
+                      <h3 className="text-xl sm:text-2xl font-bold text-green mb-2">
                         🎉 All {isMobile ? "Mobile" : "Desktop"} Tests Passed!
                       </h3>
                       <p className="text-green mb-4 text-sm sm:text-base">
@@ -967,23 +967,23 @@ export default function TestVerificationSystem() {
                       </p>
                       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 sm:gap-4 text-xs sm:text-sm">
                         <div className="bg-green/10 p-2 sm:p-3 rounded-lg">
-                          <div className="font-semibold text-green-900">Navigation</div>
+                          <div className="font-semibold text-green">Navigation</div>
                           <div className="text-green">✅ {isMobile ? "Touch-friendly" : "Mouse-friendly"}</div>
                         </div>
                         <div className="bg-green/10 p-2 sm:p-3 rounded-lg">
-                          <div className="font-semibold text-green-900">Questions</div>
+                          <div className="font-semibold text-green">Questions</div>
                           <div className="text-green">✅ {isMobile ? "Mobile UI" : "Desktop UI"}</div>
                         </div>
                         <div className="bg-green/10 p-2 sm:p-3 rounded-lg">
-                          <div className="font-semibold text-green-900">Validation</div>
+                          <div className="font-semibold text-green">Validation</div>
                           <div className="text-green">✅ {isMobile ? "Touch input" : "Keyboard input"}</div>
                         </div>
                         <div className="bg-green/10 p-2 sm:p-3 rounded-lg">
-                          <div className="font-semibold text-green-900">Completion</div>
+                          <div className="font-semibold text-green">Completion</div>
                           <div className="text-green">✅ {isMobile ? "Mobile network" : "Fast network"}</div>
                         </div>
                         <div className="bg-green/10 p-2 sm:p-3 rounded-lg col-span-2 sm:col-span-1">
-                          <div className="font-semibold text-green-900">Results</div>
+                          <div className="font-semibold text-green">Results</div>
                           <div className="text-green">✅ {isMobile ? "Mobile display" : "Desktop display"}</div>
                         </div>
                       </div>
@@ -994,7 +994,7 @@ export default function TestVerificationSystem() {
                     <AlertTriangle className="h-12 w-12 sm:h-16 sm:w-16 text-orange mx-auto" />
                     <div>
                       <h3 className="text-xl sm:text-2xl font-bold text-yellow mb-2">Issues Detected</h3>
-                      <p className="text-yellow-700 mb-4 text-sm sm:text-base">
+                      <p className="text-yellow mb-4 text-sm sm:text-base">
                         {failedTests} test(s) failed verification on {isMobile ? "mobile" : "desktop"}. {passedTests}{" "}
                         test(s) passed successfully. Please review the error details above and fix the identified
                         issues.

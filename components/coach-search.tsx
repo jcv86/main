@@ -65,7 +65,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
           {/* Search Bar */}
           <div className="flex gap-2">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-3 w-5 h-5 text-slate-400" />
+              <Search className="absolute left-3 top-3 w-5 h-5 text-muted/40" />
               <Input
                 placeholder="Busca estrategias, libros, conceptos..."
                 value={searchQuery}
@@ -78,7 +78,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
             <Button
               onClick={handleSearch}
               disabled={isLoading}
-              className="bg-blue-600 hover:bg-blue-700"
+              className="bg-blue hover:bg-blue"
             >
               {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Buscar'}
             </Button>
@@ -86,20 +86,20 @@ export function CoachSearch({ userProfile }: SearchProps) {
 
           {/* Results or Empty State */}
           {results.length === 0 ? (
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-[28px] p-8 text-center">
-              <Brain className="w-12 h-12 mx-auto mb-4 text-slate-400" />
-              <p className="text-slate-500 mb-4">
+            <div className="bg-muted/5 dark:bg-muted/90 rounded-[28px] p-8 text-center">
+              <Brain className="w-12 h-12 mx-auto mb-4 text-muted/40" />
+              <p className="text-muted/50 mb-4">
                 {searchQuery ? `Buscando: "${searchQuery}"` : 'Empieza a buscar contenido personalizado'}
               </p>
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-muted/40">
                 El Cerebro Inteligente busca a través de libros, artículos y estrategias basadas en tu perfil de El Ritual
               </p>
             </div>
           ) : (
             <div className="space-y-4">
               {reasoning && (
-                <div className="bg-blue-50 dark:bg-blue/20 border border-blue-200 dark:border-blue-900/50 rounded-[28px] p-4">
-                  <p className="text-sm text-blue-900 dark:text-blue-100">
+                <div className="bg-blue/5 dark:bg-blue/20 border border-blue/20 dark:border-blue/50 rounded-[28px] p-4">
+                  <p className="text-sm text-blue dark:text-blue/10">
                     <strong>Búsqueda:</strong> {reasoning}
                   </p>
                 </div>
@@ -109,28 +109,28 @@ export function CoachSearch({ userProfile }: SearchProps) {
                 {results.map((book) => (
                   <div
                     key={`${book.id}-${book.title}`}
-                    className="border border-slate-200 dark:border-slate-700 rounded-[28px] p-4 hover:shadow-md transition-shadow"
+                    className="border border-muted/20 dark:border-muted/70 rounded-[28px] p-4 hover:shadow-md transition-shadow"
                   >
                     <div className="flex items-start gap-3">
                       <BookOpen className="w-5 h-5 text-blue mt-1 flex-shrink-0" />
                       <div className="flex-1">
                         <h4 className="font-semibold">{book.title}</h4>
-                        <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">
+                        <p className="text-sm text-muted/60 dark:text-muted/40 mb-2">
                           por {book.author}
                         </p>
                         {book.description && (
-                          <p className="text-sm text-slate-700 dark:text-slate-300 mb-2">
+                          <p className="text-sm text-muted/70 dark:text-muted/30 mb-2">
                             {book.description}
                           </p>
                         )}
                         <div className="flex gap-2 flex-wrap">
                           {book.category && (
-                            <span className="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">
+                            <span className="text-xs bg-muted/20 dark:bg-muted/70 px-2 py-1 rounded">
                               {book.category}
                             </span>
                           )}
                           {(book.key_topics || book.tags)?.slice(0, 2).map((tag) => (
-                            <span key={tag} className="text-xs bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue-300 px-2 py-1 rounded">
+                            <span key={tag} className="text-xs bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue/30 px-2 py-1 rounded">
                               {tag}
                             </span>
                           ))}
@@ -139,7 +139,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
                       {book.rating && (
                         <div className="text-right flex-shrink-0">
                           <div className="text-2xl font-bold text-orange">{book.rating}</div>
-                          <div className="text-xs text-slate-500">★</div>
+                          <div className="text-xs text-muted/50">★</div>
                         </div>
                       )}
                     </div>

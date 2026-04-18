@@ -69,7 +69,7 @@ export default function NewsletterSignup({ className = '' }: NewsletterSignupPro
         <Button
           type="submit"
           disabled={loading}
-          className="bg-white text-purple-800 hover:bg-muted/10 font-semibold whitespace-nowrap"
+          className="bg-white text-purple hover:bg-muted/10 font-semibold whitespace-nowrap"
         >
           {loading ? (
             <>
@@ -83,14 +83,14 @@ export default function NewsletterSignup({ className = '' }: NewsletterSignupPro
       </div>
 
       {status === 'success' && (
-        <div className="flex items-center gap-2 mt-3 text-green-300">
+        <div className="flex items-center gap-2 mt-3 text-green/30">
           <CheckCircle2 className="w-4 h-4" />
           <span className="text-sm">{message}</span>
         </div>
       )}
 
       {status === 'error' && (
-        <div className="flex items-center gap-2 mt-3 text-red-300">
+        <div className="flex items-center gap-2 mt-3 text-red/30">
           <AlertCircle className="w-4 h-4" />
           <span className="text-sm">{message}</span>
         </div>

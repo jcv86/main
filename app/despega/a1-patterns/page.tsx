@@ -114,7 +114,7 @@ export default function A1PatternsPage() {
               {details.strengths.map((strength, idx) => (
                 <Card key={idx} className="bg-gradient-to-br from-green-900/40 to-green/20 border-green/30 border-2">
                   <CardContent className="pt-6">
-                    <p className="text-green-300 font-semibold">✓ {strength}</p>
+                    <p className="text-green/30 font-semibold">✓ {strength}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -129,7 +129,7 @@ export default function A1PatternsPage() {
               {details.challenges.map((challenge, idx) => (
                 <Card key={idx} className="bg-gradient-to-br from-yellow-900/40 to-orange/20 border-orange/30 border-2">
                   <CardContent className="pt-6">
-                    <p className="text-yellow-300 font-semibold">⚠️ {challenge}</p>
+                    <p className="text-yellow/30 font-semibold">⚠️ {challenge}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -143,7 +143,7 @@ export default function A1PatternsPage() {
             
             <Card className="bg-muted/80/50 border-muted/70 border-2">
               <CardHeader>
-                <CardTitle className="text-cyan-300">Tu Ventaja Natural</CardTitle>
+                <CardTitle className="text-cyan/30">Tu Ventaja Natural</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted/30">{details.teamRole}</p>
@@ -213,7 +213,7 @@ export default function A1PatternsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="bg-gradient-to-br from-blue/40 to-blue/20 border-blue/30 border-2">
               <CardHeader>
-                <CardTitle className="text-cyan-300 flex items-center gap-2">
+                <CardTitle className="text-cyan/30 flex items-center gap-2">
                   <Phone className="w-5 h-5" />
                   Call Entrena
                 </CardTitle>

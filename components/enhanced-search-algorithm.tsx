@@ -390,7 +390,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
 
           {/* Estadísticas de búsqueda */}
           {searchTerm && (
-            <div className="text-sm text-muted/60 bg-blue-50 p-3 rounded">
+            <div className="text-sm text-muted/60 bg-blue/5 p-3 rounded">
               <div className="flex items-center gap-4">
                 <span>🔍 Búsqueda: "{searchTerm}"</span>
                 <span>📊 {searchResults.length} resultados</span>
@@ -465,7 +465,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
                             {result.category}
                           </Badge>
                           {result.relevanceScore > 0.8 && (
-                            <Badge variant="default" className="text-xs bg-green-600">
+                            <Badge variant="default" className="text-xs bg-green">
                               <TrendingUp className="h-3 w-3 mr-1" />
                               Top Match
                             </Badge>
@@ -497,17 +497,17 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
                         {searchTerm && (
                           <div className="flex flex-wrap gap-1 mb-2">
                             {result.matchDetails.titleMatch > 0.3 && (
-                              <Badge variant="outline" className="text-xs bg-blue-50">
+                              <Badge variant="outline" className="text-xs bg-blue/5">
                                 📖 Título: {(result.matchDetails.titleMatch * 100).toFixed(0)}%
                               </Badge>
                             )}
                             {result.matchDetails.authorMatch > 0.3 && (
-                              <Badge variant="outline" className="text-xs bg-purple-50">
+                              <Badge variant="outline" className="text-xs bg-purple/5">
                                 ✍️ Autor: {(result.matchDetails.authorMatch * 100).toFixed(0)}%
                               </Badge>
                             )}
                             {result.matchDetails.tagMatch > 0.3 && (
-                              <Badge variant="outline" className="text-xs bg-green-50">
+                              <Badge variant="outline" className="text-xs bg-green/5">
                                 🏷️ Tags: {(result.matchDetails.tagMatch * 100).toFixed(0)}%
                               </Badge>
                             )}

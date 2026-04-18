@@ -201,7 +201,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-purple-600" />
+            <Sparkles className="h-5 w-5 text-purple" />
             Coach Personalizado con IA
           </CardTitle>
           <CardDescription>
@@ -218,7 +218,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                   <div
                     className={`max-w-[80%] rounded-[28px] p-4 ${
                       message.sender === "user"
-                        ? "bg-blue-600 text-white"
+                        ? "bg-blue text-white"
                         : "bg-muted/10 text-foreground border border-muted/20"
                     }`}
                   >

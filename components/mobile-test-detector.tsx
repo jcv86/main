@@ -146,11 +146,11 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
   const getDeviceColor = () => {
     switch (deviceInfo.type) {
       case "mobile":
-        return "bg-blue/10 text-blue border-blue-200"
+        return "bg-blue/10 text-blue border-blue/20"
       case "tablet":
-        return "bg-purple-100 text-purple-700 border-purple-200"
+        return "bg-purple/10 text-purple border-purple/20"
       default:
-        return "bg-green/10 text-green border-green-200"
+        return "bg-green/10 text-green border-green/20"
     }
   }
 
@@ -255,7 +255,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
                   <div
                     className={`h-full transition-all ${
                       deviceInfo.battery > 50
-                        ? "bg-green-500"
+                        ? "bg-green/50"
                         : deviceInfo.battery > 20
                           ? "bg-orange"
                           : "bg-red/50"
@@ -318,21 +318,21 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
 
         {/* Performance Indicators */}
         <div className="grid grid-cols-3 gap-2 text-xs">
-          <div className="text-center p-2 bg-blue-50 rounded">
-            <div className="font-semibold text-blue-900">Touch Latency</div>
+          <div className="text-center p-2 bg-blue/5 rounded">
+            <div className="font-semibold text-blue">Touch Latency</div>
             <div className="text-blue">
               {deviceInfo.touchSupport ? (deviceInfo.type === "mobile" ? "~10ms" : "~15ms") : "N/A"}
             </div>
           </div>
-          <div className="text-center p-2 bg-green-50 rounded">
-            <div className="font-semibold text-green-900">Gesture Accuracy</div>
+          <div className="text-center p-2 bg-green/5 rounded">
+            <div className="font-semibold text-green">Gesture Accuracy</div>
             <div className="text-green">
               {deviceInfo.touchSupport ? (deviceInfo.maxTouchPoints >= 5 ? "High" : "Medium") : "Low"}
             </div>
           </div>
-          <div className="text-center p-2 bg-purple-50 rounded">
-            <div className="font-semibold text-purple-900">Multi-Touch</div>
-            <div className="text-purple-700">
+          <div className="text-center p-2 bg-purple/5 rounded">
+            <div className="font-semibold text-purple">Multi-Touch</div>
+            <div className="text-purple">
               {deviceInfo.maxTouchPoints >= 2 ? `${deviceInfo.maxTouchPoints} points` : "Single"}
             </div>
           </div>

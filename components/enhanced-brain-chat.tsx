@@ -227,7 +227,7 @@ export function EnhancedBrainChat() {
           <ScrollArea className="flex-1 p-6" ref={scrollRef}>
             {showSuggestions && messages.length === 0 ? (
               <div className="space-y-4">
-                <Alert className="bg-gradient-to-br from-purple-50 to-blue-50 border-purple-200">
+                <Alert className="bg-gradient-to-br from-purple-50 to-blue-50 border-purple/20">
                   <Brain className="h-4 w-4" />
                   <AlertDescription>
                     <p className="font-semibold mb-2">¡Hola! Soy tu Coach IA con acceso a:</p>
@@ -256,7 +256,7 @@ export function EnhancedBrainChat() {
                         onClick={() => handleSuggestionClick(suggestion.text)}
                       >
                         <div className="flex items-start gap-3 w-full">
-                          <div className="p-2 bg-purple-100 rounded-lg">{suggestion.icon}</div>
+                          <div className="p-2 bg-purple/10 rounded-lg">{suggestion.icon}</div>
                           <div className="text-left flex-1">
                             <p className="font-medium text-sm">{suggestion.text}</p>
                             <Badge variant="secondary" className="text-xs mt-1">

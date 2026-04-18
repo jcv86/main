@@ -167,15 +167,15 @@ export default function LearningFlowOnboarding() {
 
         {/* Completion Message */}
         {allCompleted && (
-          <Card className="mt-8 border-green/20 bg-green/5 dark:bg-green-950">
+          <Card className="mt-8 border-green/20 bg-green/5 dark:bg-green">
             <CardContent className="p-6">
               <div className="flex items-center gap-3">
                 <CheckCircle2 className="h-8 w-8 text-green" />
                 <div>
-                  <h3 className="font-semibold text-green-900 dark:text-green-100">
+                  <h3 className="font-semibold text-green dark:text-green/10">
                     ¡Ruta de aprendizaje completada!
                   </h3>
-                  <p className="text-sm text-green dark:text-green-200">
+                  <p className="text-sm text-green dark:text-green/20">
                     Ahora tienes acceso a tu experiencia personalizada completa. Continúa en tu dashboard.
                   </p>
                 </div>

@@ -76,7 +76,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
     return (
       <Card>
         <CardContent className="p-8 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
           <p className="text-muted/60">Analizando todos tus tests con Cerebro...</p>
         </CardContent>
       </Card>
@@ -105,7 +105,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-2xl flex items-center gap-2">
-                <Brain className="h-6 w-6 text-purple-600" />
+                <Brain className="h-6 w-6 text-purple" />
                 Análisis Multi-Test con Cerebro
               </CardTitle>
               <CardDescription className="mt-2">
@@ -147,8 +147,8 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="bg-blue-50 p-4 rounded-[28px]">
-                <h4 className="font-semibold text-blue-900 mb-2">Resumen</h4>
+              <div className="bg-blue/5 p-4 rounded-[28px]">
+                <h4 className="font-semibold text-blue mb-2">Resumen</h4>
                 <p className="text-sm text-blue">{analysis.professionalProfile?.summary}</p>
               </div>
 
@@ -161,7 +161,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                   <ul className="space-y-2">
                     {analysis.professionalProfile?.keyStrengths?.map((strength: string, index: number) => (
                       <li key={index} className="flex items-start gap-2 text-sm">
-                        <div className="w-1.5 h-1.5 bg-green-600 rounded-full mt-1.5"></div>
+                        <div className="w-1.5 h-1.5 bg-green rounded-full mt-1.5"></div>
                         {strength}
                       </li>
                     ))}
@@ -176,7 +176,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                   <ul className="space-y-2">
                     {analysis.professionalProfile?.developmentAreas?.map((area: string, index: number) => (
                       <li key={index} className="flex items-start gap-2 text-sm">
-                        <div className="w-1.5 h-1.5 bg-orange-600 rounded-full mt-1.5"></div>
+                        <div className="w-1.5 h-1.5 bg-orange rounded-full mt-1.5"></div>
                         {area}
                       </li>
                     ))}
@@ -197,7 +197,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Briefcase className="h-5 w-5 text-purple-600" />
+                <Briefcase className="h-5 w-5 text-purple" />
                 Recomendaciones de Carrera Personalizadas
               </CardTitle>
               <CardDescription>Basadas en la combinación de tus resultados</CardDescription>
@@ -278,7 +278,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                         insight.demand_level === "Alta"
                           ? "bg-green/10 text-green"
                           : insight.demand_level === "Media"
-                            ? "bg-yellow/10 text-yellow-700"
+                            ? "bg-yellow/10 text-yellow"
                             : ""
                       }
                     >
@@ -318,7 +318,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-purple-600" />
+                <Sparkles className="h-5 w-5 text-purple" />
                 Insights Generados por Cerebro
               </CardTitle>
               <CardDescription>Análisis inteligente basado en patrones y datos</CardDescription>
@@ -329,12 +329,12 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                   key={index}
                   className={`p-4 rounded-[28px] border-l-4 ${
                     insight.category === "career"
-                      ? "border-l-blue-500 bg-blue-50"
+                      ? "border-l-blue-500 bg-blue/5"
                       : insight.category === "skills"
-                        ? "border-l-green-500 bg-green-50"
+                        ? "border-l-green-500 bg-green/5"
                         : insight.category === "development"
                           ? "border-l-orange-500 bg-orange/5"
-                          : "border-l-purple-500 bg-purple-50"
+                          : "border-l-purple-500 bg-purple/5"
                   }`}
                 >
                   <div className="flex items-start justify-between mb-2">

@@ -97,7 +97,7 @@ export default function A2ChatCoachPage() {
                 Profundización Cognitiva - Sofía & Dani
               </p>
             </div>
-            <Badge variant="outline" className="bg-blue/5 dark:bg-blue-950 text-blue dark:text-blue/20 border-blue/30 dark:border-blue/10">
+            <Badge variant="outline" className="bg-blue/5 dark:bg-blue text-blue dark:text-blue/20 border-blue/30 dark:border-blue/10">
               A2 – Disponible 24/7
             </Badge>
           </div>

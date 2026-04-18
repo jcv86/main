@@ -180,7 +180,7 @@ export default function GamificationClient() {
       lectura: "bg-green/10 text-green",
       simulaciones: "bg-purple/10 text-purple",
       metas: "bg-orange/10 text-orange",
-      engagement: "bg-red/10 text-red-800",
+      engagement: "bg-red/10 text-red",
     }
     return colors[category] || "bg-muted/10 text-gray-800"
   }

@@ -30,9 +30,9 @@ interface A4BadgesDisplayProps {
 
 const RARITY_COLORS = {
   common: 'bg-muted/10 text-gray-800 dark:bg-muted/90/30 dark:text-muted/30 border-muted/30',
-  uncommon: 'bg-green/10 text-green dark:bg-green/30 dark:text-green-300 border-green-300',
-  rare: 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-300 border-blue-300',
-  legendary: 'bg-purple-100 text-purple-800 dark:bg-purple/30 dark:text-purple/30 border-purple-300',
+  uncommon: 'bg-green/10 text-green dark:bg-green/30 dark:text-green/30 border-green/30',
+  rare: 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue/30 border-blue/30',
+  legendary: 'bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple/30 border-purple/30',
 }
 
 const BADGE_ICONS: Record<string, string> = {

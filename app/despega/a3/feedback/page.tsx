@@ -163,7 +163,7 @@ export default function FeedbackPage() {
                         item.type === 'strength'
                           ? 'text-green dark:text-green/40'
                           : item.type === 'improvement'
-                          ? 'text-orange dark:text-orange-400'
+                          ? 'text-orange dark:text-orange/40'
                           : 'text-blue dark:text-blue/40'
                       }`} />
                       <div className="flex-1">
@@ -175,7 +175,7 @@ export default function FeedbackPage() {
                             <Badge className="bg-green">Fortaleza</Badge>
                           )}
                           {item.type === 'improvement' && (
-                            <Badge className="bg-orange-600">Mejorar</Badge>
+                            <Badge className="bg-orange">Mejorar</Badge>
                           )}
                           {item.type === 'insight' && (
                             <Badge className="bg-blue">Insight</Badge>

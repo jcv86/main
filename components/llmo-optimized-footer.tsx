@@ -18,7 +18,7 @@ function LLMOOptimizedFooter() {
         <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl p-8 mb-12">
           <div className="max-w-3xl mx-auto text-center">
             <h3 className="text-2xl font-bold text-white mb-3">Mantente actualizado con nuestros recursos</h3>
-            <p className="text-purple-100 mb-6">
+            <p className="text-purple/10 mb-6">
               Recibe tips de desarrollo profesional, nuevos libros y recursos exclusivos cada semana
             </p>
             <NewsletterSignup />
@@ -72,35 +72,35 @@ function LLMOOptimizedFooter() {
               <a
                 href="https://linkedin.com/company/despegatucarrera"
                 aria-label="LinkedIn"
-                className="w-10 h-10 bg-gray-800 hover:bg-purple-600 rounded-lg flex items-center justify-center transition-colors"
+                className="w-10 h-10 bg-gray-800 hover:bg-purple rounded-lg flex items-center justify-center transition-colors"
               >
                 <Linkedin className="h-5 w-5" />
               </a>
               <a
                 href="https://twitter.com/despegatucarrera"
                 aria-label="Twitter"
-                className="w-10 h-10 bg-gray-800 hover:bg-purple-600 rounded-lg flex items-center justify-center transition-colors"
+                className="w-10 h-10 bg-gray-800 hover:bg-purple rounded-lg flex items-center justify-center transition-colors"
               >
                 <Twitter className="h-5 w-5" />
               </a>
               <a
                 href="https://facebook.com/despegatucarrera"
                 aria-label="Facebook"
-                className="w-10 h-10 bg-gray-800 hover:bg-purple-600 rounded-lg flex items-center justify-center transition-colors"
+                className="w-10 h-10 bg-gray-800 hover:bg-purple rounded-lg flex items-center justify-center transition-colors"
               >
                 <Facebook className="h-5 w-5" />
               </a>
               <a
                 href="https://instagram.com/despegatucarrera"
                 aria-label="Instagram"
-                className="w-10 h-10 bg-gray-800 hover:bg-purple-600 rounded-lg flex items-center justify-center transition-colors"
+                className="w-10 h-10 bg-gray-800 hover:bg-purple rounded-lg flex items-center justify-center transition-colors"
               >
                 <Instagram className="h-5 w-5" />
               </a>
               <a
                 href="https://youtube.com/@despegatucarrera"
                 aria-label="YouTube"
-                className="w-10 h-10 bg-gray-800 hover:bg-purple-600 rounded-lg flex items-center justify-center transition-colors"
+                className="w-10 h-10 bg-gray-800 hover:bg-purple rounded-lg flex items-center justify-center transition-colors"
               >
                 <Youtube className="h-5 w-5" />
               </a>
@@ -113,24 +113,24 @@ function LLMOOptimizedFooter() {
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/test/disc" className="hover:text-purple/40 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
+                  <span className="w-1.5 h-1.5 bg-purple/40 rounded-full"></span>
                   Despega Cerebral™
                 </Link>
               </li>
               <li>
                 <Link href="/test/mbti" className="hover:text-purple/40 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
+                  <span className="w-1.5 h-1.5 bg-purple/40 rounded-full"></span>
                   Mapa de Personalidad
                 </Link>
               </li>
               <li>
                 <Link href="/test/big-five" className="hover:text-purple/40 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>5 Dimensiones
+                  <span className="w-1.5 h-1.5 bg-purple/40 rounded-full"></span>5 Dimensiones
                 </Link>
               </li>
               <li>
                 <Link href="/test/riasec" className="hover:text-purple/40 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
+                  <span className="w-1.5 h-1.5 bg-purple/40 rounded-full"></span>
                   Brújula Vocacional
                 </Link>
               </li>
@@ -139,7 +139,7 @@ function LLMOOptimizedFooter() {
                   href="/test/emotional-intelligence"
                   className="hover:text-purple/40 transition-colors flex items-center gap-2"
                 >
-                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
+                  <span className="w-1.5 h-1.5 bg-purple/40 rounded-full"></span>
                   Inteligencia Emocional
                 </Link>
               </li>
@@ -148,7 +148,7 @@ function LLMOOptimizedFooter() {
                   href="/test/soft-skills"
                   className="hover:text-purple/40 transition-colors flex items-center gap-2"
                 >
-                  <span className="w-1.5 h-1.5 bg-purple-400 rounded-full"></span>
+                  <span className="w-1.5 h-1.5 bg-purple/40 rounded-full"></span>
                   Competencias Profesionales
                 </Link>
               </li>
@@ -161,19 +161,19 @@ function LLMOOptimizedFooter() {
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/biblioteca" className="hover:text-purple/40 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
+                  <span className="w-1.5 h-1.5 bg-blue/40 rounded-full"></span>
                   Biblioteca
                 </Link>
               </li>
               <li>
                 <Link href="/cerebro" className="hover:text-purple/40 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
+                  <span className="w-1.5 h-1.5 bg-blue/40 rounded-full"></span>
                   Coach con IA
                 </Link>
               </li>
               <li>
                 <Link href="/faq" className="hover:text-purple/40 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-blue-400 rounded-full"></span>
+                  <span className="w-1.5 h-1.5 bg-blue/40 rounded-full"></span>
                   Preguntas Frecuentes
                 </Link>
               </li>
@@ -186,13 +186,13 @@ function LLMOOptimizedFooter() {
             <ul className="space-y-3 text-sm">
               <li>
                 <Link href="/privacy" className="hover:text-purple/40 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+                  <span className="w-1.5 h-1.5 bg-cyan/40 rounded-full"></span>
                   Privacidad
                 </Link>
               </li>
               <li>
                 <Link href="/terms" className="hover:text-purple/40 transition-colors flex items-center gap-2">
-                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+                  <span className="w-1.5 h-1.5 bg-cyan/40 rounded-full"></span>
                   Términos de Servicio
                 </Link>
               </li>
@@ -201,7 +201,7 @@ function LLMOOptimizedFooter() {
                   onClick={() => setContactOpen(true)}
                   className="hover:text-purple/40 transition-colors flex items-center gap-2 cursor-pointer"
                 >
-                  <span className="w-1.5 h-1.5 bg-cyan-400 rounded-full"></span>
+                  <span className="w-1.5 h-1.5 bg-cyan/40 rounded-full"></span>
                   Contacto
                 </button>
               </li>
@@ -215,7 +215,7 @@ function LLMOOptimizedFooter() {
             <p>© 2025 Despega Tu Carrera. Todos los derechos reservados.</p>
             <div className="flex items-center gap-6">
               <span className="flex items-center gap-2">
-                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                <span className="w-2 h-2 bg-green/50 rounded-full animate-pulse"></span>
                 Sistema Operativo
               </span>
               <span>

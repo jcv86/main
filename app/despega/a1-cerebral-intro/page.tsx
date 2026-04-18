@@ -72,19 +72,19 @@ export default function A1CerebralIntroPage() {
                 El Análisis Cerebral es una evaluación de comportamiento inspirada en metodologías reconocidas que identifica tu estilo natural de comunicación y liderazgo. Basado en cuatro dimensiones principales:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 bg-red/5 dark:bg-red-950 rounded-[28px] border border-red/20 dark:border-red-800">
-                  <p className="font-semibold text-red-900 dark:text-red/10 mb-1">Impulsor</p>
-                  <p className="text-sm text-red-800 dark:text-red/20">Enfocado en resultados, decisivo, impulsivo</p>
+                <div className="p-4 bg-red/5 dark:bg-red rounded-[28px] border border-red/20 dark:border-red">
+                  <p className="font-semibold text-red dark:text-red/10 mb-1">Impulsor</p>
+                  <p className="text-sm text-red dark:text-red/20">Enfocado en resultados, decisivo, impulsivo</p>
                 </div>
                 <div className="p-4 bg-yellow/5 dark:bg-yellow rounded-[28px] border border-yellow/20 dark:border-yellow">
                   <p className="font-semibold text-yellow dark:text-yellow/10 mb-1">Catalizador</p>
                   <p className="text-sm text-yellow dark:text-yellow/20">Comunicativo, entusiasta, orientado a personas</p>
                 </div>
-                <div className="p-4 bg-green/5 dark:bg-green-950 rounded-[28px] border border-green/20 dark:border-green-800">
-                  <p className="font-semibold text-green-900 dark:text-green-100 mb-1">Estabilizador</p>
-                  <p className="text-sm text-green dark:text-green-200">Estable, cooperativo, confiable, paciente</p>
+                <div className="p-4 bg-green/5 dark:bg-green rounded-[28px] border border-green/20 dark:border-green">
+                  <p className="font-semibold text-green dark:text-green/10 mb-1">Estabilizador</p>
+                  <p className="text-sm text-green dark:text-green/20">Estable, cooperativo, confiable, paciente</p>
                 </div>
-                <div className="p-4 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue/10">
+                <div className="p-4 bg-blue/5 dark:bg-blue rounded-[28px] border border-blue/30 dark:border-blue/10">
                   <p className="font-semibold text-blue dark:text-blue/10 mb-1">Arquitecto</p>
                   <p className="text-sm text-blue dark:text-blue/20">Analítico, detallista, exigente con calidad</p>
                 </div>
@@ -168,8 +168,8 @@ export default function A1CerebralIntroPage() {
 
                   {/* MENOS column */}
                   <div>
-                    <p className="text-sm font-semibold text-red-400 mb-4 flex items-center gap-2">
-                      <span className="bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">−</span>
+                    <p className="text-sm font-semibold text-red/40 mb-4 flex items-center gap-2">
+                      <span className="bg-red text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">−</span>
                       MENOS como yo
                     </p>
                     <div className="space-y-3">
@@ -185,7 +185,7 @@ export default function A1CerebralIntroPage() {
                         <p className="text-muted/30">Paciente y considerado</p>
                         <p className="text-xs text-muted/50 mt-1">Estabilizador</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-red bg-red-600/20 rounded-lg text-left hover:bg-red-600/30 transition-all">
+                      <button className="w-full p-4 border-2 border-red bg-red/20 rounded-lg text-left hover:bg-red/30 transition-all">
                         <p className="font-medium text-white">Analítico y preciso</p>
                         <p className="text-xs text-muted/40 mt-1">Arquitecto</p>
                       </button>
@@ -194,7 +194,7 @@ export default function A1CerebralIntroPage() {
                 </div>
               </div>
 
-              <div className="bg-blue/5 dark:bg-blue-950 p-4 rounded-[28px] border border-blue/30 dark:border-blue/10">
+              <div className="bg-blue/5 dark:bg-blue p-4 rounded-[28px] border border-blue/30 dark:border-blue/10">
                 <p className="text-sm text-blue dark:text-blue/10">
                   <span className="font-semibold">¿Cómo funciona?</span> Cada pregunta tiene 4 opciones que representan los 4 estilos: Directo, Inspirador, Seguro y Consciente. Seleccionas cuál te describe MÁS y cuál te describe MENOS. El sistema cuenta tus selecciones y determina tu perfil dominante.
                 </p>
@@ -203,7 +203,7 @@ export default function A1CerebralIntroPage() {
           </Card>
 
           {/* Benefits */}
-          <Card className="border-0 shadow-lg bg-blue/5 dark:bg-blue-950">
+          <Card className="border-0 shadow-lg bg-blue/5 dark:bg-blue">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-blue dark:text-blue/10">
                 ¿Por qué es importante?

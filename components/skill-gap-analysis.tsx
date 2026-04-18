@@ -133,7 +133,7 @@ export function SkillGapAnalysis({ userEmail }: SkillGapAnalysisProps) {
         {/* Summary Stats */}
         <div className="grid grid-cols-3 gap-4 p-4 bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg">
           <div className="text-center">
-            <p className="text-2xl font-bold text-purple-600">{gaps.length}</p>
+            <p className="text-2xl font-bold text-purple">{gaps.length}</p>
             <p className="text-xs text-muted-foreground">Brechas Identificadas</p>
           </div>
           <div className="text-center">
@@ -154,7 +154,7 @@ export function SkillGapAnalysis({ userEmail }: SkillGapAnalysisProps) {
             const PercentileIcon = percentileInfo?.icon
 
             return (
-              <div key={index} className="p-4 border rounded-lg space-y-3 hover:border-purple-300 transition-colors">
+              <div key={index} className="p-4 border rounded-lg space-y-3 hover:border-purple/30 transition-colors">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
@@ -192,8 +192,8 @@ export function SkillGapAnalysis({ userEmail }: SkillGapAnalysisProps) {
 
                   {/* Gap Size Badge */}
                   <div className="text-center ml-4">
-                    <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-purple-100">
-                      <span className="text-xl font-bold text-purple-600">{gap.gap_size}</span>
+                    <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-purple/10">
+                      <span className="text-xl font-bold text-purple">{gap.gap_size}</span>
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">brecha</p>
                   </div>
@@ -210,7 +210,7 @@ export function SkillGapAnalysis({ userEmail }: SkillGapAnalysisProps) {
         </div>
 
         {/* Action CTA */}
-        <Alert className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
+        <Alert className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple/20">
           <Zap className="h-4 w-4" />
           <AlertDescription>
             <p className="font-semibold mb-2">💡 Recomendación del Sistema</p>

@@ -433,11 +433,11 @@ export default function RIASECTest() {
                 <p className="text-pink-700">Creative, expressive, and artistic activities</p>
               </div>
               <div className="p-3 bg-green/5 rounded-lg">
-                <h4 className="font-semibold text-green-900 mb-1">Social (S)</h4>
+                <h4 className="font-semibold text-green mb-1">Social (S)</h4>
                 <p className="text-green">Helping, teaching, and serving others</p>
               </div>
               <div className="p-3 bg-orange/5 rounded-lg">
-                <h4 className="font-semibold text-orange-900 mb-1">Emprendedor (E)</h4>
+                <h4 className="font-semibold text-orange mb-1">Emprendedor (E)</h4>
                 <p className="text-orange">Leading, persuading, and managing others</p>
               </div>
               <div className="p-3 bg-muted/5 rounded-lg">

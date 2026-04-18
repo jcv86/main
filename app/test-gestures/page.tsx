@@ -70,7 +70,7 @@ export default function TestGesturesPage() {
                 </div>
               </div>
               <div className="flex gap-2">
-                <Badge variant="outline" className="text-purple border-purple-300">
+                <Badge variant="outline" className="text-purple border-purple/30">
                   <Hand className="h-4 w-4 mr-1" />
                   Touch Testing
                 </Badge>
@@ -104,12 +104,12 @@ export default function TestGesturesPage() {
                       <div className="text-blue">Left, Right, Up, Down</div>
                     </div>
                     <div className="text-center p-3 bg-green/5 rounded-lg border">
-                      <div className="font-semibold text-green-900">Pinch Zoom</div>
+                      <div className="font-semibold text-green">Pinch Zoom</div>
                       <div className="text-green">In & Out Scaling</div>
                     </div>
                     <div className="text-center p-3 bg-yellow/5 rounded-lg border">
                       <div className="font-semibold text-yellow">Tap Gestures</div>
-                      <div className="text-yellow-700">Single, Double, Long</div>
+                      <div className="text-yellow">Single, Double, Long</div>
                     </div>
                     <div className="text-center p-3 bg-purple/5 rounded-lg border">
                       <div className="font-semibold text-purple">Drag & Drop</div>
@@ -140,7 +140,7 @@ export default function TestGesturesPage() {
         {gestureResults.length > 0 && (
           <Card className="border-green/20 bg-green/5">
             <CardHeader>
-              <CardTitle className="text-green-900">Test Results Summary</CardTitle>
+              <CardTitle className="text-green">Test Results Summary</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

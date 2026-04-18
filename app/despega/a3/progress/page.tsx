@@ -121,7 +121,7 @@ export default function ProgressPage() {
                     {a3Progress?.interviews_mastered || 0}
                   </div>
                 </div>
-                <Award className="w-8 h-8 text-green-300" />
+                <Award className="w-8 h-8 text-green/30" />
               </div>
             </CardContent>
           </Card>

@@ -425,18 +425,18 @@ export function ConversationalInterviewSimulator({
             <Progress value={((currentQuestionIdx + 1) / questions.length) * 100} className="h-2" />
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="bg-blue-50 dark:bg-blue/20 p-6 rounded-[28px] border border-blue-200 dark:border-blue-800">
-              <p className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
+            <div className="bg-blue/5 dark:bg-blue/20 p-6 rounded-[28px] border border-blue/20 dark:border-blue">
+              <p className="text-lg font-semibold text-muted/90 dark:text-white mb-3">
                 {currentQuestion.text}
               </p>
-              <p className="text-sm text-slate-600 dark:text-slate-400 italic">
+              <p className="text-sm text-muted/60 dark:text-muted/40 italic">
                 {currentQuestion.context}
               </p>
             </div>
 
             <Button
               onClick={() => setStage('response')}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white h-12"
+              className="w-full bg-blue hover:bg-blue text-white h-12"
             >
               <Video className="w-4 h-4 mr-2" />
               Grabar Respuesta
@@ -483,7 +483,7 @@ export function ConversationalInterviewSimulator({
                       value={userResponse}
                       onChange={(e) => setUserResponse(e.target.value)}
                       placeholder="Escribe aquí o usa micrófono..."
-                      className="flex-1 bg-slate-950/80 border border-slate-700 rounded-[28px] p-2 text-xs text-white placeholder-slate-500 focus:border-blue/50 focus:ring-1 focus:ring-blue-500 resize-none backdrop-blur-sm"
+                      className="flex-1 bg-slate-950/80 border border-muted/70 rounded-[28px] p-2 text-xs text-white placeholder-slate-500 focus:border-blue/50 focus:ring-1 focus:ring-blue-500 resize-none backdrop-blur-sm"
                       rows={2}
                     />
                     {isSupported && (
@@ -491,8 +491,8 @@ export function ConversationalInterviewSimulator({
                         onClick={isListening ? stopListening : startListening}
                         className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
                           isListening
-                            ? 'bg-red-600 hover:bg-red text-white'
-                            : 'bg-blue-600 hover:bg-blue-700 text-white'
+                            ? 'bg-red hover:bg-red text-white'
+                            : 'bg-blue hover:bg-blue text-white'
                         }`}
                         title={isListening ? 'Detener' : 'Grabar'}
                       >
@@ -504,10 +504,10 @@ export function ConversationalInterviewSimulator({
               </div>
 
               {/* Right Panel: Interviewer (40%) */}
-              <div className="lg:col-span-2 bg-gradient-to-b from-slate-900 to-slate-950 border-l border-slate-800 flex flex-col overflow-y-auto">
+              <div className="lg:col-span-2 bg-gradient-to-b from-slate-900 to-slate-950 border-l border-muted/80 flex flex-col overflow-y-auto">
                 
                 {/* Interviewer Header Card */}
-                <div className="p-4 border-b border-slate-800 space-y-3 flex-shrink-0">
+                <div className="p-4 border-b border-muted/80 space-y-3 flex-shrink-0">
                   <div className="flex gap-3">
                     <div className={`w-16 h-16 rounded-lg flex items-center justify-center text-3xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
                       {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
@@ -519,14 +519,14 @@ export function ConversationalInterviewSimulator({
                       <p className="text-sm font-semibold text-blue/40 truncate">
                         {getInterviewerRole(selectedInterviewerId)}
                       </p>
-                      <p className="text-xs text-slate-400 mt-1">Entrevistador</p>
+                      <p className="text-xs text-muted/40 mt-1">Entrevistador</p>
                     </div>
                   </div>
                   
                   {/* What they look for */}
-                  <div className="bg-slate-950/50 rounded-[28px] p-3 border border-slate-800/50">
-                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Lo que busca:</p>
-                    <p className="text-xs text-slate-300 leading-relaxed line-clamp-3">
+                  <div className="bg-slate-950/50 rounded-[28px] p-3 border border-muted/80/50">
+                    <p className="text-xs font-bold text-muted/40 uppercase tracking-widest mb-2">Lo que busca:</p>
+                    <p className="text-xs text-muted/30 leading-relaxed line-clamp-3">
                       {getInterviewerFocus(selectedInterviewerId)}
                     </p>
                   </div>
@@ -536,7 +536,7 @@ export function ConversationalInterviewSimulator({
                 <div className="flex-1 overflow-y-auto p-4 space-y-4">
                   
                   {/* Question Card */}
-                  <Card className="border border-slate-700 bg-slate-900/50">
+                  <Card className="border border-muted/70 bg-muted/90/50">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-xs flex items-center gap-2 uppercase tracking-widest font-bold">
                         <HelpCircle className="w-3.5 h-3.5 text-blue/40" />
@@ -547,7 +547,7 @@ export function ConversationalInterviewSimulator({
                       <p className="text-xs font-semibold text-white leading-snug mb-2">
                         {currentQuestion.text}
                       </p>
-                      <p className="text-xs text-slate-400 italic leading-snug">
+                      <p className="text-xs text-muted/40 italic leading-snug">
                         {currentQuestion.context}
                       </p>
                     </CardContent>
@@ -555,7 +555,7 @@ export function ConversationalInterviewSimulator({
 
                   {/* AI Tips Card */}
                   {user && (
-                    <div className="rounded-[28px] border border-slate-700 bg-slate-900/50 overflow-hidden">
+                    <div className="rounded-[28px] border border-muted/70 bg-muted/90/50 overflow-hidden">
                       <InterviewTips
                         questionText={currentQuestion.text}
                         userResponse={userResponse}
@@ -569,7 +569,7 @@ export function ConversationalInterviewSimulator({
                   )}
 
                   {/* Progress Card */}
-                  <Card className="border border-slate-700 bg-slate-900/50">
+                  <Card className="border border-muted/70 bg-muted/90/50">
                     <CardHeader className="pb-2">
                       <CardTitle className="text-xs flex items-center gap-2 uppercase tracking-widest font-bold">
                         <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
@@ -578,7 +578,7 @@ export function ConversationalInterviewSimulator({
                     </CardHeader>
                     <CardContent>
                       <div className="flex justify-between text-xs mb-2">
-                        <span className="text-slate-400">Pregunta</span>
+                        <span className="text-muted/40">Pregunta</span>
                         <span className="font-semibold text-white">
                           {currentQuestionIdx + 1}/{questions.length}
                         </span>
@@ -589,7 +589,7 @@ export function ConversationalInterviewSimulator({
                 </div>
 
                 {/* Action Buttons - Bottom */}
-                <div className="p-4 border-t border-slate-800 space-y-2 flex-shrink-0 bg-slate-950">
+                <div className="p-4 border-t border-muted/80 space-y-2 flex-shrink-0 bg-slate-950">
                   <Button
                     onClick={handleSubmitResponse}
                     disabled={!userResponse.trim()}
@@ -601,7 +601,7 @@ export function ConversationalInterviewSimulator({
                   <Button
                     onClick={handleMoveNext}
                     variant="outline"
-                    className="w-full border-slate-700 text-sm font-semibold hover:bg-slate-800"
+                    className="w-full border-muted/70 text-sm font-semibold hover:bg-muted/80"
                   >
                     Siguiente
                   </Button>
@@ -610,7 +610,7 @@ export function ConversationalInterviewSimulator({
             </div>
 
             {error && (
-              <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red/20">
+              <Alert variant="destructive" className="border-red/30 bg-red/5 dark:bg-red/20">
                 <AlertTriangle className="h-4 w-4 text-red" />
                 <AlertDescription className="text-red dark:text-red/20 ml-2">
                   {error}
@@ -634,7 +634,7 @@ export function ConversationalInterviewSimulator({
               </div>
               <div className="text-right">
                 <div className="text-3xl font-bold text-amber-600">{lastAttempt.score}</div>
-                <p className="text-xs text-slate-600">Puntuación</p>
+                <p className="text-xs text-muted/60">Puntuación</p>
               </div>
             </div>
           </CardHeader>
@@ -642,7 +642,7 @@ export function ConversationalInterviewSimulator({
             {/* Your Response */}
             <div>
               <p className="font-semibold mb-2">Tu respuesta:</p>
-              <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-[28px] italic text-slate-700 dark:text-slate-300">
+              <div className="bg-muted/5 dark:bg-muted/90 p-4 rounded-[28px] italic text-muted/70 dark:text-muted/30">
                 {lastAttempt.userResponse}
               </div>
             </div>
@@ -657,7 +657,7 @@ export function ConversationalInterviewSimulator({
 
               <TabsContent value="feedback" className="space-y-4">
                 <div>
-                  <p className="font-semibold text-green dark:text-green-300 mb-2">Fortalezas:</p>
+                  <p className="font-semibold text-green dark:text-green/30 mb-2">Fortalezas:</p>
                   <ul className="space-y-2">
                     {lastAttempt.feedback?.strengths.map((s, i) => (
                       <li key={i} className="flex gap-2 text-sm">
@@ -685,8 +685,8 @@ export function ConversationalInterviewSimulator({
                   <>
                     {Object.entries(lastAttempt.feedback.staAnalysis).map(([key, value]) => (
                       <div key={key}>
-                        <p className="font-semibold text-blue dark:text-blue-300 capitalize">{key}:</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">{value}</p>
+                        <p className="font-semibold text-blue dark:text-blue/30 capitalize">{key}:</p>
+                        <p className="text-sm text-muted/70 dark:text-muted/30">{value}</p>
                       </div>
                     ))}
                   </>
@@ -697,7 +697,7 @@ export function ConversationalInterviewSimulator({
                 <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-[28px] border border-emerald-200 dark:border-emerald-800 space-y-3">
                   <p className="font-semibold text-emerald-900 dark:text-emerald-200">Cómo sonarías mejor:</p>
                   <div className="space-y-2">
-                    <p className="text-sm text-slate-700 dark:text-slate-300">
+                    <p className="text-sm text-muted/70 dark:text-muted/30">
                       "La situación fue [contexto específico]. Mi responsabilidad fue [tu rol claro]. Lo que hice fue [acciones concretas con verbos fuertes: implementé, rediseñé, lideré]. El impacto fue [números, métricas, resultados medibles]."
                     </p>
                     <Button
@@ -715,9 +715,9 @@ export function ConversationalInterviewSimulator({
 
             {/* Follow-up Question */}
             {lastAttempt.followUp && (
-              <Alert className="bg-purple-50 dark:bg-purple/20 border-purple-200 dark:border-purple-800">
+              <Alert className="bg-purple/5 dark:bg-purple/20 border-purple/20 dark:border-purple">
                 <MessageSquare className="h-4 w-4" />
-                <AlertDescription className="text-purple-900 dark:text-purple/20">
+                <AlertDescription className="text-purple dark:text-purple/20">
                   <p className="font-semibold mb-1">Mi pregunta de seguimiento:</p>
                   <p>"{lastAttempt.followUp}"</p>
                 </AlertDescription>
@@ -729,7 +729,7 @@ export function ConversationalInterviewSimulator({
               {currentAttempts.length < 2 && (
                 <Button
                   onClick={handleRetryQuestion}
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+                  className="flex-1 bg-blue hover:bg-blue text-white"
                 >
                   <RotateCcw className="w-4 h-4 mr-2" />
                   Reintentar esta pregunta
@@ -761,23 +761,23 @@ export function ConversationalInterviewSimulator({
               <div className="text-5xl font-bold text-emerald-600 mb-2">
                 {Object.values(attempts).flat().reduce((acc, a) => acc + a.score, 0) / Math.max(1, Object.values(attempts).flat().length)}
               </div>
-              <p className="text-slate-600">Puntuación Promedio</p>
+              <p className="text-muted/60">Puntuación Promedio</p>
 
               {/* XP Rewards */}
               {gamification && (
-                <div className="bg-blue-50 dark:bg-blue/20 p-4 rounded-[28px] space-y-2">
+                <div className="bg-blue/5 dark:bg-blue/20 p-4 rounded-[28px] space-y-2">
                   <div className="flex items-center justify-center gap-2">
                     <Zap className="w-5 h-5 text-blue" />
                     <span className="font-bold text-blue">+150 XP Ganados</span>
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                  <p className="text-sm text-muted/60 dark:text-muted/40">
                     Nivel: {gamification.current_level} • Racha: {gamification.current_streak} días
                   </p>
                 </div>
               )}
             </div>
 
-            <p className="text-center text-slate-700 dark:text-slate-300">
+            <p className="text-center text-muted/70 dark:text-muted/30">
               Completaste {questions.length} preguntas con un total de {Object.values(attempts).flat().length} intentos.
             </p>
 

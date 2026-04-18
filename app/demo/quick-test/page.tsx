@@ -58,7 +58,7 @@ export default function QuickTestPage() {
       <div className="container mx-auto max-w-4xl">
         {/* Header */}
         <div className="text-center mb-12">
-          <Badge className="mb-4 bg-orange/10 dark:bg-orange/40 text-orange dark:text-orange-300 border-orange/20 dark:border-orange-800">
+          <Badge className="mb-4 bg-orange/10 dark:bg-orange/40 text-orange dark:text-orange/30 border-orange/20 dark:border-orange">
             <Zap className="h-3 w-3 mr-2" />
             Quick Test Mode
           </Badge>
@@ -69,7 +69,7 @@ export default function QuickTestPage() {
         </div>
 
         {/* Alert */}
-        <Alert className="mb-8 border-blue/20 dark:border-blue/10 bg-blue/5 dark:bg-blue-950/30">
+        <Alert className="mb-8 border-blue/20 dark:border-blue/10 bg-blue/5 dark:bg-blue/30">
           <AlertCircle className="h-4 w-4 text-blue dark:text-blue/40" />
           <AlertDescription className="text-blue dark:text-blue/20">
             Este es un modo de testing. Todos los links abiertos sin requirir autenticación completa.
@@ -121,13 +121,13 @@ export default function QuickTestPage() {
 
         {/* Summary */}
         {Object.keys(results).length > 0 && (
-          <Card className="bg-gradient-to-r from-green/5 to-green/5 dark:from-green-950/30 dark:to-green/30 border-green/20 dark:border-green-800">
+          <Card className="bg-gradient-to-r from-green/5 to-green/5 dark:from-green-950/30 dark:to-green/30 border-green/20 dark:border-green">
             <CardHeader>
-              <CardTitle className="text-green-900 dark:text-green-100">
+              <CardTitle className="text-green dark:text-green/10">
                 ✓ {Object.keys(results).length}/{tests.length} Pilares Probados
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-green dark:text-green-200">
+            <CardContent className="text-green dark:text-green/20">
               <p>
                 El sistema A1-A4 está funcionando correctamente. Todos los pilares son accesibles y entregan resultados esperados.
               </p>

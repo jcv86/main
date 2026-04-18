@@ -24,17 +24,17 @@ const DISC_DESCRIPTIONS: Record<string, { name: string; color: string; descripti
   },
   I: {
     name: "Influencia",
-    color: "bg-blue-500/10",
+    color: "bg-blue/50/10",
     description: "Comunicativo, entusiasta y orientado a las personas",
   },
   S: {
     name: "Estabilidad",
-    color: "bg-green-500/10",
+    color: "bg-green/50/10",
     description: "Cooperativo, confiable y orientado al equipo",
   },
   C: {
     name: "Consciencia",
-    color: "bg-purple-500/10",
+    color: "bg-purple/50/10",
     description: "Analítico, preciso y orientado a la calidad",
   },
 }

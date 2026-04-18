@@ -39,7 +39,7 @@ export default function UniversityPartnershipsPage() {
         </div>
 
         {/* El Desafío */}
-        <div className="bg-gradient-to-br from-red-50 to-orange/5 rounded-2xl shadow-lg p-8 mb-8 border-2 border-red-100">
+        <div className="bg-gradient-to-br from-red-50 to-orange/5 rounded-2xl shadow-lg p-8 mb-8 border-2 border-red/10">
           <h2 className="text-3xl font-bold text-muted/90 mb-6">🎯 El Desafío de la Empleabilidad en Chile</h2>
 
           <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -77,7 +77,7 @@ export default function UniversityPartnershipsPage() {
             </div>
 
             <div className="bg-white rounded-xl p-6">
-              <h3 className="text-xl font-bold text-yellow-700 mb-3">Pertinencia Curricular</h3>
+              <h3 className="text-xl font-bold text-yellow mb-3">Pertinencia Curricular</h3>
               <p className="text-muted/70 mb-2">
                 Desconexión entre <strong>academia y mercado laboral</strong>
               </p>
@@ -234,7 +234,7 @@ export default function UniversityPartnershipsPage() {
         </div>
 
         {/* Propuesta de Valor para Universidades */}
-        <div className="bg-gradient-to-br from-green/5 to-green/5 rounded-2xl shadow-lg p-8 mb-8 border-2 border-green-100">
+        <div className="bg-gradient-to-br from-green/5 to-green/5 rounded-2xl shadow-lg p-8 mb-8 border-2 border-green/10">
           <h2 className="text-3xl font-bold text-muted/90 mb-6">🎁 Propuesta de Valor para Universidades</h2>
 
           <div className="grid md:grid-cols-2 gap-6">
@@ -311,7 +311,7 @@ export default function UniversityPartnershipsPage() {
             </div>
 
             <div className="bg-white rounded-xl p-6">
-              <h3 className="text-xl font-bold text-cyan-700 mb-4">🏆 Ventaja Competitiva</h3>
+              <h3 className="text-xl font-bold text-cyan mb-4">🏆 Ventaja Competitiva</h3>
               <ul className="space-y-2 text-muted/70">
                 <li className="flex items-start gap-2">
                   <span className="text-blue">✓</span>

@@ -159,11 +159,11 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-blue-50 rounded">
+            <div className="p-4 bg-blue/5 rounded">
               <div className="text-sm text-muted/60">Tipo</div>
               <div className="font-medium">{getTypeLabel()}</div>
             </div>
-            <div className="p-4 bg-green-50 rounded">
+            <div className="p-4 bg-green/5 rounded">
               <div className="text-sm text-muted/60">Nivel</div>
               <div className="font-medium capitalize">{level}</div>
             </div>
@@ -204,7 +204,7 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
             <div>
               <CardTitle>Pregunta {currentQuestionIdx + 1} de {questions.length}</CardTitle>
             </div>
-            <Badge className="bg-red-600 flex items-center gap-2">
+            <Badge className="bg-red flex items-center gap-2">
               <span className="animate-pulse">●</span>
               {formatTime(recordingTime)}
             </Badge>
@@ -221,7 +221,7 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
             />
           </div>
 
-          <div className="bg-blue-50 p-4 rounded border border-blue-200">
+          <div className="bg-blue/5 p-4 rounded border border-blue/20">
             <div className="text-sm text-muted/60 mb-2">Pregunta</div>
             <div className="text-lg font-medium">{currentQuestion}</div>
           </div>
@@ -234,7 +234,7 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
           </div>
 
           {recordingTime > 90 && (
-            <Alert className="bg-orange/5 border-orange-300">
+            <Alert className="bg-orange/5 border-orange/30">
               <AlertTriangle className="h-4 w-4 text-orange" />
               <AlertDescription className="text-orange">
                 Estás excediendo el tiempo recomendado (60-90s). Intenta ser más conciso.
@@ -254,7 +254,7 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Score Visualization */}
-          <div className="bg-gradient-to-r from-blue-50 to-blue/5 p-6 rounded-[28px] border border-blue-200">
+          <div className="bg-gradient-to-r from-blue-50 to-blue/5 p-6 rounded-[28px] border border-blue/20">
             <div className="text-sm text-muted/60 mb-2">Desempeño en esta respuesta</div>
             <div className="text-4xl font-bold text-indigo-600 mb-2">
               {feedback.performance_score}%
@@ -288,7 +288,7 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
           </div>
 
           {/* Strengths */}
-          <div className="bg-green-50 p-4 rounded border border-green-200">
+          <div className="bg-green/5 p-4 rounded border border-green/20">
             <div className="font-medium text-sm mb-2">✓ Lo que funcionó</div>
             <ul className="space-y-1">
               {feedback.strengths.map((str: string, idx: number) => (
@@ -308,7 +308,7 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
           </div>
 
           {/* Coach Narrative */}
-          <div className="bg-blue-50 p-4 rounded border border-blue-200 italic">
+          <div className="bg-blue/5 p-4 rounded border border-blue/20 italic">
             "{feedback.coach_feedback}"
           </div>
 

@@ -61,21 +61,21 @@ export default function InvestorPitch() {
               El Problema
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-gradient-to-br from-red-50 to-orange/5 rounded-xl p-6 border border-red-100">
+              <div className="bg-gradient-to-br from-red-50 to-orange/5 rounded-xl p-6 border border-red/10">
                 <h3 className="font-bold text-lg mb-3 text-foreground">Acceso Limitado</h3>
                 <p className="text-muted">
                   Las herramientas de desarrollo profesional son caras e inaccesibles para la mayoría de los
                   profesionales chilenos. La coaching de carrera cuesta $100-300+ por sesión.
                 </p>
               </div>
-              <div className="bg-gradient-to-br from-orange/5 to-yellow-50 rounded-xl p-6 border border-orange-100">
+              <div className="bg-gradient-to-br from-orange/5 to-yellow-50 rounded-xl p-6 border border-orange/10">
                 <h3 className="font-bold text-lg mb-3 text-foreground">Soluciones Fragmentadas</h3>
                 <p className="text-muted">
                   Las pruebas, libros y coaching están dispersos en múltiples plataformas. No existe una solución
                   unificada para un desarrollo de carrera completo.
                 </p>
               </div>
-              <div className="bg-gradient-to-br from-yellow-50 to-red-50 rounded-xl p-6 border border-yellow-100">
+              <div className="bg-gradient-to-br from-yellow-50 to-red-50 rounded-xl p-6 border border-yellow/10">
                 <h3 className="font-bold text-lg mb-3 text-foreground">Sin Personalización</h3>
                 <p className="text-muted">
                   El consejo genérico no considera las personalidades individuales, las fortalezas o las condiciones del
@@ -307,7 +307,7 @@ export default function InvestorPitch() {
               </div>
 
               <div className="space-y-4">
-                <div className="bg-orange/5 rounded-lg p-5 border border-orange-100">
+                <div className="bg-orange/5 rounded-lg p-5 border border-orange/10">
                   <h3 className="font-bold text-lg mb-2 text-foreground">💡 Plataforma Todo en Uno</h3>
                   <p className="text-muted text-sm">
                     Pruebas + Biblioteca + Coaching de IA en una sola plataforma. Los usuarios actualmente necesitan 3-4

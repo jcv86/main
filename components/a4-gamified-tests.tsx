@@ -110,9 +110,9 @@ export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4Gamif
 
   const getNivelColor = (nivel: string) => {
     const colors: Record<string, string> = {
-      "basico": "bg-green/10 text-green dark:bg-green/40 dark:text-green-300",
-      "intermedio": "bg-blue/10 text-blue dark:bg-blue/40 dark:text-blue-300",
-      "avanzado": "bg-purple-100 text-purple-800 dark:bg-purple/40 dark:text-purple/30",
+      "basico": "bg-green/10 text-green dark:bg-green/40 dark:text-green/30",
+      "intermedio": "bg-blue/10 text-blue dark:bg-blue/40 dark:text-blue/30",
+      "avanzado": "bg-purple/10 text-purple dark:bg-purple/40 dark:text-purple/30",
     }
     return colors[nivel] || "bg-muted/10"
   }
@@ -171,7 +171,7 @@ export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4Gamif
                 </div>
                 {test.badge && (
                   <div className="flex items-center gap-2">
-                    <Trophy className="w-4 h-4 text-purple-600" />
+                    <Trophy className="w-4 h-4 text-purple" />
                     <span className="text-sm">Badge: {test.badge}</span>
                   </div>
                 )}
@@ -264,17 +264,17 @@ export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4Gamif
       ) : (
         <>
           {/* Results */}
-          <Card className={score >= 70 ? "border-green-200 bg-green-50 dark:bg-green/20" : "border-orange/20 bg-orange/5 dark:bg-orange/20"}>
+          <Card className={score >= 70 ? "border-green/20 bg-green/5 dark:bg-green/20" : "border-orange/20 bg-orange/5 dark:bg-orange/20"}>
             <CardContent className="pt-6 text-center space-y-4">
               {score >= 70 ? (
                 <>
                   <CheckCircle2 className="w-12 h-12 text-green mx-auto" />
                   <div>
-                    <h3 className="text-xl font-bold text-green-900 dark:text-green-100">¡Excelente!</h3>
-                    <p className="text-sm text-green dark:text-green-200">Has pasado el test</p>
+                    <h3 className="text-xl font-bold text-green dark:text-green/10">¡Excelente!</h3>
+                    <p className="text-sm text-green dark:text-green/20">Has pasado el test</p>
                   </div>
-                  <div className="text-3xl font-bold text-green-900 dark:text-green-100">{score}%</div>
-                  <p className="text-sm text-green dark:text-green-200">
+                  <div className="text-3xl font-bold text-green dark:text-green/10">{score}%</div>
+                  <p className="text-sm text-green dark:text-green/20">
                     +{selectedTest.puntos} puntos ganados
                     {selectedTest.badge && ` • Badge desbloqueado: ${selectedTest.badge}`}
                   </p>
@@ -283,11 +283,11 @@ export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4Gamif
                 <>
                   <AlertCircle className="w-12 h-12 text-orange mx-auto" />
                   <div>
-                    <h3 className="text-xl font-bold text-orange-900 dark:text-orange/10">Necesitas mejorar</h3>
-                    <p className="text-sm text-orange dark:text-orange-200">Intenta nuevamente más adelante</p>
+                    <h3 className="text-xl font-bold text-orange dark:text-orange/10">Necesitas mejorar</h3>
+                    <p className="text-sm text-orange dark:text-orange/20">Intenta nuevamente más adelante</p>
                   </div>
-                  <div className="text-3xl font-bold text-orange-900 dark:text-orange/10">{score}%</div>
-                  <p className="text-sm text-orange dark:text-orange-200">
+                  <div className="text-3xl font-bold text-orange dark:text-orange/10">{score}%</div>
+                  <p className="text-sm text-orange dark:text-orange/20">
                     Necesitas al menos 70% para pasar
                   </p>
                 </>
@@ -300,7 +300,7 @@ export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4Gamif
                     key={index}
                     className={`p-3 rounded-[28px] border-l-4 ${
                       userAnswers[index] === q.respuesta_correcta
-                        ? "border-l-green-600 bg-green-50 dark:bg-green/20"
+                        ? "border-l-green-600 bg-green/5 dark:bg-green/20"
                         : "border-l-orange-600 bg-orange/5 dark:bg-orange/20"
                     }`}
                   >

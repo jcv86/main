@@ -165,7 +165,7 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
             <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
               <div
                 className={`max-w-[85%] rounded-[28px] p-3 ${
-                  message.sender === "user" ? "bg-blue-600 text-white" : "bg-muted text-foreground"
+                  message.sender === "user" ? "bg-blue text-white" : "bg-muted text-foreground"
                 }`}
               >
                 <div className="flex items-start gap-2">

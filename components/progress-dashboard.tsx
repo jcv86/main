@@ -50,7 +50,7 @@ export function ProgressDashboard() {
 
         <Card>
           <CardContent className="pt-6 text-center">
-            <BookMarked className="w-8 h-8 mx-auto mb-2 text-blue-500" />
+            <BookMarked className="w-8 h-8 mx-auto mb-2 text-blue/50" />
             <p className="text-sm text-muted-foreground">Libros Completados</p>
             <p className="text-3xl font-bold">{stats.booksCompleted}</p>
             <p className="text-xs text-muted-foreground mt-1">de 64</p>

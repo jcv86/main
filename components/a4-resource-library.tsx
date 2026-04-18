@@ -39,19 +39,19 @@ const getResourceIcon = (tipo: string) => {
 
 const getResourceColor = (tipo: string) => {
   const colors: Record<string, string> = {
-    articulo: "bg-blue/10 text-blue dark:bg-blue/40 dark:text-blue-300",
-    video: "bg-red/10 text-red-800 dark:bg-red/40 dark:text-red-300",
-    podcast: "bg-purple-100 text-purple-800 dark:bg-purple/40 dark:text-purple/30",
-    libro: "bg-green/10 text-green dark:bg-green/40 dark:text-green-300",
+    articulo: "bg-blue/10 text-blue dark:bg-blue/40 dark:text-blue/30",
+    video: "bg-red/10 text-red dark:bg-red/40 dark:text-red/30",
+    podcast: "bg-purple/10 text-purple dark:bg-purple/40 dark:text-purple/30",
+    libro: "bg-green/10 text-green dark:bg-green/40 dark:text-green/30",
   }
   return colors[tipo] || "bg-muted/10"
 }
 
 const getNivelColor = (nivel: string) => {
   const colors: Record<string, string> = {
-    "basico": "bg-green-50 text-green border-green-200",
-    "intermedio": "bg-blue-50 text-blue border-blue-200",
-    "avanzado": "bg-purple-50 text-purple-700 border-purple-200",
+    "basico": "bg-green/5 text-green border-green/20",
+    "intermedio": "bg-blue/5 text-blue border-blue/20",
+    "avanzado": "bg-purple/5 text-purple border-purple/20",
   }
   return colors[nivel] || "bg-muted/5"
 }
@@ -254,7 +254,7 @@ export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource 
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 ${i < Math.round(resource.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-muted/30'}`}
+                    className={`w-4 h-4 ${i < Math.round(resource.rating) ? 'fill-yellow-400 text-yellow/40' : 'text-muted/30'}`}
                   />
                 ))}
                 <span className="text-sm text-muted-foreground ml-1">{resource.rating}/5</span>

@@ -685,7 +685,7 @@ export function WhitepaperClient() {
           <h2 className="text-3xl font-bold mb-6 text-foreground">8. Security & Compliance</h2>
 
           <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div className="bg-red/5 rounded-lg p-6 border border-red-100">
+            <div className="bg-red/5 rounded-lg p-6 border border-red/10">
               <h3 className="text-xl font-bold mb-4 text-foreground">Authentication & Authorization</h3>
               <ul className="space-y-2 text-muted">
                 <li>• JWT-based sessions</li>
@@ -694,7 +694,7 @@ export function WhitepaperClient() {
                 <li>• Session expiry & refresh</li>
               </ul>
             </div>
-            <div className="bg-orange/5 rounded-lg p-6 border border-orange-100">
+            <div className="bg-orange/5 rounded-lg p-6 border border-orange/10">
               <h3 className="text-xl font-bold mb-4 text-foreground">Data Protection</h3>
               <ul className="space-y-2 text-muted">
                 <li>• Encryption at rest & in transit</li>
@@ -707,7 +707,7 @@ export function WhitepaperClient() {
 
           <div className="bg-gradient-to-r from-green-600 to-emerald-600 rounded-lg p-8 text-white">
             <h3 className="text-2xl font-bold mb-4">GDPR Compliance</h3>
-            <p className="text-green-100 mb-4">The platform is fully GDPR-compliant with:</p>
+            <p className="text-green/10 mb-4">The platform is fully GDPR-compliant with:</p>
             <div className="grid md:grid-cols-2 gap-4">
               {[
                 "Right to Access (data download)",

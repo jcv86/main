@@ -144,8 +144,8 @@ export default function ChallensingTrainingPage() {
   const getScoreColor = (score: number) => {
     if (score >= 85) return 'bg-green'
     if (score >= 75) return 'bg-blue'
-    if (score >= 65) return 'bg-yellow-600'
-    return 'bg-red-600'
+    if (score >= 65) return 'bg-yellow'
+    return 'bg-red'
   }
 
   const getScoreLabel = (score: number) => {
@@ -161,12 +161,12 @@ export default function ChallensingTrainingPage() {
         {/* Header */}
         <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-background p-4">
           <div className="flex items-center justify-between">
-            <Link href="/despega/a3-dashboard" className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300">
+            <Link href="/despega/a3-dashboard" className="flex items-center gap-2 text-cyan/40 hover:text-cyan/30">
               <ArrowLeft className="w-4 h-4" />
               Volver al Dashboard
             </Link>
             <div className="flex gap-4 items-center">
-              <Badge className="bg-red-600 text-xs">DESAFÍO MÁXIMO</Badge>
+              <Badge className="bg-red text-xs">DESAFÍO MÁXIMO</Badge>
               <Badge className="bg-purple text-xs">{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
             </div>
           </div>
@@ -189,7 +189,7 @@ export default function ChallensingTrainingPage() {
                 
                 {/* Recording indicator */}
                 {isRecording && (
-                  <div className="absolute top-4 left-4 flex items-center gap-2 bg-red-600 px-3 py-2 rounded-lg">
+                  <div className="absolute top-4 left-4 flex items-center gap-2 bg-red px-3 py-2 rounded-lg">
                     <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
                     <span className="text-xs text-white font-bold">GRABANDO</span>
                   </div>
@@ -224,7 +224,7 @@ export default function ChallensingTrainingPage() {
                   {!isRecording ? (
                     <Button
                       onClick={handleStartRecording}
-                      className="flex-1 bg-red-600 hover:bg-red gap-2"
+                      className="flex-1 bg-red hover:bg-red gap-2"
                     >
                       <Mic className="w-4 h-4" />
                       Comenzar Grabación
@@ -232,7 +232,7 @@ export default function ChallensingTrainingPage() {
                   ) : (
                     <Button
                       onClick={handleStopRecording}
-                      className="flex-1 bg-red-600 hover:bg-red gap-2"
+                      className="flex-1 bg-red hover:bg-red gap-2"
                     >
                       <MicOff className="w-4 h-4" />
                       Detener Grabación
@@ -274,7 +274,7 @@ export default function ChallensingTrainingPage() {
                   <div>
                     <p className="text-xs text-muted/40 mb-2">Promedio General</p>
                     <div className="flex items-end gap-2">
-                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green/40' : 'text-yellow-400'}`}>
+                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green/40' : 'text-yellow/40'}`}>
                         {averageScore}
                       </span>
                       <span className="text-xs text-muted/40 pb-2">/100</span>
@@ -338,7 +338,7 @@ export default function ChallensingTrainingPage() {
               {/* Feedback */}
               {averageScore > 0 && averageScore < 75 && (
                 <div className="p-4 border-t border-muted/80 bg-yellow/20 flex-shrink-0">
-                  <p className="text-xs font-bold text-yellow-400 mb-2 flex items-center gap-1">
+                  <p className="text-xs font-bold text-yellow/40 mb-2 flex items-center gap-1">
                     <AlertCircle className="w-4 h-4" />
                     Retroalimentación
                   </p>

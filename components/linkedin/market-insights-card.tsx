@@ -48,8 +48,8 @@ export function MarketInsightsCard() {
     return (
       <Card>
         <CardContent className="py-8 flex items-center justify-center">
-          <Loader2 className="w-6 h-6 animate-spin text-cyan-500" />
-          <span className="ml-2 text-slate-600">Analyzing market trends...</span>
+          <Loader2 className="w-6 h-6 animate-spin text-cyan/50" />
+          <span className="ml-2 text-muted/60">Analyzing market trends...</span>
         </CardContent>
       </Card>
     )
@@ -58,10 +58,10 @@ export function MarketInsightsCard() {
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       {/* Trending Skills Card */}
-      <Card className="border-cyan-200 bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-950/20 dark:to-blue-950/20">
+      <Card className="border-cyan/20 bg-gradient-to-br from-cyan-50 to-blue-50 dark:from-cyan-950/20 dark:to-blue-950/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
-            <TrendingUp className="w-5 h-5 text-cyan-600" />
+            <TrendingUp className="w-5 h-5 text-cyan" />
             Trending Skills
           </CardTitle>
         </CardHeader>
@@ -70,26 +70,26 @@ export function MarketInsightsCard() {
             <div key={skill.skill} className="flex items-center justify-between">
               <div className="flex-1">
                 <p className="text-sm font-medium">{skill.skill}</p>
-                <div className="w-full bg-slate-200 rounded-full h-2 mt-1">
+                <div className="w-full bg-muted/20 rounded-full h-2 mt-1">
                   <div
-                    className="bg-cyan-500 h-2 rounded-full"
+                    className="bg-cyan/50 h-2 rounded-full"
                     style={{
                       width: `${Math.min((skill.demand_count / (marketData?.trending_skills[0].demand_count || 1)) * 100, 100)}%`,
                     }}
                   />
                 </div>
               </div>
-              <span className="text-xs text-slate-600 ml-2">{skill.demand_count}</span>
+              <span className="text-xs text-muted/60 ml-2">{skill.demand_count}</span>
             </div>
           ))}
         </CardContent>
       </Card>
 
       {/* Skill Gap Analysis Card */}
-      <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20">
+      <Card className="border-purple/20 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
-            <Target className="w-5 h-5 text-purple-600" />
+            <Target className="w-5 h-5 text-purple" />
             Your Skill Gap
           </CardTitle>
         </CardHeader>
@@ -100,9 +100,9 @@ export function MarketInsightsCard() {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium">Gap vs Market Demand</span>
-                  <span className="text-lg font-bold text-purple-600">{skillGap.gap_percentage}%</span>
+                  <span className="text-lg font-bold text-purple">{skillGap.gap_percentage}%</span>
                 </div>
-                <div className="w-full bg-slate-200 rounded-full h-3">
+                <div className="w-full bg-muted/20 rounded-full h-3">
                   <div
                     className="bg-gradient-to-r from-purple-500 to-pink-500 h-3 rounded-full"
                     style={{ width: `${skillGap.gap_percentage}%` }}
@@ -113,7 +113,7 @@ export function MarketInsightsCard() {
               {/* Current Strengths */}
               {skillGap.current_strengths.length > 0 && (
                 <div>
-                  <p className="text-xs font-semibold text-slate-700 mb-2">Your Strengths</p>
+                  <p className="text-xs font-semibold text-muted/70 mb-2">Your Strengths</p>
                   <div className="flex flex-wrap gap-2">
                     {skillGap.current_strengths.slice(0, 5).map((skill) => (
                       <Badge key={skill} className="bg-green/10 text-green">
@@ -127,7 +127,7 @@ export function MarketInsightsCard() {
               {/* Skills to Learn */}
               {skillGap.skills_to_learn.length > 0 && (
                 <div>
-                  <p className="text-xs font-semibold text-slate-700 mb-2">Priority Skills to Learn</p>
+                  <p className="text-xs font-semibold text-muted/70 mb-2">Priority Skills to Learn</p>
                   <div className="flex flex-wrap gap-2">
                     {skillGap.skills_to_learn.slice(0, 5).map((skill) => (
                       <Badge key={skill} className="bg-amber-100 text-amber-800">
@@ -139,7 +139,7 @@ export function MarketInsightsCard() {
               )}
             </>
           ) : (
-            <p className="text-sm text-slate-600">Sync your LinkedIn profile to see your skill gap</p>
+            <p className="text-sm text-muted/60">Sync your LinkedIn profile to see your skill gap</p>
           )}
         </CardContent>
       </Card>
@@ -158,25 +158,25 @@ export function MarketInsightsCard() {
               <p className="text-2xl font-bold text-teal-600">
                 {marketData?.market_snapshot.total_jobs_tracked || 0}
               </p>
-              <p className="text-xs text-slate-600 mt-1">Jobs Tracked</p>
+              <p className="text-xs text-muted/60 mt-1">Jobs Tracked</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-cyan-600">
+              <p className="text-2xl font-bold text-cyan">
                 {marketData?.trending_skills.length || 0}
               </p>
-              <p className="text-xs text-slate-600 mt-1">Trending Skills</p>
+              <p className="text-xs text-muted/60 mt-1">Trending Skills</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-purple-600">
+              <p className="text-2xl font-bold text-purple">
                 {skillGap?.current_strengths.length || 0}
               </p>
-              <p className="text-xs text-slate-600 mt-1">Your Strengths</p>
+              <p className="text-xs text-muted/60 mt-1">Your Strengths</p>
             </div>
             <div className="text-center">
               <p className="text-2xl font-bold text-amber-600">
                 {skillGap?.skills_to_learn.length || 0}
               </p>
-              <p className="text-xs text-slate-600 mt-1">To Learn</p>
+              <p className="text-xs text-muted/60 mt-1">To Learn</p>
             </div>
           </div>
         </CardContent>

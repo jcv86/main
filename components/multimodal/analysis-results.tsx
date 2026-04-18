@@ -66,11 +66,11 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
   return (
     <div className="space-y-6">
       {/* Overall Score */}
-      <Card className="border-2 border-blue-200">
+      <Card className="border-2 border-blue/20">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span>Tu Puntuación General</span>
-            <Badge className="bg-blue-600">{analysis.overall_score}/100</Badge>
+            <Badge className="bg-blue">{analysis.overall_score}/100</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -156,14 +156,14 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
         <CardContent className="space-y-3">
           <div className="flex justify-between items-center p-3 bg-muted/5 rounded-lg">
             <span className="text-sm font-medium">Alineación Visual-Audio</span>
-            <Badge className="bg-yellow-600">{analysis.coherence_analysis.visual_audio_alignment}%</Badge>
+            <Badge className="bg-yellow">{analysis.coherence_analysis.visual_audio_alignment}%</Badge>
           </div>
           <p className="text-sm text-muted">{analysis.coherence_analysis.message_consistency}</p>
         </CardContent>
       </Card>
 
       {/* Key Strengths */}
-      <Card className="border-2 border-green-200">
+      <Card className="border-2 border-green/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-green">
             <CheckCircle2 className="w-5 h-5" />
@@ -203,7 +203,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
       </Card>
 
       {/* Personalized Recommendations */}
-      <Card className="border-2 border-blue-200">
+      <Card className="border-2 border-blue/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-blue">
             <TrendingUp className="w-5 h-5" />
@@ -212,7 +212,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
         </CardHeader>
         <CardContent className="space-y-3">
           {analysis.personalized_recommendations.map((rec: string, i: number) => (
-            <div key={i} className="flex gap-3 p-3 bg-blue-50 rounded-lg">
+            <div key={i} className="flex gap-3 p-3 bg-blue/5 rounded-lg">
               <span className="font-bold text-blue flex-shrink-0">{i + 1}.</span>
               <p className="text-sm text-muted">{rec}</p>
             </div>

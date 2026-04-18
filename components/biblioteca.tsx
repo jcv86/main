@@ -81,7 +81,7 @@ export function Biblioteca() {
       <Card className="border-0 bg-gradient-to-br from-blue-500/5 to-blue-500/10 backdrop-blur-sm">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-blue-500/10 rounded-lg">
+            <div className="p-3 bg-blue/50/10 rounded-lg">
               <BookOpen className="w-6 h-6 text-blue dark:text-blue/40" />
             </div>
             <div>

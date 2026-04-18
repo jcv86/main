@@ -18,7 +18,7 @@ const CATEGORIAS_BASE = [
     icon: Newspaper,
     color: "bg-red/50",
     lightColor: "bg-red/10",
-    textColor: "text-red-800",
+    textColor: "text-red",
   },
   {
     id: "cultura",
@@ -145,7 +145,7 @@ export default function BasePage() {
                   <div className="text-2xl mb-2">🏗️</div>
                   <h3 className="font-bold text-sm">A2: Exploración</h3>
                   <p className="text-xs text-blue/10 mt-1">Construye tu plan de 90 días</p>
-                  <Badge className="mt-2 bg-yellow-400 text-yellow text-xs">En Progreso</Badge>
+                  <Badge className="mt-2 bg-yellow/40 text-yellow text-xs">En Progreso</Badge>
                 </div>
               </Link>
               
@@ -189,7 +189,7 @@ export default function BasePage() {
         </div>
 
         {/* NEXT STEPS - PROMINENT */}
-        <Card className="border-2 border-green bg-green/5 dark:bg-green-950/30 shadow-lg">
+        <Card className="border-2 border-green bg-green/5 dark:bg-green/30 shadow-lg">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
               <span className="text-2xl">🎯</span> Tu Próximo Paso
@@ -201,7 +201,7 @@ export default function BasePage() {
             </p>
             <div className="flex gap-3">
               <Link href="/despega/a2/dashboard" className="flex-1">
-                <Button className="w-full bg-green hover:bg-green-700 text-white font-semibold" size="lg">
+                <Button className="w-full bg-green hover:bg-green text-white font-semibold" size="lg">
                   Continuar en A2 Sprint 1
                 </Button>
               </Link>

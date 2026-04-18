@@ -111,7 +111,7 @@ export function GamificationProfile({
               <p className="text-xs text-muted/60">Tips Earned</p>
             </div>
             <div className="bg-white/50 rounded-[28px] p-4 text-center">
-              <Award className="w-6 h-6 text-purple-500 mx-auto mb-2" />
+              <Award className="w-6 h-6 text-purple/50 mx-auto mb-2" />
               <p className="text-2xl font-bold text-foreground">{badges.length}</p>
               <p className="text-xs text-muted/60">Badges</p>
             </div>
@@ -123,14 +123,14 @@ export function GamificationProfile({
       {badges.length > 0 && (
         <Card className="p-6">
           <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-            <Award className="w-5 h-5 text-purple-500" />
+            <Award className="w-5 h-5 text-purple/50" />
             Your Achievements
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {badges.map((badge) => (
               <div
                 key={badge}
-                className="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-purple-50 to-blue-50 rounded-[28px] border border-purple-200"
+                className="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-purple-50 to-blue-50 rounded-[28px] border border-purple/20"
               >
                 <span className="text-4xl">
                   {BADGE_ICONS[badge] || '🎖️'}

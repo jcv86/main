@@ -3645,11 +3645,11 @@ export default function BookReaderPage() {
               )}
 
               {ttsError && (
-                <div className="mt-3 p-2 bg-red/10 border border-red-300 rounded text-sm text-red">{ttsError}</div>
+                <div className="mt-3 p-2 bg-red/10 border border-red/30 rounded text-sm text-red">{ttsError}</div>
               )}
 
               {!isPlaying && !isPaused && availableVoices.length === 0 && (
-                <div className="mt-3 p-2 bg-yellow/10 border border-yellow-300 rounded text-sm text-yellow-700">
+                <div className="mt-3 p-2 bg-yellow/10 border border-yellow/30 rounded text-sm text-yellow">
                   Cargando voces disponibles...
                 </div>
               )}

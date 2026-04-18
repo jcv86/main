@@ -77,7 +77,7 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
                 </div>
               </div>
             </div>
-            <div className="p-3 bg-blue-50 border border-blue-200 rounded">
+            <div className="p-3 bg-blue/5 border border-blue/20 rounded">
               <div className="text-sm font-medium mb-2">Observaciones</div>
               <p className="text-sm text-muted">{observations?.postura_changes}</p>
               <p className="text-sm text-muted mt-2">{observations?.eye_contact_pattern}</p>
@@ -162,10 +162,10 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
               <div className="p-3 bg-muted/5 rounded">
                 <div className="text-sm text-muted/60 mb-2">Enfoque de Respuestas</div>
                 <Badge className={
-                  observations?.response_focus === "muy_enfocada" ? "bg-green-600" :
-                  observations?.response_focus === "enfocada" ? "bg-green-500" :
+                  observations?.response_focus === "muy_enfocada" ? "bg-green" :
+                  observations?.response_focus === "enfocada" ? "bg-green/50" :
                   observations?.response_focus === "dispersa" ? "bg-amber-600" :
-                  "bg-red-600"
+                  "bg-red"
                 }>
                   {observations?.response_focus?.replace("_", " ")}
                 </Badge>
@@ -243,7 +243,7 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
             </Alert>
           )}
 
-          <div className="p-3 bg-green-50 border border-green-200 rounded">
+          <div className="p-3 bg-green/5 border border-green/20 rounded">
             <div className="text-sm font-medium mb-2">Fortaleza Emocional</div>
             <p className="text-sm text-muted">
               Capacidad de regulación: {emotionalState?.emotional_regulation_score}%. 

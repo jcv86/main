@@ -80,7 +80,7 @@ export default function TrainingDashboardPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue to-background">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-cyan-500" />
+          <Loader2 className="h-8 w-8 animate-spin text-cyan/50" />
           <p className="text-muted/30">Cargando tu progreso de entrenamiento...</p>
         </div>
       </div>
@@ -224,7 +224,7 @@ export default function TrainingDashboardPage() {
         <div className="space-y-4 mb-6">
           <div className="flex items-center justify-between mb-2">
             <p className="font-semibold text-white">Completado</p>
-            <p className="text-2xl font-black text-cyan-400">{Math.round(completionPercentage)}%</p>
+            <p className="text-2xl font-black text-cyan/40">{Math.round(completionPercentage)}%</p>
           </div>
           <div className="h-3 bg-muted/70 rounded-full overflow-hidden">
             <div
@@ -258,7 +258,7 @@ export default function TrainingDashboardPage() {
             const categoryCards = activityCards.filter(card => card.category === category)
             return (
               <div key={category}>
-                <h3 className="text-sm font-bold text-cyan-400 mb-4 uppercase tracking-wider">{category}</h3>
+                <h3 className="text-sm font-bold text-cyan/40 mb-4 uppercase tracking-wider">{category}</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {categoryCards.map((card, i) => {
                     const Icon = card.icon
@@ -269,10 +269,10 @@ export default function TrainingDashboardPage() {
                         <CardHeader>
                           <div className="flex items-start justify-between mb-2">
                             <CardTitle className="text-lg flex items-center gap-2">
-                              <Icon className="w-5 h-5 text-cyan-400 group-hover:text-cyan-300" />
+                              <Icon className="w-5 h-5 text-cyan/40 group-hover:text-cyan/30" />
                               {card.title}
                             </CardTitle>
-                            {card.badge && <Badge className="text-xs bg-blue/50/20 text-cyan-300 border-blue/50">{card.badge}</Badge>}
+                            {card.badge && <Badge className="text-xs bg-blue/50/20 text-cyan/30 border-blue/50">{card.badge}</Badge>}
                           </div>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -280,7 +280,7 @@ export default function TrainingDashboardPage() {
                           {isCompleted && <Badge className="bg-green/50/20 text-emerald-400 border border-green/50">✓ Completado</Badge>}
                           <Button 
                             onClick={() => router.push(card.href)}
-                            className={`w-full group/btn transition-all ${isCompleted ? 'bg-muted/70 hover:bg-muted/60' : 'bg-blue hover:bg-cyan-700'}`}
+                            className={`w-full group/btn transition-all ${isCompleted ? 'bg-muted/70 hover:bg-muted/60' : 'bg-blue hover:bg-cyan'}`}
                           >
                             {card.action}
                             <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
@@ -303,7 +303,7 @@ export default function TrainingDashboardPage() {
               <p className="text-sm text-muted/40">Completadas: Interview 0 + CV base + Market Insights</p>
             </div>
             <div className="text-right">
-              <p className="text-3xl font-black text-cyan-400">{Math.round(completionPercentage)}%</p>
+              <p className="text-3xl font-black text-cyan/40">{Math.round(completionPercentage)}%</p>
             </div>
           </div>
           <div className="h-2 bg-muted/70 rounded-full overflow-hidden mb-4">
@@ -325,7 +325,7 @@ export default function TrainingDashboardPage() {
               <p className="text-muted/30 text-sm mb-4">
                 La base es fundamental. Completa Interview 0 primero - es la piedra angular de todas tus entrevistas.
               </p>
-              <Button onClick={() => router.push('/despega/interview-0')} className="bg-blue hover:bg-cyan-700">
+              <Button onClick={() => router.push('/despega/interview-0')} className="bg-blue hover:bg-cyan">
                 Comenzar Interview 0
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -338,7 +338,7 @@ export default function TrainingDashboardPage() {
               <p className="text-muted/30 text-sm mb-4">
                 Ya tienes tu base. Ahora practica con guía. Los Entrenamientos Guiados te enseñan la metodología STAR y te dan feedback IA en tiempo real.
               </p>
-              <Button onClick={() => router.push('/despega/a3/entrenamiento-guiado')} className="bg-blue hover:bg-cyan-700">
+              <Button onClick={() => router.push('/despega/a3/entrenamiento-guiado')} className="bg-blue hover:bg-cyan">
                 Ir a Entrenamientos Guiados
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -374,10 +374,10 @@ export default function TrainingDashboardPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="space-y-2 text-sm text-muted/30">
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Progresión: Guiado → Estructurado → Desafío</p>
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Feedback: Análisis IA después de cada sesión</p>
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Video: Analiza postura, tono, gestos reales</p>
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan-400 flex-shrink-0 mt-0.5" /> Personalización: Ajusta respuestas por vacante</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan/40 flex-shrink-0 mt-0.5" /> Progresión: Guiado → Estructurado → Desafío</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan/40 flex-shrink-0 mt-0.5" /> Feedback: Análisis IA después de cada sesión</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan/40 flex-shrink-0 mt-0.5" /> Video: Analiza postura, tono, gestos reales</p>
+                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan/40 flex-shrink-0 mt-0.5" /> Personalización: Ajusta respuestas por vacante</p>
                 </div>
               </CardContent>
             </Card>

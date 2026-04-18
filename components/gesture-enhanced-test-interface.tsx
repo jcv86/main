@@ -263,22 +263,22 @@ export function GestureEnhancedTestInterface({
     >
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header with Gesture Controls */}
-        <Card className="border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50">
+        <Card className="border-purple/20 bg-gradient-to-r from-purple-50 to-pink-50">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Hand className="h-6 w-6 text-purple-600" />
+                <div className="p-2 bg-purple/10 rounded-lg">
+                  <Hand className="h-6 w-6 text-purple" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl text-purple-900">{testTitle}</CardTitle>
-                  <p className="text-purple-700 text-sm">
+                  <CardTitle className="text-xl text-purple">{testTitle}</CardTitle>
+                  <p className="text-purple text-sm">
                     {touchSupport ? "Touch gestures enabled" : "Mouse/keyboard navigation"}
                   </p>
                 </div>
               </div>
               <div className="flex gap-2">
-                <Badge variant="outline" className="text-purple-700 border-purple-300">
+                <Badge variant="outline" className="text-purple border-purple/30">
                   Question {currentQuestionIndex + 1} of {questions.length}
                 </Badge>
               </div>
@@ -344,9 +344,9 @@ export function GestureEnhancedTestInterface({
         </Card>
 
         {/* Question Card */}
-        <Card className="border-blue-200">
+        <Card className="border-blue/20">
           <CardHeader>
-            <CardTitle className="text-lg text-blue-900">{currentQuestion.text}</CardTitle>
+            <CardTitle className="text-lg text-blue">{currentQuestion.text}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Answer Options */}
@@ -357,7 +357,7 @@ export function GestureEnhancedTestInterface({
                   onClick={() => handleAnswerSelection(option.id)}
                   className={`w-full p-4 text-left rounded-[28px] border-2 transition-all touch-manipulation ${
                     answers[currentQuestion.id] === option.id
-                      ? "border-blue/50 bg-blue-50 text-blue-900"
+                      ? "border-blue/50 bg-blue/5 text-blue"
                       : "border-muted/20 bg-white hover:border-muted/30 hover:bg-muted/5"
                   }`}
                   style={{ minHeight: "60px" }} // Touch-friendly size
@@ -365,7 +365,7 @@ export function GestureEnhancedTestInterface({
                   <div className="flex items-center gap-3">
                     <div
                       className={`w-4 h-4 rounded-full border-2 ${
-                        answers[currentQuestion.id] === option.id ? "border-blue/50 bg-blue-500" : "border-muted/30"
+                        answers[currentQuestion.id] === option.id ? "border-blue/50 bg-blue/50" : "border-muted/30"
                       }`}
                     >
                       {answers[currentQuestion.id] === option.id && (
@@ -396,7 +396,7 @@ export function GestureEnhancedTestInterface({
                   onClick={onComplete}
                   disabled={!canProceed}
                   size="lg"
-                  className="bg-green-600 hover:bg-green-700 touch-manipulation"
+                  className="bg-green hover:bg-green touch-manipulation"
                 >
                   Complete Test
                 </Button>
@@ -431,7 +431,7 @@ export function GestureEnhancedTestInterface({
                           : log.includes("zoom")
                             ? "text-blue/40"
                             : log.includes("swipe")
-                              ? "text-yellow-400"
+                              ? "text-yellow/40"
                               : "text-muted/30"
                       }`}
                     >

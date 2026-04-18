@@ -278,7 +278,7 @@ export default function A2TestPage() {
 
                       {/* Error Message */}
                       {result.error && (
-                        <div className="bg-red/5 dark:bg-red-950 border border-red/20 dark:border-red-800 text-red dark:text-red/20 p-4 rounded-[28px]">
+                        <div className="bg-red/5 dark:bg-red border border-red/20 dark:border-red text-red dark:text-red/20 p-4 rounded-[28px]">
                           <p className="font-semibold mb-1">Error:</p>
                           <p className="text-sm">{result.error}</p>
                         </div>

@@ -62,7 +62,7 @@ export function PeerComparison({
       case "below_average":
         return "bg-orange/10 text-orange"
       case "needs_improvement":
-        return "bg-red/10 text-red-800"
+        return "bg-red/10 text-red"
       default:
         return "bg-muted/10 text-gray-800"
     }
@@ -77,17 +77,17 @@ export function PeerComparison({
   }
 
   return (
-    <Card className="border-purple-200 bg-gradient-to-br from-purple-50 to-white">
+    <Card className="border-purple/20 bg-gradient-to-br from-purple-50 to-white">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Users className="h-5 w-5 text-purple-600" />
+          <Users className="h-5 w-5 text-purple" />
           Comparación con Pares
         </CardTitle>
         <CardDescription>Cómo te comparas con otros profesionales en tu industria</CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="text-center">
-          <div className="text-4xl font-bold text-purple-600 mb-2">Top {100 - comparisonData.percentile}%</div>
+          <div className="text-4xl font-bold text-purple mb-2">Top {100 - comparisonData.percentile}%</div>
           <Badge className={getComparisonColor(comparisonData.comparison)}>{comparisonData.message}</Badge>
           <p className="text-sm text-muted-foreground mt-2">
             Basado en {comparisonData.totalParticipants.toLocaleString()} participantes
@@ -97,7 +97,7 @@ export function PeerComparison({
         <div className="space-y-3">
           <div className="flex justify-between items-center">
             <span className="text-sm text-muted-foreground">Tu puntuación</span>
-            <span className="font-bold text-purple-600">{score}</span>
+            <span className="font-bold text-purple">{score}</span>
           </div>
           <Progress value={comparisonData.percentile} className="h-3" />
         </div>
@@ -115,13 +115,13 @@ export function PeerComparison({
             <div className="text-2xl font-bold text-foreground">{comparisonData.benchmarks.p90}</div>
             <div className="text-xs text-muted-foreground">Top 10% (P90)</div>
           </div>
-          <div className="text-center p-3 bg-purple-100 rounded-[28px] border border-purple-200">
-            <div className="text-2xl font-bold text-purple-600">{score}</div>
-            <div className="text-xs text-purple-700 font-medium">Tu Resultado</div>
+          <div className="text-center p-3 bg-purple/10 rounded-[28px] border border-purple/20">
+            <div className="text-2xl font-bold text-purple">{score}</div>
+            <div className="text-xs text-purple font-medium">Tu Resultado</div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-sm text-muted-foreground bg-blue-50 p-3 rounded-lg">
+        <div className="flex items-center gap-2 text-sm text-muted-foreground bg-blue/5 p-3 rounded-lg">
           <BarChart3 className="h-4 w-4 text-blue" />
           <span>Los datos se actualizan mensualmente con nuevos participantes</span>
         </div>

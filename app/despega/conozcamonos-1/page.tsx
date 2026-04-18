@@ -311,8 +311,8 @@ export default function Conozcamonos1Page() {
           )}
 
           {error && (
-            <div className="mt-4 p-3 bg-red/5 dark:bg-red-950 border border-red/20 dark:border-red-800 rounded-lg">
-              <p className="text-sm text-red-900 dark:text-red/10">{error}</p>
+            <div className="mt-4 p-3 bg-red/5 dark:bg-red border border-red/20 dark:border-red rounded-lg">
+              <p className="text-sm text-red dark:text-red/10">{error}</p>
             </div>
           )}
         </div>

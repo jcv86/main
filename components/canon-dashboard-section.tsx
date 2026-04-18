@@ -118,23 +118,23 @@ export function CanonDashboardSection() {
 
   if (!missions || missions.length === 0) {
     return (
-      <Card className="bg-gradient-to-br from-slate-800 to-slate-700 border-slate-600">
+      <Card className="bg-gradient-to-br from-slate-800 to-slate-700 border-muted/60">
         <CardHeader>
           <CardTitle className="text-white text-2xl">Ruta no generada</CardTitle>
-          <CardDescription className="text-slate-300">Completa Conozcámonos 2 para generar tu ruta personalizada</CardDescription>
+          <CardDescription className="text-muted/30">Completa Conozcámonos 2 para generar tu ruta personalizada</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-slate-300">
+          <p className="text-muted/30">
             Todavía no hemos generado tu ruta de 30/60/90 días. Responde 9 preguntas más sobre tu contexto de ejecución y generaremos acciones personalizadas basadas en el motor CANON.
           </p>
-          <div className="bg-slate-700/50 border border-slate-600 rounded-[28px] p-4 space-y-3">
-            <p className="text-sm text-slate-300">
+          <div className="bg-muted/70/50 border border-muted/60 rounded-[28px] p-4 space-y-3">
+            <p className="text-sm text-muted/30">
               <span className="font-semibold text-emerald-400">✓ Ya completaste:</span> Test A1 (Perfil DISC)
             </p>
-            <p className="text-sm text-slate-300">
+            <p className="text-sm text-muted/30">
               <span className="font-semibold text-blue/40">→ Siguiente:</span> Conozcámonos 2 - Paso 1 (Contexto de ejecución)
             </p>
-            <p className="text-sm text-slate-300">
+            <p className="text-sm text-muted/30">
               <span className="font-semibold text-purple/40">📊 Resultado:</span> Ruta 30/60/90 personalizada con trazabilidad
             </p>
           </div>
@@ -143,7 +143,7 @@ export function CanonDashboardSection() {
               Generar mi Ruta Personalizada →
             </Button>
           </Link>
-          <p className="text-xs text-slate-400 text-center">Tiempo estimado: 3 minutos</p>
+          <p className="text-xs text-muted/40 text-center">Tiempo estimado: 3 minutos</p>
         </CardContent>
       </Card>
     )

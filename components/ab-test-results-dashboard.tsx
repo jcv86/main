@@ -124,7 +124,7 @@ export function ABTestResultsDashboard() {
                       <CardTitle className="flex items-center gap-2">
                         {result.group.replace("-", " → ")}
                         {result.status === "ready_to_publish" && (
-                          <Badge className="bg-green-500">
+                          <Badge className="bg-green/50">
                             <Trophy className="h-3 w-3 mr-1" />
                             Listo para publicar
                           </Badge>
@@ -227,14 +227,14 @@ export function ABTestResultsDashboard() {
                         <div
                           key={variant.version_id}
                           className={`p-4 rounded-[28px] border-2 ${
-                            isWinner ? "border-green bg-green-50 dark:bg-green-950" : "border-border"
+                            isWinner ? "border-green bg-green/5 dark:bg-green" : "border-border"
                           }`}
                         >
                           <div className="flex items-center justify-between mb-3">
                             <div className="flex items-center gap-2">
                               <h3 className="font-semibold">{variant.version_name}</h3>
                               {isWinner && (
-                                <Badge className="bg-green-500">
+                                <Badge className="bg-green/50">
                                   <Trophy className="h-3 w-3 mr-1" />
                                   Ganador
                                 </Badge>

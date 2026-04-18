@@ -42,7 +42,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
       nextSkills: ['Respiración', 'Contacto visual', 'Tono'],
       icon: <Zap className="w-6 h-6" />,
       color: 'text-blue dark:text-blue/40',
-      bgColor: 'bg-blue-50 dark:bg-blue-950/20',
+      bgColor: 'bg-blue/5 dark:bg-blue/20',
       isLocked: false
     },
     {
@@ -55,8 +55,8 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
       focus: ['Análisis', 'Decisiones', 'Impacto'],
       nextSkills: ['Storytelling', 'Métricas', 'Liderazgo'],
       icon: <TrendingUp className="w-6 h-6" />,
-      color: 'text-purple-600 dark:text-purple/40',
-      bgColor: 'bg-purple-50 dark:bg-purple-950/20',
+      color: 'text-purple dark:text-purple/40',
+      bgColor: 'bg-purple/5 dark:bg-purple/20',
       isLocked: !userProgress?.basico?.completed || userProgress.basico.completed === 0
     },
     {
@@ -81,7 +81,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
         <Card
           key={level.id}
           className={`relative overflow-hidden transition-all hover:shadow-lg ${
-            level.isLocked ? 'opacity-60' : 'hover:border-slate-400'
+            level.isLocked ? 'opacity-60' : 'hover:border-muted/40'
           }`}
         >
           {/* Status Badge */}
@@ -95,7 +95,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
           )}
           {userProgress?.[level.id]?.completed && (
             <div className="absolute top-4 right-4">
-              <Badge className="bg-green-600 text-white flex items-center gap-1">
+              <Badge className="bg-green text-white flex items-center gap-1">
                 <CheckCircle2 className="w-3 h-3" />
                 Completado
               </Badge>
@@ -113,23 +113,23 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
           <CardContent className="space-y-4">
             {/* Level Stats */}
             <div className="grid grid-cols-3 gap-3 text-sm">
-              <div className="text-center p-2 rounded-[28px] bg-slate-50 dark:bg-slate-800">
-                <p className="font-semibold text-slate-900 dark:text-white">{level.questionsCount}</p>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Preguntas</p>
+              <div className="text-center p-2 rounded-[28px] bg-muted/5 dark:bg-muted/80">
+                <p className="font-semibold text-muted/90 dark:text-white">{level.questionsCount}</p>
+                <p className="text-xs text-muted/60 dark:text-muted/40">Preguntas</p>
               </div>
-              <div className="text-center p-2 rounded-[28px] bg-slate-50 dark:bg-slate-800">
-                <p className="font-semibold text-slate-900 dark:text-white">{level.estimatedTime}</p>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Tiempo</p>
+              <div className="text-center p-2 rounded-[28px] bg-muted/5 dark:bg-muted/80">
+                <p className="font-semibold text-muted/90 dark:text-white">{level.estimatedTime}</p>
+                <p className="text-xs text-muted/60 dark:text-muted/40">Tiempo</p>
               </div>
-              <div className="text-center p-2 rounded-[28px] bg-slate-50 dark:bg-slate-800">
-                <p className="font-semibold text-slate-900 dark:text-white">{level.difficulty}</p>
-                <p className="text-xs text-slate-600 dark:text-slate-400">Nivel</p>
+              <div className="text-center p-2 rounded-[28px] bg-muted/5 dark:bg-muted/80">
+                <p className="font-semibold text-muted/90 dark:text-white">{level.difficulty}</p>
+                <p className="text-xs text-muted/60 dark:text-muted/40">Nivel</p>
               </div>
             </div>
 
             {/* Focus Areas */}
             <div>
-              <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase mb-2">Enfoque</p>
+              <p className="text-xs font-semibold text-muted/60 dark:text-muted/40 uppercase mb-2">Enfoque</p>
               <div className="flex flex-wrap gap-2">
                 {level.focus.map((f) => (
                   <Badge key={f} variant="outline" className="text-xs">
@@ -141,11 +141,11 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
 
             {/* User Progress */}
             {userProgress?.[level.id]?.completed && (
-              <div className="p-3 rounded-[28px] bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
-                <p className="text-sm font-semibold text-green-900 dark:text-green-200">
+              <div className="p-3 rounded-[28px] bg-green/5 dark:bg-green/20 border border-green/20 dark:border-green">
+                <p className="text-sm font-semibold text-green dark:text-green/20">
                   Score: {userProgress[level.id].score}
                 </p>
-                <p className="text-xs text-green dark:text-green-300">
+                <p className="text-xs text-green dark:text-green/30">
                   {userProgress[level.id].completed} intento{userProgress[level.id].completed !== 1 ? 's' : ''}
                 </p>
               </div>
@@ -159,7 +159,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
                 level.isLocked
                   ? 'opacity-50 cursor-not-allowed'
                   : userProgress?.[level.id]?.completed
-                  ? 'bg-green-600 hover:bg-green-700'
+                  ? 'bg-green hover:bg-green'
                   : ''
               }`}
             >

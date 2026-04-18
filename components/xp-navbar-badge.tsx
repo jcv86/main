@@ -54,7 +54,7 @@ export function XPNavbarBadge() {
 
   return (
     <Link href="/despega/progress">
-      <div className="flex items-center gap-3 px-3 py-1.5 rounded-[28px] bg-gradient-to-r from-cyan-500/20 to-teal-500/20 hover:from-cyan-500/30 hover:to-teal-500/30 transition-all cursor-pointer border border-cyan-500/30 hover:border-cyan-500/50">
+      <div className="flex items-center gap-3 px-3 py-1.5 rounded-[28px] bg-gradient-to-r from-cyan-500/20 to-teal-500/20 hover:from-cyan-500/30 hover:to-teal-500/30 transition-all cursor-pointer border border-cyan/50/30 hover:border-cyan/50/50">
         {/* XP Display */}
         <div className="flex items-center gap-1.5">
           <Zap className="w-4 h-4 text-amber-500" />
@@ -65,7 +65,7 @@ export function XPNavbarBadge() {
         </div>
 
         {/* Level Badge */}
-        <Badge className="bg-cyan-600 hover:bg-cyan-700 text-white text-xs">
+        <Badge className="bg-cyan hover:bg-cyan text-white text-xs">
           Lv. {xpData.current_level}
         </Badge>
 

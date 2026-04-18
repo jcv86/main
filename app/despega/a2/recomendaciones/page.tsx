@@ -108,9 +108,9 @@ export default function RecomendacionesPage() {
         description: "Domina tu atención y logra resultados con precisión",
         icon: "🎯",
         color: "from-green to-green",
-        borderColor: "border-green/20 dark:border-green-800",
+        borderColor: "border-green/20 dark:border-green",
         bgColor: "bg-green/5 dark:bg-green/20",
-        textColor: "text-green-900 dark:text-green-100",
+        textColor: "text-green dark:text-green/10",
         duration: "30-60 días",
         skills: ["Deep Work", "Priorización", "Bloques de tiempo", "Gestión de distracciones"],
         matchScore: Math.round((100 - enfoqueScore) * 0.7 + 30),
@@ -312,7 +312,7 @@ export default function RecomendacionesPage() {
                     disabled={submitting}
                     className={`w-full ${
                       selectedRoute === route.id
-                        ? "bg-green hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
+                        ? "bg-green hover:bg-green dark:bg-green dark:hover:bg-green"
                         : ""
                     }`}
                   >

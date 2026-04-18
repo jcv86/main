@@ -134,7 +134,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
                   ? 'bg-red/5 border-red/50'
                   : item.severity === 'warning'
                   ? 'bg-yellow/5 border-orange'
-                  : 'bg-blue-50 border-blue/50'
+                  : 'bg-blue/5 border-blue/50'
               }`}
             >
               <div className="flex items-start gap-2">
@@ -154,7 +154,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
       </div>
 
       {/* Tips */}
-      <div className="bg-blue-50 border border-blue-200 rounded-[28px] p-3 text-xs text-blue">
+      <div className="bg-blue/5 border border-blue/20 rounded-[28px] p-3 text-xs text-blue">
         <p className="font-medium mb-1">Consejo:</p>
         <p>
           El feedback se actualiza cada 3 segundos. Intenta aplicar las sugerencias en tiempo real para mejorar tu desempeño.

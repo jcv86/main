@@ -104,27 +104,27 @@ export function NoticiasFeed() {
   }
 
   const getRelevanceColor = (score: number) => {
-    if (score >= 90) return 'bg-red/10 text-red-800 dark:bg-red/30 dark:text-red-300'
-    if (score >= 80) return 'bg-orange/10 text-orange dark:bg-orange/30 dark:text-orange-300'
+    if (score >= 90) return 'bg-red/10 text-red dark:bg-red/30 dark:text-red/30'
+    if (score >= 80) return 'bg-orange/10 text-orange dark:bg-orange/30 dark:text-orange/30'
     if (score >= 70) return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300'
-    return 'bg-yellow/10 text-yellow dark:bg-yellow/30 dark:text-yellow-300'
+    return 'bg-yellow/10 text-yellow dark:bg-yellow/30 dark:text-yellow/30'
   }
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      'Tecnología': 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-300',
-      'Liderazgo': 'bg-purple-100 text-purple-800 dark:bg-purple/30 dark:text-purple/30',
-      'Mercado Local': 'bg-green/10 text-green dark:bg-green/30 dark:text-green-300',
+      'Tecnología': 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue/30',
+      'Liderazgo': 'bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple/30',
+      'Mercado Local': 'bg-green/10 text-green dark:bg-green/30 dark:text-green/30',
       'Educación': 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-indigo-300',
       'Oportunidades': 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300',
     }
-    return colors[category] || 'bg-slate-100 text-slate-800 dark:bg-slate-900/30 dark:text-slate-300'
+    return colors[category] || 'bg-muted/10 text-muted/80 dark:bg-muted/90/30 dark:text-muted/30'
   }
 
   if (loading) {
     return (
       <div className="flex justify-center items-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-cyan"></div>
       </div>
     )
   }
@@ -139,7 +139,7 @@ export function NoticiasFeed() {
             size="sm"
             variant={selectedCategory === cat ? 'default' : 'outline'}
             onClick={() => setSelectedCategory(cat)}
-            className={selectedCategory === cat ? 'bg-cyan-600 hover:bg-cyan-700' : ''}
+            className={selectedCategory === cat ? 'bg-cyan hover:bg-cyan' : ''}
           >
             {cat}
           </Button>
@@ -148,7 +148,7 @@ export function NoticiasFeed() {
 
       {/* Error State */}
       {error && (
-        <div className="bg-red/10 dark:bg-red/30 text-red-800 dark:text-red-300 p-3 rounded-lg">
+        <div className="bg-red/10 dark:bg-red/30 text-red dark:text-red/30 p-3 rounded-lg">
           {error}
         </div>
       )}
@@ -157,7 +157,7 @@ export function NoticiasFeed() {
       {noticias.map((noticia) => (
         <Card
           key={noticia.id}
-          className="border-l-4 border-l-cyan-500 hover:shadow-lg transition-all duration-300 dark:hover:bg-slate-800/50"
+          className="border-l-4 border-l-cyan-500 hover:shadow-lg transition-all duration-300 dark:hover:bg-muted/80/50"
         >
           <CardContent className="p-6">
             <div className="flex items-start justify-between gap-4 mb-3">
@@ -174,7 +174,7 @@ export function NoticiasFeed() {
                   size="sm"
                   variant="ghost"
                   onClick={() => handleSave(noticia.id)}
-                  className={saved.has(noticia.id) ? 'text-cyan-600' : ''}
+                  className={saved.has(noticia.id) ? 'text-cyan' : ''}
                 >
                   <Bookmark className={`w-4 h-4 ${saved.has(noticia.id) ? 'fill-current' : ''}`} />
                 </Button>
@@ -186,21 +186,21 @@ export function NoticiasFeed() {
               </div>
             </div>
 
-            <h3 className="text-lg font-bold mb-2 text-slate-900 dark:text-slate-100">
+            <h3 className="text-lg font-bold mb-2 text-muted/90 dark:text-muted/10">
               {noticia.title}
             </h3>
-            <p className="text-slate-700 dark:text-slate-300 mb-3">
+            <p className="text-muted/70 dark:text-muted/30 mb-3">
               {noticia.description}
             </p>
 
             <div className="flex items-center justify-between">
-              <div className="text-xs text-slate-500 dark:text-slate-400">
+              <div className="text-xs text-muted/50 dark:text-muted/40">
                 <TrendingUp className="w-3 h-3 inline mr-1" />
                 {noticia.source} • {noticia.timestamp}
               </div>
               <Button 
                 size="sm" 
-                className="bg-cyan-600 hover:bg-cyan-700"
+                className="bg-cyan hover:bg-cyan"
                 onClick={() => window.open(noticia.url, '_blank')}
               >
                 Leer Más
@@ -212,7 +212,7 @@ export function NoticiasFeed() {
 
       {noticias.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-slate-500 dark:text-slate-400">No hay noticias disponibles en este momento</p>
+          <p className="text-muted/50 dark:text-muted/40">No hay noticias disponibles en este momento</p>
         </div>
       )}
     </div>

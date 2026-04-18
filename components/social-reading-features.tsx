@@ -370,7 +370,7 @@ export default function SocialReadingFeatures() {
                         <span>{group.progress}%</span>
                       </div>
                       <div className="w-full bg-muted/20 rounded-full h-2">
-                        <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${group.progress}%` }}></div>
+                        <div className="bg-blue h-2 rounded-full" style={{ width: `${group.progress}%` }}></div>
                       </div>
                     </div>
                     <div>
@@ -408,7 +408,7 @@ export default function SocialReadingFeatures() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+                <div className="flex items-center gap-3 p-3 bg-blue/5 rounded-lg">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src="https://api.dicebear.com/7.x/initials/svg?seed=Travis" />
                     <AvatarFallback>T</AvatarFallback>
@@ -423,7 +423,7 @@ export default function SocialReadingFeatures() {
                   <ThumbsUp className="h-4 w-4 text-blue" />
                 </div>
 
-                <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                <div className="flex items-center gap-3 p-3 bg-green/5 rounded-lg">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src="https://api.dicebear.com/7.x/initials/svg?seed=Demo" />
                     <AvatarFallback>D</AvatarFallback>
@@ -438,7 +438,7 @@ export default function SocialReadingFeatures() {
                   <UserPlus className="h-4 w-4 text-green" />
                 </div>
 
-                <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
+                <div className="flex items-center gap-3 p-3 bg-purple/5 rounded-lg">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src="https://api.dicebear.com/7.x/initials/svg?seed=DemoD" />
                     <AvatarFallback>DD</AvatarFallback>
@@ -450,7 +450,7 @@ export default function SocialReadingFeatures() {
                     </p>
                     <p className="text-xs text-muted/50">Hace 6 horas</p>
                   </div>
-                  <Star className="h-4 w-4 text-purple-600" />
+                  <Star className="h-4 w-4 text-purple" />
                 </div>
 
                 <div className="flex items-center gap-3 p-3 bg-orange/5 rounded-lg">

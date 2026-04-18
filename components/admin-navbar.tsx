@@ -29,7 +29,7 @@ export function AdminNavbar() {
           {/* Logo */}
           <Link href="/dashboard" className="flex items-center gap-2">
             <div className="text-2xl font-bold text-blue">DESPEGA</div>
-            <span className="text-sm text-slate-600 dark:text-slate-400">Tu Carrera</span>
+            <span className="text-sm text-muted/60 dark:text-muted/40">Tu Carrera</span>
           </Link>
 
           {/* Navigation */}

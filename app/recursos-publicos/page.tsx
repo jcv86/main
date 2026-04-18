@@ -15,7 +15,7 @@ export default function RecursosPublicosPage() {
           {/* Header */}
           <div className="text-center space-y-3">
             <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue/10 to-blue/10 dark:from-blue/30 dark:to-blue/30 rounded-full mb-4">
-              <p className="text-sm font-semibold text-cyan-700 dark:text-cyan-300">Recursos del Sector Público</p>
+              <p className="text-sm font-semibold text-cyan dark:text-cyan/30">Recursos del Sector Público</p>
             </div>
             <h1 className="text-5xl font-bold bg-gradient-to-r from-blue to-blue bg-clip-text text-transparent dark:from-blue/40 dark:to-blue/40">Recursos Públicos Chilenos</h1>
             <p className="text-xl text-muted/70 dark:text-muted/30 font-medium">
@@ -25,9 +25,9 @@ export default function RecursosPublicosPage() {
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card className="text-center border-2 border-blue/20 dark:border-cyan-900/50 bg-white dark:bg-background">
+            <Card className="text-center border-2 border-blue/20 dark:border-cyan/50 bg-white dark:bg-background">
               <CardContent className="pt-6">
-                <div className="text-3xl font-bold text-cyan-700 dark:text-cyan-400">46+</div>
+                <div className="text-3xl font-bold text-cyan dark:text-cyan/40">46+</div>
                 <p className="text-sm text-muted/70 dark:text-muted/30 mt-1 font-medium">Recursos</p>
               </CardContent>
             </Card>

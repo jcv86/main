@@ -35,7 +35,7 @@ export default function AnalisisMercadoChilePage() {
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-red/5 p-4 rounded-lg border border-red/20">
                 <div className="text-3xl font-bold text-red mb-2">917K</div>
-                <div className="text-sm text-red-800">Desempleados totales (Q2 2025)</div>
+                <div className="text-sm text-red">Desempleados totales (Q2 2025)</div>
               </div>
               <div className="bg-orange/5 p-4 rounded-lg border border-orange/20">
                 <div className="text-3xl font-bold text-orange mb-2">60%</div>
@@ -269,7 +269,7 @@ export default function AnalisisMercadoChilePage() {
               <div className="border-l-4 border-orange pl-6 bg-orange/5 p-4 rounded-r-lg">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-bold text-muted/90">Servicios Universitarios Tradicionales</h4>
-                  <span className="text-xs bg-orange-200 text-orange px-3 py-1 rounded-full">
+                  <span className="text-xs bg-orange/20 text-orange px-3 py-1 rounded-full">
                     Competencia Indirecta
                   </span>
                 </div>
@@ -301,7 +301,7 @@ export default function AnalisisMercadoChilePage() {
               <div className="border-l-4 border-orange pl-6 bg-yellow/5 p-4 rounded-r-lg">
                 <div className="flex items-center justify-between mb-2">
                   <h4 className="font-bold text-muted/90">Plataformas de Orientación Vocacional</h4>
-                  <span className="text-xs bg-yellow-200 text-yellow px-3 py-1 rounded-full">
+                  <span className="text-xs bg-yellow/20 text-yellow px-3 py-1 rounded-full">
                     Competencia Directa
                   </span>
                 </div>
@@ -672,7 +672,7 @@ export default function AnalisisMercadoChilePage() {
                 <span className="text-5xl">💼</span>
                 <div>
                   <h3 className="text-2xl font-bold">3. Lanzar Vertical B2B Enterprise (Empresas)</h3>
-                  <p className="text-green-100 mt-1">
+                  <p className="text-green/10 mt-1">
                     Capturar mercado de upskilling corporativo - ingresos recurrentes altos
                   </p>
                 </div>
@@ -726,7 +726,7 @@ export default function AnalisisMercadoChilePage() {
               <div className="space-y-4">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">KPIs a Rastrear Post-Lanzamiento:</h4>
-                  <ul className="text-sm space-y-1 text-orange-50">
+                  <ul className="text-sm space-y-1 text-orange/5">
                     <li>
                       • <strong>Empleabilidad:</strong> % de usuarios que consiguen empleo en 3-6 meses post-uso DTC
                     </li>
@@ -746,11 +746,11 @@ export default function AnalisisMercadoChilePage() {
                 </div>
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">Estrategia de Validación:</h4>
-                  <p className="text-sm text-orange-50 mb-2">
+                  <p className="text-sm text-orange/5 mb-2">
                     <strong>Fase 1 (Q1-Q2 2026):</strong> Pilotos con 2-3 universidades (300-500 estudiantes). Medir
                     resultados vs grupo control sin DTC.
                   </p>
-                  <p className="text-sm text-orange-50">
+                  <p className="text-sm text-orange/5">
                     <strong>Fase 2 (Q3-Q4 2026):</strong> Publicar whitepaper "Impacto DTC en Empleabilidad
                     Universitaria" con datos reales. Usar para ventas a otras universidades.
                   </p>
@@ -925,22 +925,22 @@ export default function AnalisisMercadoChilePage() {
 
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-3">
-                  <span className="bg-orange-600 text-white px-3 py-1 rounded-full text-sm font-bold">Continuo</span>
+                  <span className="bg-orange text-white px-3 py-1 rounded-full text-sm font-bold">Continuo</span>
                   <h4 className="text-xl font-bold">Construir Casos de Éxito y Testimonios</h4>
                 </div>
                 <ul className="text-muted/20 space-y-2 ml-6">
                   <li className="flex items-start gap-2">
-                    <span className="text-orange-400 mt-1">→</span>
+                    <span className="text-orange/40 mt-1">→</span>
                     <span>
                       Seguimiento activo a primeros 100 usuarios: encuestas mensuales, entrevistas en profundidad
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-orange-400 mt-1">→</span>
+                    <span className="text-orange/40 mt-1">→</span>
                     <span>Identificar 5-10 casos de éxito tempranos: "Conseguí trabajo en 2 meses usando DTC"</span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <span className="text-orange-400 mt-1">→</span>
+                    <span className="text-orange/40 mt-1">→</span>
                     <span>Video-testimonios para marketing, page de landing "Historias de Éxito"</span>
                   </li>
                 </ul>

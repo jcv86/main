@@ -160,7 +160,7 @@ export default function A2DashboardPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card className="border-2 border-green/20 dark:border-green-800">
+            <Card className="border-2 border-green/20 dark:border-green">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
                   <div className="w-6 h-6 rounded-[20px] bg-green/50 flex items-center justify-center text-white text-xs font-bold">1</div>

@@ -375,11 +375,11 @@ export default function AICoachTestScenarios() {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "easy":
-        return "bg-green/10 text-green border-green-200"
+        return "bg-green/10 text-green border-green/20"
       case "medium":
         return "bg-yellow/10 text-yellow border-yellow/20"
       case "hard":
-        return "bg-red/10 text-red-800 border-red/20"
+        return "bg-red/10 text-red border-red/20"
       default:
         return "bg-muted/10 text-gray-800 border-muted/20"
     }
@@ -572,7 +572,7 @@ export default function AICoachTestScenarios() {
                 <div className="text-sm text-muted/60">Tiempo Promedio</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">
+                <div className="text-2xl font-bold text-purple">
                   {testResults.length > 0
                     ? Math.round((testResults.filter((r) => r.success).length / testResults.length) * 100)
                     : 0}

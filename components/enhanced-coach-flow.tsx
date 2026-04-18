@@ -377,7 +377,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="flex items-center gap-2 text-lg">
-                    <Sparkles className="h-5 w-5 text-purple-600" />
+                    <Sparkles className="h-5 w-5 text-purple" />
                     Coach IA - Etapa: {stages.find((s) => s.id === currentStage)?.title}
                   </CardTitle>
                   <CardDescription>{stages.find((s) => s.id === currentStage)?.description}</CardDescription>
@@ -610,7 +610,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-blue-500" />
+                <BookOpen className="h-5 w-5 text-blue/50" />
                 Recursos Recomendados
               </CardTitle>
               <CardDescription>Material personalizado para tu desarrollo</CardDescription>
@@ -620,7 +620,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                 <div className="space-y-3">
                   {recommendedResources.map((resource, index) => (
                     <div key={index} className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                      <BookOpen className="h-4 w-4 text-blue-500 mt-0.5" />
+                      <BookOpen className="h-4 w-4 text-blue/50 mt-0.5" />
                       <p className="text-sm">{resource}</p>
                     </div>
                   ))}
@@ -651,7 +651,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
 
       {/* Resumen del seguimiento */}
       {completedStages.length >= 5 && (
-        <Card className="border-green-200 bg-green-50">
+        <Card className="border-green/20 bg-green/5">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-[20px] bg-green/10 flex items-center justify-center">

@@ -286,7 +286,7 @@ export default function DocumentsPage() {
                         key={book.id}
                         className={`p-3 border rounded-lg cursor-pointer transition-all ${
                           isSourceSelected(book.id, "book")
-                            ? "bg-green/5 border-green-300 shadow-sm"
+                            ? "bg-green/5 border-green/30 shadow-sm"
                             : "hover:bg-muted/5 hover:border-muted/30"
                         }`}
                         onClick={() => toggleSourceSelection(book.id, "book")}

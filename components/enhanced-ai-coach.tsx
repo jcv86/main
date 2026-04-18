@@ -449,7 +449,7 @@ ${
                     <div
                       className={`max-w-[85%] ${
                         message.role === "user"
-                          ? "bg-blue-600 text-white rounded-lg rounded-br-sm"
+                          ? "bg-blue text-white rounded-lg rounded-br-sm"
                           : "bg-muted/5 rounded-lg rounded-bl-sm border"
                       } p-3`}
                     >
@@ -544,7 +544,7 @@ ${
                             <Star
                               key={i}
                               className={`h-3 w-3 ${
-                                i < message.rating! ? "text-yellow-400 fill-current" : "text-muted/30"
+                                i < message.rating! ? "text-yellow/40 fill-current" : "text-muted/30"
                               }`}
                             />
                           ))}
@@ -556,7 +556,7 @@ ${
                     {message.role === "user" && (
                       <Avatar className="h-8 w-8">
                         <AvatarImage src={userProfile?.avatar_url || "/placeholder.svg"} />
-                        <AvatarFallback className="bg-blue-600 text-white text-xs">
+                        <AvatarFallback className="bg-blue text-white text-xs">
                           {userProfile?.full_name?.charAt(0) || "U"}
                         </AvatarFallback>
                       </Avatar>
@@ -574,13 +574,13 @@ ${
                     <div className="bg-muted/5 rounded-lg rounded-bl-sm p-3 border">
                       <div className="flex items-center gap-1">
                         <div className="flex gap-1">
-                          <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                          <div className="w-2 h-2 bg-purple/40 rounded-full animate-bounce"></div>
                           <div
-                            className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"
+                            className="w-2 h-2 bg-purple/40 rounded-full animate-bounce"
                             style={{ animationDelay: "0.1s" }}
                           ></div>
                           <div
-                            className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"
+                            className="w-2 h-2 bg-purple/40 rounded-full animate-bounce"
                             style={{ animationDelay: "0.2s" }}
                           ></div>
                         </div>
@@ -689,7 +689,7 @@ ${
               <h3 className="font-semibold text-sm">Insights Guardados</h3>
               {savedInteractions.length > 0 ? (
                 savedInteractions.map((interaction, idx) => (
-                  <div key={idx} className="border rounded-[28px] p-3 space-y-2 bg-blue-50">
+                  <div key={idx} className="border rounded-[28px] p-3 space-y-2 bg-blue/5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Bookmark className="h-3 w-3 text-blue" />
@@ -709,7 +709,7 @@ ${
                           <Star
                             key={i}
                             className={`h-3 w-3 ${
-                              i < interaction.user_rating ? "text-yellow-400 fill-current" : "text-muted/30"
+                              i < interaction.user_rating ? "text-yellow/40 fill-current" : "text-muted/30"
                             }`}
                           />
                         ))}

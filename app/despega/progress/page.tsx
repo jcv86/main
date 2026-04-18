@@ -120,13 +120,13 @@ export default function HowToEarnXPPage() {
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <Zap className="w-5 h-5 text-cyan-400" />
+                    <Zap className="w-5 h-5 text-cyan/40" />
                     <div>
                       <CardTitle className="text-lg">{rule.phase}</CardTitle>
                       <p className="text-sm text-muted/40">{rule.category}</p>
                     </div>
                   </div>
-                  <Badge className="bg-blue/50/20 text-cyan-300 border-blue/50">
+                  <Badge className="bg-blue/50/20 text-cyan/30 border-blue/50">
                     {rule.items.length} acciones
                   </Badge>
                 </div>
@@ -142,10 +142,10 @@ export default function HowToEarnXPPage() {
                         className="flex items-center justify-between p-3 rounded-[28px] bg-muted/70/30 border border-muted/60/50 hover:border-blue/30 transition-colors"
                       >
                         <div className="flex items-center gap-3 flex-1">
-                          <IconComponent className="w-5 h-5 text-cyan-400 flex-shrink-0" />
+                          <IconComponent className="w-5 h-5 text-cyan/40 flex-shrink-0" />
                           <div className="flex-1">
                             <p className="font-semibold text-foreground">{item.action}</p>
-                            {item.streak && <p className="text-xs text-cyan-300">{item.streak}</p>}
+                            {item.streak && <p className="text-xs text-cyan/30">{item.streak}</p>}
                           </div>
                         </div>
                         <Badge className="bg-yellow/50/20 text-amber-300 border-amber-500/50 font-bold">
@@ -164,7 +164,7 @@ export default function HowToEarnXPPage() {
         <Card className="bg-gradient-to-r from-orange/30 to-red-900/30 border-orange/50">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Flame className="w-6 h-6 text-orange-400" />
+              <Flame className="w-6 h-6 text-orange/40" />
               <CardTitle>Sistema de Racha 🔥</CardTitle>
             </div>
           </CardHeader>
@@ -178,7 +178,7 @@ export default function HowToEarnXPPage() {
                   key={idx}
                   className="p-4 rounded-[28px] bg-muted/80/50 border border-orange/30 text-center"
                 >
-                  <p className="font-bold text-lg text-orange-400">{benefit.days}</p>
+                  <p className="font-bold text-lg text-orange/40">{benefit.days}</p>
                   <p className="text-sm text-muted/30">{benefit.bonus}</p>
                 </div>
               ))}
@@ -190,7 +190,7 @@ export default function HowToEarnXPPage() {
         <Card className="bg-gradient-to-r from-blue/30 to-blue/30 border-blue/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-cyan-400" />
+              <Trophy className="w-5 h-5 text-cyan/40" />
               Tips para Maximizar XP
             </CardTitle>
           </CardHeader>
@@ -212,7 +212,7 @@ export default function HowToEarnXPPage() {
         <Card className="bg-muted/80/50 border-muted/70">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-cyan-400" />
+              <TrendingUp className="w-5 h-5 text-cyan/40" />
               Sistema de Niveles
             </CardTitle>
           </CardHeader>

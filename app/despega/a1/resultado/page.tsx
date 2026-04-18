@@ -219,15 +219,15 @@ export default function A1ResultadoPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="p-3 bg-red/5 dark:bg-red/20 rounded-[28px] border-l-4 border-red/50">
-                <p className="font-semibold text-red dark:text-red-300">Energía (Acción & Dinamismo)</p>
+                <p className="font-semibold text-red dark:text-red/30">Energía (Acción & Dinamismo)</p>
                 <p className="text-sm text-muted/70 dark:text-muted/30 mt-1">Tu capacidad para iniciar, moverte rápido y llevar momentum</p>
               </div>
               <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded-[28px] border-l-4 border-orange">
-                <p className="font-semibold text-yellow-700 dark:text-yellow-300">Plan Ejecutivo (Influencia & Visión)</p>
+                <p className="font-semibold text-yellow dark:text-yellow/30">Plan Ejecutivo (Influencia & Visión)</p>
                 <p className="text-sm text-muted/70 dark:text-muted/30 mt-1">Tu capacidad para inspirar, comunicar dirección y llevar gente contigo</p>
               </div>
               <div className="p-3 bg-green/5 dark:bg-green/20 rounded-[28px] border-l-4 border-green">
-                <p className="font-semibold text-green dark:text-green-300">Relaciones (Estabilidad & Confianza)</p>
+                <p className="font-semibold text-green dark:text-green/30">Relaciones (Estabilidad & Confianza)</p>
                 <p className="text-sm text-muted/70 dark:text-muted/30 mt-1">Tu capacidad para conectar, sostener y ser confiable para otros</p>
               </div>
               <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded-[28px] border-l-4 border-blue/50">
@@ -299,7 +299,7 @@ export default function A1ResultadoPage() {
                 </ul>
               </div>
               <div className="space-y-3">
-                <p className="font-semibold text-orange-900 dark:text-orange-200">⚠️ TE FRENA:</p>
+                <p className="font-semibold text-orange dark:text-orange/20">⚠️ TE FRENA:</p>
                 <ul className="space-y-2 text-sm text-muted/70 dark:text-muted/40">
                   <li className="flex gap-2">
                     <span className="text-orange font-bold">■</span>
@@ -342,16 +342,16 @@ export default function A1ResultadoPage() {
                 <li>• Roles que requieren decisión rápida + visión clara</li>
               </ul>
             </div>
-            <div className="p-4 bg-white dark:bg-background rounded-[28px] border border-orange/20 dark:border-orange-700">
-              <p className="font-semibold text-orange-900 dark:text-orange-200 mb-2">Roles a Evitar o Negociar</p>
+            <div className="p-4 bg-white dark:bg-background rounded-[28px] border border-orange/20 dark:border-orange">
+              <p className="font-semibold text-orange dark:text-orange/20 mb-2">Roles a Evitar o Negociar</p>
               <ul className="space-y-1 text-sm text-muted/70 dark:text-muted/40">
                 <li>• Trabajo operativo puro (muy repetitivo)</li>
                 <li>• Roles sin autonomía decisoria</li>
                 <li>• Ambientes con mucha burocracia o cambios de rumbo</li>
               </ul>
             </div>
-            <div className="p-4 bg-white dark:bg-background rounded-[28px] border border-red/20 dark:border-red-700">
-              <p className="font-semibold text-red-900 dark:text-red/20 mb-2">Señal de Alerta</p>
+            <div className="p-4 bg-white dark:bg-background rounded-[28px] border border-red/20 dark:border-red">
+              <p className="font-semibold text-red dark:text-red/20 mb-2">Señal de Alerta</p>
               <p className="text-sm text-muted/70 dark:text-muted/40">Si después de 3-6 meses en un rol sigues sin autonomía clara o decisión, es probable que no es el lugar. Confía en eso.</p>
             </div>
           </CardContent>

@@ -102,9 +102,9 @@ export default function CycleCompletionPage() {
 
   const getDiscColor = (profile: string | undefined) => {
     switch (profile?.toUpperCase()) {
-      case 'D': return 'bg-red/50/20 border-red-300 text-red-800'
-      case 'I': return 'bg-orange/20 border-yellow-300 text-yellow'
-      case 'S': return 'bg-green/50/20 border-green-300 text-green'
+      case 'D': return 'bg-red/50/20 border-red/30 text-red'
+      case 'I': return 'bg-orange/20 border-yellow/30 text-yellow'
+      case 'S': return 'bg-green/50/20 border-green/30 text-green'
       case 'C': return 'bg-blue/50/20 border-blue/30 text-blue'
       default: return 'bg-muted/50/20 border-muted/30 text-gray-800'
     }
@@ -186,7 +186,7 @@ export default function CycleCompletionPage() {
         </Card>
 
         {/* A1: Diagnóstico */}
-        <Card className={`border-2 ${a1Results ? 'border-green-300 bg-green/50/5' : 'border-muted'}`}>
+        <Card className={`border-2 ${a1Results ? 'border-green/30 bg-green/50/5' : 'border-muted'}`}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2">
@@ -253,7 +253,7 @@ export default function CycleCompletionPage() {
         </Card>
 
         {/* A2: Ruta Personalizada */}
-        <Card className={`border-2 ${a2Route ? 'border-green-300 bg-green/50/5' : 'border-muted'}`}>
+        <Card className={`border-2 ${a2Route ? 'border-green/30 bg-green/50/5' : 'border-muted'}`}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2">
@@ -312,7 +312,7 @@ export default function CycleCompletionPage() {
         </Card>
 
         {/* A3: Entrenamientos */}
-        <Card className={`border-2 ${a3Progress?.sessions_completed > 0 ? 'border-green-300 bg-green/50/5' : 'border-muted'}`}>
+        <Card className={`border-2 ${a3Progress?.sessions_completed > 0 ? 'border-green/30 bg-green/50/5' : 'border-muted'}`}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2">
@@ -364,7 +364,7 @@ export default function CycleCompletionPage() {
         </Card>
 
         {/* A4: Contexto Estratégico */}
-        <Card className={`border-2 ${a4Stats ? 'border-green-300 bg-green/50/5' : 'border-muted'}`}>
+        <Card className={`border-2 ${a4Stats ? 'border-green/30 bg-green/50/5' : 'border-muted'}`}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2">

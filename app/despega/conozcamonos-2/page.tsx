@@ -222,7 +222,7 @@ export default function Conozcamonos2Page() {
               key={question.id} 
               className={`p-6 transition-all ${
                 isAnswered 
-                  ? 'border-green/20 dark:border-green-800/50' 
+                  ? 'border-green/20 dark:border-green/50' 
                   : 'border-muted/20 dark:border-card'
               }`}
             >
@@ -259,7 +259,7 @@ export default function Conozcamonos2Page() {
                       maxLength={question.maxLength}
                       className={`flex-1 p-3 border rounded-[28px] bg-white dark:bg-card text-muted/90 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple disabled:opacity-50 transition-colors ${
                         error && !validatingIds.has(question.id) 
-                          ? 'border-red/50 dark:border-red/50 bg-red/5 dark:bg-red-950/20' 
+                          ? 'border-red/50 dark:border-red/50 bg-red/5 dark:bg-red/20' 
                           : 'border-muted/30 dark:border-muted/60'
                       }`}
                       rows={3}
@@ -275,7 +275,7 @@ export default function Conozcamonos2Page() {
                   )}
                   
                   {error && !validatingIds.has(question.id) && (
-                    <div className="text-xs text-red dark:text-red-400 bg-red/5 dark:bg-red-950/30 p-2 rounded border border-red/20 dark:border-red-800">
+                    <div className="text-xs text-red dark:text-red/40 bg-red/5 dark:bg-red/30 p-2 rounded border border-red/20 dark:border-red">
                       {error}
                     </div>
                   )}
@@ -331,13 +331,13 @@ export default function Conozcamonos2Page() {
         </div>
 
         {error && (
-          <div className="bg-red/5 dark:bg-red-950 border-2 border-red/50 dark:border-red rounded-[28px] p-6 mb-6 shadow-lg">
+          <div className="bg-red/5 dark:bg-red border-2 border-red/50 dark:border-red rounded-[28px] p-6 mb-6 shadow-lg">
             <div className="flex items-start gap-3">
               <span className="text-2xl flex-shrink-0">⚠️</span>
               <div className="flex-1">
-                <h3 className="font-semibold text-red-900 dark:text-red/10 mb-1">Validación requerida</h3>
-                <p className="text-red-800 dark:text-red/20 text-sm">{error}</p>
-                <p className="text-red dark:text-red-300 text-xs mt-2 font-medium">Corrige este campo antes de continuar →</p>
+                <h3 className="font-semibold text-red dark:text-red/10 mb-1">Validación requerida</h3>
+                <p className="text-red dark:text-red/20 text-sm">{error}</p>
+                <p className="text-red dark:text-red/30 text-xs mt-2 font-medium">Corrige este campo antes de continuar →</p>
               </div>
             </div>
           </div>

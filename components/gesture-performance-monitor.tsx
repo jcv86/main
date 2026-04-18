@@ -197,7 +197,7 @@ export function GesturePerformanceMonitor() {
       case "declining":
         return <TrendingDown className="h-4 w-4 text-red" />
       default:
-        return <BarChart3 className="h-4 w-4 text-blue-500" />
+        return <BarChart3 className="h-4 w-4 text-blue/50" />
     }
   }
 
@@ -212,7 +212,7 @@ export function GesturePerformanceMonitor() {
   return (
     <div className="space-y-6">
       {/* Control Panel */}
-      <Card className="border-blue-200 bg-gradient-to-r from-blue-50 to-blue/5">
+      <Card className="border-blue/20 bg-gradient-to-r from-blue-50 to-blue/5">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -220,7 +220,7 @@ export function GesturePerformanceMonitor() {
                 <Activity className="h-6 w-6 text-blue" />
               </div>
               <div>
-                <CardTitle className="text-xl text-blue-900">Gesture Performance Monitor</CardTitle>
+                <CardTitle className="text-xl text-blue">Gesture Performance Monitor</CardTitle>
                 <p className="text-blue text-sm">Real-time gesture performance tracking and analytics</p>
               </div>
             </div>
@@ -262,7 +262,7 @@ export function GesturePerformanceMonitor() {
             </div>
             <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <BarChart3 className="h-5 w-5 text-blue-500" />
+                <BarChart3 className="h-5 w-5 text-blue/50" />
                 <span className="font-semibold">Total Gestures</span>
               </div>
               <span className="text-2xl font-bold">{stats?.totalGestures || 0}</span>
@@ -376,7 +376,7 @@ export function GesturePerformanceMonitor() {
                     <div
                       key={`${metric.timestamp}-${index}`}
                       className={`p-3 rounded-[28px] border transition-all ${
-                        metric.success ? "bg-green-50 border-green-200" : "bg-red/5 border-red/20"
+                        metric.success ? "bg-green/5 border-green/20" : "bg-red/5 border-red/20"
                       }`}
                     >
                       <div className="flex items-center justify-between">
@@ -413,14 +413,14 @@ export function GesturePerformanceMonitor() {
 
       {/* Performance Insights */}
       {stats && stats.totalGestures > 10 && (
-        <Card className="border-green-200 bg-green-50">
+        <Card className="border-green/20 bg-green/5">
           <CardHeader>
-            <CardTitle className="text-green-900">Performance Insights</CardTitle>
+            <CardTitle className="text-green">Performance Insights</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-4">
               <div className="space-y-3">
-                <h4 className="font-medium text-green-900">Strengths</h4>
+                <h4 className="font-medium text-green">Strengths</h4>
                 <div className="space-y-2 text-sm">
                   {stats.successRate >= 90 && (
                     <div className="flex items-center gap-2 text-green">
@@ -449,22 +449,22 @@ export function GesturePerformanceMonitor() {
                 </div>
               </div>
               <div className="space-y-3">
-                <h4 className="font-medium text-green-900">Recommendations</h4>
+                <h4 className="font-medium text-green">Recommendations</h4>
                 <div className="space-y-2 text-sm">
                   {stats.averageResponseTime > 200 && (
-                    <div className="flex items-center gap-2 text-yellow-700">
+                    <div className="flex items-center gap-2 text-yellow">
                       <span>⚠️</span>
                       <span>Consider optimizing gesture detection algorithms</span>
                     </div>
                   )}
                   {stats.successRate < 80 && (
-                    <div className="flex items-center gap-2 text-yellow-700">
+                    <div className="flex items-center gap-2 text-yellow">
                       <span>🔧</span>
                       <span>Review gesture sensitivity settings</span>
                     </div>
                   )}
                   {Object.values(stats.gestureBreakdown).some((g) => g.successRate < 70) && (
-                    <div className="flex items-center gap-2 text-yellow-700">
+                    <div className="flex items-center gap-2 text-yellow">
                       <span>🎯</span>
                       <span>Focus on improving low-performing gestures</span>
                     </div>

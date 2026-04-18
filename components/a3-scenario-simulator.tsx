@@ -70,7 +70,7 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
       decision: { icon: "🤔", color: "bg-blue/10", label: "Toma de Decisión" },
       comunicacion: { icon: "💬", color: "bg-green/10", label: "Comunicación" },
       negociacion: { icon: "🤝", color: "bg-orange/10", label: "Negociación" },
-      liderazgo: { icon: "👥", color: "bg-purple-100", label: "Liderazgo" },
+      liderazgo: { icon: "👥", color: "bg-purple/10", label: "Liderazgo" },
       crisis: { icon: "🚨", color: "bg-red/10", label: "Gestión de Crisis" },
       planificacion: { icon: "📋", color: "bg-blue/10", label: "Planificación" },
     }
@@ -155,10 +155,10 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
         </CardHeader>
 
         <CardContent className="space-y-6">
-          <div className="bg-blue-50 border border-blue-200 rounded-[28px] p-4">
+          <div className="bg-blue/5 border border-blue/20 rounded-[28px] p-4">
             <div className="flex gap-3">
               <AlertCircle className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-blue-900">{scenario.contexto}</div>
+              <div className="text-sm text-blue">{scenario.contexto}</div>
             </div>
           </div>
 
@@ -222,24 +222,24 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
           </div>
 
           {/* Your Decision */}
-          <div className="bg-blue-50 border border-blue-200 rounded-[28px] p-4">
+          <div className="bg-blue/5 border border-blue/20 rounded-[28px] p-4">
             <div className="text-sm font-medium mb-2">Tu decisión</div>
             <div className="font-medium">{selectedDecision.text}</div>
           </div>
 
           {/* Outcome */}
-          <div className="bg-green-50 border border-green-200 rounded-[28px] p-4">
+          <div className="bg-green/5 border border-green/20 rounded-[28px] p-4">
             <div className="text-sm font-medium mb-2">Lo que sucedió</div>
-            <div className="text-sm text-green-900">{selectedDecision.outcome}</div>
+            <div className="text-sm text-green">{selectedDecision.outcome}</div>
           </div>
 
           {/* Coaching Insights */}
-          <div className="bg-purple-50 border border-purple-200 rounded-[28px] p-4">
+          <div className="bg-purple/5 border border-purple/20 rounded-[28px] p-4">
             <div className="flex gap-2">
-              <TrendingUp className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+              <TrendingUp className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
               <div>
                 <div className="text-sm font-medium mb-1">Insights del Coach</div>
-                <div className="text-sm text-purple-900">{selectedDecision.reasoning}</div>
+                <div className="text-sm text-purple">{selectedDecision.reasoning}</div>
               </div>
             </div>
           </div>

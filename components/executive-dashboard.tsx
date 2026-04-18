@@ -21,7 +21,7 @@ const mockMetrics: DashboardMetric[] = [
     label: 'Tu Nivel de Criterio',
     value: 72,
     unit: '%',
-    icon: <BarChart3 className="w-6 h-6 text-cyan-600" />,
+    icon: <BarChart3 className="w-6 h-6 text-cyan" />,
     trend: 12
   },
   {
@@ -110,13 +110,13 @@ export function ExecutiveDashboard() {
               <div className="flex items-start justify-between mb-4">
                 <div>{metric.icon}</div>
                 {metric.trend && (
-                  <Badge className={metric.trend > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red/10 text-red-800'}>
+                  <Badge className={metric.trend > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red/10 text-red'}>
                     {metric.trend > 0 ? '+' : ''}{metric.trend}%
                   </Badge>
                 )}
               </div>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">{metric.label}</p>
-              <p className="text-3xl font-bold text-slate-900 dark:text-slate-100">
+              <p className="text-sm text-muted/60 dark:text-muted/40 mb-2">{metric.label}</p>
+              <p className="text-3xl font-bold text-muted/90 dark:text-muted/10">
                 {metric.value}{metric.unit}
               </p>
             </CardContent>
@@ -131,22 +131,22 @@ export function ExecutiveDashboard() {
           {keyInsights.map((insight, idx) => (
             <Card
               key={idx}
-              className="cursor-pointer hover:border-cyan-500 transition-colors"
+              className="cursor-pointer hover:border-cyan/50 transition-colors"
               onClick={() => setExpandedInsight(expandedInsight === idx ? null : idx)}
             >
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="font-bold text-slate-900 dark:text-slate-100 mb-1">
+                    <h3 className="font-bold text-muted/90 dark:text-muted/10 mb-1">
                       {insight.title}
                     </h3>
                     {expandedInsight === idx && (
-                      <p className="text-sm text-slate-600 dark:text-slate-400 mb-3">
+                      <p className="text-sm text-muted/60 dark:text-muted/40 mb-3">
                         {insight.description}
                       </p>
                     )}
                   </div>
-                  <Button size="sm" className="ml-4 whitespace-nowrap bg-cyan-600 hover:bg-cyan-700">
+                  <Button size="sm" className="ml-4 whitespace-nowrap bg-cyan hover:bg-cyan">
                     {insight.action}
                   </Button>
                 </div>
@@ -166,20 +166,20 @@ export function ExecutiveDashboard() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-bold text-slate-900 dark:text-slate-100">
+                      <h3 className="font-bold text-muted/90 dark:text-muted/10">
                         {action.title}
                       </h3>
                       <Badge
                         className={
                           action.priority === 'Alta'
-                            ? 'bg-red/10 text-red-800'
+                            ? 'bg-red/10 text-red'
                             : 'bg-amber-100 text-amber-800'
                         }
                       >
                         {action.priority}
                       </Badge>
                     </div>
-                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                    <p className="text-xs text-muted/50 dark:text-muted/40">
                       {action.stage} • {action.daysLeft} días
                     </p>
                   </div>
@@ -187,7 +187,7 @@ export function ExecutiveDashboard() {
                     size="sm" 
                     variant="outline"
                     onClick={() => handleActionClick(action.route)}
-                    className="cursor-pointer hover:bg-cyan-50 dark:hover:bg-cyan/20"
+                    className="cursor-pointer hover:bg-cyan/5 dark:hover:bg-cyan/20"
                   >
                     Acceder
                   </Button>
@@ -199,10 +199,10 @@ export function ExecutiveDashboard() {
       </div>
 
       {/* Progress Overview */}
-      <Card className="bg-gradient-to-r from-cyan-50 to-teal-50 dark:from-cyan-900/10 dark:to-teal-900/10 border-2 border-cyan-200 dark:border-cyan-800">
+      <Card className="bg-gradient-to-r from-cyan-50 to-teal-50 dark:from-cyan-900/10 dark:to-teal-900/10 border-2 border-cyan/20 dark:border-cyan">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-cyan-600" />
+            <CheckCircle2 className="w-5 h-5 text-cyan" />
             Tu Progreso General
           </CardTitle>
         </CardHeader>
@@ -210,11 +210,11 @@ export function ExecutiveDashboard() {
           <div>
             <div className="flex justify-between mb-2">
               <span className="text-sm font-semibold">Ciclo Completo C1→A4</span>
-              <span className="text-sm text-slate-600 dark:text-slate-400">72%</span>
+              <span className="text-sm text-muted/60 dark:text-muted/40">72%</span>
             </div>
             <Progress value={72} className="h-2" />
           </div>
-          <p className="text-sm text-slate-600 dark:text-slate-400">
+          <p className="text-sm text-muted/60 dark:text-muted/40">
             Estás en fase A4. Has completado el 100% de A1, A2 y el 85% de A3. 
             Continúa con tus simulaciones y estarás listo para ejecutar en 2-3 semanas.
           </p>

@@ -38,7 +38,7 @@ export default function ConversationalInterviewPage() {
         <div className="flex flex-col h-screen">
           <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-background p-4">
             <Link href="/despega/a3-dashboard">
-              <Button variant="ghost" className="text-cyan-400 hover:text-cyan-300">
+              <Button variant="ghost" className="text-cyan/40 hover:text-cyan/30">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Volver al Dashboard
               </Button>
@@ -89,7 +89,7 @@ export default function ConversationalInterviewPage() {
                   className={`p-3 rounded-[28px] border-2 transition ${
                     selectedRole === role
                       ? 'border-blue bg-blue/5 dark:bg-cyan/20'
-                      : 'border-muted/20 dark:border-card hover:border-cyan-400'
+                      : 'border-muted/20 dark:border-card hover:border-cyan/40'
                   }`}
                 >
                   {role}
@@ -110,7 +110,7 @@ export default function ConversationalInterviewPage() {
                     className={`p-3 rounded-[28px] border-2 transition ${
                       selectedIndustry === industry
                         ? 'border-blue bg-blue/5 dark:bg-cyan/20'
-                        : 'border-muted/20 dark:border-card hover:border-cyan-400'
+                        : 'border-muted/20 dark:border-card hover:border-cyan/40'
                     }`}
                   >
                     {industry}
@@ -132,7 +132,7 @@ export default function ConversationalInterviewPage() {
                     className={`w-full p-4 rounded-[28px] border-2 transition text-left ${
                       selectedLevel === level.id
                         ? 'border-blue bg-blue/5 dark:bg-cyan/20'
-                        : 'border-muted/20 dark:border-card hover:border-cyan-400'
+                        : 'border-muted/20 dark:border-card hover:border-cyan/40'
                     }`}
                   >
                     <div className="font-semibold">{level.label}</div>
@@ -142,7 +142,7 @@ export default function ConversationalInterviewPage() {
               </div>
 
               <Button
-                className="w-full mt-6 py-6 bg-blue hover:bg-cyan-700 text-white text-lg"
+                className="w-full mt-6 py-6 bg-blue hover:bg-cyan text-white text-lg"
                 onClick={() => {}}
               >
                 Comenzar Entrevista

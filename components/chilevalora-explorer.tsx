@@ -302,7 +302,7 @@ interface ProfileCardProps {
 
 function ProfileCard({ profile, isFavorite, onFavorite, onSelect }: ProfileCardProps) {
   const demandColor = {
-    alto: 'bg-red/10 text-red-800',
+    alto: 'bg-red/10 text-red',
     medio: 'bg-yellow/10 text-yellow',
     bajo: 'bg-green/10 text-green',
   }
@@ -374,7 +374,7 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
             <div className="flex items-center gap-2 mt-2">
               <div className="w-full bg-muted/20 rounded-full h-2">
                 <div
-                  className="bg-green-500 h-2 rounded-full"
+                  className="bg-green/50 h-2 rounded-full"
                   style={{ width: `${match.matchPercentage}%` }}
                 />
               </div>

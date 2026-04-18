@@ -597,7 +597,7 @@ export default function ComprehensiveGestureTestPage() {
                               className={`text-xs ${
                                 result.success
                                   ? "bg-green/10 text-green hover:bg-green/10"
-                                  : "bg-red/10 text-red-800 hover:bg-red/10"
+                                  : "bg-red/10 text-red hover:bg-red/10"
                               }`}
                             >
                               {gesture}: {result.responseTime}ms
@@ -720,7 +720,7 @@ export default function ComprehensiveGestureTestPage() {
                   <AlertCircle className="h-5 w-5 text-yellow flex-shrink-0 mt-0.5" />
                   <div>
                     <div className="font-medium text-yellow">Tasa de Éxito Baja</div>
-                    <div className="text-sm text-yellow-700">
+                    <div className="text-sm text-yellow">
                       Considera optimizar la detección de gestos o ajustar la sensibilidad táctil.
                     </div>
                   </div>

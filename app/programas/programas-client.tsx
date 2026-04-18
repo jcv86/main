@@ -146,7 +146,7 @@ export default function ProgramasClient() {
           return (
             <Card
               key={programa.id}
-              className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-purple-300"
+              className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-purple/30"
               onClick={() => setSelectedProgram(programa)}
             >
               <CardHeader>

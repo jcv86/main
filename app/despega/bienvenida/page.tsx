@@ -87,7 +87,7 @@ export default function BienvenidaPage() {
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
                 <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-cyan/10 dark:bg-cyan mb-4">
-                  <span className="text-xl font-bold text-blue dark:text-cyan-300">3</span>
+                  <span className="text-xl font-bold text-blue dark:text-cyan/30">3</span>
                 </div>
                 <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Entrena y Analiza</h3>
                 <p className="text-sm text-muted/60 dark:text-muted/40">
@@ -134,7 +134,7 @@ export default function BienvenidaPage() {
         </div>
 
         {/* Timeline */}
-        <div className="bg-blue/5 dark:bg-blue-950/30 rounded-[28px] p-6 border border-blue/30 dark:border-blue/10 mb-8">
+        <div className="bg-blue/5 dark:bg-blue/30 rounded-[28px] p-6 border border-blue/30 dark:border-blue/10 mb-8">
           <h3 className="font-semibold text-muted/90 dark:text-white mb-3 flex items-center gap-2">
             <Target className="w-5 h-5 text-blue" />
             Tiempo Estimado

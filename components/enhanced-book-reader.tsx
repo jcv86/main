@@ -103,7 +103,7 @@ export default function EnhancedBookReader({
       case "intermedio":
         return "bg-yellow/10 text-yellow"
       case "avanzado":
-        return "bg-red/10 text-red-800"
+        return "bg-red/10 text-red"
       default:
         return "bg-muted/10 text-gray-800"
     }

@@ -240,7 +240,7 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
               <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
                   className={`max-w-[80%] rounded-lg px-3 py-2 ${
-                    message.role === "user" ? "bg-blue-500 text-white" : "bg-muted/10 text-foreground"
+                    message.role === "user" ? "bg-blue/50 text-white" : "bg-muted/10 text-foreground"
                   }`}
                 >
                   {message.role === "assistant" && message.coachName && (
@@ -283,7 +283,7 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
                   <button
                     key={star}
                     onClick={() => rateConversation(star)}
-                    className={`p-1 ${rating && rating >= star ? "text-yellow-400" : "text-muted/30"}`}
+                    className={`p-1 ${rating && rating >= star ? "text-yellow/40" : "text-muted/30"}`}
                   >
                     <Star className="h-4 w-4 fill-current" />
                   </button>

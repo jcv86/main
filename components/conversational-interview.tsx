@@ -225,7 +225,7 @@ export function ConversationalInterview({
           <CardContent className="space-y-6">
             <div className="space-y-2">
               <h3 className="font-semibold">Configuración</h3>
-              <p className="text-slate-600 dark:text-slate-400">
+              <p className="text-muted/60 dark:text-muted/40">
                 Puesto: <Badge>{role}</Badge> | Industria: <Badge>{industry}</Badge> | Nivel: <Badge>{level}</Badge>
               </p>
             </div>
@@ -280,21 +280,21 @@ export function ConversationalInterview({
     return (
       <div className="max-w-4xl mx-auto p-6 space-y-4">
         {/* Avatar Showcase */}
-        <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-[28px] border border-slate-200 dark:border-slate-700">
+        <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-[28px] border border-muted/20 dark:border-muted/70">
           {/* Interviewer Avatar */}
           <div className="flex flex-col items-center justify-center py-4 px-2">
             <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-2 ${getAvatarGradient(preferences.interviewer_avatar_id)} shadow-lg`}>
               {getAvatarEmoji(preferences.interviewer_avatar_id, 'interviewer')}
             </div>
-            <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 text-center">
+            <p className="text-xs font-semibold text-muted/70 dark:text-muted/30 text-center">
               {getAvatarName(preferences.interviewer_avatar_id, 'interviewer')}
             </p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Entrevistador</p>
+            <p className="text-xs text-muted/60 dark:text-muted/40">Entrevistador</p>
           </div>
 
           {/* VS */}
           <div className="flex items-center justify-center">
-            <p className="text-3xl font-bold text-slate-400 dark:text-slate-600">VS</p>
+            <p className="text-3xl font-bold text-muted/40 dark:text-muted/60">VS</p>
           </div>
 
           {/* User Avatar */}
@@ -302,15 +302,15 @@ export function ConversationalInterview({
             <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-2 ${getAvatarGradient(preferences.user_avatar_id)} shadow-lg`}>
               {getAvatarEmoji(preferences.user_avatar_id, 'user')}
             </div>
-            <p className="text-xs font-semibold text-slate-700 dark:text-slate-300 text-center">
+            <p className="text-xs font-semibold text-muted/70 dark:text-muted/30 text-center">
               {getAvatarName(preferences.user_avatar_id, 'user')}
             </p>
-            <p className="text-xs text-slate-600 dark:text-slate-400">Tú</p>
+            <p className="text-xs text-muted/60 dark:text-muted/40">Tú</p>
           </div>
 
           {/* You Avatar Info */}
           <div className="flex items-center justify-center col-start-1">
-            <p className="text-sm text-slate-700 dark:text-slate-300">Tu presentación</p>
+            <p className="text-sm text-muted/70 dark:text-muted/30">Tu presentación</p>
           </div>
         </div>
 
@@ -325,8 +325,8 @@ export function ConversationalInterview({
               className="w-full bg-black aspect-video"
             />
             {!videoEnabled && (
-              <div className="w-full aspect-video bg-slate-200 dark:bg-slate-800 flex items-center justify-center">
-                <p className="text-slate-500">Cámara deshabilitada</p>
+              <div className="w-full aspect-video bg-muted/20 dark:bg-muted/80 flex items-center justify-center">
+                <p className="text-muted/50">Cámara deshabilitada</p>
               </div>
             )}
 
@@ -363,7 +363,7 @@ export function ConversationalInterview({
 
         {/* Error */}
         {error && (
-          <Alert variant="destructive" className="border-red-300 bg-red/5 dark:bg-red/20">
+          <Alert variant="destructive" className="border-red/30 bg-red/5 dark:bg-red/20">
             <AlertTriangle className="h-4 w-4 text-red" />
             <AlertDescription className="text-red dark:text-red/20 ml-2">{error}</AlertDescription>
           </Alert>
@@ -375,8 +375,8 @@ export function ConversationalInterview({
             {/* Interviewer Messages */}
             <div className="space-y-3 max-h-64 overflow-y-auto">
               {interviewerMessage && (
-                <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg">
-                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Entrevistador</p>
+                <div className="bg-muted/10 dark:bg-muted/80 p-3 rounded-lg">
+                  <p className="text-sm font-semibold text-muted/70 dark:text-muted/30 mb-1">Entrevistador</p>
                   <p className="text-sm">{interviewerMessage}</p>
                 </div>
               )}
@@ -423,12 +423,12 @@ export function ConversationalInterview({
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
-                <p className="text-sm text-slate-600 dark:text-slate-400">Puntuación</p>
-                <p className="text-3xl font-bold text-cyan-600">{feedbackData?.score}/100</p>
+              <div className="p-4 bg-muted/10 dark:bg-muted/80 rounded-lg">
+                <p className="text-sm text-muted/60 dark:text-muted/40">Puntuación</p>
+                <p className="text-3xl font-bold text-cyan">{feedbackData?.score}/100</p>
               </div>
-              <div className="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
-                <p className="text-sm text-slate-600 dark:text-slate-400">Respuestas Registradas</p>
+              <div className="p-4 bg-muted/10 dark:bg-muted/80 rounded-lg">
+                <p className="text-sm text-muted/60 dark:text-muted/40">Respuestas Registradas</p>
                 <p className="text-3xl font-bold">{feedbackData?.totalResponses}</p>
               </div>
             </div>

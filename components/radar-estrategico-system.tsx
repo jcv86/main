@@ -380,9 +380,9 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
 
   const getPriorityBadge = (prioridad: string) => {
     const config = {
-      estructural: { bg: 'bg-red/30', text: 'text-red-300', label: 'Estructural', icon: AlertTriangle },
-      tactico: { bg: 'bg-yellow/30', text: 'text-yellow-300', label: 'Táctico', icon: TrendingUp },
-      contextual: { bg: 'bg-green/30', text: 'text-green-300', label: 'Contextual', icon: Eye }
+      estructural: { bg: 'bg-red/30', text: 'text-red/30', label: 'Estructural', icon: AlertTriangle },
+      tactico: { bg: 'bg-yellow/30', text: 'text-yellow/30', label: 'Táctico', icon: TrendingUp },
+      contextual: { bg: 'bg-green/30', text: 'text-green/30', label: 'Contextual', icon: Eye }
     }
     return config[prioridad as keyof typeof config] || config.contextual
   }
@@ -390,14 +390,14 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-950 dark:to-slate-900 p-6 rounded-[28px] border border-cyan-500/20">
+      <div className="bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-950 dark:to-slate-900 p-6 rounded-[28px] border border-cyan/50/20">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="text-2xl font-bold text-cyan-400 flex items-center gap-2">
+            <h2 className="text-2xl font-bold text-cyan/40 flex items-center gap-2">
               <Radar className="w-6 h-6" />
               Radar Estratégico
             </h2>
-            <p className="text-sm text-slate-400 mt-1">
+            <p className="text-sm text-muted/40 mt-1">
               {radarData.fecha} • {radarData.hora} {radarData.timezone}
             </p>
           </div>
@@ -405,39 +405,39 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
             Edición {radarData.edicion}
           </Badge>
         </div>
-        <p className="text-slate-400 text-sm">{radarData.fecha} • Zona horaria: {radarData.timezone}</p>
+        <p className="text-muted/40 text-sm">{radarData.fecha} • Zona horaria: {radarData.timezone}</p>
       </div>
 
       {/* Lectura Base - Capa 1 */}
-      <Card className="border-cyan-500/30 bg-gradient-to-br from-cyan-950/20 to-slate-950">
+      <Card className="border-cyan/50/30 bg-gradient-to-br from-cyan-950/20 to-slate-950">
         <CardHeader>
           <CardTitle className="text-xl flex items-center gap-2">
-            <Target className="w-5 h-5 text-cyan-400" />
+            <Target className="w-5 h-5 text-cyan/40" />
             Lectura Estratégica del Día
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <h4 className="text-sm font-semibold text-slate-300 mb-1">Estado Actual</h4>
-            <p className="text-slate-200">{radarData.lecturaBas.estado}</p>
+            <h4 className="text-sm font-semibold text-muted/30 mb-1">Estado Actual</h4>
+            <p className="text-muted/20">{radarData.lecturaBas.estado}</p>
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <h4 className="text-sm font-semibold text-red-400 mb-1">🔴 Riesgo Principal</h4>
-              <p className="text-slate-300 text-sm">{radarData.lecturaBas.riesgoPrincipal}</p>
+              <h4 className="text-sm font-semibold text-red/40 mb-1">🔴 Riesgo Principal</h4>
+              <p className="text-muted/30 text-sm">{radarData.lecturaBas.riesgoPrincipal}</p>
             </div>
             <div>
               <h4 className="text-sm font-semibold text-green/40 mb-1">🟢 Oportunidad Principal</h4>
-              <p className="text-slate-300 text-sm">{radarData.lecturaBas.oportunidadPrincipal}</p>
+              <p className="text-muted/30 text-sm">{radarData.lecturaBas.oportunidadPrincipal}</p>
             </div>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-slate-300 mb-1">Narrativa Dominante</h4>
-            <p className="text-slate-200 italic">{radarData.lecturaBas.narrativaDominante}</p>
+            <h4 className="text-sm font-semibold text-muted/30 mb-1">Narrativa Dominante</h4>
+            <p className="text-muted/20 italic">{radarData.lecturaBas.narrativaDominante}</p>
           </div>
-          <div className="bg-slate-900/50 p-3 rounded border border-slate-700/50">
-            <h4 className="text-sm font-semibold text-cyan-400 mb-1">👁️ Vigilar Ahora</h4>
-            <p className="text-slate-300 text-sm">{radarData.lecturaBas.vigilar}</p>
+          <div className="bg-muted/90/50 p-3 rounded border border-muted/70/50">
+            <h4 className="text-sm font-semibold text-cyan/40 mb-1">👁️ Vigilar Ahora</h4>
+            <p className="text-muted/30 text-sm">{radarData.lecturaBas.vigilar}</p>
           </div>
         </CardContent>
       </Card>
@@ -445,12 +445,12 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
       {/* Noticias Profundas - Capa 2 */}
       <div>
         <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-          <BookOpen className="w-5 h-5 text-cyan-400" />
+          <BookOpen className="w-5 h-5 text-cyan/40" />
           Análisis Profundo
         </h3>
         
         <Tabs value={selectedNoticias} onValueChange={setSelectedNoticias} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 bg-slate-900/50">
+          <TabsList className="grid w-full grid-cols-3 bg-muted/90/50">
             <TabsTrigger value="estructural" className="text-xs sm:text-sm">🔴 Estructural</TabsTrigger>
             <TabsTrigger value="tactico" className="text-xs sm:text-sm">🟡 Táctico</TabsTrigger>
             <TabsTrigger value="contextual" className="text-xs sm:text-sm">🟢 Contextual</TabsTrigger>
@@ -461,58 +461,58 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
               {radarData.noticias
                 .filter((n) => n.prioridad === prioridad)
                 .map((noticia) => (
-                  <Card key={noticia.id} className="border-slate-700/50 bg-slate-950/50">
+                  <Card key={noticia.id} className="border-muted/70/50 bg-slate-950/50">
                     <CardHeader>
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
                           <CardTitle className="text-lg mb-2">{noticia.titulo}</CardTitle>
-                          <p className="text-xs text-slate-400">{noticia.fecha} • {noticia.hora}</p>
+                          <p className="text-xs text-muted/40">{noticia.fecha} • {noticia.hora}</p>
                         </div>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-400 uppercase mb-1">Traducción sin jerga</h4>
-                        <p className="text-slate-200">{noticia.traduccion}</p>
+                        <h4 className="text-xs font-semibold text-muted/40 uppercase mb-1">Traducción sin jerga</h4>
+                        <p className="text-muted/20">{noticia.traduccion}</p>
                       </div>
 
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
-                          <h4 className="text-xs font-semibold text-red-400 uppercase mb-1">❌ Error del consenso</h4>
-                          <p className="text-slate-300 text-sm">{noticia.errorConsensual}</p>
+                          <h4 className="text-xs font-semibold text-red/40 uppercase mb-1">❌ Error del consenso</h4>
+                          <p className="text-muted/30 text-sm">{noticia.errorConsensual}</p>
                         </div>
                         <div>
-                          <h4 className="text-xs font-semibold text-cyan-400 uppercase mb-1">💹 Qué descuenta el mercado</h4>
-                          <p className="text-slate-300 text-sm">{noticia.descontandoMercado}</p>
+                          <h4 className="text-xs font-semibold text-cyan/40 uppercase mb-1">💹 Qué descuenta el mercado</h4>
+                          <p className="text-muted/30 text-sm">{noticia.descontandoMercado}</p>
                         </div>
                       </div>
 
                       <div>
-                        <h4 className="text-xs font-semibold text-yellow-400 uppercase mb-1">⚠️ Qué no encaja</h4>
-                        <p className="text-slate-300 text-sm">{noticia.noEncaja}</p>
+                        <h4 className="text-xs font-semibold text-yellow/40 uppercase mb-1">⚠️ Qué no encaja</h4>
+                        <p className="text-muted/30 text-sm">{noticia.noEncaja}</p>
                       </div>
 
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-300 uppercase mb-1">🎯 Incentivos detrás</h4>
-                        <p className="text-slate-300 text-sm">{noticia.incentivos}</p>
+                        <h4 className="text-xs font-semibold text-muted/30 uppercase mb-1">🎯 Incentivos detrás</h4>
+                        <p className="text-muted/30 text-sm">{noticia.incentivos}</p>
                       </div>
 
-                      <div className="bg-slate-900/50 p-3 rounded border border-slate-700/50">
-                        <h4 className="text-xs font-semibold text-slate-300 uppercase mb-2">📊 Impacto temporal</h4>
+                      <div className="bg-muted/90/50 p-3 rounded border border-muted/70/50">
+                        <h4 className="text-xs font-semibold text-muted/30 uppercase mb-2">📊 Impacto temporal</h4>
                         <div className="space-y-1 text-xs">
                           <p><span className="text-green/40">Corto:</span> {noticia.impactoTemporal.corto}</p>
-                          <p><span className="text-yellow-400">Medio:</span> {noticia.impactoTemporal.medio}</p>
-                          <p><span className="text-red-400">Largo:</span> {noticia.impactoTemporal.largo}</p>
+                          <p><span className="text-yellow/40">Medio:</span> {noticia.impactoTemporal.medio}</p>
+                          <p><span className="text-red/40">Largo:</span> {noticia.impactoTemporal.largo}</p>
                         </div>
                       </div>
 
                       <div>
-                        <h4 className="text-xs font-semibold text-cyan-400 uppercase mb-1">🔗 Cadena causal</h4>
-                        <p className="text-slate-300 text-sm font-mono">{noticia.cadenaCausal}</p>
+                        <h4 className="text-xs font-semibold text-cyan/40 uppercase mb-1">🔗 Cadena causal</h4>
+                        <p className="text-muted/30 text-sm font-mono">{noticia.cadenaCausal}</p>
                       </div>
 
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-300 uppercase mb-2">🗺️ Mapa de exposición</h4>
+                        <h4 className="text-xs font-semibold text-muted/30 uppercase mb-2">🗺️ Mapa de exposición</h4>
                         <div className="space-y-1 text-xs">
                           <p><span className="text-emerald-400">🇨🇱 Chile:</span> {noticia.mapeoExposicion.chile}</p>
                           <p><span className="text-blue/40">🌍 Global:</span> {noticia.mapeoExposicion.global}</p>
@@ -520,21 +520,21 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
                         </div>
                       </div>
 
-                      <div className="border-t border-slate-700/50 pt-3">
-                        <h4 className="text-xs font-semibold text-slate-300 uppercase mb-1">📖 Evolución narrativa</h4>
-                        <p className="text-slate-300 text-sm">{noticia.evolucionNarrativa}</p>
+                      <div className="border-t border-muted/70/50 pt-3">
+                        <h4 className="text-xs font-semibold text-muted/30 uppercase mb-1">📖 Evolución narrativa</h4>
+                        <p className="text-muted/30 text-sm">{noticia.evolucionNarrativa}</p>
                       </div>
 
                       {noticia.narrativaZombie && (
-                        <div className="bg-red-950/20 p-2 rounded border border-red-700/30">
-                          <h4 className="text-xs font-semibold text-red-400 uppercase mb-1">🧟 Narrativa zombie</h4>
-                          <p className="text-slate-300 text-sm">{noticia.narrativaZombie}</p>
+                        <div className="bg-red/20 p-2 rounded border border-red/30">
+                          <h4 className="text-xs font-semibold text-red/40 uppercase mb-1">🧟 Narrativa zombie</h4>
+                          <p className="text-muted/30 text-sm">{noticia.narrativaZombie}</p>
                         </div>
                       )}
 
                       <div>
-                        <h4 className="text-xs font-semibold text-slate-400 uppercase mb-1">📚 Fuentes</h4>
-                        <p className="text-slate-300 text-xs">{noticia.fuentes.join(' • ')}</p>
+                        <h4 className="text-xs font-semibold text-muted/40 uppercase mb-1">📚 Fuentes</h4>
+                        <p className="text-muted/30 text-xs">{noticia.fuentes.join(' • ')}</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -546,28 +546,28 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
 
       {/* Sistema Vivo - Capa 4 */}
       <div className="grid md:grid-cols-2 gap-4">
-        <Card className="border-slate-700/50 bg-slate-950/50">
+        <Card className="border-muted/70/50 bg-slate-950/50">
           <CardHeader>
             <CardTitle className="text-base">📋 Watchlist Activa</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {radarData.watchlist.map((item, idx) => (
-              <div key={idx} className="text-sm text-slate-300 flex gap-2">
-                <span className="text-cyan-400">▸</span>
+              <div key={idx} className="text-sm text-muted/30 flex gap-2">
+                <span className="text-cyan/40">▸</span>
                 <span>{item}</span>
               </div>
             ))}
           </CardContent>
         </Card>
 
-        <Card className="border-slate-700/50 bg-slate-950/50">
+        <Card className="border-muted/70/50 bg-slate-950/50">
           <CardHeader>
             <CardTitle className="text-base">🔍 Narrativas en Observación</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {radarData.narrativasEnObservacion.map((item, idx) => (
-              <div key={idx} className="text-sm text-slate-300 flex gap-2">
-                <span className="text-yellow-400">▸</span>
+              <div key={idx} className="text-sm text-muted/30 flex gap-2">
+                <span className="text-yellow/40">▸</span>
                 <span>{item}</span>
               </div>
             ))}

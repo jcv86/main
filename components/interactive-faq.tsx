@@ -202,10 +202,10 @@ export function InteractiveFAQ() {
       </div>
 
       {/* CTA to AI Coach */}
-      <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8 border border-purple-100">
+      <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8 border border-purple/10">
         <div className="flex items-center gap-4 mb-4">
           <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
-            <MessageCircle className="w-6 h-6 text-purple-600" />
+            <MessageCircle className="w-6 h-6 text-purple" />
           </div>
           <div>
             <h3 className="text-xl font-bold text-foreground">¿No encontraste tu respuesta?</h3>

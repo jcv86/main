@@ -36,8 +36,8 @@ export function Leaderboard() {
   const getMedalColor = (rank: number) => {
     if (rank === 1) return 'bg-orange'
     if (rank === 2) return 'bg-muted/40'
-    if (rank === 3) return 'bg-orange-600'
-    return 'bg-slate-300 dark:bg-slate-600'
+    if (rank === 3) return 'bg-orange'
+    return 'bg-muted/30 dark:bg-muted/60'
   }
 
   const getMedalEmoji = (rank: number) => {
@@ -89,7 +89,7 @@ export function Leaderboard() {
         </Card>
         <Card>
           <CardContent className="pt-6 text-center">
-            <BookMarked className="w-8 h-8 mx-auto mb-2 text-blue-500" />
+            <BookMarked className="w-8 h-8 mx-auto mb-2 text-blue/50" />
             <p className="text-sm text-muted-foreground">Libros Completados</p>
             <p className="text-3xl font-bold">5</p>
           </CardContent>

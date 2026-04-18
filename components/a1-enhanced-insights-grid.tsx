@@ -24,12 +24,12 @@ interface InsightCardProps {
 }
 
 const colorMap: Record<string, { bg: string; border: string; icon: string }> = {
-  purple: { bg: 'bg-purple-50 dark:bg-purple-950', border: 'border-purple-200 dark:border-purple-800', icon: 'text-purple-600 dark:text-purple/40' },
-  blue: { bg: 'bg-blue-50 dark:bg-blue-950', border: 'border-blue-200 dark:border-blue-800', icon: 'text-blue dark:text-blue/40' },
-  orange: { bg: 'bg-orange/5 dark:bg-orange-950', border: 'border-orange/20 dark:border-orange-800', icon: 'text-orange dark:text-orange-400' },
-  cyan: { bg: 'bg-cyan-50 dark:bg-cyan-950', border: 'border-cyan-200 dark:border-cyan-800', icon: 'text-cyan-600 dark:text-cyan-400' },
+  purple: { bg: 'bg-purple/5 dark:bg-purple', border: 'border-purple/20 dark:border-purple', icon: 'text-purple dark:text-purple/40' },
+  blue: { bg: 'bg-blue/5 dark:bg-blue', border: 'border-blue/20 dark:border-blue', icon: 'text-blue dark:text-blue/40' },
+  orange: { bg: 'bg-orange/5 dark:bg-orange', border: 'border-orange/20 dark:border-orange', icon: 'text-orange dark:text-orange/40' },
+  cyan: { bg: 'bg-cyan/5 dark:bg-cyan-950', border: 'border-cyan/20 dark:border-cyan', icon: 'text-cyan dark:text-cyan/40' },
   pink: { bg: 'bg-pink-50 dark:bg-pink-950', border: 'border-pink-200 dark:border-pink-800', icon: 'text-pink-600 dark:text-pink-400' },
-  green: { bg: 'bg-green-50 dark:bg-green-950', border: 'border-green-200 dark:border-green-800', icon: 'text-green dark:text-green/40' },
+  green: { bg: 'bg-green/5 dark:bg-green', border: 'border-green/20 dark:border-green', icon: 'text-green dark:text-green/40' },
   indigo: { bg: 'bg-indigo-50 dark:bg-indigo-950', border: 'border-indigo-200 dark:border-indigo-800', icon: 'text-indigo-600 dark:text-indigo-400' },
   amber: { bg: 'bg-amber-50 dark:bg-amber-950', border: 'border-amber-200 dark:border-amber-800', icon: 'text-amber-600 dark:text-amber-400' },
 }
@@ -57,17 +57,17 @@ export function InsightCard({ title, content, icon, index, color, emoji }: Insig
           <div className="flex items-start gap-4">
             <div className="flex flex-col items-center gap-2">
               {emoji && <span className="text-2xl">{emoji}</span>}
-              <div className={`p-2 rounded-[28px] bg-white dark:bg-slate-800 flex-shrink-0`}>
+              <div className={`p-2 rounded-[28px] bg-white dark:bg-muted/80 flex-shrink-0`}>
                 <div className={`w-5 h-5 ${colorClasses.icon}`}>
                   {icon}
                 </div>
               </div>
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-semibold text-slate-900 dark:text-white mb-2 text-sm md:text-base">
+              <h3 className="font-semibold text-muted/90 dark:text-white mb-2 text-sm md:text-base">
                 {title}
               </h3>
-              <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
+              <p className="text-sm text-muted/70 dark:text-muted/30 leading-relaxed">
                 {content}
               </p>
             </div>

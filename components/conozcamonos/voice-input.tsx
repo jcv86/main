@@ -31,7 +31,7 @@ export function VoiceInput({ onTranscript, isDisabled = false }: VoiceInputProps
 
   if (!isSupported) {
     return (
-      <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
+      <div className="text-xs text-muted/50 dark:text-muted/40 flex items-center gap-2">
         <Volume2 className="w-3 h-3" />
         Micrófono no disponible
       </div>

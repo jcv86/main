@@ -84,16 +84,16 @@ const getStatusColor = (status: string) => {
     case "interview_scheduled":
     case "technical_interview":
     case "final_interview":
-      return "bg-purple-100 text-purple-800"
+      return "bg-purple/10 text-purple"
     case "reference_check":
     case "offer_pending":
       return "bg-orange/10 text-orange"
     case "offer_extended":
       return "bg-green/10 text-green"
     case "hired":
-      return "bg-green-200 text-green-900"
+      return "bg-green/20 text-green"
     case "rejected":
-      return "bg-red/10 text-red-800"
+      return "bg-red/10 text-red"
     default:
       return "bg-muted/10 text-gray-800"
   }
@@ -454,7 +454,7 @@ export default function ApplicationStatusTracker() {
               <ul className="space-y-2 text-sm">
                 {getNextSteps(applicationData.status).map((step, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
+                    <div className="w-1.5 h-1.5 bg-blue rounded-full mt-2 flex-shrink-0" />
                     <span>{step}</span>
                   </li>
                 ))}
@@ -514,7 +514,7 @@ export default function ApplicationStatusTracker() {
                       )}
 
                       {interview.notes && (
-                        <div className="mt-2 p-2 bg-blue-50 rounded text-xs">
+                        <div className="mt-2 p-2 bg-blue/5 rounded text-xs">
                           <MessageSquare className="h-3 w-3 inline mr-1" />
                           {interview.notes}
                         </div>

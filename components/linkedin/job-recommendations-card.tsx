@@ -54,7 +54,7 @@ export function JobRecommendationsCard() {
       <Card>
         <CardContent className="py-8 flex items-center justify-center">
           <Loader2 className="w-6 h-6 animate-spin text-amber-500" />
-          <span className="ml-2 text-slate-600">Finding relevant opportunities...</span>
+          <span className="ml-2 text-muted/60">Finding relevant opportunities...</span>
         </CardContent>
       </Card>
     )
@@ -71,13 +71,13 @@ export function JobRecommendationsCard() {
 
       <CardContent className="space-y-4">
         {error && hasAttemptedLoad && (
-          <div className="p-3 bg-red/10 text-red-800 rounded-lg text-sm">
+          <div className="p-3 bg-red/10 text-red rounded-lg text-sm">
             {error}
           </div>
         )}
 
         {jobs.length === 0 ? (
-          <div className="text-center py-6 text-slate-600">
+          <div className="text-center py-6 text-muted/60">
             <p>No recommendations yet. Connect your LinkedIn profile to discover personalized opportunities.</p>
             <Button onClick={loadJobs} className="mt-4" variant="outline">
               Try Again
@@ -88,7 +88,7 @@ export function JobRecommendationsCard() {
             {jobs.slice(0, 5).map((job) => (
               <div
                 key={job.id}
-                className="p-3 bg-white dark:bg-slate-900 rounded-[28px] border border-slate-200 dark:border-slate-700 hover:border-amber-300 transition-colors"
+                className="p-3 bg-white dark:bg-muted/90 rounded-[28px] border border-muted/20 dark:border-muted/70 hover:border-amber-300 transition-colors"
               >
                 {/* Match Score Badge */}
                 {job.match_score !== undefined && (
@@ -100,7 +100,7 @@ export function JobRecommendationsCard() {
                           ? 'bg-green/10 text-green'
                           : job.match_score >= 50
                             ? 'bg-yellow/10 text-yellow'
-                            : 'bg-slate-100 text-slate-800'
+                            : 'bg-muted/10 text-muted/80'
                       }
                     >
                       <TrendingUp className="w-3 h-3 mr-1" />
@@ -111,10 +111,10 @@ export function JobRecommendationsCard() {
 
                 {/* Job Header */}
                 <h4 className="font-semibold text-sm mb-1">{job.title}</h4>
-                <p className="text-xs text-slate-600 mb-2">{job.company}</p>
+                <p className="text-xs text-muted/60 mb-2">{job.company}</p>
 
                 {/* Location */}
-                <div className="flex items-center gap-1 text-xs text-slate-500 mb-2">
+                <div className="flex items-center gap-1 text-xs text-muted/50 mb-2">
                   <MapPin className="w-3 h-3" />
                   {job.location}
                 </div>
@@ -136,7 +136,7 @@ export function JobRecommendationsCard() {
                 )}
 
                 {/* Description Preview */}
-                <p className="text-xs text-slate-600 line-clamp-2 mb-3">
+                <p className="text-xs text-muted/60 line-clamp-2 mb-3">
                   {job.description.substring(0, 150)}...
                 </p>
 
@@ -155,7 +155,7 @@ export function JobRecommendationsCard() {
 
             {jobs.length > 5 && (
               <div className="text-center pt-2">
-                <p className="text-xs text-slate-500 mb-2">
+                <p className="text-xs text-muted/50 mb-2">
                   Showing 5 of {jobs.length} opportunities
                 </p>
                 <Button variant="outline" size="sm">

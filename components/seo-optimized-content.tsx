@@ -37,7 +37,7 @@ function FAQSection({ faqs, title = "Preguntas Frecuentes" }: FAQSectionProps) {
           </p>
           <a
             href="/faq"
-            className="inline-flex items-center gap-2 text-blue dark:text-blue/40 hover:text-blue dark:hover:text-blue-300 font-medium"
+            className="inline-flex items-center gap-2 text-blue dark:text-blue/40 hover:text-blue dark:hover:text-blue/30 font-medium"
           >
             Ver todas las preguntas frecuentes
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

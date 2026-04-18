@@ -259,7 +259,7 @@ export default function DISCResultsPage() {
 
   const getContentTag = (priority: "now" | "next" | "later") => {
     const tags = {
-      now: { label: "FOCO ACTUAL", color: "bg-red/10 text-red-800 border-red-300" },
+      now: { label: "FOCO ACTUAL", color: "bg-red/10 text-red border-red/30" },
       next: { label: "PRÓXIMA MISIÓN", color: "bg-amber-100 text-amber-800 border-amber-300" },
       later: { label: "PARA CUANDO QUIERAS", color: "bg-blue/10 text-blue border-blue/30" },
     }
@@ -500,7 +500,7 @@ export default function DISCResultsPage() {
 
         {attemptNumber > 1 && (
           <div className="mb-4 text-center">
-            <Badge variant="outline" className="bg-purple/10 text-purple border-purple-300">
+            <Badge variant="outline" className="bg-purple/10 text-purple border-purple/30">
               Intento #{attemptNumber} - Ver Evolución
             </Badge>
           </div>
@@ -525,7 +525,7 @@ export default function DISCResultsPage() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="mb-6 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
+        <Card className="mb-6 border-2 border-purple/30 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -571,7 +571,7 @@ export default function DISCResultsPage() {
               </div>
             </div>
 
-            <div className="p-4 bg-purple/10 dark:bg-purple/30 rounded-lg border border-purple-300">
+            <div className="p-4 bg-purple/10 dark:bg-purple/30 rounded-lg border border-purple/30">
               <p className="text-sm text-foreground">
                 <strong>Tu Siguiente Paso:</strong> Usa la exploración de desarrollo abajo para descubrir exactamente qué competencias quieres expandir. Luego, tu coach IA te creará un plan personalizado.
               </p>
@@ -785,7 +785,7 @@ export default function DISCResultsPage() {
                     <Card>
                       <CardContent className="pt-4">
                         <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-yellow/10 flex items-center justify-center font-bold text-yellow-700">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-yellow/10 flex items-center justify-center font-bold text-yellow">
                             4
                           </div>
                           <div>
@@ -1188,7 +1188,7 @@ export default function DISCResultsPage() {
 
                   <Card className="bg-green/5">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-sm font-medium text-green-900">Mes 2: Experimentación</CardTitle>
+                      <CardTitle className="text-sm font-medium text-green">Mes 2: Experimentación</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
@@ -1309,7 +1309,7 @@ export default function DISCResultsPage() {
 
                   <Card className="bg-green/5 border-green/20">
                     <CardHeader>
-                      <CardTitle className="text-sm text-green-900">Cómo sabré que lo logré</CardTitle>
+                      <CardTitle className="text-sm text-green">Cómo sabré que lo logré</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <ul className="text-sm text-muted space-y-1">
@@ -1386,7 +1386,7 @@ export default function DISCResultsPage() {
               <CardContent className="space-y-4">
                 <Alert className="bg-orange/5 border-orange/20">
                   <AlertCircle className="h-4 w-4 text-orange" />
-                  <AlertTitle className="text-orange-900">Regla de Oro</AlertTitle>
+                  <AlertTitle className="text-orange">Regla de Oro</AlertTitle>
                   <AlertDescription className="text-orange">
                     Esta semana es de observación sin juicio. No intentes cambiar nada todavía, solo nota y registra.
                   </AlertDescription>
@@ -1469,10 +1469,10 @@ export default function DISCResultsPage() {
                       <CardHeader className="pb-3">
                         <div className="flex items-center justify-between">
                           <div>
-                            <CardTitle className="text-sm font-semibold text-orange-900">{day.day}</CardTitle>
+                            <CardTitle className="text-sm font-semibold text-orange">{day.day}</CardTitle>
                             <CardDescription className="text-xs">{day.title}</CardDescription>
                           </div>
-                          <Badge variant="outline" className="text-orange border-orange-300">
+                          <Badge variant="outline" className="text-orange border-orange/30">
                             {day.time}
                           </Badge>
                         </div>
@@ -1493,7 +1493,7 @@ export default function DISCResultsPage() {
 
                 <Alert className="bg-green/5 border-green/20">
                   <CheckCircle2 className="h-4 w-4 text-green" />
-                  <AlertTitle className="text-green-900">Al final de esta semana</AlertTitle>
+                  <AlertTitle className="text-green">Al final de esta semana</AlertTitle>
                   <AlertDescription className="text-green">
                     Tendrás: observaciones concretas de tu comportamiento, feedback externo, un mini experimento
                     completado, y tu segundo test DTC hecho. Estarás 10x más consciente de tu estilo DISC.
@@ -2095,14 +2095,14 @@ export default function DISCResultsPage() {
 
                   <Card className="bg-green/5 border-green/20">
                     <CardHeader>
-                      <CardTitle className="text-base text-green-900">✓ Día 60: Checkpoint "Experimentación"</CardTitle>
+                      <CardTitle className="text-base text-green">✓ Día 60: Checkpoint "Experimentación"</CardTitle>
                       <CardDescription className="text-sm text-green">
                         Ya debes haber salido de tu zona de confort varias veces
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-3">
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-green-900 mb-2">Experimentos Conductuales:</h4>
+                        <h4 className="text-sm font-semibold text-green mb-2">Experimentos Conductuales:</h4>
                         <div className="flex items-start gap-2">
                           <Checkbox id="c60-e1" />
                           <label htmlFor="c60-e1" className="text-sm cursor-pointer">
@@ -2124,7 +2124,7 @@ export default function DISCResultsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-green-900 mb-2">Reflexión y Ajustes:</h4>
+                        <h4 className="text-sm font-semibold text-green mb-2">Reflexión y Ajustes:</h4>
                         <div className="flex items-start gap-2">
                           <Checkbox id="c60-r1" />
                           <label htmlFor="c60-r1" className="text-sm cursor-pointer">
@@ -2140,7 +2140,7 @@ export default function DISCResultsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-green-900 mb-2">Profundización:</h4>
+                        <h4 className="text-sm font-semibold text-green mb-2">Profundización:</h4>
                         <div className="flex items-start gap-2">
                           <Checkbox id="c60-p1" />
                           <label htmlFor="c60-p1" className="text-sm cursor-pointer">

@@ -222,9 +222,9 @@ export default function A1ReportPage() {
       <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple/50 to-blue">
         <ASectionPart title="Completar Evaluación" icon={<Zap />}>
           <div className="space-y-4">
-            <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red-900/50 rounded-lg">
-              <p className="text-red dark:text-red-300 font-semibold text-lg">{error}</p>
-              <p className="text-red dark:text-red-400 text-sm mt-2">
+            <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
+              <p className="text-red dark:text-red/30 font-semibold text-lg">{error}</p>
+              <p className="text-red dark:text-red/40 text-sm mt-2">
                 Por favor completa la evaluación de Perfil Cerebral para ver tus resultados. El proceso toma aproximadamente 10-15 minutos.
               </p>
             </div>
@@ -283,7 +283,7 @@ export default function A1ReportPage() {
       <ASectionPart title="Tu Perfil Cerebral" icon={<Target />}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Primary Profile Card */}
-          <div className="bg-gradient-to-br from-purple via-purple-500 to-purple-400 rounded-xl p-6 shadow-lg border-2 border-purple-300">
+          <div className="bg-gradient-to-br from-purple via-purple-500 to-purple-400 rounded-xl p-6 shadow-lg border-2 border-purple/30">
             <p className="text-purple/10 text-sm mb-2 font-semibold">Tu Tipo Dominante</p>
             <div className="text-4xl font-black text-white mb-3">{primaryLabel}</div>
             <p className="font-semibold text-purple/5 mb-4 text-sm">{despegaLabels[primaryLabel as keyof typeof despegaLabels]}</p>
@@ -375,8 +375,8 @@ export default function A1ReportPage() {
           </div>
         ) : (
           <div className="bg-red/20 border-2 border-red/50 rounded-xl p-8 text-center">
-            <p className="text-red-300 text-lg font-semibold">Los insights no pudieron ser generados</p>
-            <p className="text-red-400 text-sm mt-2">Por favor intenta de nuevo. Si el problema persiste, contacta con soporte.</p>
+            <p className="text-red/30 text-lg font-semibold">Los insights no pudieron ser generados</p>
+            <p className="text-red/40 text-sm mt-2">Por favor intenta de nuevo. Si el problema persiste, contacta con soporte.</p>
           </div>
         )}
       </ASectionPart>
@@ -413,7 +413,7 @@ export default function A1ReportPage() {
 
           <Card className="bg-gradient-to-br from-blue/40 to-blue/20 border-blue/30 border-2">
             <CardHeader>
-              <CardTitle className="text-lg text-cyan-300">📞 Call Entrena</CardTitle>
+              <CardTitle className="text-lg text-cyan/30">📞 Call Entrena</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-muted/30 mb-4">Practica entrevistas con un entrenamiento personalizado para tu perfil {primaryLabel}.</p>

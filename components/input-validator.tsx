@@ -100,7 +100,7 @@ export function InputValidator({
     <div className="space-y-2">
       {/* Character count */}
       {showCharCount && (
-        <div className="text-xs text-slate-400 flex justify-between">
+        <div className="text-xs text-muted/40 flex justify-between">
           <span>{value.length}/{maxLength}</span>
           {isValidating && <span className="flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin" /> Validando...</span>}
         </div>
@@ -110,7 +110,7 @@ export function InputValidator({
       {errors.length > 0 && (
         <div className="space-y-1">
           {errors.map((error, idx) => (
-            <div key={idx} className="flex items-start gap-2 text-xs text-red-400 bg-red/50/10 p-2 rounded border border-red/50/20">
+            <div key={idx} className="flex items-start gap-2 text-xs text-red/40 bg-red/50/10 p-2 rounded border border-red/50/20">
               <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
               <span>{error}</span>
             </div>
@@ -120,7 +120,7 @@ export function InputValidator({
 
       {/* Success */}
       {isValid && !isValidating && (
-        <div className="flex items-center gap-2 text-xs text-green/40 bg-green-500/10 p-2 rounded border border-green/20">
+        <div className="flex items-center gap-2 text-xs text-green/40 bg-green/50/10 p-2 rounded border border-green/20">
           <CheckCircle2 className="w-4 h-4" />
           <span>Respuesta válida</span>
         </div>

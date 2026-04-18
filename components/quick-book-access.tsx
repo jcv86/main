@@ -331,25 +331,25 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
     if (result.matchDetails.titleMatch > 0.4) {
       badges.push({
         label: `📖 ${(result.matchDetails.titleMatch * 100).toFixed(0)}%`,
-        color: "bg-blue-50 text-blue",
+        color: "bg-blue/5 text-blue",
       })
     }
     if (result.matchDetails.authorMatch > 0.4) {
       badges.push({
         label: `✍️ ${(result.matchDetails.authorMatch * 100).toFixed(0)}%`,
-        color: "bg-purple-50 text-purple-700",
+        color: "bg-purple/5 text-purple",
       })
     }
     if (result.matchDetails.tagMatch > 0.4) {
       badges.push({
         label: `🏷️ ${(result.matchDetails.tagMatch * 100).toFixed(0)}%`,
-        color: "bg-green-50 text-green",
+        color: "bg-green/5 text-green",
       })
     }
     if (result.matchDetails.contentMatch > 0.3) {
       badges.push({
         label: `📄 ${(result.matchDetails.contentMatch * 100).toFixed(0)}%`,
-        color: "bg-yellow/5 text-yellow-700",
+        color: "bg-yellow/5 text-yellow",
       })
     }
     if (result.matchDetails.popularityBoost > 0.5) {
@@ -505,7 +505,7 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
 
           {/* Estadísticas de búsqueda */}
           {searchTerm && (
-            <div className="text-sm text-muted/60 bg-blue-50 p-3 rounded">
+            <div className="text-sm text-muted/60 bg-blue/5 p-3 rounded">
               <div className="flex flex-wrap items-center gap-4">
                 <span>
                   🔍 <strong>"{searchTerm}"</strong>
@@ -591,7 +591,7 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
                               {result.category}
                             </Badge>
                             {result.relevanceScore > 0.8 && (
-                              <Badge variant="default" className="text-xs bg-green-600">
+                              <Badge variant="default" className="text-xs bg-green">
                                 <TrendingUp className="h-3 w-3 mr-1" />
                                 Excelente
                               </Badge>

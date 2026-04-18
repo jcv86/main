@@ -76,7 +76,7 @@ export default function JourneySummaryPage() {
           <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5">Las 4 Fases</h2>
           
           {/* A1 */}
-          <Card className="border-2 border-green bg-green/5 dark:bg-green-950/20">
+          <Card className="border-2 border-green bg-green/5 dark:bg-green/20">
             <CardContent className="pt-6">
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
@@ -117,7 +117,7 @@ export default function JourneySummaryPage() {
                     <p><span className="font-semibold">Logro:</span> 12 acciones completadas, 7 días de racha</p>
                   </div>
                 </div>
-                <Badge className="bg-yellow-600 text-white h-fit">En Progreso</Badge>
+                <Badge className="bg-yellow text-white h-fit">En Progreso</Badge>
               </div>
               <Progress value={50} className="mt-4 h-2" />
             </CardContent>
@@ -231,7 +231,7 @@ export default function JourneySummaryPage() {
         </Card>
 
         {/* NEXT STEPS */}
-        <Card className="border-2 border-green bg-green/5 dark:bg-green-950/30">
+        <Card className="border-2 border-green bg-green/5 dark:bg-green/30">
           <CardHeader>
             <CardTitle>Tu Próximo Paso</CardTitle>
           </CardHeader>
@@ -241,7 +241,7 @@ export default function JourneySummaryPage() {
             </p>
             <div className="flex gap-3">
               <Link href="/despega/a2/dashboard" className="flex-1">
-                <Button className="w-full bg-green hover:bg-green-700 text-white font-semibold">
+                <Button className="w-full bg-green hover:bg-green text-white font-semibold">
                   Ir a A2 Dashboard
                 </Button>
               </Link>

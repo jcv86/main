@@ -48,9 +48,9 @@ const getPilarIcon = (pilar: string) => {
 const getPilarColor = (pilar: string) => {
   const colors: Record<string, string> = {
     "energia": "bg-yellow/10 text-yellow",
-    "enfoque": "bg-green/10 text-green-900",
+    "enfoque": "bg-green/10 text-green",
     "relaciones": "bg-red/10 text-pink-900",
-    "plan_ejecutivo": "bg-purple-100 text-purple-900",
+    "plan_ejecutivo": "bg-purple/10 text-purple",
   }
   return colors[pilar] || "bg-muted/10"
 }
@@ -91,7 +91,7 @@ export function A2RecommendationBridge({
         </div>
 
         {/* A1 Results Summary */}
-        <Card className="bg-gradient-to-r from-blue-50 to-blue/5 border-blue-200">
+        <Card className="bg-gradient-to-r from-blue-50 to-blue/5 border-blue/20">
           <CardContent className="pt-6">
             <div className="space-y-4">
               <div className="text-sm font-medium text-muted-foreground">Tu Diagnóstico A1</div>
@@ -236,11 +236,11 @@ export function A2RecommendationBridge({
       </div>
 
       {/* Tips */}
-      <Card className="bg-green-50 border-green-200">
+      <Card className="bg-green/5 border-green/20">
         <CardContent className="pt-6 flex gap-3">
           <TrendingUp className="w-5 h-5 text-green flex-shrink-0 mt-0.5" />
           <div>
-            <div className="font-medium text-green-900 mb-1">Consejos para Máximo Aprendizaje</div>
+            <div className="font-medium text-green mb-1">Consejos para Máximo Aprendizaje</div>
             <div className="text-sm text-green space-y-1">
               <div>• Comienza con tu área más débil para máximo impacto</div>
               <div>• Completa todas las lecciones de cada ruta</div>

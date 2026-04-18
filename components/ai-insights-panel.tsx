@@ -137,7 +137,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red/10 text-red-800"
+        return "bg-red/10 text-red"
       case "medium":
         return "bg-yellow/10 text-yellow"
       case "low":
@@ -164,19 +164,19 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
     switch (source) {
       case "openai":
         return (
-          <Badge variant="outline" className="bg-blue-50 text-blue text-xs">
+          <Badge variant="outline" className="bg-blue/5 text-blue text-xs">
             OpenAI
           </Badge>
         )
       case "cerebro":
         return (
-          <Badge variant="outline" className="bg-purple-50 text-purple-700 text-xs">
+          <Badge variant="outline" className="bg-purple/5 text-purple text-xs">
             Cerebro
           </Badge>
         )
       case "hybrid":
         return (
-          <Badge variant="outline" className="bg-green-50 text-green text-xs">
+          <Badge variant="outline" className="bg-green/5 text-green text-xs">
             Híbrido
           </Badge>
         )
@@ -244,7 +244,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                         {insight.category}
                       </Badge>
                       {insight.personalizedContext && (
-                        <p className="text-xs text-purple-600 italic mt-1">{insight.personalizedContext}</p>
+                        <p className="text-xs text-purple italic mt-1">{insight.personalizedContext}</p>
                       )}
                     </CardHeader>
                     <CardContent className="pt-0">
@@ -327,13 +327,13 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
 
                     <div>
                       <h3 className="font-medium text-sm mb-3 flex items-center gap-2">
-                        <Target className="h-4 w-4 text-blue-500" />
+                        <Target className="h-4 w-4 text-blue/50" />
                         Mediano Plazo (3-6 meses)
                       </h3>
                       <div className="space-y-2">
                         {developmentPlan.mediumTerm.map((item, index) => (
                           <div key={index} className="flex items-center gap-2 text-sm">
-                            <AlertCircle className="h-4 w-4 text-blue-500" />
+                            <AlertCircle className="h-4 w-4 text-blue/50" />
                             <span>{item}</span>
                           </div>
                         ))}
@@ -342,13 +342,13 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
 
                     <div>
                       <h3 className="font-medium text-sm mb-3 flex items-center gap-2">
-                        <Star className="h-4 w-4 text-purple-500" />
+                        <Star className="h-4 w-4 text-purple/50" />
                         Largo Plazo (6+ meses)
                       </h3>
                       <div className="space-y-2">
                         {developmentPlan.longTerm.map((item, index) => (
                           <div key={index} className="flex items-center gap-2 text-sm">
-                            <Star className="h-4 w-4 text-purple-500" />
+                            <Star className="h-4 w-4 text-purple/50" />
                             <span>{item}</span>
                           </div>
                         ))}

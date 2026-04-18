@@ -251,7 +251,7 @@ export default function EmotionalIntelligenceResults() {
             <p className="text-xl text-muted/60 mb-6">
               Parece que aún no has completado el test de Inteligencia Emocional Despega.
             </p>
-            <Button onClick={() => router.push("/test/emotional-intelligence")} className="bg-red/50 hover:bg-red-600">
+            <Button onClick={() => router.push("/test/emotional-intelligence")} className="bg-red/50 hover:bg-red">
               Realizar Test
             </Button>
           </CardContent>
@@ -329,7 +329,7 @@ export default function EmotionalIntelligenceResults() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="mb-8 border-2 border-purple-300 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
+        <Card className="mb-8 border-2 border-purple/30 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -373,7 +373,7 @@ export default function EmotionalIntelligenceResults() {
               </div>
             </div>
 
-            <div className="p-4 bg-purple/10 dark:bg-purple/30 rounded-lg border border-purple-300">
+            <div className="p-4 bg-purple/10 dark:bg-purple/30 rounded-lg border border-purple/30">
               <p className="text-sm text-foreground">
                 <strong>Tu Siguiente Paso:</strong> Identifica tu área de máxima oportunidad en IE. Tu coach IA te diseñará un plan de prácticas para expandir esa competencia gradualmente.
               </p>
@@ -1183,7 +1183,7 @@ export default function EmotionalIntelligenceResults() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="bg-green/5 p-4 rounded-lg">
-                      <h4 className="font-semibold text-green-900 mb-2">Oportunidad Principal</h4>
+                      <h4 className="font-semibold text-green mb-2">Oportunidad Principal</h4>
                       <p className="text-sm text-green">
                         {results.competency_scores.self_regulation >= 80
                           ? "Refinar tu capacidad de regulación para responder (no reaccionar) incluso en situaciones de alta presión."
@@ -1281,7 +1281,7 @@ export default function EmotionalIntelligenceResults() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="bg-orange/5 p-4 rounded-lg">
-                      <h4 className="font-semibold text-orange-900 mb-2">Oportunidad Principal</h4>
+                      <h4 className="font-semibold text-orange mb-2">Oportunidad Principal</h4>
                       <p className="text-sm text-orange">
                         Desarrollar la capacidad de recuperarte rápidamente de adversidades emocionales y encontrar
                         significado incluso en experiencias dolorosas.
@@ -1383,7 +1383,7 @@ export default function EmotionalIntelligenceResults() {
                   </Card>
 
                   {/* MBTI Connection */}
-                  <Card className="border-2 border-purple-300">
+                  <Card className="border-2 border-purple/30">
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <div className="w-8 h-8 bg-purple/10 rounded-full flex items-center justify-center text-lg">
@@ -1416,7 +1416,7 @@ export default function EmotionalIntelligenceResults() {
                   </Card>
 
                   {/* Big Five Connection */}
-                  <Card className="border-2 border-green-300">
+                  <Card className="border-2 border-green/30">
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <div className="w-8 h-8 bg-green/10 rounded-full flex items-center justify-center text-lg">
@@ -1427,7 +1427,7 @@ export default function EmotionalIntelligenceResults() {
                     </CardHeader>
                     <CardContent className="space-y-3">
                       <div className="bg-green/5 p-3 rounded text-sm">
-                        <strong className="text-green-900">Conexión:</strong>
+                        <strong className="text-green">Conexión:</strong>
                         <p className="text-green mt-1">
                           Big Five mide rasgos estables, IE mide habilidades entrenables. IE puede compensar rasgos
                           desafiantes.
@@ -1449,7 +1449,7 @@ export default function EmotionalIntelligenceResults() {
                   </Card>
 
                   {/* RIASEC Connection */}
-                  <Card className="border-2 border-orange-300">
+                  <Card className="border-2 border-orange/30">
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <div className="w-8 h-8 bg-orange/10 rounded-full flex items-center justify-center text-lg">
@@ -1460,7 +1460,7 @@ export default function EmotionalIntelligenceResults() {
                     </CardHeader>
                     <CardContent className="space-y-3">
                       <div className="bg-orange/5 p-3 rounded text-sm">
-                        <strong className="text-orange-900">Conexión:</strong>
+                        <strong className="text-orange">Conexión:</strong>
                         <p className="text-orange mt-1">
                           RIASEC muestra qué tipo de trabajo te motiva, IE determina qué tan bien manejas el estrés y
                           relaciones en ese trabajo.
@@ -1663,7 +1663,7 @@ export default function EmotionalIntelligenceResults() {
                     <AccordionContent className="pt-4 space-y-4">
                       <Card>
                         <CardContent className="pt-6 space-y-3">
-                          <h4 className="font-semibold text-green-900">
+                          <h4 className="font-semibold text-green">
                             4. ¿Cuándo fue la última vez que reaccioné emocionalmente y me arrepentí? ¿Qué habría hecho
                             diferente?
                           </h4>
@@ -1680,7 +1680,7 @@ export default function EmotionalIntelligenceResults() {
 
                       <Card>
                         <CardContent className="pt-6 space-y-3">
-                          <h4 className="font-semibold text-green-900">
+                          <h4 className="font-semibold text-green">
                             5. ¿Qué técnicas uso actualmente para calmarme cuando estoy alterado? ¿Funcionan realmente?
                           </h4>
                           <p className="text-sm text-muted/60">
@@ -1696,7 +1696,7 @@ export default function EmotionalIntelligenceResults() {
 
                       <Card>
                         <CardContent className="pt-6 space-y-3">
-                          <h4 className="font-semibold text-green-900">
+                          <h4 className="font-semibold text-green">
                             6. ¿Qué emoción tiendo a reprimir o evitar sistemáticamente? ¿Qué temo que pase si la siento
                             plenamente?
                           </h4>
@@ -1779,7 +1779,7 @@ export default function EmotionalIntelligenceResults() {
                     <AccordionContent className="pt-4 space-y-4">
                       <Card>
                         <CardContent className="pt-6 space-y-3">
-                          <h4 className="font-semibold text-orange-900">
+                          <h4 className="font-semibold text-orange">
                             10. ¿Cómo crees que tu estado emocional afecta a las personas más cercanas a ti?
                           </h4>
                           <p className="text-sm text-muted/60">
@@ -1795,7 +1795,7 @@ export default function EmotionalIntelligenceResults() {
 
                       <Card>
                         <CardContent className="pt-6 space-y-3">
-                          <h4 className="font-semibold text-orange-900">
+                          <h4 className="font-semibold text-orange">
                             11. ¿Alguna vez he dañado una relación importante por no gestionar bien mis emociones?
                           </h4>
                           <p className="text-sm text-muted/60">
@@ -1811,7 +1811,7 @@ export default function EmotionalIntelligenceResults() {
 
                       <Card>
                         <CardContent className="pt-6 space-y-3">
-                          <h4 className="font-semibold text-orange-900">
+                          <h4 className="font-semibold text-orange">
                             12. ¿Qué legado emocional quiero dejar en las personas que me importan?
                           </h4>
                           <p className="text-sm text-muted/60">

@@ -32,7 +32,7 @@ export function MiniTest({
   const getDifficultyColor = (diff: string) => {
     switch (diff) {
       case "fácil":
-        return "bg-green-500/10 text-green"
+        return "bg-green/50/10 text-green"
       case "medio":
         return "bg-amber-500/10 text-amber-700"
       case "difícil":
@@ -45,10 +45,10 @@ export function MiniTest({
       <CardHeader>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <Brain className="w-6 h-6 text-purple-500" />
+            <Brain className="w-6 h-6 text-purple/50" />
             <CardTitle className="text-xl">Mini Prueba: Entrenamiento Cognitivo</CardTitle>
           </div>
-          <Badge className="bg-orange/20 text-yellow-700 dark:text-yellow-400">
+          <Badge className="bg-orange/20 text-yellow dark:text-yellow/40">
             <Zap className="w-3 h-3 mr-1" />
             +{points} pts
           </Badge>
@@ -71,7 +71,7 @@ export function MiniTest({
         ) : (
           <>
             {/* Context */}
-            <div className="mb-6 p-3 rounded-[28px] bg-slate-500/5 border border-slate-500/10">
+            <div className="mb-6 p-3 rounded-[28px] bg-muted/50/5 border border-muted/50/10">
               <p className="text-xs text-muted-foreground">Contexto:</p>
               <p className="text-sm font-medium text-foreground">{context}</p>
             </div>

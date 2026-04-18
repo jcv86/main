@@ -48,7 +48,7 @@ export function CriticalLogsDashboard() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue" />
       </div>
     )
   }
@@ -57,7 +57,7 @@ export function CriticalLogsDashboard() {
     return (
       <Card>
         <CardContent className="pt-6">
-          <p className="text-center text-slate-600">No se pudieron cargar los logs críticos</p>
+          <p className="text-center text-muted/60">No se pudieron cargar los logs críticos</p>
         </CardContent>
       </Card>
     )
@@ -69,7 +69,7 @@ export function CriticalLogsDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Total Críticos</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted/60">Total Críticos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
@@ -81,40 +81,40 @@ export function CriticalLogsDashboard() {
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Baja Satisfacción</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted/60">Baja Satisfacción</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
               <TrendingDown className="h-5 w-5 text-orange" />
               <span className="text-3xl font-bold">{data.summary.low_satisfaction_count}</span>
             </div>
-            <p className="text-xs text-slate-500 mt-1">{"< 4.3★"}</p>
+            <p className="text-xs text-muted/50 mt-1">{"< 4.3★"}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Bajo Engagement</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted/60">Bajo Engagement</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
               <MessageSquare className="h-5 w-5 text-orange" />
               <span className="text-3xl font-bold">{data.summary.low_engagement_count}</span>
             </div>
-            <p className="text-xs text-slate-500 mt-1">{"< 70%"}</p>
+            <p className="text-xs text-muted/50 mt-1">{"< 70%"}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium text-slate-600">Baja Acción</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted/60">Baja Acción</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
               <Target className="h-5 w-5 text-red" />
               <span className="text-3xl font-bold">{data.summary.low_action_count}</span>
             </div>
-            <p className="text-xs text-slate-500 mt-1">{"< 60%"}</p>
+            <p className="text-xs text-muted/50 mt-1">{"< 60%"}</p>
           </CardContent>
         </Card>
       </div>
@@ -151,7 +151,7 @@ export function CriticalLogsDashboard() {
                 <LogCard key={metric.id} metric={metric} issueType="satisfaction" />
               ))}
               {data.critical_by_type.low_satisfaction.length === 0 && (
-                <p className="text-center text-slate-500 py-8">No hay logs críticos de este tipo</p>
+                <p className="text-center text-muted/50 py-8">No hay logs críticos de este tipo</p>
               )}
             </TabsContent>
 
@@ -160,7 +160,7 @@ export function CriticalLogsDashboard() {
                 <LogCard key={metric.id} metric={metric} issueType="engagement" />
               ))}
               {data.critical_by_type.low_engagement.length === 0 && (
-                <p className="text-center text-slate-500 py-8">No hay logs críticos de este tipo</p>
+                <p className="text-center text-muted/50 py-8">No hay logs críticos de este tipo</p>
               )}
             </TabsContent>
 
@@ -169,7 +169,7 @@ export function CriticalLogsDashboard() {
                 <LogCard key={metric.id} metric={metric} issueType="action" />
               ))}
               {data.critical_by_type.low_action.length === 0 && (
-                <p className="text-center text-slate-500 py-8">No hay logs críticos de este tipo</p>
+                <p className="text-center text-muted/50 py-8">No hay logs críticos de este tipo</p>
               )}
             </TabsContent>
           </Tabs>
@@ -201,32 +201,32 @@ function LogCard({ metric, issueType }: { metric: any; issueType: string }) {
 
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div>
-                <p className="text-slate-500">Satisfacción</p>
+                <p className="text-muted/50">Satisfacción</p>
                 <p className="font-semibold">{metric.satisfaction_rating?.toFixed(1) || "N/A"}★</p>
               </div>
               <div>
-                <p className="text-slate-500">Engagement</p>
+                <p className="text-muted/50">Engagement</p>
                 <p className="font-semibold">{metric.engagement_percentage?.toFixed(0) || "N/A"}%</p>
               </div>
               <div>
-                <p className="text-slate-500">Acción</p>
+                <p className="text-muted/50">Acción</p>
                 <p className="font-semibold">{metric.action_completion_percentage?.toFixed(0) || "N/A"}%</p>
               </div>
               <div>
-                <p className="text-slate-500">Mensajes</p>
+                <p className="text-muted/50">Mensajes</p>
                 <p className="font-semibold">{metric.message_count || 0}</p>
               </div>
             </div>
 
             {metric.satisfaction_feedback && (
-              <div className="mt-3 p-3 bg-slate-50 rounded-lg">
-                <p className="text-sm text-slate-700">
+              <div className="mt-3 p-3 bg-muted/5 rounded-lg">
+                <p className="text-sm text-muted/70">
                   <span className="font-semibold">Feedback:</span> {metric.satisfaction_feedback}
                 </p>
               </div>
             )}
 
-            <div className="flex items-center gap-4 text-xs text-slate-500 mt-2">
+            <div className="flex items-center gap-4 text-xs text-muted/50 mt-2">
               <span className="flex items-center gap-1">
                 <Calendar className="h-3 w-3" />
                 {new Date(metric.created_at).toLocaleDateString()}

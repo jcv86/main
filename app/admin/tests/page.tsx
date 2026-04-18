@@ -129,12 +129,12 @@ export default function AdminTestsPage() {
       'Core': 'bg-blue/10 text-blue dark:bg-blue dark:text-blue/20',
       'Backend': 'bg-purple/10 text-purple dark:bg-purple dark:text-purple/20',
       'AI': 'bg-red/10 text-red dark:bg-red dark:text-red/20',
-      'UX': 'bg-green/10 text-green dark:bg-green dark:text-green-200',
+      'UX': 'bg-green/10 text-green dark:bg-green dark:text-green/20',
       'Mobile': 'bg-yellow/10 text-yellow dark:bg-yellow dark:text-yellow/20',
       'Analytics': 'bg-blue/10 text-blue dark:bg-blue dark:text-blue/20',
-      'Performance': 'bg-red/10 text-red-800 dark:bg-red dark:text-red/20',
+      'Performance': 'bg-red/10 text-red dark:bg-red dark:text-red/20',
       'Design': 'bg-cyan/10 text-cyan dark:bg-cyan dark:text-cyan/20',
-      'Auth': 'bg-orange/10 text-orange dark:bg-orange dark:text-orange-200'
+      'Auth': 'bg-orange/10 text-orange dark:bg-orange dark:text-orange/20'
     }
     return colors[category] || 'bg-muted/10 text-muted/80'
   }

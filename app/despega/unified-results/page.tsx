@@ -68,10 +68,10 @@ export default function UnifiedTestDashboard() {
 
   const getColorClasses = (color: string) => {
     const colors: Record<string, string> = {
-      blue: "bg-blue/5 border-blue/30 dark:bg-blue-950/20 dark:border-blue/10",
+      blue: "bg-blue/5 border-blue/30 dark:bg-blue/20 dark:border-blue/10",
       purple: "bg-purple/5 border-purple/30 dark:bg-purple/20 dark:border-purple",
       indigo: "bg-blue/5 border-blue/30 dark:bg-indigo-950/20 dark:border-blue",
-      red: "bg-red/5 border-red/20 dark:bg-red-950/20 dark:border-red-800",
+      red: "bg-red/5 border-red/20 dark:bg-red/20 dark:border-red",
       teal: "bg-teal-50 border-blue/20 dark:bg-teal-950/20 dark:border-teal-800",
     }
     return colors[color] || colors.blue
@@ -82,7 +82,7 @@ export default function UnifiedTestDashboard() {
       blue: "text-blue dark:text-blue/40",
       purple: "text-purple dark:text-purple/40",
       indigo: "text-blue dark:text-indigo-400",
-      red: "text-red dark:text-red-400",
+      red: "text-red dark:text-red/40",
       teal: "text-blue dark:text-teal-400",
     }
     return colors[color] || colors.blue
@@ -187,7 +187,7 @@ export default function UnifiedTestDashboard() {
                 <CardTitle>Próximos Pasos</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex gap-3 p-3 bg-blue/5 dark:bg-blue-950/20 rounded-[28px] border border-blue/30 dark:border-blue/10">
+                <div className="flex gap-3 p-3 bg-blue/5 dark:bg-blue/20 rounded-[28px] border border-blue/30 dark:border-blue/10">
                   <Zap className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold text-blue dark:text-blue/10">Ir a A2: Tu Plan</p>
