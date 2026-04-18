@@ -218,6 +218,4 @@ export function DespeganNavbar() {
           </div>
         )}
       </div>
-    </nav>
-  )
 }

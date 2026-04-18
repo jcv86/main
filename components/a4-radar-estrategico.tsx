@@ -361,5 +361,4 @@ export function A4RadarEstrategico() {
         </>
       )}
     </div>
-  )
 }
