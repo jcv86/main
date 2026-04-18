@@ -40,7 +40,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "User email and achievement name are required" }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Check if achievement already exists
     const { data: existing } = await supabase
