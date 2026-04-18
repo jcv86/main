@@ -35,7 +35,7 @@ export function DashboardMetrics({
       label: 'Artículos Leídos',
       value: articlesRead,
       icon: Zap,
-      color: 'from-amber-500600',
+      color: 'from-amber-500',
       suffix: 'noticias',
     },
     {
@@ -62,7 +62,6 @@ export function DashboardMetrics({
                 </div>
                 <div className="p-3 rounded-[28px] bg-background">
                   <Icon className="w-6 h-6 text-white" />
-                </div>
                 </div>
               </div>
             </CardContent>

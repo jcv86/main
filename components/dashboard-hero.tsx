@@ -82,11 +82,12 @@ export function DashboardHero({
             <div className="flex gap-3 items-center">
               {Object.entries(discProfile).map(([key, value]) => (
                 <div key={key} className="flex flex-col items-center gap-1">
-                  <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white ${`}
-                    key === 'D' ? 'bg-red/50' :
-                    key === 'I' ? 'bg-blue/50' :
-                    key === 'S' ? 'bg-green/50' :
-                    'bg-purple/50'
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white ${
+                    key === 'D' ? 'bg-red' :
+                    key === 'I' ? 'bg-blue' :
+                    key === 'S' ? 'bg-green' :
+                    'bg-purple'
+                  }`}>
                   }`}>
                     {value}%
                   </div>
