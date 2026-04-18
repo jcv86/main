@@ -719,7 +719,7 @@ export function PersistentAICoach() {
                       className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                     >
                       <div
-                        className={`max-w-xs px-4 py-2 rounded-lg ${
+                        className={`max-w-xs px-4 py-2 rounded-lg ${`}
                           message.sender === "user"
                             ? "bg-foreground text-background rounded-br-none"
                             : "bg-muted text-foreground rounded-bl-none"

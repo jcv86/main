@@ -118,7 +118,7 @@ export function NoticiasFeed() {
                   setSelectedCategory("")
                   setPage(1)
                 }}
-                className={`px-3 py-1 rounded-[20px] text-sm transition-colors ${
+                className={`px-3 py-1 rounded-[20px] text-sm transition-colors ${`}
                   selectedCategory === ""
                     ? "bg-purple text-purple-foreground"
                     : "bg-muted hover:bg-muted/80"
@@ -133,7 +133,7 @@ export function NoticiasFeed() {
                     setSelectedCategory(category)
                     setPage(1)
                   }}
-                  className={`px-3 py-1 rounded-[20px] text-sm transition-colors ${
+                  className={`px-3 py-1 rounded-[20px] text-sm transition-colors ${`}
                     selectedCategory === category
                       ? "bg-purple text-purple-foreground"
                       : "bg-muted hover:bg-muted/80"

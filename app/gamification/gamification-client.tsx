@@ -478,7 +478,7 @@ export default function GamificationClient() {
                   <div key={item.level} className="flex items-center justify-between p-4 border rounded-lg">
                     <div className="flex items-center gap-4">
                       <div
-                        className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${
+                        className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${`}
                           item.unlocked ? "bg-blue/50 text-white" : "bg-muted/20 text-muted/50"
                         }`}
                       >

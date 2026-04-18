@@ -153,7 +153,7 @@ export function CoachChat({ coachType, userProfile }: ChatProps) {
               <>
                 {messages.map(msg => (
                   <div key={msg.id} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                    <div className={`max-w-sm px-4 py-2 rounded-lg whitespace-pre-wrap ${
+                    <div className={`max-w-sm px-4 py-2 rounded-lg whitespace-pre-wrap ${`}
                       msg.type === 'user'
                         ? 'bg-purple text-white'
                         : 'bg-transparent border border-muted/20 dark:border-muted/70'

@@ -164,7 +164,7 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
           {messages.map((message) => (
             <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
               <div
-                className={`max-w-[85%] rounded-[28px] p-3 ${
+                className={`max-w-[85%] rounded-[28px] p-3 ${`}
                   message.sender === "user" ? "bg-blue text-white" : "bg-muted text-foreground"
                 }`}
               >

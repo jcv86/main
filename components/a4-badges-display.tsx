@@ -116,7 +116,7 @@ export function A4BadgesDisplay({ data }: A4BadgesDisplayProps) {
               {data.badges.map(badge => (
                 <div
                   key={badge.id}
-                  className={`p-4 rounded-[28px] border-2 text-center transition-all hover:shadow-lg ${
+                  className={`p-4 rounded-[28px] border-2 text-center transition-all hover:shadow-lg ${`}
                     RARITY_COLORS[badge.rarity]
                   }`}
                 >

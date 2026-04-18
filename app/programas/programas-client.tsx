@@ -151,7 +151,7 @@ export default function ProgramasClient() {
             >
               <CardHeader>
                 <div
-                  className={`h-12 w-12 rounded-lg bg-background
+                  className={`h-12 w-12 rounded-lg bg-background`}
                 >
                   <Icon className="h-6 w-6 text-white" />
                 </div>
@@ -184,7 +184,7 @@ export default function ProgramasClient() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div
-                className={`h-16 w-16 rounded-lg bg-background
+                className={`h-16 w-16 rounded-lg bg-background`}
               >
                 {(() => {
                   const Icon = selectedProgram.icon
@@ -275,7 +275,7 @@ export default function ProgramasClient() {
           </div>
         </CardContent>
       </Card>
-
+`}
       {/* How it Works */}
       <Card>
         <CardHeader>

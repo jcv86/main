@@ -84,7 +84,7 @@ export default function LeaderboardPage() {
                     <Card key={index} className={index < 3 ? 'border-yellow/20 bg-yellow/5/30 dark:bg-yellow/20' : ''}>
                       <CardContent className="flex items-center justify-between p-4">
                         <div className="flex items-center gap-4 flex-1">
-                          <div className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg
+                          <div className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg`}
                             ${index === 0 ? 'bg-orange text-white' : index === 1 ? 'bg-muted/40 text-white' : index === 2 ? 'bg-orange/40 text-white' : 'bg-muted text-muted-foreground'}`}>
                             {index + 1}
                           </div>
@@ -122,7 +122,7 @@ export default function LeaderboardPage() {
                     <Card key={index} className={index < 3 ? 'border-red/20 bg-red/5/30 dark:bg-red/20' : ''}>
                       <CardContent className="flex items-center justify-between p-4">
                         <div className="flex items-center gap-4 flex-1">
-                          <div className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg
+                          <div className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg`}
                             ${index === 0 ? 'bg-red/50 text-white' : index === 1 ? 'bg-muted/40 text-white' : index === 2 ? 'bg-orange/40 text-white' : 'bg-muted text-muted-foreground'}`}>
                             {index === 0 && user.streak > 0 ? <Flame className="h-6 w-6" /> : index + 1}
                           </div>

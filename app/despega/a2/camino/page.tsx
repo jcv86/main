@@ -62,14 +62,14 @@ export default function A2CaminoPage() {
               className={`cursor-pointer transition-all ${
                 selectedCamino === camino.id
                   ? "ring-2 ring-slate-900 dark:ring-slate-50"
-                  : ""
+                  : ""`}
               }`}
             >
               <Card
                 className={`h-full hover:shadow-lg transition-shadow ${
                   selectedCamino === camino.id
                     ? "bg-muted/10 dark:bg-card"
-                    : ""
+                    : ""`}
                 }`}
               >
                 <CardHeader>

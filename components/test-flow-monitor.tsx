@@ -258,7 +258,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
         {metrics.map((metric) => (
           <Card
             key={metric.testId}
-            className={`
+            className={``}
             ${metric.status === "passed" ? "border-green/20 bg-green/5" : ""}
             ${metric.status === "failed" ? "border-red/20 bg-red/5" : ""}
             ${metric.status === "running" ? "border-blue/20 bg-blue/5" : ""}

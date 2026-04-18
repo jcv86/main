@@ -201,7 +201,7 @@ export default function Mision90DiasPage() {
         </div>
 
         {/* Route Display */}
-        <div className={`p-6 rounded-[28px] bg-background
+        <div className={`p-6 rounded-[28px] bg-background`}
           <div className="flex items-center gap-3">
             <span className="text-4xl">{routeInfo.icon}</span>
             <div>

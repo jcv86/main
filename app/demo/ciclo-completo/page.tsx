@@ -170,7 +170,7 @@ export default function CicloCompletoDemoPage() {
                 onClick={() => setSelectedPhase(selectedPhase === phase.id ? null : phase.id)}
               >
                 <CardHeader>
-                  <div className={`w-12 h-12 rounded-lg bg-background
+                  <div className={`w-12 h-12 rounded-lg bg-background`}
                     <Icon className="h-6 w-6 text-white" />
                   </div>
                   <div className="space-y-1">

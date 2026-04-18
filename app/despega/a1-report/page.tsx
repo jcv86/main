@@ -321,7 +321,7 @@ export default function A1ReportPage() {
                 <div className="flex-1 h-4 bg-muted/60 rounded-full overflow-hidden border border-muted/50">
                   <div className={`h-full bg-background
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2">`}
                   <p className="w-16 text-right font-bold text-lg text-white">{Math.max(0, Math.round(dim.score))}%</p>
                 </div>
               </div>

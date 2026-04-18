@@ -329,7 +329,7 @@ export default function RutasPage() {
                   <Card
                     key={scenario.id}
                     className={`cursor-pointer transition-all hover:shadow-md ${
-                      isCompleted ? "opacity-60 bg-muted" : ""
+                      isCompleted ? "opacity-60 bg-muted" : ""`}
                     }`}
                   >
                     <CardContent className="py-4">

@@ -171,7 +171,7 @@ Aquí traducimos lo que está pasando en el mercado chileno a tu carrera persona
               )}
 
               <div
-                className={`max-w-xs rounded-lg px-4 py-2 ${
+                className={`max-w-xs rounded-lg px-4 py-2 ${`}
                   message.sender === "user"
                     ? "bg-blue/50 text-white"
                     : "bg-muted/10 text-foreground"

@@ -643,7 +643,7 @@ export default function SoftSkillsTest() {
             {softSkillsQuestions.map((_, index) => (
               <div
                 key={index}
-                className={`w-2 h-2 rounded-full ${
+                className={`w-2 h-2 rounded-full ${`}
                   index <= currentQuestion
                     ? "bg-muted/90"
                     : answers[softSkillsQuestions[index].id]

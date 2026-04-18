@@ -232,7 +232,7 @@ export default function TestNavigationFlow() {
                   ? "border-green/20 bg-green/5"
                   : isAvailable
                     ? "border-muted/20 hover:border-muted/30"
-                    : "border-muted/10 bg-muted/5"
+                    : "border-muted/10 bg-muted/5"`}
               }`}
             >
               <CardHeader className="pb-3">

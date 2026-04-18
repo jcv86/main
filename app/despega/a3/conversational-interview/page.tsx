@@ -86,7 +86,7 @@ export default function ConversationalInterviewPage() {
                 <button
                   key={role}
                   onClick={() => setSelectedRole(role)}
-                  className={`p-3 rounded-[28px] border-2 transition ${
+                  className={`p-3 rounded-[28px] border-2 transition ${`}
                     selectedRole === role
                       ? 'border-blue bg-blue/5 dark:bg-cyan/20'
                       : 'border-muted/20 dark:border-card hover:border-cyan/40'
@@ -107,7 +107,7 @@ export default function ConversationalInterviewPage() {
                   <button
                     key={industry}
                     onClick={() => setSelectedIndustry(industry)}
-                    className={`p-3 rounded-[28px] border-2 transition ${
+                    className={`p-3 rounded-[28px] border-2 transition ${`}
                       selectedIndustry === industry
                         ? 'border-blue bg-blue/5 dark:bg-cyan/20'
                         : 'border-muted/20 dark:border-card hover:border-cyan/40'
@@ -129,7 +129,7 @@ export default function ConversationalInterviewPage() {
                   <button
                     key={level.id}
                     onClick={() => setSelectedLevel(level.id as any)}
-                    className={`w-full p-4 rounded-[28px] border-2 transition text-left ${
+                    className={`w-full p-4 rounded-[28px] border-2 transition text-left ${`}
                       selectedLevel === level.id
                         ? 'border-blue bg-blue/5 dark:bg-cyan/20'
                         : 'border-muted/20 dark:border-card hover:border-cyan/40'

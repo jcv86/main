@@ -33,13 +33,13 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
             <button
               key={interviewer.id}
               onClick={() => onChange(interviewer.id)}
-              className={`p-2 rounded-lg transition-all text-center ${
+              className={`p-2 rounded-lg transition-all text-center ${`}
                 value === interviewer.id
                   ? 'ring-2 ring-blue-500 bg-blue/5 dark:bg-blue/30'
                   : 'hover:bg-transparent dark:hover:bg-muted/80'
               }`}
             >
-              <div className={`w-8 h-8 rounded-full mx-auto mb-1 bg-background
+              <div className={`w-8 h-8 rounded-full mx-auto mb-1 bg-background`}
               <div className="text-xs font-semibold text-muted/90 dark:text-white">{interviewer.name}</div>
               <div className="text-[10px] text-muted/60 dark:text-muted/40">{interviewer.role}</div>
             </button>
@@ -64,15 +64,15 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
             <button
               key={interviewer.id}
               onClick={() => onChange(interviewer.id)}
-              className={`group relative overflow-hidden rounded-xl p-4 transition-all duration-300 ${
+              className={`group relative overflow-hidden rounded-xl p-4 transition-all duration-300 ${`}
                 value === interviewer.id
                   ? 'ring-2 ring-blue-500 scale-105'
                   : 'hover:scale-102 hover:shadow-lg'
               }`}
             >
               <div className={`absolute inset-0 bg-background
-              <div className="relative space-y-2 text-center">
-                <div className={`w-12 h-12 rounded-full mx-auto bg-background
+              <div className="relative space-y-2 text-center">`}
+                <div className={`w-12 h-12 rounded-full mx-auto bg-background`}
                 <div>
                   <div className="font-bold text-muted/90 dark:text-white">{interviewer.name}</div>
                   <div className="text-xs text-muted/60 dark:text-muted/40">{interviewer.role}</div>
@@ -91,7 +91,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
             <div className="space-y-1">
               <p className="text-sm text-muted/60 dark:text-muted/40">Entrevistador seleccionado:</p>
               <p className="font-semibold text-muted/90 dark:text-white flex items-center gap-2">
-                <span className={`w-3 h-3 rounded-[20px] bg-background
+                <span className={`w-3 h-3 rounded-[20px] bg-background`}
                 {selected.name} - {selected.role}
               </p>
             </div>

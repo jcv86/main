@@ -954,7 +954,7 @@ export default function DespegaOnboarding() {
                             })
                           }
                         }}
-                        className={`p-4 rounded-[28px] border-2 cursor-pointer transition-all ${
+                        className={`p-4 rounded-[28px] border-2 cursor-pointer transition-all ${`}
                           isDisabledInMas
                             ? "border-muted/20 bg-muted/10 opacity-50 cursor-not-allowed"
                             : selectedMas === option.dimension
@@ -963,7 +963,7 @@ export default function DespegaOnboarding() {
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                          <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${`}
                             selectedMas === option.dimension
                               ? "border-green bg-green/50"
                               : "border-muted/30"
@@ -1002,7 +1002,7 @@ export default function DespegaOnboarding() {
                             })
                           }
                         }}
-                        className={`p-4 rounded-[28px] border-2 cursor-pointer transition-all ${
+                        className={`p-4 rounded-[28px] border-2 cursor-pointer transition-all ${`}
                           isDisabledInMenos
                             ? "border-muted/20 bg-muted/10 opacity-50 cursor-not-allowed"
                             : selectedMenos === option.dimension
@@ -1011,7 +1011,7 @@ export default function DespegaOnboarding() {
                         }`}
                       >
                         <div className="flex items-center gap-3">
-                          <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
+                          <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${`}
                             selectedMenos === option.dimension
                               ? "border-red/50 bg-red/50"
                               : "border-muted/30"

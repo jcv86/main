@@ -83,7 +83,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
                     <button
                       key={score}
                       onClick={() => handleResponse(q.id, score)}
-                      className={`w-10 h-10 rounded-lg font-medium transition-all ${
+                      className={`w-10 h-10 rounded-lg font-medium transition-all ${`}
                         responses[q.id] === score
                           ? "bg-blue text-white"
                           : "bg-muted/10 text-muted/60 hover:bg-muted/20"

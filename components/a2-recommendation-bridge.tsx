@@ -151,7 +151,7 @@ export function A2RecommendationBridge({
                 <Card
                   key={rec.path.id}
                   className={`cursor-pointer transition-all hover:shadow-lg ${
-                    isPrimary ? "border-2 border-purple bg-purple/5" : ""
+                    isPrimary ? "border-2 border-purple bg-purple/5" : ""`}
                   }`}
                   onClick={() => onPathSelect?.(rec.path.id)}
                 >

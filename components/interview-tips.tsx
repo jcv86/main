@@ -162,7 +162,7 @@ export function InterviewTips({
                 <button
                   key={idx}
                   onClick={() => setCurrentTipIndex(idx)}
-                  className={`w-2 h-2 rounded-full transition-all ${
+                  className={`w-2 h-2 rounded-full transition-all ${`}
                     currentTipIndex === idx
                       ? 'bg-blue/50 w-6'
                       : 'bg-muted/30 dark:bg-muted/60'

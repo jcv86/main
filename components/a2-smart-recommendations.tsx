@@ -243,7 +243,7 @@ export function SmartRecommendations({
                     {[1, 2, 3, 4, 5].map(i => (
                       <div
                         key={i}
-                        className={`h-2 w-2 rounded-full ${
+                        className={`h-2 w-2 rounded-full ${`}
                           i <= recommendations[activeStep].priority
                             ? 'bg-purple'
                             : 'bg-muted'
@@ -290,7 +290,7 @@ export function SmartRecommendations({
                 <button
                   key={idx}
                   onClick={() => setActiveStep(idx)}
-                  className={`flex-1 h-2 rounded-full transition-colors ${
+                  className={`flex-1 h-2 rounded-full transition-colors ${`}
                     idx === activeStep ? 'bg-purple' : 'bg-muted'
                   }`}
                   aria-label={`Go to recommendation ${idx + 1}`}
@@ -317,7 +317,7 @@ export function SmartRecommendations({
               <Card
                 key={rec.id}
                 className={`cursor-pointer transition-all ${
-                  idx === activeStep ? 'border-purple bg-purple/5' : ''
+                  idx === activeStep ? 'border-purple bg-purple/5' : ''`}
                 }`}
                 onClick={() => setActiveStep(idx)}
               >

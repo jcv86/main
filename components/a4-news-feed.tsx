@@ -245,7 +245,7 @@ export function A4NewsFeed({ items }: A4NewsFeedProps) {
                             className={`w-4 h-4 ${
                               savedItems.has(item.id)
                                 ? "fill-primary text-purple"
-                                : "text-muted-foreground"
+                                : "text-muted-foreground"`}
                             }`}
                           />
                         </Button>

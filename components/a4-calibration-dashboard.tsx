@@ -97,7 +97,7 @@ export function A4CalibrationDashboard() {
                 {Array.from({ length: 5 }).map((_, i) => (
                   <div
                     key={i}
-                    className={`h-2 w-6 rounded ${
+                    className={`h-2 w-6 rounded ${`}
                       i < calibration.a2_mission_difficulty ? "bg-orange" : "bg-muted"
                     }`}
                   />

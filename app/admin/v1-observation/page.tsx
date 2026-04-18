@@ -56,7 +56,7 @@ export default function V1ObservationDashboard() {
             <button
               key={days}
               onClick={() => setTimeRange(days)}
-              className={`px-4 py-2 rounded ${
+              className={`px-4 py-2 rounded ${`}
                 timeRange === days
                   ? 'bg-blue/50 text-white'
                   : 'bg-muted/20 text-muted/70 hover:bg-muted/30'

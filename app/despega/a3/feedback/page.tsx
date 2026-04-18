@@ -116,7 +116,7 @@ export default function FeedbackPage() {
                 <button
                   key={key}
                   onClick={() => setSelectedInterview(key)}
-                  className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${
+                  className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${`}
                     selectedInterview === key
                       ? 'border-blue/50 bg-blue/5 dark:bg-blue/20'
                       : 'border-muted/20 dark:border-card hover:border-blue/30'
@@ -164,7 +164,7 @@ export default function FeedbackPage() {
                           ? 'text-green dark:text-green/40'
                           : item.type === 'improvement'
                           ? 'text-orange dark:text-orange/40'
-                          : 'text-blue dark:text-blue/40'
+                          : 'text-blue dark:text-blue/40'`}
                       }`} />
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">

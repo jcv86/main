@@ -175,7 +175,7 @@ export default function DemoPage() {
                       <button
                         key={option.value}
                         onClick={() => handleAnswer(q.id, option.value)}
-                        className={`w-full p-3 rounded-lg border-2 transition-all text-left ${
+                        className={`w-full p-3 rounded-lg border-2 transition-all text-left ${`}
                           demoAnswers[q.id] === option.value
                             ? 'border-purple bg-purple/5 dark:bg-purple'
                             : 'border-muted/20 dark:border-card hover:border-muted/40 dark:hover:border-muted/60'
@@ -218,7 +218,7 @@ export default function DemoPage() {
                   {Object.entries(profileNames).map(([key, name]) => (
                     <div key={key} className="text-center">
                       <div className={`font-bold text-2xl mb-2 ${
-                        key === primary ? 'text-purple' : key === secondary ? 'text-blue' : 'text-muted/40'
+                        key === primary ? 'text-purple' : key === secondary ? 'text-blue' : 'text-muted/40'`}
                       }`}>
                         {scores[key]}/5
                       </div>

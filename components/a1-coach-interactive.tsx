@@ -174,7 +174,7 @@ He revisado tu diagnóstico A1 y tengo algunas recomendaciones personalizadas pa
               className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-xs lg:max-w-md rounded-lg px-4 py-2 ${
+                className={`max-w-xs lg:max-w-md rounded-lg px-4 py-2 ${`}
                   message.sender === "user"
                     ? "bg-purple text-purple-foreground"
                     : "bg-muted text-foreground border"

@@ -124,11 +124,11 @@ export function XPProgressDisplay({
                 <div
                   key={level}
                   className={`flex flex-col items-center gap-1 min-w-fit ${
-                    isReached ? 'opacity-100' : 'opacity-50'
+                    isReached ? 'opacity-100' : 'opacity-50'`}
                   }`}
                 >
                   <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
+                    className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${`}
                       isCurrent
                         ? `bg-background
                         : isReached

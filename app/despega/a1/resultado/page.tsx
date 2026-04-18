@@ -120,14 +120,14 @@ export default function A1ResultadoPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className={`p-6 bg-background
-              <p className="text-sm opacity-90 mb-1">Patrón Dominante</p>
+              <p className="text-sm opacity-90 mb-1">Patrón Dominante</p>`}
               <p className="text-4xl font-bold">{getDimensionName(profile.dominant_pattern)}</p>
               <p className="text-sm opacity-90 mt-2">Tu estilo natural de energía y acción</p>
             </div>
             
             {profile.secondary_pattern && (
               <div className={`p-4 bg-background
-                <p className="text-sm opacity-90 mb-1">Patrón Secundario</p>
+                <p className="text-sm opacity-90 mb-1">Patrón Secundario</p>`}
                 <p className="text-xl font-semibold">{getDimensionName(profile.secondary_pattern)}</p>
               </div>
             )}

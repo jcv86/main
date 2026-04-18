@@ -104,7 +104,7 @@ export function RadarEstrategico() {
                         ? 'bg-red/50/20 text-red/30 border-red/50/50'
                         : tesisDia.nivel_energía === 'Confirmación'
                           ? 'bg-blue/50/20 text-blue/30 border-blue/50/50'
-                          : 'bg-muted/50/20 text-muted/30 border-muted/50/50'
+                          : 'bg-muted/50/20 text-muted/30 border-muted/50/50'`}
                     }`}
                   >
                     {tesisDia.nivel_energía}
@@ -244,7 +244,7 @@ function RadarNoticiaCard({ noticia, isSelected, onSelect }: RadarNoticiaCardPro
     <Card
       onClick={() => onSelect(noticia)}
       className={`bg-transparent border-muted/70 cursor-pointer transition-all hover:border-blue/50/50 ${
-        isSelected ? 'ring-2 ring-blue-500' : ''
+        isSelected ? 'ring-2 ring-blue-500' : ''`}
       }`}
     >
       <CardContent className="pt-6">

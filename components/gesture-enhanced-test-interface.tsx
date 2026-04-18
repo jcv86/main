@@ -355,7 +355,7 @@ export function GestureEnhancedTestInterface({
                 <button
                   key={option.id}
                   onClick={() => handleAnswerSelection(option.id)}
-                  className={`w-full p-4 text-left rounded-[28px] border-2 transition-all touch-manipulation ${
+                  className={`w-full p-4 text-left rounded-[28px] border-2 transition-all touch-manipulation ${`}
                     answers[currentQuestion.id] === option.id
                       ? "border-blue/50 bg-blue/5 text-blue"
                       : "border-muted/20 bg-white hover:border-muted/30 hover:bg-muted/5"
@@ -364,7 +364,7 @@ export function GestureEnhancedTestInterface({
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className={`w-4 h-4 rounded-full border-2 ${
+                      className={`w-4 h-4 rounded-full border-2 ${`}
                         answers[currentQuestion.id] === option.id ? "border-blue/50 bg-blue/50" : "border-muted/30"
                       }`}
                     >
@@ -432,7 +432,7 @@ export function GestureEnhancedTestInterface({
                             ? "text-blue/40"
                             : log.includes("swipe")
                               ? "text-yellow/40"
-                              : "text-muted/30"
+                              : "text-muted/30"`}
                       }`}
                     >
                       {log}

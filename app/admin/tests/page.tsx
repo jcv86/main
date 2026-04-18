@@ -182,7 +182,7 @@ export default function AdminTestsPage() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-lg font-medium transition-all ${
+                  className={`px-4 py-2 rounded-lg font-medium transition-all ${`}
                     selectedCategory === category
                       ? 'bg-blue text-white dark:bg-blue'
                       : 'bg-muted/20 text-muted/90 dark:bg-muted/70 dark:text-muted/10 hover:bg-muted/30 dark:hover:bg-muted/60'

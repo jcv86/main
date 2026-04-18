@@ -223,7 +223,7 @@ export default function Conozcamonos2Page() {
               className={`p-6 transition-all ${
                 isAnswered 
                   ? 'border-green/20 dark:border-green/50' 
-                  : 'border-muted/20 dark:border-card'
+                  : 'border-muted/20 dark:border-card'`}
               }`}
             >
               <div className="flex items-start gap-3 mb-4">
@@ -257,7 +257,7 @@ export default function Conozcamonos2Page() {
                       onBlur={(e) => validateTextResponse(question.id, question.question, e.target.value)}
                       placeholder={question.placeholder}
                       maxLength={question.maxLength}
-                      className={`flex-1 p-3 border rounded-[28px] bg-white dark:bg-card text-muted/90 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple disabled:opacity-50 transition-colors ${
+                      className={`flex-1 p-3 border rounded-[28px] bg-white dark:bg-card text-muted/90 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple disabled:opacity-50 transition-colors ${`}
                         error && !validatingIds.has(question.id) 
                           ? 'border-red/50 dark:border-red/50 bg-red/5 dark:bg-red/20' 
                           : 'border-muted/30 dark:border-muted/60'

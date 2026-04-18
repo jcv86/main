@@ -237,7 +237,7 @@ export default function MiCoachPage() {
                     ) : (
                       messages.map((msg, idx) => (
                         <div key={idx} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
-                          <div className={`max-w-sm px-4 py-2 rounded-lg whitespace-pre-wrap ${
+                          <div className={`max-w-sm px-4 py-2 rounded-lg whitespace-pre-wrap ${`}
                             msg.type === 'user'
                               ? 'bg-purple text-white'
                               : 'bg-white dark:bg-card border border-muted/20'

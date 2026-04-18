@@ -631,14 +631,14 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                         ? "border-red/20 bg-red/5"
                         : test.status === "testing"
                           ? "border-blue/20 bg-blue/5 shadow-lg"
-                          : "border-muted/20"
+                          : "border-muted/20"`}
                   }`}
                 >
                   <CardContent className="p-4">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <div
-                          className={`p-2 rounded-lg ${
+                          className={`p-2 rounded-lg ${`}
                             test.status === "passed"
                               ? "bg-green/10"
                               : test.status === "failed"
@@ -728,7 +728,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                                 ? "text-blue/40"
                                 : log.includes("Gesture detected")
                                   ? "text-yellow/40"
-                                  : "text-muted/30"
+                                  : "text-muted/30"`}
                         }`}
                       >
                         {log}

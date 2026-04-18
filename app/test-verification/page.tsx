@@ -811,14 +811,14 @@ export default function TestVerificationSystem() {
                           ? "border-red/20 bg-red/5"
                           : testFlow.overallStatus === "running"
                             ? "border-blue/20 bg-blue/5 shadow-lg"
-                            : "border-muted/20"
+                            : "border-muted/20"`}
                     }`}
                   >
                     <CardHeader className="pb-2 sm:pb-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                           <div
-                            className={`p-1.5 sm:p-2 rounded-lg ${
+                            className={`p-1.5 sm:p-2 rounded-lg ${`}
                               testFlow.overallStatus === "passed"
                                 ? "bg-green/10"
                                 : testFlow.overallStatus === "failed"
@@ -934,7 +934,7 @@ export default function TestVerificationSystem() {
                                   ? "text-blue/40"
                                   : log.includes("⏳")
                                     ? "text-yellow/40"
-                                    : "text-muted/30"
+                                    : "text-muted/30"`}
                           }`}
                         >
                           {log}

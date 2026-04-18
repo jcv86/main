@@ -216,7 +216,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
               {messages.map((message) => (
                 <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[80%] rounded-[28px] p-4 ${
+                    className={`max-w-[80%] rounded-[28px] p-4 ${`}
                       message.sender === "user"
                         ? "bg-blue text-white"
                         : "bg-muted/10 text-foreground border border-muted/20"
@@ -237,7 +237,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                           <Badge
                             variant="secondary"
                             className={`text-[10px] px-1 py-0 ${
-                              message.coach === "sofia" ? "bg-red/10 text-pink-700" : "bg-blue/10 text-blue"
+                              message.coach === "sofia" ? "bg-red/10 text-pink-700" : "bg-blue/10 text-blue"`}
                             }`}
                           >
                             {message.coach === "sofia" ? "Sofía" : "Dani"}

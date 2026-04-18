@@ -168,7 +168,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
               <Card
                 key={key}
                 className={`${
-                  isActive
+                  isActive`}
                     ? `${colors[key]} text-white border-2 border-white`
                     : 'bg-transparent border-muted/70 text-muted/30'
                 } transition-all`}
@@ -224,7 +224,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
                   </div>
                   <ChevronDown
                     className={`w-5 h-5 text-muted/40 transition-transform ${
-                      expandedSection === section.id ? 'rotate-180' : ''
+                      expandedSection === section.id ? 'rotate-180' : ''`}
                     }`}
                   />
                 </div>

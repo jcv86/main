@@ -274,7 +274,7 @@ export default function A2RoutesPage() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
                         <Calendar className="w-6 h-6" />
-                        <div>
+                        <div>`}
                           <h3 className="text-2xl font-bold">{data.label}</h3>
                           <p className="text-white/80">{data.milestone}</p>
                         </div>

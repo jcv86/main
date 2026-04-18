@@ -99,7 +99,7 @@ export function NewsTicker() {
               <button
                 key={idx}
                 onClick={() => setCurrentIndex(idx)}
-                className={`w-1.5 h-1.5 rounded-full transition-all ${
+                className={`w-1.5 h-1.5 rounded-full transition-all ${`}
                   idx === currentIndex ? 'bg-blue/40 w-3' : 'bg-muted/60 hover:bg-muted/50'
                 }`}
                 aria-label={`Go to news ${idx + 1}`}

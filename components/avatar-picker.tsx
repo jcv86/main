@@ -86,7 +86,7 @@ export function AvatarPicker({
       <CardContent className="space-y-6">
         {/* Preview Section */}
         <div className="flex flex-col items-center justify-center py-8 px-6 bg-background">
-          <div className={`w-32 h-32 rounded-full flex items-center justify-center text-6xl mb-4 bg-background
+          <div className={`w-32 h-32 rounded-full flex items-center justify-center text-6xl mb-4 bg-background`}
             {selected?.emoji}
           </div>
           <h3 className="text-2xl font-bold text-muted/90 dark:text-white">{selected?.name}</h3>
@@ -101,7 +101,7 @@ export function AvatarPicker({
               <button
                 key={avatar.id}
                 onClick={() => handleSelect(avatar.id)}
-                className={`relative group flex flex-col items-center gap-2 p-3 rounded-lg transition-all duration-200 ${
+                className={`relative group flex flex-col items-center gap-2 p-3 rounded-lg transition-all duration-200 ${`}
                   selectedAvatar === avatar.id
                     ? `bg-background
                     : 'bg-muted/10 dark:bg-transparent hover:bg-muted/20 dark:hover:bg-muted/70'

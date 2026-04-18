@@ -104,7 +104,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
                   className={`bg-background
                 >
                   <h3 className="font-bold mb-2 flex items-center gap-2">
-                    <Zap className="w-5 h-5" />
+                    <Zap className="w-5 h-5" />`}
                     {rec.book.title}
                   </h3>
                   <p className="text-sm font-medium mb-3">por {rec.book.author}</p>

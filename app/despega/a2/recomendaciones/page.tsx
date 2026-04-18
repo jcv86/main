@@ -229,7 +229,7 @@ export default function RecomendacionesPage() {
             <Card
               key={route.id}
               className={`cursor-pointer transition-all border-2 overflow-hidden hover:shadow-md ${
-                selectedRoute === route.id
+                selectedRoute === route.id`}
                   ? `${route.borderColor} shadow-lg`
                   : "border-muted/20 dark:border-card"
               }`}
@@ -313,7 +313,7 @@ export default function RecomendacionesPage() {
                     className={`w-full ${
                       selectedRoute === route.id
                         ? "bg-green hover:bg-green dark:bg-green dark:hover:bg-green"
-                        : ""
+                        : ""`}
                     }`}
                   >
                     {selectedRoute === route.id ? (

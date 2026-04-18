@@ -151,7 +151,7 @@ export function GamificationProfile({
           {['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'].map((lvl, idx) => (
             <div key={lvl} className="flex flex-col items-center">
               <div
-                className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold ${
+                className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold ${`}
                   ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'].indexOf(level) >= idx
                     ? `bg-background
                     : 'bg-muted/20 text-muted/40'

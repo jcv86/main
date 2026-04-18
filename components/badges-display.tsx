@@ -76,7 +76,7 @@ export function BadgesDisplay({ earnedBadges, totalBadgesAvailable = 24 }: Badge
                 <Tooltip key={i}>
                   <TooltipTrigger asChild>
                     <div
-                      className={`relative aspect-square rounded-lg flex items-center justify-center cursor-pointer transition-all hover:scale-110 ${
+                      className={`relative aspect-square rounded-lg flex items-center justify-center cursor-pointer transition-all hover:scale-110 ${`}
                         isEarned
                           ? `${RARITY_COLORS[badge?.rarity || 'common']} ring-2 ${RARITY_RING[badge?.rarity || 'common']}`
                           : 'bg-muted/20 dark:bg-transparent opacity-40'

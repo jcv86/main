@@ -209,7 +209,7 @@ export default function DespegazoDashboard() {
               <p className="text-muted/40 text-sm font-semibold">Readiness Score</p>
               <div className="mt-4 w-full h-1 bg-muted/80 rounded-full overflow-hidden">
                 <div
-                  className={`h-full bg-background
+                  className={`h-full bg-background`}
                   style={{ width: `${readiness.overall_score}%` }}
                 />
               </div>
@@ -305,7 +305,7 @@ export default function DespegazoDashboard() {
                 className={`w-full group/btn ${
                   stage.completed
                     ? 'bg-muted/70 hover:bg-muted/60 text-muted/30'
-                    : `bg-background
+                    : `bg-background`}
                 }`}
               >
                 {stage.completed ? 'Ver Detalles' : 'Continuar'}

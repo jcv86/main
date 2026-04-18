@@ -393,7 +393,7 @@ export default function ApplicationStatusTracker() {
                       <div
                         key={step.key}
                         className={`flex items-start gap-4 pb-4 ${
-                          index < statusSteps.length - 1 ? "border-b border-muted/10" : ""
+                          index < statusSteps.length - 1 ? "border-b border-muted/10" : ""`}
                         }`}
                       >
                         <div className="flex-shrink-0 mt-1">
@@ -407,7 +407,7 @@ export default function ApplicationStatusTracker() {
                                   ? "text-blue"
                                   : isCompleted || isRejected
                                     ? "text-green"
-                                    : "text-muted/60"
+                                    : "text-muted/60"`}
                               }`}
                             >
                               {step.label}

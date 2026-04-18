@@ -128,7 +128,7 @@ export default function A1CerebralPage() {
                     key={`more-${opt.texto}`} 
                     onClick={() => { setMore(p => ({ ...p, [q.id]: opt.texto })); setError('') }} 
                     disabled={less[q.id] === opt.texto}
-                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm font-medium ${
+                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm font-medium ${`}
                       more[q.id] === opt.texto 
                         ? 'border-green bg-green/10 text-green dark:bg-green/20 dark:text-green' 
                         : less[q.id] === opt.texto 
@@ -148,7 +148,7 @@ export default function A1CerebralPage() {
                     key={`less-${opt.texto}`} 
                     onClick={() => { setLess(p => ({ ...p, [q.id]: opt.texto })); setError('') }} 
                     disabled={more[q.id] === opt.texto}
-                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm font-medium ${
+                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm font-medium ${`}
                       less[q.id] === opt.texto 
                         ? 'border-red bg-red/10 text-red dark:bg-red/20 dark:text-red' 
                         : more[q.id] === opt.texto 

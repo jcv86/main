@@ -114,7 +114,7 @@ export function A3DifficultyProgression({
             </div>
             <div className="bg-muted/20 rounded-full h-2 mb-4">
               <div
-                className={`h-2 rounded-full transition-all ${
+                className={`h-2 rounded-full transition-all ${`}
                   pSuccessPercentage >= 70 ? "bg-green" :
                   pSuccessPercentage >= 50 ? "bg-blue" :
                   pSuccessPercentage >= 30 ? "bg-amber-600" :

@@ -375,7 +375,7 @@ export function GesturePerformanceMonitor() {
                   realtimeData.map((metric, index) => (
                     <div
                       key={`${metric.timestamp}-${index}`}
-                      className={`p-3 rounded-[28px] border transition-all ${
+                      className={`p-3 rounded-[28px] border transition-all ${`}
                         metric.success ? "bg-green/5 border-green/20" : "bg-red/5 border-red/20"
                       }`}
                     >

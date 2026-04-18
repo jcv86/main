@@ -450,7 +450,7 @@ ${
                       className={`max-w-[85%] ${
                         message.role === "user"
                           ? "bg-blue text-white rounded-lg rounded-br-sm"
-                          : "bg-muted/5 rounded-lg rounded-bl-sm border"
+                          : "bg-muted/5 rounded-lg rounded-bl-sm border"`}
                       } p-3`}
                     >
                       <div className="flex items-start justify-between gap-2 mb-1">
@@ -544,7 +544,7 @@ ${
                             <Star
                               key={i}
                               className={`h-3 w-3 ${
-                                i < message.rating! ? "text-yellow/40 fill-current" : "text-muted/30"
+                                i < message.rating! ? "text-yellow/40 fill-current" : "text-muted/30"`}
                               }`}
                             />
                           ))}
@@ -709,7 +709,7 @@ ${
                           <Star
                             key={i}
                             className={`h-3 w-3 ${
-                              i < interaction.user_rating ? "text-yellow/40 fill-current" : "text-muted/30"
+                              i < interaction.user_rating ? "text-yellow/40 fill-current" : "text-muted/30"`}
                             }`}
                           />
                         ))}

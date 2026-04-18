@@ -298,7 +298,7 @@ export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4Gamif
                 {selectedTest.preguntas.map((q, index) => (
                   <div
                     key={index}
-                    className={`p-3 rounded-[28px] border-l-4 ${
+                    className={`p-3 rounded-[28px] border-l-4 ${`}
                       userAnswers[index] === q.respuesta_correcta
                         ? "border-l-green-600 bg-green/5 dark:bg-green/20"
                         : "border-l-orange-600 bg-orange/5 dark:bg-orange/20"

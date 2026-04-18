@@ -418,7 +418,7 @@ export default function GuidedTrainingPage() {
               <Card
                 key={module.id}
                 className={`cursor-pointer transition-all hover:shadow-lg ${
-                  isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:border-blue/40'
+                  isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:border-blue/40'`}
                 }`}
               >
                 <CardHeader>
@@ -475,7 +475,7 @@ export default function GuidedTrainingPage() {
                     className={`w-full ${
                       isLocked
                         ? 'bg-muted/30 dark:bg-muted/70 cursor-not-allowed'
-                        : 'bg-blue hover:bg-blue'
+                        : 'bg-blue hover:bg-blue'`}
                     }`}
                   >
                     {isLocked ? (

@@ -300,7 +300,7 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
               className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+                className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${`}
                   message.role === "user"
                     ? "bg-purple text-purple-foreground"
                     : "bg-muted text-foreground"

@@ -48,7 +48,7 @@ export function InsightCard({ title, content, icon, index, color, emoji }: Insig
   return (
     <div
       className={`transition-all duration-700 ${
-        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+        isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'`}
       }`}
       style={{ transitionDelay: `${animationDelay}ms` }}
     >

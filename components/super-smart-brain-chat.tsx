@@ -255,7 +255,7 @@ export function SuperSmartBrainChat() {
                 {messages.map((message) => (
                   <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div
-                      className={`max-w-[85%] rounded-2xl p-5 ${
+                      className={`max-w-[85%] rounded-2xl p-5 ${`}
                         message.role === "user"
                           ? "bg-background"
                           : "bg-background"

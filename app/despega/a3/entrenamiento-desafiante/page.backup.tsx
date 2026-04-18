@@ -304,7 +304,7 @@ export default function ChallensingTrainingPage() {
                       setCurrentQuestion(idx)
                       setHasResponseBeenRecorded(false)
                     }}
-                    className={`w-full text-left p-3 rounded-lg transition-all text-xs ${
+                    className={`w-full text-left p-3 rounded-lg transition-all text-xs ${`}
                       idx === currentQuestion
                         ? 'bg-purple/30 border border-purple/50/50'
                         : completedQuestions.includes(idx)

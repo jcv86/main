@@ -184,7 +184,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                 <CardHeader>
                   <CardTitle className="text-base flex items-center gap-2">
                     <div
-                      className={`w-3 h-3 rounded-[20px] bg-background
+                      className={`w-3 h-3 rounded-[20px] bg-background`}
                     />
                     {phase.category}
                   </CardTitle>

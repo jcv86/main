@@ -376,7 +376,7 @@ export default function TestsPage() {
                     ? "border-green/20 dark:border-green bg-green/5 dark:bg-green"
                     : isAvailable
                       ? "hover:border-muted/30 dark:hover:border-muted/60"
-                      : "opacity-60 bg-muted/5 dark:bg-background"
+                      : "opacity-60 bg-muted/5 dark:bg-background"`}
                 }`}
               >
                 {isCompleted && (
@@ -405,7 +405,7 @@ export default function TestsPage() {
                               ? "bg-green/10 dark:bg-green text-green dark:text-green/30 border-green/20 dark:border-green"
                               : test.difficulty === "Intermediate"
                                 ? "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow/30 border-yellow/20 dark:border-yellow"
-                                : "bg-red/10 dark:bg-red text-red dark:text-red/30 border-red/20 dark:border-red"
+                                : "bg-red/10 dark:bg-red text-red dark:text-red/30 border-red/20 dark:border-red"`}
                           }`}
                         >
                           {test.difficulty === "Beginner"

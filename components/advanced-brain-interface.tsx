@@ -195,7 +195,7 @@ export function AdvancedBrainInterface() {
               {messages.map((message) => (
                 <div key={message.id} className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[80%] rounded-[28px] p-4 ${
+                    className={`max-w-[80%] rounded-[28px] p-4 ${`}
                       message.type === "user" ? "bg-purple text-purple-foreground" : "bg-muted"
                     }`}
                   >

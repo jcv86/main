@@ -188,7 +188,7 @@ export default function RankingsPage() {
                       return (
                         <div 
                           key={entry.user_id}
-                          className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${
+                          className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${`}
                             isCurrentUser 
                               ? "bg-purple/10 border border-purple/20" 
                               : position <= 3 

@@ -81,7 +81,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
         <Card
           key={level.id}
           className={`relative overflow-hidden transition-all hover:shadow-lg ${
-            level.isLocked ? 'opacity-60' : 'hover:border-muted/40'
+            level.isLocked ? 'opacity-60' : 'hover:border-muted/40'`}
           }`}
         >
           {/* Status Badge */}
@@ -160,7 +160,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
                   ? 'opacity-50 cursor-not-allowed'
                   : userProgress?.[level.id]?.completed
                   ? 'bg-green hover:bg-green'
-                  : ''
+                  : ''`}
               }`}
             >
               <Link href={`/despega/a3/conversational-interview?level=${level.id}`}>
