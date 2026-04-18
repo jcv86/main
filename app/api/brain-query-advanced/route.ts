@@ -209,12 +209,17 @@ export async function POST(request: NextRequest) {
 
     const responseTimeMs = Date.now() - startTime
 
-    // Track error
-    await trackAnalyticsEvent("brain_query_error", {
-      category: "error",
-      error_message: error instanceof Error ? error.message : "Unknown error",
-      response_time_ms: responseTimeMs,
-    })
+    // Track error - use lazy imports to avoid build issues
+    try {
+      const { trackAnalyticsEvent } = await import("@/lib/performance-optimizer")
+      await trackAnalyticsEvent("brain_query_error", {
+        category: "error",
+        error_message: error instanceof Error ? error.message : "Unknown error",
+        response_time_ms: responseTimeMs,
+      })
+    } catch (trackingError) {
+      console.error("Error tracking analytics:", trackingError)
+    }
 
     return NextResponse.json(
       {
@@ -230,6 +235,10 @@ export async function POST(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   try {
     const { conversationId, userId, rating, feedback } = await request.json()
+
+    // Lazy load dependencies
+    const { advancedBrain } = await import("@/lib/advanced-brain-engine")
+    const { trackAnalyticsEvent } = await import("@/lib/performance-optimizer")
 
     await advancedBrain.learnFromFeedback(userId, conversationId, rating, feedback)
 
