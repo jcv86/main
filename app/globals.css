@@ -13,37 +13,38 @@
     --card: 0 0% 2%;                 /* #050505 */
     --muted: 40 5% 72%;              /* #B8B8B2 */
     
-    /* Brand accent colors */
-    --yellow: 46 78% 44%;            /* #E4BF37 - Ritual */
-    --orange: 15 89% 57%;            /* #F47C48 - Exploración */
-    --red: 356 76% 50%;              /* #E33D4B - Entrenamiento */
-    --green: 152 68% 48%;            /* #2FB773 - Support */
-    --purple: 276 32% 57%;           /* #9B59B6 - Support */
-    --blue: 242 61% 48%;             /* #4B50C7 - Realidad */
+    /* Brand accent colors - PER BRANDBOOK.md */
+    --purple: 264 85% 54%;           /* #A855F7 - El Ritual (A1) */
+    --blue: 217 91% 60%;             /* #3B82F6 - Exploración (A2) */
+    --orange: 17 96% 61%;            /* #F97316 - Entrenamiento (A3) */
+    --cyan: 186 100% 42%;            /* #06B6D4 - La Realidad (A4) */
+    --yellow: 46 78% 44%;            /* #E4BF37 - Support/Accent */
+    --red: 0 84% 60%;                /* #EF4444 - Error */
+    --green: 142 71% 45%;            /* #22C55E - Success */
     
     /* Borders - elevated subtlety */
     --border: rgba(255, 255, 255, 0.10);
     --border-light: rgba(255, 255, 255, 0.16);
     
     /* Legacy compatibility (will be phased out) */
-    --primary: 242 61% 48%;          /* Blue - Realidad */
+    --primary: 217 91% 60%;          /* Blue - Exploración (A2) */
     --primary-foreground: 40 11% 96%;
-    --secondary: 15 89% 57%;         /* Orange - Exploración */
+    --secondary: 17 96% 61%;         /* Orange - Entrenamiento (A3) */
     --secondary-foreground: 0 0% 0%;
-    --accent: 356 76% 50%;           /* Red - Entrenamiento */
+    --accent: 0 84% 60%;             /* Red for errors */
     --accent-foreground: 40 11% 96%;
-    --destructive: 356 76% 50%;      /* Red for errors */
+    --destructive: 0 84% 60%;        /* Red for errors */
     --destructive-foreground: 40 11% 96%;
     --input: rgba(255, 255, 255, 0.10);
-    --ring: 46 78% 44%;              /* Yellow focus ring */
+    --ring: 264 85% 54%;             /* Purple focus ring */
     --radius: 20px;
     
     /* Chart colors - brand-aligned */
-    --chart-1: 46 78% 44%;           /* Yellow */
-    --chart-2: 15 89% 57%;           /* Orange */
-    --chart-3: 356 76% 50%;          /* Red */
-    --chart-4: 152 68% 48%;          /* Green */
-    --chart-5: 242 61% 48%;          /* Blue */
+    --chart-1: 264 85% 54%;          /* Purple - El Ritual */
+    --chart-2: 217 91% 60%;          /* Blue - Exploración */
+    --chart-3: 17 96% 61%;           /* Orange - Entrenamiento */
+    --chart-4: 186 100% 42%;         /* Cyan - La Realidad */
+    --chart-5: 142 71% 45%;          /* Green - Success */
   }
 
   .dark {
@@ -73,7 +74,7 @@
     line-height: 1.75;
   }
 
-  /* Display typography - Lora (Laro Soft equivalent) */
+  /* Display typography - Lora */
   h1, .h1 {
     font-family: 'Lora', serif;
     font-size: clamp(48px, 8vw, 88px);
@@ -199,13 +200,25 @@
   text-transform: uppercase;
 }
 
-/* Brand color utilities */
-.text-yellow {
-  color: hsl(var(--yellow));
+/* Brand color utilities - PER BRANDBOOK */
+.text-purple {
+  color: hsl(var(--purple));
+}
+
+.text-blue {
+  color: hsl(var(--blue));
 }
 
 .text-orange {
   color: hsl(var(--orange));
+}
+
+.text-cyan {
+  color: hsl(var(--cyan));
+}
+
+.text-yellow {
+  color: hsl(var(--yellow));
 }
 
 .text-red {
@@ -216,20 +229,24 @@
   color: hsl(var(--green));
 }
 
-.text-purple {
-  color: hsl(var(--purple));
+.bg-purple {
+  background-color: hsl(var(--purple));
 }
 
-.text-blue {
-  color: hsl(var(--blue));
-}
-
-.bg-yellow {
-  background-color: hsl(var(--yellow));
+.bg-blue {
+  background-color: hsl(var(--blue));
 }
 
 .bg-orange {
   background-color: hsl(var(--orange));
+}
+
+.bg-cyan {
+  background-color: hsl(var(--cyan));
+}
+
+.bg-yellow {
+  background-color: hsl(var(--yellow));
 }
 
 .bg-red {
@@ -240,30 +257,6 @@
   background-color: hsl(var(--green));
 }
 
-.bg-purple {
-  background-color: hsl(var(--purple));
-}
-
-.bg-blue {
-  background-color: hsl(var(--blue));
-}
-
-.border-yellow {
-  border-color: hsl(var(--yellow));
-}
-
-.border-orange {
-  border-color: hsl(var(--orange));
-}
-
-.border-red {
-  border-color: hsl(var(--red));
-}
-
-.border-green {
-  border-color: hsl(var(--green));
-}
-
 .border-purple {
   border-color: hsl(var(--purple));
 }
@@ -272,387 +265,16 @@
   border-color: hsl(var(--blue));
 }
 
-/* Surface utilities - SQUARED CORNERS 20px */
-.surface {
-  @apply bg-card border border-border rounded-[20px];
+.border-orange {
+  border-color: hsl(var(--orange));
 }
 
-.surface-lg {
-  @apply bg-card border border-border rounded-[28px];
-}
-
-.surface-xl {
-  @apply bg-card border border-border rounded-[36px];
-}
-
-/* Shadow utilities */
-.shadow-soft {
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
-}
-
-.shadow-elevated {
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42);
-}
-
-/* Gradient utilities */
-.gradient-yellow {
-  background: linear-gradient(135deg, hsl(var(--yellow)) 0%, hsl(var(--yellow)) 100%);
-}
-
-.gradient-orange {
-  background: linear-gradient(135deg, hsl(var(--orange)) 0%, hsl(var(--orange)) 100%);
-}
-
-.gradient-red {
-  background: linear-gradient(135deg, hsl(var(--red)) 0%, hsl(var(--red)) 100%);
-}
-
-.gradient-blue {
-  background: linear-gradient(135deg, hsl(var(--blue)) 0%, hsl(var(--blue)) 100%);
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateX(-20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.6s ease-out;
-}
-
-.animate-slide-in {
-  animation: slideIn 0.6s ease-out;
-}
-
-.animate-scale-in {
-  animation: scaleIn 0.6s ease-out;
-}
-
-/* Interactive effects */
-.interactive-lift {
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.interactive-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
-}
-
-.interactive-scale {
-  transition: transform 0.2s ease;
-}
-
-.interactive-scale:hover {
-  transform: scale(1.02);
-}
-
-/* Transitions */
-.transition-smooth {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.transition-smooth-fast {
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Print styles */
-@media print {
-  .no-print {
-    display: none !important;
-  }
-
-  body {
-    background: white !important;
-    color: black !important;
-  }
-}
-
-/* Mobile utilities */
-@media (max-width: 768px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-}
-
-@layer base {
-  :root {
-    /* DTC Brand Colors - Black-first aesthetic */
-    --background: 0 0% 0%;           /* #000000 */
-    --foreground: 40 11% 96%;        /* #F5F5F2 */
-    --card: 0 0% 2%;                 /* #050505 */
-    --muted: 40 5% 72%;              /* #B8B8B2 */
-    
-    /* Brand accent colors */
-    --yellow: 46 78% 44%;            /* #E4BF37 - Ritual */
-    --orange: 15 89% 57%;            /* #F47C48 - Exploración */
-    --red: 356 76% 50%;              /* #E33D4B - Entrenamiento */
-    --green: 152 68% 48%;            /* #2FB773 - Support */
-    --purple: 276 32% 57%;           /* #9B59B6 - Support */
-    --blue: 242 61% 48%;             /* #4B50C7 - Realidad */
-    
-    /* Borders - elevated subtlety */
-    --border: rgba(255, 255, 255, 0.10);
-    --border-light: rgba(255, 255, 255, 0.16);
-    
-    /* Legacy compatibility (will be phased out) */
-    --primary: 242 61% 48%;          /* Blue - Realidad */
-    --primary-foreground: 40 11% 96%;
-    --secondary: 15 89% 57%;         /* Orange - Exploración */
-    --secondary-foreground: 0 0% 0%;
-    --accent: 356 76% 50%;           /* Red - Entrenamiento */
-    --accent-foreground: 40 11% 96%;
-    --destructive: 356 76% 50%;      /* Red for errors */
-    --destructive-foreground: 40 11% 96%;
-    --input: rgba(255, 255, 255, 0.10);
-    --ring: 46 78% 44%;              /* Yellow focus ring */
-    --radius: 20px;
-    
-    /* Chart colors - brand-aligned */
-    --chart-1: 46 78% 44%;           /* Yellow */
-    --chart-2: 15 89% 57%;           /* Orange */
-    --chart-3: 356 76% 50%;          /* Red */
-    --chart-4: 152 68% 48%;          /* Green */
-    --chart-5: 242 61% 48%;          /* Blue */
-  }
-
-  .dark {
-    /* Dark mode uses same values (always dark-first) */
-    --background: 0 0% 0%;
-    --foreground: 40 11% 96%;
-    --card: 0 0% 2%;
-    --muted: 40 5% 72%;
-    --border: rgba(255, 255, 255, 0.10);
-    --border-light: rgba(255, 255, 255, 0.16);
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  html {
-    @apply scroll-smooth;
-    font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-    font-size: 16px;
-    line-height: 1.75;
-  }
-
-  /* Display typography - Laro Soft */
-  h1, .h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(48px, 8vw, 88px);
-    font-weight: 700;
-    line-height: 0.95;
-    letter-spacing: -0.04em;
-  }
-
-  h2, .h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(32px, 5vw, 56px);
-    font-weight: 700;
-    line-height: 0.98;
-    letter-spacing: -0.03em;
-  }
-
-  h3, .h3 {
-    font-family: 'Montserrat', system-ui, sans-serif;
-    font-size: clamp(20px, 3vw, 24px);
-    font-weight: 600;
-    line-height: 1.1;
-  }
-
-  h4, h5, h6 {
-    font-family: 'Montserrat', system-ui, sans-serif;
-    font-weight: 600;
-  }
-
-  p, .body {
-    font-size: 16px;
-    line-height: 1.75;
-    font-weight: 400;
-  }
-
-  label, .label {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.24em;
-    text-transform: uppercase;
-  }
-
-  /* Links */
-  a {
-    @apply text-foreground underline transition-colors;
-  }
-
-  a:hover {
-    @apply text-blue;
-  }
-
-  /* Focus styles for accessibility */
-  :focus-visible {
-    outline: 2px solid hsl(var(--ring));
-    outline-offset: 2px;
-  }
-}
-
-/* Smooth scrollbar styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: hsl(var(--background));
-}
-
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted));
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--foreground));
-}
-
-/* Typography utilities */
-.text-display-lg {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(48px, 8vw, 88px);
-  font-weight: 700;
-  line-height: 0.95;
-  letter-spacing: -0.04em;
-}
-
-.text-display-md {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(32px, 5vw, 56px);
-  font-weight: 700;
-  line-height: 0.98;
-  letter-spacing: -0.03em;
-}
-
-.text-display-sm {
-  font-family: 'Montserrat', system-ui, sans-serif;
-  font-size: clamp(20px, 3vw, 24px);
-  font-weight: 600;
-  line-height: 1.1;
-}
-
-.text-body-lg {
-  font-size: 18px;
-  line-height: 1.6;
-  font-weight: 400;
-}
-
-.text-body {
-  font-size: 16px;
-  line-height: 1.75;
-  font-weight: 400;
-}
-
-.text-body-sm {
-  font-size: 14px;
-  line-height: 1.6;
-  font-weight: 400;
-}
-
-.text-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
-}
-
-/* Brand color utilities */
-.text-yellow {
-  color: hsl(var(--yellow));
-}
-
-.text-orange {
-  color: hsl(var(--orange));
-}
-
-.text-red {
-  color: hsl(var(--red));
-}
-
-.text-green {
-  color: hsl(var(--green));
-}
-
-.text-purple {
-  color: hsl(var(--purple));
-}
-
-.text-blue {
-  color: hsl(var(--blue));
-}
-
-.bg-yellow {
-  background-color: hsl(var(--yellow));
-}
-
-.bg-orange {
-  background-color: hsl(var(--orange));
-}
-
-.bg-red {
-  background-color: hsl(var(--red));
-}
-
-.bg-green {
-  background-color: hsl(var(--green));
-}
-
-.bg-purple {
-  background-color: hsl(var(--purple));
-}
-
-.bg-blue {
-  background-color: hsl(var(--blue));
+.border-cyan {
+  border-color: hsl(var(--cyan));
 }
 
 .border-yellow {
   border-color: hsl(var(--yellow));
-}
-
-.border-orange {
-  border-color: hsl(var(--orange));
 }
 
 .border-red {
@@ -661,14 +283,6 @@
 
 .border-green {
   border-color: hsl(var(--green));
-}
-
-.border-purple {
-  border-color: hsl(var(--purple));
-}
-
-.border-blue {
-  border-color: hsl(var(--blue));
 }
 
 /* Surface utilities */
@@ -694,20 +308,20 @@
 }
 
 /* Gradient utilities */
-.gradient-yellow {
-  background: linear-gradient(135deg, hsl(var(--yellow)) 0%, hsl(var(--yellow)) 100%);
+.gradient-purple {
+  background: linear-gradient(135deg, hsl(var(--purple)) 0%, hsl(var(--purple)) 100%);
+}
+
+.gradient-blue {
+  background: linear-gradient(135deg, hsl(var(--blue)) 0%, hsl(var(--blue)) 100%);
 }
 
 .gradient-orange {
   background: linear-gradient(135deg, hsl(var(--orange)) 0%, hsl(var(--orange)) 100%);
 }
 
-.gradient-red {
-  background: linear-gradient(135deg, hsl(var(--red)) 0%, hsl(var(--red)) 100%);
-}
-
-.gradient-blue {
-  background: linear-gradient(135deg, hsl(var(--blue)) 0%, hsl(var(--blue)) 100%);
+.gradient-cyan {
+  background: linear-gradient(135deg, hsl(var(--cyan)) 0%, hsl(var(--cyan)) 100%);
 }
 
 /* Animations */

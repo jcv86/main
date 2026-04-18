@@ -55,13 +55,14 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
-        // DTC Brand colors
-        yellow: "hsl(var(--yellow))",
-        orange: "hsl(var(--orange))",
-        red: "hsl(var(--red))",
-        green: "hsl(var(--green))",
-        purple: "hsl(var(--purple))",
-        blue: "hsl(var(--blue))",
+        // DTC Brand colors - PER BRANDBOOK
+        purple: "hsl(var(--purple))",  // El Ritual (A1)
+        blue: "hsl(var(--blue))",      // Exploración (A2)
+        orange: "hsl(var(--orange))",  // Entrenamiento (A3)
+        cyan: "hsl(var(--cyan))",      // La Realidad (A4)
+        yellow: "hsl(var(--yellow))",  // Support/Accent
+        red: "hsl(var(--red))",        // Error
+        green: "hsl(var(--green))",    // Success
       },
       borderRadius: {
         DEFAULT: "20px",
