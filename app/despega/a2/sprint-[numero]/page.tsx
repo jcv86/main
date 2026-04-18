@@ -393,10 +393,10 @@ export default function SprintViewerPage() {
             {actions.map((action) => (
               <Card
                 key={action.id}
-                className={`border-0 transition-all cursor-pointer hover:shadow-md ${`}
+                className={`border-0 transition-all cursor-pointer hover:shadow-md ${
                   action.completed
                     ? "bg-green/5 dark:bg-green/10 border-l-4 border-l-green-500"
-                    : "bg-white dark:bg-card"`}
+                    : "bg-white dark:bg-card"
                 }`}
                 onClick={() => toggleAction(action.id)}
               >
@@ -405,7 +405,7 @@ export default function SprintViewerPage() {
                     {/* Checkbox */}
                     <div className="flex-shrink-0 pt-1">
                       <div
-                        className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${`}
+                        className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all ${
                           action.completed
                             ? "bg-green border-green"
                             : "border-muted/30 dark:border-muted/60"
@@ -419,17 +419,17 @@ export default function SprintViewerPage() {
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <h3 className={`font-semibold text-base ${`}
+                      <h3 className={`font-semibold text-base ${
                         action.completed
                           ? "line-through text-muted/60 dark:text-muted/40"
-                          : "text-muted/90 dark:text-muted/5"`}
+                          : "text-muted/90 dark:text-muted/5"
                       }`}>
                         {action.title}
                       </h3>
-                      <p className={`text-sm mt-1 ${`}
+                      <p className={`text-sm mt-1 ${
                         action.completed
                           ? "text-muted/60 dark:text-muted/40"
-                          : "text-muted/60 dark:text-muted/40"`}
+                          : "text-muted/60 dark:text-muted/40"
                       }`}>
                         {action.description}
                       </p>

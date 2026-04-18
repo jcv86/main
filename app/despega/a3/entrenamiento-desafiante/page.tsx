@@ -445,7 +445,7 @@ export default function ChallensingTrainingPage() {
                   <div>
                     <p className="text-xs text-muted/40 mb-2">Promedio General</p>
                     <div className="flex items-end gap-2">
-                      <span className={`text-4xl font-bold ${averageScore`} >= 75 ? 'text-green/40' : averageScore >= 60 ? 'text-yellow/40' : 'text-red/40'}`}>
+                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green/40' : averageScore >= 60 ? 'text-yellow/40' : 'text-red/40'}`}>
                         {averageScore}
                       </span>
                       <span className="text-xs text-muted/40 pb-2">/100</span>
@@ -475,7 +475,7 @@ export default function ChallensingTrainingPage() {
                       }
                     }}
                     disabled={!completedQuestions.includes(idx) && idx !== currentQuestion}
-                    className={`w-full text-left p-3 rounded-lg transition-all text-xs disabled:opacity-50 ${`}
+                    className={`w-full text-left p-3 rounded-lg transition-all text-xs disabled:opacity-50 ${
                       idx === currentQuestion
                         ? 'bg-purple/30 border border-purple/50/50'
                         : completedQuestions.includes(idx)
@@ -486,7 +486,7 @@ export default function ChallensingTrainingPage() {
                     <div className="flex items-start gap-2">
                       <div className="mt-0.5">
                         {completedQuestions.includes(idx) && scores[idx] ? (
-                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold ${`}
+                          <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold ${
                             scores[idx] >= 75 ? 'bg-green' : scores[idx] >= 60 ? 'bg-yellow' : 'bg-red'
                           }`}>
                             {scores[idx]}

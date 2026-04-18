@@ -64,10 +64,10 @@ export default function MultimodalAnalysisPage() {
             <button
               key={type.id}
               onClick={() => setEntrenamillentoType(type.id)}
-              className={`p-3 rounded-[28px] border-2 transition-all text-left ${`}
+              className={`p-3 rounded-[28px] border-2 transition-all text-left ${
                 entrenamillentoType === type.id
                   ? 'border-blue bg-blue/5 dark:bg-blue shadow-md'
-                  : 'border-muted/20 dark:border-card hover:border-muted/30 dark:hover:border-muted/60'
+                  : 'border-muted/20 dark:border-card hover:border-blue/40'
               }`}
             >
               <div className="flex items-start gap-2">
