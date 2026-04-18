@@ -69,7 +69,7 @@ export function MultimodalAnalyticsDashboard() {
         <Card>
           <CardContent className="pt-6">
             <p className="text-sm text-muted/60 mb-1">Mejora Detectada</p>
-            <p className={`text-3xl font-bold ${metrics.improvement_trend`} >= 0 ? 'text-green' : 'text-red'}`}>
+            <p className={`text-3xl font-bold ${metrics.improvement_trend >= 0 ? 'text-green' : 'text-red'}`}>
               {metrics.improvement_trend >= 0 ? '+' : ''}{metrics.improvement_trend}%
             </p>
           </CardContent>
