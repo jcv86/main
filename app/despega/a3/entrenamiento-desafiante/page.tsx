@@ -226,7 +226,7 @@ export default function ChallensingTrainingPage() {
                       <p className="text-xs text-slate-400 mb-2">Respuesta Actual</p>
                       <div className="flex items-center justify-between">
                         <span className="text-3xl font-bold text-purple-400">{currentScore}</span>
-                        <Badge className={getScoreColor(currentScore)} className="text-xs">
+                        <Badge className={`${getScoreColor(currentScore)} text-xs`}>
                           {getScoreLabel(currentScore)}
                         </Badge>
                       </div>
