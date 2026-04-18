@@ -72,7 +72,7 @@ export default function A1ResultadoPage() {
       'S': 'from-green to-green',
       'C': 'from-blue to-blue'
     }
-    return colors[letter] || 'from-slate-500 to-slate-600'
+    return colors[letter] || 'from-muted/50 to-muted/60'
   }
 
   if (loading) {
@@ -97,7 +97,7 @@ export default function A1ResultadoPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80 py-12">
       <div className="container mx-auto px-4 max-w-3xl">
         {/* Header */}
         <div className="text-center mb-12">
@@ -114,7 +114,7 @@ export default function A1ResultadoPage() {
         </div>
 
         {/* Primary Profile */}
-        <Card className="mb-8 border-0 shadow-lg bg-gradient-to-r from-white to-slate-50 dark:from-slate-900 dark:to-slate-800">
+        <Card className="mb-8 border-0 shadow-lg bg-gradient-to-r from-white to-muted/5 dark:from-muted/90 dark:to-muted/80">
           <CardHeader className="pb-4">
             <CardTitle className="text-2xl">Tu Dimensión Dominante</CardTitle>
           </CardHeader>

@@ -306,7 +306,7 @@ export default function A1ReportPage() {
         </div>
 
         {/* All 4 Profiles Breakdown */}
-        <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-6 mb-8 border-2 border-purple/50/30 shadow-lg">
+        <div className="bg-gradient-to-br from-muted/80 to-muted/70 rounded-xl p-6 mb-8 border-2 border-purple/50/30 shadow-lg">
           <h3 className="font-bold text-2xl text-white mb-6">Tu Perfil Cerebral Completo</h3>
           <div className="space-y-4">
             {[

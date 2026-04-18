@@ -134,7 +134,7 @@ export default function JourneyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-white dark:from-background dark:to-muted/90 p-6">
       <div className="max-w-6xl mx-auto">
         {/* HERO SECTION */}
         <div className="mb-12">
@@ -223,7 +223,7 @@ export default function JourneyPage() {
             <div className="space-y-4">
               <div className="flex items-center gap-4">
                 <div className="w-20 h-20 rounded-[28px] bg-blue/10 dark:bg-blue flex items-center justify-center font-bold text-blue dark:text-blue/30">A1</div>
-                <div className="flex-1 h-1 bg-gradient-to-r from-blue/30 to-slate-300 dark:from-blue dark:to-slate-700"></div>
+                <div className="flex-1 h-1 bg-gradient-to-r from-blue/30 to-muted/30 dark:from-blue dark:to-muted/70"></div>
               </div>
 
               <div className="flex items-center gap-4">

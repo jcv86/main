@@ -77,7 +77,7 @@ export default function BitacoraPage() {
   const stats = getStats()
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90">
       {/* Header */}
       <div className="border-b border-muted/20 dark:border-muted/80 bg-white dark:bg-background">
         <div className="max-w-4xl mx-auto px-4 py-6">

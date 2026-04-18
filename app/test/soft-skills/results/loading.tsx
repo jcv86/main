@@ -10,7 +10,7 @@ export default function SoftSkillsResultsLoading() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="h-8 bg-gradient-to-r from-pink-300 to-purple-300 rounded-lg mb-4 animate-pulse"></div>
+          <div className="h-8 bg-gradient-to-r from-red/30 to-purple-300 rounded-lg mb-4 animate-pulse"></div>
           <div className="h-4 bg-gray-200 rounded-lg w-2/3 mx-auto animate-pulse"></div>
         </div>
 

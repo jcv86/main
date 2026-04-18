@@ -46,7 +46,7 @@ export default function A1CerebralIntroPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <StepHeader
           stepNumber={1}

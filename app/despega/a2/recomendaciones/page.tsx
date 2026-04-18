@@ -198,7 +198,7 @@ export default function RecomendacionesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
           <p className="mt-4 text-muted/60 dark:text-muted/40">Personalizando tus rutas...</p>
@@ -208,7 +208,7 @@ export default function RecomendacionesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 p-4 overflow-y-auto">
       <div className="max-w-4xl mx-auto py-12 space-y-8">
         {/* Header */}
         <div className="text-center space-y-3">

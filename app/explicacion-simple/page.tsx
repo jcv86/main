@@ -255,7 +255,7 @@ export default function ExplicacionSimplePage() {
           </div>
 
           {/* Section 7: Technology Stack */}
-          <div className="bg-gradient-to-br from-slate-50 to-gray-50 rounded-2xl p-8 border border-muted/20">
+          <div className="bg-gradient-to-br from-muted/5 to-gray-50 rounded-2xl p-8 border border-muted/20">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">Stack Tecnológico</h2>
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-white rounded-xl p-6">

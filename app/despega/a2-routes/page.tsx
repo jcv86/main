@@ -266,7 +266,7 @@ export default function A2RoutesPage() {
               const isExpanded = expandedMilestone === days
               
               return (
-                <div key={days} className="bg-gradient-to-br from-slate-800/50 to-slate-700/30 border border-muted/70/50 rounded-xl overflow-hidden">
+                <div key={days} className="bg-gradient-to-br from-muted/80/50 to-muted/70/30 border border-muted/70/50 rounded-xl overflow-hidden">
                   <button
                     onClick={() => setExpandedMilestone(isExpanded ? null : days)}
                     className={`w-full p-6 text-left bg-gradient-to-r ${getMilestoneColor(days)} text-white hover:opacity-90 transition`}

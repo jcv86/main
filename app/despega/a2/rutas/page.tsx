@@ -141,7 +141,7 @@ export default function A2RoutasPage() {
         beneficios: route.beneficios || [],
         razon_seleccion: route.razon_seleccion,
         icon: routeIcons[route.tipo] || Target,
-        color: routeColors[route.tipo] || 'from-slate-500 to-slate-600'
+        color: routeColors[route.tipo] || 'from-muted/50 to-muted/60'
       }))
 
       setRoutes(formattedRoutes)

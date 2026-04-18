@@ -53,7 +53,7 @@ const insightCards = [
     key: 'riesgosOportunidades',
     icon: '⚡',
     title: 'Riesgos & Oportunidades',
-    color: 'from-blue/50 to-violet-500'
+    color: 'from-blue/50 to-purple'
   }
 ]
 

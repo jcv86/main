@@ -97,7 +97,7 @@ export default function CVATSPage() {
   )
 
   const renderCreativeFormat = () => (
-    <div className="bg-gradient-to-br from-purple/5 to-blue/5 dark:from-slate-800 dark:to-slate-900 p-12 text-muted/90 dark:text-white space-y-6">
+    <div className="bg-gradient-to-br from-purple/5 to-blue/5 dark:from-muted/80 dark:to-muted/90 p-12 text-muted/90 dark:text-white space-y-6">
       {/* Header with gradient accent */}
       <div className="border-l-4 border-purple pl-6">
         <h1 className="text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-purple to-blue">{cvData.personalInfo.name}</h1>
@@ -489,7 +489,7 @@ export default function CVATSPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-indigo-50 to-blue/5 dark:from-muted/90 dark:via-purple-900/20 dark:to-muted/90 p-6">
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header */}
         <Link href="/despega/a3">

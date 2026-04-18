@@ -140,7 +140,7 @@ export default function AdminTestsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-8">
+    <div className="min-h-screen bg-gradient-to-br from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-12">

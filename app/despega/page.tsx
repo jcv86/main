@@ -180,7 +180,7 @@ export default function DespegazoDashboard() {
       : 'text-orange-400'
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-slate-950 to-slate-900 text-white p-4 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-slate-950 to-muted/90 text-white p-4 py-12">
       <div className="max-w-6xl mx-auto">
         {/* Hero Header */}
         <div className="mb-16">
@@ -270,7 +270,7 @@ export default function DespegazoDashboard() {
             <div
               key={i}
               onClick={() => router.push(stage.href)}
-              className="group cursor-pointer bg-gradient-to-r from-slate-800/50 to-slate-700/30 border border-muted/70/50 hover:border-muted/60 rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
+              className="group cursor-pointer bg-gradient-to-r from-muted/80/50 to-muted/70/30 border border-muted/70/50 hover:border-muted/60 rounded-xl p-6 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10"
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-start gap-4">

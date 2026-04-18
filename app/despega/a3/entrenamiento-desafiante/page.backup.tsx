@@ -159,7 +159,7 @@ export default function ChallensingTrainingPage() {
     <main className="min-h-screen bg-black">
       <div className="flex flex-col h-screen">
         {/* Header */}
-        <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-slate-900 to-slate-950 p-4">
+        <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-slate-950 p-4">
           <div className="flex items-center justify-between">
             <Link href="/despega/a3-dashboard" className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300">
               <ArrowLeft className="w-4 h-4" />
@@ -262,7 +262,7 @@ export default function ChallensingTrainingPage() {
             </div>
 
             {/* Right Panel: Executive Dashboard (40%) */}
-            <div className="lg:col-span-2 bg-gradient-to-b from-slate-900 to-slate-950 border-l border-muted/80 flex flex-col overflow-y-auto">
+            <div className="lg:col-span-2 bg-gradient-to-b from-muted/90 to-slate-950 border-l border-muted/80 flex flex-col overflow-y-auto">
               
               {/* Score Overview */}
               <div className="p-4 border-b border-muted/80 flex-shrink-0">

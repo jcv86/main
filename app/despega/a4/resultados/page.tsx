@@ -52,7 +52,7 @@ const insightCards = [
     key: 'visionLargo',
     icon: '🚀',
     title: 'Visión a Largo Plazo',
-    color: 'from-blue/50 to-violet-500'
+    color: 'from-blue/50 to-purple'
   }
 ]
 
@@ -116,7 +116,7 @@ export default function A4ResultadosPage() {
 
   if (error) {
     return (
-      <ASection title="A4: Radar" subtitle="Resultados Estratégicos" icon="📡" colorClass="from-blue/50 to-violet-500">
+      <ASection title="A4: Radar" subtitle="Resultados Estratégicos" icon="📡" colorClass="from-blue/50 to-purple">
         <ASectionPart title="Error" icon={<Target />}>
           <div className="space-y-4">
             <div className="p-6 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-900/50 rounded-lg">
@@ -136,7 +136,7 @@ export default function A4ResultadosPage() {
   }
 
   return (
-    <ASection title="A4: Radar" subtitle="Resultados Estratégicos" icon="📡" colorClass="from-blue/50 to-violet-500">
+    <ASection title="A4: Radar" subtitle="Resultados Estratégicos" icon="📡" colorClass="from-blue/50 to-purple">
       <ASectionPart title="Análisis Estratégico Completo" icon={<Zap />}>
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

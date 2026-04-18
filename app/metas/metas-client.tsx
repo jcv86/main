@@ -381,7 +381,7 @@ export default function MetasSMARTClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-white dark:from-background dark:to-muted/90">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">

@@ -201,7 +201,7 @@ export default function DespegaOnboarding() {
   // STEP 1: Intro - Despega Cerebral
   if (step === "intro") {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 via-slate-50 to-slate-100 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+      <div className="min-h-screen bg-gradient-to-b from-muted/5 via-muted/5 to-muted/10 dark:from-background dark:via-slate-950 dark:to-muted/90 p-4 overflow-y-auto">
         <div className="max-w-3xl mx-auto py-12 space-y-8">
           {/* Hero Section */}
           <div className="text-center space-y-4">
@@ -310,7 +310,7 @@ export default function DespegaOnboarding() {
           </Card>
 
           {/* Example Question Preview */}
-          <Card className="border-2 border-blue/30 bg-gradient-to-br from-blue/5 to-white dark:from-blue-950/30 dark:to-slate-900">
+          <Card className="border-2 border-blue/30 bg-gradient-to-br from-blue/5 to-white dark:from-blue/10 dark:to-muted/90">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <span>Así se ve una pregunta</span>
@@ -414,7 +414,7 @@ export default function DespegaOnboarding() {
   // STEP 2: Instrucciones Detalladas
   if (step === "instructions") {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+      <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 p-4 overflow-y-auto">
         <div className="max-w-5xl mx-auto space-y-8 pb-8">
           {/* Hero Section */}
           <div className="text-center space-y-3 py-8">
@@ -710,8 +710,8 @@ export default function DespegaOnboarding() {
           </Card>
 
           {/* CTA */}
-          <div className="space-y-4 sticky bottom-0 bg-gradient-to-t from-slate-100 to-transparent dark:from-slate-900 dark:to-transparent pt-8 -mx-4 px-4 pb-4">
-            <Button onClick={() => setStep("test")} className="w-full h-14 text-lg font-semibold shadow-lg hover:shadow-xl transition-all rounded-[28px] bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-600 dark:from-slate-100 dark:to-slate-300 dark:text-muted/90">
+          <div className="space-y-4 sticky bottom-0 bg-gradient-to-t from-muted/10 to-transparent dark:from-muted/90 dark:to-transparent pt-8 -mx-4 px-4 pb-4">
+            <Button onClick={() => setStep("test")} className="w-full h-14 text-lg font-semibold shadow-lg hover:shadow-xl transition-all rounded-[28px] bg-gradient-to-r from-muted/90 to-muted/70 hover:from-muted/80 hover:to-muted/60 dark:from-muted/10 dark:to-muted/30 dark:text-muted/90">
               Entiendo, Comenzar Mi Test
             </Button>
             <p className="text-center text-sm text-muted/60 dark:text-muted/40">
@@ -809,7 +809,7 @@ export default function DespegaOnboarding() {
     }
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-muted/90 via-muted/80 to-muted/90 flex items-center justify-center p-4">
         <Card className="w-full max-w-2xl">
           <CardHeader>
             <CardTitle>Conozcámonos - Contexto Inicial</CardTitle>

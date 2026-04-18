@@ -52,7 +52,7 @@ const insightCards = [
     key: 'estrategiaIntegracion',
     icon: '🎯',
     title: 'Estrategia de Integración',
-    color: 'from-blue/50 to-violet-500'
+    color: 'from-blue/50 to-purple'
   }
 ]
 

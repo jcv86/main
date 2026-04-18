@@ -179,7 +179,7 @@ export default function TestOpenAIInsightsPage() {
             {/* Brain Chain - The Master Insight */}
             <Card className="bg-gradient-to-r from-purple/50 to-pink-900/50 border-purple/40/50 shadow-2xl">
               <CardHeader>
-                <CardTitle className="text-2xl bg-gradient-to-r from-purple-300 to-pink-300 bg-clip-text text-transparent">
+                <CardTitle className="text-2xl bg-gradient-to-r from-purple-300 to-red/30 bg-clip-text text-transparent">
                   Tu Insight Maestro: El Que Lo Cambia Todo
                 </CardTitle>
                 <CardDescription className="text-purple-200">

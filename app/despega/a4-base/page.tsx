@@ -134,7 +134,7 @@ export default function A4Page() {
       <div className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
         
         {/* WELCOME HERO - A4 VERSION */}
-        <div className="bg-gradient-to-r from-blue to-blue dark:from-cyan-800 dark:to-blue-800 rounded-[28px] p-8 text-white shadow-lg">
+        <div className="bg-gradient-to-r from-blue to-blue dark:from-blue dark:to-blue-800 rounded-[28px] p-8 text-white shadow-lg">
           <div className="max-w-3xl">
             <p className="text-cyan-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A4: La Realidad y Contexto Estratégico</p>
             <h1 className="text-4xl font-bold mb-3">Entiende el mundo en el que compites</h1>
@@ -283,7 +283,7 @@ export default function A4Page() {
               </CardContent>
             </Card>
             
-            <Card className="bg-gradient-to-br from-purple/5 to-purple-100 dark:from-purple/20 dark:to-purple-800/20">
+            <Card className="bg-gradient-to-br from-purple/5 to-purple-100 dark:from-purple/20 dark:to-purple/20">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>

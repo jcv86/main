@@ -39,7 +39,7 @@ export default function A4Page() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-emerald-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-teal-50 via-emerald-50 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">

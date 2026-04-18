@@ -201,7 +201,7 @@ export default function GamificationClient() {
   const totalCount = achievements.length
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
       <div className="container mx-auto p-6 max-w-7xl">
         <div className="mb-8">
           <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple/10 to-blue/10 dark:from-purple/30 dark:to-blue-900/30 rounded-full mb-4">
@@ -215,7 +215,7 @@ export default function GamificationClient() {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <Card className="border-2 border-purple/20 dark:border-purple-900/50 bg-white dark:bg-background">
+          <Card className="border-2 border-purple/20 dark:border-purple/50 bg-white dark:bg-background">
             <CardHeader className="pb-3">
               <div className="flex items-center gap-2">
                 <div className="p-2 bg-purple/10 dark:bg-purple/30 rounded-lg">

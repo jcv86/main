@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 
 export default function AnalisisMercadoChilePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue/5 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-muted/5 via-blue/5 to-indigo-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="text-center mb-16">
@@ -850,7 +850,7 @@ export default function AnalisisMercadoChilePage() {
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-muted/90 mb-8">6. Plan de Acción Inmediato (Q1 2026)</h2>
 
-          <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl shadow-2xl p-8 text-white">
+          <div className="bg-gradient-to-br from-muted/90 to-muted/80 rounded-2xl shadow-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-6">🎯 Prioridades de Lanzamiento</h3>
             <div className="space-y-6">
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">

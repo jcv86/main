@@ -104,7 +104,7 @@ export default function DashboardPage() {
 
         {/* Misión Section */}
         {userData.a2_mission ? (
-          <Card className="bg-gradient-to-r from-blue/5 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 border-2 border-blue/30 dark:border-blue/10 p-8">
+          <Card className="bg-gradient-to-r from-blue/5 to-cyan-50 dark:from-blue/10 dark:to-cyan-950/30 border-2 border-blue/30 dark:border-blue/10 p-8">
             <div className="space-y-4">
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5">
@@ -128,7 +128,7 @@ export default function DashboardPage() {
             </div>
           </Card>
         ) : (
-          <Card className="bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900 border-2 border-muted/30 dark:border-card p-8">
+          <Card className="bg-gradient-to-r from-muted/10 to-muted/5 dark:from-muted/80 dark:to-muted/90 border-2 border-muted/30 dark:border-card p-8">
             <div className="space-y-4">
               <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5">
                 Elige Tu Camino de Transformación
@@ -197,7 +197,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Coach Section */}
-        <Card className="bg-gradient-to-r from-yellow/5 to-orange/5 dark:from-amber-950/30 dark:to-orange-950/30 border-2 border-yellow/30 dark:border-yellow p-8">
+        <Card className="bg-gradient-to-r from-yellow/5 to-orange/5 dark:from-yellow/10 dark:to-orange/10 border-2 border-yellow/30 dark:border-yellow p-8">
           <div className="flex items-start gap-6">
             <div className="text-5xl">🤖</div>
             <div className="flex-1 space-y-4">

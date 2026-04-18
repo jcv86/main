@@ -118,7 +118,7 @@ export default function RankingsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-slate-950 to-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-slate-950 to-muted/90">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="mb-8">
@@ -138,7 +138,7 @@ export default function RankingsPage() {
         </div>
 
         {/* Your Position Card */}
-        <Card className="mb-8 bg-gradient-to-r from-purple/50/10 to-slate-500/10 border-2 border-purple/50/30 dark:border-purple/40/30">
+        <Card className="mb-8 bg-gradient-to-r from-purple/50/10 to-muted/50/10 border-2 border-purple/50/30 dark:border-purple/40/30">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>

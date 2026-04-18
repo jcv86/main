@@ -62,7 +62,7 @@ export default async function RecommendedBooksPage() {
   const { data: recommendations } = await query.limit(50)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-cyan-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-cyan-50 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
       <div className="container max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">

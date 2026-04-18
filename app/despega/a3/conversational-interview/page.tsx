@@ -36,7 +36,7 @@ export default function ConversationalInterviewPage() {
     return (
       <main className="min-h-screen bg-black">
         <div className="flex flex-col h-screen">
-          <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-slate-900 to-slate-950 p-4">
+          <div className="flex-shrink-0 border-b border-muted/80 bg-gradient-to-r from-muted/90 to-slate-950 p-4">
             <Link href="/despega/a3-dashboard">
               <Button variant="ghost" className="text-cyan-400 hover:text-cyan-300">
                 <ArrowLeft className="w-4 h-4 mr-2" />
@@ -61,7 +61,7 @@ export default function ConversationalInterviewPage() {
 
   // Seleccionar configuración
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4">
+    <div className="min-h-screen bg-gradient-to-br from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 p-4">
       <div className="max-w-4xl mx-auto">
         <Link href="/despega/a3-dashboard">
           <Button variant="ghost" className="mb-6">

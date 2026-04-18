@@ -76,7 +76,7 @@ export default function LearningPathsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-purple-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-blue/5 via-purple-50 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
       <div className="container mx-auto py-8 px-4">
         {/* Header */}
         <div className="mb-8">

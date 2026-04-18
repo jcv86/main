@@ -199,7 +199,7 @@ export default function Conozcamonos1Page() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <div className="mb-8">
           <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple/10 to-blue/10 dark:from-purple/30 dark:to-blue-900/30 rounded-full mb-4">
@@ -211,7 +211,7 @@ export default function Conozcamonos1Page() {
           <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
         </div>
 
-        <div className="bg-white dark:bg-background border-2 border-purple/30 dark:border-purple-900/50 rounded-2xl p-8 mb-8 shadow-lg">
+        <div className="bg-white dark:bg-background border-2 border-purple/30 dark:border-purple/50 rounded-2xl p-8 mb-8 shadow-lg">
           <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-6">{question.question}</h2>
 
           {question.type === 'select' && (

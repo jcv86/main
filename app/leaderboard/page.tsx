@@ -44,7 +44,7 @@ export default function LeaderboardPage() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
       <div className="container max-w-5xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">

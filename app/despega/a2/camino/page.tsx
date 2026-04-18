@@ -41,7 +41,7 @@ export default function A2CaminoPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4">
+    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 p-4">
       <div className="max-w-4xl mx-auto py-12 space-y-8">
         {/* Header */}
         <div className="text-center space-y-2">

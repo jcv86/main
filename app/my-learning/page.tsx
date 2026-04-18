@@ -32,7 +32,7 @@ export default async function MyLearningPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-muted/10 dark:from-background dark:via-muted/90 dark:to-muted/80">
       <div className="container max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
@@ -54,7 +54,7 @@ export default async function MyLearningPage() {
         <section className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
           <Link
             href="/leaderboard"
-            className="flex items-center gap-3 p-4 border-2 border-purple/20 dark:border-purple-900/50 rounded-lg bg-white dark:bg-background hover:bg-purple/5 dark:hover:bg-muted/80 transition-colors group shadow-sm"
+            className="flex items-center gap-3 p-4 border-2 border-purple/20 dark:border-purple/50 rounded-lg bg-white dark:bg-background hover:bg-purple/5 dark:hover:bg-muted/80 transition-colors group shadow-sm"
           >
             <div className="p-2 bg-purple/10 dark:bg-purple/30 rounded-lg group-hover:bg-purple-200 dark:group-hover:bg-purple/50 transition-colors">
               <Users className="h-5 w-5 text-purple dark:text-purple/40" />
