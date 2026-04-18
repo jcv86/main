@@ -226,7 +226,7 @@ export function ABTestResultsDashboard() {
                       return (
                         <div
                           key={variant.version_id}
-                          className={`p-4 rounded-lg border-2 ${
+                          className={`p-4 rounded-[28px] border-2 ${
                             isWinner ? "border-green-500 bg-green-50 dark:bg-green-950" : "border-border"
                           }`}
                         >

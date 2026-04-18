@@ -651,7 +651,7 @@ ${
               <h3 className="font-semibold text-sm">Historial de Conversaciones</h3>
               {conversationHistory.length > 0 ? (
                 conversationHistory.map((interaction, idx) => (
-                  <div key={idx} className="border rounded-lg p-3 space-y-2">
+                  <div key={idx} className="border rounded-[28px] p-3 space-y-2">
                     <div className="flex items-center justify-between">
                       <Badge variant="outline" className="text-xs">
                         {interaction.confidence_score}% confianza
@@ -689,7 +689,7 @@ ${
               <h3 className="font-semibold text-sm">Insights Guardados</h3>
               {savedInteractions.length > 0 ? (
                 savedInteractions.map((interaction, idx) => (
-                  <div key={idx} className="border rounded-lg p-3 space-y-2 bg-blue-50">
+                  <div key={idx} className="border rounded-[28px] p-3 space-y-2 bg-blue-50">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Bookmark className="h-3 w-3 text-blue-600" />

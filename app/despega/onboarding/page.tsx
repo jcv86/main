@@ -227,7 +227,7 @@ export default function DespegaOnboarding() {
                   Todos tenemos una forma particular de movernos frente a desafíos, cambios, presión y oportunidades. No es una etiqueta. No es una caja. <strong>Es un patrón.</strong>
                 </p>
 
-                <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 my-4">
+                <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-[28px] border border-slate-200 dark:border-slate-700 my-4">
                   <p className="text-slate-700 dark:text-slate-300">
                     En las próximas 28 preguntas explorarás cómo tiendes a actuar cuando nadie te está mirando, cuando decides rápido, cuando dudas o cuando lideras.
                   </p>
@@ -381,7 +381,7 @@ export default function DespegaOnboarding() {
               <>
                 <Button 
                   onClick={() => router.push("/despega/a1/resultado")} 
-                  className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg bg-blue hover:bg-blue-700"
+                  className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-[28px] bg-blue hover:bg-blue-700"
                 >
                   Ver mi resultado
                 </Button>
@@ -677,28 +677,28 @@ export default function DespegaOnboarding() {
             <CardContent className="pt-8">
               <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-slate-50">Qué Obtendrás de Este Test</h2>
               <div className="space-y-4">
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg border-l-4 border-emerald-500">
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-[28px] border-l-4 border-emerald-500">
                   <div className="text-3xl min-w-fit">📊</div>
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-slate-100">Tu Perfil Personalizado</p>
                     <p className="text-sm text-slate-600 dark:text-slate-400">Descubre tu estilo natural, tus fortalezas y áreas donde puedes crecer</p>
                   </div>
                 </div>
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg border-l-4 border-teal-500">
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-[28px] border-l-4 border-teal-500">
                   <div className="text-3xl min-w-fit">🎯</div>
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-slate-100">Insights Accionables</p>
                     <p className="text-sm text-slate-600 dark:text-slate-400">Cómo comunicar mejor, trabajar más efectivamente y liderar según tu estilo</p>
                   </div>
                 </div>
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg border-l-4 border-emerald-500">
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-[28px] border-l-4 border-emerald-500">
                   <div className="text-3xl min-w-fit">📚</div>
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-slate-100">Libros Recomendados</p>
                     <p className="text-sm text-slate-600 dark:text-slate-400">Seleccionamos libros estratégicos adaptados a tu perfil para acelerar tu desarrollo</p>
                   </div>
                 </div>
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg border-l-4 border-teal-500">
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-[28px] border-l-4 border-teal-500">
                   <div className="text-3xl min-w-fit">���</div>
                   <div>
                     <p className="font-semibold text-slate-900 dark:text-slate-100">Plan de Acción</p>
@@ -711,7 +711,7 @@ export default function DespegaOnboarding() {
 
           {/* CTA */}
           <div className="space-y-4 sticky bottom-0 bg-gradient-to-t from-slate-100 to-transparent dark:from-slate-900 dark:to-transparent pt-8 -mx-4 px-4 pb-4">
-            <Button onClick={() => setStep("test")} className="w-full h-14 text-lg font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-600 dark:from-slate-100 dark:to-slate-300 dark:text-slate-900">
+            <Button onClick={() => setStep("test")} className="w-full h-14 text-lg font-semibold shadow-lg hover:shadow-xl transition-all rounded-[28px] bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-600 dark:from-slate-100 dark:to-slate-300 dark:text-slate-900">
               Entiendo, Comenzar Mi Test
             </Button>
             <p className="text-center text-sm text-slate-600 dark:text-slate-400">
@@ -954,7 +954,7 @@ export default function DespegaOnboarding() {
                             })
                           }
                         }}
-                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                        className={`p-4 rounded-[28px] border-2 cursor-pointer transition-all ${
                           isDisabledInMas
                             ? "border-gray-200 bg-gray-100 opacity-50 cursor-not-allowed"
                             : selectedMas === option.dimension
@@ -1002,7 +1002,7 @@ export default function DespegaOnboarding() {
                             })
                           }
                         }}
-                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                        className={`p-4 rounded-[28px] border-2 cursor-pointer transition-all ${
                           isDisabledInMenos
                             ? "border-gray-200 bg-gray-100 opacity-50 cursor-not-allowed"
                             : selectedMenos === option.dimension
@@ -1150,7 +1150,7 @@ export default function DespegaOnboarding() {
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="bg-blue/5 dark:bg-blue-950 border border-blue/30 dark:border-blue-800 rounded-lg p-4">
+            <div className="bg-blue/5 dark:bg-blue-950 border border-blue/30 dark:border-blue-800 rounded-[28px] p-4">
               <p className="text-sm text-blue-900 dark:text-blue-100">
                 Basados en tu Despega Cerebral, vamos a crear acciones concretas para tu transformación.
               </p>
@@ -1334,7 +1334,7 @@ export default function DespegaOnboarding() {
                   Tu ruta personalizada se está generando...
                 </p>
               </div>
-              <div className="bg-green/5 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4 space-y-2">
+              <div className="bg-green/5 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-[28px] p-4 space-y-2">
                 <p className="text-sm font-medium text-emerald-900 dark:text-emerald-100">
                   Se está creando tu plan personalizado de 30/60/90 días basado en:
                 </p>
@@ -1364,7 +1364,7 @@ export default function DespegaOnboarding() {
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="bg-green/5 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
+              <div className="bg-green/5 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-[28px] p-4">
                 <p className="text-sm text-emerald-900 dark:text-emerald-100">
                   Tu ruta de 30 días está lista. Responde 5 preguntas más para extender a 60 y 90 días.
                 </p>

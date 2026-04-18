@@ -153,7 +153,7 @@ export function PruebasTab() {
           </div>
 
           {selectedCase.relevantTesis && (
-            <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+            <div className="p-4 bg-primary/5 rounded-[28px] border border-primary/20">
               <p className="text-sm text-muted-foreground mb-1">Tesis relacionada:</p>
               <p className="font-semibold text-primary">"{selectedCase.relevantTesis}"</p>
             </div>

@@ -177,7 +177,7 @@ export function InterviewTips({
         {/* Current Tip Display with Navigation */}
         {currentTip && (
           <div className="space-y-3">
-            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-[28px] border-l-4 border-blue-500">
               <div className="flex items-start justify-between mb-2">
                 <h4 className="font-semibold text-sm text-gray-900 dark:text-white">
                   Consejo IA {currentTip.isPremium ? '(Premium)' : '(Gratis)'}:
@@ -258,7 +258,7 @@ export function InterviewTips({
 
         {/* Information */}
         {!canUseFreeTip && (
-          <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+          <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-[28px] border border-yellow-200 dark:border-yellow-800">
             <p className="text-sm text-yellow-800 dark:text-yellow-200">
               Usaste los 3 tips gratis. Obtén tips premium con puntos DTC o gana más tips completando entrevistas.
             </p>
@@ -266,7 +266,7 @@ export function InterviewTips({
         )}
 
         {dtcBalance !== null && !canUsePremiumTip && premiumTipsUsed === 0 && canUseFreeTip && (
-          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+          <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-[28px] border border-blue-200 dark:border-blue-800">
             <p className="text-sm text-blue-800 dark:text-blue-200">
               Después de usar los 3 tips gratis, puedes comprar puntos DTC en la tienda para tips premium.
             </p>

@@ -280,7 +280,7 @@ export function ConversationalInterview({
     return (
       <div className="max-w-4xl mx-auto p-6 space-y-4">
         {/* Avatar Showcase */}
-        <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-lg border border-slate-200 dark:border-slate-700">
+        <div className="grid grid-cols-2 gap-4 p-4 bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-[28px] border border-slate-200 dark:border-slate-700">
           {/* Interviewer Avatar */}
           <div className="flex flex-col items-center justify-center py-4 px-2">
             <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-2 ${getAvatarGradient(preferences.interviewer_avatar_id)} shadow-lg`}>
@@ -401,7 +401,7 @@ export function ConversationalInterview({
                 value={userInput}
                 onChange={(e) => setUserInput(e.target.value)}
                 placeholder="Tu respuesta..."
-                className="flex-1 px-3 py-2 border rounded-lg bg-background"
+                className="flex-1 px-3 py-2 border rounded-[28px] bg-background"
                 disabled={isLoading}
               />
               <Button type="submit" disabled={isLoading} size="sm">

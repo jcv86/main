@@ -119,8 +119,8 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
 
         {/* Recording Status Indicator */}
         {isRecording && (
-          <div className="flex items-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-950 rounded-lg border border-red-200 dark:border-red-800">
-            <span className="animate-pulse w-2 h-2 rounded-full bg-red-600"></span>
+          <div className="flex items-center gap-2 px-3 py-2 bg-red-50 dark:bg-red-950 rounded-[28px] border border-red-200 dark:border-red-800">
+            <span className="animate-pulse w-2 h-2 rounded-[20px] bg-red-600"></span>
             <span className="text-xs font-medium text-red-700 dark:text-red-300">Grabando...</span>
           </div>
         )}
@@ -171,7 +171,7 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
         </div>
 
         {recordedBlob && (
-          <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg p-2 text-xs text-green-700 dark:text-green-300">
+          <div className="bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-[28px] p-2 text-xs text-green-700 dark:text-green-300">
             ✓ Video recorded: {(recordedBlob.size / 1024 / 1024).toFixed(2)} MB
           </div>
         )}

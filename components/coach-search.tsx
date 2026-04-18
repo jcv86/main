@@ -86,7 +86,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
 
           {/* Results or Empty State */}
           {results.length === 0 ? (
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-8 text-center">
+            <div className="bg-slate-50 dark:bg-slate-900 rounded-[28px] p-8 text-center">
               <Brain className="w-12 h-12 mx-auto mb-4 text-slate-400" />
               <p className="text-slate-500 mb-4">
                 {searchQuery ? `Buscando: "${searchQuery}"` : 'Empieza a buscar contenido personalizado'}
@@ -98,7 +98,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
           ) : (
             <div className="space-y-4">
               {reasoning && (
-                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900/50 rounded-lg p-4">
+                <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-900/50 rounded-[28px] p-4">
                   <p className="text-sm text-blue-900 dark:text-blue-100">
                     <strong>Búsqueda:</strong> {reasoning}
                   </p>
@@ -109,7 +109,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
                 {results.map((book) => (
                   <div
                     key={`${book.id}-${book.title}`}
-                    className="border border-slate-200 dark:border-slate-700 rounded-lg p-4 hover:shadow-md transition-shadow"
+                    className="border border-slate-200 dark:border-slate-700 rounded-[28px] p-4 hover:shadow-md transition-shadow"
                   >
                     <div className="flex items-start gap-3">
                       <BookOpen className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />

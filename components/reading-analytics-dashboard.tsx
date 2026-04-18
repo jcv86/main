@@ -242,7 +242,7 @@ export default function ReadingAnalyticsDashboard() {
               {booksInProgress.length > 0 ? (
                 <div className="space-y-4">
                   {booksInProgress.map((book) => (
-                    <div key={book.id} className="border rounded-lg p-4">
+                    <div key={book.id} className="border rounded-[28px] p-4">
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <h4 className="font-semibold">{book.title}</h4>
@@ -286,7 +286,7 @@ export default function ReadingAnalyticsDashboard() {
               {categoryStats.length > 0 ? (
                 <div className="space-y-4">
                   {categoryStats.map((category, index) => (
-                    <div key={category.category} className="border rounded-lg p-4">
+                    <div key={category.category} className="border rounded-[28px] p-4">
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="font-semibold">{category.category}</h4>
                         <div className="flex items-center gap-2">
@@ -349,7 +349,7 @@ export default function ReadingAnalyticsDashboard() {
                 </div>
               </div>
 
-              <div className="border rounded-lg p-4">
+              <div className="border rounded-[28px] p-4">
                 <h4 className="font-semibold mb-2">Progreso Actual</h4>
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">

@@ -439,7 +439,7 @@ export default function AICoachTestScenarios() {
               <ScrollArea className="h-[500px]">
                 <div className="space-y-4">
                   {filteredScenarios.map((scenario) => (
-                    <div key={scenario.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                    <div key={scenario.id} className="border rounded-[28px] p-4 hover:bg-gray-50 transition-colors">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
                           <h4 className="font-medium text-sm mb-2">{scenario.question}</h4>
@@ -502,7 +502,7 @@ export default function AICoachTestScenarios() {
                       return (
                         <div
                           key={`${result.scenarioId}-${result.timestamp.getTime()}`}
-                          className="border rounded-lg p-4"
+                          className="border rounded-[28px] p-4"
                         >
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex items-center gap-2">

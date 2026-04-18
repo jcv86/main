@@ -127,7 +127,7 @@ export function CanonDashboardSection() {
           <p className="text-slate-300">
             Todavía no hemos generado tu ruta de 30/60/90 días. Responde 9 preguntas más sobre tu contexto de ejecución y generaremos acciones personalizadas basadas en el motor CANON.
           </p>
-          <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-4 space-y-3">
+          <div className="bg-slate-700/50 border border-slate-600 rounded-[28px] p-4 space-y-3">
             <p className="text-sm text-slate-300">
               <span className="font-semibold text-emerald-400">✓ Ya completaste:</span> Test A1 (Perfil DISC)
             </p>

@@ -60,7 +60,7 @@ export function PillarStatusCard({
   const BadgeIcon = config.badgeIcon
 
   const content = (
-    <div className={`rounded-lg p-6 border-2 transition-all ${config.bg} ${config.border} ${status !== "locked" ? "hover:shadow-lg" : "opacity-75"}`}>
+    <div className={`rounded-[28px] p-6 border-2 transition-all ${config.bg} ${config.border} ${status !== "locked" ? "hover:shadow-lg" : "opacity-75"}`}>
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-start gap-4">
           <div className={`w-12 h-12 rounded-lg ${config.badge} flex items-center justify-center flex-shrink-0`}>
@@ -72,7 +72,7 @@ export function PillarStatusCard({
             <p className="text-sm text-foreground/70">{description}</p>
           </div>
         </div>
-        <div className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 ${config.badge}`}>
+        <div className={`px-3 py-1 rounded-[20px] text-xs font-semibold flex items-center gap-1 ${config.badge}`}>
           <BadgeIcon className="w-4 h-4" />
           {statusLabels[status]}
         </div>
@@ -85,7 +85,7 @@ export function PillarStatusCard({
       )}
 
       {results && (
-        <div className="mt-4 ml-16 p-3 bg-white/50 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-800">
+        <div className="mt-4 ml-16 p-3 bg-white/50 dark:bg-slate-900/50 rounded-[28px] border border-slate-200 dark:border-slate-800">
           <p className="text-sm font-semibold text-foreground mb-1">Resultado:</p>
           <p className="text-lg font-bold text-blue-600">{results.dimension}</p>
           <p className="text-xs text-foreground/70">Puntuación: {results.score}%</p>

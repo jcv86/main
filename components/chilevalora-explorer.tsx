@@ -417,7 +417,7 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
 
         {/* Missing Competencies Alert */}
         {match.gapAnalysis.some(g => g.estado === 'missing') && (
-          <div className="flex gap-2 items-start mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+          <div className="flex gap-2 items-start mt-4 p-3 bg-yellow-50 rounded-[28px] border border-yellow-200">
             <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
             <p className="text-xs text-yellow-800">
               {match.gapAnalysis.filter(g => g.estado === 'missing').length} competencias

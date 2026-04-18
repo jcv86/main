@@ -269,7 +269,7 @@ export default function A2TestPage() {
 
                       {/* Result Data */}
                       {result.data && (
-                        <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg overflow-auto max-h-96">
+                        <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-[28px] overflow-auto max-h-96">
                           <pre className="text-sm font-mono whitespace-pre-wrap break-words">
                             {JSON.stringify(result.data, null, 2)}
                           </pre>
@@ -278,7 +278,7 @@ export default function A2TestPage() {
 
                       {/* Error Message */}
                       {result.error && (
-                        <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-200 p-4 rounded-lg">
+                        <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-200 p-4 rounded-[28px]">
                           <p className="font-semibold mb-1">Error:</p>
                           <p className="text-sm">{result.error}</p>
                         </div>

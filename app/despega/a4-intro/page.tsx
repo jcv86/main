@@ -68,7 +68,7 @@ export default function A4IntroPage() {
                 Tu coach IA 24/7 te proporciona contexto real del mercado laboral, tendencias de industria, inteligencia competitiva 
                 y decisiones estratégicas para que entres al mercado con ventaja.
               </p>
-              <div className="bg-teal-50 dark:bg-teal-950 p-4 rounded-lg border border-teal-200 dark:border-teal-800">
+              <div className="bg-teal-50 dark:bg-teal-950 p-4 rounded-[28px] border border-teal-200 dark:border-teal-800">
                 <p className="text-sm text-teal-900 dark:text-teal-100">
                   <span className="font-semibold">Tu objetivo en A4:</span> Ejecutar tu plan con inteligencia del mercado. Conocer antes que los demás, decidir mejor, actuar con confianza.
                 </p>
@@ -85,7 +85,7 @@ export default function A4IntroPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
-                <div className="p-4 bg-blue/5 dark:bg-blue-950/30 rounded-lg border border-blue/30 dark:border-blue-800">
+                <div className="p-4 bg-blue/5 dark:bg-blue-950/30 rounded-[28px] border border-blue/30 dark:border-blue-800">
                   <div className="flex gap-3">
                     <Newspaper className="w-6 h-6 text-blue flex-shrink-0" />
                     <div>
@@ -94,7 +94,7 @@ export default function A4IntroPage() {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-purple/5 dark:bg-purple-950/30 rounded-lg border border-purple/30 dark:border-purple-800">
+                <div className="p-4 bg-purple/5 dark:bg-purple-950/30 rounded-[28px] border border-purple/30 dark:border-purple-800">
                   <div className="flex gap-3">
                     <MapPin className="w-6 h-6 text-purple flex-shrink-0" />
                     <div>
@@ -103,7 +103,7 @@ export default function A4IntroPage() {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-red-50 dark:bg-red-950/30 rounded-lg border border-red-200 dark:border-red-800">
+                <div className="p-4 bg-red-50 dark:bg-red-950/30 rounded-[28px] border border-red-200 dark:border-red-800">
                   <div className="flex gap-3">
                     <Brain className="w-6 h-6 text-red-600 flex-shrink-0" />
                     <div>
@@ -112,7 +112,7 @@ export default function A4IntroPage() {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-yellow-50 dark:bg-yellow-950/30 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                <div className="p-4 bg-yellow-50 dark:bg-yellow-950/30 rounded-[28px] border border-yellow-200 dark:border-yellow-800">
                   <div className="flex gap-3">
                     <Zap className="w-6 h-6 text-yellow-600 flex-shrink-0" />
                     <div>
@@ -121,7 +121,7 @@ export default function A4IntroPage() {
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-lg border border-green-200 dark:border-green-800">
+                <div className="p-4 bg-green-50 dark:bg-green-950/30 rounded-[28px] border border-green-200 dark:border-green-800">
                   <div className="flex gap-3">
                     <TrendingUp className="w-6 h-6 text-green-600 flex-shrink-0" />
                     <div>
@@ -141,23 +141,23 @@ export default function A4IntroPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+                <div className="bg-slate-800/50 p-4 rounded-[28px] border border-slate-700">
                   <div className="text-3xl font-bold text-teal-400 mb-2">1</div>
                   <p className="text-sm font-semibold text-white mb-1">Monitorea</p>
                   <p className="text-xs text-slate-400">Tu coach IA rastrea el mercado 24/7</p>
                 </div>
-                <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+                <div className="bg-slate-800/50 p-4 rounded-[28px] border border-slate-700">
                   <div className="text-3xl font-bold text-teal-400 mb-2">2</div>
                   <p className="text-sm font-semibold text-white mb-1">Analiza</p>
                   <p className="text-xs text-slate-400">Te proporciona insights estratégicos</p>
                 </div>
-                <div className="bg-slate-800/50 p-4 rounded-lg border border-slate-700">
+                <div className="bg-slate-800/50 p-4 rounded-[28px] border border-slate-700">
                   <div className="text-3xl font-bold text-teal-400 mb-2">3</div>
                   <p className="text-sm font-semibold text-white mb-1">Ejecuta</p>
                   <p className="text-xs text-slate-400">Tú actúas con inteligencia de mercado</p>
                 </div>
               </div>
-              <div className="bg-teal-600/20 border border-teal-600/50 p-4 rounded-lg mt-4">
+              <div className="bg-teal-600/20 border border-teal-600/50 p-4 rounded-[28px] mt-4">
                 <p className="text-sm text-teal-100">
                   <span className="font-semibold">Coach IA 24/7:</span> Tu asistente personal que nunca duerme, siempre actualizado, siempre disponible para ayudarte a tomar las mejores decisiones.
                 </p>
@@ -174,16 +174,16 @@ export default function A4IntroPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/30 rounded-lg border border-slate-200 dark:border-slate-700">
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/30 rounded-[28px] border border-slate-200 dark:border-slate-700">
                   <p className="font-semibold text-slate-900 dark:text-white text-sm">¿A qué empresas aplicar primero?</p>
                 </div>
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/30 rounded-lg border border-slate-200 dark:border-slate-700">
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/30 rounded-[28px] border border-slate-200 dark:border-slate-700">
                   <p className="font-semibold text-slate-900 dark:text-white text-sm">¿Qué roles están creciendo?</p>
                 </div>
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/30 rounded-lg border border-slate-200 dark:border-slate-700">
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/30 rounded-[28px] border border-slate-200 dark:border-slate-700">
                   <p className="font-semibold text-slate-900 dark:text-white text-sm">¿Cuándo es el mejor momento para cambiar?</p>
                 </div>
-                <div className="p-3 bg-slate-50 dark:bg-slate-800/30 rounded-lg border border-slate-200 dark:border-slate-700">
+                <div className="p-3 bg-slate-50 dark:bg-slate-800/30 rounded-[28px] border border-slate-200 dark:border-slate-700">
                   <p className="font-semibold text-slate-900 dark:text-white text-sm">¿Qué skills necesito para crecer?</p>
                 </div>
               </div>

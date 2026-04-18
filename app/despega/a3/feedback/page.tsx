@@ -116,7 +116,7 @@ export default function FeedbackPage() {
                 <button
                   key={key}
                   onClick={() => setSelectedInterview(key)}
-                  className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                  className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${
                     selectedInterview === key
                       ? 'border-blue-500 bg-blue/5 dark:bg-blue-900/20'
                       : 'border-slate-200 dark:border-slate-700 hover:border-blue-300'

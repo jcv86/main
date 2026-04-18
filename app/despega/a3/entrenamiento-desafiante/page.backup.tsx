@@ -207,7 +207,7 @@ export default function ChallensingTrainingPage() {
                 </div>
 
                 {/* Guidance */}
-                <div className="bg-blue-900/30 border border-blue-500/20 rounded-lg p-3">
+                <div className="bg-blue-900/30 border border-blue-500/20 rounded-[28px] p-3">
                   <p className="text-sm text-blue-300">{question.guidance}</p>
                 </div>
 
@@ -319,7 +319,7 @@ export default function ChallensingTrainingPage() {
                             {scores[idx]}
                           </div>
                         ) : completedQuestions.includes(idx) ? (
-                          <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center">
+                          <div className="w-6 h-6 rounded-[20px] bg-green-600 flex items-center justify-center">
                             <span className="text-xs text-white">✓</span>
                           </div>
                         ) : (

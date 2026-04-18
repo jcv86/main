@@ -71,7 +71,7 @@ export function MiniTest({
         ) : (
           <>
             {/* Context */}
-            <div className="mb-6 p-3 rounded-lg bg-slate-500/5 border border-slate-500/10">
+            <div className="mb-6 p-3 rounded-[28px] bg-slate-500/5 border border-slate-500/10">
               <p className="text-xs text-muted-foreground">Contexto:</p>
               <p className="text-sm font-medium text-foreground">{context}</p>
             </div>
@@ -94,7 +94,7 @@ export function MiniTest({
                 <button
                   key={idx}
                   onClick={() => onAnswerSelect?.(idx)}
-                  className="w-full p-3 text-left text-sm rounded-lg border border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-colors group text-foreground hover:text-primary font-medium"
+                  className="w-full p-3 text-left text-sm rounded-[28px] border border-border/50 hover:border-primary/50 hover:bg-primary/5 transition-colors group text-foreground hover:text-primary font-medium"
                 >
                   <div className="flex items-center gap-3">
                     <div className="w-5 h-5 rounded border-2 border-border group-hover:border-primary flex items-center justify-center bg-background/50 group-hover:bg-primary/10">

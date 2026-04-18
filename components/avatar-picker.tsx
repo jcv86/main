@@ -124,7 +124,7 @@ export function AvatarPicker({
         </div>
 
         {/* Info */}
-        <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+        <div className="p-3 bg-blue-50 dark:bg-blue-950/30 rounded-[28px] border border-blue-200 dark:border-blue-800">
           <p className="text-xs text-blue-800 dark:text-blue-200">
             💡 Tu avatar {type === 'user' ? 'aparecerá en tus respuestas y feedback' : 'conducirá la entrevista y mostrará expresiones realistas'}
           </p>

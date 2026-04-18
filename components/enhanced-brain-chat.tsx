@@ -274,7 +274,7 @@ export function EnhancedBrainChat() {
                 {messages.map((message) => (
                   <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div
-                      className={`max-w-[80%] rounded-lg p-4 ${
+                      className={`max-w-[80%] rounded-[28px] p-4 ${
                         message.role === "user"
                           ? "bg-gradient-to-br from-purple-500 to-blue-600 text-white"
                           : "bg-accent"
@@ -321,7 +321,7 @@ export function EnhancedBrainChat() {
 
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-accent rounded-lg p-4">
+                    <div className="bg-accent rounded-[28px] p-4">
                       <div className="flex items-center gap-2">
                         <Loader2 className="h-4 w-4 animate-spin" />
                         <span className="text-sm">Buscando en la base de conocimiento...</span>

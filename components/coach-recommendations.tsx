@@ -89,7 +89,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
       <CardContent>
         <div className="space-y-4">
           {keyInsight && (
-            <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border border-purple-200 dark:border-purple-900/50 rounded-lg p-4">
+            <div className="bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 border border-purple-200 dark:border-purple-900/50 rounded-[28px] p-4">
               <p className="text-sm text-purple-900 dark:text-purple-100">
                 <strong>Insight Principal:</strong> {keyInsight}
               </p>
@@ -101,7 +101,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
               {recommendations.map((rec, idx) => (
                 <div
                   key={`${rec.book.id}-${idx}`}
-                  className={`bg-gradient-to-r ${colors[idx % colors.length]} border rounded-lg p-6`}
+                  className={`bg-gradient-to-r ${colors[idx % colors.length]} border rounded-[28px] p-6`}
                 >
                   <h3 className="font-bold mb-2 flex items-center gap-2">
                     <Zap className="w-5 h-5" />
@@ -126,7 +126,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
               ))}
             </div>
           ) : (
-            <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-8 text-center">
+            <div className="bg-slate-50 dark:bg-slate-900 rounded-[28px] p-8 text-center">
               <BookOpen className="w-12 h-12 mx-auto mb-4 text-slate-400" />
               <p className="text-slate-500">
                 {userProfile

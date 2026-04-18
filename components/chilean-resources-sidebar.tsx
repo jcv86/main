@@ -100,7 +100,7 @@ export default function ChileanResourcesSidebar({
         {resources.map((resource) => (
           <div
             key={resource.id}
-            className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border border-blue-200 dark:border-blue-800"
+            className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-[28px] border border-blue-200 dark:border-blue-800"
           >
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1">

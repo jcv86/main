@@ -164,7 +164,7 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
           {messages.map((message) => (
             <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
               <div
-                className={`max-w-[85%] rounded-lg p-3 ${
+                className={`max-w-[85%] rounded-[28px] p-3 ${
                   message.sender === "user" ? "bg-blue-600 text-white" : "bg-muted text-foreground"
                 }`}
               >
@@ -196,7 +196,7 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="bg-muted rounded-lg p-3 max-w-[85%]">
+              <div className="bg-muted rounded-[28px] p-3 max-w-[85%]">
                 <div className="flex items-center gap-2">
                   <div className="flex gap-1">
                     <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce"></div>

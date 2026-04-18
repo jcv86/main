@@ -171,7 +171,7 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
 
                   {/* Status Alert */}
                   {pilar.score < 50 && (
-                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 flex gap-2">
+                    <div className="bg-orange-50 border border-orange-200 rounded-[28px] p-3 flex gap-2">
                       <AlertCircle className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
                       <div className="text-sm text-orange-700">
                         Esta área tiene la mayor fricción. Podrías empezar aquí si quieres explorar.

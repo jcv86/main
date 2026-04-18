@@ -254,7 +254,7 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Score Visualization */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
+          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-[28px] border border-blue-200">
             <div className="text-sm text-gray-600 mb-2">Desempeño en esta respuesta</div>
             <div className="text-4xl font-bold text-indigo-600 mb-2">
               {feedback.performance_score}%

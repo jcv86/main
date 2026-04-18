@@ -263,7 +263,7 @@ export default function GuidedInterviewPage() {
               <p className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
                 {currentQuestion.question}
               </p>
-              <div className="bg-blue/5 dark:bg-blue-900/20 border border-blue/30 dark:border-blue-800 rounded-lg p-4">
+              <div className="bg-blue/5 dark:bg-blue-900/20 border border-blue/30 dark:border-blue-800 rounded-[28px] p-4">
                 <p className="text-sm text-blue-900 dark:text-blue-200">
                   <strong>Guidance del Coach:</strong> {currentQuestion.guidance}
                 </p>

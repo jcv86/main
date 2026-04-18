@@ -86,12 +86,12 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
         </div>
 
         {/* Current selection info */}
-        <div className="mt-6 p-4 bg-white dark:bg-slate-950 rounded-lg border border-slate-200 dark:border-slate-700">
+        <div className="mt-6 p-4 bg-white dark:bg-slate-950 rounded-[28px] border border-slate-200 dark:border-slate-700">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
               <p className="text-sm text-slate-600 dark:text-slate-400">Entrevistador seleccionado:</p>
               <p className="font-semibold text-slate-900 dark:text-white flex items-center gap-2">
-                <span className={`w-3 h-3 rounded-full bg-gradient-to-br ${selected.color}`}></span>
+                <span className={`w-3 h-3 rounded-[20px] bg-gradient-to-br ${selected.color}`}></span>
                 {selected.name} - {selected.role}
               </p>
             </div>

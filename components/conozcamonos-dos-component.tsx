@@ -262,7 +262,7 @@ export function ConozcamonosDosComponent({
                 value={responses[question.key] || ""}
                 onChange={(e) => handleResponseChange(question.key, e.target.value)}
                 placeholder="Escribe tu respuesta..."
-                className="w-full min-h-32 p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 resize-none"
+                className="w-full min-h-32 p-4 rounded-[28px] border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 resize-none"
               />
             )}
           </CardContent>

@@ -103,19 +103,19 @@ export function PeerComparison({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="text-center p-3 bg-white rounded-lg border">
+          <div className="text-center p-3 bg-white rounded-[28px] border">
             <div className="text-2xl font-bold text-gray-900">{comparisonData.benchmarks.p50}</div>
             <div className="text-xs text-muted-foreground">Promedio (P50)</div>
           </div>
-          <div className="text-center p-3 bg-white rounded-lg border">
+          <div className="text-center p-3 bg-white rounded-[28px] border">
             <div className="text-2xl font-bold text-gray-900">{comparisonData.benchmarks.p75}</div>
             <div className="text-xs text-muted-foreground">Top 25% (P75)</div>
           </div>
-          <div className="text-center p-3 bg-white rounded-lg border">
+          <div className="text-center p-3 bg-white rounded-[28px] border">
             <div className="text-2xl font-bold text-gray-900">{comparisonData.benchmarks.p90}</div>
             <div className="text-xs text-muted-foreground">Top 10% (P90)</div>
           </div>
-          <div className="text-center p-3 bg-purple-100 rounded-lg border border-purple-200">
+          <div className="text-center p-3 bg-purple-100 rounded-[28px] border border-purple-200">
             <div className="text-2xl font-bold text-purple-600">{score}</div>
             <div className="text-xs text-purple-700 font-medium">Tu Resultado</div>
           </div>

@@ -128,7 +128,7 @@ export default function A1CerebralPage() {
                     key={`more-${opt.texto}`} 
                     onClick={() => { setMore(p => ({ ...p, [q.id]: opt.texto })); setError('') }} 
                     disabled={less[q.id] === opt.texto}
-                    className={`w-full text-left p-4 rounded-lg border-2 transition-all text-sm ${more[q.id] === opt.texto ? 'border-green-600 bg-green-50 dark:bg-green-950' : less[q.id] === opt.texto ? 'border-gray-300 bg-gray-100 dark:bg-gray-900 opacity-50 cursor-not-allowed' : 'border-border'}`}>
+                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm ${more[q.id] === opt.texto ? 'border-green-600 bg-green-50 dark:bg-green-950' : less[q.id] === opt.texto ? 'border-gray-300 bg-gray-100 dark:bg-gray-900 opacity-50 cursor-not-allowed' : 'border-border'}`}>
                     {opt.texto}
                   </button>
                 ))}
@@ -142,7 +142,7 @@ export default function A1CerebralPage() {
                     key={`less-${opt.texto}`} 
                     onClick={() => { setLess(p => ({ ...p, [q.id]: opt.texto })); setError('') }} 
                     disabled={more[q.id] === opt.texto}
-                    className={`w-full text-left p-4 rounded-lg border-2 transition-all text-sm ${less[q.id] === opt.texto ? 'border-red-600 bg-red-50 dark:bg-red-950' : more[q.id] === opt.texto ? 'border-gray-300 bg-gray-100 dark:bg-gray-900 opacity-50 cursor-not-allowed' : 'border-border'}`}>
+                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm ${less[q.id] === opt.texto ? 'border-red-600 bg-red-50 dark:bg-red-950' : more[q.id] === opt.texto ? 'border-gray-300 bg-gray-100 dark:bg-gray-900 opacity-50 cursor-not-allowed' : 'border-border'}`}>
                     {opt.texto}
                   </button>
                 ))}

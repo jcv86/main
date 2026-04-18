@@ -167,7 +167,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
     <div className="w-full space-y-6">
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-xl">
+          <div className="w-10 h-10 rounded-[28px] bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-xl">
             📚
           </div>
           <div>

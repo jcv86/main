@@ -433,7 +433,7 @@ export default function AIReadingCompanion() {
                       <Clock className="h-5 w-5 text-blue-600" />
                       Sesión Actual
                     </h4>
-                    <div className="bg-blue-50 p-4 rounded-lg">
+                    <div className="bg-blue-50 p-4 rounded-[28px]">
                       <h5 className="font-semibold mb-2">{plan.current_session.title}</h5>
                       <p className="text-sm text-gray-600 mb-3">
                         Tiempo estimado: {plan.current_session.estimated_time} minutos
@@ -474,7 +474,7 @@ export default function AIReadingCompanion() {
                       <TrendingUp className="h-5 w-5 text-purple-600" />
                       Próxima Sesión
                     </h4>
-                    <div className="bg-purple-50 p-4 rounded-lg">
+                    <div className="bg-purple-50 p-4 rounded-[28px]">
                       <h5 className="font-semibold mb-2">{plan.next_session.title}</h5>
                       <p className="text-sm text-gray-600">{plan.next_session.preview}</p>
                       <Button variant="outline" className="w-full mt-4 bg-transparent" disabled>

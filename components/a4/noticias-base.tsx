@@ -91,7 +91,7 @@ export function NoticiasBase({
                 href={`/despega/a4/noticia/${noticia.id}`}
                 className="group"
               >
-                <div className="p-4 rounded-lg border border-border/50 hover:border-border bg-background/30 group-hover:bg-background/60 transition-colors cursor-pointer">
+                <div className="p-4 rounded-[28px] border border-border/50 hover:border-border bg-background/30 group-hover:bg-background/60 transition-colors cursor-pointer">
                   {/* Header */}
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex-1">

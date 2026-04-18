@@ -239,7 +239,7 @@ export default function TrainingDashboardPage() {
           {activityCards.map((card, i) => {
             const isCompleted = card.status === 'completed'
             return (
-              <div key={i} className={`p-3 rounded-lg border ${isCompleted ? 'bg-emerald-900/20 border-emerald-500/30' : 'bg-slate-800/20 border-slate-700'}`}>
+              <div key={i} className={`p-3 rounded-[28px] border ${isCompleted ? 'bg-emerald-900/20 border-emerald-500/30' : 'bg-slate-800/20 border-slate-700'}`}>
                 <div className="flex items-center gap-2 mb-1">
                   {isCompleted ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-slate-400" />}
                   <p className="text-sm font-semibold text-white">{card.title}</p>

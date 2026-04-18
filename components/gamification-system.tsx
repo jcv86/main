@@ -245,7 +245,7 @@ export default function GamificationSystem() {
                 {challenges
                   .filter((c) => c.type === "daily")
                   .map((challenge) => (
-                    <div key={challenge.id} className="border rounded-lg p-4">
+                    <div key={challenge.id} className="border rounded-[28px] p-4">
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <h4 className="font-semibold">{challenge.name}</h4>
@@ -284,7 +284,7 @@ export default function GamificationSystem() {
                 {challenges
                   .filter((c) => c.type === "weekly")
                   .map((challenge) => (
-                    <div key={challenge.id} className="border rounded-lg p-4">
+                    <div key={challenge.id} className="border rounded-[28px] p-4">
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <h4 className="font-semibold">{challenge.name}</h4>
@@ -323,7 +323,7 @@ export default function GamificationSystem() {
                 {challenges
                   .filter((c) => c.type === "monthly")
                   .map((challenge) => (
-                    <div key={challenge.id} className="border rounded-lg p-4">
+                    <div key={challenge.id} className="border rounded-[28px] p-4">
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <h4 className="font-semibold">{challenge.name}</h4>
@@ -415,7 +415,7 @@ export default function GamificationSystem() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200">
+                <div className="flex items-center justify-between p-4 bg-yellow-50 rounded-[28px] border-2 border-yellow-200">
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold">
                       1

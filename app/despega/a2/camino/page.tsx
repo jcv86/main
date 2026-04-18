@@ -81,7 +81,7 @@ export default function A2CaminoPage() {
                   <div className="space-y-2">
                     {camino.examples.map((example) => (
                       <div key={example} className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-slate-400"></div>
+                        <div className="w-2 h-2 rounded-[20px] bg-slate-400"></div>
                         <span className="text-sm text-slate-600 dark:text-slate-400">
                           {example}
                         </span>

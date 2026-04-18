@@ -107,7 +107,7 @@ export function EngagementDashboard() {
             <Progress value={Math.min((metrics.articles_read + metrics.tests_completed) * 2, 100)} />
           </div>
 
-          <div className="p-3 bg-primary/5 rounded-lg border border-primary/20 mt-4">
+          <div className="p-3 bg-primary/5 rounded-[28px] border border-primary/20 mt-4">
             <p className="text-sm text-muted-foreground">
               Vas muy bien. Mantén tu racha de {metrics.reading_streak} días para desbloquear el badge "Aprendiz Comprometido".
             </p>

@@ -64,7 +64,7 @@ export default function MultimodalAnalysisPage() {
             <button
               key={type.id}
               onClick={() => setEntrenamillentoType(type.id)}
-              className={`p-3 rounded-lg border-2 transition-all text-left ${
+              className={`p-3 rounded-[28px] border-2 transition-all text-left ${
                 entrenamillentoType === type.id
                   ? 'border-blue bg-blue/5 dark:bg-blue-950 shadow-md'
                   : 'border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600'

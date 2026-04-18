@@ -163,7 +163,7 @@ export default function A2DashboardPage() {
             <Card className="border-2 border-green-200 dark:border-green-800">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center text-white text-xs font-bold">1</div>
+                  <div className="w-6 h-6 rounded-[20px] bg-green-500 flex items-center justify-center text-white text-xs font-bold">1</div>
                   Semana 1: Fundamentos
                 </CardTitle>
               </CardHeader>
@@ -186,7 +186,7 @@ export default function A2DashboardPage() {
             <Card className="border-2 border-yellow/30 dark:border-amber-800">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-yellow/50 flex items-center justify-center text-white text-xs font-bold">2</div>
+                  <div className="w-6 h-6 rounded-[20px] bg-yellow/50 flex items-center justify-center text-white text-xs font-bold">2</div>
                   Semana 2: Profundización
                 </CardTitle>
               </CardHeader>
@@ -209,7 +209,7 @@ export default function A2DashboardPage() {
             <Card className="border-2 border-purple/30 dark:border-purple-800">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-purple/50 flex items-center justify-center text-white text-xs font-bold">3</div>
+                  <div className="w-6 h-6 rounded-[20px] bg-purple/50 flex items-center justify-center text-white text-xs font-bold">3</div>
                   Semana 3: Consolidación
                 </CardTitle>
               </CardHeader>
@@ -232,7 +232,7 @@ export default function A2DashboardPage() {
             <Card className="border-2 border-blue/30 dark:border-blue-800">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-blue/50 flex items-center justify-center text-white text-xs font-bold">✓</div>
+                  <div className="w-6 h-6 rounded-[20px] bg-blue/50 flex items-center justify-center text-white text-xs font-bold">✓</div>
                   Revisión del Sprint 1
                 </CardTitle>
               </CardHeader>

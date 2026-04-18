@@ -290,7 +290,7 @@ export function BrainChatInterface() {
                                 {message.sources.map((source, idx) => (
                                   <div
                                     key={idx}
-                                    className="flex items-start gap-2 p-2 rounded-lg bg-white/50 dark:bg-gray-900/50"
+                                    className="flex items-start gap-2 p-2 rounded-[28px] bg-white/50 dark:bg-gray-900/50"
                                   >
                                     <div className="mt-0.5">
                                       {source.sourceType === "book" ? (
@@ -389,7 +389,7 @@ export function BrainChatInterface() {
             </CardHeader>
             <CardContent className="space-y-3 text-xs">
               <div className="flex items-start gap-2">
-                <div className="mt-0.5 h-5 w-5 rounded-full bg-green-100 dark:bg-green-900/20 flex items-center justify-center shrink-0">
+                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-green-100 dark:bg-green-900/20 flex items-center justify-center shrink-0">
                   <BookOpen className="h-3 w-3 text-green-600" />
                 </div>
                 <div>
@@ -399,7 +399,7 @@ export function BrainChatInterface() {
               </div>
 
               <div className="flex items-start gap-2">
-                <div className="mt-0.5 h-5 w-5 rounded-full bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center shrink-0">
+                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-blue-100 dark:bg-blue-900/20 flex items-center justify-center shrink-0">
                   <Sparkles className="h-3 w-3 text-blue-600" />
                 </div>
                 <div>
@@ -409,7 +409,7 @@ export function BrainChatInterface() {
               </div>
 
               <div className="flex items-start gap-2">
-                <div className="mt-0.5 h-5 w-5 rounded-full bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center shrink-0">
+                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-purple-100 dark:bg-purple-900/20 flex items-center justify-center shrink-0">
                   <TrendingUp className="h-3 w-3 text-purple-600" />
                 </div>
                 <div>
@@ -419,7 +419,7 @@ export function BrainChatInterface() {
               </div>
 
               <div className="flex items-start gap-2">
-                <div className="mt-0.5 h-5 w-5 rounded-full bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center shrink-0">
+                <div className="mt-0.5 h-5 w-5 rounded-[20px] bg-orange-100 dark:bg-orange-900/20 flex items-center justify-center shrink-0">
                   <Clock className="h-3 w-3 text-orange-600" />
                 </div>
                 <div>

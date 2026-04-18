@@ -112,7 +112,7 @@ export function PremiumGamificationWidget() {
           {/* STREAK & ACHIEVEMENTS ROW */}
           <div className="grid grid-cols-3 gap-2">
             {/* DAILY STREAK */}
-            <div className="bg-white/80 dark:bg-slate-900/50 rounded-lg p-2 text-center border border-orange-200 dark:border-orange-800/30">
+            <div className="bg-white/80 dark:bg-slate-900/50 rounded-[28px] p-2 text-center border border-orange-200 dark:border-orange-800/30">
               <div className="flex items-center justify-center gap-0.5 mb-1">
                 <Flame className={`w-3 h-3 ${isStreakActive ? 'text-orange-500' : 'text-slate-400'}`} />
               </div>
@@ -128,7 +128,7 @@ export function PremiumGamificationWidget() {
             </div>
 
             {/* CHALLENGES */}
-            <div className="bg-white/80 dark:bg-slate-900/50 rounded-lg p-2 text-center border border-purple-200 dark:border-purple-800/30">
+            <div className="bg-white/80 dark:bg-slate-900/50 rounded-[28px] p-2 text-center border border-purple-200 dark:border-purple-800/30">
               <Target className="w-3 h-3 text-purple-500 mx-auto mb-1" />
               <p className="text-lg font-black text-purple-600 dark:text-purple-400">
                 {gamification.daily_challenges_completed}/3
@@ -137,7 +137,7 @@ export function PremiumGamificationWidget() {
             </div>
 
             {/* ACHIEVEMENTS */}
-            <div className="bg-white/80 dark:bg-slate-900/50 rounded-lg p-2 text-center border border-green-200 dark:border-green-800/30">
+            <div className="bg-white/80 dark:bg-slate-900/50 rounded-[28px] p-2 text-center border border-green-200 dark:border-green-800/30">
               <Trophy className="w-3 h-3 text-green-500 mx-auto mb-1" />
               <p className="text-lg font-black text-green-600 dark:text-green-400">
                 {gamification.total_achievements}
@@ -161,7 +161,7 @@ export function PremiumGamificationWidget() {
           </div>
 
           {/* WEEKLY RANK */}
-          <div className="bg-gradient-to-r from-amber-100 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-900/30 rounded-lg p-2 border border-amber-200 dark:border-amber-800/30">
+          <div className="bg-gradient-to-r from-amber-100 to-yellow-100 dark:from-amber-900/30 dark:to-yellow-900/30 rounded-[28px] p-2 border border-amber-200 dark:border-amber-800/30">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Crown className="w-4 h-4 text-amber-600 dark:text-amber-400" />

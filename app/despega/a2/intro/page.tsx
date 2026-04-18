@@ -182,7 +182,7 @@ export default function A2IntroPage() {
                 hemos diseñado un plan de 90 días con micro-acciones concretas.
               </p>
               
-              <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700">
+              <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-[28px] border border-slate-200 dark:border-slate-700">
                 <p className="text-slate-700 dark:text-slate-300 leading-relaxed">
                   No se trata de trabajar más horas. Se trata de trabajar <strong>en dirección correcta, 
                   con acciones que realmente importan</strong>, adaptadas a tu patrón natural de comportamiento.
@@ -191,19 +191,19 @@ export default function A2IntroPage() {
 
               {/* Cerebro Profile Scores */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
-                <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+                <div className="bg-red-50 dark:bg-red-900/20 p-3 rounded-[28px] border border-red-200 dark:border-red-800">
                   <p className="text-xs text-red-600 dark:text-red-400 font-semibold">Energía</p>
                   <p className="text-2xl font-bold text-red-700 dark:text-red-300">{cerebroProfile?.energia}%</p>
                 </div>
-                <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-[28px] border border-yellow-200 dark:border-yellow-800">
                   <p className="text-xs text-yellow-600 dark:text-yellow-400 font-semibold">Enfoque</p>
                   <p className="text-2xl font-bold text-yellow-700 dark:text-yellow-300">{cerebroProfile?.enfoque}%</p>
                 </div>
-                <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg border border-green-200 dark:border-green-800">
+                <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-[28px] border border-green-200 dark:border-green-800">
                   <p className="text-xs text-green-600 dark:text-green-400 font-semibold">Relaciones</p>
                   <p className="text-2xl font-bold text-green-700 dark:text-green-300">{cerebroProfile?.relaciones}%</p>
                 </div>
-                <div className="bg-blue/5 dark:bg-blue-900/20 p-3 rounded-lg border border-blue/30 dark:border-blue-800">
+                <div className="bg-blue/5 dark:bg-blue-900/20 p-3 rounded-[28px] border border-blue/30 dark:border-blue-800">
                   <p className="text-xs text-blue dark:text-blue-400 font-semibold">Plan Ejecutivo</p>
                   <p className="text-2xl font-bold text-blue-700 dark:text-blue-300">{cerebroProfile?.plan_ejecutivo}%</p>
                 </div>

@@ -129,7 +129,7 @@ export function A2ChatCoach({
 
       <CardContent className="flex-1 flex flex-col space-y-4 overflow-hidden">
         {/* Context Summary */}
-        <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-lg space-y-3 border border-blue-200 dark:border-blue-800">
+        <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-[28px] space-y-3 border border-blue-200 dark:border-blue-800">
           <div className="font-medium text-blue-900 dark:text-blue-100 flex items-center gap-2">
             <MessageCircle className="w-4 h-4" />
             Tu Patrón en A1
@@ -153,7 +153,7 @@ export function A2ChatCoach({
         {/* Messages Container */}
         <div 
           data-messages-container
-          className="flex-1 space-y-3 overflow-y-auto bg-slate-50 dark:bg-slate-900/50 p-4 rounded-lg border border-slate-200 dark:border-slate-800"
+          className="flex-1 space-y-3 overflow-y-auto bg-slate-50 dark:bg-slate-900/50 p-4 rounded-[28px] border border-slate-200 dark:border-slate-800"
         >
           {messages.length === 0 ? (
             <div className="h-full flex items-center justify-center">

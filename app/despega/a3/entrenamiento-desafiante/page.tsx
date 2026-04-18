@@ -253,7 +253,7 @@ export default function ChallensingTrainingPage() {
           <div className="grid lg:grid-cols-5 gap-4 h-full">
             
             {/* Left Panel: Training (60%) */}
-            <div className="lg:col-span-3 flex flex-col bg-slate-900/50 rounded-lg border border-slate-800 overflow-hidden">
+            <div className="lg:col-span-3 flex flex-col bg-slate-900/50 rounded-[28px] border border-slate-800 overflow-hidden">
               
               {/* Video Section */}
               <div className="flex-1 bg-black relative overflow-hidden">
@@ -323,7 +323,7 @@ export default function ChallensingTrainingPage() {
                           setHasResponse(e.target.value.trim().length > 0)
                         }}
                         placeholder="Escribe aquí tu respuesta detallada... (mínimo 50 caracteres)"
-                        className="w-full h-24 bg-slate-800 text-white border border-slate-700 rounded-lg p-3 text-sm focus:border-purple-500 focus:outline-none resize-none"
+                        className="w-full h-24 bg-slate-800 text-white border border-slate-700 rounded-[28px] p-3 text-sm focus:border-purple-500 focus:outline-none resize-none"
                       />
                       {textResponse && <p className="text-xs text-green-400 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />Respuesta escrita ({textResponse.length} caracteres)</p>}
                     </div>
@@ -365,7 +365,7 @@ export default function ChallensingTrainingPage() {
                 ) : (
                   /* Evaluation Results */
                   <div className="space-y-4 border-t border-slate-800 pt-4">
-                    <div className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-500/30 rounded-lg p-4 space-y-3">
+                    <div className="bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-500/30 rounded-[28px] p-4 space-y-3">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-semibold text-slate-300">Tu Puntuación</p>
                         <div className="text-3xl font-bold text-purple-400">{evaluation.score}</div>
@@ -406,7 +406,7 @@ export default function ChallensingTrainingPage() {
                     </div>
 
                     {/* Feedback */}
-                    <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-3">
+                    <div className="bg-slate-800/50 border border-slate-700 rounded-[28px] p-3">
                       <p className="text-xs font-semibold text-slate-400 mb-2">RETROALIMENTACIÓN</p>
                       <p className="text-sm text-slate-300">{evaluation.feedback}</p>
                     </div>
@@ -492,7 +492,7 @@ export default function ChallensingTrainingPage() {
                             {scores[idx]}
                           </div>
                         ) : completedQuestions.includes(idx) ? (
-                          <div className="w-6 h-6 rounded-full bg-green-600 flex items-center justify-center">
+                          <div className="w-6 h-6 rounded-[20px] bg-green-600 flex items-center justify-center">
                             <CheckCircle2 className="w-4 h-4 text-white" />
                           </div>
                         ) : (

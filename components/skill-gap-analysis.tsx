@@ -192,7 +192,7 @@ export function SkillGapAnalysis({ userEmail }: SkillGapAnalysisProps) {
 
                   {/* Gap Size Badge */}
                   <div className="text-center ml-4">
-                    <div className="flex items-center justify-center w-12 h-12 rounded-full bg-purple-100">
+                    <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-purple-100">
                       <span className="text-xl font-bold text-purple-600">{gap.gap_size}</span>
                     </div>
                     <p className="text-xs text-muted-foreground mt-1">brecha</p>

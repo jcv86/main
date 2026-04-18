@@ -175,7 +175,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
         </CardHeader>
         <CardContent className="space-y-4">
           <p className="text-gray-900 font-semibold">{tension}</p>
-          <div className="bg-white p-4 rounded-lg border border-orange-200">
+          <div className="bg-white p-4 rounded-[28px] border border-orange-200">
             <p className="text-sm text-gray-700">{insights.areasDesarrollo}</p>
           </div>
           <p className="text-sm text-gray-600 italic">
@@ -244,7 +244,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
 
             <TabsContent value="7dias" className="space-y-3 mt-4">
               {roadmap['7dias'].map((item, idx) => (
-                <div key={idx} className="flex gap-3 p-3 bg-white rounded-lg border border-purple-200">
+                <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple-200">
                   <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-gray-900">{item}</p>
                 </div>
@@ -253,7 +253,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
 
             <TabsContent value="30dias" className="space-y-3 mt-4">
               {roadmap['30dias'].map((item, idx) => (
-                <div key={idx} className="flex gap-3 p-3 bg-white rounded-lg border border-purple-200">
+                <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple-200">
                   <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-gray-900">{item}</p>
                 </div>
@@ -262,7 +262,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
 
             <TabsContent value="90dias" className="space-y-3 mt-4">
               {roadmap['90dias'].map((item, idx) => (
-                <div key={idx} className="flex gap-3 p-3 bg-white rounded-lg border border-purple-200">
+                <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple-200">
                   <CheckCircle2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-gray-900">{item}</p>
                 </div>
@@ -291,7 +291,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
 
             <TabsContent value="linkedin" className="mt-4">
               <div className="space-y-3">
-                <div className="p-4 bg-white rounded-lg border border-pink-200">
+                <div className="p-4 bg-white rounded-[28px] border border-pink-200">
                   <p className="text-sm font-semibold text-gray-900 mb-2">Propuesta:</p>
                   <p className="text-gray-900 font-medium">{language.linkedin}</p>
                 </div>
@@ -309,7 +309,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
 
             <TabsContent value="interview" className="mt-4">
               <div className="space-y-3">
-                <div className="p-4 bg-white rounded-lg border border-pink-200">
+                <div className="p-4 bg-white rounded-[28px] border border-pink-200">
                   <p className="text-sm font-semibold text-gray-900 mb-2">Respuesta en Entrevista a "Cuéntame de ti":</p>
                   <p className="text-gray-900">{language.interview}</p>
                 </div>
@@ -327,7 +327,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
 
             <TabsContent value="networking" className="mt-4">
               <div className="space-y-3">
-                <div className="p-4 bg-white rounded-lg border border-pink-200">
+                <div className="p-4 bg-white rounded-[28px] border border-pink-200">
                   <p className="text-sm font-semibold text-gray-900 mb-2">Pitch en Networking:</p>
                   <p className="text-gray-900">{language.networking}</p>
                 </div>

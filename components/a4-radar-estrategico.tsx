@@ -329,7 +329,7 @@ export function A4RadarEstrategico() {
                 <div>
                   <h3 className="font-semibold mb-3">Acciones Concretas Prioritarias</h3>
                   <div className="grid md:grid-cols-2 gap-4">
-                    <div className="bg-blue-50/50 dark:bg-blue-950/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                    <div className="bg-blue-50/50 dark:bg-blue-950/20 p-4 rounded-[28px] border border-blue-200 dark:border-blue-800">
                       <p className="text-xs font-semibold text-blue-600 dark:text-blue-400 mb-2">ESTA SEMANA</p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
                         <li>Mapear 5 sectores defensivos en tu industria</li>
@@ -337,7 +337,7 @@ export function A4RadarEstrategico() {
                         <li>Revisar tu exposición financiera personal</li>
                       </ul>
                     </div>
-                    <div className="bg-amber-50/50 dark:bg-amber-950/20 p-4 rounded-lg border border-amber-200 dark:border-amber-800">
+                    <div className="bg-amber-50/50 dark:bg-amber-950/20 p-4 rounded-[28px] border border-amber-200 dark:border-amber-800">
                       <p className="text-xs font-semibold text-amber-600 dark:text-amber-400 mb-2">PRÓXIMAS 2 SEMANAS</p>
                       <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
                         <li>Fortalecer red en empresas anti-cíclicas</li>

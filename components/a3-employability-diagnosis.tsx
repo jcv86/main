@@ -124,7 +124,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Profile Clarity */}
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+        <div className="bg-blue-50 p-4 rounded-[28px] border border-blue-200">
           <div className="flex items-center justify-between mb-2">
             <div className="font-medium">Claridad de Perfil</div>
             <Badge>{Math.round(diagnosis?.profile_clarity)}%</Badge>
@@ -134,7 +134,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
         </div>
 
         {/* Prep Level */}
-        <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+        <div className="bg-green-50 p-4 rounded-[28px] border border-green-200">
           <div className="flex items-center justify-between mb-2">
             <div className="font-medium">Nivel de Preparación</div>
             <Badge className="bg-green-600">{diagnosis?.prep_level?.toUpperCase()}</Badge>
@@ -144,7 +144,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
         </div>
 
         {/* Strengths */}
-        <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+        <div className="bg-amber-50 p-4 rounded-[28px] border border-amber-200">
           <div className="font-medium mb-3 flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-green-600" />
             Fortalezas Identificadas
@@ -160,7 +160,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
         </div>
 
         {/* Gaps */}
-        <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+        <div className="bg-red-50 p-4 rounded-[28px] border border-red-200">
           <div className="font-medium mb-3 flex items-center gap-2">
             <AlertCircle className="w-4 h-4 text-red-600" />
             Brechas Principales
@@ -176,7 +176,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
         </div>
 
         {/* Focus Areas */}
-        <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+        <div className="bg-purple-50 p-4 rounded-[28px] border border-purple-200">
           <div className="font-medium mb-3">Áreas de Enfoque para tu Entrenamiento</div>
           <ul className="space-y-2">
             {diagnosis?.focus_areas?.map((area: string, idx: number) => (

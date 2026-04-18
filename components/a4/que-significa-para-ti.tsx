@@ -212,7 +212,7 @@ export function QueSignificaParaTi() {
             <Card key={idx} className="border-0 bg-card/70 backdrop-blur-sm overflow-hidden">
               <CardHeader className="bg-gradient-to-r from-primary/10 to-accent/10">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-primary/20">{interp.icon}</div>
+                  <div className="p-2 rounded-[28px] bg-primary/20">{interp.icon}</div>
                   <CardTitle className="text-xl">{interp.heading}</CardTitle>
                 </div>
               </CardHeader>
@@ -223,7 +223,7 @@ export function QueSignificaParaTi() {
                   <ul className="space-y-2">
                     {interp.actionableItems.map((item, aidx) => (
                       <li key={aidx} className="text-sm flex items-start gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-primary mt-1.5 flex-shrink-0" />
+                        <div className="w-1.5 h-1.5 rounded-[20px] bg-primary mt-1.5 flex-shrink-0" />
                         <span>{item}</span>
                       </li>
                     ))}

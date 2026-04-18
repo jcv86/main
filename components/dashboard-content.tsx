@@ -205,7 +205,7 @@ export function DashboardContent() {
               {/* Perfil Scores Grid */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {/* D Score - Impulsor */}
-                <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-[28px] border border-red-200 dark:border-red-800">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-2xl">⚡</span>
                     <span className="text-2xl font-bold text-red-600">{testResults.test_results.d_score || 0}%</span>
@@ -216,7 +216,7 @@ export function DashboardContent() {
                 </div>
 
                 {/* I Score - Catalizador */}
-                <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                <div className="p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-[28px] border border-yellow-200 dark:border-yellow-800">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-2xl">✨</span>
                     <span className="text-2xl font-bold text-yellow-600">{testResults.test_results.i_score || 0}%</span>
@@ -227,7 +227,7 @@ export function DashboardContent() {
                 </div>
 
                 {/* S Score - Estabilizador */}
-                <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+                <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-[28px] border border-green-200 dark:border-green-800">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-2xl">🌱</span>
                     <span className="text-2xl font-bold text-green-600">{testResults.test_results.s_score || 0}%</span>
@@ -238,7 +238,7 @@ export function DashboardContent() {
                 </div>
 
                 {/* C Score - Arquitecto */}
-                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-[28px] border border-blue-200 dark:border-blue-800">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-2xl">🏗️</span>
                     <span className="text-2xl font-bold text-blue-600">{testResults.test_results.c_score || 0}%</span>
@@ -251,7 +251,7 @@ export function DashboardContent() {
 
               {/* Dominant Profile */}
               {testResults.test_results.dominant_profile && (
-                <div className="p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-lg border border-primary/30">
+                <div className="p-4 bg-gradient-to-r from-primary/10 to-primary/5 rounded-[28px] border border-primary/30">
                   <p className="text-sm font-medium text-muted-foreground mb-2">Tu Perfil Dominante</p>
                   <p className="text-2xl font-bold text-primary">{testResults.test_results.dominant_profile}</p>
                   {testResults.test_results.secondary_profile && (

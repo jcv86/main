@@ -155,7 +155,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
                 {/* Expandable Traceability Section */}
                 {expandedMissions.has(mission.missionId) && (
                   <CardContent className="border-t border-slate-700 pt-4">
-                    <div className="space-y-4 bg-slate-900 rounded-lg p-4">
+                    <div className="space-y-4 bg-slate-900 rounded-[28px] p-4">
                       <div>
                         <h4 className="text-sm font-semibold text-blue-400 mb-2">¿Por qué esta misión?</h4>
                         <p className="text-sm text-slate-300">

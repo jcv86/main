@@ -385,7 +385,7 @@ export default function SocialReadingFeatures() {
                           </Avatar>
                         ))}
                         {group.members.length > 3 && (
-                          <div className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-xs">
+                          <div className="w-8 h-8 rounded-[20px] bg-gray-200 border-2 border-white flex items-center justify-center text-xs">
                             +{group.members.length - 3}
                           </div>
                         )}

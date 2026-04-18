@@ -144,7 +144,7 @@ export default function JourneyPage() {
           </p>
 
           {/* OVERALL PROGRESS */}
-          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 rounded-lg p-6 border border-blue/30 dark:border-indigo-800">
+          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 rounded-[28px] p-6 border border-blue/30 dark:border-indigo-800">
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-sm font-semibold text-indigo-900 dark:text-indigo-100">Progreso General</h3>
@@ -222,31 +222,31 @@ export default function JourneyPage() {
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center font-bold text-blue-700 dark:text-blue-300">A1</div>
+                <div className="w-20 h-20 rounded-[28px] bg-blue-100 dark:bg-blue-900 flex items-center justify-center font-bold text-blue-700 dark:text-blue-300">A1</div>
                 <div className="flex-1 h-1 bg-gradient-to-r from-blue-300 to-slate-300 dark:from-blue-700 dark:to-slate-700"></div>
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-lg bg-slate-300 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-300">↓</div>
+                <div className="w-20 h-20 rounded-[28px] bg-slate-300 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-300">↓</div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4 mb-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-lg bg-green-100 dark:bg-green-900 flex items-center justify-center font-bold text-green-700 dark:text-green-300">A2</div>
+                  <div className="w-20 h-20 rounded-[28px] bg-green-100 dark:bg-green-900 flex items-center justify-center font-bold text-green-700 dark:text-green-300">A2</div>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Tu Plan Personalizado</p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-lg bg-cyan-100 dark:bg-cyan-900 flex items-center justify-center font-bold text-cyan-700 dark:text-cyan-300">A4</div>
+                  <div className="w-20 h-20 rounded-[28px] bg-cyan-100 dark:bg-cyan-900 flex items-center justify-center font-bold text-cyan-700 dark:text-cyan-300">A4</div>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Contexto del Mercado</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-lg bg-slate-300 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-300">↓</div>
+                <div className="w-20 h-20 rounded-[28px] bg-slate-300 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-300">↓</div>
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-lg bg-orange-100 dark:bg-orange-900 flex items-center justify-center font-bold text-orange-700 dark:text-orange-300">A3</div>
+                <div className="w-20 h-20 rounded-[28px] bg-orange-100 dark:bg-orange-900 flex items-center justify-center font-bold text-orange-700 dark:text-orange-300">A3</div>
                 <div className="flex-1">
                   <p className="text-sm font-semibold">Entrenamientos Inteligentes</p>
                   <p className="text-xs text-slate-600 dark:text-slate-400">Usando tu plan + contexto de mercado</p>
@@ -257,7 +257,7 @@ export default function JourneyPage() {
         </Card>
 
         {/* NEXT STEPS */}
-        <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 rounded-lg p-8 border border-blue/30 dark:border-blue-800">
+        <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 rounded-[28px] p-8 border border-blue/30 dark:border-blue-800">
           <h3 className="text-lg font-semibold mb-4">Próximos Pasos</h3>
           <ul className="space-y-3 text-sm">
             <li className="flex gap-3">

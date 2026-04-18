@@ -208,25 +208,25 @@ export default function CycleCompletionPage() {
                   </div>
                   
                   <div className="grid grid-cols-4 gap-2">
-                    <div className="p-3 bg-card rounded-lg border">
+                    <div className="p-3 bg-card rounded-[28px] border">
                       <p className="text-xs text-muted-foreground mb-1">D (Dominador)</p>
                       <p className="text-2xl font-bold">{a1Results.result?.D || 0}</p>
                     </div>
-                    <div className="p-3 bg-card rounded-lg border">
+                    <div className="p-3 bg-card rounded-[28px] border">
                       <p className="text-xs text-muted-foreground mb-1">I (Influyente)</p>
                       <p className="text-2xl font-bold">{a1Results.result?.I || 0}</p>
                     </div>
-                    <div className="p-3 bg-card rounded-lg border">
+                    <div className="p-3 bg-card rounded-[28px] border">
                       <p className="text-xs text-muted-foreground mb-1">S (Estable)</p>
                       <p className="text-2xl font-bold">{a1Results.result?.S || 0}</p>
                     </div>
-                    <div className="p-3 bg-card rounded-lg border">
+                    <div className="p-3 bg-card rounded-[28px] border">
                       <p className="text-xs text-muted-foreground mb-1">C (Cauteloso)</p>
                       <p className="text-2xl font-bold">{a1Results.result?.C || 0}</p>
                     </div>
                   </div>
 
-                  <div className="p-3 bg-primary/5 rounded-lg border">
+                  <div className="p-3 bg-primary/5 rounded-[28px] border">
                     <p className="text-sm text-muted-foreground mb-2">Completado el</p>
                     <p className="font-semibold">
                       {new Date(a1Results.created_at).toLocaleDateString('es-ES', { 
@@ -268,15 +268,15 @@ export default function CycleCompletionPage() {
               <>
                 <div className="space-y-3">
                   <div className="grid grid-cols-3 gap-3">
-                    <div className="p-3 bg-card rounded-lg border">
+                    <div className="p-3 bg-card rounded-[28px] border">
                       <p className="text-xs text-muted-foreground mb-1">Misiones Totales</p>
                       <p className="text-2xl font-bold">{a2Route.route_data?.steps?.length || 0}</p>
                     </div>
-                    <div className="p-3 bg-card rounded-lg border">
+                    <div className="p-3 bg-card rounded-[28px] border">
                       <p className="text-xs text-muted-foreground mb-1">Período</p>
                       <p className="text-lg font-bold">90 Días</p>
                     </div>
-                    <div className="p-3 bg-card rounded-lg border">
+                    <div className="p-3 bg-card rounded-[28px] border">
                       <p className="text-xs text-muted-foreground mb-1">Generada el</p>
                       <p className="text-sm font-bold">
                         {new Date(a2Route.created_at).toLocaleDateString('es-ES', { 
@@ -287,7 +287,7 @@ export default function CycleCompletionPage() {
                     </div>
                   </div>
 
-                  <div className="p-3 bg-primary/5 rounded-lg border">
+                  <div className="p-3 bg-primary/5 rounded-[28px] border">
                     <p className="text-sm text-muted-foreground mb-2">Basada en tu contexto:</p>
                     <ul className="text-sm space-y-1 text-foreground">
                       <li>✓ Perfil DISC: {profileType}</li>
@@ -327,21 +327,21 @@ export default function CycleCompletionPage() {
               <>
                 <div className="space-y-3">
                   <div className="grid grid-cols-3 gap-3">
-                    <div className="p-3 bg-card rounded-lg border">
+                    <div className="p-3 bg-card rounded-[28px] border">
                       <p className="text-xs text-muted-foreground mb-1">Sesiones Completadas</p>
                       <p className="text-2xl font-bold">{a3Progress.sessions_completed}</p>
                     </div>
-                    <div className="p-3 bg-card rounded-lg border">
+                    <div className="p-3 bg-card rounded-[28px] border">
                       <p className="text-xs text-muted-foreground mb-1">Horas Entrenadas</p>
                       <p className="text-2xl font-bold">{a3Progress.hours_trained || 0}h</p>
                     </div>
-                    <div className="p-3 bg-card rounded-lg border">
+                    <div className="p-3 bg-card rounded-[28px] border">
                       <p className="text-xs text-muted-foreground mb-1">Score Empleabilidad</p>
                       <p className="text-2xl font-bold">{a3Progress.employability_score || 'N/A'}</p>
                     </div>
                   </div>
 
-                  <div className="p-3 bg-primary/5 rounded-lg border">
+                  <div className="p-3 bg-primary/5 rounded-[28px] border">
                     <p className="text-sm text-muted-foreground mb-2">Tu enfoque de entrenamiento:</p>
                     <p className="text-sm font-semibold text-foreground">
                       Entrenamientos personalizados para perfil {profileType}
@@ -379,17 +379,17 @@ export default function CycleCompletionPage() {
               <>
                 <div className="space-y-3">
                   <div className="grid grid-cols-2 gap-3">
-                    <div className="p-3 bg-card rounded-lg border">
+                    <div className="p-3 bg-card rounded-[28px] border">
                       <p className="text-xs text-muted-foreground mb-1">Score Estratégico</p>
                       <p className="text-2xl font-bold">{a4Stats.strategic_score || 0}</p>
                     </div>
-                    <div className="p-3 bg-card rounded-lg border">
+                    <div className="p-3 bg-card rounded-[28px] border">
                       <p className="text-xs text-muted-foreground mb-1">Artículos Leídos</p>
                       <p className="text-2xl font-bold">{a4Stats.articles_read || 0}</p>
                     </div>
                   </div>
 
-                  <div className="p-3 bg-primary/5 rounded-lg border">
+                  <div className="p-3 bg-primary/5 rounded-[28px] border">
                     <p className="text-sm text-muted-foreground mb-2">Contexto personalizado para ti:</p>
                     <ul className="text-sm space-y-1 text-foreground">
                       <li>✓ Noticias del mercado filtradas por tu perfil</li>

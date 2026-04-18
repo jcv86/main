@@ -237,7 +237,7 @@ export default function Conozcamonos2Page() {
                 <select
                   value={responses[question.id] as string || ''}
                   onChange={(e) => handleAnswer(question.id, e.target.value)}
-                  className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                  className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-[28px] bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                 >
                   <option value="">-- Selecciona una opción --</option>
                   {question.options?.map((opt) => (
@@ -257,7 +257,7 @@ export default function Conozcamonos2Page() {
                       onBlur={(e) => validateTextResponse(question.id, question.question, e.target.value)}
                       placeholder={question.placeholder}
                       maxLength={question.maxLength}
-                      className={`flex-1 p-3 border rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple-600 disabled:opacity-50 transition-colors ${
+                      className={`flex-1 p-3 border rounded-[28px] bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple-600 disabled:opacity-50 transition-colors ${
                         error && !validatingIds.has(question.id) 
                           ? 'border-red-500 dark:border-red-500 bg-red-50 dark:bg-red-950/20' 
                           : 'border-slate-300 dark:border-slate-600'
@@ -331,7 +331,7 @@ export default function Conozcamonos2Page() {
         </div>
 
         {error && (
-          <div className="bg-red-50 dark:bg-red-950 border-2 border-red-500 dark:border-red-600 rounded-lg p-6 mb-6 shadow-lg">
+          <div className="bg-red-50 dark:bg-red-950 border-2 border-red-500 dark:border-red-600 rounded-[28px] p-6 mb-6 shadow-lg">
             <div className="flex items-start gap-3">
               <span className="text-2xl flex-shrink-0">⚠️</span>
               <div className="flex-1">

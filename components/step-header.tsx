@@ -34,7 +34,7 @@ export function StepHeader({
   pillarColor = "blue",
 }: StepHeaderProps) {
   return (
-    <div className={`rounded-lg p-6 mb-8 border ${pillarBgLight[pillarColor]}`}>
+    <div className={`rounded-[28px] p-6 mb-8 border ${pillarBgLight[pillarColor]}`}>
       <div className="flex items-start justify-between gap-4 mb-3">
         <div className="flex items-center gap-3">
           <div className={`w-10 h-10 rounded-full ${pillarColors[pillarColor]} flex items-center justify-center text-white font-bold text-sm`}>

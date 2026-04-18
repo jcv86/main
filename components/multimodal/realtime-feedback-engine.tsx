@@ -129,7 +129,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
           feedbackItems.map((item, idx) => (
             <div
               key={idx}
-              className={`p-3 rounded-lg border-l-4 ${
+              className={`p-3 rounded-[28px] border-l-4 ${
                 item.severity === 'critical'
                   ? 'bg-red-50 border-red-500'
                   : item.severity === 'warning'
@@ -154,7 +154,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
       </div>
 
       {/* Tips */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-700">
+      <div className="bg-blue-50 border border-blue-200 rounded-[28px] p-3 text-xs text-blue-700">
         <p className="font-medium mb-1">Consejo:</p>
         <p>
           El feedback se actualiza cada 3 segundos. Intenta aplicar las sugerencias en tiempo real para mejorar tu desempeño.

@@ -79,14 +79,14 @@ export default function ConversationalInterviewPage() {
           </div>
 
           {/* Rol */}
-          <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+          <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border border-slate-200 dark:border-slate-700">
             <h2 className="text-lg font-semibold mb-4">1. Selecciona el Puesto</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {roles.map(role => (
                 <button
                   key={role}
                   onClick={() => setSelectedRole(role)}
-                  className={`p-3 rounded-lg border-2 transition ${
+                  className={`p-3 rounded-[28px] border-2 transition ${
                     selectedRole === role
                       ? 'border-cyan-600 bg-blue/5 dark:bg-cyan-900/20'
                       : 'border-slate-200 dark:border-slate-700 hover:border-cyan-400'
@@ -100,14 +100,14 @@ export default function ConversationalInterviewPage() {
 
           {/* Industria */}
           {selectedRole && (
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border border-slate-200 dark:border-slate-700">
               <h2 className="text-lg font-semibold mb-4">2. Selecciona la Industria</h2>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                 {industries.map(industry => (
                   <button
                     key={industry}
                     onClick={() => setSelectedIndustry(industry)}
-                    className={`p-3 rounded-lg border-2 transition ${
+                    className={`p-3 rounded-[28px] border-2 transition ${
                       selectedIndustry === industry
                         ? 'border-cyan-600 bg-blue/5 dark:bg-cyan-900/20'
                         : 'border-slate-200 dark:border-slate-700 hover:border-cyan-400'
@@ -122,14 +122,14 @@ export default function ConversationalInterviewPage() {
 
           {/* Nivel */}
           {selectedRole && selectedIndustry && (
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-slate-200 dark:border-slate-700">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border border-slate-200 dark:border-slate-700">
               <h2 className="text-lg font-semibold mb-4">3. Selecciona el Nivel de Dificultad</h2>
               <div className="space-y-3">
                 {levels.map(level => (
                   <button
                     key={level.id}
                     onClick={() => setSelectedLevel(level.id as any)}
-                    className={`w-full p-4 rounded-lg border-2 transition text-left ${
+                    className={`w-full p-4 rounded-[28px] border-2 transition text-left ${
                       selectedLevel === level.id
                         ? 'border-cyan-600 bg-blue/5 dark:bg-cyan-900/20'
                         : 'border-slate-200 dark:border-slate-700 hover:border-cyan-400'

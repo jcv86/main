@@ -113,15 +113,15 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
           <CardContent className="space-y-4">
             {/* Level Stats */}
             <div className="grid grid-cols-3 gap-3 text-sm">
-              <div className="text-center p-2 rounded-lg bg-slate-50 dark:bg-slate-800">
+              <div className="text-center p-2 rounded-[28px] bg-slate-50 dark:bg-slate-800">
                 <p className="font-semibold text-slate-900 dark:text-white">{level.questionsCount}</p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">Preguntas</p>
               </div>
-              <div className="text-center p-2 rounded-lg bg-slate-50 dark:bg-slate-800">
+              <div className="text-center p-2 rounded-[28px] bg-slate-50 dark:bg-slate-800">
                 <p className="font-semibold text-slate-900 dark:text-white">{level.estimatedTime}</p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">Tiempo</p>
               </div>
-              <div className="text-center p-2 rounded-lg bg-slate-50 dark:bg-slate-800">
+              <div className="text-center p-2 rounded-[28px] bg-slate-50 dark:bg-slate-800">
                 <p className="font-semibold text-slate-900 dark:text-white">{level.difficulty}</p>
                 <p className="text-xs text-slate-600 dark:text-slate-400">Nivel</p>
               </div>
@@ -141,7 +141,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
 
             {/* User Progress */}
             {userProgress?.[level.id]?.completed && (
-              <div className="p-3 rounded-lg bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
+              <div className="p-3 rounded-[28px] bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800">
                 <p className="text-sm font-semibold text-green-900 dark:text-green-200">
                   Score: {userProgress[level.id].score}
                 </p>

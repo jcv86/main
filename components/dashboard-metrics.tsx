@@ -60,7 +60,7 @@ export function DashboardMetrics({
                   <p className="text-3xl font-bold">{metric.value}</p>
                   <p className="text-xs text-muted-foreground mt-1">{metric.suffix}</p>
                 </div>
-                <div className={`p-3 rounded-lg bg-gradient-to-br ${metric.color}`}>
+                <div className={`p-3 rounded-[28px] bg-gradient-to-br ${metric.color}`}>
                   <Icon className="w-6 h-6 text-white" />
                 </div>
               </div>

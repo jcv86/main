@@ -225,7 +225,7 @@ export default function Conozcamonos1Page() {
                   <div key={option} className="space-y-2">
                     <button
                       onClick={() => handleAnswer(option)}
-                      className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+                      className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${
                         isSelected
                           ? 'border-primary bg-primary/10'
                           : 'border-border hover:border-border/80'
@@ -236,7 +236,7 @@ export default function Conozcamonos1Page() {
                     
                     {/* Show text input for "Otro" option */}
                     {option === 'Otro' && isSelected && (
-                      <div className="space-y-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
+                      <div className="space-y-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-[28px] border border-slate-200 dark:border-slate-700">
                         <textarea
                           value={customResponses[question.id] || ''}
                           onChange={(e) => handleCustomText(e.target.value)}

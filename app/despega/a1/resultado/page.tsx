@@ -218,19 +218,19 @@ export default function A1ResultadoPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border-l-4 border-red-500">
+              <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-[28px] border-l-4 border-red-500">
                 <p className="font-semibold text-red-700 dark:text-red-300">Energía (Acción & Dinamismo)</p>
                 <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">Tu capacidad para iniciar, moverte rápido y llevar momentum</p>
               </div>
-              <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border-l-4 border-yellow-500">
+              <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-[28px] border-l-4 border-yellow-500">
                 <p className="font-semibold text-yellow-700 dark:text-yellow-300">Plan Ejecutivo (Influencia & Visión)</p>
                 <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">Tu capacidad para inspirar, comunicar dirección y llevar gente contigo</p>
               </div>
-              <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border-l-4 border-green-500">
+              <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-[28px] border-l-4 border-green-500">
                 <p className="font-semibold text-green-700 dark:text-green-300">Relaciones (Estabilidad & Confianza)</p>
                 <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">Tu capacidad para conectar, sostener y ser confiable para otros</p>
               </div>
-              <div className="p-3 bg-blue/5 dark:bg-blue-900/20 rounded-lg border-l-4 border-blue-500">
+              <div className="p-3 bg-blue/5 dark:bg-blue-900/20 rounded-[28px] border-l-4 border-blue-500">
                 <p className="font-semibold text-blue-700 dark:text-blue-300">Enfoque (Precisión & Profundidad)</p>
                 <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">Tu capacidad para analizar, refinar y asegurar calidad en lo que haces</p>
               </div>
@@ -334,7 +334,7 @@ export default function A1ResultadoPage() {
             <p className="text-sm text-indigo-800 dark:text-indigo-300 mt-2 font-normal">Cómo tu perfil se posiciona en oportunidades reales</p>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-blue/30 dark:border-indigo-700">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-[28px] border border-blue/30 dark:border-indigo-700">
               <p className="font-semibold text-indigo-900 dark:text-indigo-200 mb-2">Roles Donde Brillás</p>
               <ul className="space-y-1 text-sm text-slate-700 dark:text-slate-400">
                 <li>• Liderazgo estratégico (startups, transformación digital)</li>
@@ -342,7 +342,7 @@ export default function A1ResultadoPage() {
                 <li>• Roles que requieren decisión rápida + visión clara</li>
               </ul>
             </div>
-            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-orange-200 dark:border-orange-700">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-[28px] border border-orange-200 dark:border-orange-700">
               <p className="font-semibold text-orange-900 dark:text-orange-200 mb-2">Roles a Evitar o Negociar</p>
               <ul className="space-y-1 text-sm text-slate-700 dark:text-slate-400">
                 <li>• Trabajo operativo puro (muy repetitivo)</li>
@@ -350,7 +350,7 @@ export default function A1ResultadoPage() {
                 <li>• Ambientes con mucha burocracia o cambios de rumbo</li>
               </ul>
             </div>
-            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border border-red-200 dark:border-red-700">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-[28px] border border-red-200 dark:border-red-700">
               <p className="font-semibold text-red-900 dark:text-red-200 mb-2">Señal de Alerta</p>
               <p className="text-sm text-slate-700 dark:text-slate-400">Si después de 3-6 meses en un rol sigues sin autonomía clara o decisión, es probable que no es el lugar. Confía en eso.</p>
             </div>

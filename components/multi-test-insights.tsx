@@ -147,7 +147,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="bg-blue-50 p-4 rounded-lg">
+              <div className="bg-blue-50 p-4 rounded-[28px]">
                 <h4 className="font-semibold text-blue-900 mb-2">Resumen</h4>
                 <p className="text-sm text-blue-800">{analysis.professionalProfile?.summary}</p>
               </div>
@@ -204,7 +204,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
             </CardHeader>
             <CardContent className="space-y-4">
               {testCombinations.map((combo, index) => (
-                <div key={index} className="border rounded-lg p-4 space-y-3">
+                <div key={index} className="border rounded-[28px] p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <h4 className="font-semibold text-lg">{combo.career_path}</h4>
                     <Badge variant={combo.success_probability > 75 ? "default" : "secondary"}>
@@ -260,7 +260,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
             </CardHeader>
             <CardContent className="space-y-4">
               {marketInsights.map((insight, index) => (
-                <div key={index} className="border rounded-lg p-4 space-y-3">
+                <div key={index} className="border rounded-[28px] p-4 space-y-3">
                   <div className="flex items-start justify-between">
                     <div>
                       <h4 className="font-semibold text-lg">{insight.role_title}</h4>
@@ -327,7 +327,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
               {cerebroInsights.map((insight, index) => (
                 <div
                   key={index}
-                  className={`p-4 rounded-lg border-l-4 ${
+                  className={`p-4 rounded-[28px] border-l-4 ${
                     insight.category === "career"
                       ? "border-l-blue-500 bg-blue-50"
                       : insight.category === "skills"

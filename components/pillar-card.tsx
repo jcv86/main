@@ -118,7 +118,7 @@ export function PillarCard({
       </p>
 
       {/* Status Badge */}
-      <div className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${colors.badge}`}>
+      <div className={`inline-block px-3 py-1 rounded-[20px] text-xs font-semibold ${colors.badge}`}>
         {getStatusLabel()}
       </div>
 

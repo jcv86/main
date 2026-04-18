@@ -26,7 +26,7 @@ export function A2A4IntegrationPanel() {
       <CardContent className="space-y-4">
         <div className="grid md:grid-cols-3 gap-4">
           {/* A2 SIDE */}
-          <div className="bg-white dark:bg-slate-900 rounded-lg p-4 border border-green-200 dark:border-green-800">
+          <div className="bg-white dark:bg-slate-900 rounded-[28px] p-4 border border-green-200 dark:border-green-800">
             <h4 className="font-bold text-green-900 dark:text-green-100 mb-2">Tu Plan (A2)</h4>
             {context.a2_mission ? (
               <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">
@@ -49,7 +49,7 @@ export function A2A4IntegrationPanel() {
           </div>
 
           {/* A4 SIDE */}
-          <div className="bg-white dark:bg-slate-900 rounded-lg p-4 border border-cyan-200 dark:border-cyan-800">
+          <div className="bg-white dark:bg-slate-900 rounded-[28px] p-4 border border-cyan-200 dark:border-cyan-800">
             <h4 className="font-bold text-cyan-900 dark:text-cyan-100 mb-2">Contexto (A4)</h4>
             {context.a4_relevant_news.length > 0 ? (
               <p className="text-sm text-slate-600 dark:text-slate-400 line-clamp-2">
@@ -62,7 +62,7 @@ export function A2A4IntegrationPanel() {
         </div>
 
         {/* WHY TOGETHER */}
-        <div className="bg-purple-100 dark:bg-purple-900/30 rounded-lg p-3 text-sm text-slate-700 dark:text-slate-300 space-y-2">
+        <div className="bg-purple-100 dark:bg-purple-900/30 rounded-[28px] p-3 text-sm text-slate-700 dark:text-slate-300 space-y-2">
           <p className="font-semibold text-purple-900 dark:text-purple-100">Por qué funcionan mejor juntas:</p>
           <ul className="space-y-1 text-xs">
             <li>• Tu plan (A2) te enfoca en lo que QUIERES hacer</li>

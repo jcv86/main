@@ -144,7 +144,7 @@ export default function AvatarSetupPage() {
                       ref={videoRef}
                       autoPlay
                       playsInline
-                      className="w-full rounded-lg bg-black"
+                      className="w-full rounded-[28px] bg-black"
                     />
                     <div className="flex gap-2">
                       <Button onClick={capturePhoto} className="flex-1 bg-blue hover:bg-blue-700">

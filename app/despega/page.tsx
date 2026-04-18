@@ -335,7 +335,7 @@ export default function DespegazoDashboard() {
         </div>
 
         {/* Footer Note */}
-        <div className="bg-slate-800/40 border border-slate-700 rounded-lg p-4 text-center">
+        <div className="bg-slate-800/40 border border-slate-700 rounded-[28px] p-4 text-center">
           <p className="text-slate-400 text-sm">
             💡 Tu score se actualiza automáticamente. Alcanza <span className="font-bold text-purple-400">80+</span> para estar completamente listo.
           </p>

@@ -50,7 +50,7 @@ export default function LandingPageOptimized() {
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Pilar 1: El Ritual - Quién Eres Ahora (Purple) */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-2 border-purple-500 dark:border-purple-600 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-2 border-purple-500 dark:border-purple-600 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-purple-600 dark:bg-purple-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
                 <svg className="w-6 h-6 text-white" fill="white" viewBox="0 0 24 24">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
@@ -61,7 +61,7 @@ export default function LandingPageOptimized() {
             </div>
 
             {/* Pilar 2: Exploración - Aprende Nuevas Formas (Blue) */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-blue-200 dark:border-blue-900/30 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border border-blue-200 dark:border-blue-900/30 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-blue-600 dark:bg-blue-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
                 <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M3 6c0 2 1 3 2 4c2 1 3 2 3 5c0 3-1 4-3 5c-1 1-2 2-2 4" strokeLinecap="round"/>
@@ -76,7 +76,7 @@ export default function LandingPageOptimized() {
             </div>
 
             {/* Pilar 3: Entrenamiento - Practica Siendo (Orange) */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-2 border-orange-500 dark:border-orange-600 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-2 border-orange-500 dark:border-orange-600 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-orange-600 dark:bg-orange-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
                 <svg className="w-6 h-6 text-white" fill="white" viewBox="0 0 24 24">
                   <path d="M6 2a1 1 0 0 0-1 1v3H2a1 1 0 0 0 0 2h3v4H2a1 1 0 0 0 0 2h3v4H2a1 1 0 0 0 0 2h3v3a1 1 0 0 0 1 1h3v3a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-3h4a1 1 0 0 0 1-1v-4h3a1 1 0 0 0 0-2h-3v-4h3a1 1 0 0 0 0-2h-3V5a1 1 0 0 0-1-1h-4V1a1 1 0 0 0-1-1H6v2zm2 4v12h4V6H8z"/>
@@ -87,7 +87,7 @@ export default function LandingPageOptimized() {
             </div>
 
             {/* Pilar 4: La Realidad - Vive Tu Nueva Identidad (Turquoise) */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border border-cyan-200 dark:border-cyan-900/30 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border border-cyan-200 dark:border-cyan-900/30 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 bg-cyan-600 dark:bg-cyan-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="2"/>
@@ -385,7 +385,7 @@ export default function LandingPageOptimized() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-l-4 border-purple-500 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <svg className="w-5 h-5 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -397,7 +397,7 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-l-4 border-blue-500 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -409,7 +409,7 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-l-4 border-green-500 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <svg className="w-5 h-5 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -421,7 +421,7 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-cyan-500 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-l-4 border-cyan-500 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <svg className="w-5 h-5 text-cyan-600 dark:text-cyan-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -433,7 +433,7 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-orange-500 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-l-4 border-orange-500 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <svg className="w-5 h-5 text-orange-600 dark:text-orange-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -445,7 +445,7 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-6 border-l-4 border-pink-500 hover:shadow-lg transition-shadow">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-l-4 border-pink-500 hover:shadow-lg transition-shadow">
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
                 <svg className="w-5 h-5 text-pink-600 dark:text-pink-400" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -458,7 +458,7 @@ export default function LandingPageOptimized() {
             </div>
           </div>
 
-          <div className="mt-12 p-8 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+          <div className="mt-12 p-8 bg-blue-50 dark:bg-blue-900/20 rounded-[28px] border border-blue-200 dark:border-blue-800">
             <p className="text-center text-foreground text-lg">
               Si alguna de estas situaciones es tuya, <span className="font-bold">DTC está diseñado para ti</span>.
             </p>
@@ -477,7 +477,7 @@ export default function LandingPageOptimized() {
           </p>
 
           <div className="space-y-4">
-            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+            <details className="group bg-white dark:bg-slate-800 rounded-[28px] border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
                 <span>¿Es DTC un test cualquiera o algo más?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
@@ -489,7 +489,7 @@ export default function LandingPageOptimized() {
               </div>
             </details>
 
-            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+            <details className="group bg-white dark:bg-slate-800 rounded-[28px] border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
                 <span>¿Qué pasa si estoy estancado? ¿Realmente ayuda?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
@@ -501,7 +501,7 @@ export default function LandingPageOptimized() {
               </div>
             </details>
 
-            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+            <details className="group bg-white dark:bg-slate-800 rounded-[28px] border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
                 <span>¿Es solo para buscar trabajo o también para crecimiento integral?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
@@ -513,7 +513,7 @@ export default function LandingPageOptimized() {
               </div>
             </details>
 
-            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+            <details className="group bg-white dark:bg-slate-800 rounded-[28px] border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
                 <span>¿Cómo me diferencio realmente en el mercado?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
@@ -525,7 +525,7 @@ export default function LandingPageOptimized() {
               </div>
             </details>
 
-            <details className="group bg-white dark:bg-slate-800 rounded-lg border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
+            <details className="group bg-white dark:bg-slate-800 rounded-[28px] border border-slate-200 dark:border-slate-700 p-6 hover:shadow-md transition-shadow cursor-pointer">
               <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
                 <span>¿Es útil si ya tengo experiencia o es solo para junior?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />

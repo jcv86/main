@@ -31,7 +31,7 @@ export function ASection({ title, subtitle, icon, colorClass, children }: ASecti
               <p className="text-lg text-slate-400 mt-2">{subtitle}</p>
             </div>
           </div>
-          <div className={`h-1 w-24 rounded-full bg-gradient-to-r ${colorClass}`} />
+          <div className={`h-1 w-24 rounded-[20px] bg-gradient-to-r ${colorClass}`} />
         </div>
 
         {children}

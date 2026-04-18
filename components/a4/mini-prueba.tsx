@@ -210,7 +210,7 @@ export function MiniPrueba() {
           <CardContent className="pt-12 pb-12 text-center">
             <div className="flex justify-center mb-6">
               <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                <div className="w-24 h-24 rounded-[20px] bg-gradient-to-br from-primary to-accent flex items-center justify-center">
                   {isPerfect ? (
                     <Trophy className="w-12 h-12 text-white" />
                   ) : isGood ? (
@@ -271,7 +271,7 @@ export function MiniPrueba() {
               return (
                 <div
                   key={q.id}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-card/70 backdrop-blur-sm"
+                  className="flex items-center gap-3 p-3 rounded-[28px] bg-card/70 backdrop-blur-sm"
                 >
                   {isCorrect ? (
                     <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
@@ -357,7 +357,7 @@ export function MiniPrueba() {
               key={idx}
               onClick={() => handleAnswer(idx)}
               disabled={isAnswered}
-              className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+              className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${
                 !isAnswered
                   ? "border-border hover:border-primary/50 hover:bg-primary/5 cursor-pointer"
                   : idx === currentQuestion.correctAnswer

@@ -76,7 +76,7 @@ export function A4BadgesDisplay({ data }: A4BadgesDisplayProps) {
             </div>
           </div>
 
-          <div className="bg-white/50 dark:bg-black/20 p-4 rounded-lg space-y-2">
+          <div className="bg-white/50 dark:bg-black/20 p-4 rounded-[28px] space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold">Nivel {data.level}</span>
               <span className="text-xs text-muted-foreground">
@@ -87,7 +87,7 @@ export function A4BadgesDisplay({ data }: A4BadgesDisplayProps) {
           </div>
 
           {data.streakDays > 0 && (
-            <div className="flex items-center gap-2 bg-amber-50/50 dark:bg-amber-950/20 p-3 rounded-lg border border-amber-200 dark:border-amber-800">
+            <div className="flex items-center gap-2 bg-amber-50/50 dark:bg-amber-950/20 p-3 rounded-[28px] border border-amber-200 dark:border-amber-800">
               <Flame className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               <div>
                 <p className="text-sm font-semibold text-amber-900 dark:text-amber-100">
@@ -116,7 +116,7 @@ export function A4BadgesDisplay({ data }: A4BadgesDisplayProps) {
               {data.badges.map(badge => (
                 <div
                   key={badge.id}
-                  className={`p-4 rounded-lg border-2 text-center transition-all hover:shadow-lg ${
+                  className={`p-4 rounded-[28px] border-2 text-center transition-all hover:shadow-lg ${
                     RARITY_COLORS[badge.rarity]
                   }`}
                 >

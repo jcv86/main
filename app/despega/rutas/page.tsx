@@ -205,7 +205,7 @@ export default function RutasPage() {
             Volver al Dashboard
           </Link>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center text-2xl">
+            <div className="w-12 h-12 rounded-[28px] bg-green-100 flex items-center justify-center text-2xl">
               🛤️
             </div>
             <div>

@@ -253,7 +253,7 @@ export default function A2RoutasPage() {
               >
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`p-3 rounded-lg bg-gradient-to-br ${route.color}`}>
+                    <div className={`p-3 rounded-[28px] bg-gradient-to-br ${route.color}`}>
                       {route.icon && createElement(route.icon, { className: 'w-6 h-6 text-white' })}
                     </div>
                   </div>
@@ -279,7 +279,7 @@ export default function A2RoutasPage() {
                   </div>
 
                   {/* Why this route */}
-                  <div className="p-3 bg-blue/5 dark:bg-blue-950 rounded-lg border border-blue/30 dark:border-blue-800">
+                  <div className="p-3 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue-800">
                     <p className="text-sm">
                       <span className="font-semibold text-blue-900 dark:text-blue-100">Por qué para ti: </span>
                       <span className="text-blue-800 dark:text-blue-200">{route.razon_seleccion}</span>

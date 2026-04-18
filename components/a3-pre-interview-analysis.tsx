@@ -102,7 +102,7 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="bg-gray-100 rounded-lg p-8 aspect-video flex items-center justify-center">
+          <div className="bg-gray-100 rounded-[28px] p-8 aspect-video flex items-center justify-center">
             <video
               ref={videoRef}
               autoPlay
@@ -167,7 +167,7 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
         )}
 
         {/* Readiness Score */}
-        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
+        <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-[28px] border border-blue-200">
           <div className="text-sm text-gray-600 mb-2">Preparación General</div>
           <div className="flex items-center gap-4">
             <div className="text-4xl font-bold text-indigo-600">
@@ -206,7 +206,7 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
         </div>
 
         {/* Recommendations */}
-        <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+        <div className="bg-amber-50 p-4 rounded-[28px] border border-amber-200">
           <div className="font-medium mb-3 flex items-center gap-2">
             <AlertCircle className="w-4 h-4" />
             Recomendaciones de Mejora

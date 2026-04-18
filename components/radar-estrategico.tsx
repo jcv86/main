@@ -78,36 +78,36 @@ export function RadarEstrategico() {
 
             {/* 7 Layers */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div className="p-3 bg-background/50 rounded-lg border border-border/50">
+              <div className="p-3 bg-background/50 rounded-[28px] border border-border/50">
                 <h4 className="text-xs font-medium text-muted-foreground mb-1">Delta Estratégico</h4>
                 <p className="text-sm">{tesis.delta_estrategico || "Análisis disponible"}</p>
               </div>
 
-              <div className="p-3 bg-background/50 rounded-lg border border-border/50">
+              <div className="p-3 bg-background/50 rounded-[28px] border border-border/50">
                 <h4 className="text-xs font-medium text-muted-foreground mb-1">Nivel de Energía</h4>
                 <Badge variant="outline" className="text-xs">
                   {tesis.nivel_energía || "Neutral"}
                 </Badge>
               </div>
 
-              <div className="p-3 bg-background/50 rounded-lg border border-border/50">
+              <div className="p-3 bg-background/50 rounded-[28px] border border-border/50">
                 <h4 className="text-xs font-medium text-muted-foreground mb-1">¿Qué Descuenta Mercado?</h4>
                 <p className="text-sm">{tesis.que_descuenta_mercado || "Análisis disponible"}</p>
               </div>
 
-              <div className="p-3 bg-background/50 rounded-lg border border-border/50">
+              <div className="p-3 bg-background/50 rounded-[28px] border border-border/50">
                 <h4 className="text-xs font-medium text-muted-foreground mb-1">Tension Narrativa</h4>
                 <p className="text-sm">{tesis.tension_narrativa || "Análisis disponible"}</p>
               </div>
 
-              <div className="p-3 bg-background/50 rounded-lg border border-border/50">
+              <div className="p-3 bg-background/50 rounded-[28px] border border-border/50">
                 <h4 className="text-xs font-medium text-muted-foreground mb-1">Ritmo Narrativo</h4>
                 <Badge variant="outline" className="text-xs">
                   {tesis.ritmo_narrativo || "Variable"}
                 </Badge>
               </div>
 
-              <div className="p-3 bg-background/50 rounded-lg border border-border/50">
+              <div className="p-3 bg-background/50 rounded-[28px] border border-border/50">
                 <h4 className="text-xs font-medium text-muted-foreground mb-1">Impacto a Plazo</h4>
                 <Badge variant="outline" className="text-xs">
                   {tesis.impacto_plazo || "Pendiente"}

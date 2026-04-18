@@ -127,7 +127,7 @@ export default function RankingsPage() {
             Volver al Dashboard
           </Link>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-yellow-500 to-purple-600 flex items-center justify-center text-2xl">
+            <div className="w-12 h-12 rounded-[28px] bg-gradient-to-br from-yellow-500 to-purple-600 flex items-center justify-center text-2xl">
               🏆
             </div>
             <div>

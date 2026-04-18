@@ -156,13 +156,13 @@ export function InteractiveTrainingSession({
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Pregunta */}
-            <div className="bg-slate-950/50 p-6 rounded-lg border border-slate-700">
+            <div className="bg-slate-950/50 p-6 rounded-[28px] border border-slate-700">
               <h3 className="text-sm font-semibold text-slate-400 mb-2">PREGUNTA:</h3>
               <p className="text-white text-lg leading-relaxed">{question}</p>
             </div>
 
             {/* Guía */}
-            <div className="bg-blue-950/30 p-6 rounded-lg border border-blue-500/20">
+            <div className="bg-blue-950/30 p-6 rounded-[28px] border border-blue-500/20">
               <h3 className="text-sm font-semibold text-blue-300 mb-3 flex items-center gap-2">
                 <span>💡 GUÍA PARA RESPONDER:</span>
               </h3>

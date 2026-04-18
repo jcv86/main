@@ -139,7 +139,7 @@ export default function HowToEarnXPPage() {
                     return (
                       <div 
                         key={itemIdx}
-                        className="flex items-center justify-between p-3 rounded-lg bg-slate-700/30 border border-slate-600/50 hover:border-cyan-500/30 transition-colors"
+                        className="flex items-center justify-between p-3 rounded-[28px] bg-slate-700/30 border border-slate-600/50 hover:border-cyan-500/30 transition-colors"
                       >
                         <div className="flex items-center gap-3 flex-1">
                           <IconComponent className="w-5 h-5 text-cyan-400 flex-shrink-0" />
@@ -176,7 +176,7 @@ export default function HowToEarnXPPage() {
               {streakBenefits.map((benefit, idx) => (
                 <div 
                   key={idx}
-                  className="p-4 rounded-lg bg-slate-800/50 border border-orange-500/30 text-center"
+                  className="p-4 rounded-[28px] bg-slate-800/50 border border-orange-500/30 text-center"
                 >
                   <p className="font-bold text-lg text-orange-400">{benefit.days}</p>
                   <p className="text-sm text-slate-300">{benefit.bonus}</p>
@@ -222,17 +222,17 @@ export default function HowToEarnXPPage() {
                 <span className="font-bold">1,000 XP = 1 Nivel</span>
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="p-3 rounded-lg bg-slate-700/50 border border-cyan-500/30">
+                <div className="p-3 rounded-[28px] bg-slate-700/50 border border-cyan-500/30">
                   <p className="text-xs text-slate-400">Novato</p>
                   <p className="text-lg font-bold">Niveles 1-5</p>
                   <p className="text-xs text-slate-400">0-5,000 XP</p>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-700/50 border border-cyan-500/30">
+                <div className="p-3 rounded-[28px] bg-slate-700/50 border border-cyan-500/30">
                   <p className="text-xs text-slate-400">Intermedio</p>
                   <p className="text-lg font-bold">Niveles 6-15</p>
                   <p className="text-xs text-slate-400">5,000-15,000 XP</p>
                 </div>
-                <div className="p-3 rounded-lg bg-slate-700/50 border border-cyan-500/30">
+                <div className="p-3 rounded-[28px] bg-slate-700/50 border border-cyan-500/30">
                   <p className="text-xs text-slate-400">Experto</p>
                   <p className="text-lg font-bold">Niveles 16+</p>
                   <p className="text-xs text-slate-400">15,000+ XP</p>

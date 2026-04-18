@@ -134,7 +134,7 @@ export default function A4Page() {
       <div className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
         
         {/* WELCOME HERO - A4 VERSION */}
-        <div className="bg-gradient-to-r from-blue to-blue-600 dark:from-cyan-800 dark:to-blue-800 rounded-lg p-8 text-white shadow-lg">
+        <div className="bg-gradient-to-r from-blue to-blue-600 dark:from-cyan-800 dark:to-blue-800 rounded-[28px] p-8 text-white shadow-lg">
           <div className="max-w-3xl">
             <p className="text-cyan-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A4: La Realidad y Contexto Estratégico</p>
             <h1 className="text-4xl font-bold mb-3">Entiende el mundo en el que compites</h1>
@@ -162,28 +162,28 @@ export default function A4Page() {
           <CardContent>
             <div className="space-y-4">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">1</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-[20px] bg-cyan-600 text-white flex items-center justify-center font-bold">1</div>
                 <div>
                   <h4 className="font-semibold text-slate-900 dark:text-slate-50">Revisa tu Radar Estratégico</h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Detecta señales estructurales, tácticas y contextuales en tu industria. El Radar te muestra qué está pasando antes de que sea obvio.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">2</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-[20px] bg-cyan-600 text-white flex items-center justify-center font-bold">2</div>
                 <div>
                   <h4 className="font-semibold text-slate-900 dark:text-slate-50">Lee Noticias Personalizadas</h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Accede a noticias filtradas por tu perfil. No es ruido. Es context específico para tu transformación.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">3</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-[20px] bg-cyan-600 text-white flex items-center justify-center font-bold">3</div>
                 <div>
                   <h4 className="font-semibold text-slate-900 dark:text-slate-50">Estudia Módulos de Contexto</h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Entiende la cultura corporativa, dinámicas de industria, y como posicionarte estratégicamente.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">4</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-[20px] bg-cyan-600 text-white flex items-center justify-center font-bold">4</div>
                 <div>
                   <h4 className="font-semibold text-slate-900 dark:text-slate-50">Guarda Recursos y Crea tu Biblioteca</h4>
                   <p className="text-sm text-slate-600 dark:text-slate-400">Construye tu base de conocimiento. A4 es para referencia continua durante tu transformación.</p>
@@ -196,7 +196,7 @@ export default function A4Page() {
         {/* Original Header - Simplified */}
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-blue to-blue-600 flex items-center justify-center text-sm font-bold text-white">
+            <div className="w-12 h-12 rounded-[28px] bg-gradient-to-br from-blue to-blue-600 flex items-center justify-center text-sm font-bold text-white">
               A4
             </div>
             <div>

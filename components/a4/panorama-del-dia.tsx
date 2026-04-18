@@ -92,7 +92,7 @@ export function PanoramadelDia({
             items.map((item, idx) => (
               <div
                 key={idx}
-                className={`p-4 rounded-lg transition-colors ${getColorClasses(item.importance)}`}
+                className={`p-4 rounded-[28px] transition-colors ${getColorClasses(item.importance)}`}
               >
                 <div className="flex items-start gap-3">
                   {getIcon(item.type)}

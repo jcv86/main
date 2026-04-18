@@ -611,7 +611,7 @@ export function PersistentAICoach() {
       </div>
 
       {messages.length <= 1 && (
-        <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-lg border border-blue-200 dark:border-blue-800">
+        <div className="mb-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950/30 dark:to-purple-950/30 rounded-[28px] border border-blue-200 dark:border-blue-800">
           <h2 className="text-xl font-semibold text-foreground mb-2">¿Eres nuevo aquí? Te mostramos cómo funciona</h2>
           <p className="text-sm text-muted-foreground mb-4">
             Tu Coach de Carrera IA está diseñado para apoyarte en tres formas:
@@ -619,7 +619,7 @@ export function PersistentAICoach() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             {/* Chat Tab Guide */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-4 border border-blue-200 dark:border-blue-800">
               <div className="flex items-start gap-3 mb-2">
                 <MessageSquare className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
                 <h3 className="font-semibold text-foreground">💬 Chat Personalizado</h3>
@@ -631,7 +631,7 @@ export function PersistentAICoach() {
             </div>
 
             {/* Suggestions Guide */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-green-200 dark:border-green-800">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-4 border border-green-200 dark:border-green-800">
               <div className="flex items-start gap-3 mb-2">
                 <Lightbulb className="h-5 w-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
                 <h3 className="font-semibold text-foreground">💡 Sugerencias</h3>
@@ -643,7 +643,7 @@ export function PersistentAICoach() {
             </div>
 
             {/* Insights Guide */}
-            <div className="bg-white dark:bg-slate-800 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-4 border border-purple-200 dark:border-purple-800">
               <div className="flex items-start gap-3 mb-2">
                 <Sparkles className="h-5 w-5 text-purple-600 dark:text-purple-400 flex-shrink-0 mt-0.5" />
                 <h3 className="font-semibold text-foreground">✨ Insights</h3>
@@ -794,7 +794,7 @@ export function PersistentAICoach() {
                               setInputMessage((suggestion as any).text || suggestion)
                               setActiveTab("chat")
                             }}
-                            className="text-left p-3 rounded-lg border border-border hover:border-foreground hover:bg-muted/50 transition-all text-sm text-foreground hover:text-foreground cursor-pointer group"
+                            className="text-left p-3 rounded-[28px] border border-border hover:border-foreground hover:bg-muted/50 transition-all text-sm text-foreground hover:text-foreground cursor-pointer group"
                           >
                             <p className="line-clamp-2 group-hover:text-foreground font-medium">
                               {(suggestion as any).text || suggestion}
@@ -828,7 +828,7 @@ export function PersistentAICoach() {
                   return (
                     <div
                       key={suggestion.id}
-                      className="border border-border rounded-lg p-4 hover:bg-muted/50 transition-colors cursor-pointer"
+                      className="border border-border rounded-[28px] p-4 hover:bg-muted/50 transition-colors cursor-pointer"
                       onClick={() => handleSuggestionClick(suggestion)}
                     >
                       <div className="flex items-start justify-between">
@@ -884,7 +884,7 @@ export function PersistentAICoach() {
                   return (
                     <div
                       key={insight.id}
-                      className="border border-border rounded-lg p-6 hover:bg-muted/50 transition-colors"
+                      className="border border-border rounded-[28px] p-6 hover:bg-muted/50 transition-colors"
                     >
                       <div className="flex items-start space-x-4">
                         <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center flex-shrink-0">

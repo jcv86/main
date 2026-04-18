@@ -186,7 +186,7 @@ export default function BookRecommendationsPage() {
                 <p className="text-sm text-gray-700">
                   Basado en tu perfil DISC y 120+ libros de desarrollo profesional.
                 </p>
-                <div className="bg-white p-3 rounded-lg border border-blue/30">
+                <div className="bg-white p-3 rounded-[28px] border border-blue/30">
                   <p className="text-xs font-semibold text-indigo-700 mb-1">
                     📍 Enfoque Prioritario
                   </p>

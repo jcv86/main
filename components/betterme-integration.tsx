@@ -97,7 +97,7 @@ export function BetterMeIntegration() {
                 <p className="text-sm text-muted-foreground">
                   Este módulo te ayudará a crear un camino de aprendizaje personalizado basado en tu nivel actual y objetivos profesionales.
                 </p>
-                <div className="bg-muted p-4 rounded-lg">
+                <div className="bg-muted p-4 rounded-[28px]">
                   <p className="font-medium mb-2">¿Cómo funciona?</p>
                   <ul className="text-sm space-y-1 list-disc list-inside">
                     <li>Responde un quiz rápido de 5-10 preguntas</li>

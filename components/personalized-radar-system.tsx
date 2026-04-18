@@ -78,25 +78,25 @@ export function PersonalizedRadarSystem() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {/* Market Jobs Available */}
-              <div className="bg-background/50 p-3 rounded-lg border border-slate-700/50">
+              <div className="bg-background/50 p-3 rounded-[28px] border border-slate-700/50">
                 <p className="text-xs text-slate-400 mb-1">Ofertas en tu industria</p>
                 <p className="text-2xl font-bold text-cyan-400">{personalization.total_market_jobs}</p>
               </div>
 
               {/* Skills Mastered */}
-              <div className="bg-background/50 p-3 rounded-lg border border-slate-700/50">
+              <div className="bg-background/50 p-3 rounded-[28px] border border-slate-700/50">
                 <p className="text-xs text-slate-400 mb-1">Skills dominados</p>
                 <p className="text-2xl font-bold text-teal-400">{personalization.user_skills.length}</p>
               </div>
 
               {/* Skills to Learn */}
-              <div className="bg-background/50 p-3 rounded-lg border border-slate-700/50">
+              <div className="bg-background/50 p-3 rounded-[28px] border border-slate-700/50">
                 <p className="text-xs text-slate-400 mb-1">Skills demandados</p>
                 <p className="text-2xl font-bold text-amber-400">{personalization.market_trending_skills.length}</p>
               </div>
 
               {/* Seniority Level */}
-              <div className="bg-background/50 p-3 rounded-lg border border-slate-700/50">
+              <div className="bg-background/50 p-3 rounded-[28px] border border-slate-700/50">
                 <p className="text-xs text-slate-400 mb-1">Nivel profesional</p>
                 <p className="text-sm font-bold text-slate-300 capitalize">{personalization.seniority_level}</p>
               </div>

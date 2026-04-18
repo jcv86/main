@@ -54,12 +54,12 @@ export function XPHeaderCompact({ onInfoClick }: XPHeaderProps) {
 
   if (loading || !xpData) {
     return (
-      <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-slate-200 dark:bg-slate-700 animate-pulse w-48 h-10" />
+      <div className="flex items-center gap-2 px-4 py-2 rounded-[28px] bg-slate-200 dark:bg-slate-700 animate-pulse w-48 h-10" />
     )
   }
 
   return (
-    <div className="flex items-center gap-3 px-4 py-2 rounded-lg bg-gradient-to-r from-cyan-50 to-teal-50 dark:from-cyan-950/30 dark:to-teal-950/30 border border-cyan-200 dark:border-cyan-800">
+    <div className="flex items-center gap-3 px-4 py-2 rounded-[28px] bg-gradient-to-r from-cyan-50 to-teal-50 dark:from-cyan-950/30 dark:to-teal-950/30 border border-cyan-200 dark:border-cyan-800">
       {/* XP DISPLAY */}
       <div className="flex items-center gap-2">
         <Zap className="w-4 h-4 text-amber-500" />

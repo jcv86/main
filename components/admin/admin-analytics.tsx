@@ -148,7 +148,7 @@ export function AdminAnalytics() {
             { badge: "Consistencia", users: 156, icon: "🔥" },
             { badge: "Perfeccionista", users: 89, icon: "⭐" },
           ].map((item) => (
-            <div key={item.badge} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border border-border/50">
+            <div key={item.badge} className="flex items-center justify-between p-3 bg-muted/50 rounded-[28px] border border-border/50">
               <div className="flex items-center gap-2">
                 <span className="text-2xl">{item.icon}</span>
                 <p className="font-medium text-sm">{item.badge}</p>

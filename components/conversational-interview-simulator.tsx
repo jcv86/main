@@ -370,7 +370,7 @@ export function ConversationalInterviewSimulator({
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-lg border border-emerald-200 dark:border-emerald-800 space-y-3">
+              <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-[28px] border border-emerald-200 dark:border-emerald-800 space-y-3">
                 <p className="font-bold text-emerald-900 dark:text-emerald-200">Aquí está el diferencial:</p>
                 <ul className="space-y-2 text-sm text-emerald-800 dark:text-emerald-300">
                   <li className="flex gap-2">
@@ -425,7 +425,7 @@ export function ConversationalInterviewSimulator({
             <Progress value={((currentQuestionIdx + 1) / questions.length) * 100} className="h-2" />
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800">
+            <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-[28px] border border-blue-200 dark:border-blue-800">
               <p className="text-lg font-semibold text-slate-900 dark:text-white mb-3">
                 {currentQuestion.text}
               </p>
@@ -483,7 +483,7 @@ export function ConversationalInterviewSimulator({
                       value={userResponse}
                       onChange={(e) => setUserResponse(e.target.value)}
                       placeholder="Escribe aquí o usa micrófono..."
-                      className="flex-1 bg-slate-950/80 border border-slate-700 rounded-lg p-2 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none backdrop-blur-sm"
+                      className="flex-1 bg-slate-950/80 border border-slate-700 rounded-[28px] p-2 text-xs text-white placeholder-slate-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 resize-none backdrop-blur-sm"
                       rows={2}
                     />
                     {isSupported && (
@@ -524,7 +524,7 @@ export function ConversationalInterviewSimulator({
                   </div>
                   
                   {/* What they look for */}
-                  <div className="bg-slate-950/50 rounded-lg p-3 border border-slate-800/50">
+                  <div className="bg-slate-950/50 rounded-[28px] p-3 border border-slate-800/50">
                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Lo que busca:</p>
                     <p className="text-xs text-slate-300 leading-relaxed line-clamp-3">
                       {getInterviewerFocus(selectedInterviewerId)}
@@ -555,7 +555,7 @@ export function ConversationalInterviewSimulator({
 
                   {/* AI Tips Card */}
                   {user && (
-                    <div className="rounded-lg border border-slate-700 bg-slate-900/50 overflow-hidden">
+                    <div className="rounded-[28px] border border-slate-700 bg-slate-900/50 overflow-hidden">
                       <InterviewTips
                         questionText={currentQuestion.text}
                         userResponse={userResponse}
@@ -642,7 +642,7 @@ export function ConversationalInterviewSimulator({
             {/* Your Response */}
             <div>
               <p className="font-semibold mb-2">Tu respuesta:</p>
-              <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg italic text-slate-700 dark:text-slate-300">
+              <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-[28px] italic text-slate-700 dark:text-slate-300">
                 {lastAttempt.userResponse}
               </div>
             </div>
@@ -694,7 +694,7 @@ export function ConversationalInterviewSimulator({
               </TabsContent>
 
               <TabsContent value="language" className="space-y-4">
-                <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-lg border border-emerald-200 dark:border-emerald-800 space-y-3">
+                <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-[28px] border border-emerald-200 dark:border-emerald-800 space-y-3">
                   <p className="font-semibold text-emerald-900 dark:text-emerald-200">Cómo sonarías mejor:</p>
                   <div className="space-y-2">
                     <p className="text-sm text-slate-700 dark:text-slate-300">
@@ -765,7 +765,7 @@ export function ConversationalInterviewSimulator({
 
               {/* XP Rewards */}
               {gamification && (
-                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg space-y-2">
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-[28px] space-y-2">
                   <div className="flex items-center justify-center gap-2">
                     <Zap className="w-5 h-5 text-blue-600" />
                     <span className="font-bold text-blue-600">+150 XP Ganados</span>

@@ -315,7 +315,7 @@ export function GestureEnhancedTestInterface({
 
             {/* Gesture Instructions */}
             {touchSupport && (
-              <div className="p-3 bg-white rounded-lg border text-sm">
+              <div className="p-3 bg-white rounded-[28px] border text-sm">
                 <h4 className="font-medium mb-2 flex items-center gap-2">
                   <Touch className="h-4 w-4" />
                   Touch Gestures Available:
@@ -355,7 +355,7 @@ export function GestureEnhancedTestInterface({
                 <button
                   key={option.id}
                   onClick={() => handleAnswerSelection(option.id)}
-                  className={`w-full p-4 text-left rounded-lg border-2 transition-all touch-manipulation ${
+                  className={`w-full p-4 text-left rounded-[28px] border-2 transition-all touch-manipulation ${
                     answers[currentQuestion.id] === option.id
                       ? "border-blue-500 bg-blue-50 text-blue-900"
                       : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
@@ -420,7 +420,7 @@ export function GestureEnhancedTestInterface({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-32 overflow-y-auto bg-gray-900 rounded-lg p-3 font-mono text-sm">
+              <div className="h-32 overflow-y-auto bg-gray-900 rounded-[28px] p-3 font-mono text-sm">
                 <div className="space-y-1">
                   {gestureLog.map((log, index) => (
                     <div

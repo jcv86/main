@@ -118,7 +118,7 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
             <div className="space-y-2">
               {scenario.metricas_exito.map((metrica, idx) => (
                 <div key={idx} className="flex items-start gap-2">
-                  <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
+                  <div className="w-2 h-2 rounded-[20px] bg-primary mt-2 flex-shrink-0" />
                   <div>
                     <div className="font-medium text-sm">{metrica.label}</div>
                     <div className="text-xs text-muted-foreground">{metrica.description}</div>
@@ -155,7 +155,7 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
         </CardHeader>
 
         <CardContent className="space-y-6">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-[28px] p-4">
             <div className="flex gap-3">
               <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
               <div className="text-sm text-blue-900">{scenario.contexto}</div>
@@ -222,19 +222,19 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
           </div>
 
           {/* Your Decision */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-blue-50 border border-blue-200 rounded-[28px] p-4">
             <div className="text-sm font-medium mb-2">Tu decisión</div>
             <div className="font-medium">{selectedDecision.text}</div>
           </div>
 
           {/* Outcome */}
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="bg-green-50 border border-green-200 rounded-[28px] p-4">
             <div className="text-sm font-medium mb-2">Lo que sucedió</div>
             <div className="text-sm text-green-900">{selectedDecision.outcome}</div>
           </div>
 
           {/* Coaching Insights */}
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+          <div className="bg-purple-50 border border-purple-200 rounded-[28px] p-4">
             <div className="flex gap-2">
               <TrendingUp className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
               <div>

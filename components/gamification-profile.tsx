@@ -95,22 +95,22 @@ export function GamificationProfile({
 
           {/* Stats Grid */}
           <div className="grid grid-cols-4 gap-4">
-            <div className="bg-white/50 rounded-lg p-4 text-center">
+            <div className="bg-white/50 rounded-[28px] p-4 text-center">
               <Flame className="w-6 h-6 text-red-500 mx-auto mb-2" />
               <p className="text-2xl font-bold text-gray-900">{streak}</p>
               <p className="text-xs text-gray-600">Current Streak</p>
             </div>
-            <div className="bg-white/50 rounded-lg p-4 text-center">
+            <div className="bg-white/50 rounded-[28px] p-4 text-center">
               <Trophy className="w-6 h-6 text-yellow-500 mx-auto mb-2" />
               <p className="text-2xl font-bold text-gray-900">{bestStreak}</p>
               <p className="text-xs text-gray-600">Best Streak</p>
             </div>
-            <div className="bg-white/50 rounded-lg p-4 text-center">
+            <div className="bg-white/50 rounded-[28px] p-4 text-center">
               <Star className="w-6 h-6 text-amber-500 mx-auto mb-2" />
               <p className="text-2xl font-bold text-gray-900">{totalTipsEarned}</p>
               <p className="text-xs text-gray-600">Tips Earned</p>
             </div>
-            <div className="bg-white/50 rounded-lg p-4 text-center">
+            <div className="bg-white/50 rounded-[28px] p-4 text-center">
               <Award className="w-6 h-6 text-purple-500 mx-auto mb-2" />
               <p className="text-2xl font-bold text-gray-900">{badges.length}</p>
               <p className="text-xs text-gray-600">Badges</p>
@@ -130,7 +130,7 @@ export function GamificationProfile({
             {badges.map((badge) => (
               <div
                 key={badge}
-                className="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-purple-50 to-blue-50 rounded-lg border border-purple-200"
+                className="flex flex-col items-center gap-2 p-4 bg-gradient-to-br from-purple-50 to-blue-50 rounded-[28px] border border-purple-200"
               >
                 <span className="text-4xl">
                   {BADGE_ICONS[badge] || '🎖️'}

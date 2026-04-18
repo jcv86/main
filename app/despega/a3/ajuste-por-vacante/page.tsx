@@ -186,7 +186,7 @@ export default function JobMatchingPage() {
                     {Object.entries(analysis.recommendedResponses).map(([question, response]: [string, any]) => (
                       <div key={question} className="space-y-2">
                         <p className="font-semibold text-slate-900 dark:text-white">{question}</p>
-                        <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
+                        <div className="bg-slate-50 dark:bg-slate-800 p-4 rounded-[28px]">
                           <p className="text-sm text-slate-700 dark:text-slate-300">{response}</p>
                         </div>
                         <Button variant="outline" size="sm">

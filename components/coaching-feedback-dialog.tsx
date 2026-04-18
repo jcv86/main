@@ -162,7 +162,7 @@ export function CoachingFeedbackDialog({
 
           {/* Action Completion */}
           {suggestedAction && (
-            <div className="space-y-3 rounded-lg border p-4">
+            <div className="space-y-3 rounded-[28px] border p-4">
               <div className="flex items-start gap-3">
                 <input
                   type="checkbox"

@@ -399,7 +399,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                       className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                     >
                       <div
-                        className={`max-w-[85%] rounded-lg p-3 ${
+                        className={`max-w-[85%] rounded-[28px] p-3 ${
                           message.sender === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
                         }`}
                       >
@@ -433,7 +433,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                   ))}
                   {isLoading && (
                     <div className="flex justify-start">
-                      <div className="bg-muted rounded-lg p-3">
+                      <div className="bg-muted rounded-[28px] p-3">
                         <div className="flex items-center gap-2">
                           <div className="flex gap-1">
                             <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" />
@@ -654,7 +654,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
         <Card className="border-green-200 bg-green-50">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+              <div className="w-10 h-10 rounded-[20px] bg-green-100 flex items-center justify-center">
                 <CheckCircle2 className="h-5 w-5 text-green-600" />
               </div>
               <div>

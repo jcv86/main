@@ -86,7 +86,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-lg">
+            <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-4 rounded-[28px]">
               <p className="text-sm text-gray-600 mb-2">Postura</p>
               <div className="flex items-end gap-2">
                 <span className="text-2xl font-bold">{analysis.visual_analysis.posture_quality}</span>
@@ -95,7 +95,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
               <p className="text-xs text-gray-600 mt-2">{analysis.visual_analysis.posture_feedback}</p>
             </div>
 
-            <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-lg">
+            <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-4 rounded-[28px]">
               <p className="text-sm text-gray-600 mb-2">Contacto Visual</p>
               <div className="flex items-end gap-2">
                 <span className="text-2xl font-bold">{analysis.visual_analysis.eye_contact}</span>
@@ -115,7 +115,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-lg">
+            <div className="bg-gradient-to-br from-green-50 to-green-100 p-4 rounded-[28px]">
               <p className="text-sm text-gray-600 mb-2">Tono & Claridad</p>
               <div className="flex items-end gap-2">
                 <span className="text-2xl font-bold">
@@ -125,7 +125,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-cyan-50 to-cyan-100 p-4 rounded-lg">
+            <div className="bg-gradient-to-br from-cyan-50 to-cyan-100 p-4 rounded-[28px]">
               <p className="text-sm text-gray-600 mb-2">Confianza</p>
               <div className="flex items-end gap-2">
                 <span className="text-2xl font-bold">{analysis.audio_analysis.confidence_level}</span>

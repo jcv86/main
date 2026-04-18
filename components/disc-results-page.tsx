@@ -193,13 +193,13 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
             </CardHeader>
             <CardContent className="space-y-3">
               {c1Context[3] && (
-                <div className="bg-slate-700/50 p-4 rounded-lg border-l-4 border-blue-500">
+                <div className="bg-slate-700/50 p-4 rounded-[28px] border-l-4 border-blue-500">
                   <p className="text-xs text-slate-400 font-semibold mb-1">Tu Desafío Actual</p>
                   <p className="text-white">{c1Context[3]}</p>
                 </div>
               )}
               {c1Context[4] && (
-                <div className="bg-slate-700/50 p-4 rounded-lg border-l-4 border-emerald-500">
+                <div className="bg-slate-700/50 p-4 rounded-[28px] border-l-4 border-emerald-500">
                   <p className="text-xs text-slate-400 font-semibold mb-1">Tu Objetivo para 90 Días</p>
                   <p className="text-white">{c1Context[4]}</p>
                 </div>

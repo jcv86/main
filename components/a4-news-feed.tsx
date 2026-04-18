@@ -116,7 +116,7 @@ export function A4NewsFeed({ items }: A4NewsFeedProps) {
       {/* Header */}
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-xl">
+          <div className="w-10 h-10 rounded-[28px] bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-xl">
             {getRelevanceIcon(75)}
           </div>
           <div>

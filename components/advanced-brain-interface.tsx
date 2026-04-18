@@ -195,7 +195,7 @@ export function AdvancedBrainInterface() {
               {messages.map((message) => (
                 <div key={message.id} className={`flex ${message.type === "user" ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[80%] rounded-lg p-4 ${
+                    className={`max-w-[80%] rounded-[28px] p-4 ${
                       message.type === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
                     }`}
                   >
@@ -247,7 +247,7 @@ export function AdvancedBrainInterface() {
 
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-muted rounded-lg p-4">
+                  <div className="bg-muted rounded-[28px] p-4">
                     <Loader2 className="h-5 w-5 animate-spin" />
                   </div>
                 </div>

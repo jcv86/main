@@ -288,7 +288,7 @@ export default function A2RoutesPage() {
                       {data.tasks && data.tasks.length > 0 ? (
                         <div className="space-y-3">
                           {data.tasks.map((task, idx) => (
-                            <div key={idx} className="bg-slate-700/30 border border-slate-600/30 rounded-lg p-4 hover:border-slate-500/50 transition">
+                            <div key={idx} className="bg-slate-700/30 border border-slate-600/30 rounded-[28px] p-4 hover:border-slate-500/50 transition">
                               <div className="flex items-start gap-3">
                                 <div className="flex-shrink-0">
                                   {task.type === 'learning' && <span className="text-2xl">📚</span>}
@@ -329,7 +329,7 @@ export default function A2RoutesPage() {
             })}
 
             {/* Success Metrics */}
-            <div className="bg-gradient-to-br from-emerald-900/20 to-emerald-800/10 border border-emerald-500/30 rounded-lg p-6">
+            <div className="bg-gradient-to-br from-emerald-900/20 to-emerald-800/10 border border-emerald-500/30 rounded-[28px] p-6">
               <h3 className="text-lg font-bold text-emerald-400 mb-4">Métricas de Éxito</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex gap-3">

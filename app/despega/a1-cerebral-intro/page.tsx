@@ -72,19 +72,19 @@ export default function A1CerebralIntroPage() {
                 El Análisis Cerebral es una evaluación de comportamiento inspirada en metodologías reconocidas que identifica tu estilo natural de comunicación y liderazgo. Basado en cuatro dimensiones principales:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 bg-red-50 dark:bg-red-950 rounded-lg border border-red-200 dark:border-red-800">
+                <div className="p-4 bg-red-50 dark:bg-red-950 rounded-[28px] border border-red-200 dark:border-red-800">
                   <p className="font-semibold text-red-900 dark:text-red-100 mb-1">Impulsor</p>
                   <p className="text-sm text-red-800 dark:text-red-200">Enfocado en resultados, decisivo, impulsivo</p>
                 </div>
-                <div className="p-4 bg-yellow-50 dark:bg-yellow-950 rounded-lg border border-yellow-200 dark:border-yellow-800">
+                <div className="p-4 bg-yellow-50 dark:bg-yellow-950 rounded-[28px] border border-yellow-200 dark:border-yellow-800">
                   <p className="font-semibold text-yellow-900 dark:text-yellow-100 mb-1">Catalizador</p>
                   <p className="text-sm text-yellow-800 dark:text-yellow-200">Comunicativo, entusiasta, orientado a personas</p>
                 </div>
-                <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg border border-green-200 dark:border-green-800">
+                <div className="p-4 bg-green-50 dark:bg-green-950 rounded-[28px] border border-green-200 dark:border-green-800">
                   <p className="font-semibold text-green-900 dark:text-green-100 mb-1">Estabilizador</p>
                   <p className="text-sm text-green-800 dark:text-green-200">Estable, cooperativo, confiable, paciente</p>
                 </div>
-                <div className="p-4 bg-blue/5 dark:bg-blue-950 rounded-lg border border-blue/30 dark:border-blue-800">
+                <div className="p-4 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue-800">
                   <p className="font-semibold text-blue-900 dark:text-blue-100 mb-1">Arquitecto</p>
                   <p className="text-sm text-blue-800 dark:text-blue-200">Analítico, detallista, exigente con calidad</p>
                 </div>
@@ -134,7 +134,7 @@ export default function A1CerebralIntroPage() {
               <CardDescription className="text-slate-400">Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="bg-slate-800 dark:bg-slate-700 p-8 rounded-lg border border-slate-700">
+              <div className="bg-slate-800 dark:bg-slate-700 p-8 rounded-[28px] border border-slate-700">
                 <p className="text-xl font-semibold text-white mb-8 text-center">
                   "Cuando enfrento un desafío importante, tiendo a ser más:"
                 </p>
@@ -194,7 +194,7 @@ export default function A1CerebralIntroPage() {
                 </div>
               </div>
 
-              <div className="bg-blue/5 dark:bg-blue-950 p-4 rounded-lg border border-blue/30 dark:border-blue-800">
+              <div className="bg-blue/5 dark:bg-blue-950 p-4 rounded-[28px] border border-blue/30 dark:border-blue-800">
                 <p className="text-sm text-blue-900 dark:text-blue-100">
                   <span className="font-semibold">¿Cómo funciona?</span> Cada pregunta tiene 4 opciones que representan los 4 estilos: Directo, Inspirador, Seguro y Consciente. Seleccionas cuál te describe MÁS y cuál te describe MENOS. El sistema cuenta tus selecciones y determina tu perfil dominante.
                 </p>

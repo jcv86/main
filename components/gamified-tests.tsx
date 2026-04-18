@@ -126,7 +126,7 @@ export function GamifiedTests() {
                           <button
                             key={optionIdx}
                             onClick={() => handleSelectAnswer(question.id, optionIdx)}
-                            className={`w-full p-3 rounded-lg border-2 transition-colors text-left ${
+                            className={`w-full p-3 rounded-[28px] border-2 transition-colors text-left ${
                               answers[question.id] === optionIdx
                                 ? "border-primary bg-primary/10"
                                 : "border-border hover:border-primary"

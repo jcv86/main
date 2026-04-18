@@ -544,28 +544,28 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
         <CardContent>
           {/* Device Capabilities */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="text-center p-3 bg-white rounded-lg border">
+            <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 text-green-600 mb-1">
                 <CheckCircle className="h-5 w-5" />
                 <span className="text-2xl font-bold">{passedTests}</span>
               </div>
               <p className="text-sm text-gray-600">Passed</p>
             </div>
-            <div className="text-center p-3 bg-white rounded-lg border">
+            <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 text-red-600 mb-1">
                 <XCircle className="h-5 w-5" />
                 <span className="text-2xl font-bold">{failedTests}</span>
               </div>
               <p className="text-sm text-gray-600">Failed</p>
             </div>
-            <div className="text-center p-3 bg-white rounded-lg border">
+            <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 text-blue-600 mb-1">
                 <Loader2 className={`h-5 w-5 ${testingTests > 0 ? "animate-spin" : ""}`} />
                 <span className="text-2xl font-bold">{testingTests}</span>
               </div>
               <p className="text-sm text-gray-600">Testing</p>
             </div>
-            <div className="text-center p-3 bg-white rounded-lg border">
+            <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 text-purple-600 mb-1">
                 <Touch className="h-5 w-5" />
                 <span className="text-2xl font-bold">{navigator.maxTouchPoints || 0}</span>
@@ -711,7 +711,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-48 overflow-y-auto bg-gray-900 rounded-lg p-3 font-mono text-sm">
+              <div className="h-48 overflow-y-auto bg-gray-900 rounded-[28px] p-3 font-mono text-sm">
                 {gestureLog.length === 0 ? (
                   <div className="text-gray-400 text-center py-8">Waiting for gesture detection...</div>
                 ) : (
@@ -748,29 +748,29 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
           <div className="text-center space-y-4">
             <h3 className="text-xl font-bold text-purple-900">Gesture Support Summary</h3>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
-              <div className="bg-white p-3 rounded-lg border">
+              <div className="bg-white p-3 rounded-[28px] border">
                 <div className="font-semibold text-purple-900">Touch Events</div>
                 <div className={touchSupport ? "text-green-700" : "text-red-700"}>
                   {touchSupport ? "✅ Supported" : "❌ Not Supported"}
                 </div>
               </div>
-              <div className="bg-white p-3 rounded-lg border">
+              <div className="bg-white p-3 rounded-[28px] border">
                 <div className="font-semibold text-purple-900">Multi-Touch</div>
                 <div className={multiTouchSupport ? "text-green-700" : "text-red-700"}>
                   {multiTouchSupport ? "✅ Supported" : "❌ Not Supported"}
                 </div>
               </div>
-              <div className="bg-white p-3 rounded-lg border">
+              <div className="bg-white p-3 rounded-[28px] border">
                 <div className="font-semibold text-purple-900">Swipe Gestures</div>
                 <div className="text-green-700">✅ All Directions</div>
               </div>
-              <div className="bg-white p-3 rounded-lg border">
+              <div className="bg-white p-3 rounded-[28px] border">
                 <div className="font-semibold text-purple-900">Pinch Zoom</div>
                 <div className={multiTouchSupport ? "text-green-700" : "text-yellow-700"}>
                   {multiTouchSupport ? "✅ In/Out" : "⚠️ Limited"}
                 </div>
               </div>
-              <div className="bg-white p-3 rounded-lg border">
+              <div className="bg-white p-3 rounded-[28px] border">
                 <div className="font-semibold text-purple-900">Tap Gestures</div>
                 <div className="text-green-700">✅ Single/Double/Long</div>
               </div>

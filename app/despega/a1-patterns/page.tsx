@@ -87,7 +87,7 @@ export default function A1PatternsPage() {
         </div>
 
         {/* Tab Navigation */}
-        <div className="flex flex-wrap gap-2 mb-8 bg-slate-800/50 p-4 rounded-lg">
+        <div className="flex flex-wrap gap-2 mb-8 bg-slate-800/50 p-4 rounded-[28px]">
           {(['strengths', 'challenges', 'interview', 'career'] as const).map((tab) => (
             <button
               key={tab}

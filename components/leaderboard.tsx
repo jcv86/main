@@ -50,7 +50,7 @@ export function Leaderboard() {
   const renderLeaderboard = (sortBy: string) => (
     <div className="space-y-2">
       {getSortedData(sortBy).map((user) => (
-        <div key={user.rank} className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted transition">
+        <div key={user.rank} className="flex items-center justify-between p-4 rounded-[28px] border hover:bg-muted transition">
           <div className="flex items-center gap-4 flex-1">
             <div className={`w-10 h-10 ${getMedalColor(user.rank)} rounded-full flex items-center justify-center text-white font-bold text-sm`}>
               {getMedalEmoji(user.rank)}

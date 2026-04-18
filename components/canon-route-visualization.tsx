@@ -47,7 +47,7 @@ function MilestoneCard({ milestone, index }: { milestone: MilestoneCard; index: 
                 {milestone.days === 90 && "Integración completa"}
               </CardDescription>
             </div>
-            <div className="p-2 rounded-lg bg-muted">
+            <div className="p-2 rounded-[28px] bg-muted">
               <IconComponent className="w-5 h-5 text-foreground" />
             </div>
           </div>
@@ -159,7 +159,7 @@ export function CanonRouteVisualization({
             <ul className="space-y-3">
               {recomendacionesPersonalizadas.map((rec, idx) => (
                 <li key={idx} className="flex gap-3 text-blue-800 dark:text-blue-200">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 dark:bg-blue-400 flex-shrink-0 mt-2" />
+                  <div className="w-1.5 h-1.5 rounded-[20px] bg-blue-500 dark:bg-blue-400 flex-shrink-0 mt-2" />
                   <span className="text-sm">{rec}</span>
                 </li>
               ))}

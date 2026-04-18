@@ -162,7 +162,7 @@ export default function GuidedTrainingPage() {
             </div>
 
             {/* Coach Content Area */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue/30 dark:border-blue-800 rounded-lg p-8 min-h-64 space-y-4">
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue/30 dark:border-blue-800 rounded-[28px] p-8 min-h-64 space-y-4">
               <div className="space-y-4 text-slate-700 dark:text-slate-300">
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-lg text-slate-900 dark:text-white flex items-center gap-2">
@@ -191,7 +191,7 @@ export default function GuidedTrainingPage() {
                 </div>
 
                 {aiTip ? (
-                  <div className="bg-white dark:bg-slate-900 p-4 rounded-lg border-l-4 border-blue space-y-3">
+                  <div className="bg-white dark:bg-slate-900 p-4 rounded-[28px] border-l-4 border-blue space-y-3">
                     <p className="text-slate-900 dark:text-white">{aiTip}</p>
                   </div>
                 ) : (
@@ -315,7 +315,7 @@ export default function GuidedTrainingPage() {
 
             {/* Practice Section */}
             {!showVideoSession ? (
-              <div className="bg-yellow/5 dark:bg-amber-900/20 border border-yellow/30 dark:border-amber-800 rounded-lg p-6 space-y-4">
+              <div className="bg-yellow/5 dark:bg-amber-900/20 border border-yellow/30 dark:border-amber-800 rounded-[28px] p-6 space-y-4">
                 <p className="font-bold text-amber-900 dark:text-amber-200">
                   Practica conmigo:
                 </p>

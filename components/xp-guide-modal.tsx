@@ -184,7 +184,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                 <CardHeader>
                   <CardTitle className="text-base flex items-center gap-2">
                     <div
-                      className={`w-3 h-3 rounded-full bg-gradient-to-r ${phase.color}`}
+                      className={`w-3 h-3 rounded-[20px] bg-gradient-to-r ${phase.color}`}
                     />
                     {phase.category}
                   </CardTitle>
@@ -193,7 +193,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                   {phase.activities.map((activity, idx) => (
                     <div
                       key={idx}
-                      className="flex items-start justify-between p-3 rounded-lg bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800"
+                      className="flex items-start justify-between p-3 rounded-[28px] bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800"
                     >
                       <div className="flex items-start gap-3 flex-1">
                         <div className="text-slate-400 mt-0.5">{activity.icon}</div>
@@ -229,7 +229,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                 {streakBonuses.map((streak, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-between p-3 rounded-lg bg-white dark:bg-slate-900/50 border border-orange-200 dark:border-orange-800"
+                    className="flex items-center justify-between p-3 rounded-[28px] bg-white dark:bg-slate-900/50 border border-orange-200 dark:border-orange-800"
                   >
                     <div className="flex items-center gap-3">
                       <div className="text-center">
@@ -271,7 +271,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-lg border border-slate-200 dark:border-slate-800">
+                <div className="p-4 bg-slate-50 dark:bg-slate-900/50 rounded-[28px] border border-slate-200 dark:border-slate-800">
                   <p className="font-semibold text-sm mb-2">Nivel = 1,000 XP</p>
                   <p className="text-sm text-slate-600 dark:text-slate-400">
                     Cada nivel requiere 1,000 puntos. Con multiplicadores de racha, 
@@ -284,7 +284,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                   </ul>
                 </div>
 
-                <div className="p-4 bg-emerald-50 dark:bg-emerald-950/20 rounded-lg border border-emerald-200 dark:border-emerald-800">
+                <div className="p-4 bg-emerald-50 dark:bg-emerald-950/20 rounded-[28px] border border-emerald-200 dark:border-emerald-800">
                   <p className="font-semibold text-sm mb-2 text-emerald-900 dark:text-emerald-100">
                     Progresión por Fase
                   </p>

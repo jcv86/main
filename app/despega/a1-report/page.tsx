@@ -315,7 +315,7 @@ export default function A1ReportPage() {
               { label: 'Estabilizador', score: profile.S, color: 'from-green to-blue', icon: '🛡️' },
               { label: 'Arquitecto', score: profile.C, color: 'from-blue to-purple-500', icon: '🏗️' }
             ].map((dim, idx) => (
-              <div key={idx} className="flex items-center gap-4 p-3 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors">
+              <div key={idx} className="flex items-center gap-4 p-3 bg-slate-700/50 rounded-[28px] border border-slate-600 hover:border-slate-500 transition-colors">
                 <span className="text-2xl">{dim.icon}</span>
                 <p className="font-bold text-white w-32">{dim.label}</p>
                 <div className="flex-1 h-4 bg-slate-600 rounded-full overflow-hidden border border-slate-500">

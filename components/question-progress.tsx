@@ -21,7 +21,7 @@ export function QuestionProgress({
   const estimatedTimeRemaining = (totalQuestions - currentQuestion + 1) * estimatedTimePerQuestion
 
   return (
-    <div className="bg-slate-50 dark:bg-slate-900 rounded-lg p-4 mb-6 border border-slate-200 dark:border-slate-800">
+    <div className="bg-slate-50 dark:bg-slate-900 rounded-[28px] p-4 mb-6 border border-slate-200 dark:border-slate-800">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-4">
           <div>

@@ -188,7 +188,7 @@ export default function BitacoraPage() {
                       placeholder="Ej: Día 3 - Aprendizaje clave"
                       value={newEntry.title}
                       onChange={e => setNewEntry({ ...newEntry, title: e.target.value })}
-                      className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50"
+                      className="w-full px-4 py-2 rounded-[28px] border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50"
                     />
                   </div>
 
@@ -239,7 +239,7 @@ export default function BitacoraPage() {
                         min="0"
                         value={newEntry.actionsTaken}
                         onChange={e => setNewEntry({ ...newEntry, actionsTaken: parseInt(e.target.value) || 0 })}
-                        className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50"
+                        className="w-full px-4 py-2 rounded-[28px] border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-50"
                       />
                     </div>
                   </div>
@@ -351,7 +351,7 @@ export default function BitacoraPage() {
 
                       {/* Next Steps */}
                       {entry.nextSteps && (
-                        <div className="p-3 bg-blue/5 dark:bg-blue-950 rounded-lg border border-blue/30 dark:border-blue-800">
+                        <div className="p-3 bg-blue/5 dark:bg-blue-950 rounded-[28px] border border-blue/30 dark:border-blue-800">
                           <p className="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">Próximos Pasos</p>
                           <p className="text-sm text-blue-800 dark:text-blue-200">{entry.nextSteps}</p>
                         </div>

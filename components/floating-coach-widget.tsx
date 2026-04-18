@@ -28,7 +28,7 @@ export function FloatingCoachWidget() {
             setIsMinimized(false)
             setHasUnread(false)
           }}
-          className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:scale-110"
+          className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-[20px] bg-gradient-to-br from-purple-600 to-blue-600 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:scale-110"
           aria-label="Abrir chat con coach IA"
         >
           {hasUnread && (

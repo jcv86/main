@@ -87,7 +87,7 @@ export function XPProgressDisplay({
 
           {/* Stats Row */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white/50 dark:bg-black/20 rounded-lg p-3">
+            <div className="bg-white/50 dark:bg-black/20 rounded-[28px] p-3">
               <div className="flex items-center gap-2 mb-1">
                 <Flame className="w-4 h-4 text-orange-500" />
                 <span className="text-xs font-semibold">Racha</span>
@@ -96,7 +96,7 @@ export function XPProgressDisplay({
               <p className="text-xs opacity-75">días seguidos</p>
             </div>
 
-            <div className="bg-white/50 dark:bg-black/20 rounded-lg p-3">
+            <div className="bg-white/50 dark:bg-black/20 rounded-[28px] p-3">
               <div className="flex items-center gap-2 mb-1">
                 <Trophy className="w-4 h-4 text-amber-500" />
                 <span className="text-xs font-semibold">Entrevistas</span>

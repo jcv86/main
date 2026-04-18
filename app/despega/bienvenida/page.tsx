@@ -56,7 +56,7 @@ export default function BienvenidaPage() {
           <Card className="border-0 shadow-sm bg-white dark:bg-slate-800">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-blue-100 dark:bg-blue-900 mb-4">
+                <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-blue-100 dark:bg-blue-900 mb-4">
                   <span className="text-xl font-bold text-blue dark:text-blue-300">1</span>
                 </div>
                 <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Conozcámonos</h3>
@@ -71,7 +71,7 @@ export default function BienvenidaPage() {
           <Card className="border-0 shadow-sm bg-white dark:bg-slate-800">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-purple-100 dark:bg-purple-900 mb-4">
+                <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-purple-100 dark:bg-purple-900 mb-4">
                   <span className="text-xl font-bold text-purple dark:text-purple-300">2</span>
                 </div>
                 <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Tu Plan A2</h3>
@@ -86,7 +86,7 @@ export default function BienvenidaPage() {
           <Card className="border-0 shadow-sm bg-white dark:bg-slate-800">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-cyan-100 dark:bg-cyan-900 mb-4">
+                <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-cyan-100 dark:bg-cyan-900 mb-4">
                   <span className="text-xl font-bold text-blue dark:text-cyan-300">3</span>
                 </div>
                 <h3 className="font-semibold text-slate-900 dark:text-white mb-2">Entrena y Analiza</h3>
@@ -134,7 +134,7 @@ export default function BienvenidaPage() {
         </div>
 
         {/* Timeline */}
-        <div className="bg-blue/5 dark:bg-blue-950/30 rounded-lg p-6 border border-blue/30 dark:border-blue-800 mb-8">
+        <div className="bg-blue/5 dark:bg-blue-950/30 rounded-[28px] p-6 border border-blue/30 dark:border-blue-800 mb-8">
           <h3 className="font-semibold text-slate-900 dark:text-white mb-3 flex items-center gap-2">
             <Target className="w-5 h-5 text-blue" />
             Tiempo Estimado

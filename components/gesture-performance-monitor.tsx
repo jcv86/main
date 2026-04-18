@@ -251,7 +251,7 @@ export function GesturePerformanceMonitor() {
         <CardContent>
           {/* Status Indicators */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="text-center p-3 bg-white rounded-lg border">
+            <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Activity className={`h-5 w-5 ${isMonitoring ? "text-green-500 animate-pulse" : "text-gray-400"}`} />
                 <span className="font-semibold">Status</span>
@@ -260,14 +260,14 @@ export function GesturePerformanceMonitor() {
                 {isMonitoring ? "🟢 Monitoring" : "⚪ Stopped"}
               </Badge>
             </div>
-            <div className="text-center p-3 bg-white rounded-lg border">
+            <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <BarChart3 className="h-5 w-5 text-blue-500" />
                 <span className="font-semibold">Total Gestures</span>
               </div>
               <span className="text-2xl font-bold">{stats?.totalGestures || 0}</span>
             </div>
-            <div className="text-center p-3 bg-white rounded-lg border">
+            <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <Clock className="h-5 w-5 text-yellow-500" />
                 <span className="font-semibold">Avg Response</span>
@@ -276,7 +276,7 @@ export function GesturePerformanceMonitor() {
                 {stats?.averageResponseTime || 0}ms
               </span>
             </div>
-            <div className="text-center p-3 bg-white rounded-lg border">
+            <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 mb-2">
                 <TrendingUp className="h-5 w-5 text-green-500" />
                 <span className="font-semibold">Success Rate</span>
@@ -375,7 +375,7 @@ export function GesturePerformanceMonitor() {
                   realtimeData.map((metric, index) => (
                     <div
                       key={`${metric.timestamp}-${index}`}
-                      className={`p-3 rounded-lg border transition-all ${
+                      className={`p-3 rounded-[28px] border transition-all ${
                         metric.success ? "bg-green-50 border-green-200" : "bg-red-50 border-red-200"
                       }`}
                     >

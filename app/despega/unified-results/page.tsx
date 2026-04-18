@@ -187,14 +187,14 @@ export default function UnifiedTestDashboard() {
                 <CardTitle>Próximos Pasos</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex gap-3 p-3 bg-blue/5 dark:bg-blue-950/20 rounded-lg border border-blue/30 dark:border-blue-800">
+                <div className="flex gap-3 p-3 bg-blue/5 dark:bg-blue-950/20 rounded-[28px] border border-blue/30 dark:border-blue-800">
                   <Zap className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold text-blue-900 dark:text-blue-100">Ir a A2: Tu Plan</p>
                     <p className="text-sm text-blue-700 dark:text-blue-300">Usa tus resultados para crear un plan personalizado</p>
                   </div>
                 </div>
-                <div className="flex gap-3 p-3 bg-purple/5 dark:bg-purple-950/20 rounded-lg border border-purple/30 dark:border-purple-800">
+                <div className="flex gap-3 p-3 bg-purple/5 dark:bg-purple-950/20 rounded-[28px] border border-purple/30 dark:border-purple-800">
                   <Share2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold text-purple-900 dark:text-purple-100">Compartir Resultados</p>

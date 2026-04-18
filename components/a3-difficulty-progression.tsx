@@ -138,7 +138,7 @@ export function A3DifficultyProgression({
             </Alert>
           )}
 
-          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+          <div className="bg-blue-50 p-4 rounded-[28px] border border-blue-200">
             <div className="text-sm text-gray-600 mb-2">Factores considerados:</div>
             <ul className="text-sm text-gray-700 space-y-1">
               <li>• Historial de completación: 85%</li>
@@ -189,7 +189,7 @@ export function A3DifficultyProgression({
             <CardDescription>{nextConfig.description}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+            <div className="bg-green-50 p-4 rounded-[28px] border border-green-200">
               <div className="font-medium text-sm mb-2">Requisitos para avanzar:</div>
               <p className="text-sm text-gray-700">
                 {nextConfig.solidExecutions} ejecuciones sólidas sin abandono temprano ni señales fuertes de frustración

@@ -101,7 +101,7 @@ export default function A1CallEntrenaPage() {
         colorClass="from-blue to-blue"
       >
         <ASectionPart title="¡Excelente!" icon={<CheckCircle2 />}>
-          <div className="bg-gradient-to-br from-cyan-900/30 to-teal-900/20 border border-cyan-500/30 rounded-lg p-8 text-center mb-8">
+          <div className="bg-gradient-to-br from-cyan-900/30 to-teal-900/20 border border-cyan-500/30 rounded-[28px] p-8 text-center mb-8">
             <div className="mb-4">
               <div className="text-5xl font-black text-transparent bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text mb-2">
                 {profileNames[profile]}
@@ -110,7 +110,7 @@ export default function A1CallEntrenaPage() {
               <p className="text-sm text-slate-400 mt-2">Una sesión de entrenamiento para practicar respuestas en entrevistas</p>
             </div>
 
-            <div className="bg-slate-800/50 rounded-lg p-6 mb-6 text-left">
+            <div className="bg-slate-800/50 rounded-[28px] p-6 mb-6 text-left">
               <h3 className="font-semibold text-white mb-4">Tus Respuestas:</h3>
               <div className="space-y-3">
                 {responses.map((response, idx) => (

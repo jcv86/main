@@ -109,7 +109,7 @@ export function ChileEnNumeros({
             indicators.map((indicator, idx) => (
               <div
                 key={idx}
-                className="p-4 rounded-lg border border-border/50 hover:border-border transition-colors group"
+                className="p-4 rounded-[28px] border border-border/50 hover:border-border transition-colors group"
               >
                 {/* Header */}
                 <div className="flex items-start justify-between mb-3">

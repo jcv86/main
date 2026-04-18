@@ -216,7 +216,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
               {messages.map((message) => (
                 <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[80%] rounded-lg p-4 ${
+                    className={`max-w-[80%] rounded-[28px] p-4 ${
                       message.sender === "user"
                         ? "bg-blue-600 text-white"
                         : "bg-gray-100 text-gray-900 border border-gray-200"
@@ -256,7 +256,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
               ))}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-gray-100 border border-gray-200 rounded-lg p-4 max-w-[80%]">
+                  <div className="bg-gray-100 border border-gray-200 rounded-[28px] p-4 max-w-[80%]">
                     <div className="flex items-center gap-3">
                       <div className="flex gap-1">
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>

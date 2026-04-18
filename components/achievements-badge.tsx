@@ -87,7 +87,7 @@ export function AchievementsBadge() {
               return (
                 <div
                   key={achievement.id}
-                  className={`p-4 rounded-lg text-center transition-all ${
+                  className={`p-4 rounded-[28px] text-center transition-all ${
                     achievement.unlocked
                       ? `bg-gradient-to-br ${achievement.color} text-white`
                       : 'bg-muted text-muted-foreground opacity-50'

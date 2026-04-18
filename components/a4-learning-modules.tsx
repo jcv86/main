@@ -81,7 +81,7 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
       {/* Header */}
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center text-xl">
+          <div className="w-10 h-10 rounded-[28px] bg-purple-100 flex items-center justify-center text-xl">
             📚
           </div>
           <div>
@@ -195,7 +195,7 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
 
                       <div className="space-y-6">
                         {/* Main Content */}
-                        <div className="bg-muted p-4 rounded-lg">
+                        <div className="bg-muted p-4 rounded-[28px]">
                           <div className="text-sm whitespace-pre-wrap">
                             {module.contenido_principal}
                           </div>

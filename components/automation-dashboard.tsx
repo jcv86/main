@@ -78,7 +78,7 @@ export default function AutomationDashboard() {
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg bg-${job.color}-100 dark:bg-${job.color}-900/20`}>
+                    <div className={`p-2 rounded-[28px] bg-${job.color}-100 dark:bg-${job.color}-900/20`}>
                       <Icon className={`h-5 w-5 text-${job.color}-600 dark:text-${job.color}-400`} />
                     </div>
                     <div>

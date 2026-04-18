@@ -79,7 +79,7 @@ export function PersonalizationProfile() {
           </div>
 
           {discProfile.dominant_pattern && (
-            <div className="p-4 bg-primary/5 rounded-lg border border-primary/20">
+            <div className="p-4 bg-primary/5 rounded-[28px] border border-primary/20">
               <div className="text-sm text-muted-foreground mb-1">Patrón Dominante:</div>
               <div className="text-lg font-semibold text-primary">
                 {DISC_DESCRIPTIONS[discProfile.dominant_pattern]?.name} (
