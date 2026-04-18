@@ -26,7 +26,8 @@ export function InterviewTips({
 }: InterviewTipsProps) {
   const [freeTipsUsed, setFreeTipsUsed] = useState(0)
   const [premiumTipsUsed, setPremiumTipsUsed] = useState(0)
-  const [currentTip, setCurrentTip] = useState<string | null>(null)
+  const [tipHistory, setTipHistory] = useState<Array<{ tip: string; isPremium: boolean; index: number }>>([])
+  const [currentTipIndex, setCurrentTipIndex] = useState<number | null>(null)
   const [loading, setLoading] = useState(false)
   const [dtcBalance, setDtcBalance] = useState<number | null>(null)
   const [showPremiumOption, setShowPremiumOption] = useState(false)
@@ -93,7 +94,15 @@ export function InterviewTips({
         return
       }
 
-      setCurrentTip(data.tip)
+      // Add tip to history
+      const newTipEntry = {
+        tip: data.tip,
+        isPremium,
+        index: tipHistory.length
+      }
+      setTipHistory([...tipHistory, newTipEntry])
+      setCurrentTipIndex(tipHistory.length) // Show the newly generated tip
+
       if (isPremium) {
         setPremiumTipsUsed(premiumTipsUsed + 1)
         // Update DTC balance after purchase
@@ -112,6 +121,10 @@ export function InterviewTips({
       setLoading(false)
     }
   }
+
+  const currentTip = currentTipIndex !== null ? tipHistory[currentTipIndex] : null
+  const canNavigateBack = currentTipIndex !== null && currentTipIndex > 0
+  const canNavigateNext = currentTipIndex !== null && currentTipIndex < tipHistory.length - 1
 
   return (
     <Card className="p-6 bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
@@ -140,11 +153,65 @@ export function InterviewTips({
           </div>
         </div>
 
-        {/* Current Tip Display */}
+        {/* All Tips Visual Indicator */}
+        {tipHistory.length > 0 && (
+          <div className="flex gap-2 items-center">
+            <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">Tips obtenidos:</span>
+            <div className="flex gap-1">
+              {tipHistory.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentTipIndex(idx)}
+                  className={`w-2 h-2 rounded-full transition-all ${
+                    currentTipIndex === idx
+                      ? 'bg-blue-500 w-6'
+                      : 'bg-slate-300 dark:bg-slate-600'
+                  }`}
+                  title={`Tip ${idx + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Current Tip Display with Navigation */}
         {currentTip && (
-          <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500">
-            <h4 className="font-semibold text-sm mb-2 text-gray-900 dark:text-white">Consejo IA:</h4>
-            <p className="text-sm text-gray-700 dark:text-gray-300">{currentTip}</p>
+          <div className="space-y-3">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500">
+              <div className="flex items-start justify-between mb-2">
+                <h4 className="font-semibold text-sm text-gray-900 dark:text-white">
+                  Consejo IA {currentTip.isPremium ? '(Premium)' : '(Gratis)'}:
+                </h4>
+                <span className="text-xs bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded">
+                  {(currentTipIndex || 0) + 1}/{tipHistory.length}
+                </span>
+              </div>
+              <p className="text-sm text-gray-700 dark:text-gray-300">{currentTip.tip}</p>
+            </div>
+
+            {/* Navigation buttons */}
+            {tipHistory.length > 1 && (
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => setCurrentTipIndex((currentTipIndex || 0) - 1)}
+                  disabled={!canNavigateBack}
+                  variant="outline"
+                  size="sm"
+                  className="flex-1"
+                >
+                  ← Anterior
+                </Button>
+                <Button
+                  onClick={() => setCurrentTipIndex((currentTipIndex || 0) + 1)}
+                  disabled={!canNavigateNext}
+                  variant="outline"
+                  size="sm"
+                  className="flex-1"
+                >
+                  Siguiente →
+                </Button>
+              </div>
+            )}
           </div>
         )}
 
