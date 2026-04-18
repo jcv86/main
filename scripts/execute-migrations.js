@@ -43,6 +43,11 @@ async function executeMigration(filePath) {
     .map(s => s.trim())
     .filter(s => s.length > 0 && !s.startsWith('--'));
 
+  if (statements.length === 0) {
+    console.log('[v0] No SQL statements found');
+    return;
+  }
+
   console.log(`[v0] Found ${statements.length} SQL statements`);
 
   for (let i = 0; i < statements.length; i++) {
@@ -51,18 +56,20 @@ async function executeMigration(filePath) {
     try {
       console.log(`[v0] Executing statement ${i + 1}/${statements.length}...`);
       
-      const { data, error } = await supabase.rpc('exec_sql', {
-        sql_command: statement + ';'
-      }).catch(async () => {
-        // Fallback: Try direct execution via query
-        console.log(`[v0] RPC not available, attempting direct execution...`);
-        return { error: new Error('RPC not available, try Supabase dashboard') };
-      });
+      try {
+        const { data, error } = await supabase.rpc('exec_sql', {
+          sql_command: statement + ';'
+        });
 
-      if (error) {
-        console.warn(`[v0] Warning on statement ${i + 1}:`, error.message);
-      } else {
-        console.log(`[v0] Statement ${i + 1} executed successfully`);
+        if (error) {
+          console.warn(`[v0] Warning on statement ${i + 1}:`, error.message);
+        } else {
+          console.log(`[v0] ✓ Statement ${i + 1} executed successfully`);
+        }
+      } catch (rpcError) {
+        console.warn(`[v0] RPC not available (${rpcError.message})`);
+        console.log(`[v0] → Please visit your Supabase Dashboard and run the SQL manually`);
+        break;
       }
     } catch (err) {
       console.error(`[v0] Error on statement ${i + 1}:`, err.message);
@@ -72,19 +79,27 @@ async function executeMigration(filePath) {
 
 async function runAllMigrations() {
   const scriptsDir = path.join(__dirname);
-  const files = fs
-    .readdirSync(scriptsDir)
-    .filter(f => f.match(/^\d+-.*\.sql$/))
+  const allFiles = fs.readdirSync(scriptsDir);
+  
+  // Only run gamification migration files
+  const gamificationFiles = allFiles
+    .filter(f => f === '01-gamification-schema.sql' || f === '02-enhanced-interview-questions.sql')
     .sort();
 
-  console.log(`\n[v0] Found ${files.length} migration files`);
+  console.log(`\n[v0] Found ${gamificationFiles.length} gamification migration files`);
 
-  for (const file of files) {
+  if (gamificationFiles.length === 0) {
+    console.log('[v0] ❌ Gamification migration files not found!');
+    console.log('[v0] Expected: 01-gamification-schema.sql, 02-enhanced-interview-questions.sql');
+    return;
+  }
+
+  for (const file of gamificationFiles) {
     await executeMigration(path.join(scriptsDir, file));
   }
 
   console.log('\n[v0] ✓ Migration process completed!');
-  console.log('[v0] Note: If migrations failed above, run the SQL files manually via Supabase dashboard');
+  console.log('[v0] Note: If RPC not available, run the SQL files manually via Supabase dashboard');
 }
 
 runAllMigrations().catch(err => {
