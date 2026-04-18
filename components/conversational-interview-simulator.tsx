@@ -6,6 +6,7 @@ import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { useContextValidation } from '@/lib/hooks/use-context-validation'
 import { useSpeechRecognition } from '@/lib/hooks/use-speech-recognition'
 import { useAvatarPreferences } from '@/lib/hooks/use-avatar-preferences'
+import { useGamification } from '@/lib/hooks/use-gamification'
 import { InterviewerSelector } from '@/components/interviewer-selector'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -137,6 +138,7 @@ export function ConversationalInterviewSimulator({
   const supabase = createClient()
   const { validateContextRelevance, isValidating, validationError, clearError } = useContextValidation()
   const { preferences, updatePreferences } = useAvatarPreferences(user?.id)
+  const { gamification, awardXP, updateStreak } = useGamification(user?.id)
   
   // STT Hook - usar como en C1
   const { isListening, isSupported, transcript, isFinal, startListening, stopListening, resetTranscript } = useSpeechRecognition({
@@ -791,19 +793,52 @@ export function ConversationalInterviewSimulator({
               ¡Simulación Completada!
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="text-center py-6">
+          <CardContent className="space-y-6">
+            {/* Score Display */}
+            <div className="text-center py-6 space-y-3">
               <div className="text-5xl font-bold text-emerald-600 mb-2">
                 {Object.values(attempts).flat().reduce((acc, a) => acc + a.score, 0) / Math.max(1, Object.values(attempts).flat().length)}
               </div>
               <p className="text-slate-600">Puntuación Promedio</p>
+
+              {/* XP Rewards */}
+              {gamification && (
+                <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg space-y-2">
+                  <div className="flex items-center justify-center gap-2">
+                    <Zap className="w-5 h-5 text-blue-600" />
+                    <span className="font-bold text-blue-600">+150 XP Ganados</span>
+                  </div>
+                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                    Nivel: {gamification.current_level} • Racha: {gamification.current_streak} días
+                  </p>
+                </div>
+              )}
             </div>
+
             <p className="text-center text-slate-700 dark:text-slate-300">
               Completaste {questions.length} preguntas con un total de {Object.values(attempts).flat().length} intentos.
             </p>
-            <Button className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12">
-              Volver al Dashboard
-            </Button>
+
+            <div className="flex gap-3">
+              <Button 
+                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white h-12"
+                onClick={() => {
+                  // Award XP for completing interview
+                  awardXP(150, 'conversational-interview-simulator')
+                  updateStreak()
+                  if (onComplete) onComplete({ score: 85, completed: true })
+                }}
+              >
+                Volver al Dashboard
+              </Button>
+              <Button 
+                variant="outline" 
+                className="flex-1 h-12"
+                onClick={() => setStage('setup')}
+              >
+                Otra Simulación
+              </Button>
+            </div>
           </CardContent>
         </Card>
       )}

@@ -1,0 +1,152 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import { Badge } from '@/components/ui/badge'
+import { Zap, Flame, Trophy, Star } from 'lucide-react'
+
+export interface XPProgressProps {
+  currentLevel: number
+  currentXP: number
+  xpForNextLevel: number
+  currentStreak: number
+  totalInterviews: number
+}
+
+const LEVEL_TITLES: Record<number, string> = {
+  1: 'Principiante',
+  2: 'Aprendiz',
+  3: 'Practicante',
+  4: 'Competente',
+  5: 'Avanzado',
+  6: 'Experto',
+  7: 'Maestro',
+  8: 'Leyenda'
+}
+
+const LEVEL_COLORS: Record<number, { bg: string; text: string; accent: string }> = {
+  1: { bg: 'bg-slate-100 dark:bg-slate-800', text: 'text-slate-700 dark:text-slate-300', accent: 'from-slate-400 to-slate-600' },
+  2: { bg: 'bg-green-100 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-300', accent: 'from-green-400 to-green-600' },
+  3: { bg: 'bg-blue-100 dark:bg-blue-900/30', text: 'text-blue-700 dark:text-blue-300', accent: 'from-blue-400 to-blue-600' },
+  4: { bg: 'bg-purple-100 dark:bg-purple-900/30', text: 'text-purple-700 dark:text-purple-300', accent: 'from-purple-400 to-purple-600' },
+  5: { bg: 'bg-orange-100 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-300', accent: 'from-orange-400 to-orange-600' },
+  6: { bg: 'bg-amber-100 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-300', accent: 'from-amber-400 to-amber-600' },
+  7: { bg: 'bg-rose-100 dark:bg-rose-900/30', text: 'text-rose-700 dark:text-rose-300', accent: 'from-rose-400 to-rose-600' },
+  8: { bg: 'bg-fuchsia-100 dark:bg-fuchsia-900/30', text: 'text-fuchsia-700 dark:text-fuchsia-300', accent: 'from-fuchsia-400 to-fuchsia-600' }
+}
+
+export function XPProgressDisplay({
+  currentLevel,
+  currentXP,
+  xpForNextLevel,
+  currentStreak,
+  totalInterviews
+}: XPProgressProps) {
+  const [xpPercentage, setXpPercentage] = useState(0)
+  const [levelTitle, setLevelTitle] = useState('')
+
+  useEffect(() => {
+    setXpPercentage((currentXP / xpForNextLevel) * 100)
+    setLevelTitle(LEVEL_TITLES[Math.min(currentLevel, 8)])
+  }, [currentLevel, currentXP, xpForNextLevel])
+
+  const colors = LEVEL_COLORS[Math.min(currentLevel, 8)]
+
+  return (
+    <div className="space-y-4">
+      {/* Level Card */}
+      <Card className={`border-2 ${colors.bg}`}>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className={colors.text}>
+                Nivel {currentLevel}
+              </CardTitle>
+              <p className={`text-sm ${colors.text} opacity-75`}>{levelTitle}</p>
+            </div>
+            <div className={`text-3xl font-bold ${colors.text}`}>
+              {currentLevel}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* XP Progress Bar */}
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="font-semibold">Experiencia</span>
+              <span className="text-xs opacity-75">
+                {currentXP} / {xpForNextLevel} XP
+              </span>
+            </div>
+            <Progress
+              value={xpPercentage}
+              className="h-3"
+            />
+          </div>
+
+          {/* Stats Row */}
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-white/50 dark:bg-black/20 rounded-lg p-3">
+              <div className="flex items-center gap-2 mb-1">
+                <Flame className="w-4 h-4 text-orange-500" />
+                <span className="text-xs font-semibold">Racha</span>
+              </div>
+              <p className="text-xl font-bold">{currentStreak}</p>
+              <p className="text-xs opacity-75">días seguidos</p>
+            </div>
+
+            <div className="bg-white/50 dark:bg-black/20 rounded-lg p-3">
+              <div className="flex items-center gap-2 mb-1">
+                <Trophy className="w-4 h-4 text-amber-500" />
+                <span className="text-xs font-semibold">Entrevistas</span>
+              </div>
+              <p className="text-xl font-bold">{totalInterviews}</p>
+              <p className="text-xs opacity-75">completadas</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Level Progression */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-sm">Progresión de Niveles</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-1 overflow-x-auto pb-2">
+            {Array.from({ length: 8 }).map((_, i) => {
+              const level = i + 1
+              const isReached = level <= currentLevel
+              const isCurrent = level === currentLevel
+
+              return (
+                <div
+                  key={level}
+                  className={`flex flex-col items-center gap-1 min-w-fit ${
+                    isReached ? 'opacity-100' : 'opacity-50'
+                  }`}
+                >
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm ${
+                      isCurrent
+                        ? `bg-gradient-to-br ${LEVEL_COLORS[level].accent} text-white shadow-lg`
+                        : isReached
+                        ? `${LEVEL_COLORS[level].bg} ${LEVEL_COLORS[level].text}`
+                        : 'bg-slate-200 dark:bg-slate-700 text-slate-400'
+                    }`}
+                  >
+                    {level}
+                  </div>
+                  <span className="text-xs font-semibold whitespace-nowrap">
+                    {LEVEL_TITLES[level].split(' ')[0]}
+                  </span>
+                </div>
+              )
+            })}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
