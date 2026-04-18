@@ -46,7 +46,7 @@ export function WhitepaperClient() {
 
       <main className="container mx-auto px-4 py-12 max-w-5xl">
         {/* Title Section */}
-        <div className="bg-gradient-to-r from-purple to-blue rounded-2xl p-12 text-white mb-12">
+        <div className="bg-purple rounded-2xl p-12 text-white mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Despega Tu Carrera Platform</h1>
           <p className="text-2xl mb-6 text-purple/10">Technical Whitepaper v1.0</p>
           <div className="flex flex-col gap-2 text-purple/10">
@@ -818,7 +818,7 @@ export function WhitepaperClient() {
         </section>
 
         {/* Conclusion */}
-        <section className="bg-gradient-to-r from-purple to-blue rounded-2xl p-12 text-white">
+        <section className="bg-purple rounded-2xl p-12 text-white">
           <h2 className="text-3xl font-bold mb-6">Conclusion</h2>
           <p className="text-lg text-purple/10 mb-6 leading-relaxed">
             Despega Tu Carrera represents a significant advancement in democratizing professional development for

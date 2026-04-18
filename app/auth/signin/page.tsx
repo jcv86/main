@@ -93,7 +93,7 @@ export default function SignInPage() {
   const isLoading = isLoadingGoogle || isLoadingLinkedIn
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple/5 via-blue/5 to-blue/5 dark:from-background dark:via-muted/90 dark:to-muted/90 px-4 py-8">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple/20 dark:bg-purple/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
@@ -105,11 +105,11 @@ export default function SignInPage() {
         {/* Header section */}
         <div className="text-center space-y-3 mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="p-2 bg-gradient-to-br from-purple/50 to-blue/50 rounded-lg">
+            <div className="p-2 bg-purple/50 rounded-lg">
               <Sparkles className="w-6 h-6 text-white" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple via-blue to-blue bg-clip-text text-transparent dark:from-purple-400 dark:via-blue-400 dark:to-blue/40">
+          <h1 className="text-4xl font-bold text-purple ">
             Despega Tu Carrera
           </h1>
           <p className="text-lg text-muted/60 dark:text-muted/30">
@@ -154,7 +154,7 @@ export default function SignInPage() {
             <Button
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
-              className="w-full h-12 text-base gap-2 bg-gradient-to-r from-blue to-blue hover:from-blue hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-200 dark:from-blue dark:to-blue-800 dark:hover:from-blue-800 dark:hover:to-blue-900"
+              className="w-full h-12 text-base gap-2 bg-blue hover:bg-blue/80 text-white shadow-md hover:shadow-lg transition-all duration-200 "
             >
               {isLoadingLinkedIn ? (
                 <Loader2 className="h-5 w-5 animate-spin" />

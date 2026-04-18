@@ -141,7 +141,7 @@ export default function A2TestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 p-4">
+    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 p-4">
       <div className="max-w-6xl mx-auto py-8">
         {/* Header */}
         <div className="mb-8">
@@ -155,7 +155,7 @@ export default function A2TestPage() {
 
         {/* Control Panel */}
         <Card className="mb-8 border-0 shadow-lg">
-          <CardHeader className="bg-gradient-to-r from-blue to-blue text-white rounded-t-lg">
+          <CardHeader className="bg-blue text-white rounded-t-lg">
             <CardTitle>Panel de Control</CardTitle>
             <CardDescription className="text-blue/10">
               Haz clic para probar cada fase del flujo CANON
@@ -211,7 +211,7 @@ export default function A2TestPage() {
                 onClick={runFullTest}
                 disabled={isRunning}
                 size="lg"
-                className="h-14 text-lg font-bold bg-gradient-to-r from-blue to-blue hover:from-blue hover:to-blue-800"
+                className="h-14 text-lg font-bold bg-blue hover:bg-blue/80"
               >
                 {isRunning ? (
                   <>

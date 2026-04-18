@@ -12,12 +12,12 @@ export default function ComenzarPage() {
       {/* Hero */}
       <section className="container mx-auto px-4 py-20">
         <div className="text-center max-w-3xl mx-auto">
-          <Badge className="mb-4 bg-gradient-to-r from-purple to-blue text-white border-0">
+          <Badge className="mb-4 bg-purple text-white border-0">
             <Rocket className="h-3 w-3 mr-2" />
             Listo para Producción
           </Badge>
 
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-purple via-blue to-blue bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-purple">
             Tu Transformación Comienza Aquí
           </h1>
 
@@ -29,7 +29,7 @@ export default function ComenzarPage() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">
             <Link href="/demo/ciclo-completo">
-              <Button size="lg" className="bg-gradient-to-r from-purple to-blue text-white hover:from-purple-700 hover:to-blue">
+              <Button size="lg" className="bg-purple text-white hover:from-purple-700 hover:to-blue">
                 Ver Demo (5 min)
               </Button>
             </Link>
@@ -110,7 +110,7 @@ export default function ComenzarPage() {
                 </p>
                 <div className="space-y-2">
                   <Link href="/despega/conozcamonos-1">
-                    <Button className="w-full bg-gradient-to-r from-purple to-blue text-white hover:from-purple-700 hover:to-blue justify-between">
+                    <Button className="w-full bg-purple text-white hover:from-purple-700 hover:to-blue justify-between">
                       Comenzar Ahora <Rocket className="h-4 w-4" />
                     </Button>
                   </Link>

@@ -207,7 +207,7 @@ export default function GamificationClient() {
           <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple/10 to-blue/10 dark:from-purple/30 dark:to-blue-900/30 rounded-full mb-4">
             <p className="text-sm font-semibold text-purple dark:text-purple/30">Tu Progreso y Logros</p>
           </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">Gamificación DTC</h1>
+          <h1 className="text-5xl font-bold bg-purple bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">Gamificación DTC</h1>
           <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">
             Completa misiones, gana logros y sube de nivel mientras creces personalmente
           </p>

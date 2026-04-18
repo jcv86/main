@@ -83,7 +83,7 @@ export default function AvatarSetupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 py-12 px-4">
+    <div className="min-h-screen bg-background py-12 px-4">
       <div className="max-w-5xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center mb-12">
@@ -175,7 +175,7 @@ export default function AvatarSetupPage() {
         </div>
 
         {/* Benefits */}
-        <Card className="border-muted/20 dark:border-muted/80 bg-gradient-to-br from-white to-muted/5 dark:from-background dark:to-muted/90">
+        <Card className="border-muted/20 dark:border-muted/80 bg-gradient-to-br from-white to-muted/5">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5 text-green" />

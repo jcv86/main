@@ -80,7 +80,7 @@ export default function A1PatternsPage() {
     <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple/50 to-blue">
       <ASectionPart title={`Tu Perfil: ${label}`} icon={<Target />}>
         {/* Profile Header */}
-        <div className="bg-gradient-to-r from-purple to-blue rounded-xl p-8 text-white mb-8 shadow-lg">
+        <div className="bg-purple rounded-xl p-8 text-white mb-8 shadow-lg">
           <p className="text-purple/10 text-sm mb-2 font-semibold">Perfil Cerebral Identificado</p>
           <h1 className="text-5xl font-black mb-3">{label}</h1>
           <p className="text-lg text-purple/10 font-medium">{description}</p>
@@ -222,7 +222,7 @@ export default function A1PatternsPage() {
                 <p className="text-muted/30 mb-4">Practica entrevistas específicas para tu perfil</p>
                 <Button 
                   onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile}`)}
-                  className="w-full bg-gradient-to-r from-blue to-blue hover:from-blue hover:to-blue"
+                  className="w-full bg-blue hover:from-blue hover:to-blue"
                 >
                   Comenzar Práctica
                   <ArrowRight className="w-4 h-4 ml-2" />

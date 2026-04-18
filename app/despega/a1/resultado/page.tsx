@@ -105,7 +105,7 @@ export default function A1ResultadoPage() {
             <Brain className="w-4 h-4 text-purple dark:text-purple/40" />
             <span className="text-sm font-semibold text-purple dark:text-purple/30">Tu Perfil Despega Cerebral</span>
           </div>
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-4">
+          <h1 className="text-5xl font-bold bg-purple bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-4">
             Tu Mapa está Listo
           </h1>
           <p className="text-lg text-muted/70 dark:text-muted/30">
@@ -383,7 +383,7 @@ export default function A1ResultadoPage() {
                 trackEvent('a1_bridge_cta_clicked', {})
                 router.push('/despega/a2/intro')
               }} 
-              className="gap-2 px-8 py-6 text-lg w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white font-semibold"
+              className="gap-2 px-8 py-6 text-lg w-full bg-purple hover:from-purple-700 hover:to-blue text-white font-semibold"
               size="lg"
             >
               Comenzar tu Misión de 90 Días

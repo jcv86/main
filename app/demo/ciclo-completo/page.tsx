@@ -107,18 +107,18 @@ export default function CicloCompletoDemoPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90">
+    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10">
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-16 md:py-24">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <Badge className="mb-4 bg-gradient-to-r from-purple to-blue text-white border-0">
+          <Badge className="mb-4 bg-purple text-white border-0">
             <Sparkles className="h-3 w-3 mr-2" />
             Ciclo Completo A1-A4
           </Badge>
           
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
             Tu Transformación en{' '}
-            <span className="bg-gradient-to-r from-purple via-blue to-blue bg-clip-text text-transparent">
+            <span className="text-purple">
               4 Pilares
             </span>
           </h1>
@@ -130,7 +130,7 @@ export default function CicloCompletoDemoPage() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/despega/conozcamonos-1">
-              <Button size="lg" className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white">
+              <Button size="lg" className="bg-purple hover:from-purple-700 hover:to-blue text-white">
                 Comenzar el Ciclo <ChevronRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -241,7 +241,7 @@ export default function CicloCompletoDemoPage() {
 
       {/* Quick Stats */}
       <section className="container mx-auto px-4 py-12">
-        <div className="bg-gradient-to-r from-purple to-blue rounded-2xl p-8 md:p-12 text-white">
+        <div className="bg-purple rounded-2xl p-8 md:p-12 text-white">
           <h2 className="text-3xl font-bold mb-8">¿Qué lograrás?</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {[
@@ -265,7 +265,7 @@ export default function CicloCompletoDemoPage() {
           Sistema completamente integrado. Resultados medibles. Acción clara.
         </p>
         <Link href="/despega/conozcamonos-1">
-          <Button size="lg" className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white">
+          <Button size="lg" className="bg-purple hover:from-purple-700 hover:to-blue text-white">
             Iniciar Tu Transformación Ahora
           </Button>
         </Link>

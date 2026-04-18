@@ -849,7 +849,7 @@ export function ConversationalInterviewSimulator({
       'professional-1': 'bg-gradient-to-br from-blue-500 to-blue-600',
       'creative-1': 'bg-gradient-to-br from-purple-500 to-purple',
       'tech-1': 'bg-gradient-to-br from-green-500 to-green-600',
-      'business-1': 'bg-gradient-to-br from-red to-red',
+      'business-1': 'bg-red',
       'casual-1': 'bg-gradient-to-br from-orange-500 to-orange-600',
       'formal-1': 'bg-gradient-to-br from-slate-700 to-slate-900',
       'interviewer-classic-1': 'bg-gradient-to-br from-purple-500 to-purple',

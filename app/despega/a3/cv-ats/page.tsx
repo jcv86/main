@@ -97,10 +97,10 @@ export default function CVATSPage() {
   )
 
   const renderCreativeFormat = () => (
-    <div className="bg-gradient-to-br from-purple/5 to-blue/5 dark:from-muted/80 dark:to-muted/90 p-12 text-muted/90 dark:text-white space-y-6">
+    <div className="bg-background dark:from-muted/80 dark:to-muted/90 p-12 text-muted/90 dark:text-white space-y-6">
       {/* Header with gradient accent */}
       <div className="border-l-4 border-purple pl-6">
-        <h1 className="text-4xl font-black bg-clip-text text-transparent bg-gradient-to-r from-purple to-blue">{cvData.personalInfo.name}</h1>
+        <h1 className="text-4xl font-black bg-clip-text text-transparent bg-purple">{cvData.personalInfo.name}</h1>
         <p className="text-xl font-bold text-purple dark:text-purple/40 mt-1">{cvData.personalInfo.title}</p>
         <div className="flex gap-4 text-sm mt-2 flex-wrap">
           <span>{cvData.personalInfo.email}</span>
@@ -276,7 +276,7 @@ export default function CVATSPage() {
   const renderLinkedInFormat = () => (
     <div className="bg-white dark:bg-background p-8 text-muted/90 dark:text-white space-y-6">
       {/* LinkedIn Header */}
-      <div className="bg-gradient-to-r from-blue to-blue text-white p-8 rounded-[28px] -mx-8 -mt-8 mb-4">
+      <div className="bg-blue text-white p-8 rounded-[28px] -mx-8 -mt-8 mb-4">
         <h1 className="text-3xl font-bold">{cvData.personalInfo.name}</h1>
         <p className="text-lg mt-1">{cvData.personalInfo.title}</p>
         <p className="text-blue/10 mt-2">{cvData.personalInfo.location}</p>

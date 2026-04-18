@@ -210,7 +210,7 @@ export default function BibliotecaPage() {
               <BookOpen className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Biblioteca Digital</h1>
+              <h1 className="text-5xl font-bold bg-purple bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Biblioteca Digital</h1>
               <p className="text-muted/70 dark:text-muted/30 font-medium">
                 {user
                   ? `Hola ${user.email?.split("@")[0]}, aquí están tus recursos personalizados`

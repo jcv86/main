@@ -89,7 +89,7 @@ export default function UnifiedTestDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 p-4">
+    <div className="min-h-screen bg-background p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">

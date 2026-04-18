@@ -19,7 +19,7 @@ export default function CerebroLoading() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 max-w-[1600px] mx-auto">
           <div className="lg:col-span-3">
             <Card className="h-[calc(100vh-8rem)] flex flex-col shadow-xl">
-              <CardHeader className="border-b bg-gradient-to-r from-purple to-blue text-white">
+              <CardHeader className="border-b bg-purple text-white">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <Skeleton className="h-10 w-10 rounded-lg bg-white/20" />

@@ -228,7 +228,7 @@ export default function TrainingDashboardPage() {
           </div>
           <div className="h-3 bg-muted/70 rounded-full overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-blue to-blue rounded-full transition-all"
+              className="h-full bg-blue rounded-full transition-all"
               style={{ width: `${completionPercentage}%` }}
             />
           </div>
@@ -308,7 +308,7 @@ export default function TrainingDashboardPage() {
           </div>
           <div className="h-2 bg-muted/70 rounded-full overflow-hidden mb-4">
             <div
-              className="h-full bg-gradient-to-r from-blue to-blue rounded-full transition-all"
+              className="h-full bg-blue rounded-full transition-all"
               style={{ width: `${completionPercentage}%` }}
             />
           </div>

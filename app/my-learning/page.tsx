@@ -39,7 +39,7 @@ export default async function MyLearningPage() {
           <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple/10 to-blue/10 dark:from-purple/30 dark:to-blue-900/30 rounded-full mb-4">
             <p className="text-sm font-semibold text-purple dark:text-purple/30">Tu Progreso de Aprendizaje</p>
           </div>
-          <h1 className="text-5xl font-bold mb-2 bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Tu Aprendizaje</h1>
+          <h1 className="text-5xl font-bold mb-2 bg-purple bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400">Tu Aprendizaje</h1>
           <p className="text-lg text-muted/70 dark:text-muted/30">
             Nivel: <span className="font-bold text-purple dark:text-purple/40">{profile.current_level}</span>
           </p>

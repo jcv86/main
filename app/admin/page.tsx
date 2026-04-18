@@ -16,7 +16,7 @@ const ProtectedAdminRoute = dynamic(() => import('@/components/admin/protected-a
 export default function AdminDashboardPage() {
   return (
     <ProtectedAdminRoute>
-      <main className="min-h-screen bg-gradient-to-br from-background to-muted/20">
+      <main className="min-h-screen bg-background">
         <div className="container max-w-7xl py-8 px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8 space-y-2">

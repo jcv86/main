@@ -192,7 +192,7 @@ export default function Conozcamonos2Page() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-blue/5 dark:from-background dark:via-muted/90 dark:to-muted/80 p-4 py-8">
+    <div className="min-h-screen bg-background dark:from-background dark:via-muted/90 dark:to-muted/80 p-4 py-8">
       <div className="max-w-3xl mx-auto">
         {/* Header with brandbook styling */}
         <div className="text-center mb-8">
@@ -367,7 +367,7 @@ export default function Conozcamonos2Page() {
             <Button
               onClick={handleNext}
               disabled={!allStepAnswered || loading || !!error}
-              className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-purple hover:from-purple-700 hover:to-blue text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               title={
                 error 
                   ? 'Error de validación: ' + error

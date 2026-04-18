@@ -173,7 +173,7 @@ export default function Mision90DiasPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 flex items-center justify-center">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green"></div>
           <p className="mt-4 text-muted/60 dark:text-muted/40">Preparando tu misión...</p>
@@ -185,7 +185,7 @@ export default function Mision90DiasPage() {
   const routeInfo = ROUTE_INFO[routeSelected as keyof typeof ROUTE_INFO] || ROUTE_INFO.energia
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 p-4 overflow-y-auto">
       <div className="max-w-3xl mx-auto py-12 space-y-8">
         {/* Header */}
         <div className="text-center space-y-3">

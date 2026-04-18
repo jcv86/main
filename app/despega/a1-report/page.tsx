@@ -230,7 +230,7 @@ export default function A1ReportPage() {
             </div>
             <Button 
               onClick={() => router.push('/despega/a1-cerebral')} 
-              className="w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white font-semibold py-6 text-lg"
+              className="w-full bg-purple hover:from-purple-700 hover:to-blue text-white font-semibold py-6 text-lg"
             >
               <Target className="w-5 h-5 mr-2" />
               Comenzar Evaluación de Perfil Cerebral
@@ -419,7 +419,7 @@ export default function A1ReportPage() {
               <p className="text-sm text-muted/30 mb-4">Practica entrevistas con un entrenamiento personalizado para tu perfil {primaryLabel}.</p>
               <Button 
                 onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile.primary}`)} 
-                className="w-full bg-gradient-to-r from-blue to-blue hover:from-blue hover:to-blue text-white" 
+                className="w-full bg-blue hover:from-blue hover:to-blue text-white" 
                 size="sm"
               >
                 <Phone className="w-3 h-3 mr-1" />

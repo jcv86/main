@@ -122,7 +122,7 @@ export default function DemoPage() {
 
             <Button 
               onClick={() => setStep('questions')}
-              className="bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white text-lg px-8 py-6"
+              className="bg-purple hover:from-purple-700 hover:to-blue text-white text-lg px-8 py-6"
             >
               Comenzar Demo
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -197,7 +197,7 @@ export default function DemoPage() {
             <Button 
               onClick={() => setStep('results')}
               disabled={!allAnswered}
-              className="w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white text-lg py-6"
+              className="w-full bg-purple hover:from-purple-700 hover:to-blue text-white text-lg py-6"
             >
               Ver Mi Perfil
               <ArrowRight className="ml-2 h-5 w-5" />
@@ -208,7 +208,7 @@ export default function DemoPage() {
         {step === 'results' && allAnswered && (
           <div className="space-y-8">
             {/* Profile Card */}
-            <Card className="border-4 border-purple/50 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple/30 dark:to-blue/10">
+            <Card className="border-4 border-purple/50 bg-background dark:from-purple/30 dark:to-blue/10">
               <CardHeader>
                 <CardTitle className="text-3xl mb-2">Tu Perfil: {profileNames[primary]} + {profileNames[secondary]}</CardTitle>
                 <CardDescription className="text-lg">{profileDescriptions[primary]}</CardDescription>
@@ -265,7 +265,7 @@ export default function DemoPage() {
 
                 <div className="border-t border-muted/20 dark:border-muted/80 pt-4 space-y-2">
                   <Link href="/auth/signin">
-                    <Button className="w-full bg-gradient-to-r from-purple to-blue hover:from-purple-700 hover:to-blue text-white py-6 text-lg">
+                    <Button className="w-full bg-purple hover:from-purple-700 hover:to-blue text-white py-6 text-lg">
                       Crear Mi Cuenta Gratuita
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </Button>

@@ -35,7 +35,7 @@ export default function MarketInsightsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 p-4 py-12">
+    <div className="min-h-screen bg-background p-4 py-12">
       <div className="max-w-2xl mx-auto">
         <Card className="p-8 text-center">
           <TrendingUp className="w-16 h-16 mx-auto text-purple mb-4 opacity-50" />

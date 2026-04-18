@@ -152,7 +152,7 @@ export default function A2ResultadosPage() {
             </div>
             <Button 
               onClick={() => router.push('/despega/a2/dashboard')} 
-              className="w-full bg-gradient-to-r from-blue to-blue hover:from-blue hover:to-cyan-700 text-white font-semibold py-6 text-lg"
+              className="w-full bg-blue hover:from-blue hover:to-cyan-700 text-white font-semibold py-6 text-lg"
             >
               <ArrowRight className="w-5 h-5 mr-2" />
               Volver al Dashboard A2
@@ -190,7 +190,7 @@ export default function A2ResultadosPage() {
           <div className="mt-8 flex gap-4 justify-center">
             <Button 
               onClick={() => router.push('/despega/a2/dashboard')}
-              className="bg-gradient-to-r from-blue to-blue hover:from-blue hover:to-cyan-700 text-white font-semibold py-6 px-8"
+              className="bg-blue hover:from-blue hover:to-cyan-700 text-white font-semibold py-6 px-8"
             >
               <Target className="w-5 h-5 mr-2" />
               Continuar con Misión

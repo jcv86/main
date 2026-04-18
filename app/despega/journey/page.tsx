@@ -134,7 +134,7 @@ export default function JourneyPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-white dark:from-background dark:to-muted/90 p-6">
+    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-white p-6">
       <div className="max-w-6xl mx-auto">
         {/* HERO SECTION */}
         <div className="mb-12">

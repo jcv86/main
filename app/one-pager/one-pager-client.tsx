@@ -6,7 +6,7 @@ export default function OnePagerClient() {
   return (
     <div className="min-h-screen bg-white">
       {/* Header - Print-friendly */}
-      <header className="bg-gradient-to-r from-purple to-blue text-white py-8 no-print">
+      <header className="bg-purple text-white py-8 no-print">
         <div className="container mx-auto px-4 max-w-5xl flex items-center justify-between">
           <Link href="/" className="text-lg font-semibold hover:text-purple/10">
             ← Volver al Inicio

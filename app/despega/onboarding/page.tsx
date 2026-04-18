@@ -414,7 +414,7 @@ export default function DespegaOnboarding() {
   // STEP 2: Instrucciones Detalladas
   if (step === "instructions") {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 p-4 overflow-y-auto">
+      <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 p-4 overflow-y-auto">
         <div className="max-w-5xl mx-auto space-y-8 pb-8">
           {/* Hero Section */}
           <div className="text-center space-y-3 py-8">

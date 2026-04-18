@@ -136,7 +136,7 @@ export default function FeedbackPage() {
         {/* Feedback Content */}
         <div className="space-y-6">
           {/* Overall Score */}
-          <Card className="bg-gradient-to-r from-blue to-blue text-white border-0">
+          <Card className="bg-blue text-white border-0">
             <CardContent className="pt-6 pb-6">
               <div className="flex items-center justify-between">
                 <div>

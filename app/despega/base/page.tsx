@@ -115,7 +115,7 @@ export default function BasePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90">
+    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10">
       <div className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
         
         {/* JOURNEY PROGRESS - BIG VISUAL */}

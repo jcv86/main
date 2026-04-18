@@ -510,7 +510,7 @@ export default function RIASECResults() {
               <div>
                 <CardTitle className="text-3xl font-bold text-blue mb-2">
                   Resultados Despega Rumbo
-                  <Badge className="ml-3 bg-gradient-to-r from-blue to-blue text-white">
+                  <Badge className="ml-3 bg-blue text-white">
                     Código Holland: {results.holland_code}
                   </Badge>
                   {isDemoMode && (
@@ -530,7 +530,7 @@ export default function RIASECResults() {
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="mb-6 border-2 border-purple/30 bg-gradient-to-br from-purple/5 to-blue/5 dark:from-purple dark:to-blue-950">
+        <Card className="mb-6 border-2 border-purple/30 bg-background dark:from-purple dark:to-blue-950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Sparkles className="h-5 w-5 text-purple" />
@@ -1720,7 +1720,7 @@ export default function RIASECResults() {
                       </ul>
                     </div>
 
-                    <div className="bg-gradient-to-r from-blue to-blue text-white p-4 rounded-lg">
+                    <div className="bg-blue text-white p-4 rounded-lg">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-semibold mb-1">Recurso Recomendado DTC</p>

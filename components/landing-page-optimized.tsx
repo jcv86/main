@@ -24,7 +24,7 @@ export default function LandingPageOptimized() {
             <Link href="/auth/signin" prefetch={true}>
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-purple to-blue hover:from-purple/80 hover:to-blue/80 text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all text-white"
+                className="bg-purple hover:from-purple/80 hover:to-blue/80 text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all text-white"
               >
                 Quiero comenzar mi diagnóstico
                 <ArrowRight className="ml-2 h-5 w-5" />

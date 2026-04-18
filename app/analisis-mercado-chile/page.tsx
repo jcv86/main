@@ -7,11 +7,11 @@ export const metadata: Metadata = {
 
 export default function AnalisisMercadoChilePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-muted/5 via-blue/5 to-blue/5">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         {/* Header */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-blue via-blue to-purple bg-clip-text text-transparent mb-6">
+          <h1 className="text-5xl font-bold text-blue mb-6">
             Análisis del Mercado Chileno
           </h1>
           <p className="text-xl text-muted/60 max-w-3xl mx-auto">
@@ -55,7 +55,7 @@ export default function AnalisisMercadoChilePage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             {/* Crisis de Empleabilidad */}
-            <div className="bg-gradient-to-br from-red to-red rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-red rounded-2xl shadow-lg p-8 text-white">
               <h3 className="text-2xl font-bold mb-4">🚨 Crisis de Empleabilidad</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
@@ -94,7 +94,7 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Escasez de Talento */}
-            <div className="bg-gradient-to-br from-orange/50 to-orange-600 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-orange rounded-2xl shadow-lg p-8 text-white">
               <h3 className="text-2xl font-bold mb-4">💼 Escasez Crítica de Talento</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
@@ -175,7 +175,7 @@ export default function AnalisisMercadoChilePage() {
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-muted/90 mb-8">2. Tamaño y Oportunidad de Mercado</h2>
 
-          <div className="bg-gradient-to-r from-blue to-blue rounded-2xl shadow-lg p-8 text-white mb-8">
+          <div className="bg-blue rounded-2xl shadow-lg p-8 text-white mb-8">
             <h3 className="text-2xl font-bold mb-6">📊 Segmentos de Mercado Primarios</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
@@ -362,7 +362,7 @@ export default function AnalisisMercadoChilePage() {
           </div>
 
           {/* Ventaja Competitiva de DTC */}
-          <div className="bg-gradient-to-br from-green to-green rounded-2xl shadow-lg p-8 text-white">
+          <div className="bg-green rounded-2xl shadow-lg p-8 text-white">
             <h3 className="text-2xl font-bold mb-6">🏆 Ventaja Competitiva de Despega Tu Carrera</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
@@ -590,7 +590,7 @@ export default function AnalisisMercadoChilePage() {
 
           <div className="space-y-6">
             {/* Recomendación 1 */}
-            <div className="bg-gradient-to-r from-blue to-blue rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-blue rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">🎯</span>
                 <div>
@@ -667,7 +667,7 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Recomendación 3 */}
-            <div className="bg-gradient-to-r from-green-600 to-green rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-green rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">💼</span>
                 <div>
@@ -713,7 +713,7 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Recomendación 4 */}
-            <div className="bg-gradient-to-r from-orange-600 to-red-600 rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-orange rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">📊</span>
                 <div>
@@ -759,7 +759,7 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Recomendación 5 */}
-            <div className="bg-gradient-to-r from-blue to-blue rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-blue rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">🎓</span>
                 <div>
@@ -802,7 +802,7 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Recomendación 6 */}
-            <div className="bg-gradient-to-r from-red to-red rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-red rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">🌎</span>
                 <div>
@@ -850,7 +850,7 @@ export default function AnalisisMercadoChilePage() {
         <section className="mb-16">
           <h2 className="text-3xl font-bold text-muted/90 mb-8">6. Plan de Acción Inmediato (Q1 2026)</h2>
 
-          <div className="bg-gradient-to-br from-muted/90 to-muted/80 rounded-2xl shadow-2xl p-8 text-white">
+          <div className="bg-muted/90 rounded-2xl shadow-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-6">🎯 Prioridades de Lanzamiento</h3>
             <div className="space-y-6">
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
@@ -951,7 +951,7 @@ export default function AnalisisMercadoChilePage() {
 
         {/* Conclusión */}
         <section className="mb-16">
-          <div className="bg-gradient-to-r from-blue via-blue to-purple rounded-2xl shadow-2xl p-12 text-white text-center">
+          <div className="bg-blue rounded-2xl shadow-2xl p-12 text-white text-center">
             <h2 className="text-4xl font-bold mb-6">Conclusión</h2>
             <p className="text-xl text-blue/5 max-w-4xl mx-auto leading-relaxed mb-8">
               Chile enfrenta una crisis estructural de empleabilidad con <strong>8.1% de desempleo profesional</strong>y{" "}

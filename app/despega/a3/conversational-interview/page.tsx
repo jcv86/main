@@ -61,7 +61,7 @@ export default function ConversationalInterviewPage() {
 
   // Seleccionar configuración
   return (
-    <div className="min-h-screen bg-gradient-to-br from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 p-4">
+    <div className="min-h-screen bg-background p-4">
       <div className="max-w-4xl mx-auto">
         <Link href="/despega/a3-dashboard">
           <Button variant="ghost" className="mb-6">

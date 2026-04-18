@@ -129,7 +129,7 @@ export default function A1SimulationPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Button 
               onClick={handleRestart}
-              className="w-full bg-gradient-to-r from-blue to-blue hover:from-blue hover:to-blue text-white"
+              className="w-full bg-blue hover:from-blue hover:to-blue text-white"
             >
               <Zap className="w-4 h-4 mr-2" />
               Repetir Simulación
@@ -172,7 +172,7 @@ export default function A1SimulationPage() {
           </div>
           <div className="h-2 bg-muted/70 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-blue to-blue transition-all duration-500" 
+              className="h-full bg-blue transition-all duration-500" 
               style={{ width: `${progress}%` }}
             />
           </div>

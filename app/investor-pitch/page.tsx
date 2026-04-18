@@ -88,7 +88,7 @@ export default function InvestorPitch() {
 
         {/* The Solution */}
         <section className="mb-12">
-          <div className="bg-gradient-to-r from-purple to-blue rounded-2xl p-8 shadow-lg text-white">
+          <div className="bg-purple rounded-2xl p-8 shadow-lg text-white">
             <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
               <span className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl backdrop-blur-sm">
                 ✨
@@ -227,7 +227,7 @@ export default function InvestorPitch() {
             </h2>
 
             <div className="grid md:grid-cols-3 gap-6">
-              <div className="bg-gradient-to-br from-purple/5 to-blue/5 rounded-xl p-6 border border-purple/10">
+              <div className="bg-background rounded-xl p-6 border border-purple/10">
                 <h3 className="font-bold text-xl mb-4 text-foreground">Freemium (Lanzamiento)</h3>
                 <div className="text-3xl font-bold text-purple mb-2">$0</div>
                 <ul className="space-y-2 text-muted text-sm mb-4">
@@ -399,7 +399,7 @@ export default function InvestorPitch() {
             </h2>
 
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="bg-gradient-to-br from-purple/5 to-blue/5 rounded-xl p-6 border border-purple/10">
+              <div className="bg-background rounded-xl p-6 border border-purple/10">
                 <div className="w-20 h-20 bg-purple/20 rounded-full flex items-center justify-center text-3xl font-bold text-purple mb-4">
                   JC
                 </div>
@@ -446,7 +446,7 @@ export default function InvestorPitch() {
 
         {/* The Ask */}
         <section className="mb-12">
-          <div className="bg-gradient-to-r from-purple to-blue rounded-2xl p-12 text-white shadow-xl">
+          <div className="bg-purple rounded-2xl p-12 text-white shadow-xl">
             <h2 className="text-4xl font-bold mb-6">Oportunidad de Inversión</h2>
             <p className="text-xl text-purple/10 mb-8">
               Buscamos inversores estratégicos para acelerar el crecimiento, expandir nuestro equipo y escalar en

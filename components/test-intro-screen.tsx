@@ -36,7 +36,7 @@ export function TestIntroScreen({
   const displayName = title || testName
   const displayDescription = description || testDescription
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="max-w-3xl w-full">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">

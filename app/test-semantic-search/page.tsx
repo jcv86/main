@@ -119,7 +119,7 @@ export default function TestSemanticSearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple/5 via-blue/5 to-blue/5">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto py-8 px-4 max-w-7xl">
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-3">
@@ -127,7 +127,7 @@ export default function TestSemanticSearchPage() {
               <Brain className="h-8 w-8 text-white" />
             </div>
             <div>
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-purple to-blue bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold bg-purple bg-clip-text text-transparent">
                 Búsqueda Semántica
               </h1>
               <p className="text-muted-foreground">Encuentra contenido relevante usando inteligencia artificial</p>
@@ -219,7 +219,7 @@ export default function TestSemanticSearchPage() {
             )}
 
             {searchStats && !error && (
-              <Card className="border-purple/20 bg-gradient-to-br from-purple/5 to-blue/5">
+              <Card className="border-purple/20 bg-background">
                 <CardContent className="pt-6">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
@@ -384,7 +384,7 @@ export default function TestSemanticSearchPage() {
           </div>
 
           <div className="space-y-6">
-            <Card className="shadow-lg border-0 bg-gradient-to-br from-purple/5 to-blue/5">
+            <Card className="shadow-lg border-0 bg-background">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-purple">
                   <Brain className="h-5 w-5" />

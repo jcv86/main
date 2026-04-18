@@ -70,7 +70,7 @@ export default function A2ChatCoachPage() {
 
   if (!mounted || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 flex items-center justify-center">
         <div className="text-center space-y-3">
           <MessageCircle className="w-8 h-8 animate-pulse text-blue mx-auto" />
           <p className="text-muted/60 dark:text-muted/40">Iniciando tu sesión con el Coach...</p>
@@ -80,7 +80,7 @@ export default function A2ChatCoachPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10 dark:from-background dark:to-muted/90">
+    <div className="min-h-screen bg-gradient-to-b from-muted/5 to-muted/10">
       {/* Header */}
       <div className="border-b border-muted/20 dark:border-muted/80 bg-white dark:bg-background sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 py-4">
