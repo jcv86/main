@@ -63,6 +63,8 @@ export default function ChallensingTrainingPage() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [completedQuestions, setCompletedQuestions] = useState<number[]>([])
   const [scores, setScores] = useState<Record<number, number>>({})
+  const [isRecording, setIsRecording] = useState(false)
+  const [hasResponseBeenRecorded, setHasResponseBeenRecorded] = useState(false)
 
   const question = CHALLENGING_QUESTIONS[currentQuestion]
   const progress = (completedQuestions.length / CHALLENGING_QUESTIONS.length) * 100
@@ -72,12 +74,21 @@ export default function ChallensingTrainingPage() {
     : 0
 
   const handleQuestionComplete = (score?: number) => {
+    // Don't advance if response hasn't been recorded
+    if (!hasResponseBeenRecorded) {
+      return
+    }
+    
     if (score) {
       setScores({ ...scores, [currentQuestion]: score })
     }
     if (!completedQuestions.includes(currentQuestion)) {
       setCompletedQuestions([...completedQuestions, currentQuestion])
     }
+    // Reset recording state for next question
+    setHasResponseBeenRecorded(false)
+    setIsRecording(false)
+    
     if (currentQuestion < CHALLENGING_QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
     }
@@ -104,60 +115,46 @@ export default function ChallensingTrainingPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-950 via-purple-950/20 to-slate-950">
-      <div className="container max-w-6xl mx-auto px-4 py-8">
+    <main className="min-h-screen bg-black">
+      <div className="flex flex-col h-screen">
         {/* Header */}
-        <div className="mb-8 flex items-center justify-between">
-          <Link href="/despega/a3-dashboard" className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300">
-            <ArrowLeft className="w-4 h-4" />
-            Volver
-          </Link>
-          <div className="flex gap-4 items-center">
-            <Badge className="bg-red-600">DESAFÍO MÁXIMO</Badge>
-            <Badge className="bg-purple-600">{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
+        <div className="flex-shrink-0 border-b border-slate-800 bg-gradient-to-r from-slate-900 to-slate-950 p-4">
+          <div className="flex items-center justify-between">
+            <Link href="/despega/a3-dashboard" className="flex items-center gap-2 text-cyan-400 hover:text-cyan-300">
+              <ArrowLeft className="w-4 h-4" />
+              Volver al Dashboard
+            </Link>
+            <div className="flex gap-4 items-center">
+              <Badge className="bg-red-600 text-xs">DESAFÍO MÁXIMO</Badge>
+              <Badge className="bg-purple-600 text-xs">{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
+            </div>
           </div>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main Training Area */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card className="border-purple-500/30 bg-gradient-to-br from-purple-950/30 to-slate-950">
-              <CardHeader>
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <Badge className={`mb-3 ${getScoreColor(question.expectedScoreMin)}`}>
-                      {question.difficulty} - Puntuación Esperada: {question.expectedScoreMin}+
-                    </Badge>
-                    <CardTitle className="text-2xl flex items-center gap-2">
-                      <Crown className="w-6 h-6 text-purple-400" />
-                      Entrenamiento Desafiante - Pregunta {currentQuestion + 1}
-                    </CardTitle>
-                  </div>
-                  <Zap className="w-8 h-8 text-purple-400" />
-                </div>
-                <p className="text-slate-300 text-lg font-medium">{question.question}</p>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {/* Progress Bar */}
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-slate-400">Progreso del desafío</span>
-                    <span className="text-purple-400 font-semibold">{Math.round(progress)}%</span>
-                  </div>
-                  <div className="w-full bg-slate-800 rounded-full h-2">
-                    <div
-                      className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all duration-300"
-                      style={{ width: `${progress}%` }}
-                    />
-                  </div>
+        {/* Main Split-Screen Layout */}
+        <div className="flex-1 overflow-hidden p-4">
+          <div className="grid lg:grid-cols-5 gap-0 bg-black rounded-xl overflow-hidden shadow-2xl h-full">
+            
+            {/* Left Panel: Training Area (60%) */}
+            <div className="lg:col-span-3 relative bg-black overflow-y-auto flex flex-col">
+              <div className="p-6 space-y-6 flex-1">
+                <div className="space-y-3">
+                  <Badge className={`${getScoreColor(question.expectedScoreMin)} text-xs`}>
+                    {question.difficulty} - Puntuación Esperada: {question.expectedScoreMin}+
+                  </Badge>
+                  <h2 className="text-3xl font-bold flex items-center gap-3 text-white">
+                    <Crown className="w-8 h-8 text-purple-400" />
+                    Pregunta {currentQuestion + 1}
+                  </h2>
+                  <p className="text-lg text-slate-200 leading-relaxed">{question.question}</p>
                 </div>
 
-                {/* Competencies Being Evaluated */}
+                {/* Competencies */}
                 <div className="bg-purple-900/30 border border-purple-500/20 rounded-lg p-4">
-                  <p className="text-sm font-semibold text-purple-300 mb-2">Competencias Evaluadas:</p>
+                  <p className="text-sm font-semibold text-purple-300 mb-3">Competencias Evaluadas:</p>
                   <div className="flex flex-wrap gap-2">
                     {question.competencies.map((comp) => (
-                      <Badge key={comp} variant="outline" className="border-purple-500/50 text-purple-300">
+                      <Badge key={comp} variant="outline" className="border-purple-500/50 text-purple-300 text-xs">
                         {comp}
                       </Badge>
                     ))}
@@ -170,74 +167,88 @@ export default function ChallensingTrainingPage() {
                   guidance={question.guidance}
                   estimatedTime="5 minutos"
                   trainingType="challenging"
+                  onRecordingStart={() => {
+                    setIsRecording(true)
+                  }}
+                  onRecordingComplete={() => {
+                    setIsRecording(false)
+                    setHasResponseBeenRecorded(true)
+                  }}
                 />
+              </div>
 
-                {/* Navigation */}
-                <div className="flex gap-4 pt-6 border-t border-slate-700">
+              {/* Navigation Buttons - Bottom */}
+              <div className="flex-shrink-0 p-6 border-t border-slate-800 bg-slate-950 space-y-3">
+                {!hasResponseBeenRecorded && (
+                  <div className="flex items-center gap-2 text-amber-600 text-sm bg-amber-950/40 border border-amber-700/40 rounded-lg px-4 py-2">
+                    <AlertCircle className="w-4 h-4" />
+                    <span>Completa la grabación de tu respuesta antes de continuar</span>
+                  </div>
+                )}
+                <div className="flex gap-3">
                   <Button
                     onClick={handlePreviousQuestion}
                     disabled={currentQuestion === 0}
                     variant="outline"
-                    className="flex-1"
+                    className="flex-1 border-slate-700 hover:bg-slate-800"
                   >
                     Anterior
                   </Button>
                   <Button
                     onClick={() => handleQuestionComplete()}
-                    className="flex-1 bg-purple-600 hover:bg-purple-700"
+                    disabled={!hasResponseBeenRecorded || isRecording}
+                    className="flex-1 bg-purple-600 hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Siguiente Desafío
+                    {currentQuestion === CHALLENGING_QUESTIONS.length - 1 ? 'Finalizar' : 'Siguiente Desafío'}
                   </Button>
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              </div>
+            </div>
 
-          {/* Sidebar - Executive Dashboard */}
-          <div className="space-y-4">
-            {/* Score Overview */}
-            <Card className="border-purple-500/30 bg-gradient-to-br from-purple-900/30 to-slate-900/50">
-              <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
+            {/* Right Panel: Executive Dashboard (40%) */}
+            <div className="lg:col-span-2 bg-gradient-to-b from-slate-900 to-slate-950 border-l border-slate-800 flex flex-col overflow-y-auto">
+              
+              {/* Score Overview */}
+              <div className="p-4 border-b border-slate-800 flex-shrink-0">
+                <h3 className="text-lg font-bold flex items-center gap-2 text-white mb-4">
                   <BarChart3 className="w-5 h-5 text-purple-400" />
                   Puntuación Ejecutiva
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <p className="text-xs text-slate-400 mb-2">Promedio General</p>
-                  <div className="flex items-end gap-2">
-                    <span className={`text-3xl font-bold ${averageScore >= 75 ? 'text-green-400' : 'text-yellow-400'}`}>
-                      {averageScore}
-                    </span>
-                    <span className="text-xs text-slate-400 pb-1">/100</span>
-                  </div>
-                </div>
-                {currentScore !== undefined && (
-                  <div className="pt-4 border-t border-slate-700">
-                    <p className="text-xs text-slate-400 mb-2">Respuesta Actual</p>
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold text-purple-400">{currentScore}</span>
-                      <Badge className={getScoreColor(currentScore)}>
-                        {getScoreLabel(currentScore)}
-                      </Badge>
+                </h3>
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-xs text-slate-400 mb-2">Promedio General</p>
+                    <div className="flex items-end gap-2">
+                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green-400' : 'text-yellow-400'}`}>
+                        {averageScore}
+                      </span>
+                      <span className="text-xs text-slate-400 pb-2">/100</span>
                     </div>
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                  {currentScore !== undefined && (
+                    <div className="pt-4 border-t border-slate-700">
+                      <p className="text-xs text-slate-400 mb-2">Respuesta Actual</p>
+                      <div className="flex items-center justify-between">
+                        <span className="text-3xl font-bold text-purple-400">{currentScore}</span>
+                        <Badge className={getScoreColor(currentScore)} className="text-xs">
+                          {getScoreLabel(currentScore)}
+                        </Badge>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
 
-            {/* Questions Overview */}
-            <Card className="border-slate-700 bg-slate-900/50">
-              <CardHeader>
-                <CardTitle className="text-lg">Desafíos</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-2 max-h-96 overflow-y-auto">
+              {/* Questions List */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-2">
+                <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3">Desafíos</p>
                 {CHALLENGING_QUESTIONS.map((q, idx) => (
                   <button
                     key={q.id}
-                    onClick={() => setCurrentQuestion(idx)}
-                    className={`w-full text-left p-3 rounded-lg transition-all ${
+                    onClick={() => {
+                      setCurrentQuestion(idx)
+                      setHasResponseBeenRecorded(false)
+                    }}
+                    className={`w-full text-left p-3 rounded-lg transition-all text-xs ${
                       idx === currentQuestion
                         ? 'bg-purple-600/30 border border-purple-500/50'
                         : completedQuestions.includes(idx)
@@ -245,8 +256,8 @@ export default function ChallensingTrainingPage() {
                         : 'bg-slate-800/50 border border-slate-700/30 hover:bg-slate-700/50'
                     }`}
                   >
-                    <div className="flex items-start gap-3">
-                      <div className="mt-1">
+                    <div className="flex items-start gap-2">
+                      <div className="mt-0.5">
                         {completedQuestions.includes(idx) && scores[idx] ? (
                           <div className={`w-6 h-6 rounded-full ${getScoreColor(scores[idx])} flex items-center justify-center text-white text-xs font-bold`}>
                             {scores[idx]}
@@ -260,57 +271,28 @@ export default function ChallensingTrainingPage() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs font-semibold text-slate-400 mb-1">Pregunta {idx + 1}</p>
-                        <p className="text-sm text-slate-200 line-clamp-2">{q.question}</p>
+                        <p className="text-slate-400 mb-1">Pregunta {idx + 1}</p>
+                        <p className="text-slate-300 line-clamp-2">{q.question}</p>
                       </div>
                     </div>
                   </button>
                 ))}
-              </CardContent>
-            </Card>
+              </div>
 
-            {/* Warning */}
-            {averageScore > 0 && averageScore < 75 && (
-              <Card className="border-yellow-500/30 bg-yellow-950/20">
-                <CardHeader>
-                  <CardTitle className="text-lg flex items-center gap-2 text-yellow-400">
-                    <AlertCircle className="w-5 h-5" />
+              {/* Warning */}
+              {averageScore > 0 && averageScore < 75 && (
+                <div className="p-4 border-t border-slate-800 bg-yellow-950/20 flex-shrink-0">
+                  <p className="text-xs font-bold text-yellow-400 mb-2 flex items-center gap-1">
+                    <AlertCircle className="w-4 h-4" />
                     Retroalimentación
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="text-sm text-yellow-200">
-                  <p>Tu puntuación promedio está por debajo del estándar ejecutivo. Enfócate en:</p>
-                  <ul className="mt-2 space-y-1 text-xs">
-                    <li>• Mejorar tu narrativa y estructura</li>
-                    <li>• Ser más específico con ejemplos</li>
-                    <li>• Demostrar mayor impacto de negocio</li>
-                  </ul>
-                </CardContent>
-              </Card>
-            )}
+                  </p>
+                  <p className="text-xs text-yellow-200">
+                    Enfócate en mejorar tu narrativa, ser más específico con ejemplos, y demostrar mayor impacto de negocio.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-
-        {/* Info Section */}
-        <div className="mt-12 bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-500/30 rounded-lg p-6">
-          <h3 className="text-lg font-semibold text-purple-400 mb-3">Entrenamiento Desafiante - Fase 3</h3>
-          <p className="text-slate-300 mb-4">
-            Este es el nivel máximo de entrenamiento, diseñado para prepararte para entrevistas ejecutivas de alto nivel. Las preguntas son desafiantes, sin guía, y requieren respuestas profundas que demuestren madurez ejecutiva, autorreflexión, y capacidad de liderazgo transformacional.
-          </p>
-          <ul className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-slate-300">
-            <li className="flex gap-2">
-              <TrendingUp className="w-5 h-5 text-purple-400 flex-shrink-0" />
-              <span>Análisis multimodal ejecutivo-grade</span>
-            </li>
-            <li className="flex gap-2">
-              <BarChart3 className="w-5 h-5 text-purple-400 flex-shrink-0" />
-              <span>Puntuaciones comparativas vs. ejecutivos C-Suite</span>
-            </li>
-            <li className="flex gap-2">
-              <Crown className="w-5 h-5 text-purple-400 flex-shrink-0" />
-              <span>Recomendaciones personalizadas para mejora</span>
-            </li>
-          </ul>
         </div>
       </div>
     </main>
