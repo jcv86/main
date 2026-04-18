@@ -74,13 +74,17 @@ export function DespeganNavbar() {
   }
 
   return (
-    <nav className="sticky top-0 z-50 bg-white dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
+    <nav className="sticky top-0 z-50 bg-black border-b border-slate-800">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/despega" className="flex items-center gap-2 font-bold text-lg text-purple-600 dark:text-purple-400">
-            <Home className="w-5 h-5" />
-            <span>Despega</span>
+          <Link href="/despega" className="flex items-center gap-3 group">
+            <div className="w-8 h-8 bg-gradient-to-br from-yellow to-yellow/60 rounded-surface-lg flex items-center justify-center">
+              <Home className="w-4 h-4 text-black" />
+            </div>
+            <span className="font-bold text-lg text-white" style={{ fontFamily: 'var(--font-playfair-display)' }}>
+              Despega
+            </span>
           </Link>
 
           {/* Desktop Menu */}
@@ -89,41 +93,61 @@ export function DespeganNavbar() {
               <Button 
                 variant={pathname === '/despega' ? 'default' : 'ghost'}
                 size="sm"
+                className={pathname === '/despega' ? 'bg-yellow text-black hover:bg-yellow/90' : 'text-slate-300 hover:text-white hover:bg-slate-900'}
               >
                 Dashboard
               </Button>
             </Link>
 
-            {stages.map((stage) => (
-              <div key={stage.name} className="relative group">
-                <Button variant="ghost" size="sm" className="flex items-center gap-1">
-                  <stage.icon className="w-4 h-4" />
-                  {stage.name}
-                  <ChevronDown className="w-4 h-4" />
-                </Button>
+            {stages.map((stage) => {
+              const stagePhaseMap = {
+                'Información': 'info',
+                'El Ritual': 'ritual',
+                'Exploración': 'exploration',
+                'Entrenamiento': 'training',
+                'La Realidad': 'reality'
+              }
+              const phaseAccent = {
+                'ritual': 'text-yellow hover:text-yellow',
+                'exploration': 'text-orange hover:text-orange',
+                'training': 'text-red hover:text-red',
+                'reality': 'text-blue hover:text-blue',
+                'info': 'text-slate-400 hover:text-slate-200'
+              }[stagePhaseMap[stage.name as keyof typeof stagePhaseMap] || 'info']
+              
+              return (
+                <div key={stage.name} className="relative group">
+                  <Button variant="ghost" size="sm" className={`flex items-center gap-1 ${phaseAccent}`}>
+                    <stage.icon className="w-4 h-4" />
+                    {stage.name}
+                    <ChevronDown className="w-4 h-4" />
+                  </Button>
 
-                {/* Dropdown */}
-                <div className="absolute left-0 mt-0 w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-                  {stage.routes.map((route) => (
-                    <Link key={route.href} href={route.href}>
-                      <Button
-                        variant={pathname === route.href ? 'default' : 'ghost'}
-                        size="sm"
-                        className="w-full justify-start rounded-none first:rounded-t-lg last:rounded-b-lg"
-                      >
-                        {route.label}
-                      </Button>
-                    </Link>
-                  ))}
+                  {/* Dropdown */}
+                  <div className="absolute left-0 mt-0 w-48 bg-slate-900 border border-slate-700 rounded-surface-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                    {stage.routes.map((route) => (
+                      <Link key={route.href} href={route.href}>
+                        <Button
+                          variant={pathname === route.href ? 'default' : 'ghost'}
+                          size="sm"
+                          className={`w-full justify-start rounded-none first:rounded-t-surface-lg last:rounded-b-surface-lg ${
+                            pathname === route.href ? 'bg-slate-800 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                          }`}
+                        >
+                          {route.label}
+                        </Button>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
 
           {/* Desktop XP Badge + Logout */}
           <div className="hidden md:flex items-center gap-3">
             <XPNavbarBadge />
-            <Button onClick={handleLogout} variant="outline" size="sm" className="gap-2">
+            <Button onClick={handleLogout} variant="outline" size="sm" className="gap-2 border-slate-700 text-slate-300 hover:bg-slate-900 hover:text-white">
               <LogOut className="w-4 h-4" />
               Salir
             </Button>
@@ -131,7 +155,7 @@ export function DespeganNavbar() {
 
           {/* Mobile Menu Button */}
           <button 
-            className="md:hidden"
+            className="md:hidden text-slate-300 hover:text-white"
             onClick={() => setIsOpen(!isOpen)}
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -142,7 +166,7 @@ export function DespeganNavbar() {
         {isOpen && (
           <div className="md:hidden pb-4 space-y-2 max-h-96 overflow-y-auto">
             <Link href="/despega">
-              <Button variant="ghost" className="w-full justify-start mb-2">
+              <Button variant="ghost" className="w-full justify-start mb-2 text-slate-300 hover:text-white hover:bg-slate-900">
                 Dashboard
               </Button>
             </Link>
@@ -151,7 +175,7 @@ export function DespeganNavbar() {
               <div key={stage.name}>
                 <button
                   onClick={() => setExpandedStage(expandedStage === stage.name ? null : stage.name)}
-                  className="w-full flex items-center justify-between px-4 py-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 font-semibold"
+                  className="w-full flex items-center justify-between px-4 py-2 rounded-lg hover:bg-slate-800 font-semibold text-slate-300 hover:text-white"
                 >
                   <div className="flex items-center gap-2">
                     <stage.icon className="w-4 h-4" />
@@ -169,7 +193,9 @@ export function DespeganNavbar() {
                         <Button
                           variant={pathname === route.href ? 'default' : 'ghost'}
                           size="sm"
-                          className="w-full justify-start text-sm"
+                          className={`w-full justify-start text-sm ${
+                            pathname === route.href ? 'bg-slate-800 text-white' : 'text-slate-300 hover:text-white hover:bg-slate-900'
+                          }`}
                           onClick={() => setIsOpen(false)}
                         >
                           {route.label}
@@ -184,7 +210,7 @@ export function DespeganNavbar() {
             <Button 
               onClick={handleLogout}
               variant="outline" 
-              className="w-full justify-start gap-2 mt-4"
+              className="w-full justify-start gap-2 mt-4 border-slate-700 text-slate-300 hover:bg-slate-900 hover:text-white"
             >
               <LogOut className="w-4 h-4" />
               Salir

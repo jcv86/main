@@ -50,10 +50,10 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-slate-600 dark:text-slate-400">Cargando tu transformación...</p>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-yellow"></div>
+          <p className="text-slate-400">Cargando tu transformación...</p>
         </div>
       </div>
     )
@@ -61,13 +61,13 @@ export default function DashboardPage() {
 
   if (!userData) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-4">
-        <Card className="p-8 max-w-md text-center space-y-4">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">No hay datos</h2>
-          <p className="text-slate-600 dark:text-slate-400">
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
+        <Card className="p-8 max-w-md text-center space-y-4 bg-slate-900 border-slate-800">
+          <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'var(--font-playfair-display)' }}>No hay datos</h2>
+          <p className="text-slate-400">
             Por favor, completa el onboarding primero
           </p>
-          <Button onClick={() => router.push('/despega/onboarding')} className="w-full">
+          <Button onClick={() => router.push('/despega/onboarding')} className="w-full bg-yellow text-black hover:bg-yellow/90">
             Ir al Onboarding
           </Button>
         </Card>
@@ -76,7 +76,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-black">
       <div className="max-w-7xl mx-auto px-4 py-12 space-y-12">
         {/* Hero Section */}
         <DashboardHero 
@@ -88,7 +88,7 @@ export default function DashboardPage() {
 
         {/* Metrics */}
         <div>
-          <h2 className="text-2xl font-bold text-foreground mb-6">
+          <h2 className="text-3xl font-bold text-white mb-6" style={{ fontFamily: 'var(--font-playfair-display)' }}>
             Tu Progreso
           </h2>
           <DashboardMetrics 
