@@ -14,7 +14,7 @@ export default function LandingPageOptimized() {
           <ThemeToggle />
         </div>
         <div className="text-center max-w-5xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent leading-tight">
+          <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-purple via-blue to-cyan bg-clip-text text-transparent leading-tight">
             Entiende cómo funcionas.<br />Ordena tu camino.<br />Avanza con más claridad.
           </h1>
           <p className="text-xl md:text-2xl text-foreground/70 mb-12 max-w-3xl mx-auto leading-relaxed">
@@ -24,7 +24,7 @@ export default function LandingPageOptimized() {
             <Link href="/auth/signin" prefetch={true}>
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all"
+                className="bg-gradient-to-r from-purple to-blue hover:from-purple/80 hover:to-blue/80 text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all text-white"
               >
                 Quiero comenzar mi diagnóstico
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -49,9 +49,9 @@ export default function LandingPageOptimized() {
           <p className="text-center text-sm font-semibold text-foreground/60 mb-8 uppercase tracking-wider">Las 4 Fases de Tu Transformación</p>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {/* Pilar 1: El Ritual - Quién Eres Ahora (Purple) */}
-            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-2 border-purple-500 dark:border-purple-600 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-purple-600 dark:bg-purple-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
+            {/* Pilar 1: El Ritual - Quién Eres Ahora (Purple #A855F7) */}
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-2 border-purple hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-purple rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
                 <svg className="w-6 h-6 text-white" fill="white" viewBox="0 0 24 24">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
                 </svg>
@@ -60,9 +60,9 @@ export default function LandingPageOptimized() {
               <p className="text-sm text-foreground/70">Descubre tu verdadero perfil sin filtros con evaluaciones científicas. El autoconocimiento es el primer paso.</p>
             </div>
 
-            {/* Pilar 2: Exploración - Aprende Nuevas Formas (Blue) */}
-            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border border-blue-200 dark:border-blue-900/30 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-blue-600 dark:bg-blue-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
+            {/* Pilar 2: Exploración - Aprende Nuevas Formas (Blue #3B82F6) */}
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-2 border-blue hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-blue rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
                 <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M3 6c0 2 1 3 2 4c2 1 3 2 3 5c0 3-1 4-3 5c-1 1-2 2-2 4" strokeLinecap="round"/>
                   <path d="M21 6c0 2 -1 3 -2 4c-2 1 -3 2 -3 5c0 3 1 4 3 5c1 1 2 2 2 4" strokeLinecap="round" opacity="0.4"/>
@@ -75,9 +75,9 @@ export default function LandingPageOptimized() {
               <p className="text-sm text-foreground/70">Tu ruta personalizada de 30/60/90 días diseñada según tu perfil cerebral, objetivos y disponibilidad semanal.</p>
             </div>
 
-            {/* Pilar 3: Entrenamiento - Practica Siendo (Orange) */}
-            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-2 border-orange-500 dark:border-orange-600 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-orange-600 dark:bg-orange-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
+            {/* Pilar 3: Entrenamiento - Practica Siendo (Orange #F97316) */}
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-2 border-orange hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-orange rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
                 <svg className="w-6 h-6 text-white" fill="white" viewBox="0 0 24 24">
                   <path d="M6 2a1 1 0 0 0-1 1v3H2a1 1 0 0 0 0 2h3v4H2a1 1 0 0 0 0 2h3v4H2a1 1 0 0 0 0 2h3v3a1 1 0 0 0 1 1h3v3a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-3h4a1 1 0 0 0 1-1v-4h3a1 1 0 0 0 0-2h-3v-4h3a1 1 0 0 0 0-2h-3V5a1 1 0 0 0-1-1h-4V1a1 1 0 0 0-1-1H6v2zm2 4v12h4V6H8z"/>
                 </svg>
@@ -86,9 +86,9 @@ export default function LandingPageOptimized() {
               <p className="text-sm text-foreground/70">Entrenamientos realistas con video, análisis de postura y tono, feedback IA inmediato y ajuste por vacante específica.</p>
             </div>
 
-            {/* Pilar 4: La Realidad - Vive Tu Nueva Identidad (Turquoise) */}
-            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border border-cyan-200 dark:border-cyan-900/30 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 bg-cyan-600 dark:bg-cyan-600 rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
+            {/* Pilar 4: La Realidad - Vive Tu Nueva Identidad (Cyan #06B6D4) */}
+            <div className="bg-white dark:bg-slate-800 rounded-[28px] p-6 border-2 border-cyan hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 bg-cyan rounded-lg flex items-center justify-center mb-4 flex-shrink-0">
                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="2"/>
                   <circle cx="6" cy="9" r="2"/>

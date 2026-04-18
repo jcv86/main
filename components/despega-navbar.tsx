@@ -74,13 +74,13 @@ export function DespeganNavbar() {
   }
 
   return (
-    <nav className="sticky top-0 z-50 bg-black border-b border-slate-800">
+    <nav className="sticky top-0 z-50 bg-black border-b border-muted/20">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/despega" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 bg-gradient-to-br from-yellow to-yellow/60 rounded-surface-lg flex items-center justify-center">
-              <Home className="w-4 h-4 text-black" />
+            <div className="w-8 h-8 bg-gradient-to-br from-purple to-purple/60 rounded-surface-lg flex items-center justify-center">
+              <Home className="w-4 h-4 text-white" />
             </div>
             <span className="font-bold text-lg text-white" style={{ fontFamily: 'var(--font-playfair-display)' }}>
               Despega
@@ -93,7 +93,7 @@ export function DespeganNavbar() {
               <Button 
                 variant={pathname === '/despega' ? 'default' : 'ghost'}
                 size="sm"
-                className={pathname === '/despega' ? 'bg-yellow text-black hover:bg-yellow/90' : 'text-slate-300 hover:text-white hover:bg-slate-900'}
+                className={pathname === '/despega' ? 'bg-purple text-white hover:bg-purple/90' : 'text-muted hover:text-foreground hover:bg-muted/10'}
               >
                 Dashboard
               </Button>
@@ -108,11 +108,11 @@ export function DespeganNavbar() {
                 'La Realidad': 'reality'
               }
               const phaseAccent = {
-                'ritual': 'text-yellow hover:text-yellow',
-                'exploration': 'text-orange hover:text-orange',
-                'training': 'text-red hover:text-red',
-                'reality': 'text-blue hover:text-blue',
-                'info': 'text-slate-400 hover:text-slate-200'
+                'ritual': 'text-purple hover:text-purple',
+                'exploration': 'text-blue hover:text-blue',
+                'training': 'text-orange hover:text-orange',
+                'reality': 'text-cyan hover:text-cyan',
+                'info': 'text-muted hover:text-foreground'
               }[stagePhaseMap[stage.name as keyof typeof stagePhaseMap] || 'info']
               
               return (
