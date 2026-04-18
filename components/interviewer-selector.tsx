@@ -39,7 +39,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
                   : 'hover:bg-transparent dark:hover:bg-muted/80'
               }`}
             >
-              <div className={`w-8 h-8 rounded-full mx-auto mb-1 bg-background`}
+              <div className={`w-8 h-8 rounded-full mx-auto mb-1 bg-background`} />
               <div className="text-xs font-semibold text-muted/90 dark:text-white">{interviewer.name}</div>
               <div className="text-[10px] text-muted/60 dark:text-muted/40">{interviewer.role}</div>
             </button>
@@ -70,9 +70,9 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
                   : 'hover:scale-102 hover:shadow-lg'
               }`}
             >
-              <div className={`absolute inset-0 bg-background`}
-              <div className="relative space-y-2 text-center">`}
-                <div className={`w-12 h-12 rounded-full mx-auto bg-background`}
+              <div className={`absolute inset-0 bg-background`} />
+              <div className="relative space-y-2 text-center">
+                <div className={`w-12 h-12 rounded-full mx-auto bg-background`} />
                 <div>
                   <div className="font-bold text-muted/90 dark:text-white">{interviewer.name}</div>
                   <div className="text-xs text-muted/60 dark:text-muted/40">{interviewer.role}</div>
