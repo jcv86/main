@@ -312,7 +312,7 @@ export default function CycleCompletionPage() {
         </Card>
 
         {/* A3: Entrenamientos */}
-        <Card className={`border-2 ${a3Progress?.sessions_completed`} > 0 ? 'border-green/30 bg-green/50/5' : 'border-muted'}`}>
+        <Card className={`border-2 ${a3Progress?.sessions_completed > 0 ? 'border-green/30 bg-green/50/5' : 'border-muted'}`}>
           <CardHeader>
             <CardTitle className="flex items-center justify-between">
               <span className="flex items-center gap-2">

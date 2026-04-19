@@ -302,11 +302,10 @@ export default function DespegazoDashboard() {
                   e.stopPropagation()
                   router.push(stage.href)
                 }}
-                className={`w-full group/btn ${`}
+                className={`w-full group/btn ${
                   stage.completed
                     ? 'bg-muted/70 hover:bg-muted/60 text-muted/30'
-                    : `bg-background`}
-                }`}
+                    : `bg-background`}`}
               >
                 {stage.completed ? 'Ver Detalles' : 'Continuar'}
                 <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
