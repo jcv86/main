@@ -727,7 +727,7 @@ export default function TestVerificationSystem() {
               </div>
               <div className="text-center p-2 sm:p-3 bg-white rounded-lg border">
                 <div className="flex items-center justify-center gap-1 sm:gap-2 text-blue mb-1">
-                  <Loader2 className={`h-4 w-4 sm:h-5 sm:w-5 ${runningTests`} > 0 ? "animate-spin" : ""}`} />
+                  <Loader2 className={`h-4 w-4 sm:h-5 sm:w-5 ${runningTests > 0 ? "animate-spin" : ""}`} />
                   <span className="text-lg sm:text-2xl font-bold">{runningTests}</span>
                 </div>
                 <p className="text-xs sm:text-sm text-muted/60">Running</p>
@@ -804,21 +804,22 @@ export default function TestVerificationSystem() {
                 return (
                   <Card
                     key={testFlow.testId}
-                    className={`transition-all ${`}
+                    className={`transition-all ${
                       testFlow.overallStatus === "passed"
                         ? "border-green/20 bg-green/5"
                         : testFlow.overallStatus === "failed"
                           ? "border-red/20 bg-red/5"
                           : testFlow.overallStatus === "running"
                             ? "border-blue/20 bg-blue/5 shadow-lg"
-                            : "border-muted/20"`}
+                            : "border-muted/20"
+                    }`}
                     }`}
                   >
                     <CardHeader className="pb-2 sm:pb-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                           <div
-                            className={`p-1.5 sm:p-2 rounded-lg ${`}
+                            className={`p-1.5 sm:p-2 rounded-lg ${
                               testFlow.overallStatus === "passed"
                                 ? "bg-green/10"
                                 : testFlow.overallStatus === "failed"
@@ -826,6 +827,7 @@ export default function TestVerificationSystem() {
                                   : testFlow.overallStatus === "running"
                                     ? "bg-blue/10"
                                     : "bg-muted/10"
+                            }`}
                             }`}
                           >
                             <IconComponent className="h-4 w-4 sm:h-5 sm:w-5" />
@@ -925,7 +927,7 @@ export default function TestVerificationSystem() {
                       {executionLog.map((log, index) => (
                         <div
                           key={index}
-                          className={`break-words ${`}
+                          className={`break-words ${
                             log.includes("✅")
                               ? "text-green/40"
                               : log.includes("❌") || log.includes("💥")
@@ -934,7 +936,7 @@ export default function TestVerificationSystem() {
                                   ? "text-blue/40"
                                   : log.includes("⏳")
                                     ? "text-yellow/40"
-                                    : "text-muted/30"`}
+                                    : "text-muted/30"
                           }`}
                         >
                           {log}
