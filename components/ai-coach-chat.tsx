@@ -239,7 +239,7 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
             {messages.map((message) => (
               <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
-                  className={`max-w-[80%] rounded-lg px-3 py-2 ${`}
+                  className={`max-w-[80%] rounded-lg px-3 py-2 ${
                     message.role === "user" ? "bg-blue/50 text-white" : "bg-muted/10 text-foreground"
                   }`}
                 >
