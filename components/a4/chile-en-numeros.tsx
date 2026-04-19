@@ -124,7 +124,9 @@ export function ChileEnNumeros({
                   </div>
                   <div className="flex items-center gap-1">
                     {getArrow(indicator.change)}
-                    <span className={`text-xs font-medium ${indicator.change`} > 0 ? 'text-green' : indicator.change < 0 ? 'text-red' : 'text-muted/60'}`}>
+                    <span className={`text-xs font-medium ${
+                      indicator.change > 0 ? 'text-green' : indicator.change < 0 ? 'text-red' : 'text-muted/60'
+                    }`}>
                       {indicator.change > 0 ? '+' : ''}{indicator.change}
                     </span>
                   </div>
