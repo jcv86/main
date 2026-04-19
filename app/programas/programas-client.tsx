@@ -275,7 +275,7 @@ export default function ProgramasClient() {
           </div>
         </CardContent>
       </Card>
-`}
+
       {/* How it Works */}
       <Card>
         <CardHeader>
