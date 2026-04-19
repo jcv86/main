@@ -779,4 +779,3 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
       </Card>
     </div>
   )
-}

@@ -830,7 +830,6 @@ export default function TestVerificationSystem() {
                                     ? "bg-blue/10"
                                     : "bg-muted/10"
                             }`}
-                            }`}
                           >
                             <IconComponent className="h-4 w-4 sm:h-5 sm:w-5" />
                           </div>
@@ -907,7 +906,6 @@ export default function TestVerificationSystem() {
                   </Card>
                 )
               })}
-            </div>
           </div>
 
           {/* Execution Log - Mobile Optimized */}
