@@ -400,7 +400,7 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
             {match.gapAnalysis.map((gap, idx) => (
               <div
                 key={idx}
-                className={`p-2 rounded text-center ${`}
+                className={`p-2 rounded text-center ${
                   gap.estado === 'acquired'
                     ? 'bg-green/10 text-green'
                     : 'bg-yellow/10 text-yellow'
