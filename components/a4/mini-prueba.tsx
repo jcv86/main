@@ -357,7 +357,7 @@ export function MiniPrueba() {
               key={idx}
               onClick={() => handleAnswer(idx)}
               disabled={isAnswered}
-              className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${`}
+              className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${
                 !isAnswered
                   ? "border-border hover:border-purple/50 hover:bg-purple/5 cursor-pointer"
                   : idx === currentQuestion.correctAnswer
@@ -369,7 +369,7 @@ export function MiniPrueba() {
             >
               <div className="flex items-center gap-3">
                 <div
-                  className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-sm font-medium ${`}
+                  className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-sm font-medium ${
                     isAnswered && idx === currentQuestion.correctAnswer
                       ? "bg-green/50 border-green text-white"
                       : isAnswered && idx === userAnswer && !isCorrect
@@ -395,10 +395,10 @@ export function MiniPrueba() {
       {/* Explanation */}
       {showExplanation && (
         <Alert
-          className={`border-0 ${`}
+          className={`border-0 ${
             isCorrect
               ? "bg-green/50/10"
-              : "bg-red/50/10"`}
+              : "bg-red/50/10"
           }`}
         >
           <AlertCircle className="h-4 w-4" />
