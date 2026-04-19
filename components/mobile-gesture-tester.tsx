@@ -515,7 +515,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
     }
   }
 
-// Calculate stats
+  // Calculate stats
   const passedTests = gestureTests.filter((test) => test.status === "passed").length
   const failedTests = gestureTests.filter((test) => test.status === "failed").length
   const testingTests = gestureTests.filter((test) => test.status === "testing").length
