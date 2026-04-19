@@ -815,7 +815,6 @@ export default function TestVerificationSystem() {
                             ? "border-blue/20 bg-blue/5 shadow-lg"
                             : "border-muted/20"
                     }`}
-                    }`}
                   >
                     <CardHeader className="pb-2 sm:pb-3">
                       <div className="flex items-center justify-between">
