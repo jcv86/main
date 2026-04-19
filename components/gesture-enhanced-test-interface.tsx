@@ -355,16 +355,16 @@ export function GestureEnhancedTestInterface({
                 <button
                   key={option.id}
                   onClick={() => handleAnswerSelection(option.id)}
-                  className={`w-full p-4 text-left rounded-[28px] border-2 transition-all touch-manipulation ${`}
+                  className={`w-full p-4 text-left rounded-[28px] border-2 transition-all touch-manipulation ${
                     answers[currentQuestion.id] === option.id
                       ? "border-blue/50 bg-blue/5 text-blue"
                       : "border-muted/20 bg-white hover:border-muted/30 hover:bg-muted/5"
                   }`}
-                  style={{ minHeight: "60px" }} // Touch-friendly size
+                  style={{ minHeight: "60px" }}
                 >
                   <div className="flex items-center gap-3">
                     <div
-                      className={`w-4 h-4 rounded-full border-2 ${`}
+                      className={`w-4 h-4 rounded-full border-2 ${
                         answers[currentQuestion.id] === option.id ? "border-blue/50 bg-blue/50" : "border-muted/30"
                       }`}
                     >
