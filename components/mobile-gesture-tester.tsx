@@ -631,6 +631,212 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                         ? "border-red/20 bg-red/5"
                         : test.status === "testing"
                           ? "border-blue/20 bg-blue/5 shadow-lg"
+                          : "border-muted/20"
+                  }`}
+                >
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={`p-2 rounded-lg ${
+                            test.status === "passed"
+                              ? "bg-green/10"
+                              : test.status === "failed"
+                                ? "bg-red/10"
+                                : test.status === "testing"
+                                  ? "bg-blue/10"
+                                  : "bg-muted/10"
+                          }`}
+                        >
+                          <IconComponent className="h-5 w-5" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold">{test.name}</h4>
+                          <p className="text-sm text-muted/60">{test.description}</p>
+                        </div>
+                      </div>
+                      {getStatusIcon(test.status, isCurrentTest)}
+                    </div>
+
+                    {test.result && (
+                      <div className="text-sm text-green bg-green/10 p-2 rounded">✅ {test.result}</div>
+                    )}
+
+                    {test.error && (
+                      <div className="text-sm text-red bg-red/10 p-2 rounded">❌ {test.error}</div>
+                    )}
+
+                    {test.events.length > 0 && (
+                      <div className="mt-2 text-xs text-muted/60">Events detected: {test.events.length}</div>
+                    )}
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Interactive Test Area & Log */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-foreground">Interactive Test Area</h3>
+
+          {/* Test Area */}
+          <Card className="border-dashed border-2 border-purple/30">
+            <CardContent className="p-0">
+              <div
+                ref={testAreaRef}
+                className="h-64 bg-background flex items-center justify-center"
+                style={{ touchAction: "none" }}
+              >
+                <div className="space-y-2 text-center">
+                  <Hand className="h-12 w-12 text-purple/40 mx-auto" />
+                  <h4 className="text-lg font-semibold text-purple">Touch Test Area</h4>
+                  <p className="text-sm text-purple max-w-xs">
+                    Try different gestures here: tap, double-tap, long press, swipe, pinch, drag
+                  </p>
+                  {!touchSupport && (
+                    <p className="text-xs text-red bg-red/10 p-2 rounded">
+                      ⚠️ Touch events not supported on this device
+                    </p>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Activity Log */}
+          <Card className="border-purple/10">
+            <CardHeader>
+              <CardTitle className="text-sm">Activity Log</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2 max-h-48 overflow-y-auto">
+                {gestureLog.length === 0 ? (
+                  <p className="text-xs text-muted/60 italic">No gestures detected yet...</p>
+                ) : (
+                  gestureLog.map((log, i) => (
+                    <div key={i} className="text-xs text-muted/80 font-mono">
+                      {log}
+                    </div>
+                  ))
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  )
+}
+      {/* Header */}
+      <Card className="border-purple/20 bg-background">
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-purple/10 rounded-lg">
+                <Hand className="h-6 w-6 text-purple" />
+              </div>
+              <div>
+                <CardTitle className="text-xl text-purple">Mobile Gesture Testing</CardTitle>
+                <p className="text-purple text-sm">Test swipe, pinch, tap, and other touch gestures</p>
+              </div>
+            </div>
+            <Badge variant="outline" className="text-purple border-purple/30">
+              <Smartphone className="h-4 w-4 mr-1" />
+              {touchSupport ? "Touch Enabled" : "No Touch Support"}
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {/* Device Capabilities */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+            <div className="text-center p-3 bg-white rounded-[28px] border">
+              <div className="flex items-center justify-center gap-2 text-green mb-1">
+                <CheckCircle className="h-5 w-5" />
+                <span className="text-2xl font-bold">{passedTests}</span>
+              </div>
+              <p className="text-sm text-muted/60">Passed</p>
+            </div>
+            <div className="text-center p-3 bg-white rounded-[28px] border">
+              <div className="flex items-center justify-center gap-2 text-red mb-1">
+                <XCircle className="h-5 w-5" />
+                <span className="text-2xl font-bold">{failedTests}</span>
+              </div>
+              <p className="text-sm text-muted/60">Failed</p>
+            </div>
+            <div className="text-center p-3 bg-white rounded-[28px] border">
+              <div className="flex items-center justify-center gap-2 text-blue mb-1">
+                <Loader2 className={`h-5 w-5 ${testingTests > 0 ? "animate-spin" : ""}`} />
+                <span className="text-2xl font-bold">{testingTests}</span>
+              </div>
+              <p className="text-sm text-muted/60">Testing</p>
+            </div>
+            <div className="text-center p-3 bg-white rounded-[28px] border">
+              <div className="flex items-center justify-center gap-2 text-purple mb-1">
+                <Touch className="h-5 w-5" />
+                <span className="text-2xl font-bold">{navigator.maxTouchPoints || 0}</span>
+              </div>
+              <p className="text-sm text-muted/60">Max Touch Points</p>
+            </div>
+          </div>
+
+          {/* Controls */}
+          <div className="flex gap-3 mb-4">
+            <Button
+              onClick={runAutomatedTests}
+              disabled={isRunning || !touchSupport}
+              className="bg-purple hover:bg-purple"
+            >
+              {isRunning ? (
+                <>
+                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                  Testing Gestures...
+                </>
+              ) : (
+                <>
+                  <Hand className="h-4 w-4 mr-2" />
+                  Run Gesture Tests
+                </>
+              )}
+            </Button>
+            <Button onClick={resetTests} variant="outline" disabled={isRunning}>
+              <RotateCcw className="h-4 w-4 mr-2" />
+              Reset Tests
+            </Button>
+          </div>
+
+          {/* Progress */}
+          {isRunning && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between text-sm">
+                <span className="font-medium">Testing Progress</span>
+                <span>{Math.round(progress)}% Complete</span>
+              </div>
+              <Progress value={progress} className="h-3" />
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <div className="grid lg:grid-cols-2 gap-6">
+        {/* Gesture Tests */}
+        <div className="space-y-4">
+          <h3 className="text-lg font-semibold text-foreground">Gesture Tests</h3>
+          <div className="grid gap-3">
+            {gestureTests.map((test) => {
+              const IconComponent = test.icon
+              const isCurrentTest = currentTest === test.id
+
+              return (
+                <Card
+                  key={test.id}
+                  className={`transition-all ${
+                    test.status === "passed"
+                      ? "border-green/20 bg-green/5"
+                      : test.status === "failed"
+                        ? "border-red/20 bg-red/5"
+                        : test.status === "testing"
+                          ? "border-blue/20 bg-blue/5 shadow-lg"
                           : "border-muted/20"}`}
                 >
                   <CardContent className="p-4">
