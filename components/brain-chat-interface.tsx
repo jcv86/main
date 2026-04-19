@@ -255,7 +255,7 @@ export function BrainChatInterface() {
                     className={`flex ${message.role === "user" ? "justify-end" : "justify-start"} animate-in fade-in slide-in-from-bottom-2 duration-500`}
                   >
                     <div
-                      className={`max-w-[85%] rounded-2xl p-4 ${`}
+                      className={`max-w-[85%] rounded-2xl p-4 ${
                         message.role === "user"
                           ? "bg-background"
                           : "bg-muted/10 dark:bg-gray-800 border border-muted/20 dark:border-gray-700"
