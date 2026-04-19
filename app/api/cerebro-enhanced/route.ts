@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { getCerebroIntelligence } from "@/lib/cerebro-intelligence"
+import { cerebroIntelligence } from "@/lib/cerebro-intelligence"
 import { semanticSearch } from "@/lib/embeddings"
 import { callOpenAI } from "@/lib/openai-wrapper"
 
@@ -15,20 +15,17 @@ export async function POST(request: NextRequest) {
 
     const startTime = Date.now()
 
-    // Initialize cerebro once per request
-    const cerebro = getCerebroIntelligence()
-
     // 1. Retrieve relevant memories
-    const memories = await cerebro.retrieveRelevantMemories(userId, message, {
+    const memories = await cerebroIntelligence.retrieveRelevantMemories(userId, message, {
       similarityThreshold: 0.75,
       limit: 5,
     })
 
     // 2. Get user patterns for personalization
-    const userPatterns = await cerebro.getUserPatterns(userId)
+    const userPatterns = await cerebroIntelligence.getUserPatterns(userId)
 
     // 3. Get comprehensive user context
-    const userContext = await cerebro.getUserContext(userId)
+    const userContext = await cerebroIntelligence.getUserContext(userId)
 
     // 4. Perform semantic search on knowledge base
     const knowledgeResults = await semanticSearch(message, {
@@ -37,7 +34,7 @@ export async function POST(request: NextRequest) {
     })
 
     // 5. Get pending predictive insights
-    const pendingInsights = await cerebro.getPendingInsights(userId, 3)
+    const pendingInsights = await cerebroIntelligence.getPendingInsights(userId, 3)
 
     // 6. Build enhanced context for AI
     const enhancedContext = buildEnhancedContext({
@@ -54,7 +51,7 @@ export async function POST(request: NextRequest) {
 
     // 8. Store reasoning chain
     const processingTime = Date.now() - startTime
-    await cerebro.storeReasoningChain(
+    await cerebroIntelligence.storeReasoningChain(
       userId,
       {
         query: message,
