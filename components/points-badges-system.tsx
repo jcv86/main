@@ -197,7 +197,7 @@ export function PointsBadgesSystem() {
                 ].map(entry => (
                   <div
                     key={entry.rank}
-                    className={`flex items-center justify-between p-3 rounded-lg ${`}
+                    className={`flex items-center justify-between p-3 rounded-lg ${
                       entry.isCurrent ? "bg-purple/10 border border-purple/20" : "bg-muted/50"
                     }`}
                   >
