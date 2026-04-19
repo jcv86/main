@@ -492,6 +492,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
         error: undefined,
         events: [],
       })),
+    )
     setProgress(0)
     setCurrentTest(null)
     setGestureLog([])
