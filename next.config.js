@@ -3,7 +3,18 @@ const path = require('path');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Suppress Edge Runtime warnings for dependencies
+  logging: {
+    fetches: {
+      unmatchedRoute: false,
+    },
+  },
   webpack: (config, { dev, isServer }) => {
+    // Ignore Edge Runtime warnings from @supabase/realtime-js
+    config.ignoreWarnings = [
+      { module: /@supabase\/realtime-js/ },
+      (warning) => warning.message?.includes('process.versions'),
+    ];
     // Configure webpack cache with absolute path
     if (!dev && !isServer) {
       config.cache = {
