@@ -102,7 +102,7 @@ export function Biblioteca() {
               <Filter className="w-4 h-4 text-muted-foreground flex-shrink-0" />
               <button
                 onClick={() => setSelectedCategory("")}
-                className={`px-3 py-1 rounded-[20px] text-sm transition-colors ${`}
+                className={`px-3 py-1 rounded-[20px] text-sm transition-colors ${
                   selectedCategory === ""
                     ? "bg-purple text-purple-foreground"
                     : "bg-muted hover:bg-muted/80"
@@ -114,7 +114,7 @@ export function Biblioteca() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-3 py-1 rounded-[20px] text-sm transition-colors ${`}
+                  className={`px-3 py-1 rounded-[20px] text-sm transition-colors ${
                     selectedCategory === category
                       ? "bg-purple text-purple-foreground"
                       : "bg-muted hover:bg-muted/80"
