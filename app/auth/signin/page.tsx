@@ -74,12 +74,9 @@ export default function SignInPage() {
       const next = searchParams.get('next') || '/despega/conozcamonos-1'
 
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'linkedin',
+        provider: 'linkedin_oidc',
         options: {
           redirectTo: `${redirectTo}?next=${encodeURIComponent(next)}`,
-          queryParams: {
-            prompt: 'login',
-          },
         },
       })
 
