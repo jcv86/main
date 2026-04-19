@@ -143,7 +143,7 @@ export function NotificationCenter() {
           {notifications.map(notification => (
             <Card
               key={notification.id}
-              className={`border ${getMilestoneColor(notification.milestone_type)} ${`}
+              className={`border ${getMilestoneColor(notification.milestone_type)} ${
                 !notification.read ? 'ring-1 ring-primary' : ''
               }`}
             >
