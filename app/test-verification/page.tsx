@@ -627,6 +627,8 @@ export default function TestVerificationSystem() {
             Failed
           </Badge>
         )
+      default:
+        return null
     }
   }
 
