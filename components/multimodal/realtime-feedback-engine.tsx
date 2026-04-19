@@ -129,7 +129,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
           feedbackItems.map((item, idx) => (
             <div
               key={idx}
-              className={`p-3 rounded-[28px] border-l-4 ${`}
+              className={`p-3 rounded-[28px] border-l-4 ${
                 item.severity === 'critical'
                   ? 'bg-red/5 border-red/50'
                   : item.severity === 'warning'
