@@ -113,7 +113,7 @@ export default function LearningFlowOnboarding() {
                 <CardContent className="p-6">
                   <div className="flex items-start gap-4">
                     <div
-                      className={`h-12 w-12 rounded-full flex items-center justify-center flex-shrink-0 ${`}
+                      className={`h-12 w-12 rounded-full flex items-center justify-center flex-shrink-0 ${
                         isCompleted ? 'bg-green/50' : isActive ? 'bg-blue/50' : 'bg-muted'
                       }`}
                     >

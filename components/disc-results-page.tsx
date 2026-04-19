@@ -167,8 +167,8 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
             return (
               <Card
                 key={key}
-                className={`${`}
-                  isActive`}
+                className={`${
+                  isActive
                     ? `${colors[key]} text-white border-2 border-white`
                     : 'bg-transparent border-muted/70 text-muted/30'
                 } transition-all`}
@@ -223,8 +223,8 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
                     <CardTitle className="text-white text-lg">{section.title}</CardTitle>
                   </div>
                   <ChevronDown
-                    className={`w-5 h-5 text-muted/40 transition-transform ${`}
-                      expandedSection === section.id ? 'rotate-180' : ''`}
+                    className={`w-5 h-5 text-muted/40 transition-transform ${
+                      expandedSection === section.id ? 'rotate-180' : ''
                     }`}
                   />
                 </div>
