@@ -258,11 +258,15 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
         {metrics.map((metric) => (
           <Card
             key={metric.testId}
-            className={``}
-            ${metric.status === "passed" ? "border-green/20 bg-green/5" : ""}
-            ${metric.status === "failed" ? "border-red/20 bg-red/5" : ""}
-            ${metric.status === "running" ? "border-blue/20 bg-blue/5" : ""}
-          `}
+            className={`${
+              metric.status === "passed"
+                ? "border-green/20 bg-green/5"
+                : metric.status === "failed"
+                ? "border-red/20 bg-red/5"
+                : metric.status === "running"
+                ? "border-blue/20 bg-blue/5"
+                : ""
+            }`}
           >
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
