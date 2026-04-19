@@ -85,7 +85,7 @@ export default function LearningFlowOnboarding() {
             {steps.map((_, index) => (
               <div
                 key={index}
-                className={`flex-1 h-2 rounded-full transition-all ${`}
+                className={`flex-1 h-2 rounded-full transition-all ${
                   completed[index] ? 'bg-green/50' : index === currentStep ? 'bg-blue/50' : 'bg-muted'
                 }`}
               />
@@ -106,8 +106,8 @@ export default function LearningFlowOnboarding() {
             return (
               <Card
                 key={index}
-                className={`transition-all ${`}
-                  isActive ? 'ring-2 ring-blue-500' : ''`}
+                className={`transition-all ${
+                  isActive ? 'ring-2 ring-blue-500' : ''
                 } ${isCompleted ? 'opacity-75' : ''}`}
               >
                 <CardContent className="p-6">

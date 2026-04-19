@@ -230,7 +230,7 @@ export default function DocumentsPage() {
                     filteredDocuments.map((doc) => (
                       <div
                         key={doc.id}
-                        className={`p-3 border rounded-lg cursor-pointer transition-all ${`}
+                        className={`p-3 border rounded-lg cursor-pointer transition-all ${
                           isSourceSelected(doc.id, "document")
                             ? "bg-blue/5 border-blue/30 shadow-sm"
                             : "hover:bg-muted/5 hover:border-muted/30"
@@ -284,7 +284,7 @@ export default function DocumentsPage() {
                     filteredBooks.map((book) => (
                       <div
                         key={book.id}
-                        className={`p-3 border rounded-lg cursor-pointer transition-all ${`}
+                        className={`p-3 border rounded-lg cursor-pointer transition-all ${
                           isSourceSelected(book.id, "book")
                             ? "bg-green/5 border-green/30 shadow-sm"
                             : "hover:bg-muted/5 hover:border-muted/30"
@@ -371,7 +371,7 @@ export default function DocumentsPage() {
                       chatMessages.map((msg, i) => (
                         <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
                           <div
-                            className={`max-w-[80%] p-4 rounded-lg shadow-sm ${`}
+                            className={`max-w-[80%] p-4 rounded-lg shadow-sm ${
                               msg.role === "user"
                                 ? "bg-background"
                                 : "bg-white border border-muted/20 text-foreground"
