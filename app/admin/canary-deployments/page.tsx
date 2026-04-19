@@ -249,7 +249,7 @@ export default function CanaryDeploymentsPage() {
                               : stage.status === "failed"
                                 ? "bg-red/5 border-red/20"
                                 : "bg-muted/5 border-muted/20"
-                        }`}
+                        }`
                       >
                         <div className="font-semibold">{stage.traffic_percentage}%</div>
                         <div className="text-muted-foreground">{stage.status}</div>

@@ -60,7 +60,7 @@ export default function V1ObservationDashboard() {
                 timeRange === days
                   ? 'bg-blue/50 text-white'
                   : 'bg-muted/20 text-muted/70 hover:bg-muted/30'
-              }`}
+              }`
             >
               {days} días
             </button>

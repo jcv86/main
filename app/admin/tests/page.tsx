@@ -186,7 +186,7 @@ export default function AdminTestsPage() {
                     selectedCategory === category
                       ? 'bg-blue text-white dark:bg-blue'
                       : 'bg-muted/20 text-muted/90 dark:bg-muted/70 dark:text-muted/10 hover:bg-muted/30 dark:hover:bg-muted/60'
-                  }`}
+                  }`
                 >
                   {category.charAt(0).toUpperCase() + category.slice(1)}
                 </button>
