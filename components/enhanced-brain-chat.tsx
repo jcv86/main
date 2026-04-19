@@ -274,7 +274,7 @@ export function EnhancedBrainChat() {
                 {messages.map((message) => (
                   <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div
-                      className={`max-w-[80%] rounded-[28px] p-4 ${`}
+                      className={`max-w-[80%] rounded-[28px] p-4 ${
                         message.role === "user"
                           ? "bg-background"
                           : "bg-accent"
