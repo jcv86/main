@@ -289,7 +289,7 @@ export default function AIReadingCompanion() {
                 {chatMessages.map((message, index) => (
                   <div key={index} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div
-                      className={`max-w-[80%] p-3 rounded-lg ${`}
+                      className={`max-w-[80%] p-3 rounded-lg ${
                         message.role === "user" ? "bg-blue text-white" : "bg-muted/10 text-gray-800"
                       }`}
                     >
