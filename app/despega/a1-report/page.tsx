@@ -319,9 +319,9 @@ export default function A1ReportPage() {
                 <span className="text-2xl">{dim.icon}</span>
                 <p className="font-bold text-white w-32">{dim.label}</p>
                 <div className="flex-1 h-4 bg-muted/60 rounded-full overflow-hidden border border-muted/50">
-                  <div className={`h-full bg-background`} style={{ width: `${(dim.value / 10) * 100}%` }} />
+                  <div className={`h-full bg-background`} style={{ width: `${(dim.score / 10) * 100}%` }} />
                 </div>
-                <div className="flex items-center gap-2">`}
+                <div className="flex items-center gap-2">
                   <p className="w-16 text-right font-bold text-lg text-white">{Math.max(0, Math.round(dim.score))}%</p>
                 </div>
               </div>
