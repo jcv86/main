@@ -52,7 +52,7 @@ export const PhaseSection = React.forwardRef<HTMLDivElement, PhaseSectionProps>(
         ref={ref}
         className={cn(
           'relative rounded-surface-lg border p-6 md:p-8',
-          `bg-background
+          'bg-background',
           config.borderColor,
           'backdrop-blur-sm',
           'transition-all duration-300',
