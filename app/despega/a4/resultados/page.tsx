@@ -144,7 +144,7 @@ export default function A4ResultadosPage() {
               <Card key={card.key} className={`bg-background`}>
                 <CardHeader>
                   <div className="flex items-start justify-between">
-                    <div>`}
+                    <div>
                       <div className="text-3xl mb-2">{card.icon}</div>
                       <CardTitle className="text-lg">{card.title}</CardTitle>
                     </div>

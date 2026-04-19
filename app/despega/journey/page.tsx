@@ -170,7 +170,7 @@ export default function JourneyPage() {
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">`}
+                        <div className="flex items-center gap-2 mb-2">
                           <span className={`text-2xl font-bold ${phase.color}`}>{phase.phase}</span>
                           <Badge variant={phase.status === 'completed' ? 'default' : phase.status === 'in-progress' ? 'secondary' : 'outline'}>
                             {phase.status === 'completed' ? 'Completado' : phase.status === 'in-progress' ? 'En Progreso' : 'Próximo'}
