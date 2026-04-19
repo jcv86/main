@@ -507,7 +507,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
       case "passed":
         return <CheckCircle className="h-4 w-4 text-green/50" />
       case "failed":
-        return <XCircle className="h-4 w-4 text-red" />
+        return <XCircle className="h-4 w-4 text-red/50" />
       case "testing":
         return <Loader2 className="h-4 w-4 animate-spin text-blue/50" />
       default:
