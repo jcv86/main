@@ -193,7 +193,7 @@ export function EnhancedBrainChat() {
                 <button
                   key={conv.id}
                   onClick={() => loadConversation(conv.id)}
-                  className={`w-full text-left p-3 rounded-lg text-sm hover:bg-accent transition-colors ${`}
+                  className={`w-full text-left p-3 rounded-lg text-sm hover:bg-accent transition-colors ${
                     conversationId === conv.id ? "bg-accent" : ""
                   }`}
                 >
