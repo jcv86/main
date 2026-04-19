@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { useContextValidation } from '@/lib/hooks/use-context-validation'
 import { useAvatarPreferences } from '@/lib/hooks/use-avatar-preferences'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
@@ -277,80 +278,87 @@ export function ConversationalInterview({
   }
 
   if (stage === 'interview') {
+    const interviewerImage = getAvatarImage(selectedInterviewerId)
+    
     return (
-      <div className="max-w-4xl mx-auto p-6 space-y-4">
-        {/* Avatar Showcase */}
-        <div className="grid grid-cols-2 gap-4 p-4 bg-background">
-          {/* Interviewer Avatar */}
-          <div className="flex flex-col items-center justify-center py-4 px-2">
-            <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-2 ${getAvatarGradient(preferences.interviewer_avatar_id)} shadow-lg`}>
-              {getAvatarEmoji(preferences.interviewer_avatar_id, 'interviewer')}
-            </div>
-            <p className="text-xs font-semibold text-muted/70 dark:text-muted/30 text-center">
-              {getAvatarName(preferences.interviewer_avatar_id, 'interviewer')}
-            </p>
-            <p className="text-xs text-muted/60 dark:text-muted/40">Entrevistador</p>
-          </div>
+      <div className="max-w-7xl mx-auto p-6 space-y-4">
+        {/* 60/40 Split Layout: User Video (60%) + Interviewer Photo (40%) */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-4 min-h-96">
+          {/* User Video Feed (60%) */}
+          <Card className="relative overflow-hidden lg:col-span-1">
+            <CardContent className="p-0 h-full">
+              <video
+                ref={videoRef}
+                autoPlay
+                playsInline
+                muted
+                className="w-full h-full bg-black aspect-video lg:aspect-auto object-cover"
+              />
+              {!videoEnabled && (
+                <div className="w-full h-full bg-muted/20 dark:bg-transparent flex items-center justify-center">
+                  <p className="text-muted/50">Cámara deshabilitada</p>
+                </div>
+              )}
 
-          {/* VS */}
-          <div className="flex items-center justify-center">
-            <p className="text-3xl font-bold text-muted/40 dark:text-muted/60">VS</p>
-          </div>
-
-          {/* User Avatar */}
-          <div className="flex flex-col items-center justify-center py-4 px-2 col-start-2">
-            <div className={`w-20 h-20 rounded-full flex items-center justify-center text-4xl mb-2 ${getAvatarGradient(preferences.user_avatar_id)} shadow-lg`}>
-              {getAvatarEmoji(preferences.user_avatar_id, 'user')}
-            </div>
-            <p className="text-xs font-semibold text-muted/70 dark:text-muted/30 text-center">
-              {getAvatarName(preferences.user_avatar_id, 'user')}
-            </p>
-            <p className="text-xs text-muted/60 dark:text-muted/40">Tú</p>
-          </div>
-
-          {/* You Avatar Info */}
-          <div className="flex items-center justify-center col-start-1">
-            <p className="text-sm text-muted/70 dark:text-muted/30">Tu presentación</p>
-          </div>
-        </div>
-
-        {/* Video Feed */}
-        <Card className="relative overflow-hidden">
-          <CardContent className="p-0">
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              muted
-              className="w-full bg-black aspect-video"
-            />
-            {!videoEnabled && (
-              <div className="w-full aspect-video bg-muted/20 dark:bg-transparent flex items-center justify-center">
-                <p className="text-muted/50">Cámara deshabilitada</p>
+              {/* Controls Overlay */}
+              <div className="absolute bottom-4 left-4 flex gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setVideoEnabled(!videoEnabled)}
+                  className="bg-background/80"
+                >
+                  {videoEnabled ? <Video className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => setAudioEnabled(!audioEnabled)}
+                  className="bg-background/80"
+                >
+                  {audioEnabled ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
+                </Button>
               </div>
-            )}
 
-            {/* Controls Overlay */}
-            <div className="absolute bottom-4 left-4 flex gap-2">
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setVideoEnabled(!videoEnabled)}
-                className="bg-background/80"
-              >
-                {videoEnabled ? <Video className="h-4 w-4" /> : <VideoOff className="h-4 w-4" />}
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => setAudioEnabled(!audioEnabled)}
-                className="bg-background/80"
-              >
-                {audioEnabled ? <Mic className="h-4 w-4" /> : <MicOff className="h-4 w-4" />}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+              {/* User Label */}
+              <div className="absolute top-4 left-4 bg-background/80 px-3 py-1 rounded-full text-sm font-semibold">
+                Tú
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Interviewer Photo (40%) */}
+          <Card className="relative overflow-hidden hidden lg:block">
+            <CardContent className="p-0 h-full">
+              {interviewerImage ? (
+                <div className="relative w-full h-full">
+                  <Image
+                    src={interviewerImage}
+                    alt={getAvatarName(selectedInterviewerId, 'interviewer')}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                  {/* Overlay info */}
+                  <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-all flex flex-col justify-end p-4">
+                    <div className="bg-background/90 backdrop-blur-sm rounded-lg p-3">
+                      <p className="font-semibold text-sm">{getAvatarName(selectedInterviewerId, 'interviewer')}</p>
+                      <p className="text-xs text-muted/60">Entrevistador</p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="w-full h-full bg-muted/20 flex flex-col items-center justify-center">
+                  <div className={`w-24 h-24 rounded-full flex items-center justify-center text-5xl mb-4 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
+                    {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
+                  </div>
+                  <p className="font-semibold">{getAvatarName(selectedInterviewerId, 'interviewer')}</p>
+                  <p className="text-xs text-muted/60">Entrevistador</p>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Progress */}
         <div className="space-y-2">
@@ -449,7 +457,7 @@ export function ConversationalInterview({
 function getAvatarEmoji(avatarId: string, type: 'user' | 'interviewer'): string {
   const emojiMap: Record<string, string> = {
     'professional-1': '👔',
-    'creative-1': '��',
+    'creative-1': '🎨',
     'tech-1': '💻',
     'business-1': '🏢',
     'casual-1': '😎',
@@ -461,6 +469,56 @@ function getAvatarEmoji(avatarId: string, type: 'user' | 'interviewer'): string 
     'interviewer-modern-1': '🧑‍🏫',
     'interviewer-modern-2': '🎯',
   }
+  return emojiMap[avatarId] || (type === 'user' ? '👤' : '👥')
+}
+
+function getAvatarName(avatarId: string, type: 'user' | 'interviewer'): string {
+  const nameMap: Record<string, string> = {
+    'professional-1': 'Professional',
+    'creative-1': 'Creative',
+    'tech-1': 'Tech',
+    'business-1': 'Business',
+    'casual-1': 'Casual',
+    'formal-1': 'Formal',
+    'interviewer-classic-1': 'Sofia',
+    'interviewer-classic-2': 'Marco',
+    'interviewer-classic-3': 'Elena',
+    'interviewer-classic-4': 'David',
+    'interviewer-modern-1': 'Alexandra',
+    'interviewer-modern-2': 'Bruno',
+  }
+  return nameMap[avatarId] || 'Avatar'
+}
+
+function getAvatarImage(avatarId: string): string | null {
+  const imageMap: Record<string, string> = {
+    'interviewer-classic-1': '/images/interviewers/sofia.jpg',
+    'interviewer-classic-2': '/images/interviewers/marco.jpg',
+    'interviewer-classic-3': '/images/interviewers/elena.jpg',
+    'interviewer-classic-4': '/images/interviewers/david.jpg',
+    'interviewer-modern-1': '/images/interviewers/alexandra.jpg',
+    'interviewer-modern-2': '/images/interviewers/bruno.jpg',
+  }
+  return imageMap[avatarId] || null
+}
+
+function getAvatarGradient(avatarId: string): string {
+  const gradients: Record<string, string> = {
+    'professional-1': 'bg-background',
+    'creative-1': 'bg-background',
+    'tech-1': 'bg-background',
+    'business-1': 'bg-red',
+    'casual-1': 'bg-background',
+    'formal-1': 'bg-background',
+    'interviewer-classic-1': 'bg-background',
+    'interviewer-classic-2': 'bg-background',
+    'interviewer-classic-3': 'bg-background',
+    'interviewer-classic-4': 'bg-background',
+    'interviewer-modern-1': 'bg-background',
+    'interviewer-modern-2': 'bg-background',
+  }
+  return gradients[avatarId] || 'bg-background'
+}
   return emojiMap[avatarId] || (type === 'user' ? '👤' : '👥')
 }
 
