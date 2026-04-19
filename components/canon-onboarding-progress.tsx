@@ -70,28 +70,28 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
                 </div>
 
                 {/* Content */}
-                <div className={`p-4 rounded-[28px] border ${`}
+                <div className={`p-4 rounded-[28px] border ${
                   isCurrent
                     ? "border-purple/50 bg-purple/5"
                     : isCompleted
                     ? "border-accent/50 bg-accent/5"
                     : "border-border bg-card"
                 }`}>
-                  <h4 className={`font-semibold ${`}
+                  <h4 className={`font-semibold ${
                     isCurrent
                       ? "text-blue dark:text-blue/10"
                       : isCompleted
                       ? "text-green dark:text-green/10"
-                      : "text-muted/70 dark:text-muted/40"`}
+                      : "text-muted/70 dark:text-muted/40"
                   }`}>
                     {step.label}
                   </h4>
-                  <p className={`text-sm mt-1 ${`}
+                  <p className={`text-sm mt-1 ${
                     isCurrent
                       ? "text-blue dark:text-blue/20"
                       : isCompleted
                       ? "text-green dark:text-green/20"
-                      : "text-muted/60 dark:text-muted/50"`}
+                      : "text-muted/60 dark:text-muted/50"
                   }`}>
                     {step.description}
                   </p>
