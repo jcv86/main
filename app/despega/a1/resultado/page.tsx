@@ -127,7 +127,7 @@ export default function A1ResultadoPage() {
             
             {profile.secondary_pattern && (
               <div className={`p-4 bg-background`}>
-                <p className="text-sm opacity-90 mb-1">Patrón Secundario</p>`}
+                <p className="text-sm opacity-90 mb-1">Patrón Secundario</p>
                 <p className="text-xl font-semibold">{getDimensionName(profile.secondary_pattern)}</p>
               </div>
             )}
