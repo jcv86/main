@@ -62,7 +62,7 @@ export function PersonalizationProfile() {
             {Object.entries(DISC_DESCRIPTIONS).map(([key, value]) => (
               <div
                 key={key}
-                className={`p-3 rounded-lg ${value.color} ${`}
+                className={`p-3 rounded-lg ${value.color} ${
                   discProfile.disc_profile?.[key as keyof typeof discProfile.disc_profile] || 0 > 50
                     ? "ring-2 ring-primary"
                     : ""
