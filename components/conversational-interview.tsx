@@ -484,18 +484,18 @@ function getAvatarName(avatarId: string, type: 'user' | 'interviewer'): string {
 
 function getAvatarGradient(avatarId: string): string {
   const gradients: Record<string, string> = {
-    'professional-1': 'bg-background
-    'creative-1': 'bg-background
-    'tech-1': 'bg-background
+    'professional-1': 'bg-background',
+    'creative-1': 'bg-background',
+    'tech-1': 'bg-background',
     'business-1': 'bg-red',
-    'casual-1': 'bg-background
-    'formal-1': 'bg-background
-    'interviewer-classic-1': 'bg-background
-    'interviewer-classic-2': 'bg-background
-    'interviewer-classic-3': 'bg-background
-    'interviewer-classic-4': 'bg-background
-    'interviewer-modern-1': 'bg-background
-    'interviewer-modern-2': 'bg-background
+    'casual-1': 'bg-background',
+    'formal-1': 'bg-background',
+    'interviewer-classic-1': 'bg-background',
+    'interviewer-classic-2': 'bg-background',
+    'interviewer-classic-3': 'bg-background',
+    'interviewer-classic-4': 'bg-background',
+    'interviewer-modern-1': 'bg-background',
+    'interviewer-modern-2': 'bg-background',
   }
-  return gradients[avatarId] || 'bg-background
+  return gradients[avatarId] || 'bg-background'
 }
