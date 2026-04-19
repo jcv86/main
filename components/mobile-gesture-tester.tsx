@@ -728,7 +728,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
     </div>
   )
 }
-      {/* Header */}
+
       <Card className="border-purple/20 bg-background">
         <CardHeader>
           <div className="flex items-center justify-between">
