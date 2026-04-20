@@ -168,17 +168,17 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
       <Card className="border-2 border-orange/50 bg-orange/5/50">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Lightbulb className="w-5 h-5 text-orange" />
+            <Lightbulb className="w-5 h-5 text-orange-400" />
             Tu Tensión Específica (La verdad incómoda)
           </CardTitle>
           <CardDescription>Dónde se quiebran los {profile.primary}s bajo presión</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-foreground font-semibold">{tension}</p>
-          <div className="bg-white p-4 rounded-[28px] border border-orange/20">
-            <p className="text-sm text-muted">{insights.areasDesarrollo}</p>
+          <p className="text-white font-semibold">{tension}</p>
+          <div className="bg-blue/20 p-4 rounded-[28px] border border-blue/50">
+            <p className="text-sm text-white font-medium">{insights.areasDesarrollo}</p>
           </div>
-          <p className="text-sm text-muted-foreground italic">
+          <p className="text-sm text-white/75 italic">
             Esta tensión no es debilidad. Es el lado oscuro de tu fortaleza. La pregunta es: ¿la ves? ¿La gestionas?
           </p>
         </CardContent>
@@ -196,26 +196,26 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
         <CardContent>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold text-green mb-3 flex items-center gap-2">
+              <h4 className="font-semibold text-green-400 mb-3 flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4" />
                 Brillas En
               </h4>
               <div className="space-y-2">
                 {roles.brilla.map((role, idx) => (
-                  <Badge key={idx} variant="outline" className="bg-green/10 text-green border-green/30">
+                  <Badge key={idx} variant="outline" className="bg-green/10 text-white border-green/30">
                     {role}
                   </Badge>
                 ))}
               </div>
             </div>
             <div>
-              <h4 className="font-semibold text-red mb-3 flex items-center gap-2">
+              <h4 className="font-semibold text-red-400 mb-3 flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 rotate-180" />
                 Drenas En
               </h4>
               <div className="space-y-2">
                 {roles.drena.map((role, idx) => (
-                  <Badge key={idx} variant="outline" className="bg-red/10 text-red border-red/30">
+                  <Badge key={idx} variant="outline" className="bg-red/10 text-white border-red/30">
                     {role}
                   </Badge>
                 ))}
@@ -244,27 +244,27 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
 
             <TabsContent value="7dias" className="space-y-3 mt-4">
               {roadmap['7dias'].map((item, idx) => (
-                <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple/20">
-                  <CheckCircle2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-foreground">{item}</p>
+                <div key={idx} className="flex gap-3 p-3 bg-purple/20 rounded-[28px] border border-purple/40">
+                  <CheckCircle2 className="w-5 h-5 text-purple-300 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-white">{item}</p>
                 </div>
               ))}
             </TabsContent>
 
             <TabsContent value="30dias" className="space-y-3 mt-4">
               {roadmap['30dias'].map((item, idx) => (
-                <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple/20">
-                  <CheckCircle2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-foreground">{item}</p>
+                <div key={idx} className="flex gap-3 p-3 bg-purple/20 rounded-[28px] border border-purple/40">
+                  <CheckCircle2 className="w-5 h-5 text-purple-300 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-white">{item}</p>
                 </div>
               ))}
             </TabsContent>
 
             <TabsContent value="90dias" className="space-y-3 mt-4">
               {roadmap['90dias'].map((item, idx) => (
-                <div key={idx} className="flex gap-3 p-3 bg-white rounded-[28px] border border-purple/20">
-                  <CheckCircle2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-foreground">{item}</p>
+                <div key={idx} className="flex gap-3 p-3 bg-purple/20 rounded-[28px] border border-purple/40">
+                  <CheckCircle2 className="w-5 h-5 text-purple-300 flex-shrink-0 mt-0.5" />
+                  <p className="text-sm text-white">{item}</p>
                 </div>
               ))}
             </TabsContent>
@@ -291,9 +291,9 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
 
             <TabsContent value="linkedin" className="mt-4">
               <div className="space-y-3">
-                <div className="p-4 bg-white rounded-[28px] border border-pink-200">
-                  <p className="text-sm font-semibold text-foreground mb-2">Propuesta:</p>
-                  <p className="text-foreground font-medium">{language.linkedin}</p>
+                <div className="p-4 bg-pink/20 rounded-[28px] border border-pink-400/50">
+                  <p className="text-sm font-semibold text-white mb-2">Propuesta:</p>
+                  <p className="text-white font-medium">{language.linkedin}</p>
                 </div>
                 <Button
                   size="sm"
@@ -309,9 +309,9 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
 
             <TabsContent value="interview" className="mt-4">
               <div className="space-y-3">
-                <div className="p-4 bg-white rounded-[28px] border border-pink-200">
-                  <p className="text-sm font-semibold text-foreground mb-2">Respuesta en Entrevista a "Cuéntame de ti":</p>
-                  <p className="text-foreground">{language.interview}</p>
+                <div className="p-4 bg-pink/20 rounded-[28px] border border-pink-400/50">
+                  <p className="text-sm font-semibold text-white mb-2">Respuesta en Entrevista a "Cuéntame de ti":</p>
+                  <p className="text-white">{language.interview}</p>
                 </div>
                 <Button
                   size="sm"
@@ -327,9 +327,9 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
 
             <TabsContent value="networking" className="mt-4">
               <div className="space-y-3">
-                <div className="p-4 bg-white rounded-[28px] border border-pink-200">
-                  <p className="text-sm font-semibold text-foreground mb-2">Pitch en Networking:</p>
-                  <p className="text-foreground">{language.networking}</p>
+                <div className="p-4 bg-pink/20 rounded-[28px] border border-pink-400/50">
+                  <p className="text-sm font-semibold text-white mb-2">Pitch en Networking:</p>
+                  <p className="text-white">{language.networking}</p>
                 </div>
                 <Button
                   size="sm"
