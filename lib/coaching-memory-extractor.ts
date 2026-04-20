@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase/server"
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY
 
