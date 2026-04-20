@@ -341,7 +341,7 @@ export function ConversationalInterviewSimulator({
       questionsCompleted: questions.length,
       totalAttempts: Object.values(attempts).flat().length,
       averageScore,
-      attempts,
+      attempts
     })
 
     setStage('complete')
@@ -454,8 +454,8 @@ export function ConversationalInterviewSimulator({
               <div className="grid lg:grid-cols-3 gap-6 flex-1 min-h-0">
                 
                 {/* Left Panel: User Video (60% - 2 columns) */}
-                <div className="lg:col-span-2 min-h-0 flex flex-col">
-                  <div className="relative bg-black rounded-xl overflow-hidden shadow-2xl flex-1 flex flex-col">
+                <div className="lg:col-span-2 min-h-0">
+                  <div className="relative bg-black rounded-xl overflow-hidden shadow-2xl h-full flex flex-col">
                     {/* User Video Stream */}
                     <video
                       ref={videoRef}
@@ -465,76 +465,76 @@ export function ConversationalInterviewSimulator({
                       className="w-full h-full object-cover flex-1"
                     />
 
-                    {/* Recording Status Badge - Top Left */}
-                    <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
-                      <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red/50 animate-pulse' : 'bg-emerald-500'}`} />
-                      <span className="text-xs font-bold text-white bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full uppercase tracking-wide">
-                        {isListening ? '🔴 Grabando' : '🎥 Listo'}
-                      </span>
-                    </div>
+                  {/* Recording Status Badge - Top Left */}
+                  <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
+                    <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red/50 animate-pulse' : 'bg-emerald-500'}`} />
+                    <span className="text-xs font-bold text-white bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full uppercase tracking-wide">
+                      {isListening ? '🔴 Grabando' : '🎥 Listo'}
+                    </span>
                   </div>
+                </div>
 
-                  {/* Response Input - Below Video */}
-                  <div className="mt-4 space-y-2">
-                    <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Tu respuesta:</label>
-                    <div className="flex gap-2">
-                      <textarea
-                        value={userResponse}
-                        onChange={(e) => setUserResponse(e.target.value)}
-                        placeholder="Escribe aquí o usa micrófono..."
-                        className="flex-1 bg-slate-950/80 border border-muted/70 rounded-[28px] p-3 text-sm text-white placeholder-slate-500 focus:border-blue/50 focus:ring-1 focus:ring-blue-500 resize-none backdrop-blur-sm"
-                        rows={3}
-                      />
-                      {isSupported && (
-                        <button
-                          onClick={isListening ? stopListening : startListening}
-                          className={`px-4 py-3 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
-                            isListening
-                              ? 'bg-red hover:bg-red text-white'
-                              : 'bg-muted/20 hover:bg-muted/30 text-muted-foreground hover:text-secondary'
-                          }`}
-                          title={isListening ? 'Detener' : 'Grabar'}
-                        >
-                          {isListening ? 'Detener' : 'Micrófono'}
-                        </button>
-                      )}
+                {/* Response Input - Below Video */}
+                <div className="mt-4 space-y-2">
+                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Tu respuesta:</label>
+                  <div className="flex gap-2">
+                    <textarea
+                      value={userResponse}
+                      onChange={(e) => setUserResponse(e.target.value)}
+                      placeholder="Escribe aquí o usa micrófono..."
+                      className="flex-1 bg-slate-950/80 border border-muted/70 rounded-[28px] p-3 text-sm text-white placeholder-slate-500 focus:border-blue/50 focus:ring-1 focus:ring-blue-500 resize-none backdrop-blur-sm"
+                      rows={3}
+                    />
+                    {isSupported && (
+                      <button
+                        onClick={isListening ? stopListening : startListening}
+                        className={`px-4 py-3 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
+                          isListening
+                            ? 'bg-red hover:bg-red text-white'
+                            : 'bg-muted/20 hover:bg-muted/30 text-muted-foreground hover:text-secondary'
+                        }`}
+                        title={isListening ? 'Detener' : 'Grabar'}
+                      >
+                        {isListening ? 'Detener' : 'Micrófono'}
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Panel: Interviewer (40% - 1 column) */}
+              <div className="lg:col-span-1 flex flex-col min-h-0 bg-background rounded-xl overflow-hidden border border-muted/20">
+                
+                {/* Interviewer Photo - Flexible Height */}
+                <div className="flex-1 relative overflow-hidden bg-black min-h-40">
+                  {selectedInterviewerId && (
+                    <Image
+                      src={`/images/interviewers/${selectedInterviewerId}.jpg`}
+                      alt={getAvatarName(selectedInterviewerId, 'interviewer')}
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  )}
+                </div>
+
+                {/* Interviewer Info Card */}
+                <div className="p-3 border-t border-muted/80 space-y-2 flex-shrink-0 bg-background/95">
+                  <div className="flex gap-2">
+                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
+                      {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-base font-bold text-white truncate">
+                        {getAvatarName(selectedInterviewerId, 'interviewer')}
+                      </h3>
+                      <p className="text-xs text-muted-foreground">Entrevistador</p>
                     </div>
                   </div>
                 </div>
 
-                {/* Right Panel: Interviewer (40% - 1 column) */}
-                <div className="lg:col-span-1 flex flex-col min-h-0 bg-background rounded-xl overflow-hidden border border-muted/20">
-                  
-                  {/* Interviewer Photo - Flexible Height */}
-                  <div className="flex-1 relative overflow-hidden bg-black min-h-40">
-                    {selectedInterviewerId && (
-                      <Image
-                        src={`/images/interviewers/${selectedInterviewerId}.jpg`}
-                        alt={getAvatarName(selectedInterviewerId, 'interviewer')}
-                        fill
-                        className="object-cover"
-                        priority
-                      />
-                    )}
-                  </div>
-
-                  {/* Interviewer Info Card */}
-                  <div className="p-3 border-t border-muted/80 space-y-2 flex-shrink-0 bg-background/95">
-                    <div className="flex gap-2">
-                      <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
-                        {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <h3 className="text-base font-bold text-white truncate">
-                          {getAvatarName(selectedInterviewerId, 'interviewer')}
-                        </h3>
-                        <p className="text-xs text-muted-foreground">Entrevistador</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Scrollable Content */}
-                  <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
+                {/* Scrollable Content */}
+                <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
                   
                   {/* Question Card */}
                   <Card className="border border-muted/70 bg-muted/90/50">
@@ -588,11 +588,27 @@ export function ConversationalInterviewSimulator({
                     </CardContent>
                   </Card>
                 </div>
+
+                {/* Action Buttons - Bottom */}
+                <div className="p-4 border-t border-muted/80 space-y-2 flex-shrink-0 bg-slate-950">
+                  <Button
+                    onClick={handleSubmitResponse}
+                    disabled={!userResponse.trim()}
+                    className="w-full bg-background"
+                  >
+                    <Send className="w-4 h-4" />
+                    Enviar
+                  </Button>
+                  <Button
+                    onClick={handleMoveNext}
+                    variant="outline"
+                    className="w-full border-muted/70 text-sm font-semibold hover:bg-muted/80"
+                  >
+                    Siguiente
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
 
             {error && (
               <Alert variant="destructive" className="border-red/30 bg-red/5 dark:bg-red/20">
