@@ -199,14 +199,14 @@ export default function A2RoutesPage() {
           <h1 className="text-4xl font-bold text-white flex items-center gap-3">
             <span className="text-3xl">🗺️</span> A2: Ruta
           </h1>
-          <p className="text-lg text-muted-foreground">Tu plan personalizado de 90 días</p>
+          <p className="text-lg text-white/75">Tu plan personalizado de 90 días</p>
         </div>
 
         {/* What is A2 */}
         <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <Zap className="w-5 h-5 text-orange" />
+              <Zap className="w-5 h-5 text-orange-400" />
               Tu Ruta de 90 Días (Fase de Visualización)
             </CardTitle>
           </CardHeader>
@@ -216,7 +216,7 @@ export default function A2RoutesPage() {
               Este es el resultado de A2: Diseño de tu Ruta. Aquí visualizas las acciones, milestones y recursos 
               organizados en 3 fases progresivas para llevar tu carrera al siguiente nivel.
             </p>
-            <p className="text-muted-foreground text-sm">
+            <p className="text-white/75 text-sm">
               📋 Estructura: 3 fases de 30 días cada una con tareas específicas, recursos y hitos de progreso.
             </p>
           </CardContent>
@@ -226,7 +226,7 @@ export default function A2RoutesPage() {
         <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <MapPin className="w-5 h-5 text-cyan/50" />
+              <MapPin className="w-5 h-5 text-cyan-400" />
               Tu Progreso en A2
             </CardTitle>
           </CardHeader>
@@ -256,7 +256,7 @@ export default function A2RoutesPage() {
         <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <Calendar className="w-5 h-5 text-white0" />
+              <Calendar className="w-5 h-5 text-purple-400" />
               Tus 90 Días Estructurados
             </CardTitle>
           </CardHeader>
@@ -273,13 +273,13 @@ export default function A2RoutesPage() {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <Calendar className="w-6 h-6" />
+                        <Calendar className="w-6 h-6 text-purple-400" />
                         <div>
-                          <h3 className="text-2xl font-bold">{data.label}</h3>
+                          <h3 className="text-2xl font-bold text-white">{data.label}</h3>
                           <p className="text-white/80">{data.milestone}</p>
                         </div>
                       </div>
-                      <div className="text-3xl opacity-20">{days}</div>
+                      <div className="text-3xl opacity-20 text-white">{days}</div>
                     </div>
                   </button>
 
@@ -288,7 +288,7 @@ export default function A2RoutesPage() {
                       {data.tasks && data.tasks.length > 0 ? (
                         <div className="space-y-3">
                           {data.tasks.map((task, idx) => (
-                            <div key={idx} className="bg-muted/70/30 border border-muted/60/30 rounded-[28px] p-4 hover:border-muted/50/50 transition">
+                            <div key={idx} className="bg-muted/20 border border-muted/40 rounded-[28px] p-4 hover:border-muted/60 transition">
                               <div className="flex items-start gap-3">
                                 <div className="flex-shrink-0">
                                   {task.type === 'learning' && <span className="text-2xl">📚</span>}
@@ -300,15 +300,15 @@ export default function A2RoutesPage() {
                                 <div className="flex-1">
                                   <div className="flex items-center justify-between gap-2">
                                     <h4 className="font-semibold text-white text-sm">Día {task.day}: {task.title}</h4>
-                                    <span className="text-xs bg-muted/60/50 text-white/85 px-2 py-1 rounded whitespace-nowrap">
+                                    <span className="text-xs bg-purple/30 text-white/90 px-2 py-1 rounded whitespace-nowrap">
                                       {Math.round(task.timeEstimate / 60)}h
                                     </span>
                                   </div>
-                                  <p className="text-sm text-muted-foreground mt-2">{task.description}</p>
+                                  <p className="text-sm text-white/75 mt-2">{task.description}</p>
                                   {task.resources && task.resources.length > 0 && (
                                     <div className="flex flex-wrap gap-2 mt-2">
                                       {task.resources.map((resource, ridx) => (
-                                        <span key={ridx} className="text-xs bg-blue/50/20 text-blue/30 px-2 py-1 rounded">
+                                        <span key={ridx} className="text-xs bg-blue/30 text-white/90 px-2 py-1 rounded">
                                           📌 {resource}
                                         </span>
                                       ))}
@@ -320,7 +320,7 @@ export default function A2RoutesPage() {
                           ))}
                         </div>
                       ) : (
-                        <p className="text-muted-foreground">Contenido personalizado para la fase de {days} días</p>
+                        <p className="text-white/75">Contenido personalizado para la fase de {days} días</p>
                       )}
                     </div>
                   )}
