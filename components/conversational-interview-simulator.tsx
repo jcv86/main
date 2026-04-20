@@ -890,28 +890,4 @@ export function ConversationalInterviewSimulator({
     }
     return gradients[avatarId] || 'bg-background'
   }
-
-  function getInterviewerRole(interviewerId: string): string {
-    const roles: Record<string, string> = {
-      'interviewer-classic-1': 'Reclutadora de Talento',
-      'interviewer-classic-2': 'Manager Senior de Ingeniería',
-      'interviewer-classic-3': 'VP de Talento Estratégico',
-      'interviewer-classic-4': 'Tech Lead Senior',
-      'interviewer-modern-1': 'Product Manager',
-      'interviewer-modern-2': 'Consultor CEO',
-    }
-    return roles[interviewerId] || 'Entrevistador'
-  }
-
-  function getInterviewerFocus(interviewerId: string): string {
-    const focuses: Record<string, string> = {
-      'interviewer-classic-1': 'Sofia busca candidatos con habilidades de comunicación sólidas, empatía y capacidad de trabajo en equipo. Valora la autenticidad y cómo te relacionas con otros.',
-      'interviewer-classic-2': 'Marco se enfoca en tu arquitectura mental, resolución de problemas complejos y experiencia técnica. Quiere entender tu proceso de decisión.',
-      'interviewer-classic-3': 'Elena busca liderazgo potencial, visión estratégica y capacidad de influir en otros. Valora candidatos que piensan a largo plazo.',
-      'interviewer-classic-4': 'David evalúa tu competencia técnica, calidad del código y metodología de trabajo. Busca desarrolladores que practiquen buenos hábitos.',
-      'interviewer-modern-1': 'Alex se enfoca en pensamiento orientado al usuario, análisis de datos y capacidad de iterar. Valora candidatos que entienden el impacto comercial.',
-      'interviewer-modern-2': 'Jordan busca potencial de liderazgo, visión de negocio y capacidad de ejecutar bajo presión. Quiere entender tu motivación y ambición.',
-    }
-    return focuses[interviewerId] || 'Buscando candidatos con talento y potencial'
-  }
 }
