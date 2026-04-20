@@ -156,7 +156,7 @@ export function InterviewTips({
         {/* All Tips Visual Indicator */}
         {tipHistory.length > 0 && (
           <div className="flex gap-2 items-center">
-            <span className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground">Tips obtenidos:</span>
+            <span className="text-xs font-semibold text-white/80">Tips obtenidos:</span>
             <div className="flex gap-1">
               {tipHistory.map((_, idx) => (
                 <button
@@ -164,8 +164,8 @@ export function InterviewTips({
                   onClick={() => setCurrentTipIndex(idx)}
                   className={`w-2 h-2 rounded-full transition-all ${
                     currentTipIndex === idx
-                      ? 'bg-blue/50 w-6'
-                      : 'bg-muted/30 dark:bg-muted/60'
+                      ? 'bg-blue/70 w-6'
+                      : 'bg-muted/50 dark:bg-muted/40'
                   }`}
                   title={`Tip ${idx + 1}`}
                 />
@@ -258,16 +258,16 @@ export function InterviewTips({
 
         {/* Information */}
         {!canUseFreeTip && (
-          <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded-[28px] border border-yellow/20 dark:border-yellow">
-            <p className="text-sm text-yellow dark:text-yellow/20">
+          <div className="p-3 bg-yellow/10 dark:bg-yellow/20 rounded-[28px] border border-yellow/40 dark:border-yellow/50">
+            <p className="text-sm text-yellow/80 dark:text-yellow/90 font-medium leading-relaxed">
               Usaste los 3 tips gratis. Obtén tips premium con puntos DTC o gana más tips completando entrevistas.
             </p>
           </div>
         )}
 
         {dtcBalance !== null && !canUsePremiumTip && premiumTipsUsed === 0 && canUseFreeTip && (
-          <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded-[28px] border border-blue/20 dark:border-blue">
-            <p className="text-sm text-blue dark:text-blue/20">
+          <div className="p-3 bg-blue/10 dark:bg-blue/20 rounded-[28px] border border-blue/40 dark:border-blue/50">
+            <p className="text-sm text-blue/80 dark:text-blue/90 font-medium leading-relaxed">
               Después de usar los 3 tips gratis, puedes comprar puntos DTC en la tienda para tips premium.
             </p>
           </div>
