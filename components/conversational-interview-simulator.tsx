@@ -359,54 +359,50 @@ export function ConversationalInterviewSimulator({
     <div className="space-y-6">
       {/* Setup Stage */}
       {stage === 'setup' && (
-        <div className="space-y-6">
-          <Card className="border-2 border-emerald-500/20">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-emerald-600" />
-                Simulador Conversacional de Entrevista
-              </CardTitle>
-              <CardDescription>
-                Entrena con un entrevistador adaptativo que hace follow-ups reales basado en tus respuestas
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-[28px] border border-emerald-200 dark:border-emerald-800 space-y-3">
-                <p className="font-bold text-emerald-900 dark:text-emerald-200">Aquí está el diferencial:</p>
-                <ul className="space-y-2 text-sm text-emerald-800 dark:text-emerald-300">
-                  <li className="flex gap-2">
-                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span><strong>Respuestas vagas?</strong> Te pediré ejemplo. <strong>Demasiado largo?</strong> Te interrumpiré.</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span><strong>Segundo intento inmediato.</strong> Las mejores respuestas salen en el segundo round.</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span><strong>Debrief STAR detallado:</strong> Dónde ganaste puntos, dónde perdiste, y cómo sonarías mejor.</span>
-                  </li>
-                  <li className="flex gap-2">
-                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span><strong>Lenguaje para copiar-pegar.</strong> Frases exactas que sonarían mejor en esa situación.</span>
-                  </li>
-                </ul>
+        <div className="w-full bg-background min-h-screen flex flex-col justify-center py-4 px-4">
+          <div className="max-w-4xl mx-auto w-full space-y-4">
+            
+            {/* Title Section - Compact */}
+            <div className="space-y-2">
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground">Entrena tu Entrevista</h1>
+              <p className="text-muted-foreground">Elige un entrevistador y comienza la simulación</p>
+            </div>
+
+            {/* Quick Benefits - Compact Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-emerald-50/50 dark:bg-emerald-900/10 p-3 rounded-lg border border-emerald-200/50 dark:border-emerald-800/30">
+              <div className="flex gap-2 text-sm">
+                <Check className="w-4 h-4 flex-shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
+                <span className="text-emerald-900 dark:text-emerald-300"><strong>Follow-ups</strong> en tiempo real</span>
               </div>
-            </CardContent>
-          </Card>
+              <div className="flex gap-2 text-sm">
+                <Check className="w-4 h-4 flex-shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
+                <span className="text-emerald-900 dark:text-emerald-300"><strong>Debrief STAR</strong> detallado</span>
+              </div>
+              <div className="flex gap-2 text-sm">
+                <Check className="w-4 h-4 flex-shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
+                <span className="text-emerald-900 dark:text-emerald-300"><strong>Segundo intento</strong> inmediato</span>
+              </div>
+              <div className="flex gap-2 text-sm">
+                <Check className="w-4 h-4 flex-shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
+                <span className="text-emerald-900 dark:text-emerald-300"><strong>Lenguaje</strong> para copiar</span>
+              </div>
+            </div>
 
-          {/* Interviewer Selector */}
-          <InterviewerSelector
-            value={selectedInterviewerId}
-            onChange={setSelectedInterviewerId}
-          />
+            {/* Interviewer Selector */}
+            <InterviewerSelector
+              value={selectedInterviewerId}
+              onChange={setSelectedInterviewerId}
+            />
 
-          <Button
-            onClick={handleStartInterview}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12 text-lg"
-          >
-            Comenzar Simulación
-          </Button>
+            {/* Start Button */}
+            <Button
+              onClick={handleStartInterview}
+              disabled={!selectedInterviewerId}
+              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-11 font-semibold text-base"
+            >
+              Comenzar Simulación
+            </Button>
+          </div>
         </div>
       )}
 
