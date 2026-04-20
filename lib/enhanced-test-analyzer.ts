@@ -138,11 +138,12 @@ export class EnhancedTestAnalyzer {
    * Get all test results for a user
    */
   private async getUserTestResults(userId: string): Promise<TestResult[]> {
-    const { data: profile } = await this.getSupabase().from("user_profiles").select("email").eq("id", userId).single()
+    const supabase = await this.getSupabase()
+    const { data: profile } = await supabase.from("user_profiles").select("email").eq("id", userId).single()
 
     if (!profile?.email) return []
 
-    const { data, error } = await this.getSupabase()
+    const { data, error } = await supabase
       .from("test_results")
       .select("*")
       .eq("user_email", profile.email)
@@ -152,6 +153,51 @@ export class EnhancedTestAnalyzer {
       console.error("Error fetching test results:", error)
       return []
     }
+
+    return (data || []).map((r) => ({
+      testType: r.test_type,
+      score: r.score,
+      results: r.results,
+      completedAt: r.completed_at,
+    }))
+  }
+
+  /**
+   * Get Chilean market insights
+   */
+  private async getChileanMarketInsights(): Promise<any[]> {
+    const supabase = await this.getSupabase()
+    const { data, error } = await supabase
+      .from("cerebro_market_insights")
+      .select("*")
+      .eq("region", "Chile")
+      .order("confidence_score", { ascending: false })
+      .limit(10)
+
+    if (error) {
+      console.error("Error fetching market insights:", error)
+      return []
+    }
+
+    return data || []
+  }
+
+  /**
+   * Get test combination pattern if exists
+   */
+  private async getTestCombinationPattern(testTypes: string[]): Promise<any | null> {
+    const supabase = await this.getSupabase()
+    const combination = testTypes.sort().join("+")
+
+    const { data, error } = await supabase
+      .from("cerebro_test_combinations")
+      .select("*")
+      .eq("test_combination", combination)
+      .single()
+
+    if (error) return null
+    return data
+  }
 
     return (data || []).map((r) => ({
       testType: r.test_type,
@@ -333,14 +379,15 @@ Enfócate en:
    */
   private async storeCrossTestAnalysis(userId: string, testResults: TestResult[], analysis: CrossTestAnalysis) {
     try {
-    const { data: profile } = this.getSupabase().from("user_profiles").select("email").eq("id", userId).single()
+      const supabase = await this.getSupabase()
+      const { data: profile } = await supabase.from("user_profiles").select("email").eq("id", userId).single()
 
       if (!profile?.email) {
         console.error("User profile not found")
         return
       }
 
-      this.getSupabase().from("cerebro_cross_test_analysis").insert({
+      await supabase.from("cerebro_cross_test_analysis").insert({
         user_email: profile.email,
         test_types: testResults.map((t) => t.testType),
         combined_profile: {
@@ -404,11 +451,12 @@ Enfócate en:
    * Get latest cross-test analysis for user
    */
   async getLatestCrossTestAnalysis(userId: string): Promise<CrossTestAnalysis | null> {
-    const { data: profile } = this.getSupabase().from("user_profiles").select("email").eq("id", userId).single()
+    const supabase = await this.getSupabase()
+    const { data: profile } = await supabase.from("user_profiles").select("email").eq("id", userId).single()
 
     if (!profile?.email) return null
 
-    const { data, error } = this.getSupabase()
+    const { data, error } = await supabase
       .from("cerebro_cross_test_analysis")
       .select("*")
       .eq("user_email", profile.email)
