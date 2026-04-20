@@ -111,9 +111,9 @@ Responde SOLO con JSON válido con esta estructura:
 async function generateCerebroInsights(userId: string, testType: string, results: any, responses: any): Promise<any> {
   try {
     // 1. Get user context and patterns
-    const userContext = await cerebroIntelligence.getUserContext(userId)
-    const userPatterns = await cerebroIntelligence.getUserPatterns(userId)
-    const memories = await cerebroIntelligence.retrieveRelevantMemories(userId, `test ${testType} results`, {
+    const userContext = await getCerebroIntelligence().getUserContext(userId)
+    const userPatterns = await getCerebroIntelligence().getUserPatterns(userId)
+    const memories = await getCerebroIntelligence().retrieveRelevantMemories(userId, `test ${testType} results`, {
       limit: 5,
     })
 
