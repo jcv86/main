@@ -1,4 +1,4 @@
-import { createClient } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase/server"
 import { getCerebroIntelligence } from "@/lib/cerebro-intelligence"
 import { z } from "zod"
 
