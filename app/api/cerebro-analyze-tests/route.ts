@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { enhancedTestAnalyzer } from "@/lib/enhanced-test-analyzer"
+import { getEnhancedTestAnalyzer } from "@/lib/enhanced-test-analyzer"
 
 export const maxDuration = 60
 
@@ -13,6 +13,8 @@ export async function POST(request: NextRequest) {
     if (!userId) {
       return NextResponse.json({ error: "userId is required" }, { status: 400 })
     }
+
+    const enhancedTestAnalyzer = getEnhancedTestAnalyzer()
 
     console.log("[v0] Starting cross-test analysis for user:", userId)
     const startTime = Date.now()

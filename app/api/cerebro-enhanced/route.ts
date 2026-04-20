@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { cerebroIntelligence } from "@/lib/cerebro-intelligence"
+import { getCerebroIntelligence } from "@/lib/cerebro-intelligence"
 import { semanticSearch } from "@/lib/embeddings"
 import { callOpenAI } from "@/lib/openai-wrapper"
 
@@ -13,6 +13,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Message and userId are required" }, { status: 400 })
     }
 
+    const cerebroIntelligence = getCerebroIntelligence()
     const startTime = Date.now()
 
     // 1. Retrieve relevant memories
