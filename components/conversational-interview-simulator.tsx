@@ -151,11 +151,6 @@ export function ConversationalInterviewSimulator({
   })
   
   const [stage, setStage] = useState<'setup' | 'question' | 'response' | 'feedback' | 'complete'>('setup')
-
-  // Debug: log stage changes
-  useEffect(() => {
-    console.log('[v0] Stage changed to:', stage)
-  }, [stage])
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
   const [videoEnabled, setVideoEnabled] = useState(true)
   const [userResponse, setUserResponse] = useState('')
