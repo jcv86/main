@@ -4,6 +4,9 @@ import { useState } from 'react'
 import { CheckCircle2, Circle, Clock, BookOpen, Wrench, Users, ClipboardList, Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { TaskDetailModal } from '@/components/task-detail-modal'
+import { getTaskDetail } from '@/lib/task-details'
+import type { TaskDetail } from '@/lib/task-details'
 
 export interface Task {
   day: number
@@ -40,6 +43,8 @@ const taskTypeEmojis = {
 
 export function TaskCard({ task, completed = false, onComplete, taskId }: TaskCardProps) {
   const [isCompleted, setIsCompleted] = useState(completed)
+  const [showDetailModal, setShowDetailModal] = useState(false)
+  const taskDetail = getTaskDetail(task.day)
   const typeInfo = taskTypeIcons[task.type]
   const emoji = taskTypeEmojis[task.type]
 
@@ -52,17 +57,19 @@ export function TaskCard({ task, completed = false, onComplete, taskId }: TaskCa
   const minutes = task.timeEstimate % 60
 
   return (
-    <div
-      className={`transition-all duration-200 ${
-        isCompleted ? 'opacity-60' : ''
-      }`}
-    >
-      <div className={`bg-muted/20 border-2 ${
-        isCompleted
-          ? 'border-emerald-500/50 bg-emerald-500/5'
-          : 'border-muted/40'
-      } rounded-[28px] p-4 hover:border-muted/60 transition group`}>
-        <div className="flex items-start gap-3">
+    <>
+      <div
+        className={`transition-all duration-200 ${
+          isCompleted ? 'opacity-60' : ''
+        }`}
+      >
+        <div className={`bg-muted/20 border-2 ${
+          isCompleted
+            ? 'border-emerald-500/50 bg-emerald-500/5'
+            : 'border-muted/40'
+        } rounded-[28px] p-4 hover:border-muted/60 transition group cursor-pointer`}
+        onClick={() => taskDetail && setShowDetailModal(true)}>
+          <div className="flex items-start gap-3">
           {/* Completion checkbox */}
           <button
             onClick={handleComplete}
@@ -138,6 +145,15 @@ export function TaskCard({ task, completed = false, onComplete, taskId }: TaskCa
           </div>
         </div>
       </div>
-    </div>
+
+      {/* Task Detail Modal */}
+      {taskDetail && (
+        <TaskDetailModal
+          task={taskDetail}
+          isOpen={showDetailModal}
+          onClose={() => setShowDetailModal(false)}
+        />
+      )}
+    </>
   )
 }
