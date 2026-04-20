@@ -17,16 +17,16 @@ export async function POST(request: NextRequest) {
     const startTime = Date.now()
 
     // 1. Retrieve relevant memories
-    const memories = await cerebroIntelligence.retrieveRelevantMemories(userId, message, {
+    const memories = await getCerebroIntelligence().retrieveRelevantMemories(userId, message, {
       similarityThreshold: 0.75,
       limit: 5,
     })
 
     // 2. Get user patterns for personalization
-    const userPatterns = await cerebroIntelligence.getUserPatterns(userId)
+    const userPatterns = await getCerebroIntelligence().getUserPatterns(userId)
 
     // 3. Get comprehensive user context
-    const userContext = await cerebroIntelligence.getUserContext(userId)
+    const userContext = await getCerebroIntelligence().getUserContext(userId)
 
     // 4. Perform semantic search on knowledge base
     const knowledgeResults = await semanticSearch(message, {
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     })
 
     // 5. Get pending predictive insights
-    const pendingInsights = await cerebroIntelligence.getPendingInsights(userId, 3)
+    const pendingInsights = await getCerebroIntelligence().getPendingInsights(userId, 3)
 
     // 6. Build enhanced context for AI
     const enhancedContext = buildEnhancedContext({
@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
 
     // 8. Store reasoning chain
     const processingTime = Date.now() - startTime
-    await cerebroIntelligence.storeReasoningChain(
+    await getCerebroIntelligence().storeReasoningChain(
       userId,
       {
         query: message,
@@ -238,7 +238,7 @@ async function extractAndStoreMemories(
 
   // Example: If user expresses a preference
   if (query.toLowerCase().includes("prefiero") || query.toLowerCase().includes("me gusta")) {
-    await cerebroIntelligence.storeMemory(userId, conversationId, {
+    await getCerebroIntelligence().storeMemory(userId, conversationId, {
       memoryType: "preference",
       content: `Preferencia del usuario: ${query}`,
       importanceScore: 7,
@@ -263,7 +263,7 @@ async function learnFromInteraction(
   const queryStylePattern = existingPatterns.find((p) => p.patternType === "query_style")
   const avgQueryLength = queryStylePattern?.patternData?.avgLength || queryLength
 
-  await cerebroIntelligence.learnUserPattern(userId, {
+  await getCerebroIntelligence().learnUserPattern(userId, {
     patternType: "query_style",
     patternData: {
       avgLength: (avgQueryLength + queryLength) / 2,
@@ -277,7 +277,7 @@ async function learnFromInteraction(
   // Learn topic interest
   const topics = extractTopics(query)
   if (topics.length > 0) {
-    await cerebroIntelligence.learnUserPattern(userId, {
+    await getCerebroIntelligence().learnUserPattern(userId, {
       patternType: "topic_interest",
       patternData: {
         recentTopics: topics,
