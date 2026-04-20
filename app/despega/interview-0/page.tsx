@@ -41,7 +41,7 @@ export default function Interview0Page() {
   return (
     <main className="min-h-screen bg-black">
       <div className="flex flex-col h-screen">
-        <div className="flex-shrink-0 border-b border-muted/80 bg-background">
+        <div className="flex-shrink-0 border-b border-muted/80 bg-background py-3 px-4">
           <button
             onClick={() => router.back()}
             className="inline-flex items-center gap-2 text-cyan/40 hover:text-cyan/30"
@@ -51,7 +51,7 @@ export default function Interview0Page() {
           </button>
         </div>
 
-        <div className="flex-1 overflow-hidden p-4">
+        <div className="flex-1 overflow-auto p-2 md:p-4">
           <ConversationalInterviewSimulator
             level="basico"
             onComplete={(result) => {
