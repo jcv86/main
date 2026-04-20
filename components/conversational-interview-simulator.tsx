@@ -359,50 +359,54 @@ export function ConversationalInterviewSimulator({
     <div className="space-y-6">
       {/* Setup Stage */}
       {stage === 'setup' && (
-        <div className="w-full bg-background min-h-screen flex flex-col justify-center py-4 px-4">
-          <div className="max-w-4xl mx-auto w-full space-y-4">
-            
-            {/* Title Section - Compact */}
-            <div className="space-y-2">
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground">Entrena tu Entrevista</h1>
-              <p className="text-muted-foreground">Elige un entrevistador y comienza la simulación</p>
-            </div>
+        <div className="space-y-6">
+          <Card className="border-2 border-emerald-500/20">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Zap className="w-5 h-5 text-emerald-600" />
+                Simulador Conversacional de Entrevista
+              </CardTitle>
+              <CardDescription>
+                Entrena con un entrevistador adaptativo que hace follow-ups reales basado en tus respuestas
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-[28px] border border-emerald-200 dark:border-emerald-800 space-y-3">
+                <p className="font-bold text-emerald-900 dark:text-emerald-200">Aquí está el diferencial:</p>
+                <ul className="space-y-2 text-sm text-emerald-800 dark:text-emerald-300">
+                  <li className="flex gap-2">
+                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span><strong>Respuestas vagas?</strong> Te pediré ejemplo. <strong>Demasiado largo?</strong> Te interrumpiré.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span><strong>Segundo intento inmediato.</strong> Las mejores respuestas salen en el segundo round.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span><strong>Debrief STAR detallado:</strong> Dónde ganaste puntos, dónde perdiste, y cómo sonarías mejor.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
+                    <span><strong>Lenguaje para copiar-pegar.</strong> Frases exactas que sonarían mejor en esa situación.</span>
+                  </li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
 
-            {/* Quick Benefits - Compact Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-emerald-50/50 dark:bg-emerald-900/10 p-3 rounded-lg border border-emerald-200/50 dark:border-emerald-800/30">
-              <div className="flex gap-2 text-sm">
-                <Check className="w-4 h-4 flex-shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
-                <span className="text-emerald-900 dark:text-emerald-300"><strong>Follow-ups</strong> en tiempo real</span>
-              </div>
-              <div className="flex gap-2 text-sm">
-                <Check className="w-4 h-4 flex-shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
-                <span className="text-emerald-900 dark:text-emerald-300"><strong>Debrief STAR</strong> detallado</span>
-              </div>
-              <div className="flex gap-2 text-sm">
-                <Check className="w-4 h-4 flex-shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
-                <span className="text-emerald-900 dark:text-emerald-300"><strong>Segundo intento</strong> inmediato</span>
-              </div>
-              <div className="flex gap-2 text-sm">
-                <Check className="w-4 h-4 flex-shrink-0 text-emerald-600 dark:text-emerald-400 mt-0.5" />
-                <span className="text-emerald-900 dark:text-emerald-300"><strong>Lenguaje</strong> para copiar</span>
-              </div>
-            </div>
+          {/* Interviewer Selector */}
+          <InterviewerSelector
+            value={selectedInterviewerId}
+            onChange={setSelectedInterviewerId}
+          />
 
-            {/* Interviewer Selector */}
-            <InterviewerSelector
-              value={selectedInterviewerId}
-              onChange={setSelectedInterviewerId}
-            />
-
-            {/* Start Button */}
-            <Button
-              onClick={handleStartInterview}
-              disabled={!selectedInterviewerId}
-              className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-11 font-semibold text-base"
-            >
-              Comenzar Simulación
-            </Button>
-          </div>
+          <Button
+            onClick={handleStartInterview}
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12 text-lg"
+          >
+            Comenzar Simulación
+          </Button>
         </div>
       )}
 
@@ -444,51 +448,49 @@ export function ConversationalInterviewSimulator({
 
       {/* Response Recording Stage */}
       {stage === 'response' && (
-        <div className="w-full h-full bg-background flex flex-col">
-          <div className="flex-1 overflow-auto">
-            <div className="max-w-7xl mx-auto p-4 h-full flex flex-col">
-              <h2 className="text-2xl font-bold text-foreground mb-2">Graba tu respuesta</h2>
-              <p className="text-muted-foreground text-sm mb-4">Mira la pregunta, mantén contacto visual con la cámara y responde como en entrevista real</p>
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Graba tu respuesta</CardTitle>
+            <CardDescription>Mira la pregunta, mantén contacto visual con la cámara y responde como en entrevista real</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* Professional Split-Screen Layout - Video Interview */}
+            <div className="grid lg:grid-cols-5 gap-0 bg-black rounded-xl overflow-hidden shadow-2xl h-[600px] lg:h-[700px]">
               
-              {/* Professional Split-Screen Layout - Video Interview */}
-              <div className="grid lg:grid-cols-3 gap-6 flex-1 min-h-0">
-                
-                {/* Left Panel: User Video (60% - 2 columns) */}
-                <div className="lg:col-span-2 min-h-0">
-                  <div className="relative bg-black rounded-xl overflow-hidden shadow-2xl h-full flex flex-col">
-                    {/* User Video Stream */}
-                    <video
-                      ref={videoRef}
-                      autoPlay
-                      playsInline
-                      muted
-                      className="w-full h-full object-cover flex-1"
-                    />
+              {/* Left Panel: User Video (60%) */}
+              <div className="lg:col-span-3 relative bg-black overflow-hidden flex flex-col">
+                {/* User Video Stream */}
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="w-full h-full object-cover"
+                />
 
-                  {/* Recording Status Badge - Top Left */}
-                  <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
-                    <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red/50 animate-pulse' : 'bg-emerald-500'}`} />
-                    <span className="text-xs font-bold text-white bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full uppercase tracking-wide">
-                      {isListening ? '🔴 Grabando' : '🎥 Listo'}
-                    </span>
-                  </div>
+                {/* Recording Status Badge - Top Left */}
+                <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
+                  <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red/50 animate-pulse' : 'bg-emerald-500'}`} />
+                  <span className="text-xs font-bold text-white bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full uppercase tracking-wide">
+                    {isListening ? '🔴 Grabando' : '🎥 Listo'}
+                  </span>
                 </div>
 
-                {/* Response Input - Below Video */}
-                <div className="mt-4 space-y-2">
-                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">Tu respuesta:</label>
+                {/* Response Input - Bottom of Video */}
+                <div className="absolute bottom-0 left-0 right-0 bg-background">
+                  <label className="text-xs font-semibold text-white/80 mb-2 block">Tu respuesta:</label>
                   <div className="flex gap-2">
                     <textarea
                       value={userResponse}
                       onChange={(e) => setUserResponse(e.target.value)}
                       placeholder="Escribe aquí o usa micrófono..."
-                      className="flex-1 bg-slate-950/80 border border-muted/70 rounded-[28px] p-3 text-sm text-white placeholder-slate-500 focus:border-blue/50 focus:ring-1 focus:ring-blue-500 resize-none backdrop-blur-sm"
-                      rows={3}
+                      className="flex-1 bg-slate-950/80 border border-muted/70 rounded-[28px] p-2 text-xs text-white placeholder-slate-500 focus:border-blue/50 focus:ring-1 focus:ring-blue-500 resize-none backdrop-blur-sm"
+                      rows={2}
                     />
                     {isSupported && (
                       <button
                         onClick={isListening ? stopListening : startListening}
-                        className={`px-4 py-3 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
+                        className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
                           isListening
                             ? 'bg-red hover:bg-red text-white'
                             : 'bg-muted/20 hover:bg-muted/30 text-muted-foreground hover:text-secondary'
@@ -502,11 +504,11 @@ export function ConversationalInterviewSimulator({
                 </div>
               </div>
 
-              {/* Right Panel: Interviewer (40% - 1 column) */}
-              <div className="lg:col-span-1 flex flex-col min-h-0 bg-background rounded-xl overflow-hidden border border-muted/20">
+              {/* Right Panel: Interviewer (40%) */}
+              <div className="lg:col-span-2 bg-background flex flex-col overflow-hidden">
                 
-                {/* Interviewer Photo - Flexible Height */}
-                <div className="flex-1 relative overflow-hidden bg-black min-h-40">
+                {/* Interviewer Photo - Large Display */}
+                <div className="flex-1 relative overflow-hidden bg-black border-l border-muted/20 flex items-center justify-center">
                   {selectedInterviewerId && (
                     <Image
                       src={`/images/interviewers/${selectedInterviewerId}.jpg`}
@@ -518,23 +520,34 @@ export function ConversationalInterviewSimulator({
                   )}
                 </div>
 
-                {/* Interviewer Info Card */}
-                <div className="p-3 border-t border-muted/80 space-y-2 flex-shrink-0 bg-background/95">
-                  <div className="flex gap-2">
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
+                {/* Interviewer Header Card - Fixed at bottom */}
+                <div className="p-4 border-t border-muted/80 space-y-3 flex-shrink-0 bg-background/95 backdrop-blur-sm">
+                  <div className="flex gap-3">
+                    <div className={`w-16 h-16 rounded-lg flex items-center justify-center text-3xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
                       {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <h3 className="text-base font-bold text-white truncate">
+                      <h3 className="text-lg font-bold text-white truncate">
                         {getAvatarName(selectedInterviewerId, 'interviewer')}
                       </h3>
-                      <p className="text-xs text-muted-foreground">Entrevistador</p>
+                      <p className="text-sm font-semibold text-blue/40 truncate">
+                        {getInterviewerRole(selectedInterviewerId)}
+                      </p>
+                      <p className="text-xs text-muted-foreground mt-1">Entrevistador</p>
                     </div>
+                  </div>
+                  
+                  {/* What they look for */}
+                  <div className="bg-slate-950/50 rounded-[28px] p-3 border border-muted/80/50">
+                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Lo que busca:</p>
+                    <p className="text-xs text-muted/30 leading-relaxed line-clamp-3">
+                      {getInterviewerFocus(selectedInterviewerId)}
+                    </p>
                   </div>
                 </div>
 
-                {/* Scrollable Content */}
-                <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
+                {/* Scrollable Content Area */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
                   
                   {/* Question Card */}
                   <Card className="border border-muted/70 bg-muted/90/50">
@@ -618,8 +631,8 @@ export function ConversationalInterviewSimulator({
                 </AlertDescription>
               </Alert>
             )}
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       )}
 
       {/* Feedback Stage */}
