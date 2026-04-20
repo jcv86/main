@@ -202,29 +202,14 @@ export class EnhancedTestAnalyzer {
   /**
    * Get Chilean market insights
    */
-  private async getChileanMarketInsights(): Promise<any[]> {
-    const { data, error } = await this.getSupabase()
-      .from("cerebro_market_insights")
-      .select("*")
-      .eq("region", "Chile")
-      .order("confidence_score", { ascending: false })
-      .limit(10)
-
-    if (error) {
-      console.error("Error fetching market insights:", error)
-      return []
-    }
-
-    return data || []
-  }
-
   /**
    * Get test combination pattern if exists
    */
   private async getTestCombinationPattern(testTypes: string[]): Promise<any | null> {
+    const supabase = await this.getSupabase()
     const combination = testTypes.sort().join("+")
 
-    const { data, error } = this.getSupabase()
+    const { data, error } = await supabase
       .from("cerebro_test_combinations")
       .select("*")
       .eq("test_combination", combination)
