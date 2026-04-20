@@ -159,7 +159,7 @@ export default function A2RoutesPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-purple/50" />
+          <Loader2 className="h-8 w-8 animate-spin text-white0" />
           <p className="text-white/85">Generando tu ruta personalizada...</p>
         </div>
       </div>
@@ -256,7 +256,7 @@ export default function A2RoutesPage() {
         <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <Calendar className="w-5 h-5 text-blue/50" />
+              <Calendar className="w-5 h-5 text-white0" />
               Tus 90 Días Estructurados
             </CardTitle>
           </CardHeader>
@@ -349,7 +349,7 @@ export default function A2RoutesPage() {
         <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <CheckCircle2 className="w-5 h-5 text-purple/50" />
+              <CheckCircle2 className="w-5 h-5 text-white0" />
               Próximos Pasos
             </CardTitle>
           </CardHeader>

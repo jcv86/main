@@ -87,7 +87,7 @@ export default function BienvenidaPage() {
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
                 <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-cyan/10 dark:bg-cyan mb-4">
-                  <span className="text-xl font-bold text-blue dark:text-cyan/30">3</span>
+                  <span className="text-xl font-bold text-blue dark:text-white">3</span>
                 </div>
                 <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Entrena y Analiza</h3>
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">

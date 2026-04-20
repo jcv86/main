@@ -167,7 +167,7 @@ export default function A1SimulationPage() {
       <ASectionPart title={`Pregunta ${currentQuestion + 1} de ${SIMULATION_QUESTIONS.length}`} icon={<Zap />}>
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            <p className="text-sm text-muted-foreground">Perfil: <span className="font-semibold text-cyan/30">{profileNames[profile]}</span></p>
+            <p className="text-sm text-muted-foreground">Perfil: <span className="font-semibold text-white">{profileNames[profile]}</span></p>
             <p className="text-sm text-muted-foreground">{Math.round(progress)}%</p>
           </div>
           <div className="h-2 bg-muted/70 rounded-full overflow-hidden">

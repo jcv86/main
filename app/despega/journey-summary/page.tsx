@@ -59,15 +59,15 @@ export default function JourneySummaryPage() {
             <div className="flex items-end justify-between">
               <div>
                 <div className="text-5xl font-bold mb-2">50%</div>
-                <p className="text-blue/10">Completado en 45 días</p>
+                <p className="text-white">Completado en 45 días</p>
               </div>
               <div className="text-right">
                 <div className="text-3xl font-bold mb-2">45/90</div>
-                <p className="text-blue/10">días en el programa</p>
+                <p className="text-white">días en el programa</p>
               </div>
             </div>
             <Progress value={50} className="h-3 bg-white/30" />
-            <p className="text-sm text-blue/10">Ritmo: 1 fase cada 22.5 días. A3 y A4 por completar.</p>
+            <p className="text-sm text-white">Ritmo: 1 fase cada 22.5 días. A3 y A4 por completar.</p>
           </CardContent>
         </Card>
 

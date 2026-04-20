@@ -269,7 +269,7 @@ export default function Conozcamonos2Page() {
                   
                   {/* Validation status */}
                   {validatingIds.has(question.id) && (
-                    <p className="text-xs text-blue/50 flex items-center gap-1">
+                    <p className="text-xs text-white0 flex items-center gap-1">
                       <span className="animate-spin">⏳</span> Validando...
                     </p>
                   )}

@@ -284,24 +284,24 @@ export default function A1ReportPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Primary Profile Card */}
           <div className="bg-background">
-            <p className="text-purple/10 text-sm mb-2 font-semibold">Tu Tipo Dominante</p>
+            <p className="text-white text-sm mb-2 font-semibold">Tu Tipo Dominante</p>
             <div className="text-4xl font-black text-white mb-3">{primaryLabel}</div>
-            <p className="font-semibold text-purple/5 mb-4 text-sm">{despegaLabels[primaryLabel as keyof typeof despegaLabels]}</p>
+            <p className="font-semibold text-white mb-4 text-sm">{despegaLabels[primaryLabel as keyof typeof despegaLabels]}</p>
             <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/30 mb-2">
               <div className="h-full bg-background" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
             </div>
-            <p className="text-xs text-purple/10 font-bold">{Math.max(0, Math.round(profile.primaryScore))}%</p>
+            <p className="text-xs text-white font-bold">{Math.max(0, Math.round(profile.primaryScore))}%</p>
           </div>
 
           {/* Secondary Profile Card */}
           <div className="bg-background">
-            <p className="text-blue/10 text-sm mb-2 font-semibold">Tu Tipo Secundario</p>
+            <p className="text-white text-sm mb-2 font-semibold">Tu Tipo Secundario</p>
             <div className="text-4xl font-black text-white mb-3">{secondaryLabel}</div>
-            <p className="font-semibold text-blue/5 mb-4 text-sm">{despegaLabels[secondaryLabel as keyof typeof despegaLabels]}</p>
+            <p className="font-semibold text-white mb-4 text-sm">{despegaLabels[secondaryLabel as keyof typeof despegaLabels]}</p>
             <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/30 mb-2">
               <div className="h-full bg-background" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
             </div>
-            <p className="text-xs text-blue/10 font-bold">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
+            <p className="text-xs text-white font-bold">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
           </div>
         </div>
 
@@ -413,7 +413,7 @@ export default function A1ReportPage() {
 
           <Card className="bg-background">
             <CardHeader>
-              <CardTitle className="text-lg text-cyan/30">📞 Call Entrena</CardTitle>
+              <CardTitle className="text-lg text-white">📞 Call Entrena</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm text-white/85 mb-4">Practica entrevistas con un entrenamiento personalizado para tu perfil {primaryLabel}.</p>

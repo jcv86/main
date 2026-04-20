@@ -175,7 +175,7 @@ export default function A3IntroPage() {
 
           <div className="p-6 bg-blue rounded-lg shadow-lg">
             <h3 className="text-xl font-bold text-white mb-2">Listo para entrenar?</h3>
-            <p className="text-cyan/10 mb-6">Entra al dashboard y elige tu modalidad de entrenamiento.</p>
+            <p className="text-white mb-6">Entra al dashboard y elige tu modalidad de entrenamiento.</p>
             <Button 
               onClick={() => router.push('/despega/a3-dashboard')}
               className="w-full bg-white text-cyan hover:bg-blue/5 font-semibold"

@@ -157,7 +157,7 @@ export default function A2TestPage() {
         <Card className="mb-8 border-0 shadow-lg">
           <CardHeader className="bg-blue text-white rounded-t-lg">
             <CardTitle>Panel de Control</CardTitle>
-            <CardDescription className="text-blue/10">
+            <CardDescription className="text-white">
               Haz clic para probar cada fase del flujo CANON
             </CardDescription>
           </CardHeader>

@@ -147,7 +147,7 @@ export default function JourneyPage() {
           <div className="bg-background">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-sm font-semibold text-indigo-900 dark:text-blue/10">Progreso General</h3>
+                <h3 className="text-sm font-semibold text-indigo-900 dark:text-white">Progreso General</h3>
                 <p className="text-xs text-indigo-700 dark:text-indigo-300">A través de todas las fases</p>
               </div>
               <Badge className="bg-blue text-white text-lg px-4 py-2">{overallProgress}%</Badge>
@@ -236,7 +236,7 @@ export default function JourneyPage() {
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground">Tu Plan Personalizado</p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-[28px] bg-cyan/10 dark:bg-cyan flex items-center justify-center font-bold text-cyan dark:text-cyan/30">A4</div>
+                  <div className="w-20 h-20 rounded-[28px] bg-cyan/10 dark:bg-cyan flex items-center justify-center font-bold text-cyan dark:text-white">A4</div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground">Contexto del Mercado</p>
                 </div>
               </div>

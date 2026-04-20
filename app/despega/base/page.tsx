@@ -121,7 +121,7 @@ export default function BasePage() {
         {/* JOURNEY PROGRESS - BIG VISUAL */}
         <div className="bg-background">
           <h1 className="text-3xl font-bold mb-2">Tu Viaje DespegarTuCarrera</h1>
-          <p className="text-blue/10 mb-6">90 días de transformación profesional. Aquí está dónde estás:</p>
+          <p className="text-white mb-6">90 días de transformación profesional. Aquí está dónde estás:</p>
           
           {/* Journey Map */}
           <div className="space-y-4">
@@ -131,7 +131,7 @@ export default function BasePage() {
                 <div className="bg-white/20 backdrop-blur hover:bg-white/30 transition-all p-4 rounded-[28px] cursor-pointer border border-white/30 text-center">
                   <div className="text-2xl mb-2">🧠</div>
                   <h3 className="font-bold text-sm">A1: Autoconocimiento</h3>
-                  <p className="text-xs text-blue/10 mt-1">Descubre tu perfil DISC</p>
+                  <p className="text-xs text-white mt-1">Descubre tu perfil DISC</p>
                   <Badge className="mt-2 bg-white text-indigo-700 text-xs">Completado</Badge>
                 </div>
               </Link>
@@ -144,7 +144,7 @@ export default function BasePage() {
                 <div className="bg-white/20 backdrop-blur hover:bg-white/30 transition-all p-4 rounded-[28px] cursor-pointer border-2 border-white/70 text-center ring-2 ring-white/50">
                   <div className="text-2xl mb-2">🏗️</div>
                   <h3 className="font-bold text-sm">A2: Exploración</h3>
-                  <p className="text-xs text-blue/10 mt-1">Construye tu plan de 90 días</p>
+                  <p className="text-xs text-white mt-1">Construye tu plan de 90 días</p>
                   <Badge className="mt-2 bg-yellow/40 text-yellow text-xs">En Progreso</Badge>
                 </div>
               </Link>
@@ -184,7 +184,7 @@ export default function BasePage() {
               <span className="text-sm font-bold">50%</span>
             </div>
             <Progress value={50} className="h-2 bg-white/30" />
-            <p className="text-xs text-blue/10 mt-2">Completaste A1. Actualmente en A2. Te faltan A3 y A4.</p>
+            <p className="text-xs text-white mt-2">Completaste A1. Actualmente en A2. Te faltan A3 y A4.</p>
           </div>
         </div>
 

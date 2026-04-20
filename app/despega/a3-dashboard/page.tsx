@@ -269,10 +269,10 @@ export default function TrainingDashboardPage() {
                         <CardHeader>
                           <div className="flex items-start justify-between mb-2">
                             <CardTitle className="text-lg flex items-center gap-2">
-                              <Icon className="w-5 h-5 text-cyan/40 group-hover:text-cyan/30" />
+                              <Icon className="w-5 h-5 text-cyan/40 group-hover:text-white" />
                               {card.title}
                             </CardTitle>
-                            {card.badge && <Badge className="text-xs bg-blue/50/20 text-cyan/30 border-blue/50">{card.badge}</Badge>}
+                            {card.badge && <Badge className="text-xs bg-blue/50/20 text-white border-blue/50">{card.badge}</Badge>}
                           </div>
                         </CardHeader>
                         <CardContent className="space-y-4">

@@ -136,7 +136,7 @@ export default function A4Page() {
         {/* WELCOME HERO - A4 VERSION */}
         <div className="bg-blue800 rounded-[28px] p-8 text-white shadow-lg">
           <div className="max-w-3xl">
-            <p className="text-cyan/10 text-sm font-semibold uppercase tracking-wider mb-2">Fase A4: La Realidad y Contexto Estratégico</p>
+            <p className="text-white text-sm font-semibold uppercase tracking-wider mb-2">Fase A4: La Realidad y Contexto Estratégico</p>
             <h1 className="text-4xl font-bold mb-3">Entiende el mundo en el que compites</h1>
             <p className="text-lg text-cyan/5 mb-4">
               A4 es tu conexión con la realidad: datos económicos, tendencias del mercado, oportunidades ocultas y contexto cultural. 
@@ -426,7 +426,7 @@ export default function A4Page() {
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-blue text-lg">💡</div>
             <div>
-              <div className="font-semibold text-cyan dark:text-cyan/10 mb-2">A4 - El Contexto Real: Tu Nueva Identidad en Acción</div>
+              <div className="font-semibold text-cyan dark:text-white mb-2">A4 - El Contexto Real: Tu Nueva Identidad en Acción</div>
               <ul className="text-sm text-cyan dark:text-cyan/20 space-y-1">
                 <li>✓ <strong>Dashboard:</strong> Tu progreso, puntos y logros en tiempo real</li>
                 <li>✓ <strong>Noticias:</strong> Contexto del mercado donde vivirá tu nueva identidad</li>

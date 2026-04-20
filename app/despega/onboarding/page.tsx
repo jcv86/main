@@ -1151,7 +1151,7 @@ export default function DespegaOnboarding() {
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="bg-blue/5 dark:bg-blue border border-blue/30 dark:border-blue/10 rounded-[28px] p-4">
-              <p className="text-sm text-blue dark:text-blue/10">
+              <p className="text-sm text-blue dark:text-white">
                 Basados en tu Despega Cerebral, vamos a crear acciones concretas para tu transformación.
               </p>
             </div>

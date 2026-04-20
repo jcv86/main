@@ -44,7 +44,7 @@ export default function Interview0Page() {
         <div className="flex-shrink-0 border-b border-muted/80 bg-background py-3 px-4">
           <button
             onClick={() => router.back()}
-            className="inline-flex items-center gap-2 text-cyan/40 hover:text-cyan/30"
+            className="inline-flex items-center gap-2 text-cyan/40 hover:text-white"
           >
             <ArrowLeft className="w-4 h-4" />
             Volver

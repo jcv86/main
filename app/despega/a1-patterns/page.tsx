@@ -70,7 +70,7 @@ export default function A1PatternsPage() {
     return (
       <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple/50">
         <div className="flex items-center justify-center py-20">
-          <Loader2 className="h-8 w-8 animate-spin text-purple/50" />
+          <Loader2 className="h-8 w-8 animate-spin text-white0" />
         </div>
       </ASection>
     )
@@ -81,9 +81,9 @@ export default function A1PatternsPage() {
       <ASectionPart title={`Tu Perfil: ${label}`} icon={<Target />}>
         {/* Profile Header */}
         <div className="bg-purple rounded-xl p-8 text-white mb-8 shadow-lg">
-          <p className="text-purple/10 text-sm mb-2 font-semibold">Perfil Cerebral Identificado</p>
+          <p className="text-white text-sm mb-2 font-semibold">Perfil Cerebral Identificado</p>
           <h1 className="text-5xl font-black mb-3">{label}</h1>
-          <p className="text-lg text-purple/10 font-medium">{description}</p>
+          <p className="text-lg text-white font-medium">{description}</p>
         </div>
 
         {/* Tab Navigation */}
@@ -143,7 +143,7 @@ export default function A1PatternsPage() {
             
             <Card className="bg-muted/80/50 border-muted/70 border-2">
               <CardHeader>
-                <CardTitle className="text-cyan/30">Tu Ventaja Natural</CardTitle>
+                <CardTitle className="text-white">Tu Ventaja Natural</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-white/85">{details.teamRole}</p>
@@ -199,7 +199,7 @@ export default function A1PatternsPage() {
               {details.career.map((role, idx) => (
                 <Card key={idx} className="bg-background">
                   <CardContent className="pt-6">
-                    <p className="text-purple/30 font-semibold text-lg">🎯 {role}</p>
+                    <p className="text-white font-semibold text-lg">🎯 {role}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -213,7 +213,7 @@ export default function A1PatternsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="bg-background">
               <CardHeader>
-                <CardTitle className="text-cyan/30 flex items-center gap-2">
+                <CardTitle className="text-white flex items-center gap-2">
                   <Phone className="w-5 h-5" />
                   Call Entrena
                 </CardTitle>

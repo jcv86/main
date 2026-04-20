@@ -126,7 +126,7 @@ export default function HowToEarnXPPage() {
                       <p className="text-sm text-muted-foreground">{rule.category}</p>
                     </div>
                   </div>
-                  <Badge className="bg-blue/50/20 text-cyan/30 border-blue/50">
+                  <Badge className="bg-blue/50/20 text-white border-blue/50">
                     {rule.items.length} acciones
                   </Badge>
                 </div>
@@ -145,7 +145,7 @@ export default function HowToEarnXPPage() {
                           <IconComponent className="w-5 h-5 text-cyan/40 flex-shrink-0" />
                           <div className="flex-1">
                             <p className="font-semibold text-foreground">{item.action}</p>
-                            {item.streak && <p className="text-xs text-cyan/30">{item.streak}</p>}
+                            {item.streak && <p className="text-xs text-white">{item.streak}</p>}
                           </div>
                         </div>
                         <Badge className="bg-yellow/50/20 text-amber-300 border-amber-500/50 font-bold">

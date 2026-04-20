@@ -85,7 +85,7 @@ export default function A1CerebralIntroPage() {
                   <p className="text-sm text-green dark:text-green/20">Estable, cooperativo, confiable, paciente</p>
                 </div>
                 <div className="p-4 bg-blue/5 dark:bg-blue rounded-[28px] border border-blue/30 dark:border-blue/10">
-                  <p className="font-semibold text-blue dark:text-blue/10 mb-1">Arquitecto</p>
+                  <p className="font-semibold text-blue dark:text-white mb-1">Arquitecto</p>
                   <p className="text-sm text-blue dark:text-blue-300">Analítico, detallista, exigente con calidad</p>
                 </div>
               </div>
@@ -195,7 +195,7 @@ export default function A1CerebralIntroPage() {
               </div>
 
               <div className="bg-blue/5 dark:bg-blue p-4 rounded-[28px] border border-blue/30 dark:border-blue/10">
-                <p className="text-sm text-blue dark:text-blue/10">
+                <p className="text-sm text-blue dark:text-white">
                   <span className="font-semibold">¿Cómo funciona?</span> Cada pregunta tiene 4 opciones que representan los 4 estilos: Directo, Inspirador, Seguro y Consciente. Seleccionas cuál te describe MÁS y cuál te describe MENOS. El sistema cuenta tus selecciones y determina tu perfil dominante.
                 </p>
               </div>
@@ -205,11 +205,11 @@ export default function A1CerebralIntroPage() {
           {/* Benefits */}
           <Card className="border-0 shadow-lg bg-blue/5 dark:bg-blue">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl text-blue dark:text-blue/10">
+              <CardTitle className="text-2xl text-blue dark:text-white">
                 ¿Por qué es importante?
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-blue dark:text-blue/10">
+            <CardContent className="space-y-3 text-blue dark:text-white">
               <div className="flex gap-3">
                 <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue" />
                 <p>Entiende tu estilo de comunicación natural</p>
