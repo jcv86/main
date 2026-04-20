@@ -50,7 +50,7 @@ export default function StructuredTrainingPage() {
           </Link>
         </div>
 
-        <div className="flex-1 overflow-hidden p-4">
+        <div className="flex-1 overflow-auto p-2 md:p-4">
           <ConversationalInterviewSimulator 
             level="intermedio"
             onComplete={handleComplete}

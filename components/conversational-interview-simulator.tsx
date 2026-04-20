@@ -444,25 +444,26 @@ export function ConversationalInterviewSimulator({
 
       {/* Response Recording Stage */}
       {stage === 'response' && (
-        <div className="w-full min-h-screen bg-background">
-          <div className="max-w-7xl mx-auto p-4">
-            <h2 className="text-2xl font-bold text-foreground mb-4">Graba tu respuesta</h2>
-            <p className="text-muted-foreground mb-6">Mira la pregunta, mantén contacto visual con la cámara y responde como en entrevista real</p>
-            
-            {/* Professional Split-Screen Layout - Video Interview */}
-            <div className="grid lg:grid-cols-3 gap-6 auto-rows-max">
+        <div className="w-full h-full bg-background flex flex-col">
+          <div className="flex-1 overflow-auto">
+            <div className="max-w-7xl mx-auto p-4 h-full flex flex-col">
+              <h2 className="text-2xl font-bold text-foreground mb-2">Graba tu respuesta</h2>
+              <p className="text-muted-foreground text-sm mb-4">Mira la pregunta, mantén contacto visual con la cámara y responde como en entrevista real</p>
               
-              {/* Left Panel: User Video (60% - 2 columns) */}
-              <div className="lg:col-span-2">
-                <div className="relative bg-black rounded-xl overflow-hidden shadow-2xl h-96 flex flex-col">
-                  {/* User Video Stream */}
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    playsInline
-                    muted
-                    className="w-full h-full object-cover"
-                  />
+              {/* Professional Split-Screen Layout - Video Interview */}
+              <div className="grid lg:grid-cols-3 gap-6 flex-1 min-h-0">
+                
+                {/* Left Panel: User Video (60% - 2 columns) */}
+                <div className="lg:col-span-2 min-h-0">
+                  <div className="relative bg-black rounded-xl overflow-hidden shadow-2xl h-full flex flex-col">
+                    {/* User Video Stream */}
+                    <video
+                      ref={videoRef}
+                      autoPlay
+                      playsInline
+                      muted
+                      className="w-full h-full object-cover flex-1"
+                    />
 
                   {/* Recording Status Badge - Top Left */}
                   <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
@@ -502,10 +503,10 @@ export function ConversationalInterviewSimulator({
               </div>
 
               {/* Right Panel: Interviewer (40% - 1 column) */}
-              <div className="lg:col-span-1 flex flex-col gap-4">
+              <div className="lg:col-span-1 flex flex-col min-h-0 bg-background rounded-xl overflow-hidden border border-muted/20">
                 
-                {/* Interviewer Photo - Large Display */}
-                <div className="flex-1 relative overflow-hidden bg-black border-l border-muted/20 flex items-center justify-center">
+                {/* Interviewer Photo - Flexible Height */}
+                <div className="flex-1 relative overflow-hidden bg-black min-h-40">
                   {selectedInterviewerId && (
                     <Image
                       src={`/images/interviewers/${selectedInterviewerId}.jpg`}
@@ -517,34 +518,23 @@ export function ConversationalInterviewSimulator({
                   )}
                 </div>
 
-                {/* Interviewer Header Card - Fixed at bottom */}
-                <div className="p-4 border-t border-muted/80 space-y-3 flex-shrink-0 bg-background/95 backdrop-blur-sm">
-                  <div className="flex gap-3">
-                    <div className={`w-16 h-16 rounded-lg flex items-center justify-center text-3xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
+                {/* Interviewer Info Card */}
+                <div className="p-3 border-t border-muted/80 space-y-2 flex-shrink-0 bg-background/95">
+                  <div className="flex gap-2">
+                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
                       {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <h3 className="text-lg font-bold text-white truncate">
+                      <h3 className="text-base font-bold text-white truncate">
                         {getAvatarName(selectedInterviewerId, 'interviewer')}
                       </h3>
-                      <p className="text-sm font-semibold text-blue/80 truncate">
-                        {getInterviewerRole(selectedInterviewerId)}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-1">Entrevistador</p>
+                      <p className="text-xs text-muted-foreground">Entrevistador</p>
                     </div>
-                  </div>
-                  
-                  {/* What they look for */}
-                  <div className="bg-slate-950/50 rounded-[28px] p-3 border border-muted/80/50">
-                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Lo que busca:</p>
-                    <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
-                      {getInterviewerFocus(selectedInterviewerId)}
-                    </p>
                   </div>
                 </div>
 
-                {/* Scrollable Content Area */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {/* Scrollable Content */}
+                <div className="flex-1 overflow-y-auto p-3 space-y-3 min-h-0">
                   
                   {/* Question Card */}
                   <Card className="border border-muted/70 bg-muted/90/50">
