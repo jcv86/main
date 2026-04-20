@@ -1,6 +1,5 @@
 import jsPDF from 'jspdf'
 import html2canvas from 'html2canvas'
-import { PersonalizedRoute, RouteTask } from '@/lib/route-generator'
 
 export interface PDFReportOptions {
   userName: string
