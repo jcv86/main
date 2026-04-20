@@ -10,6 +10,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Loader2, Calendar, Target, CheckCircle2, AlertCircle, ArrowRight, Zap, MapPin } from 'lucide-react'
+import { TaskCard } from '@/components/task-card'
+import { PhaseProgress } from '@/components/phase-progress'
 
 export default function A2RoutesPage() {
   const router = useRouter()
@@ -17,8 +19,34 @@ export default function A2RoutesPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [expandedMilestone, setExpandedMilestone] = useState<30 | 60 | 90 | null>(30)
+  const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set())
   const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
+
+  // Handle task completion
+  const handleTaskComplete = (taskId: string) => {
+    const newCompleted = new Set(completedTasks)
+    if (newCompleted.has(taskId)) {
+      newCompleted.delete(taskId)
+    } else {
+      newCompleted.add(taskId)
+    }
+    setCompletedTasks(newCompleted)
+  }
+
+  // Calculate phase progress
+  const getPhaseProgress = (days: 30 | 60 | 90) => {
+    const tasksMap = {
+      30: route?.route_30days || [],
+      60: route?.route_60days || [],
+      90: route?.route_90days || []
+    }
+    const tasks = tasksMap[days]
+    const completed = tasks.filter(task => 
+      completedTasks.has(`${days}-${task.day}-${task.title}`)
+    ).length
+    return { completed, total: tasks.length }
+  }
 
   // Milestone data helper
   const getMilestoneData = (days: 30 | 60 | 90) => {
@@ -284,39 +312,26 @@ export default function A2RoutesPage() {
                   </button>
 
                   {isExpanded && (
-                    <div className="p-6 space-y-4 bg-muted/80/20">
+                    <div className="p-6 space-y-6 bg-muted/80/20">
+                      {/* Phase Progress */}
+                      <PhaseProgress
+                        phaseName={`Fase ${data.label}`}
+                        completed={getPhaseProgress(days).completed}
+                        total={getPhaseProgress(days).total}
+                        daysRange={`${days === 30 ? '1-30' : days === 60 ? '31-60' : '61-90'} días`}
+                      />
+
+                      {/* Tasks */}
                       {data.tasks && data.tasks.length > 0 ? (
                         <div className="space-y-3">
                           {data.tasks.map((task, idx) => (
-                            <div key={idx} className="bg-muted/20 border border-muted/40 rounded-[28px] p-4 hover:border-muted/60 transition">
-                              <div className="flex items-start gap-3">
-                                <div className="flex-shrink-0">
-                                  {task.type === 'learning' && <span className="text-2xl">📚</span>}
-                                  {task.type === 'practice' && <span className="text-2xl">🛠️</span>}
-                                  {task.type === 'networking' && <span className="text-2xl">🤝</span>}
-                                  {task.type === 'planning' && <span className="text-2xl">📋</span>}
-                                  {task.type === 'milestone' && <span className="text-2xl">🏆</span>}
-                                </div>
-                                <div className="flex-1">
-                                  <div className="flex items-center justify-between gap-2">
-                                    <h4 className="font-semibold text-white text-sm">Día {task.day}: {task.title}</h4>
-                                    <span className="text-xs bg-purple/30 text-white/90 px-2 py-1 rounded whitespace-nowrap">
-                                      {Math.round(task.timeEstimate / 60)}h
-                                    </span>
-                                  </div>
-                                  <p className="text-sm text-white/75 mt-2">{task.description}</p>
-                                  {task.resources && task.resources.length > 0 && (
-                                    <div className="flex flex-wrap gap-2 mt-2">
-                                      {task.resources.map((resource, ridx) => (
-                                        <span key={ridx} className="text-xs bg-blue/30 text-white/90 px-2 py-1 rounded">
-                                          📌 {resource}
-                                        </span>
-                                      ))}
-                                    </div>
-                                  )}
-                                </div>
-                              </div>
-                            </div>
+                            <TaskCard
+                              key={`${days}-${idx}`}
+                              task={task}
+                              taskId={`${days}-${task.day}-${task.title}`}
+                              completed={completedTasks.has(`${days}-${task.day}-${task.title}`)}
+                              onComplete={handleTaskComplete}
+                            />
                           ))}
                         </div>
                       ) : (
