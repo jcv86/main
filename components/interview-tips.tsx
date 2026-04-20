@@ -177,16 +177,16 @@ export function InterviewTips({
         {/* Current Tip Display with Navigation */}
         {currentTip && (
           <div className="space-y-3">
-            <div className="p-4 bg-transparent rounded-[28px] border-l-4 border-blue/50">
-              <div className="flex items-start justify-between mb-2">
-                <h4 className="font-semibold text-sm text-foreground dark:text-white">
+            <div className="p-4 bg-slate-900/50 rounded-[28px] border-l-4 border-blue/70">
+              <div className="flex items-start justify-between mb-3">
+                <h4 className="font-bold text-sm text-white">
                   Consejo IA {currentTip.isPremium ? '(Premium)' : '(Gratis)'}:
                 </h4>
-                <span className="text-xs bg-muted/20 dark:bg-muted/70 px-2 py-1 rounded">
+                <span className="text-xs bg-muted/40 dark:bg-slate-700 px-2 py-1 rounded text-white/90">
                   {(currentTipIndex || 0) + 1}/{tipHistory.length}
                 </span>
               </div>
-              <p className="text-sm text-muted dark:text-muted/30">{currentTip.tip}</p>
+              <p className="text-sm text-white/90 leading-relaxed">{currentTip.tip}</p>
             </div>
 
             {/* Navigation buttons */}
