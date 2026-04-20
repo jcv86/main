@@ -599,7 +599,7 @@ export function ConversationalInterviewSimulator({
                       src={`/images/interviewers/${getInterviewerImageFile(selectedInterviewerId)}.jpg`}
                       alt={getAvatarName(selectedInterviewerId, 'interviewer')}
                       fill
-                      className="object-cover absolute inset-0"
+                      className="object-top object-contain absolute inset-0"
                       priority
                     />
                   )}
