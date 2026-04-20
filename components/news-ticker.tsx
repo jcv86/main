@@ -77,7 +77,7 @@ export function NewsTicker() {
         {/* Label */}
         <div className="flex items-center gap-2 flex-shrink-0 font-semibold whitespace-nowrap text-sm">
           <TrendingUp className="w-4 h-4 text-blue/40" />
-          <span className="text-muted/30">MERCADO</span>
+          <span className="text-white/85">MERCADO</span>
         </div>
         
         {/* Noticia actual - estática */}

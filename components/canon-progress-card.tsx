@@ -42,10 +42,10 @@ export function CanonProgressCard({
           {/* Progress Bar */}
           <div>
             <div className="flex justify-between mb-2">
-              <span className="text-sm font-semibold text-muted-foreground dark:text-muted/30">
+              <span className="text-sm font-semibold text-muted-foreground dark:text-white/85">
                 Progreso: {totalSteps}/3 pasos
               </span>
-              <span className="text-sm font-semibold text-muted-foreground dark:text-muted/30">
+              <span className="text-sm font-semibold text-muted-foreground dark:text-white/85">
                 {Math.round(progress)}%
               </span>
             </div>
@@ -151,7 +151,7 @@ export function CanonProgressCard({
                   {generatedRoute.recomendaciones_personalizadas.map((rec, idx) => (
                     <li key={idx} className="flex gap-2 text-sm">
                       <span className="text-purple dark:text-purple/40 font-bold">•</span>
-                      <span className="text-muted-foreground dark:text-muted/30">{rec}</span>
+                      <span className="text-muted-foreground dark:text-white/85">{rec}</span>
                     </li>
                   ))}
                 </ul>
@@ -171,7 +171,7 @@ export function CanonProgressCard({
               <CardContent>
                 <ul className="space-y-2">
                   {generatedRoute.contradicciones_detectadas.map((adv, idx) => (
-                    <li key={idx} className="text-sm text-yellow dark:text-yellow/20">
+                    <li key={idx} className="text-sm text-yellow dark:text-yellow-300">
                       {adv}
                     </li>
                   ))}
@@ -196,7 +196,7 @@ export function CanonProgressCard({
                       <Badge className="bg-green/10 text-green dark:bg-green dark:text-green/20">
                         ✓
                       </Badge>
-                      <span className="text-muted-foreground dark:text-muted/30">{factor}</span>
+                      <span className="text-muted-foreground dark:text-white/85">{factor}</span>
                     </li>
                   ))}
                 </ul>

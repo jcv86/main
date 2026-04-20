@@ -95,7 +95,7 @@ export function AvatarPicker({
 
         {/* Avatar Gallery */}
         <div>
-          <p className="text-sm font-semibold text-muted-foreground dark:text-muted/30 mb-3">Opciones disponibles</p>
+          <p className="text-sm font-semibold text-muted-foreground dark:text-white/85 mb-3">Opciones disponibles</p>
           <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
             {avatars.map((avatar) => (
               <button
@@ -115,7 +115,7 @@ export function AvatarPicker({
                   </div>
                 )}
 
-                <span className="text-xs font-medium text-center leading-tight text-muted-foreground dark:text-muted/30 group-hover:text-muted/90 dark:group-hover:text-white">
+                <span className="text-xs font-medium text-center leading-tight text-muted-foreground dark:text-white/85 group-hover:text-muted/90 dark:group-hover:text-white">
                   {avatar.name}
                 </span>
               </button>
@@ -125,7 +125,7 @@ export function AvatarPicker({
 
         {/* Info */}
         <div className="p-3 bg-blue/5 dark:bg-blue/30 rounded-[28px] border border-blue/20 dark:border-blue">
-          <p className="text-xs text-blue dark:text-blue/20">
+          <p className="text-xs text-blue dark:text-blue-300">
             💡 Tu avatar {type === 'user' ? 'aparecerá en tus respuestas y feedback' : 'conducirá la entrevista y mostrará expresiones realistas'}
           </p>
         </div>

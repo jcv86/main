@@ -511,7 +511,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
       case "testing":
         return <Loader2 className="h-4 w-4 animate-spin text-blue/50" />
       default:
-        return <Clock className="h-4 w-4 text-muted/30" />
+        return <Clock className="h-4 w-4 text-white/85" />
     }
   }
 

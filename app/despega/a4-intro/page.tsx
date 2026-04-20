@@ -63,7 +63,7 @@ export default function A4IntroPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-muted-foreground dark:text-muted/30">
+              <p className="text-muted-foreground dark:text-white/85">
                 A4 es tu fase final de ejecución continuada. No terminas aquí - aquí EMPIEZAS a aplicar todo lo que aprendiste. 
                 Tu coach IA 24/7 te proporciona contexto real del mercado laboral, tendencias de industria, inteligencia competitiva 
                 y decisiones estratégicas para que entres al mercado con ventaja.

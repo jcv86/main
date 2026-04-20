@@ -74,7 +74,7 @@ export function AIAssistant({
           <Lightbulb className="w-5 h-5 text-blue dark:text-blue/40 mt-0.5 flex-shrink-0" />
           <div>
             <p className="font-semibold text-blue dark:text-blue/10">{title}</p>
-            <p className="text-sm text-blue dark:text-blue/20 mt-0.5">
+            <p className="text-sm text-blue dark:text-blue-300 mt-0.5">
               {suggestion ? 'Aquí está mi sugerencia:' : 'Obtén ayuda para responder esta pregunta'}
             </p>
           </div>
@@ -99,7 +99,7 @@ export function AIAssistant({
       )}
 
       {loading && (
-        <div className="flex gap-2 items-center text-blue dark:text-blue/30">
+        <div className="flex gap-2 items-center text-blue dark:text-blue-200">
           <Loader2 className="w-4 h-4 animate-spin" />
           <p className="text-sm">Generando sugerencia...</p>
         </div>
@@ -108,7 +108,7 @@ export function AIAssistant({
       {suggestion && (
         <div className="space-y-3">
           <div className="p-3 bg-transparent rounded border border-blue/10 dark:border-blue">
-            <p className="text-sm text-muted-foreground dark:text-muted/30 whitespace-pre-wrap">
+            <p className="text-sm text-muted-foreground dark:text-white/85 whitespace-pre-wrap">
               {suggestion}
             </p>
           </div>

@@ -95,7 +95,7 @@ export default function A1PatternsPage() {
               className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                 selectedTab === tab
                   ? 'bg-purple text-white shadow-lg'
-                  : 'bg-muted/70 text-muted/30 hover:bg-muted/60'
+                  : 'bg-muted/70 text-white/85 hover:bg-muted/60'
               }`}
             >
               {tab === 'strengths' && '💪 Fortalezas'}
@@ -146,7 +146,7 @@ export default function A1PatternsPage() {
                 <CardTitle className="text-cyan/30">Tu Ventaja Natural</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted/30">{details.teamRole}</p>
+                <p className="text-white/85">{details.teamRole}</p>
               </CardContent>
             </Card>
 
@@ -219,7 +219,7 @@ export default function A1PatternsPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted/30 mb-4">Practica entrevistas específicas para tu perfil</p>
+                <p className="text-white/85 mb-4">Practica entrevistas específicas para tu perfil</p>
                 <Button 
                   onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile}`)}
                   className="w-full bg-blue hover:from-blue hover:to-blue"
@@ -235,7 +235,7 @@ export default function A1PatternsPage() {
                 <CardTitle>Ir a A2: Ruta</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted/30 mb-4">Crea tu plan personalizado de 90 días</p>
+                <p className="text-white/85 mb-4">Crea tu plan personalizado de 90 días</p>
                 <Button 
                   onClick={() => router.push('/despega/a2-routes')}
                   className="w-full bg-purple hover:bg-purple"

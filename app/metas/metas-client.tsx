@@ -330,13 +330,13 @@ export default function MetasSMARTClient() {
       case "activa":
         return "bg-green/10 dark:bg-green text-green dark:text-green/20"
       case "completada":
-        return "bg-blue/10 dark:bg-blue text-blue dark:text-blue/20"
+        return "bg-blue/10 dark:bg-blue text-blue dark:text-blue-300"
       case "pausada":
-        return "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow/20"
+        return "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow-300"
       case "abandonada":
         return "bg-red/10 dark:bg-red text-red dark:text-red/20"
       default:
-        return "bg-muted/10 dark:bg-gray-800 text-gray-800 dark:text-muted/20"
+        return "bg-muted/10 dark:bg-gray-800 text-gray-800 dark:text-white/80"
     }
   }
 
@@ -491,7 +491,7 @@ export default function MetasSMARTClient() {
                         <div className="flex justify-between items-center">
                           <div className="flex items-center gap-2">
                             {getIconoTipo(meta.tipo)}
-                            <span className="font-medium text-secondary dark:text-muted/20">{meta.nombre}</span>
+                            <span className="font-medium text-secondary dark:text-white/80">{meta.nombre}</span>
                           </div>
                           <span className="text-sm font-bold text-blue dark:text-indigo-400">
                             {meta.progreso}%
@@ -508,7 +508,7 @@ export default function MetasSMARTClient() {
 
                 {metas.filter((m) => m.estado === "activa").length === 0 && (
                   <div className="text-center py-8 text-muted-foreground dark:text-muted-foreground">
-                    <Target className="h-12 w-12 mx-auto mb-3 text-muted/30 dark:text-muted-foreground" />
+                    <Target className="h-12 w-12 mx-auto mb-3 text-white/85 dark:text-muted-foreground" />
                     <p>No tienes metas activas. ¡Crea una nueva meta para empezar!</p>
                   </div>
                 )}
@@ -529,7 +529,7 @@ export default function MetasSMARTClient() {
                     const metasDelTest = metas.filter((m) => m.origen.includes(test))
                     return (
                       <div key={test} className="p-4 bg-muted/5 rounded-lg dark:bg-muted/70">
-                        <h4 className="font-medium mb-2 text-secondary dark:text-muted/20">{test}</h4>
+                        <h4 className="font-medium mb-2 text-secondary dark:text-white/80">{test}</h4>
                         <p className="text-2xl font-bold text-blue dark:text-indigo-400">{metasDelTest.length}</p>
                         <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                           {metasDelTest.filter((m) => m.estado === "activa").length} activas

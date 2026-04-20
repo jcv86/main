@@ -35,10 +35,10 @@ const contrastReplacements = [
   { pattern: /dark:text-purple\/30/g, replacement: 'dark:text-purple-200' },
   
   // text-slate/gray patterns (too faint on dark)
-  { pattern: /text-slate-400/g, replacement: 'text-slate-200' },
-  { pattern: /text-slate-500/g, replacement: 'text-slate-300' },
-  { pattern: /text-gray-400/g, replacement: 'text-gray-200' },
-  { pattern: /text-gray-500/g, replacement: 'text-gray-300' },
+  { pattern: /text-slate-200/g, replacement: 'text-slate-200' },
+  { pattern: /text-slate-300/g, replacement: 'text-slate-300' },
+  { pattern: /text-gray-200/g, replacement: 'text-gray-200' },
+  { pattern: /text-gray-300/g, replacement: 'text-gray-300' },
   
   // text-muted-foreground patterns
   { pattern: /text-muted-foreground\/50/g, replacement: 'text-white/70' },

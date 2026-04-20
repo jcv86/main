@@ -57,7 +57,7 @@ export default function BienvenidaPage() {
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
                 <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-blue/10 dark:bg-blue mb-4">
-                  <span className="text-xl font-bold text-blue dark:text-blue/30">1</span>
+                  <span className="text-xl font-bold text-blue dark:text-blue-200">1</span>
                 </div>
                 <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Conozcámonos</h3>
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">
@@ -72,7 +72,7 @@ export default function BienvenidaPage() {
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
                 <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-purple/10 dark:bg-purple mb-4">
-                  <span className="text-xl font-bold text-purple dark:text-purple/30">2</span>
+                  <span className="text-xl font-bold text-purple dark:text-purple-200">2</span>
                 </div>
                 <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Tu Plan A2</h3>
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">
@@ -139,7 +139,7 @@ export default function BienvenidaPage() {
             <Target className="w-5 h-5 text-blue" />
             Tiempo Estimado
           </h3>
-          <p className="text-sm text-muted-foreground dark:text-muted/30 mb-3">Tu viaje será gradual y personalizado:</p>
+          <p className="text-sm text-muted-foreground dark:text-white/85 mb-3">Tu viaje será gradual y personalizado:</p>
           <ul className="space-y-2 text-sm text-muted-foreground dark:text-muted-foreground">
             <li>• <strong>Hoy:</strong> Responderas preguntas de conocimiento (30 min)</li>
             <li>• <strong>Días 1-3:</strong> Recibirás tu plan personalizado A2 (lectura: 1 hora)</li>

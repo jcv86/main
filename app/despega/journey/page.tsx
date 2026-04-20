@@ -222,12 +222,12 @@ export default function JourneyPage() {
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-[28px] bg-blue/10 dark:bg-blue flex items-center justify-center font-bold text-blue dark:text-blue/30">A1</div>
+                <div className="w-20 h-20 rounded-[28px] bg-blue/10 dark:bg-blue flex items-center justify-center font-bold text-blue dark:text-blue-200">A1</div>
                 <div className="flex-1 h-1 bg-background"></div>
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-muted/70 flex items-center justify-center font-bold text-muted-foreground dark:text-muted/30">↓</div>
+                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-muted/70 flex items-center justify-center font-bold text-muted-foreground dark:text-white/85">↓</div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4 mb-4">
@@ -242,7 +242,7 @@ export default function JourneyPage() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-muted/70 flex items-center justify-center font-bold text-muted-foreground dark:text-muted/30">↓</div>
+                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-muted/70 flex items-center justify-center font-bold text-muted-foreground dark:text-white/85">↓</div>
               </div>
 
               <div className="flex items-center gap-4">

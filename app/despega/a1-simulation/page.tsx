@@ -106,7 +106,7 @@ export default function A1SimulationPage() {
               <div className="text-5xl font-black text-transparent bg-background">
                 {profileNames[profile]}
               </div>
-              <p className="text-lg text-muted/30">Completaste la simulación de entrevista</p>
+              <p className="text-lg text-white/85">Completaste la simulación de entrevista</p>
             </div>
 
             <div className="bg-muted/80/50 rounded-[28px] p-6 mb-6 text-left">
@@ -115,7 +115,7 @@ export default function A1SimulationPage() {
                 {responses.map((response, idx) => (
                   <div key={idx} className="border border-muted/60 rounded p-3">
                     <p className="text-xs text-muted-foreground mb-1">Pregunta {idx + 1}:</p>
-                    <p className="text-muted/20">{response}</p>
+                    <p className="text-white/80">{response}</p>
                   </div>
                 ))}
               </div>

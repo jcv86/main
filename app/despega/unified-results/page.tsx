@@ -191,14 +191,14 @@ export default function UnifiedTestDashboard() {
                   <Zap className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold text-blue dark:text-blue/10">Ir a A2: Tu Plan</p>
-                    <p className="text-sm text-blue dark:text-blue/30">Usa tus resultados para crear un plan personalizado</p>
+                    <p className="text-sm text-blue dark:text-blue-200">Usa tus resultados para crear un plan personalizado</p>
                   </div>
                 </div>
                 <div className="flex gap-3 p-3 bg-purple/5 dark:bg-purple/20 rounded-[28px] border border-purple/30 dark:border-purple">
                   <Share2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold text-purple dark:text-purple/10">Compartir Resultados</p>
-                    <p className="text-sm text-purple dark:text-purple/30">Exporta tu perfil completo en PDF</p>
+                    <p className="text-sm text-purple dark:text-purple-200">Exporta tu perfil completo en PDF</p>
                   </div>
                 </div>
               </CardContent>

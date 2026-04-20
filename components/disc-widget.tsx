@@ -21,7 +21,7 @@ const DISC_DETAILS = {
   I: {
     label: 'Influenciador',
     description: 'Comunicador, orientado a personas',
-    color: 'bg-yellow/10 dark:bg-yellow/30 text-yellow dark:text-yellow/30',
+    color: 'bg-yellow/10 dark:bg-yellow/30 text-yellow dark:text-yellow-200',
     icon: '🎤',
     traits: ['Entusiasta', 'Comunicativo', 'Sociable', 'Inspirador'],
   },
@@ -35,7 +35,7 @@ const DISC_DETAILS = {
   C: {
     label: 'Concienzudo',
     description: 'Analítico, orientado a la calidad',
-    color: 'bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue/30',
+    color: 'bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue-200',
     icon: '🎯',
     traits: ['Preciso', 'Detallista', 'Analítico', 'Riguroso'],
   },

@@ -713,7 +713,7 @@ export function ConversationalInterviewSimulator({
             {/* Your Response */}
             <div>
               <p className="font-semibold mb-2">Tu respuesta:</p>
-              <div className="bg-muted/5 dark:bg-transparent p-4 rounded-[28px] italic text-muted-foreground dark:text-muted/30">
+              <div className="bg-muted/5 dark:bg-transparent p-4 rounded-[28px] italic text-muted-foreground dark:text-white/85">
                 {lastAttempt.userResponse}
               </div>
             </div>
@@ -756,8 +756,8 @@ export function ConversationalInterviewSimulator({
                   <>
                     {Object.entries(lastAttempt.feedback.staAnalysis).map(([key, value]) => (
                       <div key={key}>
-                        <p className="font-semibold text-blue dark:text-blue/30 capitalize">{key}:</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">{value}</p>
+                        <p className="font-semibold text-blue dark:text-blue-200 capitalize">{key}:</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">{value}</p>
                       </div>
                     ))}
                   </>
@@ -768,7 +768,7 @@ export function ConversationalInterviewSimulator({
                 <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-[28px] border border-emerald-200 dark:border-emerald-800 space-y-3">
                   <p className="font-semibold text-emerald-900 dark:text-emerald-200">Cómo sonarías mejor:</p>
                   <div className="space-y-2">
-                    <p className="text-sm text-muted-foreground dark:text-muted/30">
+                    <p className="text-sm text-muted-foreground dark:text-white/85">
                       "La situación fue [contexto específico]. Mi responsabilidad fue [tu rol claro]. Lo que hice fue [acciones concretas con verbos fuertes: implementé, rediseñé, lideré]. El impacto fue [números, métricas, resultados medibles]."
                     </p>
                     <Button
@@ -788,7 +788,7 @@ export function ConversationalInterviewSimulator({
             {lastAttempt.followUp && (
               <Alert className="bg-purple/5 dark:bg-purple/20 border-purple/20 dark:border-purple">
                 <MessageSquare className="h-4 w-4" />
-                <AlertDescription className="text-purple dark:text-purple/20">
+                <AlertDescription className="text-purple dark:text-purple-300">
                   <p className="font-semibold mb-1">Mi pregunta de seguimiento:</p>
                   <p>"{lastAttempt.followUp}"</p>
                 </AlertDescription>
@@ -848,7 +848,7 @@ export function ConversationalInterviewSimulator({
               )}
             </div>
 
-            <p className="text-center text-muted-foreground dark:text-muted/30">
+            <p className="text-center text-muted-foreground dark:text-white/85">
               Completaste {questions.length} preguntas con un total de {Object.values(attempts).flat().length} intentos.
             </p>
 

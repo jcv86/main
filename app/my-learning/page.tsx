@@ -37,10 +37,10 @@ export default async function MyLearningPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="inline-block px-4 py-2 bg-background">
-            <p className="text-sm font-semibold text-purple dark:text-purple/30">Tu Progreso de Aprendizaje</p>
+            <p className="text-sm font-semibold text-purple dark:text-purple-200">Tu Progreso de Aprendizaje</p>
           </div>
           <h1 className="text-5xl font-bold mb-2 text-purple400400">Tu Aprendizaje</h1>
-          <p className="text-lg text-muted-foreground dark:text-muted/30">
+          <p className="text-lg text-muted-foreground dark:text-white/85">
             Nivel: <span className="font-bold text-purple dark:text-purple/40">{profile.current_level}</span>
           </p>
         </div>

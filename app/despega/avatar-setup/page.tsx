@@ -87,7 +87,7 @@ export default function AvatarSetupPage() {
       <div className="max-w-5xl mx-auto space-y-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <Badge className="bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue/30 mb-4">
+          <Badge className="bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-200 mb-4">
             <Sparkles className="w-3 h-3 mr-1" />
             Configuración de Entrevista
           </Badge>

@@ -97,7 +97,7 @@ export function GlobalProgressSidebar() {
       {/* PHASES MICRO TRACKER */}
       <Card className="bg-transparent border border-muted/20 dark:border-muted/80 shadow-md">
         <div className="p-4 space-y-3">
-          <p className="text-xs font-semibold text-muted-foreground dark:text-muted/30 uppercase">Fases del Ciclo</p>
+          <p className="text-xs font-semibold text-muted-foreground dark:text-white/85 uppercase">Fases del Ciclo</p>
           
           <div className="space-y-2">
             {phases.map((phase, idx) => (
@@ -130,7 +130,7 @@ export function GlobalProgressSidebar() {
       {/* QUICK ACTIONS */}
       <Card className="bg-background">
         <div className="p-3 space-y-2">
-          <p className="text-xs font-semibold text-muted-foreground dark:text-muted/30">Acceso Rápido</p>
+          <p className="text-xs font-semibold text-muted-foreground dark:text-white/85">Acceso Rápido</p>
           <div className="space-y-1">
             <Link href="/despega/journey">
               <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-white/50 dark:hover:bg-muted/80 text-blue dark:text-blue/40">

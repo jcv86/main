@@ -166,7 +166,7 @@ export function InteractiveTrainingSession({
               <h3 className="text-sm font-semibold text-blue/30 mb-3 flex items-center gap-2">
                 <span>💡 GUÍA PARA RESPONDER:</span>
               </h3>
-              <div className="text-muted/30 space-y-2 text-sm leading-relaxed">
+              <div className="text-white/85 space-y-2 text-sm leading-relaxed">
                 {guidance}
               </div>
             </div>
@@ -174,7 +174,7 @@ export function InteractiveTrainingSession({
             {/* Instrucciones */}
             <div className="space-y-3">
               <h4 className="font-semibold text-white">¿Qué va a pasar?</h4>
-              <ul className="space-y-2 text-sm text-muted/30">
+              <ul className="space-y-2 text-sm text-white/85">
                 <li className="flex gap-3">
                   <span className="text-cyan/40 font-bold">1.</span>
                   <span>Grabarás tu respuesta EN VIVO con cámara y micrófono</span>

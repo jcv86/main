@@ -181,7 +181,7 @@ export default function FeedbackPage() {
                             <Badge className="bg-blue">Insight</Badge>
                           )}
                         </div>
-                        <p className="text-muted-foreground dark:text-muted/30 mb-3">
+                        <p className="text-muted-foreground dark:text-white/85 mb-3">
                           {item.description}
                         </p>
                         <p className="text-xs text-muted-foreground flex items-center gap-2">
@@ -209,7 +209,7 @@ export default function FeedbackPage() {
                 <p className="text-sm font-semibold text-muted/90 dark:text-white">
                   Para tu próxima simulación, enfócate en:
                 </p>
-                <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground dark:text-muted/30">
+                <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground dark:text-white/85">
                   <li>Añadir 2-3 números específicos en cada logro (% de mejora, cantidad de usuarios, tiempo ahorrado)</li>
                   <li>Practicar verbalizaciones de pausa ("Déjame pensar...", "Buena pregunta...")</li>
                   <li>Incluir un aprendizaje de un colega en al menos una respuesta</li>
@@ -218,7 +218,7 @@ export default function FeedbackPage() {
               </div>
 
               <div className="pt-4 border-t border-purple/30 dark:border-purple">
-                <p className="text-sm text-muted-foreground dark:text-muted/30 mb-3">
+                <p className="text-sm text-muted-foreground dark:text-white/85 mb-3">
                   Cuando estés listo, practica la siguiente dificultad:
                 </p>
                 <Button className="w-full bg-purple hover:bg-purple">

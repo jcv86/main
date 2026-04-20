@@ -202,7 +202,7 @@ export default function GuidedInterviewPage() {
 
           <Card className="p-6">
             <h2 className="text-xl font-bold mb-4">Próximos Pasos</h2>
-            <ul className="space-y-3 text-muted-foreground dark:text-muted/30">
+            <ul className="space-y-3 text-muted-foreground dark:text-white/85">
               <li className="flex gap-3">
                 <span className="text-green font-bold">1.</span>
                 <span>Revisa el feedback detallado de tu entrevista</span>
@@ -264,7 +264,7 @@ export default function GuidedInterviewPage() {
                 {currentQuestion.question}
               </p>
               <div className="bg-blue/5 dark:bg-blue/20 border border-blue/30 dark:border-blue/10 rounded-[28px] p-4">
-                <p className="text-sm text-blue dark:text-blue/20">
+                <p className="text-sm text-blue dark:text-blue-300">
                   <strong>Guidance del Coach:</strong> {currentQuestion.guidance}
                 </p>
               </div>
@@ -280,7 +280,7 @@ export default function GuidedInterviewPage() {
 
             {/* Response Input */}
             <div className="space-y-3">
-              <label className="text-sm font-semibold text-muted-foreground dark:text-muted/30">
+              <label className="text-sm font-semibold text-muted-foreground dark:text-white/85">
                 Tu respuesta:
               </label>
               <div className="space-y-2">
@@ -331,7 +331,7 @@ export default function GuidedInterviewPage() {
             <div className="bg-purple/5 dark:bg-purple/20 border border-purple/30 dark:border-purple rounded-[28px] p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Mic className="w-5 h-5 text-purple dark:text-purple/40" />
-                <span className="text-sm font-semibold text-purple dark:text-purple/20">
+                <span className="text-sm font-semibold text-purple dark:text-purple-300">
                   O practica hablando en voz alta (sin grabación aún)
                 </span>
               </div>

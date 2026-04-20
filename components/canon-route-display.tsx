@@ -74,7 +74,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
       <div className="space-y-4">
         <div>
           <h1 className="text-4xl font-bold text-white mb-2">Tu Ruta de Transformación</h1>
-          <p className="text-lg text-muted/30">Generada especialmente para ti basada en tus respuestas</p>
+          <p className="text-lg text-white/85">Generada especialmente para ti basada en tus respuestas</p>
         </div>
         
         <div className="grid grid-cols-3 gap-4">
@@ -132,10 +132,10 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
                         <Badge className={`${getDifficultyColor(mission.difficulty)}`}>
                           {mission.difficulty === 'easy' ? 'Fácil' : mission.difficulty === 'medium' ? 'Medio' : 'Desafiante'}
                         </Badge>
-                        <Badge variant="outline" className="text-muted/30">
+                        <Badge variant="outline" className="text-white/85">
                           Día {mission.day}
                         </Badge>
-                        <Badge variant="outline" className="text-muted/30">
+                        <Badge variant="outline" className="text-white/85">
                           {mission.estimatedHours}h
                         </Badge>
                       </div>
@@ -158,7 +158,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
                     <div className="space-y-4 bg-muted/90 rounded-[28px] p-4">
                       <div>
                         <h4 className="text-sm font-semibold text-blue/40 mb-2">¿Por qué esta misión?</h4>
-                        <p className="text-sm text-muted/30">
+                        <p className="text-sm text-white/85">
                           Generada por la regla: <span className="font-semibold text-yellow/40">{mission.sourceRule}</span>
                         </p>
                       </div>
@@ -170,9 +170,9 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
                             <p className="text-xs text-muted-foreground mb-1">Tu respuesta a:</p>
                             <p className="text-sm text-white font-medium mb-2">{response.questionText}</p>
                             <div className="bg-muted/70 rounded p-2 mb-2">
-                              <p className="text-sm text-muted/20 italic">"{response.userAnswer}"</p>
+                              <p className="text-sm text-white/80 italic">"{response.userAnswer}"</p>
                             </div>
-                            <p className="text-xs text-muted/30">
+                            <p className="text-xs text-white/85">
                               <span className="text-green/40">→</span> {response.ruleLogic}
                             </p>
                           </div>
@@ -197,7 +197,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
           <div className="space-y-4">
             <div>
               <div className="flex justify-between mb-2">
-                <span className="text-sm font-medium text-muted/30">Misiones totales</span>
+                <span className="text-sm font-medium text-white/85">Misiones totales</span>
                 <span className="text-sm font-medium text-blue/40">{missions.length}</span>
               </div>
               <Progress value={(missions.filter(m => m.phase === '30').length / missions.length) * 100} className="h-2" />

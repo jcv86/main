@@ -283,7 +283,7 @@ export function BrainChatInterface() {
                           {message.sources && message.sources.length > 0 && (
                             <div className="mt-4 space-y-2">
                               <Separator className="my-2" />
-                              <div className="text-xs font-semibold text-muted dark:text-muted/30 mb-2">
+                              <div className="text-xs font-semibold text-muted dark:text-white/85 mb-2">
                                 📚 Fuentes consultadas:
                               </div>
                               <div className="space-y-2">

@@ -81,7 +81,7 @@ export default function TrainingDashboardPage() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-cyan/50" />
-          <p className="text-muted/30">Cargando tu progreso de entrenamiento...</p>
+          <p className="text-white/85">Cargando tu progreso de entrenamiento...</p>
         </div>
       </div>
     )
@@ -209,7 +209,7 @@ export default function TrainingDashboardPage() {
     >
       {/* EXPLICACIÓN */}
       <ASectionPart title="¿Qué es Entrenamiento Intensivo?" icon={<Zap />}>
-        <p className="text-muted/30 mb-4">
+        <p className="text-white/85 mb-4">
           Esta es tu fase de práctica intensiva. Aquí realizas entrenamientos realistas de entrevistas, recibes feedback inmediato, 
           y ajustas tu enfoque basado en análisis. Combinas tu Interview 0, CV optimizado e inteligencia del mercado 
           en entrenamientos prácticos que te preparan para situaciones reales.
@@ -322,7 +322,7 @@ export default function TrainingDashboardPage() {
           {completionPercentage === 0 && (
             <div className="p-6 bg-background">
               <h4 className="text-white font-semibold mb-2">Comienza aquí</h4>
-              <p className="text-muted/30 text-sm mb-4">
+              <p className="text-white/85 text-sm mb-4">
                 La base es fundamental. Completa Interview 0 primero - es la piedra angular de todas tus entrevistas.
               </p>
               <Button onClick={() => router.push('/despega/interview-0')} className="bg-blue hover:bg-cyan">
@@ -335,7 +335,7 @@ export default function TrainingDashboardPage() {
           {completionPercentage > 0 && completionPercentage < 50 && (
             <div className="p-6 bg-background">
               <h4 className="text-white font-semibold mb-2">Siguiente: Entrenamiento Guiado</h4>
-              <p className="text-muted/30 text-sm mb-4">
+              <p className="text-white/85 text-sm mb-4">
                 Ya tienes tu base. Ahora practica con guía. Los Entrenamientos Guiados te enseñan la metodología STAR y te dan feedback IA en tiempo real.
               </p>
               <Button onClick={() => router.push('/despega/a3/entrenamiento-guiado')} className="bg-blue hover:bg-cyan">
@@ -348,7 +348,7 @@ export default function TrainingDashboardPage() {
           {completionPercentage >= 50 && completionPercentage < 100 && (
             <div className="p-6 bg-background">
               <h4 className="text-white font-semibold mb-2">Intensifica: Desafío Máximo</h4>
-              <p className="text-muted/30 text-sm mb-4">
+              <p className="text-white/85 text-sm mb-4">
                 Estás en buena forma. Es momento de desafiarte. Los Entrenamientos Desafiantes te preparan para presión real de entrevista ejecutiva.
               </p>
               <Button onClick={() => router.push('/despega/a3/entrenamiento-desafiante')} className="bg-blue hover:bg-teal-700">
@@ -373,7 +373,7 @@ export default function TrainingDashboardPage() {
                 <CardTitle className="text-lg">4 Principios del Módulo de Entrenamiento</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="space-y-2 text-sm text-muted/30">
+                <div className="space-y-2 text-sm text-white/85">
                   <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan/40 flex-shrink-0 mt-0.5" /> Progresión: Guiado → Estructurado → Desafío</p>
                   <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan/40 flex-shrink-0 mt-0.5" /> Feedback: Análisis IA después de cada sesión</p>
                   <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan/40 flex-shrink-0 mt-0.5" /> Video: Analiza postura, tono, gestos reales</p>
@@ -387,7 +387,7 @@ export default function TrainingDashboardPage() {
                 <CardTitle className="text-lg">Tips de Experto</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <ul className="space-y-2 text-sm text-muted/30">
+                <ul className="space-y-2 text-sm text-white/85">
                   <li>• Practiquen 2-3 entrenamientos por semana para máximo progreso</li>
                   <li>• Mira el video de ti mismo - es incómodo pero transformador</li>
                   <li>• Ajusta tus respuestas según feedback IA</li>

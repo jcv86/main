@@ -117,7 +117,7 @@ export function PhaseTransitionHandler({
       <CardContent>
         <div className="space-y-4">
           <div className="p-4 bg-transparent rounded-[28px] border border-muted/20 dark:border-muted/70">
-            <p className="text-sm font-semibold text-muted-foreground dark:text-muted/30 mb-2">
+            <p className="text-sm font-semibold text-muted-foreground dark:text-white/85 mb-2">
               Próxima fase:
             </p>
             <p className="text-lg font-bold text-teal-600 dark:text-teal-400 mb-4">

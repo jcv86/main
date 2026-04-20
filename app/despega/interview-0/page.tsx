@@ -15,7 +15,7 @@ export default function Interview0Page() {
       <div className="min-h-screen bg-background">
         <div className="text-center max-w-md">
           <h1 className="text-4xl font-bold text-cyan/40 mb-4">¡Interview 0 Completado!</h1>
-          <p className="text-muted/30 mb-8">
+          <p className="text-white/85 mb-8">
             Excelente trabajo preparando tu pitch personal. Ahora tienes la base para entrevistas más complejas.
           </p>
           <div className="flex gap-4">

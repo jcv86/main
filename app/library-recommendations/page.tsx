@@ -67,13 +67,13 @@ export default async function RecommendedBooksPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="inline-block px-4 py-2 bg-background">
-            <p className="text-sm font-semibold text-blue dark:text-blue/30">Personalizadas para ti</p>
+            <p className="text-sm font-semibold text-blue dark:text-blue-200">Personalizadas para ti</p>
           </div>
           <div className="flex items-center gap-2 mb-4">
             <Star className="h-8 w-8 fill-yellow-500 text-orange" />
             <h1 className="text-5xl font-bold bg-blue bg-clip-text text-transparent/40/40">Libros Recomendados</h1>
           </div>
-          <p className="text-lg text-muted-foreground dark:text-muted/30 font-medium">
+          <p className="text-lg text-muted-foreground dark:text-white/85 font-medium">
             Basado en tu nivel <span className="font-semibold capitalize">{profile.current_level}</span> y tus intereses en {profile.preferred_categories?.join(", ") || "varias categorías"}
           </p>
         </div>

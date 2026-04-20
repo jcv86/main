@@ -160,7 +160,7 @@ export default function A2RoutesPage() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-purple/50" />
-          <p className="text-muted/30">Generando tu ruta personalizada...</p>
+          <p className="text-white/85">Generando tu ruta personalizada...</p>
         </div>
       </div>
     )
@@ -211,7 +211,7 @@ export default function A2RoutesPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-muted/30">
+            <p className="text-white/85">
               Basado en tu perfil DISC y objetivos, hemos generado tu plan personalizado de 90 días. 
               Este es el resultado de A2: Diseño de tu Ruta. Aquí visualizas las acciones, milestones y recursos 
               organizados en 3 fases progresivas para llevar tu carrera al siguiente nivel.
@@ -240,7 +240,7 @@ export default function A2RoutesPage() {
             </div>
             
             <div className="p-4 bg-muted/80/30 border border-muted/70 rounded-lg">
-              <p className="text-muted/30 text-sm mb-3">Próximo: Continúa a <span className="font-semibold">Entrenamiento Intensivo</span> para prepararte para entrevistas</p>
+              <p className="text-white/85 text-sm mb-3">Próximo: Continúa a <span className="font-semibold">Entrenamiento Intensivo</span> para prepararte para entrevistas</p>
               <Button 
                 onClick={() => router.push('/despega/a3-intro')}
                 className="w-full bg-blue hover:bg-cyan"
@@ -300,7 +300,7 @@ export default function A2RoutesPage() {
                                 <div className="flex-1">
                                   <div className="flex items-center justify-between gap-2">
                                     <h4 className="font-semibold text-white text-sm">Día {task.day}: {task.title}</h4>
-                                    <span className="text-xs bg-muted/60/50 text-muted/30 px-2 py-1 rounded whitespace-nowrap">
+                                    <span className="text-xs bg-muted/60/50 text-white/85 px-2 py-1 rounded whitespace-nowrap">
                                       {Math.round(task.timeEstimate / 60)}h
                                     </span>
                                   </div>
@@ -334,11 +334,11 @@ export default function A2RoutesPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex gap-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <p className="text-muted/30">Completar todas las acciones de cada fase</p>
+                  <p className="text-white/85">Completar todas las acciones de cada fase</p>
                 </div>
                 <div className="flex gap-3">
                   <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <p className="text-muted/30">Dedicar el tiempo programado cada semana</p>
+                  <p className="text-white/85">Dedicar el tiempo programado cada semana</p>
                 </div>
               </div>
             </div>
@@ -387,7 +387,7 @@ export default function A2RoutesPage() {
             </div>
 
             <div className="p-6 bg-background">
-              <p className="text-muted/30 mb-4">
+              <p className="text-white/85 mb-4">
                 <strong>Este es tu plan. Adáptalo según sea necesario.</strong> La vida acontece, y el plan puede cambiar. 
                 Si necesitas ajustes o tienes preguntas, habla con el coach.
               </p>

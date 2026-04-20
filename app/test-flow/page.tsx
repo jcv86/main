@@ -248,7 +248,7 @@ export default function TestFlowVerification() {
   const getCheckIcon = (passed: boolean, isActive: boolean) => {
     if (isActive) return <RefreshCw className="h-4 w-4 animate-spin text-blue/50" />
     if (passed) return <CheckCircle className="h-4 w-4 text-green" />
-    return <XCircle className="h-4 w-4 text-muted/30" />
+    return <XCircle className="h-4 w-4 text-white/85" />
   }
 
   const getStatusBadge = (status: TestFlowCheck["status"]) => {

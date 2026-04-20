@@ -257,7 +257,7 @@ export default function A1ReportPage() {
         ) : insights ? (
           <div className="space-y-6">
             <div className="bg-background">
-              <p className="text-muted/30 text-center text-lg">
+              <p className="text-white/85 text-center text-lg">
                 Basado en tu perfil de El Ritual y contexto personal, aquí está tu análisis completo:
               </p>
             </div>
@@ -335,7 +335,7 @@ export default function A1ReportPage() {
         {insightsLoading ? (
           <div className="flex flex-col items-center justify-center py-16">
             <Loader2 className="h-8 w-8 animate-spin text-purple mb-4" />
-            <p className="text-muted/30 text-lg font-semibold">Generando tu análisis personalizado con IA...</p>
+            <p className="text-white/85 text-lg font-semibold">Generando tu análisis personalizado con IA...</p>
             <p className="text-muted-foreground text-sm mt-2">Esto toma unos segundos mientras analizamos tu perfil</p>
           </div>
         ) : insights ? (
@@ -346,7 +346,7 @@ export default function A1ReportPage() {
                 <div className="text-4xl">🎯</div>
                 <div className="flex-1">
                   <h3 className="text-2xl font-bold text-white mb-3">Tu Perfil: {primaryLabel} + {secondaryLabel}</h3>
-                  <p className="text-muted/20 leading-relaxed text-base">
+                  <p className="text-white/80 leading-relaxed text-base">
                     Eres una persona con características únicas. Tu combinación {profile.primary}/{profile.secondary} 
                     te hace especial en cómo tomas decisiones, te relacionas con otros, y enfrentas desafíos. 
                     Los siguientes 8 insights te mostrarán exactamente qué te hace diferente y cómo aprovecharlo.
@@ -357,7 +357,7 @@ export default function A1ReportPage() {
 
             {/* Introducción */}
             <div className="bg-muted/80/50 border border-muted/70 rounded-xl p-6 text-center">
-              <p className="text-muted/30 text-lg">
+              <p className="text-white/85 text-lg">
                 Basado en tu Perfil de El Ritual y tu contexto personal, aquí está tu análisis completo:
               </p>
             </div>
@@ -384,7 +384,7 @@ export default function A1ReportPage() {
       {/* A1 WOW REPORT - El Reporte de Transformación */}
       <ASectionPart title="🚀 Tu Reporte de Transformación" icon={<Sparkles />}>
         <div className="mb-6">
-          <p className="text-muted/30 text-center text-lg mb-6">
+          <p className="text-white/85 text-center text-lg mb-6">
             Ahora que entiendes tu perfil, aquí está tu mapa de acción. Las 5 herramientas que te hacen imprescindible.
           </p>
         </div>
@@ -416,7 +416,7 @@ export default function A1ReportPage() {
               <CardTitle className="text-lg text-cyan/30">📞 Call Entrena</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted/30 mb-4">Practica entrevistas con un entrenamiento personalizado para tu perfil {primaryLabel}.</p>
+              <p className="text-sm text-white/85 mb-4">Practica entrevistas con un entrenamiento personalizado para tu perfil {primaryLabel}.</p>
               <Button 
                 onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile.primary}`)} 
                 className="w-full bg-blue hover:from-blue hover:to-blue text-white" 

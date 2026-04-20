@@ -65,7 +65,7 @@ export default function JobMatchingPage() {
         {!analysis ? (
           <Card className="p-8 space-y-6">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-muted-foreground dark:text-muted/30">
+              <label className="text-sm font-semibold text-muted-foreground dark:text-white/85">
                 Descripción de Trabajo (Job Description)
               </label>
               <Textarea
@@ -162,7 +162,7 @@ export default function JobMatchingPage() {
                       {analysis.resumeAdjustments.map((adjustment: string, idx: number) => (
                         <li key={idx} className="flex gap-3">
                           <span className="text-blue dark:text-blue/40 font-bold">{idx + 1}.</span>
-                          <span className="text-muted-foreground dark:text-muted/30">{adjustment}</span>
+                          <span className="text-muted-foreground dark:text-white/85">{adjustment}</span>
                         </li>
                       ))}
                     </ul>
@@ -187,7 +187,7 @@ export default function JobMatchingPage() {
                       <div key={question} className="space-y-2">
                         <p className="font-semibold text-muted/90 dark:text-white">{question}</p>
                         <div className="bg-muted/5 dark:bg-card p-4 rounded-[28px]">
-                          <p className="text-sm text-muted-foreground dark:text-muted/30">{response}</p>
+                          <p className="text-sm text-muted-foreground dark:text-white/85">{response}</p>
                         </div>
                         <Button variant="outline" size="sm">
                           Editar Respuesta

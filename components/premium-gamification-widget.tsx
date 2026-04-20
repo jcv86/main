@@ -98,7 +98,7 @@ export function PremiumGamificationWidget() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <Zap className="w-4 h-4 text-amber-500" />
-                <span className="text-xs font-semibold text-muted-foreground dark:text-muted/30">
+                <span className="text-xs font-semibold text-muted-foreground dark:text-white/85">
                   {gamification.total_xp.toLocaleString()} XP
                 </span>
               </div>
@@ -148,7 +148,7 @@ export function PremiumGamificationWidget() {
 
           {/* PHASE PROGRESS */}
           <div className="space-y-2 pt-2 border-t border-muted/20 dark:border-muted/70">
-            <p className="text-xs font-bold text-muted-foreground dark:text-muted/30 uppercase tracking-wide">
+            <p className="text-xs font-bold text-muted-foreground dark:text-white/85 uppercase tracking-wide">
               Fase Actual - Nivel {gamification.phase_level['current']}
             </p>
             <div className="flex items-center gap-2">
@@ -192,7 +192,7 @@ export function PremiumGamificationWidget() {
           <div className="bg-muted/10 dark:bg-transparent/50 rounded p-2">
             <div className="flex items-center gap-2 text-xs">
               <Unlock className="w-3 h-3 text-muted-foreground dark:text-muted-foreground flex-shrink-0" />
-              <span className="text-muted-foreground dark:text-muted/30">
+              <span className="text-muted-foreground dark:text-white/85">
                 <strong>{500 - (gamification.phase_xp['current'] % 500)} XP</strong> para próximo achievement
               </span>
             </div>

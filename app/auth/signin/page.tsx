@@ -112,7 +112,7 @@ export default function SignInPage() {
           <h1 className="text-4xl font-bold text-purple ">
             Despega Tu Carrera
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-muted/30">
+          <p className="text-lg text-muted-foreground dark:text-white/85">
             Tu transformación profesional comienza hoy
           </p>
           <p className="text-sm text-muted-foreground dark:text-muted-foreground max-w-sm mx-auto">

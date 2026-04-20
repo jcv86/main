@@ -71,7 +71,7 @@ export default function QuickTestPage() {
         {/* Alert */}
         <Alert className="mb-8 border-blue/20 dark:border-blue/10 bg-blue/5 dark:bg-blue/30">
           <AlertCircle className="h-4 w-4 text-blue dark:text-blue/40" />
-          <AlertDescription className="text-blue dark:text-blue/20">
+          <AlertDescription className="text-blue dark:text-blue-300">
             Este es un modo de testing. Todos los links abiertos sin requirir autenticación completa.
           </AlertDescription>
         </Alert>

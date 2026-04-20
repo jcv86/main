@@ -25,7 +25,7 @@ export default function PrivacyPage() {
         <div className="space-y-8">
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">1. Introducción</h2>
-            <p className="text-muted/30 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               En Despega Tu Carrera, respetamos tu privacidad y nos comprometemos a proteger tus datos personales. Esta política explica cómo recopilamos, usamos y protegemos tu información cuando usas nuestra plataforma.
             </p>
           </section>
@@ -33,8 +33,8 @@ export default function PrivacyPage() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">2. Información que Recopilamos</h2>
             <div className="bg-background">
-              <p className="text-muted/30 leading-relaxed mb-4">Recopilamos información que nos proporciona voluntariamente:</p>
-              <ul className="list-disc list-inside text-muted/30 space-y-2">
+              <p className="text-white/85 leading-relaxed mb-4">Recopilamos información que nos proporciona voluntariamente:</p>
+              <ul className="list-disc list-inside text-white/85 space-y-2">
                 <li>Nombre, correo electrónico y datos de contacto</li>
                 <li>Información de perfil profesional</li>
                 <li>Resultados de evaluaciones psicométricas</li>
@@ -45,8 +45,8 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">3. Uso de Información</h2>
-            <p className="text-muted/30 leading-relaxed mb-4">Utilizamos tu información para:</p>
-            <ul className="list-disc list-inside text-muted/30 space-y-2">
+            <p className="text-white/85 leading-relaxed mb-4">Utilizamos tu información para:</p>
+            <ul className="list-disc list-inside text-white/85 space-y-2">
               <li>Proporcionar y mejorar nuestros servicios</li>
               <li>Personalizar tu experiencia</li>
               <li>Comunicarnos contigo sobre actualizaciones y recursos</li>
@@ -56,15 +56,15 @@ export default function PrivacyPage() {
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">4. Seguridad de Datos</h2>
-            <p className="text-muted/30 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Implementamos medidas de seguridad técnicas y organizativas para proteger tu información contra acceso no autorizado, alteración y destrucción. Usamos encriptación SSL/TLS y almacenamiento seguro en servidores protegidos.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">5. Tus Derechos</h2>
-            <p className="text-muted/30 leading-relaxed mb-4">Tienes derecho a:</p>
-            <ul className="list-disc list-inside text-muted/30 space-y-2">
+            <p className="text-white/85 leading-relaxed mb-4">Tienes derecho a:</p>
+            <ul className="list-disc list-inside text-white/85 space-y-2">
               <li>Acceder a tus datos personales</li>
               <li>Solicitar la rectificación de datos inexactos</li>
               <li>Solicitar la eliminación de tus datos</li>
@@ -74,7 +74,7 @@ export default function PrivacyPage() {
 
           <section className="bg-background">
             <h2 className="text-2xl font-bold text-white mb-4">6. Contacto</h2>
-            <p className="text-muted/30 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Para preguntas sobre esta política, contáctanos en{" "}
               <a href="mailto:contacto@despegatucarrera.cl" className="text-purple/40 hover:text-purple/30 transition-colors font-semibold">
                 contacto@despegatucarrera.cl

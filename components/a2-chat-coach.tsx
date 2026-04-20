@@ -134,14 +134,14 @@ export function A2ChatCoach({
             <MessageCircle className="w-4 h-4" />
             Tu Patrón en A1
           </div>
-          <div className="text-sm text-blue dark:text-blue/20 leading-relaxed">{a1Pattern}</div>
+          <div className="text-sm text-blue dark:text-blue-300 leading-relaxed">{a1Pattern}</div>
 
           {variantContexts.length > 0 && (
             <div className="pt-2 border-t border-blue/20 dark:border-blue space-y-2">
               <div className="font-medium text-blue dark:text-blue/10 text-sm">Contextos a explorar:</div>
               <div className="flex flex-wrap gap-2">
                 {variantContexts.map((context, i) => (
-                  <Badge key={i} variant="secondary" className="bg-transparent text-blue dark:text-blue/30 border-blue/20 dark:border-blue">
+                  <Badge key={i} variant="secondary" className="bg-transparent text-blue dark:text-blue-200 border-blue/20 dark:border-blue">
                     {context}
                   </Badge>
                 ))}
@@ -202,7 +202,7 @@ export function A2ChatCoach({
         {/* Alert */}
         <Alert className="bg-blue/5 dark:bg-blue/30 border-blue/20 dark:border-blue">
           <AlertCircle className="w-4 h-4 text-blue dark:text-blue/40" />
-          <AlertDescription className="text-blue dark:text-blue/20 text-sm">
+          <AlertDescription className="text-blue dark:text-blue-300 text-sm">
             A2 expande tu comprensión, no etiqueta. Tus respuestas son tuyas.
           </AlertDescription>
         </Alert>

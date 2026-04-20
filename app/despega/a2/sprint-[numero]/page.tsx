@@ -376,7 +376,7 @@ export default function SprintViewerPage() {
         {/* Sprint Info */}
         <Card className="border-0 shadow-md bg-white dark:bg-background">
           <CardContent className="p-6">
-            <p className="text-muted-foreground dark:text-muted/30 leading-relaxed">
+            <p className="text-muted-foreground dark:text-white/85 leading-relaxed">
               {sprint.description}
             </p>
           </CardContent>
@@ -471,7 +471,7 @@ export default function SprintViewerPage() {
                 <BookOpen className="w-5 h-5" />
                 Reflexión Semanal
               </h3>
-              <p className="text-sm text-muted-foreground dark:text-muted/30">
+              <p className="text-sm text-muted-foreground dark:text-white/85">
                 Al final de cada semana, reflexiona: ¿Qué salió bien? ¿Qué fue más difícil? ¿Qué aprendiste?
               </p>
               <Button variant="outline" asChild>

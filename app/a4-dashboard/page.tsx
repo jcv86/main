@@ -21,7 +21,7 @@ export default function A4DashboardPage() {
         {/* Header */}
         <div className="mb-8 space-y-2">
           <h1 className="text-5xl font-bold text-balance text-white">Centro de Aprendizaje A4</h1>
-          <p className="text-lg text-muted/30">
+          <p className="text-lg text-white/85">
             Análisis estratégico, noticias curadas, pruebas interactivas y recursos verificados
           </p>
         </div>

@@ -132,7 +132,7 @@ export default function RankingsPage() {
             </div>
             <div>
               <h1 className="text-4xl font-bold text-white">Rankings Despega</h1>
-              <p className="text-muted/30 font-medium">Compite y mejora junto a la comunidad</p>
+              <p className="text-white/85 font-medium">Compite y mejora junto a la comunidad</p>
             </div>
           </div>
         </div>
@@ -142,11 +142,11 @@ export default function RankingsPage() {
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-muted/30 font-medium">Tu posición actual</p>
+                <p className="text-sm text-white/85 font-medium">Tu posición actual</p>
                 <p className="text-4xl font-bold text-white">#{getCurrentUserRank(RANKING_TABS.find(t => t.id === activeTab)?.scoreKey || "score_general")}</p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-muted/30 font-medium">Puntos</p>
+                <p className="text-sm text-white/85 font-medium">Puntos</p>
                 <p className="text-4xl font-bold text-transparent bg-background">
                   {getCurrentUserScore(RANKING_TABS.find(t => t.id === activeTab)?.scoreKey || "score_general")}
                 </p>

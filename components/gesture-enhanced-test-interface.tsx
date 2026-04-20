@@ -432,7 +432,7 @@ export function GestureEnhancedTestInterface({
                             ? "text-blue/40"
                             : log.includes("swipe")
                               ? "text-yellow/40"
-                              : "text-muted/30"`}
+                              : "text-white/85"`}
                       }`}
                     >
                       {log}

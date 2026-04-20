@@ -203,12 +203,12 @@ export default function Conozcamonos1Page() {
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <div className="mb-8">
           <div className="inline-block px-4 py-2 bg-background">
-            <p className="text-sm font-semibold text-purple dark:text-purple/30">El Ritual: Paso 1 - Conocámonos</p>
+            <p className="text-sm font-semibold text-purple dark:text-purple-200">El Ritual: Paso 1 - Conocámonos</p>
           </div>
           <h1 className="text-4xl font-bold text-purple400400 mb-2">
             Antes de Empezar, Cuéntame Tu Historia
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-muted/30 font-medium">Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
+          <p className="text-lg text-muted-foreground dark:text-white/85 font-medium">Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
         </div>
 
         <div className="bg-white dark:bg-background border-2 border-purple/30 dark:border-purple/50 rounded-2xl p-8 mb-8 shadow-lg">

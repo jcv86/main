@@ -479,26 +479,26 @@ export default function DespegaOnboarding() {
                   <div className="md:col-span-3 space-y-3">
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10 mb-1">Filosofía: Uso Activo de Fuerza</p>
-                      <p className="text-muted-foreground dark:text-muted/30">
+                      <p className="text-muted-foreground dark:text-white/85">
                         Los Impulsores superan resistencias mediante acción directa y decisiva. Van hacia adelante con determinación.
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
                       <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
                         <p className="font-semibold text-red dark:text-red/30 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Orientados a resultados, decisiones rápidas, lideran con confianza, directos y eficientes</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Orientados a resultados, decisiones rápidas, lideran con confianza, directos y eficientes</p>
                       </div>
                       <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
                         <p className="font-semibold text-red dark:text-red/30 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Liderazgo, decisión, competencia, determinación, coraje, eficiencia</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Liderazgo, decisión, competencia, determinación, coraje, eficiencia</p>
                       </div>
                       <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
                         <p className="font-semibold text-red dark:text-red/30 text-sm mb-1">Motivación</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Resultados, control, desafíos, ambientes dinámicos, autonomía</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Resultados, control, desafíos, ambientes dinámicos, autonomía</p>
                       </div>
                       <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
                         <p className="font-semibold text-red dark:text-red/30 text-sm mb-1">Ambiente Ideal</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Liderazgo, emprendimiento, cambio, competencia, responsabilidad</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Liderazgo, emprendimiento, cambio, competencia, responsabilidad</p>
                       </div>
                     </div>
                   </div>
@@ -519,26 +519,26 @@ export default function DespegaOnboarding() {
                   <div className="md:col-span-3 space-y-3">
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10 mb-1">Filosofía: Uso de Encanto</p>
-                      <p className="text-muted-foreground dark:text-muted/30">
+                      <p className="text-muted-foreground dark:text-white/85">
                         Los Catalizadores superan obstáculos mediante carisma, persuasión y conexión genuina con otras personas.
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
                       <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
-                        <p className="font-semibold text-yellow dark:text-yellow/30 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Entusiastas, carismáticos, conectan fácilmente, optimistas, energéticos</p>
+                        <p className="font-semibold text-yellow dark:text-yellow-200 text-sm mb-1">Cómo Actúan</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Entusiastas, carismáticos, conectan fácilmente, optimistas, energéticos</p>
                       </div>
                       <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
-                        <p className="font-semibold text-yellow dark:text-yellow/30 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Comunicación, entusiasmo, carisma, persuasión, energía positiva</p>
+                        <p className="font-semibold text-yellow dark:text-yellow-200 text-sm mb-1">Fortalezas</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Comunicación, entusiasmo, carisma, persuasión, energía positiva</p>
                       </div>
                       <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
-                        <p className="font-semibold text-yellow dark:text-yellow/30 text-sm mb-1">Motivación</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Reconocimiento, interacción social, diversión, visibilidad</p>
+                        <p className="font-semibold text-yellow dark:text-yellow-200 text-sm mb-1">Motivación</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Reconocimiento, interacción social, diversión, visibilidad</p>
                       </div>
                       <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
-                        <p className="font-semibold text-yellow dark:text-yellow/30 text-sm mb-1">Ambiente Ideal</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Ventas, networking, equipo, creatividad, relaciones públicas</p>
+                        <p className="font-semibold text-yellow dark:text-yellow-200 text-sm mb-1">Ambiente Ideal</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Ventas, networking, equipo, creatividad, relaciones públicas</p>
                       </div>
                     </div>
                   </div>
@@ -559,26 +559,26 @@ export default function DespegaOnboarding() {
                   <div className="md:col-span-3 space-y-3">
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10 mb-1">Filosofía: Aceptación Voluntaria</p>
-                      <p className="text-muted-foreground dark:text-muted/30">
+                      <p className="text-muted-foreground dark:text-white/85">
                         Los Estabilizadores aceptan voluntariamente los cambios con paciencia, apoyo y consistencia genuina.
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
                       <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
                         <p className="font-semibold text-green dark:text-green/30 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Confiables, pacientes, colaborativos, apoyan genuinamente, crean armonía</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Confiables, pacientes, colaborativos, apoyan genuinamente, crean armonía</p>
                       </div>
                       <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
                         <p className="font-semibold text-green dark:text-green/30 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Empatía, paciencia, loyalidad, consistencia, confiabilidad, trabajo en equipo</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Empatía, paciencia, loyalidad, consistencia, confiabilidad, trabajo en equipo</p>
                       </div>
                       <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
                         <p className="font-semibold text-green dark:text-green/30 text-sm mb-1">Motivación</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Estabilidad, equipo, armonía, relaciones significativas, seguridad</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Estabilidad, equipo, armonía, relaciones significativas, seguridad</p>
                       </div>
                       <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
                         <p className="font-semibold text-green dark:text-green/30 text-sm mb-1">Ambiente Ideal</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Apoyo, servicio, coaching, ambientes estables, relaciones duraderas</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Apoyo, servicio, coaching, ambientes estables, relaciones duraderas</p>
                       </div>
                     </div>
                   </div>
@@ -599,26 +599,26 @@ export default function DespegaOnboarding() {
                   <div className="md:col-span-3 space-y-3">
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10 mb-1">Filosofía: Adaptación Cautelosa</p>
-                      <p className="text-muted-foreground dark:text-muted/30">
+                      <p className="text-muted-foreground dark:text-white/85">
                         Los Arquitectos se adaptan cautelosamente, con precisión, análisis profundo y enfoque en excelencia.
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
                       <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded">
-                        <p className="font-semibold text-blue dark:text-blue/30 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Analíticos, precisos, orientados a calidad, detallistas, orientados a datos</p>
+                        <p className="font-semibold text-blue dark:text-blue-200 text-sm mb-1">Cómo Actúan</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Analíticos, precisos, orientados a calidad, detallistas, orientados a datos</p>
                       </div>
                       <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded">
-                        <p className="font-semibold text-blue dark:text-blue/30 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Precisión, análisis, atención al detalle, planificación, calidad, pensamiento crítico</p>
+                        <p className="font-semibold text-blue dark:text-blue-200 text-sm mb-1">Fortalezas</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Precisión, análisis, atención al detalle, planificación, calidad, pensamiento crítico</p>
                       </div>
                       <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded">
-                        <p className="font-semibold text-blue dark:text-blue/30 text-sm mb-1">Motivación</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Precisión, datos, excelencia, estándares altos, competencia técnica</p>
+                        <p className="font-semibold text-blue dark:text-blue-200 text-sm mb-1">Motivación</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Precisión, datos, excelencia, estándares altos, competencia técnica</p>
                       </div>
                       <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded">
-                        <p className="font-semibold text-blue dark:text-blue/30 text-sm mb-1">Ambiente Ideal</p>
-                        <p className="text-sm text-muted-foreground dark:text-muted/30">Análisis, investigación, procesos claros, documentación, roles técnicos</p>
+                        <p className="font-semibold text-blue dark:text-blue-200 text-sm mb-1">Ambiente Ideal</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Análisis, investigación, procesos claros, documentación, roles técnicos</p>
                       </div>
                     </div>
                   </div>

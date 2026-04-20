@@ -117,7 +117,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
                       </span>
                     )}
                     {rec.book.rating && (
-                      <span className="text-xs bg-yellow/10 dark:bg-yellow/30 text-yellow dark:text-yellow/30 px-2 py-1 rounded">
+                      <span className="text-xs bg-yellow/10 dark:bg-yellow/30 text-yellow dark:text-yellow-200 px-2 py-1 rounded">
                         ★ {rec.book.rating}
                       </span>
                     )}

@@ -291,7 +291,7 @@ export default function Mision90DiasPage() {
           {/* Info Box */}
           <Card className="border-0 bg-blue/5 dark:bg-blue/20 border-l-4 border-l-blue-500">
             <CardContent className="p-4">
-              <p className="text-sm text-muted-foreground dark:text-muted/30">
+              <p className="text-sm text-muted-foreground dark:text-white/85">
                 <strong>📅 Estructura de los 90 días:</strong> Dividiremos esta misión en 3 sprints de 30 días cada uno. Cada semana tendrá un desafío y micro-acciones específicas.
               </p>
             </CardContent>

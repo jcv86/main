@@ -45,7 +45,7 @@ export default function A4RadarPage() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
-          <p className="text-muted/30">Activando tu Radar...</p>
+          <p className="text-white/85">Activando tu Radar...</p>
         </div>
       </div>
     )
@@ -60,7 +60,7 @@ export default function A4RadarPage() {
     >
       {/* EXPLICACIÓN */}
       <ASectionPart title="¿Qué es A4: Radar?" icon={<Zap />}>
-        <p className="text-muted/30 mb-4">
+        <p className="text-white/85 mb-4">
           En A4: Radar, tu transformación Despega entra en la fase de acción. Aquí monitoreas oportunidades en tiempo real, 
           recibes alertas sobre posiciones que coinciden con tu perfil, y mantienes un pulso constante del mercado. 
           Es tu sistema de seguimiento y aceleración para conseguir resultados.
@@ -200,7 +200,7 @@ export default function A4RadarPage() {
                 <CardTitle className="text-lg">Tu Transformación Está Completa</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="text-sm text-muted/30">
+                <p className="text-sm text-white/85">
                   Has pasado por A1 (Origen), A2 (Ruta), A3 (Impulso). Ahora con A4 (Radar), 
                   tienes todas las herramientas para buscar y asegurar tu próxima oportunidad con confianza.
                 </p>
@@ -220,7 +220,7 @@ export default function A4RadarPage() {
                 <CardTitle className="text-lg">Sigue Monitoreando</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="text-sm text-muted/30">
+                <p className="text-sm text-white/85">
                   A4 es permanente. Vuelve regularmente para:
                 </p>
                 <ul className="space-y-1 text-xs text-muted-foreground">
@@ -234,7 +234,7 @@ export default function A4RadarPage() {
           </div>
 
           <div className="p-6 bg-background">
-            <p className="text-muted/30 mb-4">
+            <p className="text-white/85 mb-4">
               <strong>¿Listo para empezar?</strong> Ve al dashboard principal para ver todas las oportunidades 
               que el Radar ha identificado para ti. Tu search ha comenzado.
             </p>

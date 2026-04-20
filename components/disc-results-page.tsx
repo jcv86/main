@@ -170,7 +170,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
                 className={`${
                   isActive
                     ? `${colors[key]} text-white border-2 border-white`
-                    : 'bg-transparent border-muted/70 text-muted/30'
+                    : 'bg-transparent border-muted/70 text-white/85'
                 } transition-all`}
               >
                 <CardContent className="p-4 text-center">
@@ -235,14 +235,14 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
                   {Array.isArray(section.content[profile]) ? (
                     <ul className="space-y-2">
                       {(section.content[profile] as string[]).map((item: string, idx: number) => (
-                        <li key={idx} className="flex gap-3 text-muted/20">
+                        <li key={idx} className="flex gap-3 text-white/80">
                           <span className="text-emerald-500 font-bold flex-shrink-0">✓</span>
                           <span>{item}</span>
                         </li>
                       ))}
                     </ul>
                   ) : (
-                    <p className="text-muted/20 leading-relaxed">{String(section.content[profile])}</p>
+                    <p className="text-white/80 leading-relaxed">{String(section.content[profile])}</p>
                   )}
                 </CardContent>
               )}
@@ -257,7 +257,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
               <h3 className="text-xl font-semibold text-white">
                 Ahora vamos a crear tu ruta personalizada
               </h3>
-              <p className="text-muted/20 text-sm">
+              <p className="text-white/80 text-sm">
                 Conocemos tu perfil DISC y contexto personal. Responde 9 preguntas más sobre tu ejecución para generar tu plan de 30/60/90 días con acciones específicas diseñadas para ti.
               </p>
               <Button

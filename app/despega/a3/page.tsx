@@ -117,7 +117,7 @@ export default function A3Page() {
           <div className="max-w-3xl space-y-4">
             <p className="text-red/80 text-sm font-semibold uppercase tracking-wider">Fase A3: Entrenamiento Aplicado - Entrevista 0 + Preparación</p>
             <h1 className="text-4xl font-bold" style={{ fontFamily: 'Lora, serif' }}>Entrena como Profesional. Verdaderamente.</h1>
-            <p className="text-lg text-muted/30">
+            <p className="text-lg text-white/85">
               Empezamos con Entrevista 0: tu diagnóstico de preparación en luz, fondo, audio, postura, presencia, y lenguaje.
               Luego avanzas en 4 niveles: guiada → estructurada → desafiante → maestría. 
               Cada sesión te prepara para situaciones reales.
@@ -255,7 +255,7 @@ export default function A3Page() {
             <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
               {['Luz', 'Fondo', 'Audio', 'Postura', 'Presencia', 'Lenguaje'].map((item) => (
                 <div key={item} className="p-2 bg-purple/5 dark:bg-purple/20 rounded text-center">
-                  <p className="text-xs font-semibold text-purple dark:text-purple/30">{item}</p>
+                  <p className="text-xs font-semibold text-purple dark:text-purple-200">{item}</p>
                 </div>
               ))}
             </div>

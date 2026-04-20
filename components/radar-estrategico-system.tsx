@@ -418,26 +418,26 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <h4 className="text-sm font-semibold text-muted/30 mb-1">Estado Actual</h4>
-            <p className="text-muted/20">{radarData.lecturaBas.estado}</p>
+            <h4 className="text-sm font-semibold text-white/85 mb-1">Estado Actual</h4>
+            <p className="text-white/80">{radarData.lecturaBas.estado}</p>
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <h4 className="text-sm font-semibold text-red/40 mb-1">🔴 Riesgo Principal</h4>
-              <p className="text-muted/30 text-sm">{radarData.lecturaBas.riesgoPrincipal}</p>
+              <p className="text-white/85 text-sm">{radarData.lecturaBas.riesgoPrincipal}</p>
             </div>
             <div>
               <h4 className="text-sm font-semibold text-green/40 mb-1">🟢 Oportunidad Principal</h4>
-              <p className="text-muted/30 text-sm">{radarData.lecturaBas.oportunidadPrincipal}</p>
+              <p className="text-white/85 text-sm">{radarData.lecturaBas.oportunidadPrincipal}</p>
             </div>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-muted/30 mb-1">Narrativa Dominante</h4>
-            <p className="text-muted/20 italic">{radarData.lecturaBas.narrativaDominante}</p>
+            <h4 className="text-sm font-semibold text-white/85 mb-1">Narrativa Dominante</h4>
+            <p className="text-white/80 italic">{radarData.lecturaBas.narrativaDominante}</p>
           </div>
           <div className="bg-muted/90/50 p-3 rounded border border-muted/70/50">
             <h4 className="text-sm font-semibold text-cyan/40 mb-1">👁️ Vigilar Ahora</h4>
-            <p className="text-muted/30 text-sm">{radarData.lecturaBas.vigilar}</p>
+            <p className="text-white/85 text-sm">{radarData.lecturaBas.vigilar}</p>
           </div>
         </CardContent>
       </Card>
@@ -473,32 +473,32 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
                     <CardContent className="space-y-4">
                       <div>
                         <h4 className="text-xs font-semibold text-muted-foreground uppercase mb-1">Traducción sin jerga</h4>
-                        <p className="text-muted/20">{noticia.traduccion}</p>
+                        <p className="text-white/80">{noticia.traduccion}</p>
                       </div>
 
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
                           <h4 className="text-xs font-semibold text-red/40 uppercase mb-1">❌ Error del consenso</h4>
-                          <p className="text-muted/30 text-sm">{noticia.errorConsensual}</p>
+                          <p className="text-white/85 text-sm">{noticia.errorConsensual}</p>
                         </div>
                         <div>
                           <h4 className="text-xs font-semibold text-cyan/40 uppercase mb-1">💹 Qué descuenta el mercado</h4>
-                          <p className="text-muted/30 text-sm">{noticia.descontandoMercado}</p>
+                          <p className="text-white/85 text-sm">{noticia.descontandoMercado}</p>
                         </div>
                       </div>
 
                       <div>
                         <h4 className="text-xs font-semibold text-yellow/40 uppercase mb-1">⚠️ Qué no encaja</h4>
-                        <p className="text-muted/30 text-sm">{noticia.noEncaja}</p>
+                        <p className="text-white/85 text-sm">{noticia.noEncaja}</p>
                       </div>
 
                       <div>
-                        <h4 className="text-xs font-semibold text-muted/30 uppercase mb-1">🎯 Incentivos detrás</h4>
-                        <p className="text-muted/30 text-sm">{noticia.incentivos}</p>
+                        <h4 className="text-xs font-semibold text-white/85 uppercase mb-1">🎯 Incentivos detrás</h4>
+                        <p className="text-white/85 text-sm">{noticia.incentivos}</p>
                       </div>
 
                       <div className="bg-muted/90/50 p-3 rounded border border-muted/70/50">
-                        <h4 className="text-xs font-semibold text-muted/30 uppercase mb-2">📊 Impacto temporal</h4>
+                        <h4 className="text-xs font-semibold text-white/85 uppercase mb-2">📊 Impacto temporal</h4>
                         <div className="space-y-1 text-xs">
                           <p><span className="text-green/40">Corto:</span> {noticia.impactoTemporal.corto}</p>
                           <p><span className="text-yellow/40">Medio:</span> {noticia.impactoTemporal.medio}</p>
@@ -508,11 +508,11 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
 
                       <div>
                         <h4 className="text-xs font-semibold text-cyan/40 uppercase mb-1">🔗 Cadena causal</h4>
-                        <p className="text-muted/30 text-sm font-mono">{noticia.cadenaCausal}</p>
+                        <p className="text-white/85 text-sm font-mono">{noticia.cadenaCausal}</p>
                       </div>
 
                       <div>
-                        <h4 className="text-xs font-semibold text-muted/30 uppercase mb-2">🗺️ Mapa de exposición</h4>
+                        <h4 className="text-xs font-semibold text-white/85 uppercase mb-2">🗺️ Mapa de exposición</h4>
                         <div className="space-y-1 text-xs">
                           <p><span className="text-emerald-400">🇨🇱 Chile:</span> {noticia.mapeoExposicion.chile}</p>
                           <p><span className="text-blue/40">🌍 Global:</span> {noticia.mapeoExposicion.global}</p>
@@ -521,20 +521,20 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
                       </div>
 
                       <div className="border-t border-muted/70/50 pt-3">
-                        <h4 className="text-xs font-semibold text-muted/30 uppercase mb-1">📖 Evolución narrativa</h4>
-                        <p className="text-muted/30 text-sm">{noticia.evolucionNarrativa}</p>
+                        <h4 className="text-xs font-semibold text-white/85 uppercase mb-1">📖 Evolución narrativa</h4>
+                        <p className="text-white/85 text-sm">{noticia.evolucionNarrativa}</p>
                       </div>
 
                       {noticia.narrativaZombie && (
                         <div className="bg-red/20 p-2 rounded border border-red/30">
                           <h4 className="text-xs font-semibold text-red/40 uppercase mb-1">🧟 Narrativa zombie</h4>
-                          <p className="text-muted/30 text-sm">{noticia.narrativaZombie}</p>
+                          <p className="text-white/85 text-sm">{noticia.narrativaZombie}</p>
                         </div>
                       )}
 
                       <div>
                         <h4 className="text-xs font-semibold text-muted-foreground uppercase mb-1">📚 Fuentes</h4>
-                        <p className="text-muted/30 text-xs">{noticia.fuentes.join(' • ')}</p>
+                        <p className="text-white/85 text-xs">{noticia.fuentes.join(' • ')}</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -552,7 +552,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
           </CardHeader>
           <CardContent className="space-y-2">
             {radarData.watchlist.map((item, idx) => (
-              <div key={idx} className="text-sm text-muted/30 flex gap-2">
+              <div key={idx} className="text-sm text-white/85 flex gap-2">
                 <span className="text-cyan/40">▸</span>
                 <span>{item}</span>
               </div>
@@ -566,7 +566,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
           </CardHeader>
           <CardContent className="space-y-2">
             {radarData.narrativasEnObservacion.map((item, idx) => (
-              <div key={idx} className="text-sm text-muted/30 flex gap-2">
+              <div key={idx} className="text-sm text-white/85 flex gap-2">
                 <span className="text-yellow/40">▸</span>
                 <span>{item}</span>
               </div>

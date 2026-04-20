@@ -236,7 +236,7 @@ export default function JourneySummaryPage() {
             <CardTitle>Tu Próximo Paso</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-muted-foreground dark:text-muted/30">
+            <p className="text-muted-foreground dark:text-white/85">
               Continúa en <strong>A2 Sprint 1: Fundamentos</strong>. Completa las acciones diarias para fortalecer tu base antes de A3.
             </p>
             <div className="flex gap-3">

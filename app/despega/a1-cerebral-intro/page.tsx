@@ -68,7 +68,7 @@ export default function A1CerebralIntroPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-muted-foreground dark:text-muted/30">
+              <p className="text-muted-foreground dark:text-white/85">
                 El Análisis Cerebral es una evaluación de comportamiento inspirada en metodologías reconocidas que identifica tu estilo natural de comunicación y liderazgo. Basado en cuatro dimensiones principales:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -78,7 +78,7 @@ export default function A1CerebralIntroPage() {
                 </div>
                 <div className="p-4 bg-yellow/5 dark:bg-yellow rounded-[28px] border border-yellow/20 dark:border-yellow">
                   <p className="font-semibold text-yellow dark:text-yellow/10 mb-1">Catalizador</p>
-                  <p className="text-sm text-yellow dark:text-yellow/20">Comunicativo, entusiasta, orientado a personas</p>
+                  <p className="text-sm text-yellow dark:text-yellow-300">Comunicativo, entusiasta, orientado a personas</p>
                 </div>
                 <div className="p-4 bg-green/5 dark:bg-green rounded-[28px] border border-green/20 dark:border-green">
                   <p className="font-semibold text-green dark:text-green/10 mb-1">Estabilizador</p>
@@ -86,7 +86,7 @@ export default function A1CerebralIntroPage() {
                 </div>
                 <div className="p-4 bg-blue/5 dark:bg-blue rounded-[28px] border border-blue/30 dark:border-blue/10">
                   <p className="font-semibold text-blue dark:text-blue/10 mb-1">Arquitecto</p>
-                  <p className="text-sm text-blue dark:text-blue/20">Analítico, detallista, exigente con calidad</p>
+                  <p className="text-sm text-blue dark:text-blue-300">Analítico, detallista, exigente con calidad</p>
                 </div>
               </div>
             </CardContent>
@@ -152,15 +152,15 @@ export default function A1CerebralIntroPage() {
                         <p className="text-xs text-muted-foreground mt-1">Impulsor</p>
                       </button>
                       <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-muted/30">Optimista e inspirador</p>
+                        <p className="text-white/85">Optimista e inspirador</p>
                         <p className="text-xs text-muted-foreground mt-1">Catalizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-muted/30">Paciente y considerado</p>
+                        <p className="text-white/85">Paciente y considerado</p>
                         <p className="text-xs text-muted-foreground mt-1">Estabilizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-muted/30">Analítico y preciso</p>
+                        <p className="text-white/85">Analítico y preciso</p>
                         <p className="text-xs text-muted-foreground mt-1">Arquitecto</p>
                       </button>
                     </div>
@@ -174,15 +174,15 @@ export default function A1CerebralIntroPage() {
                     </p>
                     <div className="space-y-3">
                       <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-muted/30">Decidido y directo</p>
+                        <p className="text-white/85">Decidido y directo</p>
                         <p className="text-xs text-muted-foreground mt-1">Impulsor</p>
                       </button>
                       <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-muted/30">Optimista e inspirador</p>
+                        <p className="text-white/85">Optimista e inspirador</p>
                         <p className="text-xs text-muted-foreground mt-1">Catalizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-muted/30">Paciente y considerado</p>
+                        <p className="text-white/85">Paciente y considerado</p>
                         <p className="text-xs text-muted-foreground mt-1">Estabilizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-red bg-red/20 rounded-lg text-left hover:bg-red/30 transition-all">

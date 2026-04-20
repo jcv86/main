@@ -123,7 +123,7 @@ export default function CicloCompletoDemoPage() {
             </span>
           </h1>
           
-          <p className="text-xl text-muted-foreground dark:text-muted/30 mb-8">
+          <p className="text-xl text-muted-foreground dark:text-white/85 mb-8">
             Un viaje guiado desde el autoconocimiento hasta la acción estratégica. 
             Completa todos los pilares y desbloquea tu potencial máximo.
           </p>
@@ -148,7 +148,7 @@ export default function CicloCompletoDemoPage() {
             {phases.map((phase) => (
               <div key={phase.id} className="flex-1 text-center">
                 <phase.icon className={`h-6 w-6 mx-auto mb-2 ${phase.id === 'a1' ? 'text-purple' : phase.id === 'a2' ? 'text-blue' : phase.id === 'a3' ? 'text-orange' : 'text-blue'}`} />
-                <p className="text-xs font-medium text-muted-foreground dark:text-muted/30">{phase.id.toUpperCase()}</p>
+                <p className="text-xs font-medium text-muted-foreground dark:text-white/85">{phase.id.toUpperCase()}</p>
               </div>
             ))}
           </div>
@@ -181,7 +181,7 @@ export default function CicloCompletoDemoPage() {
                 </CardHeader>
 
                 <CardContent className="space-y-4">
-                  <p className="text-sm text-muted-foreground dark:text-muted/30">
+                  <p className="text-sm text-muted-foreground dark:text-white/85">
                     {phase.description}
                   </p>
 

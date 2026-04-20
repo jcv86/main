@@ -122,7 +122,7 @@ export function DashboardContent() {
         <h1 className="text-5xl font-bold bg-background">
           Tu Dashboard
         </h1>
-        <p className="text-lg text-muted-foreground dark:text-muted/30">Bienvenido a tu centro de comando Despega</p>
+        <p className="text-lg text-muted-foreground dark:text-white/85">Bienvenido a tu centro de comando Despega</p>
       </div>
 
       {/* Debug Info - Remove in production */}
@@ -145,10 +145,10 @@ export function DashboardContent() {
         {/* Tests Completados */}
         <Card className="border-2 border-purple/20 dark:border-purple/50 bg-transparent shadow-md">
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-purple dark:text-purple/30">Tests Completados</CardTitle>
+            <CardTitle className="text-sm font-medium text-purple dark:text-purple-200">Tests Completados</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-purple dark:text-purple/20">{userData?.tests_completed || 0}</div>
+            <div className="text-3xl font-bold text-purple dark:text-purple-300">{userData?.tests_completed || 0}</div>
             <Progress value={((userData?.tests_completed || 0) / 6) * 100} className="mt-2" />
             <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">de 6 tests disponibles</p>
           </CardContent>
@@ -221,7 +221,7 @@ export function DashboardContent() {
                     <span className="text-2xl">✨</span>
                     <span className="text-2xl font-bold text-yellow">{testResults.test_results.i_score || 0}%</span>
                   </div>
-                  <p className="text-sm font-medium text-yellow dark:text-yellow/30">Catalizador</p>
+                  <p className="text-sm font-medium text-yellow dark:text-yellow-200">Catalizador</p>
                   <Progress value={testResults.test_results.i_score || 0} className="mt-2" />
                   <p className="text-xs text-yellow dark:text-yellow/40 mt-1">Entusiasmo y Conexión</p>
                 </div>
@@ -243,7 +243,7 @@ export function DashboardContent() {
                     <span className="text-2xl">🏗️</span>
                     <span className="text-2xl font-bold text-blue">{testResults.test_results.c_score || 0}%</span>
                   </div>
-                  <p className="text-sm font-medium text-blue dark:text-blue/30">Arquitecto</p>
+                  <p className="text-sm font-medium text-blue dark:text-blue-200">Arquitecto</p>
                   <Progress value={testResults.test_results.c_score || 0} className="mt-2" />
                   <p className="text-xs text-blue dark:text-blue/40 mt-1">Precisión y Análisis</p>
                 </div>
@@ -266,13 +266,13 @@ export function DashboardContent() {
               <div className="grid grid-cols-2 gap-4">
                 {testResults.test_results.camino_persona && (
                   <div className="p-3 bg-purple/5 dark:bg-purple/20 rounded border border-purple/20 dark:border-purple">
-                    <p className="text-sm font-medium text-purple dark:text-purple/30">Camino Personal</p>
+                    <p className="text-sm font-medium text-purple dark:text-purple-200">Camino Personal</p>
                     <p className="text-xs text-purple dark:text-purple/40 mt-1">Activado</p>
                   </div>
                 )}
                 {testResults.test_results.camino_profesional && (
                   <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded border border-blue/20 dark:border-blue">
-                    <p className="text-sm font-medium text-blue dark:text-blue/30">Camino Profesional</p>
+                    <p className="text-sm font-medium text-blue dark:text-blue-200">Camino Profesional</p>
                     <p className="text-xs text-blue dark:text-blue/40 mt-1">Activado</p>
                   </div>
                 )}

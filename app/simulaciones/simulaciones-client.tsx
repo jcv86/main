@@ -78,11 +78,11 @@ export default function EntrenamientoEntrevistasClient() {
       case "fácil":
         return "bg-green/10 dark:bg-green text-green dark:text-green/20"
       case "media":
-        return "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow/20"
+        return "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow-300"
       case "difícil":
         return "bg-red/10 dark:bg-red text-red dark:text-red/20"
       default:
-        return "bg-muted/10 dark:bg-gray-800 text-gray-800 dark:text-muted/20"
+        return "bg-muted/10 dark:bg-gray-800 text-gray-800 dark:text-white/80"
     }
   }
 
@@ -107,7 +107,7 @@ export default function EntrenamientoEntrevistasClient() {
         {/* Filtros */}
         <div className="mb-6 flex gap-4">
           <div>
-            <label className="text-sm font-medium text-muted-foreground dark:text-muted/30">Tipo</label>
+            <label className="text-sm font-medium text-muted-foreground dark:text-white/85">Tipo</label>
             <select
               value={filtroTipo}
               onChange={(e) => setFiltroTipo(e.target.value)}
@@ -121,7 +121,7 @@ export default function EntrenamientoEntrevistasClient() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-muted-foreground dark:text-muted/30">Dificultad</label>
+            <label className="text-sm font-medium text-muted-foreground dark:text-white/85">Dificultad</label>
             <select
               value={filtroDificultad}
               onChange={(e) => setFiltroDificultad(e.target.value)}

@@ -28,7 +28,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
   if (compact) {
     return (
       <div className="space-y-3">
-        <label className="text-sm font-semibold text-muted-foreground dark:text-muted/30">Tu Entrevistador</label>
+        <label className="text-sm font-semibold text-muted-foreground dark:text-white/85">Tu Entrevistador</label>
         <div className="grid grid-cols-3 gap-2">
           {INTERVIEWERS.map(interviewer => (
             <button
@@ -62,7 +62,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
     <Card className="bg-background">
       <div className="p-6 space-y-4">
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-muted-foreground dark:text-muted/30">Elige tu Entrevistador</label>
+          <label className="text-sm font-semibold text-muted-foreground dark:text-white/85">Elige tu Entrevistador</label>
           <p className="text-sm text-muted-foreground dark:text-muted-foreground">
             Selecciona un perfil profesional diferente para tener perspectivas variadas
           </p>

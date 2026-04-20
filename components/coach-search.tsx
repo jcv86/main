@@ -119,7 +119,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
                           por {book.author}
                         </p>
                         {book.description && (
-                          <p className="text-sm text-muted-foreground dark:text-muted/30 mb-2">
+                          <p className="text-sm text-muted-foreground dark:text-white/85 mb-2">
                             {book.description}
                           </p>
                         )}
@@ -130,7 +130,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
                             </span>
                           )}
                           {(book.key_topics || book.tags)?.slice(0, 2).map((tag) => (
-                            <span key={tag} className="text-xs bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue/30 px-2 py-1 rounded">
+                            <span key={tag} className="text-xs bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue-200 px-2 py-1 rounded">
                               {tag}
                             </span>
                           ))}

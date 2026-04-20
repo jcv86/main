@@ -211,7 +211,7 @@ export default function BibliotecaPage() {
             </div>
             <div>
               <h1 className="text-5xl font-bold text-purple400400">Biblioteca Digital</h1>
-              <p className="text-muted-foreground dark:text-muted/30 font-medium">
+              <p className="text-muted-foreground dark:text-white/85 font-medium">
                 {user
                   ? `Hola ${user.email?.split("@")[0]}, aquí están tus recursos personalizados`
                   : "Descubre recursos valiosos para tu crecimiento personal y profesional"}

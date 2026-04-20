@@ -98,7 +98,7 @@ export function PersonalizedRadarSystem() {
               {/* Seniority Level */}
               <div className="bg-background/50 p-3 rounded-[28px] border border-muted/70/50">
                 <p className="text-xs text-muted-foreground mb-1">Nivel profesional</p>
-                <p className="text-sm font-bold text-muted/30 capitalize">{personalization.seniority_level}</p>
+                <p className="text-sm font-bold text-white/85 capitalize">{personalization.seniority_level}</p>
               </div>
             </div>
 
@@ -120,7 +120,7 @@ export function PersonalizedRadarSystem() {
             {personalization.relevant_companies.length > 0 && (
               <div className="border-t border-muted/70/50 pt-4">
                 <p className="text-xs text-muted-foreground mb-2">Top empresas contratando:</p>
-                <p className="text-sm text-muted/30">
+                <p className="text-sm text-white/85">
                   {personalization.relevant_companies.join(' • ')}
                 </p>
               </div>

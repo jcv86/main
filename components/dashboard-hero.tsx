@@ -73,7 +73,7 @@ export function DashboardHero({
               <h2 className={`text-2xl font-bold ${profile.color}`}>
                 {profile.name}
               </h2>
-              <p className="text-muted-foreground dark:text-muted/30 font-medium">
+              <p className="text-muted-foreground dark:text-white/85 font-medium">
                 {profile.description}
               </p>
             </div>

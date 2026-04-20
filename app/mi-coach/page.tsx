@@ -252,7 +252,7 @@ export default function MiCoachPage() {
                   {/* Quick Suggestions - Mostrar solo si no hay mensajes */}
                   {messages.length === 0 && (
                     <div className="space-y-3">
-                      <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground dark:text-muted/20">
+                      <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground dark:text-white/80">
                         <Lightbulb className="w-4 h-4 text-amber-500" />
                         Preguntas para empezar
                       </div>
@@ -266,7 +266,7 @@ export default function MiCoachPage() {
                             <div className="flex items-start justify-between gap-2">
                               <div>
                                 <p className="font-medium text-xs text-muted/90 dark:text-muted/10 group-hover:text-purple dark:group-hover:text-purple/30">{suggestion.title}</p>
-                                <p className="text-xs text-muted-foreground dark:text-muted/20 mt-1">{suggestion.prompt.slice(0, 40)}...</p>
+                                <p className="text-xs text-muted-foreground dark:text-white/80 mt-1">{suggestion.prompt.slice(0, 40)}...</p>
                               </div>
                               <ArrowRight className="w-4 h-4 text-muted-foreground dark:text-muted-foreground group-hover:text-purple dark:group-hover:text-purple/40 flex-shrink-0 mt-0.5" />
                             </div>
@@ -349,7 +349,7 @@ export default function MiCoachPage() {
                           <h3 className="font-bold text-sm text-muted/90 dark:text-muted/10">{book.title}</h3>
                           <p className="text-xs text-muted-foreground dark:text-muted-foreground">{book.author}</p>
                           {book.description && (
-                            <p className="text-xs mt-2 text-muted-foreground dark:text-muted/30">{book.description.slice(0, 80)}...</p>
+                            <p className="text-xs mt-2 text-muted-foreground dark:text-white/85">{book.description.slice(0, 80)}...</p>
                           )}
                           
                           {/* Reference Links */}
@@ -419,7 +419,7 @@ export default function MiCoachPage() {
                 Coaching 24/7
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-sm text-muted-foreground dark:text-muted/20">
+            <CardContent className="text-sm text-muted-foreground dark:text-white/80">
               Conversaciones ilimitadas sobre tu carrera, estrategia personal y mentoría.
             </CardContent>
           </Card>
@@ -431,7 +431,7 @@ export default function MiCoachPage() {
                 Cerebro Inteligente
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-sm text-muted-foreground dark:text-muted/20">
+            <CardContent className="text-sm text-muted-foreground dark:text-white/80">
               Busca de forma inteligente a través de contenido personalizado.
             </CardContent>
           </Card>
@@ -443,7 +443,7 @@ export default function MiCoachPage() {
                 Sugerencias
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-sm text-muted-foreground dark:text-muted/20">
+            <CardContent className="text-sm text-muted-foreground dark:text-white/80">
               Ideas y recomendaciones personalizadas basadas en tu perfil.
             </CardContent>
           </Card>

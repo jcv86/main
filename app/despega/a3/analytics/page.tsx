@@ -157,7 +157,7 @@ export default function A3AnalyticsPage() {
               {userData?.strengths.map((strength: string, idx: number) => (
                 <div key={idx} className="flex items-center gap-3 p-3 rounded-[28px] bg-green/5 dark:bg-green/20">
                   <span className="text-green dark:text-green/40 font-bold">+</span>
-                  <span className="text-muted-foreground dark:text-muted/30">{strength}</span>
+                  <span className="text-muted-foreground dark:text-white/85">{strength}</span>
                 </div>
               ))}
             </CardContent>
@@ -176,7 +176,7 @@ export default function A3AnalyticsPage() {
               {userData?.improvements.map((improvement: string, idx: number) => (
                 <div key={idx} className="flex items-center gap-3 p-3 rounded-[28px] bg-orange/5 dark:bg-orange/20">
                   <span className="text-orange dark:text-orange/40 font-bold">→</span>
-                  <span className="text-muted-foreground dark:text-muted/30">{improvement}</span>
+                  <span className="text-muted-foreground dark:text-white/85">{improvement}</span>
                 </div>
               ))}
             </CardContent>
@@ -198,7 +198,7 @@ export default function A3AnalyticsPage() {
               ].map((entry, idx) => (
                 <div key={idx} className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-muted-foreground dark:text-muted/30">{entry.date}</span>
+                    <span className="text-sm font-medium text-muted-foreground dark:text-white/85">{entry.date}</span>
                     <Badge variant="secondary">{entry.level}</Badge>
                   </div>
                   <div className="flex items-center gap-3">
@@ -216,7 +216,7 @@ export default function A3AnalyticsPage() {
           <CardHeader>
             <CardTitle className="text-lg">Recomendaciones del Coach IA</CardTitle>
           </CardHeader>
-          <CardContent className="text-muted-foreground dark:text-muted/30 space-y-3">
+          <CardContent className="text-muted-foreground dark:text-white/85 space-y-3">
             <p>
               Basado en tu análisis: Tu comunicación es excepcional, pero necesitas ser más específico con números.
             </p>

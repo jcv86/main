@@ -58,7 +58,7 @@ export function DailyCareerTip({ careerStage = "all" }: { careerStage?: string }
     <Card className="border-purple/20 dark:border-muted/70 bg-background">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-semibold text-purple dark:text-purple/20 flex items-center gap-2">
+          <CardTitle className="text-base font-semibold text-purple dark:text-purple-300 flex items-center gap-2">
             <Lightbulb className="h-5 w-5 text-purple dark:text-purple/40" />
             Consejo del Día
           </CardTitle>
@@ -69,7 +69,7 @@ export function DailyCareerTip({ careerStage = "all" }: { careerStage?: string }
       </CardHeader>
       <CardContent>
         <h4 className="font-semibold text-foreground dark:text-white mb-2">{tip.title}</h4>
-        <p className="text-sm text-muted-foreground dark:text-muted/30 leading-relaxed">{tip.content}</p>
+        <p className="text-sm text-muted-foreground dark:text-white/85 leading-relaxed">{tip.content}</p>
       </CardContent>
     </Card>
   )

@@ -67,7 +67,7 @@ export function InsightCard({ title, content, icon, index, color, emoji }: Insig
               <h3 className="font-semibold text-muted/90 dark:text-white mb-2 text-sm md:text-base">
                 {title}
               </h3>
-              <p className="text-sm text-muted-foreground dark:text-muted/30 leading-relaxed">
+              <p className="text-sm text-muted-foreground dark:text-white/85 leading-relaxed">
                 {content}
               </p>
             </div>

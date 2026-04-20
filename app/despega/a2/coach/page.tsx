@@ -97,7 +97,7 @@ export default function A2ChatCoachPage() {
                 Profundización Cognitiva - Sofía & Dani
               </p>
             </div>
-            <Badge variant="outline" className="bg-blue/5 dark:bg-blue text-blue dark:text-blue/20 border-blue/30 dark:border-blue/10">
+            <Badge variant="outline" className="bg-blue/5 dark:bg-blue text-blue dark:text-blue-300 border-blue/30 dark:border-blue/10">
               A2 – Disponible 24/7
             </Badge>
           </div>
@@ -194,7 +194,7 @@ export default function A2ChatCoachPage() {
             <CardTitle className="text-base">Preguntas útiles para explorar</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2 text-sm text-muted-foreground dark:text-muted/30">
+            <div className="space-y-2 text-sm text-muted-foreground dark:text-white/85">
               <p>• ¿Cómo varía mi patrón según el contexto laboral o personal?</p>
               <p>• ¿Qué tensiones internas he notado entre lo que siento y lo que hago?</p>
               <p>• ¿En qué situaciones actúo diferente a mi patrón típico?</p>

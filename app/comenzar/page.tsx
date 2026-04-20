@@ -21,7 +21,7 @@ export default function ComenzarPage() {
             Tu Transformación Comienza Aquí
           </h1>
 
-          <p className="text-xl text-muted-foreground dark:text-muted/30 mb-12">
+          <p className="text-xl text-muted-foreground dark:text-white/85 mb-12">
             Sistema completamente integrado de 4 pilares. 
             <br />
             Descubrimiento → Exploración → Entrenamiento → Acción
@@ -75,7 +75,7 @@ export default function ComenzarPage() {
                 <CardTitle>Para Testing & QA</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-muted-foreground dark:text-muted/30">
+                <p className="text-muted-foreground dark:text-white/85">
                   Prueba rápidamente la integración de todos los pilares sin necesidad de hacer el ciclo completo.
                 </p>
                 <div className="space-y-2">
@@ -105,7 +105,7 @@ export default function ComenzarPage() {
                 <CardTitle>Para Usuarios Nuevos</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-muted-foreground dark:text-muted/30">
+                <p className="text-muted-foreground dark:text-white/85">
                   Inicia tu ciclo de transformación completo. Completarás los 4 pilares en orden.
                 </p>
                 <div className="space-y-2">

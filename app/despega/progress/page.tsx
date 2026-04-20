@@ -169,7 +169,7 @@ export default function HowToEarnXPPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <p className="text-muted/30 mb-4">
+            <p className="text-white/85 mb-4">
               ¡No rompas tu racha! Mientras más días consecutivos estés activo, mayor el multiplicador de XP:
             </p>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -179,7 +179,7 @@ export default function HowToEarnXPPage() {
                   className="p-4 rounded-[28px] bg-muted/80/50 border border-orange/30 text-center"
                 >
                   <p className="font-bold text-lg text-orange/40">{benefit.days}</p>
-                  <p className="text-sm text-muted/30">{benefit.bonus}</p>
+                  <p className="text-sm text-white/85">{benefit.bonus}</p>
                 </div>
               ))}
             </div>
@@ -197,7 +197,7 @@ export default function HowToEarnXPPage() {
           <CardContent className="space-y-3">
             <div className="space-y-2">
               <p className="font-semibold text-foreground">✨ Maximiza tu XP:</p>
-              <ul className="text-sm text-muted/30 space-y-1 ml-4">
+              <ul className="text-sm text-white/85 space-y-1 ml-4">
                 <li>• Completa los 3 desafíos diarios para el bonus de 50 XP</li>
                 <li>• Mantén tu racha - el multiplicador te puede dar hasta 2x más XP</li>
                 <li>• Avanza en las fases - los bonificadores finales son enormes (500+ XP)</li>
@@ -218,7 +218,7 @@ export default function HowToEarnXPPage() {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <p className="text-muted/30">
+              <p className="text-white/85">
                 <span className="font-bold">1,000 XP = 1 Nivel</span>
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

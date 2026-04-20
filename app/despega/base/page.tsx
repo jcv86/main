@@ -196,7 +196,7 @@ export default function BasePage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground dark:text-muted/30 mb-4">
+            <p className="text-sm text-muted-foreground dark:text-white/85 mb-4">
               Estás en <strong>Sprint 1: Fundamentos</strong> (días 1-30). Continúa con tus acciones diarias y aprenderás los pilares básicos de tu transformación.
             </p>
             <div className="flex gap-3">

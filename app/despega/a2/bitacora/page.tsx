@@ -171,7 +171,7 @@ export default function BitacoraPage() {
                           className={`px-4 py-2 rounded-lg font-medium transition ${
                             newEntry.type === type
                               ? 'bg-blue text-white'
-                              : 'bg-muted/10 dark:bg-card text-muted-foreground dark:text-muted/30'
+                              : 'bg-muted/10 dark:bg-card text-muted-foreground dark:text-white/85'
                           }`}
                         >
                           {type === 'daily' ? 'Reflexión Diaria' : 'Revisión Semanal'}
@@ -294,7 +294,7 @@ export default function BitacoraPage() {
               {entries.length === 0 ? (
                 <Card className="border-0 shadow-sm">
                   <CardContent className="py-12 text-center">
-                    <BookOpen className="w-12 h-12 text-muted/30 dark:text-muted-foreground mx-auto mb-4" />
+                    <BookOpen className="w-12 h-12 text-white/85 dark:text-muted-foreground mx-auto mb-4" />
                     <p className="text-muted-foreground dark:text-muted-foreground">Aún no hay entradas. ¡Comienza tu primera reflexión!</p>
                   </CardContent>
                 </Card>
@@ -322,7 +322,7 @@ export default function BitacoraPage() {
                       </div>
 
                       {/* Reflection */}
-                      <p className="text-muted-foreground dark:text-muted/30 leading-relaxed">{entry.reflection}</p>
+                      <p className="text-muted-foreground dark:text-white/85 leading-relaxed">{entry.reflection}</p>
 
                       {/* Insights */}
                       {entry.insights && entry.insights.length > 0 && (
@@ -353,7 +353,7 @@ export default function BitacoraPage() {
                       {entry.nextSteps && (
                         <div className="p-3 bg-blue/5 dark:bg-blue rounded-[28px] border border-blue/30 dark:border-blue/10">
                           <p className="text-sm font-medium text-blue dark:text-blue/10 mb-1">Próximos Pasos</p>
-                          <p className="text-sm text-blue dark:text-blue/20">{entry.nextSteps}</p>
+                          <p className="text-sm text-blue dark:text-blue-300">{entry.nextSteps}</p>
                         </div>
                       )}
                     </CardContent>

@@ -226,7 +226,7 @@ export function A3ProgressTracker({ userId, level }: A3ProgressTrackerProps) {
                 progress.strengthAreas.map((area, i) => (
                   <div key={i} className="flex items-center gap-2 p-2 rounded-[28px] bg-green/5 dark:bg-green/20">
                     <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0" />
-                    <p className="text-sm text-muted-foreground dark:text-muted/30">{area}</p>
+                    <p className="text-sm text-muted-foreground dark:text-white/85">{area}</p>
                   </div>
                 ))
               ) : (
@@ -249,7 +249,7 @@ export function A3ProgressTracker({ userId, level }: A3ProgressTrackerProps) {
                 progress.improvementAreas.map((area, i) => (
                   <div key={i} className="flex items-center gap-2 p-2 rounded-[28px] bg-orange/5 dark:bg-orange/20">
                     <Target className="w-4 h-4 text-orange dark:text-orange/40 flex-shrink-0" />
-                    <p className="text-sm text-muted-foreground dark:text-muted/30">{area}</p>
+                    <p className="text-sm text-muted-foreground dark:text-white/85">{area}</p>
                   </div>
                 ))
               ) : (

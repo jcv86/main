@@ -63,7 +63,7 @@ export default function A3IntroPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-muted-foreground dark:text-muted/30">
+              <p className="text-muted-foreground dark:text-white/85">
                 A3 es tu fase de práctica de alto impacto. Realizarás simulaciones de entrevistas estructuradas donde recibirás feedback inmediato de IA y podrás iterar tu desempeño hasta llegar a la confianza de nivel profesional.
               </p>
               <div className="bg-blue/5 dark:bg-cyan-950 p-4 rounded-[28px] border border-blue/30 dark:border-cyan">

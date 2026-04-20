@@ -76,8 +76,8 @@ const RECURSOS_DEFAULT: Recurso[] = [
 
 const getTipoColor = (tipo: string) => {
   const colors: Record<string, { badge: string; icon: string }> = {
-    libro: { badge: 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue/30', icon: '📚' },
-    articulo: { badge: 'bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple/30', icon: '📄' },
+    libro: { badge: 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-200', icon: '📚' },
+    articulo: { badge: 'bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple-200', icon: '📄' },
     podcast: { badge: 'bg-green/10 text-green dark:bg-green/30 dark:text-green/30', icon: '🎧' },
     video: { badge: 'bg-red/10 text-red dark:bg-red/30 dark:text-red/30', icon: '🎬' },
     reporte: { badge: 'bg-orange/10 text-orange dark:bg-orange/30 dark:text-orange/30', icon: '📊' },
@@ -90,7 +90,7 @@ const getCategoriaColor = (categoria: string) => {
     'Liderazgo': 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-indigo-300',
     'Emprendimiento': 'bg-red/10 text-red dark:bg-red/30 dark:text-pink-300',
     'Negociación': 'bg-cyan/10 text-cyan dark:bg-cyan/30 dark:text-cyan/30',
-    'Toma de Decisiones': 'bg-yellow/10 text-yellow dark:bg-yellow/30 dark:text-yellow/30',
+    'Toma de Decisiones': 'bg-yellow/10 text-yellow dark:bg-yellow/30 dark:text-yellow-200',
   }
   return colors[categoria] || 'bg-muted/10 text-gray-800'
 }

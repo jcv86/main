@@ -88,7 +88,7 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
                   </h4>
                   <p className={`text-sm mt-1 ${
                     isCurrent
-                      ? "text-blue dark:text-blue/20"
+                      ? "text-blue dark:text-blue-300"
                       : isCompleted
                       ? "text-green dark:text-green/20"
                       : "text-muted-foreground dark:text-muted-foreground"

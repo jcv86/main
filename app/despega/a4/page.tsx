@@ -59,7 +59,7 @@ export default function A4Page() {
           <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance bg-background">
             Tu Dashboard Ejecutivo
           </h1>
-          <p className="text-xl text-muted-foreground dark:text-muted/30 mb-2">
+          <p className="text-xl text-muted-foreground dark:text-white/85 mb-2">
             Coach IA 24/7 • Contexto de Mercado • Decisiones Estratégicas
           </p>
           <p className="text-muted-foreground dark:text-muted-foreground">

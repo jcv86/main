@@ -124,7 +124,7 @@ export default function DespegazoDashboard() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-purple/50" />
-          <p className="text-muted/30">Cargando tu dashboard...</p>
+          <p className="text-white/85">Cargando tu dashboard...</p>
         </div>
       </div>
     )
@@ -221,7 +221,7 @@ export default function DespegazoDashboard() {
                 {readiness.recommendations.slice(0, 3).map((rec, i) => (
                   <div key={i} className="flex gap-3 items-start">
                     <Zap className="w-5 h-5 text-purple/40 flex-shrink-0 mt-1" />
-                    <p className="text-muted/20">{rec}</p>
+                    <p className="text-white/80">{rec}</p>
                   </div>
                 ))}
               </div>
@@ -238,7 +238,7 @@ export default function DespegazoDashboard() {
             <ul className="space-y-2">
               {readiness.strengths.length > 0 ? (
                 readiness.strengths.map((strength, i) => (
-                  <li key={i} className="text-muted/30 text-sm">{strength}</li>
+                  <li key={i} className="text-white/85 text-sm">{strength}</li>
                 ))
               ) : (
                 <p className="text-muted-foreground">Completa más etapas</p>
@@ -253,7 +253,7 @@ export default function DespegazoDashboard() {
             <ul className="space-y-2">
               {readiness.gaps.length > 0 ? (
                 readiness.gaps.map((gap, i) => (
-                  <li key={i} className="text-muted/30 text-sm">{gap}</li>
+                  <li key={i} className="text-white/85 text-sm">{gap}</li>
                 ))
               ) : (
                 <p className="text-emerald-400 font-semibold">¡Excelente, todo completo!</p>
@@ -304,7 +304,7 @@ export default function DespegazoDashboard() {
                 }}
                 className={`w-full group/btn ${
                   stage.completed
-                    ? 'bg-muted/70 hover:bg-muted/60 text-muted/30'
+                    ? 'bg-muted/70 hover:bg-muted/60 text-white/85'
                     : `bg-background`}`}
               >
                 {stage.completed ? 'Ver Detalles' : 'Continuar'}

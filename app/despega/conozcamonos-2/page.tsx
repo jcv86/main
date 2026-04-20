@@ -197,12 +197,12 @@ export default function Conozcamonos2Page() {
         {/* Header with brandbook styling */}
         <div className="text-center mb-8">
           <div className="inline-block px-4 py-2 bg-background">
-            <p className="text-sm font-semibold text-blue dark:text-blue/30">Conozcámonos 2: Tu Ruta</p>
+            <p className="text-sm font-semibold text-blue dark:text-blue-200">Conozcámonos 2: Tu Ruta</p>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold bg-background">
             Explora y Diseña Tu Ruta
           </h1>
-          <p className="text-muted-foreground dark:text-muted/30 mb-4">
+          <p className="text-muted-foreground dark:text-white/85 mb-4">
             {currentStep === 'paso1'
               ? 'Paso 1: Define tu objetivo y contexto profesional'
               : 'Paso 2: Personaliza los detalles de tu desarrollo'}
@@ -320,7 +320,7 @@ export default function Conozcamonos2Page() {
                           handleAnswer(question.id, updated)
                         }}
                       />
-                      <span className="text-muted-foreground dark:text-muted/30">{opt}</span>
+                      <span className="text-muted-foreground dark:text-white/85">{opt}</span>
                     </label>
                   ))}
                 </div>

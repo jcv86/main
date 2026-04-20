@@ -163,7 +163,7 @@ export default function GuidedTrainingPage() {
 
             {/* Coach Content Area */}
             <div className="bg-background">
-              <div className="space-y-4 text-muted-foreground dark:text-muted/30">
+              <div className="space-y-4 text-muted-foreground dark:text-white/85">
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-lg text-muted/90 dark:text-white flex items-center gap-2">
                     <Lightbulb className="w-5 h-5 text-blue dark:text-blue/40" />

@@ -16,7 +16,7 @@ export default function AuthPage() {
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="flex flex-col items-center gap-4">
         <Loader2 className="h-8 w-8 animate-spin text-purple" />
-        <p className="text-muted-foreground dark:text-muted/30">Redirigiendo a inicio de sesión...</p>
+        <p className="text-muted-foreground dark:text-white/85">Redirigiendo a inicio de sesión...</p>
       </div>
     </div>
   )

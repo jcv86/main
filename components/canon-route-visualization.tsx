@@ -128,7 +128,7 @@ export function CanonRouteVisualization({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-purple dark:text-purple/20 font-semibold leading-relaxed">
+            <p className="text-lg text-purple dark:text-purple-300 font-semibold leading-relaxed">
               "{masterInsight}"
             </p>
           </CardContent>
@@ -158,7 +158,7 @@ export function CanonRouteVisualization({
           <CardContent>
             <ul className="space-y-3">
               {recomendacionesPersonalizadas.map((rec, idx) => (
-                <li key={idx} className="flex gap-3 text-blue dark:text-blue/20">
+                <li key={idx} className="flex gap-3 text-blue dark:text-blue-300">
                   <div className="w-1.5 h-1.5 rounded-[20px] bg-blue/50 dark:bg-blue/40 flex-shrink-0 mt-2" />
                   <span className="text-sm">{rec}</span>
                 </li>

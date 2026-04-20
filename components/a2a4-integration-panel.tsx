@@ -62,7 +62,7 @@ export function A2A4IntegrationPanel() {
         </div>
 
         {/* WHY TOGETHER */}
-        <div className="bg-purple/10 dark:bg-purple/30 rounded-[28px] p-3 text-sm text-muted-foreground dark:text-muted/30 space-y-2">
+        <div className="bg-purple/10 dark:bg-purple/30 rounded-[28px] p-3 text-sm text-muted-foreground dark:text-white/85 space-y-2">
           <p className="font-semibold text-purple dark:text-purple/10">Por qué funcionan mejor juntas:</p>
           <ul className="space-y-1 text-xs">
             <li>• Tu plan (A2) te enfoca en lo que QUIERES hacer</li>

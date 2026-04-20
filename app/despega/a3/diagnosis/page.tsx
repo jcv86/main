@@ -40,7 +40,7 @@ export default function DiagnosisPage() {
           <CardHeader>
             <CardTitle className="text-base">¿Por qué esta diagnosis?</CardTitle>
           </CardHeader>
-          <CardContent className="text-sm text-muted-foreground dark:text-muted/30 space-y-2">
+          <CardContent className="text-sm text-muted-foreground dark:text-white/85 space-y-2">
             <p>
               Cada persona tiene un punto de partida diferente. Esta diagnosis nos ayuda a:
             </p>

@@ -214,7 +214,7 @@ export default function TestsPage() {
             <Button
               variant="outline"
               onClick={() => router.push("/test-verification")}
-              className="text-xs sm:text-sm bg-blue/5 dark:bg-blue border-blue/20 dark:border-blue/10 text-blue dark:text-blue/30 hover:bg-blue/10 dark:hover:bg-blue flex-1 sm:flex-none"
+              className="text-xs sm:text-sm bg-blue/5 dark:bg-blue border-blue/20 dark:border-blue/10 text-blue dark:text-blue-200 hover:bg-blue/10 dark:hover:bg-blue flex-1 sm:flex-none"
               size={isMobile ? "sm" : "default"}
             >
               {isMobile ? <Smartphone className="h-4 w-4 mr-2" /> : <Monitor className="h-4 w-4 mr-2" />}
@@ -263,7 +263,7 @@ export default function TestsPage() {
                   <Zap className="h-4 w-4 sm:h-5 sm:w-5 text-blue dark:text-blue/40" />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-semibold text-blue dark:text-blue/30 text-sm sm:text-base">
+                  <h3 className="font-semibold text-blue dark:text-blue-200 text-sm sm:text-base">
                     Verificación de Tests en Tiempo Real
                   </h3>
                   <p className="text-xs sm:text-sm text-blue dark:text-blue/40">
@@ -310,7 +310,7 @@ export default function TestsPage() {
                 <div className="flex items-center gap-3">
                   <nextTest.icon className="h-4 w-4 sm:h-5 sm:w-5 text-blue dark:text-blue/40 flex-shrink-0" />
                   <div className="min-w-0">
-                    <p className="font-medium text-blue dark:text-blue/30 text-sm sm:text-base truncate">
+                    <p className="font-medium text-blue dark:text-blue-200 text-sm sm:text-base truncate">
                       Recomendado: {nextTest.title}
                     </p>
                     <p className="text-xs sm:text-sm text-blue dark:text-blue/40">
@@ -404,7 +404,7 @@ export default function TestsPage() {
                             test.difficulty === "Beginner"
                               ? "bg-green/10 dark:bg-green text-green dark:text-green/30 border-green/20 dark:border-green"
                               : test.difficulty === "Intermediate"
-                                ? "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow/30 border-yellow/20 dark:border-yellow"
+                                ? "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow-200 border-yellow/20 dark:border-yellow"
                                 : "bg-red/10 dark:bg-red text-red dark:text-red/30 border-red/20 dark:border-red"`}
                           }`}
                         >
@@ -414,7 +414,7 @@ export default function TestsPage() {
                               ? "Intermedio"
                               : "Avanzado"}
                         </Badge>
-                        <Badge variant="outline" className="text-xs dark:border-muted/60 dark:text-muted/30">
+                        <Badge variant="outline" className="text-xs dark:border-muted/60 dark:text-white/85">
                           {test.category === "Personality"
                             ? "Personalidad"
                             : test.category === "Skills"

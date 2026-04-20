@@ -121,20 +121,20 @@ export function CanonDashboardSection() {
       <Card className="bg-background">
         <CardHeader>
           <CardTitle className="text-white text-2xl">Ruta no generada</CardTitle>
-          <CardDescription className="text-muted/30">Completa Conozcámonos 2 para generar tu ruta personalizada</CardDescription>
+          <CardDescription className="text-white/85">Completa Conozcámonos 2 para generar tu ruta personalizada</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-muted/30">
+          <p className="text-white/85">
             Todavía no hemos generado tu ruta de 30/60/90 días. Responde 9 preguntas más sobre tu contexto de ejecución y generaremos acciones personalizadas basadas en el motor CANON.
           </p>
           <div className="bg-muted/70/50 border border-muted/60 rounded-[28px] p-4 space-y-3">
-            <p className="text-sm text-muted/30">
+            <p className="text-sm text-white/85">
               <span className="font-semibold text-emerald-400">✓ Ya completaste:</span> Test A1 (Perfil DISC)
             </p>
-            <p className="text-sm text-muted/30">
+            <p className="text-sm text-white/85">
               <span className="font-semibold text-blue/40">→ Siguiente:</span> Conozcámonos 2 - Paso 1 (Contexto de ejecución)
             </p>
-            <p className="text-sm text-muted/30">
+            <p className="text-sm text-white/85">
               <span className="font-semibold text-purple/40">📊 Resultado:</span> Ruta 30/60/90 personalizada con trazabilidad
             </p>
           </div>

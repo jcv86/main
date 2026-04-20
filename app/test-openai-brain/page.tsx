@@ -208,19 +208,19 @@ export default function TestOpenAIInsightsPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-muted/30">Todas las fases completadas</span>
+                  <span className="text-white/85">Todas las fases completadas</span>
                   <Badge className={results.validation.all_phases_completed ? 'bg-green' : 'bg-red'}>
                     {results.validation.all_phases_completed ? 'EXITOSO' : 'FALLIDO'}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-muted/30">Cadena BRAIN conectada</span>
+                  <span className="text-white/85">Cadena BRAIN conectada</span>
                   <Badge className={results.validation.brain_connected ? 'bg-green' : 'bg-red'}>
                     {results.validation.brain_connected ? 'EXITOSO' : 'FALLIDO'}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-muted/30">Tiempo de respuesta API</span>
+                  <span className="text-white/85">Tiempo de respuesta API</span>
                   <Badge variant={results.performance.total_ms < 10000 ? 'default' : 'destructive'}>
                     {results.performance.total_ms}ms
                   </Badge>
@@ -235,7 +235,7 @@ export default function TestOpenAIInsightsPage() {
           <CardHeader>
             <CardTitle>Cómo Funciona Tu Viaje de Descubrimiento</CardTitle>
           </CardHeader>
-          <CardContent className="text-sm text-muted/30 space-y-3">
+          <CardContent className="text-sm text-white/85 space-y-3">
             <p className="font-semibold text-muted/10">4 Fases. 1 Insight Maestro. Tu Transformación Comienza.</p>
             <div className="space-y-2 text-muted-foreground">
               <p><span className="text-blue/30 font-semibold">Fase 1:</span> Descubrimos quién eres realmente (tu patrón natural)</p>

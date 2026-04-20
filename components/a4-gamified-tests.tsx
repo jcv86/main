@@ -111,8 +111,8 @@ export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4Gamif
   const getNivelColor = (nivel: string) => {
     const colors: Record<string, string> = {
       "basico": "bg-green/10 text-green dark:bg-green/40 dark:text-green/30",
-      "intermedio": "bg-blue/10 text-blue dark:bg-blue/40 dark:text-blue/30",
-      "avanzado": "bg-purple/10 text-purple dark:bg-purple/40 dark:text-purple/30",
+      "intermedio": "bg-blue/10 text-blue dark:bg-blue/40 dark:text-blue-200",
+      "avanzado": "bg-purple/10 text-purple dark:bg-purple/40 dark:text-purple-200",
     }
     return colors[nivel] || "bg-muted/10"
   }

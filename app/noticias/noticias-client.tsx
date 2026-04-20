@@ -672,7 +672,7 @@ export default function NoticiasClient() {
                 {savedArticles.size === 0 && (
                   <Card>
                     <CardContent className="p-12 text-center">
-                      <Heart className="h-12 w-12 text-muted/30 mx-auto mb-4" />
+                      <Heart className="h-12 w-12 text-white/85 mx-auto mb-4" />
                       <p className="text-muted-foreground">No has guardado artículos todavía.</p>
                       <p className="text-sm text-muted-foreground mt-1">Guarda artículos para leerlos después.</p>
                     </CardContent>
@@ -702,7 +702,7 @@ export default function NoticiasClient() {
                 {readArticles.size === 0 && (
                   <Card>
                     <CardContent className="p-12 text-center">
-                      <Briefcase className="h-12 w-12 text-muted/30 mx-auto mb-4" />
+                      <Briefcase className="h-12 w-12 text-white/85 mx-auto mb-4" />
                       <p className="text-muted-foreground">No has leído artículos todavía.</p>
                       <p className="text-sm text-muted-foreground mt-1">Tu historial de lectura aparecerá aquí.</p>
                     </CardContent>

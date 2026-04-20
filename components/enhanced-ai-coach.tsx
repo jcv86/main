@@ -544,7 +544,7 @@ ${
                             <Star
                               key={i}
                               className={`h-3 w-3 ${`}
-                                i < message.rating! ? "text-yellow/40 fill-current" : "text-muted/30"`}
+                                i < message.rating! ? "text-yellow/40 fill-current" : "text-white/85"`}
                               }`}
                             />
                           ))}
@@ -709,7 +709,7 @@ ${
                           <Star
                             key={i}
                             className={`h-3 w-3 ${`}
-                              i < interaction.user_rating ? "text-yellow/40 fill-current" : "text-muted/30"`}
+                              i < interaction.user_rating ? "text-yellow/40 fill-current" : "text-white/85"`}
                             }`}
                           />
                         ))}

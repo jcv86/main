@@ -67,7 +67,7 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
           </h1>
 
           {/* Subheadline */}
-          <p className="text-lg md:text-xl text-muted/30 max-w-3xl mb-8 leading-relaxed">
+          <p className="text-lg md:text-xl text-white/85 max-w-3xl mb-8 leading-relaxed">
             No es coaching. No es motivación. Es un sistema científico y estructurado que te transforma desde el autoconocimiento hasta la ejecución en el mercado laboral real.
           </p>
 
@@ -145,7 +145,7 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
                   </p>
 
                   {/* Content Line */}
-                  <p className="text-muted/30 text-sm leading-relaxed mb-6">
+                  <p className="text-white/85 text-sm leading-relaxed mb-6">
                     {phase.content}
                   </p>
 
@@ -156,11 +156,11 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
                   <div className="space-y-3">
                     <div className="flex items-start gap-2">
                       <CheckCircle size={16} className={cn('mt-1 flex-shrink-0', colors.accent)} />
-                      <p className="text-xs text-muted/30">Autoevaluación científica</p>
+                      <p className="text-xs text-white/85">Autoevaluación científica</p>
                     </div>
                     <div className="flex items-start gap-2">
                       <CheckCircle size={16} className={cn('mt-1 flex-shrink-0', colors.accent)} />
-                      <p className="text-xs text-muted/30">Feedback personalizado</p>
+                      <p className="text-xs text-white/85">Feedback personalizado</p>
                     </div>
                   </div>
                 </div>

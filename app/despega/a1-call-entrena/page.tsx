@@ -106,7 +106,7 @@ export default function A1CallEntrenaPage() {
               <div className="text-5xl font-black text-transparent bg-background">
                 {profileNames[profile]}
               </div>
-              <p className="text-lg text-muted/30">Completaste tu Call Entrena</p>
+              <p className="text-lg text-white/85">Completaste tu Call Entrena</p>
               <p className="text-sm text-muted-foreground mt-2">Una sesión de entrenamiento para practicar respuestas en entrevistas</p>
             </div>
 
@@ -116,7 +116,7 @@ export default function A1CallEntrenaPage() {
                 {responses.map((response, idx) => (
                   <div key={idx} className="border border-muted/60 rounded p-3">
                     <p className="text-xs text-muted-foreground mb-1">Pregunta {idx + 1}:</p>
-                    <p className="text-muted/20">{response}</p>
+                    <p className="text-white/80">{response}</p>
                   </div>
                 ))}
               </div>

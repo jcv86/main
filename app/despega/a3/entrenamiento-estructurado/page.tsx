@@ -25,7 +25,7 @@ export default function StructuredTrainingPage() {
           
           <div className="text-center py-12">
             <h1 className="text-4xl font-bold text-cyan/40 mb-4">¡Entrenamiento Completado!</h1>
-            <p className="text-muted/30 text-lg mb-8">
+            <p className="text-white/85 text-lg mb-8">
               Excelente trabajo. Ahora tienes el material para sonar como un profesional en tu próxima entrevista.
             </p>
             <Button 

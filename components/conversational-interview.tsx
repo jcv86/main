@@ -384,7 +384,7 @@ export function ConversationalInterview({
             <div className="space-y-3 max-h-64 overflow-y-auto">
               {interviewerMessage && (
                 <div className="bg-muted/10 dark:bg-transparent p-3 rounded-lg">
-                  <p className="text-sm font-semibold text-muted-foreground dark:text-muted/30 mb-1">Entrevistador</p>
+                  <p className="text-sm font-semibold text-muted-foreground dark:text-white/85 mb-1">Entrevistador</p>
                   <p className="text-sm">{interviewerMessage}</p>
                 </div>
               )}

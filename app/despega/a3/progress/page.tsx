@@ -174,7 +174,7 @@ export default function ProgressPage() {
                 <Card key={item.badge} className="bg-background">
                   <CardContent className="pt-6 text-center">
                     <div className="text-3xl mb-2">{item.badge}</div>
-                    <p className="text-sm text-muted-foreground dark:text-muted/30">{item.desc}</p>
+                    <p className="text-sm text-muted-foreground dark:text-white/85">{item.desc}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -188,7 +188,7 @@ export default function ProgressPage() {
             <div className="w-5 h-5 flex-shrink-0 text-purple text-lg">💡</div>
             <div>
               <div className="font-semibold text-purple dark:text-purple/10 mb-2">Cómo acelerar tu progreso</div>
-              <ul className="text-sm text-purple dark:text-purple/20 space-y-1">
+              <ul className="text-sm text-purple dark:text-purple-300 space-y-1">
                 <li>✓ Realiza al menos 1 simulación diaria</li>
                 <li>✓ Revisa el feedback del coach en detalle</li>
                 <li>✓ Practica específicamente los gaps identificados</li>

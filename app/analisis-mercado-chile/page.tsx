@@ -858,7 +858,7 @@ export default function AnalisisMercadoChilePage() {
                   <span className="bg-blue text-white px-3 py-1 rounded-full text-sm font-bold">Semana 1-4</span>
                   <h4 className="text-xl font-bold">Cerrar Primeros 3 Convenios Universitarios</h4>
                 </div>
-                <ul className="text-muted/20 space-y-2 ml-6">
+                <ul className="text-white/80 space-y-2 ml-6">
                   <li className="flex items-start gap-2">
                     <span className="text-blue/40 mt-1">→</span>
                     <span>Contactar directamente a Directores de Centros de Carrera de UDD, PUC, U. Chile</span>
@@ -879,7 +879,7 @@ export default function AnalisisMercadoChilePage() {
                   <span className="bg-purple text-white px-3 py-1 rounded-full text-sm font-bold">Semana 5-8</span>
                   <h4 className="text-xl font-bold">Lanzamiento Beta Público B2C</h4>
                 </div>
-                <ul className="text-muted/20 space-y-2 ml-6">
+                <ul className="text-white/80 space-y-2 ml-6">
                   <li className="flex items-start gap-2">
                     <span className="text-purple/40 mt-1">→</span>
                     <span>Tier Freemium: 1 test gratis + 5 consultas coach IA/mes + búsqueda biblioteca limitada</span>
@@ -905,7 +905,7 @@ export default function AnalisisMercadoChilePage() {
                   <span className="bg-green text-white px-3 py-1 rounded-full text-sm font-bold">Semana 9-12</span>
                   <h4 className="text-xl font-bold">Agregar Módulo "AI Literacy"</h4>
                 </div>
-                <ul className="text-muted/20 space-y-2 ml-6">
+                <ul className="text-white/80 space-y-2 ml-6">
                   <li className="flex items-start gap-2">
                     <span className="text-green/40 mt-1">→</span>
                     <span>
@@ -928,7 +928,7 @@ export default function AnalisisMercadoChilePage() {
                   <span className="bg-orange text-white px-3 py-1 rounded-full text-sm font-bold">Continuo</span>
                   <h4 className="text-xl font-bold">Construir Casos de Éxito y Testimonios</h4>
                 </div>
-                <ul className="text-muted/20 space-y-2 ml-6">
+                <ul className="text-white/80 space-y-2 ml-6">
                   <li className="flex items-start gap-2">
                     <span className="text-orange/40 mt-1">→</span>
                     <span>

@@ -103,12 +103,12 @@ export default function A1ResultadoPage() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-background">
             <Brain className="w-4 h-4 text-purple dark:text-purple/40" />
-            <span className="text-sm font-semibold text-purple dark:text-purple/30">Tu Perfil Despega Cerebral</span>
+            <span className="text-sm font-semibold text-purple dark:text-purple-200">Tu Perfil Despega Cerebral</span>
           </div>
           <h1 className="text-5xl font-bold text-purple400400 mb-4">
             Tu Mapa está Listo
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-muted/30">
+          <p className="text-lg text-muted-foreground dark:text-white/85">
             Una visión clara de cómo te relacionas con el mundo, tus fortalezas naturales y tu potencial
           </p>
         </div>
@@ -144,7 +144,7 @@ export default function A1ResultadoPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground dark:text-muted/30">
+              <p className="text-muted-foreground dark:text-white/85">
                 Tu tendencia natural es la de un {getDimensionName(profile.dominant_pattern).toLowerCase()}. 
                 Esto significa que prefieres la acción clara, los resultados tangibles y la dirección definida. 
                 Trabajas mejor cuando hay objetivos claros y libertad para ejecutar.
@@ -160,7 +160,7 @@ export default function A1ResultadoPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <ul className="space-y-2 text-muted-foreground dark:text-muted/30">
+              <ul className="space-y-2 text-muted-foreground dark:text-white/85">
                 <li className="flex gap-2">
                   <span className="text-green font-bold">✓</span>
                   <span>Tomas decisiones con confianza y claridad</span>
@@ -189,7 +189,7 @@ export default function A1ResultadoPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              <ul className="space-y-2 text-muted-foreground dark:text-muted/30">
+              <ul className="space-y-2 text-muted-foreground dark:text-white/85">
                 <li className="flex gap-2">
                   <span className="text-orange font-bold">→</span>
                   <span>Desarrollar más paciencia en procesos complejos</span>
@@ -220,19 +220,19 @@ export default function A1ResultadoPage() {
             <CardContent className="space-y-3">
               <div className="p-3 bg-red/5 dark:bg-red/20 rounded-[28px] border-l-4 border-red/50">
                 <p className="font-semibold text-red dark:text-red/30">Energía (Acción & Dinamismo)</p>
-                <p className="text-sm text-muted-foreground dark:text-muted/30 mt-1">Tu capacidad para iniciar, moverte rápido y llevar momentum</p>
+                <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">Tu capacidad para iniciar, moverte rápido y llevar momentum</p>
               </div>
               <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded-[28px] border-l-4 border-orange">
-                <p className="font-semibold text-yellow dark:text-yellow/30">Plan Ejecutivo (Influencia & Visión)</p>
-                <p className="text-sm text-muted-foreground dark:text-muted/30 mt-1">Tu capacidad para inspirar, comunicar dirección y llevar gente contigo</p>
+                <p className="font-semibold text-yellow dark:text-yellow-200">Plan Ejecutivo (Influencia & Visión)</p>
+                <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">Tu capacidad para inspirar, comunicar dirección y llevar gente contigo</p>
               </div>
               <div className="p-3 bg-green/5 dark:bg-green/20 rounded-[28px] border-l-4 border-green">
                 <p className="font-semibold text-green dark:text-green/30">Relaciones (Estabilidad & Confianza)</p>
-                <p className="text-sm text-muted-foreground dark:text-muted/30 mt-1">Tu capacidad para conectar, sostener y ser confiable para otros</p>
+                <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">Tu capacidad para conectar, sostener y ser confiable para otros</p>
               </div>
               <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded-[28px] border-l-4 border-blue/50">
-                <p className="font-semibold text-blue dark:text-blue/30">Enfoque (Precisión & Profundidad)</p>
-                <p className="text-sm text-muted-foreground dark:text-muted/30 mt-1">Tu capacidad para analizar, refinar y asegurar calidad en lo que haces</p>
+                <p className="font-semibold text-blue dark:text-blue-200">Enfoque (Precisión & Profundidad)</p>
+                <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">Tu capacidad para analizar, refinar y asegurar calidad en lo que haces</p>
               </div>
             </CardContent>
           </Card>
@@ -327,7 +327,7 @@ export default function A1ResultadoPage() {
         {/* ⭐ A1 V2: PREDICTIVE INSIGHTS */}
         <Card className="mb-8 border-0 shadow-lg border-2 border-blue/30 dark:border-blue bg-blue/5/50 dark:bg-blue/20">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-indigo-900 dark:text-blue/20">
+            <CardTitle className="flex items-center gap-2 text-indigo-900 dark:text-blue-300">
               <Target className="w-5 h-5 text-blue" />
               Lectura Predictiva: El Mercado Laboral y Vos
             </CardTitle>
@@ -335,7 +335,7 @@ export default function A1ResultadoPage() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="p-4 bg-white dark:bg-background rounded-[28px] border border-blue/30 dark:border-indigo-700">
-              <p className="font-semibold text-indigo-900 dark:text-blue/20 mb-2">Roles Donde Brillás</p>
+              <p className="font-semibold text-indigo-900 dark:text-blue-300 mb-2">Roles Donde Brillás</p>
               <ul className="space-y-1 text-sm text-muted-foreground dark:text-muted-foreground">
                 <li>• Liderazgo estratégico (startups, transformación digital)</li>
                 <li>• Project leadership en ambientes de cambio rápido</li>
@@ -362,7 +362,7 @@ export default function A1ResultadoPage() {
           <CardHeader>
             <CardTitle className="text-xl">Por Qué Esto Importa Para Tu Ruta</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3 text-muted-foreground dark:text-muted/30">
+          <CardContent className="space-y-3 text-muted-foreground dark:text-white/85">
             <p>Tu perfil Despega Cerebral no es una etiqueta, es un mapa de cómo avanzas naturalmente.</p>
             <p>Lo que viene a continuación (tu Misión 90 días en 3 sprints) estará diseñado para:</p>
             <ul className="space-y-1 ml-4">
@@ -375,7 +375,7 @@ export default function A1ResultadoPage() {
         </Card>
         <div className="text-center space-y-4">
           <div className="p-4 bg-background">
-            <p className="text-sm text-muted-foreground dark:text-muted/30 mb-3 font-medium">
+            <p className="text-sm text-muted-foreground dark:text-white/85 mb-3 font-medium">
               Ya entiendes cómo funcionas. Los próximos 90 días son la prueba real.
             </p>
             <Button 

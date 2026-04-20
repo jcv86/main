@@ -114,7 +114,7 @@ export default function ChileanResourcesSidebar({
                 </a>
                 <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">{resource.category}</p>
                 {resource.reason && (
-                  <p className="text-xs text-muted dark:text-muted/30 mt-2 italic">"{resource.reason}"</p>
+                  <p className="text-xs text-muted dark:text-white/85 mt-2 italic">"{resource.reason}"</p>
                 )}
               </div>
               {resource.matchScore && (

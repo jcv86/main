@@ -25,14 +25,14 @@ export default function TermsPage() {
         <div className="space-y-8">
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">1. Aceptación de Términos</h2>
-            <p className="text-muted/30 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Al acceder y usar Despega Tu Carrera, aceptas estar vinculado por estos términos y condiciones. Si no estás de acuerdo con alguna parte de estos términos, no debes usar nuestros servicios.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">2. Licencia de Uso</h2>
-            <p className="text-muted/30 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Te otorgamos una licencia personal, no exclusiva y no transferible para acceder y usar nuestro sitio y servicios para propósitos legales. No puedes reproducir, distribuir o transmitir el contenido sin nuestro consentimiento previo.
             </p>
           </section>
@@ -40,7 +40,7 @@ export default function TermsPage() {
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">3. Responsabilidades del Usuario</h2>
             <div className="bg-background">
-              <ul className="list-disc list-inside text-muted/30 space-y-2">
+              <ul className="list-disc list-inside text-white/85 space-y-2">
                 <li>Mantener la confidencialidad de tu cuenta</li>
                 <li>Proporcionar información precisa y completa</li>
                 <li>No usar la plataforma para actividades ilegales</li>
@@ -51,35 +51,35 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">4. Limitación de Responsabilidad</h2>
-            <p className="text-muted/30 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Despega Tu Carrera se proporciona "tal cual". No garantizamos que los servicios sean ininterrumpidos o libres de errores. No somos responsables por daños indirectos, incidentales o consecuentes.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">5. Modificaciones del Servicio</h2>
-            <p className="text-muted/30 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Nos reservamos el derecho de modificar o suspender el servicio en cualquier momento. Te notificaremos sobre cambios significativos.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">6. Propiedad Intelectual</h2>
-            <p className="text-muted/30 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Todo el contenido de la plataforma, incluyendo tests, análisis y recursos, es propiedad de Despega Tu Carrera o de sus licenciantes. No está permitido reproducir o distribuir sin autorización.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">7. Terminación de Cuenta</h2>
-            <p className="text-muted/30 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Puedes terminar tu cuenta en cualquier momento. También nos reservamos el derecho de terminar cuentas que violen estos términos.
             </p>
           </section>
 
           <section className="bg-background">
             <h2 className="text-2xl font-bold text-white mb-4">8. Contacto</h2>
-            <p className="text-muted/30 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Para preguntas sobre estos términos, contáctanos en{" "}
               <a href="mailto:contacto@despegatucarrera.cl" className="text-purple/40 hover:text-purple/30 transition-colors font-semibold">
                 contacto@despegatucarrera.cl

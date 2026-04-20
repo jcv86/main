@@ -82,7 +82,7 @@ export function RadarEstrategico() {
                 <h3 className="text-sm font-semibold text-blue/30 uppercase tracking-wider">
                   Tesis Estratégica
                 </h3>
-                <p className="text-lg leading-relaxed text-muted/20">{tesisDia.tesis_estrategica}</p>
+                <p className="text-lg leading-relaxed text-white/80">{tesisDia.tesis_estrategica}</p>
               </div>
 
               {/* Capa 2: Delta */}
@@ -90,7 +90,7 @@ export function RadarEstrategico() {
                 <h3 className="text-sm font-semibold text-amber-300 uppercase tracking-wider">
                   Delta vs Ayer
                 </h3>
-                <p className="text-base text-muted/30">{tesisDia.delta_estrategico}</p>
+                <p className="text-base text-white/85">{tesisDia.delta_estrategico}</p>
               </div>
 
               {/* Metadata Grid */}
@@ -104,7 +104,7 @@ export function RadarEstrategico() {
                         ? 'bg-red/50/20 text-red/30 border-red/50/50'
                         : tesisDia.nivel_energía === 'Confirmación'
                           ? 'bg-blue/50/20 text-blue/30 border-blue/50/50'
-                          : 'bg-muted/50/20 text-muted/30 border-muted/50/50'`}
+                          : 'bg-muted/50/20 text-white/85 border-muted/50/50'`}
                     }`}
                   >
                     {tesisDia.nivel_energía}
@@ -141,7 +141,7 @@ export function RadarEstrategico() {
                 <h3 className="text-sm font-semibold text-cyan/30 uppercase tracking-wider">
                   Qué Descuenta el Mercado
                 </h3>
-                <p className="text-base text-muted/30">{tesisDia.que_descuento_mercado}</p>
+                <p className="text-base text-white/85">{tesisDia.que_descuento_mercado}</p>
               </div>
 
               {/* Capa 5: Tensión narrativa */}
@@ -150,7 +150,7 @@ export function RadarEstrategico() {
                   <h3 className="text-sm font-semibold text-orange/30 uppercase tracking-wider">
                     Tensión Narrativa
                   </h3>
-                  <p className="text-base text-muted/30">{tesisDia.tension_narrativa}</p>
+                  <p className="text-base text-white/85">{tesisDia.tension_narrativa}</p>
                 </div>
               )}
             </CardContent>
@@ -212,7 +212,7 @@ export function RadarEstrategico() {
 
           {/* Tab: Weak Signals */}
           <TabsContent value="weak-signals" className="space-y-4">
-            <div className="text-muted/30 p-4 border border-dashed border-muted/60 rounded-lg">
+            <div className="text-white/85 p-4 border border-dashed border-muted/60 rounded-lg">
               Weak signals están siendo procesadas...
             </div>
           </TabsContent>
@@ -237,7 +237,7 @@ function RadarNoticiaCard({ noticia, isSelected, onSelect }: RadarNoticiaCardPro
   const getNivelColor = (nivel: string) => {
     if (nivel === 'Alta') return 'bg-red/50/20 text-red/30 border-red/50/50'
     if (nivel === 'Confirmación') return 'bg-blue/50/20 text-blue/30 border-blue/50/50'
-    return 'bg-muted/50/20 text-muted/30 border-muted/50/50'
+    return 'bg-muted/50/20 text-white/85 border-muted/50/50'
   }
 
   return (
@@ -300,41 +300,41 @@ function RadarNoticiaDetail({ noticia, onClose }: RadarNoticiaDetailProps) {
           {/* Capa 1 */}
           <div className="space-y-2">
             <h4 className="text-sm font-semibold text-blue/30 uppercase">1. Tesis</h4>
-            <p className="text-base text-muted/30">{noticia.capa_1_tesis}</p>
+            <p className="text-base text-white/85">{noticia.capa_1_tesis}</p>
           </div>
 
           {/* Capa 2 */}
           <div className="space-y-2">
             <h4 className="text-sm font-semibold text-amber-300 uppercase">2. Delta vs Ayer</h4>
-            <p className="text-base text-muted/30">{noticia.capa_2_delta}</p>
+            <p className="text-base text-white/85">{noticia.capa_2_delta}</p>
           </div>
 
           {/* Capa 3-7 */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <p className="text-xs text-muted-foreground uppercase">3. Nivel de Energía</p>
-              <p className="mt-2 text-base font-semibold text-muted/20">{noticia.capa_3_nivel_energia}</p>
+              <p className="mt-2 text-base font-semibold text-white/80">{noticia.capa_3_nivel_energia}</p>
             </div>
             <div>
               <p className="text-xs text-muted-foreground uppercase">6. Ritmo Narrativo</p>
-              <p className="mt-2 text-base font-semibold text-muted/20">{noticia.capa_6_ritmo_narrativo}</p>
+              <p className="mt-2 text-base font-semibold text-white/80">{noticia.capa_6_ritmo_narrativo}</p>
             </div>
             <div>
               <p className="text-xs text-muted-foreground uppercase">7. Impacto Plazo</p>
-              <p className="mt-2 text-base font-semibold text-muted/20">{noticia.capa_7_impacto_plazo}</p>
+              <p className="mt-2 text-base font-semibold text-white/80">{noticia.capa_7_impacto_plazo}</p>
             </div>
           </div>
 
           {/* Capa 4 */}
           <div className="space-y-2">
             <h4 className="text-sm font-semibold text-cyan/30 uppercase">4. Qué Descuenta el Mercado</h4>
-            <p className="text-base text-muted/30">{noticia.capa_4_descuento_mercado}</p>
+            <p className="text-base text-white/85">{noticia.capa_4_descuento_mercado}</p>
           </div>
 
           {/* Capa 5 */}
           <div className="space-y-2">
             <h4 className="text-sm font-semibold text-orange/30 uppercase">5. Consenso y Tensión</h4>
-            <p className="text-base text-muted/30">{noticia.capa_5_consensus}</p>
+            <p className="text-base text-white/85">{noticia.capa_5_consensus}</p>
           </div>
 
           {noticia.url && (

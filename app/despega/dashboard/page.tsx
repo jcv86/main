@@ -113,7 +113,7 @@ export default function DashboardPage() {
                 <h3 className="text-xl font-semibold text-blue dark:text-blue/40">
                   {userData.a2_mission.titulo}
                 </h3>
-                <p className="text-muted-foreground dark:text-muted/30">
+                <p className="text-muted-foreground dark:text-white/85">
                   {userData.a2_mission.objetivo}
                 </p>
               </div>
@@ -133,7 +133,7 @@ export default function DashboardPage() {
               <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5">
                 Elige Tu Camino de Transformación
               </h2>
-              <p className="text-muted-foreground dark:text-muted/30">
+              <p className="text-muted-foreground dark:text-white/85">
                 Comienza eligiendo entre tu transformación personal o profesional
               </p>
               <Button className="bg-blue hover:bg-blue" size="lg">
@@ -205,7 +205,7 @@ export default function DashboardPage() {
                 <h3 className="text-xl font-bold text-muted/90 dark:text-muted/5 mb-2">
                   Tu Coach IA: Sofía
                 </h3>
-                <p className="text-muted-foreground dark:text-muted/30">
+                <p className="text-muted-foreground dark:text-white/85">
                   "¡Hola María! Veo que eres AZUL, lo que significa que te guía la empatía y las relaciones. Tu transformación comenzará fortaleciendo estas cualidades naturales tuyas."
                 </p>
               </div>
