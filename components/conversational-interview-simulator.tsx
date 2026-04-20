@@ -518,47 +518,39 @@ export function ConversationalInterviewSimulator({
               {/* Right Panel: Interviewer (40%) */}
               <div className="lg:col-span-2 bg-background flex flex-col overflow-hidden">
                 
-                {/* Interviewer Photo - Large Display */}
-                <div className="flex-1 relative overflow-hidden bg-black border-l border-muted/20 flex items-center justify-center">
+                {/* Interviewer Photo and Header Combined */}
+                <div className="flex-1 relative overflow-hidden bg-black border-l border-muted/20">
+                  {/* Photo Background */}
                   {selectedInterviewerId && (
                     <Image
                       src={`/images/interviewers/${selectedInterviewerId}.jpg`}
                       alt={getAvatarName(selectedInterviewerId, 'interviewer')}
                       fill
-                      className="object-cover"
+                      className="object-cover absolute inset-0"
                       priority
                     />
                   )}
-                </div>
-
-                {/* Interviewer Header Card - Fixed at bottom */}
-                <div className="p-4 border-t border-muted/80 space-y-3 flex-shrink-0 bg-background/95 backdrop-blur-sm">
-                  <div className="flex gap-3">
-                    <div className={`w-16 h-16 rounded-lg flex items-center justify-center text-3xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
-                      {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-lg font-bold text-white truncate">
-                        {getAvatarName(selectedInterviewerId, 'interviewer')}
-                      </h3>
-                      <p className="text-sm font-semibold text-blue/40 truncate">
-                        {getInterviewerRole(selectedInterviewerId)}
-                      </p>
-                      <p className="text-xs text-muted-foreground mt-1">Entrevistador</p>
-                    </div>
-                  </div>
                   
-                  {/* What they look for */}
-                  <div className="bg-slate-950/50 rounded-[28px] p-3 border border-muted/80/50">
-                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Lo que busca:</p>
-                    <p className="text-xs text-muted/30 leading-relaxed line-clamp-3">
-                      {getInterviewerFocus(selectedInterviewerId)}
-                    </p>
+                  {/* Overlay with Info */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-4">
+                    <div className="flex gap-3 items-end">
+                      <div className={`w-14 h-14 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg border-2 border-white/20`}>
+                        {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <h3 className="text-base font-bold text-white truncate">
+                          {getAvatarName(selectedInterviewerId, 'interviewer')}
+                        </h3>
+                        <p className="text-xs font-semibold text-blue/60 truncate">
+                          {getInterviewerRole(selectedInterviewerId)}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
 
                 {/* Scrollable Content Area */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-background border-t border-muted/20">
                   
                   {/* Question Card */}
                   <Card className="border border-muted/70 bg-muted/90/50">
