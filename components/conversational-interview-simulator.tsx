@@ -458,7 +458,7 @@ export function ConversationalInterviewSimulator({
               
               {/* Left Panel: User Video (60% - 2 columns) */}
               <div className="lg:col-span-2">
-                <div className="relative bg-black rounded-xl overflow-hidden shadow-2xl aspect-video flex flex-col">
+                <div className="relative bg-black rounded-xl overflow-hidden shadow-2xl h-96 flex flex-col">
                   {/* User Video Stream */}
                   <video
                     ref={videoRef}
@@ -531,7 +531,7 @@ export function ConversationalInterviewSimulator({
                       <h3 className="text-lg font-bold text-white truncate">
                         {getAvatarName(selectedInterviewerId, 'interviewer')}
                       </h3>
-                      <p className="text-sm font-semibold text-blue/40 truncate">
+                      <p className="text-sm font-semibold text-blue/80 truncate">
                         {getInterviewerRole(selectedInterviewerId)}
                       </p>
                       <p className="text-xs text-muted-foreground mt-1">Entrevistador</p>
@@ -541,7 +541,7 @@ export function ConversationalInterviewSimulator({
                   {/* What they look for */}
                   <div className="bg-slate-950/50 rounded-[28px] p-3 border border-muted/80/50">
                     <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Lo que busca:</p>
-                    <p className="text-xs text-muted/30 leading-relaxed line-clamp-3">
+                    <p className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
                       {getInterviewerFocus(selectedInterviewerId)}
                     </p>
                   </div>
