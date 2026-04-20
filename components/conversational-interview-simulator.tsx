@@ -589,7 +589,7 @@ export function ConversationalInterviewSimulator({
               </div>
 
               {/* Right Panel: Interviewer (50%) */}
-              <div className="lg:col-span-6 bg-background flex flex-col overflow-hidden">
+              <div className="lg:col-span-6 bg-background flex flex-col overflow-hidden relative">
                 
                 {/* Interviewer Photo and Header Combined */}
                 <div className="flex-1 relative overflow-hidden bg-black border-l border-muted/20">
@@ -649,6 +649,21 @@ export function ConversationalInterviewSimulator({
                     </CardContent>
                   </Card>
 
+                  {/* Progress Card - Positioned at Top Right Corner */}
+                  <div className="absolute top-1 right-1 w-28 bg-muted/90/50 border border-muted/70 rounded-[12px] p-1">
+                    <div className="flex items-center gap-0.5 mb-0.5">
+                      <TrendingUp className="w-2.5 h-2.5 text-emerald-400" />
+                      <p className="text-xs font-bold text-muted-foreground uppercase">Progreso</p>
+                    </div>
+                    <div className="flex justify-between text-xs mb-0.5">
+                      <span className="text-muted-foreground text-xs">Q</span>
+                      <span className="font-semibold text-white text-xs">
+                        {currentQuestionIdx + 1}/{questions.length}
+                      </span>
+                    </div>
+                    <Progress value={((currentQuestionIdx + 1) / questions.length) * 100} className="h-1" />
+                  </div>
+
                   {/* AI Tips Card */}
                   {user && (
                     <div className="rounded-[28px] border border-muted/70 bg-muted/90/50 overflow-hidden">
@@ -663,25 +678,6 @@ export function ConversationalInterviewSimulator({
                       />
                     </div>
                   )}
-
-                  {/* Progress Card */}
-                  <Card className="border border-muted/70 bg-muted/90/50">
-                    <CardHeader className="py-1 px-2 pb-1">
-                      <CardTitle className="text-xs flex items-center gap-1 uppercase tracking-widest font-bold">
-                        <TrendingUp className="w-3 h-3 text-emerald-400" />
-                        Progreso
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-2">
-                      <div className="flex justify-between text-xs mb-2">
-                        <span className="text-muted-foreground">Pregunta</span>
-                        <span className="font-semibold text-white">
-                          {currentQuestionIdx + 1}/{questions.length}
-                        </span>
-                      </div>
-                      <Progress value={((currentQuestionIdx + 1) / questions.length) * 100} className="h-2" />
-                    </CardContent>
-                  </Card>
                 </div>
 
                 {/* Action Buttons - Bottom */}
