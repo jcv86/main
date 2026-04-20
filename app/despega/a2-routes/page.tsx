@@ -168,7 +168,7 @@ export default function A2RoutesPage() {
         route.route_60days || [],
         route.route_90days || []
       )
-      const recommendationsForPDF = recommendations.map(rec => rec.text)
+      const recommendationsForPDF = recommendations.map(rec => `${rec.title}: ${rec.description}`)
 
       await exportProgressToPDF({
         userName: user.email || 'Usuario',
