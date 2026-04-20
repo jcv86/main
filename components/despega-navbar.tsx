@@ -194,7 +194,7 @@ export function DespeganNavbar() {
                           variant={pathname === route.href ? 'default' : 'ghost'}
                           size="sm"
                           className={`w-full justify-start text-sm ${
-                            pathname === route.href ? 'bg-muted/80 text-white' : 'text-muted-foreground hover:text-white hover:bg-transparent'`}
+                            pathname === route.href ? 'bg-muted/80 text-white' : 'text-muted-foreground hover:text-white hover:bg-transparent'
                           }`}
                           onClick={() => setIsOpen(false)}
                         >
