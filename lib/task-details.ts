@@ -424,10 +424,10 @@ export const TASK_DETAILS: Record<number, TaskDetail> = {
       },
       {
         title: 'Coursera - Management Fundamentals',
-        type: 'certificate',
+        type: 'course',
         url: 'https://www.coursera.org/learn/management',
         duration: '4-6 weeks',
-        description: 'Certificado de fundamentos de gestión'
+        description: 'Curso de fundamentos de gestión con certificado'
       }
     ],
     expectedOutput: 'Primer módulo/semana del curso completado con notas y reflexiones',
