@@ -341,5 +341,19 @@ export class CerebroIntelligence {
   }
 }
 
-// Export singleton instance
-export const cerebroIntelligence = new CerebroIntelligence()
+// Lazy singleton to avoid build-time initialization
+let instance: CerebroIntelligence | null = null
+
+export function getCerebroIntelligence(): CerebroIntelligence {
+  if (!instance) {
+    instance = new CerebroIntelligence()
+  }
+  return instance
+}
+
+// Deprecated - use getCerebroIntelligence() instead
+export const cerebroIntelligence = new Proxy({} as CerebroIntelligence, {
+  get: (target, prop) => {
+    return Reflect.get(getCerebroIntelligence(), prop)
+  },
+})

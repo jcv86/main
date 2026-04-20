@@ -432,4 +432,19 @@ Enfócate en:
   }
 }
 
-export const enhancedTestAnalyzer = new EnhancedTestAnalyzer()
+// Lazy singleton to avoid build-time initialization
+let instance: EnhancedTestAnalyzer | null = null
+
+export function getEnhancedTestAnalyzer(): EnhancedTestAnalyzer {
+  if (!instance) {
+    instance = new EnhancedTestAnalyzer()
+  }
+  return instance
+}
+
+// Deprecated - use getEnhancedTestAnalyzer() instead
+export const enhancedTestAnalyzer = new Proxy({} as EnhancedTestAnalyzer, {
+  get: (target, prop) => {
+    return Reflect.get(getEnhancedTestAnalyzer(), prop)
+  },
+})
