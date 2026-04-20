@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ResourceCard } from '@/components/resource-card'
 import { CategoryTabs } from '@/components/category-tabs'
-import { Loader2, BookOpen } from 'lucide-react'
+import { Loader2, BookOpen, Search, Filter, X } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import {
   fetchAllResources,
   fetchResourcesByCategory,
@@ -12,12 +13,18 @@ import {
   type Resource
 } from '@/lib/supabase/resource-library'
 
+type DifficultyLevel = 'Beginner' | 'Intermediate' | 'Advanced'
+type ResourceType = 'Template' | 'Course' | 'Article' | 'Tool' | 'Report' | 'Video'
+
 export function ResourceLibrary() {
   const [resources, setResources] = useState<Resource[]>([])
   const [categories, setCategories] = useState<string[]>([])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
+  const [difficultyFilter, setDifficultyFilter] = useState<DifficultyLevel | null>(null)
+  const [typeFilter, setTypeFilter] = useState<ResourceType | null>(null)
+  const [showFilters, setShowFilters] = useState(false)
 
   useEffect(() => {
     loadInitialData()
@@ -57,36 +64,142 @@ export function ResourceLibrary() {
     }
   }
 
-  // Filter resources by search term
-  const filteredResources = resources.filter(resource => {
-    const searchLower = searchTerm.toLowerCase()
-    return (
-      resource.title.toLowerCase().includes(searchLower) ||
-      resource.description.toLowerCase().includes(searchLower) ||
-      resource.tags.some(tag => tag.toLowerCase().includes(searchLower))
-    )
-  })
+  // Filter resources by search term, difficulty, and type
+  const filteredResources = useMemo(() => {
+    return resources.filter(resource => {
+      const searchLower = searchTerm.toLowerCase()
+      const matchesSearch = !searchTerm || (
+        resource.title.toLowerCase().includes(searchLower) ||
+        resource.description.toLowerCase().includes(searchLower) ||
+        resource.tags.some(tag => tag.toLowerCase().includes(searchLower))
+      )
+      const matchesDifficulty = !difficultyFilter || resource.difficulty_level === difficultyFilter
+      const matchesType = !typeFilter || resource.resource_type === typeFilter
+      
+      return matchesSearch && matchesDifficulty && matchesType
+    })
+  }, [resources, searchTerm, difficultyFilter, typeFilter])
 
   return (
-    <Card className="bg-transparent border-muted/80">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-white">
-          <BookOpen className="w-5 h-5 text-blue-400" />
-          Biblioteca de Recursos Útiles
+    <Card className="bg-card border border-border rounded-2xl">
+      <CardHeader className="bg-gradient-to-r from-training/10 to-exploration/10 border-b border-border">
+        <CardTitle className="flex items-center gap-2 text-foreground text-2xl">
+          <BookOpen className="w-6 h-6 text-training" />
+          Biblioteca de Recursos
         </CardTitle>
-        <p className="text-sm text-white/60 mt-2">
-          {filteredResources.length} recursos disponibles
+        <p className="text-sm text-muted-foreground mt-2">
+          {filteredResources.length} de {resources.length} recursos disponibles
         </p>
       </CardHeader>
-      <CardContent className="space-y-6">
-        {/* Search input */}
-        <input
-          type="text"
-          placeholder="Buscar recursos..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full px-4 py-2 bg-muted/40 border border-muted/60 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-blue-500/50 text-sm"
-        />
+      <CardContent className="space-y-6 p-6">
+        {/* Search and Filter Section */}
+        <div className="space-y-4">
+          {/* Search Input */}
+          <div className="relative">
+            <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="Buscar por título, descripción o tags..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-muted/5 border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:border-exploration/50 focus:bg-muted/10 transition text-sm"
+            />
+          </div>
+
+          {/* Filter Toggle and Filters */}
+          <div className="space-y-3">
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 text-sm font-semibold text-muted-foreground hover:text-foreground transition"
+            >
+              <Filter className="w-4 h-4" />
+              {showFilters ? 'Ocultar Filtros' : 'Mostrar Filtros'}
+            </button>
+
+            {showFilters && (
+              <div className="bg-muted/5 border border-border rounded-lg p-4 space-y-4">
+                {/* Difficulty Filter */}
+                <div>
+                  <label className="text-sm font-semibold text-foreground mb-2 block">
+                    Nivel de Dificultad
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => setDifficultyFilter(null)}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold transition ${
+                        !difficultyFilter
+                          ? 'bg-exploration text-background'
+                          : 'bg-muted/20 text-muted-foreground hover:bg-muted/30'
+                      }`}
+                    >
+                      Todos
+                    </button>
+                    {(['Beginner', 'Intermediate', 'Advanced'] as const).map(level => (
+                      <button
+                        key={level}
+                        onClick={() => setDifficultyFilter(level)}
+                        className={`px-3 py-1 rounded-full text-xs font-semibold transition ${
+                          difficultyFilter === level
+                            ? 'bg-exploration text-background'
+                            : 'bg-muted/20 text-muted-foreground hover:bg-muted/30'
+                        }`}
+                      >
+                        {level}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Type Filter */}
+                <div>
+                  <label className="text-sm font-semibold text-foreground mb-2 block">
+                    Tipo de Recurso
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      onClick={() => setTypeFilter(null)}
+                      className={`px-3 py-1 rounded-full text-xs font-semibold transition ${
+                        !typeFilter
+                          ? 'bg-training text-background'
+                          : 'bg-muted/20 text-muted-foreground hover:bg-muted/30'
+                      }`}
+                    >
+                      Todos
+                    </button>
+                    {(['Template', 'Course', 'Article', 'Tool', 'Report', 'Video'] as const).map(type => (
+                      <button
+                        key={type}
+                        onClick={() => setTypeFilter(type)}
+                        className={`px-3 py-1 rounded-full text-xs font-semibold transition ${
+                          typeFilter === type
+                            ? 'bg-training text-background'
+                            : 'bg-muted/20 text-muted-foreground hover:bg-muted/30'
+                        }`}
+                      >
+                        {type}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Clear Filters Button */}
+                {(difficultyFilter || typeFilter || searchTerm) && (
+                  <button
+                    onClick={() => {
+                      setDifficultyFilter(null)
+                      setTypeFilter(null)
+                      setSearchTerm('')
+                    }}
+                    className="flex items-center gap-2 px-3 py-2 text-xs font-semibold text-training hover:bg-training/10 rounded-lg transition"
+                  >
+                    <X className="w-3 h-3" />
+                    Limpiar Filtros
+                  </button>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
 
         {/* Category tabs */}
         <CategoryTabs

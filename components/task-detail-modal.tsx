@@ -29,25 +29,34 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <Card className="bg-background border-muted/60 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="sticky top-0 bg-background border-b border-muted/40 px-6 py-4 flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold text-white">
-              Día {task.day}: {task.title}
+      <Card className="bg-card border border-border w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col rounded-2xl">
+        {/* Animated Header with gradient */}
+        <div className="sticky top-0 bg-gradient-to-r from-exploration/20 to-training/20 border-b border-border px-8 py-6 flex items-start justify-between">
+          <div className="flex-1">
+            <div className="flex items-center gap-3 mb-2">
+              <span className="px-3 py-1 bg-exploration/20 text-exploration rounded-full text-xs font-semibold">Día {task.day}</span>
+              <Clock className="w-4 h-4 text-muted-foreground" />
+            </div>
+            <h2 className="text-3xl font-bold text-foreground">
+              {task.title}
             </h2>
-            <p className="text-sm text-white/60 mt-1">{task.objective}</p>
+            <p className="text-sm text-muted-foreground mt-2">{task.objective}</p>
           </div>
           <button
             onClick={onClose}
-            className="text-white/60 hover:text-white transition"
+            className="p-2 hover:bg-muted/20 rounded-lg transition text-muted-foreground hover:text-foreground"
           >
             <X className="w-6 h-6" />
           </button>
         </div>
 
-        <div className="px-6 py-6 space-y-8">
-          {/* Full Description */}
+        {/* Scrollable Content */}
+        <div className="overflow-y-auto flex-1">
+          <div className="px-8 py-6 space-y-8">
+            {/* Full Description - Highlighted */}
+            <div className="bg-muted/5 border border-border rounded-xl p-4 mb-6">
+              <p className="text-sm text-muted-foreground leading-relaxed">{task.fullDescription}</p>
+            </div>
           <div>
             <h3 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-blue-400" />
@@ -56,33 +65,62 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
             <p className="text-white/75 leading-relaxed">{task.fullDescription}</p>
           </div>
 
-          {/* Steps */}
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <CheckCircle className="w-5 h-5 text-green-400" />
-              Pasos a Seguir
-            </h3>
-            <div className="space-y-3">
-              {task.steps.map((step) => (
-                <div
-                  key={step.stepNumber}
-                  className="border border-muted/40 rounded-lg overflow-hidden hover:border-muted/60 transition"
-                >
-                  <button
-                    onClick={() => toggleStep(step.stepNumber)}
-                    className="w-full px-4 py-3 bg-muted/20 hover:bg-muted/30 transition flex items-center justify-between"
-                  >
-                    <div className="text-left">
-                      <div className="flex items-center gap-3">
-                        <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/30 text-blue-400 font-semibold text-sm">
-                          {step.stepNumber}
-                        </span>
-                        <span className="font-semibold text-white">{step.title}</span>
-                        <span className="text-xs bg-purple/30 text-white/70 px-2 py-1 rounded flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          {step.duration}
-                        </span>
+            {/* Steps - Improved Visual Design */}
+            <div>
+              <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <BookOpen className="w-5 h-5 text-exploration" />
+                Pasos a Seguir
+              </h3>
+              <div className="space-y-3">
+                {task.steps.map((step, idx) => (
+                  <div key={idx} className="group">
+                    <button
+                      onClick={() => toggleStep(step.stepNumber)}
+                      className="w-full p-4 bg-muted/5 hover:bg-muted/10 border border-border rounded-lg transition flex items-start gap-4 text-left"
+                    >
+                      <div className="flex-shrink-0 w-8 h-8 bg-exploration/20 text-exploration rounded-full flex items-center justify-center font-semibold text-sm">
+                        {step.stepNumber}
                       </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-foreground group-hover:text-exploration transition">{step.title}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{step.duration} • Clic para expandir</p>
+                      </div>
+                      <span className={`flex-shrink-0 text-muted-foreground transition ${expandedSteps.has(step.stepNumber) ? 'rotate-180' : ''}`}>
+                        ▼
+                      </span>
+                    </button>
+                    
+                    {expandedSteps.has(step.stepNumber) && (
+                      <div className="mt-2 ml-12 pl-4 border-l-2 border-exploration/30 space-y-3">
+                        <p className="text-sm text-muted-foreground">{step.description}</p>
+                        {step.tips && step.tips.length > 0 && (
+                          <div className="bg-training/5 border border-training/20 rounded-lg p-3 space-y-2">
+                            <p className="text-xs font-semibold text-training flex items-center gap-2">
+                              <Lightbulb className="w-4 h-4" />
+                              Tips
+                            </p>
+                            <ul className="text-xs text-muted-foreground space-y-1">
+                              {step.tips.map((tip, i) => (
+                                <li key={i} className="flex gap-2">
+                                  <span className="text-training">•</span>
+                                  <span>{tip}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        {step.example && (
+                          <div className="bg-exploration/5 border border-exploration/20 rounded-lg p-3">
+                            <p className="text-xs font-semibold text-exploration mb-2">Ejemplo:</p>
+                            <p className="text-xs text-muted-foreground italic">{step.example}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
                     </div>
                     <div className={`transition-transform ${expandedSteps.has(step.stepNumber) ? 'rotate-180' : ''}`}>
                       ▼
@@ -120,34 +158,41 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
             </div>
           </div>
 
-          {/* Resources */}
-          <div>
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
-              <ExternalLink className="w-5 h-5 text-purple-400" />
-              Recursos Recomendados
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {task.resources.map((resource, idx) => (
-                <a
-                  key={idx}
-                  href={resource.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group p-4 border border-muted/40 rounded-lg hover:border-purple-500/50 hover:bg-purple-500/5 transition"
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <h4 className="font-semibold text-white group-hover:text-purple-400 transition text-sm">
-                        {resource.title}
-                      </h4>
-                      <p className="text-xs text-white/60 mt-1">{resource.description}</p>
-                      {resource.duration && (
-                        <p className="text-xs text-white/50 mt-2 flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          {resource.duration}
-                        </p>
-                      )}
+            {/* Resources - Grid layout */}
+            <div>
+              <h3 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <ExternalLink className="w-5 h-5 text-training" />
+                Recursos Recomendados
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {task.resources.map((resource, idx) => (
+                  <a
+                    key={idx}
+                    href={resource.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group p-4 bg-muted/5 hover:bg-muted/10 border border-border rounded-lg hover:border-training/50 transition"
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <span className="px-2 py-1 bg-training/20 text-training rounded text-xs font-semibold capitalize">
+                        {resource.type}
+                      </span>
+                      <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-training transition" />
                     </div>
+                    <p className="font-semibold text-foreground group-hover:text-training transition line-clamp-2">
+                      {resource.title}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-2">{resource.description}</p>
+                    {resource.duration && (
+                      <p className="text-xs text-exploration mt-2 flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {resource.duration}
+                      </p>
+                    )}
+                  </a>
+                ))}
+              </div>
+            </div>
                     <span className="text-xs bg-purple/30 text-white/70 px-2 py-1 rounded whitespace-nowrap">
                       {resource.type}
                     </span>
@@ -157,64 +202,50 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
             </div>
           </div>
 
-          {/* Expected Output */}
-          {task.expectedOutput && (
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-400" />
-                Resultado Esperado
-              </h3>
-              <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
-                <p className="text-white/75">{task.expectedOutput}</p>
-              </div>
+            {/* Expected Output */}
+            <div className="bg-exploration/5 border border-exploration/30 rounded-xl p-4">
+              <p className="text-sm font-semibold text-exploration flex items-center gap-2 mb-2">
+                <CheckCircle className="w-4 h-4" />
+                Output Esperado
+              </p>
+              <p className="text-sm text-muted-foreground">{task.expectedOutput}</p>
             </div>
-          )}
 
-          {/* Success Criteria */}
-          {task.successCriteria && (
+            {/* Success Criteria - Checklist style */}
             <div>
-              <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-emerald-400" />
+              <h3 className="text-lg font-bold text-foreground mb-3 flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-ritual" />
                 Criterios de Éxito
               </h3>
               <div className="space-y-2">
                 {task.successCriteria.map((criterion, idx) => (
-                  <div key={idx} className="flex items-start gap-2 text-white/75 text-sm">
-                    <span className="text-emerald-400 font-bold mt-0.5">✓</span>
-                    <span>{criterion}</span>
+                  <div
+                    key={idx}
+                    className="flex items-start gap-3 p-3 bg-ritual/5 border border-ritual/20 rounded-lg"
+                  >
+                    <span className="text-ritual font-bold text-lg">✓</span>
+                    <span className="text-sm text-muted-foreground">{criterion}</span>
                   </div>
                 ))}
               </div>
             </div>
-          )}
-
-          {/* Common Mistakes */}
-          {task.commonMistakes && (
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                <AlertCircle className="w-5 h-5 text-amber-400" />
-                Errores Comunes a Evitar
-              </h3>
-              <div className="space-y-2">
-                {task.commonMistakes.map((mistake, idx) => (
-                  <div key={idx} className="flex items-start gap-2 text-white/75 text-sm">
-                    <span className="text-amber-400 font-bold mt-0.5">⚠</span>
-                    <span>{mistake}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Close Button */}
-          <div className="flex justify-end gap-2 pt-4 border-t border-muted/40">
-            <Button
-              onClick={onClose}
-              className="bg-muted/20 hover:bg-muted/30 text-white"
-            >
-              Cerrar
-            </Button>
           </div>
+        </div>
+
+        {/* Footer - Action buttons */}
+        <div className="sticky bottom-0 bg-card border-t border-border px-8 py-4 flex justify-end gap-3">
+          <Button
+            onClick={onClose}
+            variant="outline"
+            className="border-border hover:bg-muted/10"
+          >
+            Cerrar
+          </Button>
+          <Button
+            className="bg-exploration hover:bg-exploration/90"
+          >
+            Empezar Ahora
+          </Button>
         </div>
       </Card>
     </div>
