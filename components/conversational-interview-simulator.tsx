@@ -541,8 +541,8 @@ export function ConversationalInterviewSimulator({
             {/* Professional Split-Screen Layout - Video Interview */}
             <div className="grid lg:grid-cols-12 gap-0 bg-black rounded-xl overflow-hidden shadow-2xl h-[500px] lg:h-[550px]">
               
-              {/* Left Panel: User Video (65%) */}
-              <div className="lg:col-span-8 relative bg-black overflow-hidden flex flex-col">
+              {/* Left Panel: User Video (50%) */}
+              <div className="lg:col-span-6 relative bg-black overflow-hidden flex flex-col">
                 {/* User Video Stream */}
                 <video
                   ref={videoRef}
@@ -588,8 +588,8 @@ export function ConversationalInterviewSimulator({
                 </div>
               </div>
 
-              {/* Right Panel: Interviewer (35%) */}
-              <div className="lg:col-span-4 bg-background flex flex-col overflow-hidden">
+              {/* Right Panel: Interviewer (50%) */}
+              <div className="lg:col-span-6 bg-background flex flex-col overflow-hidden">
                 
                 {/* Interviewer Photo and Header Combined */}
                 <div className="flex-1 relative overflow-hidden bg-black border-l border-muted/20">
@@ -599,7 +599,7 @@ export function ConversationalInterviewSimulator({
                       src={`/images/interviewers/${getInterviewerImageFile(selectedInterviewerId)}.jpg`}
                       alt={getAvatarName(selectedInterviewerId, 'interviewer')}
                       fill
-                      className="object-scale-down absolute inset-0"
+                      className="object-cover absolute inset-0"
                       priority
                     />
                   )}
