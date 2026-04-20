@@ -805,7 +805,5 @@ export function getTaskDetail(day: number): TaskDetail | undefined {
 
 // Get all available days with details
 export function getAvailableDays(): number[] {
-  return Object.keys(TASK_DETAILS).map(Number)
-}
   return Object.keys(TASK_DETAILS).map(Number).sort((a, b) => a - b)
 }
