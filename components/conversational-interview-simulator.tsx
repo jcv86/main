@@ -588,10 +588,11 @@ export function ConversationalInterviewSimulator({
                     </CardContent>
                   </Card>
                 </div>
-                  </div>
-                </div>
               </div>
             </div>
+          </div>
+        </div>
+      )}
 
             {error && (
               <Alert variant="destructive" className="border-red/30 bg-red/5 dark:bg-red/20">
