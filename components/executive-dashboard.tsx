@@ -21,27 +21,27 @@ const mockMetrics: DashboardMetric[] = [
     label: 'Tu Nivel de Criterio',
     value: 72,
     unit: '%',
-    icon: <BarChart3 className="w-6 h-6 text-cyan" />,
+    icon: <BarChart3 className="w-6 h-6 text-cyan-400" />,
     trend: 12
   },
   {
     label: 'Oportunidades Identificadas',
     value: 23,
-    icon: <Target className="w-6 h-6 text-teal-600" />,
+    icon: <Target className="w-6 h-6 text-teal-400" />,
     trend: 5
   },
   {
     label: 'Horas de Aprendizaje',
     value: 47,
     unit: 'h',
-    icon: <Clock className="w-6 h-6 text-emerald-600" />,
+    icon: <Clock className="w-6 h-6 text-emerald-400" />,
     trend: 8
   },
   {
     label: 'Ranking Semanal',
     value: 145,
     unit: 'º',
-    icon: <Award className="w-6 h-6 text-amber-600" />,
+    icon: <Award className="w-6 h-6 text-amber-400" />,
     trend: -12
   }
 ]
@@ -115,8 +115,8 @@ export function ExecutiveDashboard() {
                   </Badge>
                 )}
               </div>
-              <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-2">{metric.label}</p>
-              <p className="text-3xl font-bold text-muted/90 dark:text-muted/10">
+              <p className="text-sm text-white/80 mb-2">{metric.label}</p>
+              <p className="text-3xl font-bold text-white">
                 {metric.value}{metric.unit}
               </p>
             </CardContent>
@@ -137,11 +137,11 @@ export function ExecutiveDashboard() {
               <CardContent className="p-6">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="font-bold text-muted/90 dark:text-muted/10 mb-1">
+                    <h3 className="font-bold text-white mb-1">
                       {insight.title}
                     </h3>
                     {expandedInsight === idx && (
-                      <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-3">
+                      <p className="text-sm text-white/80 mb-3">
                         {insight.description}
                       </p>
                     )}
@@ -166,20 +166,20 @@ export function ExecutiveDashboard() {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-bold text-muted/90 dark:text-muted/10">
+                      <h3 className="font-bold text-white">
                         {action.title}
                       </h3>
                       <Badge
                         className={
                           action.priority === 'Alta'
-                            ? 'bg-red/10 text-red'
-                            : 'bg-amber-100 text-amber-800'
+                            ? 'bg-red/10 text-red-400'
+                            : 'bg-amber-100 text-amber-900'
                         }
                       >
                         {action.priority}
                       </Badge>
                     </div>
-                    <p className="text-xs text-muted-foreground dark:text-muted-foreground">
+                    <p className="text-xs text-white/70">
                       {action.stage} • {action.daysLeft} días
                     </p>
                   </div>
