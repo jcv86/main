@@ -227,7 +227,7 @@ async function extractAndStoreMemories(
 
   // Example: If user mentions a goal
   if (query.toLowerCase().includes("quiero") || query.toLowerCase().includes("objetivo")) {
-    await cerebroIntelligence.storeMemory(userId, conversationId, {
+    await getCerebroIntelligence().storeMemory(userId, conversationId, {
       memoryType: "goal",
       content: `Usuario expresó: ${query}`,
       importanceScore: 8,
