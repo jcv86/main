@@ -29,7 +29,7 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-      <Card className="bg-card border border-border w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col rounded-2xl">
+      <Card className="bg-card border border-border w-full max-w-3xl max-h-[95vh] overflow-hidden flex flex-col rounded-2xl">
         {/* Header with gradient */}
         <div className="sticky top-0 bg-gradient-to-r from-exploration/20 to-training/20 border-b border-border px-8 py-6 flex items-start justify-between">
           <div className="flex-1">
@@ -50,7 +50,7 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
         </div>
 
         {/* Scrollable Content */}
-        <div className="overflow-y-auto flex-1 px-8 py-6 space-y-8">
+        <div className="overflow-y-auto flex-1 px-8 py-6 space-y-8 pb-8">
           {/* Full Description */}
           <div className="bg-muted/5 border border-border rounded-xl p-4">
             <p className="text-sm text-muted-foreground leading-relaxed">{task.fullDescription}</p>
@@ -150,13 +150,15 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
           </div>
 
           {/* Expected Output */}
-          <div className="bg-exploration/5 border border-exploration/30 rounded-xl p-4">
-            <p className="text-sm font-semibold text-exploration flex items-center gap-2 mb-2">
-              <CheckCircle className="w-4 h-4" />
-              Output Esperado
-            </p>
-            <p className="text-sm text-muted-foreground">{task.expectedOutput}</p>
-          </div>
+          {task.expectedOutput && (
+            <div className="bg-exploration/5 border border-exploration/30 rounded-xl p-4">
+              <p className="text-sm font-semibold text-exploration flex items-center gap-2 mb-2">
+                <CheckCircle className="w-4 h-4" />
+                Output Esperado
+              </p>
+              <p className="text-sm text-muted-foreground">{task.expectedOutput}</p>
+            </div>
+          )}
 
           {/* Success Criteria */}
           <div>
