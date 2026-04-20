@@ -203,23 +203,6 @@ export class EnhancedTestAnalyzer {
    * Get Chilean market insights
    */
   /**
-   * Get test combination pattern if exists
-   */
-  private async getTestCombinationPattern(testTypes: string[]): Promise<any | null> {
-    const supabase = await this.getSupabase()
-    const combination = testTypes.sort().join("+")
-
-    const { data, error } = await supabase
-      .from("cerebro_test_combinations")
-      .select("*")
-      .eq("test_combination", combination)
-      .single()
-
-    if (error) return null
-    return data
-  }
-
-  /**
    * Generate comprehensive cross-test analysis using AI
    */
   private async generateCrossTestAnalysis(context: any): Promise<CrossTestAnalysis> {
