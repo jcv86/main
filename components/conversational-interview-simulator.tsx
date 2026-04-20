@@ -180,18 +180,17 @@ export function ConversationalInterviewSimulator({
     }
   }, [transcript, isFinal, stage, resetTranscript])
 
-  // Initialize camera - keep running for entire session
+  // Initialize camera when response stage is reached
   useEffect(() => {
-    console.log('[v0] useEffect camera triggered - videoEnabled:', videoEnabled)
-    if (videoEnabled) {
-      console.log('[v0] Calling initializeCamera...')
+    if (stage === 'response' && videoEnabled) {
+      console.log('[v0] Response stage reached, initializing camera')
       initializeCamera()
       return () => {
-        console.log('[v0] Cleanup: stopping camera')
+        console.log('[v0] Cleaning up camera')
         stopCamera()
       }
     }
-  }, [videoEnabled])
+  }, [stage, videoEnabled])
 
   const initializeCamera = async () => {
     try {
@@ -345,6 +344,18 @@ export function ConversationalInterviewSimulator({
     })
 
     setStage('complete')
+  }
+
+  const getAvatarName = (id: string, type: 'avatar' | 'interviewer') => {
+    const names: Record<string, string> = {
+      'interviewer-classic-1': 'Sofia',
+      'interviewer-classic-2': 'Marco',
+      'interviewer-classic-3': 'Elena',
+      'interviewer-classic-4': 'David',
+      'interviewer-classic-5': 'Alexandra',
+      'interviewer-classic-6': 'Bruno'
+    }
+    return names[id] || 'Entrevistador'
   }
 
   const copyToClipboard = (text: string) => {
