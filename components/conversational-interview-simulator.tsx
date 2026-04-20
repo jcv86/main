@@ -538,11 +538,100 @@ export function ConversationalInterviewSimulator({
             <CardDescription>Mira la pregunta, mantén contacto visual con la cámara y responde como en entrevista real</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Professional Split-Screen Layout - Video Interview */}
-            <div className="grid lg:grid-cols-12 gap-0 bg-black rounded-xl overflow-hidden shadow-2xl h-[500px] lg:h-[550px]">
+            {/* Professional Vertical Layout - Video Interview */}
+            <div className="flex flex-col bg-black rounded-xl overflow-hidden shadow-2xl h-[650px] lg:h-[700px]">
               
-              {/* Left Panel: User Video (50%) */}
-              <div className="lg:col-span-6 relative bg-black overflow-hidden flex flex-col">
+              {/* TOP SECTION: Interviewer Photo with Info Overlay (30%) */}
+              <div className="h-1/3 relative overflow-hidden bg-black border-b border-muted/20 flex items-center justify-center">
+                {/* Interviewer Photo */}
+                {selectedInterviewerId && (
+                  <Image
+                    src={`/images/interviewers/${getInterviewerImageFile(selectedInterviewerId)}.jpg`}
+                    alt={getAvatarName(selectedInterviewerId, 'interviewer')}
+                    fill
+                    className="object-top object-contain absolute inset-0"
+                    priority
+                  />
+                )}
+                
+                {/* Info Overlay - Bottom Left */}
+                <div className="absolute bottom-2 left-2 right-2 flex gap-2 z-10 bg-black/70 backdrop-blur-sm rounded-lg p-2">
+                  <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
+                    {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="text-sm font-bold text-white truncate">
+                      {getAvatarName(selectedInterviewerId, 'interviewer')}
+                    </h3>
+                    <p className="text-xs text-blue/60 truncate">
+                      {getInterviewerRole(selectedInterviewerId)}
+                    </p>
+                  </div>
+                </div>
+                
+                {/* Progress Badge - Top Right */}
+                <div className="absolute top-2 right-2 w-32 bg-muted/90/50 border border-muted/70 rounded-[12px] p-1.5 z-10">
+                  <div className="flex items-center gap-0.5 mb-1">
+                    <TrendingUp className="w-3 h-3 text-emerald-400" />
+                    <p className="text-xs font-bold text-muted-foreground uppercase">Progreso</p>
+                  </div>
+                  <div className="flex justify-between text-xs mb-1">
+                    <span className="text-muted-foreground text-xs">Pregunta</span>
+                    <span className="font-semibold text-white text-xs">
+                      {currentQuestionIdx + 1}/{questions.length}
+                    </span>
+                  </div>
+                  <Progress value={((currentQuestionIdx + 1) / questions.length) * 100} className="h-1.5" />
+                </div>
+              </div>
+
+              {/* MIDDLE SECTION: Question, Tips, and Info (40%) - SCROLLABLE */}
+              <div className="flex-1 overflow-y-auto bg-background border-b border-muted/20 p-3 space-y-2">
+                
+                {/* What they look for */}
+                <div className="bg-slate-950/50 rounded-[14px] p-2 border border-muted/50">
+                  <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1 leading-none">Lo que busca:</p>
+                  <p className="text-xs text-muted/40 leading-tight">
+                    {getInterviewerFocus(selectedInterviewerId)}
+                  </p>
+                </div>
+
+                {/* Question Card */}
+                <Card className="border border-muted/70 bg-muted/90/50">
+                  <CardHeader className="py-1 px-2 pb-1">
+                    <CardTitle className="text-xs flex items-center gap-1 uppercase tracking-widest font-bold leading-none">
+                      <HelpCircle className="w-3 h-3 text-blue/40" />
+                      Pregunta
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="p-2">
+                    <p className="text-xs font-semibold text-white leading-snug mb-1">
+                      {currentQuestion.text}
+                    </p>
+                    <p className="text-xs text-muted-foreground italic leading-snug">
+                      {currentQuestion.context}
+                    </p>
+                  </CardContent>
+                </Card>
+
+                {/* AI Tips Card */}
+                {user && (
+                  <div className="rounded-[14px] border border-muted/70 bg-muted/90/50 overflow-hidden">
+                    <InterviewTips
+                      questionText={currentQuestion.text}
+                      userResponse={userResponse}
+                      questionContext={currentQuestion.context}
+                      difficulty={level}
+                      sessionId={`interview-${level}-${Date.now()}`}
+                      userId={user.id}
+                      onTipGenerated={(tip) => console.log('[v0] Tip generated:', tip)}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* BOTTOM SECTION: User Video and Controls (30%) */}
+              <div className="h-1/3 relative bg-black overflow-hidden flex flex-col"
                 {/* User Video Stream */}
                 <video
                   ref={videoRef}
