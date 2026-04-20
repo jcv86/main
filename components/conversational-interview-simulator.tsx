@@ -358,6 +358,30 @@ export function ConversationalInterviewSimulator({
     return names[id] || 'Entrevistador'
   }
 
+  const getInterviewerRole = (id: string) => {
+    const roles: Record<string, string> = {
+      'interviewer-classic-1': 'Reclutadora',
+      'interviewer-classic-2': 'Manager Senior',
+      'interviewer-classic-3': 'VP Talent',
+      'interviewer-classic-4': 'Tech Lead',
+      'interviewer-classic-5': 'Product Manager',
+      'interviewer-classic-6': 'Consultor CEO'
+    }
+    return roles[id] || 'Entrevistador'
+  }
+
+  const getInterviewerFocus = (id: string) => {
+    const focus: Record<string, string> = {
+      'interviewer-classic-1': 'Sofia busca candidatos con habilidades de comunicación sólidas, empatía y capacidad de trabajo en equipo.',
+      'interviewer-classic-2': 'Marco valora la experiencia, pensamiento estratégico y liderazgo demostrado.',
+      'interviewer-classic-3': 'Elena se enfoca en potencial de crecimiento, adaptabilidad y visión de carrera.',
+      'interviewer-classic-4': 'David evalúa capacidad técnica, resolución de problemas y arquitectura de soluciones.',
+      'interviewer-classic-5': 'Alexandra busca innovación, pensamiento de usuario y capacidad de gestionar stakeholders.',
+      'interviewer-classic-6': 'Bruno valora visión estratégica, impacto empresarial y capacidad de influencia.'
+    }
+    return focus[id] || 'Evaluando tu potencial profesional.'
+  }
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
     setCopied(true)
