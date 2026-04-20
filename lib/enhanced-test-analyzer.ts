@@ -106,8 +106,8 @@ export class EnhancedTestAnalyzer {
       const marketInsights = await this.getChileanMarketInsights()
 
       // 3. Get user context and patterns
-      const userContext = await cerebroIntelligence.getUserContext(userId)
-      const userPatterns = await cerebroIntelligence.getUserPatterns(userId)
+      const userContext = await getCerebroIntelligence().getUserContext(userId)
+      const userPatterns = await getCerebroIntelligence().getUserPatterns(userId)
 
       // 4. Check for known test combination patterns
       const combinationPattern = await this.getTestCombinationPattern(testResults.map((t) => t.testType))
