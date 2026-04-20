@@ -123,8 +123,18 @@ export function DespeganNavbar() {
                     <ChevronDown className="w-4 h-4" />
                   </Button>
 
-                  {/* Dropdown */}
-                  <div className="absolute left-0 mt-0 w-48 bg-transparent border border-muted/70 rounded-surface-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                  {/* Dropdown - Colored background based on phase */}
+                  <div className={`absolute left-0 mt-0 w-48 border rounded-surface-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ${
+                    stagePhaseMap[stage.name as keyof typeof stagePhaseMap] === 'ritual' 
+                      ? 'bg-purple/15 border-purple/40'
+                      : stagePhaseMap[stage.name as keyof typeof stagePhaseMap] === 'exploration'
+                      ? 'bg-blue/15 border-blue/40'
+                      : stagePhaseMap[stage.name as keyof typeof stagePhaseMap] === 'training'
+                      ? 'bg-orange/15 border-orange/40'
+                      : stagePhaseMap[stage.name as keyof typeof stagePhaseMap] === 'reality'
+                      ? 'bg-red/15 border-red/40'
+                      : 'bg-muted/10 border-muted/40'
+                  }`}>
                     {stage.routes.map((route) => (
                       <Link key={route.href} href={route.href}>
                         <Button
