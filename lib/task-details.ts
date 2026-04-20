@@ -563,6 +563,95 @@ export const TASK_DETAILS: Record<number, TaskDetail> = {
       '✓ Nuevos ajustes definidos',
       '✓ Plan para semana 3 listo'
     ]
+  },
+
+  // Day 15-20 tasks
+  15: {
+    day: 15,
+    title: 'Entrevistas Mock: Prepárate',
+    fullDescription: 'Realiza 2-3 entrevistas de práctica con amigos o mentores para identificar áreas de mejora antes de las reales.',
+    objective: 'Ganar confianza y eliminar nerviosismo en entrevistas',
+    steps: [
+      {
+        stepNumber: 1,
+        title: 'Prepara 3 historias STAR',
+        description: 'Desarrolla 3 historias cortas de éxito usando formato STAR (Situation, Task, Action, Result).',
+        duration: '30 min',
+        tips: ['Elige historias relevantes', 'Practica la dicción', 'Hazlas memorables'],
+        example: 'Ej: Una vez lideré un proyecto que mejoró conversiones 25%, así es cómo...'
+      },
+      {
+        stepNumber: 2,
+        title: 'Agenda 2-3 mock interviews',
+        description: 'Contacta mentores o amigos en la industria para hacer entrevistas de práctica.',
+        duration: '15 min',
+        tips: ['Elige gente en tu rol objetivo', 'Pídeles feedback honesto', 'Agradece su tiempo']
+      },
+      {
+        stepNumber: 3,
+        title: 'Realiza las mock interviews',
+        description: 'Ejecuta las entrevistas como si fueran reales: vístete, prepara el ambiente, toma notas de feedback.',
+        duration: '90 min total',
+        tips: ['Sé puntual', 'Haz preguntas al final', 'Toma notas de feedback']
+      }
+    ],
+    resources: [
+      {
+        title: 'STAR Method Guide',
+        type: 'article',
+        url: 'https://www.thebalancecareers.com/star-interview-method-2061629',
+        description: 'Guía para estructurar respuestas'
+      }
+    ],
+    expectedOutput: '3 historias STAR documentadas, 2-3 mock interviews completadas, feedback documentado',
+    successCriteria: [
+      '✓ Historias STAR preparadas',
+      '✓ Mock interviews realizadas',
+      '✓ Feedback recibido y documentado',
+      '✓ Mejoras identificadas'
+    ]
+  },
+
+  20: {
+    day: 20,
+    title: 'Mid-point Review: Día 20',
+    fullDescription: 'Revisión de mid-point de tu progreso. Analizá si estás en track para los objetivos de día 30.',
+    objective: 'Asegurar que estés en camino correcto a los 30 días',
+    steps: [
+      {
+        stepNumber: 1,
+        title: 'Revisa tu visión inicial',
+        description: 'Retorna a tus notas del día 1. ¿Sigues en el mismo camino? ¿Hay ajustes?',
+        duration: '15 min'
+      },
+      {
+        stepNumber: 2,
+        title: 'Mide progreso en números',
+        description: 'Cuenta: entrevistas agendadas, ofertas recibidas, skills desarrollados, relaciones construidas.',
+        duration: '20 min'
+      },
+      {
+        stepNumber: 3,
+        title: 'Acelera o ajusta',
+        description: 'Si vas retrasado, identifica qué acelerar. Si vas adelante, prepárate para la siguiente fase.',
+        duration: '30 min'
+      }
+    ],
+    resources: [
+      {
+        title: 'Progress Tracking Template',
+        type: 'template',
+        url: 'https://www.notion.so/templates/progress-tracker',
+        description: 'Plantilla para medir progreso'
+      }
+    ],
+    expectedOutput: 'Análisis de mid-point con ajustes para el cierre de los 30 días',
+    successCriteria: [
+      '✓ Progreso medido contra visión inicial',
+      '✓ Métricas clave revisadas',
+      '✓ Cambios identificados si necesario',
+      '✓ Plan para últimos 10 días definido'
+    ]
   }
 }
 
