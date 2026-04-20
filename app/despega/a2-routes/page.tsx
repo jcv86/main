@@ -28,6 +28,7 @@ import { exportProgressToPDF } from '@/lib/pdf-export'
 export default function A2RoutesPage() {
   const router = useRouter()
   const [route, setRoute] = useState<PersonalizedRoute | null>(null)
+  const [discProfile, setDiscProfile] = useState<string>('DISC Profile')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [expandedMilestone, setExpandedMilestone] = useState<30 | 60 | 90 | null>(30)
@@ -163,7 +164,7 @@ export default function A2RoutesPage() {
 
       await exportProgressToPDF({
         userName: user.email || 'Usuario',
-        profile: route.profile || 'DISC Profile',
+        profile: discProfile,
         completedTasks: totalProgress.completed,
         totalTasks: totalProgress.total,
         badges: unlockedBadges,
@@ -283,6 +284,7 @@ export default function A2RoutesPage() {
       }
 
       setRoute(generatedRoute)
+      setDiscProfile(discProfile.primary || 'DISC Profile')
       console.log('[v0] A2 Route generated and saved successfully', { route: generatedRoute })
     } catch (err) {
       console.error('[v0] Error loading A2 routes:', err)
