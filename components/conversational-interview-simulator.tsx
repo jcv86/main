@@ -539,7 +539,7 @@ export function ConversationalInterviewSimulator({
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Professional Vertical Layout - Video Interview */}
-            <div className="flex flex-col bg-black rounded-xl overflow-hidden shadow-2xl h-[650px] lg:h-[700px]">
+            <div className="flex flex-col bg-black rounded-xl overflow-visible shadow-2xl h-[650px] lg:h-[700px]">
               
               {/* TOP SECTION: Interviewer Photo with Info Overlay (30%) */}
               <div className="h-1/3 relative overflow-hidden bg-black border-b border-muted/20 flex items-center justify-center">
