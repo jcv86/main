@@ -283,7 +283,7 @@ export function ConversationalInterview({
     return (
       <div className="max-w-7xl mx-auto p-6 space-y-4">
         {/* 60/40 Split Layout: User Video (60%) + Interviewer Photo (40%) */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-4 min-h-96">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.5fr_1fr] gap-6 min-h-screen lg:min-h-[600px]">
           {/* User Video Feed (60%) */}
           <Card className="relative overflow-hidden lg:col-span-1">
             <CardContent className="p-0 h-full">

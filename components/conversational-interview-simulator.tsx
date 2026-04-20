@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/client'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { useContextValidation } from '@/lib/hooks/use-context-validation'
@@ -504,10 +505,23 @@ export function ConversationalInterviewSimulator({
               </div>
 
               {/* Right Panel: Interviewer (40%) */}
-              <div className="lg:col-span-2 bg-background">
+              <div className="lg:col-span-2 bg-background flex flex-col overflow-hidden">
                 
-                {/* Interviewer Header Card */}
-                <div className="p-4 border-b border-muted/80 space-y-3 flex-shrink-0">
+                {/* Interviewer Photo - Large Display */}
+                <div className="flex-1 relative overflow-hidden bg-black border-l border-muted/20 flex items-center justify-center">
+                  {selectedInterviewerId && (
+                    <Image
+                      src={`/images/interviewers/${selectedInterviewerId}.jpg`}
+                      alt={getAvatarName(selectedInterviewerId, 'interviewer')}
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  )}
+                </div>
+
+                {/* Interviewer Header Card - Fixed at bottom */}
+                <div className="p-4 border-t border-muted/80 space-y-3 flex-shrink-0 bg-background/95 backdrop-blur-sm">
                   <div className="flex gap-3">
                     <div className={`w-16 h-16 rounded-lg flex items-center justify-center text-3xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
                       {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
