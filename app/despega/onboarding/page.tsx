@@ -206,7 +206,7 @@ export default function DespegaOnboarding() {
           {/* Hero Section */}
           <div className="text-center space-y-4">
             <div className="space-y-2">
-              <h1 className="text-5xl md:text-6xl font-bold text-muted/90 dark:text-muted/5 leading-tight">
+              <h1 className="text-5xl md:text-6xl font-bold text-foreground dark:text-foreground leading-tight">
                 Despega Cerebral
               </h1>
               <p className="text-xl text-muted-foreground dark:text-muted-foreground">
@@ -219,16 +219,16 @@ export default function DespegaOnboarding() {
           <Card className="border-0 shadow-lg bg-white dark:bg-background">
             <CardContent className="pt-8 space-y-6">
               <div className="space-y-4">
-                <p className="text-lg text-muted-foreground dark:text-muted/30 leading-relaxed">
+                <p className="text-lg text-foreground dark:text-foreground leading-relaxed">
                   Antes de hablar de metas, decisiones o próximos pasos, necesitamos entender algo más profundo: <strong>tu patrón natural de acción</strong>.
                 </p>
                 
-                <p className="text-muted-foreground dark:text-muted-foreground leading-relaxed">
+                <p className="text-foreground dark:text-foreground leading-relaxed">
                   Todos tenemos una forma particular de movernos frente a desafíos, cambios, presión y oportunidades. No es una etiqueta. No es una caja. <strong>Es un patrón.</strong>
                 </p>
 
                 <div className="p-4 bg-muted/5 dark:bg-card/50 rounded-[28px] border border-muted/20 dark:border-card my-4">
-                  <p className="text-muted-foreground dark:text-muted/30">
+                  <p className="text-muted-foreground dark:text-muted-foreground">
                     En las próximas 28 preguntas explorarás cómo tiendes a actuar cuando nadie te está mirando, cuando decides rápido, cuando dudas o cuando lideras.
                   </p>
                 </div>
@@ -245,7 +245,7 @@ export default function DespegaOnboarding() {
                   </p>
                 </div>
 
-                <p className="text-muted-foreground dark:text-muted/30 italic pt-2">
+                <p className="text-muted-foreground dark:text-muted-foreground italic pt-2">
                   En unos minutos descubrirás cuál describe mejor tu forma de moverte en el mundo.
                 </p>
               </div>
@@ -256,11 +256,11 @@ export default function DespegaOnboarding() {
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="border-0 shadow-lg bg-background">
               <CardContent className="pt-8">
-                <h3 className="text-xl font-bold text-blue dark:text-blue/10 mb-3">¿Qué es Despega Cerebral?</h3>
-                <p className="text-sm text-blue dark:text-blue/20 leading-relaxed">
+                <h3 className="text-xl font-bold text-blue dark:text-blue mb-3">¿Qué es Despega Cerebral?</h3>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground leading-relaxed">
                   Es la base de tu recorrido dentro de DespegaTuCarrera. Se inspira en marcos conductuales ampliamente estudiados, pero no busca encasillarte.
                 </p>
-                <p className="text-sm text-blue dark:text-blue/20 leading-relaxed mt-3">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground leading-relaxed mt-3">
                   Su objetivo es identificar tendencias de comportamiento que influyen en cómo tomas decisiones, enfrentas conflictos, lideras o colaboras.
                 </p>
               </CardContent>
@@ -268,11 +268,11 @@ export default function DespegaOnboarding() {
 
             <Card className="border-0 shadow-lg bg-background">
               <CardContent className="pt-8">
-                <h3 className="text-xl font-bold text-emerald-900 dark:text-emerald-100 mb-3">¿Por qué empezar por aquí?</h3>
-                <p className="text-sm text-emerald-800 dark:text-emerald-200 leading-relaxed font-semibold">
+                <h3 className="text-xl font-bold text-emerald-100 dark:text-emerald-100 mb-3">¿Por qué empezar por aquí?</h3>
+                <p className="text-sm text-emerald-100 dark:text-emerald-100 leading-relaxed font-semibold">
                   Porque sin autoconocimiento, cualquier meta es aleatoria.
                 </p>
-                <p className="text-sm text-emerald-800 dark:text-emerald-200 leading-relaxed mt-3">
+                <p className="text-sm text-emerald-100 dark:text-emerald-100 leading-relaxed mt-3">
                   DespegaTuCarrera no parte por decirte qué hacer. Parte por ayudarte a entender cómo funcionas.
                 </p>
               </CardContent>
@@ -288,21 +288,21 @@ export default function DespegaOnboarding() {
               <div className="flex gap-4">
                 <div className="text-2xl min-w-fit">1️⃣</div>
                 <div>
-                  <p className="font-semibold text-muted/90 dark:text-muted/10">Responde con honestidad total</p>
+                  <p className="font-semibold text-foreground dark:text-foreground">Responde con honestidad total</p>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground">No pienses en cómo deberías ser, sino en cómo realmente actúas.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="text-2xl min-w-fit">2️⃣</div>
                 <div>
-                  <p className="font-semibold text-muted/90 dark:text-muted/10">Tu primer impulso es el más preciso</p>
+                  <p className="font-semibold text-foreground dark:text-foreground">Tu primer impulso es el más preciso</p>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground">No pienses demasiado en las opciones. Tu instinto es lo más acertado.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="text-2xl min-w-fit">3️⃣</div>
                 <div>
-                  <p className="font-semibold text-muted/90 dark:text-muted/10">Este es tu punto de partida</p>
+                  <p className="font-semibold text-foreground dark:text-foreground">Este es tu punto de partida</p>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground">Primero claridad. Luego dirección.</p>
                 </div>
               </div>
@@ -318,7 +318,7 @@ export default function DespegaOnboarding() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex justify-between items-center text-sm">
-                <span className="font-semibold text-muted-foreground dark:text-muted/30">Evaluación DISC Despega</span>
+                <span className="font-semibold text-muted-foreground dark:text-muted-foreground">Evaluación DISC Despega</span>
                 <span className="text-muted-foreground dark:text-muted-foreground">1/28</span>
               </div>
               <div className="h-1 bg-blue/20 dark:bg-blue rounded-full overflow-hidden">
@@ -326,7 +326,7 @@ export default function DespegaOnboarding() {
               </div>
               
               <div className="space-y-4">
-                <h4 className="text-center font-semibold text-muted/90 dark:text-muted/10">
+                <h4 className="text-center font-semibold text-foreground dark:text-foreground">
                   Cuando enfrento un desafío importante, tiendo a ser más:
                 </h4>
                 
@@ -334,16 +334,16 @@ export default function DespegaOnboarding() {
                   <div className="space-y-2">
                     <p className="text-sm font-semibold text-green dark:text-green/40">MÁS como yo</p>
                     <div className="space-y-2">
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Decidido y directo
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Optimista e inspirador
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Paciente y considerado
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Analítico y preciso
                       </button>
                     </div>
@@ -352,16 +352,16 @@ export default function DespegaOnboarding() {
                   <div className="space-y-2">
                     <p className="text-sm font-semibold text-red dark:text-red/40">MENOS como yo</p>
                     <div className="space-y-2">
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Decidido y directo
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Optimista e inspirador
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Paciente y considerado
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Analítico y preciso
                       </button>
                     </div>
@@ -418,7 +418,7 @@ export default function DespegaOnboarding() {
         <div className="max-w-5xl mx-auto space-y-8 pb-8">
           {/* Hero Section */}
           <div className="text-center space-y-3 py-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground dark:text-foreground">
               Descubre Tu Perfil Despega Cerebral
             </h1>
             <p className="text-xl text-muted-foreground dark:text-muted-foreground">
