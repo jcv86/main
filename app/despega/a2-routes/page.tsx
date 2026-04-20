@@ -14,6 +14,7 @@ import { TaskCard } from '@/components/task-card'
 import { PhaseProgress } from '@/components/phase-progress'
 import { AchievementsDisplay } from '@/components/achievement-badge'
 import { RecommendationsDisplay } from '@/components/recommendations-display'
+import { ResourceLibrary } from '@/components/resource-library'
 import { 
   fetchUserCompletions, 
   markTaskComplete, 
@@ -451,6 +452,9 @@ export default function A2RoutesPage() {
             {isExporting ? 'Generando PDF...' : 'Descargar Progreso en PDF'}
           </Button>
         </div>
+
+        {/* Resources Library Section */}
+        <ResourceLibrary />
         <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
