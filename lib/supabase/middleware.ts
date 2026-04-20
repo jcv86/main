@@ -7,9 +7,12 @@ export async function updateSession(request: NextRequest) {
   })
 
   // Create a new Supabase client for each request (required for Fluid compute)
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dcfrbwxbejtbcouionna.supabase.co'
+  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjZnJid3hiZWp0YmNvdWlvbm5hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mjc4MTc2MDAsImV4cCI6MTk0MzM5MzYwMH0.9H3zWQ0K8YqVbH5Yf3rXpqJhMzK7LmN8OqRsStUvWjI'
+  
   const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    supabaseUrl,
+    supabaseAnonKey,
     {
       cookies: {
         getAll() {
