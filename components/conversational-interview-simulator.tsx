@@ -539,7 +539,7 @@ export function ConversationalInterviewSimulator({
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Professional Split-Screen Layout - Video Interview */}
-            <div className="grid lg:grid-cols-5 gap-0 bg-black rounded-xl overflow-hidden shadow-2xl h-[600px] lg:h-[700px]">
+            <div className="grid lg:grid-cols-5 gap-0 bg-black rounded-xl overflow-hidden shadow-2xl h-[500px] lg:h-[550px]">
               
               {/* Left Panel: User Video (60%) */}
               <div className="lg:col-span-3 relative bg-black overflow-hidden flex flex-col">
@@ -606,7 +606,7 @@ export function ConversationalInterviewSimulator({
                 </div>
 
                 {/* Scrollable Content Area */}
-                <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-background border-t border-muted/20">
+                <div className="flex-1 overflow-y-auto p-2 space-y-2 bg-background border-t border-muted/20">
                   
                   {/* Interviewer Info */}
                   <div className="flex gap-2 pb-2 border-b border-muted/20">
@@ -624,26 +624,26 @@ export function ConversationalInterviewSimulator({
                   </div>
 
                   {/* What they look for */}
-                  <div className="bg-slate-950/50 rounded-[20px] p-3 border border-muted/50">
-                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Lo que busca:</p>
-                    <p className="text-xs text-muted/40 leading-relaxed">
+                  <div className="bg-slate-950/50 rounded-[16px] p-2 border border-muted/50">
+                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Lo que busca:</p>
+                    <p className="text-xs text-muted/40 leading-relaxed line-clamp-3">
                       {getInterviewerFocus(selectedInterviewerId)}
                     </p>
                   </div>
 
                   {/* Question Card */}
                   <Card className="border border-muted/70 bg-muted/90/50">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-xs flex items-center gap-2 uppercase tracking-widest font-bold">
-                        <HelpCircle className="w-3.5 h-3.5 text-blue/40" />
+                    <CardHeader className="py-1 px-2 pb-1">
+                      <CardTitle className="text-xs flex items-center gap-1 uppercase tracking-widest font-bold">
+                        <HelpCircle className="w-3 h-3 text-blue/40" />
                         Pregunta
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                      <p className="text-xs font-semibold text-white leading-snug mb-2">
+                    <CardContent className="p-2">
+                      <p className="text-xs font-semibold text-white leading-snug mb-1 line-clamp-2">
                         {currentQuestion.text}
                       </p>
-                      <p className="text-xs text-muted-foreground italic leading-snug">
+                      <p className="text-xs text-muted-foreground italic leading-snug line-clamp-1">
                         {currentQuestion.context}
                       </p>
                     </CardContent>
@@ -666,13 +666,13 @@ export function ConversationalInterviewSimulator({
 
                   {/* Progress Card */}
                   <Card className="border border-muted/70 bg-muted/90/50">
-                    <CardHeader className="pb-2">
-                      <CardTitle className="text-xs flex items-center gap-2 uppercase tracking-widest font-bold">
-                        <TrendingUp className="w-3.5 h-3.5 text-emerald-400" />
+                    <CardHeader className="py-1 px-2 pb-1">
+                      <CardTitle className="text-xs flex items-center gap-1 uppercase tracking-widest font-bold">
+                        <TrendingUp className="w-3 h-3 text-emerald-400" />
                         Progreso
                       </CardTitle>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="p-2">
                       <div className="flex justify-between text-xs mb-2">
                         <span className="text-muted-foreground">Pregunta</span>
                         <span className="font-semibold text-white">
