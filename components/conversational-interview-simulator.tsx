@@ -364,8 +364,8 @@ export function ConversationalInterviewSimulator({
       'interviewer-classic-2': 'marco',
       'interviewer-classic-3': 'elena',
       'interviewer-classic-4': 'david',
-      'interviewer-classic-5': 'alexandra',
-      'interviewer-classic-6': 'bruno'
+      'interviewer-modern-1': 'alexandra',
+      'interviewer-modern-2': 'bruno'
     }
     return imageMap[id] || 'sofia'
   }
@@ -376,8 +376,8 @@ export function ConversationalInterviewSimulator({
       'interviewer-classic-2': 'Manager Senior',
       'interviewer-classic-3': 'VP Talent',
       'interviewer-classic-4': 'Tech Lead',
-      'interviewer-classic-5': 'Product Manager',
-      'interviewer-classic-6': 'Consultor CEO'
+      'interviewer-modern-1': 'Product Manager',
+      'interviewer-modern-2': 'Consultor CEO'
     }
     return roles[id] || 'Entrevistador'
   }
@@ -388,8 +388,8 @@ export function ConversationalInterviewSimulator({
       'interviewer-classic-2': 'Marco valora la experiencia, pensamiento estratégico y liderazgo demostrado.',
       'interviewer-classic-3': 'Elena se enfoca en potencial de crecimiento, adaptabilidad y visión de carrera.',
       'interviewer-classic-4': 'David evalúa capacidad técnica, resolución de problemas y arquitectura de soluciones.',
-      'interviewer-classic-5': 'Alexandra busca innovación, pensamiento de usuario y capacidad de gestionar stakeholders.',
-      'interviewer-classic-6': 'Bruno valora visión estratégica, impacto empresarial y capacidad de influencia.'
+      'interviewer-modern-1': 'Alexandra busca innovación, pensamiento de usuario y capacidad de gestionar stakeholders.',
+      'interviewer-modern-2': 'Bruno valora visión estratégica, impacto empresarial y capacidad de influencia.'
     }
     return focus[id] || 'Evaluando tu potencial profesional.'
   }
@@ -643,22 +643,22 @@ export function ConversationalInterviewSimulator({
                 <div className="flex-1 overflow-y-auto p-2 space-y-1.5 bg-background">
                   
                   {/* What they look for */}
-                  <div className="bg-slate-950/50 rounded-lg p-1.5 border border-muted/50">
-                    <p className="text-xs font-bold text-muted-foreground uppercase mb-0.5">Lo que busca:</p>
-                    <p className="text-xs text-muted/40 leading-tight line-clamp-2">{getInterviewerFocus(selectedInterviewerId)}</p>
+                  <div className="bg-slate-950/80 rounded-lg p-2 border border-blue/40">
+                    <p className="text-xs font-bold text-blue-300 uppercase mb-1 tracking-wider">Lo que busca:</p>
+                    <p className="text-xs text-white/80 leading-tight line-clamp-3">{getInterviewerFocus(selectedInterviewerId)}</p>
                   </div>
 
                   {/* Question Card */}
-                  <Card className="border border-muted/70 bg-muted/50">
-                    <CardHeader className="py-1 px-2 pb-0.5">
-                      <CardTitle className="text-xs flex items-center gap-1 uppercase font-bold leading-none">
+                  <Card className="border border-blue/40 bg-slate-950/80">
+                    <CardHeader className="py-1.5 px-2 pb-1">
+                      <CardTitle className="text-xs flex items-center gap-1 uppercase font-bold leading-none text-blue-300">
                         <HelpCircle className="w-2.5 h-2.5" />
                         Pregunta
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="p-2 text-xs">
-                      <p className="font-semibold mb-0.5 line-clamp-2">{currentQuestion.text}</p>
-                      <p className="text-muted-foreground italic line-clamp-1">{currentQuestion.context}</p>
+                    <CardContent className="p-2 text-xs space-y-1">
+                      <p className="font-semibold text-white/90 line-clamp-2">{currentQuestion.text}</p>
+                      <p className="text-white/70 italic line-clamp-1">{currentQuestion.context}</p>
                     </CardContent>
                   </Card>
 
