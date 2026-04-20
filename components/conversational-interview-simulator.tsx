@@ -388,6 +388,43 @@ export function ConversationalInterviewSimulator({
     setTimeout(() => setCopied(false), 2000)
   }
 
+  // Helper functions for avatar data
+  const getAvatarEmoji = (avatarId: string, type: 'user' | 'interviewer'): string => {
+    const emojiMap: Record<string, string> = {
+      'professional-1': '👔',
+      'creative-1': '🎨',
+      'tech-1': '💻',
+      'business-1': '🏢',
+      'casual-1': '😎',
+      'formal-1': '🎩',
+      'interviewer-classic-1': '👩‍💼',
+      'interviewer-classic-2': '👨‍💻',
+      'interviewer-classic-3': '👩‍💼',
+      'interviewer-classic-4': '👨‍💼',
+      'interviewer-modern-1': '🧑‍🏫',
+      'interviewer-modern-2': '🎯',
+    }
+    return emojiMap[avatarId] || (type === 'user' ? '👤' : '👥')
+  }
+
+  const getAvatarGradient = (avatarId: string): string => {
+    const gradients: Record<string, string> = {
+      'professional-1': 'bg-background',
+      'creative-1': 'bg-background',
+      'tech-1': 'bg-background',
+      'business-1': 'bg-red',
+      'casual-1': 'bg-background',
+      'formal-1': 'bg-background',
+      'interviewer-classic-1': 'bg-background',
+      'interviewer-classic-2': 'bg-background',
+      'interviewer-classic-3': 'bg-background',
+      'interviewer-classic-4': 'bg-background',
+      'interviewer-modern-1': 'bg-background',
+      'interviewer-modern-2': 'bg-background',
+    }
+    return gradients[avatarId] || 'bg-background'
+  }
+
   const lastAttempt = currentAttempts[currentAttempts.length - 1]
 
   return (
@@ -853,23 +890,7 @@ export function ConversationalInterviewSimulator({
       )}
     </div>
   )
-
-  // Helper functions for avatar data
-  function getAvatarEmoji(avatarId: string, type: 'user' | 'interviewer'): string {
-    const emojiMap: Record<string, string> = {
-      'professional-1': '👔',
-      'creative-1': '🎨',
-      'tech-1': '💻',
-      'business-1': '🏢',
-      'casual-1': '😎',
-      'formal-1': '🎩',
-      'interviewer-classic-1': '👩‍💼',
-      'interviewer-classic-2': '👨‍💻',
-      'interviewer-classic-3': '👩‍💼',
-      'interviewer-classic-4': '👨‍💼',
-      'interviewer-modern-1': '🧑‍🏫',
-      'interviewer-modern-2': '🎯',
-    }
+}
     return emojiMap[avatarId] || (type === 'user' ? '👤' : '👥')
   }
 
