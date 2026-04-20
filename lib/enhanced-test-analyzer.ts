@@ -2,7 +2,7 @@ import { createClient } from "@/lib/supabase/server"
 import { getCerebroIntelligence } from "@/lib/cerebro-intelligence"
 import { z } from "zod"
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+const getOpenAIKey = () => process.env.OPENAI_API_KEY
 
 export interface TestResult {
   testType: string
@@ -245,7 +245,7 @@ Enfócate en:
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        Authorization: `Bearer ${getOpenAIKey()}`,
       },
       body: JSON.stringify({
         model: "gpt-4o",
