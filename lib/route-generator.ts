@@ -2,6 +2,7 @@
 
 import { DiscProfile } from './disc-calculator'
 import { callOpenAI } from './openai-helper'
+import { getAvailableDays, getTaskDetail } from './task-details'
 
 export interface RouteActionItem {
   day: number
@@ -68,86 +69,49 @@ Responde en JSON con el siguiente formato:
     console.log('[v0] AI content generation skipped, using template')
   }
 
-  const route_30days: RouteActionItem[] = [
-    // Week 1: Foundation
-    {
-      day: 1,
-      title: 'Define tu visión y roadmap',
-      description: 'Crea un documento con tu objetivo, pasos clave y timeline',
-      type: 'planning',
-      timeEstimate: 120,
-      resources: ['Notion Template', 'Goal Setting Framework']
-    },
-    {
-      day: 3,
-      title: 'Análisis del mercado y rol objetivo',
-      description: 'Investigar empresas, roles similares, salarios, requerimientos',
-      type: 'learning',
-      timeEstimate: 180,
-      resources: ['LinkedIn', 'Glassdoor', 'Industry Reports']
-    },
-    {
-      day: 5,
-      title: 'Audit de habilidades actuales',
-      description: 'Evalúa qué sabes, qué falta, qué mejorar',
-      type: 'planning',
-      timeEstimate: 90,
-      resources: ['Skills Assessment Tool']
-    },
-    {
-      day: 7,
-      title: `Sesión 1: ${isEnergia ? 'Acción Rápida' : isEnfoque ? 'Análisis Estratégico' : isRelaciones ? 'Networking Activo' : 'Planificación Detallada'}`,
-      description: isEnergia ? 'Iniciar acciones concretas' : isEnfoque ? 'Profundizar en análisis' : isRelaciones ? 'Conectar con líderes clave' : 'Estructurar plan detallado',
-      type: 'networking',
-      timeEstimate: 60
-    },
-
-    // Week 2: Start Learning
-    {
-      day: 10,
-      title: `Iniciar curso/recurso principal para: ${skills[0] || 'habilidad clave'}`,
-      description: 'Comenzar con el primer módulo del recurso seleccionado',
-      type: 'learning',
-      timeEstimate: 120
-    },
-    {
-      day: 12,
-      title: 'Crear tu perfil de marca personal',
-      description: 'LinkedIn, portafolio, o presencia online relevante',
-      type: 'practice',
-      timeEstimate: 180
-    },
-    {
-      day: 14,
-      title: 'Semana 2: Checkpoint',
-      description: 'Revisar progreso, ajustar si es necesario',
-      type: 'planning',
-      timeEstimate: 60
-    },
-
-    // Week 3-4: Practice
-    {
-      day: 17,
-      title: `Proyecto práctico: Aplica ${skills[0] || 'conocimiento nuevo'}`,
-      description: 'Crea algo pequeño pero real que demuestre aprendizaje',
-      type: 'practice',
-      timeEstimate: 240
-    },
-    {
-      day: 21,
-      title: 'Networking: Informational interviews',
-      description: 'Conecta con 2-3 personas en tu rol objetivo',
-      type: 'networking',
-      timeEstimate: 120
-    },
-    {
-      day: 28,
-      title: 'Hito de 30 días: Revisión completa',
-      description: 'Evalúa lo aprendido, ajusta plan para próximos 30 días',
-      type: 'milestone',
-      timeEstimate: 120
-    }
-  ]
+  // Generate 30-day route from task-details database
+  const availableDays = getAvailableDays()
+  const route_30days: RouteActionItem[] = availableDays
+    .filter(day => day <= 30)
+    .map(day => {
+      const taskDetail = getTaskDetail(day)
+      if (!taskDetail) {
+        return {
+          day,
+          title: `Day ${day}`,
+          description: 'Task pending',
+          type: 'planning' as const,
+          timeEstimate: 60
+        }
+      }
+      
+      // Map task type from title patterns
+      let type: 'learning' | 'practice' | 'networking' | 'planning' | 'milestone' = 'planning'
+      const lowerTitle = taskDetail.title.toLowerCase()
+      
+      if (lowerTitle.includes('aprender') || lowerTitle.includes('curso') || lowerTitle.includes('aprendizaje') || lowerTitle.includes('avanza')) type = 'learning'
+      else if (lowerTitle.includes('proyecto') || lowerTitle.includes('práctica') || lowerTitle.includes('practica') || lowerTitle.includes('práct') || lowerTitle.includes('build') || lowerTitle.includes('mock')) type = 'practice'
+      else if (lowerTitle.includes('networking') || lowerTitle.includes('conecta') || lowerTitle.includes('outreach') || lowerTitle.includes('interview')) type = 'networking'
+      else if (lowerTitle.includes('checkpoint') || lowerTitle.includes('revisión') || lowerTitle.includes('review') || lowerTitle.includes('reflexión')) type = 'planning'
+      else if (lowerTitle.includes('milestone') || lowerTitle.includes('completado') || lowerTitle.includes('assessment') || day === 30) type = 'milestone'
+      
+      // Calculate total time from all steps
+      const totalTime = taskDetail.steps.reduce((sum, step) => {
+        const minutes = step.duration.includes('h') 
+          ? parseInt(step.duration) * 60
+          : parseInt(step.duration)
+        return sum + minutes
+      }, 0)
+      
+      return {
+        day: taskDetail.day,
+        title: taskDetail.title,
+        description: taskDetail.fullDescription,
+        type,
+        timeEstimate: totalTime || 120,
+        resources: taskDetail.resources?.map(r => r.title)
+      }
+    })
 
   const route_60days: RouteActionItem[] = [
     {
