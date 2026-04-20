@@ -530,28 +530,34 @@ export function ConversationalInterviewSimulator({
                       priority
                     />
                   )}
-                  
-                  {/* Overlay with Info */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex flex-col justify-end p-4">
-                    <div className="flex gap-3 items-end">
-                      <div className={`w-14 h-14 rounded-lg flex items-center justify-center text-2xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg border-2 border-white/20`}>
-                        {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <h3 className="text-base font-bold text-white truncate">
-                          {getAvatarName(selectedInterviewerId, 'interviewer')}
-                        </h3>
-                        <p className="text-xs font-semibold text-blue/60 truncate">
-                          {getInterviewerRole(selectedInterviewerId)}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
                 </div>
 
                 {/* Scrollable Content Area */}
                 <div className="flex-1 overflow-y-auto p-3 space-y-3 bg-background border-t border-muted/20">
                   
+                  {/* Interviewer Info */}
+                  <div className="flex gap-2 pb-2 border-b border-muted/20">
+                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
+                      {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-sm font-bold text-white truncate">
+                        {getAvatarName(selectedInterviewerId, 'interviewer')}
+                      </h3>
+                      <p className="text-xs text-blue/60 truncate">
+                        {getInterviewerRole(selectedInterviewerId)}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* What they look for */}
+                  <div className="bg-slate-950/50 rounded-[20px] p-3 border border-muted/50">
+                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">Lo que busca:</p>
+                    <p className="text-xs text-muted/40 leading-relaxed">
+                      {getInterviewerFocus(selectedInterviewerId)}
+                    </p>
+                  </div>
+
                   {/* Question Card */}
                   <Card className="border border-muted/70 bg-muted/90/50">
                     <CardHeader className="pb-2">
