@@ -4,6 +4,8 @@ import { semanticSearch } from "@/lib/embeddings"
 import { callOpenAI } from "@/lib/openai-wrapper"
 
 export const maxDuration = 60
+// Mark route as dynamic to prevent build-time analysis
+export const dynamic = 'force-dynamic'
 
 export async function POST(request: NextRequest) {
   try {
