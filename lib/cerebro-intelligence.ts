@@ -350,10 +350,3 @@ export function getCerebroIntelligence(): CerebroIntelligence {
   }
   return instance
 }
-
-// Deprecated - use getCerebroIntelligence() instead
-export const cerebroIntelligence = new Proxy({} as CerebroIntelligence, {
-  get: (target, prop) => {
-    return Reflect.get(getCerebroIntelligence(), prop)
-  },
-})

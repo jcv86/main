@@ -441,10 +441,3 @@ export function getEnhancedTestAnalyzer(): EnhancedTestAnalyzer {
   }
   return instance
 }
-
-// Deprecated - use getEnhancedTestAnalyzer() instead
-export const enhancedTestAnalyzer = new Proxy({} as EnhancedTestAnalyzer, {
-  get: (target, prop) => {
-    return Reflect.get(getEnhancedTestAnalyzer(), prop)
-  },
-})
