@@ -9,9 +9,11 @@ import { type DespegarProfile } from '@/lib/disc-calculator'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Loader2, Calendar, Target, CheckCircle2, AlertCircle, ArrowRight, Zap, MapPin } from 'lucide-react'
+import { Loader2, Calendar, Target, CheckCircle2, AlertCircle, ArrowRight, Zap, MapPin, Download, Trophy } from 'lucide-react'
 import { TaskCard } from '@/components/task-card'
 import { PhaseProgress } from '@/components/phase-progress'
+import { AchievementsDisplay } from '@/components/achievement-badge'
+import { RecommendationsDisplay } from '@/components/recommendations-display'
 import { 
   fetchUserCompletions, 
   markTaskComplete, 
@@ -19,6 +21,9 @@ import {
   completionsToSet,
   getTaskId 
 } from '@/lib/supabase/task-completions'
+import { getUnlockedBadges } from '@/lib/badge-system'
+import { getRecommendations } from '@/lib/recommendation-engine'
+import { exportProgressToPDF } from '@/lib/pdf-export'
 
 export default function A2RoutesPage() {
   const router = useRouter()
@@ -28,6 +33,7 @@ export default function A2RoutesPage() {
   const [expandedMilestone, setExpandedMilestone] = useState<30 | 60 | 90 | null>(30)
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set())
   const [isSyncing, setIsSyncing] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
   const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
 
@@ -122,6 +128,55 @@ export default function A2RoutesPage() {
       90: 'from-green'
     }
     return colorsMap[days]
+  }
+
+  // Calculate total progress
+  const calculateTotalProgress = () => {
+    const allTasks = [...(route?.route_30days || []), ...(route?.route_60days || []), ...(route?.route_90days || [])]
+    const completed = allTasks.filter(task => {
+      const phases = [30, 60, 90] as const
+      return phases.some(phase => 
+        completedTasks.has(`${phase}-${task.day}-${task.title}`)
+      )
+    }).length
+    return { completed, total: allTasks.length }
+  }
+
+  // Handle PDF export
+  const handleExportPDF = async () => {
+    if (!user || !route) return
+    
+    setIsExporting(true)
+    try {
+      const totalProgress = calculateTotalProgress()
+      const completionPercentage = totalProgress.total > 0 
+        ? (totalProgress.completed / totalProgress.total) * 100 
+        : 0
+
+      const unlockedBadges = getUnlockedBadges(completionPercentage)
+      const recommendations = getRecommendations(
+        completedTasks,
+        route.route_30days || [],
+        route.route_60days || [],
+        route.route_90days || []
+      )
+
+      await exportProgressToPDF({
+        userName: user.email || 'Usuario',
+        profile: route.profile || 'DISC Profile',
+        completedTasks: totalProgress.completed,
+        totalTasks: totalProgress.total,
+        badges: unlockedBadges,
+        recommendations
+      })
+
+      console.log('[v0] PDF exported successfully')
+    } catch (err) {
+      console.error('[v0] Error exporting PDF:', err)
+      alert('Error al exportar PDF. Por favor intenta de nuevo.')
+    } finally {
+      setIsExporting(false)
+    }
   }
 
   useEffect(() => {
@@ -336,7 +391,56 @@ export default function A2RoutesPage() {
           </CardContent>
         </Card>
 
-        {/* 90-Day Timeline */}
+        {/* Achievements & Recommendations Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Achievements - Takes 2 columns on large screens */}
+          <Card className="bg-transparent border-muted/80 lg:col-span-2">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Trophy className="w-5 h-5 text-yellow-400" />
+                Tus Logros
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AchievementsDisplay
+                completedTasks={calculateTotalProgress().completed}
+                totalTasks={calculateTotalProgress().total}
+              />
+            </CardContent>
+          </Card>
+
+          {/* Recommendations - Takes 1 column */}
+          <Card className="bg-transparent border-muted/80">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-white">
+                <Zap className="w-5 h-5 text-purple-400" />
+                Recomendaciones
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <RecommendationsDisplay
+                recommendations={getRecommendations(
+                  completedTasks,
+                  route?.route_30days || [],
+                  route?.route_60days || [],
+                  route?.route_90days || []
+                )}
+              />
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Export PDF Button */}
+        <div className="flex justify-center pt-4">
+          <Button
+            onClick={handleExportPDF}
+            disabled={isExporting}
+            className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white"
+          >
+            <Download className="w-4 h-4 mr-2" />
+            {isExporting ? 'Generando PDF...' : 'Descargar Progreso en PDF'}
+          </Button>
+        </div>
         <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
