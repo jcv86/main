@@ -851,24 +851,6 @@ export function ConversationalInterviewSimulator({
     return emojiMap[avatarId] || (type === 'user' ? '👤' : '👥')
   }
 
-  function getAvatarName(avatarId: string, type: 'user' | 'interviewer'): string {
-    const nameMap: Record<string, string> = {
-      'professional-1': 'Professional',
-      'creative-1': 'Creative',
-      'tech-1': 'Tech',
-      'business-1': 'Business',
-      'casual-1': 'Casual',
-      'formal-1': 'Formal',
-      'interviewer-classic-1': 'Sofia',
-      'interviewer-classic-2': 'Marco',
-      'interviewer-classic-3': 'Elena',
-      'interviewer-classic-4': 'David',
-      'interviewer-modern-1': 'Alex',
-      'interviewer-modern-2': 'Jordan',
-    }
-    return nameMap[avatarId] || 'Avatar'
-  }
-
   function getAvatarGradient(avatarId: string): string {
     const gradients: Record<string, string> = {
       'professional-1': 'bg-background',
