@@ -199,14 +199,6 @@ export class EnhancedTestAnalyzer {
     return data
   }
 
-    return (data || []).map((r) => ({
-      testType: r.test_type,
-      score: r.score,
-      results: r.results,
-      completedAt: r.completed_at,
-    }))
-  }
-
   /**
    * Get Chilean market insights
    */
