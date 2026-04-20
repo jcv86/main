@@ -56,6 +56,25 @@ const getNivelColor = (nivel: string) => {
   return colors[nivel] || "bg-muted/5"
 }
 
+const getNivelLabel = (nivel: string) => {
+  const labels: Record<string, string> = {
+    "basico": "Básico",
+    "intermedio": "Intermedio",
+    "avanzado": "Avanzado",
+  }
+  return labels[nivel] || nivel
+}
+
+const getTipoLabel = (tipo: string) => {
+  const labels: Record<string, string> = {
+    "articulo": "Artículo",
+    "video": "Vídeo",
+    "podcast": "Podcast",
+    "libro": "Libro",
+  }
+  return labels[tipo] || tipo
+}
+
 export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource }: A4ResourceLibraryProps) {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
@@ -136,7 +155,7 @@ export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource 
                   className="gap-1"
                 >
                   {getResourceIcon(type)}
-                  {type}
+                  {getTipoLabel(type)}
                 </Button>
               ))}
             </div>
@@ -184,7 +203,7 @@ export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource 
                   size="sm"
                   onClick={() => setSelectedLevel(level)}
                 >
-                  {level}
+                  {getNivelLabel(level)}
                 </Button>
               ))}
             </div>
@@ -214,7 +233,7 @@ export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource 
               <div className="flex items-start justify-between gap-2 mb-2">
                 <Badge className={getResourceColor(resource.tipo)}>
                   {getResourceIcon(resource.tipo)}
-                  <span className="ml-1">{resource.tipo}</span>
+                  <span className="ml-1">{getTipoLabel(resource.tipo)}</span>
                 </Badge>
                 <Button
                   variant="ghost"
@@ -235,7 +254,7 @@ export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource 
               {/* Metadata */}
               <div className="flex flex-wrap gap-2 mt-3">
                 <Badge variant="outline" className={getNivelColor(resource.nivel)}>
-                  {resource.nivel}
+                  {getNivelLabel(resource.nivel)}
                 </Badge>
                 {resource.autor && (
                   <Badge variant="outline" className="text-xs">

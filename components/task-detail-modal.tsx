@@ -6,6 +6,15 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { TaskDetail } from '@/lib/task-details'
 
+const RESOURCE_TYPE_LABELS: Record<string, string> = {
+  'template': 'Plantilla',
+  'article': 'Artículo',
+  'course': 'Curso',
+  'tool': 'Herramienta',
+  'video': 'Vídeo',
+  'framework': 'Framework'
+}
+
 interface TaskDetailModalProps {
   task: TaskDetail
   isOpen: boolean
@@ -131,7 +140,7 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
                   >
                     <div className="flex items-start justify-between mb-2 gap-2">
                       <span className="px-2 py-1 bg-training/20 text-training rounded text-xs font-semibold capitalize whitespace-nowrap">
-                        {resource.type}
+                        {RESOURCE_TYPE_LABELS[resource.type] || resource.type}
                       </span>
                       <ExternalLink className="w-3 h-3 text-muted-foreground group-hover:text-training transition flex-shrink-0" />
                     </div>
