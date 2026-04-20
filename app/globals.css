@@ -11,7 +11,8 @@
     --background: 0 0% 0%;           /* #000000 */
     --foreground: 40 11% 96%;        /* #F5F5F2 */
     --card: 0 0% 2%;                 /* #050505 */
-    --muted: 40 5% 72%;              /* #B8B8B2 */
+    --muted: 40 5% 85%;              /* #D9D9D3 - Improved contrast */
+    --muted-foreground: 40 5% 60%;   /* #999993 - Added for secondary text */
     
     /* 6-Color Psychology System - PER BRANDBOOK IMAGE */
     --yellow: 47 100% 50%;           /* #FFD700 - Activates Memory */
@@ -60,7 +61,8 @@
     --background: 0 0% 0%;
     --foreground: 40 11% 96%;
     --card: 0 0% 2%;
-    --muted: 40 5% 72%;
+    --muted: 40 5% 85%;
+    --muted-foreground: 40 5% 60%;
     --border: rgba(255, 255, 255, 0.10);
     --border-light: rgba(255, 255, 255, 0.16);
   }
@@ -206,6 +208,26 @@
   font-weight: 600;
   letter-spacing: 0.24em;
   text-transform: uppercase;
+}
+
+/* Secondary text - proper contrast on dark backgrounds */
+.text-secondary {
+  color: hsl(var(--muted));
+  opacity: 1;
+}
+
+.text-tertiary {
+  color: hsl(var(--muted-foreground));
+  opacity: 1;
+}
+
+/* Muted variants with WCAG AA compliance */
+.text-muted {
+  color: hsl(var(--muted-foreground));
+}
+
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground));
 }
 
 /* Brand color utilities - PER BRANDBOOK */
