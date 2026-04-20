@@ -83,7 +83,7 @@ export async function fetchCategories(): Promise<string[]> {
     return []
   }
 
-  const categories = data?.map(item => item.category) || []
+  const categories = data?.map((item: any) => item.category as string) || []
   return [...new Set(categories)].sort()
 }
 
@@ -101,8 +101,9 @@ export async function fetchResourceCounts(): Promise<Record<string, number>> {
   }
 
   const counts: Record<string, number> = {}
-  data?.forEach(item => {
-    counts[item.category] = (counts[item.category] || 0) + 1
+  data?.forEach((item: any) => {
+    const category = item.category as string
+    counts[category] = (counts[category] || 0) + 1
   })
 
   return counts
