@@ -606,11 +606,11 @@ export function ConversationalInterviewSimulator({
                 </div>
 
                 {/* Scrollable Content Area */}
-                <div className="flex-1 overflow-y-auto p-2 space-y-2 bg-background border-t border-muted/20">
+                <div className="flex-1 overflow-hidden p-1.5 space-y-1 bg-background border-t border-muted/20 flex flex-col">
                   
                   {/* Interviewer Info */}
-                  <div className="flex gap-2 pb-2 border-b border-muted/20">
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center text-xl flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
+                  <div className="flex gap-1 pb-1 border-b border-muted/20 flex-shrink-0">
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
                       {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
                     </div>
                     <div className="min-w-0 flex-1">
@@ -624,23 +624,23 @@ export function ConversationalInterviewSimulator({
                   </div>
 
                   {/* What they look for */}
-                  <div className="bg-slate-950/50 rounded-[16px] p-2 border border-muted/50">
-                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-1">Lo que busca:</p>
-                    <p className="text-xs text-muted/40 leading-relaxed line-clamp-3">
+                  <div className="bg-slate-950/50 rounded-[14px] p-1.5 border border-muted/50 flex-shrink-0">
+                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-0.5 leading-none">Lo que busca:</p>
+                    <p className="text-xs text-muted/40 leading-tight line-clamp-2">
                       {getInterviewerFocus(selectedInterviewerId)}
                     </p>
                   </div>
 
                   {/* Question Card */}
-                  <Card className="border border-muted/70 bg-muted/90/50">
-                    <CardHeader className="py-1 px-2 pb-1">
-                      <CardTitle className="text-xs flex items-center gap-1 uppercase tracking-widest font-bold">
-                        <HelpCircle className="w-3 h-3 text-blue/40" />
+                  <Card className="border border-muted/70 bg-muted/90/50 flex-shrink-0">
+                    <CardHeader className="py-0.5 px-1.5 pb-0.5">
+                      <CardTitle className="text-xs flex items-center gap-0.5 uppercase tracking-widest font-bold leading-none">
+                        <HelpCircle className="w-2.5 h-2.5 text-blue/40" />
                         Pregunta
                       </CardTitle>
                     </CardHeader>
-                    <CardContent className="p-2">
-                      <p className="text-xs font-semibold text-white leading-snug mb-1 line-clamp-2">
+                    <CardContent className="p-1.5 pt-0.5">
+                      <p className="text-xs font-semibold text-white leading-snug mb-0.5 line-clamp-1">
                         {currentQuestion.text}
                       </p>
                       <p className="text-xs text-muted-foreground italic leading-snug line-clamp-1">
