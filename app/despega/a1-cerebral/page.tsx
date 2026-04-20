@@ -121,7 +121,7 @@ export default function A1CerebralPage() {
           <h2 className="text-2xl font-bold mb-8 text-center">{q.pregunta}</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <p className="text-lg font-semibold text-green dark:text-green/40 mb-4 text-center">MÁS como yo</p>
+              <p className="text-lg font-semibold text-green-400 mb-4 text-center">MÁS como yo</p>
               <div className="space-y-3">
                 {q.opciones.map((opt) => (
                   <button 
@@ -130,9 +130,9 @@ export default function A1CerebralPage() {
                     disabled={less[q.id] === opt.texto}
                     className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm font-medium ${
                       more[q.id] === opt.texto 
-                        ? 'border-green bg-green/10 text-green dark:bg-green/20 dark:text-green' 
+                        ? 'border-green bg-green/10 text-white dark:bg-green/20 dark:text-white' 
                         : less[q.id] === opt.texto 
-                          ? 'border-muted/20 bg-muted/5 text-muted-foreground dark:border-muted/40 dark:bg-transparent dark:text-muted-foreground opacity-50 cursor-not-allowed' 
+                          ? 'border-muted/20 bg-muted/5 text-white/50 dark:border-muted/40 dark:bg-transparent dark:text-white/50 opacity-50 cursor-not-allowed' 
                           : 'border-border text-foreground hover:border-green/50 hover:bg-green/5 dark:hover:bg-green/10'
                     }`}>
                     {opt.texto}
@@ -141,7 +141,7 @@ export default function A1CerebralPage() {
               </div>
             </div>
             <div>
-              <p className="text-lg font-semibold text-red dark:text-red/40 mb-4 text-center">MENOS como yo</p>
+              <p className="text-lg font-semibold text-red-400 mb-4 text-center">MENOS como yo</p>
               <div className="space-y-3">
                 {q.opciones.map((opt) => (
                   <button 
@@ -150,9 +150,9 @@ export default function A1CerebralPage() {
                     disabled={more[q.id] === opt.texto}
                     className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm font-medium ${
                       less[q.id] === opt.texto 
-                        ? 'border-red bg-red/10 text-red dark:bg-red/20 dark:text-red' 
+                        ? 'border-red bg-red/10 text-white dark:bg-red/20 dark:text-white' 
                         : more[q.id] === opt.texto 
-                          ? 'border-muted/20 bg-muted/5 text-muted-foreground dark:border-muted/40 dark:bg-transparent dark:text-muted-foreground opacity-50 cursor-not-allowed' 
+                          ? 'border-muted/20 bg-muted/5 text-white/50 dark:border-muted/40 dark:bg-transparent dark:text-white/50 opacity-50 cursor-not-allowed' 
                           : 'border-border text-foreground hover:border-red/50 hover:bg-red/5 dark:hover:bg-red/10'
                     }`}>
                     {opt.texto}
