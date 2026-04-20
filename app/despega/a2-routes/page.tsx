@@ -168,6 +168,7 @@ export default function A2RoutesPage() {
         route.route_60days || [],
         route.route_90days || []
       )
+      const recommendationsForPDF = recommendations.map(rec => rec.text)
 
       await exportProgressToPDF({
         userName: user.email || 'Usuario',
@@ -175,7 +176,7 @@ export default function A2RoutesPage() {
         completedTasks: totalProgress.completed,
         totalTasks: totalProgress.total,
         badges: badgesForPDF,
-        recommendations
+        recommendations: recommendationsForPDF
       })
 
       console.log('[v0] PDF exported successfully')
