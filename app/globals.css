@@ -12,7 +12,7 @@
     --foreground: 40 11% 96%;        /* #F5F5F2 */
     --card: 0 0% 2%;                 /* #050505 */
     --muted: 40 5% 85%;              /* #D9D9D3 - Improved contrast */
-    --muted-foreground: 40 5% 60%;   /* #999993 - Added for secondary text */
+    --muted-foreground: 40 3% 72%;   /* #B8B8B0 - Better contrast (was 60%) */
     
     /* 6-Color Psychology System - PER BRANDBOOK IMAGE */
     --yellow: 47 100% 50%;           /* #FFD700 - Activates Memory */
@@ -62,7 +62,7 @@
     --foreground: 40 11% 96%;
     --card: 0 0% 2%;
     --muted: 40 5% 85%;
-    --muted-foreground: 40 5% 60%;
+    --muted-foreground: 40 3% 72%;
     --border: rgba(255, 255, 255, 0.10);
     --border-light: rgba(255, 255, 255, 0.16);
   }
