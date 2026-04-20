@@ -631,169 +631,77 @@ export function ConversationalInterviewSimulator({
               </div>
 
               {/* BOTTOM SECTION: User Video and Controls (30%) */}
-              <div className="h-1/3 relative bg-black overflow-hidden flex flex-col"
+              <div className="h-1/3 relative bg-black overflow-hidden flex flex-col">
                 {/* User Video Stream */}
                 <video
                   ref={videoRef}
                   autoPlay
                   playsInline
                   muted
-                  className="w-full h-full object-cover"
+                  className="flex-1 object-cover w-full"
                 />
 
                 {/* Recording Status Badge - Top Left */}
-                <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
-                  <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red/50 animate-pulse' : 'bg-emerald-500'}`} />
-                  <span className="text-xs font-bold text-white bg-black/60 backdrop-blur-sm px-3 py-1.5 rounded-full uppercase tracking-wide">
-                    {isListening ? '🔴 Grabando' : '🎥 Listo'}
+                <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
+                  <div className={`w-3 h-3 rounded-full ${isListening ? 'bg-red animate-pulse' : 'bg-emerald-500'}`} />
+                  <span className="text-xs font-bold text-white bg-black/70 backdrop-blur-sm px-3 py-1 rounded-full uppercase tracking-wide">
+                    {isListening ? 'Grabando' : 'Listo'}
                   </span>
                 </div>
 
-                {/* Response Input - Bottom of Video */}
-                <div className="absolute bottom-0 left-0 right-0 bg-background">
-                  <label className="text-xs font-semibold text-white/80 mb-2 block">Tu respuesta:</label>
-                  <div className="flex gap-2">
-                    <textarea
-                      value={userResponse}
-                      onChange={(e) => setUserResponse(e.target.value)}
-                      placeholder="Escribe aquí o usa micrófono..."
-                      className="flex-1 bg-slate-950/80 border border-muted/70 rounded-[28px] p-2 text-xs text-white placeholder-slate-500 focus:border-blue/50 focus:ring-1 focus:ring-blue-500 resize-none backdrop-blur-sm"
-                      rows={2}
-                    />
-                    {isSupported && (
+                {/* Controls Section - Bottom */}
+                <div className="p-2 bg-black/80 border-t border-muted/20 space-y-1.5">
+                  {/* Response Input */}
+                  <div>
+                    <label className="text-xs font-semibold text-white/80 mb-1 block">Tu respuesta:</label>
+                    <div className="flex gap-1 items-end">
+                      <textarea
+                        value={userResponse}
+                        onChange={(e) => setUserResponse(e.target.value)}
+                        placeholder="Escribe aquí o usa micrófono..."
+                        className="flex-1 bg-slate-950/80 border border-muted/70 rounded-lg p-1.5 text-xs text-white placeholder-slate-500 focus:border-blue/50 focus:ring-1 focus:ring-blue-500 resize-none"
+                        rows={1}
+                      />
+                      {isSupported && (
+                        <button
+                          onClick={isListening ? stopListening : startListening}
+                          className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap h-fit ${
+                            isListening
+                              ? 'bg-red hover:bg-red text-white'
+                              : 'bg-muted/20 hover:bg-muted/30 text-muted-foreground'
+                          }`}
+                        >
+                          {isListening ? 'Parar' : 'Mic'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Action Buttons */}
+                  <div className="flex gap-1">
+                    {userResponse.trim() && (
                       <button
-                        onClick={isListening ? stopListening : startListening}
-                        className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all whitespace-nowrap ${
-                          isListening
-                            ? 'bg-red hover:bg-red text-white'
-                            : 'bg-muted/20 hover:bg-muted/30 text-muted-foreground hover:text-secondary'
-                        }`}
-                        title={isListening ? 'Detener' : 'Grabar'}
+                        onClick={handleSubmitResponse}
+                        className="flex-1 bg-blue/80 hover:bg-blue text-white text-xs font-bold py-1 rounded-lg transition-all"
                       >
-                        {isListening ? 'Detener' : 'Micrófono'}
+                        Enviar
                       </button>
                     )}
+                    <button
+                      onClick={handleMoveNext}
+                      className="flex-1 bg-emerald-600/80 hover:bg-emerald-600 text-white text-xs font-bold py-1 rounded-lg transition-all"
+                    >
+                      Siguiente
+                    </button>
                   </div>
-                </div>
-              </div>
-
-              {/* Right Panel: Interviewer (50%) */}
-              <div className="lg:col-span-6 bg-background flex flex-col overflow-hidden relative">
-                
-                {/* Interviewer Photo and Header Combined */}
-                <div className="flex-1 relative overflow-hidden bg-black border-l border-muted/20">
-                  {/* Photo Background */}
-                  {selectedInterviewerId && (
-                    <Image
-                      src={`/images/interviewers/${getInterviewerImageFile(selectedInterviewerId)}.jpg`}
-                      alt={getAvatarName(selectedInterviewerId, 'interviewer')}
-                      fill
-                      className="object-top object-contain absolute inset-0"
-                      priority
-                    />
-                  )}
-                </div>
-
-                {/* Scrollable Content Area */}
-                <div className="flex-1 overflow-hidden p-1.5 space-y-1 bg-background border-t border-muted/20 flex flex-col">
-                  
-                  {/* Interviewer Info */}
-                  <div className="flex gap-1 pb-1 border-b border-muted/20 flex-shrink-0">
-                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)} shadow-lg`}>
-                      {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <h3 className="text-sm font-bold text-white truncate">
-                        {getAvatarName(selectedInterviewerId, 'interviewer')}
-                      </h3>
-                      <p className="text-xs text-blue/60 truncate">
-                        {getInterviewerRole(selectedInterviewerId)}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* What they look for */}
-                  <div className="bg-slate-950/50 rounded-[14px] p-1.5 border border-muted/50 flex-shrink-0">
-                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-0.5 leading-none">Lo que busca:</p>
-                    <p className="text-xs text-muted/40 leading-tight line-clamp-2">
-                      {getInterviewerFocus(selectedInterviewerId)}
-                    </p>
-                  </div>
-
-                  {/* Question Card */}
-                  <Card className="border border-muted/70 bg-muted/90/50 flex-shrink-0">
-                    <CardHeader className="py-0.5 px-1.5 pb-0.5">
-                      <CardTitle className="text-xs flex items-center gap-0.5 uppercase tracking-widest font-bold leading-none">
-                        <HelpCircle className="w-2.5 h-2.5 text-blue/40" />
-                        Pregunta
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-1.5 pt-0.5">
-                      <p className="text-xs font-semibold text-white leading-snug mb-0.5 line-clamp-1">
-                        {currentQuestion.text}
-                      </p>
-                      <p className="text-xs text-muted-foreground italic leading-snug line-clamp-1">
-                        {currentQuestion.context}
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  {/* Progress Card - Positioned at Top Right Corner */}
-                  <div className="absolute top-1 right-1 w-28 bg-muted/90/50 border border-muted/70 rounded-[12px] p-1">
-                    <div className="flex items-center gap-0.5 mb-0.5">
-                      <TrendingUp className="w-2.5 h-2.5 text-emerald-400" />
-                      <p className="text-xs font-bold text-muted-foreground uppercase">Progreso</p>
-                    </div>
-                    <div className="flex justify-between text-xs mb-0.5">
-                      <span className="text-muted-foreground text-xs">Q</span>
-                      <span className="font-semibold text-white text-xs">
-                        {currentQuestionIdx + 1}/{questions.length}
-                      </span>
-                    </div>
-                    <Progress value={((currentQuestionIdx + 1) / questions.length) * 100} className="h-1" />
-                  </div>
-
-                  {/* AI Tips Card */}
-                  {user && (
-                    <div className="rounded-[28px] border border-muted/70 bg-muted/90/50 overflow-hidden">
-                      <InterviewTips
-                        questionText={currentQuestion.text}
-                        userResponse={userResponse}
-                        questionContext={currentQuestion.context}
-                        difficulty={level}
-                        sessionId={`interview-${level}-${Date.now()}`}
-                        userId={user.id}
-                        onTipGenerated={(tip) => console.log('[v0] Tip generated:', tip)}
-                      />
-                    </div>
-                  )}
-                </div>
-
-                {/* Action Buttons - Bottom */}
-                <div className="p-4 border-t border-muted/80 space-y-2 flex-shrink-0 bg-slate-950">
-                  <Button
-                    onClick={handleSubmitResponse}
-                    disabled={!userResponse.trim()}
-                    className="w-full bg-background"
-                  >
-                    <Send className="w-4 h-4" />
-                    Enviar
-                  </Button>
-                  <Button
-                    onClick={handleMoveNext}
-                    variant="outline"
-                    className="w-full border-muted/70 text-sm font-semibold hover:bg-muted/80"
-                  >
-                    Siguiente
-                  </Button>
                 </div>
               </div>
             </div>
 
             {error && (
-              <Alert variant="destructive" className="border-red/30 bg-red/5 dark:bg-red/20">
+              <Alert variant="destructive" className="border-red/30 bg-red/5">
                 <AlertTriangle className="h-4 w-4 text-red" />
-                <AlertDescription className="text-red dark:text-red/20 ml-2">
+                <AlertDescription className="text-red ml-2">
                   {error}
                 </AlertDescription>
               </Alert>
