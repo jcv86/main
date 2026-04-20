@@ -127,3 +127,21 @@ export function generateRecommendations(
 
   return recommendations
 }
+
+// Simplified version for A2 routes page
+export function getSimpleRecommendations(
+  completedTasks: Set<string>,
+  route30Days: any[] = [],
+  route60Days: any[] = [],
+  route90Days: any[] = []
+): Recommendation[] {
+  const totalTasks = new Map<string, number>([
+    ['30', route30Days.length],
+    ['60', route60Days.length],
+    ['90', route90Days.length]
+  ])
+
+  const taskTypes = new Map<string, string[]>()
+  
+  return generateRecommendations(completedTasks, totalTasks, taskTypes)
+}

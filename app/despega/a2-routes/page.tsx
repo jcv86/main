@@ -21,8 +21,8 @@ import {
   completionsToSet,
   getTaskId 
 } from '@/lib/supabase/task-completions'
-import { getUnlockedBadges } from '@/lib/badge-system'
-import { getRecommendations } from '@/lib/recommendation-engine'
+import { calculateBadges } from '@/lib/badge-system'
+import { getSimpleRecommendations } from '@/lib/recommendation-engine'
 import { exportProgressToPDF } from '@/lib/pdf-export'
 
 export default function A2RoutesPage() {
@@ -153,8 +153,8 @@ export default function A2RoutesPage() {
         ? (totalProgress.completed / totalProgress.total) * 100 
         : 0
 
-      const unlockedBadges = getUnlockedBadges(completionPercentage)
-      const recommendations = getRecommendations(
+      const unlockedBadges = calculateBadges(totalProgress.completed, totalProgress.total)
+      const recommendations = getSimpleRecommendations(
         completedTasks,
         route.route_30days || [],
         route.route_60days || [],
@@ -419,7 +419,7 @@ export default function A2RoutesPage() {
             </CardHeader>
             <CardContent>
               <RecommendationsDisplay
-                recommendations={getRecommendations(
+                recommendations={getSimpleRecommendations(
                   completedTasks,
                   route?.route_30days || [],
                   route?.route_60days || [],
