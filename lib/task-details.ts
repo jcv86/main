@@ -565,8 +565,243 @@ export const TASK_DETAILS: Record<number, TaskDetail> = {
     ]
   },
 
-  // Day 15-20 tasks
-  15: {
+  // Day 17: Practical project - Apply leadership
+  17: {
+    day: 17,
+    title: 'Proyecto práctico: Aplica Liderazgo',
+    fullDescription: 'Ejecuta un pequeño proyecto o iniciativa que demuestre las habilidades de liderazgo que estás desarrollando. Puede ser en tu trabajo actual o voluntariado.',
+    objective: 'Aplicar habilidades de liderazgo en contexto real',
+    steps: [
+      {
+        stepNumber: 1,
+        title: 'Identifica una iniciativa o proyecto',
+        description: 'Encuentra algo en tu trabajo o comunidad donde puedas liderar (mejorar un proceso, coordinar un equipo, dirigir un proyecto pequeño).',
+        duration: '30 min',
+        tips: [
+          'Elige algo realista de completar en 2-3 semanas',
+          'Debe involucrar a otras personas',
+          'Busca impacto medible'
+        ],
+        example: 'Ej: Liderar la implementación de una nueva herramienta de team, reorganizar un proceso departamental, o coordinar un proyecto de voluntariado'
+      },
+      {
+        stepNumber: 2,
+        title: 'Define objetivos y equipo',
+        description: 'Documenta qué quieres lograr, quién está involucrado, y cómo medirás éxito.',
+        duration: '45 min',
+        tips: [
+          'Comunica claramente el objetivo',
+          'Define roles y responsabilidades',
+          'Establece timeline y milestones'
+        ]
+      },
+      {
+        stepNumber: 3,
+        title: 'Ejecuta aplicando 3 principios de liderazgo',
+        description: 'Durante el proyecto, aplica 3 conceptos que aprendiste (comunicación clara, delegación, resolución de conflictos, etc.).',
+        duration: '6-8 hours total',
+        tips: [
+          'Documenta cómo aplicas cada principio',
+          'Solicita feedback de tu equipo',
+          'Reflexiona sobre qué funcionó'
+        ]
+      },
+      {
+        stepNumber: 4,
+        title: 'Documenta y reflexiona',
+        description: 'Escribe un caso de estudio de lo que aprendiste liderando este proyecto.',
+        duration: '30 min',
+        tips: [
+          'Incluye desafíos y cómo los superaste',
+          'Resultados concretos',
+          'Qué harías diferente'
+        ]
+      }
+    ],
+    resources: [
+      {
+        title: 'Project Leadership Checklist',
+        type: 'template',
+        url: 'https://www.notion.so/templates/project-leadership',
+        description: 'Checklist para liderar proyectos'
+      },
+      {
+        title: 'Harvard Business Review - Leadership Lessons',
+        type: 'article',
+        url: 'https://hbr.org/topic/leadership',
+        description: 'Artículos sobre liderazgo práctico'
+      }
+    ],
+    expectedOutput: 'Proyecto completado con documentación de aprendizajes y caso de estudio de liderazgo',
+    successCriteria: [
+      '✓ Proyecto ejecutado exitosamente',
+      '✓ 3 principios de liderazgo aplicados',
+      '✓ Feedback del equipo recopilado',
+      '✓ Documento de reflexión completado'
+    ]
+  },
+
+  // Day 21: Networking - Informational interviews
+  21: {
+    day: 21,
+    title: 'Networking: Informational interviews',
+    fullDescription: 'Realiza 2-3 informational interviews con profesionales en tu rol objetivo. El objetivo es aprender, no pedir trabajo.',
+    objective: 'Construir relaciones y aprender del mercado',
+    steps: [
+      {
+        stepNumber: 1,
+        title: 'Prepara tu lista de preguntas',
+        description: 'Desarrolla 8-10 preguntas que quieras hacer para aprender sobre el rol, industria, y trayectoria profesional.',
+        duration: '30 min',
+        tips: [
+          'Sé específico/a',
+          'Evita preguntas que puedas responder en Google',
+          'Incluye preguntas personales sobre su carrera'
+        ],
+        example: 'Ej: "¿Cuáles fueron los 3 mayores cambios en tu rol en los últimos 2 años?" o "¿Qué skill te habría gustado desarrollar antes?"'
+      },
+      {
+        stepNumber: 2,
+        title: 'Contacta 3-5 personas para entrevistas',
+        description: 'Alcanza personas en LinkedIn o a través de referidos. Solicita 20-30 minutos de su tiempo.',
+        duration: '30 min',
+        tips: [
+          'Sé respetuoso del tiempo',
+          'Explica por qué quieres hablar con ellos',
+          'Ofrece flexibilidad en horarios',
+          'Remite a un link de calendario'
+        ]
+      },
+      {
+        stepNumber: 3,
+        title: 'Realiza las informational interviews',
+        description: 'Conduce 2-3 conversaciones de calidad. Escucha más que hablas, toma notas detalladas.',
+        duration: '60 min total',
+        tips: [
+          'Sé puntual y profesional',
+          'Apaga notificaciones',
+          'Haz seguimiento de lo que dicen',
+          'Al final, pregunta si pueden referirte a otros'
+        ]
+      },
+      {
+        stepNumber: 4,
+        title: 'Seguimiento y gratitud',
+        description: 'Envía thank you notes personalizadas a cada persona. Menciona algo específico que aprendiste.',
+        duration: '30 min',
+        tips: [
+          'Envía dentro de 24 horas',
+          'Sé específico/a en la gratitud',
+          'Ofrece valor si puedes (conexiones, artículos, etc.)'
+        ]
+      }
+    ],
+    resources: [
+      {
+        title: 'Informational Interview Guide',
+        type: 'article',
+        url: 'https://www.thebalancecareers.com/informational-interview-questions-2061616',
+        description: 'Guía completa de entrevistas informativas'
+      },
+      {
+        title: 'LinkedIn - How to Request an Informational Interview',
+        type: 'article',
+        url: 'https://business.linkedin.com/talent-solutions/recruiter-tips',
+        description: 'Tips de LinkedIn para solicitar entrevistas'
+      }
+    ],
+    expectedOutput: '2-3 informational interviews completadas, notas documentadas, thank you notes enviadas',
+    successCriteria: [
+      '✓ 2-3 entrevistas realizadas',
+      '✓ Preguntas de calidad respondidas',
+      '✓ Insights documentados',
+      '✓ Relaciones iniciadas',
+      '✓ Thank you notes enviadas'
+    ]
+  },
+
+  // Day 28: 30-day milestone - Complete review
+  28: {
+    day: 28,
+    title: 'Hito de 30 días: Revisión completa',
+    fullDescription: 'Evaluación completa de tus 30 días. Mide progreso, celebra logros, y planifica los próximos 60 días con lo aprendido.',
+    objective: 'Consolidar aprendizajes y planificar siguiente fase',
+    steps: [
+      {
+        stepNumber: 1,
+        title: 'Revisa tu estado inicial vs. actual',
+        description: 'Compara dónde estabas el Día 1 vs. donde estás hoy en: skills, red, aplicaciones, entrevistas, marca personal.',
+        duration: '30 min',
+        tips: [
+          'Sé brutal con la honestidad',
+          'Documenta cambios cuantitativos',
+          'Nota cambios en mentalidad/confianza'
+        ]
+      },
+      {
+        stepNumber: 2,
+        title: 'Analiza qué funcionó mejor',
+        description: 'Identifica las 3 acciones o estrategias que generaron mayor ROI (retorno en inversión de tiempo).',
+        duration: '30 min',
+        tips: [
+          'Mira qué canales trajeron entrevistas',
+          'Qué hizo que te conectaras con decisores',
+          'Qué actividades te motivaron más'
+        ]
+      },
+      {
+        stepNumber: 3,
+        title: 'Celebra tus logros',
+        description: 'Haz una lista de TODO lo que lograste. Desde skills desarrollados hasta relaciones construidas. Celebra apropiadamente.',
+        duration: '30 min',
+        tips: [
+          'No subestimes lo alcanzado',
+          'Comparte logros con mentores/amigos',
+          'Reconoce tu esfuerzo'
+        ]
+      },
+      {
+        stepNumber: 4,
+        title: 'Planifica los próximos 60 días',
+        description: 'Basado en lo aprendido, planifica una estrategia mejorada para los próximos 60 días. ¿Qué harías diferente? ¿Qué acelerarías?',
+        duration: '90 min',
+        tips: [
+          'Sé más ambicioso/a con lo que sabes funciona',
+          'Identifica nuevas oportunidades',
+          'Define nuevos objetivos',
+          'Planifica recursos necesarios'
+        ]
+      }
+    ],
+    resources: [
+      {
+        title: 'Quarterly Review Template',
+        type: 'template',
+        url: 'https://www.notion.so/templates/quarterly-review',
+        description: 'Template para revisión de período'
+      },
+      {
+        title: 'Goal Setting for Next Quarter',
+        type: 'framework',
+        url: 'https://www.notion.so/templates/goal-setting',
+        description: 'Framework para definir objetivos nuevos'
+      }
+    ],
+    expectedOutput: 'Documento completo de revisión de 30 días + plan detallado para próximos 60 días',
+    successCriteria: [
+      '✓ Comparación inicial vs. final documentada',
+      '✓ 3 estrategias ganadores identificadas',
+      '✓ Logros celebrados y reconocidos',
+      '✓ Plan 60 días definido',
+      '✓ Nuevos objetivos claros'
+    ]
+  }
+}
+
+// Get task details by day number
+export function getTaskDetail(day: number): TaskDetail | undefined {
+  return TASK_DETAILS[day]
+}
     day: 15,
     title: 'Entrevistas Mock: Prepárate',
     fullDescription: 'Realiza 2-3 entrevistas de práctica con amigos o mentores para identificar áreas de mejora antes de las reales.',
