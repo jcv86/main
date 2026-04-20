@@ -67,7 +67,7 @@ export default function A3IntroPage() {
                 A3 es tu fase de práctica de alto impacto. Realizarás simulaciones de entrevistas estructuradas donde recibirás feedback inmediato de IA y podrás iterar tu desempeño hasta llegar a la confianza de nivel profesional.
               </p>
               <div className="bg-blue/5 dark:bg-cyan-950 p-4 rounded-[28px] border border-blue/30 dark:border-cyan">
-                <p className="text-sm text-cyan dark:text-cyan/10">
+                <p className="text-sm text-cyan-700 dark:text-cyan-300 font-medium">
                   <span className="font-semibold">Tu objetivo en A3:</span> Pasar de "conozco las respuestas" a "puedo responder con seguridad bajo presión".
                 </p>
               </div>
@@ -117,7 +117,7 @@ export default function A3IntroPage() {
           <Card className="border-0 shadow-lg bg-muted/90 dark:bg-card">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-white flex items-center gap-2">
-                <MessageSquare className="w-6 h-6 text-cyan/40" />
+                <MessageSquare className="w-6 h-6 text-cyan-400" />
                 El Ciclo de Mejora
               </CardTitle>
               <CardDescription className="text-muted-foreground">Cada simulación sigue este proceso</CardDescription>
@@ -125,24 +125,24 @@ export default function A3IntroPage() {
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
-                  <div className="text-3xl font-bold text-cyan/40 mb-2">1</div>
+                  <div className="text-3xl font-bold text-cyan-400 mb-2">1</div>
                   <p className="text-sm font-semibold text-white mb-1">Responde</p>
-                  <p className="text-xs text-muted-foreground">Simulación completa</p>
+                  <p className="text-xs text-white/70">Simulación completa</p>
                 </div>
                 <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
-                  <div className="text-3xl font-bold text-cyan/40 mb-2">2</div>
+                  <div className="text-3xl font-bold text-cyan-400 mb-2">2</div>
                   <p className="text-sm font-semibold text-white mb-1">Analiza</p>
-                  <p className="text-xs text-muted-foreground">Feedback de IA</p>
+                  <p className="text-xs text-white/70">Feedback de IA</p>
                 </div>
                 <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
-                  <div className="text-3xl font-bold text-cyan/40 mb-2">3</div>
+                  <div className="text-3xl font-bold text-cyan-400 mb-2">3</div>
                   <p className="text-sm font-semibold text-white mb-1">Ajusta</p>
-                  <p className="text-xs text-muted-foreground">Mejora tu respuesta</p>
+                  <p className="text-xs text-white/70">Mejora tu respuesta</p>
                 </div>
                 <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
-                  <div className="text-3xl font-bold text-cyan/40 mb-2">4</div>
+                  <div className="text-3xl font-bold text-cyan-400 mb-2">4</div>
                   <p className="text-sm font-semibold text-white mb-1">Repite</p>
-                  <p className="text-xs text-muted-foreground">Vuelve a simular</p>
+                  <p className="text-xs text-white/70">Vuelve a simular</p>
                 </div>
               </div>
             </CardContent>
