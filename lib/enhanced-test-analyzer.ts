@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase"
-import { cerebroIntelligence } from "@/lib/cerebro-intelligence"
+import { getCerebroIntelligence } from "@/lib/cerebro-intelligence"
 import { z } from "zod"
 
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY

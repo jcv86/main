@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { cerebroIntelligence } from "@/lib/cerebro-intelligence"
+import { getCerebroIntelligence } from "@/lib/cerebro-intelligence"
 import { semanticSearch } from "@/lib/embeddings"
 import { createClient } from "@/lib/supabase/server"
 
