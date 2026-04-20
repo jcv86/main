@@ -258,18 +258,24 @@ export function InterviewTips({
 
         {/* Information */}
         {!canUseFreeTip && (
-          <div className="p-3 bg-yellow/10 dark:bg-yellow/20 rounded-[28px] border border-yellow/40 dark:border-yellow/50">
-            <p className="text-sm text-yellow/80 dark:text-yellow/90 font-medium leading-relaxed">
-              Usaste los 3 tips gratis. Obtén tips premium con puntos DTC o gana más tips completando entrevistas.
-            </p>
+          <div className="p-4 bg-yellow-950/60 dark:bg-yellow-950/70 rounded-[28px] border-2 border-yellow/60 dark:border-yellow/70">
+            <div className="flex gap-2 items-start">
+              <div className="text-yellow/80 dark:text-yellow/90 text-lg flex-shrink-0">⭐</div>
+              <p className="text-sm text-yellow-100 dark:text-yellow-100 font-semibold leading-relaxed">
+                Usaste los 3 tips gratis. Obtén tips premium con puntos DTC o gana más tips completando entrevistas.
+              </p>
+            </div>
           </div>
         )}
 
         {dtcBalance !== null && !canUsePremiumTip && premiumTipsUsed === 0 && canUseFreeTip && (
-          <div className="p-3 bg-blue/10 dark:bg-blue/20 rounded-[28px] border border-blue/40 dark:border-blue/50">
-            <p className="text-sm text-blue/80 dark:text-blue/90 font-medium leading-relaxed">
-              Después de usar los 3 tips gratis, puedes comprar puntos DTC en la tienda para tips premium.
-            </p>
+          <div className="p-4 bg-blue-950/60 dark:bg-blue-950/70 rounded-[28px] border-2 border-blue/60 dark:border-blue/70">
+            <div className="flex gap-2 items-start">
+              <div className="text-blue/80 dark:text-blue/90 text-lg flex-shrink-0">💳</div>
+              <p className="text-sm text-blue-100 dark:text-blue-100 font-semibold leading-relaxed">
+                Después de usar los 3 tips gratis, puedes comprar puntos DTC en la tienda para tips premium.
+              </p>
+            </div>
           </div>
         )}
       </div>
