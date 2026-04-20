@@ -73,20 +73,20 @@ export default function A1CerebralIntroPage() {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="p-4 bg-red/5 dark:bg-red rounded-[28px] border border-red/20 dark:border-red">
-                  <p className="font-semibold text-red dark:text-red/10 mb-1">Impulsor</p>
-                  <p className="text-sm text-red dark:text-red/20">Enfocado en resultados, decisivo, impulsivo</p>
+                  <p className="font-semibold text-white mb-1">Impulsor</p>
+                  <p className="text-sm text-white">Enfocado en resultados, decisivo, impulsivo</p>
                 </div>
                 <div className="p-4 bg-yellow/5 dark:bg-yellow rounded-[28px] border border-yellow/20 dark:border-yellow">
-                  <p className="font-semibold text-yellow dark:text-yellow/10 mb-1">Catalizador</p>
-                  <p className="text-sm text-yellow dark:text-yellow-300">Comunicativo, entusiasta, orientado a personas</p>
+                  <p className="font-semibold text-white mb-1">Catalizador</p>
+                  <p className="text-sm text-white">Comunicativo, entusiasta, orientado a personas</p>
                 </div>
                 <div className="p-4 bg-green/5 dark:bg-green rounded-[28px] border border-green/20 dark:border-green">
-                  <p className="font-semibold text-green dark:text-green/10 mb-1">Estabilizador</p>
-                  <p className="text-sm text-green dark:text-green/20">Estable, cooperativo, confiable, paciente</p>
+                  <p className="font-semibold text-white mb-1">Estabilizador</p>
+                  <p className="text-sm text-white">Estable, cooperativo, confiable, paciente</p>
                 </div>
                 <div className="p-4 bg-blue/5 dark:bg-blue rounded-[28px] border border-blue/30 dark:border-blue/10">
-                  <p className="font-semibold text-blue dark:text-white mb-1">Arquitecto</p>
-                  <p className="text-sm text-blue dark:text-blue-300">Analítico, detallista, exigente con calidad</p>
+                  <p className="font-semibold text-white mb-1">Arquitecto</p>
+                  <p className="text-sm text-white">Analítico, detallista, exigente con calidad</p>
                 </div>
               </div>
             </CardContent>
