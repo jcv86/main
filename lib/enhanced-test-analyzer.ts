@@ -368,7 +368,7 @@ Enfócate en:
   private async generatePredictiveCareerInsights(userId: string, analysis: CrossTestAnalysis) {
     // Generate insights for top career matches
     for (const match of analysis.careerAlignment.topMatches.slice(0, 3)) {
-      await cerebroIntelligence.generatePredictiveInsight(userId, {
+      await getCerebroIntelligence().generatePredictiveInsight(userId, {
         insightType: "career_opportunity",
         prediction: `${match.career} es una excelente opción de carrera para ti`,
         reasoning: `${match.reasoning}. Fit con mercado chileno: ${match.chileanMarketFit}`,
@@ -379,7 +379,7 @@ Enfócate en:
 
     // Generate insights for skill gaps
     for (const gap of analysis.skillGaps.filter((g) => g.importance === "high").slice(0, 2)) {
-      await cerebroIntelligence.generatePredictiveInsight(userId, {
+      await getCerebroIntelligence().generatePredictiveInsight(userId, {
         insightType: "skill_gap",
         prediction: `Desarrollar ${gap.skill} aumentará significativamente tus oportunidades`,
         reasoning: gap.developmentPath,
@@ -390,7 +390,7 @@ Enfócate en:
 
     // Generate insights for high-priority development areas
     for (const priority of analysis.developmentPriorities.filter((p) => p.priority === "high")) {
-      await cerebroIntelligence.generatePredictiveInsight(userId, {
+      await getCerebroIntelligence().generatePredictiveInsight(userId, {
         insightType: "learning_recommendation",
         prediction: `Enfócate en ${priority.area} en los próximos ${priority.timeframe}`,
         reasoning: `Pasos: ${priority.actionSteps.join(", ")}`,
