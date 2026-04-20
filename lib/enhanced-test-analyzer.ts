@@ -82,9 +82,9 @@ const CrossTestAnalysisSchema = z.object({
 export class EnhancedTestAnalyzer {
   private supabaseInstance: any = null
 
-  private getSupabase() {
+  private async getSupabase() {
     if (!this.supabaseInstance) {
-      this.supabaseInstance = createClient()
+      this.supabaseInstance = await createClient()
     }
     return this.supabaseInstance
   }
@@ -186,7 +186,7 @@ export class EnhancedTestAnalyzer {
   private async getTestCombinationPattern(testTypes: string[]): Promise<any | null> {
     const combination = testTypes.sort().join("+")
 
-    const { data, error } = await this.getSupabase()
+    const { data, error } = this.getSupabase()
       .from("cerebro_test_combinations")
       .select("*")
       .eq("test_combination", combination)
@@ -333,14 +333,14 @@ Enfócate en:
    */
   private async storeCrossTestAnalysis(userId: string, testResults: TestResult[], analysis: CrossTestAnalysis) {
     try {
-    const { data: profile } = await this.getSupabase().from("user_profiles").select("email").eq("id", userId).single()
+    const { data: profile } = this.getSupabase().from("user_profiles").select("email").eq("id", userId).single()
 
       if (!profile?.email) {
         console.error("User profile not found")
         return
       }
 
-      await this.getSupabase().from("cerebro_cross_test_analysis").insert({
+      this.getSupabase().from("cerebro_cross_test_analysis").insert({
         user_email: profile.email,
         test_types: testResults.map((t) => t.testType),
         combined_profile: {
@@ -404,11 +404,11 @@ Enfócate en:
    * Get latest cross-test analysis for user
    */
   async getLatestCrossTestAnalysis(userId: string): Promise<CrossTestAnalysis | null> {
-    const { data: profile } = await this.getSupabase().from("user_profiles").select("email").eq("id", userId).single()
+    const { data: profile } = this.getSupabase().from("user_profiles").select("email").eq("id", userId).single()
 
     if (!profile?.email) return null
 
-    const { data, error } = await this.getSupabase()
+    const { data, error } = this.getSupabase()
       .from("cerebro_cross_test_analysis")
       .select("*")
       .eq("user_email", profile.email)
