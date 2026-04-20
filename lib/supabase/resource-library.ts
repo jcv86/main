@@ -83,8 +83,8 @@ export async function fetchCategories(): Promise<string[]> {
     return []
   }
 
-  const categories = data?.map((item: any) => item.category as string) || []
-  return [...new Set(categories)].sort()
+  const categories: string[] = data?.map((item: any) => item.category as string) || []
+  return Array.from(new Set(categories)).sort()
 }
 
 // Get resource count by category
