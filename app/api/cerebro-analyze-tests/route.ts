@@ -64,6 +64,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "userId is required" }, { status: 400 })
     }
 
+    const enhancedTestAnalyzer = getEnhancedTestAnalyzer()
     const analysis = await enhancedTestAnalyzer.getLatestCrossTestAnalysis(userId)
 
     if (!analysis) {
