@@ -21,7 +21,7 @@ import {
   completionsToSet,
   getTaskId 
 } from '@/lib/supabase/task-completions'
-import { calculateBadges } from '@/lib/badge-system'
+import { calculateBadges, BADGES } from '@/lib/badge-system'
 import { getSimpleRecommendations } from '@/lib/recommendation-engine'
 import { exportProgressToPDF } from '@/lib/pdf-export'
 
@@ -155,10 +155,13 @@ export default function A2RoutesPage() {
         : 0
 
       const unlockedBadges = calculateBadges(totalProgress.completed, totalProgress.total)
-      const badgesForPDF = unlockedBadges.map(badge => ({
-        title: badge.title,
-        icon: badge.icon
-      }))
+      const badgesForPDF = unlockedBadges.map(badgeId => {
+        const badge = BADGES[badgeId]
+        return {
+          title: badge.title,
+          icon: badge.icon
+        }
+      })
       const recommendations = getSimpleRecommendations(
         completedTasks,
         route.route_30days || [],
