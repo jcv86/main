@@ -341,7 +341,7 @@ export function ConversationalInterviewSimulator({
       questionsCompleted: questions.length,
       totalAttempts: Object.values(attempts).flat().length,
       averageScore,
-      attempts
+      attempts,
     })
 
     setStage('complete')
