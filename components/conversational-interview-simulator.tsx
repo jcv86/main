@@ -588,24 +588,7 @@ export function ConversationalInterviewSimulator({
                     </CardContent>
                   </Card>
                 </div>
-
-                {/* Action Buttons - Bottom */}
-                <div className="p-4 border-t border-muted/80 space-y-2 flex-shrink-0 bg-slate-950">
-                  <Button
-                    onClick={handleSubmitResponse}
-                    disabled={!userResponse.trim()}
-                    className="w-full bg-background"
-                  >
-                    <Send className="w-4 h-4" />
-                    Enviar
-                  </Button>
-                  <Button
-                    onClick={handleMoveNext}
-                    variant="outline"
-                    className="w-full border-muted/70 text-sm font-semibold hover:bg-muted/80"
-                  >
-                    Siguiente
-                  </Button>
+                  </div>
                 </div>
               </div>
             </div>
