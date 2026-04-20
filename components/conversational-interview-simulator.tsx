@@ -358,6 +358,18 @@ export function ConversationalInterviewSimulator({
     return names[id] || 'Entrevistador'
   }
 
+  const getInterviewerImageFile = (id: string) => {
+    const imageMap: Record<string, string> = {
+      'interviewer-classic-1': 'sofia',
+      'interviewer-classic-2': 'marco',
+      'interviewer-classic-3': 'elena',
+      'interviewer-classic-4': 'david',
+      'interviewer-classic-5': 'alexandra',
+      'interviewer-classic-6': 'bruno'
+    }
+    return imageMap[id] || 'sofia'
+  }
+
   const getInterviewerRole = (id: string) => {
     const roles: Record<string, string> = {
       'interviewer-classic-1': 'Reclutadora',
@@ -584,7 +596,7 @@ export function ConversationalInterviewSimulator({
                   {/* Photo Background */}
                   {selectedInterviewerId && (
                     <Image
-                      src={`/images/interviewers/${selectedInterviewerId}.jpg`}
+                      src={`/images/interviewers/${getInterviewerImageFile(selectedInterviewerId)}.jpg`}
                       alt={getAvatarName(selectedInterviewerId, 'interviewer')}
                       fill
                       className="object-cover absolute inset-0"
