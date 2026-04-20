@@ -12,6 +12,13 @@ import { Badge } from '@/components/ui/badge'
 import { Loader2, Calendar, Target, CheckCircle2, AlertCircle, ArrowRight, Zap, MapPin } from 'lucide-react'
 import { TaskCard } from '@/components/task-card'
 import { PhaseProgress } from '@/components/phase-progress'
+import { 
+  fetchUserCompletions, 
+  markTaskComplete, 
+  unmarkTaskComplete, 
+  completionsToSet,
+  getTaskId 
+} from '@/lib/supabase/task-completions'
 
 export default function A2RoutesPage() {
   const router = useRouter()
@@ -20,18 +27,67 @@ export default function A2RoutesPage() {
   const [error, setError] = useState('')
   const [expandedMilestone, setExpandedMilestone] = useState<30 | 60 | 90 | null>(30)
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set())
+  const [isSyncing, setIsSyncing] = useState(false)
   const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
 
-  // Handle task completion
-  const handleTaskComplete = (taskId: string) => {
+  // Load completions from Supabase on mount
+  useEffect(() => {
+    if (authLoading || !user?.id) return
+    loadCompletionsFromSupabase()
+  }, [authLoading, user?.id])
+
+  const loadCompletionsFromSupabase = async () => {
+    try {
+      const completions = await fetchUserCompletions()
+      const completionSet = completionsToSet(completions)
+      setCompletedTasks(completionSet)
+      console.log('[v0] Loaded', completionSet.size, 'completed tasks from Supabase')
+    } catch (err) {
+      console.error('[v0] Error loading completions:', err)
+      // Continue with empty set if load fails - user can still work locally
+    }
+  }
+
+  // Handle task completion with Supabase sync
+  const handleTaskComplete = async (taskId: string) => {
+    // Optimistic update
     const newCompleted = new Set(completedTasks)
-    if (newCompleted.has(taskId)) {
+    const isCurrentlyCompleted = newCompleted.has(taskId)
+    
+    if (isCurrentlyCompleted) {
       newCompleted.delete(taskId)
     } else {
       newCompleted.add(taskId)
     }
     setCompletedTasks(newCompleted)
+
+    // Parse task ID to get phase, day, and title
+    const parts = taskId.split('-')
+    const phase = parseInt(parts[0]) as 30 | 60 | 90
+    const day = parseInt(parts[1])
+    // Join remaining parts in case title has dashes
+    const title = parts.slice(2).join('-')
+
+    // Sync to Supabase in background
+    setIsSyncing(true)
+    try {
+      if (isCurrentlyCompleted) {
+        // Task was completed, now uncompleting it
+        await unmarkTaskComplete(phase, day, title)
+        console.log('[v0] Task unmarked in Supabase:', taskId)
+      } else {
+        // Task is now being completed
+        await markTaskComplete(phase, day, title)
+        console.log('[v0] Task marked in Supabase:', taskId)
+      }
+    } catch (err) {
+      console.error('[v0] Error syncing task completion:', err)
+      // Revert optimistic update on error
+      setCompletedTasks(completedTasks)
+    } finally {
+      setIsSyncing(false)
+    }
   }
 
   // Calculate phase progress
