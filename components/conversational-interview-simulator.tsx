@@ -614,15 +614,15 @@ export function ConversationalInterviewSimulator({
                   )}
                 </div>
 
-                {/* Info Card - Top Right Corner */}
-                <div className="absolute top-2 right-2 left-auto w-40 z-20">
+                {/* Info Card - Top Left Corner */}
+                <div className="absolute top-2 left-2 right-auto w-56 z-20">
                   <div className="flex gap-2 bg-black/90 backdrop-blur-md rounded-lg p-2 border border-muted/50">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)}`}>
                       {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
                     </div>
                     <div className="min-w-0 flex-1">
                       <h3 className="text-xs font-bold text-white truncate">{getAvatarName(selectedInterviewerId, 'interviewer')}</h3>
-                      <p className="text-xs text-emerald-400/80 truncate">{getInterviewerRole(selectedInterviewerId)}</p>
+                      <p className="text-xs text-emerald-400/80 line-clamp-2">{getInterviewerRole(selectedInterviewerId)}</p>
                     </div>
                   </div>
                 </div>
