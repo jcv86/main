@@ -170,7 +170,7 @@ Solo retorna el JSON, sin explicaciones.`
 
 export async function processWeeklyCoachingMemory() {
   try {
-    const supabase = createClient()
+    const supabase = await createClient()
 
     // Get all users with recent coaching conversations
     const { data: recentConversations, error: conversationError } = await supabase
