@@ -21,7 +21,7 @@ export default function ComenzarPage() {
             Tu Transformación Comienza Aquí
           </h1>
 
-          <p className="text-xl text-muted/60 dark:text-muted/30 mb-12">
+          <p className="text-xl text-muted-foreground dark:text-muted/30 mb-12">
             Sistema completamente integrado de 4 pilares. 
             <br />
             Descubrimiento → Exploración → Entrenamiento → Acción
@@ -55,7 +55,7 @@ export default function ComenzarPage() {
             ].map((stat, idx) => (
               <div key={idx} className="bg-white/50 dark:bg-background/50 backdrop-blur rounded-lg p-4">
                 <div className="text-2xl font-bold text-muted/90 dark:text-white">{stat.value}</div>
-                <div className="text-sm text-muted/60 dark:text-muted/40">{stat.label}</div>
+                <div className="text-sm text-muted-foreground dark:text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -75,7 +75,7 @@ export default function ComenzarPage() {
                 <CardTitle>Para Testing & QA</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-muted/70 dark:text-muted/30">
+                <p className="text-muted-foreground dark:text-muted/30">
                   Prueba rápidamente la integración de todos los pilares sin necesidad de hacer el ciclo completo.
                 </p>
                 <div className="space-y-2">
@@ -105,7 +105,7 @@ export default function ComenzarPage() {
                 <CardTitle>Para Usuarios Nuevos</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-muted/70 dark:text-muted/30">
+                <p className="text-muted-foreground dark:text-muted/30">
                   Inicia tu ciclo de transformación completo. Completarás los 4 pilares en orden.
                 </p>
                 <div className="space-y-2">
@@ -242,11 +242,11 @@ export default function ComenzarPage() {
           <div className="grid md:grid-cols-3 gap-6">
             <Card>
               <CardHeader>
-                <FileText className="h-8 w-8 text-muted/60 dark:text-muted/40 mb-2" />
+                <FileText className="h-8 w-8 text-muted-foreground dark:text-muted-foreground mb-2" />
                 <CardTitle className="text-lg">Testing Guide</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted/60 dark:text-muted/40 mb-4">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-4">
                   Guía completa de testing con todos los endpoints y flujos
                 </p>
                 <Link href="/TESTING_GUIDE.md" target="_blank">
@@ -263,7 +263,7 @@ export default function ComenzarPage() {
                 <CardTitle className="text-lg">Production Checklist</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted/60 dark:text-muted/40 mb-4">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-4">
                   Checklist de validación para producción
                 </p>
                 <Link href="/PRODUCTION_READY_CHECKLIST.md" target="_blank">
@@ -280,7 +280,7 @@ export default function ComenzarPage() {
                 <CardTitle className="text-lg">Testing Links</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted/60 dark:text-muted/40 mb-4">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-4">
                   Index completo de todas las rutas disponibles
                 </p>
                 <Link href="/TESTING_LINKS.md" target="_blank">
@@ -296,10 +296,10 @@ export default function ComenzarPage() {
 
       {/* Footer */}
       <section className="container mx-auto px-4 py-12 text-center border-t border-muted/20 dark:border-muted/80">
-        <p className="text-muted/60 dark:text-muted/40 mb-4">
+        <p className="text-muted-foreground dark:text-muted-foreground mb-4">
           Sistema DTC - Transformación Profesional Integrada
         </p>
-        <p className="text-sm text-muted/50 dark:text-muted/50">
+        <p className="text-sm text-muted-foreground dark:text-muted-foreground">
           ✅ Todos los 4 pilares (A1-A4) integrados y listos para producción
         </p>
       </section>

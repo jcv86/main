@@ -73,7 +73,7 @@ export default async function RecommendedBooksPage() {
             <Star className="h-8 w-8 fill-yellow-500 text-orange" />
             <h1 className="text-5xl font-bold bg-blue bg-clip-text text-transparent/40/40">Libros Recomendados</h1>
           </div>
-          <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">
+          <p className="text-lg text-muted-foreground dark:text-muted/30 font-medium">
             Basado en tu nivel <span className="font-semibold capitalize">{profile.current_level}</span> y tus intereses en {profile.preferred_categories?.join(", ") || "varias categorías"}
           </p>
         </div>

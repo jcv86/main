@@ -323,7 +323,7 @@ function ProfileCard({ profile, isFavorite, onFavorite, onSelect }: ProfileCardP
             className="p-2 hover:bg-accent rounded-lg"
           >
             <Heart
-              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red' : 'text-muted/40'}`}
+              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red' : 'text-muted-foreground'}`}
             />
           </button>
         </div>
@@ -388,7 +388,7 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
             }}
           >
             <Heart
-              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red' : 'text-muted/40'}`}
+              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red' : 'text-muted-foreground'}`}
             />
           </button>
         </div>

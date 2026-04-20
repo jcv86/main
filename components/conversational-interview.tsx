@@ -226,7 +226,7 @@ export function ConversationalInterview({
           <CardContent className="space-y-6">
             <div className="space-y-2">
               <h3 className="font-semibold">Configuración</h3>
-              <p className="text-muted/60 dark:text-muted/40">
+              <p className="text-muted-foreground dark:text-muted-foreground">
                 Puesto: <Badge>{role}</Badge> | Industria: <Badge>{industry}</Badge> | Nivel: <Badge>{level}</Badge>
               </p>
             </div>
@@ -296,7 +296,7 @@ export function ConversationalInterview({
               />
               {!videoEnabled && (
                 <div className="w-full h-full bg-muted/20 dark:bg-transparent flex items-center justify-center">
-                  <p className="text-muted/50">Cámara deshabilitada</p>
+                  <p className="text-muted-foreground">Cámara deshabilitada</p>
                 </div>
               )}
 
@@ -343,7 +343,7 @@ export function ConversationalInterview({
                   <div className="absolute inset-0 bg-black/0 hover:bg-black/20 transition-all flex flex-col justify-end p-4">
                     <div className="bg-background/90 backdrop-blur-sm rounded-lg p-3">
                       <p className="font-semibold text-sm">{getAvatarName(selectedInterviewerId, 'interviewer')}</p>
-                      <p className="text-xs text-muted/60">Entrevistador</p>
+                      <p className="text-xs text-muted-foreground">Entrevistador</p>
                     </div>
                   </div>
                 </div>
@@ -353,7 +353,7 @@ export function ConversationalInterview({
                     {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
                   </div>
                   <p className="font-semibold">{getAvatarName(selectedInterviewerId, 'interviewer')}</p>
-                  <p className="text-xs text-muted/60">Entrevistador</p>
+                  <p className="text-xs text-muted-foreground">Entrevistador</p>
                 </div>
               )}
             </CardContent>
@@ -384,7 +384,7 @@ export function ConversationalInterview({
             <div className="space-y-3 max-h-64 overflow-y-auto">
               {interviewerMessage && (
                 <div className="bg-muted/10 dark:bg-transparent p-3 rounded-lg">
-                  <p className="text-sm font-semibold text-muted/70 dark:text-muted/30 mb-1">Entrevistador</p>
+                  <p className="text-sm font-semibold text-muted-foreground dark:text-muted/30 mb-1">Entrevistador</p>
                   <p className="text-sm">{interviewerMessage}</p>
                 </div>
               )}
@@ -432,11 +432,11 @@ export function ConversationalInterview({
           <CardContent className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="p-4 bg-muted/10 dark:bg-transparent rounded-lg">
-                <p className="text-sm text-muted/60 dark:text-muted/40">Puntuación</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Puntuación</p>
                 <p className="text-3xl font-bold text-cyan">{feedbackData?.score}/100</p>
               </div>
               <div className="p-4 bg-muted/10 dark:bg-transparent rounded-lg">
-                <p className="text-sm text-muted/60 dark:text-muted/40">Respuestas Registradas</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Respuestas Registradas</p>
                 <p className="text-3xl font-bold">{feedbackData?.totalResponses}</p>
               </div>
             </div>

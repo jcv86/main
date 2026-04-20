@@ -427,7 +427,7 @@ export default function EmotionalIntelligenceTest() {
           <CardContent className="p-8">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
-              <p className="text-muted/60">Cargando evaluación...</p>
+              <p className="text-muted-foreground">Cargando evaluación...</p>
             </div>
           </CardContent>
         </Card>
@@ -439,7 +439,7 @@ export default function EmotionalIntelligenceTest() {
     return (
       <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-muted/60">Redirigiendo...</p>
+          <p className="text-muted-foreground">Redirigiendo...</p>
         </div>
       </div>
     )
@@ -460,7 +460,7 @@ export default function EmotionalIntelligenceTest() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h1 className="text-2xl font-bold text-foreground">Despega Empatía</h1>
-              <div className="flex items-center gap-2 text-sm text-muted/60 mt-1">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                 <Heart className="h-4 w-4" />
                 <span>Reconocer, comprender y gestionar emociones</span>
               </div>
@@ -472,7 +472,7 @@ export default function EmotionalIntelligenceTest() {
 
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium">Progreso</span>
-            <div className="flex items-center gap-2 text-sm text-muted/60">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Clock className="h-4 w-4" />
               <span>{Math.round((Date.now() - startTime) / 60000)} min</span>
             </div>
@@ -550,7 +550,7 @@ export default function EmotionalIntelligenceTest() {
               />
             ))}
           </div>
-          <p className="text-sm text-muted/60 mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             {Object.keys(answers).length} de {emotionalIntelligenceQuestions.length} preguntas respondidas
           </p>
         </div>

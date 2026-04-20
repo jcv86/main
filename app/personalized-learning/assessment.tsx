@@ -127,7 +127,7 @@ export function AssessmentQuiz() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="text-center space-y-2">
-            <p className="text-sm text-muted/60">Nivel Detectado</p>
+            <p className="text-sm text-muted-foreground">Nivel Detectado</p>
             <p className="text-3xl font-bold capitalize">
               {userLevel === 'beginner' && '🌱 Principiante'}
               {userLevel === 'intermediate' && '📈 Intermedio'}

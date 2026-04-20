@@ -94,7 +94,7 @@ export default function UnifiedTestDashboard() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Tus Resultados de Tests</h1>
-          <p className="text-muted/60 dark:text-muted/40">
+          <p className="text-muted-foreground dark:text-muted-foreground">
             Panel unificado de todos tus evaluaciones científicas
           </p>
         </div>
@@ -128,7 +128,7 @@ export default function UnifiedTestDashboard() {
                               <h3 className={`font-bold ${getTextColorClasses(test.color)}`}>
                                 {test.name}
                               </h3>
-                              <p className="text-xs text-muted/60 dark:text-muted/40">
+                              <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                                 {test.description}
                               </p>
                             </div>
@@ -158,7 +158,7 @@ export default function UnifiedTestDashboard() {
               <CardContent>
                 <div className="grid md:grid-cols-4 gap-4">
                   <div className="p-4 bg-muted/10 dark:bg-card rounded-lg">
-                    <p className="text-sm text-muted/60 dark:text-muted/40">Tests Completados</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Tests Completados</p>
                     <p className="text-2xl font-bold">5 de 5</p>
                     <Progress value={100} className="mt-2" />
                   </div>
@@ -220,7 +220,7 @@ export default function UnifiedTestDashboard() {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="p-4 bg-muted/10 dark:bg-card rounded-lg">
-                    <p className="text-sm text-muted/60 dark:text-muted/40 mb-2">Cargando resultado...</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-2">Cargando resultado...</p>
                     <Progress value={33} />
                   </div>
                   <Button className="w-full">

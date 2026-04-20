@@ -57,7 +57,7 @@ export default function JobMatchingPage() {
 
         <div className="space-y-2">
           <h1 className="text-3xl font-bold text-muted/90 dark:text-white">Ajuste por Vacante</h1>
-          <p className="text-muted/60 dark:text-muted/40">
+          <p className="text-muted-foreground dark:text-muted-foreground">
             Pega la descripción de trabajo y obtén: análisis de match, CV personalizado, y respuestas optimizadas.
           </p>
         </div>
@@ -65,7 +65,7 @@ export default function JobMatchingPage() {
         {!analysis ? (
           <Card className="p-8 space-y-6">
             <div className="space-y-2">
-              <label className="text-sm font-semibold text-muted/70 dark:text-muted/30">
+              <label className="text-sm font-semibold text-muted-foreground dark:text-muted/30">
                 Descripción de Trabajo (Job Description)
               </label>
               <Textarea
@@ -74,7 +74,7 @@ export default function JobMatchingPage() {
                 placeholder="Pega aquí la descripción completa de la posición..."
                 className="min-h-64 resize-none"
               />
-              <p className="text-xs text-muted/50">
+              <p className="text-xs text-muted-foreground">
                 Puedes copiar-pegar desde LinkedIn, Indeed, o cualquier portal de empleos
               </p>
             </div>
@@ -95,7 +95,7 @@ export default function JobMatchingPage() {
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted/60 dark:text-muted/40">Tu Match con esta Vacante</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Tu Match con esta Vacante</p>
                     <p className="text-5xl font-bold text-green dark:text-green/40 mt-2">
                       {analysis.matchPercentage}%
                     </p>
@@ -162,7 +162,7 @@ export default function JobMatchingPage() {
                       {analysis.resumeAdjustments.map((adjustment: string, idx: number) => (
                         <li key={idx} className="flex gap-3">
                           <span className="text-blue dark:text-blue/40 font-bold">{idx + 1}.</span>
-                          <span className="text-muted/70 dark:text-muted/30">{adjustment}</span>
+                          <span className="text-muted-foreground dark:text-muted/30">{adjustment}</span>
                         </li>
                       ))}
                     </ul>
@@ -187,7 +187,7 @@ export default function JobMatchingPage() {
                       <div key={question} className="space-y-2">
                         <p className="font-semibold text-muted/90 dark:text-white">{question}</p>
                         <div className="bg-muted/5 dark:bg-card p-4 rounded-[28px]">
-                          <p className="text-sm text-muted/70 dark:text-muted/30">{response}</p>
+                          <p className="text-sm text-muted-foreground dark:text-muted/30">{response}</p>
                         </div>
                         <Button variant="outline" size="sm">
                           Editar Respuesta
@@ -205,7 +205,7 @@ export default function JobMatchingPage() {
                     <h3 className="text-lg font-bold text-muted/90 dark:text-white">
                       Simulación Personalizada
                     </h3>
-                    <p className="text-muted/60 dark:text-muted/40">
+                    <p className="text-muted-foreground dark:text-muted-foreground">
                       Práctica una entrevista simulada con preguntas específicas de esta vacante
                     </p>
                     <Button className="bg-blue hover:bg-blue">

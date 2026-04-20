@@ -122,7 +122,7 @@ export function DashboardContent() {
         <h1 className="text-5xl font-bold bg-background">
           Tu Dashboard
         </h1>
-        <p className="text-lg text-muted/70 dark:text-muted/30">Bienvenido a tu centro de comando Despega</p>
+        <p className="text-lg text-muted-foreground dark:text-muted/30">Bienvenido a tu centro de comando Despega</p>
       </div>
 
       {/* Debug Info - Remove in production */}
@@ -150,7 +150,7 @@ export function DashboardContent() {
           <CardContent>
             <div className="text-3xl font-bold text-purple dark:text-purple/20">{userData?.tests_completed || 0}</div>
             <Progress value={((userData?.tests_completed || 0) / 6) * 100} className="mt-2" />
-            <p className="text-xs text-muted/60 dark:text-muted/40 mt-1">de 6 tests disponibles</p>
+            <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">de 6 tests disponibles</p>
           </CardContent>
         </Card>
 

@@ -244,7 +244,7 @@ export default function DISCTestClient() {
       <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-muted/60">Loading Despega Cerebral assessment...</p>
+          <p className="text-muted-foreground">Loading Despega Cerebral assessment...</p>
         </div>
       </div>
     )
@@ -254,7 +254,7 @@ export default function DISCTestClient() {
     return (
       <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-muted/60">Redirecting...</p>
+          <p className="text-muted-foreground">Redirecting...</p>
         </div>
       </div>
     )
@@ -304,8 +304,8 @@ export default function DISCTestClient() {
               </Badge>
             )}
             <div className="flex items-center space-x-2">
-              <Clock className="h-4 w-4 text-muted/50" />
-              <span className="text-sm text-muted/60">{Math.round((Date.now() - startTime) / 60000)} min</span>
+              <Clock className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">{Math.round((Date.now() - startTime) / 60000)} min</span>
             </div>
           </div>
         </div>
@@ -325,12 +325,12 @@ export default function DISCTestClient() {
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-bold">Despega Cerebral</h2>
-            <span className="text-sm font-medium text-muted/60">
+            <span className="text-sm font-medium text-muted-foreground">
               {currentQuestion + 1} of {discQuestions.length}
             </span>
           </div>
           <Progress value={progress} className="h-2" />
-          <p className="text-xs text-muted/50 mt-1">{Math.round((Date.now() - startTime) / 60000)} minutes elapsed</p>
+          <p className="text-xs text-muted-foreground mt-1">{Math.round((Date.now() - startTime) / 60000)} minutes elapsed</p>
         </div>
 
         <Card className="transition-all duration-300" style={{ transform: `scale(${Math.min(zoomLevel, 1.1)})` }}>
@@ -374,7 +374,7 @@ export default function DISCTestClient() {
                   onChange={(e) => handleAnswer(e.target.value)}
                   className="min-h-[120px]"
                 />
-                <div className="flex items-center text-xs text-muted/50">
+                <div className="flex items-center text-xs text-muted-foreground">
                   <Brain className="h-3 w-3 mr-1 text-blue" />
                   This response will be analyzed for personalized insights
                 </div>
@@ -430,7 +430,7 @@ export default function DISCTestClient() {
               <Brain className="h-5 w-5 text-blue mt-0.5" />
               <div>
                 <h3 className="font-semibold text-sm">About the Despega Cerebral Assessment</h3>
-                <p className="text-sm text-muted/60 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   The Despega Cerebral assessment evaluates four behavioral dimensions: Dominance (D), Influence (I),
                   Steadiness (S), and Compliance (C). Your responses will help identify your natural behavioral style
                   and communication preferences in professional settings.

@@ -281,7 +281,7 @@ export default function TestFlowVerification() {
           <CardContent>
             <div className="flex items-center justify-between mb-4">
               <div className="space-y-2">
-                <p className="text-muted/60">
+                <p className="text-muted-foreground">
                   Automated verification of all personality test navigation flows and completion processes.
                 </p>
                 <div className="flex items-center gap-4 text-sm">
@@ -294,7 +294,7 @@ export default function TestFlowVerification() {
                     {failedTests} Failed
                   </span>
                   <span className="flex items-center gap-1">
-                    <Clock className="h-4 w-4 text-muted/50" />
+                    <Clock className="h-4 w-4 text-muted-foreground" />
                     {checks.length - passedTests - failedTests} Pending
                   </span>
                 </div>
@@ -344,7 +344,7 @@ export default function TestFlowVerification() {
                     </div>
                     <div>
                       <CardTitle className="text-lg">{check.testName}</CardTitle>
-                      <p className="text-sm text-muted/60">{check.path}</p>
+                      <p className="text-sm text-muted-foreground">{check.path}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">

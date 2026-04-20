@@ -86,7 +86,7 @@ export default function LearningPathsPage() {
             </div>
             <div>
               <h1 className="text-5xl font-bold text-purple400400">Rutas de Aprendizaje</h1>
-              <p className="text-muted/70 dark:text-muted/30 font-medium">Caminos estructurados para el desarrollo profesional continuo</p>
+              <p className="text-muted-foreground dark:text-muted/30 font-medium">Caminos estructurados para el desarrollo profesional continuo</p>
             </div>
           </div>
 

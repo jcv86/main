@@ -29,11 +29,11 @@ export function A2A4IntegrationPanel() {
           <div className="bg-transparent rounded-[28px] p-4 border border-green/20 dark:border-green">
             <h4 className="font-bold text-green dark:text-green/10 mb-2">Tu Plan (A2)</h4>
             {context.a2_mission ? (
-              <p className="text-sm text-muted/60 dark:text-muted/40 line-clamp-2">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground line-clamp-2">
                 {context.a2_mission}
               </p>
             ) : (
-              <p className="text-xs text-muted/50 italic">Crea tu misión en A2</p>
+              <p className="text-xs text-muted-foreground italic">Crea tu misión en A2</p>
             )}
           </div>
 
@@ -52,17 +52,17 @@ export function A2A4IntegrationPanel() {
           <div className="bg-transparent rounded-[28px] p-4 border border-cyan/20 dark:border-cyan">
             <h4 className="font-bold text-cyan dark:text-cyan/10 mb-2">Contexto (A4)</h4>
             {context.a4_relevant_news.length > 0 ? (
-              <p className="text-sm text-muted/60 dark:text-muted/40 line-clamp-2">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground line-clamp-2">
                 {context.a4_relevant_news[0]}
               </p>
             ) : (
-              <p className="text-xs text-muted/50 italic">Explora noticias en A4</p>
+              <p className="text-xs text-muted-foreground italic">Explora noticias en A4</p>
             )}
           </div>
         </div>
 
         {/* WHY TOGETHER */}
-        <div className="bg-purple/10 dark:bg-purple/30 rounded-[28px] p-3 text-sm text-muted/70 dark:text-muted/30 space-y-2">
+        <div className="bg-purple/10 dark:bg-purple/30 rounded-[28px] p-3 text-sm text-muted-foreground dark:text-muted/30 space-y-2">
           <p className="font-semibold text-purple dark:text-purple/10">Por qué funcionan mejor juntas:</p>
           <ul className="space-y-1 text-xs">
             <li>• Tu plan (A2) te enfoca en lo que QUIERES hacer</li>
@@ -77,7 +77,7 @@ export function A2A4IntegrationPanel() {
               Ir a A2
             </button>
           </Link>
-          <span className="text-xs text-muted/40">|</span>
+          <span className="text-xs text-muted-foreground">|</span>
           <Link href="/despega/a4-base">
             <button className="text-xs font-semibold text-cyan dark:text-cyan/40 hover:underline">
               Ir a A4

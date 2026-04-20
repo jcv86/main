@@ -505,7 +505,7 @@ export default function RecursosClient() {
           <BookOpen className="h-8 w-8 text-blue" />
           <h1 className="text-3xl font-bold">Biblioteca de Recursos DTC</h1>
         </div>
-        <p className="text-muted/60">
+        <p className="text-muted-foreground">
           Motor de recomendación personalizado basado en tus resultados de tests, metas y preferencias
         </p>
       </div>
@@ -518,7 +518,7 @@ export default function RecursosClient() {
               <BarChart3 className="h-8 w-8 text-blue" />
               <div>
                 <p className="text-2xl font-bold">{testResults.length}</p>
-                <p className="text-sm text-muted/60">Tests Completados</p>
+                <p className="text-sm text-muted-foreground">Tests Completados</p>
               </div>
             </div>
           </CardContent>
@@ -530,7 +530,7 @@ export default function RecursosClient() {
               <Star className="h-8 w-8 text-orange" />
               <div>
                 <p className="text-2xl font-bold">{totalXP}</p>
-                <p className="text-sm text-muted/60">XP Ganado</p>
+                <p className="text-sm text-muted-foreground">XP Ganado</p>
               </div>
             </div>
           </CardContent>
@@ -542,7 +542,7 @@ export default function RecursosClient() {
               <CheckCircle className="h-8 w-8 text-green" />
               <div>
                 <p className="text-2xl font-bold">{completedChallenges.length}</p>
-                <p className="text-sm text-muted/60">Retos Completados</p>
+                <p className="text-sm text-muted-foreground">Retos Completados</p>
               </div>
             </div>
           </CardContent>
@@ -554,7 +554,7 @@ export default function RecursosClient() {
               <Target className="h-8 w-8 text-purple" />
               <div>
                 <p className="text-2xl font-bold">{developmentAreas.length}</p>
-                <p className="text-sm text-muted/60">Áreas de Desarrollo</p>
+                <p className="text-sm text-muted-foreground">Áreas de Desarrollo</p>
               </div>
             </div>
           </CardContent>
@@ -570,7 +570,7 @@ export default function RecursosClient() {
                 <Sparkles className="h-10 w-10 text-blue" />
                 <div>
                   <h3 className="font-bold text-lg">Personaliza tus Recomendaciones</h3>
-                  <p className="text-muted/60">
+                  <p className="text-muted-foreground">
                     Completa al menos un test para recibir recomendaciones de recursos basadas en tu perfil único
                   </p>
                 </div>
@@ -587,7 +587,7 @@ export default function RecursosClient() {
       {/* Area Filter */}
       <div className="mb-6">
         <div className="flex items-center gap-2 mb-4">
-          <Filter className="h-5 w-5 text-muted/60" />
+          <Filter className="h-5 w-5 text-muted-foreground" />
           <span className="font-medium">Filtrar por Área:</span>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -657,7 +657,7 @@ export default function RecursosClient() {
                             </Badge>
                           </div>
                           <CardTitle className="text-base leading-tight">{book.title}</CardTitle>
-                          <p className="text-sm text-muted/60">{book.author}</p>
+                          <p className="text-sm text-muted-foreground">{book.author}</p>
                         </CardHeader>
                         <CardContent>
                           <p className="text-sm text-muted mb-4 italic">"{book.keyInsight}"</p>
@@ -689,15 +689,15 @@ export default function RecursosClient() {
                               />
                               <div className="flex-1">
                                 <div className="flex items-center justify-between mb-2">
-                                  <h4 className={`font-bold ${isCompleted ? "line-through text-muted/50" : ""}`}>
+                                  <h4 className={`font-bold ${isCompleted ? "line-through text-muted-foreground" : ""}`}>
                                     {challenge.title}
                                   </h4>
                                   <Badge variant="secondary" className="bg-yellow/10 text-yellow">
                                     +{challenge.xp} XP
                                   </Badge>
                                 </div>
-                                <p className="text-sm text-muted/60 mb-3">{challenge.description}</p>
-                                <div className="flex items-center gap-4 text-xs text-muted/50">
+                                <p className="text-sm text-muted-foreground mb-3">{challenge.description}</p>
+                                <div className="flex items-center gap-4 text-xs text-muted-foreground">
                                   <span className="flex items-center gap-1">
                                     <Clock className="h-3 w-3" />
                                     {challenge.duration}

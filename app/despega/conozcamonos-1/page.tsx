@@ -208,7 +208,7 @@ export default function Conozcamonos1Page() {
           <h1 className="text-4xl font-bold text-purple400400 mb-2">
             Antes de Empezar, Cuéntame Tu Historia
           </h1>
-          <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
+          <p className="text-lg text-muted-foreground dark:text-muted/30 font-medium">Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
         </div>
 
         <div className="bg-white dark:bg-background border-2 border-purple/30 dark:border-purple/50 rounded-2xl p-8 mb-8 shadow-lg">
@@ -253,7 +253,7 @@ export default function Conozcamonos1Page() {
                             }}
                             isDisabled={loading || validating}
                           />
-                          <span className="text-xs text-muted/50 dark:text-muted/40">
+                          <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                             O habla para dictar
                           </span>
                         </div>
@@ -294,7 +294,7 @@ export default function Conozcamonos1Page() {
                   }}
                   isDisabled={loading || validating}
                 />
-                <span className="text-xs text-muted/50 dark:text-muted/40">
+                <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                   O habla para dictar tu respuesta
                 </span>
               </div>

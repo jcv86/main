@@ -159,44 +159,44 @@ export default function AdminProgressDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted/60">Total Users</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Total Users</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">{stats.totalUsers}</div>
-              <p className="text-xs text-muted/50 mt-1">registered users</p>
+              <p className="text-xs text-muted-foreground mt-1">registered users</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted/60">Fully Onboarded</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Fully Onboarded</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-green">{stats.fullyOnboarded}</div>
               <Progress value={(stats.fullyOnboarded / stats.totalUsers) * 100} className="mt-2" />
-              <p className="text-xs text-muted/50 mt-1">{((stats.fullyOnboarded / stats.totalUsers) * 100).toFixed(1)}% completion</p>
+              <p className="text-xs text-muted-foreground mt-1">{((stats.fullyOnboarded / stats.totalUsers) * 100).toFixed(1)}% completion</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted/60">Current Stage Avg</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Current Stage Avg</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold">
                 {(users.reduce((sum, u) => sum + u.completion_stage, 0) / users.length).toFixed(1)}
               </div>
-              <p className="text-xs text-muted/50 mt-1">average stage across all users</p>
+              <p className="text-xs text-muted-foreground mt-1">average stage across all users</p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-medium text-muted/60">Stuck/Incomplete</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">Stuck/Incomplete</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="text-3xl font-bold text-orange">{stats.totalUsers - stats.fullyOnboarded}</div>
-              <p className="text-xs text-muted/50 mt-1">still in progress</p>
+              <p className="text-xs text-muted-foreground mt-1">still in progress</p>
             </CardContent>
           </Card>
         </div>
@@ -280,42 +280,42 @@ export default function AdminProgressDashboard() {
                         {user.onboarding_completed ? (
                           <CheckCircle2 className="w-5 h-5 text-green" />
                         ) : (
-                          <Clock className="w-5 h-5 text-muted/40" />
+                          <Clock className="w-5 h-5 text-muted-foreground" />
                         )}
                       </TableCell>
                       <TableCell>
                         {user.a1_test_completed ? (
                           <CheckCircle2 className="w-5 h-5 text-green" />
                         ) : (
-                          <Clock className="w-5 h-5 text-muted/40" />
+                          <Clock className="w-5 h-5 text-muted-foreground" />
                         )}
                       </TableCell>
                       <TableCell>
                         {user.onboarding_conozcamonos_2_completed ? (
                           <CheckCircle2 className="w-5 h-5 text-green" />
                         ) : (
-                          <Clock className="w-5 h-5 text-muted/40" />
+                          <Clock className="w-5 h-5 text-muted-foreground" />
                         )}
                       </TableCell>
                       <TableCell>
                         {user.a2_missions_started ? (
                           <CheckCircle2 className="w-5 h-5 text-green" />
                         ) : (
-                          <Clock className="w-5 h-5 text-muted/40" />
+                          <Clock className="w-5 h-5 text-muted-foreground" />
                         )}
                       </TableCell>
                       <TableCell>
                         {user.a3_training_started ? (
                           <CheckCircle2 className="w-5 h-5 text-green" />
                         ) : (
-                          <Clock className="w-5 h-5 text-muted/40" />
+                          <Clock className="w-5 h-5 text-muted-foreground" />
                         )}
                       </TableCell>
                       <TableCell>
                         {user.a4_unlocked ? (
                           <CheckCircle2 className="w-5 h-5 text-green" />
                         ) : (
-                          <Clock className="w-5 h-5 text-muted/40" />
+                          <Clock className="w-5 h-5 text-muted-foreground" />
                         )}
                       </TableCell>
                       <TableCell>

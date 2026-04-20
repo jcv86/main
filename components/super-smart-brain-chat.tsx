@@ -311,7 +311,7 @@ export function SuperSmartBrainChat() {
                       {/* Feedback buttons */}
                       {message.role === "assistant" && (
                         <div className="flex items-center gap-2 mt-4 pt-3 border-t border-muted/30">
-                          <span className="text-xs text-muted/60">¿Te ayudó esta respuesta?</span>
+                          <span className="text-xs text-muted-foreground">¿Te ayudó esta respuesta?</span>
                           <Button
                             variant="ghost"
                             size="sm"

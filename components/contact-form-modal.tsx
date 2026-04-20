@@ -70,7 +70,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               <DialogTitle className="text-2xl font-bold bg-background">
                 Contáctanos
               </DialogTitle>
-              <DialogDescription className="text-sm text-muted/60 mt-1">
+              <DialogDescription className="text-sm text-muted-foreground mt-1">
                 Cuéntanos sobre tu consulta y nos pondremos en contacto pronto
               </DialogDescription>
             </div>
@@ -89,7 +89,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              className="border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted/40"
+              className="border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted-foreground"
               disabled={loading}
             />
           </div>
@@ -106,7 +106,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
-              className="border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted/40"
+              className="border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted-foreground"
               disabled={loading}
             />
           </div>
@@ -115,7 +115,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
           <div className="space-y-2">
             <Label htmlFor="whatsapp" className="text-sm font-semibold text-muted">
               WhatsApp{" "}
-              <span className="text-xs font-normal text-muted/50">(Opcional)</span>
+              <span className="text-xs font-normal text-muted-foreground">(Opcional)</span>
             </Label>
             <Input
               id="whatsapp"
@@ -123,7 +123,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               type="tel"
               value={formData.whatsapp}
               onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-              className="border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted/40"
+              className="border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted-foreground"
               disabled={loading}
             />
           </div>
@@ -139,10 +139,10 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               required
-              className="min-h-[140px] border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted/40 resize-none"
+              className="min-h-[140px] border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted-foreground resize-none"
               disabled={loading}
             />
-            <p className="text-xs text-muted/50">Mínimo 10 caracteres</p>
+            <p className="text-xs text-muted-foreground">Mínimo 10 caracteres</p>
           </div>
 
           {/* Status Messages */}
@@ -190,7 +190,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
           </Button>
 
           {/* Footer Note */}
-          <p className="text-xs text-muted/50 text-center">
+          <p className="text-xs text-muted-foreground text-center">
             Nos comprometemos a responder dentro de 24 horas.{" "}
             <a href="/privacy" className="text-purple hover:text-purple font-medium">
               Revisa nuestra política de privacidad

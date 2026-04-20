@@ -193,7 +193,7 @@ Aquí traducimos lo que está pasando en el mercado chileno a tu carrera persona
                 <AvatarFallback>A4</AvatarFallback>
               </Avatar>
               <div className="bg-muted/10 rounded-lg px-4 py-2">
-                <Loader className="w-4 h-4 animate-spin text-muted/60" />
+                <Loader className="w-4 h-4 animate-spin text-muted-foreground" />
               </div>
             </div>
           )}

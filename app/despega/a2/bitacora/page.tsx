@@ -88,7 +88,7 @@ export default function BitacoraPage() {
             <BookOpen className="w-6 h-6 text-blue dark:text-blue/40" />
             <h1 className="text-3xl font-bold text-muted/90 dark:text-muted/5">Mi Bitácora</h1>
           </div>
-          <p className="text-muted/60 dark:text-muted/40 ml-11">
+          <p className="text-muted-foreground dark:text-muted-foreground ml-11">
             Tu registro personal de aprendizaje, reflexiones e insights
           </p>
         </div>
@@ -101,7 +101,7 @@ export default function BitacoraPage() {
           <div className="flex items-center justify-center py-12">
             <div className="text-center space-y-3">
               <Loader className="w-8 h-8 animate-spin text-blue mx-auto" />
-              <p className="text-muted/60 dark:text-muted/40">Cargando tu bitácora...</p>
+              <p className="text-muted-foreground dark:text-muted-foreground">Cargando tu bitácora...</p>
             </div>
           </div>
         )}
@@ -124,9 +124,9 @@ export default function BitacoraPage() {
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-6">
                   <div className="space-y-2">
-                    <p className="text-sm text-muted/60 dark:text-muted/40">Entradas Registradas</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Entradas Registradas</p>
                     <p className="text-3xl font-bold text-muted/90 dark:text-muted/5">{stats.total}</p>
-                    <p className="text-xs text-muted/50">Bitácora activa</p>
+                    <p className="text-xs text-muted-foreground">Bitácora activa</p>
                   </div>
                 </CardContent>
               </Card>
@@ -134,9 +134,9 @@ export default function BitacoraPage() {
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-6">
                   <div className="space-y-2">
-                    <p className="text-sm text-muted/60 dark:text-muted/40">Ánimo Promedio</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Ánimo Promedio</p>
                     <p className="text-3xl font-bold text-muted/90 dark:text-muted/5">{stats.avgMood}/5</p>
-                    <p className="text-xs text-muted/50">{stats.avgMood >= 4 ? 'Muy positivo' : stats.avgMood >= 3 ? 'Neutral' : 'Desafiante'}</p>
+                    <p className="text-xs text-muted-foreground">{stats.avgMood >= 4 ? 'Muy positivo' : stats.avgMood >= 3 ? 'Neutral' : 'Desafiante'}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -144,9 +144,9 @@ export default function BitacoraPage() {
               <Card className="border-0 shadow-sm">
                 <CardContent className="pt-6">
                   <div className="space-y-2">
-                    <p className="text-sm text-muted/60 dark:text-muted/40">Acciones Completadas</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Acciones Completadas</p>
                     <p className="text-3xl font-bold text-muted/90 dark:text-muted/5">{stats.totalActions}</p>
-                    <p className="text-xs text-muted/50">En total</p>
+                    <p className="text-xs text-muted-foreground">En total</p>
                   </div>
                 </CardContent>
               </Card>
@@ -171,7 +171,7 @@ export default function BitacoraPage() {
                           className={`px-4 py-2 rounded-lg font-medium transition ${
                             newEntry.type === type
                               ? 'bg-blue text-white'
-                              : 'bg-muted/10 dark:bg-card text-muted/70 dark:text-muted/30'
+                              : 'bg-muted/10 dark:bg-card text-muted-foreground dark:text-muted/30'
                           }`}
                         >
                           {type === 'daily' ? 'Reflexión Diaria' : 'Revisión Semanal'}
@@ -229,7 +229,7 @@ export default function BitacoraPage() {
                           </button>
                         ))}
                       </div>
-                      <p className="text-xs text-muted/50 text-center">{getMoodLabel(newEntry.mood)}</p>
+                      <p className="text-xs text-muted-foreground text-center">{getMoodLabel(newEntry.mood)}</p>
                     </div>
 
                     <div className="space-y-2">
@@ -294,8 +294,8 @@ export default function BitacoraPage() {
               {entries.length === 0 ? (
                 <Card className="border-0 shadow-sm">
                   <CardContent className="py-12 text-center">
-                    <BookOpen className="w-12 h-12 text-muted/30 dark:text-muted/70 mx-auto mb-4" />
-                    <p className="text-muted/60 dark:text-muted/40">Aún no hay entradas. ¡Comienza tu primera reflexión!</p>
+                    <BookOpen className="w-12 h-12 text-muted/30 dark:text-muted-foreground mx-auto mb-4" />
+                    <p className="text-muted-foreground dark:text-muted-foreground">Aún no hay entradas. ¡Comienza tu primera reflexión!</p>
                   </CardContent>
                 </Card>
               ) : (
@@ -309,7 +309,7 @@ export default function BitacoraPage() {
                             <Badge variant={entry.type === 'daily' ? 'default' : 'secondary'}>
                               {entry.type === 'daily' ? 'Diaria' : 'Semanal'}
                             </Badge>
-                            <span className="text-xs text-muted/50 flex items-center gap-1">
+                            <span className="text-xs text-muted-foreground flex items-center gap-1">
                               <Calendar className="w-3 h-3" />
                               {new Date(entry.date).toLocaleDateString('es-ES')}
                             </span>
@@ -322,7 +322,7 @@ export default function BitacoraPage() {
                       </div>
 
                       {/* Reflection */}
-                      <p className="text-muted/70 dark:text-muted/30 leading-relaxed">{entry.reflection}</p>
+                      <p className="text-muted-foreground dark:text-muted/30 leading-relaxed">{entry.reflection}</p>
 
                       {/* Insights */}
                       {entry.insights && entry.insights.length > 0 && (
@@ -342,7 +342,7 @@ export default function BitacoraPage() {
                       )}
 
                       {/* Stats */}
-                      <div className="flex items-center gap-4 text-sm text-muted/60 dark:text-muted/40 pt-2 border-t border-muted/20 dark:border-muted/80">
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground dark:text-muted-foreground pt-2 border-t border-muted/20 dark:border-muted/80">
                         <span className="flex items-center gap-1">
                           <TrendingUp className="w-4 h-4" />
                           {entry.actionsTaken} acción{entry.actionsTaken !== 1 ? 'es' : ''} completada{entry.actionsTaken !== 1 ? 's' : ''}

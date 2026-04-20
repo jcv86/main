@@ -251,8 +251,8 @@ export default function A1ReportPage() {
         {insightsLoading ? (
           <div className="flex flex-col items-center justify-center py-16">
             <Loader2 className="h-8 w-8 animate-spin text-purple mb-4" />
-            <p className="text-muted/40 text-lg">Analizando tu perfil con IA...</p>
-            <p className="text-muted/50 text-sm mt-2">Esto toma unos segundos</p>
+            <p className="text-muted-foreground text-lg">Analizando tu perfil con IA...</p>
+            <p className="text-muted-foreground text-sm mt-2">Esto toma unos segundos</p>
           </div>
         ) : insights ? (
           <div className="space-y-6">
@@ -264,7 +264,7 @@ export default function A1ReportPage() {
             <EnhancedInsightsGrid insights={insights} />
           </div>
         ) : (
-          <p className="text-muted/40 text-center py-8">Los insights no pudieron ser generados en este momento. Intenta de nuevo más tarde.</p>
+          <p className="text-muted-foreground text-center py-8">Los insights no pudieron ser generados en este momento. Intenta de nuevo más tarde.</p>
         )}
       </ASectionPart>
       </ASection>
@@ -336,7 +336,7 @@ export default function A1ReportPage() {
           <div className="flex flex-col items-center justify-center py-16">
             <Loader2 className="h-8 w-8 animate-spin text-purple mb-4" />
             <p className="text-muted/30 text-lg font-semibold">Generando tu análisis personalizado con IA...</p>
-            <p className="text-muted/50 text-sm mt-2">Esto toma unos segundos mientras analizamos tu perfil</p>
+            <p className="text-muted-foreground text-sm mt-2">Esto toma unos segundos mientras analizamos tu perfil</p>
           </div>
         ) : insights ? (
           <div className="space-y-8">
@@ -404,7 +404,7 @@ export default function A1ReportPage() {
               <CardTitle className="text-lg">Entender Tus Patrones</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted/40 mb-4">Descubre cómo tu perfil te ayuda en entrevistas y equipos.</p>
+              <p className="text-sm text-muted-foreground mb-4">Descubre cómo tu perfil te ayuda en entrevistas y equipos.</p>
               <Button onClick={() => router.push('/despega/a1-patterns')} variant="outline" className="border-muted/60" size="sm">
                 Ver Detalles
               </Button>
@@ -433,7 +433,7 @@ export default function A1ReportPage() {
               <CardTitle className="text-lg">Avanzar a A2</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted/40 mb-4">Crea tu plan de 90 días.</p>
+              <p className="text-sm text-muted-foreground mb-4">Crea tu plan de 90 días.</p>
               <Button onClick={() => router.push('/despega/a2-routes')} className="w-full bg-purple hover:bg-purple" size="sm">
                 Ir a A2: Ruta
                 <ArrowRight className="w-3 h-3 ml-1" />

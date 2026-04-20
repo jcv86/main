@@ -8,7 +8,7 @@ export default function ExplicacionSimplePage() {
             <span className="text-purple font-bold text-lg">Explicación Clara y Directa</span>
           </div>
           <h1 className="text-5xl font-bold mb-6 text-foreground">Despega Tu Carrera</h1>
-          <p className="text-2xl text-muted/60">Desarrollo profesional inteligente y personalizado</p>
+          <p className="text-2xl text-muted-foreground">Desarrollo profesional inteligente y personalizado</p>
         </div>
 
         {/* Main Content */}
@@ -212,7 +212,7 @@ export default function ExplicacionSimplePage() {
                 </div>
                 <div>
                   <p className="text-lg font-bold text-foreground">Registro</p>
-                  <p className="text-muted/60">Creación de cuenta con email. Proceso de onboarding guiado.</p>
+                  <p className="text-muted-foreground">Creación de cuenta con email. Proceso de onboarding guiado.</p>
                 </div>
               </div>
 
@@ -222,7 +222,7 @@ export default function ExplicacionSimplePage() {
                 </div>
                 <div>
                   <p className="text-lg font-bold text-foreground">Evaluaciones Psicométricas</p>
-                  <p className="text-muted/60">
+                  <p className="text-muted-foreground">
                     Completa las 6 evaluaciones (15-20 min cada una). Total: 90-120 minutos.
                   </p>
                 </div>
@@ -234,7 +234,7 @@ export default function ExplicacionSimplePage() {
                 </div>
                 <div>
                   <p className="text-lg font-bold text-foreground">Análisis de Resultados</p>
-                  <p className="text-muted/60">
+                  <p className="text-muted-foreground">
                     Perfil profesional detallado con visualizaciones, fortalezas, áreas de mejora y plan de acción.
                   </p>
                 </div>
@@ -246,7 +246,7 @@ export default function ExplicacionSimplePage() {
                 </div>
                 <div>
                   <p className="text-lg font-bold text-foreground">Interacción Continua</p>
-                  <p className="text-muted/60">
+                  <p className="text-muted-foreground">
                     Conversa con el Coach IA, consulta la biblioteca, actualiza evaluaciones trimestralmente.
                   </p>
                 </div>
@@ -300,7 +300,7 @@ export default function ExplicacionSimplePage() {
             <div className="space-y-4">
               <div className="bg-white rounded-xl p-6 border-l-4 border-rose-500">
                 <p className="font-bold text-rose-700 text-2xl mb-2">Joaquin Covarrubias</p>
-                <p className="text-muted/60 font-semibold mb-3">Fundador & CEO</p>
+                <p className="text-muted-foreground font-semibold mb-3">Fundador & CEO</p>
                 <p className="text-muted">
                   Visionario del proyecto. Responsable de la estrategia, financiamiento y dirección general. Define la
                   propuesta de valor y el modelo de negocio.
@@ -309,7 +309,7 @@ export default function ExplicacionSimplePage() {
 
               <div className="bg-white rounded-xl p-6 border-l-4 border-blue/50">
                 <p className="font-bold text-blue text-2xl mb-2">Travis Comber</p>
-                <p className="text-muted/60 font-semibold mb-3">CTO & Lead Developer</p>
+                <p className="text-muted-foreground font-semibold mb-3">CTO & Lead Developer</p>
                 <p className="text-muted">
                   Arquitecto y desarrollador fullstack. Responsable de la construcción completa de la plataforma desde
                   cero: frontend, backend, integraciones IA, base de datos, seguridad y deployment.
@@ -322,7 +322,7 @@ export default function ExplicacionSimplePage() {
           <div className="bg-background">
             <h2 className="text-3xl font-bold text-foreground mb-6">Lanzamiento y Roadmap</h2>
             <div className="bg-white rounded-xl p-6 text-center mb-6">
-              <p className="text-sm text-muted/50 mb-2">LANZAMIENTO PÚBLICO</p>
+              <p className="text-sm text-muted-foreground mb-2">LANZAMIENTO PÚBLICO</p>
               <p className="text-6xl font-bold text-orange mb-2">Q1 2026</p>
               <p className="text-xl text-muted">Enero - Marzo 2026</p>
             </div>

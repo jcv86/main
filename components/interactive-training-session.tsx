@@ -157,7 +157,7 @@ export function InteractiveTrainingSession({
           <CardContent className="space-y-6">
             {/* Pregunta */}
             <div className="bg-slate-950/50 p-6 rounded-[28px] border border-muted/70">
-              <h3 className="text-sm font-semibold text-muted/40 mb-2">PREGUNTA:</h3>
+              <h3 className="text-sm font-semibold text-muted-foreground mb-2">PREGUNTA:</h3>
               <p className="text-white text-lg leading-relaxed">{question}</p>
             </div>
 
@@ -191,7 +191,7 @@ export function InteractiveTrainingSession({
             </div>
 
             {/* Timing */}
-            <div className="flex items-center gap-2 text-sm text-muted/40">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <span>⏱️ Tiempo estimado:</span>
               <Badge variant="outline">{estimatedTime}</Badge>
             </div>
@@ -255,7 +255,7 @@ export function InteractiveTrainingSession({
               </Button>
             </div>
 
-            <p className="text-xs text-muted/50 text-center">
+            <p className="text-xs text-muted-foreground text-center">
               Asegúrate de estar bien iluminado. La cámara analiza tu lenguaje corporal.
             </p>
           </CardContent>

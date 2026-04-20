@@ -663,22 +663,22 @@ export function PersistentAICoach() {
       {performanceContext && (
         <div className="bg-transparent border-b border-muted/70 px-4 py-3">
           <div className="flex items-center gap-4 text-sm">
-            <span className="text-muted/40">Tu Contexto de Performance:</span>
+            <span className="text-muted-foreground">Tu Contexto de Performance:</span>
             <div className="flex gap-3">
               <div className="flex items-center gap-1">
-                <span className="text-muted/50">C1:</span>
+                <span className="text-muted-foreground">C1:</span>
                 <span className="font-semibold text-blue/40">{performanceContext.c1_score.toFixed(1)}</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-muted/50">C2:</span>
+                <span className="text-muted-foreground">C2:</span>
                 <span className="font-semibold text-green/40">{performanceContext.c2_score.toFixed(1)}</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-muted/50">C3:</span>
+                <span className="text-muted-foreground">C3:</span>
                 <span className="font-semibold text-purple/40">{performanceContext.c3_score.toFixed(1)}</span>
               </div>
               <div className="flex items-center gap-1">
-                <span className="text-muted/50">C4:</span>
+                <span className="text-muted-foreground">C4:</span>
                 <span className="font-semibold text-orange/40">{performanceContext.c4_score.toFixed(1)}</span>
               </div>
             </div>

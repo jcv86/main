@@ -27,7 +27,7 @@ export default function DiagnosisPage() {
           <h1 className="text-3xl font-bold text-muted/90 dark:text-muted/5">
             Diagnosis de Empleabilidad
           </h1>
-          <p className="text-lg text-muted/60 dark:text-muted/40">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Evaluación rápida para entender tu nivel actual y calibrar tus entrenamientos.
           </p>
         </div>
@@ -40,7 +40,7 @@ export default function DiagnosisPage() {
           <CardHeader>
             <CardTitle className="text-base">¿Por qué esta diagnosis?</CardTitle>
           </CardHeader>
-          <CardContent className="text-sm text-muted/70 dark:text-muted/30 space-y-2">
+          <CardContent className="text-sm text-muted-foreground dark:text-muted/30 space-y-2">
             <p>
               Cada persona tiene un punto de partida diferente. Esta diagnosis nos ayuda a:
             </p>

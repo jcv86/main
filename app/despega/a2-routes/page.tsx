@@ -199,7 +199,7 @@ export default function A2RoutesPage() {
           <h1 className="text-4xl font-bold text-white flex items-center gap-3">
             <span className="text-3xl">🗺️</span> A2: Ruta
           </h1>
-          <p className="text-lg text-muted/40">Tu plan personalizado de 90 días</p>
+          <p className="text-lg text-muted-foreground">Tu plan personalizado de 90 días</p>
         </div>
 
         {/* What is A2 */}
@@ -216,7 +216,7 @@ export default function A2RoutesPage() {
               Este es el resultado de A2: Diseño de tu Ruta. Aquí visualizas las acciones, milestones y recursos 
               organizados en 3 fases progresivas para llevar tu carrera al siguiente nivel.
             </p>
-            <p className="text-muted/40 text-sm">
+            <p className="text-muted-foreground text-sm">
               📋 Estructura: 3 fases de 30 días cada una con tareas específicas, recursos y hitos de progreso.
             </p>
           </CardContent>
@@ -235,7 +235,7 @@ export default function A2RoutesPage() {
               <CheckCircle2 className="w-6 h-6 text-emerald-400 flex-shrink-0" />
               <div>
                 <p className="font-semibold text-emerald-400">Ruta Generada</p>
-                <p className="text-sm text-muted/40">Tu plan de 90 días personalizado está listo</p>
+                <p className="text-sm text-muted-foreground">Tu plan de 90 días personalizado está listo</p>
               </div>
             </div>
             
@@ -304,7 +304,7 @@ export default function A2RoutesPage() {
                                       {Math.round(task.timeEstimate / 60)}h
                                     </span>
                                   </div>
-                                  <p className="text-sm text-muted/40 mt-2">{task.description}</p>
+                                  <p className="text-sm text-muted-foreground mt-2">{task.description}</p>
                                   {task.resources && task.resources.length > 0 && (
                                     <div className="flex flex-wrap gap-2 mt-2">
                                       {task.resources.map((resource, ridx) => (
@@ -320,7 +320,7 @@ export default function A2RoutesPage() {
                           ))}
                         </div>
                       ) : (
-                        <p className="text-muted/40">Contenido personalizado para la fase de {days} días</p>
+                        <p className="text-muted-foreground">Contenido personalizado para la fase de {days} días</p>
                       )}
                     </div>
                   )}
@@ -360,7 +360,7 @@ export default function A2RoutesPage() {
                   <CardTitle className="text-lg">Ver Detalle del Plan</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-sm text-muted/40">
+                  <p className="text-sm text-muted-foreground">
                     Expande cada fase (30, 60, 90 días) para ver las acciones detalladas.
                   </p>
                 </CardContent>
@@ -371,7 +371,7 @@ export default function A2RoutesPage() {
                   <CardTitle className="text-lg">Avanzar a A3</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-sm text-muted/40">
+                  <p className="text-sm text-muted-foreground">
                     Dirígete a <span className="font-semibold">A3: Impulso</span> para prepararte para entrevistas.
                   </p>
                   <Button 

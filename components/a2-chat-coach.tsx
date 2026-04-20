@@ -157,8 +157,8 @@ export function A2ChatCoach({
         >
           {messages.length === 0 ? (
             <div className="h-full flex items-center justify-center">
-              <div className="text-center text-muted/60 dark:text-muted/40 text-sm space-y-2">
-                <MessageCircle className="w-8 h-8 text-muted/40 mx-auto opacity-50" />
+              <div className="text-center text-muted-foreground dark:text-muted-foreground text-sm space-y-2">
+                <MessageCircle className="w-8 h-8 text-muted-foreground mx-auto opacity-50" />
                 <p>Inicia con una pregunta sobre variaciones o contextos de tu patrón</p>
               </div>
             </div>

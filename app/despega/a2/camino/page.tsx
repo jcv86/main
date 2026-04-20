@@ -48,7 +48,7 @@ export default function A2CaminoPage() {
           <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
             Elige Tu Camino
           </h1>
-          <p className="text-lg text-muted/60 dark:text-muted/40">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             ¿En qué aspectos quieres enfocarte en estos 90 días?
           </p>
         </div>
@@ -82,7 +82,7 @@ export default function A2CaminoPage() {
                     {camino.examples.map((example) => (
                       <div key={example} className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-[20px] bg-muted/40"></div>
-                        <span className="text-sm text-muted/60 dark:text-muted/40">
+                        <span className="text-sm text-muted-foreground dark:text-muted-foreground">
                           {example}
                         </span>
                       </div>

@@ -201,15 +201,15 @@ export default function InvestorPitch() {
               <div className="grid md:grid-cols-3 gap-4">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-purple mb-1">Primero en IA</div>
-                  <p className="text-sm text-muted/60">Gen Z y Millennials demandan soluciones impulsadas por IA</p>
+                  <p className="text-sm text-muted-foreground">Gen Z y Millennials demandan soluciones impulsadas por IA</p>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-blue mb-1">Trabajo Remoto</div>
-                  <p className="text-sm text-muted/60">Mayor necesidad de desarrollo profesional autodirigido</p>
+                  <p className="text-sm text-muted-foreground">Mayor necesidad de desarrollo profesional autodirigido</p>
                 </div>
                 <div className="text-center">
                   <div className="text-3xl font-bold text-green mb-1">Brecha de Habilidades</div>
-                  <p className="text-sm text-muted/60">
+                  <p className="text-sm text-muted-foreground">
                     Empresas invirtiendo fuertemente en el reforzamiento de empleados
                   </p>
                 </div>
@@ -236,7 +236,7 @@ export default function InvestorPitch() {
                   <li>✓ Coaching básico de IA</li>
                   <li>✓ Resultados e insights</li>
                 </ul>
-                <p className="text-xs text-muted/60">
+                <p className="text-xs text-muted-foreground">
                   Construye base de usuarios y recopila datos para ajuste producto-mercado
                 </p>
               </div>
@@ -251,7 +251,7 @@ export default function InvestorPitch() {
                   <li>✓ Simulaciones de trayectoria de carrera</li>
                   <li>✓ Soporte prioritario</li>
                 </ul>
-                <p className="text-xs text-muted/60">Objetivo: conversión de 5-10% de usuarios gratuitos</p>
+                <p className="text-xs text-muted-foreground">Objetivo: conversión de 5-10% de usuarios gratuitos</p>
               </div>
 
               <div className="bg-background">
@@ -264,7 +264,7 @@ export default function InvestorPitch() {
                   <li>✓ Integración con sistemas HR</li>
                   <li>✓ Soporte dedicado</li>
                 </ul>
-                <p className="text-xs text-muted/60">Objetivo: grandes empresas chilenas y consultorías de HR</p>
+                <p className="text-xs text-muted-foreground">Objetivo: grandes empresas chilenas y consultorías de HR</p>
               </div>
             </div>
           </div>
@@ -530,7 +530,7 @@ export default function InvestorPitch() {
         <section className="text-center">
           <div className="bg-white rounded-2xl p-12 shadow-lg border border-muted/20">
             <h2 className="text-3xl font-bold mb-4 text-foreground">Hablemos</h2>
-            <p className="text-xl text-muted/60 mb-8">
+            <p className="text-xl text-muted-foreground mb-8">
               ¿Interesado en aprender más? Nos encantaría discutir esta oportunidad contigo.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -552,7 +552,7 @@ export default function InvestorPitch() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-12 py-8 text-center text-muted/60 border-t border-muted/20">
+      <footer className="mt-12 py-8 text-center text-muted-foreground border-t border-muted/20">
         <p className="mb-2">
           <strong>Despega Tu Carrera</strong> - Democratizando el Desarrollo Profesional en LATAM
         </p>

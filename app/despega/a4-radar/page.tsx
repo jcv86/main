@@ -65,7 +65,7 @@ export default function A4RadarPage() {
           recibes alertas sobre posiciones que coinciden con tu perfil, y mantienes un pulso constante del mercado. 
           Es tu sistema de seguimiento y aceleración para conseguir resultados.
         </p>
-        <p className="text-muted/40 text-sm">
+        <p className="text-muted-foreground text-sm">
           ⏱️ Duración: Indefinido. A4 es tu herramienta permanente mientras buscas.
         </p>
       </ASectionPart>
@@ -78,28 +78,28 @@ export default function A4RadarPage() {
               <div className="w-8 h-8 rounded-[20px] bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">1</div>
               <div>
                 <p className="font-semibold text-white">Tu Perfil Se Carga</p>
-                <p className="text-sm text-muted/40">Tus datos de A1-A3 alimentan el sistema de matching</p>
+                <p className="text-sm text-muted-foreground">Tus datos de A1-A3 alimentan el sistema de matching</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
               <div className="w-8 h-8 rounded-[20px] bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">2</div>
               <div>
                 <p className="font-semibold text-white">Algoritmo Busca Coincidencias</p>
-                <p className="text-sm text-muted/40">Escaneamos el mercado por ofertas que coincidan</p>
+                <p className="text-sm text-muted-foreground">Escaneamos el mercado por ofertas que coincidan</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
               <div className="w-8 h-8 rounded-[20px] bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">3</div>
               <div>
                 <p className="font-semibold text-white">Recibes Alertas</p>
-                <p className="text-sm text-muted/40">Notificaciones de posiciones que son TU fit</p>
+                <p className="text-sm text-muted-foreground">Notificaciones de posiciones que son TU fit</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
               <div className="w-8 h-8 rounded-[20px] bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">4</div>
               <div>
                 <p className="font-semibold text-white">Tomas Acción</p>
-                <p className="text-sm text-muted/40">Aplicas, entrevishas, y avanzas en tu búsqueda</p>
+                <p className="text-sm text-muted-foreground">Aplicas, entrevishas, y avanzas en tu búsqueda</p>
               </div>
             </div>
           </div>
@@ -117,10 +117,10 @@ export default function A4RadarPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-sm text-muted/40">
+              <p className="text-sm text-muted-foreground">
                 Noticias y actualizaciones sobre empresas e industrias de tu interés
               </p>
-              <ul className="space-y-1 text-xs text-muted/40">
+              <ul className="space-y-1 text-xs text-muted-foreground">
                 <li>✓ Hirings en tu industria</li>
                 <li>✓ Funding rounds y crecimiento</li>
                 <li>✓ Cambios en liderazgo</li>
@@ -137,10 +137,10 @@ export default function A4RadarPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-sm text-muted/40">
+              <p className="text-sm text-muted-foreground">
                 Análisis automático del fit entre tu perfil y posiciones disponibles
               </p>
-              <ul className="space-space-y-1 text-xs text-muted/40">
+              <ul className="space-space-y-1 text-xs text-muted-foreground">
                 <li>✓ Análisis de skills match</li>
                 <li>✓ Fit cultural basado en DISC</li>
                 <li>✓ Análisis salarial</li>
@@ -157,10 +157,10 @@ export default function A4RadarPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-sm text-muted/40">
+              <p className="text-sm text-muted-foreground">
                 Sigue tu avance completo desde A1 hasta oportunidades aplicadas
               </p>
-              <ul className="space-y-1 text-xs text-muted/40">
+              <ul className="space-y-1 text-xs text-muted-foreground">
                 <li>✓ Readiness score en tiempo real</li>
                 <li>✓ Aplicaciones enviadas</li>
                 <li>✓ Entrevistas coordinadas</li>
@@ -177,10 +177,10 @@ export default function A4RadarPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <p className="text-sm text-muted/40">
+              <p className="text-sm text-muted-foreground">
                 Asistente inteligente disponible en todos los stages
               </p>
-              <ul className="space-y-1 text-xs text-muted/40">
+              <ul className="space-y-1 text-xs text-muted-foreground">
                 <li>✓ Preguntas sobre estrategia</li>
                 <li>✓ Revisión de documentos</li>
                 <li>✓ Prep de entrevistas</li>
@@ -223,7 +223,7 @@ export default function A4RadarPage() {
                 <p className="text-sm text-muted/30">
                   A4 es permanente. Vuelve regularmente para:
                 </p>
-                <ul className="space-y-1 text-xs text-muted/40">
+                <ul className="space-y-1 text-xs text-muted-foreground">
                   <li>✓ Ver nuevas oportunidades</li>
                   <li>✓ Revisar tu readiness score</li>
                   <li>✓ Hablar con el coach</li>

@@ -108,7 +108,7 @@ export function AIAssistant({
       {suggestion && (
         <div className="space-y-3">
           <div className="p-3 bg-transparent rounded border border-blue/10 dark:border-blue">
-            <p className="text-sm text-muted/70 dark:text-muted/30 whitespace-pre-wrap">
+            <p className="text-sm text-muted-foreground dark:text-muted/30 whitespace-pre-wrap">
               {suggestion}
             </p>
           </div>

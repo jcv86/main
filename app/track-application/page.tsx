@@ -11,7 +11,7 @@ function TrackApplicationContent() {
       <div className="container mx-auto px-4">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-2">Seguimiento de Aplicación</h1>
-          <p className="text-muted/60">Mantente al día con el estado de tu postulación laboral</p>
+          <p className="text-muted-foreground">Mantente al día con el estado de tu postulación laboral</p>
         </div>
 
         <ApplicationStatusTracker />

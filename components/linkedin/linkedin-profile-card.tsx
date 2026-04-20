@@ -68,7 +68,7 @@ export function LinkedInProfileCard() {
       <Card>
         <CardContent className="py-8 flex items-center justify-center">
           <Loader2 className="w-6 h-6 animate-spin text-blue/50" />
-          <span className="ml-2 text-muted/60">Loading LinkedIn profile...</span>
+          <span className="ml-2 text-muted-foreground">Loading LinkedIn profile...</span>
         </CardContent>
       </Card>
     )
@@ -105,7 +105,7 @@ export function LinkedInProfileCard() {
 
         {!profile ? (
           <div className="text-center py-6">
-            <p className="text-muted/60 mb-4">No LinkedIn profile synced yet</p>
+            <p className="text-muted-foreground mb-4">No LinkedIn profile synced yet</p>
             <Button onClick={handleSync} className="bg-blue hover:bg-blue">
               <Linkedin className="w-4 h-4 mr-2" />
               Connect LinkedIn
@@ -126,7 +126,7 @@ export function LinkedInProfileCard() {
                 <h3 className="font-bold text-lg">
                   {profile.first_name} {profile.last_name}
                 </h3>
-                <p className="text-sm text-muted/60">{profile.headline}</p>
+                <p className="text-sm text-muted-foreground">{profile.headline}</p>
                 <a
                   href={profile.linkedin_url}
                   target="_blank"
@@ -150,7 +150,7 @@ export function LinkedInProfileCard() {
                     <Badge key={skill.name} variant="secondary" className="text-xs">
                       {skill.name}
                       {skill.endorsements > 0 && (
-                        <span className="ml-1 text-muted/50">+{skill.endorsements}</span>
+                        <span className="ml-1 text-muted-foreground">+{skill.endorsements}</span>
                       )}
                     </Badge>
                   ))}
@@ -171,13 +171,13 @@ export function LinkedInProfileCard() {
                   {profile.experience.slice(0, 3).map((exp, idx) => (
                     <div key={idx} className="text-sm">
                       <p className="font-medium">{exp.title}</p>
-                      <p className="text-xs text-muted/60">
+                      <p className="text-xs text-muted-foreground">
                         {exp.company} • {exp.startDate} - {exp.endDate}
                       </p>
                     </div>
                   ))}
                   {profile.experience.length > 3 && (
-                    <p className="text-xs text-muted/50 mt-2">
+                    <p className="text-xs text-muted-foreground mt-2">
                       +{profile.experience.length - 3} more positions
                     </p>
                   )}
@@ -186,7 +186,7 @@ export function LinkedInProfileCard() {
             )}
 
             {/* Last Synced */}
-            <div className="text-xs text-muted/50 pt-2 border-t">
+            <div className="text-xs text-muted-foreground pt-2 border-t">
               Last synced: {new Date(profile.last_synced_at).toLocaleDateString()}
             </div>
           </>

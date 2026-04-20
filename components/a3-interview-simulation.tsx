@@ -160,11 +160,11 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
         <CardContent className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
             <div className="p-4 bg-blue/5 rounded">
-              <div className="text-sm text-muted/60">Tipo</div>
+              <div className="text-sm text-muted-foreground">Tipo</div>
               <div className="font-medium">{getTypeLabel()}</div>
             </div>
             <div className="p-4 bg-green/5 rounded">
-              <div className="text-sm text-muted/60">Nivel</div>
+              <div className="text-sm text-muted-foreground">Nivel</div>
               <div className="font-medium capitalize">{level}</div>
             </div>
           </div>
@@ -222,7 +222,7 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
           </div>
 
           <div className="bg-blue/5 p-4 rounded border border-blue/20">
-            <div className="text-sm text-muted/60 mb-2">Pregunta</div>
+            <div className="text-sm text-muted-foreground mb-2">Pregunta</div>
             <div className="text-lg font-medium">{currentQuestion}</div>
           </div>
 
@@ -255,7 +255,7 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
         <CardContent className="space-y-6">
           {/* Score Visualization */}
           <div className="bg-background">
-            <div className="text-sm text-muted/60 mb-2">Desempeño en esta respuesta</div>
+            <div className="text-sm text-muted-foreground mb-2">Desempeño en esta respuesta</div>
             <div className="text-4xl font-bold text-indigo-600 mb-2">
               {feedback.performance_score}%
             </div>
@@ -270,19 +270,19 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
           {/* Metric Breakdown */}
           <div className="grid grid-cols-2 gap-4">
             <div className="p-3 bg-muted/5 rounded">
-              <div className="text-xs text-muted/60">Confianza Vocal</div>
+              <div className="text-xs text-muted-foreground">Confianza Vocal</div>
               <div className="text-xl font-bold">{feedback.vocal_confidence}%</div>
             </div>
             <div className="p-3 bg-muted/5 rounded">
-              <div className="text-xs text-muted/60">Contacto Visual</div>
+              <div className="text-xs text-muted-foreground">Contacto Visual</div>
               <div className="text-xl font-bold">{feedback.eye_contact}%</div>
             </div>
             <div className="p-3 bg-muted/5 rounded">
-              <div className="text-xs text-muted/60">Claridad</div>
+              <div className="text-xs text-muted-foreground">Claridad</div>
               <div className="text-xl font-bold">{feedback.clarity}%</div>
             </div>
             <div className="p-3 bg-muted/5 rounded">
-              <div className="text-xs text-muted/60">Profundidad</div>
+              <div className="text-xs text-muted-foreground">Profundidad</div>
               <div className="text-xl font-bold">{feedback.response_depth}%</div>
             </div>
           </div>

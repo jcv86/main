@@ -18,7 +18,7 @@ export default function RecursosPublicosPage() {
               <p className="text-sm font-semibold text-cyan dark:text-cyan/30">Recursos del Sector Público</p>
             </div>
             <h1 className="text-5xl font-bold bg-blue bg-clip-text text-transparent/40/40">Recursos Públicos Chilenos</h1>
-            <p className="text-xl text-muted/70 dark:text-muted/30 font-medium">
+            <p className="text-xl text-muted-foreground dark:text-muted/30 font-medium">
               Accede a 46+ bases de datos y recursos del gobierno chileno para tu desarrollo profesional
             </p>
           </div>
@@ -28,25 +28,25 @@ export default function RecursosPublicosPage() {
             <Card className="text-center border-2 border-blue/20 dark:border-cyan/50 bg-white dark:bg-background">
               <CardContent className="pt-6">
                 <div className="text-3xl font-bold text-cyan dark:text-cyan/40">46+</div>
-                <p className="text-sm text-muted/70 dark:text-muted/30 mt-1 font-medium">Recursos</p>
+                <p className="text-sm text-muted-foreground dark:text-muted/30 mt-1 font-medium">Recursos</p>
               </CardContent>
             </Card>
             <Card className="text-center border-2 border-blue/20 dark:border-teal-900/50 bg-white dark:bg-background">
               <CardContent className="pt-6">
                 <div className="text-3xl font-bold text-teal-700 dark:text-teal-400">8</div>
-                <p className="text-sm text-muted/70 dark:text-muted/30 mt-1 font-medium">Categorías</p>
+                <p className="text-sm text-muted-foreground dark:text-muted/30 mt-1 font-medium">Categorías</p>
               </CardContent>
             </Card>
             <Card className="text-center border-2 border-green/20 dark:border-emerald-900/50 bg-white dark:bg-background">
               <CardContent className="pt-6">
                 <div className="text-3xl font-bold text-emerald-700 dark:text-emerald-400">100%</div>
-                <p className="text-sm text-muted/70 dark:text-muted/30 mt-1 font-medium">Gratuitos</p>
+                <p className="text-sm text-muted-foreground dark:text-muted/30 mt-1 font-medium">Gratuitos</p>
               </CardContent>
             </Card>
             <Card className="text-center border-2 border-blue/20 dark:border-blue/50 bg-white dark:bg-background">
               <CardContent className="pt-6">
                 <div className="text-3xl font-bold text-blue dark:text-blue/40">Oficial</div>
-                <p className="text-sm text-muted/70 dark:text-muted/30 mt-1 font-medium">Verificados</p>
+                <p className="text-sm text-muted-foreground dark:text-muted/30 mt-1 font-medium">Verificados</p>
               </CardContent>
             </Card>
           </div>

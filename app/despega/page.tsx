@@ -193,7 +193,7 @@ export default function DespegazoDashboard() {
               </span>
             </h1>
           </div>
-          <p className="text-lg text-muted/40 max-w-2xl">
+          <p className="text-lg text-muted-foreground max-w-2xl">
             Sigue tu progreso a través de 4 etapas de desarrollo profesional. 
             Alcanza el 80+ de readiness para estar completamente listo.
           </p>
@@ -206,7 +206,7 @@ export default function DespegazoDashboard() {
               <div className={`text-7xl font-black ${scoreColor} mb-2`}>
                 {readiness.overall_score}
               </div>
-              <p className="text-muted/40 text-sm font-semibold">Readiness Score</p>
+              <p className="text-muted-foreground text-sm font-semibold">Readiness Score</p>
               <div className="mt-4 w-full h-1 bg-muted/80 rounded-full overflow-hidden">
                 <div
                   className={`h-full bg-background`}
@@ -241,7 +241,7 @@ export default function DespegazoDashboard() {
                   <li key={i} className="text-muted/30 text-sm">{strength}</li>
                 ))
               ) : (
-                <p className="text-muted/50">Completa más etapas</p>
+                <p className="text-muted-foreground">Completa más etapas</p>
               )}
             </ul>
           </div>
@@ -279,7 +279,7 @@ export default function DespegazoDashboard() {
                     <h3 className="text-xl font-bold text-white group-hover:text-purple/40 transition-colors">
                       {stage.name}
                     </h3>
-                    <p className="text-muted/40 text-sm mt-1">{stage.description}</p>
+                    <p className="text-muted-foreground text-sm mt-1">{stage.description}</p>
                   </div>
                 </div>
                 {stage.completed ? (
@@ -335,7 +335,7 @@ export default function DespegazoDashboard() {
 
         {/* Footer Note */}
         <div className="bg-muted/80/40 border border-muted/70 rounded-[28px] p-4 text-center">
-          <p className="text-muted/40 text-sm">
+          <p className="text-muted-foreground text-sm">
             💡 Tu score se actualiza automáticamente. Alcanza <span className="font-bold text-purple/40">80+</span> para estar completamente listo.
           </p>
         </div>

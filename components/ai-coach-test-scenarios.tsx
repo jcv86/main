@@ -402,7 +402,7 @@ export default function AICoachTestScenarios() {
             <Brain className="h-6 w-6 text-blue" />
             AI Coach - Escenarios de Testing
           </CardTitle>
-          <p className="text-muted/60">Prueba diferentes tipos de preguntas para validar las respuestas del AI Coach</p>
+          <p className="text-muted-foreground">Prueba diferentes tipos de preguntas para validar las respuestas del AI Coach</p>
         </CardHeader>
       </Card>
 
@@ -443,7 +443,7 @@ export default function AICoachTestScenarios() {
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
                           <h4 className="font-medium text-sm mb-2">{scenario.question}</h4>
-                          <p className="text-xs text-muted/60 mb-2">{scenario.expectedResponse}</p>
+                          <p className="text-xs text-muted-foreground mb-2">{scenario.expectedResponse}</p>
                         </div>
                         <Badge className={`text-xs ml-2 ${getDifficultyColor(scenario.difficulty)}`}>
                           {scenario.difficulty}
@@ -509,7 +509,7 @@ export default function AICoachTestScenarios() {
                               {getResultIcon(result.success)}
                               <span className="font-medium text-sm">{scenario?.question}</span>
                             </div>
-                            <div className="flex items-center gap-2 text-xs text-muted/50">
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
                               <Clock className="h-3 w-3" />
                               {result.responseTime}ms
                             </div>
@@ -522,7 +522,7 @@ export default function AICoachTestScenarios() {
                             </p>
                           </div>
 
-                          <div className="flex items-center justify-between text-xs text-muted/50">
+                          <div className="flex items-center justify-between text-xs text-muted-foreground">
                             <span>{result.timestamp.toLocaleTimeString()}</span>
                             <Badge variant={result.success ? "default" : "destructive"} className="text-xs">
                               {result.success ? "Exitoso" : "Error"}
@@ -532,7 +532,7 @@ export default function AICoachTestScenarios() {
                       )
                     })
                   ) : (
-                    <div className="text-center py-8 text-muted/50">
+                    <div className="text-center py-8 text-muted-foreground">
                       <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
                       <p className="text-sm">No hay resultados de testing aún</p>
                       <p className="text-xs mt-2">Ejecuta algunos escenarios para ver los resultados</p>
@@ -556,11 +556,11 @@ export default function AICoachTestScenarios() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue">{testResults.length}</div>
-                <div className="text-sm text-muted/60">Tests Ejecutados</div>
+                <div className="text-sm text-muted-foreground">Tests Ejecutados</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-green">{testResults.filter((r) => r.success).length}</div>
-                <div className="text-sm text-muted/60">Exitosos</div>
+                <div className="text-sm text-muted-foreground">Exitosos</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-orange">
@@ -569,7 +569,7 @@ export default function AICoachTestScenarios() {
                     : 0}
                   ms
                 </div>
-                <div className="text-sm text-muted/60">Tiempo Promedio</div>
+                <div className="text-sm text-muted-foreground">Tiempo Promedio</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-purple">
@@ -578,7 +578,7 @@ export default function AICoachTestScenarios() {
                     : 0}
                   %
                 </div>
-                <div className="text-sm text-muted/60">Tasa de Éxito</div>
+                <div className="text-sm text-muted-foreground">Tasa de Éxito</div>
               </div>
             </div>
           </CardContent>

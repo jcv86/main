@@ -28,7 +28,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
   if (compact) {
     return (
       <div className="space-y-3">
-        <label className="text-sm font-semibold text-muted/70 dark:text-muted/30">Tu Entrevistador</label>
+        <label className="text-sm font-semibold text-muted-foreground dark:text-muted/30">Tu Entrevistador</label>
         <div className="grid grid-cols-3 gap-2">
           {INTERVIEWERS.map(interviewer => (
             <button
@@ -50,7 +50,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
                 />
               </div>
               <div className="text-xs font-semibold text-muted/90 dark:text-white">{interviewer.name}</div>
-              <div className="text-[10px] text-muted/60 dark:text-muted/40">{interviewer.role}</div>
+              <div className="text-[10px] text-muted-foreground dark:text-muted-foreground">{interviewer.role}</div>
             </button>
           ))}
         </div>
@@ -62,8 +62,8 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
     <Card className="bg-background">
       <div className="p-6 space-y-4">
         <div className="space-y-2">
-          <label className="text-sm font-semibold text-muted/70 dark:text-muted/30">Elige tu Entrevistador</label>
-          <p className="text-sm text-muted/60 dark:text-muted/40">
+          <label className="text-sm font-semibold text-muted-foreground dark:text-muted/30">Elige tu Entrevistador</label>
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground">
             Selecciona un perfil profesional diferente para tener perspectivas variadas
           </p>
         </div>
@@ -116,13 +116,13 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
                 />
               </div>
               <div className="text-left">
-                <p className="text-sm text-muted/60 dark:text-muted/40">Entrevistador seleccionado:</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Entrevistador seleccionado:</p>
                 <p className="font-semibold text-muted/90 dark:text-white">
                   {selected.name} - {selected.role}
                 </p>
               </div>
             </div>
-            <ChevronRight className="w-5 h-5 text-muted/40 flex-shrink-0" />
+            <ChevronRight className="w-5 h-5 text-muted-foreground flex-shrink-0" />
           </div>
         </div>
       </div>

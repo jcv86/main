@@ -315,7 +315,7 @@ export default function SprintViewerPage() {
       <div className="min-h-screen bg-background">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green"></div>
-          <p className="mt-4 text-muted/60 dark:text-muted/40">Cargando tu sprint...</p>
+          <p className="mt-4 text-muted-foreground dark:text-muted-foreground">Cargando tu sprint...</p>
         </div>
       </div>
     )
@@ -350,7 +350,7 @@ export default function SprintViewerPage() {
               <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
                 {sprint.theme}
               </h1>
-              <p className="text-lg text-muted/60 dark:text-muted/40">
+              <p className="text-lg text-muted-foreground dark:text-muted-foreground">
                 Días {sprint.startDay}-{sprint.endDay} de tu transformación
               </p>
             </div>
@@ -365,7 +365,7 @@ export default function SprintViewerPage() {
               <span className="font-medium text-muted/90 dark:text-muted/5">
                 Progreso del Sprint
               </span>
-              <span className="text-muted/60 dark:text-muted/40">
+              <span className="text-muted-foreground dark:text-muted-foreground">
                 {completedCount} de {actions.length} acciones
               </span>
             </div>
@@ -376,7 +376,7 @@ export default function SprintViewerPage() {
         {/* Sprint Info */}
         <Card className="border-0 shadow-md bg-white dark:bg-background">
           <CardContent className="p-6">
-            <p className="text-muted/70 dark:text-muted/30 leading-relaxed">
+            <p className="text-muted-foreground dark:text-muted/30 leading-relaxed">
               {sprint.description}
             </p>
           </CardContent>
@@ -421,15 +421,15 @@ export default function SprintViewerPage() {
                     <div className="flex-1 min-w-0">
                       <h3 className={`font-semibold text-base ${
                         action.completed
-                          ? "line-through text-muted/60 dark:text-muted/40"
+                          ? "line-through text-muted-foreground dark:text-muted-foreground"
                           : "text-muted/90 dark:text-muted/5"
                       }`}>
                         {action.title}
                       </h3>
                       <p className={`text-sm mt-1 ${
                         action.completed
-                          ? "text-muted/60 dark:text-muted/40"
-                          : "text-muted/60 dark:text-muted/40"
+                          ? "text-muted-foreground dark:text-muted-foreground"
+                          : "text-muted-foreground dark:text-muted-foreground"
                       }`}>
                         {action.description}
                       </p>
@@ -453,7 +453,7 @@ export default function SprintViewerPage() {
                       {action.completed ? (
                         <CheckCircle className="w-6 h-6 text-green" />
                       ) : (
-                        <Circle className="w-6 h-6 text-muted/40 dark:text-muted/60" />
+                        <Circle className="w-6 h-6 text-muted-foreground dark:text-muted-foreground" />
                       )}
                     </div>
                   </div>
@@ -471,7 +471,7 @@ export default function SprintViewerPage() {
                 <BookOpen className="w-5 h-5" />
                 Reflexión Semanal
               </h3>
-              <p className="text-sm text-muted/70 dark:text-muted/30">
+              <p className="text-sm text-muted-foreground dark:text-muted/30">
                 Al final de cada semana, reflexiona: ¿Qué salió bien? ¿Qué fue más difícil? ¿Qué aprendiste?
               </p>
               <Button variant="outline" asChild>

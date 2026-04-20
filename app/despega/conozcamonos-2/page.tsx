@@ -202,13 +202,13 @@ export default function Conozcamonos2Page() {
           <h1 className="text-4xl md:text-5xl font-bold bg-background">
             Explora y Diseña Tu Ruta
           </h1>
-          <p className="text-muted/70 dark:text-muted/30 mb-4">
+          <p className="text-muted-foreground dark:text-muted/30 mb-4">
             {currentStep === 'paso1'
               ? 'Paso 1: Define tu objetivo y contexto profesional'
               : 'Paso 2: Personaliza los detalles de tu desarrollo'}
           </p>
           <Progress value={progress} className="h-2 bg-muted/20 dark:bg-muted/70" />
-          <p className="text-sm text-muted/60 dark:text-muted/40 mt-3 font-medium">
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-3 font-medium">
             Progreso: {completedCount} de {totalQuestions} preguntas
           </p>
         </div>
@@ -281,7 +281,7 @@ export default function Conozcamonos2Page() {
                   )}
                   
                   {/* Character count */}
-                  <div className="text-xs text-muted/50 dark:text-muted/40">
+                  <div className="text-xs text-muted-foreground dark:text-muted-foreground">
                     {(responses[question.id] as string || '').length} / {question.maxLength} caracteres
                   </div>
                   
@@ -292,7 +292,7 @@ export default function Conozcamonos2Page() {
                       }}
                       isDisabled={loading || validatingIds.has(question.id)}
                     />
-                    <span className="text-xs text-muted/50 dark:text-muted/40">
+                    <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                       O habla para dictar tu respuesta
                     </span>
                   </div>
@@ -320,7 +320,7 @@ export default function Conozcamonos2Page() {
                           handleAnswer(question.id, updated)
                         }}
                       />
-                      <span className="text-muted/70 dark:text-muted/30">{opt}</span>
+                      <span className="text-muted-foreground dark:text-muted/30">{opt}</span>
                     </label>
                   ))}
                 </div>
@@ -346,7 +346,7 @@ export default function Conozcamonos2Page() {
         {/* Navigation */}
         <div className="flex gap-4 justify-between items-center mt-8 pt-6 border-t border-muted/20 dark:border-card">
           {!allStepAnswered && (
-            <div className="flex-1 text-sm text-muted/60 dark:text-muted/40">
+            <div className="flex-1 text-sm text-muted-foreground dark:text-muted-foreground">
               <p>Responde todas las preguntas para continuar</p>
             </div>
           )}

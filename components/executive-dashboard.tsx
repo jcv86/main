@@ -115,7 +115,7 @@ export function ExecutiveDashboard() {
                   </Badge>
                 )}
               </div>
-              <p className="text-sm text-muted/60 dark:text-muted/40 mb-2">{metric.label}</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-2">{metric.label}</p>
               <p className="text-3xl font-bold text-muted/90 dark:text-muted/10">
                 {metric.value}{metric.unit}
               </p>
@@ -141,7 +141,7 @@ export function ExecutiveDashboard() {
                       {insight.title}
                     </h3>
                     {expandedInsight === idx && (
-                      <p className="text-sm text-muted/60 dark:text-muted/40 mb-3">
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-3">
                         {insight.description}
                       </p>
                     )}
@@ -179,7 +179,7 @@ export function ExecutiveDashboard() {
                         {action.priority}
                       </Badge>
                     </div>
-                    <p className="text-xs text-muted/50 dark:text-muted/40">
+                    <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                       {action.stage} • {action.daysLeft} días
                     </p>
                   </div>
@@ -210,11 +210,11 @@ export function ExecutiveDashboard() {
           <div>
             <div className="flex justify-between mb-2">
               <span className="text-sm font-semibold">Ciclo Completo C1→A4</span>
-              <span className="text-sm text-muted/60 dark:text-muted/40">72%</span>
+              <span className="text-sm text-muted-foreground dark:text-muted-foreground">72%</span>
             </div>
             <Progress value={72} className="h-2" />
           </div>
-          <p className="text-sm text-muted/60 dark:text-muted/40">
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground">
             Estás en fase A4. Has completado el 100% de A1, A2 y el 85% de A3. 
             Continúa con tus simulaciones y estarás listo para ejecutar en 2-3 semanas.
           </p>

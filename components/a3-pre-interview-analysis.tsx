@@ -168,7 +168,7 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
 
         {/* Readiness Score */}
         <div className="bg-background">
-          <div className="text-sm text-muted/60 mb-2">Preparación General</div>
+          <div className="text-sm text-muted-foreground mb-2">Preparación General</div>
           <div className="flex items-center gap-4">
             <div className="text-4xl font-bold text-indigo-600">
               {analysis?.pre_interview_readiness}%
@@ -187,21 +187,21 @@ export function A3PreInterviewAnalysis({ onComplete, scenarioContext }: PreInter
         {/* Detailed Metrics */}
         <div className="grid grid-cols-3 gap-4">
           <div className="p-4 bg-muted/5 rounded-lg">
-            <div className="text-xs text-muted/60 mb-2">Vestimenta</div>
+            <div className="text-xs text-muted-foreground mb-2">Vestimenta</div>
             <div className="text-2xl font-bold text-foreground">{analysis?.vestimenta_coherence}%</div>
-            <p className="text-xs text-muted/60 mt-2">{analysis?.vestimenta_feedback}</p>
+            <p className="text-xs text-muted-foreground mt-2">{analysis?.vestimenta_feedback}</p>
           </div>
 
           <div className="p-4 bg-muted/5 rounded-lg">
-            <div className="text-xs text-muted/60 mb-2">Postura</div>
+            <div className="text-xs text-muted-foreground mb-2">Postura</div>
             <div className="text-2xl font-bold text-foreground">{analysis?.postura_score}%</div>
-            <p className="text-xs text-muted/60 mt-2">{analysis?.postura_notes}</p>
+            <p className="text-xs text-muted-foreground mt-2">{analysis?.postura_notes}</p>
           </div>
 
           <div className="p-4 bg-muted/5 rounded-lg">
-            <div className="text-xs text-muted/60 mb-2">Confianza</div>
+            <div className="text-xs text-muted-foreground mb-2">Confianza</div>
             <div className="text-2xl font-bold text-foreground">{analysis?.expresion_facial_confidence}%</div>
-            <p className="text-xs text-muted/60 mt-2">{analysis?.expresion_notes}</p>
+            <p className="text-xs text-muted-foreground mt-2">{analysis?.expresion_notes}</p>
           </div>
         </div>
 

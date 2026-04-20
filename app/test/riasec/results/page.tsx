@@ -488,7 +488,7 @@ export default function RIASECResults() {
           <CardContent className="p-6 text-center">
             <AlertCircle className="h-12 w-12 text-orange mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No se encontraron resultados</h3>
-      <p className="text-muted/60 mb-4">Parece que aún no has completado el test Despega Rumbo.</p>
+      <p className="text-muted-foreground mb-4">Parece que aún no has completado el test Despega Rumbo.</p>
       <Button onClick={() => router.push("/test/riasec")}>Realizar Test Despega Rumbo</Button>
           </CardContent>
         </Card>
@@ -523,7 +523,7 @@ export default function RIASECResults() {
               </div>
               <div className="text-right">
                 <div className="text-3xl font-bold text-blue">{results.overall_score}%</div>
-                <div className="text-sm text-muted/50">Puntuación General</div>
+                <div className="text-sm text-muted-foreground">Puntuación General</div>
               </div>
             </div>
           </CardHeader>
@@ -1205,7 +1205,7 @@ export default function RIASECResults() {
                               </div>
                               <div className="text-right">
                                 <div className="font-semibold">{score}/100</div>
-                                <div className="text-xs text-muted/50">{percentage}%</div>
+                                <div className="text-xs text-muted-foreground">{percentage}%</div>
                               </div>
                             </div>
                             <Progress value={percentage} className="h-2" />
@@ -1915,7 +1915,7 @@ export default function RIASECResults() {
                       <div className="inline-block bg-green text-white px-6 py-3 rounded-full font-bold text-lg">
                         Brújula Vocacional (RIASEC)
                       </div>
-                      <p className="text-sm text-muted/60 mt-2">Tus intereses y vocación profesional</p>
+                      <p className="text-sm text-muted-foreground mt-2">Tus intereses y vocación profesional</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
@@ -2096,7 +2096,7 @@ export default function RIASECResults() {
                           </CardTitle>
                         </CardHeader>
                         <CardContent>
-                          <p className="text-sm text-muted/60">
+                          <p className="text-sm text-muted-foreground">
                             Próximamente: Test de Valores para alinear tu vocación con lo que realmente importa para ti.
                           </p>
                         </CardContent>
@@ -2231,7 +2231,7 @@ export default function RIASECResults() {
                             1. ¿Mi trabajo actual aprovecha mi código Holland {results.holland_code}? ¿En qué
                             porcentaje?
                           </h4>
-                          <p className="text-sm text-muted/60">
+                          <p className="text-sm text-muted-foreground">
                             Si tu respuesta es menos del 50%, estás dejando más de la mitad de tu potencial sin usar.
                             ¿Qué cambios puedes hacer?
                           </p>
@@ -2247,7 +2247,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-blue">
                             2. ¿Qué me impide seguir las carreras sugeridas por mi código Holland?
                           </h4>
-                          <p className="text-sm text-muted/60">
+                          <p className="text-sm text-muted-foreground">
                             Si tu respuesta es menos del 50%, estás dejando más de la mitad de tu potencial sin usar.
                             ¿Qué cambios puedes hacer?
                           </p>
@@ -2263,7 +2263,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-blue">
                             3. ¿Qué actividades del último mes me dieron más energía? ¿Coinciden con mi código Holland?
                           </h4>
-                          <p className="text-sm text-muted/60">
+                          <p className="text-sm text-muted-foreground">
                             La vocación auténtica te da energía, no te la quita. Si hay desconexión, ¿por qué?
                           </p>
                           <textarea
@@ -2288,7 +2288,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-orange">
                             4. ¿Qué me impide seguir las carreras sugeridas por mi código Holland?
                           </h4>
-                          <p className="text-sm text-muted/60">
+                          <p className="text-sm text-muted-foreground">
                             Identifica si son barreras reales (falta de formación) o creencias limitantes ("no soy lo
                             suficientemente bueno").
                           </p>
@@ -2305,7 +2305,7 @@ export default function RIASECResults() {
                             5. ¿Qué dirían mis padres/pareja sobre las carreras que me interesan? ¿Me importa su opinión
                             más que la mía?
                           </h4>
-                          <p className="text-sm text-muted/60">
+                          <p className="text-sm text-muted-foreground">
                             Muchas personas siguen carreras para complacer a otros, no a sí mismas. ¿Es tu caso?
                           </p>
                           <textarea
@@ -2320,7 +2320,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-orange">
                             6. ¿Tengo miedo de seguir mi vocación real? ¿De qué tengo miedo específicamente?
                           </h4>
-                          <p className="text-sm text-muted/60">
+                          <p className="text-sm text-muted-foreground">
                             El miedo más común: "no voy a ganar suficiente dinero". Pero, ¿es eso cierto o es una
                             excusa?
                           </p>
@@ -2346,7 +2346,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-purple">
                             7. ¿Qué problema del mundo me gustaría resolver usando mi código Holland?
                           </h4>
-                          <p className="text-sm text-muted/60">
+                          <p className="text-sm text-muted-foreground">
                             La vocación más satisfactoria conecta tus intereses con contribución significativa. ¿Cuál es
                             la tuya?
                           </p>
@@ -2362,7 +2362,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-purple">
                             8. Si tuviera éxito total en mi vocación, ¿cómo sería el mundo 10 años después?
                           </h4>
-                          <p className="text-sm text-muted/60">
+                          <p className="text-sm text-muted-foreground">
                             Piensa en grande. Tu vocación no es solo un trabajo, es tu manera de dejar huella.
                           </p>
                           <textarea
@@ -2378,7 +2378,7 @@ export default function RIASECResults() {
                             9. ¿A quién admiro que tenga un código Holland similar al mío? ¿Qué puedo aprender de su
                             carrera?
                           </h4>
-                          <p className="text-sm text-muted/60">
+                          <p className="text-sm text-muted-foreground">
                             Estudiar trayectorias de éxito en tu área vocacional te muestra posibilidades que no habías
                             considerado.
                           </p>
@@ -2404,7 +2404,7 @@ export default function RIASECResults() {
                           <h4 className="font-semibold text-green">
                             10. Si tuviera que dar UN paso concreto hoy hacia mi vocación ideal, ¿cuál sería?
                           </h4>
-                          <p className="text-sm text-muted/60">
+                          <p className="text-sm text-muted-foreground">
                             No pienses en grandes cambios. ¿Qué acción pequeña puedes tomar HOY que te acerque a tu
                             código Holland?
                           </p>

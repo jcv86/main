@@ -21,7 +21,7 @@ export default function FAQPage() {
 
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">Preguntas Frecuentes</h1>
-          <p className="text-xl text-muted/60 max-w-3xl mx-auto">
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Encuentra respuestas rápidas a las preguntas más comunes. Si no encuentras lo que buscas, nuestros coaches
             virtuales Sofia y Dani están disponibles 24/7 para ayudarte.
           </p>

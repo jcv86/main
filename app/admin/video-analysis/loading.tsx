@@ -7,7 +7,7 @@ export default function AdminVideoAnalysisLoading() {
         <Video className="h-12 w-12 animate-pulse mx-auto text-blue" />
         <div className="flex items-center gap-2">
           <Loader2 className="h-5 w-5 animate-spin text-blue" />
-          <p className="text-lg text-muted/60">Cargando herramienta de análisis de videos...</p>
+          <p className="text-lg text-muted-foreground">Cargando herramienta de análisis de videos...</p>
         </div>
       </div>
     </div>

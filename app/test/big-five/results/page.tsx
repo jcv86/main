@@ -166,7 +166,7 @@ export default function BigFiveResults() {
           <CardContent className="p-8 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
             <h3 className="text-lg font-semibold mb-2">Cargando Resultados</h3>
-            <p className="text-muted/60">Preparando tu análisis personalizado...</p>
+            <p className="text-muted-foreground">Preparando tu análisis personalizado...</p>
           </CardContent>
         </Card>
       </div>
@@ -180,7 +180,7 @@ export default function BigFiveResults() {
           <CardContent className="p-8 text-center">
             <AlertCircle className="h-12 w-12 text-orange mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No se encontraron resultados</h3>
-            <p className="text-muted/60 mb-4">Parece que aún no has completado el Test Big Five.</p>
+            <p className="text-muted-foreground mb-4">Parece que aún no has completado el Test Big Five.</p>
             <Button onClick={() => router.push("/test/big-five")} className="bg-purple hover:bg-purple">
               Realizar Test
             </Button>
@@ -229,7 +229,7 @@ export default function BigFiveResults() {
         </div>
 
         <h1 className="text-4xl font-bold text-foreground mb-2">Resultados: Despega Brújula</h1>
-        <p className="text-muted/60 mb-8">Tu perfil completo de personalidad según las cinco grandes dimensiones</p>
+        <p className="text-muted-foreground mb-8">Tu perfil completo de personalidad según las cinco grandes dimensiones</p>
 
         {/* PUENTE DE TRANSICION SECTION */}
         <div className="mb-8 p-6 border-2 border-purple/30 bg-background950 rounded-lg">
@@ -1407,7 +1407,7 @@ export default function BigFiveResults() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted/60 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         Reflexiona sobre cuál dimensión (Apertura, Responsabilidad, Extraversión, Amabilidad,
                         Estabilidad) resuena más profundamente con tu identidad.
                       </p>
@@ -1425,7 +1425,7 @@ export default function BigFiveResults() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted/60 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         Identifica situaciones donde te comportaste de forma contraria a tus rasgos. ¿Qué provocó ese
                         cambio? ¿Fue positivo o costoso?
                       </p>
@@ -1443,7 +1443,7 @@ export default function BigFiveResults() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted/60 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         No para cambiarte, sino para entender qué aspecto de ti sientes que limita tu potencial. ¿Es
                         real o es juicio externo?
                       </p>
@@ -1462,7 +1462,7 @@ export default function BigFiveResults() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted/60 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         Ejemplo: Baja Amabilidad puede causar conflictos pero también establecer límites sanos. Alta
                         Amabilidad puede crear armonía pero también sacrificar necesidades propias.
                       </p>
@@ -1480,7 +1480,7 @@ export default function BigFiveResults() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted/60 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         Carreras, relaciones, lugares de vida. ¿Cuáles resultaron mejor? Esto revela cuándo seguir tu
                         naturaleza vs. cuándo crecer más allá de ella.
                       </p>
@@ -1498,7 +1498,7 @@ export default function BigFiveResults() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted/60 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         Ejemplo: Baja Extraversión no es timidez, es preferencia por profundidad. Alta Apertura no es
                         falta de practicidad, es capacidad de ver posibilidades.
                       </p>
@@ -1516,7 +1516,7 @@ export default function BigFiveResults() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted/60 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         Si eres highly Responsable, quizás admiras a alguien espontáneo. Si eres muy Estable, quizás
                         admiras la pasión emocional de alguien. ¿Qué te enseña eso sobre lo que necesitas integrar?
                       </p>
@@ -1535,7 +1535,7 @@ export default function BigFiveResults() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted/60 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         Si tu trabajo contradice constantemente tus rasgos, el costo emocional será alto. ¿Es temporal o
                         insostenible?
                       </p>
@@ -1553,7 +1553,7 @@ export default function BigFiveResults() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted/60 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         Ejemplo: Alta Responsabilidad = éxito profesional pero también rigidez. Alta Amabilidad =
                         relaciones profundas pero dificultad para decir no.
                       </p>
@@ -1572,7 +1572,7 @@ export default function BigFiveResults() {
                       </CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-muted/60 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         Describe tu día típico, tipo de trabajo, relaciones, hobbies, entorno. ¿Qué tan diferente es de
                         tu vida actual? ¿Qué puedes empezar a cambiar YA?
                       </p>
@@ -1873,9 +1873,9 @@ export default function BigFiveResults() {
                         </td>
                         <td className="p-4 text-muted">
                           <span className="font-medium">Guía de Mindfulness</span>
-                          <p className="text-sm text-muted/50 mt-1">Práctica de 10 minutos diarios</p>
+                          <p className="text-sm text-muted-foreground mt-1">Práctica de 10 minutos diarios</p>
                         </td>
-                        <td className="p-4 text-sm text-muted/60">
+                        <td className="p-4 text-sm text-muted-foreground">
                           {100 - results.N < 50
                             ? "Tu neuroticismo elevado indica que técnicas de regulación emocional serían muy beneficiosas para ti."
                             : "Mantén tu estabilidad emocional con prácticas que profundicen tu bienestar."}
@@ -1893,9 +1893,9 @@ export default function BigFiveResults() {
                         </td>
                         <td className="p-4 text-muted">
                           <span className="font-medium">Taller de Empatía Activa</span>
-                          <p className="text-sm text-muted/50 mt-1">Ejercicios de escucha</p>
+                          <p className="text-sm text-muted-foreground mt-1">Ejercicios de escucha</p>
                         </td>
-                        <td className="p-4 text-sm text-muted/60">
+                        <td className="p-4 text-sm text-muted-foreground">
                           {results.A >= 60
                             ? "Tu alta amabilidad es una fortaleza. Aprende a balancearla con asertividad."
                             : "Aumentar tu empatía mejorará significativamente tus relaciones personales."}
@@ -1913,9 +1913,9 @@ export default function BigFiveResults() {
                         </td>
                         <td className="p-4 text-muted">
                           <span className="font-medium">Programa de Creatividad Diaria</span>
-                          <p className="text-sm text-muted/50 mt-1">30 ideas en 30 días</p>
+                          <p className="text-sm text-muted-foreground mt-1">30 ideas en 30 días</p>
                         </td>
-                        <td className="p-4 text-sm text-muted/60">
+                        <td className="p-4 text-sm text-muted-foreground">
                           {results.O >= 60
                             ? "Tu alta apertura necesita canales creativos para expresarse plenamente."
                             : "Desarrollar tu creatividad te abrirá nuevas perspectivas de vida."}
@@ -1933,9 +1933,9 @@ export default function BigFiveResults() {
                         </td>
                         <td className="p-4 text-muted">
                           <span className="font-medium">Sistema GTD Simplificado</span>
-                          <p className="text-sm text-muted/50 mt-1">Getting Things Done adaptado</p>
+                          <p className="text-sm text-muted-foreground mt-1">Getting Things Done adaptado</p>
                         </td>
-                        <td className="p-4 text-sm text-muted/60">
+                        <td className="p-4 text-sm text-muted-foreground">
                           {results.C >= 60
                             ? "Optimiza tu alta responsabilidad con sistemas que te den más libertad."
                             : "Un sistema básico de organización reducirá tu estrés significativamente."}
@@ -1953,9 +1953,9 @@ export default function BigFiveResults() {
                         </td>
                         <td className="p-4 text-muted">
                           <span className="font-medium">Guía de Conexión Social</span>
-                          <p className="text-sm text-muted/50 mt-1">Para introvertidos y extrovertidos</p>
+                          <p className="text-sm text-muted-foreground mt-1">Para introvertidos y extrovertidos</p>
                         </td>
-                        <td className="p-4 text-sm text-muted/60">
+                        <td className="p-4 text-sm text-muted-foreground">
                           {results.E >= 60
                             ? "Canaliza tu extraversión en conexiones de calidad, no solo cantidad."
                             : "Aprende a recargar energía social de forma que respete tu introversión."}
@@ -1975,9 +1975,9 @@ export default function BigFiveResults() {
                         </td>
                         <td className="p-4 text-muted">
                           <span className="font-medium">Plan de Vida Holístico</span>
-                          <p className="text-sm text-muted/50 mt-1">Bienestar 360°</p>
+                          <p className="text-sm text-muted-foreground mt-1">Bienestar 360°</p>
                         </td>
-                        <td className="p-4 text-sm text-muted/60">
+                        <td className="p-4 text-sm text-muted-foreground">
                           Integra todos tus rasgos en un plan coherente que priorice tu felicidad y relaciones.
                         </td>
                         <td className="p-4 text-sm text-muted">

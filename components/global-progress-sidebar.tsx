@@ -97,7 +97,7 @@ export function GlobalProgressSidebar() {
       {/* PHASES MICRO TRACKER */}
       <Card className="bg-transparent border border-muted/20 dark:border-muted/80 shadow-md">
         <div className="p-4 space-y-3">
-          <p className="text-xs font-semibold text-muted/70 dark:text-muted/30 uppercase">Fases del Ciclo</p>
+          <p className="text-xs font-semibold text-muted-foreground dark:text-muted/30 uppercase">Fases del Ciclo</p>
           
           <div className="space-y-2">
             {phases.map((phase, idx) => (
@@ -109,13 +109,13 @@ export function GlobalProgressSidebar() {
                     ) : phase.status === 'in-progress' ? (
                       <Circle className="w-4 h-4 text-blue dark:text-blue/40 flex-shrink-0" />
                     ) : (
-                      <Circle className="w-4 h-4 text-muted/40 dark:text-muted/60 flex-shrink-0" />
+                      <Circle className="w-4 h-4 text-muted-foreground dark:text-muted-foreground flex-shrink-0" />
                     )}
                     
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-sm font-semibold text-muted/90 dark:text-muted/10">{phase.phase}</span>
-                        <span className="text-xs text-muted/60 dark:text-muted/40">{phase.progress}%</span>
+                        <span className="text-xs text-muted-foreground dark:text-muted-foreground">{phase.progress}%</span>
                       </div>
                       <Progress value={phase.progress} className="h-1.5 mt-1" />
                     </div>
@@ -130,7 +130,7 @@ export function GlobalProgressSidebar() {
       {/* QUICK ACTIONS */}
       <Card className="bg-background">
         <div className="p-3 space-y-2">
-          <p className="text-xs font-semibold text-muted/70 dark:text-muted/30">Acceso Rápido</p>
+          <p className="text-xs font-semibold text-muted-foreground dark:text-muted/30">Acceso Rápido</p>
           <div className="space-y-1">
             <Link href="/despega/journey">
               <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-white/50 dark:hover:bg-muted/80 text-blue dark:text-blue/40">

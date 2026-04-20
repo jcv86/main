@@ -147,7 +147,7 @@ export default function GuidedTrainingPage() {
               </h1>
             </div>
             <Progress value={selectedModule.progress} className="h-2" />
-            <p className="text-sm text-muted/60 dark:text-muted/40">
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground">
               Lección {currentLesson + 1} de {selectedModule.lessons.length}
             </p>
           </div>
@@ -158,12 +158,12 @@ export default function GuidedTrainingPage() {
               <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">
                 {lesson.title}
               </h2>
-              <p className="text-muted/60 dark:text-muted/40">{lesson.description}</p>
+              <p className="text-muted-foreground dark:text-muted-foreground">{lesson.description}</p>
             </div>
 
             {/* Coach Content Area */}
             <div className="bg-background">
-              <div className="space-y-4 text-muted/70 dark:text-muted/30">
+              <div className="space-y-4 text-muted-foreground dark:text-muted/30">
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-lg text-muted/90 dark:text-white flex items-center gap-2">
                     <Lightbulb className="w-5 h-5 text-blue dark:text-blue/40" />
@@ -222,7 +222,7 @@ export default function GuidedTrainingPage() {
                             "En mi anterior empresa, como Tech Lead de un equipo de 5 developers, nos asignaron migrar una base de datos legacy a PostgreSQL bajo presión..."
                           </p>
                         </div>
-                        <p className="text-sm text-muted/60 dark:text-muted/40">
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                           Sé específico: ¿Qué empresa? ¿Cuál era tu rol? ¿Cuál era el desafío? ¿Bajo qué presión estabas?
                         </p>
                       </div>
@@ -245,7 +245,7 @@ export default function GuidedTrainingPage() {
                             "El equipo trabajó duro y mejoramos el sistema"
                           </p>
                         </div>
-                        <p className="text-sm text-muted/60 dark:text-muted/40 italic">
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground italic">
                           Usa "yo", "decidí", "implementé", "resolví" - verbos de acción clara.
                         </p>
                       </div>
@@ -262,7 +262,7 @@ export default function GuidedTrainingPage() {
                             "La migración se completó 2 semanas antes, con zero downtime. Redujimos queries en un 40% y el equipo ganó confianza en nuevas tecnologías."
                           </p>
                         </div>
-                        <p className="text-sm text-muted/60 dark:text-muted/40">
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                           Números, porcentajes, tiempo ahorrado, mejoras medibles - eso es lo que recuerdan los entrevistadores.
                         </p>
                       </div>
@@ -282,7 +282,7 @@ export default function GuidedTrainingPage() {
                             <li>Decisiones: "Cuéntame de una decisión difícil que tomaste"</li>
                           </ul>
                         </div>
-                        <p className="text-xs text-muted/60 dark:text-muted/40 italic">
+                        <p className="text-xs text-muted-foreground dark:text-muted-foreground italic">
                           Usa STAR para todas. El entrevistador quiere ver madurez, aprendizaje y responsabilidad.
                         </p>
                       </div>
@@ -303,7 +303,7 @@ export default function GuidedTrainingPage() {
                             Intenta: "Dividimos el sistema en servicios independientes que pueden crecer y actualizarse por separado, como restaurantes en un mall"
                           </p>
                         </div>
-                        <p className="text-sm text-muted/60 dark:text-muted/40">
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                           Usa analogías, evita jerga, explica el "por qué" y el impacto en negocio.
                         </p>
                       </div>
@@ -403,7 +403,7 @@ export default function GuidedTrainingPage() {
           <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
             Entrenamiento Guiado
           </h1>
-          <p className="text-muted/60 dark:text-muted/40">
+          <p className="text-muted-foreground dark:text-muted-foreground">
             Aprende junto a tu Coach IA. Módulos progresivos que te llevan de lo básico a dominar entrevistas complejas.
           </p>
         </div>
@@ -435,12 +435,12 @@ export default function GuidedTrainingPage() {
                       {module.status === 'in-progress' && (
                         <Badge className="bg-blue">En Progreso</Badge>
                       )}
-                      {isLocked && <Lock className="w-5 h-5 text-muted/40" />}
+                      {isLocked && <Lock className="w-5 h-5 text-muted-foreground" />}
                     </div>
                   </div>
 
                   <Progress value={module.progress} className="h-2 mb-2" />
-                  <p className="text-xs text-muted/50">
+                  <p className="text-xs text-muted-foreground">
                     {module.progress}% completo • {module.duration}
                   </p>
                 </CardHeader>
@@ -462,7 +462,7 @@ export default function GuidedTrainingPage() {
                           <p className="text-sm font-medium text-muted/90 dark:text-white">
                             {lesson.title}
                           </p>
-                          <p className="text-xs text-muted/50">{lesson.description}</p>
+                          <p className="text-xs text-muted-foreground">{lesson.description}</p>
                         </div>
                       </div>
                     ))}

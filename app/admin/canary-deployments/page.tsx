@@ -37,7 +37,7 @@ export default function CanaryDeploymentsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Canary Deployments</h1>
-          <p className="text-muted/60">Monitor and manage canary deployment rollouts</p>
+          <p className="text-muted-foreground">Monitor and manage canary deployment rollouts</p>
         </div>
       </div>
 
@@ -69,7 +69,7 @@ export default function CanaryDeploymentsPage() {
             <CardContent>
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
-                  <span className="text-muted/60">Progress</span>
+                  <span className="text-muted-foreground">Progress</span>
                   <span className="font-medium">{deployment.progress}%</span>
                 </div>
                 <div className="w-full h-2 bg-muted/20 rounded-full overflow-hidden">

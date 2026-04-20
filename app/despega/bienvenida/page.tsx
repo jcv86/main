@@ -60,7 +60,7 @@ export default function BienvenidaPage() {
                   <span className="text-xl font-bold text-blue dark:text-blue/30">1</span>
                 </div>
                 <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Conozcámonos</h3>
-                <p className="text-sm text-muted/60 dark:text-muted/40">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                   Responde preguntas para entender tu perfil, objetivos y contexto laboral
                 </p>
               </div>
@@ -75,7 +75,7 @@ export default function BienvenidaPage() {
                   <span className="text-xl font-bold text-purple dark:text-purple/30">2</span>
                 </div>
                 <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Tu Plan A2</h3>
-                <p className="text-sm text-muted/60 dark:text-muted/40">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                   Recibe un plan personalizado de 90 días adaptado a tu perfil
                 </p>
               </div>
@@ -90,7 +90,7 @@ export default function BienvenidaPage() {
                   <span className="text-xl font-bold text-blue dark:text-cyan/30">3</span>
                 </div>
                 <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Entrena y Analiza</h3>
-                <p className="text-sm text-muted/60 dark:text-muted/40">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                   Practica entrenamientos y obtén análisis multimodal avanzado
                 </p>
               </div>
@@ -106,28 +106,28 @@ export default function BienvenidaPage() {
               <CheckCircle2 className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-muted/90 dark:text-white">Análisis Completo</p>
-                <p className="text-sm text-muted/60 dark:text-muted/40">Feedback detallado sobre postura, tono, gestos y coherencia</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Feedback detallado sobre postura, tono, gestos y coherencia</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-muted/90 dark:text-white">Plan Personalizado</p>
-                <p className="text-sm text-muted/60 dark:text-muted/40">Diseñado específicamente para tu perfil y objetivos</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Diseñado específicamente para tu perfil y objetivos</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-muted/90 dark:text-white">Entrenamientos Progresivos</p>
-                <p className="text-sm text-muted/60 dark:text-muted/40">De básico a maestría en 4 niveles de dificultad</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">De básico a maestría en 4 niveles de dificultad</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-muted/90 dark:text-white">Contexto del Mercado</p>
-                <p className="text-sm text-muted/60 dark:text-muted/40">Análisis en profundidad de tendencias y oportunidades</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Análisis en profundidad de tendencias y oportunidades</p>
               </div>
             </div>
           </div>
@@ -139,8 +139,8 @@ export default function BienvenidaPage() {
             <Target className="w-5 h-5 text-blue" />
             Tiempo Estimado
           </h3>
-          <p className="text-sm text-muted/70 dark:text-muted/30 mb-3">Tu viaje será gradual y personalizado:</p>
-          <ul className="space-y-2 text-sm text-muted/60 dark:text-muted/40">
+          <p className="text-sm text-muted-foreground dark:text-muted/30 mb-3">Tu viaje será gradual y personalizado:</p>
+          <ul className="space-y-2 text-sm text-muted-foreground dark:text-muted-foreground">
             <li>• <strong>Hoy:</strong> Responderas preguntas de conocimiento (30 min)</li>
             <li>• <strong>Días 1-3:</strong> Recibirás tu plan personalizado A2 (lectura: 1 hora)</li>
             <li>• <strong>Semanas 1-12:</strong> Sigue tu plan con entrenamientos progresivos (2-3 horas/semana)</li>
@@ -167,7 +167,7 @@ export default function BienvenidaPage() {
         </div>
 
         {/* Footer Note */}
-        <p className="text-center text-xs text-muted/50 dark:text-muted/40 mt-8">
+        <p className="text-center text-xs text-muted-foreground dark:text-muted-foreground mt-8">
           Puedes volver a esta página en cualquier momento desde el menú de Despega
         </p>
       </div>

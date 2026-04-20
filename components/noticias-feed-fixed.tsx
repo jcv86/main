@@ -118,7 +118,7 @@ export function NoticiasFeed() {
       'Educación': 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-indigo-300',
       'Oportunidades': 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300',
     }
-    return colors[category] || 'bg-muted/10 text-muted/80 dark:bg-transparent/30 dark:text-muted/30'
+    return colors[category] || 'bg-muted/10 text-secondary dark:bg-transparent/30 dark:text-muted/30'
   }
 
   if (loading) {
@@ -189,12 +189,12 @@ export function NoticiasFeed() {
             <h3 className="text-lg font-bold mb-2 text-muted/90 dark:text-muted/10">
               {noticia.title}
             </h3>
-            <p className="text-muted/70 dark:text-muted/30 mb-3">
+            <p className="text-muted-foreground dark:text-muted/30 mb-3">
               {noticia.description}
             </p>
 
             <div className="flex items-center justify-between">
-              <div className="text-xs text-muted/50 dark:text-muted/40">
+              <div className="text-xs text-muted-foreground dark:text-muted-foreground">
                 <TrendingUp className="w-3 h-3 inline mr-1" />
                 {noticia.source} • {noticia.timestamp}
               </div>
@@ -212,7 +212,7 @@ export function NoticiasFeed() {
 
       {noticias.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-muted/50 dark:text-muted/40">No hay noticias disponibles en este momento</p>
+          <p className="text-muted-foreground dark:text-muted-foreground">No hay noticias disponibles en este momento</p>
         </div>
       )}
     </div>

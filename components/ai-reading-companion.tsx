@@ -246,7 +246,7 @@ export default function AIReadingCompanion() {
       case "application":
         return "text-orange"
       default:
-        return "text-muted/60"
+        return "text-muted-foreground"
     }
   }
 
@@ -265,7 +265,7 @@ export default function AIReadingCompanion() {
     <div className="space-y-6 p-6">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-4">🤖 Compañero de Lectura IA</h1>
-        <p className="text-xl text-muted/60">Tu asistente inteligente para maximizar el aprendizaje de cada libro</p>
+        <p className="text-xl text-muted-foreground">Tu asistente inteligente para maximizar el aprendizaje de cada libro</p>
       </div>
 
       <Tabs defaultValue="chat" className="space-y-6">
@@ -302,7 +302,7 @@ export default function AIReadingCompanion() {
                     <div className="bg-muted/10 p-3 rounded-lg">
                       <div className="flex items-center gap-2">
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue"></div>
-                        <span className="text-sm text-muted/60">Pensando...</span>
+                        <span className="text-sm text-muted-foreground">Pensando...</span>
                       </div>
                     </div>
                   </div>
@@ -386,12 +386,12 @@ export default function AIReadingCompanion() {
                     </div>
                     <Badge variant="outline">{insight.confidence}% confianza</Badge>
                   </div>
-                  <p className="text-sm text-muted/60">{insight.book_title}</p>
+                  <p className="text-sm text-muted-foreground">{insight.book_title}</p>
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted mb-4">{insight.content}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted/50">{new Date(insight.created_at).toLocaleString()}</span>
+                    <span className="text-xs text-muted-foreground">{new Date(insight.created_at).toLocaleString()}</span>
                     <div className="flex gap-2">
                       <Button variant="ghost" size="sm">
                         <Volume2 className="h-4 w-4" />
@@ -416,7 +416,7 @@ export default function AIReadingCompanion() {
                   Plan de Estudio: {plan.book_title}
                 </CardTitle>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-muted/60">
+                  <span className="text-sm text-muted-foreground">
                     Sesión {plan.completed_sessions + 1} de {plan.total_sessions}
                   </span>
                   <Badge variant="outline">
@@ -435,14 +435,14 @@ export default function AIReadingCompanion() {
                     </h4>
                     <div className="bg-blue/5 p-4 rounded-[28px]">
                       <h5 className="font-semibold mb-2">{plan.current_session.title}</h5>
-                      <p className="text-sm text-muted/60 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         Tiempo estimado: {plan.current_session.estimated_time} minutos
                       </p>
 
                       <div className="space-y-3">
                         <div>
                           <h6 className="font-medium text-sm">Objetivos:</h6>
-                          <ul className="text-sm text-muted/60 list-disc list-inside">
+                          <ul className="text-sm text-muted-foreground list-disc list-inside">
                             {plan.current_session.objectives.map((objective, index) => (
                               <li key={index}>{objective}</li>
                             ))}
@@ -476,7 +476,7 @@ export default function AIReadingCompanion() {
                     </h4>
                     <div className="bg-purple/5 p-4 rounded-[28px]">
                       <h5 className="font-semibold mb-2">{plan.next_session.title}</h5>
-                      <p className="text-sm text-muted/60">{plan.next_session.preview}</p>
+                      <p className="text-sm text-muted-foreground">{plan.next_session.preview}</p>
                       <Button variant="outline" className="w-full mt-4 bg-transparent" disabled>
                         <AlertCircle className="h-4 w-4 mr-1" />
                         Disponible después de completar sesión actual
@@ -496,7 +496,7 @@ export default function AIReadingCompanion() {
                 <Brain className="h-5 w-5 text-green" />
                 Recomendaciones Personalizadas
               </CardTitle>
-              <p className="text-sm text-muted/60">Basadas en tu historial de lectura y preferencias</p>
+              <p className="text-sm text-muted-foreground">Basadas en tu historial de lectura y preferencias</p>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -506,7 +506,7 @@ export default function AIReadingCompanion() {
                       <div className="flex items-start justify-between">
                         <div>
                           <CardTitle className="text-lg">{rec.title}</CardTitle>
-                          <p className="text-sm text-muted/60">por {rec.author}</p>
+                          <p className="text-sm text-muted-foreground">por {rec.author}</p>
                         </div>
                         <Badge variant="default" className="bg-green">
                           {rec.match_score}% match

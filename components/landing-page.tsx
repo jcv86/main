@@ -53,7 +53,7 @@ export default function LandingPage() {
             <h2 className="text-4xl font-bold text-foreground mb-4">
               Todo lo que Necesitas para Crecer Profesionalmente
             </h2>
-            <p className="text-xl text-muted/60 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Una plataforma integral que combina ciencia, tecnología y experiencia para acelerar tu desarrollo
               profesional.
             </p>
@@ -112,7 +112,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-foreground mb-4">Historias de Éxito</h2>
-            <p className="text-xl text-muted/60">
+            <p className="text-xl text-muted-foreground">
               Profesionales que han transformado sus carreras con nuestra plataforma
             </p>
           </div>
@@ -131,7 +131,7 @@ export default function LandingPage() {
                 <CardDescription>Gerente de Marketing, Tech Startup</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-muted/60 italic">
+                <p className="text-muted-foreground italic">
                   "Las evaluaciones me ayudaron a entender mis fortalezas en liderazgo. En 6 meses logré una promoción
                   que llevaba años buscando."
                 </p>
@@ -154,7 +154,7 @@ export default function LandingPage() {
                 <CardDescription>Desarrollador Senior, Fintech</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-muted/60 italic">
+                <p className="text-muted-foreground italic">
                   "El coach IA me guió para hacer la transición a Product Manager. Ahora lidero un equipo de 12 personas
                   en una empresa internacional."
                 </p>
@@ -177,7 +177,7 @@ export default function LandingPage() {
                 <CardDescription>Consultora Independiente</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-muted/60 italic">
+                <p className="text-muted-foreground italic">
                   "La biblioteca digital me dio las herramientas para lanzar mi consultora. Hoy facturo 3x más que en mi
                   trabajo anterior."
                 </p>
@@ -196,7 +196,7 @@ export default function LandingPage() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-foreground mb-4">Sobre Nosotros</h2>
-              <p className="text-xl text-muted/60">
+              <p className="text-xl text-muted-foreground">
                 Somos expertos en desarrollo profesional con base en Santiago de Chile
               </p>
             </div>
@@ -204,22 +204,22 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
                 <h3 className="text-2xl font-bold text-foreground mb-6">Nuestra Misión</h3>
-                <p className="text-muted/60 mb-6 text-lg">
+                <p className="text-muted-foreground mb-6 text-lg">
                   Democratizar el acceso al desarrollo profesional de calidad mundial, combinando la sabiduría de la
                   psicología organizacional con el poder de la inteligencia artificial.
                 </p>
-                <p className="text-muted/60 mb-6 text-lg">
+                <p className="text-muted-foreground mb-6 text-lg">
                   Desde Santiago de Chile, servimos a profesionales de toda Latinoamérica que buscan acelerar su
                   crecimiento profesional con herramientas científicamente validadas.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
                     <div className="text-3xl font-bold text-blue">10,000+</div>
-                    <div className="text-muted/60">Profesionales Evaluados</div>
+                    <div className="text-muted-foreground">Profesionales Evaluados</div>
                   </div>
                   <div className="text-center">
                     <div className="text-3xl font-bold text-purple">95%</div>
-                    <div className="text-muted/60">Satisfacción del Cliente</div>
+                    <div className="text-muted-foreground">Satisfacción del Cliente</div>
                   </div>
                 </div>
               </div>
@@ -232,7 +232,7 @@ export default function LandingPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted/60">
+                    <p className="text-muted-foreground">
                       Nuestros tests están validados por organizaciones internacionales de psicología organizacional.
                     </p>
                   </CardContent>
@@ -245,7 +245,7 @@ export default function LandingPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-muted/60">
+                    <p className="text-muted-foreground">
                       85% de nuestros usuarios reporta mejoras significativas en su carrera dentro de los primeros 6
                       meses.
                     </p>
@@ -263,7 +263,7 @@ export default function LandingPage() {
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-bold text-foreground mb-4">Preguntas Frecuentes</h2>
-              <p className="text-xl text-muted/60">Resolvemos las dudas más comunes sobre nuestra plataforma</p>
+              <p className="text-xl text-muted-foreground">Resolvemos las dudas más comunes sobre nuestra plataforma</p>
             </div>
 
             <div className="space-y-6">
@@ -272,7 +272,7 @@ export default function LandingPage() {
                   <CardTitle>¿Qué incluye la evaluación completa?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted/60">
+                  <p className="text-muted-foreground">
                     Incluye 6 tests psicométricos (DISC, Big Five, MBTI, RIASEC, Inteligencia Emocional y Habilidades
                     Blandas), análisis detallado con IA, plan de desarrollo personalizado y acceso completo a la
                     biblioteca digital.
@@ -285,7 +285,7 @@ export default function LandingPage() {
                   <CardTitle>¿Cómo funciona el Coach IA?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted/60">
+                  <p className="text-muted-foreground">
                     Nuestro Coach IA analiza tus resultados psicométricos, objetivos profesionales y contexto laboral
                     para brindarte consejos personalizados 24/7. Utiliza modelos de lenguaje avanzados entrenados
                     específicamente en desarrollo profesional.
@@ -298,7 +298,7 @@ export default function LandingPage() {
                   <CardTitle>¿Los tests son científicamente válidos?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted/60">
+                  <p className="text-muted-foreground">
                     Sí, todos nuestros tests están basados en modelos psicológicos reconocidos internacionalmente y han
                     sido validados en poblaciones latinoamericanas. Cumplimos con estándares internacionales de
                     evaluación psicométrica.
@@ -311,7 +311,7 @@ export default function LandingPage() {
                   <CardTitle>¿Qué tipo de libros incluye la biblioteca?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted/60">
+                  <p className="text-muted-foreground">
                     Más de 70 libros cuidadosamente seleccionados sobre liderazgo, comunicación, productividad,
                     inteligencia emocional, negociación, estrategia empresarial y desarrollo personal. Todos con
                     resúmenes y ejercicios prácticos.
@@ -324,7 +324,7 @@ export default function LandingPage() {
                   <CardTitle>¿Ofrecen soporte técnico?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted/60">
+                  <p className="text-muted-foreground">
                     Sí, ofrecemos soporte técnico por email y chat en vivo de lunes a viernes de 9:00 a 18:00 (hora de
                     Chile). También tenemos una base de conocimientos completa y tutoriales en video.
                   </p>
@@ -377,7 +377,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold text-foreground mb-6">¿Listo para Transformar tu Carrera?</h2>
-            <p className="text-xl text-muted/60 mb-8">
+            <p className="text-xl text-muted-foreground mb-8">
               Únete a miles de profesionales que ya están acelerando su crecimiento con nuestra plataforma de desarrollo
               profesional.
             </p>

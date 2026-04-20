@@ -132,7 +132,7 @@ export default function A2IntroPage() {
       <div className="min-h-screen bg-background">
         <div className="text-center">
           <Loader2 className="h-12 w-12 animate-spin mx-auto text-purple dark:text-purple/40" />
-          <p className="mt-4 text-muted/60 dark:text-muted/40">Cargando tu A2...</p>
+          <p className="mt-4 text-muted-foreground dark:text-muted-foreground">Cargando tu A2...</p>
         </div>
       </div>
     )
@@ -168,7 +168,7 @@ export default function A2IntroPage() {
           <h1 className="text-5xl md:text-6xl font-bold text-muted/90 dark:text-muted/5 leading-tight">
             Tu Motor de Avance
           </h1>
-          <p className="text-xl text-muted/60 dark:text-muted/40">
+          <p className="text-xl text-muted-foreground dark:text-muted-foreground">
             90 días de acciones personalizadas según tu patrón
           </p>
         </div>
@@ -177,13 +177,13 @@ export default function A2IntroPage() {
         <Card className="border-0 shadow-lg bg-white dark:bg-background">
           <CardContent className="pt-8 space-y-6">
             <div className="space-y-4">
-              <p className="text-lg text-muted/70 dark:text-muted/30 leading-relaxed">
+              <p className="text-lg text-muted-foreground dark:text-muted/30 leading-relaxed">
                 Basado en tu perfil <strong>{profileName}</strong> de Despega Cerebral con puntuación dominante de <strong>{cerebroProfile.primaryScore}%</strong>, 
                 hemos diseñado un plan de 90 días con micro-acciones concretas.
               </p>
               
               <div className="p-4 bg-muted/5 dark:bg-card/50 rounded-[28px] border border-muted/20 dark:border-card">
-                <p className="text-muted/70 dark:text-muted/30 leading-relaxed">
+                <p className="text-muted-foreground dark:text-muted/30 leading-relaxed">
                   No se trata de trabajar más horas. Se trata de trabajar <strong>en dirección correcta, 
                   con acciones que realmente importan</strong>, adaptadas a tu patrón natural de comportamiento.
                 </p>
@@ -214,21 +214,21 @@ export default function A2IntroPage() {
                   <Zap className="w-6 h-6 text-amber-500 flex-shrink-0 mt-1" />
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Micro-acciones diarias</p>
-                    <p className="text-sm text-muted/60 dark:text-muted/40">De 5 a 120 minutos, nunca abrumador</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">De 5 a 120 minutos, nunca abrumador</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <Target className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-1" />
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">3 Sprints estructurados</p>
-                    <p className="text-sm text-muted/60 dark:text-muted/40">30 días cada uno, con momentum progresivo</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">30 días cada uno, con momentum progresivo</p>
                   </div>
                 </div>
                 <div className="flex gap-3">
                   <BookOpen className="w-6 h-6 text-blue/50 flex-shrink-0 mt-1" />
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Bitácora de aprendizaje</p>
-                    <p className="text-sm text-muted/60 dark:text-muted/40">Reflexión semanal para consolidar progreso</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Reflexión semanal para consolidar progreso</p>
                   </div>
                 </div>
               </div>
@@ -244,7 +244,7 @@ export default function A2IntroPage() {
               <CardDescription>Días 1-30</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted/60 dark:text-muted/40">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 Tomar velocidad, establecer rutinas, descubrir tu ritmo natural
               </p>
             </CardContent>
@@ -256,7 +256,7 @@ export default function A2IntroPage() {
               <CardDescription>Días 31-60</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted/60 dark:text-muted/40">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 Profundizar habilidades, resolver obstáculos, acelerar transformación
               </p>
             </CardContent>
@@ -268,7 +268,7 @@ export default function A2IntroPage() {
               <CardDescription>Días 61-90</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-muted/60 dark:text-muted/40">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 Integración definitiva, preparación para A3, nuevo estándar
               </p>
             </CardContent>
@@ -284,7 +284,7 @@ export default function A2IntroPage() {
           >
             Comenzar Mi A2 <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
-          <p className="text-center text-sm text-muted/60 dark:text-muted/40">
+          <p className="text-center text-sm text-muted-foreground dark:text-muted-foreground">
             Tómate un momento para entender por dónde comenzaremos
           </p>
         </div>

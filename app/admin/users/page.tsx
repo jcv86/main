@@ -305,7 +305,7 @@ export default function AdminUsersPage() {
         <div className="text-center">
           <Shield className="h-12 w-12 mx-auto mb-4 text-red" />
           <h2 className="text-2xl font-bold mb-2">Acceso Denegado</h2>
-          <p className="text-muted/60">No tienes permisos para acceder a esta página.</p>
+          <p className="text-muted-foreground">No tienes permisos para acceder a esta página.</p>
         </div>
       </div>
     )
@@ -328,7 +328,7 @@ export default function AdminUsersPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Administración de Usuarios</h1>
-          <p className="text-muted/60">Gestiona los usuarios de la plataforma</p>
+          <p className="text-muted-foreground">Gestiona los usuarios de la plataforma</p>
         </div>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
@@ -365,7 +365,7 @@ export default function AdminUsersPage() {
                   required
                   minLength={6}
                 />
-                <p className="text-xs text-muted/50 mt-1">Esta contraseña se usará para que el usuario inicie sesión</p>
+                <p className="text-xs text-muted-foreground mt-1">Esta contraseña se usará para que el usuario inicie sesión</p>
               </div>
               <div>
                 <Label htmlFor="full_name">Nombre Completo</Label>
@@ -499,7 +499,7 @@ export default function AdminUsersPage() {
       <Card>
         <CardContent className="pt-6">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted/40" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Buscar usuarios por email, nombre o ubicación..."
               value={searchTerm}
@@ -532,15 +532,15 @@ export default function AdminUsersPage() {
                 {filteredUsers.map((user) => (
                   <TableRow key={user.id}>
                     <TableCell className="font-medium">{user.email}</TableCell>
-                    <TableCell>{user.full_name || <span className="text-muted/40">Sin nombre</span>}</TableCell>
+                    <TableCell>{user.full_name || <span className="text-muted-foreground">Sin nombre</span>}</TableCell>
                     <TableCell>
                       {user.location ? (
                         <Badge variant="secondary">{user.location}</Badge>
                       ) : (
-                        <span className="text-muted/40">-</span>
+                        <span className="text-muted-foreground">-</span>
                       )}
                     </TableCell>
-                    <TableCell>{user.phone || <span className="text-muted/40">-</span>}</TableCell>
+                    <TableCell>{user.phone || <span className="text-muted-foreground">-</span>}</TableCell>
                     <TableCell>{new Date(user.created_at).toLocaleDateString()}</TableCell>
                     <TableCell>
                       <div className="flex gap-2">
@@ -577,7 +577,7 @@ export default function AdminUsersPage() {
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 disabled
               />
-              <p className="text-xs text-muted/50 mt-1">El email no se puede modificar</p>
+              <p className="text-xs text-muted-foreground mt-1">El email no se puede modificar</p>
             </div>
             <div>
               <Label htmlFor="edit-full_name">Nombre Completo</Label>

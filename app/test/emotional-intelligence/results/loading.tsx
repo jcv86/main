@@ -58,7 +58,7 @@ export default function EmotionalIntelligenceResultsLoading() {
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center space-x-4">
                     <div className="p-4 bg-muted/20 rounded-xl animate-pulse">
-                      <Icon className="h-8 w-8 text-muted/40" />
+                      <Icon className="h-8 w-8 text-muted-foreground" />
                     </div>
                     <div>
                       <div className="h-6 bg-muted/20 rounded w-32 mb-2 animate-pulse"></div>
@@ -88,7 +88,7 @@ export default function EmotionalIntelligenceResultsLoading() {
           <div className="text-center">
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-red/50 mx-auto mb-4"></div>
             <h2 className="text-xl font-semibold text-foreground mb-2">Cargando resultados...</h2>
-            <p className="text-muted/60">Analizando tu perfil de inteligencia emocional</p>
+            <p className="text-muted-foreground">Analizando tu perfil de inteligencia emocional</p>
           </div>
         </div>
       </div>

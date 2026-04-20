@@ -40,7 +40,7 @@ export default async function MyLearningPage() {
             <p className="text-sm font-semibold text-purple dark:text-purple/30">Tu Progreso de Aprendizaje</p>
           </div>
           <h1 className="text-5xl font-bold mb-2 text-purple400400">Tu Aprendizaje</h1>
-          <p className="text-lg text-muted/70 dark:text-muted/30">
+          <p className="text-lg text-muted-foreground dark:text-muted/30">
             Nivel: <span className="font-bold text-purple dark:text-purple/40">{profile.current_level}</span>
           </p>
         </div>
@@ -61,7 +61,7 @@ export default async function MyLearningPage() {
             </div>
             <div className="flex-1">
               <h3 className="font-semibold text-sm text-muted/90 dark:text-white">Leaderboard</h3>
-              <p className="text-xs text-muted/60 dark:text-muted/40">Compite con otros usuarios</p>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground">Compite con otros usuarios</p>
             </div>
           </Link>
 
@@ -74,7 +74,7 @@ export default async function MyLearningPage() {
             </div>
             <div className="flex-1">
               <h3 className="font-semibold text-sm text-muted/90 dark:text-white">Biblioteca</h3>
-              <p className="text-xs text-muted/60 dark:text-muted/40">Explora 120+ libros</p>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground">Explora 120+ libros</p>
             </div>
           </Link>
 
@@ -87,7 +87,7 @@ export default async function MyLearningPage() {
             </div>
             <div className="flex-1">
               <h3 className="font-semibold text-sm text-muted/90 dark:text-white">Próximos Pasos</h3>
-              <p className="text-xs text-muted/60 dark:text-muted/40">Basados en tu nivel</p>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground">Basados en tu nivel</p>
             </div>
           </Link>
         </section>

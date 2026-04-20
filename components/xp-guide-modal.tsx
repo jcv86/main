@@ -196,12 +196,12 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                       className="flex items-start justify-between p-3 rounded-[28px] bg-muted/5 dark:bg-transparent/50 border border-muted/20 dark:border-muted/80"
                     >
                       <div className="flex items-start gap-3 flex-1">
-                        <div className="text-muted/40 mt-0.5">{activity.icon}</div>
+                        <div className="text-muted-foreground mt-0.5">{activity.icon}</div>
                         <div>
                           <p className="font-semibold text-sm text-muted/90 dark:text-muted/10">
                             {activity.action}
                           </p>
-                          <p className="text-xs text-muted/50 dark:text-muted/40 mt-0.5">
+                          <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-0.5">
                             {activity.description}
                           </p>
                         </div>
@@ -236,7 +236,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                         <div className="text-2xl font-black text-orange">
                           {streak.days}
                         </div>
-                        <div className="text-xs text-muted/50 dark:text-muted/40">
+                        <div className="text-xs text-muted-foreground dark:text-muted-foreground">
                           días
                         </div>
                       </div>
@@ -244,7 +244,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                         <p className="font-semibold text-sm text-muted/90 dark:text-muted/10">
                           Multiplicador x{streak.multiplier.toFixed(2)}
                         </p>
-                        <p className="text-xs text-muted/50 dark:text-muted/40">
+                        <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                           Todos tus XP se multiplican
                         </p>
                       </div>
@@ -273,11 +273,11 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
               <CardContent className="space-y-4">
                 <div className="p-4 bg-muted/5 dark:bg-transparent/50 rounded-[28px] border border-muted/20 dark:border-muted/80">
                   <p className="font-semibold text-sm mb-2">Nivel = 1,000 XP</p>
-                  <p className="text-sm text-muted/60 dark:text-muted/40">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     Cada nivel requiere 1,000 puntos. Con multiplicadores de racha, 
                     puedes llegar más rápido. Por ejemplo, con racha de 7 días:
                   </p>
-                  <ul className="mt-3 space-y-2 text-sm text-muted/60 dark:text-muted/40">
+                  <ul className="mt-3 space-y-2 text-sm text-muted-foreground dark:text-muted-foreground">
                     <li>• Simulación Desafiante: 300 XP → 450 XP con racha x1.5</li>
                     <li>• Análisis Multimodal: 250 XP → 375 XP con racha x1.5</li>
                     <li>• 3 Desafíos diarios → Subes casi un nivel completo</li>

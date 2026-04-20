@@ -59,10 +59,10 @@ export default function A4Page() {
           <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance bg-background">
             Tu Dashboard Ejecutivo
           </h1>
-          <p className="text-xl text-muted/70 dark:text-muted/30 mb-2">
+          <p className="text-xl text-muted-foreground dark:text-muted/30 mb-2">
             Coach IA 24/7 • Contexto de Mercado • Decisiones Estratégicas
           </p>
-          <p className="text-muted/60 dark:text-muted/40">
+          <p className="text-muted-foreground dark:text-muted-foreground">
             Monitorea tu progreso, descubre oportunidades y desarrolla criterio laboral
           </p>
         </div>
@@ -101,7 +101,7 @@ export default function A4Page() {
           <TabsContent value="oportunidades" className="space-y-4">
             <div className="mb-6">
               <h2 className="text-2xl font-bold mb-2">Oportunidades en el Mercado</h2>
-              <p className="text-muted/60 dark:text-muted/40">
+              <p className="text-muted-foreground dark:text-muted-foreground">
                 Tu perfil de LinkedIn sincronizado, ofertas personalizadas y análisis del mercado laboral
               </p>
             </div>
@@ -124,7 +124,7 @@ export default function A4Page() {
           <TabsContent value="tests" className="space-y-4">
             <div className="mb-6">
               <h2 className="text-2xl font-bold mb-2">Cultura General & Tests</h2>
-              <p className="text-muted/60 dark:text-muted/40">
+              <p className="text-muted-foreground dark:text-muted-foreground">
                 Evalúa tu conocimiento sobre historia, geografía, actualidad y cultura. Acumula puntos y desbloquea badges.
               </p>
             </div>

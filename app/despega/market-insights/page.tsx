@@ -42,7 +42,7 @@ export default function MarketInsightsPage() {
           <h1 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">
             Market Intelligence
           </h1>
-          <p className="text-muted/60 dark:text-muted/40 mb-6">
+          <p className="text-muted-foreground dark:text-muted-foreground mb-6">
             Análisis del mercado para tu rol objetivo
           </p>
           <div className="bg-blue/5 dark:bg-blue border border-blue/30 dark:border-blue/10 rounded-[28px] p-4 mb-6">

@@ -90,12 +90,12 @@ export function AvatarPicker({
             {selected?.emoji}
           </div>
           <h3 className="text-2xl font-bold text-muted/90 dark:text-white">{selected?.name}</h3>
-          <p className="text-sm text-muted/60 dark:text-muted/40 mt-1">{selected?.description}</p>
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-1">{selected?.description}</p>
         </div>
 
         {/* Avatar Gallery */}
         <div>
-          <p className="text-sm font-semibold text-muted/70 dark:text-muted/30 mb-3">Opciones disponibles</p>
+          <p className="text-sm font-semibold text-muted-foreground dark:text-muted/30 mb-3">Opciones disponibles</p>
           <div className="grid grid-cols-3 gap-3 md:grid-cols-6">
             {avatars.map((avatar) => (
               <button
@@ -115,7 +115,7 @@ export function AvatarPicker({
                   </div>
                 )}
 
-                <span className="text-xs font-medium text-center leading-tight text-muted/70 dark:text-muted/30 group-hover:text-muted/90 dark:group-hover:text-white">
+                <span className="text-xs font-medium text-center leading-tight text-muted-foreground dark:text-muted/30 group-hover:text-muted/90 dark:group-hover:text-white">
                   {avatar.name}
                 </span>
               </button>

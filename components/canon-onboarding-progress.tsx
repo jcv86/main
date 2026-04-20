@@ -82,7 +82,7 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
                       ? "text-blue dark:text-blue/10"
                       : isCompleted
                       ? "text-green dark:text-green/10"
-                      : "text-muted/70 dark:text-muted/40"
+                      : "text-muted-foreground dark:text-muted-foreground"
                   }`}>
                     {step.label}
                   </h4>
@@ -91,7 +91,7 @@ export function CanonOnboardingProgress({ steps, currentStep }: OnboardingProgre
                       ? "text-blue dark:text-blue/20"
                       : isCompleted
                       ? "text-green dark:text-green/20"
-                      : "text-muted/60 dark:text-muted/50"
+                      : "text-muted-foreground dark:text-muted-foreground"
                   }`}>
                     {step.description}
                   </p>

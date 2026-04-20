@@ -117,7 +117,7 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
       case "in_progress":
         return <Clock className="h-5 w-5 text-blue" />
       default:
-        return <AlertCircle className="h-5 w-5 text-muted/60" />
+        return <AlertCircle className="h-5 w-5 text-muted-foreground" />
     }
   }
 

@@ -45,7 +45,7 @@ export function DailyCareerTip({ careerStage = "all" }: { careerStage?: string }
         <CardContent className="pt-6">
           <div className="flex items-center gap-3">
             <Lightbulb className="h-5 w-5 animate-pulse text-purple dark:text-purple/40" />
-            <p className="text-sm text-muted-foreground dark:text-muted/40">Cargando consejo del día...</p>
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground">Cargando consejo del día...</p>
           </div>
         </CardContent>
       </Card>

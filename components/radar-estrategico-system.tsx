@@ -397,7 +397,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
               <Radar className="w-6 h-6" />
               Radar Estratégico
             </h2>
-            <p className="text-sm text-muted/40 mt-1">
+            <p className="text-sm text-muted-foreground mt-1">
               {radarData.fecha} • {radarData.hora} {radarData.timezone}
             </p>
           </div>
@@ -405,7 +405,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
             Edición {radarData.edicion}
           </Badge>
         </div>
-        <p className="text-muted/40 text-sm">{radarData.fecha} • Zona horaria: {radarData.timezone}</p>
+        <p className="text-muted-foreground text-sm">{radarData.fecha} • Zona horaria: {radarData.timezone}</p>
       </div>
 
       {/* Lectura Base - Capa 1 */}
@@ -466,13 +466,13 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
                           <CardTitle className="text-lg mb-2">{noticia.titulo}</CardTitle>
-                          <p className="text-xs text-muted/40">{noticia.fecha} • {noticia.hora}</p>
+                          <p className="text-xs text-muted-foreground">{noticia.fecha} • {noticia.hora}</p>
                         </div>
                       </div>
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div>
-                        <h4 className="text-xs font-semibold text-muted/40 uppercase mb-1">Traducción sin jerga</h4>
+                        <h4 className="text-xs font-semibold text-muted-foreground uppercase mb-1">Traducción sin jerga</h4>
                         <p className="text-muted/20">{noticia.traduccion}</p>
                       </div>
 
@@ -533,7 +533,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
                       )}
 
                       <div>
-                        <h4 className="text-xs font-semibold text-muted/40 uppercase mb-1">📚 Fuentes</h4>
+                        <h4 className="text-xs font-semibold text-muted-foreground uppercase mb-1">📚 Fuentes</h4>
                         <p className="text-muted/30 text-xs">{noticia.fuentes.join(' • ')}</p>
                       </div>
                     </CardContent>

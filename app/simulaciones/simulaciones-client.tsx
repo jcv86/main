@@ -99,7 +99,7 @@ export default function EntrenamientoEntrevistasClient() {
             <Play className="h-8 w-8 text-orange dark:text-orange/40" />
             Entrenamiento de Entrevistas
           </h1>
-          <p className="text-muted/60 dark:text-muted/40 mt-2">
+          <p className="text-muted-foreground dark:text-muted-foreground mt-2">
             Practica entrevistas, conversaciones y presentaciones con feedback IA
           </p>
         </div>
@@ -107,7 +107,7 @@ export default function EntrenamientoEntrevistasClient() {
         {/* Filtros */}
         <div className="mb-6 flex gap-4">
           <div>
-            <label className="text-sm font-medium text-muted/70 dark:text-muted/30">Tipo</label>
+            <label className="text-sm font-medium text-muted-foreground dark:text-muted/30">Tipo</label>
             <select
               value={filtroTipo}
               onChange={(e) => setFiltroTipo(e.target.value)}
@@ -121,7 +121,7 @@ export default function EntrenamientoEntrevistasClient() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-muted/70 dark:text-muted/30">Dificultad</label>
+            <label className="text-sm font-medium text-muted-foreground dark:text-muted/30">Dificultad</label>
             <select
               value={filtroDificultad}
               onChange={(e) => setFiltroDificultad(e.target.value)}
@@ -153,7 +153,7 @@ export default function EntrenamientoEntrevistasClient() {
               <CardContent className="space-y-4">
                 <CardDescription>{entrenamiento.descripcion}</CardDescription>
 
-                <div className="flex items-center gap-2 text-sm text-muted/60 dark:text-muted/40">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
                   <TrendingUp className="h-4 w-4" />
                   Duración estimada: {entrenamiento.duracion} min
                 </div>
@@ -182,7 +182,7 @@ export default function EntrenamientoEntrevistasClient() {
 
         {entrenamientosFiltrados.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-muted/50 dark:text-muted/40">
+            <p className="text-muted-foreground dark:text-muted-foreground">
               No hay entrenamientos disponibles con los filtros seleccionados
             </p>
           </div>

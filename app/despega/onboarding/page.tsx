@@ -209,7 +209,7 @@ export default function DespegaOnboarding() {
               <h1 className="text-5xl md:text-6xl font-bold text-muted/90 dark:text-muted/5 leading-tight">
                 Despega Cerebral
               </h1>
-              <p className="text-xl text-muted/60 dark:text-muted/40">
+              <p className="text-xl text-muted-foreground dark:text-muted-foreground">
                 Tu punto de partida en DespegaTuCarrera
               </p>
             </div>
@@ -219,33 +219,33 @@ export default function DespegaOnboarding() {
           <Card className="border-0 shadow-lg bg-white dark:bg-background">
             <CardContent className="pt-8 space-y-6">
               <div className="space-y-4">
-                <p className="text-lg text-muted/70 dark:text-muted/30 leading-relaxed">
+                <p className="text-lg text-muted-foreground dark:text-muted/30 leading-relaxed">
                   Antes de hablar de metas, decisiones o próximos pasos, necesitamos entender algo más profundo: <strong>tu patrón natural de acción</strong>.
                 </p>
                 
-                <p className="text-muted/60 dark:text-muted/40 leading-relaxed">
+                <p className="text-muted-foreground dark:text-muted-foreground leading-relaxed">
                   Todos tenemos una forma particular de movernos frente a desafíos, cambios, presión y oportunidades. No es una etiqueta. No es una caja. <strong>Es un patrón.</strong>
                 </p>
 
                 <div className="p-4 bg-muted/5 dark:bg-card/50 rounded-[28px] border border-muted/20 dark:border-card my-4">
-                  <p className="text-muted/70 dark:text-muted/30">
+                  <p className="text-muted-foreground dark:text-muted/30">
                     En las próximas 28 preguntas explorarás cómo tiendes a actuar cuando nadie te está mirando, cuando decides rápido, cuando dudas o cuando lideras.
                   </p>
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-muted/60 dark:text-muted/40">
+                  <p className="text-muted-foreground dark:text-muted-foreground">
                     ✓ No hay respuestas correctas o incorrectas.
                   </p>
-                  <p className="text-muted/60 dark:text-muted/40">
+                  <p className="text-muted-foreground dark:text-muted-foreground">
                     ✓ No hay perfiles mejores que otros.
                   </p>
-                  <p className="text-muted/60 dark:text-muted/40">
+                  <p className="text-muted-foreground dark:text-muted-foreground">
                     ✓ Existen distintos patrones naturales de acción.
                   </p>
                 </div>
 
-                <p className="text-muted/70 dark:text-muted/30 italic pt-2">
+                <p className="text-muted-foreground dark:text-muted/30 italic pt-2">
                   En unos minutos descubrirás cuál describe mejor tu forma de moverte en el mundo.
                 </p>
               </div>
@@ -289,21 +289,21 @@ export default function DespegaOnboarding() {
                 <div className="text-2xl min-w-fit">1️⃣</div>
                 <div>
                   <p className="font-semibold text-muted/90 dark:text-muted/10">Responde con honestidad total</p>
-                  <p className="text-sm text-muted/60 dark:text-muted/40">No pienses en cómo deberías ser, sino en cómo realmente actúas.</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">No pienses en cómo deberías ser, sino en cómo realmente actúas.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="text-2xl min-w-fit">2️⃣</div>
                 <div>
                   <p className="font-semibold text-muted/90 dark:text-muted/10">Tu primer impulso es el más preciso</p>
-                  <p className="text-sm text-muted/60 dark:text-muted/40">No pienses demasiado en las opciones. Tu instinto es lo más acertado.</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">No pienses demasiado en las opciones. Tu instinto es lo más acertado.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="text-2xl min-w-fit">3️⃣</div>
                 <div>
                   <p className="font-semibold text-muted/90 dark:text-muted/10">Este es tu punto de partida</p>
-                  <p className="text-sm text-muted/60 dark:text-muted/40">Primero claridad. Luego dirección.</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Primero claridad. Luego dirección.</p>
                 </div>
               </div>
             </CardContent>
@@ -318,8 +318,8 @@ export default function DespegaOnboarding() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex justify-between items-center text-sm">
-                <span className="font-semibold text-muted/70 dark:text-muted/30">Evaluación DISC Despega</span>
-                <span className="text-muted/50 dark:text-muted/40">1/28</span>
+                <span className="font-semibold text-muted-foreground dark:text-muted/30">Evaluación DISC Despega</span>
+                <span className="text-muted-foreground dark:text-muted-foreground">1/28</span>
               </div>
               <div className="h-1 bg-blue/20 dark:bg-blue rounded-full overflow-hidden">
                 <div className="h-full bg-blue dark:bg-blue/50 rounded-full" style={{ width: '4%' }}></div>
@@ -334,16 +334,16 @@ export default function DespegaOnboarding() {
                   <div className="space-y-2">
                     <p className="text-sm font-semibold text-green dark:text-green/40">MÁS como yo</p>
                     <div className="space-y-2">
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
                         Decidido y directo
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
                         Optimista e inspirador
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
                         Paciente y considerado
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
                         Analítico y preciso
                       </button>
                     </div>
@@ -352,16 +352,16 @@ export default function DespegaOnboarding() {
                   <div className="space-y-2">
                     <p className="text-sm font-semibold text-red dark:text-red/40">MENOS como yo</p>
                     <div className="space-y-2">
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
                         Decidido y directo
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
                         Optimista e inspirador
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
                         Paciente y considerado
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted/70 dark:text-muted/30">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted/30">
                         Analítico y preciso
                       </button>
                     </div>
@@ -369,7 +369,7 @@ export default function DespegaOnboarding() {
                 </div>
               </div>
               
-              <p className="text-xs text-muted/50 dark:text-muted/40 text-center italic">
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground text-center italic">
                 Selecciona una opción de cada lado para responder
               </p>
             </CardContent>
@@ -402,7 +402,7 @@ export default function DespegaOnboarding() {
                 Cuando estés listo, comienza
               </Button>
             )}
-            <p className="text-center text-sm text-muted/60 dark:text-muted/40">
+            <p className="text-center text-sm text-muted-foreground dark:text-muted-foreground">
               ⏱️ Tiempo estimado: 3 minutos
             </p>
           </div>
@@ -421,10 +421,10 @@ export default function DespegaOnboarding() {
             <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
               Descubre Tu Perfil Despega Cerebral
             </h1>
-            <p className="text-xl text-muted/60 dark:text-muted/40">
+            <p className="text-xl text-muted-foreground dark:text-muted-foreground">
               Entiende cómo actúas, cómo interactúas, y cómo impulsar tu mejor versión
             </p>
-            <div className="flex justify-center gap-3 text-sm text-muted/60 dark:text-muted/40 pt-2">
+            <div className="flex justify-center gap-3 text-sm text-muted-foreground dark:text-muted-foreground pt-2">
               <span>⏱️ 3 minutos</span>
               <span>•</span>
               <span>📊 Resultados inmediatos</span>
@@ -479,26 +479,26 @@ export default function DespegaOnboarding() {
                   <div className="md:col-span-3 space-y-3">
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10 mb-1">Filosofía: Uso Activo de Fuerza</p>
-                      <p className="text-muted/70 dark:text-muted/30">
+                      <p className="text-muted-foreground dark:text-muted/30">
                         Los Impulsores superan resistencias mediante acción directa y decisiva. Van hacia adelante con determinación.
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
                       <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
                         <p className="font-semibold text-red dark:text-red/30 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Orientados a resultados, decisiones rápidas, lideran con confianza, directos y eficientes</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Orientados a resultados, decisiones rápidas, lideran con confianza, directos y eficientes</p>
                       </div>
                       <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
                         <p className="font-semibold text-red dark:text-red/30 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Liderazgo, decisión, competencia, determinación, coraje, eficiencia</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Liderazgo, decisión, competencia, determinación, coraje, eficiencia</p>
                       </div>
                       <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
                         <p className="font-semibold text-red dark:text-red/30 text-sm mb-1">Motivación</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Resultados, control, desafíos, ambientes dinámicos, autonomía</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Resultados, control, desafíos, ambientes dinámicos, autonomía</p>
                       </div>
                       <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
                         <p className="font-semibold text-red dark:text-red/30 text-sm mb-1">Ambiente Ideal</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Liderazgo, emprendimiento, cambio, competencia, responsabilidad</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Liderazgo, emprendimiento, cambio, competencia, responsabilidad</p>
                       </div>
                     </div>
                   </div>
@@ -519,26 +519,26 @@ export default function DespegaOnboarding() {
                   <div className="md:col-span-3 space-y-3">
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10 mb-1">Filosofía: Uso de Encanto</p>
-                      <p className="text-muted/70 dark:text-muted/30">
+                      <p className="text-muted-foreground dark:text-muted/30">
                         Los Catalizadores superan obstáculos mediante carisma, persuasión y conexión genuina con otras personas.
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
                       <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
                         <p className="font-semibold text-yellow dark:text-yellow/30 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Entusiastas, carismáticos, conectan fácilmente, optimistas, energéticos</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Entusiastas, carismáticos, conectan fácilmente, optimistas, energéticos</p>
                       </div>
                       <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
                         <p className="font-semibold text-yellow dark:text-yellow/30 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Comunicación, entusiasmo, carisma, persuasión, energía positiva</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Comunicación, entusiasmo, carisma, persuasión, energía positiva</p>
                       </div>
                       <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
                         <p className="font-semibold text-yellow dark:text-yellow/30 text-sm mb-1">Motivación</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Reconocimiento, interacción social, diversión, visibilidad</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Reconocimiento, interacción social, diversión, visibilidad</p>
                       </div>
                       <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
                         <p className="font-semibold text-yellow dark:text-yellow/30 text-sm mb-1">Ambiente Ideal</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Ventas, networking, equipo, creatividad, relaciones públicas</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Ventas, networking, equipo, creatividad, relaciones públicas</p>
                       </div>
                     </div>
                   </div>
@@ -559,26 +559,26 @@ export default function DespegaOnboarding() {
                   <div className="md:col-span-3 space-y-3">
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10 mb-1">Filosofía: Aceptación Voluntaria</p>
-                      <p className="text-muted/70 dark:text-muted/30">
+                      <p className="text-muted-foreground dark:text-muted/30">
                         Los Estabilizadores aceptan voluntariamente los cambios con paciencia, apoyo y consistencia genuina.
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
                       <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
                         <p className="font-semibold text-green dark:text-green/30 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Confiables, pacientes, colaborativos, apoyan genuinamente, crean armonía</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Confiables, pacientes, colaborativos, apoyan genuinamente, crean armonía</p>
                       </div>
                       <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
                         <p className="font-semibold text-green dark:text-green/30 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Empatía, paciencia, loyalidad, consistencia, confiabilidad, trabajo en equipo</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Empatía, paciencia, loyalidad, consistencia, confiabilidad, trabajo en equipo</p>
                       </div>
                       <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
                         <p className="font-semibold text-green dark:text-green/30 text-sm mb-1">Motivación</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Estabilidad, equipo, armonía, relaciones significativas, seguridad</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Estabilidad, equipo, armonía, relaciones significativas, seguridad</p>
                       </div>
                       <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
                         <p className="font-semibold text-green dark:text-green/30 text-sm mb-1">Ambiente Ideal</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Apoyo, servicio, coaching, ambientes estables, relaciones duraderas</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Apoyo, servicio, coaching, ambientes estables, relaciones duraderas</p>
                       </div>
                     </div>
                   </div>
@@ -599,26 +599,26 @@ export default function DespegaOnboarding() {
                   <div className="md:col-span-3 space-y-3">
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10 mb-1">Filosofía: Adaptación Cautelosa</p>
-                      <p className="text-muted/70 dark:text-muted/30">
+                      <p className="text-muted-foreground dark:text-muted/30">
                         Los Arquitectos se adaptan cautelosamente, con precisión, análisis profundo y enfoque en excelencia.
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
                       <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded">
                         <p className="font-semibold text-blue dark:text-blue/30 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Analíticos, precisos, orientados a calidad, detallistas, orientados a datos</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Analíticos, precisos, orientados a calidad, detallistas, orientados a datos</p>
                       </div>
                       <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded">
                         <p className="font-semibold text-blue dark:text-blue/30 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Precisión, análisis, atención al detalle, planificación, calidad, pensamiento crítico</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Precisión, análisis, atención al detalle, planificación, calidad, pensamiento crítico</p>
                       </div>
                       <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded">
                         <p className="font-semibold text-blue dark:text-blue/30 text-sm mb-1">Motivación</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Precisión, datos, excelencia, estándares altos, competencia técnica</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Precisión, datos, excelencia, estándares altos, competencia técnica</p>
                       </div>
                       <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded">
                         <p className="font-semibold text-blue dark:text-blue/30 text-sm mb-1">Ambiente Ideal</p>
-                        <p className="text-sm text-muted/70 dark:text-muted/30">Análisis, investigación, procesos claros, documentación, roles técnicos</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted/30">Análisis, investigación, procesos claros, documentación, roles técnicos</p>
                       </div>
                     </div>
                   </div>
@@ -637,7 +637,7 @@ export default function DespegaOnboarding() {
                     <div className="text-2xl min-w-fit">✓</div>
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10">Sin respuestas correctas</p>
-                      <p className="text-sm text-muted/60 dark:text-muted/40">No hay perfil superior. Todos son igualmente valiosos y necesarios.</p>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">No hay perfil superior. Todos son igualmente valiosos y necesarios.</p>
                     </div>
                   </div>
                 </div>
@@ -646,7 +646,7 @@ export default function DespegaOnboarding() {
                     <div className="text-2xl min-w-fit">✓</div>
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10">Honestidad total</p>
-                      <p className="text-sm text-muted/60 dark:text-muted/40">Responde como REALMENTE eres, no como crees que deberías ser.</p>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Responde como REALMENTE eres, no como crees que deberías ser.</p>
                     </div>
                   </div>
                 </div>
@@ -655,7 +655,7 @@ export default function DespegaOnboarding() {
                     <div className="text-2xl min-w-fit">✓</div>
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10">Primer instinto</p>
-                      <p className="text-sm text-muted/60 dark:text-muted/40">Responde rápidamente. Tu instinto natural es lo más preciso.</p>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Responde rápidamente. Tu instinto natural es lo más preciso.</p>
                     </div>
                   </div>
                 </div>
@@ -664,7 +664,7 @@ export default function DespegaOnboarding() {
                     <div className="text-2xl min-w-fit">✓</div>
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10">Estilo flexible</p>
-                      <p className="text-sm text-muted/60 dark:text-muted/40">Adaptamos nuestro estilo según el contexto y las personas.</p>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Adaptamos nuestro estilo según el contexto y las personas.</p>
                     </div>
                   </div>
                 </div>
@@ -681,28 +681,28 @@ export default function DespegaOnboarding() {
                   <div className="text-3xl min-w-fit">📊</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Tu Perfil Personalizado</p>
-                    <p className="text-sm text-muted/60 dark:text-muted/40">Descubre tu estilo natural, tus fortalezas y áreas donde puedes crecer</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Descubre tu estilo natural, tus fortalezas y áreas donde puedes crecer</p>
                   </div>
                 </div>
                 <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-teal-500">
                   <div className="text-3xl min-w-fit">🎯</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Insights Accionables</p>
-                    <p className="text-sm text-muted/60 dark:text-muted/40">Cómo comunicar mejor, trabajar más efectivamente y liderar según tu estilo</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Cómo comunicar mejor, trabajar más efectivamente y liderar según tu estilo</p>
                   </div>
                 </div>
                 <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
                   <div className="text-3xl min-w-fit">📚</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Libros Recomendados</p>
-                    <p className="text-sm text-muted/60 dark:text-muted/40">Seleccionamos libros estratégicos adaptados a tu perfil para acelerar tu desarrollo</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Seleccionamos libros estratégicos adaptados a tu perfil para acelerar tu desarrollo</p>
                   </div>
                 </div>
                 <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-teal-500">
                   <div className="text-3xl min-w-fit">���</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Plan de Acción</p>
-                    <p className="text-sm text-muted/60 dark:text-muted/40">Pasos claros y concretos para tu transición profesional y personal</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Pasos claros y concretos para tu transición profesional y personal</p>
                   </div>
                 </div>
               </div>
@@ -714,7 +714,7 @@ export default function DespegaOnboarding() {
             <Button onClick={() => setStep("test")} className="w-full h-14 text-lg font-semibold shadow-lg hover:shadow-xl transition-all rounded-[28px] bg-background">
               Entiendo, Comenzar Mi Test
             </Button>
-            <p className="text-center text-sm text-muted/60 dark:text-muted/40">
+            <p className="text-center text-sm text-muted-foreground dark:text-muted-foreground">
               Este test toma ~3 minutos. Responde con honestidad para resultados precisos.
             </p>
           </div>
@@ -972,7 +972,7 @@ export default function DespegaOnboarding() {
                               <span className="text-white text-sm">✓</span>
                             )}
                           </div>
-                          <span className={`text-sm ${isDisabledInMas ? "text-muted/50" : ""}`}>
+                          <span className={`text-sm ${isDisabledInMas ? "text-muted-foreground" : ""}`}>
                             {option.texto}
                             {isDisabledInMas && " (Ya seleccionado en MENOS como yo)"}
                           </span>
@@ -1020,7 +1020,7 @@ export default function DespegaOnboarding() {
                               <span className="text-white text-sm">✗</span>
                             )}
                           </div>
-                          <span className={`text-sm ${isDisabledInMenos ? "text-muted/50" : ""}`}>
+                          <span className={`text-sm ${isDisabledInMenos ? "text-muted-foreground" : ""}`}>
                             {option.texto}
                             {isDisabledInMenos && " (Ya seleccionado en MÁS como yo)"}
                           </span>
@@ -1224,7 +1224,7 @@ export default function DespegaOnboarding() {
               )}
 
               {isLastQuestion && isCurrentQuestionAnswered && (
-                <div className="text-xs text-muted/50 text-center pt-2">
+                <div className="text-xs text-muted-foreground text-center pt-2">
                   Haz click en "Terminar y Continuar" para generar tu ruta
                 </div>
               )}
@@ -1330,7 +1330,7 @@ export default function DespegaOnboarding() {
               </div>
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-green">¡Excelente!</h2>
-                <p className="text-muted/60 dark:text-muted/40">
+                <p className="text-muted-foreground dark:text-muted-foreground">
                   Tu ruta personalizada se está generando...
                 </p>
               </div>
@@ -1345,7 +1345,7 @@ export default function DespegaOnboarding() {
                   <li>✓ Tus objetivos 30/60/90</li>
                 </ul>
               </div>
-              <p className="text-xs text-muted/50">Redirigiendo en un momento...</p>
+              <p className="text-xs text-muted-foreground">Redirigiendo en un momento...</p>
             </CardContent>
           </Card>
         ) : (
@@ -1394,7 +1394,7 @@ export default function DespegaOnboarding() {
                 )}
 
                 {isLastQuestion && isCurrentQuestionAnswered && (
-                  <div className="text-xs text-muted/50 text-center pt-2">
+                  <div className="text-xs text-muted-foreground text-center pt-2">
                     Haz click en "Completar y Generar Ruta" para crear tu plan personalizado
                   </div>
                 )}

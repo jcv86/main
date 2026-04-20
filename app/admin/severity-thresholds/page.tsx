@@ -115,7 +115,7 @@ export default function SeverityThresholdsPage() {
       case "quality":
         return "bg-orange/50/10 text-orange"
       default:
-        return "bg-muted/50/10 text-muted/50"
+        return "bg-muted/50/10 text-muted-foreground"
     }
   }
 

@@ -74,7 +74,7 @@ export function ChileEnNumeros({
   const getArrow = (change: number) => {
     if (change > 0) return <ArrowUp className="w-4 h-4 text-green/50" />
     if (change < 0) return <ArrowDown className="w-4 h-4 text-red" />
-    return <Minus className="w-4 h-4 text-muted/40" />
+    return <Minus className="w-4 h-4 text-muted-foreground" />
   }
 
   const getImportanceColor = (importance: string) => {
@@ -84,7 +84,7 @@ export function ChileEnNumeros({
       case "Alto":
         return "bg-amber-500/10 text-amber-700 dark:text-amber-400"
       default:
-        return "bg-muted/50/10 text-muted/70 dark:text-muted/40"
+        return "bg-muted/50/10 text-muted-foreground dark:text-muted-foreground"
     }
   }
 
@@ -125,7 +125,7 @@ export function ChileEnNumeros({
                   <div className="flex items-center gap-1">
                     {getArrow(indicator.change)}
                     <span className={`text-xs font-medium ${
-                      indicator.change > 0 ? 'text-green' : indicator.change < 0 ? 'text-red' : 'text-muted/60'
+                      indicator.change > 0 ? 'text-green' : indicator.change < 0 ? 'text-red' : 'text-muted-foreground'
                     }`}>
                       {indicator.change > 0 ? '+' : ''}{indicator.change}
                     </span>

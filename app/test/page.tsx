@@ -185,7 +185,7 @@ export default function TestsPage() {
       <div className="min-h-screen bg-muted/5 dark:bg-background flex items-center justify-center p-4">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 sm:h-12 sm:w-12 border-b-2 border-gray-900 dark:border-muted/10 mx-auto mb-4"></div>
-          <p className="text-muted/60 dark:text-muted/40 text-sm sm:text-base">Cargando evaluaciones...</p>
+          <p className="text-muted-foreground dark:text-muted-foreground text-sm sm:text-base">Cargando evaluaciones...</p>
         </div>
       </div>
     )
@@ -195,7 +195,7 @@ export default function TestsPage() {
     return (
       <div className="min-h-screen bg-muted/5 dark:bg-background flex items-center justify-center p-4">
         <div className="text-center">
-          <p className="text-muted/60 dark:text-muted/40 text-sm sm:text-base">Redirigiendo...</p>
+          <p className="text-muted-foreground dark:text-muted-foreground text-sm sm:text-base">Redirigiendo...</p>
         </div>
       </div>
     )
@@ -227,7 +227,7 @@ export default function TestsPage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground dark:text-white mb-2">
             Evaluaciones de Personalidad
           </h1>
-          <p className="text-muted/60 dark:text-muted/40 text-sm sm:text-base">
+          <p className="text-muted-foreground dark:text-muted-foreground text-sm sm:text-base">
             Completa evaluaciones integrales para descubrir tu personalidad, habilidades e intereses profesionales.
           </p>
         </div>
@@ -299,7 +299,7 @@ export default function TestsPage() {
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-xs sm:text-sm font-medium">Progreso General</span>
-              <span className="text-xs sm:text-sm text-muted/60 dark:text-muted/40">
+              <span className="text-xs sm:text-sm text-muted-foreground dark:text-muted-foreground">
                 {completedTests.length} de {tests.length} completados
               </span>
             </div>
@@ -428,13 +428,13 @@ export default function TestsPage() {
                       </div>
                     </div>
                   </div>
-                  <CardDescription className="text-xs sm:text-sm leading-relaxed text-muted/60 dark:text-muted/40">
+                  <CardDescription className="text-xs sm:text-sm leading-relaxed text-muted-foreground dark:text-muted-foreground">
                     {test.description}
                   </CardDescription>
                 </CardHeader>
 
                 <CardContent className="space-y-3 sm:space-y-4">
-                  <div className="flex items-center justify-between text-xs sm:text-sm text-muted/60 dark:text-muted/40">
+                  <div className="flex items-center justify-between text-xs sm:text-sm text-muted-foreground dark:text-muted-foreground">
                     <div className="flex items-center gap-1">
                       <Clock className="h-3 w-3 sm:h-4 sm:w-4" />
                       <span>{test.duration}</span>
@@ -446,7 +446,7 @@ export default function TestsPage() {
                   </div>
 
                   {test.prerequisites && !isCompleted && (
-                    <div className="text-xs text-muted/50 dark:text-muted/40 p-2 bg-muted/10 dark:bg-card rounded">
+                    <div className="text-xs text-muted-foreground dark:text-muted-foreground p-2 bg-muted/10 dark:bg-card rounded">
                       <span className="font-medium">Requisitos previos:</span>{" "}
                       {test.prerequisites.map((prereq) => {
                         const prereqTest = tests.find((t) => t.id === prereq)

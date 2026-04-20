@@ -122,7 +122,7 @@ export default function ReadingAnalyticsDashboard() {
     <div className="space-y-6 p-6">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-4">📊 Análisis de Lectura</h1>
-        <p className="text-xl text-muted/60">Seguimiento detallado de tu progreso y hábitos de lectura</p>
+        <p className="text-xl text-muted-foreground">Seguimiento detallado de tu progreso y hábitos de lectura</p>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
@@ -246,7 +246,7 @@ export default function ReadingAnalyticsDashboard() {
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <h4 className="font-semibold">{book.title}</h4>
-                          <p className="text-sm text-muted/60">por {book.author}</p>
+                          <p className="text-sm text-muted-foreground">por {book.author}</p>
                         </div>
                         <Badge variant="secondary">{book.category}</Badge>
                       </div>
@@ -256,7 +256,7 @@ export default function ReadingAnalyticsDashboard() {
                           <span>{book.progress_percentage}%</span>
                         </div>
                         <Progress value={book.progress_percentage} className="h-2" />
-                        <div className="flex items-center justify-between text-xs text-muted/50">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
                           <span>Tiempo: {formatTime(book.reading_time_minutes)}</span>
                           <span>Última lectura: {new Date(book.last_read_at).toLocaleDateString()}</span>
                         </div>
@@ -266,8 +266,8 @@ export default function ReadingAnalyticsDashboard() {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <BookOpen className="h-12 w-12 text-muted/40 mx-auto mb-4" />
-                  <p className="text-muted/60">No tienes libros en progreso</p>
+                  <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">No tienes libros en progreso</p>
                 </div>
               )}
             </CardContent>
@@ -301,11 +301,11 @@ export default function ReadingAnalyticsDashboard() {
                       </div>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <span className="text-muted/60">Libros leídos:</span>
+                          <span className="text-muted-foreground">Libros leídos:</span>
                           <span className="font-medium ml-2">{category.books_read}</span>
                         </div>
                         <div>
-                          <span className="text-muted/60">Tiempo total:</span>
+                          <span className="text-muted-foreground">Tiempo total:</span>
                           <span className="font-medium ml-2">{formatTime(category.total_time)}</span>
                         </div>
                       </div>
@@ -314,8 +314,8 @@ export default function ReadingAnalyticsDashboard() {
                 </div>
               ) : (
                 <div className="text-center py-8">
-                  <PieChart className="h-12 w-12 text-muted/40 mx-auto mb-4" />
-                  <p className="text-muted/60">No hay estadísticas de categorías disponibles</p>
+                  <PieChart className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+                  <p className="text-muted-foreground">No hay estadísticas de categorías disponibles</p>
                 </div>
               )}
             </CardContent>
@@ -342,7 +342,7 @@ export default function ReadingAnalyticsDashboard() {
                     onChange={(e) => setMonthlyGoal(Number.parseInt(e.target.value) || 1)}
                     className="w-20"
                   />
-                  <span className="text-sm text-muted/60">libros por mes</span>
+                  <span className="text-sm text-muted-foreground">libros por mes</span>
                   <Button onClick={updateMonthlyGoal} size="sm">
                     Actualizar
                   </Button>
@@ -359,7 +359,7 @@ export default function ReadingAnalyticsDashboard() {
                     </span>
                   </div>
                   <Progress value={(stats.monthlyProgress / stats.monthlyGoal) * 100} className="h-2" />
-                  <p className="text-xs text-muted/60">
+                  <p className="text-xs text-muted-foreground">
                     {stats.monthlyGoal - stats.monthlyProgress > 0
                       ? `Te faltan ${stats.monthlyGoal - stats.monthlyProgress} libros para cumplir tu objetivo`
                       : "¡Felicidades! Has cumplido tu objetivo mensual"}
@@ -373,7 +373,7 @@ export default function ReadingAnalyticsDashboard() {
                     <div className="text-center">
                       <Calendar className="h-8 w-8 mx-auto mb-2 text-blue" />
                       <div className="text-2xl font-bold">{stats.currentStreak}</div>
-                      <p className="text-sm text-muted/60">Días consecutivos</p>
+                      <p className="text-sm text-muted-foreground">Días consecutivos</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -383,7 +383,7 @@ export default function ReadingAnalyticsDashboard() {
                     <div className="text-center">
                       <Clock className="h-8 w-8 mx-auto mb-2 text-green" />
                       <div className="text-2xl font-bold">{formatTime(stats.totalReadingTime)}</div>
-                      <p className="text-sm text-muted/60">Tiempo total</p>
+                      <p className="text-sm text-muted-foreground">Tiempo total</p>
                     </div>
                   </CardContent>
                 </Card>
@@ -393,7 +393,7 @@ export default function ReadingAnalyticsDashboard() {
                     <div className="text-center">
                       <Award className="h-8 w-8 mx-auto mb-2 text-yellow" />
                       <div className="text-2xl font-bold">{stats.totalBooksRead}</div>
-                      <p className="text-sm text-muted/60">Libros completados</p>
+                      <p className="text-sm text-muted-foreground">Libros completados</p>
                     </div>
                   </CardContent>
                 </Card>

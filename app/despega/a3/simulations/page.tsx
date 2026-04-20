@@ -97,7 +97,7 @@ export default function SimulationsPage() {
           <h1 className="text-3xl font-bold text-muted/90 dark:text-muted/5">
             Entrenamiento de Entrevista
           </h1>
-          <p className="text-lg text-muted/60 dark:text-muted/40">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             4 niveles progresivos para entrenar desde lo básico hasta la maestría total.
           </p>
         </div>
@@ -125,14 +125,14 @@ export default function SimulationsPage() {
               <Card key={ent.id} className="border-2 hover:shadow-lg transition flex flex-col">
                 <CardHeader>
                   <div className="flex items-start justify-between mb-2">
-                    <IconComponent className="w-6 h-6 text-muted/40" />
+                    <IconComponent className="w-6 h-6 text-muted-foreground" />
                     <Badge className={ent.difficultyColor}>{ent.difficulty}</Badge>
                   </div>
                   <CardTitle>{ent.name}</CardTitle>
                   <CardDescription className="text-base">{ent.subtitle}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 space-y-4">
-                  <p className="text-sm text-muted/60 dark:text-muted/40">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     {ent.description}
                   </p>
 
@@ -140,14 +140,14 @@ export default function SimulationsPage() {
                     <div className="text-sm font-semibold text-muted/90 dark:text-muted/5">
                       Incluye:
                     </div>
-                    <ul className="text-sm space-y-1 text-muted/70 dark:text-muted/30">
+                    <ul className="text-sm space-y-1 text-muted-foreground dark:text-muted/30">
                       {ent.features.map((feature, idx) => (
                         <li key={idx}>✓ {feature}</li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="flex items-center gap-2 text-sm text-muted/60 dark:text-muted/40 pt-2">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground pt-2">
                     <Clock className="w-4 h-4" />
                     Duración: {ent.duration}
                   </div>

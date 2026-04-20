@@ -123,7 +123,7 @@ export default function CicloCompletoDemoPage() {
             </span>
           </h1>
           
-          <p className="text-xl text-muted/60 dark:text-muted/30 mb-8">
+          <p className="text-xl text-muted-foreground dark:text-muted/30 mb-8">
             Un viaje guiado desde el autoconocimiento hasta la acción estratégica. 
             Completa todos los pilares y desbloquea tu potencial máximo.
           </p>
@@ -148,7 +148,7 @@ export default function CicloCompletoDemoPage() {
             {phases.map((phase) => (
               <div key={phase.id} className="flex-1 text-center">
                 <phase.icon className={`h-6 w-6 mx-auto mb-2 ${phase.id === 'a1' ? 'text-purple' : phase.id === 'a2' ? 'text-blue' : phase.id === 'a3' ? 'text-orange' : 'text-blue'}`} />
-                <p className="text-xs font-medium text-muted/70 dark:text-muted/30">{phase.id.toUpperCase()}</p>
+                <p className="text-xs font-medium text-muted-foreground dark:text-muted/30">{phase.id.toUpperCase()}</p>
               </div>
             ))}
           </div>
@@ -177,17 +177,17 @@ export default function CicloCompletoDemoPage() {
                     <CardTitle className="text-xl">{phase.name}</CardTitle>
                     <CardDescription className="text-base font-medium">{phase.subtitle}</CardDescription>
                   </div>
-                  <p className="text-sm text-muted/60 dark:text-muted/40 mt-2">{phase.duration}</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">{phase.duration}</p>
                 </CardHeader>
 
                 <CardContent className="space-y-4">
-                  <p className="text-sm text-muted/70 dark:text-muted/30">
+                  <p className="text-sm text-muted-foreground dark:text-muted/30">
                     {phase.description}
                   </p>
 
                   {selectedPhase === phase.id && (
                     <div className="space-y-2 pt-4 border-t border-muted/20 dark:border-card">
-                      <p className="text-xs font-semibold text-muted/60 dark:text-muted/40">Incluye:</p>
+                      <p className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground">Incluye:</p>
                       <ul className="space-y-1">
                         {phase.features.map((feature, idx) => (
                           <li key={idx} className="text-sm flex items-start gap-2">
@@ -223,7 +223,7 @@ export default function CicloCompletoDemoPage() {
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <CardTitle className="text-lg">{link.title}</CardTitle>
-                      <Icon className="h-5 w-5 text-muted/40" />
+                      <Icon className="h-5 w-5 text-muted-foreground" />
                     </div>
                     <CardDescription>{link.description}</CardDescription>
                   </CardHeader>
@@ -261,7 +261,7 @@ export default function CicloCompletoDemoPage() {
 
       {/* Footer CTA */}
       <section className="container mx-auto px-4 py-12 text-center">
-        <p className="text-muted/60 dark:text-muted/40 mb-6">
+        <p className="text-muted-foreground dark:text-muted-foreground mb-6">
           Sistema completamente integrado. Resultados medibles. Acción clara.
         </p>
         <Link href="/despega/conozcamonos-1">

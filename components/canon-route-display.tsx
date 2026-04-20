@@ -56,7 +56,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
       case 'easy': return 'bg-green/10 text-green'
       case 'medium': return 'bg-yellow/10 text-yellow'
       case 'hard': return 'bg-red/10 text-red'
-      default: return 'bg-muted/10 text-muted/80'
+      default: return 'bg-muted/10 text-secondary'
     }
   }
 
@@ -83,7 +83,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
               <CardContent className="pt-6">
                 <div className="text-center">
                   <div className="text-3xl font-bold text-blue/40 mb-2">{phaseMissions.length}</div>
-                  <p className="text-sm text-muted/40">Misiones Día {phase}</p>
+                  <p className="text-sm text-muted-foreground">Misiones Día {phase}</p>
                   <div className="mt-3 text-2xl">
                     {phase === '30' ? '🎯' : phase === '60' ? '🔥' : '🏆'}
                   </div>
@@ -140,13 +140,13 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
                         </Badge>
                       </div>
                       <CardTitle className="text-white text-lg">{mission.title}</CardTitle>
-                      <CardDescription className="text-muted/40 mt-1">{mission.description}</CardDescription>
+                      <CardDescription className="text-muted-foreground mt-1">{mission.description}</CardDescription>
                     </div>
                     <div className="ml-4">
                       {expandedMissions.has(mission.missionId) ? (
-                        <ChevronUp className="w-5 h-5 text-muted/40" />
+                        <ChevronUp className="w-5 h-5 text-muted-foreground" />
                       ) : (
-                        <ChevronDown className="w-5 h-5 text-muted/40" />
+                        <ChevronDown className="w-5 h-5 text-muted-foreground" />
                       )}
                     </div>
                   </div>
@@ -167,7 +167,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
                         <h4 className="text-sm font-semibold text-blue/40">Tus respuestas que la generaron:</h4>
                         {mission.sourceResponses.map((response, idx) => (
                           <div key={idx} className="bg-muted/80 rounded p-3 border-l-4 border-blue/50">
-                            <p className="text-xs text-muted/40 mb-1">Tu respuesta a:</p>
+                            <p className="text-xs text-muted-foreground mb-1">Tu respuesta a:</p>
                             <p className="text-sm text-white font-medium mb-2">{response.questionText}</p>
                             <div className="bg-muted/70 rounded p-2 mb-2">
                               <p className="text-sm text-muted/20 italic">"{response.userAnswer}"</p>
@@ -205,15 +205,15 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
             <div className="grid grid-cols-3 gap-4 text-center">
               <div>
                 <p className="text-2xl font-bold text-blue/40">{missionsByPhase['30'].length}</p>
-                <p className="text-xs text-muted/40">Días 1-30</p>
+                <p className="text-xs text-muted-foreground">Días 1-30</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-purple/40">{missionsByPhase['60'].length}</p>
-                <p className="text-xs text-muted/40">Días 31-60</p>
+                <p className="text-xs text-muted-foreground">Días 31-60</p>
               </div>
               <div>
                 <p className="text-2xl font-bold text-emerald-400">{missionsByPhase['90'].length}</p>
-                <p className="text-xs text-muted/40">Días 61-90</p>
+                <p className="text-xs text-muted-foreground">Días 61-90</p>
               </div>
             </div>
           </div>

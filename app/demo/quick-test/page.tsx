@@ -63,7 +63,7 @@ export default function QuickTestPage() {
             Quick Test Mode
           </Badge>
           <h1 className="text-4xl font-bold mb-4">Prueba Cada Pilar</h1>
-          <p className="text-lg text-muted/60 dark:text-muted/40 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground max-w-2xl mx-auto">
             Accede rápidamente a cada fase del ciclo A1-A4 para verificar integración y funcionamiento
           </p>
         </div>

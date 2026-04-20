@@ -176,7 +176,7 @@ export default function Mision90DiasPage() {
       <div className="min-h-screen bg-background">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green"></div>
-          <p className="mt-4 text-muted/60 dark:text-muted/40">Preparando tu misión...</p>
+          <p className="mt-4 text-muted-foreground dark:text-muted-foreground">Preparando tu misión...</p>
         </div>
       </div>
     )
@@ -195,7 +195,7 @@ export default function Mision90DiasPage() {
           <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
             Tu Misión 90 Días
           </h1>
-          <p className="text-lg text-muted/60 dark:text-muted/40">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Sé específico. La claridad es poder.
           </p>
         </div>
@@ -217,7 +217,7 @@ export default function Mision90DiasPage() {
           <Card className="border-0 shadow-md">
             <CardHeader>
               <CardTitle className="text-lg">¿Cuál es tu objetivo específico?</CardTitle>
-              <p className="text-sm text-muted/60 dark:text-muted/40 mt-2">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">
                 No "mejorar energía", sino "dormir 8 horas diarias y despertar sin fatiga"
               </p>
             </CardHeader>
@@ -234,7 +234,7 @@ export default function Mision90DiasPage() {
               {errors.objective && (
                 <p className="text-sm text-red dark:text-red/40">{errors.objective}</p>
               )}
-              <p className="text-xs text-muted/60 dark:text-muted/40">
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                 {objective.length} caracteres | Mínimo: 10 caracteres
               </p>
             </CardContent>
@@ -244,7 +244,7 @@ export default function Mision90DiasPage() {
           <Card className="border-0 shadow-md">
             <CardHeader>
               <CardTitle className="text-lg">¿Cuáles son tus restricciones o contexto?</CardTitle>
-              <p className="text-sm text-muted/60 dark:text-muted/40 mt-2">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">
                 Opcional. Ej: horario de trabajo, limitaciones físicas, etc.
               </p>
             </CardHeader>
@@ -255,7 +255,7 @@ export default function Mision90DiasPage() {
                 onChange={(e) => setConstraints(e.target.value)}
                 className="min-h-20 resize-none"
               />
-              <p className="text-xs text-muted/60 dark:text-muted/40">
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                 Esto nos ayuda a personalizar aún más tu camino
               </p>
             </CardContent>
@@ -265,7 +265,7 @@ export default function Mision90DiasPage() {
           <Card className="border-0 shadow-md">
             <CardHeader>
               <CardTitle className="text-lg">¿Cómo sabrás que tuviste éxito?</CardTitle>
-              <p className="text-sm text-muted/60 dark:text-muted/40 mt-2">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">
                 Define métricas claras: números, comportamientos, sentimientos
               </p>
             </CardHeader>
@@ -282,7 +282,7 @@ export default function Mision90DiasPage() {
               {errors.successMetric && (
                 <p className="text-sm text-red dark:text-red/40">{errors.successMetric}</p>
               )}
-              <p className="text-xs text-muted/60 dark:text-muted/40">
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                 {successMetric.length} caracteres | Mínimo: 10 caracteres
               </p>
             </CardContent>
@@ -291,7 +291,7 @@ export default function Mision90DiasPage() {
           {/* Info Box */}
           <Card className="border-0 bg-blue/5 dark:bg-blue/20 border-l-4 border-l-blue-500">
             <CardContent className="p-4">
-              <p className="text-sm text-muted/70 dark:text-muted/30">
+              <p className="text-sm text-muted-foreground dark:text-muted/30">
                 <strong>📅 Estructura de los 90 días:</strong> Dividiremos esta misión en 3 sprints de 30 días cada uno. Cada semana tendrá un desafío y micro-acciones específicas.
               </p>
             </CardContent>

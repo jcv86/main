@@ -105,7 +105,7 @@ export default function HowToEarnXPPage() {
           <h1 className="text-5xl font-bold bg-background">
             ¿Cómo Ganar Puntos (XP)?
           </h1>
-          <p className="text-xl text-muted/40">
+          <p className="text-xl text-muted-foreground">
             Cada acción en tu jornada de transformación te da XP. Cuanto más activo, más puntos ganas.
           </p>
         </div>
@@ -123,7 +123,7 @@ export default function HowToEarnXPPage() {
                     <Zap className="w-5 h-5 text-cyan/40" />
                     <div>
                       <CardTitle className="text-lg">{rule.phase}</CardTitle>
-                      <p className="text-sm text-muted/40">{rule.category}</p>
+                      <p className="text-sm text-muted-foreground">{rule.category}</p>
                     </div>
                   </div>
                   <Badge className="bg-blue/50/20 text-cyan/30 border-blue/50">
@@ -223,19 +223,19 @@ export default function HowToEarnXPPage() {
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="p-3 rounded-[28px] bg-muted/70/50 border border-blue/30">
-                  <p className="text-xs text-muted/40">Novato</p>
+                  <p className="text-xs text-muted-foreground">Novato</p>
                   <p className="text-lg font-bold">Niveles 1-5</p>
-                  <p className="text-xs text-muted/40">0-5,000 XP</p>
+                  <p className="text-xs text-muted-foreground">0-5,000 XP</p>
                 </div>
                 <div className="p-3 rounded-[28px] bg-muted/70/50 border border-blue/30">
-                  <p className="text-xs text-muted/40">Intermedio</p>
+                  <p className="text-xs text-muted-foreground">Intermedio</p>
                   <p className="text-lg font-bold">Niveles 6-15</p>
-                  <p className="text-xs text-muted/40">5,000-15,000 XP</p>
+                  <p className="text-xs text-muted-foreground">5,000-15,000 XP</p>
                 </div>
                 <div className="p-3 rounded-[28px] bg-muted/70/50 border border-blue/30">
-                  <p className="text-xs text-muted/40">Experto</p>
+                  <p className="text-xs text-muted-foreground">Experto</p>
                   <p className="text-lg font-bold">Niveles 16+</p>
-                  <p className="text-xs text-muted/40">15,000+ XP</p>
+                  <p className="text-xs text-muted-foreground">15,000+ XP</p>
                 </div>
               </div>
             </div>

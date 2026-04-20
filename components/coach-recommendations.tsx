@@ -127,8 +127,8 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
             </div>
           ) : (
             <div className="bg-muted/5 dark:bg-transparent rounded-[28px] p-8 text-center">
-              <BookOpen className="w-12 h-12 mx-auto mb-4 text-muted/40" />
-              <p className="text-muted/50">
+              <BookOpen className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground">
                 {userProfile
                   ? 'Cargando sugerencias personalizadas...'
                   : 'Completa el test de El Ritual para obtener sugerencias personalizadas'}

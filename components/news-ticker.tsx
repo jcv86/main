@@ -111,7 +111,7 @@ export function NewsTicker() {
         {/* Link a todas las noticias */}
         <Link
           href="/despega/a4/noticias"
-          className="flex-shrink-0 text-xs font-semibold text-muted/40 hover:text-blue/40 transition-colors whitespace-nowrap"
+          className="flex-shrink-0 text-xs font-semibold text-muted-foreground hover:text-blue/40 transition-colors whitespace-nowrap"
         >
           Ver todas →
         </Link>

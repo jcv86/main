@@ -81,7 +81,7 @@ export function WeeklyResourceDigest() {
           {Object.entries(categoryCounts).map(([category, count]) => (
             <div key={category} className="text-center p-3 bg-transparent rounded-lg">
               <div className="text-2xl font-bold text-blue">{count}</div>
-              <div className="text-xs text-muted/60 dark:text-muted/40">{category}</div>
+              <div className="text-xs text-muted-foreground dark:text-muted-foreground">{category}</div>
             </div>
           ))}
         </div>
@@ -94,7 +94,7 @@ export function WeeklyResourceDigest() {
             >
               <div className="flex-1">
                 <p className="font-medium text-sm">{resource.name}</p>
-                <p className="text-xs text-muted/50 dark:text-muted/40">{resource.category}</p>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground">{resource.category}</p>
               </div>
               <Button variant="ghost" size="sm" onClick={() => window.open(resource.url, "_blank")} className="ml-2">
                 <ExternalLink className="w-4 h-4" />

@@ -214,7 +214,7 @@ export default function TrainingDashboardPage() {
           y ajustas tu enfoque basado en análisis. Combinas tu Interview 0, CV optimizado e inteligencia del mercado 
           en entrenamientos prácticos que te preparan para situaciones reales.
         </p>
-        <p className="text-muted/40 text-sm">
+        <p className="text-muted-foreground text-sm">
           🎯 Enfoque: Práctica realista, feedback de IA, iteración y mejora continua durante 30-60 días.
         </p>
       </ASectionPart>
@@ -232,7 +232,7 @@ export default function TrainingDashboardPage() {
               style={{ width: `${completionPercentage}%` }}
             />
           </div>
-          <p className="text-xs text-muted/40">{completedItems} de 4 módulos completados</p>
+          <p className="text-xs text-muted-foreground">{completedItems} de 4 módulos completados</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -241,10 +241,10 @@ export default function TrainingDashboardPage() {
             return (
               <div key={i} className={`p-3 rounded-[28px] border ${isCompleted ? 'bg-emerald-900/20 border-green/30' : 'bg-muted/80/20 border-muted/70'}`}>
                 <div className="flex items-center gap-2 mb-1">
-                  {isCompleted ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-muted/40" />}
+                  {isCompleted ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-muted-foreground" />}
                   <p className="text-sm font-semibold text-white">{card.title}</p>
                 </div>
-                <p className="text-xs text-muted/40 ml-6">{isCompleted ? 'Completado' : 'Pendiente'}</p>
+                <p className="text-xs text-muted-foreground ml-6">{isCompleted ? 'Completado' : 'Pendiente'}</p>
               </div>
             )
           })}
@@ -276,7 +276,7 @@ export default function TrainingDashboardPage() {
                           </div>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                          <p className="text-sm text-muted/40">{card.description}</p>
+                          <p className="text-sm text-muted-foreground">{card.description}</p>
                           {isCompleted && <Badge className="bg-green/50/20 text-emerald-400 border border-green/50">✓ Completado</Badge>}
                           <Button 
                             onClick={() => router.push(card.href)}
@@ -300,7 +300,7 @@ export default function TrainingDashboardPage() {
           <div className="flex items-center justify-between mb-4">
             <div>
               <h4 className="text-white font-semibold mb-1">Tu Progreso General</h4>
-              <p className="text-sm text-muted/40">Completadas: Interview 0 + CV base + Market Insights</p>
+              <p className="text-sm text-muted-foreground">Completadas: Interview 0 + CV base + Market Insights</p>
             </div>
             <div className="text-right">
               <p className="text-3xl font-black text-cyan/40">{Math.round(completionPercentage)}%</p>
@@ -312,7 +312,7 @@ export default function TrainingDashboardPage() {
               style={{ width: `${completionPercentage}%` }}
             />
           </div>
-          <p className="text-xs text-muted/40">{completedItems} de 4 componentes base completados</p>
+          <p className="text-xs text-muted-foreground">{completedItems} de 4 componentes base completados</p>
         </div>
       </ASectionPart>
 

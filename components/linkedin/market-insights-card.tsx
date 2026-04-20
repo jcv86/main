@@ -49,7 +49,7 @@ export function MarketInsightsCard() {
       <Card>
         <CardContent className="py-8 flex items-center justify-center">
           <Loader2 className="w-6 h-6 animate-spin text-cyan/50" />
-          <span className="ml-2 text-muted/60">Analyzing market trends...</span>
+          <span className="ml-2 text-muted-foreground">Analyzing market trends...</span>
         </CardContent>
       </Card>
     )
@@ -79,7 +79,7 @@ export function MarketInsightsCard() {
                   />
                 </div>
               </div>
-              <span className="text-xs text-muted/60 ml-2">{skill.demand_count}</span>
+              <span className="text-xs text-muted-foreground ml-2">{skill.demand_count}</span>
             </div>
           ))}
         </CardContent>
@@ -113,7 +113,7 @@ export function MarketInsightsCard() {
               {/* Current Strengths */}
               {skillGap.current_strengths.length > 0 && (
                 <div>
-                  <p className="text-xs font-semibold text-muted/70 mb-2">Your Strengths</p>
+                  <p className="text-xs font-semibold text-muted-foreground mb-2">Your Strengths</p>
                   <div className="flex flex-wrap gap-2">
                     {skillGap.current_strengths.slice(0, 5).map((skill) => (
                       <Badge key={skill} className="bg-green/10 text-green">
@@ -127,7 +127,7 @@ export function MarketInsightsCard() {
               {/* Skills to Learn */}
               {skillGap.skills_to_learn.length > 0 && (
                 <div>
-                  <p className="text-xs font-semibold text-muted/70 mb-2">Priority Skills to Learn</p>
+                  <p className="text-xs font-semibold text-muted-foreground mb-2">Priority Skills to Learn</p>
                   <div className="flex flex-wrap gap-2">
                     {skillGap.skills_to_learn.slice(0, 5).map((skill) => (
                       <Badge key={skill} className="bg-amber-100 text-amber-800">
@@ -139,7 +139,7 @@ export function MarketInsightsCard() {
               )}
             </>
           ) : (
-            <p className="text-sm text-muted/60">Sync your LinkedIn profile to see your skill gap</p>
+            <p className="text-sm text-muted-foreground">Sync your LinkedIn profile to see your skill gap</p>
           )}
         </CardContent>
       </Card>
@@ -158,25 +158,25 @@ export function MarketInsightsCard() {
               <p className="text-2xl font-bold text-teal-600">
                 {marketData?.market_snapshot.total_jobs_tracked || 0}
               </p>
-              <p className="text-xs text-muted/60 mt-1">Jobs Tracked</p>
+              <p className="text-xs text-muted-foreground mt-1">Jobs Tracked</p>
             </div>
             <div className="text-center">
               <p className="text-2xl font-bold text-cyan">
                 {marketData?.trending_skills.length || 0}
               </p>
-              <p className="text-xs text-muted/60 mt-1">Trending Skills</p>
+              <p className="text-xs text-muted-foreground mt-1">Trending Skills</p>
             </div>
             <div className="text-center">
               <p className="text-2xl font-bold text-purple">
                 {skillGap?.current_strengths.length || 0}
               </p>
-              <p className="text-xs text-muted/60 mt-1">Your Strengths</p>
+              <p className="text-xs text-muted-foreground mt-1">Your Strengths</p>
             </div>
             <div className="text-center">
               <p className="text-2xl font-bold text-amber-600">
                 {skillGap?.skills_to_learn.length || 0}
               </p>
-              <p className="text-xs text-muted/60 mt-1">To Learn</p>
+              <p className="text-xs text-muted-foreground mt-1">To Learn</p>
             </div>
           </div>
         </CardContent>

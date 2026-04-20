@@ -428,7 +428,7 @@ export default function MBTITest() {
       <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-muted/60">Cargando evaluación...</p>
+          <p className="text-muted-foreground">Cargando evaluación...</p>
         </div>
       </div>
     )
@@ -438,7 +438,7 @@ export default function MBTITest() {
     return (
       <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-muted/60">Redirigiendo...</p>
+          <p className="text-muted-foreground">Redirigiendo...</p>
         </div>
       </div>
     )
@@ -520,11 +520,11 @@ export default function MBTITest() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h2 className="text-2xl font-bold text-foreground">Despega Resonancia</h2>
-                <p className="text-muted/60">
+                <p className="text-muted-foreground">
                   Pregunta {currentQuestion + 1} de {mbtiQuestions.length}
                 </p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-muted/60">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" />
                 <span>~18 minutos</span>
               </div>
@@ -616,7 +616,7 @@ export default function MBTITest() {
               />
             ))}
           </div>
-          <p className="text-sm text-muted/60 mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             {Object.keys(answers).length} of {mbtiQuestions.length} questions answered
           </p>
         </div>

@@ -211,7 +211,7 @@ export default function BibliotecaPage() {
             </div>
             <div>
               <h1 className="text-5xl font-bold text-purple400400">Biblioteca Digital</h1>
-              <p className="text-muted/70 dark:text-muted/30 font-medium">
+              <p className="text-muted-foreground dark:text-muted/30 font-medium">
                 {user
                   ? `Hola ${user.email?.split("@")[0]}, aquí están tus recursos personalizados`
                   : "Descubre recursos valiosos para tu crecimiento personal y profesional"}
@@ -231,7 +231,7 @@ export default function BibliotecaPage() {
                   <CardTitle className="text-xl text-foreground">
                     {userProfile ? "Recomendados para Tu Perfil" : "Comienza Tu Viaje Profesional"}
                   </CardTitle>
-                  <p className="text-sm text-muted/60 dark:text-muted/40 mt-1">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-1">
                     {userProfile
                       ? `Basado en tu perfil ${Object.entries(userProfile.scores || {})
                           .reduce((a: any, b: any) => (a[1] > b[1] ? a : b))[0]
@@ -290,13 +290,13 @@ export default function BibliotecaPage() {
                           <Badge className={qualityBadge.color}>{qualityBadge.label}</Badge>
                         </div>
                         <CardTitle className="text-base leading-tight text-foreground">{book.title}</CardTitle>
-                        <div className="flex items-center text-sm text-muted/60 dark:text-muted/40">
+                        <div className="flex items-center text-sm text-muted-foreground dark:text-muted-foreground">
                           <User className="h-4 w-4 mr-1" />
                           {book.author}
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-sm text-muted/60 dark:text-muted/40 mb-3 line-clamp-2">
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-3 line-clamp-2">
                           {book.content ? book.content.substring(0, 100) + "..." : "Sin descripción disponible"}
                         </p>
 
@@ -325,8 +325,8 @@ export default function BibliotecaPage() {
               </div>
             ) : (
               <div className="text-center py-8">
-                <BookOpen className="h-12 w-12 text-muted/40 dark:text-muted/60 mx-auto mb-4" />
-                <p className="text-muted/60 dark:text-muted/40">No hay recomendaciones disponibles en este momento</p>
+                <BookOpen className="h-12 w-12 text-muted-foreground dark:text-muted-foreground mx-auto mb-4" />
+                <p className="text-muted-foreground dark:text-muted-foreground">No hay recomendaciones disponibles en este momento</p>
               </div>
             )}
           </CardContent>
@@ -357,7 +357,7 @@ export default function BibliotecaPage() {
       <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted/60">Total Libros</CardTitle>
+            <CardTitle className="text-sm text-muted-foreground">Total Libros</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
@@ -369,7 +369,7 @@ export default function BibliotecaPage() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted/60">Libros Completos</CardTitle>
+            <CardTitle className="text-sm text-muted-foreground">Libros Completos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
@@ -381,7 +381,7 @@ export default function BibliotecaPage() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted/60">Recursos Chilenos</CardTitle>
+            <CardTitle className="text-sm text-muted-foreground">Recursos Chilenos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
@@ -393,7 +393,7 @@ export default function BibliotecaPage() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted/60">Categorías</CardTitle>
+            <CardTitle className="text-sm text-muted-foreground">Categorías</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
@@ -405,7 +405,7 @@ export default function BibliotecaPage() {
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm text-muted/60">Autores</CardTitle>
+            <CardTitle className="text-sm text-muted-foreground">Autores</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
@@ -421,7 +421,7 @@ export default function BibliotecaPage() {
         <div className="flex flex-col md:flex-row gap-4">
           <div className="flex-1">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted/40" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Buscar libros, autores, temas..."
                 value={searchTerm}
@@ -482,7 +482,7 @@ export default function BibliotecaPage() {
 
         {/* Popular Tags */}
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm text-muted/60">Tags populares:</span>
+          <span className="text-sm text-muted-foreground">Tags populares:</span>
           {popularTags.map((tag) => (
             <Badge
               key={tag}
@@ -503,7 +503,7 @@ export default function BibliotecaPage() {
             key={tab}
             onClick={() => setActiveTab(tab)}
             className={`px-4 py-2 font-medium transition-colors ${
-              activeTab === tab ? "text-blue border-b-2 border-blue" : "text-muted/60 hover:text-foreground"
+              activeTab === tab ? "text-blue border-b-2 border-blue" : "text-muted-foreground hover:text-foreground"
             }`}
           >
             {tab === "all" && `Todos (${books.length})`}
@@ -519,12 +519,12 @@ export default function BibliotecaPage() {
       {loading ? (
         <div className="text-center py-12">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto"></div>
-          <p className="mt-4 text-muted/60">Cargando biblioteca...</p>
+          <p className="mt-4 text-muted-foreground">Cargando biblioteca...</p>
         </div>
       ) : filteredBooks.length === 0 ? (
         <div className="text-center py-12">
-          <BookOpen className="h-12 w-12 text-muted/40 mx-auto mb-4" />
-          <p className="text-muted/60">No se encontraron libros que coincidan con tu búsqueda</p>
+          <BookOpen className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <p className="text-muted-foreground">No se encontraron libros que coincidan con tu búsqueda</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -541,13 +541,13 @@ export default function BibliotecaPage() {
                     <Badge className={qualityBadge.color}>{qualityBadge.label}</Badge>
                   </div>
                   <CardTitle className="text-lg leading-tight text-foreground">{book.title}</CardTitle>
-                  <div className="flex items-center text-sm text-muted/60 dark:text-muted/40">
+                  <div className="flex items-center text-sm text-muted-foreground dark:text-muted-foreground">
                     <User className="h-4 w-4 mr-1" />
                     {book.author}
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted/60 dark:text-muted/40 mb-4 line-clamp-3">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-4 line-clamp-3">
                     {book.content ? book.content.substring(0, 250) + "..." : "Sin descripción disponible"}
                   </p>
 

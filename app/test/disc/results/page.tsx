@@ -187,7 +187,7 @@ export default function DISCResultsPage() {
       <div className="min-h-screen bg-background">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto mb-4"></div>
-          <p className="text-muted/60">Cargando resultados...</p>
+          <p className="text-muted-foreground">Cargando resultados...</p>
         </div>
       </div>
     )
@@ -519,7 +519,7 @@ export default function DISCResultsPage() {
               <Badge variant="default" className="text-lg px-4 py-2">
                 Estilo Principal: {styleInfo.title}
               </Badge>
-              <p className="text-muted/60 mt-4 max-w-2xl mx-auto">{styleInfo.description}</p>
+              <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">{styleInfo.description}</p>
             </div>
           </CardContent>
         </Card>
@@ -715,7 +715,7 @@ export default function DISCResultsPage() {
                           </div>
                           <div>
                             <strong>Cómo piensas y decides:</strong>
-                            <p className="text-sm text-muted/60 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               {discResult.d_score > 70
                                 ? "Decides rápido, priorizas resultados y prefieres la acción inmediata."
                                 : discResult.c_score > 70
@@ -737,7 +737,7 @@ export default function DISCResultsPage() {
                           </div>
                           <div>
                             <strong>Cómo te ves a ti mismo:</strong>
-                            <p className="text-sm text-muted/60 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               {discResult.d_score > 70
                                 ? "Te ves como alguien competente, fuerte y capaz de superar cualquier obstáculo."
                                 : discResult.i_score > 70
@@ -759,7 +759,7 @@ export default function DISCResultsPage() {
                           </div>
                           <div>
                             <strong>Cómo te perciben otros:</strong>
-                            <p className="text-sm text-muted/60 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               Tu pareja/familia te ve como{" "}
                               {discResult.d_score > 70
                                 ? "intenso pero confiable, aunque a veces demasiado directo."
@@ -790,7 +790,7 @@ export default function DISCResultsPage() {
                           </div>
                           <div>
                             <strong>Dónde generas más impacto:</strong>
-                            <p className="text-sm text-muted/60 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               Cuando estás en equilibrio, generas impacto en{" "}
                               {discResult.d_score > 70
                                 ? "resolver problemas complejos y liderar cambios difíciles."
@@ -813,7 +813,7 @@ export default function DISCResultsPage() {
                           </div>
                           <div>
                             <strong>Qué pasa bajo estrés:</strong>
-                            <p className="text-sm text-muted/60 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               Cuando estás estresado,{" "}
                               {discResult.d_score > 70
                                 ? "puedes volverte autoritario, impaciente y poco receptivo."
@@ -840,7 +840,7 @@ export default function DISCResultsPage() {
                     <Card className="border-l-4 border-l-purple-500">
                       <CardContent className="pt-4">
                         <h4 className="font-semibold text-purple mb-2">Vida Personal</h4>
-                        <p className="text-sm text-muted/60">
+                        <p className="text-sm text-muted-foreground">
                           {discResult.d_score > 70
                             ? "Tus relaciones personales pueden sentir tu intensidad. Algunos te admiran, otros se sienten abrumados."
                             : discResult.i_score > 70
@@ -855,7 +855,7 @@ export default function DISCResultsPage() {
                     <Card className="border-l-4 border-l-blue-500">
                       <CardContent className="pt-4">
                         <h4 className="font-semibold text-blue mb-2">Trabajo/Estudios</h4>
-                        <p className="text-sm text-muted/60">
+                        <p className="text-sm text-muted-foreground">
                           {discResult.d_score > 70
                             ? "Eres el motor de resultados, pero a veces atropellas procesos o personas en el camino."
                             : discResult.i_score > 70
@@ -870,7 +870,7 @@ export default function DISCResultsPage() {
                     <Card className="border-l-4 border-l-green-500">
                       <CardContent className="pt-4">
                         <h4 className="font-semibold text-green mb-2">Proyectos/Decisiones</h4>
-                        <p className="text-sm text-muted/60">
+                        <p className="text-sm text-muted-foreground">
                           {discResult.d_score > 70
                             ? "Inicias muchos proyectos con energía, pero necesitas trabajar en la paciencia y el refinamiento."
                             : discResult.i_score > 70
@@ -1536,7 +1536,7 @@ export default function DISCResultsPage() {
                             </td>
                             <td className="p-3">
                               <div className="font-medium">Comunicación No Violenta</div>
-                              <div className="text-sm text-muted/50">Marshall Rosenberg</div>
+                              <div className="text-sm text-muted-foreground">Marshall Rosenberg</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.d_score > 70
@@ -1557,7 +1557,7 @@ export default function DISCResultsPage() {
                             </td>
                             <td className="p-3">
                               <div className="font-medium">El Arte de Escuchar</div>
-                              <div className="text-sm text-muted/50">Erich Fromm</div>
+                              <div className="text-sm text-muted-foreground">Erich Fromm</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.d_score > 70
@@ -1583,7 +1583,7 @@ export default function DISCResultsPage() {
                             </td>
                             <td className="p-3">
                               <div className="font-medium">Esencialismo</div>
-                              <div className="text-sm text-muted/50">Greg McKeown</div>
+                              <div className="text-sm text-muted-foreground">Greg McKeown</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.i_score > 70
@@ -1604,7 +1604,7 @@ export default function DISCResultsPage() {
                             </td>
                             <td className="p-3">
                               <div className="font-medium">Getting Things Done</div>
-                              <div className="text-sm text-muted/50">David Allen</div>
+                              <div className="text-sm text-muted-foreground">David Allen</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.i_score > 70
@@ -1630,7 +1630,7 @@ export default function DISCResultsPage() {
                             </td>
                             <td className="p-3">
                               <div className="font-medium">Boundaries (Límites)</div>
-                              <div className="text-sm text-muted/50">Henry Cloud & John Townsend</div>
+                              <div className="text-sm text-muted-foreground">Henry Cloud & John Townsend</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.s_score > 70
@@ -1651,7 +1651,7 @@ export default function DISCResultsPage() {
                             </td>
                             <td className="p-3">
                               <div className="font-medium">Conversaciones Cruciales</div>
-                              <div className="text-sm text-muted/50">Kerry Patterson et al.</div>
+                              <div className="text-sm text-muted-foreground">Kerry Patterson et al.</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.s_score > 70
@@ -1677,7 +1677,7 @@ export default function DISCResultsPage() {
                             </td>
                             <td className="p-3">
                               <div className="font-medium">La Trampa de la Perfección</div>
-                              <div className="text-sm text-muted/50">Brené Brown</div>
+                              <div className="text-sm text-muted-foreground">Brené Brown</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.c_score > 70
@@ -1698,7 +1698,7 @@ export default function DISCResultsPage() {
                             </td>
                             <td className="p-3">
                               <div className="font-medium">Inteligencia Emocional 2.0</div>
-                              <div className="text-sm text-muted/50">Travis Bradberry</div>
+                              <div className="text-sm text-muted-foreground">Travis Bradberry</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.c_score > 70
@@ -1727,7 +1727,7 @@ export default function DISCResultsPage() {
                               </td>
                               <td className="p-3">
                                 <div className="font-medium">Diseña Tu Vida</div>
-                                <div className="text-sm text-muted/50">Bill Burnett & Dave Evans</div>
+                                <div className="text-sm text-muted-foreground">Bill Burnett & Dave Evans</div>
                               </td>
                               <td className="p-3 text-sm">
                                 Tu perfil equilibrado te da flexibilidad. Este libro te ayudará a diseñar una vida que
@@ -1747,7 +1747,7 @@ export default function DISCResultsPage() {
                               </td>
                               <td className="p-3">
                                 <div className="font-medium">Los 7 Hábitos de la Gente Altamente Efectiva</div>
-                                <div className="text-sm text-muted/50">Stephen Covey</div>
+                                <div className="text-sm text-muted-foreground">Stephen Covey</div>
                               </td>
                               <td className="p-3 text-sm">
                                 Un clásico para construir efectividad personal y profesional desde lo más profundo.
@@ -1769,7 +1769,7 @@ export default function DISCResultsPage() {
                     <BookOpen className="h-5 w-5 text-blue" />
                     Accede a la biblioteca completa
                   </h4>
-                  <p className="text-sm text-muted/60 mb-3">
+                  <p className="text-sm text-muted-foreground mb-3">
                     Estos son solo algunos recursos. En la Biblioteca DTC encontrarás +50 libros, podcasts y ejercicios
                     personalizados para tu perfil.
                   </p>
@@ -1801,7 +1801,7 @@ export default function DISCResultsPage() {
                     <Card key={idx} className="border-l-4 border-l-purple-500">
                       <CardContent className="pt-4">
                         <h4 className="font-semibold text-purple">{conn.module}</h4>
-                        <p className="text-sm text-muted/60 mt-1">{conn.relation}</p>
+                        <p className="text-sm text-muted-foreground mt-1">{conn.relation}</p>
                         <div className="mt-2 bg-purple/5 p-2 rounded text-sm">
                           <strong>Sinergia:</strong> {conn.synergy}
                         </div>
@@ -1812,7 +1812,7 @@ export default function DISCResultsPage() {
 
                 <div className="mt-6 p-4 bg-background">
                   <h4 className="font-semibold mb-2">Completa tu Perfil 360°</h4>
-                  <p className="text-sm text-muted/60 mb-3">
+                  <p className="text-sm text-muted-foreground mb-3">
                     Mientras más tests completes, más precisa será tu ruta de desarrollo personalizada.
                   </p>
                   <Button onClick={() => router.push("/test")} size="sm">
@@ -1915,7 +1915,7 @@ export default function DISCResultsPage() {
                         ))}
                         <div className="bg-blue/5 p-3 rounded-lg">
                           <h5 className="font-medium text-sm mb-1">KPIs del Mes:</h5>
-                          <ul className="text-sm text-muted/60">
+                          <ul className="text-sm text-muted-foreground">
                             {plan90Days.month1.kpis.map((kpi, kIdx) => (
                               <li key={kIdx}>• {kpi}</li>
                             ))}
@@ -1961,7 +1961,7 @@ export default function DISCResultsPage() {
                         ))}
                         <div className="bg-green/5 p-3 rounded-lg">
                           <h5 className="font-medium text-sm mb-1">KPIs del Mes:</h5>
-                          <ul className="text-sm text-muted/60">
+                          <ul className="text-sm text-muted-foreground">
                             {plan90Days.month2.kpis.map((kpi, kIdx) => (
                               <li key={kIdx}>• {kpi}</li>
                             ))}
@@ -2007,7 +2007,7 @@ export default function DISCResultsPage() {
                         ))}
                         <div className="bg-purple/5 p-3 rounded-lg">
                           <h5 className="font-medium text-sm mb-1">KPIs del Mes:</h5>
-                          <ul className="text-sm text-muted/60">
+                          <ul className="text-sm text-muted-foreground">
                             {plan90Days.month3.kpis.map((kpi, kIdx) => (
                               <li key={kIdx}>• {kpi}</li>
                             ))}

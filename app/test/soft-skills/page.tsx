@@ -493,11 +493,11 @@ export default function SoftSkillsTest() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h2 className="text-2xl font-bold text-foreground">Competencias Blandas Despega</h2>
-                <p className="text-muted/60">
+                <p className="text-muted-foreground">
                   Pregunta {currentQuestion + 1} de {softSkillsQuestions.length}
                 </p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-muted/60">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" />
                 <span>~20 minutos</span>
               </div>
@@ -582,7 +582,7 @@ export default function SoftSkillsTest() {
                   onChange={(e) => handleTextAnswer(question.id, e.target.value)}
                   className="min-h-[120px] resize-none"
                 />
-                <div className="flex items-center justify-between text-sm text-muted/50">
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <span>{((currentAnswer as string) || "").length} caracteres (mínimo 50 requeridos)</span>
                   {((currentAnswer as string) || "").length >= 50 && (
                     <Badge variant="secondary" className="bg-green/10 text-green">
@@ -653,7 +653,7 @@ export default function SoftSkillsTest() {
               />
             ))}
           </div>
-          <p className="text-sm text-muted/60 mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             {Object.keys(answers).length} de {softSkillsQuestions.length} preguntas respondidas
           </p>
         </div>

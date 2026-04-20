@@ -42,7 +42,7 @@ export default function ProgressPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="w-12 h-12 rounded-full border-4 border-purple/30 border-t-purple-600 animate-spin mx-auto mb-4"></div>
-          <p className="text-muted/60 dark:text-muted/40">Cargando progreso...</p>
+          <p className="text-muted-foreground dark:text-muted-foreground">Cargando progreso...</p>
         </div>
       </div>
     )
@@ -63,7 +63,7 @@ export default function ProgressPage() {
           <h1 className="text-3xl font-bold text-muted/90 dark:text-muted/5">
             Tu Progreso en A3
           </h1>
-          <p className="text-lg text-muted/60 dark:text-muted/40">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Visualiza tu evolución y mejora en el tiempo.
           </p>
         </div>
@@ -74,7 +74,7 @@ export default function ProgressPage() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted/60 dark:text-muted/40 mb-1">Sesiones Completadas</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Sesiones Completadas</p>
                   <div className="text-3xl font-bold text-purple">
                     {a3Progress?.sessions_completed || 0}
                   </div>
@@ -88,7 +88,7 @@ export default function ProgressPage() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted/60 dark:text-muted/40 mb-1">Score de Empleabilidad</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Score de Empleabilidad</p>
                   <div className="text-3xl font-bold text-blue">
                     {a3Progress?.employability_score || 0}/100
                   </div>
@@ -102,7 +102,7 @@ export default function ProgressPage() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted/60 dark:text-muted/40 mb-1">Horas Entrenadas</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Horas Entrenadas</p>
                   <div className="text-3xl font-bold text-blue">
                     {a3Progress?.hours_trained || 0}h
                   </div>
@@ -116,7 +116,7 @@ export default function ProgressPage() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-muted/60 dark:text-muted/40 mb-1">Entrevistas Dominadas</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Entrevistas Dominadas</p>
                   <div className="text-3xl font-bold text-green">
                     {a3Progress?.interviews_mastered || 0}
                   </div>
@@ -145,7 +145,7 @@ export default function ProgressPage() {
               <div key={item.skill} className="space-y-2">
                 <div className="flex items-center justify-between">
                   <span className="font-semibold text-muted/90 dark:text-muted/5">{item.skill}</span>
-                  <span className="text-sm font-semibold text-muted/60 dark:text-muted/40">{item.progress}%</span>
+                  <span className="text-sm font-semibold text-muted-foreground dark:text-muted-foreground">{item.progress}%</span>
                 </div>
                 <div className="w-full bg-muted/20 dark:bg-muted/70 h-2 rounded-full overflow-hidden">
                   <div
@@ -174,7 +174,7 @@ export default function ProgressPage() {
                 <Card key={item.badge} className="bg-background">
                   <CardContent className="pt-6 text-center">
                     <div className="text-3xl mb-2">{item.badge}</div>
-                    <p className="text-sm text-muted/70 dark:text-muted/30">{item.desc}</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted/30">{item.desc}</p>
                   </CardContent>
                 </Card>
               ))}

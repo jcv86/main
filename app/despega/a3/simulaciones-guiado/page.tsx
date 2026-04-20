@@ -195,14 +195,14 @@ export default function GuidedInterviewPage() {
             <div className="text-6xl font-bold text-transparent bg-clip-text bg-background">
               {score}%
             </div>
-            <p className="text-lg text-muted/60 dark:text-muted/40">
+            <p className="text-lg text-muted-foreground dark:text-muted-foreground">
               Excelente progreso. Tu coach IA está analizando tus respuestas...
             </p>
           </div>
 
           <Card className="p-6">
             <h2 className="text-xl font-bold mb-4">Próximos Pasos</h2>
-            <ul className="space-y-3 text-muted/70 dark:text-muted/30">
+            <ul className="space-y-3 text-muted-foreground dark:text-muted/30">
               <li className="flex gap-3">
                 <span className="text-green font-bold">1.</span>
                 <span>Revisa el feedback detallado de tu entrevista</span>
@@ -273,14 +273,14 @@ export default function GuidedInterviewPage() {
             {/* Timer */}
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold">Tiempo disponible:</span>
-              <div className={`text-2xl font-bold ${timeLeft < 30 ? 'text-red' : 'text-muted/60 dark:text-muted/40'}`}>
+              <div className={`text-2xl font-bold ${timeLeft < 30 ? 'text-red' : 'text-muted-foreground dark:text-muted-foreground'}`}>
                 {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
               </div>
             </div>
 
             {/* Response Input */}
             <div className="space-y-3">
-              <label className="text-sm font-semibold text-muted/70 dark:text-muted/30">
+              <label className="text-sm font-semibold text-muted-foreground dark:text-muted/30">
                 Tu respuesta:
               </label>
               <div className="space-y-2">
@@ -292,7 +292,7 @@ export default function GuidedInterviewPage() {
                   className="min-h-40 resize-none"
                 />
                 <div className="flex justify-between items-center">
-                  <p className="text-xs text-muted/50 dark:text-muted/40">
+                  <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                     Palabras escritas: {(responses[currentQuestion.id] || '').split(/\s+/).filter(w => w).length}
                   </p>
                   {validatingIds.has(currentQuestion.id) && (
@@ -312,7 +312,7 @@ export default function GuidedInterviewPage() {
                   }}
                   isDisabled={loading || validatingIds.has(currentQuestion.id)}
                 />
-                <span className="text-xs text-muted/50 dark:text-muted/40">
+                <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                   O habla para dictar tu respuesta
                 </span>
               </div>

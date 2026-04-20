@@ -143,7 +143,7 @@ export function CanonDashboardSection() {
               Generar mi Ruta Personalizada →
             </Button>
           </Link>
-          <p className="text-xs text-muted/40 text-center">Tiempo estimado: 3 minutos</p>
+          <p className="text-xs text-muted-foreground text-center">Tiempo estimado: 3 minutos</p>
         </CardContent>
       </Card>
     )

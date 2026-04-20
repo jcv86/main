@@ -178,7 +178,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
           <div className="bg-white p-4 rounded-[28px] border border-orange/20">
             <p className="text-sm text-muted">{insights.areasDesarrollo}</p>
           </div>
-          <p className="text-sm text-muted/60 italic">
+          <p className="text-sm text-muted-foreground italic">
             Esta tensión no es debilidad. Es el lado oscuro de tu fortaleza. La pregunta es: ¿la ves? ¿La gestionas?
           </p>
         </CardContent>

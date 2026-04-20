@@ -54,7 +54,7 @@ export function PanoramadelDia({
       case "opportunity":
         return <CheckCircle2 className="w-5 h-5 text-green/50" />
       default:
-        return <TrendingDown className="w-5 h-5 text-muted/50" />
+        return <TrendingDown className="w-5 h-5 text-muted-foreground" />
     }
   }
 

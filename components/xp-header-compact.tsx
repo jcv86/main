@@ -64,7 +64,7 @@ export function XPHeaderCompact({ onInfoClick }: XPHeaderProps) {
       <div className="flex items-center gap-2">
         <Zap className="w-4 h-4 text-amber-500" />
         <div className="flex flex-col gap-0.5">
-          <span className="text-xs text-muted/60 dark:text-muted/40">XP</span>
+          <span className="text-xs text-muted-foreground dark:text-muted-foreground">XP</span>
           <span className="text-sm font-bold text-cyan dark:text-cyan/30">
             {xpData.total_xp.toLocaleString()}
           </span>

@@ -148,7 +148,7 @@ export default function A2TestPage() {
           <h1 className="text-4xl font-bold text-muted/90 dark:text-muted/5 mb-2">
             CANON A2 - Test Completo
           </h1>
-          <p className="text-lg text-muted/60 dark:text-muted/40">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Prueba el flujo completo: C1 → A1 → C2 con OpenAI integrado
           </p>
         </div>

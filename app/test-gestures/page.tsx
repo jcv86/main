@@ -119,7 +119,7 @@ export default function TestGesturesPage() {
 
                   <div className="p-4 bg-muted/5 rounded-lg">
                     <h4 className="font-medium mb-2">What We Test:</h4>
-                    <ul className="text-sm text-muted/60 space-y-1">
+                    <ul className="text-sm text-muted-foreground space-y-1">
                       <li>• Touch event detection and handling</li>
                       <li>• Multi-finger gesture recognition</li>
                       <li>• Gesture accuracy and response times</li>
@@ -148,19 +148,19 @@ export default function TestGesturesPage() {
                   <div className="text-2xl font-bold text-green">
                     {gestureResults.filter((r) => r.status === "passed").length}
                   </div>
-                  <div className="text-sm text-muted/60">Passed</div>
+                  <div className="text-sm text-muted-foreground">Passed</div>
                 </div>
                 <div className="text-center p-3 bg-white rounded-lg border">
                   <div className="text-2xl font-bold text-red">
                     {gestureResults.filter((r) => r.status === "failed").length}
                   </div>
-                  <div className="text-sm text-muted/60">Failed</div>
+                  <div className="text-sm text-muted-foreground">Failed</div>
                 </div>
                 <div className="text-center p-3 bg-white rounded-lg border">
                   <div className="text-2xl font-bold text-blue">
                     {gestureResults.reduce((acc, r) => acc + r.events.length, 0)}
                   </div>
-                  <div className="text-sm text-muted/60">Events Detected</div>
+                  <div className="text-sm text-muted-foreground">Events Detected</div>
                 </div>
                 <div className="text-center p-3 bg-white rounded-lg border">
                   <div className="text-2xl font-bold text-purple">
@@ -169,7 +169,7 @@ export default function TestGesturesPage() {
                     )}
                     %
                   </div>
-                  <div className="text-sm text-muted/60">Success Rate</div>
+                  <div className="text-sm text-muted-foreground">Success Rate</div>
                 </div>
               </div>
             </CardContent>

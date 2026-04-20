@@ -109,7 +109,7 @@ export default function BooksExportPage() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">Exportar Biblioteca Completa</h1>
-          <p className="text-xl text-muted/60">
+          <p className="text-xl text-muted-foreground">
             Descarga todos los {bookCount} libros de desarrollo profesional en formato CSV
           </p>
         </div>

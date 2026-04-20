@@ -495,7 +495,7 @@ export default function NoticiasClient() {
                 <Rocket className="h-6 w-6 text-amber-500" />
                 Tu Feed Personalizado
               </h1>
-              <p className="text-muted/50 text-sm">Contenido seleccionado según tu perfil y tests completados</p>
+              <p className="text-muted-foreground text-sm">Contenido seleccionado según tu perfil y tests completados</p>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={() => setShowPreferences(!showPreferences)}>
@@ -626,8 +626,8 @@ export default function NoticiasClient() {
                 ) : sortedArticles.length === 0 ? (
                   <Card>
                     <CardContent className="p-12 text-center">
-                      <p className="text-muted/50">No hay artículos para mostrar.</p>
-                      <p className="text-sm text-muted/40 mt-1">Ajusta tus preferencias para ver más contenido.</p>
+                      <p className="text-muted-foreground">No hay artículos para mostrar.</p>
+                      <p className="text-sm text-muted-foreground mt-1">Ajusta tus preferencias para ver más contenido.</p>
                     </CardContent>
                   </Card>
                 ) : (
@@ -673,8 +673,8 @@ export default function NoticiasClient() {
                   <Card>
                     <CardContent className="p-12 text-center">
                       <Heart className="h-12 w-12 text-muted/30 mx-auto mb-4" />
-                      <p className="text-muted/50">No has guardado artículos todavía.</p>
-                      <p className="text-sm text-muted/40 mt-1">Guarda artículos para leerlos después.</p>
+                      <p className="text-muted-foreground">No has guardado artículos todavía.</p>
+                      <p className="text-sm text-muted-foreground mt-1">Guarda artículos para leerlos después.</p>
                     </CardContent>
                   </Card>
                 )}
@@ -703,8 +703,8 @@ export default function NoticiasClient() {
                   <Card>
                     <CardContent className="p-12 text-center">
                       <Briefcase className="h-12 w-12 text-muted/30 mx-auto mb-4" />
-                      <p className="text-muted/50">No has leído artículos todavía.</p>
-                      <p className="text-sm text-muted/40 mt-1">Tu historial de lectura aparecerá aquí.</p>
+                      <p className="text-muted-foreground">No has leído artículos todavía.</p>
+                      <p className="text-sm text-muted-foreground mt-1">Tu historial de lectura aparecerá aquí.</p>
                     </CardContent>
                   </Card>
                 )}
@@ -734,9 +734,9 @@ export default function NoticiasClient() {
                     alt={selectedArticle.title}
                     className="w-full h-40 object-cover rounded-lg"
                   />
-                  <p className="text-muted/60 text-sm">{selectedArticle.summary}</p>
+                  <p className="text-muted-foreground text-sm">{selectedArticle.summary}</p>
 
-                  <div className="flex items-center gap-4 text-sm text-muted/50">
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
                     <span className="flex items-center gap-1">
                       <Heart className="h-4 w-4" />
                       {selectedArticle.readTime} min
@@ -762,7 +762,7 @@ export default function NoticiasClient() {
                     <h4 className="font-medium text-sm mb-2">Acciones sugeridas</h4>
                     <ul className="space-y-1">
                       {selectedArticle.actionItems.map((action, i) => (
-                        <li key={i} className="flex items-start gap-2 text-sm text-muted/60">
+                        <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
                           <Briefcase className="h-4 w-4 text-blue/50 mt-0.5 flex-shrink-0" />
                           {action}
                         </li>
@@ -797,15 +797,15 @@ export default function NoticiasClient() {
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-muted/60 text-sm">Artículos disponibles</span>
+                      <span className="text-muted-foreground text-sm">Artículos disponibles</span>
                       <span className="font-semibold">{stats.total}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-muted/60 text-sm">Guardados</span>
+                      <span className="text-muted-foreground text-sm">Guardados</span>
                       <span className="font-semibold">{stats.saved}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-muted/60 text-sm">Leídos</span>
+                      <span className="text-muted-foreground text-sm">Leídos</span>
                       <span className="font-semibold">{stats.read}</span>
                     </div>
                     <div className="h-2 bg-muted/20 rounded-full mt-2">
@@ -814,7 +814,7 @@ export default function NoticiasClient() {
                         style={{ width: `${(stats.read / stats.total) * 100}%` }}
                       />
                     </div>
-                    <p className="text-xs text-muted/50 text-center">
+                    <p className="text-xs text-muted-foreground text-center">
                       {Math.round((stats.read / stats.total) * 100)}% completado esta semana
                     </p>
                   </CardContent>
@@ -938,9 +938,9 @@ function ArticleCard({
               )}
             </div>
             <h3 className="font-semibold text-foreground line-clamp-2 mb-1">{article.title}</h3>
-            <p className="text-sm text-muted/60 line-clamp-2">{article.summary}</p>
+            <p className="text-sm text-muted-foreground line-clamp-2">{article.summary}</p>
             <div className="flex items-center justify-between mt-2">
-              <div className="flex items-center gap-3 text-xs text-muted/50">
+              <div className="flex items-center gap-3 text-xs text-muted-foreground">
                 <span className="flex items-center gap-1">
                   <Heart className="h-3 w-3" />
                   {article.readTime} min
@@ -965,7 +965,7 @@ function ArticleCard({
 
         {/* Action buttons section */}
         <div className="mt-4 pt-4 border-t border-muted/10">
-          <p className="text-xs text-muted/50 mb-2">Acciones rápidas:</p>
+          <p className="text-xs text-muted-foreground mb-2">Acciones rápidas:</p>
           <div className="flex flex-wrap gap-2">
             <Button size="sm" variant="outline" onClick={onCreateGoal} className="text-xs bg-transparent">
               <Target className="h-3 w-3 mr-1" />
@@ -986,7 +986,7 @@ function ArticleCard({
 
         {/* Feedback section */}
         <div className="mt-3 pt-3 border-t border-muted/10">
-          <p className="text-xs text-muted/50 mb-2">¿Te sirvió este contenido?</p>
+          <p className="text-xs text-muted-foreground mb-2">¿Te sirvió este contenido?</p>
           <div className="flex gap-2">
             <Button
               size="sm"

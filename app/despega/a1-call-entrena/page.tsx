@@ -107,7 +107,7 @@ export default function A1CallEntrenaPage() {
                 {profileNames[profile]}
               </div>
               <p className="text-lg text-muted/30">Completaste tu Call Entrena</p>
-              <p className="text-sm text-muted/40 mt-2">Una sesión de entrenamiento para practicar respuestas en entrevistas</p>
+              <p className="text-sm text-muted-foreground mt-2">Una sesión de entrenamiento para practicar respuestas en entrevistas</p>
             </div>
 
             <div className="bg-muted/80/50 rounded-[28px] p-6 mb-6 text-left">
@@ -115,14 +115,14 @@ export default function A1CallEntrenaPage() {
               <div className="space-y-3">
                 {responses.map((response, idx) => (
                   <div key={idx} className="border border-muted/60 rounded p-3">
-                    <p className="text-xs text-muted/40 mb-1">Pregunta {idx + 1}:</p>
+                    <p className="text-xs text-muted-foreground mb-1">Pregunta {idx + 1}:</p>
                     <p className="text-muted/20">{response}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <p className="text-muted/40 mb-6">
+            <p className="text-muted-foreground mb-6">
               Tu Call Entrena fue adaptado para tu perfil {profileNames[profile]}. Repítelo cuantas veces quieras para mejorar tus respuestas.
             </p>
           </div>
@@ -168,8 +168,8 @@ export default function A1CallEntrenaPage() {
       <ASectionPart title={`Pregunta ${currentQuestion + 1} de ${CALL_ENTRENA_QUESTIONS.length}`} icon={<Phone />}>
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            <p className="text-sm text-muted/40">Tu Perfil: <span className="font-semibold text-cyan/30">{profileNames[profile]}</span></p>
-            <p className="text-sm text-muted/40">{Math.round(progress)}%</p>
+            <p className="text-sm text-muted-foreground">Tu Perfil: <span className="font-semibold text-cyan/30">{profileNames[profile]}</span></p>
+            <p className="text-sm text-muted-foreground">{Math.round(progress)}%</p>
           </div>
           <div className="h-2 bg-muted/70 rounded-full overflow-hidden">
             <div 
@@ -184,8 +184,8 @@ export default function A1CallEntrenaPage() {
             <CardTitle className="text-lg">{question.question}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted/40 italic mb-4">Contexto: {question.scenario}</p>
-            <p className="text-xs text-muted/50">Responde cómo lo haría alguien con tu perfil {profileNames[profile]}.</p>
+            <p className="text-sm text-muted-foreground italic mb-4">Contexto: {question.scenario}</p>
+            <p className="text-xs text-muted-foreground">Responde cómo lo haría alguien con tu perfil {profileNames[profile]}.</p>
           </CardContent>
         </Card>
 
@@ -220,9 +220,9 @@ export default function A1CallEntrenaPage() {
             >
               <div className="text-left flex-1">
                 <p className="font-semibold text-white text-sm">{option.label}</p>
-                <p className="text-xs text-muted/40">{option.description}</p>
+                <p className="text-xs text-muted-foreground">{option.description}</p>
               </div>
-              <ArrowRight className="w-4 h-4 text-muted/40" />
+              <ArrowRight className="w-4 h-4 text-muted-foreground" />
             </Button>
           ))}
         </div>

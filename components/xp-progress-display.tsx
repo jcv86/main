@@ -26,7 +26,7 @@ const LEVEL_TITLES: Record<number, string> = {
 }
 
 const LEVEL_COLORS: Record<number, { bg: string; text: string; accent: string }> = {
-  1: { bg: 'bg-muted/10 dark:bg-transparent', text: 'text-muted/70 dark:text-muted/30', accent: 'from-slate-400600' },
+  1: { bg: 'bg-muted/10 dark:bg-transparent', text: 'text-muted-foreground dark:text-muted/30', accent: 'from-slate-400600' },
   2: { bg: 'bg-green/10 dark:bg-green/30', text: 'text-green dark:text-green/30', accent: 'from-green-400600' },
   3: { bg: 'bg-blue/10 dark:bg-blue/30', text: 'text-blue dark:text-blue/30', accent: 'from-blue-400600' },
   4: { bg: 'bg-purple/10 dark:bg-purple/30', text: 'text-purple dark:text-purple/30', accent: 'from-purple-400' },
@@ -133,7 +133,7 @@ export function XPProgressDisplay({
                         ? 'bg-background'
                         : isReached
                         ? `${LEVEL_COLORS[level].bg} ${LEVEL_COLORS[level].text}`
-                        : 'bg-muted/20 dark:bg-muted/70 text-muted/40'
+                        : 'bg-muted/20 dark:bg-muted/70 text-muted-foreground'
                     }`}
                   >
                     {level}

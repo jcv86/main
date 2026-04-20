@@ -156,7 +156,7 @@ export function InterviewTips({
         {/* All Tips Visual Indicator */}
         {tipHistory.length > 0 && (
           <div className="flex gap-2 items-center">
-            <span className="text-xs font-semibold text-muted/60 dark:text-muted/40">Tips obtenidos:</span>
+            <span className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground">Tips obtenidos:</span>
             <div className="flex gap-1">
               {tipHistory.map((_, idx) => (
                 <button

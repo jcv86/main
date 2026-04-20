@@ -100,7 +100,7 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
           <h1 className="text-4xl font-bold text-foreground">DTC Points Shop</h1>
           <Sparkles className="w-8 h-8 text-amber-500" />
         </div>
-        <p className="text-muted/60 mb-4">
+        <p className="text-muted-foreground mb-4">
           Unlock premium interview tips and accelerate your career growth
         </p>
         <div className="inline-block bg-blue/5 rounded-lg px-4 py-2">
@@ -131,7 +131,7 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
             {/* Package Info */}
             <div className="flex-1 mb-6">
               {pkg.label && (
-                <p className="text-xs font-semibold text-muted/50 uppercase mb-2">
+                <p className="text-xs font-semibold text-muted-foreground uppercase mb-2">
                   {pkg.label}
                 </p>
               )}
@@ -143,7 +143,7 @@ export function DTCShop({ userId, currentBalance, onPurchaseComplete }: DTCShopP
                     {pkg.dtcAmount + pkg.bonus}
                   </span>
                 </div>
-                <p className="text-sm text-muted/60">
+                <p className="text-sm text-muted-foreground">
                   DTC Points
                   {pkg.bonus > 0 && (
                     <span className="block text-green font-semibold">

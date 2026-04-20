@@ -201,7 +201,7 @@ export default function RecomendacionesPage() {
       <div className="min-h-screen bg-background">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green"></div>
-          <p className="mt-4 text-muted/60 dark:text-muted/40">Personalizando tus rutas...</p>
+          <p className="mt-4 text-muted-foreground dark:text-muted-foreground">Personalizando tus rutas...</p>
         </div>
       </div>
     )
@@ -218,7 +218,7 @@ export default function RecomendacionesPage() {
           <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
             Tus Rutas Recomendadas
           </h1>
-          <p className="text-lg text-muted/60 dark:text-muted/40 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground max-w-2xl mx-auto">
             Basadas en tu patrón A1 y tu objetivo. Selecciona una para comenzar.
           </p>
         </div>
@@ -246,7 +246,7 @@ export default function RecomendacionesPage() {
                           <h3 className="font-bold text-lg text-muted/90 dark:text-muted/5">
                             {route.name}
                           </h3>
-                          <p className="text-sm text-muted/60 dark:text-muted/40">
+                          <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                             {route.description}
                           </p>
                         </div>
@@ -256,7 +256,7 @@ export default function RecomendacionesPage() {
                       <div className={`text-2xl font-bold ${route.textColor}`}>
                         {route.matchScore}%
                       </div>
-                      <p className="text-xs text-muted/60 dark:text-muted/40">
+                      <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                         Match para ti
                       </p>
                     </div>
@@ -265,10 +265,10 @@ export default function RecomendacionesPage() {
                   {/* Match Score Bar */}
                   <div className="space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-muted/60 dark:text-muted/40">
+                      <span className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground">
                         Alineación con tu perfil
                       </span>
-                      <span className="text-xs text-muted/60 dark:text-muted/40">
+                      <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                         {route.matchScore}%
                       </span>
                     </div>
@@ -285,7 +285,7 @@ export default function RecomendacionesPage() {
                   {/* Details Grid */}
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-xs font-semibold text-muted/60 dark:text-muted/40 mb-2">
+                      <p className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
                         Duración
                       </p>
                       <p className="text-sm text-muted/90 dark:text-muted/5 font-medium">
@@ -293,7 +293,7 @@ export default function RecomendacionesPage() {
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-muted/60 dark:text-muted/40 mb-2">
+                      <p className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
                         Habilidades a Desarrollar
                       </p>
                       <div className="flex flex-wrap gap-1">
@@ -335,7 +335,7 @@ export default function RecomendacionesPage() {
         {/* Info Box */}
         <Card className="border-0 bg-yellow/5 dark:bg-amber-900/20 border-l-4 border-l-amber-500">
           <CardContent className="p-4">
-            <p className="text-sm text-muted/70 dark:text-muted/30">
+            <p className="text-sm text-muted-foreground dark:text-muted/30">
               <strong>💡 Consejo:</strong> Todas estas rutas son poderosas. Elige la que resuena más con tu objetivo inmediato. Puedes explorar otras después.
             </p>
           </CardContent>

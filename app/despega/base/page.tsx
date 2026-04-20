@@ -196,7 +196,7 @@ export default function BasePage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted/70 dark:text-muted/30 mb-4">
+            <p className="text-sm text-muted-foreground dark:text-muted/30 mb-4">
               Estás en <strong>Sprint 1: Fundamentos</strong> (días 1-30). Continúa con tus acciones diarias y aprenderás los pilares básicos de tu transformación.
             </p>
             <div className="flex gap-3">
@@ -219,25 +219,25 @@ export default function BasePage() {
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
               <div className="text-3xl font-bold text-blue">1/4</div>
-              <p className="text-xs text-muted/60 dark:text-muted/40 mt-2">Fases Completadas</p>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-2">Fases Completadas</p>
             </CardContent>
           </Card>
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
               <div className="text-3xl font-bold text-yellow">5/30</div>
-              <p className="text-xs text-muted/60 dark:text-muted/40 mt-2">Días Sprint 1</p>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-2">Días Sprint 1</p>
             </CardContent>
           </Card>
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
               <div className="text-3xl font-bold text-purple">12</div>
-              <p className="text-xs text-muted/60 dark:text-muted/40 mt-2">Acciones Totales</p>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-2">Acciones Totales</p>
             </CardContent>
           </Card>
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
               <div className="text-3xl font-bold text-green">7/7</div>
-              <p className="text-xs text-muted/60 dark:text-muted/40 mt-2">Racha Días</p>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-2">Racha Días</p>
             </CardContent>
           </Card>
         </div>
@@ -245,7 +245,7 @@ export default function BasePage() {
         {/* Section Title */}
         <div className="space-y-2">
           <h2 className="text-2xl font-bold">Centro de Recursos</h2>
-          <p className="text-muted/60 dark:text-muted/40">Acceso rápido a noticias, cultura y recursos para tu transformación</p>
+          <p className="text-muted-foreground dark:text-muted-foreground">Acceso rápido a noticias, cultura y recursos para tu transformación</p>
         </div>
 
         {/* Categorías */}

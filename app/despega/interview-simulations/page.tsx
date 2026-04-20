@@ -45,7 +45,7 @@ export default function InterviewSimulationsPage() {
           <h1 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">
             Entrenamiento de Entrevista
           </h1>
-          <p className="text-muted/60 dark:text-muted/40 mb-6">
+          <p className="text-muted-foreground dark:text-muted-foreground mb-6">
             Simula entrevistas realistas y recibe feedback instantáneo
           </p>
           <div className="bg-blue/5 dark:bg-blue border border-blue/30 dark:border-blue/10 rounded-[28px] p-4 mb-6">

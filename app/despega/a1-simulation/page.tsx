@@ -114,14 +114,14 @@ export default function A1SimulationPage() {
               <div className="space-y-3">
                 {responses.map((response, idx) => (
                   <div key={idx} className="border border-muted/60 rounded p-3">
-                    <p className="text-xs text-muted/40 mb-1">Pregunta {idx + 1}:</p>
+                    <p className="text-xs text-muted-foreground mb-1">Pregunta {idx + 1}:</p>
                     <p className="text-muted/20">{response}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <p className="text-muted/40 mb-6">
+            <p className="text-muted-foreground mb-6">
               Esta simulación te ayuda a practicar respuestas según tu perfil {profileNames[profile]}. Repítela cuantas veces quieras para mejorar.
             </p>
           </div>
@@ -167,8 +167,8 @@ export default function A1SimulationPage() {
       <ASectionPart title={`Pregunta ${currentQuestion + 1} de ${SIMULATION_QUESTIONS.length}`} icon={<Zap />}>
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            <p className="text-sm text-muted/40">Perfil: <span className="font-semibold text-cyan/30">{profileNames[profile]}</span></p>
-            <p className="text-sm text-muted/40">{Math.round(progress)}%</p>
+            <p className="text-sm text-muted-foreground">Perfil: <span className="font-semibold text-cyan/30">{profileNames[profile]}</span></p>
+            <p className="text-sm text-muted-foreground">{Math.round(progress)}%</p>
           </div>
           <div className="h-2 bg-muted/70 rounded-full overflow-hidden">
             <div 
@@ -183,8 +183,8 @@ export default function A1SimulationPage() {
             <CardTitle className="text-lg">{question.question}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted/40 italic mb-4">Contexto: {question.scenario}</p>
-            <p className="text-xs text-muted/50">Responde cómo lo haría alguien con tu perfil {profileNames[profile]}.</p>
+            <p className="text-sm text-muted-foreground italic mb-4">Contexto: {question.scenario}</p>
+            <p className="text-xs text-muted-foreground">Responde cómo lo haría alguien con tu perfil {profileNames[profile]}.</p>
           </CardContent>
         </Card>
 
@@ -219,9 +219,9 @@ export default function A1SimulationPage() {
             >
               <div className="text-left flex-1">
                 <p className="font-semibold text-white text-sm">{option.label}</p>
-                <p className="text-xs text-muted/40">{option.description}</p>
+                <p className="text-xs text-muted-foreground">{option.description}</p>
               </div>
-              <ArrowRight className="w-4 h-4 text-muted/40" />
+              <ArrowRight className="w-4 h-4 text-muted-foreground" />
             </Button>
           ))}
         </div>

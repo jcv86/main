@@ -141,12 +141,12 @@ export function CoachChat({ coachType, userProfile }: ChatProps) {
             {messages.length === 0 ? (
               <div className="flex items-center justify-center h-full text-center">
                 <div>
-                  <p className="text-muted/50 mb-2">
+                  <p className="text-muted-foreground mb-2">
                     {coachType === 'tecnico' && '¡Hola! Soy tu Coach Técnico'}
                     {coachType === 'liderazgo' && '¡Hola! Soy tu Coach de Liderazgo'}
                     {coachType === 'cerebro' && '¡Hola! Soy el Cerebro Inteligente'}
                   </p>
-                  <p className="text-sm text-muted/40">Comienza a hacer una pregunta...</p>
+                  <p className="text-sm text-muted-foreground">Comienza a hacer una pregunta...</p>
                 </div>
               </div>
             ) : (

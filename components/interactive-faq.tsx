@@ -76,7 +76,7 @@ export function InteractiveFAQ() {
       {/* Search Bar */}
       <div className="mb-8">
         <div className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted/40" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
           <Input
             type="text"
             placeholder="Busca tu pregunta..."
@@ -113,7 +113,7 @@ export function InteractiveFAQ() {
       </div>
 
       {/* Results Count */}
-      <div className="mb-6 text-sm text-muted/60">
+      <div className="mb-6 text-sm text-muted-foreground">
         {filteredFAQs.length} {filteredFAQs.length === 1 ? "pregunta encontrada" : "preguntas encontradas"}
       </div>
 
@@ -121,8 +121,8 @@ export function InteractiveFAQ() {
       <div className="space-y-4 mb-12">
         {filteredFAQs.length === 0 ? (
           <div className="text-center py-12 bg-muted/5 rounded-xl">
-            <HelpCircle className="w-12 h-12 text-muted/40 mx-auto mb-4" />
-            <p className="text-muted/60 mb-4">No encontramos preguntas que coincidan con tu búsqueda</p>
+            <HelpCircle className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+            <p className="text-muted-foreground mb-4">No encontramos preguntas que coincidan con tu búsqueda</p>
             <Link href="/ai-coach">
               <Button className="gap-2">
                 <MessageCircle className="w-4 h-4" />
@@ -148,17 +148,17 @@ export function InteractiveFAQ() {
                 >
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <CategoryIcon className="w-4 h-4 text-muted/50" />
-                      <span className="text-xs font-medium text-muted/50 uppercase tracking-wide">
+                      <CategoryIcon className="w-4 h-4 text-muted-foreground" />
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
                         {categoryInfo.label}
                       </span>
                     </div>
                     <h3 className="text-lg font-semibold text-foreground">{faq.question}</h3>
                   </div>
                   {isExpanded ? (
-                    <ChevronUp className="w-5 h-5 text-muted/40 flex-shrink-0 mt-1" />
+                    <ChevronUp className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-1" />
                   ) : (
-                    <ChevronDown className="w-5 h-5 text-muted/40 flex-shrink-0 mt-1" />
+                    <ChevronDown className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-1" />
                   )}
                 </button>
 
@@ -209,7 +209,7 @@ export function InteractiveFAQ() {
           </div>
           <div>
             <h3 className="text-xl font-bold text-foreground">¿No encontraste tu respuesta?</h3>
-            <p className="text-muted/60">Pregúntale directamente a Sofia o Dani</p>
+            <p className="text-muted-foreground">Pregúntale directamente a Sofia o Dani</p>
           </div>
         </div>
         <Link href="/ai-coach">

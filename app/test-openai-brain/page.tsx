@@ -101,15 +101,15 @@ export default function TestOpenAIInsightsPage() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                   <div className="p-3 bg-muted/80 rounded">
-                    <p className="text-xs text-muted/40">Tiempo Total</p>
+                    <p className="text-xs text-muted-foreground">Tiempo Total</p>
                     <p className="text-lg font-bold text-white">{results.performance.total_ms}ms</p>
                   </div>
                   <div className="p-3 bg-muted/80 rounded">
-                    <p className="text-xs text-muted/40">Promedio Fase</p>
+                    <p className="text-xs text-muted-foreground">Promedio Fase</p>
                     <p className="text-lg font-bold text-white">{results.performance.avg_phase_ms}ms</p>
                   </div>
                   <div className="p-3 bg-muted/80 rounded">
-                    <p className="text-xs text-muted/40">Fases</p>
+                    <p className="text-xs text-muted-foreground">Fases</p>
                     <p className="text-lg font-bold text-white">{results.validation.insights_generated}</p>
                   </div>
                 </div>
@@ -237,7 +237,7 @@ export default function TestOpenAIInsightsPage() {
           </CardHeader>
           <CardContent className="text-sm text-muted/30 space-y-3">
             <p className="font-semibold text-muted/10">4 Fases. 1 Insight Maestro. Tu Transformación Comienza.</p>
-            <div className="space-y-2 text-muted/40">
+            <div className="space-y-2 text-muted-foreground">
               <p><span className="text-blue/30 font-semibold">Fase 1:</span> Descubrimos quién eres realmente (tu patrón natural)</p>
               <p><span className="text-emerald-300 font-semibold">Fase 2:</span> Creamos tu camino claro (qué hacer cada 30 días)</p>
               <p><span className="text-orange/30 font-semibold">Fase 3:</span> Te preparamos (feedback honesto sobre lo que necesitas cambiar)</p>

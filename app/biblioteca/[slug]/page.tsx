@@ -3433,7 +3433,7 @@ export default function BookReaderPage() {
         <div className="flex items-center justify-center min-h-[400px]">
           <div className="text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto mb-4"></div>
-            <p className="text-muted/60">Cargando libro...</p>
+            <p className="text-muted-foreground">Cargando libro...</p>
           </div>
         </div>
       </div>
@@ -3445,7 +3445,7 @@ export default function BookReaderPage() {
       <div className="container mx-auto px-4 py-8">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">{error}</h1>
-          <p className="text-muted/60 mb-4">No se pudo encontrar el libro solicitado.</p>
+          <p className="text-muted-foreground mb-4">No se pudo encontrar el libro solicitado.</p>
           <Button onClick={() => router.push("/biblioteca")}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Volver a la biblioteca
@@ -3485,7 +3485,7 @@ export default function BookReaderPage() {
                 <Badge className={getDifficultyColor(book.category)}>{book.category}</Badge>
               </div>
 
-              <div className="flex items-center gap-4 text-muted/60 mb-4">
+              <div className="flex items-center gap-4 text-muted-foreground mb-4">
                 <div className="flex items-center">
                   <User className="h-4 w-4 mr-1" />
                   {book.author}
@@ -3539,7 +3539,7 @@ export default function BookReaderPage() {
           </div>
 
           <div className="space-y-2">
-            <div className="flex justify-between text-sm text-muted/60">
+            <div className="flex justify-between text-sm text-muted-foreground">
               <span>Progreso de lectura</span>
               <span>{Math.round(readingProgress)}%</span>
             </div>
@@ -3688,7 +3688,7 @@ export default function BookReaderPage() {
                   Anterior
                 </Button>
 
-                <span className="text-sm text-muted/60">
+                <span className="text-sm text-muted-foreground">
                   Página {currentPage} de {totalPages}
                 </span>
 
@@ -3708,15 +3708,15 @@ export default function BookReaderPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between">
-                <span className="text-sm text-muted/60">Progreso</span>
+                <span className="text-sm text-muted-foreground">Progreso</span>
                 <span className="text-sm font-medium">{Math.round(readingProgress)}%</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-muted/60">Tiempo leyendo</span>
+                <span className="text-sm text-muted-foreground">Tiempo leyendo</span>
                 <span className="text-sm font-medium">{formatTime(readingTime)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-sm text-muted/60">Páginas restantes</span>
+                <span className="text-sm text-muted-foreground">Páginas restantes</span>
                 <span className="text-sm font-medium">{totalPages - currentPage}</span>
               </div>
             </CardContent>

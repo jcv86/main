@@ -30,7 +30,7 @@ export default function MultimodalAnalysisPage() {
           <h1 className="text-2xl font-bold text-muted/90 dark:text-white">
             Análisis Multimodal
           </h1>
-          <p className="text-sm text-muted/60 dark:text-muted/40">
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground">
             Feedback detallado sobre postura, tono de voz, gestos y coherencia emocional
           </p>
         </div>
@@ -78,7 +78,7 @@ export default function MultimodalAnalysisPage() {
                   <p className={`font-semibold text-sm ${entrenamillentoType === type.id ? 'text-blue dark:text-blue/10' : 'text-muted/90 dark:text-muted/10'}`}>
                     {type.label}
                   </p>
-                  <p className="text-xs text-muted/50 dark:text-muted/40">{type.desc}</p>
+                  <p className="text-xs text-muted-foreground dark:text-muted-foreground">{type.desc}</p>
                 </div>
               </div>
             </button>

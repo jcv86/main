@@ -234,7 +234,7 @@ export default function RIASECTest() {
       <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-muted/60">Cargando Despega Rumbo...</p>
+          <p className="text-muted-foreground">Cargando Despega Rumbo...</p>
         </div>
       </div>
     )
@@ -244,7 +244,7 @@ export default function RIASECTest() {
     return (
       <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-muted/60">Redirecting...</p>
+          <p className="text-muted-foreground">Redirecting...</p>
         </div>
       </div>
     )
@@ -311,11 +311,11 @@ export default function RIASECTest() {
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h2 className="text-2xl font-bold text-foreground">Despega Rumbo</h2>
-                <p className="text-muted/60">
+                <p className="text-muted-foreground">
                   Question {currentQuestion + 1} of {riasecQuestions.length}
                 </p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-muted/60">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" />
                 <span>~15 minutes</span>
               </div>
@@ -411,7 +411,7 @@ export default function RIASECTest() {
               />
             ))}
           </div>
-          <p className="text-sm text-muted/60 mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             {Object.keys(answers).length} of {riasecQuestions.length} questions answered
           </p>
         </div>

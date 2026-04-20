@@ -65,7 +65,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
           {/* Search Bar */}
           <div className="flex gap-2">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-3 w-5 h-5 text-muted/40" />
+              <Search className="absolute left-3 top-3 w-5 h-5 text-muted-foreground" />
               <Input
                 placeholder="Busca estrategias, libros, conceptos..."
                 value={searchQuery}
@@ -87,11 +87,11 @@ export function CoachSearch({ userProfile }: SearchProps) {
           {/* Results or Empty State */}
           {results.length === 0 ? (
             <div className="bg-muted/5 dark:bg-transparent rounded-[28px] p-8 text-center">
-              <Brain className="w-12 h-12 mx-auto mb-4 text-muted/40" />
-              <p className="text-muted/50 mb-4">
+              <Brain className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
+              <p className="text-muted-foreground mb-4">
                 {searchQuery ? `Buscando: "${searchQuery}"` : 'Empieza a buscar contenido personalizado'}
               </p>
-              <p className="text-sm text-muted/40">
+              <p className="text-sm text-muted-foreground">
                 El Cerebro Inteligente busca a través de libros, artículos y estrategias basadas en tu perfil de El Ritual
               </p>
             </div>
@@ -115,11 +115,11 @@ export function CoachSearch({ userProfile }: SearchProps) {
                       <BookOpen className="w-5 h-5 text-blue mt-1 flex-shrink-0" />
                       <div className="flex-1">
                         <h4 className="font-semibold">{book.title}</h4>
-                        <p className="text-sm text-muted/60 dark:text-muted/40 mb-2">
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-2">
                           por {book.author}
                         </p>
                         {book.description && (
-                          <p className="text-sm text-muted/70 dark:text-muted/30 mb-2">
+                          <p className="text-sm text-muted-foreground dark:text-muted/30 mb-2">
                             {book.description}
                           </p>
                         )}
@@ -139,7 +139,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
                       {book.rating && (
                         <div className="text-right flex-shrink-0">
                           <div className="text-2xl font-bold text-orange">{book.rating}</div>
-                          <div className="text-xs text-muted/50">★</div>
+                          <div className="text-xs text-muted-foreground">★</div>
                         </div>
                       )}
                     </div>

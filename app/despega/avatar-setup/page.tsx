@@ -76,7 +76,7 @@ export default function AvatarSetupPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto mb-4"></div>
-          <p className="text-muted/60 dark:text-muted/40">Cargando configuración...</p>
+          <p className="text-muted-foreground dark:text-muted-foreground">Cargando configuración...</p>
         </div>
       </div>
     )
@@ -94,7 +94,7 @@ export default function AvatarSetupPage() {
           <h1 className="text-4xl font-bold text-muted/90 dark:text-white mb-3">
             Tu Perfil y Entrevistador
           </h1>
-          <p className="text-lg text-muted/60 dark:text-muted/40">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Usa tu foto de perfil y selecciona quién te entrevistará en las sesiones de práctica.
           </p>
         </div>
@@ -119,7 +119,7 @@ export default function AvatarSetupPage() {
               </Avatar>
               <div className="text-center">
                 <p className="font-semibold text-muted/90 dark:text-white">{user?.email}</p>
-                <p className="text-sm text-muted/60 dark:text-muted/40">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                   {profilePhoto ? 'Foto cargada automáticamente' : 'Captura una foto para comenzar'}
                 </p>
               </div>
@@ -185,19 +185,19 @@ export default function AvatarSetupPage() {
           <CardContent className="grid md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <h4 className="font-semibold text-muted/90 dark:text-white">Realismo Máximo</h4>
-              <p className="text-sm text-muted/60 dark:text-muted/40">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 Las entrevistas son más auténticas cuando ves tu verdadera apariencia frente al entrevistador
               </p>
             </div>
             <div className="space-y-2">
               <h4 className="font-semibold text-muted/90 dark:text-white">Retroalimentación Real</h4>
-              <p className="text-sm text-muted/60 dark:text-muted/40">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 Recibe feedback basado en cómo realmente te ves, no en un avatar genérico
               </p>
             </div>
             <div className="space-y-2">
               <h4 className="font-semibold text-muted/90 dark:text-white">Preparación Efectiva</h4>
-              <p className="text-sm text-muted/60 dark:text-muted/40">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 Entrena con tu apariencia real para ganar confianza en entrevistas verdaderas
               </p>
             </div>

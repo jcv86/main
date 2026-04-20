@@ -180,7 +180,7 @@ export function ConozcamonosDosComponent({
           <h2 className="text-4xl font-bold text-muted/90 dark:text-muted/5 mb-2">
             Tu Ruta Personalizada
           </h2>
-          <p className="text-lg text-muted/60 dark:text-muted/40">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Vamos a crear una ruta 30/60/90 que se adapte a tu realidad.
           </p>
         </div>
@@ -188,10 +188,10 @@ export function ConozcamonosDosComponent({
         {/* Progress */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-3">
-            <span className="text-sm font-semibold text-muted/60 dark:text-muted/40">
+            <span className="text-sm font-semibold text-muted-foreground dark:text-muted-foreground">
               Pregunta {currentQuestion + 1} de {C2_QUESTIONS.length}
             </span>
-            <span className="text-sm font-semibold text-muted/60 dark:text-muted/40">
+            <span className="text-sm font-semibold text-muted-foreground dark:text-muted-foreground">
               {Math.round(progress)}%
             </span>
           </div>

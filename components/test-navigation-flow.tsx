@@ -164,12 +164,12 @@ export default function TestNavigationFlow() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Completado General</span>
-              <span className="text-sm text-muted/60">
+              <span className="text-sm text-muted-foreground">
                 {completedTests.length}/{tests.length} evaluaciones
               </span>
             </div>
             <Progress value={overallProgress} className="h-2" />
-            <div className="flex items-center justify-between text-sm text-muted/60">
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>Inicio</span>
               <span>{overallProgress}% completado</span>
               <span>Completo</span>
@@ -249,13 +249,13 @@ export default function TestNavigationFlow() {
                     </div>
                   </div>
                   {isCompleted && <CheckCircle className="h-6 w-6 text-green" />}
-                  {!isAvailable && <AlertCircle className="h-6 w-6 text-muted/40" />}
+                  {!isAvailable && <AlertCircle className="h-6 w-6 text-muted-foreground" />}
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-muted/60">{test.description}</p>
+                <p className="text-sm text-muted-foreground">{test.description}</p>
 
-                <div className="flex items-center justify-between text-sm text-muted/50">
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
@@ -276,7 +276,7 @@ export default function TestNavigationFlow() {
                 )}
 
                 {test.prerequisites && !isCompleted && (
-                  <div className="text-xs text-muted/50">
+                  <div className="text-xs text-muted-foreground">
                     <span className="font-medium">Prerrequisitos:</span>{" "}
                     {test.prerequisites.map((prereq) => {
                       const prereqTest = tests.find((t) => t.id === prereq)

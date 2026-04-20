@@ -108,7 +108,7 @@ export default function TestSemanticSearchPage() {
     if (score >= 0.9) return "text-green bg-green/5 border-green/20"
     if (score >= 0.8) return "text-blue bg-blue/5 border-blue/20"
     if (score >= 0.7) return "text-purple bg-purple/5 border-purple/20"
-    return "text-muted/60 bg-muted/5 border-muted/20"
+    return "text-muted-foreground bg-muted/5 border-muted/20"
   }
 
   const getSimilarityLabel = (score: number) => {

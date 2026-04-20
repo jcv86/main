@@ -506,7 +506,7 @@ ${
                       {/* Knowledge Sources */}
                       {message.knowledgeUsed && message.knowledgeUsed.length > 0 && (
                         <div className="mt-2 pt-2 border-t border-muted/20">
-                          <div className="text-xs text-muted/50 mb-1">Fuentes consultadas:</div>
+                          <div className="text-xs text-muted-foreground mb-1">Fuentes consultadas:</div>
                           <div className="flex flex-wrap gap-1">
                             {message.knowledgeUsed.map((source, idx) => (
                               <Badge key={idx} variant="outline" className="text-xs">
@@ -548,7 +548,7 @@ ${
                               }`}
                             />
                           ))}
-                          <span className="text-xs text-muted/50 ml-1">Calificado</span>
+                          <span className="text-xs text-muted-foreground ml-1">Calificado</span>
                         </div>
                       )}
                     </div>
@@ -584,7 +584,7 @@ ${
                             style={{ animationDelay: "0.2s" }}
                           ></div>
                         </div>
-                        <span className="text-xs text-muted/50 ml-2">Consultando cerebro de la plataforma...</span>
+                        <span className="text-xs text-muted-foreground ml-2">Consultando cerebro de la plataforma...</span>
                       </div>
                     </div>
                   </div>
@@ -623,7 +623,7 @@ ${
                 </Button>
               </div>
 
-              <div className="flex items-center justify-between mt-2 text-xs text-muted/50">
+              <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Brain className="h-3 w-3" />
                   <span>
@@ -656,12 +656,12 @@ ${
                       <Badge variant="outline" className="text-xs">
                         {interaction.confidence_score}% confianza
                       </Badge>
-                      <span className="text-xs text-muted/50">
+                      <span className="text-xs text-muted-foreground">
                         {new Date(interaction.created_at).toLocaleDateString()}
                       </span>
                     </div>
                     <div className="text-sm font-medium">{interaction.query}</div>
-                    <div className="text-xs text-muted/60 line-clamp-2">{interaction.response}</div>
+                    <div className="text-xs text-muted-foreground line-clamp-2">{interaction.response}</div>
                     {interaction.knowledge_used && interaction.knowledge_used.length > 0 && (
                       <div className="flex flex-wrap gap-1">
                         {interaction.knowledge_used.slice(0, 2).map((source: string, sourceIdx: number) => (
@@ -674,7 +674,7 @@ ${
                   </div>
                 ))
               ) : (
-                <div className="text-center py-8 text-muted/50">
+                <div className="text-center py-8 text-muted-foreground">
                   <History className="h-12 w-12 mx-auto mb-2 opacity-50" />
                   <p className="text-sm">No hay conversaciones previas</p>
                 </div>
@@ -697,7 +697,7 @@ ${
                           {interaction.confidence_score}% confianza
                         </Badge>
                       </div>
-                      <span className="text-xs text-muted/50">
+                      <span className="text-xs text-muted-foreground">
                         {new Date(interaction.created_at).toLocaleDateString()}
                       </span>
                     </div>
@@ -718,7 +718,7 @@ ${
                   </div>
                 ))
               ) : (
-                <div className="text-center py-8 text-muted/50">
+                <div className="text-center py-8 text-muted-foreground">
                   <Bookmark className="h-12 w-12 mx-auto mb-2 opacity-50" />
                   <p className="text-sm">No tienes insights guardados</p>
                   <p className="text-xs mt-1">Guarda respuestas útiles usando el menú de opciones</p>

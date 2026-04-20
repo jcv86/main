@@ -159,7 +159,7 @@ export default function TestVerificationPage() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="text-2xl">Test Verification</CardTitle>
-                <p className="text-muted/60 text-sm">System health verification</p>
+                <p className="text-muted-foreground text-sm">System health verification</p>
               </div>
               <Badge variant="outline">
                 <Smartphone className="h-4 w-4 mr-1" />
@@ -253,7 +253,7 @@ export default function TestVerificationPage() {
             <CardContent>
               <div className="bg-background rounded p-3 max-h-40 overflow-y-auto font-mono text-xs space-y-1">
                 {logs.map((log, i) => (
-                  <div key={i} className="text-muted/70">
+                  <div key={i} className="text-muted-foreground">
                     {log}
                   </div>
                 ))}
@@ -265,7 +265,7 @@ export default function TestVerificationPage() {
         {testFlows.length === 0 && !isRunning && (
           <Card className="border-dashed">
             <CardContent className="p-12 text-center">
-              <p className="text-muted/60 mb-6">Click "Run Tests" to start verification</p>
+              <p className="text-muted-foreground mb-6">Click "Run Tests" to start verification</p>
               <Button onClick={runAllTests}>Start Tests</Button>
             </CardContent>
           </Card>

@@ -55,11 +55,11 @@ export default function LeaderboardPage() {
             <Trophy className="h-10 w-10 text-orange" />
             <h1 className="text-5xl font-bold bg-background">Ranking de Lectores</h1>
           </div>
-          <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">
+          <p className="text-lg text-muted-foreground dark:text-muted/30 font-medium">
             Compite con otros usuarios y sube en el ranking
           </p>
           {stats && (
-            <p className="text-sm text-muted/60 dark:text-muted/40 mt-2 font-medium">
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2 font-medium">
               {stats.totalParticipants} usuarios participando en la comunidad
             </p>
           )}

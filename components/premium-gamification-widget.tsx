@@ -98,11 +98,11 @@ export function PremiumGamificationWidget() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1">
                 <Zap className="w-4 h-4 text-amber-500" />
-                <span className="text-xs font-semibold text-muted/70 dark:text-muted/30">
+                <span className="text-xs font-semibold text-muted-foreground dark:text-muted/30">
                   {gamification.total_xp.toLocaleString()} XP
                 </span>
               </div>
-              <span className="text-xs text-muted/60 dark:text-muted/40">
+              <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                 {gamification.xp_to_next_level} para siguiente nivel
               </span>
             </div>
@@ -114,12 +114,12 @@ export function PremiumGamificationWidget() {
             {/* DAILY STREAK */}
             <div className="bg-white/80 dark:bg-transparent/50 rounded-[28px] p-2 text-center border border-orange/20 dark:border-orange/30">
               <div className="flex items-center justify-center gap-0.5 mb-1">
-                <Flame className={`w-3 h-3 ${isStreakActive ? 'text-orange' : 'text-muted/40'}`} />
+                <Flame className={`w-3 h-3 ${isStreakActive ? 'text-orange' : 'text-muted-foreground'}`} />
               </div>
               <p className="text-lg font-black text-orange dark:text-orange/40">
                 {gamification.daily_streak}
               </p>
-              <p className="text-xs text-muted/60 dark:text-muted/40">días</p>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground">días</p>
               {streakMultiplier > 1 && (
                 <Badge className="text-xs bg-orange/50/20 text-orange dark:text-orange/40 border-0 mt-1">
                   {streakMultiplier.toFixed(1)}x
@@ -133,7 +133,7 @@ export function PremiumGamificationWidget() {
               <p className="text-lg font-black text-purple dark:text-purple/40">
                 {gamification.daily_challenges_completed}/3
               </p>
-              <p className="text-xs text-muted/60 dark:text-muted/40">hoy</p>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground">hoy</p>
             </div>
 
             {/* ACHIEVEMENTS */}
@@ -142,19 +142,19 @@ export function PremiumGamificationWidget() {
               <p className="text-lg font-black text-green dark:text-green/40">
                 {gamification.total_achievements}
               </p>
-              <p className="text-xs text-muted/60 dark:text-muted/40">badges</p>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground">badges</p>
             </div>
           </div>
 
           {/* PHASE PROGRESS */}
           <div className="space-y-2 pt-2 border-t border-muted/20 dark:border-muted/70">
-            <p className="text-xs font-bold text-muted/70 dark:text-muted/30 uppercase tracking-wide">
+            <p className="text-xs font-bold text-muted-foreground dark:text-muted/30 uppercase tracking-wide">
               Fase Actual - Nivel {gamification.phase_level['current']}
             </p>
             <div className="flex items-center gap-2">
               <Star className="w-4 h-4 text-orange flex-shrink-0" />
               <Progress value={Math.min((gamification.phase_xp['current'] / 500) * 100, 100)} className="h-1.5 flex-1" />
-              <span className="text-xs font-semibold text-muted/60 dark:text-muted/40">
+              <span className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground">
                 {gamification.phase_xp['current']}/500
               </span>
             </div>
@@ -191,8 +191,8 @@ export function PremiumGamificationWidget() {
           {/* NEXT UNLOCK */}
           <div className="bg-muted/10 dark:bg-transparent/50 rounded p-2">
             <div className="flex items-center gap-2 text-xs">
-              <Unlock className="w-3 h-3 text-muted/60 dark:text-muted/40 flex-shrink-0" />
-              <span className="text-muted/70 dark:text-muted/30">
+              <Unlock className="w-3 h-3 text-muted-foreground dark:text-muted-foreground flex-shrink-0" />
+              <span className="text-muted-foreground dark:text-muted/30">
                 <strong>{500 - (gamification.phase_xp['current'] % 500)} XP</strong> para próximo achievement
               </span>
             </div>
@@ -201,7 +201,7 @@ export function PremiumGamificationWidget() {
       </Card>
 
       {/* QUICK STATS FOOTER */}
-      <div className="text-center text-xs text-muted/60 dark:text-muted/40 px-2">
+      <div className="text-center text-xs text-muted-foreground dark:text-muted-foreground px-2">
         <p>Sigue tu racha para mantener el multiplicador activo 🔥</p>
       </div>
     </div>

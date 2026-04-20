@@ -122,7 +122,7 @@ export default function CronAlertsPage() {
       case "critical":
         return <AlertCircle className="h-5 w-5 text-red" />
       default:
-        return <Clock className="h-5 w-5 text-muted/50" />
+        return <Clock className="h-5 w-5 text-muted-foreground" />
     }
   }
 

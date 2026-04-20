@@ -86,7 +86,7 @@ export default function RankingsPage() {
 
   const getRankIcon = (position: number) => {
     if (position === 1) return <Trophy className="w-5 h-5 text-orange" />
-    if (position === 2) return <Medal className="w-5 h-5 text-muted/40" />
+    if (position === 2) return <Medal className="w-5 h-5 text-muted-foreground" />
     if (position === 3) return <Award className="w-5 h-5 text-yellow" />
     return <span className="w-5 h-5 flex items-center justify-center text-sm font-medium text-muted-foreground">#{position}</span>
   }

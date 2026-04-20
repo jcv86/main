@@ -100,7 +100,7 @@ export function InputValidator({
     <div className="space-y-2">
       {/* Character count */}
       {showCharCount && (
-        <div className="text-xs text-muted/40 flex justify-between">
+        <div className="text-xs text-muted-foreground flex justify-between">
           <span>{value.length}/{maxLength}</span>
           {isValidating && <span className="flex items-center gap-1"><Loader2 className="w-3 h-3 animate-spin" /> Validando...</span>}
         </div>

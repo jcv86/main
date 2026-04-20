@@ -112,10 +112,10 @@ export default function SignInPage() {
           <h1 className="text-4xl font-bold text-purple ">
             Despega Tu Carrera
           </h1>
-          <p className="text-lg text-muted/60 dark:text-muted/30">
+          <p className="text-lg text-muted-foreground dark:text-muted/30">
             Tu transformación profesional comienza hoy
           </p>
-          <p className="text-sm text-muted/50 dark:text-muted/40 max-w-sm mx-auto">
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground max-w-sm mx-auto">
             Descubre quién eres, explora tu potencial, entrénate para triunfar
           </p>
         </div>
@@ -170,7 +170,7 @@ export default function SignInPage() {
                 <div className="w-full border-t border-muted/20 dark:border-card" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="px-2 bg-white dark:bg-background text-muted/50 dark:text-muted/40">o</span>
+                <span className="px-2 bg-white dark:bg-background text-muted-foreground dark:text-muted-foreground">o</span>
               </div>
             </div>
 
@@ -178,20 +178,20 @@ export default function SignInPage() {
             <div className="grid grid-cols-3 gap-3 py-2">
               <div className="text-center">
                 <div className="text-2xl font-bold text-purple dark:text-purple/40">6</div>
-                <p className="text-xs text-muted/70 dark:text-muted/40 font-medium">Tests</p>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium">Tests</p>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue dark:text-blue/40">120+</div>
-                <p className="text-xs text-muted/70 dark:text-muted/40 font-medium">Recursos</p>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium">Recursos</p>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-cyan dark:text-cyan/40">24/7</div>
-                <p className="text-xs text-muted/70 dark:text-muted/40 font-medium">Coach IA</p>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium">Coach IA</p>
               </div>
             </div>
 
             {/* Terms */}
-            <p className="text-xs text-center text-muted/50 dark:text-muted/40 leading-relaxed pt-2">
+            <p className="text-xs text-center text-muted-foreground dark:text-muted-foreground leading-relaxed pt-2">
               Al ingresar, aceptas nuestros{' '}
               <a href="/terms" className="text-blue dark:text-blue/40 hover:underline font-medium">
                 términos de servicio
@@ -205,7 +205,7 @@ export default function SignInPage() {
         </Card>
 
         {/* Footer note */}
-        <p className="text-center text-xs text-muted/50 dark:text-muted/40">
+        <p className="text-center text-xs text-muted-foreground dark:text-muted-foreground">
           ¿Es tu primera vez? Crearemos tu cuenta automáticamente
         </p>
       </div>

@@ -34,7 +34,7 @@ export default function CerebroLoading() {
               <div className="flex-1 flex items-center justify-center">
                 <div className="text-center space-y-4">
                   <Loader2 className="h-16 w-16 animate-spin text-purple mx-auto" />
-                  <p className="text-muted/60 dark:text-muted/40">Cargando cerebro inteligente...</p>
+                  <p className="text-muted-foreground dark:text-muted-foreground">Cargando cerebro inteligente...</p>
                 </div>
               </div>
 

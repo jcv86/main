@@ -96,7 +96,7 @@ export function RadarEstrategico() {
               {/* Metadata Grid */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-muted/70 pt-4">
                 <div>
-                  <p className="text-xs text-muted/40 uppercase">Nivel de Energía</p>
+                  <p className="text-xs text-muted-foreground uppercase">Nivel de Energía</p>
                   <Badge
                     variant="outline"
                     className={`mt-2 ${`}
@@ -111,19 +111,19 @@ export function RadarEstrategico() {
                   </Badge>
                 </div>
                 <div>
-                  <p className="text-xs text-muted/40 uppercase">Ritmo Narrativo</p>
+                  <p className="text-xs text-muted-foreground uppercase">Ritmo Narrativo</p>
                   <Badge variant="outline" className="mt-2 bg-purple/50/20 text-purple/30 border-purple/50/50">
                     {tesisDia.ritmo_narrativo}
                   </Badge>
                 </div>
                 <div>
-                  <p className="text-xs text-muted/40 uppercase">Impacto</p>
+                  <p className="text-xs text-muted-foreground uppercase">Impacto</p>
                   <Badge variant="outline" className="mt-2 bg-green/50/20 text-green/30 border-green/50">
                     {tesisDia.impacto_plazo} Plazo
                   </Badge>
                 </div>
                 <div>
-                  <p className="text-xs text-muted/40 uppercase">Consenso</p>
+                  <p className="text-xs text-muted-foreground uppercase">Consenso</p>
                   <div className="mt-2 flex items-center gap-2">
                     <div className="w-full h-2 bg-muted/70 rounded-full overflow-hidden">
                       <div
@@ -256,7 +256,7 @@ function RadarNoticiaCard({ noticia, isSelected, onSelect }: RadarNoticiaCardPro
             </Badge>
           </div>
 
-          <p className="text-sm text-muted/40">{noticia.descripcion}</p>
+          <p className="text-sm text-muted-foreground">{noticia.descripcion}</p>
 
           {/* Mini 7-Capas */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -312,15 +312,15 @@ function RadarNoticiaDetail({ noticia, onClose }: RadarNoticiaDetailProps) {
           {/* Capa 3-7 */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-muted/40 uppercase">3. Nivel de Energía</p>
+              <p className="text-xs text-muted-foreground uppercase">3. Nivel de Energía</p>
               <p className="mt-2 text-base font-semibold text-muted/20">{noticia.capa_3_nivel_energia}</p>
             </div>
             <div>
-              <p className="text-xs text-muted/40 uppercase">6. Ritmo Narrativo</p>
+              <p className="text-xs text-muted-foreground uppercase">6. Ritmo Narrativo</p>
               <p className="mt-2 text-base font-semibold text-muted/20">{noticia.capa_6_ritmo_narrativo}</p>
             </div>
             <div>
-              <p className="text-xs text-muted/40 uppercase">7. Impacto Plazo</p>
+              <p className="text-xs text-muted-foreground uppercase">7. Impacto Plazo</p>
               <p className="mt-2 text-base font-semibold text-muted/20">{noticia.capa_7_impacto_plazo}</p>
             </div>
           </div>

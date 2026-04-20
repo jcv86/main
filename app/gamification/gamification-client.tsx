@@ -208,7 +208,7 @@ export default function GamificationClient() {
             <p className="text-sm font-semibold text-purple dark:text-purple/30">Tu Progreso y Logros</p>
           </div>
           <h1 className="text-5xl font-bold text-purple400400 mb-2">Gamificación DTC</h1>
-          <p className="text-lg text-muted/70 dark:text-muted/30 font-medium">
+          <p className="text-lg text-muted-foreground dark:text-muted/30 font-medium">
             Completa misiones, gana logros y sube de nivel mientras creces personalmente
           </p>
         </div>
@@ -479,7 +479,7 @@ export default function GamificationClient() {
                     <div className="flex items-center gap-4">
                     <div
                       className={`w-12 h-12 rounded-full flex items-center justify-center font-bold ${
-                        item.unlocked ? "bg-blue/50 text-white" : "bg-muted/20 text-muted/50"
+                        item.unlocked ? "bg-blue/50 text-white" : "bg-muted/20 text-muted-foreground"
                       }`}
                     >
                       {item.level}

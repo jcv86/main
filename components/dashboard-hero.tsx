@@ -61,7 +61,7 @@ export function DashboardHero({
           <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
             Hola, <span className={profile.color}>{userName}</span>
           </h1>
-          <p className="text-lg text-muted/60 dark:text-muted/40">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Tu Transformación de 90 Días Comienza Hoy
           </p>
         </div>
@@ -73,7 +73,7 @@ export function DashboardHero({
               <h2 className={`text-2xl font-bold ${profile.color}`}>
                 {profile.name}
               </h2>
-              <p className="text-muted/70 dark:text-muted/30 font-medium">
+              <p className="text-muted-foreground dark:text-muted/30 font-medium">
                 {profile.description}
               </p>
             </div>
@@ -91,7 +91,7 @@ export function DashboardHero({
                     {key}
                   </div>
                   <span className="text-xs font-semibold">{value}%</span>
-                  <span className="text-xs font-semibold text-muted/60 dark:text-muted/40">{key}</span>
+                  <span className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground">{key}</span>
                 </div>
               ))}
             </div>
@@ -101,7 +101,7 @@ export function DashboardHero({
         {/* Progress Bar */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <span className="text-sm font-semibold text-muted/60 dark:text-muted/40">Progreso de 90 Días</span>
+            <span className="text-sm font-semibold text-muted-foreground dark:text-muted-foreground">Progreso de 90 Días</span>
             <span className={`text-sm font-bold ${progressPercent === 0 ? 'text-blue' : 'text-green'}`}>
               {progressPercent}%
             </span>

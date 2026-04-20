@@ -156,7 +156,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
       case "difícil":
         return <Target className="h-4 w-4 text-red" />
       default:
-        return <CheckCircle className="h-4 w-4 text-muted/50" />
+        return <CheckCircle className="h-4 w-4 text-muted-foreground" />
     }
   }
 
@@ -236,7 +236,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                           <Badge className={getPriorityColor(insight.priority)}>{insight.priority}</Badge>
                           <div className="flex items-center gap-1">
                             <Star className="h-3 w-3 text-orange" />
-                            <span className="text-xs text-muted/60">{Math.round(insight.confidence * 100)}%</span>
+                            <span className="text-xs text-muted-foreground">{Math.round(insight.confidence * 100)}%</span>
                           </div>
                         </div>
                       </div>
@@ -251,10 +251,10 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                       <p className="text-sm text-muted">{insight.description}</p>
                       {insight.actionableSteps && insight.actionableSteps.length > 0 && (
                         <div className="mt-3">
-                          <p className="text-xs font-semibold text-muted/60 mb-1">Pasos Accionables:</p>
+                          <p className="text-xs font-semibold text-muted-foreground mb-1">Pasos Accionables:</p>
                           <ul className="space-y-1">
                             {insight.actionableSteps.map((step: string, i: number) => (
-                              <li key={i} className="text-xs text-muted/60 flex items-start gap-1">
+                              <li key={i} className="text-xs text-muted-foreground flex items-start gap-1">
                                 <CheckCircle className="h-3 w-3 text-green/50 mt-0.5 flex-shrink-0" />
                                 {step}
                               </li>
@@ -263,7 +263,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                         </div>
                       )}
                       <Progress value={insight.confidence * 100} className="mt-2 h-2" />
-                      <p className="text-xs text-muted/50 mt-1">Fuente: {insight.reasoningSource}</p>
+                      <p className="text-xs text-muted-foreground mt-1">Fuente: {insight.reasoningSource}</p>
                     </CardContent>
                   </Card>
                 ))}

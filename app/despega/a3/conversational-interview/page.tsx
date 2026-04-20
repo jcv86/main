@@ -73,7 +73,7 @@ export default function ConversationalInterviewPage() {
         <div className="space-y-8">
           <div>
             <h1 className="text-4xl font-bold mb-2">Simulación de Entrevista Conversacional</h1>
-            <p className="text-muted/60 dark:text-muted/40">
+            <p className="text-muted-foreground dark:text-muted-foreground">
               Personaliza tu entrevista y practica con IA como entrevistador
             </p>
           </div>
@@ -136,7 +136,7 @@ export default function ConversationalInterviewPage() {
                     }`}
                   >
                     <div className="font-semibold">{level.label}</div>
-                    <div className="text-sm text-muted/60 dark:text-muted/40">{level.desc}</div>
+                    <div className="text-sm text-muted-foreground dark:text-muted-foreground">{level.desc}</div>
                   </button>
                 ))}
               </div>

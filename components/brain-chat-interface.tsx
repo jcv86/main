@@ -272,7 +272,7 @@ export function BrainChatInterface() {
                                 <span className="font-medium">Confianza: {Math.round(message.confidence)}%</span>
                               </div>
                               {message.processingTime && (
-                                <div className="flex items-center gap-1.5 text-muted/50">
+                                <div className="flex items-center gap-1.5 text-muted-foreground">
                                   <Clock className="h-3.5 w-3.5" />
                                   <span>{message.processingTime}ms</span>
                                 </div>
@@ -306,7 +306,7 @@ export function BrainChatInterface() {
                                           {Math.round(source.similarity * 100)}%
                                         </Badge>
                                       </div>
-                                      <div className="text-xs text-muted/60 dark:text-muted/40">{source.author}</div>
+                                      <div className="text-xs text-muted-foreground dark:text-muted-foreground">{source.author}</div>
                                       {source.category && (
                                         <Badge variant="secondary" className="text-xs mt-1">
                                           {source.category}
@@ -321,7 +321,7 @@ export function BrainChatInterface() {
                         </>
                       )}
 
-                      <div className="text-xs text-muted/40 mt-2">{message.timestamp.toLocaleTimeString()}</div>
+                      <div className="text-xs text-muted-foreground mt-2">{message.timestamp.toLocaleTimeString()}</div>
                     </div>
                   </div>
                 ))}
@@ -330,7 +330,7 @@ export function BrainChatInterface() {
                   <div className="flex justify-start animate-in fade-in duration-500">
                     <div className="bg-muted/10 dark:bg-gray-800 rounded-2xl p-4 flex items-center gap-3">
                       <Loader2 className="h-5 w-5 animate-spin text-purple" />
-                      <span className="text-sm text-muted/60 dark:text-muted/40">Pensando...</span>
+                      <span className="text-sm text-muted-foreground dark:text-muted-foreground">Pensando...</span>
                     </div>
                   </div>
                 )}
@@ -394,7 +394,7 @@ export function BrainChatInterface() {
                 </div>
                 <div>
                   <div className="font-semibold">120+ Libros</div>
-                  <div className="text-muted/60 dark:text-muted/40">Contenido expandido y detallado</div>
+                  <div className="text-muted-foreground dark:text-muted-foreground">Contenido expandido y detallado</div>
                 </div>
               </div>
 
@@ -404,7 +404,7 @@ export function BrainChatInterface() {
                 </div>
                 <div>
                   <div className="font-semibold">Búsqueda Semántica</div>
-                  <div className="text-muted/60 dark:text-muted/40">Entiende el contexto de tus preguntas</div>
+                  <div className="text-muted-foreground dark:text-muted-foreground">Entiende el contexto de tus preguntas</div>
                 </div>
               </div>
 
@@ -414,7 +414,7 @@ export function BrainChatInterface() {
                 </div>
                 <div>
                   <div className="font-semibold">Alta Precisión</div>
-                  <div className="text-muted/60 dark:text-muted/40">Respuestas basadas en fuentes verificadas</div>
+                  <div className="text-muted-foreground dark:text-muted-foreground">Respuestas basadas en fuentes verificadas</div>
                 </div>
               </div>
 
@@ -424,7 +424,7 @@ export function BrainChatInterface() {
                 </div>
                 <div>
                   <div className="font-semibold">Respuestas Rápidas</div>
-                  <div className="text-muted/60 dark:text-muted/40">Procesamiento en menos de 2 segundos</div>
+                  <div className="text-muted-foreground dark:text-muted-foreground">Procesamiento en menos de 2 segundos</div>
                 </div>
               </div>
             </CardContent>

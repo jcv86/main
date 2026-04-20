@@ -58,7 +58,7 @@ export default function SoftSkillsResultsLoading() {
               <CardContent className="p-4 text-center">
                 <MessageCircle className="h-8 w-8 text-red mx-auto mb-2" />
                 <h4 className="font-semibold text-gray-800 mb-1">Análisis de Comunicación</h4>
-                <p className="text-sm text-muted/60">Evaluamos tu capacidad para transmitir ideas efectivamente</p>
+                <p className="text-sm text-muted-foreground">Evaluamos tu capacidad para transmitir ideas efectivamente</p>
               </CardContent>
             </Card>
 
@@ -66,7 +66,7 @@ export default function SoftSkillsResultsLoading() {
               <CardContent className="p-4 text-center">
                 <Crown className="h-8 w-8 text-purple mx-auto mb-2" />
                 <h4 className="font-semibold text-gray-800 mb-1">Potencial de Liderazgo</h4>
-                <p className="text-sm text-muted/60">Medimos tu habilidad para guiar y motivar equipos</p>
+                <p className="text-sm text-muted-foreground">Medimos tu habilidad para guiar y motivar equipos</p>
               </CardContent>
             </Card>
 
@@ -74,7 +74,7 @@ export default function SoftSkillsResultsLoading() {
               <CardContent className="p-4 text-center">
                 <Users className="h-8 w-8 text-blue mx-auto mb-2" />
                 <h4 className="font-semibold text-gray-800 mb-1">Colaboración</h4>
-                <p className="text-sm text-muted/60">Analizamos tu efectividad trabajando en equipo</p>
+                <p className="text-sm text-muted-foreground">Analizamos tu efectividad trabajando en equipo</p>
               </CardContent>
             </Card>
           </div>
@@ -117,7 +117,7 @@ export default function SoftSkillsResultsLoading() {
 
         {/* Loading Animation */}
         <div className="text-center mt-8">
-          <div className="inline-flex items-center gap-2 text-muted/60">
+          <div className="inline-flex items-center gap-2 text-muted-foreground">
             <Loader2 className="h-5 w-5 animate-spin" />
             <span>Preparando tu análisis personalizado...</span>
           </div>

@@ -161,7 +161,7 @@ export default function SocialReadingFeatures() {
     <div className="space-y-6 p-6">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-4">👥 Comunidad de Lectores</h1>
-        <p className="text-xl text-muted/60">Conecta con otros lectores, únete a clubes y participa en discusiones</p>
+        <p className="text-xl text-muted-foreground">Conecta con otros lectores, únete a clubes y participa en discusiones</p>
       </div>
 
       <Tabs defaultValue="discussions" className="space-y-6">
@@ -228,7 +228,7 @@ export default function SocialReadingFeatures() {
                         <Badge variant="outline" className="text-xs">
                           {discussion.book_title}
                         </Badge>
-                        <span className="text-xs text-muted/50">
+                        <span className="text-xs text-muted-foreground">
                           {new Date(discussion.created_at).toLocaleString()}
                         </span>
                       </div>
@@ -277,17 +277,17 @@ export default function SocialReadingFeatures() {
                             </>
                           )}
                         </Badge>
-                        <span className="text-sm text-muted/60">{club.member_count} miembros</span>
+                        <span className="text-sm text-muted-foreground">{club.member_count} miembros</span>
                       </div>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted/60 mb-4">{club.description}</p>
+                  <p className="text-sm text-muted-foreground mb-4">{club.description}</p>
                   <div className="space-y-3">
                     <div>
                       <p className="text-sm font-medium">Libro Actual:</p>
-                      <p className="text-sm text-muted/60">{club.current_book}</p>
+                      <p className="text-sm text-muted-foreground">{club.current_book}</p>
                     </div>
                     <Button className="w-full" onClick={() => joinBookClub(club.id)}>
                       <UserPlus className="h-4 w-4 mr-1" />
@@ -302,9 +302,9 @@ export default function SocialReadingFeatures() {
             <Card className="border-2 border-dashed border-muted/30">
               <CardContent className="pt-6">
                 <div className="text-center">
-                  <Users className="h-12 w-12 text-muted/40 mx-auto mb-4" />
+                  <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <h3 className="font-semibold mb-2">Crear Nuevo Club</h3>
-                  <p className="text-sm text-muted/60 mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     Inicia tu propio club de lectura y conecta con lectores afines
                   </p>
                   <Dialog>
@@ -358,11 +358,11 @@ export default function SocialReadingFeatures() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted/60 mb-4">{group.description}</p>
+                  <p className="text-sm text-muted-foreground mb-4">{group.description}</p>
                   <div className="space-y-3">
                     <div>
                       <p className="text-sm font-medium">Desafío Actual:</p>
-                      <p className="text-sm text-muted/60">{group.current_challenge}</p>
+                      <p className="text-sm text-muted-foreground">{group.current_challenge}</p>
                     </div>
                     <div>
                       <div className="flex justify-between text-sm mb-1">
@@ -418,7 +418,7 @@ export default function SocialReadingFeatures() {
                       <span className="font-semibold">Travis</span> completó
                       <span className="font-semibold"> "Los 7 Hábitos de la Gente Altamente Efectiva"</span>
                     </p>
-                    <p className="text-xs text-muted/50">Hace 2 horas</p>
+                    <p className="text-xs text-muted-foreground">Hace 2 horas</p>
                   </div>
                   <ThumbsUp className="h-4 w-4 text-blue" />
                 </div>
@@ -433,7 +433,7 @@ export default function SocialReadingFeatures() {
                       <span className="font-semibold">Demo User</span> se unió al club
                       <span className="font-semibold"> "Líderes del Futuro"</span>
                     </p>
-                    <p className="text-xs text-muted/50">Hace 4 horas</p>
+                    <p className="text-xs text-muted-foreground">Hace 4 horas</p>
                   </div>
                   <UserPlus className="h-4 w-4 text-green" />
                 </div>
@@ -448,7 +448,7 @@ export default function SocialReadingFeatures() {
                       <span className="font-semibold">Demo Despega</span> escribió una reseña de 5 estrellas para
                       <span className="font-semibold"> "Atomic Habits"</span>
                     </p>
-                    <p className="text-xs text-muted/50">Hace 6 horas</p>
+                    <p className="text-xs text-muted-foreground">Hace 6 horas</p>
                   </div>
                   <Star className="h-4 w-4 text-purple" />
                 </div>
@@ -463,7 +463,7 @@ export default function SocialReadingFeatures() {
                       <span className="font-semibold">Travis</span> inició una nueva discusión sobre
                       <span className="font-semibold"> "Técnicas de productividad"</span>
                     </p>
-                    <p className="text-xs text-muted/50">Hace 1 día</p>
+                    <p className="text-xs text-muted-foreground">Hace 1 día</p>
                   </div>
                   <MessageCircle className="h-4 w-4 text-orange" />
                 </div>
@@ -478,7 +478,7 @@ export default function SocialReadingFeatures() {
                       <span className="font-semibold">Demo User</span> alcanzó el logro
                       <span className="font-semibold"> "Lector Dedicado"</span>
                     </p>
-                    <p className="text-xs text-muted/50">Hace 2 días</p>
+                    <p className="text-xs text-muted-foreground">Hace 2 días</p>
                   </div>
                   <Award className="h-4 w-4 text-yellow" />
                 </div>

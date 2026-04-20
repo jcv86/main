@@ -85,7 +85,7 @@ export function BadgesDisplay({ earnedBadges, totalBadgesAvailable = 24 }: Badge
                       {isEarned ? (
                         <div className="text-2xl">{badge?.icon_url}</div>
                       ) : (
-                        <Lock className="w-4 h-4 text-muted/40" />
+                        <Lock className="w-4 h-4 text-muted-foreground" />
                       )}
                     </div>
                   </TooltipTrigger>

@@ -34,11 +34,11 @@ export function A4CalibrationDashboard() {
           <div className="flex items-start justify-between">
             <div>
               <CardTitle className="text-2xl">Sistema Calibrado</CardTitle>
-              <p className="text-sm text-muted/40 mt-2">Tu experiencia se adapta dinámicamente a tu nivel estratégico</p>
+              <p className="text-sm text-muted-foreground mt-2">Tu experiencia se adapta dinámicamente a tu nivel estratégico</p>
             </div>
             <div className="text-right">
               <div className="text-4xl font-bold">{strategic.a4_current_score}</div>
-              <div className="text-sm text-muted/40">/100</div>
+              <div className="text-sm text-muted-foreground">/100</div>
             </div>
           </div>
         </CardHeader>
@@ -47,7 +47,7 @@ export function A4CalibrationDashboard() {
             <div>
               <div className="flex justify-between mb-2">
                 <span className="text-sm">Progreso Estratégico</span>
-                <span className="text-xs text-muted/40">{strategic.a4_score_level}</span>
+                <span className="text-xs text-muted-foreground">{strategic.a4_score_level}</span>
               </div>
               <Progress value={strategic.a4_current_score} className="h-2" />
             </div>

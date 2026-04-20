@@ -91,7 +91,7 @@ export function PillarCard({
         </div>
         <div className="flex items-center gap-2">
           {getStatusIcon()}
-          <span className="text-xs font-medium text-muted/60 dark:text-muted/40">{getStatusLabel()}</span>
+          <span className="text-xs font-medium text-muted-foreground dark:text-muted-foreground">{getStatusLabel()}</span>
         </div>
       </div>
       {/* Header */}

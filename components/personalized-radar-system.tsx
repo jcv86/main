@@ -52,7 +52,7 @@ export function PersonalizedRadarSystem() {
     return (
       <div className="flex items-center justify-center py-12">
         <Loader2 className="w-6 h-6 animate-spin text-cyan/50" />
-        <span className="ml-2 text-muted/40">Personalizando tu Radar...</span>
+        <span className="ml-2 text-muted-foreground">Personalizando tu Radar...</span>
       </div>
     )
   }
@@ -66,7 +66,7 @@ export function PersonalizedRadarSystem() {
             <div className="flex items-start justify-between">
               <div>
                 <CardTitle className="text-lg">Tu Radar Personalizado</CardTitle>
-                <p className="text-sm text-muted/40 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   Basado en: <span className="text-cyan/30 font-semibold">{personalization.headline}</span>
                 </p>
               </div>
@@ -79,25 +79,25 @@ export function PersonalizedRadarSystem() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {/* Market Jobs Available */}
               <div className="bg-background/50 p-3 rounded-[28px] border border-muted/70/50">
-                <p className="text-xs text-muted/40 mb-1">Ofertas en tu industria</p>
+                <p className="text-xs text-muted-foreground mb-1">Ofertas en tu industria</p>
                 <p className="text-2xl font-bold text-cyan/40">{personalization.total_market_jobs}</p>
               </div>
 
               {/* Skills Mastered */}
               <div className="bg-background/50 p-3 rounded-[28px] border border-muted/70/50">
-                <p className="text-xs text-muted/40 mb-1">Skills dominados</p>
+                <p className="text-xs text-muted-foreground mb-1">Skills dominados</p>
                 <p className="text-2xl font-bold text-teal-400">{personalization.user_skills.length}</p>
               </div>
 
               {/* Skills to Learn */}
               <div className="bg-background/50 p-3 rounded-[28px] border border-muted/70/50">
-                <p className="text-xs text-muted/40 mb-1">Skills demandados</p>
+                <p className="text-xs text-muted-foreground mb-1">Skills demandados</p>
                 <p className="text-2xl font-bold text-amber-400">{personalization.market_trending_skills.length}</p>
               </div>
 
               {/* Seniority Level */}
               <div className="bg-background/50 p-3 rounded-[28px] border border-muted/70/50">
-                <p className="text-xs text-muted/40 mb-1">Nivel profesional</p>
+                <p className="text-xs text-muted-foreground mb-1">Nivel profesional</p>
                 <p className="text-sm font-bold text-muted/30 capitalize">{personalization.seniority_level}</p>
               </div>
             </div>
@@ -105,7 +105,7 @@ export function PersonalizedRadarSystem() {
             {/* Top Skills to Learn */}
             {personalization.skills_gap.length > 0 && (
               <div className="border-t border-muted/70/50 pt-4">
-                <p className="text-xs text-muted/40 mb-2">Skills emergentes en tu industria:</p>
+                <p className="text-xs text-muted-foreground mb-2">Skills emergentes en tu industria:</p>
                 <div className="flex flex-wrap gap-2">
                   {personalization.skills_gap.map((skill, i) => (
                     <Badge key={i} variant="secondary" className="text-xs">
@@ -119,7 +119,7 @@ export function PersonalizedRadarSystem() {
             {/* Top Companies Hiring */}
             {personalization.relevant_companies.length > 0 && (
               <div className="border-t border-muted/70/50 pt-4">
-                <p className="text-xs text-muted/40 mb-2">Top empresas contratando:</p>
+                <p className="text-xs text-muted-foreground mb-2">Top empresas contratando:</p>
                 <p className="text-sm text-muted/30">
                   {personalization.relevant_companies.join(' • ')}
                 </p>

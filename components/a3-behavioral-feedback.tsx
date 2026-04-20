@@ -41,7 +41,7 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
               style={{ width: `${performanceScore}%` }}
             />
           </div>
-          <div className="text-center text-sm text-muted/60">
+          <div className="text-center text-sm text-muted-foreground">
             {performanceScore >= 80 ? "Excelente desempeño" :
              performanceScore >= 60 ? "Buen desempeño, con áreas de mejora" :
              "Necesitas más práctica"}
@@ -65,13 +65,13 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="p-3 bg-muted/5 rounded">
-                <div className="text-sm text-muted/60">Contacto Visual</div>
+                <div className="text-sm text-muted-foreground">Contacto Visual</div>
                 <div className={`text-2xl font-bold ${getScoreColor(observations?.eye_contact_percentage)}`}>
                   {observations?.eye_contact_percentage}%
                 </div>
               </div>
               <div className="p-3 bg-muted/5 rounded">
-                <div className="text-sm text-muted/60">Rigidez Postural</div>
+                <div className="text-sm text-muted-foreground">Rigidez Postural</div>
                 <div className={`text-2xl font-bold ${getScoreColor(100 - (observations?.postura_rigidez_score || 0))}`}>
                   {100 - (observations?.postura_rigidez_score || 0)}%
                 </div>
@@ -110,13 +110,13 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="p-3 bg-muted/5 rounded">
-                <div className="text-sm text-muted/60">Confianza en Tono</div>
+                <div className="text-sm text-muted-foreground">Confianza en Tono</div>
                 <div className={`text-2xl font-bold ${getScoreColor(observations?.tone_confidence)}`}>
                   {observations?.tone_confidence}%
                 </div>
               </div>
               <div className="p-3 bg-muted/5 rounded">
-                <div className="text-sm text-muted/60">Velocidad de Habla</div>
+                <div className="text-sm text-muted-foreground">Velocidad de Habla</div>
                 <Badge variant="outline">{observations?.speech_speed?.replace("_", " ")}</Badge>
               </div>
             </div>
@@ -151,7 +151,7 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
           <CardContent className="space-y-4">
             <div className="space-y-3">
               <div className="p-3 bg-muted/5 rounded">
-                <div className="text-sm text-muted/60 mb-1">Muletillas Detectadas</div>
+                <div className="text-sm text-muted-foreground mb-1">Muletillas Detectadas</div>
                 <div className="flex flex-wrap gap-2">
                   {observations?.verbal_fillers?.map((filler: string, idx: number) => (
                     <Badge key={idx} variant="secondary">{filler}</Badge>
@@ -160,7 +160,7 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
               </div>
 
               <div className="p-3 bg-muted/5 rounded">
-                <div className="text-sm text-muted/60 mb-2">Enfoque de Respuestas</div>
+                <div className="text-sm text-muted-foreground mb-2">Enfoque de Respuestas</div>
                 <Badge className={
                   observations?.response_focus === "muy_enfocada" ? "bg-green" :
                   observations?.response_focus === "enfocada" ? "bg-green/50" :
@@ -224,11 +224,11 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="p-3 bg-muted/5 rounded">
-              <div className="text-sm text-muted/60">Ansiedad Inicial</div>
+              <div className="text-sm text-muted-foreground">Ansiedad Inicial</div>
               <div className="text-2xl font-bold">{emotionalState?.anxiety_level_pre}%</div>
             </div>
             <div className="p-3 bg-muted/5 rounded">
-              <div className="text-sm text-muted/60">Pico Máximo</div>
+              <div className="text-sm text-muted-foreground">Pico Máximo</div>
               <div className="text-2xl font-bold text-red">{emotionalState?.max_anxiety_during}%</div>
             </div>
           </div>

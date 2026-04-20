@@ -278,7 +278,7 @@ export default function ChallensingTrainingPage() {
                 <div className="space-y-2">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h3 className="text-sm font-bold text-muted/40 mb-2">Pregunta {currentQuestion + 1} de {CHALLENGING_QUESTIONS.length}</h3>
+                      <h3 className="text-sm font-bold text-muted-foreground mb-2">Pregunta {currentQuestion + 1} de {CHALLENGING_QUESTIONS.length}</h3>
                       <p className="text-lg text-white font-semibold">{question.question}</p>
                     </div>
                     <Badge className={question.difficulty === 'Crítico' ? 'bg-red' : 'bg-yellow'}>{question.difficulty}</Badge>
@@ -407,7 +407,7 @@ export default function ChallensingTrainingPage() {
 
                     {/* Feedback */}
                     <div className="bg-muted/80/50 border border-muted/70 rounded-[28px] p-3">
-                      <p className="text-xs font-semibold text-muted/40 mb-2">RETROALIMENTACIÓN</p>
+                      <p className="text-xs font-semibold text-muted-foreground mb-2">RETROALIMENTACIÓN</p>
                       <p className="text-sm text-muted/30">{evaluation.feedback}</p>
                     </div>
 
@@ -443,17 +443,17 @@ export default function ChallensingTrainingPage() {
                 </h3>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-xs text-muted/40 mb-2">Promedio General</p>
+                    <p className="text-xs text-muted-foreground mb-2">Promedio General</p>
                     <div className="flex items-end gap-2">
                       <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green/40' : averageScore >= 60 ? 'text-yellow/40' : 'text-red/40'}`}>
                         {averageScore}
                       </span>
-                      <span className="text-xs text-muted/40 pb-2">/100</span>
+                      <span className="text-xs text-muted-foreground pb-2">/100</span>
                     </div>
                   </div>
                   {currentScore !== undefined && (
                     <div className="pt-4 border-t border-muted/70">
-                      <p className="text-xs text-muted/40 mb-2">Esta Pregunta</p>
+                      <p className="text-xs text-muted-foreground mb-2">Esta Pregunta</p>
                       <span className="text-2xl font-bold text-purple/40">{currentScore}</span>
                     </div>
                   )}
@@ -462,7 +462,7 @@ export default function ChallensingTrainingPage() {
 
               {/* Questions List */}
               <div className="flex-1 overflow-y-auto p-4 space-y-2">
-                <p className="text-xs font-bold text-muted/40 uppercase tracking-widest mb-3">Preguntas</p>
+                <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">Preguntas</p>
                 {CHALLENGING_QUESTIONS.map((q, idx) => (
                   <button
                     key={q.id}
@@ -500,7 +500,7 @@ export default function ChallensingTrainingPage() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-muted/40 mb-1">P{idx + 1}</p>
+                        <p className="text-muted-foreground mb-1">P{idx + 1}</p>
                         <p className="text-muted/30 line-clamp-2">{q.question}</p>
                       </div>
                     </div>
@@ -510,7 +510,7 @@ export default function ChallensingTrainingPage() {
 
               {/* Standard Info */}
               <div className="p-4 border-t border-muted/80 bg-background/50 flex-shrink-0">
-                <p className="text-xs font-bold text-muted/40 mb-2">ESTÁNDAR EJECUTIVO</p>
+                <p className="text-xs font-bold text-muted-foreground mb-2">ESTÁNDAR EJECUTIVO</p>
                 <p className="text-xs text-muted/30">75+ = Listo para entrevista executiva<br/>60-74 = Mejora necesaria<br/>{'<'}60 = Requiere trabajo</p>
               </div>
             </div>

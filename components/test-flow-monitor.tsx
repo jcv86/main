@@ -186,7 +186,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
       case "failed":
         return <XCircle className="h-4 w-4 text-red" />
       default:
-        return <Clock className="h-4 w-4 text-muted/40" />
+        return <Clock className="h-4 w-4 text-muted-foreground" />
     }
   }
 
@@ -274,7 +274,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
                   {getStatusIcon(metric.status)}
                   <div>
                     <CardTitle className="text-sm">{metric.testName}</CardTitle>
-                    <p className="text-xs text-muted/60">{metric.testId}</p>
+                    <p className="text-xs text-muted-foreground">{metric.testId}</p>
                   </div>
                 </div>
                 {getStatusBadge(metric.status)}
@@ -293,7 +293,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
               </div>
 
               {/* Duration */}
-              {metric.duration && <div className="text-xs text-muted/60">Duration: {metric.duration}ms</div>}
+              {metric.duration && <div className="text-xs text-muted-foreground">Duration: {metric.duration}ms</div>}
 
               {/* Errors */}
               {metric.errors.length > 0 && (

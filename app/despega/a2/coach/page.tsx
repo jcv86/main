@@ -73,7 +73,7 @@ export default function A2ChatCoachPage() {
       <div className="min-h-screen bg-background">
         <div className="text-center space-y-3">
           <MessageCircle className="w-8 h-8 animate-pulse text-blue mx-auto" />
-          <p className="text-muted/60 dark:text-muted/40">Iniciando tu sesión con el Coach...</p>
+          <p className="text-muted-foreground dark:text-muted-foreground">Iniciando tu sesión con el Coach...</p>
         </div>
       </div>
     )
@@ -93,7 +93,7 @@ export default function A2ChatCoachPage() {
                 <MessageCircle className="w-5 h-5 text-blue dark:text-blue/40" />
                 <h1 className="text-2xl font-bold text-muted/90 dark:text-muted/5">Chat Coach</h1>
               </div>
-              <p className="text-sm text-muted/60 dark:text-muted/40">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 Profundización Cognitiva - Sofía & Dani
               </p>
             </div>
@@ -134,7 +134,7 @@ export default function A2ChatCoachPage() {
                   <Lightbulb className="w-5 h-5 text-orange mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium text-muted/90 dark:text-muted/5">Profundización</p>
-                    <p className="text-sm text-muted/60 dark:text-muted/40">
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                       Exploramos cómo tu patrón se manifiesta en diferentes contextos
                     </p>
                   </div>
@@ -146,7 +146,7 @@ export default function A2ChatCoachPage() {
                   <BookOpen className="w-5 h-5 text-blue/50 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium text-muted/90 dark:text-muted/5">Sin etiquetas</p>
-                    <p className="text-sm text-muted/60 dark:text-muted/40">
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                       No diagnosticamos, explicamos variaciones y flexibilidad
                     </p>
                   </div>
@@ -158,7 +158,7 @@ export default function A2ChatCoachPage() {
                   <MessageCircle className="w-5 h-5 text-purple/50 mt-0.5 flex-shrink-0" />
                   <div>
                     <p className="font-medium text-muted/90 dark:text-muted/5">Conversacional</p>
-                    <p className="text-sm text-muted/60 dark:text-muted/40">
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                       Haz preguntas libremente sobre tu patrón y contextos
                     </p>
                   </div>
@@ -194,7 +194,7 @@ export default function A2ChatCoachPage() {
             <CardTitle className="text-base">Preguntas útiles para explorar</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2 text-sm text-muted/70 dark:text-muted/30">
+            <div className="space-y-2 text-sm text-muted-foreground dark:text-muted/30">
               <p>• ¿Cómo varía mi patrón según el contexto laboral o personal?</p>
               <p>• ¿Qué tensiones internas he notado entre lo que siento y lo que hago?</p>
               <p>• ¿En qué situaciones actúo diferente a mi patrón típico?</p>

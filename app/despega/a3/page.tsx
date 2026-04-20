@@ -103,7 +103,7 @@ export default function A3Page() {
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center space-y-4">
           <div className="w-12 h-12 rounded-full border-4 border-red/30 border-t-red animate-spin mx-auto"></div>
-          <p className="text-muted/40">Cargando entrenamientos...</p>
+          <p className="text-muted-foreground">Cargando entrenamientos...</p>
         </div>
       </div>
     )
@@ -150,28 +150,28 @@ export default function A3Page() {
                 <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-red text-black flex items-center justify-center font-bold">1</div>
                 <div>
                   <h4 className="font-semibold text-white">Entiende los Módulos de Entrenamiento</h4>
-                  <p className="text-sm text-muted/40">A3 tiene 3 módulos: Entrevistas, Presentaciones y Decisiones Estratégicas. Cada uno progresa del básico al experto.</p>
+                  <p className="text-sm text-muted-foreground">A3 tiene 3 módulos: Entrevistas, Presentaciones y Decisiones Estratégicas. Cada uno progresa del básico al experto.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-red text-black flex items-center justify-center font-bold">2</div>
                 <div>
                   <h4 className="font-semibold text-white">Comienza con el Módulo de Entrevistas</h4>
-                  <p className="text-sm text-muted/40">Practica con entrevistadores reales simulados, recibe feedback instantáneo y mejora cada respuesta.</p>
+                  <p className="text-sm text-muted-foreground">Practica con entrevistadores reales simulados, recibe feedback instantáneo y mejora cada respuesta.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-red text-black flex items-center justify-center font-bold">3</div>
                 <div>
                   <h4 className="font-semibold text-white">Practica en Progresión</h4>
-                  <p className="text-sm text-muted/40">No saltes niveles. El progreso es acumulativo: básico → intermedio → avanzado → maestría.</p>
+                  <p className="text-sm text-muted-foreground">No saltes niveles. El progreso es acumulativo: básico → intermedio → avanzado → maestría.</p>
                 </div>
               </div>
               <div className="flex gap-4">
                 <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-red text-black flex items-center justify-center font-bold">4</div>
                 <div>
                   <h4 className="font-semibold text-white">Registra tu Empleabilidad</h4>
-                  <p className="text-sm text-muted/40">Tu score de empleabilidad mejora con cada sesión. Es un indicador real de qué tan preparado estás para el mercado.</p>
+                  <p className="text-sm text-muted-foreground">Tu score de empleabilidad mejora con cada sesión. Es un indicador real de qué tan preparado estás para el mercado.</p>
                 </div>
               </div>
             </div>
@@ -185,7 +185,7 @@ export default function A3Page() {
               <div className="text-3xl font-bold text-red">
                 {a3Progress?.sessions_completed || 0}
               </div>
-              <p className="text-sm text-muted/40 mt-2">Sesiones Completadas</p>
+              <p className="text-sm text-muted-foreground mt-2">Sesiones Completadas</p>
             </CardContent>
           </Card>
 
@@ -194,7 +194,7 @@ export default function A3Page() {
               <div className="text-3xl font-bold text-red">
                 {a3Progress?.employability_score || 'Calcular'}
               </div>
-              <p className="text-sm text-muted/40 mt-2">Score de Empleabilidad</p>
+              <p className="text-sm text-muted-foreground mt-2">Score de Empleabilidad</p>
             </CardContent>
           </Card>
 
@@ -203,7 +203,7 @@ export default function A3Page() {
               <div className="text-3xl font-bold text-blue dark:text-blue/40">
                 {a3Progress?.hours_trained || 0}h
               </div>
-              <p className="text-sm text-muted/60 dark:text-muted/40 mt-2">Horas Entrenadas</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">Horas Entrenadas</p>
             </CardContent>
           </Card>
 
@@ -212,7 +212,7 @@ export default function A3Page() {
               <div className="text-3xl font-bold text-green dark:text-green/40">
                 {a3Progress?.interviews_mastered || 0}
               </div>
-              <p className="text-sm text-muted/60 dark:text-muted/40 mt-2">Entrevistas Dominadas</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">Entrevistas Dominadas</p>
             </CardContent>
           </Card>
         </div>
@@ -222,7 +222,7 @@ export default function A3Page() {
           <>
             <div>
               <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Tu Progreso</h2>
-              <p className="text-muted/60 dark:text-muted/40">Monitorea tu desarrollo y mejora continua</p>
+              <p className="text-muted-foreground dark:text-muted-foreground">Monitorea tu desarrollo y mejora continua</p>
             </div>
             <A3ProgressTracker userId={user.id} level="basico" />
           </>
@@ -231,7 +231,7 @@ export default function A3Page() {
         {/* TRAINING LEVELS SECTION */}
         <div>
           <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Módulo de Entrevistas</h2>
-          <p className="text-muted/60 dark:text-muted/40 mb-6">
+          <p className="text-muted-foreground dark:text-muted-foreground mb-6">
             Progresa a través de tres niveles de dificultad. Completa cada uno antes de avanzar al siguiente.
           </p>
         </div>
@@ -249,7 +249,7 @@ export default function A3Page() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-sm text-muted/60 dark:text-muted/40">
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground">
               Antes de entrenar, conoce tu punto de partida. Evaluamos luz, fondo, audio, postura, presencia y comunicación.
             </p>
             <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
@@ -279,19 +279,19 @@ export default function A3Page() {
             <CardContent className="space-y-3">
               <div className="flex gap-3">
                 <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
-                <p className="text-sm text-muted/60 dark:text-muted/40">Usa el método STAR: Situación, Tarea, Acción, Resultado</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Usa el método STAR: Situación, Tarea, Acción, Resultado</p>
               </div>
               <div className="flex gap-3">
                 <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
-                <p className="text-sm text-muted/60 dark:text-muted/40">Practica frente a espejo antes de cada nivel</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Practica frente a espejo antes de cada nivel</p>
               </div>
               <div className="flex gap-3">
                 <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
-                <p className="text-sm text-muted/60 dark:text-muted/40">Registra tus respuestas para auto-análisis</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Registra tus respuestas para auto-análisis</p>
               </div>
               <div className="flex gap-3">
                 <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
-                <p className="text-sm text-muted/60 dark:text-muted/40">Revisa retroalimentación después de cada intento</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Revisa retroalimentación después de cada intento</p>
               </div>
             </CardContent>
           </Card>
@@ -310,7 +310,7 @@ export default function A3Page() {
                 </p>
                 <p className="text-xs text-green dark:text-emerald-400 mt-1">Score de empleabilidad actual</p>
               </div>
-              <p className="text-sm text-muted/60 dark:text-muted/40">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 Tu score aumenta con cada sesión completada y cada mejora de feedback implementada.
               </p>
             </CardContent>

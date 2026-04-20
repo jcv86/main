@@ -18,7 +18,7 @@ export default function PrivacyPage() {
             <span>Volver al inicio</span>
           </Link>
           <h1 className="text-5xl font-black text-white mb-4">Política de Privacidad</h1>
-          <p className="text-xl text-muted/40">Última actualización: 5 de abril de 2026</p>
+          <p className="text-xl text-muted-foreground">Última actualización: 5 de abril de 2026</p>
         </div>
 
         {/* Content */}

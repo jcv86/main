@@ -282,7 +282,7 @@ export default function AdminKnowledgeBasePage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Administración de Biblioteca</h1>
-          <p className="text-muted/60">Gestiona la base de conocimiento de la plataforma</p>
+          <p className="text-muted-foreground">Gestiona la base de conocimiento de la plataforma</p>
         </div>
         <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
           <DialogTrigger asChild>
@@ -425,7 +425,7 @@ export default function AdminKnowledgeBasePage() {
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted/40" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
                 placeholder="Buscar libros por título, autor o contenido..."
                 value={searchTerm}

@@ -50,7 +50,7 @@ export default function V1ObservationDashboard() {
     <div className="p-8 space-y-8">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold">V1 Observation Dashboard - Fase 1</h1>
-        <p className="text-muted/60">Observando dónde cae gente, qué confunde, dónde falla la retención</p>
+        <p className="text-muted-foreground">Observando dónde cae gente, qué confunde, dónde falla la retención</p>
         <div className="flex gap-2 mt-4">
           {[7, 14, 30].map(days => (
             <button
@@ -59,7 +59,7 @@ export default function V1ObservationDashboard() {
               className={`px-4 py-2 rounded ${
                 timeRange === days
                   ? 'bg-blue/50 text-white'
-                  : 'bg-muted/20 text-muted/70 hover:bg-muted/30'
+                  : 'bg-muted/20 text-muted-foreground hover:bg-muted/30'
               }`}
             >
               {days} días
@@ -167,15 +167,15 @@ export default function V1ObservationDashboard() {
         <CardContent className="grid grid-cols-3 gap-4">
           <div className="p-4 bg-blue/5 rounded text-center">
             <div className="text-3xl font-bold text-blue">{metrics.uniqueSessions}</div>
-            <div className="text-sm text-muted/60">Sesiones únicas</div>
+            <div className="text-sm text-muted-foreground">Sesiones únicas</div>
           </div>
           <div className="p-4 bg-red/5 rounded text-center">
             <div className="text-3xl font-bold text-red">{metrics.totalErrors}</div>
-            <div className="text-sm text-muted/60">Errores detectados</div>
+            <div className="text-sm text-muted-foreground">Errores detectados</div>
           </div>
           <div className="p-4 bg-yellow/5 rounded text-center">
             <div className="text-3xl font-bold text-yellow">{(metrics.conversionC1toA1 as number * 100).toFixed(1)}%</div>
-            <div className="text-sm text-muted/60">Conv. C1→A1</div>
+            <div className="text-sm text-muted-foreground">Conv. C1→A1</div>
           </div>
         </CardContent>
       </Card>

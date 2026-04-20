@@ -77,7 +77,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
       <Card>
         <CardContent className="p-8 text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
-          <p className="text-muted/60">Analizando todos tus tests con Cerebro...</p>
+          <p className="text-muted-foreground">Analizando todos tus tests con Cerebro...</p>
         </CardContent>
       </Card>
     )
@@ -87,8 +87,8 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
     return (
       <Card>
         <CardContent className="p-8 text-center">
-          <Brain className="h-12 w-12 text-muted/40 mx-auto mb-4" />
-          <p className="text-muted/60 mb-4">Completa más tests para obtener un análisis completo</p>
+          <Brain className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <p className="text-muted-foreground mb-4">Completa más tests para obtener un análisis completo</p>
           <Button onClick={() => (window.location.href = "/test")} variant="outline">
             Ver Tests Disponibles
           </Button>
@@ -264,7 +264,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                   <div className="flex items-start justify-between">
                     <div>
                       <h4 className="font-semibold text-lg">{insight.role_title}</h4>
-                      <p className="text-sm text-muted/60">{insight.industry}</p>
+                      <p className="text-sm text-muted-foreground">{insight.industry}</p>
                     </div>
                     <Badge
                       variant={
@@ -343,7 +343,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                     </Badge>
                     <div className="flex items-center gap-1">
                       <Progress value={insight.confidence_score} className="w-16 h-2" />
-                      <span className="text-xs text-muted/60">{insight.confidence_score}%</span>
+                      <span className="text-xs text-muted-foreground">{insight.confidence_score}%</span>
                     </div>
                   </div>
                   <p className="text-sm text-gray-800">{insight.insight_text}</p>

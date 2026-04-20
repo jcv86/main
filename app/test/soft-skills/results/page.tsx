@@ -143,7 +143,7 @@ export default function SoftSkillsResults() {
       <div className="min-h-screen flex items-center justify-center bg-muted/5">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto mb-4"></div>
-          <p className="text-muted/60">Cargando resultados...</p>
+          <p className="text-muted-foreground">Cargando resultados...</p>
         </div>
       </div>
     )
@@ -156,7 +156,7 @@ export default function SoftSkillsResults() {
           {/* Header */}
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-foreground mb-2">Resultados: Competencias Blandas Despega</h1>
-            <p className="text-xl text-muted/60">No se encontraron resultados para esta evaluación.</p>
+            <p className="text-xl text-muted-foreground">No se encontraron resultados para esta evaluación.</p>
           </div>
         </div>
       </div>
@@ -227,7 +227,7 @@ export default function SoftSkillsResults() {
         {/* Title */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-foreground mb-4">Resultados: Competencias Blandas Despega</h1>
-          <p className="text-lg text-muted/60 max-w-3xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
             Tu perfil completo de competencias interpersonales y profesionales
           </p>
         </div>
@@ -1024,7 +1024,7 @@ export default function SoftSkillsResults() {
                       <div className="inline-block bg-purple text-white px-6 py-3 rounded-full font-bold text-lg">
                         Soft Skills (Competencias Entrenables)
                       </div>
-                      <p className="text-sm text-muted/60 mt-2">Habilidades que puedes desarrollar con práctica</p>
+                      <p className="text-sm text-muted-foreground mt-2">Habilidades que puedes desarrollar con práctica</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 gap-4">
@@ -1385,7 +1385,7 @@ export default function SoftSkillsResults() {
                         <h4 className="font-semibold text-orange mb-2">
                           5. ¿Qué creencias limitantes tienes sobre tu capacidad de mejorar estas áreas?
                         </h4>
-                        <p className="text-sm text-muted/60 mb-2">
+                        <p className="text-sm text-muted-foreground mb-2">
                           (Ejemplo: "No soy bueno para comunicar", "Nunca he sido organizado", "Eso no es para mí")
                         </p>
                         <textarea
@@ -1422,7 +1422,7 @@ export default function SoftSkillsResults() {
                         <h4 className="font-semibold text-blue mb-2">
                           7. ¿Cómo cambiaría tu vida si tuvieras un 10/10 en TODAS las soft skills?
                         </h4>
-                        <p className="text-sm text-muted/60 mb-2">
+                        <p className="text-sm text-muted-foreground mb-2">
                           (Qué lograrías, qué relaciones mejorarían, qué oportunidades aparecerían)
                         </p>
                         <textarea
@@ -1469,7 +1469,7 @@ export default function SoftSkillsResults() {
                           10. Si tuvieras que elegir UNA competencia para entrenar intensivamente los próximos 90 días,
                           ¿cuál sería y cuál sería tu primera acción mañana?
                         </h4>
-                        <p className="text-sm text-muted/60 mb-2">
+                        <p className="text-sm text-muted-foreground mb-2">
                           (Sé ultra específico: no "mejorar comunicación", sino "practicar escucha activa 10 min/día con
                           mi pareja")
                         </p>

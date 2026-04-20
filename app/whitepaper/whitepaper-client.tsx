@@ -86,7 +86,7 @@ export function WhitepaperClient() {
                 <p className="text-muted mb-4 text-sm">
                   Advanced AI reasoning system powered by GPT-4 with semantic search capabilities
                 </p>
-                <ul className="space-y-2 text-sm text-muted/60">
+                <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-start gap-2">
                     <span className="text-purple mt-1">•</span>
                     <span>pgvector semantic search across 120+ books</span>
@@ -117,7 +117,7 @@ export function WhitepaperClient() {
                 <p className="text-muted mb-4 text-sm">
                   Personalized career coaching powered by GPT-4 with deep psychological insights
                 </p>
-                <ul className="space-y-2 text-sm text-muted/60">
+                <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-start gap-2">
                     <span className="text-blue mt-1">•</span>
                     <span>Career path recommendations</span>
@@ -148,7 +148,7 @@ export function WhitepaperClient() {
                 <p className="text-muted mb-4 text-sm">
                   Scientifically-validated assessments with AI-powered analysis
                 </p>
-                <ul className="space-y-2 text-sm text-muted/60">
+                <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-start gap-2">
                     <span className="text-green mt-1">•</span>
                     <span>DISC (Despega Cerebral)</span>
@@ -385,7 +385,7 @@ export function WhitepaperClient() {
                 <p className="text-muted mb-4">{test.description}</p>
                 <div className="space-y-1">
                   {test.dimensions.map((dim, j) => (
-                    <div key={j} className="text-sm text-muted/60">
+                    <div key={j} className="text-sm text-muted-foreground">
                       • {dim}
                     </div>
                   ))}
@@ -741,7 +741,7 @@ export function WhitepaperClient() {
               { metric: "Time to Interactive", target: "< 3s", color: "indigo" },
             ].map((perf, i) => (
               <div key={i} className={`bg-${perf.color}-50 rounded-lg p-4 border border-${perf.color}-100 text-center`}>
-                <div className="text-sm text-muted/60 mb-1">{perf.metric}</div>
+                <div className="text-sm text-muted-foreground mb-1">{perf.metric}</div>
                 <div className={`text-2xl font-bold text-${perf.color}-600`}>{perf.target}</div>
               </div>
             ))}
@@ -857,7 +857,7 @@ export function WhitepaperClient() {
         </section>
 
         {/* Footer */}
-        <footer className="mt-12 text-center text-muted/60 border-t border-muted/20 pt-8">
+        <footer className="mt-12 text-center text-muted-foreground border-t border-muted/20 pt-8">
           <p className="mb-2">
             <strong>Document Version:</strong> 1.0 | <strong>Published:</strong> September 26, 2025
           </p>

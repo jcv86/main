@@ -330,7 +330,7 @@ export default function ComprehensiveGestureTestPage() {
       case "running":
         return <Clock className="h-5 w-5 text-blue/50 animate-spin" />
       default:
-        return <Clock className="h-5 w-5 text-muted/40" />
+        return <Clock className="h-5 w-5 text-muted-foreground" />
     }
   }
 

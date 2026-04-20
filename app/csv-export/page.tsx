@@ -109,7 +109,7 @@ export default function CSVExportPage() {
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-foreground mb-4">📚 CSV Export - Biblioteca Completa</h1>
-          <p className="text-xl text-muted/60">{bookCount} libros de desarrollo profesional listos para descargar</p>
+          <p className="text-xl text-muted-foreground">{bookCount} libros de desarrollo profesional listos para descargar</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3 mb-8">

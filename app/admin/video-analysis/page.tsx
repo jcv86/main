@@ -300,11 +300,11 @@ export default function AdminVideoAnalysisPage() {
                     <div className="space-y-2">
                       {result.questions.map((q, i) => (
                         <div key={i} className="bg-muted/5 p-2 rounded text-sm">
-                          <p className="font-medium text-xs text-muted/60 mb-1">P{i + 1}:</p>
+                          <p className="font-medium text-xs text-muted-foreground mb-1">P{i + 1}:</p>
                           <p className="text-foreground">{q}</p>
                           {result.answers && result.answers[i] && (
                             <>
-                              <p className="font-medium text-xs text-muted/60 mt-2 mb-1">R{i + 1}:</p>
+                              <p className="font-medium text-xs text-muted-foreground mt-2 mb-1">R{i + 1}:</p>
                               <p className="text-foreground">{result.answers[i]}</p>
                             </>
                           )}

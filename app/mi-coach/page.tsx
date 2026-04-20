@@ -232,7 +232,7 @@ export default function MiCoachPage() {
                   <div className="bg-muted/5 dark:bg-background rounded-lg p-6 h-96 overflow-y-auto space-y-4">
                     {messages.length === 0 ? (
                       <div className="flex items-center justify-center h-full text-center">
-                        <p className="text-muted/50">Inicia una conversación con tu coach...</p>
+                        <p className="text-muted-foreground">Inicia una conversación con tu coach...</p>
                       </div>
                     ) : (
                       messages.map((msg, idx) => (
@@ -252,7 +252,7 @@ export default function MiCoachPage() {
                   {/* Quick Suggestions - Mostrar solo si no hay mensajes */}
                   {messages.length === 0 && (
                     <div className="space-y-3">
-                      <div className="flex items-center gap-2 text-sm font-semibold text-muted/70 dark:text-muted/20">
+                      <div className="flex items-center gap-2 text-sm font-semibold text-muted-foreground dark:text-muted/20">
                         <Lightbulb className="w-4 h-4 text-amber-500" />
                         Preguntas para empezar
                       </div>
@@ -266,9 +266,9 @@ export default function MiCoachPage() {
                             <div className="flex items-start justify-between gap-2">
                               <div>
                                 <p className="font-medium text-xs text-muted/90 dark:text-muted/10 group-hover:text-purple dark:group-hover:text-purple/30">{suggestion.title}</p>
-                                <p className="text-xs text-muted/60 dark:text-muted/20 mt-1">{suggestion.prompt.slice(0, 40)}...</p>
+                                <p className="text-xs text-muted-foreground dark:text-muted/20 mt-1">{suggestion.prompt.slice(0, 40)}...</p>
                               </div>
-                              <ArrowRight className="w-4 h-4 text-muted/40 dark:text-muted/50 group-hover:text-purple dark:group-hover:text-purple/40 flex-shrink-0 mt-0.5" />
+                              <ArrowRight className="w-4 h-4 text-muted-foreground dark:text-muted-foreground group-hover:text-purple dark:group-hover:text-purple/40 flex-shrink-0 mt-0.5" />
                             </div>
                           </button>
                         ))}
@@ -284,7 +284,7 @@ export default function MiCoachPage() {
                       onChange={(e) => setChatInput(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && !chatLoading && handleChatSubmit()}
                       disabled={chatLoading}
-                      className="bg-white dark:bg-background text-muted/90 dark:text-muted/10 placeholder:text-muted/50 dark:placeholder:text-muted/40"
+                      className="bg-white dark:bg-background text-muted/90 dark:text-muted/10 placeholder:text-muted-foreground dark:placeholder:text-muted-foreground"
                     />
                     <Button 
                       onClick={handleChatSubmit} 
@@ -316,7 +316,7 @@ export default function MiCoachPage() {
                       onChange={(e) => setSearchQuery(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && !searchLoading && handleSearch()}
                       disabled={searchLoading}
-                      className="bg-white dark:bg-background text-muted/90 dark:text-muted/10 placeholder:text-muted/50 dark:placeholder:text-muted/40"
+                      className="bg-white dark:bg-background text-muted/90 dark:text-muted/10 placeholder:text-muted-foreground dark:placeholder:text-muted-foreground"
                     />
                     <Button 
                       onClick={handleSearch} 
@@ -340,16 +340,16 @@ export default function MiCoachPage() {
                   {/* Results */}
                   <div className="space-y-3 max-h-96 overflow-y-auto">
                     {searchResults.length === 0 ? (
-                      <p className="text-muted/50 dark:text-muted/40 text-center py-8">
+                      <p className="text-muted-foreground dark:text-muted-foreground text-center py-8">
                         {searchQuery ? 'No se encontraron resultados' : 'Realiza una búsqueda'}
                       </p>
                     ) : (
                       searchResults.map((book) => (
                         <div key={book.id} className="border rounded-lg p-4 hover:bg-muted/5 dark:hover:bg-muted/80 transition">
                           <h3 className="font-bold text-sm text-muted/90 dark:text-muted/10">{book.title}</h3>
-                          <p className="text-xs text-muted/60 dark:text-muted/40">{book.author}</p>
+                          <p className="text-xs text-muted-foreground dark:text-muted-foreground">{book.author}</p>
                           {book.description && (
-                            <p className="text-xs mt-2 text-muted/70 dark:text-muted/30">{book.description.slice(0, 80)}...</p>
+                            <p className="text-xs mt-2 text-muted-foreground dark:text-muted/30">{book.description.slice(0, 80)}...</p>
                           )}
                           
                           {/* Reference Links */}
@@ -393,12 +393,12 @@ export default function MiCoachPage() {
                 ) : (
                   <div className="space-y-4 max-h-96 overflow-y-auto">
                     {recommendations.length === 0 ? (
-                      <p className="text-muted/50 dark:text-muted/40 text-center py-8">No hay recomendaciones disponibles</p>
+                      <p className="text-muted-foreground dark:text-muted-foreground text-center py-8">No hay recomendaciones disponibles</p>
                     ) : (
                       recommendations.map((rec) => (
                         <div key={rec.id} className="border rounded-lg p-4 hover:bg-muted/5 dark:hover:bg-muted/80 transition">
                           <h3 className="font-bold text-sm text-muted/90 dark:text-muted/10">{rec.title}</h3>
-                          <p className="text-xs text-muted/60 dark:text-muted/40">{rec.author}</p>
+                          <p className="text-xs text-muted-foreground dark:text-muted-foreground">{rec.author}</p>
                           <p className="text-xs text-purple dark:text-purple/40 mt-2 font-medium">{rec.reason}</p>
                         </div>
                       ))
@@ -419,7 +419,7 @@ export default function MiCoachPage() {
                 Coaching 24/7
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-sm text-muted/70 dark:text-muted/20">
+            <CardContent className="text-sm text-muted-foreground dark:text-muted/20">
               Conversaciones ilimitadas sobre tu carrera, estrategia personal y mentoría.
             </CardContent>
           </Card>
@@ -431,7 +431,7 @@ export default function MiCoachPage() {
                 Cerebro Inteligente
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-sm text-muted/70 dark:text-muted/20">
+            <CardContent className="text-sm text-muted-foreground dark:text-muted/20">
               Busca de forma inteligente a través de contenido personalizado.
             </CardContent>
           </Card>
@@ -443,7 +443,7 @@ export default function MiCoachPage() {
                 Sugerencias
               </CardTitle>
             </CardHeader>
-            <CardContent className="text-sm text-muted/70 dark:text-muted/20">
+            <CardContent className="text-sm text-muted-foreground dark:text-muted/20">
               Ideas y recomendaciones personalizadas basadas en tu perfil.
             </CardContent>
           </Card>

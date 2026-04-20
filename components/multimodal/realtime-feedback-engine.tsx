@@ -122,7 +122,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
       {/* Feedback Items */}
       <div className="space-y-2 max-h-64 overflow-y-auto">
         {feedbackItems.length === 0 ? (
-          <p className="text-sm text-muted/50 text-center py-4">
+          <p className="text-sm text-muted-foreground text-center py-4">
             Comienza tu grabación para recibir feedback en tiempo real
           </p>
         ) : (
@@ -145,7 +145,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
                   <p className="text-sm font-medium">
                     {getIconForType(item.type)} {item.message}
                   </p>
-                  <p className="text-xs text-muted/60 mt-1">💡 {item.suggestion}</p>
+                  <p className="text-xs text-muted-foreground mt-1">💡 {item.suggestion}</p>
                 </div>
               </div>
             </div>

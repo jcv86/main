@@ -253,7 +253,7 @@ export function GesturePerformanceMonitor() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <Activity className={`h-5 w-5 ${isMonitoring ? "text-green/50 animate-pulse" : "text-muted/40"}`} />
+                <Activity className={`h-5 w-5 ${isMonitoring ? "text-green/50 animate-pulse" : "text-muted-foreground"}`} />
                 <span className="font-semibold">Status</span>
               </div>
               <Badge variant={isMonitoring ? "default" : "outline"}>
@@ -338,13 +338,13 @@ export function GesturePerformanceMonitor() {
                       </div>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
-                          <span className="text-muted/60">Avg Time:</span>
+                          <span className="text-muted-foreground">Avg Time:</span>
                           <span className={`ml-2 font-mono ${getPerformanceColor(data.avgTime, "time")}`}>
                             {data.avgTime}ms
                           </span>
                         </div>
                         <div>
-                          <span className="text-muted/60">Success:</span>
+                          <span className="text-muted-foreground">Success:</span>
                           <span className={`ml-2 font-mono ${getPerformanceColor(data.successRate, "rate")}`}>
                             {data.successRate}%
                           </span>
@@ -368,7 +368,7 @@ export function GesturePerformanceMonitor() {
             <CardContent>
               <div className="space-y-3">
                 {realtimeData.length === 0 ? (
-                  <div className="text-center py-8 text-muted/50">
+                  <div className="text-center py-8 text-muted-foreground">
                     {isMonitoring ? "Waiting for gesture data..." : "Start monitoring to see real-time data"}
                   </div>
                 ) : (
@@ -386,18 +386,18 @@ export function GesturePerformanceMonitor() {
                           </Badge>
                           <div>
                             <span className="font-medium capitalize">{metric.gestureType}</span>
-                            <span className="text-sm text-muted/50 ml-2">on {metric.deviceType}</span>
+                            <span className="text-sm text-muted-foreground ml-2">on {metric.deviceType}</span>
                           </div>
                         </div>
                         <div className="text-right text-sm">
                           <div className={`font-mono ${getPerformanceColor(metric.responseTime, "time")}`}>
                             {metric.responseTime}ms
                           </div>
-                          <div className="text-muted/50">{new Date(metric.timestamp).toLocaleTimeString()}</div>
+                          <div className="text-muted-foreground">{new Date(metric.timestamp).toLocaleTimeString()}</div>
                         </div>
                       </div>
                       <div className="mt-2">
-                        <div className="flex items-center justify-between text-xs text-muted/60">
+                        <div className="flex items-center justify-between text-xs text-muted-foreground">
                           <span>Accuracy: {metric.accuracy}%</span>
                           <Progress value={metric.accuracy} className="w-20 h-1" />
                         </div>

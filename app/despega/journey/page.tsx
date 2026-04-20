@@ -128,7 +128,7 @@ export default function JourneyPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-muted/60 dark:text-muted/40">Cargando tu jornada...</div>
+        <div className="text-muted-foreground dark:text-muted-foreground">Cargando tu jornada...</div>
       </div>
     )
   }
@@ -139,7 +139,7 @@ export default function JourneyPage() {
         {/* HERO SECTION */}
         <div className="mb-12">
           <h1 className="text-4xl font-bold mb-2">Tu Jornada de Transformación</h1>
-          <p className="text-lg text-muted/60 dark:text-muted/40 mb-6">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground mb-6">
             Hola {userName}, aquí ves el progreso de tu transformación profesional en 90 días
           </p>
 
@@ -178,7 +178,7 @@ export default function JourneyPage() {
                         </div>
                         <CardTitle className="text-xl">{phase.name}</CardTitle>
                         <CardDescription className="text-sm mt-1">{phase.description}</CardDescription>
-                        <p className="text-xs text-muted/60 dark:text-muted/40 mt-2">{phase.weeks}</p>
+                        <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-2">{phase.weeks}</p>
                       </div>
                       <div className={phase.color}>{phase.icon}</div>
                     </div>
@@ -195,7 +195,7 @@ export default function JourneyPage() {
                       </div>
 
                       {phase.status === 'upcoming' && (
-                        <p className="text-xs text-muted/60 dark:text-muted/40 italic">
+                        <p className="text-xs text-muted-foreground dark:text-muted-foreground italic">
                           Disponible cuando completes A2 y A4
                         </p>
                       )}
@@ -227,29 +227,29 @@ export default function JourneyPage() {
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-muted/70 flex items-center justify-center font-bold text-muted/70 dark:text-muted/30">↓</div>
+                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-muted/70 flex items-center justify-center font-bold text-muted-foreground dark:text-muted/30">↓</div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4 mb-4">
                 <div className="flex items-center gap-4">
                   <div className="w-20 h-20 rounded-[28px] bg-green/10 dark:bg-green flex items-center justify-center font-bold text-green dark:text-green/30">A2</div>
-                  <p className="text-sm text-muted/60 dark:text-muted/40">Tu Plan Personalizado</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Tu Plan Personalizado</p>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="w-20 h-20 rounded-[28px] bg-cyan/10 dark:bg-cyan flex items-center justify-center font-bold text-cyan dark:text-cyan/30">A4</div>
-                  <p className="text-sm text-muted/60 dark:text-muted/40">Contexto del Mercado</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Contexto del Mercado</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-muted/70 flex items-center justify-center font-bold text-muted/70 dark:text-muted/30">↓</div>
+                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-muted/70 flex items-center justify-center font-bold text-muted-foreground dark:text-muted/30">↓</div>
               </div>
 
               <div className="flex items-center gap-4">
                 <div className="w-20 h-20 rounded-[28px] bg-orange/10 dark:bg-orange flex items-center justify-center font-bold text-orange dark:text-orange/30">A3</div>
                 <div className="flex-1">
                   <p className="text-sm font-semibold">Entrenamientos Inteligentes</p>
-                  <p className="text-xs text-muted/60 dark:text-muted/40">Usando tu plan + contexto de mercado</p>
+                  <p className="text-xs text-muted-foreground dark:text-muted-foreground">Usando tu plan + contexto de mercado</p>
                 </div>
               </div>
             </div>
@@ -265,15 +265,15 @@ export default function JourneyPage() {
               <span>Ya completaste A1 y descubriste tu perfil</span>
             </li>
             <li className="flex gap-3">
-              <Circle className="w-5 h-5 text-muted/40 flex-shrink-0 mt-0.5" />
+              <Circle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
               <span>Ahora trabaja en A2 para definir tu plan de 90 días</span>
             </li>
             <li className="flex gap-3">
-              <Circle className="w-5 h-5 text-muted/40 flex-shrink-0 mt-0.5" />
+              <Circle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
               <span>Usa A4 para entender el contexto del mercado</span>
             </li>
             <li className="flex gap-3">
-              <Circle className="w-5 h-5 text-muted/40 flex-shrink-0 mt-0.5" />
+              <Circle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
               <span>Practica en A3 con entrenamientos personalizados</span>
             </li>
           </ul>

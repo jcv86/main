@@ -246,7 +246,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                       )}
                       <div className="flex-1">
                         <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                        <p className={`text-xs mt-2 ${message.sender === "user" ? "text-white/70" : "text-muted/50"}`}>
+                        <p className={`text-xs mt-2 ${message.sender === "user" ? "text-white/70" : "text-muted-foreground"}`}>
                           {message.timestamp.toLocaleTimeString()}
                         </p>
                       </div>
@@ -269,7 +269,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                           style={{ animationDelay: "0.2s" }}
                         ></div>
                       </div>
-                      <span className="text-sm text-muted/60">Pensando...</span>
+                      <span className="text-sm text-muted-foreground">Pensando...</span>
                     </div>
                   </div>
                 </div>
@@ -280,7 +280,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
 
           {messages.length <= 1 && (
             <div className="mb-4">
-              <p className="text-sm text-muted/60 mb-3">Preguntas sugeridas:</p>
+              <p className="text-sm text-muted-foreground mb-3">Preguntas sugeridas:</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {quickStartQuestions.map((question, index) => (
                   <Button
@@ -319,7 +319,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
               <Send className="h-4 w-4" />
             </Button>
           </div>
-          <p className="text-xs text-muted/50 mt-2">Presiona Enter para enviar, Shift+Enter para nueva línea</p>
+          <p className="text-xs text-muted-foreground mt-2">Presiona Enter para enviar, Shift+Enter para nueva línea</p>
         </CardContent>
       </Card>
 

@@ -115,21 +115,21 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
             <div className="grid grid-cols-3 gap-3 text-sm">
               <div className="text-center p-2 rounded-[28px] bg-muted/5 dark:bg-transparent">
                 <p className="font-semibold text-muted/90 dark:text-white">{level.questionsCount}</p>
-                <p className="text-xs text-muted/60 dark:text-muted/40">Preguntas</p>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground">Preguntas</p>
               </div>
               <div className="text-center p-2 rounded-[28px] bg-muted/5 dark:bg-transparent">
                 <p className="font-semibold text-muted/90 dark:text-white">{level.estimatedTime}</p>
-                <p className="text-xs text-muted/60 dark:text-muted/40">Tiempo</p>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground">Tiempo</p>
               </div>
               <div className="text-center p-2 rounded-[28px] bg-muted/5 dark:bg-transparent">
                 <p className="font-semibold text-muted/90 dark:text-white">{level.difficulty}</p>
-                <p className="text-xs text-muted/60 dark:text-muted/40">Nivel</p>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground">Nivel</p>
               </div>
             </div>
 
             {/* Focus Areas */}
             <div>
-              <p className="text-xs font-semibold text-muted/60 dark:text-muted/40 uppercase mb-2">Enfoque</p>
+              <p className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground uppercase mb-2">Enfoque</p>
               <div className="flex flex-wrap gap-2">
                 {level.focus.map((f) => (
                   <Badge key={f} variant="outline" className="text-xs">

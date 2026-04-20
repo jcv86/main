@@ -139,7 +139,7 @@ export function A3DifficultyProgression({
           )}
 
           <div className="bg-blue/5 p-4 rounded-[28px] border border-blue/20">
-            <div className="text-sm text-muted/60 mb-2">Factores considerados:</div>
+            <div className="text-sm text-muted-foreground mb-2">Factores considerados:</div>
             <ul className="text-sm text-muted space-y-1">
               <li>• Historial de completación: 85%</li>
               <li>• Nivel actual: {currentConfig.name}</li>
@@ -163,15 +163,15 @@ export function A3DifficultyProgression({
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div className="p-3 bg-muted/5 rounded">
-              <div className="text-xs text-muted/60">Presión</div>
+              <div className="text-xs text-muted-foreground">Presión</div>
               <div className="text-sm font-medium">{currentConfig.pressure}</div>
             </div>
             <div className="p-3 bg-muted/5 rounded">
-              <div className="text-xs text-muted/60">Guía</div>
+              <div className="text-xs text-muted-foreground">Guía</div>
               <div className="text-sm font-medium">{currentConfig.guidance}</div>
             </div>
             <div className="p-3 bg-muted/5 rounded">
-              <div className="text-xs text-muted/60">Feedback</div>
+              <div className="text-xs text-muted-foreground">Feedback</div>
               <div className="text-sm font-medium">{currentConfig.feedbackFrequency}</div>
             </div>
           </div>
@@ -198,15 +198,15 @@ export function A3DifficultyProgression({
 
             <div className="grid grid-cols-3 gap-4">
               <div className="p-3 bg-muted/5 rounded">
-                <div className="text-xs text-muted/60">Presión</div>
+                <div className="text-xs text-muted-foreground">Presión</div>
                 <div className="text-sm font-medium">{nextConfig.pressure}</div>
               </div>
               <div className="p-3 bg-muted/5 rounded">
-                <div className="text-xs text-muted/60">Guía</div>
+                <div className="text-xs text-muted-foreground">Guía</div>
                 <div className="text-sm font-medium">{nextConfig.guidance}</div>
               </div>
               <div className="p-3 bg-muted/5 rounded">
-                <div className="text-xs text-muted/60">Feedback</div>
+                <div className="text-xs text-muted-foreground">Feedback</div>
                 <div className="text-sm font-medium">{nextConfig.feedbackFrequency}</div>
               </div>
             </div>
@@ -229,7 +229,7 @@ export function A3DifficultyProgression({
           <p className="text-sm text-muted italic">
             "En A3 no se avanza por insistir. Se avanza por sostener."
           </p>
-          <p className="text-xs text-muted/60 mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             Cantidad + Calidad + Estabilidad. No es solo completar, es completar consistentemente con desempeño.
           </p>
         </CardContent>

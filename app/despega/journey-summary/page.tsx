@@ -37,13 +37,13 @@ export default function JourneySummaryPage() {
         
         {/* Header */}
         <div className="space-y-4">
-          <Link href="/despega/base" className="inline-flex items-center text-sm text-muted/60 hover:text-muted/90 dark:text-muted/40 dark:hover:text-muted/10">
+          <Link href="/despega/base" className="inline-flex items-center text-sm text-muted-foreground hover:text-muted/90 dark:text-muted-foreground dark:hover:text-muted/10">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Volver a Inicio
           </Link>
           <div>
             <h1 className="text-4xl font-bold text-muted/90 dark:text-muted/5">Tu Resumen del Viaje</h1>
-            <p className="text-lg text-muted/60 dark:text-muted/40 mt-2">Visualiza tu transformación de 90 días en DespegarTuCarrera</p>
+            <p className="text-lg text-muted-foreground dark:text-muted-foreground mt-2">Visualiza tu transformación de 90 días en DespegarTuCarrera</p>
           </div>
         </div>
 
@@ -84,7 +84,7 @@ export default function JourneySummaryPage() {
                     <div className="text-3xl">🧠</div>
                     <div>
                       <h3 className="font-bold text-lg">A1: Autoconocimiento (Cerebral)</h3>
-                      <p className="text-sm text-muted/60 dark:text-muted/40">Descubrimiento de tu perfil DISC y valores</p>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Descubrimiento de tu perfil DISC y valores</p>
                     </div>
                   </div>
                   <div className="mt-3 space-y-1 text-sm">
@@ -108,7 +108,7 @@ export default function JourneySummaryPage() {
                     <div className="text-3xl">🏗️</div>
                     <div>
                       <h3 className="font-bold text-lg">A2: Exploración y Construcción</h3>
-                      <p className="text-sm text-muted/60 dark:text-muted/40">Plan de acción y sprints de transformación</p>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Plan de acción y sprints de transformación</p>
                     </div>
                   </div>
                   <div className="mt-3 space-y-1 text-sm">
@@ -132,7 +132,7 @@ export default function JourneySummaryPage() {
                     <div className="text-3xl">🎯</div>
                     <div>
                       <h3 className="font-bold text-lg">A3: Aterrizaje y Simulación</h3>
-                      <p className="text-sm text-muted/60 dark:text-muted/40">Entrenamientos realistas y feedback en vivo</p>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Entrenamientos realistas y feedback en vivo</p>
                     </div>
                   </div>
                   <div className="mt-3 space-y-1 text-sm">
@@ -156,7 +156,7 @@ export default function JourneySummaryPage() {
                     <div className="text-3xl">🌍</div>
                     <div>
                       <h3 className="font-bold text-lg">A4: La Realidad y Contexto Estratégico</h3>
-                      <p className="text-sm text-muted/60 dark:text-muted/40">Inteligencia de mercado, tendencias, oportunidades</p>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Inteligencia de mercado, tendencias, oportunidades</p>
                     </div>
                   </div>
                   <div className="mt-3 space-y-1 text-sm">
@@ -178,21 +178,21 @@ export default function JourneySummaryPage() {
             <CardContent className="pt-6 text-center">
               <Award className="w-8 h-8 mx-auto text-purple mb-3" />
               <div className="text-3xl font-bold text-purple">1/4</div>
-              <p className="text-sm text-muted/60 dark:text-muted/40 mt-2">Fases Completadas</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">Fases Completadas</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6 text-center">
               <Zap className="w-8 h-8 mx-auto text-yellow mb-3" />
               <div className="text-3xl font-bold text-yellow">12</div>
-              <p className="text-sm text-muted/60 dark:text-muted/40 mt-2">Acciones Completadas</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">Acciones Completadas</p>
             </CardContent>
           </Card>
           <Card>
             <CardContent className="pt-6 text-center">
               <TrendingUp className="w-8 h-8 mx-auto text-green mb-3" />
               <div className="text-3xl font-bold text-green">7/7</div>
-              <p className="text-sm text-muted/60 dark:text-muted/40 mt-2">Racha Días</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">Racha Días</p>
             </CardContent>
           </Card>
         </div>
@@ -210,21 +210,21 @@ export default function JourneySummaryPage() {
               <CheckCircle2 className="w-5 h-5 text-green flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-muted/90 dark:text-muted/5">Mantiene ritmo consistente</p>
-                <p className="text-sm text-muted/60 dark:text-muted/40">7 días de racha significa que estás comprometido diariamente</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">7 días de racha significa que estás comprometido diariamente</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <CheckCircle2 className="w-5 h-5 text-green flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-muted/90 dark:text-muted/5">Progreso en sprint actual</p>
-                <p className="text-sm text-muted/60 dark:text-muted/40">Sprint 1 de 3 en marcha. Completaste 12 acciones y sigues adelante</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Sprint 1 de 3 en marcha. Completaste 12 acciones y sigues adelante</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
               <Clock className="w-5 h-5 text-orange flex-shrink-0 mt-0.5" />
               <div>
                 <p className="font-medium text-muted/90 dark:text-muted/5">A3 comienza en 15 días</p>
-                <p className="text-sm text-muted/60 dark:text-muted/40">Prepárate para entrenamientos realistas. Este es el pico de intensidad</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Prepárate para entrenamientos realistas. Este es el pico de intensidad</p>
               </div>
             </div>
           </CardContent>
@@ -236,7 +236,7 @@ export default function JourneySummaryPage() {
             <CardTitle>Tu Próximo Paso</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <p className="text-muted/70 dark:text-muted/30">
+            <p className="text-muted-foreground dark:text-muted/30">
               Continúa en <strong>A2 Sprint 1: Fundamentos</strong>. Completa las acciones diarias para fortalecer tu base antes de A3.
             </p>
             <div className="flex gap-3">

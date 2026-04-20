@@ -98,7 +98,7 @@ export function AdvancedBookSearch({ onSearch, onFiltersChange }: AdvancedSearch
       {/* Search Input */}
       <div className="relative">
         <div className="relative flex items-center">
-          <Search className="absolute left-3 w-5 h-5 text-muted/40" />
+          <Search className="absolute left-3 w-5 h-5 text-muted-foreground" />
           <Input
             ref={inputRef}
             type="text"
@@ -119,7 +119,7 @@ export function AdvancedBookSearch({ onSearch, onFiltersChange }: AdvancedSearch
           {query && (
             <button
               onClick={() => setQuery('')}
-              className="absolute right-3 text-muted/40 hover:text-muted/60"
+              className="absolute right-3 text-muted-foreground hover:text-muted-foreground"
             >
               <X className="w-5 h-5" />
             </button>
@@ -140,11 +140,11 @@ export function AdvancedBookSearch({ onSearch, onFiltersChange }: AdvancedSearch
               >
                 <div>
                   <div className="font-medium text-foreground">{suggestion.title}</div>
-                  <div className="text-sm text-muted/60 dark:text-muted/40">
+                  <div className="text-sm text-muted-foreground dark:text-muted-foreground">
                     {suggestion.author} • {suggestion.category}
                   </div>
                 </div>
-                <Search className="w-4 h-4 text-muted/40 group-hover:text-muted/60 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Search className="w-4 h-4 text-muted-foreground group-hover:text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
               </button>
             ))}
           </div>

@@ -86,7 +86,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
                       className={`w-10 h-10 rounded-lg font-medium transition-all ${
                         responses[q.id] === score
                           ? "bg-blue text-white"
-                          : "bg-muted/10 text-muted/60 hover:bg-muted/20"
+                          : "bg-muted/10 text-muted-foreground hover:bg-muted/20"
                       }`}
                     >
                       {score}
@@ -97,7 +97,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
             ))}
           </div>
 
-          <div className="text-xs text-muted/50 text-center">
+          <div className="text-xs text-muted-foreground text-center">
             1 = Completamente en desacuerdo | 5 = Completamente de acuerdo
           </div>
 
@@ -140,7 +140,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
             <Badge className="bg-green">{diagnosis?.prep_level?.toUpperCase()}</Badge>
           </div>
           <Progress value={diagnosis?.prep_level_score} className="mb-2" />
-          <p className="text-xs text-muted/60">Puntuación: {Math.round(diagnosis?.prep_level_score)}/100</p>
+          <p className="text-xs text-muted-foreground">Puntuación: {Math.round(diagnosis?.prep_level_score)}/100</p>
         </div>
 
         {/* Strengths */}

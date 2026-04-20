@@ -126,7 +126,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
     return (
       <Card>
         <CardContent className="p-4">
-          <div className="text-center text-muted/50">Detecting device...</div>
+          <div className="text-center text-muted-foreground">Detecting device...</div>
         </CardContent>
       </Card>
     )
@@ -195,13 +195,13 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
             <span className="font-medium">Resolution</span>
-            <p className="text-muted/60">
+            <p className="text-muted-foreground">
               {deviceInfo.width} × {deviceInfo.height}
             </p>
           </div>
           <div>
             <span className="font-medium">Orientation</span>
-            <p className="text-muted/60 capitalize">{deviceInfo.orientation}</p>
+            <p className="text-muted-foreground capitalize">{deviceInfo.orientation}</p>
           </div>
         </div>
 
@@ -215,11 +215,11 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="font-medium">Max Touch Points</span>
-            <span className="text-muted/60 font-mono">{deviceInfo.maxTouchPoints}</span>
+            <span className="text-muted-foreground font-mono">{deviceInfo.maxTouchPoints}</span>
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="font-medium">Pixel Ratio</span>
-            <span className="text-muted/60 font-mono">{deviceInfo.pixelRatio}x</span>
+            <span className="text-muted-foreground font-mono">{deviceInfo.pixelRatio}x</span>
           </div>
         </div>
 
@@ -240,7 +240,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
                 <Signal className="h-4 w-4" />
                 Connection Type
               </span>
-              <span className="text-muted/60 uppercase font-mono">{deviceInfo.connection}</span>
+              <span className="text-muted-foreground uppercase font-mono">{deviceInfo.connection}</span>
             </div>
           )}
           {deviceInfo.battery !== undefined && (
@@ -250,7 +250,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
                 Battery Level
               </span>
               <div className="flex items-center gap-1">
-                <span className="text-muted/60 font-mono">{deviceInfo.battery}%</span>
+                <span className="text-muted-foreground font-mono">{deviceInfo.battery}%</span>
                 <div className="w-8 h-2 bg-muted/20 rounded-full overflow-hidden">
                   <div
                     className={`h-full transition-all ${`}
@@ -271,7 +271,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
         {/* Platform Details */}
         <div className="text-xs">
           <span className="font-medium">Platform:</span>
-          <p className="text-muted/60 mt-1">{deviceInfo.platform}</p>
+          <p className="text-muted-foreground mt-1">{deviceInfo.platform}</p>
         </div>
 
         {/* Gesture Testing Recommendations */}
@@ -280,7 +280,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
             <Zap className="h-4 w-4" />
             Gesture Testing Recommendations
           </h4>
-          <div className="space-y-1 text-xs text-muted/60">
+          <div className="space-y-1 text-xs text-muted-foreground">
             {deviceInfo.type === "mobile" && deviceInfo.touchSupport && (
               <>
                 <p>• ✅ Perfect for comprehensive gesture testing</p>

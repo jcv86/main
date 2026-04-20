@@ -101,7 +101,7 @@ export function AdvancedAnalyticsReporting() {
                 <p className={`text-3xl font-bold ${analytics.improvement_trend >= 0 ? 'text-green' : 'text-red'}`}>
                   {analytics.improvement_trend >= 0 ? '+' : ''}{analytics.improvement_trend}%
                 </p>
-                <p className="text-xs text-muted/50 mt-1">vs. período anterior</p>
+                <p className="text-xs text-muted-foreground mt-1">vs. período anterior</p>
               </CardContent>
             </Card>
 
@@ -111,7 +111,7 @@ export function AdvancedAnalyticsReporting() {
               </CardHeader>
               <CardContent>
                 <p className="text-3xl font-bold text-blue">{analytics.consistency_score}%</p>
-                <p className="text-xs text-muted/50 mt-1">Variación mínima en sesiones</p>
+                <p className="text-xs text-muted-foreground mt-1">Variación mínima en sesiones</p>
               </CardContent>
             </Card>
 
@@ -121,7 +121,7 @@ export function AdvancedAnalyticsReporting() {
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold">{analytics.strongest_area}</p>
-                <p className="text-xs text-muted/50 mt-1">{analytics.strongest_score}/100</p>
+                <p className="text-xs text-muted-foreground mt-1">{analytics.strongest_score}/100</p>
               </CardContent>
             </Card>
           </div>
@@ -174,7 +174,7 @@ export function AdvancedAnalyticsReporting() {
                       <span className="text-sm font-medium">{item.metric}</span>
                       <div className="flex gap-2 text-sm">
                         <span className="text-blue font-semibold">Tu: {item.your_score}%</span>
-                        <span className="text-muted/50">Benchmark: {item.benchmark}%</span>
+                        <span className="text-muted-foreground">Benchmark: {item.benchmark}%</span>
                       </div>
                     </div>
                     <div className="flex gap-2">
@@ -254,7 +254,7 @@ export function AdvancedAnalyticsReporting() {
                       <span className="text-2xl">{achievement.icon}</span>
                       <div>
                         <p className="font-medium text-sm">{achievement.title}</p>
-                        <p className="text-xs text-muted/60">{achievement.description}</p>
+                        <p className="text-xs text-muted-foreground">{achievement.description}</p>
                       </div>
                     </div>
                   ))}
@@ -275,7 +275,7 @@ export function AdvancedAnalyticsReporting() {
                     <div key={goal.id}>
                       <div className="flex justify-between mb-1">
                         <p className="text-sm font-medium">{goal.title}</p>
-                        <span className="text-xs text-muted/50">{goal.progress}%</span>
+                        <span className="text-xs text-muted-foreground">{goal.progress}%</span>
                       </div>
                       <div className="h-2 bg-muted/20 rounded-full overflow-hidden">
                         <div

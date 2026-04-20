@@ -27,7 +27,7 @@ export default function DemoDISCButton() {
             </div>
             <div>
               <p className="font-medium text-sm">Gráficos Interactivos</p>
-              <p className="text-xs text-muted/60">Radar, barras y circulares</p>
+              <p className="text-xs text-muted-foreground">Radar, barras y circulares</p>
             </div>
           </div>
 
@@ -37,7 +37,7 @@ export default function DemoDISCButton() {
             </div>
             <div>
               <p className="font-medium text-sm">Análisis con IA</p>
-              <p className="text-xs text-muted/60">Insights personalizados</p>
+              <p className="text-xs text-muted-foreground">Insights personalizados</p>
             </div>
           </div>
 
@@ -47,7 +47,7 @@ export default function DemoDISCButton() {
             </div>
             <div>
               <p className="font-medium text-sm">Perfil Completo</p>
-              <p className="text-xs text-muted/60">DISC detallado</p>
+              <p className="text-xs text-muted-foreground">DISC detallado</p>
             </div>
           </div>
 
@@ -57,7 +57,7 @@ export default function DemoDISCButton() {
             </div>
             <div>
               <p className="font-medium text-sm">Demo Interactivo</p>
-              <p className="text-xs text-muted/60">Prueba inmediata</p>
+              <p className="text-xs text-muted-foreground">Prueba inmediata</p>
             </div>
           </div>
         </div>

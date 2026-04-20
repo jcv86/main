@@ -194,13 +194,13 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
             <CardContent className="space-y-3">
               {c1Context[3] && (
                 <div className="bg-muted/70/50 p-4 rounded-[28px] border-l-4 border-blue/50">
-                  <p className="text-xs text-muted/40 font-semibold mb-1">Tu Desafío Actual</p>
+                  <p className="text-xs text-muted-foreground font-semibold mb-1">Tu Desafío Actual</p>
                   <p className="text-white">{c1Context[3]}</p>
                 </div>
               )}
               {c1Context[4] && (
                 <div className="bg-muted/70/50 p-4 rounded-[28px] border-l-4 border-emerald-500">
-                  <p className="text-xs text-muted/40 font-semibold mb-1">Tu Objetivo para 90 Días</p>
+                  <p className="text-xs text-muted-foreground font-semibold mb-1">Tu Objetivo para 90 Días</p>
                   <p className="text-white">{c1Context[4]}</p>
                 </div>
               )}
@@ -223,7 +223,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
                     <CardTitle className="text-white text-lg">{section.title}</CardTitle>
                   </div>
                   <ChevronDown
-                    className={`w-5 h-5 text-muted/40 transition-transform ${
+                    className={`w-5 h-5 text-muted-foreground transition-transform ${
                       expandedSection === section.id ? 'rotate-180' : ''
                     }`}
                   />
@@ -266,7 +266,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
               >
                 Generar mi Ruta Personalizada →
               </Button>
-              <p className="text-xs text-muted/40">Tiempo estimado: 3 minutos</p>
+              <p className="text-xs text-muted-foreground">Tiempo estimado: 3 minutos</p>
             </CardContent>
           </Card>
         )}

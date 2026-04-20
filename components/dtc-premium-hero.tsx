@@ -56,7 +56,7 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
         <div className="mb-24">
           {/* Tagline */}
           <div className="mb-8 inline-block">
-            <p className="text-sm font-semibold tracking-widest text-muted/40 uppercase">
+            <p className="text-sm font-semibold tracking-widest text-muted-foreground uppercase">
               Transformación Profesional Estructurada
             </p>
           </div>
@@ -86,19 +86,19 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
             <div className="p-6 rounded-[20px] bg-muted/90/40 border border-muted/80">
               <p className="text-3xl font-bold text-yellow mb-2">4</p>
-              <p className="text-sm text-muted/40">Fases Estructuradas</p>
+              <p className="text-sm text-muted-foreground">Fases Estructuradas</p>
             </div>
             <div className="p-6 rounded-[20px] bg-muted/90/40 border border-muted/80">
               <p className="text-3xl font-bold text-orange mb-2">90</p>
-              <p className="text-sm text-muted/40">Días de Transformación</p>
+              <p className="text-sm text-muted-foreground">Días de Transformación</p>
             </div>
             <div className="p-6 rounded-[20px] bg-muted/90/40 border border-muted/80">
               <p className="text-3xl font-bold text-red mb-2">∞</p>
-              <p className="text-sm text-muted/40">Coach IA 24/7</p>
+              <p className="text-sm text-muted-foreground">Coach IA 24/7</p>
             </div>
             <div className="p-6 rounded-[20px] bg-muted/90/40 border border-muted/80">
               <p className="text-3xl font-bold text-blue mb-2">1:1</p>
-              <p className="text-sm text-muted/40">Personalizado</p>
+              <p className="text-sm text-muted-foreground">Personalizado</p>
             </div>
           </div>
         </div>
@@ -140,7 +140,7 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
                   </h3>
 
                   {/* Description */}
-                  <p className="text-muted/40 text-sm mb-4 font-medium">
+                  <p className="text-muted-foreground text-sm mb-4 font-medium">
                     {phase.description}
                   </p>
 
@@ -212,7 +212,7 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
                 <div className={`text-lg font-bold mb-3 text-${item.accent}`}>
                   {item.title}
                 </div>
-                <p className="text-muted/40 text-sm leading-relaxed">
+                <p className="text-muted-foreground text-sm leading-relaxed">
                   {item.description}
                 </p>
               </div>
@@ -222,7 +222,7 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
 
         {/* Final CTA */}
         <div className="text-center pt-12 border-t border-muted/80">
-          <p className="text-muted/40 mb-8">
+          <p className="text-muted-foreground mb-8">
             Tu transformación comienza hoy. Sin condiciones. Sin promesas vacías.
           </p>
           <button className="bg-red text-white font-semibold px-10 py-5 rounded-[20px] text-lg hover:bg-red/90 transition-colors inline-flex items-center gap-2 group">

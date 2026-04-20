@@ -277,7 +277,7 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
         {messages.length > 2 && conversationId && (
           <div className="px-4 py-2 border-t bg-muted/5">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-muted/60">¿Qué te pareció esta conversación?</span>
+              <span className="text-muted-foreground">¿Qué te pareció esta conversación?</span>
               <div className="flex items-center gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
@@ -320,9 +320,9 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
             </Button>
           </div>
           <div className="flex items-center justify-between mt-2">
-            <p className="text-xs text-muted/50">Presiona Enter para enviar, Shift+Enter para nueva línea</p>
+            <p className="text-xs text-muted-foreground">Presiona Enter para enviar, Shift+Enter para nueva línea</p>
             {speechSupported && (
-              <p className="text-xs text-muted/50 flex items-center gap-1">
+              <p className="text-xs text-muted-foreground flex items-center gap-1">
                 <Mic className="h-3 w-3" />
                 {isListening ? "Escuchando..." : "Click para hablar"}
               </p>

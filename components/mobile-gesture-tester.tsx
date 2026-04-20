@@ -549,28 +549,28 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                 <CheckCircle className="h-5 w-5" />
                 <span className="text-2xl font-bold">{passedTests}</span>
               </div>
-              <p className="text-sm text-muted/60">Passed</p>
+              <p className="text-sm text-muted-foreground">Passed</p>
             </div>
             <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 text-red mb-1">
                 <XCircle className="h-5 w-5" />
                 <span className="text-2xl font-bold">{failedTests}</span>
               </div>
-              <p className="text-sm text-muted/60">Failed</p>
+              <p className="text-sm text-muted-foreground">Failed</p>
             </div>
             <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 text-blue mb-1">
                 <Loader2 className={`h-5 w-5 ${testingTests > 0 ? "animate-spin" : ""}`} />
                 <span className="text-2xl font-bold">{testingTests}</span>
               </div>
-              <p className="text-sm text-muted/60">Testing</p>
+              <p className="text-sm text-muted-foreground">Testing</p>
             </div>
             <div className="text-center p-3 bg-white rounded-[28px] border">
               <div className="flex items-center justify-center gap-2 text-purple mb-1">
                 <Touch className="h-5 w-5" />
                 <span className="text-2xl font-bold">{navigator.maxTouchPoints || 0}</span>
               </div>
-              <p className="text-sm text-muted/60">Max Touch Points</p>
+              <p className="text-sm text-muted-foreground">Max Touch Points</p>
             </div>
           </div>
 
@@ -652,7 +652,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                         </div>
                         <div>
                           <h4 className="font-semibold">{test.name}</h4>
-                          <p className="text-sm text-muted/60">{test.description}</p>
+                          <p className="text-sm text-muted-foreground">{test.description}</p>
                         </div>
                       </div>
                       {getStatusIcon(test.status, isCurrentTest)}
@@ -667,7 +667,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                     )}
 
                     {test.events.length > 0 && (
-                      <div className="mt-2 text-xs text-muted/60">Events detected: {test.events.length}</div>
+                      <div className="mt-2 text-xs text-muted-foreground">Events detected: {test.events.length}</div>
                     )}
                   </CardContent>
                 </Card>
@@ -712,10 +712,10 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
             <CardContent>
               <div className="space-y-2 max-h-48 overflow-y-auto">
                 {gestureLog.length === 0 ? (
-                  <p className="text-xs text-muted/60 italic">No gestures detected yet...</p>
+                  <p className="text-xs text-muted-foreground italic">No gestures detected yet...</p>
                 ) : (
                   gestureLog.map((log, i) => (
-                    <div key={i} className="text-xs text-muted/80 font-mono">
+                    <div key={i} className="text-xs text-secondary font-mono">
                       {log}
                     </div>
                   ))

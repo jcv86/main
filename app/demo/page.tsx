@@ -218,7 +218,7 @@ export default function DemoPage() {
                   {Object.entries(profileNames).map(([key, name]) => (
                     <div key={key} className="text-center">
                       <div className={`font-bold text-2xl mb-2 ${
-                        key === primary ? 'text-purple' : key === secondary ? 'text-blue' : 'text-muted/40'
+                        key === primary ? 'text-purple' : key === secondary ? 'text-blue' : 'text-muted-foreground'
                       }`}>
                         {scores[key]}/5
                       </div>
