@@ -39,11 +39,13 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
   const handleStartNow = () => {
     // Expand first step if not already expanded
     setExpandedSteps(new Set([0]))
-    // Scroll to steps section
+    // Scroll to steps section within the modal's scrollable container
+    const contentContainer = document.querySelector('[data-modal-content="scrollable"]')
     const stepsSection = document.querySelector('[data-section="steps"]')
-    if (stepsSection) {
+    if (stepsSection && contentContainer) {
       setTimeout(() => {
-        stepsSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        const offsetTop = stepsSection.getBoundingClientRect().top - contentContainer.getBoundingClientRect().top + contentContainer.scrollTop
+        contentContainer.scrollTo({ top: offsetTop - 20, behavior: 'smooth' })
       }, 100)
     }
   }
@@ -71,7 +73,7 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
         </div>
 
         {/* Scrollable Content */}
-        <div className="overflow-y-auto flex-1 px-6 sm:px-8 py-6 space-y-6 pb-20">
+        <div className="overflow-y-auto flex-1 px-6 sm:px-8 py-6 space-y-6 pb-20" data-modal-content="scrollable">
           {/* Full Description */}
           <div className="bg-muted/5 border border-border rounded-xl p-3 sm:p-4">
             <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">{task.fullDescription}</p>
