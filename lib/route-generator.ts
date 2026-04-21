@@ -113,88 +113,89 @@ Responde en JSON con el siguiente formato:
       }
     })
 
-  const route_60days: RouteActionItem[] = [
-    {
-      day: 31,
-      title: `Profundizar en ${skills[1] || 'segunda habilidad'}`,
-      description: 'Nivel intermedio del siguiente área de desarrollo',
-      type: 'learning',
-      timeEstimate: 180
-    },
-    {
-      day: 35,
-      title: 'Proyecto más complejo: Multi-skill',
-      description: 'Proyecto que combine las habilidades aprendidas',
-      type: 'practice',
-      timeEstimate: 300
-    },
-    {
-      day: 42,
-      title: 'Participar en comunidad o grupo profesional',
-      description: 'Unirse a meetups, grupo de estudio, o comunidad online',
-      type: 'networking',
-      timeEstimate: 120
-    },
-    {
-      day: 49,
-      title: 'Buscar oportunidades: Informar a contactos',
-      description: 'Hacer seguimiento a contactos clave sobre tu progreso',
-      type: 'networking',
-      timeEstimate: 90
-    },
-    {
-      day: 56,
-      title: 'Evaluación de candidatura',
-      description: 'Si aplica: revisar qué falta para ser candidato competitivo',
-      type: 'planning',
-      timeEstimate: 120
-    },
-    {
-      day: 59,
-      title: 'Hito de 60 días: Mid-course review',
-      description: 'Celebra logros, reajusta estrategia para últimos 30 días',
-      type: 'milestone',
-      timeEstimate: 120
-    }
-  ]
+  const route_60days: RouteActionItem[] = availableDays
+    .filter(day => day > 30 && day <= 60)
+    .map(day => {
+      const taskDetail = getTaskDetail(day)
+      if (!taskDetail) {
+        return {
+          day,
+          title: `Día ${day}`,
+          description: 'Tarea pendiente',
+          type: 'planning' as const,
+          timeEstimate: 60
+        }
+      }
+      
+      // Map task type from title patterns
+      let type: 'learning' | 'practice' | 'networking' | 'planning' | 'milestone' = 'planning'
+      const lowerTitle = taskDetail.title.toLowerCase()
+      
+      if (lowerTitle.includes('aprender') || lowerTitle.includes('curso') || lowerTitle.includes('aprendizaje') || lowerTitle.includes('análisis') || lowerTitle.includes('profundizar')) type = 'learning'
+      else if (lowerTitle.includes('proyecto') || lowerTitle.includes('práctica') || lowerTitle.includes('practica') || lowerTitle.includes('práct') || lowerTitle.includes('build')) type = 'practice'
+      else if (lowerTitle.includes('networking') || lowerTitle.includes('conecta') || lowerTitle.includes('entrevista') || lowerTitle.includes('buscar') || lowerTitle.includes('participar') || lowerTitle.includes('activación')) type = 'networking'
+      else if (lowerTitle.includes('checkpoint') || lowerTitle.includes('revisión') || lowerTitle.includes('review') || lowerTitle.includes('reflexión') || lowerTitle.includes('evaluación')) type = 'planning'
+      else if (lowerTitle.includes('milestone') || lowerTitle.includes('completado') || lowerTitle.includes('assessment') || day === 60) type = 'milestone'
+      
+      // Calculate total time from all steps
+      const totalTime = taskDetail.steps.reduce((sum, step) => {
+        const minutes = step.duration.includes('h') 
+          ? parseInt(step.duration) * 60
+          : parseInt(step.duration)
+        return sum + minutes
+      }, 0)
+      
+      return {
+        day: taskDetail.day,
+        title: taskDetail.title,
+        description: taskDetail.fullDescription,
+        type,
+        timeEstimate: totalTime || 120,
+        resources: taskDetail.resources?.map(r => r.title)
+      }
+    })
 
-  const route_90days: RouteActionItem[] = [
-    {
-      day: 61,
-      title: `Especialización: ${skills[2] || 'tercera habilidad'}`,
-      description: 'Alcanza nivel avanzado en área complementaria',
-      type: 'learning',
-      timeEstimate: 200
-    },
-    {
-      day: 70,
-      title: 'Proyecto capstone: Portfolio piece',
-      description: 'Crea tu mejor trabajo para demostrar competencia',
-      type: 'practice',
-      timeEstimate: 400
-    },
-    {
-      day: 77,
-      title: 'Activación en el mercado',
-      description: 'Aplicar a posiciones, hacer pitches a empresas, acelerar networking',
-      type: 'networking',
-      timeEstimate: 180
-    },
-    {
-      day: 85,
-      title: 'Preparación final para el rol',
-      description: 'Entrevistas de práctica, revisión técnica, confianza',
-      type: 'practice',
-      timeEstimate: 150
-    },
-    {
-      day: 89,
-      title: 'Hito de 90 días: Celebración y próximos pasos',
-      description: 'Evalúa transformación, planifica continuidad',
-      type: 'milestone',
-      timeEstimate: 120
-    }
-  ]
+  const route_90days: RouteActionItem[] = availableDays
+    .filter(day => day > 60 && day <= 90)
+    .map(day => {
+      const taskDetail = getTaskDetail(day)
+      if (!taskDetail) {
+        return {
+          day,
+          title: `Día ${day}`,
+          description: 'Tarea pendiente',
+          type: 'planning' as const,
+          timeEstimate: 60
+        }
+      }
+      
+      // Map task type from title patterns
+      let type: 'learning' | 'practice' | 'networking' | 'planning' | 'milestone' = 'planning'
+      const lowerTitle = taskDetail.title.toLowerCase()
+      
+      if (lowerTitle.includes('aprender') || lowerTitle.includes('especialización') || lowerTitle.includes('liderazgo') || lowerTitle.includes('experto')) type = 'learning'
+      else if (lowerTitle.includes('proyecto') || lowerTitle.includes('capstone') || lowerTitle.includes('práctica') || lowerTitle.includes('practica') || lowerTitle.includes('preparación')) type = 'practice'
+      else if (lowerTitle.includes('networking') || lowerTitle.includes('activación') || lowerTitle.includes('mercado') || lowerTitle.includes('pitch')) type = 'networking'
+      else if (lowerTitle.includes('checkpoint') || lowerTitle.includes('revisión') || lowerTitle.includes('review') || lowerTitle.includes('reflexión') || lowerTitle.includes('evaluación')) type = 'planning'
+      else if (lowerTitle.includes('milestone') || lowerTitle.includes('completado') || lowerTitle.includes('assessment') || lowerTitle.includes('mes 1') || day === 90) type = 'milestone'
+      
+      // Calculate total time from all steps
+      const totalTime = taskDetail.steps.reduce((sum, step) => {
+        const minutes = step.duration.includes('h') 
+          ? parseInt(step.duration) * 60
+          : parseInt(step.duration)
+        return sum + minutes
+      }, 0)
+      
+      return {
+        day: taskDetail.day,
+        title: taskDetail.title,
+        description: taskDetail.fullDescription,
+        type,
+        timeEstimate: totalTime || 120,
+        resources: taskDetail.resources?.map(r => r.title)
+      }
+    })
 
   return {
     route_30days,
