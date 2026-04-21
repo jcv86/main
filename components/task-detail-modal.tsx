@@ -36,6 +36,18 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
     setExpandedSteps(newExpanded)
   }
 
+  const handleStartNow = () => {
+    // Expand first step if not already expanded
+    setExpandedSteps(new Set([0]))
+    // Scroll to steps section
+    const stepsSection = document.querySelector('[data-section="steps"]')
+    if (stepsSection) {
+      setTimeout(() => {
+        stepsSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      }, 100)
+    }
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 sm:p-4">
       <Card className="bg-card border border-border w-full max-w-4xl h-[90vh] overflow-hidden flex flex-col rounded-2xl">
@@ -66,7 +78,7 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
           </div>
 
           {/* Steps */}
-          <div>
+          <div data-section="steps">
             <h3 className="text-lg sm:text-xl font-bold text-foreground mb-3 flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-exploration flex-shrink-0" />
               Pasos a Seguir
@@ -202,7 +214,10 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
           >
             Cerrar
           </Button>
-          <Button className="bg-exploration hover:bg-exploration/90 text-xs sm:text-sm">
+          <Button
+            onClick={handleStartNow}
+            className="bg-exploration hover:bg-exploration/90 text-xs sm:text-sm"
+          >
             Empezar Ahora
           </Button>
         </div>
