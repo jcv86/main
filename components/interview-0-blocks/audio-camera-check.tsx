@@ -62,38 +62,53 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
 
   const handleTestAudio = async () => {
     setIsTestingAudio(true)
+    let stream: MediaStream | null = null
+    let audioContext: AudioContext | null = null
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
+      stream = await navigator.mediaDevices.getUserMedia({
         audio: { echoCancellation: true, noiseSuppression: true },
         video: false
       })
 
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+      audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
       const analyser = audioContext.createAnalyser()
       const source = audioContext.createMediaStreamSource(stream)
       source.connect(analyser)
 
       const dataArray = new Uint8Array(analyser.frequencyBinCount)
+      let isRunning = true
+
       const checkAudio = () => {
+        if (!isRunning) return
         analyser.getByteFrequencyData(dataArray)
         const average = dataArray.reduce((a, b) => a + b) / dataArray.length
         setAudioLevel(Math.round((average / 255) * 100))
-
-        if (isTestingAudio) {
-          requestAnimationFrame(checkAudio)
-        }
+        requestAnimationFrame(checkAudio)
       }
 
       checkAudio()
 
+      // Stop after 3 seconds
       setTimeout(() => {
+        isRunning = false
         setIsTestingAudio(false)
-        stream.getTracks().forEach(track => track.stop())
-        audioContext.close()
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop())
+        }
+        if (audioContext && audioContext.state !== 'closed') {
+          audioContext.close()
+        }
       }, 3000)
     } catch (err) {
       console.error('[v0] Audio test error:', err)
       setIsTestingAudio(false)
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop())
+      }
+      if (audioContext && audioContext.state !== 'closed') {
+        audioContext.close()
+      }
     }
   }
 
