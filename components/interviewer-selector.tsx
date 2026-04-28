@@ -65,41 +65,41 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
         </p>
       </div>
 
-      {/* Layout: Navbar Vertical + Foto Grande */}
-      <div className="flex gap-6">
+      {/* Layout: Navbar Vertical + Foto */}
+      <div className="flex gap-4">
         {/* Navbar Vertical - Izquierda */}
-        <div className="flex flex-col gap-2 w-32">
+        <div className="flex flex-col gap-2 w-28">
           {INTERVIEWERS.map(interviewer => (
             <button
               key={interviewer.id}
               onClick={() => onChange(interviewer.id)}
-              className={`flex flex-col items-center gap-2 p-3 rounded-lg transition-all ${
+              className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-all ${
                 value === interviewer.id
                   ? 'bg-blue-500/20 border-2 border-blue-500'
                   : 'bg-muted/10 border-2 border-transparent hover:bg-muted/20'
               }`}
             >
-              <div className="relative w-16 h-16 rounded-lg overflow-hidden flex-shrink-0 border border-muted">
+              <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-muted">
                 <Image
                   src={interviewer.image}
                   alt={interviewer.name}
                   fill
                   className="object-cover"
-                  sizes="64px"
+                  sizes="48px"
                 />
               </div>
               <div className="text-center min-w-0">
-                <p className="font-semibold text-foreground text-xs">{interviewer.name}</p>
-                <p className="text-[10px] text-muted-foreground">{interviewer.level}</p>
+                <p className="font-semibold text-foreground text-[10px]">{interviewer.name}</p>
+                <p className="text-[8px] text-muted-foreground">{interviewer.level}</p>
               </div>
             </button>
           ))}
         </div>
 
-        {/* Foto Grande - Derecha */}
+        {/* Foto - Derecha */}
         <div className="flex-1">
           <div className="bg-gradient-to-br from-muted/20 to-muted/5 border border-muted/20 rounded-xl overflow-hidden">
-            <div className="relative w-full h-96 bg-muted">
+            <div className="relative w-full h-48 bg-muted">
               <Image
                 src={selected.image}
                 alt={selected.name}
@@ -111,10 +111,10 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
             </div>
             
             {/* Info abajo de la foto */}
-            <div className="p-6 space-y-2">
-              <h4 className="text-2xl font-bold text-foreground">{selected.name}</h4>
+            <div className="p-4 space-y-2">
+              <h4 className="text-xl font-bold text-foreground">{selected.name}</h4>
               <p className="text-sm text-muted-foreground">{selected.role}</p>
-              <Badge className="mt-3 bg-blue-500/30 text-blue-700 border-blue-500/50 border">
+              <Badge className="mt-2 text-xs bg-blue-500/30 text-blue-700 border-blue-500/50 border">
                 {selected.level}
               </Badge>
             </div>
