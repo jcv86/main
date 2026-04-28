@@ -5,15 +5,16 @@ import Image from 'next/image'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, Zap, Target, Lightbulb } from 'lucide-react'
+import { AVATAR_CONFIG } from '@/lib/avatar-config'
 
 const INTERVIEWERS = [
-  { id: 'interviewer-classic-1', name: 'Sofia', role: 'Reclutadora', image: '/images/interviewers/sofia.jpg' },
-  { id: 'interviewer-classic-2', name: 'Marco', role: 'Manager Senior', image: '/images/interviewers/marco.jpg' },
-  { id: 'interviewer-classic-3', name: 'Elena', role: 'VP Talent', image: '/images/interviewers/elena.jpg' },
-  { id: 'interviewer-classic-4', name: 'David', role: 'Tech Lead', image: '/images/interviewers/david.jpg' },
-  { id: 'interviewer-modern-1', name: 'Alexandra', role: 'Product Manager', image: '/images/interviewers/alexandra.jpg' },
-  { id: 'interviewer-modern-2', name: 'Bruno', role: 'Consultor CEO', image: '/images/interviewers/bruno.jpg' }
+  { id: 'sofia-navarro', name: 'Sofía Navarro', role: 'Orientadora Profesional', level: 'Básico', image: '/images/interviewers/sofia.jpg' },
+  { id: 'andres-rojas', name: 'Andrés Rojas', role: 'Reclutador Técnico', level: 'Intermedio', image: '/images/interviewers/andres.jpg' },
+  { id: 'valentina-muñoz', name: 'Valentina Muñoz', role: 'Jefa de Equipo', level: 'Intermedio+', image: '/images/interviewers/valentina.jpg' },
+  { id: 'mateo-silva', name: 'Mateo Silva', role: 'Co-founder Startup', level: 'Intermedio+', image: '/images/interviewers/mateo.jpg' },
+  { id: 'camila-rivera', name: 'Camila Rivera', role: 'VP Product & Strategy', level: 'Avanzado', image: '/images/interviewers/camila.jpg' },
+  { id: 'rafael-araya', name: 'Rafael Araya', role: 'Senior Advisor & Coach', level: 'Avanzado', image: '/images/interviewers/rafael.jpg' }
 ]
 
 interface InterviewerSelectorProps {

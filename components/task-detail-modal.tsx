@@ -1,10 +1,11 @@
 'use client'
 
 import { useState } from 'react'
-import { X, ExternalLink, BookOpen, CheckCircle, Lightbulb, Clock } from 'lucide-react'
+import { X, ExternalLink, BookOpen, CheckCircle, Lightbulb, Clock, Video } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { TaskDetail } from '@/lib/task-details'
+import { getRecommendedAvatars, getAvatarConfig } from '@/lib/avatar-config'
 
 const RESOURCE_TYPE_LABELS: Record<string, string> = {
   'template': 'Plantilla',
@@ -49,6 +50,18 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
       }, 100)
     }
   }
+
+  const handlePracticeWithAvatar = () => {
+    const recommendedAvatars = getRecommendedAvatars(task.day)
+    if (recommendedAvatars.length > 0) {
+      const avatarId = recommendedAvatars[0]
+      window.location.href = `/despega/a3?avatar=${avatarId}&day=${task.day}`
+    } else {
+      window.location.href = `/despega/a3?day=${task.day}`
+    }
+  }
+
+  const recommendedAvatars = getRecommendedAvatars(task.day)
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-2 sm:p-4">
@@ -208,7 +221,7 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
         </div>
 
         {/* Footer - Action buttons */}
-        <div className="sticky bottom-0 bg-card border-t border-border px-6 sm:px-8 py-3 sm:py-4 flex justify-end gap-2 sm:gap-3">
+        <div className="sticky bottom-0 bg-card border-t border-border px-6 sm:px-8 py-3 sm:py-4 flex justify-between gap-2 sm:gap-3 flex-wrap">
           <Button
             onClick={onClose}
             variant="outline"
@@ -216,12 +229,24 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
           >
             Cerrar
           </Button>
-          <Button
-            onClick={handleStartNow}
-            className="bg-exploration hover:bg-exploration/90 text-xs sm:text-sm"
-          >
-            Empezar Ahora
-          </Button>
+          <div className="flex gap-2 sm:gap-3">
+            {recommendedAvatars.length > 0 && (
+              <Button
+                onClick={handlePracticeWithAvatar}
+                variant="outline"
+                className="border-training hover:bg-training/10 text-training text-xs sm:text-sm flex items-center gap-2"
+              >
+                <Video className="w-4 h-4" />
+                Practicar con Avatar
+              </Button>
+            )}
+            <Button
+              onClick={handleStartNow}
+              className="bg-exploration hover:bg-exploration/90 text-xs sm:text-sm"
+            >
+              Empezar Ahora
+            </Button>
+          </div>
         </div>
       </Card>
     </div>
