@@ -1,44 +1,49 @@
-const path = require('path');
+// This file was auto-created and injected by v0.
+// DO NOT MODIFY THIS FILE DIRECTLY.
+// EDIT THE USER CONFIG IN ./next.user-config.js INSTEAD.
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  // Suppress Edge Runtime warnings for dependencies
+const userConfigImport = require('./next.user-config.js')
+const path = require('path')
+
+const __v0_turbopack_root = undefined ?? __dirname
+
+const userConfig = typeof userConfigImport === 'function'
+  ? userConfigImport('phase-development-server', { defaultConfig: {} })
+  : userConfigImport
+
+const config = {
+  ...userConfig,
+  devIndicators: false,
+  images: {
+    ...userConfig.images,
+    unoptimized: process.env.NODE_ENV === 'development',
+  },
   logging: {
-    fetches: {
-      unmatchedRoute: false,
+    ...userConfig.logging,
+    fetches: { fullUrl: true, hmrRefreshes: true },
+    browserToTerminal: true,
+  },
+  turbopack: {
+    ...userConfig.turbopack,
+    root: __v0_turbopack_root,
+  },
+  experimental: {
+    ...userConfig.experimental,
+    transitionIndicator: true,
+    turbopackFileSystemCacheForDev: process.env.TURBOPACK_PERSISTENT_CACHE !== 'false' && process.env.TURBOPACK_PERSISTENT_CACHE !== '0',
+    serverActions: {
+      ...userConfig.experimental?.serverActions,
+      allowedOrigins: [
+        ...(userConfig.experimental?.serverActions?.allowedOrigins || []),
+        '*.vusercontent.net',
+      ],
     },
   },
-  webpack: (config, { dev, isServer }) => {
-    // Ignore Edge Runtime warnings from @supabase/realtime-js
-    config.ignoreWarnings = [
-      { module: /@supabase\/realtime-js/ },
-      (warning) => warning.message?.includes('process.versions'),
-    ];
-    // Configure webpack cache with absolute path
-    if (!dev && !isServer) {
-      config.cache = {
-        type: 'filesystem',
-        cacheDirectory: path.join(process.cwd(), '.next/cache/webpack'),
-        buildDependencies: {
-          config: [__filename],
-        },
-        maxAge: 1000 * 60 * 60 * 24, // 24 hours
-      };
-    } else {
-      // Development: Use in-memory cache
-      config.cache = {
-        type: 'memory',
-      };
-    }
+  allowedDevOrigins: [
+    ...(userConfig.allowedDevOrigins || []),
+    '*.vusercontent.net',
+    '*.dev-vm.vusercontent.net',
+  ],
+}
 
-    return config;
-  },
-  // Ensure proper build output
-  outputFileTracingIncludes: {},
-  experimental: {
-    esmExternals: true,
-  },
-};
-
-module.exports = nextConfig;
+module.exports = config
