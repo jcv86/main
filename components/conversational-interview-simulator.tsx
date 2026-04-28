@@ -701,19 +701,8 @@ export function ConversationalInterviewSimulator({
           </CardContent>
         </Card>
       )}
-                    {userResponse.trim() && (
-                      <button
-                        onClick={handleSubmitResponse}
-                        className="flex-1 bg-blue/80 hover:bg-blue text-white text-xs font-bold py-1 rounded transition-all"
-                      >
-                        ✓ Enviar
-                      </button>
-                    )}
-                    <button
-                      onClick={handleMoveNext}
-                      className="flex-1 bg-emerald-600/80 hover:bg-emerald-600 text-white text-xs font-bold py-1 rounded transition-all"
-                    >
-                      → Siguiente
+
+      {/* Feedback Stage */}
                     </button>
                   </div>
                 </div>
