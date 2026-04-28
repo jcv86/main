@@ -571,11 +571,11 @@ export function ConversationalInterviewSimulator({
             <CardDescription>Mira la pregunta, mantén contacto visual con la cámara y responde como en entrevista real</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {/* Professional Split-Screen Layout - Video Interview */}
-            <div className="grid lg:grid-cols-2 gap-0 bg-black rounded-xl overflow-hidden shadow-2xl h-[550px]">
+            {/* Full Screen Video Recording Layout with Avatar PIP */}
+            <div className="relative bg-black rounded-xl overflow-hidden shadow-2xl h-[550px]">
               
-              {/* LEFT PANEL: User Video (50%) */}
-              <div className="relative bg-black overflow-hidden flex flex-col">
+              {/* MAIN VIDEO: User Video (Full Width) */}
+              <div className="relative w-full h-full flex flex-col">
                 {/* User Video Stream */}
                 <video
                   ref={videoRef}
@@ -586,56 +586,15 @@ export function ConversationalInterviewSimulator({
                 />
 
                 {/* Recording Status - Top Left */}
-                <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
+                <div className="absolute top-3 left-3 flex items-center gap-2 z-20">
                   <div className={`w-2.5 h-2.5 rounded-full ${isListening ? 'bg-red animate-pulse' : 'bg-emerald-500'}`} />
                   <span className="text-xs font-bold text-white bg-black/60 px-2 py-1 rounded-full uppercase">
                     {isListening ? 'Grabando' : 'Listo'}
                   </span>
                 </div>
 
-                {/* Input & Controls - Bottom */}
-                <div className="p-2 bg-black/80 border-t border-muted/20 space-y-1.5">
-                  <textarea
-                    value={userResponse}
-                    onChange={(e) => setUserResponse(e.target.value)}
-                    placeholder="Tu respuesta..."
-                    className="w-full bg-slate-950/80 border border-muted/70 rounded-lg p-1.5 text-xs text-white placeholder-slate-500 resize-none"
-                    rows={1}
-                  />
-                  <div className="flex gap-1">
-                    {isSupported && (
-                      <button
-                        onClick={isListening ? stopListening : startListening}
-                        className={`px-2 py-1 rounded-lg text-xs font-semibold transition-all ${
-                          isListening ? 'bg-red text-white' : 'bg-muted/20 text-muted-foreground'
-                        }`}
-                      >
-                        {isListening ? 'Parar' : 'Mic'}
-                      </button>
-                    )}
-                    {userResponse.trim() && (
-                      <button
-                        onClick={handleSubmitResponse}
-                        className="flex-1 bg-blue/80 text-white text-xs font-bold py-1 rounded-lg"
-                      >
-                        Enviar
-                      </button>
-                    )}
-                    <button
-                      onClick={handleMoveNext}
-                      className="flex-1 bg-emerald-600/80 text-white text-xs font-bold py-1 rounded-lg"
-                    >
-                      Siguiente
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* RIGHT PANEL: Interviewer (50%) */}
-              <div className="bg-background flex flex-col overflow-hidden relative">
-                
-                {/* Interviewer Avatar - Listening Video in Loop */}
-                <div className="h-2/5 relative overflow-hidden bg-black border-l border-muted/20 flex items-center justify-center">
+                {/* Avatar PIP - Bottom Left Corner */}
+                <div className="absolute bottom-3 left-3 w-32 h-40 rounded-lg overflow-hidden border-2 border-white/30 shadow-lg z-30 bg-black">
                   {selectedInterviewerId ? (
                     <video
                       key={`listening-${selectedInterviewerId}`}
@@ -651,17 +610,57 @@ export function ConversationalInterviewSimulator({
                   )}
                 </div>
 
-                {/* Info Card - Top Left Corner */}
-                <div className="absolute top-2 left-2 right-auto w-56 z-20">
+                {/* Interviewer Info - Top Right */}
+                <div className="absolute top-3 right-3 w-48 z-20">
                   <div className="flex gap-2 bg-black/90 backdrop-blur-md rounded-lg p-2 border border-muted/50">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)}`}>
                       {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
                     </div>
                     <div className="min-w-0 flex-1">
                       <h3 className="text-xs font-bold text-white truncate">{getAvatarName(selectedInterviewerId, 'interviewer')}</h3>
-                      <p className="text-xs text-emerald-400/80 line-clamp-2">{getInterviewerRole(selectedInterviewerId)}</p>
+                      <p className="text-xs text-emerald-400/80 line-clamp-1">{getInterviewerRole(selectedInterviewerId)}</p>
                     </div>
                   </div>
+                </div>
+
+                {/* Input & Controls - Bottom */}
+                <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black via-black/80 to-transparent border-t border-muted/20 space-y-2 z-20">
+                  <textarea
+                    value={userResponse}
+                    onChange={(e) => setUserResponse(e.target.value)}
+                    placeholder="Tu respuesta..."
+                    className="w-full bg-slate-950/80 border border-muted/70 rounded-lg p-2 text-xs text-white placeholder-slate-500 resize-none"
+                    rows={2}
+                  />
+                  <div className="flex gap-2">
+                    {isSupported && (
+                      <button
+                        onClick={isListening ? stopListening : startListening}
+                        className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
+                          isListening ? 'bg-red text-white' : 'bg-muted/20 text-muted-foreground hover:bg-muted/30'
+                        }`}
+                      >
+                        {isListening ? '⏹️ Parar' : '🎤 Mic'}
+                      </button>
+                    )}
+                    {userResponse.trim() && (
+                      <button
+                        onClick={handleSubmitResponse}
+                        className="flex-1 bg-blue/80 hover:bg-blue text-white text-xs font-bold py-2 rounded-lg transition-all"
+                      >
+                        ✓ Enviar
+                      </button>
+                    )}
+                    <button
+                      onClick={handleMoveNext}
+                      className="flex-1 bg-emerald-600/80 hover:bg-emerald-600 text-white text-xs font-bold py-2 rounded-lg transition-all"
+                    >
+                      → Siguiente
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
                 </div>
 
                 {/* Progress Badge - Top Right */}
