@@ -443,7 +443,6 @@ export function ConversationalInterviewSimulator({
 
   return (
     <div className="space-y-6">
-      {console.log('[v0] Current stage:', stage)}
       {/* Setup Stage */}
       {stage === 'setup' && (
         <div className="space-y-6">
