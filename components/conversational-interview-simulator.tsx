@@ -439,6 +439,10 @@ export function ConversationalInterviewSimulator({
     return gradients[avatarId] || 'bg-background'
   }
 
+  const getWhatTheyLookFor = (id: string) => {
+    return getInterviewerFocus(id)
+  }
+
   const lastAttempt = currentAttempts[currentAttempts.length - 1]
 
   return (
