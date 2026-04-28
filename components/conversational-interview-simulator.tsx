@@ -634,16 +634,20 @@ export function ConversationalInterviewSimulator({
               {/* RIGHT PANEL: Interviewer (50%) */}
               <div className="bg-background flex flex-col overflow-hidden relative">
                 
-                {/* Interviewer Photo Section */}
-                <div className="h-2/5 relative overflow-hidden bg-black border-l border-muted/20">
-                  {selectedInterviewerId && (
-                    <Image
-                      src={`/images/interviewers/${getInterviewerImageFile(selectedInterviewerId)}.jpg`}
-                      alt={getAvatarName(selectedInterviewerId, 'interviewer')}
-                      fill
-                      className="object-top object-contain"
-                      priority
+                {/* Interviewer Avatar - Listening Video in Loop */}
+                <div className="h-2/5 relative overflow-hidden bg-black border-l border-muted/20 flex items-center justify-center">
+                  {selectedInterviewerId ? (
+                    <video
+                      key={`listening-${selectedInterviewerId}`}
+                      src={`/videos/avatars/${selectedInterviewerId}/listening.mp4`}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
                     />
+                  ) : (
+                    <div className="w-full h-full bg-muted/20" />
                   )}
                 </div>
 
