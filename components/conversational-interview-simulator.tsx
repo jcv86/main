@@ -805,59 +805,6 @@ export function ConversationalInterviewSimulator({
 
             </div>
 
-                {/* Progress Badge - Top Right */}
-                <div className="absolute top-2 right-2 w-28 bg-muted/90 border border-muted/70 rounded-lg p-1 z-10">
-                  <div className="flex items-center gap-0.5 mb-0.5">
-                    <TrendingUp className="w-2.5 h-2.5 text-emerald-400" />
-                    <p className="text-xs font-bold uppercase">Progreso</p>
-                  </div>
-                  <div className="text-xs mb-0.5">
-                    <span className="font-semibold">{currentQuestionIdx + 1}</span>/<span>{questions.length}</span>
-                  </div>
-                  <Progress value={((currentQuestionIdx + 1) / questions.length) * 100} className="h-1" />
-                </div>
-
-                {/* Scrollable Content */}
-                <div className="flex-1 overflow-y-auto p-2 space-y-1.5 bg-background">
-                  
-                  {/* What they look for */}
-                  <div className="bg-slate-950/80 rounded-lg p-2 border border-blue/40">
-                    <p className="text-xs font-bold text-blue-300 uppercase mb-1 tracking-wider">Lo que busca:</p>
-                    <p className="text-xs text-white/80 leading-tight line-clamp-3">{getInterviewerFocus(selectedInterviewerId)}</p>
-                  </div>
-
-                  {/* Question Card */}
-                  <Card className="border border-blue/40 bg-slate-950/80">
-                    <CardHeader className="py-1.5 px-2 pb-1">
-                      <CardTitle className="text-xs flex items-center gap-1 uppercase font-bold leading-none text-blue-300">
-                        <HelpCircle className="w-2.5 h-2.5" />
-                        Pregunta
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent className="p-2 text-xs space-y-1">
-                      <p className="font-semibold text-white/90 line-clamp-2">{currentQuestion.text}</p>
-                      <p className="text-white/70 italic line-clamp-1">{currentQuestion.context}</p>
-                    </CardContent>
-                  </Card>
-
-                  {/* Tips */}
-                  {user && (
-                    <div className="rounded-lg border border-muted/70 bg-slate-950/80 overflow-hidden">
-                      <InterviewTips
-                        questionText={currentQuestion.text}
-                        userResponse={userResponse}
-                        questionContext={currentQuestion.context}
-                        difficulty={level}
-                        sessionId={`interview-${level}-${Date.now()}`}
-                        userId={user.id}
-                        onTipGenerated={(tip) => console.log('[v0] Tip generated:', tip)}
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
             {error && (
               <Alert variant="destructive" className="border-red/30 bg-red/5">
                 <AlertTriangle className="h-4 w-4 text-red" />
