@@ -841,6 +841,32 @@ export function ConversationalInterviewSimulator({
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
+            {/* Farewell Video + Results Loading */}
+            <div className="space-y-4">
+              {/* Video */}
+              <video
+                src="/videos/farewell.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full rounded-xl shadow-lg"
+              />
+
+              {/* Results Calculating Message */}
+              <div className="bg-gradient-to-r from-blue/10 to-purple/10 border border-blue/30 rounded-xl p-6 text-center space-y-3">
+                <div className="flex justify-center gap-1">
+                  <div className="w-2 h-2 rounded-full bg-blue animate-bounce" style={{ animationDelay: '0s' }} />
+                  <div className="w-2 h-2 rounded-full bg-blue animate-bounce" style={{ animationDelay: '0.2s' }} />
+                  <div className="w-2 h-2 rounded-full bg-blue animate-bounce" style={{ animationDelay: '0.4s' }} />
+                </div>
+                <div>
+                  <p className="text-lg font-semibold text-white mb-1">Calculando tus resultados...</p>
+                  <p className="text-sm text-white/70">Por favor espera mientras procesamos tu evaluación</p>
+                </div>
+              </div>
+            </div>
+
             {/* Score Display */}
             <div className="text-center py-6 space-y-3">
               <div className="text-5xl font-bold text-emerald-600 mb-2">
