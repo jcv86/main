@@ -676,8 +676,8 @@ export function ConversationalInterviewSimulator({
                   <div>
                     <p className="font-bold text-blue mb-0.5">PREGUNTA</p>
                     <p className="text-white font-semibold text-xs leading-tight">{questions[currentQuestionIdx]?.text || 'Cargando pregunta...'}</p>
-                    {questions[currentQuestionIdx]?.hint && (
-                      <p className="text-[10px] text-emerald-400/70 italic mt-1">{questions[currentQuestionIdx].hint}</p>
+                    {questions[currentQuestionIdx]?.context && (
+                      <p className="text-[10px] text-emerald-400/70 italic mt-1">{questions[currentQuestionIdx].context}</p>
                     )}
                   </div>
                 </div>
