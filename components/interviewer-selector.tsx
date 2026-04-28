@@ -5,12 +5,12 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 
 const INTERVIEWERS = [
-  { id: 'interviewer-classic-1', name: 'Sofia', role: 'Reclutadora Senior', level: 'Básico', image: '/images/interviewers/sofia.jpg' },
-  { id: 'interviewer-classic-2', name: 'Marco', role: 'Manager Senior Ingeniería', level: 'Intermedio', image: '/images/interviewers/marco.jpg' },
-  { id: 'interviewer-classic-3', name: 'Elena', role: 'VP Talent & Culture', level: 'Intermedio+', image: '/images/interviewers/elena.jpg' },
-  { id: 'interviewer-classic-4', name: 'David', role: 'Tech Lead & Architect', level: 'Intermedio+', image: '/images/interviewers/david.jpg' },
-  { id: 'interviewer-modern-1', name: 'Alex', role: 'Product Manager', level: 'Avanzado', image: '/images/interviewers/alex.jpg' },
-  { id: 'interviewer-modern-2', name: 'Jordan', role: 'CEO Advisor', level: 'Avanzado', image: '/images/interviewers/jordan.jpg' }
+  { id: 'interviewer-classic-1', name: 'Sofia', role: 'Reclutadora Senior', level: 'Básico', image: '/images/interviewers/sofia.jpg', color: 'from-green-500 to-green-600' },
+  { id: 'interviewer-classic-2', name: 'Marco', role: 'Manager Senior Ingeniería', level: 'Intermedio', image: '/images/interviewers/marco.jpg', color: 'from-yellow-500 to-yellow-600' },
+  { id: 'interviewer-classic-3', name: 'Elena', role: 'VP Talent & Culture', level: 'Intermedio+', image: '/images/interviewers/elena.jpg', color: 'from-purple-500 to-purple-600' },
+  { id: 'interviewer-classic-4', name: 'David', role: 'Tech Lead & Architect', level: 'Intermedio+', image: '/images/interviewers/david.jpg', color: 'from-orange-500 to-orange-600' },
+  { id: 'interviewer-modern-1', name: 'Alex', role: 'Product Manager', level: 'Avanzado', image: '/images/interviewers/alex.jpg', color: 'from-blue-500 to-blue-600' },
+  { id: 'interviewer-modern-2', name: 'Jordan', role: 'CEO Advisor', level: 'Avanzado', image: '/images/interviewers/jordan.jpg', color: 'from-red-500 to-red-600' }
 ]
 
 interface InterviewerSelectorProps {
@@ -63,68 +63,64 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Header */}
       <div>
-        <h3 className="text-lg font-bold text-foreground">Selecciona tu Entrevistador</h3>
-        <p className="text-sm text-muted-foreground mt-1">
+        <h3 className="text-2xl font-bold text-foreground uppercase tracking-wide">Selecciona tu Entrevistador</h3>
+        <p className="text-sm text-muted-foreground mt-2">
           Elige un perfil profesional diferente para tener perspectivas variadas
         </p>
       </div>
 
-      {/* Layout: Navbar Vertical + Foto */}
-      <div className="flex gap-3">
-        {/* Navbar Vertical - Izquierda */}
-        <div className="flex flex-col gap-2 w-24">
-          {INTERVIEWERS.map(interviewer => (
-            <button
-              key={interviewer.id}
-              onClick={() => handleSelect(interviewer.id)}
-              className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-all ${
-                value === interviewer.id
-                  ? 'bg-blue-500/20 border-2 border-blue-500 scale-105'
-                  : 'bg-muted/10 border-2 border-transparent hover:bg-muted/20 hover:scale-102'
-              }`}
-            >
-              <div className="relative w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-muted">
-                <Image
-                  src={interviewer.image}
-                  alt={interviewer.name}
-                  fill
-                  className="object-cover"
-                  sizes="40px"
-                />
-              </div>
-              <div className="text-center min-w-0">
-                <p className="font-semibold text-foreground text-[9px]">{interviewer.name}</p>
-                <p className="text-[7px] text-muted-foreground">{interviewer.level}</p>
-              </div>
-            </button>
-          ))}
+      {/* Main Layout: Selected Info (Left) + Grid Avatars (Right) */}
+      <div className="flex gap-8">
+        {/* Left Panel - Selected Coach Info */}
+        <div className="w-96 bg-muted/20 rounded-xl p-8 border border-muted/20 flex flex-col justify-center">
+          <div className={`transition-opacity duration-300 ${isChanging ? 'opacity-50' : 'opacity-100'}`}>
+            <h2 className="text-4xl font-bold text-white mb-4">{selected.name}</h2>
+            <p className="text-lg text-muted-foreground mb-6">{selected.role}</p>
+            <Badge className="text-sm bg-blue-500/40 text-blue-100 border-blue-500/60 border px-4 py-1">
+              Nivel: {selected.level}
+            </Badge>
+          </div>
         </div>
 
-        {/* Foto - Derecha */}
+        {/* Right Panel - Grid of Circular Avatars */}
         <div className="flex-1">
-          <div className="bg-gradient-to-br from-muted/20 to-muted/5 border border-muted/20 rounded-lg overflow-hidden">
-            <div className={`relative w-full h-64 bg-muted flex items-center justify-center transition-opacity duration-300 ${isChanging ? 'opacity-60' : 'opacity-100'}`}>
-              <Image
-                src={selected.image}
-                alt={selected.name}
-                fill
-                className="object-contain"
-                sizes="(max-width: 768px) 100vw, 500px"
-                priority
-              />
-            </div>
-            
-            {/* Info abajo de la foto */}
-            <div className="p-3 space-y-1">
-              <h4 className="text-lg font-bold text-foreground">{selected.name}</h4>
-              <p className="text-xs text-muted-foreground">{selected.role}</p>
-              <Badge className="mt-1 text-[10px] bg-blue-500/30 text-blue-700 border-blue-500/50 border">
-                {selected.level}
-              </Badge>
-            </div>
+          <div className="grid grid-cols-3 gap-6">
+            {INTERVIEWERS.map(interviewer => (
+              <button
+                key={interviewer.id}
+                onClick={() => handleSelect(interviewer.id)}
+                className="flex flex-col items-center gap-3 transition-all group"
+              >
+                {/* Circular Avatar with Gradient Background */}
+                <div className={`relative w-32 h-32 rounded-full overflow-hidden border-4 transition-all ${
+                  value === interviewer.id
+                    ? 'border-white shadow-lg shadow-white/50 scale-110'
+                    : 'border-muted/30 group-hover:border-white/50 group-hover:scale-105'
+                }`}>
+                  {/* Gradient Background */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${interviewer.color} opacity-40`} />
+                  {/* Image */}
+                  <div className="absolute inset-0">
+                    <Image
+                      src={interviewer.image}
+                      alt={interviewer.name}
+                      fill
+                      className="object-cover"
+                      sizes="128px"
+                    />
+                  </div>
+                </div>
+
+                {/* Name and Level */}
+                <div className="text-center">
+                  <p className="font-semibold text-white text-sm">{interviewer.name}</p>
+                  <p className="text-xs text-muted-foreground">{interviewer.level}</p>
+                </div>
+              </button>
+            ))}
           </div>
         </div>
       </div>
