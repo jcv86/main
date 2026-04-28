@@ -572,13 +572,13 @@ export function ConversationalInterviewSimulator({
             <CardTitle>Graba tu respuesta</CardTitle>
             <CardDescription>Mira la pregunta, mantén contacto visual con la cámara y responde como en entrevista real</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Split-Screen Layout: User Video with Sofia PIP + Data Panel */}
-            <div className="grid grid-cols-[1.5fr_1fr] gap-0 bg-black rounded-xl overflow-hidden shadow-2xl h-[550px]">
-              
-              {/* LEFT PANEL: User Video with Sofia PIP */}
-              <div className="relative bg-black overflow-hidden flex flex-col">
-                {/* User Video Stream - Full Height */}
+          <CardContent>
+            {/* Layout: Video (60%) + Response Panel (40%) */}
+            <div className="grid grid-cols-[3fr_2fr] gap-4 items-start">
+
+              {/* LEFT: User video with Sofia PIP + question bar */}
+              <div className="relative bg-black rounded-xl overflow-hidden aspect-video">
+                {/* User webcam */}
                 <video
                   ref={videoRef}
                   autoPlay
@@ -587,19 +587,19 @@ export function ConversationalInterviewSimulator({
                   className="w-full h-full object-cover"
                 />
 
-                {/* Recording Status - Top Left */}
+                {/* Recording status - Top Left */}
                 <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
-                  <div className={`w-2.5 h-2.5 rounded-full ${isListening ? 'bg-red animate-pulse' : 'bg-emerald-500'}`} />
-                  <span className="text-xs font-bold text-white bg-black/60 px-2 py-1 rounded-full uppercase">
+                  <div className={`w-2.5 h-2.5 rounded-full ${isListening ? 'bg-red-500 animate-pulse' : 'bg-emerald-500'}`} />
+                  <span className="text-xs font-bold text-white bg-black/60 px-2 py-1 rounded-full uppercase tracking-wide">
                     {isListening ? 'Grabando' : 'Listo'}
                   </span>
                 </div>
 
-                {/* Sofia Avatar - Small PIP Bottom Left */}
-                <div className="absolute bottom-3 left-3 w-28 h-36 rounded-lg overflow-hidden border-2 border-white/40 shadow-lg z-20 bg-black">
+                {/* Sofia PIP - circular, bottom left */}
+                <div className="absolute bottom-14 left-3 w-16 h-16 rounded-full overflow-hidden border-2 border-white/60 shadow-xl z-20 bg-black">
                   {selectedInterviewerId ? (
                     <video
-                      key={`listening-${selectedInterviewerId}`}
+                      key={`pip-${selectedInterviewerId}`}
                       src={`/videos/avatars/${selectedInterviewerId}/listening.mp4`}
                       autoPlay
                       loop
@@ -612,93 +612,86 @@ export function ConversationalInterviewSimulator({
                   )}
                 </div>
 
-                {/* Input Area - Bottom Right */}
-                <div className="absolute bottom-0 right-0 left-32 p-2 bg-gradient-to-t from-black via-black/90 to-transparent space-y-1.5 z-10">
+                {/* Question bar - bottom overlay */}
+                <div className="absolute bottom-0 left-0 right-0 bg-black/80 backdrop-blur-sm px-4 py-3 z-10">
+                  <p className="text-sm text-white leading-snug">
+                    <span className="font-bold text-white/60 mr-1">Pregunta:</span>
+                    {questions[currentQuestionIdx]?.text || ''}
+                  </p>
+                </div>
+              </div>
+
+              {/* RIGHT: Response textarea + Tips */}
+              <div className="flex flex-col gap-3">
+
+                {/* Tu respuesta */}
+                <div className="bg-slate-900/80 border border-muted/30 rounded-xl p-4">
+                  <p className="text-sm font-semibold text-white mb-2">Tu respuesta:</p>
                   <textarea
                     value={userResponse}
                     onChange={(e) => setUserResponse(e.target.value)}
-                    placeholder="Tu respuesta..."
-                    className="w-full bg-slate-950/80 border border-muted/70 rounded p-1.5 text-xs text-white placeholder-slate-500 resize-none"
-                    rows={1}
+                    placeholder=".................."
+                    className="w-full bg-transparent text-sm text-white/80 placeholder-white/20 resize-none outline-none min-h-[80px]"
+                    rows={4}
                   />
-                  <div className="flex gap-1">
-                    {isSupported && (
-                      <button
-                        onClick={isListening ? stopListening : startListening}
-                        className={`px-2 py-1 rounded text-xs font-semibold transition-all ${
-                          isListening ? 'bg-red text-white' : 'bg-muted/20 text-muted-foreground hover:bg-muted/30'
-                        }`}
-                      >
-                        {isListening ? '⏹️ Parar' : '🎤 Mic'}
-                      </button>
-                    )}
-                    {userResponse.trim() && (
-                      <button
-                        onClick={handleSubmitResponse}
-                        className="flex-1 bg-blue/80 hover:bg-blue text-white text-xs font-bold py-1 rounded transition-all"
-                      >
-                        ✓ Enviar
-                      </button>
-                    )}
+                </div>
+
+                {/* Mic / Submit / Next controls */}
+                <div className="flex gap-2">
+                  {isSupported && (
                     <button
-                      onClick={handleMoveNext}
-                      className="flex-1 bg-emerald-600/80 hover:bg-emerald-600 text-white text-xs font-bold py-1 rounded transition-all"
+                      onClick={isListening ? stopListening : startListening}
+                      className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all border ${
+                        isListening
+                          ? 'bg-red-600/80 border-red-500/50 text-white'
+                          : 'bg-muted/20 border-muted/40 text-muted-foreground hover:bg-muted/30'
+                      }`}
                     >
-                      → Siguiente
+                      {isListening ? 'Parar' : 'Mic'}
                     </button>
-                  </div>
+                  )}
+                  {userResponse.trim() && (
+                    <button
+                      onClick={handleSubmitResponse}
+                      className="flex-1 bg-blue-600/80 hover:bg-blue-600 text-white text-xs font-bold py-2 rounded-lg transition-all"
+                    >
+                      Enviar
+                    </button>
+                  )}
+                  <button
+                    onClick={handleMoveNext}
+                    className="flex-1 bg-emerald-700/70 hover:bg-emerald-700 text-white text-xs font-bold py-2 rounded-lg transition-all"
+                  >
+                    Siguiente
+                  </button>
                 </div>
+
+                {/* Tip buttons */}
+                <div className="grid grid-cols-2 gap-2">
+                  <button className="bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold py-3 rounded-xl transition-all">
+                    Tip Gratis (1/3)
+                  </button>
+                  <button className="bg-slate-700/60 hover:bg-slate-700 text-white/70 text-sm font-semibold py-3 rounded-xl transition-all border border-muted/30">
+                    Tip Premium (150 DTC)
+                  </button>
+                </div>
+
+                {/* Tip content card */}
+                {user && (
+                  <div className="bg-slate-900/60 border border-muted/30 rounded-xl overflow-hidden">
+                    <InterviewTips
+                      questionText={questions[currentQuestionIdx]?.text || ''}
+                      userResponse={userResponse}
+                      questionContext={questions[currentQuestionIdx]?.context || ''}
+                      difficulty={level}
+                      sessionId={`interview-${level}-${Date.now()}`}
+                      userId={user.id}
+                      onTipGenerated={(tip) => console.log('[v0] Tip generated:', tip)}
+                    />
+                  </div>
+                )}
+
               </div>
-
-              {/* RIGHT PANEL: Data Only (No Video) */}
-              <div className="bg-slate-950/80 flex flex-col overflow-hidden border-l border-muted/20">
-                
-                {/* Interviewer Badge - Top */}
-                <div className="flex gap-1.5 bg-slate-900/60 p-2 border-b border-muted/20">
-                  <div className={`w-8 h-8 rounded flex items-center justify-center text-sm flex-shrink-0 ${getAvatarGradient(selectedInterviewerId)}`}>
-                    {getAvatarEmoji(selectedInterviewerId, 'interviewer')}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h4 className="text-xs font-bold text-white truncate">{getAvatarName(selectedInterviewerId, 'interviewer')}</h4>
-                    <p className="text-[10px] text-emerald-400/70">{getInterviewerRole(selectedInterviewerId)}</p>
-                  </div>
-                </div>
-
-                {/* MIDDLE: Question & Info */}
-                <div className="h-2/5 overflow-y-auto px-3 py-2 space-y-2 text-xs border-b border-muted/20">
-                  {/* What they're looking for */}
-                  <div>
-                    <p className="font-bold text-muted-foreground mb-0.5">LO QUE BUSCA:</p>
-                    <p className="text-muted text-[11px] leading-tight">{getWhatTheyLookFor(selectedInterviewerId)}</p>
-                  </div>
-
-                  {/* Question */}
-                  <div>
-                    <p className="font-bold text-blue mb-0.5">PREGUNTA</p>
-                    <p className="text-white font-semibold text-xs leading-tight">{questions[currentQuestionIdx]?.text || 'Cargando pregunta...'}</p>
-                    {questions[currentQuestionIdx]?.context && (
-                      <p className="text-[10px] text-emerald-400/70 italic mt-1">{questions[currentQuestionIdx].context}</p>
-                    )}
-                  </div>
-                </div>
-
-                {/* BOTTOM: Tips */}
-                <div className="h-1/5 overflow-y-auto px-3 py-2 space-y-1.5 bg-gradient-to-t from-slate-900/50">
-                  <div className="flex items-center justify-between text-xs font-bold mb-1">
-                    <span className="text-muted-foreground">💡 TIPS</span>
-                    <span className="text-emerald-400">Tips Gratis: 0/3</span>
-                  </div>
-                  <div className="flex gap-1">
-                    <button className="flex-1 bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-500 hover:to-purple-400 text-white text-xs font-bold py-1.5 rounded transition-all">
-                      💜 Tip Gratis (0/3)
-                    </button>
-                    <button className="flex-1 bg-muted/20 hover:bg-muted/30 text-muted-foreground text-xs font-bold py-1.5 rounded transition-all border border-muted/50">
-                      🔒 Premium (50 DTC)
-                    </button>
-                  </div>
-                </div>
-              </div>
-
             </div>
 
             {error && (
