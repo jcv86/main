@@ -396,6 +396,8 @@ export function ConversationalInterviewSimulator({
     return focus[id] || 'Evaluando tu potencial profesional.'
   }
 
+  const getWhatTheyLookFor = (id: string) => getInterviewerFocus(id)
+
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
     setCopied(true)
