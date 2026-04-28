@@ -20,7 +20,14 @@ interface InterviewerSelectorProps {
 }
 
 export function InterviewerSelector({ value, onChange, compact = false }: InterviewerSelectorProps) {
+  const [isChanging, setIsChanging] = useState(false)
   const selected = INTERVIEWERS.find(i => i.id === value) || INTERVIEWERS[0]
+
+  const handleSelect = (id: string) => {
+    setIsChanging(true)
+    onChange(id)
+    setTimeout(() => setIsChanging(false), 300)
+  }
 
   if (compact) {
     return (
@@ -30,7 +37,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
           {INTERVIEWERS.map(interviewer => (
             <button
               key={interviewer.id}
-              onClick={() => onChange(interviewer.id)}
+              onClick={() => handleSelect(interviewer.id)}
               className={`p-2 rounded-lg transition-all text-center ${
                 value === interviewer.id
                   ? 'ring-2 ring-blue-500 bg-blue-500/10'
@@ -66,31 +73,31 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
       </div>
 
       {/* Layout: Navbar Vertical + Foto */}
-      <div className="flex gap-4">
+      <div className="flex gap-3">
         {/* Navbar Vertical - Izquierda */}
-        <div className="flex flex-col gap-2 w-28">
+        <div className="flex flex-col gap-2 w-24">
           {INTERVIEWERS.map(interviewer => (
             <button
               key={interviewer.id}
-              onClick={() => onChange(interviewer.id)}
+              onClick={() => handleSelect(interviewer.id)}
               className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-all ${
                 value === interviewer.id
-                  ? 'bg-blue-500/20 border-2 border-blue-500'
-                  : 'bg-muted/10 border-2 border-transparent hover:bg-muted/20'
+                  ? 'bg-blue-500/20 border-2 border-blue-500 scale-105'
+                  : 'bg-muted/10 border-2 border-transparent hover:bg-muted/20 hover:scale-102'
               }`}
             >
-              <div className="relative w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-muted">
+              <div className="relative w-10 h-10 rounded-lg overflow-hidden flex-shrink-0 border border-muted">
                 <Image
                   src={interviewer.image}
                   alt={interviewer.name}
                   fill
                   className="object-cover"
-                  sizes="48px"
+                  sizes="40px"
                 />
               </div>
               <div className="text-center min-w-0">
-                <p className="font-semibold text-foreground text-[10px]">{interviewer.name}</p>
-                <p className="text-[8px] text-muted-foreground">{interviewer.level}</p>
+                <p className="font-semibold text-foreground text-[9px]">{interviewer.name}</p>
+                <p className="text-[7px] text-muted-foreground">{interviewer.level}</p>
               </div>
             </button>
           ))}
@@ -98,23 +105,23 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
 
         {/* Foto - Derecha */}
         <div className="flex-1">
-          <div className="bg-gradient-to-br from-muted/20 to-muted/5 border border-muted/20 rounded-xl overflow-hidden">
-            <div className="relative w-full h-48 bg-muted">
+          <div className="bg-gradient-to-br from-muted/20 to-muted/5 border border-muted/20 rounded-lg overflow-hidden h-full">
+            <div className={`relative w-full h-32 bg-muted transition-opacity duration-300 ${isChanging ? 'opacity-60' : 'opacity-100'}`}>
               <Image
                 src={selected.image}
                 alt={selected.name}
                 fill
                 className="object-cover"
-                sizes="(max-width: 768px) 100vw, 400px"
+                sizes="(max-width: 768px) 100vw, 300px"
                 priority
               />
             </div>
             
             {/* Info abajo de la foto */}
-            <div className="p-4 space-y-2">
-              <h4 className="text-xl font-bold text-foreground">{selected.name}</h4>
-              <p className="text-sm text-muted-foreground">{selected.role}</p>
-              <Badge className="mt-2 text-xs bg-blue-500/30 text-blue-700 border-blue-500/50 border">
+            <div className="p-3 space-y-1">
+              <h4 className="text-lg font-bold text-foreground">{selected.name}</h4>
+              <p className="text-xs text-muted-foreground">{selected.role}</p>
+              <Badge className="mt-1 text-[10px] bg-blue-500/30 text-blue-700 border-blue-500/50 border">
                 {selected.level}
               </Badge>
             </div>
