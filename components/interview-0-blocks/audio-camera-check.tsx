@@ -18,13 +18,17 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
   const [cameraQuality, setCameraQuality] = useState(0)
 
   useEffect(() => {
+    let cameraStream: MediaStream | null = null
+    let audioStream: MediaStream | null = null
+
     const checkDevices = async () => {
       try {
         // Check camera
-        const cameraStream = await navigator.mediaDevices.getUserMedia({
+        cameraStream = await navigator.mediaDevices.getUserMedia({
           video: { width: { ideal: 1280 }, height: { ideal: 720 } },
           audio: false
         })
+        
         if (videoRef.current) {
           videoRef.current.srcObject = cameraStream
           setCameraStatus('ready')
@@ -35,7 +39,7 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
         }
 
         // Check microphone
-        const audioStream = await navigator.mediaDevices.getUserMedia({
+        audioStream = await navigator.mediaDevices.getUserMedia({
           audio: { echoCancellation: true, noiseSuppression: true },
           video: false
         })
@@ -53,9 +57,15 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
     checkDevices()
 
     return () => {
+      // Clean up camera stream
       if (videoRef.current?.srcObject) {
         const tracks = (videoRef.current.srcObject as MediaStream).getTracks()
         tracks.forEach(track => track.stop())
+        videoRef.current.srcObject = null
+      }
+      // Clean up audio stream if still exists
+      if (audioStream) {
+        audioStream.getTracks().forEach(track => track.stop())
       }
     }
   }, [])
@@ -245,7 +255,7 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
               ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
               : 'bg-muted/20 text-white/50 cursor-not-allowed'
           }`}
-          disabled={!passed && (cameraStatus === 'checking' || micStatus === 'checking')}
+          disabled={!passed}
         >
           {passed ? (
             <>
