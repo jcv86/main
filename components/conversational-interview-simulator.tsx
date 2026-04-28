@@ -221,6 +221,7 @@ export function ConversationalInterviewSimulator({
   }
 
   const handleStartInterview = () => {
+    console.log('[v0] Starting interview with interviewerId:', selectedInterviewerId)
     // Show greeting video first, then go to question
     setStage('greeting_video')
     setCurrentQuestionIdx(0)
@@ -442,6 +443,7 @@ export function ConversationalInterviewSimulator({
 
   return (
     <div className="space-y-6">
+      {console.log('[v0] Current stage:', stage)}
       {/* Setup Stage */}
       {stage === 'setup' && (
         <div className="space-y-6">
