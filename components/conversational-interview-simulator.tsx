@@ -150,7 +150,7 @@ export function ConversationalInterviewSimulator({
     silenceTimeout: 2000
   })
   
-  const [stage, setStage] = useState<'setup' | 'question' | 'response' | 'feedback' | 'complete'>('setup')
+  const [stage, setStage] = useState<'setup' | 'greeting_video' | 'question' | 'response' | 'feedback' | 'complete'>('setup')
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
   const [videoEnabled, setVideoEnabled] = useState(true)
   const [userResponse, setUserResponse] = useState('')
@@ -221,7 +221,8 @@ export function ConversationalInterviewSimulator({
   }
 
   const handleStartInterview = () => {
-    setStage('question')
+    // Show greeting video first, then go to question
+    setStage('greeting_video')
     setCurrentQuestionIdx(0)
     // Save selected interviewer to preferences
     if (selectedInterviewerId !== preferences?.interviewer_avatar_id) {
@@ -492,6 +493,37 @@ export function ConversationalInterviewSimulator({
             Comenzar Simulación
           </Button>
         </div>
+      )}
+
+      {/* Greeting Video Stage */}
+      {stage === 'greeting_video' && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Bienvenida del Entrevistador</CardTitle>
+            <CardDescription>Mira el video de presentación antes de comenzar</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="bg-muted/20 rounded-lg overflow-hidden aspect-video flex items-center justify-center">
+              <video
+                src={`/videos/avatars/${selectedInterviewerId}/greeting.mp4`}
+                autoPlay
+                playsInline
+                controls
+                className="w-full h-full object-contain"
+                onEnded={() => setStage('question')}
+              />
+            </div>
+            <p className="text-sm text-muted-foreground">
+              El entrevistador te está dando la bienvenida. Cuando termine el video, procederemos con las preguntas.
+            </p>
+            <Button
+              onClick={() => setStage('question')}
+              className="w-full bg-blue hover:bg-blue text-white h-12"
+            >
+              Continuar a Preguntas
+            </Button>
+          </CardContent>
+        </Card>
       )}
 
       {/* Question Display Stage */}

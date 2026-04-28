@@ -10,6 +10,7 @@ import { Mic, Video, Clock, AlertTriangle } from "lucide-react"
 interface InterviewSimulationProps {
   level: "basico" | "intermedio" | "avanzado" | "bonus"
   type: "guiada" | "estructurada" | "desafiante" | "presion"
+  interviewerId?: string
   onComplete: (result: any) => void
 }
 
@@ -36,13 +37,14 @@ const INTERVIEW_QUESTIONS = {
   ]
 }
 
-export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimulationProps) {
-  const [stage, setStage] = useState<"intro" | "question" | "recording" | "feedback">("intro")
+export function A3InterviewSimulation({ level, type, interviewerId, onComplete }: InterviewSimulationProps) {
+  const [stage, setStage] = useState<"intro" | "greeting_video" | "question" | "recording" | "feedback">("intro")
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
   const [isRecording, setIsRecording] = useState(false)
   const [recordingTime, setRecordingTime] = useState(0)
   const [feedback, setFeedback] = useState<any>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const greetingVideoRef = useRef<HTMLVideoElement>(null)
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const recordedChunksRef = useRef<Blob[]>([])
 
@@ -59,6 +61,13 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
   }, [isRecording])
 
   const startRecording = async () => {
+    // First, show greeting video if available
+    if (interviewerId) {
+      setStage("greeting_video")
+      return
+    }
+
+    // Otherwise, start recording directly
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       if (videoRef.current) {
@@ -76,6 +85,30 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
       mediaRecorder.start()
       setIsRecording(true)
       setStage("recording")
+    } catch (err) {
+      console.error("Error accessing media:", err)
+    }
+  }
+
+  const startActualRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream
+      }
+
+      const mediaRecorder = new MediaRecorder(stream)
+      mediaRecorderRef.current = mediaRecorder
+      recordedChunksRef.current = []
+
+      mediaRecorder.ondataavailable = (event) => {
+        recordedChunksRef.current.push(event.data)
+      }
+
+      mediaRecorder.start()
+      setIsRecording(true)
+      setRecordingTime(0)
+      setStage("question")
     } catch (err) {
       console.error("Error accessing media:", err)
     }
@@ -190,6 +223,56 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
           <Button onClick={startRecording} className="w-full" size="lg">
             <Video className="w-4 h-4 mr-2" />
             Comenzar Simulación
+          </Button>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  if (stage === "greeting_video") {
+    const getGreetingVideoPath = () => {
+      if (!interviewerId) return null
+      return `/videos/avatars/${interviewerId}/greeting.mp4`
+    }
+
+    const videoPath = getGreetingVideoPath()
+
+    return (
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Saludo del Entrevistador</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {videoPath && (
+            <div className="bg-muted/20 rounded-lg overflow-hidden aspect-video flex items-center justify-center">
+              <video
+                ref={greetingVideoRef}
+                src={videoPath}
+                autoPlay
+                playsInline
+                controls
+                className="w-full h-full object-contain"
+                onEnded={() => {
+                  // After video ends, start the actual interview recording
+                  startActualRecording()
+                }}
+              />
+            </div>
+          )}
+
+          <div className="bg-blue/5 p-4 rounded border border-blue/20">
+            <p className="text-sm text-muted">
+              El entrevistador te está dando la bienvenida y explicando la dinámica de la entrevista. 
+              Cuando termine el video, la cámara se activará para tu primera pregunta.
+            </p>
+          </div>
+
+          <Button
+            onClick={() => startActualRecording()}
+            variant="outline"
+            className="w-full"
+          >
+            Saltar al Video y Comenzar
           </Button>
         </CardContent>
       </Card>
