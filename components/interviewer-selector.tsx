@@ -105,14 +105,14 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
 
         {/* Foto - Derecha */}
         <div className="flex-1">
-          <div className="bg-gradient-to-br from-muted/20 to-muted/5 border border-muted/20 rounded-lg overflow-hidden h-full">
-            <div className={`relative w-full h-32 bg-muted transition-opacity duration-300 ${isChanging ? 'opacity-60' : 'opacity-100'}`}>
+          <div className="bg-gradient-to-br from-muted/20 to-muted/5 border border-muted/20 rounded-lg overflow-hidden">
+            <div className={`relative w-full h-64 bg-muted flex items-center justify-center transition-opacity duration-300 ${isChanging ? 'opacity-60' : 'opacity-100'}`}>
               <Image
                 src={selected.image}
                 alt={selected.name}
                 fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 300px"
+                className="object-contain"
+                sizes="(max-width: 768px) 100vw, 500px"
                 priority
               />
             </div>
