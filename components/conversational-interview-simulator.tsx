@@ -702,22 +702,9 @@ export function ConversationalInterviewSimulator({
               </div>
 
             </div>
-
-                {/* Input Area - Bottom */}
-                <div className="absolute bottom-0 left-0 right-0 p-2 bg-gradient-to-t from-black via-black/90 to-transparent space-y-1.5 z-10">
-                  <textarea
-                    value={userResponse}
-                    onChange={(e) => setUserResponse(e.target.value)}
-                    placeholder="Tu respuesta..."
-                    className="w-full bg-slate-950/80 border border-muted/70 rounded p-1.5 text-xs text-white placeholder-slate-500 resize-none"
-                    rows={1}
-                  />
-                  <div className="flex gap-1">
-                    {isSupported && (
-                      <button
-                        onClick={isListening ? stopListening : startListening}
-                        className={`px-2 py-1 rounded text-xs font-semibold transition-all ${
-                          isListening ? 'bg-red text-white' : 'bg-muted/20 text-muted-foreground hover:bg-muted/30'
+          </CardContent>
+        </Card>
+      )}
                         }`}
                       >
                         {isListening ? '⏹️ Parar' : '🎤 Mic'}
