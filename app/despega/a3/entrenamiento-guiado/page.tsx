@@ -141,7 +141,7 @@ export default function GuidedTrainingPage() {
           {/* Module Info */}
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <Icon className="w-8 h-8 text-blue dark:text-blue/40" />
+              <Icon className="w-8 h-8 text-blue" />
               <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
                 {selectedModule.name}
               </h1>
@@ -158,15 +158,15 @@ export default function GuidedTrainingPage() {
               <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">
                 {lesson.title}
               </h2>
-              <p className="text-muted-foreground dark:text-muted-foreground">{lesson.description}</p>
+              <p className="text-white/85">{lesson.description}</p>
             </div>
 
             {/* Coach Content Area */}
             <div className="bg-background">
-              <div className="space-y-4 text-muted-foreground dark:text-white/85">
+              <div className="space-y-4 text-white/85">
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-lg text-muted/90 dark:text-white flex items-center gap-2">
-                    <Lightbulb className="w-5 h-5 text-blue dark:text-blue/40" />
+                    <Lightbulb className="w-5 h-5 text-blue" />
                     Tu Coach IA explica:
                   </p>
                   <Button
@@ -338,7 +338,7 @@ export default function GuidedTrainingPage() {
                   <Button
                     onClick={() => setShowVideoSession(false)}
                     variant="outline"
-                    className="text-cyan/40 hover:text-cyan/30"
+                    className="text-cyan hover:text-cyan/80"
                   >
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Volver a la Lección
@@ -418,13 +418,13 @@ export default function GuidedTrainingPage() {
               <Card
                 key={module.id}
                 className={`cursor-pointer transition-all hover:shadow-lg ${`}
-                  isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:border-blue/40'`}
+                  isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:border-blue'`}
                 }`}
               >
                 <CardHeader>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <Icon className="w-8 h-8 text-blue dark:text-blue/40" />
+                      <Icon className="w-8 h-8 text-blue" />
                       <div>
                         <CardTitle className="text-xl">{module.name}</CardTitle>
                         <CardDescription>{module.description}</CardDescription>
@@ -435,7 +435,7 @@ export default function GuidedTrainingPage() {
                       {module.status === 'in-progress' && (
                         <Badge className="bg-blue">En Progreso</Badge>
                       )}
-                      {isLocked && <Lock className="w-5 h-5 text-muted-foreground" />}
+                      {isLocked && <Lock className="w-5 h-5 text-yellow" />}
                     </div>
                   </div>
 
@@ -462,7 +462,7 @@ export default function GuidedTrainingPage() {
                           <p className="text-sm font-medium text-muted/90 dark:text-white">
                             {lesson.title}
                           </p>
-                          <p className="text-xs text-muted-foreground">{lesson.description}</p>
+                          <p className="text-xs text-white/75">{lesson.description}</p>
                         </div>
                       </div>
                     ))}
