@@ -113,6 +113,8 @@ Provide specific, actionable feedback.`,
     }
   }
 }
+
+export async function validatePreparationResponses(
   role: string,
   company: string,
   achievements: string
