@@ -124,27 +124,26 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
       <Card className="border-muted/30 max-w-2xl mx-auto">
         <CardContent className="pt-12 pb-8 text-center space-y-6">
           <div>
-            <h1 className="text-4xl font-bold text-white mb-2">Entrevista 0</h1>
-            <p className="text-lg text-white/70">Prepara tu escenario antes de hablar</p>
+            <h1 className="text-4xl font-bold text-white mb-2">Entrevista 0: Tu Base Profesional</h1>
+            <p className="text-lg text-white/70">Prepara tu escenario, presencia y pitch inicial</p>
           </div>
 
           <p className="text-white/80 max-w-md mx-auto">
-            Antes de simular una entrevista real, revisaremos tu entorno, presencia, cámara, audio y preparación inicial.
-            Esto te ayudará a identificar áreas de mejora.
+            Revisaremos tu entorno, presencia, cámara, audio y preparación inicial. Esto identifica qué mejorar antes de practicar entrevistas reales.
           </p>
 
           <div className="space-y-2 text-sm text-white/70">
             <p>✓ Auditoría de entorno (luz, fondo, ruido)</p>
-            <p>✓ Validación de presencia (postura, energía)</p>
-            <p>✓ Test de audio y cámara</p>
-            <p>✓ Preparación inicial</p>
+            <p>✓ Validación de presencia (postura, mirada, energía)</p>
+            <p>✓ Prueba de audio y cámara</p>
+            <p>✓ Preparación de pitch inicial</p>
           </div>
 
           <Button
             onClick={() => setStage('environment')}
             className="w-full bg-blue hover:bg-cyan text-white h-12"
           >
-            Comenzar Auditoría
+            Comenzar revisión
             <ChevronRight className="w-4 h-4 ml-2" />
           </Button>
         </CardContent>

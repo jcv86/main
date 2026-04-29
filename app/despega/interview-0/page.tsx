@@ -25,9 +25,9 @@ export default function Interview0Page() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="text-center max-w-md">
-          <h1 className="text-4xl font-bold text-cyan/40 mb-4">¡Interview 0 Completado!</h1>
+          <h1 className="text-4xl font-bold text-cyan/40 mb-4">¡Entrevista 0 completada!</h1>
           <p className="text-white/85 mb-8">
-            Excelente trabajo preparando tu pitch personal. Ahora tienes la base para entrevistas más complejas.
+            Excelente. Ahora tienes tu base profesional lista. Continúa con práctica guiada o entrenamiento estructurado.
           </p>
           <div className="flex flex-col gap-3">
             <Button
@@ -37,11 +37,11 @@ export default function Interview0Page() {
               Hacer otra auditoría
             </Button>
             <Button
-              onClick={() => router.push('/despega/a3-dashboard')}
+              onClick={() => router.push('/despega/a3')}
               variant="outline"
               className="text-white"
             >
-              Volver al Dashboard
+              Volver a entrenamientos
             </Button>
           </div>
         </div>
