@@ -205,7 +205,7 @@ export default function GamificationClient() {
       <div className="container mx-auto p-6 max-w-7xl">
         <div className="mb-8">
           <div className="inline-block px-4 py-2 bg-background">
-            <p className="text-sm font-semibold text-purple dark:text-purple-200">Tu Progreso y Logros</p>
+            <p className="text-sm font-semibold text-purple dark:text-purple/20">Tu Progreso y Logros</p>
           </div>
           <h1 className="text-5xl font-bold text-purple400400 mb-2">Gamificación DTC</h1>
           <p className="text-lg text-muted-foreground dark:text-white/85 font-medium">

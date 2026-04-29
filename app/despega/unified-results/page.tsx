@@ -198,7 +198,7 @@ export default function UnifiedTestDashboard() {
                   <Share2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
                   <div>
                     <p className="font-semibold text-purple dark:text-white">Compartir Resultados</p>
-                    <p className="text-sm text-purple dark:text-purple-200">Exporta tu perfil completo en PDF</p>
+                    <p className="text-sm text-purple dark:text-purple/20">Exporta tu perfil completo en PDF</p>
                   </div>
                 </div>
               </CardContent>

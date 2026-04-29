@@ -58,7 +58,7 @@ export function DailyCareerTip({ careerStage = "all" }: { careerStage?: string }
     <Card className="border-purple/20 dark:border-muted/70 bg-background">
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-semibold text-purple dark:text-purple-300 flex items-center gap-2">
+          <CardTitle className="text-base font-semibold text-purple dark:text-purple/30 flex items-center gap-2">
             <Lightbulb className="h-5 w-5 text-purple dark:text-purple/40" />
             Consejo del Día
           </CardTitle>

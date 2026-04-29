@@ -121,7 +121,7 @@ export default function A1CerebralPage() {
           <h2 className="text-2xl font-bold mb-8 text-center">{q.pregunta}</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div>
-              <p className="text-lg font-semibold text-green-400 mb-4 text-center">MÁS como yo</p>
+              <p className="text-lg font-semibold text-green/40 mb-4 text-center">MÁS como yo</p>
               <div className="space-y-3">
                 {q.opciones.map((opt) => (
                   <button 

@@ -7,10 +7,10 @@ import { Badge } from '@/components/ui/badge'
 const INTERVIEWERS = [
   { id: 'interviewer-classic-1', name: 'Sofia', role: 'Reclutadora Senior', level: 'Básico', image: '/images/interviewers/sofia.jpg', color: 'from-green-500 to-green-600' },
   { id: 'interviewer-classic-2', name: 'Marco', role: 'Manager Senior Ingeniería', level: 'Intermedio', image: '/images/interviewers/marco.jpg', color: 'from-yellow-500 to-yellow-600' },
-  { id: 'interviewer-classic-3', name: 'Elena', role: 'VP Talent & Culture', level: 'Intermedio+', image: '/images/interviewers/elena.jpg', color: 'from-purple-500 to-purple-600' },
+  { id: 'interviewer-classic-3', name: 'Elena', role: 'VP Talent & Culture', level: 'Intermedio+', image: '/images/interviewers/elena.jpg', color: 'from-purple-500 to-purple' },
   { id: 'interviewer-classic-4', name: 'David', role: 'Tech Lead & Architect', level: 'Intermedio+', image: '/images/interviewers/david.jpg', color: 'from-orange-500 to-orange-600' },
   { id: 'interviewer-modern-1', name: 'Alex', role: 'Product Manager', level: 'Avanzado', image: '/images/interviewers/alex.jpg', color: 'from-blue-500 to-blue-600' },
-  { id: 'interviewer-modern-2', name: 'Jordan', role: 'CEO Advisor', level: 'Avanzado', image: '/images/interviewers/jordan.jpg', color: 'from-red-500 to-red-600' }
+  { id: 'interviewer-modern-2', name: 'Jordan', role: 'CEO Advisor', level: 'Avanzado', image: '/images/interviewers/jordan.jpg', color: 'from-red to-red' }
 ]
 
 interface InterviewerSelectorProps {
@@ -79,7 +79,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
           <div className={`transition-opacity duration-300 ${isChanging ? 'opacity-50' : 'opacity-100'}`}>
             <h2 className="text-4xl font-bold text-white mb-4">{selected.name}</h2>
             <p className="text-lg text-muted-foreground mb-6">{selected.role}</p>
-            <Badge className="text-sm bg-blue-500/40 text-blue-100 border-blue-500/60 border px-4 py-1">
+            <Badge className="text-sm bg-blue-500/40 text-blue-100 border-blue/50/60 border px-4 py-1">
               Nivel: {selected.level}
             </Badge>
           </div>

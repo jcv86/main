@@ -123,7 +123,7 @@ export default function DespegazoDashboard() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-purple-400" />
+          <Loader2 className="h-8 w-8 animate-spin text-purple/40" />
           <p className="text-white/85">Cargando tu dashboard...</p>
         </div>
       </div>
@@ -185,7 +185,7 @@ export default function DespegazoDashboard() {
         {/* Hero Header */}
         <div className="mb-16">
           <div className="flex items-center gap-3 mb-4">
-            <Zap className="w-8 h-8 text-purple-400" />
+            <Zap className="w-8 h-8 text-purple/40" />
             <h1 className="text-5xl md:text-6xl font-black text-white leading-tight">
               Tu Transformación <br />
               <span className="bg-background">
@@ -220,7 +220,7 @@ export default function DespegazoDashboard() {
               <div className="space-y-3">
                 {readiness.recommendations.slice(0, 3).map((rec, i) => (
                   <div key={i} className="flex gap-3 items-start">
-                    <Zap className="w-5 h-5 text-purple-400 flex-shrink-0 mt-1" />
+                    <Zap className="w-5 h-5 text-purple/40 flex-shrink-0 mt-1" />
                     <p className="text-white/80">{rec}</p>
                   </div>
                 ))}
@@ -276,7 +276,7 @@ export default function DespegazoDashboard() {
                 <div className="flex items-start gap-4">
                   <div className="text-4xl">{stage.icon}</div>
                   <div className="flex-1">
-                    <h3 className="text-xl font-bold text-white group-hover:text-purple-400 transition-colors">
+                    <h3 className="text-xl font-bold text-white group-hover:text-purple/40 transition-colors">
                       {stage.name}
                     </h3>
                     <p className="text-white/70 text-sm mt-1">{stage.description}</p>
@@ -287,7 +287,7 @@ export default function DespegazoDashboard() {
                     ✓ Completo
                   </Badge>
                 ) : (
-                  <Badge className="bg-purple-950/40 text-purple-300 border border-purple-400/50 ml-4">
+                  <Badge className="bg-purple-950/40 text-purple/30 border border-purple-400/50 ml-4">
                     {Math.round(stage.score)}%
                   </Badge>
                 )}
@@ -319,7 +319,7 @@ export default function DespegazoDashboard() {
           <Button
             onClick={() => router.push('/despega/conozcamonos-1')}
             variant="outline"
-            className="h-12 border-muted/60 hover:border-purple-400 text-white hover:text-purple-400"
+            className="h-12 border-muted/60 hover:border-purple-400 text-white hover:text-purple/40"
           >
             <Clock className="w-4 h-4 mr-2" />
             Comenzar o Continuar
@@ -336,7 +336,7 @@ export default function DespegazoDashboard() {
         {/* Footer Note */}
         <div className="bg-muted/80/40 border border-muted/70 rounded-[28px] p-4 text-center">
           <p className="text-white/75 text-sm">
-            💡 Tu score se actualiza automáticamente. Alcanza <span className="font-bold text-purple-400">80+</span> para estar completamente listo.
+            💡 Tu score se actualiza automáticamente. Alcanza <span className="font-bold text-purple/40">80+</span> para estar completamente listo.
           </p>
         </div>
       </div>

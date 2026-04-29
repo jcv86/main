@@ -21,7 +21,7 @@ const DISC_DETAILS = {
   I: {
     label: 'Influenciador',
     description: 'Comunicador, orientado a personas',
-    color: 'bg-yellow/10 dark:bg-yellow/30 text-yellow dark:text-yellow-200',
+    color: 'bg-yellow/10 dark:bg-yellow/30 text-yellow dark:text-yellow/20',
     icon: '🎤',
     traits: ['Entusiasta', 'Comunicativo', 'Sociable', 'Inspirador'],
   },

@@ -58,7 +58,7 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
 
   const getStatus = () => {
     if (totalScore >= 80) return { text: 'Listo para practicar', color: 'text-emerald-400', bg: 'bg-emerald-500/10' }
-    if (totalScore >= 60) return { text: 'Ajustes menores', color: 'text-yellow-400', bg: 'bg-yellow-500/10' }
+    if (totalScore >= 60) return { text: 'Ajustes menores', color: 'text-yellow-400', bg: 'bg-yellow/50/10' }
     return { text: 'Revisar antes de simular', color: 'text-red-400', bg: 'bg-red-500/10' }
   }
 
@@ -181,7 +181,7 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
               <p className="text-white/70 text-sm mt-1">Estás listo para comenzar la simulación de entrevista</p>
             </div>
           ) : totalScore >= 60 ? (
-            <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 text-center">
+            <div className="bg-yellow/50/10 border border-yellow-500/30 rounded-lg p-4 text-center">
               <p className="text-yellow-400 font-semibold">Algunos ajustes recomendados</p>
               <p className="text-white/70 text-sm mt-1">Revisa las áreas con puntuación más baja antes de continuar</p>
             </div>

@@ -27,11 +27,11 @@ interface A4NewsFeedProps {
 const getCategoryColor = (category: string) => {
   const colors: Record<string, { badge: string; bg: string }> = {
     "Mercado Laboral": { badge: "bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-200", bg: "bg-blue/5/50" },
-    "Industrias": { badge: "bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple-200", bg: "bg-purple/5/50" },
+    "Industrias": { badge: "bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple/20", bg: "bg-purple/5/50" },
     "Economía": { badge: "bg-green/10 text-green dark:bg-green/30 dark:text-green/30", bg: "bg-green/5/50" },
     "Tendencias": { badge: "bg-orange/10 text-orange dark:bg-orange/30 dark:text-orange/30", bg: "bg-orange/5/50" },
     "Tech": { badge: "bg-cyan/10 text-cyan dark:bg-cyan/30 dark:text-cyan/30", bg: "bg-cyan/5/50" },
-    "Finanzas": { badge: "bg-yellow/10 text-yellow dark:bg-yellow/30 dark:text-yellow-200", bg: "bg-yellow/5/50" },
+    "Finanzas": { badge: "bg-yellow/10 text-yellow dark:bg-yellow/30 dark:text-yellow/20", bg: "bg-yellow/5/50" },
   }
   return colors[category] || { badge: "bg-muted/10 text-gray-800 dark:bg-transparent/30 dark:text-white/85", bg: "bg-muted/5/50" }
 }

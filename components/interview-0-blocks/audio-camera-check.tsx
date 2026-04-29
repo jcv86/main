@@ -247,14 +247,14 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
             audioTestResult === 'good' 
               ? 'bg-emerald-500/10 border-emerald-500/30' 
               : audioTestResult === 'fair'
-              ? 'bg-blue-500/10 border-blue-500/30'
-              : 'bg-yellow-500/10 border-yellow-500/30'
+              ? 'bg-blue-500/10 border-blue/50/30'
+              : 'bg-yellow/50/10 border-yellow-500/30'
           }`}>
             <p className={`font-semibold ${
               audioTestResult === 'good'
                 ? 'text-emerald-400'
                 : audioTestResult === 'fair'
-                ? 'text-blue-400'
+                ? 'text-blue/40'
                 : 'text-yellow-400'
             }`}>
               {audioTestResult === 'good' && 'Excelente calidad de audio'}

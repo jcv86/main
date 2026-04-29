@@ -30,11 +30,11 @@ const getResourceIcon = (type: string) => {
 // Get difficulty level color
 const getDifficultyColor = (level?: string) => {
   const colorMap: Record<string, string> = {
-    'Beginner': 'bg-green-500/20 text-green-300 border-green-500/30',
-    'Intermediate': 'bg-yellow-500/20 text-yellow-300 border-yellow-500/30',
+    'Beginner': 'bg-green-500/20 text-green-300 border-green/30',
+    'Intermediate': 'bg-yellow/50/20 text-yellow-300 border-yellow-500/30',
     'Advanced': 'bg-red-500/20 text-red-300 border-red-500/30',
   }
-  return colorMap[level || 'Beginner'] || 'bg-blue-500/20 text-blue-300 border-blue-500/30'
+  return colorMap[level || 'Beginner'] || 'bg-blue-500/20 text-blue-300 border-blue/50/30'
 }
 
 export function ResourceCard({ resource }: ResourceCardProps) {
@@ -96,7 +96,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
         {/* CTA Button */}
         <Button
           asChild
-          className="w-full mt-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white text-xs h-8"
+          className="w-full mt-2 bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple text-white text-xs h-8"
         >
           <a href={resource.url} target="_blank" rel="noopener noreferrer">
             Ir al recurso

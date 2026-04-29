@@ -49,7 +49,7 @@ export default function LeaderboardPage() {
         {/* Header */}
         <div className="mb-8">
           <div className="inline-block px-4 py-2 bg-background">
-            <p className="text-sm font-semibold text-purple dark:text-purple-200">Compite y Crece</p>
+            <p className="text-sm font-semibold text-purple dark:text-purple/20">Compite y Crece</p>
           </div>
           <div className="flex items-center gap-3 mb-4">
             <Trophy className="h-10 w-10 text-orange" />

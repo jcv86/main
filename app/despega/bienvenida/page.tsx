@@ -72,7 +72,7 @@ export default function BienvenidaPage() {
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
                 <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-purple/10 dark:bg-purple mb-4">
-                  <span className="text-xl font-bold text-purple dark:text-purple-200">2</span>
+                  <span className="text-xl font-bold text-purple dark:text-purple/20">2</span>
                 </div>
                 <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Tu Plan A2</h3>
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">

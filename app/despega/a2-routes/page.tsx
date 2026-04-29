@@ -424,7 +424,7 @@ export default function A2RoutesPage() {
           <Card className="bg-transparent border-muted/80">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white">
-                <Zap className="w-5 h-5 text-purple-400" />
+                <Zap className="w-5 h-5 text-purple/40" />
                 Recomendaciones
               </CardTitle>
             </CardHeader>
@@ -446,7 +446,7 @@ export default function A2RoutesPage() {
           <Button
             onClick={handleExportPDF}
             disabled={isExporting}
-            className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white"
+            className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple text-white"
           >
             <Download className="w-4 h-4 mr-2" />
             {isExporting ? 'Generando PDF...' : 'Descargar Progreso en PDF'}
@@ -458,7 +458,7 @@ export default function A2RoutesPage() {
         <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
-              <Calendar className="w-5 h-5 text-purple-400" />
+              <Calendar className="w-5 h-5 text-purple/40" />
               Tus 90 Días Estructurados
             </CardTitle>
           </CardHeader>
@@ -475,7 +475,7 @@ export default function A2RoutesPage() {
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-4">
-                        <Calendar className="w-6 h-6 text-purple-400" />
+                        <Calendar className="w-6 h-6 text-purple/40" />
                         <div>
                           <h3 className="text-2xl font-bold text-white">{data.label}</h3>
                           <p className="text-white/80">{data.milestone}</p>

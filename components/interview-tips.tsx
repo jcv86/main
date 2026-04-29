@@ -258,10 +258,10 @@ export function InterviewTips({
 
         {/* Information */}
         {!canUseFreeTip && (
-          <div className="p-4 bg-yellow-950/60 dark:bg-yellow-950/70 rounded-[28px] border-2 border-yellow/60 dark:border-yellow/70">
+          <div className="p-4 bg-yellow/60 dark:bg-yellow/70 rounded-[28px] border-2 border-yellow/60 dark:border-yellow/70">
             <div className="flex gap-2 items-start">
               <div className="text-yellow/80 dark:text-yellow/90 text-lg flex-shrink-0">⭐</div>
-              <p className="text-sm text-yellow-100 dark:text-yellow-100 font-semibold leading-relaxed">
+              <p className="text-sm text-yellow/10 dark:text-yellow/10 font-semibold leading-relaxed">
                 Usaste los 3 tips gratis. Obtén tips premium con puntos DTC o gana más tips completando entrevistas.
               </p>
             </div>

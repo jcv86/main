@@ -32,7 +32,7 @@ const RARITY_COLORS = {
   common: 'bg-muted/10 text-gray-800 dark:bg-transparent/30 dark:text-white/85 border-muted/30',
   uncommon: 'bg-green/10 text-green dark:bg-green/30 dark:text-green/30 border-green/30',
   rare: 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-200 border-blue/30',
-  legendary: 'bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple-200 border-purple/30',
+  legendary: 'bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple/20 border-purple/30',
 }
 
 const BADGE_ICONS: Record<string, string> = {

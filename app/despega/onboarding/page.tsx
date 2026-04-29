@@ -525,19 +525,19 @@ export default function DespegaOnboarding() {
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
                       <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
-                        <p className="font-semibold text-yellow dark:text-yellow-200 text-sm mb-1">Cómo Actúan</p>
+                        <p className="font-semibold text-yellow dark:text-yellow/20 text-sm mb-1">Cómo Actúan</p>
                         <p className="text-sm text-muted-foreground dark:text-white/85">Entusiastas, carismáticos, conectan fácilmente, optimistas, energéticos</p>
                       </div>
                       <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
-                        <p className="font-semibold text-yellow dark:text-yellow-200 text-sm mb-1">Fortalezas</p>
+                        <p className="font-semibold text-yellow dark:text-yellow/20 text-sm mb-1">Fortalezas</p>
                         <p className="text-sm text-muted-foreground dark:text-white/85">Comunicación, entusiasmo, carisma, persuasión, energía positiva</p>
                       </div>
                       <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
-                        <p className="font-semibold text-yellow dark:text-yellow-200 text-sm mb-1">Motivación</p>
+                        <p className="font-semibold text-yellow dark:text-yellow/20 text-sm mb-1">Motivación</p>
                         <p className="text-sm text-muted-foreground dark:text-white/85">Reconocimiento, interacción social, diversión, visibilidad</p>
                       </div>
                       <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
-                        <p className="font-semibold text-yellow dark:text-yellow-200 text-sm mb-1">Ambiente Ideal</p>
+                        <p className="font-semibold text-yellow dark:text-yellow/20 text-sm mb-1">Ambiente Ideal</p>
                         <p className="text-sm text-muted-foreground dark:text-white/85">Ventas, networking, equipo, creatividad, relaciones públicas</p>
                       </div>
                     </div>

@@ -169,7 +169,7 @@ export default function SimulationsPage() {
             <div className="w-5 h-5 flex-shrink-0 text-purple text-lg">💡</div>
             <div>
               <div className="font-semibold text-purple dark:text-purple/10 mb-2">Cómo progresar en entrenamiento de entrevistas</div>
-              <ul className="text-sm text-purple dark:text-purple-300 space-y-1">
+              <ul className="text-sm text-purple dark:text-purple/30 space-y-1">
                 <li>✓ Domina cada nivel antes de subir (practica hasta sentirte cómodo)</li>
                 <li>✓ Revisa el feedback del coach después de cada entrenamiento</li>
                 <li>✓ Identifica patrones en tus fortalezas y debilidades</li>

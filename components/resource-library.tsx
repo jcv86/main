@@ -211,7 +211,7 @@ export function ResourceLibrary() {
         {/* Loading state */}
         {isLoading && (
           <div className="flex justify-center items-center py-12">
-            <Loader2 className="w-6 h-6 text-blue-400 animate-spin" />
+            <Loader2 className="w-6 h-6 text-blue/40 animate-spin" />
           </div>
         )}
 

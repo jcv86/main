@@ -203,7 +203,7 @@ export default function Conozcamonos1Page() {
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <div className="mb-8">
           <div className="inline-block px-4 py-2 bg-background">
-            <p className="text-sm font-semibold text-purple dark:text-purple-200">El Ritual: Paso 1 - Conocámonos</p>
+            <p className="text-sm font-semibold text-purple dark:text-purple/20">El Ritual: Paso 1 - Conocámonos</p>
           </div>
           <h1 className="text-4xl font-bold text-purple400400 mb-2">
             Antes de Empezar, Cuéntame Tu Historia

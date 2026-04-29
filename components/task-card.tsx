@@ -25,10 +25,10 @@ interface TaskCardProps {
 }
 
 const taskTypeIcons = {
-  learning: { icon: <BookOpen className="w-6 h-6" />, label: 'Aprender', color: 'text-blue-400' },
+  learning: { icon: <BookOpen className="w-6 h-6" />, label: 'Aprender', color: 'text-blue/40' },
   practice: { icon: <Wrench className="w-6 h-6" />, label: 'Practicar', color: 'text-yellow-400' },
   networking: { icon: <Users className="w-6 h-6" />, label: 'Conectar', color: 'text-pink-400' },
-  planning: { icon: <ClipboardList className="w-6 h-6" />, label: 'Planificar', color: 'text-purple-400' },
+  planning: { icon: <ClipboardList className="w-6 h-6" />, label: 'Planificar', color: 'text-purple/40' },
   milestone: { icon: <Trophy className="w-6 h-6" />, label: 'Hito', color: 'text-emerald-400' },
 }
 

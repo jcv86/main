@@ -181,15 +181,15 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
                 item.severity === 'high' 
                   ? 'bg-red-500/10 border border-red-500/30'
                   : item.severity === 'medium'
-                  ? 'bg-yellow-500/10 border border-yellow-500/30'
-                  : 'bg-blue-500/10 border border-blue-500/30'
+                  ? 'bg-yellow/50/10 border border-yellow-500/30'
+                  : 'bg-blue-500/10 border border-blue/50/30'
               }`}>
                 <AlertCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
                   item.severity === 'high'
                     ? 'text-red-400'
                     : item.severity === 'medium'
                     ? 'text-yellow-400'
-                    : 'text-blue-400'
+                    : 'text-blue/40'
                 }`} />
                 <span className="text-sm text-white/85">{item.text}</span>
               </div>
@@ -203,15 +203,15 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
             score >= 80
               ? 'bg-emerald-500/10 border-emerald-500/30'
               : score >= 60
-              ? 'bg-blue-500/10 border-blue-500/30'
-              : 'bg-yellow-500/10 border-yellow-500/30'
+              ? 'bg-blue-500/10 border-blue/50/30'
+              : 'bg-yellow/50/10 border-yellow-500/30'
           }`}>
             <p className="text-white/70 text-sm">Puntuación de Presencia</p>
             <p className={`text-4xl font-bold mt-1 ${
               score >= 80
                 ? 'text-emerald-400'
                 : score >= 60
-                ? 'text-blue-400'
+                ? 'text-blue/40'
                 : 'text-yellow-400'
             }`}>
               {Math.round(score)}

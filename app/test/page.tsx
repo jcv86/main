@@ -404,7 +404,7 @@ export default function TestsPage() {
                             test.difficulty === "Beginner"
                               ? "bg-green/10 dark:bg-green text-green dark:text-green/30 border-green/20 dark:border-green"
                               : test.difficulty === "Intermediate"
-                                ? "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow-200 border-yellow/20 dark:border-yellow"
+                                ? "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow/20 border-yellow/20 dark:border-yellow"
                                 : "bg-red/10 dark:bg-red text-red dark:text-red/30 border-red/20 dark:border-red"`}
                           }`}
                         >

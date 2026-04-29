@@ -34,7 +34,7 @@ export function RecommendationsDisplay({ recommendations }: RecommendationsDispl
                 <div className="flex-1">
                   <div className="flex items-center justify-between gap-2 mb-1">
                     <h4 className="font-semibold text-white text-sm">{rec.title}</h4>
-                    <span className="text-xs bg-orange-500/30 text-orange-200 px-2 py-1 rounded">
+                    <span className="text-xs bg-orange/50/30 text-orange-200 px-2 py-1 rounded">
                       Fase {rec.phase}
                     </span>
                   </div>

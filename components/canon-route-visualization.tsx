@@ -128,7 +128,7 @@ export function CanonRouteVisualization({
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-purple dark:text-purple-300 font-semibold leading-relaxed">
+            <p className="text-lg text-purple dark:text-purple/30 font-semibold leading-relaxed">
               "{masterInsight}"
             </p>
           </CardContent>

@@ -103,7 +103,7 @@ export default function A1ResultadoPage() {
         <div className="text-center mb-12">
           <div className="inline-flex items-center gap-2 mb-4 px-4 py-2 bg-background">
             <Brain className="w-4 h-4 text-purple dark:text-purple/40" />
-            <span className="text-sm font-semibold text-purple dark:text-purple-200">Tu Perfil Despega Cerebral</span>
+            <span className="text-sm font-semibold text-purple dark:text-purple/20">Tu Perfil Despega Cerebral</span>
           </div>
           <h1 className="text-5xl font-bold text-purple400400 mb-4">
             Tu Mapa está Listo
@@ -223,7 +223,7 @@ export default function A1ResultadoPage() {
                 <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">Tu capacidad para iniciar, moverte rápido y llevar momentum</p>
               </div>
               <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded-[28px] border-l-4 border-orange">
-                <p className="font-semibold text-yellow dark:text-yellow-200">Plan Ejecutivo (Influencia & Visión)</p>
+                <p className="font-semibold text-yellow dark:text-yellow/20">Plan Ejecutivo (Influencia & Visión)</p>
                 <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">Tu capacidad para inspirar, comunicar dirección y llevar gente contigo</p>
               </div>
               <div className="p-3 bg-green/5 dark:bg-green/20 rounded-[28px] border-l-4 border-green">

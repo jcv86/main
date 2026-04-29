@@ -49,7 +49,7 @@ export function PromptBankDashboard() {
   }
 
   const categoryColors = {
-    autoconocimiento_proposito: "bg-purple/50/10 text-purple dark:text-purple-200",
+    autoconocimiento_proposito: "bg-purple/50/10 text-purple dark:text-purple/20",
     cv_linkedin_marca: "bg-blue/50/10 text-blue dark:text-blue-200",
     entrevistas_comunicacion: "bg-green/50/10 text-green dark:text-green/30",
     crecimiento_salarial: "bg-orange/50/10 text-orange dark:text-orange/30",

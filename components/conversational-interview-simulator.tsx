@@ -831,7 +831,7 @@ export function ConversationalInterviewSimulator({
             {lastAttempt.followUp && (
               <Alert className="bg-purple/5 dark:bg-purple/20 border-purple/20 dark:border-purple">
                 <MessageSquare className="h-4 w-4" />
-                <AlertDescription className="text-purple dark:text-purple-300">
+                <AlertDescription className="text-purple dark:text-purple/30">
                   <p className="font-semibold mb-1">Mi pregunta de seguimiento:</p>
                   <p>"{lastAttempt.followUp}"</p>
                 </AlertDescription>

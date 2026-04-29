@@ -41,7 +41,7 @@ const getResourceColor = (tipo: string) => {
   const colors: Record<string, string> = {
     articulo: "bg-blue/10 text-blue dark:bg-blue/40 dark:text-blue-200",
     video: "bg-red/10 text-red dark:bg-red/40 dark:text-red/30",
-    podcast: "bg-purple/10 text-purple dark:bg-purple/40 dark:text-purple-200",
+    podcast: "bg-purple/10 text-purple dark:bg-purple/40 dark:text-purple/20",
     libro: "bg-green/10 text-green dark:bg-green/40 dark:text-green/30",
   }
   return colors[tipo] || "bg-muted/10"

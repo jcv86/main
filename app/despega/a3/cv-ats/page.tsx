@@ -133,7 +133,7 @@ export default function CVATSPage() {
               <p className="text-muted-foreground dark:text-white/85 text-sm mb-3">{exp.description}</p>
               <div className="flex flex-wrap gap-2">
                 {exp.skills.map((skill) => (
-                  <span key={skill} className="text-xs bg-purple/10 dark:bg-purple/30 text-purple dark:text-purple-200 px-2 py-1 rounded">{skill}</span>
+                  <span key={skill} className="text-xs bg-purple/10 dark:bg-purple/30 text-purple dark:text-purple/20 px-2 py-1 rounded">{skill}</span>
                 ))}
               </div>
             </div>

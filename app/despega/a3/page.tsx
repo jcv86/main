@@ -245,7 +245,7 @@ export default function A3Page() {
             <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
               {['Luz', 'Fondo', 'Audio', 'Postura', 'Presencia', 'Lenguaje'].map((item) => (
                 <div key={item} className="p-2 bg-purple/5 dark:bg-purple/20 rounded text-center">
-                  <p className="text-xs font-semibold text-purple dark:text-purple-200">{item}</p>
+                  <p className="text-xs font-semibold text-purple dark:text-purple/20">{item}</p>
                 </div>
               ))}
             </div>

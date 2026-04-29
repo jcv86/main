@@ -331,7 +331,7 @@ export default function GuidedInterviewPage() {
             <div className="bg-purple/5 dark:bg-purple/20 border border-purple/30 dark:border-purple rounded-[28px] p-4 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <Mic className="w-5 h-5 text-purple dark:text-purple/40" />
-                <span className="text-sm font-semibold text-purple dark:text-purple-300">
+                <span className="text-sm font-semibold text-purple dark:text-purple/30">
                   O practica hablando en voz alta (sin grabación aún)
                 </span>
               </div>

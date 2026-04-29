@@ -197,7 +197,7 @@ export default function A2IntroPage() {
                 </div>
                 <div className="bg-yellow/5 dark:bg-yellow/20 p-3 rounded-[28px] border border-yellow/20 dark:border-yellow">
                   <p className="text-xs text-yellow dark:text-yellow/40 font-semibold">Enfoque</p>
-                  <p className="text-2xl font-bold text-yellow dark:text-yellow-200">{cerebroProfile?.enfoque}%</p>
+                  <p className="text-2xl font-bold text-yellow dark:text-yellow/20">{cerebroProfile?.enfoque}%</p>
                 </div>
                 <div className="bg-green/5 dark:bg-green/20 p-3 rounded-[28px] border border-green/20 dark:border-green">
                   <p className="text-xs text-green dark:text-green/40 font-semibold">Relaciones</p>

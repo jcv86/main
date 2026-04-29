@@ -107,13 +107,13 @@ export function NoticiasFeed() {
     if (score >= 90) return 'bg-red/10 text-red dark:bg-red/30 dark:text-red/30'
     if (score >= 80) return 'bg-orange/10 text-orange dark:bg-orange/30 dark:text-orange/30'
     if (score >= 70) return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300'
-    return 'bg-yellow/10 text-yellow dark:bg-yellow/30 dark:text-yellow-200'
+    return 'bg-yellow/10 text-yellow dark:bg-yellow/30 dark:text-yellow/20'
   }
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
       'Tecnología': 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-200',
-      'Liderazgo': 'bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple-200',
+      'Liderazgo': 'bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple/20',
       'Mercado Local': 'bg-green/10 text-green dark:bg-green/30 dark:text-green/30',
       'Educación': 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-indigo-300',
       'Oportunidades': 'bg-teal-100 text-teal-800 dark:bg-teal-900/30 dark:text-teal-300',

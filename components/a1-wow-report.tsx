@@ -196,7 +196,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
         <CardContent>
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h4 className="font-semibold text-green-400 mb-3 flex items-center gap-2">
+              <h4 className="font-semibold text-green/40 mb-3 flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4" />
                 Brillas En
               </h4>
@@ -245,7 +245,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
             <TabsContent value="7dias" className="space-y-3 mt-4">
               {roadmap['7dias'].map((item, idx) => (
                 <div key={idx} className="flex gap-3 p-3 bg-purple/20 rounded-[28px] border border-purple/40">
-                  <CheckCircle2 className="w-5 h-5 text-purple-300 flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-purple/30 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-white">{item}</p>
                 </div>
               ))}
@@ -254,7 +254,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
             <TabsContent value="30dias" className="space-y-3 mt-4">
               {roadmap['30dias'].map((item, idx) => (
                 <div key={idx} className="flex gap-3 p-3 bg-purple/20 rounded-[28px] border border-purple/40">
-                  <CheckCircle2 className="w-5 h-5 text-purple-300 flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-purple/30 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-white">{item}</p>
                 </div>
               ))}
@@ -263,7 +263,7 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
             <TabsContent value="90dias" className="space-y-3 mt-4">
               {roadmap['90dias'].map((item, idx) => (
                 <div key={idx} className="flex gap-3 p-3 bg-purple/20 rounded-[28px] border border-purple/40">
-                  <CheckCircle2 className="w-5 h-5 text-purple-300 flex-shrink-0 mt-0.5" />
+                  <CheckCircle2 className="w-5 h-5 text-purple/30 flex-shrink-0 mt-0.5" />
                   <p className="text-sm text-white">{item}</p>
                 </div>
               ))}
