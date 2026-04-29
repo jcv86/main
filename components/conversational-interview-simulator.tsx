@@ -16,7 +16,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Mic, MicOff, Video, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp, Lightbulb, HelpCircle, Loader2, AlertTriangle, Volume2 } from 'lucide-react'
+import { Mic, MicOff, Video, RotateCcw, Send, Copy, Check, Zap, Target, MessageSquare, TrendingUp, Lightbulb, HelpCircle, Loader2, AlertTriangle, Volume2, ChevronRight, Lock } from 'lucide-react'
 
 interface ConversationalInterviewSimulatorProps {
   level: 'basico' | 'intermedio' | 'avanzado'
@@ -622,57 +622,86 @@ export function ConversationalInterviewSimulator({
               </div>
 
               {/* RIGHT: Response textarea + Tips */}
-              <div className="flex flex-col gap-3">
+              <div className="flex flex-col gap-4">
 
                 {/* Tu respuesta */}
-                <div className="bg-slate-900/80 border border-muted/30 rounded-xl p-4">
-                  <p className="text-sm font-semibold text-white mb-2">Tu respuesta:</p>
+                <div className="bg-slate-900/80 border border-muted/30 rounded-xl p-5 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-base font-semibold text-white">Tu respuesta:</p>
+                    <Badge className="bg-white/10 text-white/70 text-xs">
+                      {userResponse.trim().split(/\s+/).length} palabras
+                    </Badge>
+                  </div>
                   <textarea
                     value={userResponse}
                     onChange={(e) => setUserResponse(e.target.value)}
-                    placeholder=".................."
-                    className="w-full bg-transparent text-sm text-white/80 placeholder-white/20 resize-none outline-none min-h-[80px]"
-                    rows={4}
+                    placeholder="Escribe tu respuesta aquí o usa el micrófono para grabar..."
+                    className="w-full bg-transparent text-sm text-white/80 placeholder-white/40 resize-none outline-none min-h-[120px] leading-relaxed"
+                    rows={5}
                   />
                 </div>
 
                 {/* Mic / Submit / Next controls */}
-                <div className="flex gap-2">
+                <div className="flex gap-3">
                   {isSupported && (
                     <button
                       onClick={isListening ? stopListening : startListening}
-                      className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all border ${
+                      className={`px-4 py-3 rounded-lg text-sm font-semibold transition-all border flex items-center gap-2 ${
                         isListening
                           ? 'bg-red-600/80 border-red-500/50 text-white'
                           : 'bg-muted/20 border-muted/40 text-muted-foreground hover:bg-muted/30'
                       }`}
                     >
-                      {isListening ? 'Parar' : 'Mic'}
+                      {isListening ? (
+                        <>
+                          <span className="animate-pulse">●</span>
+                          Parando...
+                        </>
+                      ) : (
+                        <>
+                          <Mic className="w-4 h-4" />
+                          Grabar
+                        </>
+                      )}
                     </button>
                   )}
                   {userResponse.trim() && (
                     <button
                       onClick={handleSubmitResponse}
-                      className="flex-1 bg-blue-600/80 hover:bg-blue-600 text-white text-xs font-bold py-2 rounded-lg transition-all"
+                      disabled={isLoading}
+                      className="flex-1 bg-blue-600/80 hover:bg-blue-600 disabled:bg-blue-600/40 text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
                     >
-                      Enviar
+                      {isLoading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                          Evaluando...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="w-4 h-4" />
+                          Enviar Respuesta
+                        </>
+                      )}
                     </button>
                   )}
                   <button
                     onClick={handleMoveNext}
-                    className="flex-1 bg-emerald-700/70 hover:bg-emerald-700 text-white text-xs font-bold py-2 rounded-lg transition-all"
+                    className="px-4 py-3 bg-emerald-700/70 hover:bg-emerald-700 text-white font-bold rounded-lg transition-all flex items-center gap-2"
                   >
+                    <ChevronRight className="w-4 h-4" />
                     Siguiente
                   </button>
                 </div>
 
                 {/* Tip buttons */}
-                <div className="grid grid-cols-2 gap-2">
-                  <button className="bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold py-3 rounded-xl transition-all">
+                <div className="grid grid-cols-2 gap-3">
+                  <button className="bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold py-4 rounded-xl transition-all flex items-center justify-center gap-2">
+                    <Zap className="w-4 h-4" />
                     Tip Gratis (1/3)
                   </button>
-                  <button className="bg-slate-700/60 hover:bg-slate-700 text-white/70 text-sm font-semibold py-3 rounded-xl transition-all border border-muted/30">
-                    Tip Premium (150 DTC)
+                  <button className="bg-slate-700/60 hover:bg-slate-700 text-white/70 text-sm font-semibold py-4 rounded-xl transition-all border border-muted/30 flex items-center justify-center gap-2">
+                    <Lock className="w-4 h-4" />
+                    Premium (150 DTC)
                   </button>
                 </div>
 
