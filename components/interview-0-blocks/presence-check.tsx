@@ -78,6 +78,12 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
     }
   }
 
+  const handleRetry = () => {
+    setIsRecording(false)
+    setScore(0)
+    setFeedback([])
+  }
+
   const handleContinue = () => {
     onComplete({
       passed: score >= 60,
@@ -207,18 +213,28 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
             )}
           </Button>
         ) : (
-          <Button
-            onClick={handleContinue}
-            disabled={isAnalyzing}
-            className={`w-full h-12 font-semibold ${
-              score >= 60
-                ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-                : 'bg-yellow-600 hover:bg-yellow-700 text-white'
-            }`}
-          >
-            <Check className="w-4 h-4 mr-2" />
-            Continuar
-          </Button>
+          <div className="flex gap-3">
+            <Button
+              onClick={handleRetry}
+              disabled={isAnalyzing}
+              variant="outline"
+              className="flex-1 h-12 font-semibold text-white"
+            >
+              Intentar de Nuevo
+            </Button>
+            <Button
+              onClick={handleContinue}
+              disabled={isAnalyzing}
+              className={`flex-1 h-12 font-semibold ${
+                score >= 60
+                  ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                  : 'bg-yellow-600 hover:bg-yellow-700 text-white'
+              }`}
+            >
+              <Check className="w-4 h-4 mr-2" />
+              Continuar
+            </Button>
+          </div>
         )}
       </CardContent>
     </Card>
