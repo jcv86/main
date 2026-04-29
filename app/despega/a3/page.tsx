@@ -267,6 +267,98 @@ export default function A3Page() {
           </CardContent>
         </Card>
 
+        {/* Preparation Modules Section */}
+        <div className="space-y-4">
+          <div>
+            <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Módulos de Preparación</h2>
+            <p className="text-muted-foreground dark:text-muted-foreground">
+              Construye tu base profesional completa antes de practicar entrevistas simuladas.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            {/* Module 1: Guided Training */}
+            <Card className="border border-blue/30 hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-blue" />
+                  Entrenamiento Guiado
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                  Aprende el método STAR: Situación, Tarea, Acción, Resultado. Respuestas estructuradas y claras.
+                </p>
+                <Link href="/despega/a3/entrenamiento-guiado" className="block">
+                  <Button className="w-full bg-blue hover:bg-cyan text-white">
+                    Comenzar <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* Module 2: CV for ATS */}
+            <Card className="border border-cyan/30 hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-cyan" />
+                  CV Inteligente para ATS
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                  Optimiza tu CV para sistemas de seguimiento de candidatos. Múltiples formatos profesionales.
+                </p>
+                <Link href="/despega/a3/cv-ats" className="block">
+                  <Button className="w-full bg-cyan hover:bg-cyan text-black">
+                    Optimizar CV <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* Module 3: Job Matching */}
+            <Card className="border border-green/30 hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Target className="w-5 h-5 text-green" />
+                  Preparación por Vacante
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                  Pega una vacante y obtén análisis de match, CV personalizado y respuestas optimizadas.
+                </p>
+                <Link href="/despega/a3/ajuste-por-vacante" className="block">
+                  <Button className="w-full bg-green hover:bg-emerald-600 text-white">
+                    Analizar Vacante <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* Module 4: Video Analysis */}
+            <Card className="border border-purple/30 hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Video className="w-5 h-5 text-purple" />
+                  Análisis en Video
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                  Grabate practicando y recibe análisis multimodal de lenguaje corporal, tono y claridad.
+                </p>
+                <Link href="/despega/a3/analisis-multimodal" className="block">
+                  <Button className="w-full bg-purple hover:bg-violet-600 text-white">
+                    Analizar Video <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
         {/* Resources Section */}
         <div className="grid md:grid-cols-2 gap-6">
           <Card>
