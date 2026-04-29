@@ -1,403 +1,228 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
-import { useAuthRedirect } from '@/hooks/use-auth-redirect'
-import { ASection, ASectionPart } from '@/components/a-section-layout'
 import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { PhaseTransitionHandler } from '@/components/phase-transition-handler'
-import { Loader2, Video, FileText, Briefcase, TrendingUp, CheckCircle2, Clock, Zap, Target, ArrowRight } from 'lucide-react'
+import { Zap, BarChart3, Target, Video, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 
-interface TrainingProgress {
-  interview_0: boolean
-  cv_prepared: boolean
-  market_insights: boolean
-  trainings_done: number
-}
-
-export default function TrainingDashboardPage() {
-  const [progress, setProgress] = useState<TrainingProgress | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const { user, loading: authLoading } = useAuthRedirect()
-  const supabase = createClient()
+export default function A3DashboardPage() {
   const router = useRouter()
 
-  useEffect(() => {
-    if (authLoading || !user?.id) return
-    loadProgress()
-  }, [authLoading, user?.id])
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="container max-w-6xl mx-auto px-4 py-16">
+        <div className="text-center mb-12 space-y-4">
+          <h1 className="text-5xl font-bold text-white">Tu Entrenamiento A3</h1>
+          <p className="text-xl text-white/70 max-w-2xl mx-auto">
+            Prepárate para entrevistas con práctica guiada, feedback de IA y análisis profundo.
+          </p>
+        </div>
 
-  const loadProgress = async () => {
-    try {
-      // Check Interview 0
-      const { data: interview } = await supabase
-        .from('user_a3_interview_0')
-        .select('id')
-        .eq('user_id', user?.id)
-        .limit(1)
+        {/* Base Foundation Section */}
+        <div className="mb-16 space-y-4">
+          <div>
+            <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Tu Base Profesional</h2>
+            <p className="text-muted-foreground dark:text-muted-foreground">
+              Comienza aquí: prepara tu presencia, pitch y documentación.
+            </p>
+          </div>
 
-      // Check CV
-      const { data: cv } = await supabase
-        .from('user_a3_cv')
-        .select('id')
-        .eq('user_id', user?.id)
-        .limit(1)
+          <Card className="border border-blue/30 hover:shadow-lg transition">
+            <CardHeader>
+              <CardTitle className="text-xl">Entrevista 0: Tu Base Profesional</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-muted-foreground">
+                Auditoría completa de tu entorno, presencia, audio y pitch inicial. Identifica qué mejorar antes de practicar.
+              </p>
+              <Link href="/despega/interview-0" className="block">
+                <Button className="w-full bg-blue hover:bg-cyan text-white">
+                  Comenzar Auditoría <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
 
-      // Check Market Insights
-      const { data: market } = await supabase
-        .from('user_a3_market_insights')
-        .select('id')
-        .eq('user_id', user.id)
-        .limit(1)
+        {/* Preparation Modules Section */}
+        <div className="space-y-4 mb-16">
+          <div>
+            <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Módulos de Preparación</h2>
+            <p className="text-muted-foreground dark:text-muted-foreground">
+              Construye tu base profesional completa antes de practicar entrevistas simuladas.
+            </p>
+          </div>
 
-      // Check Training Sessions
-      const { data: trainings } = await supabase
-        .from('user_a3_simulations')
-        .select('id')
-        .eq('user_id', user.id)
+          <div className="grid md:grid-cols-2 gap-4">
+            {/* Module 1: Guided Training */}
+            <Card className="border border-blue/30 hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-blue" />
+                  Entrenamiento Guiado
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                  Aprende el método STAR: Situación, Tarea, Acción, Resultado. Respuestas estructuradas y claras.
+                </p>
+                <Link href="/despega/a3/entrenamiento-guiado" className="block">
+                  <Button className="w-full bg-blue hover:bg-cyan text-white">
+                    Comenzar <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
 
-      setProgress({
-        interview_0: !!interview?.length,
-        cv_prepared: !!cv?.length,
-        market_insights: !!market?.length,
-        trainings_done: trainings?.length || 0
-      })
+            {/* Module 2: CV for ATS */}
+            <Card className="border border-cyan/30 hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <BarChart3 className="w-5 h-5 text-cyan" />
+                  CV Inteligente para ATS
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                  Optimiza tu CV para sistemas de seguimiento de candidatos. Múltiples formatos profesionales.
+                </p>
+                <Link href="/despega/a3/cv-ats" className="block">
+                  <Button className="w-full bg-cyan hover:bg-cyan text-black">
+                    Optimizar CV <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
 
-      console.log('[v0] Training progress loaded')
-    } catch (err) {
-      console.error('[v0] Error loading training progress:', err)
-      setError('Error al cargar progreso')
-    } finally {
-      setLoading(false)
-    }
-  }
+            {/* Module 3: Job Matching */}
+            <Card className="border border-green/30 hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Target className="w-5 h-5 text-green" />
+                  Preparación por Vacante
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                  Pega una vacante y obtén análisis de match, CV personalizado y respuestas optimizadas.
+                </p>
+                <Link href="/despega/a3/ajuste-por-vacante" className="block">
+                  <Button className="w-full bg-green hover:bg-emerald-600 text-white">
+                    Analizar Vacante <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-cyan/50" />
-          <p className="text-white/85">Cargando tu progreso de entrenamiento...</p>
+            {/* Module 4: Video Analysis */}
+            <Card className="border border-purple/30 hover:shadow-lg transition">
+              <CardHeader>
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Video className="w-5 h-5 text-purple" />
+                  Análisis en Video
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
+                  Grabate practicando y recibe análisis multimodal de lenguaje corporal, tono y claridad.
+                </p>
+                <Link href="/despega/a3/analisis-multimodal" className="block">
+                  <Button className="w-full bg-purple hover:bg-violet-600 text-white">
+                    Analizar Video <ArrowRight className="ml-2 w-4 h-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Training Levels Section */}
+        <div className="space-y-4">
+          <div>
+            <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Entrenamientos por Nivel</h2>
+            <p className="text-muted-foreground dark:text-muted-foreground">
+              Practica en 4 niveles de dificultad con feedback inmediato de IA.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <Card className="border border-muted/30 hover:shadow-lg transition">
+              <CardHeader>
+                <Badge className="w-fit bg-blue/20 text-blue mb-2">Básico</Badge>
+                <CardTitle>Entrenamiento Guiado</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Preguntas con guía paso a paso. Feedback en tiempo real mientras practicas.
+                </p>
+                <Button 
+                  onClick={() => router.push('/despega/a3/entrenamiento-guiado')}
+                  className="w-full bg-blue hover:bg-cyan text-white"
+                >
+                  Comenzar <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-muted/30 hover:shadow-lg transition">
+              <CardHeader>
+                <Badge className="w-fit bg-cyan/20 text-cyan mb-2">Intermedio</Badge>
+                <CardTitle>Entrenamiento Estructurado</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Entrenamientos conductuales y técnicos con presión moderada.
+                </p>
+                <Button 
+                  onClick={() => router.push('/despega/a3/entrenamiento-estructurado')}
+                  className="w-full bg-cyan hover:bg-cyan text-black"
+                >
+                  Practicar <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-muted/30 hover:shadow-lg transition">
+              <CardHeader>
+                <Badge className="w-fit bg-green/20 text-green mb-2">Avanzado</Badge>
+                <CardTitle>Entrenamiento Desafiante</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Preguntas difíciles sin guía. Simula presión de entrevista ejecutiva.
+                </p>
+                <Button 
+                  onClick={() => router.push('/despega/a3/entrenamiento-desafiante')}
+                  className="w-full bg-green hover:bg-emerald-600 text-white"
+                >
+                  Desafiarse <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-muted/30 hover:shadow-lg transition">
+              <CardHeader>
+                <Badge className="w-fit bg-purple/20 text-purple mb-2">Maestría</Badge>
+                <CardTitle>Entrevista Conversacional</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Entrevista real con IA. Análisis multimodal completo con feedback profundo.
+                </p>
+                <Button 
+                  onClick={() => router.push('/despega/a3/conversational-interview')}
+                  className="w-full bg-purple hover:bg-violet-600 text-white"
+                >
+                  Comenzar <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
-    )
-  }
-
-  if (!progress) return null
-
-  const completedItems = [
-    progress.interview_0,
-    progress.cv_prepared,
-    progress.market_insights,
-    progress.trainings_done >= 2
-  ].filter(Boolean).length
-
-  const completionPercentage = (completedItems / 4) * 100
-
-  const activityCards = [
-    // ENTRENAMIENTO CONVERSACIONAL (NUEVO - DESTACADO)
-    {
-      category: 'ENTRENAMIENTO CONVERSACIONAL',
-      icon: Video,
-      title: 'Entrevista Conversacional con IA',
-      description: 'Entrevista real con IA como entrevistador. Cámara activa. Análisis multimodal: postura, tono, gestos, contenido. Feedback inmediato.',
-      status: 'pending',
-      action: 'Comenzar',
-      href: '/despega/a3/conversational-interview',
-      badge: '🎥 Video Real'
-    },
-    
-    // FUNDACIÓN
-    {
-      category: 'FUNDACIÓN',
-      icon: Video,
-      title: 'Interview 0: Tu Pitch Personal',
-      description: 'Practica tus respuestas personales a 5 preguntas clave que aparecen en CUALQUIER entrevista. Base sólida.',
-      status: progress.interview_0 ? 'completed' : 'pending',
-      action: progress.interview_0 ? 'Ver respuestas' : 'Comenzar',
-      href: '/despega/interview-0',
-      badge: '5 preguntas'
-    },
-    {
-      category: 'FUNDACIÓN',
-      icon: FileText,
-      title: 'CV ATS Optimizer',
-      description: 'Optimiza tu CV para pasar filtros automáticos. Formatos ATS y creativo lado a lado.',
-      status: progress.cv_prepared ? 'completed' : 'pending',
-      action: progress.cv_prepared ? 'Ver CV' : 'Generar CV',
-      href: '/despega/a3/cv-ats',
-      badge: 'ATS Ready'
-    },
-    
-    // ENTRENAMIENTO GUIADO
-    {
-      category: 'ENTRENAMIENTO GUIADO',
-      icon: Briefcase,
-      title: 'Entrenamientos Guiados',
-      description: '6 preguntas con guía paso a paso. Usa STAR method. Input voz y texto. Feedback IA en tiempo real.',
-      status: 'pending',
-      action: 'Comenzar',
-      href: '/despega/a3/entrenamiento-guiado',
-      badge: '6 preguntas'
-    },
-    {
-      category: 'ENTRENAMIENTO GUIADO',
-      icon: Briefcase,
-      title: 'Análisis Multimodal con Video',
-      description: 'Grabate respondiendo. IA analiza: postura, tono, gestos, coherencia emocional. Feedback profundo.',
-      status: 'pending',
-      action: 'Grabar Video',
-      href: '/despega/a3/analisis-multimodal',
-      badge: 'Con IA Vision'
-    },
-    
-    // ENTRENAMIENTO ESTRUCTURADO
-    {
-      category: 'ENTRENAMIENTO ESTRUCTURADO',
-      icon: Target,
-      title: 'Entrenamientos Estructurados',
-      description: 'Entrenamientos conductuales y técnicos con presión moderada. Construye confianza sistemáticamente.',
-      status: 'pending',
-      action: 'Practicar',
-      href: '/despega/a3/entrenamiento-estructurado',
-      badge: 'Intermedio'
-    },
-    {
-      category: 'ENTRENAMIENTO ESTRUCTURADO',
-      icon: TrendingUp,
-      title: 'Ajuste por Vacante',
-      description: 'Pega un job posting. IA analiza skills match y genera respuestas personalizadas para ESA vacante.',
-      status: 'pending',
-      action: 'Ajustar',
-      href: '/despega/a3/ajuste-por-vacante',
-      badge: 'Personalizado'
-    },
-    
-    // DESAFÍO MÁXIMO
-    {
-      category: 'DESAFÍO MÁXIMO',
-      icon: Zap,
-      title: 'Entrenamientos Desafiantes',
-      description: 'Entrenamientos intensos. Preguntas difíciles sin guía. Simula presión real de entrevista ejecutiva.',
-      status: 'pending',
-      action: 'Desafiarse',
-      href: '/despega/a3/entrenamiento-desafiante',
-      badge: 'Avanzado'
-    },
-    {
-      category: 'DESAFÍO MÁXIMO',
-      icon: Briefcase,
-      title: 'Market Intelligence',
-      description: 'Analiza tendencias, salarios, empresas que contratan en tu sector. Contexto laboral estratégico.',
-      status: progress.market_insights ? 'completed' : 'pending',
-      action: progress.market_insights ? 'Ver análisis' : 'Generar',
-      href: '/despega/market-insights',
-      badge: 'Mercado Real'
-    },
-  ]
-
-  return (
-    <ASection
-      title="Entrenamiento Intensivo"
-      subtitle="Práctica y Feedback Realista para Entrevistas"
-      icon="🎯"
-      colorClass="from-blue"
-    >
-      {/* EXPLICACIÓN */}
-      <ASectionPart title="¿Qué es Entrenamiento Intensivo?" icon={<Zap />}>
-        <p className="text-white/85 mb-4">
-          Esta es tu fase de práctica intensiva. Aquí realizas entrenamientos realistas de entrevistas, recibes feedback inmediato, 
-          y ajustas tu enfoque basado en análisis. Combinas tu Interview 0, CV optimizado e inteligencia del mercado 
-          en entrenamientos prácticos que te preparan para situaciones reales.
-        </p>
-        <p className="text-muted-foreground text-sm">
-          🎯 Enfoque: Práctica realista, feedback de IA, iteración y mejora continua durante 30-60 días.
-        </p>
-      </ASectionPart>
-
-      {/* FLUJO / PROCESO */}
-      <ASectionPart title="Tu Progreso en Entrenamiento" icon={<Target />}>
-        <div className="space-y-4 mb-6">
-          <div className="flex items-center justify-between mb-2">
-            <p className="font-semibold text-white">Completado</p>
-            <p className="text-2xl font-black text-cyan/40">{Math.round(completionPercentage)}%</p>
-          </div>
-          <div className="h-3 bg-muted/70 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-blue rounded-full transition-all"
-              style={{ width: `${completionPercentage}%` }}
-            />
-          </div>
-          <p className="text-xs text-muted-foreground">{completedItems} de 4 módulos completados</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {activityCards.map((card, i) => {
-            const isCompleted = card.status === 'completed'
-            return (
-              <div key={i} className={`p-3 rounded-[28px] border ${isCompleted ? 'bg-emerald-900/20 border-green/30' : 'bg-muted/80/20 border-muted/70'}`}>
-                <div className="flex items-center gap-2 mb-1">
-                  {isCompleted ? <CheckCircle2 className="w-4 h-4 text-emerald-400" /> : <Clock className="w-4 h-4 text-muted-foreground" />}
-                  <p className="text-sm font-semibold text-white">{card.title}</p>
-                </div>
-                <p className="text-xs text-muted-foreground ml-6">{isCompleted ? 'Completado' : 'Pendiente'}</p>
-              </div>
-            )
-          })}
-        </div>
-      </ASectionPart>
-
-      {/* RESULTADOS */}
-      <ASectionPart title="Todas Tus Herramientas de Entrenamiento" icon={<CheckCircle2 />}>
-        <div className="space-y-8">
-          {['FUNDACIÓN', 'ENTRENAMIENTO GUIADO', 'ENTRENAMIENTO ESTRUCTURADO', 'DESAFÍO MÁXIMO'].map((category) => {
-            const categoryCards = activityCards.filter(card => card.category === category)
-            return (
-              <div key={category}>
-                <h3 className="text-sm font-bold text-cyan/40 mb-4 uppercase tracking-wider">{category}</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {categoryCards.map((card, i) => {
-                    const Icon = card.icon
-                    const isCompleted = card.status === 'completed'
-
-                    return (
-                      <Card key={i} className="bg-muted/80/40 border-muted/70 hover:border-blue/50 transition-colors group">
-                        <CardHeader>
-                          <div className="flex items-start justify-between mb-2">
-                            <CardTitle className="text-lg flex items-center gap-2">
-                              <Icon className="w-5 h-5 text-cyan/40 group-hover:text-white" />
-                              {card.title}
-                            </CardTitle>
-                            {card.badge && <Badge className="text-xs bg-blue/50/20 text-white border-blue/50">{card.badge}</Badge>}
-                          </div>
-                        </CardHeader>
-                        <CardContent className="space-y-4">
-                          <p className="text-sm text-muted-foreground">{card.description}</p>
-                          {isCompleted && <Badge className="bg-green/50/20 text-emerald-400 border border-green/50">✓ Completado</Badge>}
-                          <Button 
-                            onClick={() => router.push(card.href)}
-                            className={`w-full group/btn transition-all ${isCompleted ? 'bg-muted/70 hover:bg-muted/60' : 'bg-blue hover:bg-cyan'}`}
-                          >
-                            {card.action}
-                            <ArrowRight className="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
-                          </Button>
-                        </CardContent>
-                      </Card>
-                    )
-                  })}
-                </div>
-              </div>
-            )
-          })}
-        </div>
-
-        {/* PROGRESO RESUMEN */}
-        <div className="mt-8 p-6 bg-background">
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <h4 className="text-white font-semibold mb-1">Tu Progreso General</h4>
-              <p className="text-sm text-muted-foreground">Completadas: Interview 0 + CV base + Market Insights</p>
-            </div>
-            <div className="text-right">
-              <p className="text-3xl font-black text-cyan/40">{Math.round(completionPercentage)}%</p>
-            </div>
-          </div>
-          <div className="h-2 bg-muted/70 rounded-full overflow-hidden mb-4">
-            <div
-              className="h-full bg-blue rounded-full transition-all"
-              style={{ width: `${completionPercentage}%` }}
-            />
-          </div>
-          <p className="text-xs text-muted-foreground">{completedItems} de 4 componentes base completados</p>
-        </div>
-      </ASectionPart>
-
-      {/* RECOMENDACIONES */}
-      <ASectionPart title="Tu Camino de Entrenamiento Recomendado" icon={<Target />}>
-        <div className="space-y-6">
-          {completionPercentage === 0 && (
-            <div className="p-6 bg-background">
-              <h4 className="text-white font-semibold mb-2">Comienza aquí</h4>
-              <p className="text-white/85 text-sm mb-4">
-                La base es fundamental. Completa Interview 0 primero - es la piedra angular de todas tus entrevistas.
-              </p>
-              <Button onClick={() => router.push('/despega/interview-0')} className="bg-blue hover:bg-cyan">
-                Comenzar Interview 0
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          )}
-
-          {completionPercentage > 0 && completionPercentage < 50 && (
-            <div className="p-6 bg-background">
-              <h4 className="text-white font-semibold mb-2">Siguiente: Entrenamiento Guiado</h4>
-              <p className="text-white/85 text-sm mb-4">
-                Ya tienes tu base. Ahora practica con guía. Los Entrenamientos Guiados te enseñan la metodología STAR y te dan feedback IA en tiempo real.
-              </p>
-              <Button onClick={() => router.push('/despega/a3/entrenamiento-guiado')} className="bg-blue hover:bg-cyan">
-                Ir a Entrenamientos Guiados
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          )}
-
-          {completionPercentage >= 50 && completionPercentage < 100 && (
-            <div className="p-6 bg-background">
-              <h4 className="text-white font-semibold mb-2">Intensifica: Desafío Máximo</h4>
-              <p className="text-white/85 text-sm mb-4">
-                Estás en buena forma. Es momento de desafiarte. Los Entrenamientos Desafiantes te preparan para presión real de entrevista ejecutiva.
-              </p>
-              <Button onClick={() => router.push('/despega/a3/entrenamiento-desafiante')} className="bg-blue hover:bg-teal-700">
-                Ir a Entrenamientos Desafiantes
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          )}
-
-          {completionPercentage === 100 && (
-            <PhaseTransitionHandler
-              currentPhase="a3"
-              isComplete={true}
-              nextPhaseLabel="La Realidad: Ejecución y Contexto"
-              nextPhaseUrl="/despega/a4"
-            />
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-muted/80/40 border-muted/70">
-              <CardHeader>
-                <CardTitle className="text-lg">4 Principios del Módulo de Entrenamiento</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="space-y-2 text-sm text-white/85">
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan/40 flex-shrink-0 mt-0.5" /> Progresión: Guiado → Estructurado → Desafío</p>
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan/40 flex-shrink-0 mt-0.5" /> Feedback: Análisis IA después de cada sesión</p>
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan/40 flex-shrink-0 mt-0.5" /> Video: Analiza postura, tono, gestos reales</p>
-                  <p className="flex gap-2"><CheckCircle2 className="w-4 h-4 text-cyan/40 flex-shrink-0 mt-0.5" /> Personalización: Ajusta respuestas por vacante</p>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="bg-muted/80/40 border-muted/70">
-              <CardHeader>
-                <CardTitle className="text-lg">Tips de Experto</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <ul className="space-y-2 text-sm text-white/85">
-                  <li>• Practiquen 2-3 entrenamientos por semana para máximo progreso</li>
-                  <li>• Mira el video de ti mismo - es incómodo pero transformador</li>
-                  <li>• Ajusta tus respuestas según feedback IA</li>
-                  <li>• Usa CV ATS optimizado para cada candidatura</li>
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </ASectionPart>
-    </ASection>
+    </div>
   )
 }
