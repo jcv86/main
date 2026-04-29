@@ -156,7 +156,7 @@ export default function DespegazoDashboard() {
         progress.a3_progress.interview_0 &&
         progress.a3_progress.cv_prepared &&
         progress.a3_progress.market_insights,
-      href: '/despega/a3-dashboard',
+      href: '/despega/a3',
       score: readiness.a3_completeness,
       icon: '⚡',
       color: 'from-blue'

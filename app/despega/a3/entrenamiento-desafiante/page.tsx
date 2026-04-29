@@ -237,7 +237,7 @@ export default function ChallensingTrainingPage() {
         {/* Header */}
         <div className="flex-shrink-0 border-b border-muted/80 bg-background">
           <div className="flex items-center justify-between">
-            <Link href="/despega/a3-dashboard" className="flex items-center gap-2 text-cyan/40 hover:text-cyan/30">
+            <Link href="/despega/a3" className="flex items-center gap-2 text-cyan hover:text-cyan/80">
               <ArrowLeft className="w-4 h-4" />
               Volver al Dashboard
             </Link>
@@ -421,7 +421,7 @@ export default function ChallensingTrainingPage() {
                       </Button>
                     ) : (
                       <Button
-                        onClick={() => window.location.href = '/despega/a3-dashboard'}
+                        onClick={() => window.location.href = '/despega/a3'}
                         className="w-full bg-green hover:bg-green gap-2"
                       >
                         Completar Entrenamiento

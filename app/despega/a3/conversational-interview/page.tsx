@@ -37,7 +37,7 @@ export default function ConversationalInterviewPage() {
       <main className="min-h-screen bg-black">
         <div className="flex flex-col h-screen">
           <div className="flex-shrink-0 border-b border-muted/80 bg-background">
-            <Link href="/despega/a3-dashboard">
+            <Link href="/despega/a3">
               <Button variant="ghost" className="text-cyan/40 hover:text-cyan/30">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Volver al Dashboard

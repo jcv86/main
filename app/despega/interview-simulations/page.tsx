@@ -31,7 +31,7 @@ export default function InterviewSimulationsPage() {
         completed_at: new Date().toISOString()
       })
 
-      router.push('/despega/a3-dashboard')
+      router.push('/despega/a3')
     } finally {
       setLoading(false)
     }

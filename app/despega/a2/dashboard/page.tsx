@@ -278,7 +278,7 @@ export default function A2DashboardPage() {
           currentPhase="a2"
           isComplete={true}
           nextPhaseLabel="Entrenamiento: Simulación Intensiva"
-          nextPhaseUrl="/despega/a3-dashboard"
+          nextPhaseUrl="/despega/a3"
         />
 
       </div>

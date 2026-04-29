@@ -564,7 +564,7 @@ export default function A2RoutesPage() {
                     Dirígete a <span className="font-semibold">A3: Impulso</span> para prepararte para entrevistas.
                   </p>
                   <Button 
-                    onClick={() => router.push('/despega/a3-dashboard')}
+                    onClick={() => router.push('/despega/a3')}
                     className="w-full bg-blue hover:bg-blue mt-2"
                     size="sm"
                   >
