@@ -11,6 +11,8 @@ const validationSchema = z.object({
   feedback: z.string().describe('Helpful feedback for the user')
 })
 
+type ValidationResult = z.infer<typeof validationSchema>
+
 export async function validatePreparationResponses(
   role: string,
   company: string,
@@ -48,10 +50,10 @@ Is this a genuine, professional preparation? Provide validation score and feedba
     })
 
     return {
-      isValid: (result.object as typeof validationSchema._type).isValid,
-      confidence: (result.object as typeof validationSchema._type).confidence,
-      issues: (result.object as typeof validationSchema._type).issues,
-      feedback: (result.object as typeof validationSchema._type).feedback
+      isValid: (result.object as ValidationResult).isValid,
+      confidence: (result.object as ValidationResult).confidence,
+      issues: (result.object as ValidationResult).issues,
+      feedback: (result.object as ValidationResult).feedback
     }
   } catch (error) {
     console.error('[v0] AI validation error:', error)
