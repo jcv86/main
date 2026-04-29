@@ -516,7 +516,7 @@ export function ConversationalInterviewSimulator({
                 onEnded={() => setStage('question')}
               />
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-white/80">
               El entrevistador te está dando la bienvenida. Cuando termine el video, procederemos con las preguntas.
             </p>
             <Button
@@ -549,7 +549,7 @@ export function ConversationalInterviewSimulator({
               <p className="text-lg font-semibold text-muted/90 dark:text-white mb-3">
                 {currentQuestion.text}
               </p>
-              <p className="text-sm text-muted-foreground dark:text-muted-foreground italic">
+              <p className="text-sm text-white/85 italic">
                 {currentQuestion.context}
               </p>
             </div>
@@ -699,7 +699,7 @@ export function ConversationalInterviewSimulator({
                     <Zap className="w-4 h-4" />
                     Tip Gratis (1/3)
                   </button>
-                  <button className="bg-slate-700/60 hover:bg-slate-700 text-white/70 text-sm font-semibold py-4 rounded-xl transition-all border border-muted/30 flex items-center justify-center gap-2">
+                  <button className="bg-slate-700/60 hover:bg-slate-700 text-white text-sm font-semibold py-4 rounded-xl transition-all border border-muted/30 flex items-center justify-center gap-2">
                     <Lock className="w-4 h-4" />
                     Premium (150 DTC)
                   </button>
@@ -748,7 +748,7 @@ export function ConversationalInterviewSimulator({
               </div>
               <div className="text-right">
                 <div className="text-3xl font-bold text-amber-600">{lastAttempt.score}</div>
-                <p className="text-xs text-muted-foreground">Puntuación</p>
+                <p className="text-sm text-white/85">Puntuación</p>
               </div>
             </div>
           </CardHeader>
@@ -756,7 +756,7 @@ export function ConversationalInterviewSimulator({
             {/* Your Response */}
             <div>
               <p className="font-semibold mb-2">Tu respuesta:</p>
-              <div className="bg-muted/5 dark:bg-transparent p-4 rounded-[28px] italic text-muted-foreground dark:text-white/85">
+              <div className="bg-muted/5 dark:bg-transparent p-4 rounded-[28px] italic text-white/85">
                 {lastAttempt.userResponse}
               </div>
             </div>
@@ -771,7 +771,7 @@ export function ConversationalInterviewSimulator({
 
               <TabsContent value="feedback" className="space-y-4">
                 <div>
-                  <p className="font-semibold text-green dark:text-green/30 mb-2">Fortalezas:</p>
+                  <p className="font-semibold text-green mb-2">Fortalezas:</p>
                   <ul className="space-y-2">
                     {lastAttempt.feedback?.strengths.map((s, i) => (
                       <li key={i} className="flex gap-2 text-sm">
@@ -800,7 +800,7 @@ export function ConversationalInterviewSimulator({
                     {Object.entries(lastAttempt.feedback.staAnalysis).map(([key, value]) => (
                       <div key={key}>
                         <p className="font-semibold text-blue dark:text-blue-200 capitalize">{key}:</p>
-                        <p className="text-sm text-muted-foreground dark:text-white/85">{value}</p>
+                        <p className="text-sm text-white/85">{value}</p>
                       </div>
                     ))}
                   </>
