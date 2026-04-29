@@ -60,9 +60,9 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
     return null
   }
 
-  const roleValid = !validateRole(role)
-  const companyValid = !validateCompany(company)
-  const achievementsValid = !validateAchievements(achievements)
+  const roleValid = validateRole(role) === null
+  const companyValid = validateCompany(company) === null
+  const achievementsValid = validateAchievements(achievements) === null
 
   const validFields = [roleValid, companyValid, achievementsValid].filter(Boolean).length
   const allValid = roleValid && companyValid && achievementsValid
