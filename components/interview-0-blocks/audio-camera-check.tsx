@@ -85,8 +85,83 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
     }
   }
 
-  const passed = micStatus === 'ready'
-  const score = passed ? 100 : 40
+  const [maxAudioLevel, setMaxAudioLevel] = useState(0)
+  const [audioTestResult, setAudioTestResult] = useState<'good' | 'fair' | 'poor' | null>(null)
+
+  const handleTestAudio = async () => {
+    setIsTestingAudio(true)
+    setMaxAudioLevel(0)
+    setAudioTestResult(null)
+    let stream: MediaStream | null = null
+    let audioContext: AudioContext | null = null
+
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        audio: { echoCancellation: true, noiseSuppression: true },
+        video: false
+      })
+
+      audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+      const analyser = audioContext.createAnalyser()
+      const source = audioContext.createMediaStreamSource(stream)
+      source.connect(analyser)
+
+      const dataArray = new Uint8Array(analyser.frequencyBinCount)
+      let isRunning = true
+      let max = 0
+
+      const checkAudio = () => {
+        if (!isRunning) return
+        analyser.getByteFrequencyData(dataArray)
+        const average = dataArray.reduce((a, b) => a + b) / dataArray.length
+        const level = Math.round((average / 255) * 100)
+        setAudioLevel(level)
+        max = Math.max(max, level)
+        setMaxAudioLevel(max)
+        requestAnimationFrame(checkAudio)
+      }
+
+      checkAudio()
+
+      // Stop after 3 seconds and evaluate
+      setTimeout(() => {
+        isRunning = false
+        setIsTestingAudio(false)
+        
+        // Evaluate audio quality based on max level detected
+        let result: 'good' | 'fair' | 'poor'
+        if (max >= 50) {
+          result = 'good'
+        } else if (max >= 30) {
+          result = 'fair'
+        } else {
+          result = 'poor'
+        }
+        setAudioTestResult(result)
+        
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop())
+        }
+        if (audioContext && audioContext.state !== 'closed') {
+          audioContext.close()
+        }
+      }, 3000)
+    } catch (err) {
+      console.error('[v0] Audio test error:', err)
+      setIsTestingAudio(false)
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop())
+      }
+      if (audioContext && audioContext.state !== 'closed') {
+        audioContext.close()
+      }
+    }
+  }
+
+  // Score depends on audio quality test result, not just mic availability
+  const audioQualityScore = audioTestResult === 'good' ? 100 : audioTestResult === 'fair' ? 70 : audioTestResult === 'poor' ? 40 : 0
+  const passed = micStatus === 'ready' && (audioTestResult === 'good' || audioTestResult === 'fair')
+  const score = Math.max(audioQualityScore, passed ? 70 : 0)
 
   return (
     <Card className="border-muted/30">
@@ -162,6 +237,32 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
               />
             </div>
             <p className="text-center text-2xl font-bold text-white">{audioLevel}%</p>
+          </div>
+        )}
+
+        {/* Audio Test Result */}
+        {audioTestResult && (
+          <div className={`rounded-lg p-4 text-center border ${
+            audioTestResult === 'good' 
+              ? 'bg-emerald-500/10 border-emerald-500/30' 
+              : audioTestResult === 'fair'
+              ? 'bg-yellow-500/10 border-yellow-500/30'
+              : 'bg-red-500/10 border-red-500/30'
+          }`}>
+            <p className={`font-semibold ${
+              audioTestResult === 'good'
+                ? 'text-emerald-400'
+                : audioTestResult === 'fair'
+                ? 'text-yellow-400'
+                : 'text-red-400'
+            }`}>
+              {audioTestResult === 'good' && 'Excelente calidad de audio'}
+              {audioTestResult === 'fair' && 'Audio adecuado'}
+              {audioTestResult === 'poor' && 'Audio bajo - acércate al micrófono'}
+            </p>
+            <p className="text-sm text-white/70 mt-1">
+              Nivel máximo detectado: {maxAudioLevel}%
+            </p>
           </div>
         )}
 

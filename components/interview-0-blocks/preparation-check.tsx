@@ -20,10 +20,12 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
   const companyValid = company.trim().length >= 2
   const achievementsValid = achievements.trim().length >= 10
 
+  const validFields = [roleValid, companyValid, achievementsValid].filter(Boolean).length
   const allValid = roleValid && companyValid && achievementsValid
-  const score = allValid ? 100 : Math.round(
-    (roleValid ? 33 : 0) + (companyValid ? 33 : 0) + (achievementsValid ? 34 : 0)
-  )
+  
+  // Stricter scoring: only 100 if all fields are filled AND substantial
+  // If any field is missing, max score is 60
+  const score = allValid ? 100 : validFields === 3 ? 100 : validFields === 2 ? 60 : validFields === 1 ? 40 : 0
 
   const handleContinue = () => {
     onComplete({

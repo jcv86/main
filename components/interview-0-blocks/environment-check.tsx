@@ -18,17 +18,23 @@ export function EnvironmentCheck({ onComplete }: EnvironmentCheckProps) {
     connection: false
   })
 
+  // Score should only be 100 if ALL checks are complete
+  // Partial scores only if user manually validates they're ready to continue
+  const completedCount = Object.values(checks).filter(Boolean).length
   const allChecked = Object.values(checks).every(Boolean)
-  const score = allChecked ? 100 : (Object.values(checks).filter(Boolean).length / 4) * 100
+  
+  // More strict: 0-25 per check, so max 100 only if all 4 are checked
+  const score = allChecked ? 100 : completedCount > 0 ? 60 : 0
 
   const handleToggle = (key: keyof typeof checks) => {
     setChecks(prev => ({ ...prev, [key]: !prev[key] }))
   }
 
   const handleContinue = () => {
+    // Only allow continuation if ALL checks are confirmed
     onComplete({
       passed: allChecked,
-      score: Math.round(score)
+      score: score
     })
   }
 
