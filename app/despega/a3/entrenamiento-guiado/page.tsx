@@ -14,7 +14,7 @@ import { ConversationalInterviewSimulator } from '@/components/conversational-in
 const TRAINING_MODULES = [
   {
     id: 1,
-    name: 'STAR Method Mastery',
+    name: 'Dominio del Método STAR',
     description: 'Aprende y domina la metodología STAR (Situación, Tarea, Acción, Resultado)',
     duration: '45 min',
     lessons: [
@@ -46,7 +46,7 @@ const TRAINING_MODULES = [
   },
   {
     id: 2,
-    name: 'Behavioral Questions Deep Dive',
+    name: 'Preguntas de Comportamiento',
     description: 'Estrategias para responder preguntas de comportamiento complejo',
     duration: '60 min',
     lessons: [
@@ -59,12 +59,12 @@ const TRAINING_MODULES = [
     difficulty: 'Intermedio',
     icon: Brain,
     status: 'locked',
-    requiresCompletion: 'STAR Method Mastery'
+    requiresCompletion: 'Dominio del Método STAR'
   },
   {
     id: 3,
-    name: 'Technical Communication',
-    description: 'Explica conceptos técnicos a non-technical stakeholders',
+    name: 'Comunicación Técnica',
+    description: 'Explica conceptos técnicos a stakeholders no-técnicos de forma clara',
     duration: '50 min',
     lessons: [
       { title: 'Simplificación', description: 'Explicar lo complejo de forma simple', completed: false },
@@ -75,7 +75,7 @@ const TRAINING_MODULES = [
     difficulty: 'Avanzado',
     icon: BookOpen,
     status: 'locked',
-    requiresCompletion: 'Behavioral Questions Deep Dive'
+    requiresCompletion: 'Preguntas de Comportamiento'
   }
 ]
 
@@ -292,7 +292,7 @@ export default function GuidedTrainingPage() {
                     {selectedModule.id === 3 && (
                       <div className="space-y-3">
                         <p>
-                          Poder explicar conceptos técnicos complejos a non-technical people es un superpoder.
+                          Poder explicar conceptos técnicos complejos a personas no-técnicas es un superpoder.
                         </p>
                         <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-blue">
                           <p className="font-semibold mb-2">Ejemplo:</p>
