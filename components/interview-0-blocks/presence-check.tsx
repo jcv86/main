@@ -3,8 +3,10 @@
 import { useState, useRef, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { AlertCircle, Check, Loader } from 'lucide-react'
+import { AlertCircle, Check, Loader, Lightbulb } from 'lucide-react'
 import { analyzePose } from '@/lib/interview-0/pose-detection'
+import { validatePresenceAnalysis } from '@/lib/interview-0/ai-validation'
+import { coachPrompts } from '@/lib/interview-0/ai-coach-prompts'
 
 interface PresenceCheckProps {
   onComplete: (data: { passed: boolean; score: number }) => void
@@ -17,6 +19,14 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isRecording, setIsRecording] = useState(false)
   const [cameraError, setCameraError] = useState(false)
+  const [coachTip, setCoachTip] = useState<string | null>(null)
+  const [isValidatingPresence, setIsValidatingPresence] = useState(false)
+  const [presenceValidationResult, setPresenceValidationResult] = useState<{
+    isValid: boolean
+    score: number
+    issues: string[]
+    tips: string[]
+  } | null>(null)
 
   useEffect(() => {
     const startCamera = async () => {
@@ -61,6 +71,9 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
         severity: issue.severity
       })))
 
+      // Show random Coach tip
+      setCoachTip(coachPrompts.tips.presence[Math.floor(Math.random() * coachPrompts.tips.presence.length)])
+
       console.log('[v0] Pose analysis result:', {
         score: result.score,
         issues: result.issues.length,
@@ -82,13 +95,40 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
     setIsRecording(false)
     setScore(0)
     setFeedback([])
+    setCoachTip(null)
+    setPresenceValidationResult(null)
   }
 
-  const handleContinue = () => {
-    onComplete({
-      passed: score >= 60,
-      score: Math.round(score)
-    })
+  const handleContinueWithValidation = async () => {
+    setIsValidatingPresence(true)
+    try {
+      // Simulated presence data - en producción vendría de MediaPipe
+      const result = await validatePresenceAnalysis({
+        posture: Math.min(100, score * 0.8),
+        eyeContact: Math.min(100, score * 0.9),
+        lighting: Math.min(100, score * 0.85),
+        backgroundQuality: Math.min(100, score * 0.8),
+        overallScore: score
+      })
+      setPresenceValidationResult(result)
+      
+      if (result.isValid) {
+        onComplete({
+          passed: true,
+          score: result.score
+        })
+      }
+    } catch (error) {
+      console.error('[v0] Presence validation error:', error)
+      setPresenceValidationResult({
+        isValid: false,
+        score: score,
+        issues: ['Error en validación con IA'],
+        tips: ['Intenta mejorar tu presencia y prueba nuevamente']
+      })
+    } finally {
+      setIsValidatingPresence(false)
+    }
   }
 
   return (
@@ -186,6 +226,50 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
           </div>
         )}
 
+        {/* Coach IA Tip */}
+        {coachTip && (
+          <div className="flex gap-2 items-start bg-blue/10 p-3 rounded border border-blue/30">
+            <Lightbulb className="w-4 h-4 text-blue/60 mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-blue/80">{coachTip}</p>
+          </div>
+        )}
+
+        {/* Presence IA Validation Result */}
+        {presenceValidationResult && (
+          <div className={`rounded-lg p-4 border ${
+            presenceValidationResult.isValid
+              ? 'bg-emerald-500/10 border-emerald-500/30'
+              : 'bg-red-500/10 border-red-500/30'
+          }`}>
+            <div className="flex items-start gap-3">
+              {presenceValidationResult.isValid ? (
+                <Check className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+              ) : (
+                <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+              )}
+              <div className="flex-1">
+                <p className={`font-semibold ${presenceValidationResult.isValid ? 'text-emerald-400' : 'text-red-400'}`}>
+                  {presenceValidationResult.isValid ? 'Presencia Validada' : 'Presencia Rechazada'}
+                </p>
+                {presenceValidationResult.issues.length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    {presenceValidationResult.issues.map((issue, idx) => (
+                      <p key={idx} className="text-xs text-white/70">• {issue}</p>
+                    ))}
+                  </div>
+                )}
+                {presenceValidationResult.tips.length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    {presenceValidationResult.tips.map((tip, idx) => (
+                      <p key={idx} className="text-xs text-white/70">✓ {tip}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Error state */}
         {cameraError && (
           <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center">
@@ -216,23 +300,32 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
           <div className="flex gap-3">
             <Button
               onClick={handleRetry}
-              disabled={isAnalyzing}
+              disabled={isAnalyzing || isValidatingPresence}
               variant="outline"
               className="flex-1 h-12 font-semibold text-white"
             >
               Intentar de Nuevo
             </Button>
             <Button
-              onClick={handleContinue}
-              disabled={isAnalyzing}
+              onClick={handleContinueWithValidation}
+              disabled={isAnalyzing || isValidatingPresence}
               className={`flex-1 h-12 font-semibold ${
                 score >= 60
                   ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
                   : 'bg-yellow-600 hover:bg-yellow-700 text-white'
               }`}
             >
-              <Check className="w-4 h-4 mr-2" />
-              Continuar
+              {isValidatingPresence ? (
+                <>
+                  <Loader className="w-4 h-4 mr-2 animate-spin" />
+                  Validando...
+                </>
+              ) : (
+                <>
+                  <Check className="w-4 h-4 mr-2" />
+                  Continuar
+                </>
+              )}
             </Button>
           </div>
         )}

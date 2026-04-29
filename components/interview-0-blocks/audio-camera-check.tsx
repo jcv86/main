@@ -3,7 +3,9 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Check, Mic } from 'lucide-react'
+import { Check, Mic, Lightbulb, AlertCircle, Loader } from 'lucide-react'
+import { validateAudioQuality } from '@/lib/interview-0/ai-validation'
+import { coachPrompts } from '@/lib/interview-0/ai-coach-prompts'
 
 interface AudioCameraCheckProps {
   onComplete: (data: { passed: boolean; score: number }) => void
@@ -35,6 +37,14 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
 
   const [maxAudioLevel, setMaxAudioLevel] = useState(0)
   const [audioTestResult, setAudioTestResult] = useState<'good' | 'fair' | 'poor' | null>(null)
+  const [coachTip, setCoachTip] = useState<string | null>(null)
+  const [isValidatingAudio, setIsValidatingAudio] = useState(false)
+  const [audioValidationResult, setAudioValidationResult] = useState<{
+    isValid: boolean
+    score: number
+    issues: string[]
+    tips: string[]
+  } | null>(null)
 
   const handleTestAudio = async () => {
     setIsTestingAudio(true)
@@ -97,6 +107,13 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
         setAudioTestResult(result)
         console.log('[v0] Audio test - max level:', max, 'result:', result)
         
+        // Show Coach tip based on result
+        if (result === 'poor') {
+          setCoachTip(coachPrompts.tips.audio[0]) // "Prueba el audio en un ambiente tranquilo..."
+        } else if (result === 'fair') {
+          setCoachTip(coachPrompts.tips.audio[Math.floor(Math.random() * coachPrompts.tips.audio.length)])
+        }
+        
         if (stream) {
           stream.getTracks().forEach(track => track.stop())
         }
@@ -120,6 +137,32 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
   const audioQualityScore = audioTestResult === 'good' ? 100 : audioTestResult === 'fair' ? 80 : audioTestResult === 'poor' ? 60 : 0
   const passed = micStatus === 'ready' && audioTestResult !== null // Allow any audio level
   const score = audioQualityScore
+
+  const handleValidateAndContinue = async () => {
+    setIsValidatingAudio(true)
+    try {
+      const result = await validateAudioQuality(maxAudioLevel)
+      setAudioValidationResult(result)
+      
+      if (result.isValid) {
+        onComplete({
+          passed: true,
+          score: result.score
+        })
+      }
+    } catch (error) {
+      console.error('[v0] Audio validation error:', error)
+      // Allow user to continue but show warning
+      setAudioValidationResult({
+        isValid: false,
+        score: audioQualityScore,
+        issues: ['Error en validación con IA'],
+        tips: ['Continúa pero verifica tu audio manualmente']
+      })
+    } finally {
+      setIsValidatingAudio(false)
+    }
+  }
 
   return (
     <Card className="border-muted/30">
@@ -224,17 +267,66 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
           </div>
         )}
 
+        {/* Coach IA Tip */}
+        {coachTip && (
+          <div className="flex gap-2 items-start bg-blue/10 p-3 rounded border border-blue/30">
+            <Lightbulb className="w-4 h-4 text-blue/60 mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-blue/80">{coachTip}</p>
+          </div>
+        )}
+
+        {/* Audio IA Validation Result */}
+        {audioValidationResult && (
+          <div className={`rounded-lg p-4 border ${
+            audioValidationResult.isValid
+              ? 'bg-emerald-500/10 border-emerald-500/30'
+              : 'bg-red-500/10 border-red-500/30'
+          }`}>
+            <div className="flex items-start gap-3">
+              {audioValidationResult.isValid ? (
+                <Check className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+              ) : (
+                <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+              )}
+              <div className="flex-1">
+                <p className={`font-semibold ${audioValidationResult.isValid ? 'text-emerald-400' : 'text-red-400'}`}>
+                  {audioValidationResult.isValid ? 'Audio Aceptable' : 'Audio Rechazado'}
+                </p>
+                {audioValidationResult.issues.length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    {audioValidationResult.issues.map((issue, idx) => (
+                      <p key={idx} className="text-xs text-white/70">• {issue}</p>
+                    ))}
+                  </div>
+                )}
+                {audioValidationResult.tips.length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    {audioValidationResult.tips.map((tip, idx) => (
+                      <p key={idx} className="text-xs text-white/70">✓ {tip}</p>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* CTA */}
         <Button
-          onClick={() => onComplete({ passed, score })}
+          onClick={handleValidateAndContinue}
+          disabled={!passed || isValidatingAudio}
           className={`w-full h-12 font-semibold ${
-            passed
+            passed && !isValidatingAudio
               ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
               : 'bg-muted/20 text-white/50 cursor-not-allowed'
           }`}
-          disabled={!passed}
         >
-          {passed ? (
+          {isValidatingAudio ? (
+            <>
+              <Loader className="w-4 h-4 mr-2 animate-spin" />
+              Validando Audio...
+            </>
+          ) : passed ? (
             <>
               <Check className="w-4 h-4 mr-2" />
               Continuar

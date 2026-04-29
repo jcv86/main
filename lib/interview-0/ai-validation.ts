@@ -13,7 +13,106 @@ const validationSchema = z.object({
 
 type ValidationResult = z.infer<typeof validationSchema>
 
-export async function validatePreparationResponses(
+export async function validatePresenceAnalysis(
+  detectionData: {
+    posture: number
+    eyeContact: number
+    lighting: number
+    backgroundQuality: number
+    overallScore: number
+  }
+): Promise<{
+  isValid: boolean
+  score: number
+  issues: string[]
+  tips: string[]
+}> {
+  try {
+    const result = await generateObject({
+      model: openai('gpt-4o-mini'),
+      schema: z.object({
+        isValid: z.boolean(),
+        score: z.number().min(0).max(100),
+        issues: z.array(z.string()),
+        tips: z.array(z.string())
+      }),
+      system: `You are a professional interview coach analyzing presence data.
+Evaluate posture, eye contact, lighting, and background quality.
+Provide constructive, specific feedback for improvement.`,
+      prompt: `Analyze this presence test data:
+- Postura: ${detectionData.posture}/100
+- Contacto visual: ${detectionData.eyeContact}/100
+- Iluminación: ${detectionData.lighting}/100
+- Calidad de fondo: ${detectionData.backgroundQuality}/100
+- Puntaje general: ${detectionData.overallScore}/100
+
+Determina si la presencia es profesional para una entrevista. Devuelve: isValid (bool), score (0-100), issues (array), tips (3 max).`
+    })
+
+    const obj = result.object as any
+    return {
+      isValid: obj.isValid,
+      score: obj.score,
+      issues: obj.issues || [],
+      tips: obj.tips || []
+    }
+  } catch (error) {
+    console.error('[v0] Presence validation error:', error)
+    return {
+      isValid: true,
+      score: 60,
+      issues: [],
+      tips: ['Intenta mejorar tu postura', 'Asegúrate que la luz sea clara', 'Mantén un fondo limpio y profesional']
+    }
+  }
+}
+
+export async function validateAudioQuality(
+  audioLevel: number,
+  testDuration: number = 3
+): Promise<{
+  isValid: boolean
+  score: number
+  issues: string[]
+  tips: string[]
+}> {
+  try {
+    const result = await generateObject({
+      model: openai('gpt-4o-mini'),
+      schema: z.object({
+        isValid: z.boolean(),
+        score: z.number().min(0).max(100),
+        issues: z.array(z.string()),
+        tips: z.array(z.string())
+      }),
+      system: `You are an audio engineer evaluating interview audio quality.
+Consider noise levels, clarity, and professional standards.
+Provide specific, actionable feedback.`,
+      prompt: `Analyze this audio test result:
+- Nivel máximo detectado: ${audioLevel}%
+- Duración del test: ${testDuration}s
+- Rango recomendado: 20-80%
+
+¿Es aceptable para una entrevista profesional? Devuelve: isValid, score (0-100), issues, tips (3 max).`
+    })
+
+    const obj = result.object as any
+    return {
+      isValid: obj.isValid,
+      score: obj.score,
+      issues: obj.issues || [],
+      tips: obj.tips || []
+    }
+  } catch (error) {
+    console.error('[v0] Audio validation error:', error)
+    return {
+      isValid: audioLevel >= 12,
+      score: Math.min(100, audioLevel * 3),
+      issues: audioLevel < 15 ? ['Audio muy bajo - acércate al micrófono'] : [],
+      tips: ['Prueba en ambiente tranquilo', 'Habla con claridad', 'Verifica que no haya ruido de fondo']
+    }
+  }
+}
   role: string,
   company: string,
   achievements: string
