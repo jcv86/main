@@ -48,10 +48,10 @@ Is this a genuine, professional preparation? Provide validation score and feedba
     })
 
     return {
-      isValid: result.object.isValid,
-      confidence: result.object.confidence,
-      issues: result.object.issues,
-      feedback: result.object.feedback
+      isValid: (result.object as typeof validationSchema._type).isValid,
+      confidence: (result.object as typeof validationSchema._type).confidence,
+      issues: (result.object as typeof validationSchema._type).issues,
+      feedback: (result.object as typeof validationSchema._type).feedback
     }
   } catch (error) {
     console.error('[v0] AI validation error:', error)
