@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { getNextRequiredPage } from '@/lib/redirect-logic'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { useCoach } from '@/contexts/coach-context'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -36,15 +35,6 @@ export default function A3Page() {
     try {
       setLoading(true)
       
-      // Check prerequisites using centralized logic
-      const nextPage = await getNextRequiredPage(user?.id)
-      if (!nextPage.includes('/a3')) {
-        console.log('[v0] User not ready for A3, redirecting to:', nextPage)
-        trackEvent('error_occurred', { errorType: 'prerequisite_failed' })
-        router.push(nextPage)
-        return
-      }
-
       // Load user profile
       const { data: profileData } = await supabase
         .from('despega_user_profiles')

@@ -55,11 +55,11 @@ export default function Interview0Page() {
         {/* Header */}
         <div className="flex-shrink-0 border-b border-muted/80 bg-background py-3 px-4">
           <button
-            onClick={() => router.back()}
+            onClick={() => router.push('/despega/a3')}
             className="inline-flex items-center gap-2 text-cyan/40 hover:text-white transition"
           >
             <ArrowLeft className="w-4 h-4" />
-            Volver
+            Volver a Entrenamientos
           </button>
         </div>
 
