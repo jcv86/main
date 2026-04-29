@@ -162,36 +162,32 @@ Is this a genuine, professional preparation? Provide validation score and feedba
     const errorMsg = error instanceof Error ? error.message : String(error)
     console.log('[v0] Error message:', errorMsg)
     
-    // If it's JUST an API error (not auth), be lenient - let them pass if local validation looks good
-    const isAuthError = errorMsg.includes('401') || errorMsg.includes('API key') || errorMsg.includes('Unauthorized')
-    const isBadRequest = errorMsg.includes('400') || errorMsg.includes('Bad Request')
+    // Always do local validation as fallback - don't be too strict
+    // Check if the responses look legitimate (not spam/gibberish)
+    const localValid = 
+      role.length >= 3 && 
+      role.length <= 50 &&
+      company.length >= 2 && 
+      company.length <= 50 &&
+      achievements.length >= 20 &&
+      // Not obviously spam (repeated chars)
+      !/^(.)\1{5,}/.test(role) &&
+      !/^(.)\1{5,}/.test(company) &&
+      !/^(.)\1{5,}/.test(achievements)
     
-    if (isAuthError || isBadRequest) {
-      // API error - do local validation instead
-      // Check if the responses look legitimate (not spam/gibberish)
-      const localValid = 
-        role.length >= 3 && 
-        role.length <= 50 &&
-        company.length >= 2 && 
-        company.length <= 50 &&
-        achievements.length >= 20 &&
-        // Not obviously spam (repeated chars)
-        !/^(.)\1{5,}/.test(role) &&
-        !/^(.)\1{5,}/.test(company) &&
-        !/^(.)\1{5,}/.test(achievements)
-      
-      if (localValid) {
-        // Local validation passed, allow to continue
-        return {
-          isValid: true,
-          confidence: 70,
-          issues: [],
-          feedback: 'Validación completada. Respuestas parecen profesionales y bien estructuradas.'
-        }
+    if (localValid) {
+      // Local validation passed, allow to continue
+      console.log('[v0] Local validation passed despite API error')
+      return {
+        isValid: true,
+        confidence: 70,
+        issues: [],
+        feedback: 'Validación completada. Respuestas parecen profesionales y bien estructuradas.'
       }
     }
     
-    // If truly bad data, reject
+    // If local validation failed, reject
+    console.log('[v0] Local validation failed')
     return {
       isValid: false,
       confidence: 0,
