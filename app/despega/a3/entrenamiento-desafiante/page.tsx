@@ -438,23 +438,23 @@ export default function ChallensingTrainingPage() {
               {/* Score Overview */}
               <div className="p-4 border-b border-muted/80 flex-shrink-0">
                 <h3 className="text-lg font-bold flex items-center gap-2 text-white mb-4">
-                  <BarChart3 className="w-5 h-5 text-purple/40" />
+                  <BarChart3 className="w-5 h-5 text-purple" />
                   Puntuación Ejecutiva
                 </h3>
                 <div className="space-y-4">
                   <div>
-                    <p className="text-xs text-muted-foreground mb-2">Promedio General</p>
+                    <p className="text-xs text-white/60 font-semibold mb-2">Promedio General</p>
                     <div className="flex items-end gap-2">
-                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green/40' : averageScore >= 60 ? 'text-yellow/40' : 'text-red/40'}`}>
+                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green' : averageScore >= 60 ? 'text-yellow' : 'text-red'}`}>
                         {averageScore}
                       </span>
-                      <span className="text-xs text-muted-foreground pb-2">/100</span>
+                      <span className="text-xs text-white/60 pb-2">/100</span>
                     </div>
                   </div>
                   {currentScore !== undefined && (
                     <div className="pt-4 border-t border-muted/70">
-                      <p className="text-xs text-muted-foreground mb-2">Esta Pregunta</p>
-                      <span className="text-2xl font-bold text-purple/40">{currentScore}</span>
+                      <p className="text-xs text-white/60 font-semibold mb-2">Esta Pregunta</p>
+                      <span className="text-2xl font-bold text-purple">{currentScore}</span>
                     </div>
                   )}
                 </div>
@@ -462,7 +462,7 @@ export default function ChallensingTrainingPage() {
 
               {/* Questions List */}
               <div className="flex-1 overflow-y-auto p-4 space-y-2">
-                <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-3">Preguntas</p>
+                <p className="text-xs font-bold text-white/70 uppercase tracking-widest mb-3">Preguntas</p>
                 {CHALLENGING_QUESTIONS.map((q, idx) => (
                   <button
                     key={q.id}
@@ -477,10 +477,10 @@ export default function ChallensingTrainingPage() {
                     disabled={!completedQuestions.includes(idx) && idx !== currentQuestion}
                     className={`w-full text-left p-3 rounded-lg transition-all text-xs disabled:opacity-50 ${
                       idx === currentQuestion
-                        ? 'bg-purple/30 border border-purple/50/50'
+                        ? 'bg-purple/30 border border-purple/50 text-white'
                         : completedQuestions.includes(idx)
-                        ? 'bg-green/20 border border-green/30 cursor-pointer hover:bg-green/30'
-                        : 'bg-muted/80/50 border border-muted/70/30'
+                        ? 'bg-green/20 border border-green/40 cursor-pointer hover:bg-green/30 text-white'
+                        : 'bg-white/10 border border-white/20 text-white/80'
                     }`}
                   >
                     <div className="flex items-start gap-2">
@@ -500,8 +500,8 @@ export default function ChallensingTrainingPage() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-muted-foreground mb-1">P{idx + 1}</p>
-                        <p className="text-white/85 line-clamp-2">{q.question}</p>
+                        <p className="text-white/70 text-xs font-semibold mb-1">P{idx + 1}</p>
+                        <p className="text-white/90 line-clamp-2 text-xs">{q.question}</p>
                       </div>
                     </div>
                   </button>
@@ -510,7 +510,7 @@ export default function ChallensingTrainingPage() {
 
               {/* Standard Info */}
               <div className="p-4 border-t border-muted/80 bg-background/50 flex-shrink-0">
-                <p className="text-xs font-bold text-muted-foreground mb-2">ESTÁNDAR EJECUTIVO</p>
+                <p className="text-xs font-bold text-white/70 mb-2">ESTÁNDAR EJECUTIVO</p>
                 <p className="text-xs text-white/85">75+ = Listo para entrevista executiva<br/>60-74 = Mejora necesaria<br/>{'<'}60 = Requiere trabajo</p>
               </div>
             </div>
