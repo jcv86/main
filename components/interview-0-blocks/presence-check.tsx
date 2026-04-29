@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { AlertCircle, Check } from 'lucide-react'
+import { AlertCircle, Check, Loader } from 'lucide-react'
+import { analyzePose } from '@/lib/interview-0/pose-detection'
 
 interface PresenceCheckProps {
   onComplete: (data: { passed: boolean; score: number }) => void
@@ -12,14 +13,16 @@ interface PresenceCheckProps {
 export function PresenceCheck({ onComplete }: PresenceCheckProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [score, setScore] = useState(0)
-  const [feedback, setFeedback] = useState<string[]>([])
+  const [feedback, setFeedback] = useState<{ text: string; severity: string }[]>([])
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isRecording, setIsRecording] = useState(false)
+  const [cameraError, setCameraError] = useState(false)
 
   useEffect(() => {
     const startCamera = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: 'user' },
+          video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
           audio: false
         })
         if (videoRef.current) {
@@ -27,7 +30,8 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
         }
       } catch (err) {
         console.error('[v0] Camera access denied:', err)
-        setFeedback(['No se pudo acceder a la cámara. Por favor verifica los permisos.'])
+        setCameraError(true)
+        setFeedback([{ text: 'No se pudo acceder a la cámara. Por favor verifica los permisos.', severity: 'high' }])
       }
     }
 
@@ -41,38 +45,37 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
     }
   }, [])
 
-  const handleAnalyzePresence = () => {
-    // More realistic presence scoring based on common issues
-    const issues: string[] = []
-    let calculatedScore = 100
+  const handleAnalyzePresence = async () => {
+    if (!videoRef.current) return
 
-    // Check for common issues (simulated detection would use pose estimation in production)
-    // For now, we'll use user behavior as proxy: if they record, they're conscious of presence
-    // Deduct points for each issue category
-    
-    const posibleIssues = [
-      { text: 'Mantén la mirada al frente', deduct: 15 },
-      { text: 'Sonríe naturalmente', deduct: 10 },
-      { text: 'Relaja los hombros', deduct: 12 },
-      { text: 'Acércate un poco más a la cámara', deduct: 15 },
-      { text: 'Mejora tu postura', deduct: 18 }
-    ]
-
-    // Randomly select 0-2 issues (simulating detection)
-    const numIssues = Math.floor(Math.random() * 3) // 0, 1, or 2 issues
-    const randomIssues = posibleIssues.sort(() => Math.random() - 0.5).slice(0, numIssues)
-    
-    randomIssues.forEach(issue => {
-      issues.push(issue.text)
-      calculatedScore -= issue.deduct
-    })
-
-    // Minimum score of 50 if no issues detected, min 40 if issues found
-    const finalScore = numIssues === 0 ? Math.max(75, calculatedScore) : Math.max(40, calculatedScore)
-
-    setFeedback(issues)
-    setScore(finalScore)
+    setIsAnalyzing(true)
     setIsRecording(true)
+
+    try {
+      // Run pose detection
+      const result = await analyzePose(videoRef.current)
+      
+      setScore(result.score)
+      setFeedback(result.issues.map(issue => ({
+        text: issue.text,
+        severity: issue.severity
+      })))
+
+      console.log('[v0] Pose analysis result:', {
+        score: result.score,
+        issues: result.issues.length,
+        feedback: result.issues
+      })
+    } catch (err) {
+      console.error('[v0] Pose analysis error:', err)
+      setScore(50)
+      setFeedback([{ 
+        text: 'Error al analizar tu presencia. Intenta nuevamente.', 
+        severity: 'high' 
+      }])
+    } finally {
+      setIsAnalyzing(false)
+    }
   }
 
   const handleContinue = () => {
@@ -90,12 +93,12 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
           Validación de Presencia
         </CardTitle>
         <p className="text-sm text-white/70 mt-2">
-          Verificaremos tu postura, energía y contacto visual
+          Analizaremos tu postura, contacto visual y presencia profesional en tiempo real
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Video preview */}
-        <div className="relative bg-black rounded-lg overflow-hidden aspect-video">
+        <div className="relative bg-black rounded-lg overflow-hidden aspect-video border border-muted/30">
           <video
             ref={videoRef}
             autoPlay
@@ -106,8 +109,16 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
           {!isRecording && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/40">
               <div className="text-center">
-                <p className="text-white/80">Posiciona tu cámara</p>
-                <p className="text-white/60 text-sm mt-1">Tu cabeza debe ocupar 60% de la pantalla</p>
+                <p className="text-white/80 font-semibold">Posiciona tu cámara</p>
+                <p className="text-white/60 text-sm mt-1">Tu cabeza debe ocupar 50-70% de la pantalla</p>
+              </div>
+            </div>
+          )}
+          {isAnalyzing && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+              <div className="text-center space-y-2">
+                <Loader className="w-8 h-8 animate-spin text-cyan mx-auto" />
+                <p className="text-white text-sm">Analizando tu presencia...</p>
               </div>
             </div>
           )}
@@ -116,11 +127,25 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
         {/* Feedback */}
         {isRecording && feedback.length > 0 && (
           <div className="space-y-2">
-            <p className="text-sm font-semibold text-white/70">Recomendaciones</p>
+            <p className="text-sm font-semibold text-white/70">
+              {feedback.length === 1 ? 'Recomendación' : 'Recomendaciones'}
+            </p>
             {feedback.map((item, idx) => (
-              <div key={idx} className="flex items-start gap-2 text-sm">
-                <span className="text-yellow-400 mt-1">•</span>
-                <span className="text-white/80">{item}</span>
+              <div key={idx} className={`flex items-start gap-3 p-3 rounded-lg ${
+                item.severity === 'high' 
+                  ? 'bg-red-500/10 border border-red-500/30'
+                  : item.severity === 'medium'
+                  ? 'bg-yellow-500/10 border border-yellow-500/30'
+                  : 'bg-blue-500/10 border border-blue-500/30'
+              }`}>
+                <AlertCircle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
+                  item.severity === 'high'
+                    ? 'text-red-400'
+                    : item.severity === 'medium'
+                    ? 'text-yellow-400'
+                    : 'text-blue-400'
+                }`} />
+                <span className="text-sm text-white/85">{item.text}</span>
               </div>
             ))}
           </div>
@@ -128,11 +153,39 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
 
         {/* Score */}
         {isRecording && (
-          <div className="bg-blue/10 border border-blue/30 rounded-lg p-4 text-center">
+          <div className={`rounded-lg p-4 text-center border ${
+            score >= 80
+              ? 'bg-emerald-500/10 border-emerald-500/30'
+              : score >= 60
+              ? 'bg-blue-500/10 border-blue-500/30'
+              : 'bg-yellow-500/10 border-yellow-500/30'
+          }`}>
             <p className="text-white/70 text-sm">Puntuación de Presencia</p>
-            <p className="text-4xl font-bold text-white mt-1">{score}</p>
-            <p className="text-white/60 text-sm mt-1">
-              {score >= 80 ? '¡Excelente presencia!' : score >= 60 ? 'Buena presencia, algunos ajustes' : 'Puedes mejorar tu presencia'}
+            <p className={`text-4xl font-bold mt-1 ${
+              score >= 80
+                ? 'text-emerald-400'
+                : score >= 60
+                ? 'text-blue-400'
+                : 'text-yellow-400'
+            }`}>
+              {Math.round(score)}
+            </p>
+            <p className="text-white/60 text-sm mt-2">
+              {score >= 80 
+                ? '¡Excelente presencia profesional!' 
+                : score >= 60 
+                ? 'Buena presencia. Aplica las recomendaciones para mejorar'
+                : 'Puedes mejorar tu presencia. Sigue las recomendaciones'}
+            </p>
+          </div>
+        )}
+
+        {/* Error state */}
+        {cameraError && (
+          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center">
+            <AlertCircle className="w-5 h-5 text-red-400 mx-auto mb-2" />
+            <p className="text-red-400 text-sm">
+              No se puede acceder a la cámara. Verifica que has otorgado los permisos necesarios.
             </p>
           </div>
         )}
@@ -141,14 +194,27 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
         {!isRecording ? (
           <Button
             onClick={handleAnalyzePresence}
-            className="w-full bg-blue hover:bg-cyan text-white h-12 font-semibold"
+            disabled={cameraError || isAnalyzing}
+            className="w-full bg-blue hover:bg-cyan text-white h-12 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Analizar Presencia
+            {isAnalyzing ? (
+              <>
+                <Loader className="w-4 h-4 mr-2 animate-spin" />
+                Analizando...
+              </>
+            ) : (
+              'Analizar Presencia'
+            )}
           </Button>
         ) : (
           <Button
             onClick={handleContinue}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12 font-semibold"
+            disabled={isAnalyzing}
+            className={`w-full h-12 font-semibold ${
+              score >= 60
+                ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                : 'bg-yellow-600 hover:bg-yellow-700 text-white'
+            }`}
           >
             <Check className="w-4 h-4 mr-2" />
             Continuar
