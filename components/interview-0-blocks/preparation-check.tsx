@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
-import { Check } from 'lucide-react'
+import { Check, AlertCircle, Loader } from 'lucide-react'
+import { validatePreparationResponses } from '@/lib/interview-0/ai-validation'
 
 interface PreparationCheckProps {
   onComplete: (data: { passed: boolean; score: number }) => void
@@ -16,6 +17,14 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
   const [company, setCompany] = useState('')
   const [achievements, setAchievements] = useState('')
   const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({})
+  const [isValidatingAI, setIsValidatingAI] = useState(false)
+  const [aiValidationResult, setAiValidationResult] = useState<{
+    isValid: boolean
+    confidence: number
+    issues: string[]
+    feedback: string
+  } | null>(null)
+  const [showAIValidation, setShowAIValidation] = useState(false)
 
   // Validation functions
   const validateRole = (value: string): string | null => {
@@ -112,11 +121,42 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
     })
   }
 
-  const handleContinue = () => {
-    onComplete({
-      passed: allValid,
-      score: Math.round(score)
-    })
+  const handleContinue = async () => {
+    if (!allValid) return
+
+    // First pass: regex validation passed
+    // Second pass: AI validation
+    setIsValidatingAI(true)
+    setShowAIValidation(true)
+
+    try {
+      const result = await validatePreparationResponses(role, company, achievements)
+      setAiValidationResult(result)
+
+      console.log('[v0] AI validation result:', result)
+
+      // If AI says it's not valid, block continuation
+      if (!result.isValid) {
+        return
+      }
+
+      // AI approved - continue
+      onComplete({
+        passed: true,
+        score: 100
+      })
+    } catch (error) {
+      console.error('[v0] AI validation error:', error)
+      // On error, allow manual retry
+      setAiValidationResult({
+        isValid: false,
+        confidence: 0,
+        issues: ['Error en validación con IA. Intenta de nuevo.'],
+        feedback: 'Por favor intenta enviar nuevamente.'
+      })
+    } finally {
+      setIsValidatingAI(false)
+    }
   }
 
   return (
@@ -233,17 +273,68 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
           </div>
         </div>
 
+        {/* AI Validation Result */}
+        {showAIValidation && aiValidationResult && (
+          <div className={`rounded-lg p-4 border ${
+            aiValidationResult.isValid
+              ? 'bg-emerald-500/10 border-emerald-500/30'
+              : 'bg-red-500/10 border-red-500/30'
+          }`}>
+            <div className="flex items-start gap-3">
+              {aiValidationResult.isValid ? (
+                <Check className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+              ) : (
+                <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+              )}
+              <div className="flex-1">
+                <p className={`font-semibold ${aiValidationResult.isValid ? 'text-emerald-400' : 'text-red-400'}`}>
+                  {aiValidationResult.isValid ? 'Validación Exitosa' : 'Validación Rechazada'}
+                </p>
+                <p className="text-sm text-white/80 mt-1">{aiValidationResult.feedback}</p>
+                {aiValidationResult.issues.length > 0 && (
+                  <div className="mt-2 space-y-1">
+                    {aiValidationResult.issues.map((issue, idx) => (
+                      <p key={idx} className="text-xs text-white/70">• {issue}</p>
+                    ))}
+                  </div>
+                )}
+                <p className="text-xs text-white/60 mt-2">
+                  Confianza: {aiValidationResult.confidence}%
+                </p>
+              </div>
+            </div>
+
+            {!aiValidationResult.isValid && (
+              <Button
+                onClick={() => {
+                  setShowAIValidation(false)
+                  setAiValidationResult(null)
+                }}
+                variant="outline"
+                className="w-full mt-3 text-white"
+              >
+                Intentar Nuevamente
+              </Button>
+            )}
+          </div>
+        )}
+
         {/* CTA */}
         <Button
           onClick={handleContinue}
+          disabled={!allValid || isValidatingAI}
           className={`w-full h-12 font-semibold ${
-            allValid
+            allValid && !isValidatingAI
               ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
               : 'bg-muted/20 text-white/50 cursor-not-allowed'
           }`}
-          disabled={!allValid}
         >
-          {allValid ? (
+          {isValidatingAI ? (
+            <>
+              <Loader className="w-4 h-4 mr-2 animate-spin" />
+              Validando con IA...
+            </>
+          ) : allValid ? (
             <>
               <Check className="w-4 h-4 mr-2" />
               Completar Auditoría
