@@ -51,41 +51,51 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
 
       audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
       const analyser = audioContext.createAnalyser()
+      analyser.fftSize = 256 // Smaller FFT for better low-frequency detection
       const source = audioContext.createMediaStreamSource(stream)
       source.connect(analyser)
 
       const dataArray = new Uint8Array(analyser.frequencyBinCount)
       let isRunning = true
       let max = 0
+      let sampleCount = 0
 
       const checkAudio = () => {
         if (!isRunning) return
         analyser.getByteFrequencyData(dataArray)
-        const average = dataArray.reduce((a, b) => a + b) / dataArray.length
+        
+        // Focus on lower frequencies (speech range: 85-255Hz)
+        const lowFreqData = dataArray.slice(0, Math.floor(dataArray.length * 0.3))
+        const average = lowFreqData.reduce((a, b) => a + b) / lowFreqData.length
         const level = Math.round((average / 255) * 100)
+        
         setAudioLevel(level)
         max = Math.max(max, level)
         setMaxAudioLevel(max)
+        sampleCount++
+        
         requestAnimationFrame(checkAudio)
       }
 
       checkAudio()
 
-      // Stop after 3 seconds and evaluate
+      // Stop after 3 seconds and evaluate with LOWER thresholds
       setTimeout(() => {
         isRunning = false
         setIsTestingAudio(false)
         
-        // Evaluate audio quality based on max level detected
+        // Much lower thresholds since Web Audio API is naturally quiet
+        // good: 25%+, fair: 12%+, poor: < 12%
         let result: 'good' | 'fair' | 'poor'
-        if (max >= 50) {
+        if (max >= 25) {
           result = 'good'
-        } else if (max >= 30) {
+        } else if (max >= 12) {
           result = 'fair'
         } else {
           result = 'poor'
         }
         setAudioTestResult(result)
+        console.log('[v0] Audio test - max level:', max, 'result:', result)
         
         if (stream) {
           stream.getTracks().forEach(track => track.stop())
@@ -106,10 +116,10 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
     }
   }
 
-  // Score depends on audio quality test result, not just mic availability
-  const audioQualityScore = audioTestResult === 'good' ? 100 : audioTestResult === 'fair' ? 70 : audioTestResult === 'poor' ? 40 : 0
-  const passed = micStatus === 'ready' && (audioTestResult === 'good' || audioTestResult === 'fair')
-  const score = Math.max(audioQualityScore, passed ? 70 : 0)
+  // Allow passing with any audio detection (good/fair/poor), just with different scores
+  const audioQualityScore = audioTestResult === 'good' ? 100 : audioTestResult === 'fair' ? 80 : audioTestResult === 'poor' ? 60 : 0
+  const passed = micStatus === 'ready' && audioTestResult !== null // Allow any audio level
+  const score = audioQualityScore
 
   return (
     <Card className="border-muted/30">
@@ -194,19 +204,19 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
             audioTestResult === 'good' 
               ? 'bg-emerald-500/10 border-emerald-500/30' 
               : audioTestResult === 'fair'
-              ? 'bg-yellow-500/10 border-yellow-500/30'
-              : 'bg-red-500/10 border-red-500/30'
+              ? 'bg-blue-500/10 border-blue-500/30'
+              : 'bg-yellow-500/10 border-yellow-500/30'
           }`}>
             <p className={`font-semibold ${
               audioTestResult === 'good'
                 ? 'text-emerald-400'
                 : audioTestResult === 'fair'
-                ? 'text-yellow-400'
-                : 'text-red-400'
+                ? 'text-blue-400'
+                : 'text-yellow-400'
             }`}>
               {audioTestResult === 'good' && 'Excelente calidad de audio'}
-              {audioTestResult === 'fair' && 'Audio adecuado'}
-              {audioTestResult === 'poor' && 'Audio bajo - acércate al micrófono'}
+              {audioTestResult === 'fair' && 'Audio detectado correctamente'}
+              {audioTestResult === 'poor' && 'Audio bajo - considera acercarte al micrófono'}
             </p>
             <p className="text-sm text-white/70 mt-1">
               Nivel máximo detectado: {maxAudioLevel}%
@@ -230,7 +240,7 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
               Continuar
             </>
           ) : (
-            'Verifica tu micrófono para continuar'
+            'Prueba tu micrófono para continuar'
           )}
         </Button>
       </CardContent>
