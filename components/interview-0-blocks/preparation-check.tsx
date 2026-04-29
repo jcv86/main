@@ -15,17 +15,102 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
   const [role, setRole] = useState('')
   const [company, setCompany] = useState('')
   const [achievements, setAchievements] = useState('')
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({})
 
-  const roleValid = role.trim().length >= 3
-  const companyValid = company.trim().length >= 2
-  const achievementsValid = achievements.trim().length >= 10
+  // Validation functions
+  const validateRole = (value: string): string | null => {
+    const trimmed = value.trim()
+    if (trimmed.length < 3) return 'Mínimo 3 caracteres'
+    if (trimmed.length > 50) return 'Máximo 50 caracteres'
+    if (!/^[a-záéíóúñA-ZÁÉÍÓÚÑ\s\-/]+$/.test(trimmed)) return 'Solo letras, espacios y guiones'
+    
+    // Check for obviously fake/repetitive input (like "aaa", "111")
+    const uniqueChars = new Set(trimmed.toLowerCase().replace(/\s/g, '')).size
+    if (uniqueChars < 2) return 'Ingresa un cargo válido'
+    
+    return null
+  }
+
+  const validateCompany = (value: string): string | null => {
+    const trimmed = value.trim()
+    if (trimmed.length < 2) return 'Mínimo 2 caracteres'
+    if (trimmed.length > 50) return 'Máximo 50 caracteres'
+    if (!/^[a-záéíóúñA-ZÁÉÍÓÚÑ0-9\s\-&.]+$/.test(trimmed)) return 'Usa solo letras, números y símbolos básicos'
+    
+    return null
+  }
+
+  const validateAchievements = (value: string): string | null => {
+    const trimmed = value.trim()
+    if (trimmed.length < 20) return `Mínimo 20 caracteres (${trimmed.length}/20)`
+    if (trimmed.length > 500) return 'Máximo 500 caracteres'
+    
+    // Check for repetitive/spam input (same character repeated)
+    const charCounts = new Map<string, number>()
+    for (const char of trimmed.toLowerCase()) {
+      charCounts.set(char, (charCounts.get(char) || 0) + 1)
+    }
+    const maxCharCount = Math.max(...charCounts.values())
+    if (maxCharCount > trimmed.length * 0.6) return 'Ingresa logros reales y variados'
+    
+    // Check for at least some variety (words)
+    const words = trimmed.split(/\s+/).filter(w => w.length > 2)
+    if (words.length < 3) return 'Describe tus logros de forma más completa'
+    
+    return null
+  }
+
+  const roleValid = !validateRole(role)
+  const companyValid = !validateCompany(company)
+  const achievementsValid = !validateAchievements(achievements)
 
   const validFields = [roleValid, companyValid, achievementsValid].filter(Boolean).length
   const allValid = roleValid && companyValid && achievementsValid
   
-  // Stricter scoring: only 100 if all fields are filled AND substantial
-  // If any field is missing, max score is 60
-  const score = allValid ? 100 : validFields === 3 ? 100 : validFields === 2 ? 60 : validFields === 1 ? 40 : 0
+  // Scoring: 100 only if all fields are valid and substantial
+  const score = allValid ? 100 : validFields === 2 ? 60 : validFields === 1 ? 30 : 0
+
+  const handleRoleChange = (value: string) => {
+    setRole(value)
+    const error = validateRole(value)
+    setValidationErrors(prev => {
+      const next = { ...prev }
+      if (error) {
+        next.role = error
+      } else {
+        delete next.role
+      }
+      return next
+    })
+  }
+
+  const handleCompanyChange = (value: string) => {
+    setCompany(value)
+    const error = validateCompany(value)
+    setValidationErrors(prev => {
+      const next = { ...prev }
+      if (error) {
+        next.company = error
+      } else {
+        delete next.company
+      }
+      return next
+    })
+  }
+
+  const handleAchievementsChange = (value: string) => {
+    setAchievements(value)
+    const error = validateAchievements(value)
+    setValidationErrors(prev => {
+      const next = { ...prev }
+      if (error) {
+        next.achievements = error
+      } else {
+        delete next.achievements
+      }
+      return next
+    })
+  }
 
   const handleContinue = () => {
     onComplete({
@@ -55,11 +140,13 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
           <Input
             placeholder="Ej: Ingeniero de Software, Product Manager, Data Analyst"
             value={role}
-            onChange={(e) => setRole(e.target.value)}
-            className="bg-muted/20 border-muted/40 text-white placeholder-white/40"
+            onChange={(e) => handleRoleChange(e.target.value)}
+            className={`bg-muted/20 border-muted/40 text-white placeholder-white/40 ${
+              validationErrors.role ? 'border-red-500/50' : ''
+            }`}
           />
-          <p className="text-xs text-white/50">
-            {roleValid ? 'Correcto' : 'Al menos 3 caracteres'}
+          <p className={`text-xs ${validationErrors.role ? 'text-red-400' : 'text-white/50'}`}>
+            {validationErrors.role || 'Cargo objetivo (3-50 caracteres)'}
           </p>
         </div>
 
@@ -72,11 +159,13 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
           <Input
             placeholder="Ej: Google, Startup X, Mi propia empresa"
             value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            className="bg-muted/20 border-muted/40 text-white placeholder-white/40"
+            onChange={(e) => handleCompanyChange(e.target.value)}
+            className={`bg-muted/20 border-muted/40 text-white placeholder-white/40 ${
+              validationErrors.company ? 'border-red-500/50' : ''
+            }`}
           />
-          <p className="text-xs text-white/50">
-            {companyValid ? 'Correcto' : 'Al menos 2 caracteres'}
+          <p className={`text-xs ${validationErrors.company ? 'text-red-400' : 'text-white/50'}`}>
+            {validationErrors.company || 'Empresa u objetivo (2-50 caracteres)'}
           </p>
         </div>
 
@@ -89,11 +178,13 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
           <Textarea
             placeholder="Ej:&#10;- Lideré proyecto X que incrementó ventas 30%&#10;- Certificado en AWS&#10;- 5 años en industria tech"
             value={achievements}
-            onChange={(e) => setAchievements(e.target.value)}
-            className="bg-muted/20 border-muted/40 text-white placeholder-white/40 resize-none min-h-[120px]"
+            onChange={(e) => handleAchievementsChange(e.target.value)}
+            className={`bg-muted/20 border-muted/40 text-white placeholder-white/40 resize-none min-h-[120px] ${
+              validationErrors.achievements ? 'border-red-500/50' : ''
+            }`}
           />
-          <p className="text-xs text-white/50">
-            {achievementsValid ? 'Correcto' : `Al menos 10 caracteres (${achievements.length}/10)`}
+          <p className={`text-xs ${validationErrors.achievements ? 'text-red-400' : 'text-white/50'}`}>
+            {validationErrors.achievements || `Logros (${achievements.length}/20 mín.)`}
           </p>
         </div>
 
