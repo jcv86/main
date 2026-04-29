@@ -57,12 +57,27 @@ Is this a genuine, professional preparation? Provide validation score and feedba
     }
   } catch (error) {
     console.error('[v0] AI validation error:', error)
-    // If AI validation fails, allow user to continue (don't block on API errors)
+    
+    // Check if it's an API key issue
+    const errorMsg = error instanceof Error ? error.message : String(error)
+    const isAuthError = errorMsg.includes('401') || errorMsg.includes('API key') || errorMsg.includes('Unauthorized')
+    
+    if (isAuthError) {
+      // If auth fails, be STRICT - reject the response to force user to check setup
+      return {
+        isValid: false,
+        confidence: 0,
+        issues: ['Sistema de validación no disponible'],
+        feedback: 'Error de configuración. Intenta más tarde.'
+      }
+    }
+    
+    // For other errors, be lenient but warn
     return {
       isValid: true,
       confidence: 0,
       issues: [],
-      feedback: 'No se pudo validar con AI. Por favor intenta de nuevo.'
+      feedback: 'Validación manual omitida (error temporal). Por favor revisa tu respuesta sea profesional.'
     }
   }
 }
