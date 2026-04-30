@@ -12,7 +12,7 @@ interface A2ProgressData {
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 export function A2ProgressBar() {
-  const { data: progress } = useSWR<A2ProgressData>(
+  const { data: progress, error } = useSWR<A2ProgressData>(
     '/api/a2/progress',
     fetcher,
     {
@@ -20,21 +20,22 @@ export function A2ProgressBar() {
       revalidateOnReconnect: true,
       refreshInterval: 5000,
       dedupingInterval: 2000,
+      fallbackData: { current_month: 1, progress_percentage: 0, status: 'loading' }
     }
   )
 
-  if (!progress) {
-    return null
-  }
+  const percentage = progress?.progress_percentage ?? 0
+  const month = progress?.current_month ?? 1
+  const displayPercentage = Math.max(percentage, 1)
 
   return (
     <Link href="/despega/a2-routes">
       <div className="h-1 bg-white/5 relative overflow-hidden cursor-pointer group hover:bg-white/10 transition-colors">
-        {/* Background gradient bar */}
+        {/* Gradient bar that fills */}
         <div
           className="h-full bg-gradient-to-r from-purple via-blue to-cyan transition-all duration-500 ease-out shadow-lg"
           style={{
-            width: `${Math.max(progress.progress_percentage, 1)}%`,
+            width: `${displayPercentage}%`,
           }}
         >
           {/* Shimmer effect */}
@@ -44,7 +45,7 @@ export function A2ProgressBar() {
         {/* Progress text on hover */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/40">
           <span className="text-xs font-semibold text-white">
-            Mes {progress.current_month} • {progress.progress_percentage}% completado
+            Mes {month} • {percentage}% completado
           </span>
         </div>
       </div>
