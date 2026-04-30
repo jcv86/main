@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { TrendingUp, Newspaper, MapPin, Zap, Brain, ArrowRight, Radar } from 'lucide-react'
 import { StepHeader } from '@/components/step-header'
 
-export default function A4IntroPage() {
+export default function ContinuousExecutionIntroPage() {
   const [authOk, setAuthOk] = useState(false)
   const router = useRouter()
   const supabase = createClient()
@@ -47,158 +47,123 @@ export default function A4IntroPage() {
       <div className="container mx-auto px-4 py-12 max-w-4xl">
         <StepHeader
           stepNumber={4}
-          pillarName="La Realidad"
-          title="Ejecución + Contexto de Mercado"
-          description="Tu coach IA 24/7 que monitorea el mercado laboral, te proporciona inteligencia competitiva y te guía en decisiones estratégicas reales."
+          pillarName="Ejecución Continua"
+          title="Tu Coach IA 24/7 - Inteligencia de Mercado"
+          description="Monitorea el mercado laboral, obtén inteligencia competitiva y toma decisiones estratégicas con confianza. Tu ejecución comienza aquí."
           estimatedTime="Acceso continuo"
           pillarColor="cyan"
         />
 
         <div className="space-y-8">
-          <Card className="border-0 shadow-lg">
+          <Card className="bg-gradient-to-br from-cyan/20 to-blue/20 border-2 border-cyan/40 shadow-lg">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <Radar className="w-6 h-6 text-blue" />
-                ¿Qué es La Realidad?
+              <CardTitle className="text-3xl flex items-center gap-3 text-white">
+                <Radar className="w-8 h-8 text-cyan" />
+                Tu Coach IA 24/7
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-muted-foreground dark:text-white/85">
-                A4 es tu fase final de ejecución continuada. No terminas aquí - aquí EMPIEZAS a aplicar todo lo que aprendiste. 
-                Tu coach IA 24/7 te proporciona contexto real del mercado laboral, tendencias de industria, inteligencia competitiva 
-                y decisiones estratégicas para que entres al mercado con ventaja.
+            <CardContent className="space-y-6">
+              <p className="text-white/90 text-lg leading-relaxed">
+                Esta es tu fase de ejecución continua. No terminas en entrenamiento - aquí EMPIEZAS a aplicar todo. Tu coach IA personal te proporciona contexto real del mercado laboral, tendencias de industria, inteligencia competitiva y decisiones estratégicas para que entres al mercado con ventaja.
               </p>
-              <div className="bg-teal-50 dark:bg-teal-950 p-4 rounded-[28px] border border-blue/20 dark:border-teal-800">
-                <p className="text-sm text-teal-900 dark:text-teal-100">
-                  <span className="font-semibold">Tu objetivo en A4:</span> Ejecutar tu plan con inteligencia del mercado. Conocer antes que los demás, decidir mejor, actuar con confianza.
+              <div className="bg-cyan/25 p-6 rounded-xl border-2 border-cyan/50">
+                <p className="text-white font-bold text-lg">
+                  Tu objetivo: Ejecutar tu plan con inteligencia del mercado. Conocer antes que los demás, decidir mejor, actuar con confianza.
                 </p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-lg">
+          <Card className="bg-gradient-to-br from-green/20 to-teal/20 border-2 border-green/40 shadow-lg">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <TrendingUp className="w-6 h-6 text-green" />
+              <CardTitle className="text-3xl flex items-center gap-3 text-white">
+                <TrendingUp className="w-8 h-8 text-green" />
                 Tus 7 Herramientas de Inteligencia
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
-                <div className="p-4 bg-blue/5 dark:bg-blue/30 rounded-[28px] border border-blue/30 dark:border-blue/10">
-                  <div className="flex gap-3">
-                    <Newspaper className="w-6 h-6 text-blue flex-shrink-0" />
-                    <div>
-                      <p className="font-semibold text-muted/90 dark:text-white">Noticias y Tendencias</p>
-                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Alertas sobre industria, empresas y roles en tu área.</p>
+                {[
+                  { icon: Newspaper, label: 'Noticias y Tendencias', desc: 'Alertas sobre industria, empresas y roles en tu área', color: 'blue' },
+                  { icon: MapPin, label: 'Radar de Oportunidades', desc: 'Empresas contratando, posiciones abiertas, crecimiento', color: 'purple' },
+                  { icon: Brain, label: 'Análisis de Mercado', desc: 'Salarios, demanda de skills, tendencias de carrera', color: 'red' },
+                  { icon: Zap, label: 'Benchmark Competitivo', desc: 'Cómo te comparas con otros perfiles en el mercado', color: 'yellow' },
+                  { icon: TrendingUp, label: 'Decisiones Estratégicas', desc: 'Recomendaciones personalizadas para tu perfil y mercado', color: 'green' }
+                ].map((tool, idx) => {
+                  const IconComponent = tool.icon
+                  return (
+                    <div key={idx} className={`p-5 bg-${tool.color}/15 border-2 border-${tool.color}/40 rounded-xl flex gap-4 hover:shadow-lg transition-all`}>
+                      <IconComponent className={`w-7 h-7 text-${tool.color} flex-shrink-0 mt-1`} />
+                      <div className="flex-1">
+                        <p className="font-bold text-white text-lg">{tool.label}</p>
+                        <p className="text-white/85 text-base">{tool.desc}</p>
+                      </div>
                     </div>
-                  </div>
-                </div>
-                <div className="p-4 bg-purple/5 dark:bg-purple/30 rounded-[28px] border border-purple/30 dark:border-purple">
-                  <div className="flex gap-3">
-                    <MapPin className="w-6 h-6 text-purple flex-shrink-0" />
-                    <div>
-                      <p className="font-semibold text-muted/90 dark:text-white">Radar de Oportunidades</p>
-                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Empresas contratando, posiciones abiertas, crecimiento de equipos.</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-4 bg-red/5 dark:bg-red/30 rounded-[28px] border border-red/20 dark:border-red">
-                  <div className="flex gap-3">
-                    <Brain className="w-6 h-6 text-red flex-shrink-0" />
-                    <div>
-                      <p className="font-semibold text-muted/90 dark:text-white">Análisis de Mercado</p>
-                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Salarios, demanda de skills, tendencias de carrera.</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-4 bg-yellow/5 dark:bg-yellow/30 rounded-[28px] border border-yellow/20 dark:border-yellow">
-                  <div className="flex gap-3">
-                    <Zap className="w-6 h-6 text-yellow flex-shrink-0" />
-                    <div>
-                      <p className="font-semibold text-muted/90 dark:text-white">Benchmark Competitivo</p>
-                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Cómo te comparas con otros perfiles en el mercado.</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="p-4 bg-green/5 dark:bg-green/30 rounded-[28px] border border-green/20 dark:border-green">
-                  <div className="flex gap-3">
-                    <TrendingUp className="w-6 h-6 text-green flex-shrink-0" />
-                    <div>
-                      <p className="font-semibold text-muted/90 dark:text-white">Decisiones Estratégicas</p>
-                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Recomendaciones personalizadas basadas en tu perfil y mercado.</p>
-                    </div>
-                  </div>
-                </div>
+                  )
+                })}
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-lg bg-muted/90 dark:bg-card">
+          <Card className="bg-gradient-to-br from-purple/20 to-indigo/20 border-2 border-purple/40 shadow-lg">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl text-white">El Flujo de A4</CardTitle>
-              <CardDescription className="text-muted-foreground">Cómo funciona tu ejecución continua</CardDescription>
+              <CardTitle className="text-3xl text-white">Tu Flujo de Ejecución</CardTitle>
+              <CardDescription className="text-white/75 text-lg">Cómo funciona tu ejecución continua</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70">
-                  <div className="text-3xl font-bold text-teal-400 mb-2">1</div>
-                  <p className="text-sm font-semibold text-white mb-1">Monitorea</p>
-                  <p className="text-xs text-muted-foreground">Tu coach IA rastrea el mercado 24/7</p>
-                </div>
-                <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70">
-                  <div className="text-3xl font-bold text-teal-400 mb-2">2</div>
-                  <p className="text-sm font-semibold text-white mb-1">Analiza</p>
-                  <p className="text-xs text-muted-foreground">Te proporciona insights estratégicos</p>
-                </div>
-                <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70">
-                  <div className="text-3xl font-bold text-teal-400 mb-2">3</div>
-                  <p className="text-sm font-semibold text-white mb-1">Ejecuta</p>
-                  <p className="text-xs text-muted-foreground">Tú actúas con inteligencia de mercado</p>
-                </div>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {[
+                  { num: '1', label: 'Monitorea', desc: 'Tu coach IA rastrea el mercado 24/7' },
+                  { num: '2', label: 'Analiza', desc: 'Te proporciona insights estratégicos personalizados' },
+                  { num: '3', label: 'Ejecuta', desc: 'Tú actúas con inteligencia de mercado real' }
+                ].map((step, idx) => (
+                  <div key={idx} className="bg-background/50 border-2 border-white/20 p-6 rounded-xl text-center hover:border-purple/50 transition-all">
+                    <div className="text-5xl font-black text-purple mb-3">{step.num}</div>
+                    <p className="font-bold text-white text-xl mb-2">{step.label}</p>
+                    <p className="text-white/85 text-base">{step.desc}</p>
+                  </div>
+                ))}
               </div>
-              <div className="bg-blue/20 border border-teal-600/50 p-4 rounded-[28px] mt-4">
-                <p className="text-sm text-teal-100">
-                  <span className="font-semibold">Coach IA 24/7:</span> Tu asistente personal que nunca duerme, siempre actualizado, siempre disponible para ayudarte a tomar las mejores decisiones.
+              <div className="bg-purple/30 border-2 border-purple/50 p-6 rounded-xl">
+                <p className="text-white text-lg font-semibold text-center">
+                  <span className="text-purple">Coach IA 24/7:</span> Tu asistente personal que nunca duerme, siempre actualizado, siempre disponible para ayudarte a tomar las mejores decisiones.
                 </p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-lg">
+          <Card className="bg-gradient-to-br from-orange/20 to-red/20 border-2 border-orange/40 shadow-lg">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <Radar className="w-6 h-6 text-blue" />
+              <CardTitle className="text-3xl flex items-center gap-3 text-white">
+                <Radar className="w-8 h-8 text-orange" />
                 Tipos de Decisiones que Tomarás
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="p-3 bg-muted/5 dark:bg-card/30 rounded-[28px] border border-muted/20 dark:border-card">
-                  <p className="font-semibold text-muted/90 dark:text-white text-sm">¿A qué empresas aplicar primero?</p>
-                </div>
-                <div className="p-3 bg-muted/5 dark:bg-card/30 rounded-[28px] border border-muted/20 dark:border-card">
-                  <p className="font-semibold text-muted/90 dark:text-white text-sm">¿Qué roles están creciendo?</p>
-                </div>
-                <div className="p-3 bg-muted/5 dark:bg-card/30 rounded-[28px] border border-muted/20 dark:border-card">
-                  <p className="font-semibold text-muted/90 dark:text-white text-sm">¿Cuándo es el mejor momento para cambiar?</p>
-                </div>
-                <div className="p-3 bg-muted/5 dark:bg-card/30 rounded-[28px] border border-muted/20 dark:border-card">
-                  <p className="font-semibold text-muted/90 dark:text-white text-sm">¿Qué skills necesito para crecer?</p>
-                </div>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {[
+                  '¿A qué empresas aplicar primero?',
+                  '¿Qué roles están creciendo?',
+                  '¿Cuándo es el mejor momento para cambiar?',
+                  '¿Qué skills necesito para crecer?'
+                ].map((q, idx) => (
+                  <div key={idx} className="p-5 bg-orange/15 border-2 border-orange/40 rounded-xl">
+                    <p className="font-semibold text-white text-lg">{q}</p>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
 
-          <div className="p-6 bg-background">
-            <h3 className="text-xl font-bold text-white mb-2">Bienvenido a La Realidad</h3>
-            <p className="text-teal-100 mb-6">Aquí es donde todo tu trabajo cobra vida. Entra al dashboard y comienza tu ejecución estratégica.</p>
+          <div className="p-8 bg-gradient-to-r from-cyan/20 to-blue/20 border-2 border-cyan/40 rounded-xl shadow-lg">
+            <h3 className="text-3xl font-bold text-white mb-3">Bienvenido a Tu Ejecución Continua</h3>
+            <p className="text-white/90 text-lg mb-8">Aquí es donde todo tu trabajo cobra vida. Entra al dashboard y comienza tu ejecución con inteligencia de mercado.</p>
             <Button 
               onClick={() => router.push('/despega/a4')}
-              className="w-full bg-white text-teal-700 hover:bg-teal-50 font-semibold"
+              className="w-full bg-cyan hover:bg-cyan/90 text-black font-bold text-lg py-6"
             >
-              Ir a La Realidad
-              <ArrowRight className="w-4 h-4 ml-2" />
+              Ir a Ejecución Continua
+              <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
         </div>
