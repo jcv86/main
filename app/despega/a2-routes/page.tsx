@@ -352,6 +352,23 @@ export default function A2RoutesPage() {
           <p className="text-xl text-white/85">Tu plan personalizado de 90 días mapeado a conversaciones reales</p>
         </div>
 
+        {/* Success Banner - First element */}
+        <Card className="bg-gradient-to-br from-emerald-900/30 to-emerald-900/10 border-2 border-emerald-400/50 shadow-lg">
+          <CardContent className="pt-6">
+            <div className="flex items-start gap-4">
+              <CheckCircle2 className="w-8 h-8 text-emerald-400 flex-shrink-0 mt-1" />
+              <div className="flex-1">
+                <h4 className="font-bold text-emerald-300 text-lg mb-1">Ruta Generada!</h4>
+                <p className="text-sm text-white/85 mb-3">Tu plan de 90 días personalizado está listo y se adapta a tu ritmo</p>
+                <div className="flex items-center gap-2 text-xs text-white/70">
+                  <Calendar className="w-4 h-4" />
+                  <span>Próximo hito: Completa la Fase 1 en los próximos 30 días</span>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Main Intro Section */}
         <div className="bg-gradient-to-r from-purple/20 to-blue/20 border-2 border-purple/40 rounded-2xl p-10">
           <h2 className="text-3xl font-bold text-white mb-6">Tu Ruta 7/30/90</h2>
@@ -506,22 +523,7 @@ export default function A2RoutesPage() {
             </div>
           </div>
 
-          {/* Current Status Card */}
-          <Card className="bg-gradient-to-br from-emerald-900/30 to-emerald-900/10 border-2 border-emerald-400/50 shadow-lg">
-            <CardContent className="pt-6">
-              <div className="flex items-start gap-4">
-                <CheckCircle2 className="w-8 h-8 text-emerald-400 flex-shrink-0 mt-1" />
-                <div className="flex-1">
-                  <h4 className="font-bold text-emerald-300 text-lg mb-1">Ruta Generada!</h4>
-                  <p className="text-sm text-white/85 mb-3">Tu plan de 90 días personalizado está listo y se adapta a tu ritmo</p>
-                  <div className="flex items-center gap-2 text-xs text-white/70">
-                    <Calendar className="w-4 h-4" />
-                    <span>Próximo hito: Completa la Fase 1 en los próximos 30 días</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+
 
           {/* Achievements & Recommendations Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
