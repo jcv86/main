@@ -103,24 +103,23 @@ export default function A3Page() {
     <div className="min-h-screen bg-black p-6">
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Navigation Tabs */}
-        <div className="border-b border-muted/20">
-          <Tabs defaultValue="entrenamientos" className="w-full">
-            <TabsList className="bg-transparent border-b border-muted/20 rounded-none w-full justify-start">
-              <TabsTrigger 
-                value="entrenamientos" 
-                className="data-[state=active]:border-b-2 data-[state=active]:border-training text-white/80 hover:text-white rounded-none border-b-2 border-transparent px-4 py-3"
-              >
-                Entrenamientos
-              </TabsTrigger>
-              <TabsTrigger 
-                value="feedback" 
-                className="data-[state=active]:border-b-2 data-[state=active]:border-training text-white/80 hover:text-white rounded-none border-b-2 border-transparent px-4 py-3"
-              >
-                Feedback y Resultados
-              </TabsTrigger>
-            </TabsList>
+        <Tabs defaultValue="entrenamientos" className="w-full">
+          <TabsList className="bg-transparent border-b border-muted/20 rounded-none w-full justify-start">
+            <TabsTrigger 
+              value="entrenamientos" 
+              className="data-[state=active]:border-b-2 data-[state=active]:border-training text-white/80 hover:text-white rounded-none border-b-2 border-transparent px-4 py-3"
+            >
+              Entrenamientos
+            </TabsTrigger>
+            <TabsTrigger 
+              value="feedback" 
+              className="data-[state=active]:border-b-2 data-[state=active]:border-training text-white/80 hover:text-white rounded-none border-b-2 border-transparent px-4 py-3"
+            >
+              Feedback y Resultados
+            </TabsTrigger>
+          </TabsList>
 
-            <TabsContent value="entrenamientos" className="mt-8 space-y-8">
+          <TabsContent value="entrenamientos" className="mt-8 space-y-8">
         <div className="bg-background">
           <div className="max-w-3xl space-y-4">
             <p className="text-training/80 text-sm font-semibold uppercase tracking-wider">Entrenamiento Intensivo: Entrevista 0 + Preparación</p>
@@ -388,4 +387,7 @@ export default function A3Page() {
               </div>
             </TabsContent>
           </Tabs>
-        </div>
+      </div>
+    </div>
+  )
+}
