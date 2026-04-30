@@ -629,7 +629,7 @@ export default function A2RoutesPage() {
                   {isExpanded && (
                     <div className="p-4 space-y-3">
                       {tasks.map((task: any, taskIdx: number) => {
-                        const taskId = getTaskId(task, days)
+                        const taskId = getTaskId(days, task.day, task.title)
                         return (
                           <TaskCard
                             key={taskIdx}
