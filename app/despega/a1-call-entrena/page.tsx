@@ -130,7 +130,7 @@ export default function CallEntrenaCoachingPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Button 
               onClick={handleRestart}
-              className="w-full bg-blue hover:from-blue hover:to-blue text-white"
+              className="w-full bg-blue/80 hover:bg-blue/70 text-white"
             >
               <Phone className="w-4 h-4 mr-2" />
               Repetir Call Entrena
