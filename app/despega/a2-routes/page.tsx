@@ -335,11 +335,13 @@ export default function A2RoutesPage() {
                 </Button>
               </div>
             </div>
-          </Card>
+            </Card>
+          </div>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
+}
 
   return (
     <div className="min-h-screen bg-background p-8">
@@ -478,246 +480,56 @@ export default function A2RoutesPage() {
                       <div className="text-right">
                         <p className="text-lg font-bold text-white">{Math.round(progressPercent)}%</p>
                         <p className="text-xs text-white/60">{progress.completed}/{progress.total} tareas</p>
-                      </div>
-                    </div>
-                    <div className="w-full bg-muted/60 rounded-full h-2.5">
-                      <div
-                        className="bg-gradient-to-r from-purple to-blue h-2.5 rounded-full transition-all duration-500"
-                        style={{ width: `${progressPercent}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-            
-            {/* Overall Progress Summary */}
-            <div className="mt-6 pt-6 border-t border-purple/20">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-white/80 mb-1">Progreso Total</p>
-                  <p className="text-2xl font-bold text-white">{Math.round((calculateTotalProgress().completed / calculateTotalProgress().total) * 100)}%</p>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-white/80 mb-1">{calculateTotalProgress().completed} de {calculateTotalProgress().total}</p>
-                  <p className="text-xs text-purple">Tareas completadas</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Current Status Card */}
-          <Card className="bg-gradient-to-br from-emerald-900/30 to-emerald-900/10 border-2 border-emerald-400/50 shadow-lg">
-            <CardContent className="pt-6">
-              <div className="flex items-start gap-4">
-                <CheckCircle2 className="w-8 h-8 text-emerald-400 flex-shrink-0 mt-1" />
-                <div className="flex-1">
-                  <h4 className="font-bold text-emerald-300 text-lg mb-1">¡Ruta Generada!</h4>
-                  <p className="text-sm text-white/85 mb-3">Tu plan de 90 días personalizado está listo y se adapta a tu ritmo</p>
-                  <div className="flex items-center gap-2 text-xs text-white/70">
-                    <Calendar className="w-4 h-4" />
-                    <span>Próximo hito: Completa la Fase 1 en los próximos 30 días</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Achievements & Recommendations Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Achievements - Takes 2 columns on large screens */}
-            <Card className="bg-transparent border-muted/80 lg:col-span-2">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-white">
-                  <Trophy className="w-5 h-5 text-yellow-400" />
-                  Tus Logros Desbloqueados
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <AchievementsDisplay
-                  completedTasks={calculateTotalProgress().completed}
-                  totalTasks={calculateTotalProgress().total}
-                />
-              </CardContent>
-            </Card>
-
-            {/* Recommendations - Takes 1 column */}
-            <Card className="bg-transparent border-muted/80">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-white">
-                  <Zap className="w-5 h-5 text-purple" />
-                  Qué Sigue
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <RecommendationsDisplay
-                  recommendations={getSimpleRecommendations(
-                    completedTasks,
-                    route?.route_30days || [],
-                    route?.route_60days || [],
-                    route?.route_90days || []
-                  )}
-                />
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Quick Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card className="bg-muted/30 border-muted/50 p-4">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-purple mb-1">{calculateTotalProgress().completed}</p>
-                <p className="text-xs text-white/70">Tareas Completadas</p>
-              </div>
-            </Card>
-            <Card className="bg-muted/30 border-muted/50 p-4">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-blue mb-1">{calculateTotalProgress().total - calculateTotalProgress().completed}</p>
-                <p className="text-xs text-white/70">Tareas Restantes</p>
-              </div>
-            </Card>
-            <Card className="bg-muted/30 border-muted/50 p-4">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-emerald-400 mb-1">3</p>
-                <p className="text-xs text-white/70">Fases Disponibles</p>
-              </div>
-            </Card>
-            <Card className="bg-muted/30 border-muted/50 p-4">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-yellow-400 mb-1">90</p>
-                <p className="text-xs text-white/70">Días de Plan</p>
-              </div>
-            </Card>
-          </div>
-
-          {/* Próximos Pasos - Simplified Linear Flow */}
-          <div className="pt-8 border-t border-white/10">
-            <Card className="bg-gradient-to-r from-purple/20 to-blue/20 border-2 border-purple/40">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-white text-2xl">
-                  <CheckCircle2 className="w-6 h-6 text-white" />
-                  Tu Siguiente Paso
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-3">
-                  <p className="text-white/90 text-lg">
-                    <strong>1. Completa tu ruta de 90 días:</strong>
-                  </p>
-                  <p className="text-white/80">
-                    Trabaja en las 3 fases de tu plan personalizado (Fundamentos → Aceleración → Dominio). Marca cada tarea completada para rastrear tu progreso.
-                  </p>
-                </div>
-
-                <div className="space-y-3">
-                  <p className="text-white/90 text-lg">
-                    <strong>2. Entonces accede a Entrenamiento Intensivo:</strong>
-                  </p>
-                  <p className="text-white/80 mb-4">
-                    Una vez completes tu ruta, estarás listo para practicar con entrenamientos avanzados y prepararte para entrevistas reales.
-                  </p>
-                  <Button 
-                    onClick={() => router.push('/despega/a3')}
-                    className="w-full bg-purple/80 hover:bg-purple/70 text-white py-6 text-base font-semibold"
-                  >
-                    Comenzar Entrenamiento Intensivo
-                    <ArrowRight className="w-5 h-5 ml-2" />
-                  </Button>
-                </div>
-
-                <div className="p-4 bg-background/80 border border-white/10 rounded-lg">
-                  <p className="text-white/80 text-sm">
-                    <strong>💡 Tip:</strong> El plan es flexible. Si necesitas cambios o tienes preguntas, habla con el coach en cualquier momento.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
-
-        {/* Main Route Breakdown - Tus 90 Días Estructurados */}
-        <Card className="bg-transparent border-muted/80">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white">
-              <Calendar className="w-5 h-5 text-purple/40" />
-              Tus 90 Días Estructurados
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {([30, 60, 90] as const).map((days) => {
-              const data = getMilestoneData(days)
-              const isExpanded = expandedMilestone === days
-              
-              return (
-                <div key={days} className="bg-background">
-                  <button
-                    onClick={() => setExpandedMilestone(isExpanded ? null : days)}
-                    className={`w-full p-6 text-left bg-background`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <Calendar className="w-6 h-6 text-purple/40" />
-                        <div>
-                          <h3 className="text-2xl font-bold text-white">{data.label}</h3>
-                          <p className="text-white/80">{data.milestone}</p>
-                        </div>
-                      </div>
-                      <div className="text-3xl opacity-20 text-white">{days}</div>
-                    </div>
-                  </button>
-
-                  {isExpanded && (
-                    <div className="p-6 space-y-6 bg-muted/80/20">
-                      {/* Phase Progress */}
-                      <PhaseProgress
-                        phaseName={`Fase ${data.label}`}
-                        completed={getPhaseProgress(days).completed}
-                        total={getPhaseProgress(days).total}
-                        daysRange={`${days === 30 ? '1-30' : days === 60 ? '31-60' : '61-90'} días`}
-                      />
-
-                      {/* Tasks */}
-                      {data.tasks && data.tasks.length > 0 ? (
-                        <div className="space-y-3">
-                          {data.tasks.map((task, idx) => (
-                            <TaskCard
-                              key={`${days}-${idx}`}
-                              task={task}
-                              taskId={`${days}-${task.day}-${task.title}`}
-                              completed={completedTasks.has(`${days}-${task.day}-${task.title}`)}
-                              onComplete={handleTaskComplete}
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-white/75">Contenido personalizado para la fase de {days} días</p>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-
-            {/* Success Metrics */}
-            <div className="bg-background">
-              <h3 className="text-lg font-bold text-emerald-400 mb-4">Métricas de Éxito</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <p className="text-white/85">Completar todas las acciones de cada fase</p>
-                </div>
-                <div className="flex gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <p className="text-white/85">Dedicar el tiempo programado cada semana</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
         {/* Resources Library Section - At the END */}
         <div className="pt-8 border-t border-white/10">
           <ResourceLibrary />
+        </div>
+
+        {/* Tu Siguiente Paso - At the VERY END */}
+        <div className="pt-8 border-t border-white/10">
+          <Card className="bg-gradient-to-r from-purple/20 to-blue/20 border-2 border-purple/40">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-white text-2xl">
+                <CheckCircle2 className="w-6 h-6 text-white" />
+                Tu Siguiente Paso
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-3">
+                <p className="text-white/90 text-lg">
+                  <strong>1. Completa tu ruta de 90 días:</strong>
+                </p>
+                <p className="text-white/80">
+                  Trabaja en las 3 fases de tu plan personalizado (Fundamentos → Aceleración → Dominio). Marca cada tarea completada para rastrear tu progreso.
+                </p>
+              </div>
+
+              <div className="space-y-3">
+                <p className="text-white/90 text-lg">
+                  <strong>2. Entonces accede a Entrenamiento Intensivo:</strong>
+                </p>
+                <p className="text-white/80 mb-4">
+                  Una vez completes tu ruta, estarás listo para practicar con entrenamientos avanzados y prepararte para entrevistas reales.
+                </p>
+                <Button 
+                  onClick={() => router.push('/despega/a3')}
+                  className="w-full bg-purple/80 hover:bg-purple/70 text-white py-6 text-base font-semibold"
+                >
+                  Comenzar Entrenamiento Intensivo
+                  <ArrowRight className="w-5 h-5 ml-2" />
+                </Button>
+              </div>
+
+              <div className="p-4 bg-background/80 border border-white/10 rounded-lg">
+                <p className="text-white/80 text-sm">
+                  <strong>💡 Tip:</strong> El plan es flexible. Si necesitas cambios o tienes preguntas, habla con el coach en cualquier momento.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>
