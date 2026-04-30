@@ -673,56 +673,45 @@ export default function A2RoutesPage() {
             </Card>
           </div>
 
-          {/* Próximos Pasos - Now at the END */}
+          {/* Próximos Pasos - Simplified Linear Flow */}
           <div className="pt-8 border-t border-white/10">
-            <Card className="bg-transparent border-muted/80">
+            <Card className="bg-gradient-to-r from-purple/20 to-blue/20 border-2 border-purple/40">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-white">
-                  <CheckCircle2 className="w-5 h-5 text-white" />
-                  Próximos Pasos
+                <CardTitle className="flex items-center gap-2 text-white text-2xl">
+                  <CheckCircle2 className="w-6 h-6 text-white" />
+                  Tu Siguiente Paso
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                  <Card className="bg-muted/80/40 border-muted/70 hover:border-purple/50 transition-colors">
-                    <CardHeader>
-                      <CardTitle className="text-lg">Ver Detalle del Plan</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                      <p className="text-sm text-white/85">
-                        Expande cada fase (30, 60, 90 días) para ver las acciones detalladas.
-                      </p>
-                    </CardContent>
-                  </Card>
-
-                  <Card className="bg-muted/80/40 border-muted/70 hover:border-purple/50 transition-colors">
-                    <CardHeader>
-                      <CardTitle className="text-lg">Siguiente: Entrenamiento Intensivo</CardTitle>
-                    </CardHeader>
-                    <CardContent className="space-y-2">
-                      <p className="text-sm text-white/85">
-                        Una vez completes tu ruta de 90 días, dirígete a <span className="font-semibold">Entrenamiento Intensivo</span> para practicar y prepararte para entrevistas reales.
-                      </p>
-                      <Button 
-                        onClick={() => router.push('/despega/a3')}
-                        className="w-full bg-purple/80 hover:bg-purple/70 mt-2"
-                        size="sm"
-                      >
-                        Ver Entrenamiento Intensivo
-                        <ArrowRight className="w-3 h-3 ml-1" />
-                      </Button>
-                    </CardContent>
-                  </Card>
+              <CardContent className="space-y-6">
+                <div className="space-y-3">
+                  <p className="text-white/90 text-lg">
+                    <strong>1. Completa tu ruta de 90 días:</strong>
+                  </p>
+                  <p className="text-white/80">
+                    Trabaja en las 3 fases de tu plan personalizado (Fundamentos → Aceleración → Dominio). Marca cada tarea completada para rastrear tu progreso.
+                  </p>
                 </div>
 
-                <div className="p-6 bg-background">
-                  <p className="text-white/85 mb-4">
-                    <strong>Este es tu plan. Adáptalo según sea necesario.</strong> La vida acontece, y el plan puede cambiar. 
-                    Si necesitas ajustes o tienes preguntas, habla con el coach.
+                <div className="space-y-3">
+                  <p className="text-white/90 text-lg">
+                    <strong>2. Entonces accede a Entrenamiento Intensivo:</strong>
                   </p>
-                  <Button variant="outline" className="border-purple/50 hover:border-purple/40 hover:text-purple/40">
-                    Hablar con el Coach
+                  <p className="text-white/80 mb-4">
+                    Una vez completes tu ruta, estarás listo para practicar con entrenamientos avanzados y prepararte para entrevistas reales.
+                  </p>
+                  <Button 
+                    onClick={() => router.push('/despega/a3')}
+                    className="w-full bg-purple/80 hover:bg-purple/70 text-white py-6 text-base font-semibold"
+                  >
+                    Comenzar Entrenamiento Intensivo
+                    <ArrowRight className="w-5 h-5 ml-2" />
                   </Button>
+                </div>
+
+                <div className="p-4 bg-background/80 border border-white/10 rounded-lg">
+                  <p className="text-white/80 text-sm">
+                    <strong>💡 Tip:</strong> El plan es flexible. Si necesitas cambios o tienes preguntas, habla con el coach en cualquier momento.
+                  </p>
                 </div>
               </CardContent>
             </Card>
