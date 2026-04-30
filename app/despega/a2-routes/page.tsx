@@ -460,7 +460,7 @@ export default function A2RoutesPage() {
               <CheckCircle2 className="w-6 h-6 text-emerald-400 flex-shrink-0" />
               <div>
                 <p className="font-semibold text-emerald-400">Ruta Generada</p>
-                <p className="text-sm text-muted-foreground">Tu plan de 90 días personalizado está listo</p>
+                <p className="text-sm text-white/85">Tu plan de 90 días personalizado está listo</p>
               </div>
             </div>
             
@@ -624,7 +624,7 @@ export default function A2RoutesPage() {
                   <CardTitle className="text-lg">Ver Detalle del Plan</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-white/85">
                     Expande cada fase (30, 60, 90 días) para ver las acciones detalladas.
                   </p>
                 </CardContent>
@@ -635,8 +635,8 @@ export default function A2RoutesPage() {
                   <CardTitle className="text-lg">Avanzar a A3</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <p className="text-sm text-muted-foreground">
-                    Dirígete a <span className="font-semibold">A3: Impulso</span> para prepararte para entrevistas.
+                  <p className="text-sm text-white/85">
+                    Dirígete a <span className="font-semibold">Entrenamiento Intensivo</span> para prepararte para entrevistas.
                   </p>
                   <Button 
                     onClick={() => router.push('/despega/a3')}
