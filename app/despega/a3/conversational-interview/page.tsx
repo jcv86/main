@@ -63,7 +63,7 @@ export default function ConversationalInterviewPage() {
   return (
     <div className="min-h-screen bg-background p-4">
       <div className="max-w-4xl mx-auto">
-        <Link href="/despega/a3-dashboard">
+        <Link href="/despega/a3">
           <Button variant="ghost" className="mb-6">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Volver al Dashboard
