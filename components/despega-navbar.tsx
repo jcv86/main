@@ -69,7 +69,6 @@ export function DespegaNavbar() {
   const router = useRouter()
   const pathname = usePathname()
 
-  // Determine current phase for progress indicator
   const getCurrentPhase = () => {
     if (pathname.includes('conozcamonos') || pathname.includes('a1-cerebral') || pathname.includes('a1-report')) return 'ritual'
     if (pathname.includes('conozcamonos-2') || pathname.includes('a2-')) return 'exploration'
@@ -101,33 +100,6 @@ export function DespegaNavbar() {
             <img src="/logos/dtc-logo-light.png" alt="Despega Tu Carrera" className="h-8 w-auto" />
           </Link>
 
-          {/* Phase Progress Indicator - Desktop - HIDDEN */}
-          {/* <div className="hidden lg:flex items-center gap-1">
-            {phaseOrder.map((phase, idx) => {
-              const isCompleted = false // TODO: Get from user data
-              const isActive = currentPhase === phase.key
-              return (
-                <div key={phase.key} className="flex items-center">
-                  <button
-                    onClick={() => {
-                      if (phase.key === 'ritual') router.push('/despega/a1-cerebral')
-                      else if (phase.key === 'exploration') router.push('/despega/conozcamonos-2')
-                      else if (phase.key === 'training') router.push('/despega/a3-intro')
-                      else if (phase.key === 'reality') router.push('/despega/a4-intro')
-                    }}
-                    className={`px-3 py-1.5 rounded-lg font-semibold text-sm transition-all ${
-                      isActive ? `${phase.color} text-white shadow-lg` : 'bg-white/5 text-white/60 hover:text-white'
-                    }`}
-                    title={phase.label}
-                  >
-                    {idx + 1}
-                  </button>
-                  {idx < phaseOrder.length - 1 && <div className="w-2 h-0.5 bg-white/20 mx-1"></div>}
-                </div>
-              )
-            })}
-          </div> */
-
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-1">
             <Link href="/despega">
@@ -141,24 +113,27 @@ export function DespegaNavbar() {
             </Link>
 
             {stages.map((stage) => {
-              const stagePhaseMap = {
+              const stagePhaseMap: Record<string, string> = {
                 'Información': 'info',
                 'El Ritual': 'ritual',
                 'Exploración': 'exploration',
                 'Entrenamiento': 'training',
                 'La Realidad': 'reality'
               }
-              const phaseAccent = {
+              const phaseAccent: Record<string, string> = {
                 'ritual': 'text-purple hover:text-purple',
                 'exploration': 'text-blue hover:text-blue',
                 'training': 'text-orange hover:text-orange',
                 'reality': 'text-red hover:text-red',
                 'info': 'text-muted hover:text-foreground'
-              }[stagePhaseMap[stage.name as keyof typeof stagePhaseMap] || 'info']
+              }
+              
+              const stagePhase = stagePhaseMap[stage.name] || 'info'
+              const accent = phaseAccent[stagePhase] || 'text-muted hover:text-foreground'
               
               return (
                 <div key={stage.name} className="relative group">
-                  <Button variant="ghost" size="sm" className={`flex items-center gap-1 ${phaseAccent}`}>
+                  <Button variant="ghost" size="sm" className={`flex items-center gap-1 ${accent}`}>
                     <stage.icon className="w-4 h-4" />
                     {stage.name}
                     <ChevronDown className="w-4 h-4" />
@@ -166,13 +141,13 @@ export function DespegaNavbar() {
 
                   {/* Dropdown - Colored background based on phase */}
                   <div className={`absolute left-0 top-full mt-2 w-48 border rounded-lg shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ${
-                    stagePhaseMap[stage.name as keyof typeof stagePhaseMap] === 'ritual' 
+                    stagePhase === 'ritual' 
                       ? 'bg-purple/15 border-purple/40'
-                      : stagePhaseMap[stage.name as keyof typeof stagePhaseMap] === 'exploration'
+                      : stagePhase === 'exploration'
                       ? 'bg-blue/15 border-blue/40'
-                      : stagePhaseMap[stage.name as keyof typeof stagePhaseMap] === 'training'
+                      : stagePhase === 'training'
                       ? 'bg-orange/15 border-orange/40'
-                      : stagePhaseMap[stage.name as keyof typeof stagePhaseMap] === 'reality'
+                      : stagePhase === 'reality'
                       ? 'bg-red/15 border-red/40'
                       : 'bg-muted/10 border-muted/40'
                   }`}>
@@ -212,28 +187,6 @@ export function DespegaNavbar() {
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
-        </div>
-
-        {/* Phase Progress Indicator - Mobile */}
-        <div className="md:hidden flex items-center justify-center gap-1 pb-3">
-          {phaseOrder.map((phase, idx) => (
-            <div key={phase.key} className="flex items-center">
-              <button
-                onClick={() => {
-                  if (phase.key === 'ritual') router.push('/despega/a1-cerebral')
-                  else if (phase.key === 'exploration') router.push('/despega/conozcamonos-2')
-                  else if (phase.key === 'training') router.push('/despega/a3-intro')
-                  else if (phase.key === 'reality') router.push('/despega/a4-intro')
-                }}
-                className={`w-8 h-8 rounded-full font-bold text-xs transition-all flex items-center justify-center ${
-                  currentPhase === phase.key ? `${phase.color} text-white shadow-lg` : 'bg-white/10 text-white/60'
-                }`}
-              >
-                {idx + 1}
-              </button>
-              {idx < phaseOrder.length - 1 && <div className="w-1 h-0.5 bg-white/20 mx-0.5"></div>}
-            </div>
-          ))}
         </div>
 
         {/* Mobile Menu */}
