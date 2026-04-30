@@ -83,6 +83,11 @@ export default function BienvenidaPage() {
                       <strong className="text-purple">Duración:</strong> ~30 minutos | <strong className="text-purple">Resultado:</strong> Tu perfil personalizado que guía el viaje
                     </p>
                   </div>
+                  <Link href="/despega/conocer" className="block mt-6">
+                    <Button className="w-full bg-purple hover:bg-purple/90 text-white font-bold text-lg py-6">
+                      Comenzar Diagnóstico <ArrowRight className="ml-2 w-5 h-5" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </CardContent>
@@ -119,6 +124,11 @@ export default function BienvenidaPage() {
                       <strong className="text-purple">Dedicación:</strong> 2-3 horas por semana | <strong className="text-purple">Feedback:</strong> Inmediato después de cada sesión
                     </p>
                   </div>
+                  <Link href="/despega/plan" className="block mt-6">
+                    <Button className="w-full bg-purple hover:bg-purple/90 text-white font-bold text-lg py-6">
+                      Ver Tu Plan <ArrowRight className="ml-2 w-5 h-5" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </CardContent>
@@ -155,6 +165,11 @@ export default function BienvenidaPage() {
                       <strong className="text-training">Entrevistador IA:</strong> Conversacional y adaptativo | <strong className="text-training">Feedback:</strong> Detallado después de cada sesión
                     </p>
                   </div>
+                  <Link href="/despega/a3" className="block mt-6">
+                    <Button className="w-full bg-training hover:bg-training/90 text-black font-bold text-lg py-6">
+                      Comenzar Entrenamiento <ArrowRight className="ml-2 w-5 h-5" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </CardContent>
@@ -191,6 +206,11 @@ export default function BienvenidaPage() {
                       <strong className="text-green">Duración:</strong> Indefinida durante búsqueda | <strong className="text-green">Soporte:</strong> Coaches + comunidad + premium
                     </p>
                   </div>
+                  <Link href="/despega/a4" className="block mt-6">
+                    <Button className="w-full bg-green hover:bg-green/90 text-white font-bold text-lg py-6">
+                      Acceder Dashboard <ArrowRight className="ml-2 w-5 h-5" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </CardContent>
