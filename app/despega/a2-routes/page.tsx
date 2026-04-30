@@ -447,9 +447,6 @@ export default function A2RoutesPage() {
           </CardContent>
         </Card>
 
-        {/* Resources Library Section */}
-        <ResourceLibrary />
-
         {/* Main Route Breakdown - Tus 90 Días Estructurados */}
         <Card className="bg-transparent border-muted/80">
           <CardHeader>
@@ -582,6 +579,9 @@ export default function A2RoutesPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Resources Library Section */}
+        <ResourceLibrary />
 
         {/* Tu Progreso y Logros - Now at the END */}
         <div className="space-y-6 pt-8 border-t border-white/10">
