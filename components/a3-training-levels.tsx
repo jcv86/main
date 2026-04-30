@@ -159,7 +159,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
                 level.isLocked
                   ? 'opacity-50 cursor-not-allowed'
                   : userProgress?.[level.id]?.completed
-                  ? 'bg-green hover:bg-green'
+                  ? 'bg-green/80 hover:bg-green/70'
                   : ''`}
               }`}
             >

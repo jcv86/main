@@ -118,7 +118,7 @@ export default function DashboardPage() {
                 </p>
               </div>
               <div className="flex gap-4">
-                <Button className="bg-blue hover:bg-blue">
+                <Button className="bg-blue/80 hover:bg-blue/70">
                   Ver Detalles de Misión
                 </Button>
                 <Button variant="outline">
@@ -136,7 +136,7 @@ export default function DashboardPage() {
               <p className="text-muted-foreground dark:text-white/85">
                 Comienza eligiendo entre tu transformación personal o profesional
               </p>
-              <Button className="bg-blue hover:bg-blue" size="lg">
+              <Button className="bg-blue/80 hover:bg-blue/70" size="lg">
                 Comenzar Mi Misión
               </Button>
             </div>

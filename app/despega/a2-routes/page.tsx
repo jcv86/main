@@ -328,7 +328,7 @@ export default function A2RoutesPage() {
                 <p className="text-red text-lg mb-6">{error || 'No se encontró ruta personalizada'}</p>
                 <Button 
                   onClick={() => loadAndGenerateRoute()}
-                  className="bg-blue hover:bg-blue text-white"
+                  className="bg-blue/80 hover:bg-blue/70 text-white"
                 >
                   Reintentar
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -640,7 +640,7 @@ export default function A2RoutesPage() {
                   </p>
                   <Button 
                     onClick={() => router.push('/despega/a3')}
-                    className="w-full bg-blue hover:bg-blue mt-2"
+                    className="w-full bg-blue/80 hover:bg-blue/70 mt-2"
                     size="sm"
                   >
                     Continúa con Entrenamiento Intensivo

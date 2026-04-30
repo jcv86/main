@@ -222,7 +222,7 @@ export default function GuidedInterviewPage() {
             <Link href="/despega/a3/simulations" className="flex-1">
               <Button variant="outline" className="w-full">Volver a Entrenamientos</Button>
             </Link>
-            <Button onClick={() => handleNext()} className="flex-1 bg-blue hover:bg-blue">
+            <Button onClick={() => handleNext()} className="flex-1 bg-blue/80 hover:bg-blue/70">
               Ver Análisis Detallado
             </Button>
           </div>
@@ -376,7 +376,7 @@ export default function GuidedInterviewPage() {
                 </Button>
                 <Button
                   onClick={handleNext}
-                  className="bg-blue hover:bg-blue"
+                  className="bg-blue/80 hover:bg-blue/70"
                 >
                   Siguiente
                   <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
@@ -386,7 +386,7 @@ export default function GuidedInterviewPage() {
               <Button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="bg-green hover:bg-green"
+                className="bg-green/80 hover:bg-green/70"
               >
                 {loading ? 'Guardando...' : 'Completar y Enviar'}
               </Button>

@@ -381,7 +381,7 @@ export default function DespegaOnboarding() {
               <>
                 <Button 
                   onClick={() => router.push("/despega/a1/resultado")} 
-                  className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-[28px] bg-blue hover:bg-blue"
+                  className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-[28px] bg-blue/80 hover:bg-blue/70"
                 >
                   Ver mi resultado
                 </Button>

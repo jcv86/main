@@ -143,7 +143,7 @@ export default function A1SimulationPage() {
             </Button>
             <Button 
               onClick={() => router.push('/despega')}
-              className="w-full bg-purple hover:bg-purple"
+              className="w-full bg-purple/80 hover:bg-purple/70"
             >
               Dashboard
               <ArrowRight className="w-4 h-4 ml-2" />

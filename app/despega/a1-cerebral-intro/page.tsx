@@ -235,7 +235,7 @@ export default function A1CerebralIntroPage() {
             <Button
               onClick={() => router.push('/despega/a1-cerebral')}
               size="lg"
-              className="px-8 text-lg bg-purple hover:bg-purple text-white"
+              className="px-8 text-lg bg-purple/80 hover:bg-purple/70 text-white"
             >
               Comenzar Análisis Cerebral
             </Button>

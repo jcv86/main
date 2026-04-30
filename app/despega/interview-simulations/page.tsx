@@ -53,7 +53,7 @@ export default function InterviewSimulationsPage() {
               Este módulo ofrece: entrevistas técnicas, conductuales, preguntas STAR, feedback en tiempo real
             </p>
           </div>
-          <Button onClick={handleCompleteSimulation} className="bg-purple hover:bg-purple">
+          <Button onClick={handleCompleteSimulation} className="bg-purple/80 hover:bg-purple/70">
             {loading ? 'Guardando...' : 'Completar simulación'}
           </Button>
         </Card>

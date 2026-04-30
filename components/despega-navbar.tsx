@@ -138,7 +138,7 @@ export function DespeganNavbar() {
               <Button 
                 variant={pathname === '/despega' ? 'default' : 'ghost'}
                 size="sm"
-                className={pathname === '/despega' ? 'bg-purple text-white hover:bg-purple/90' : 'text-muted-foreground hover:text-foreground hover:bg-transparent'}
+                className={pathname === '/despega' ? 'bg-purple text-white hover:bg-purple/70' : 'text-muted-foreground hover:text-foreground hover:bg-transparent'}
               >
                 Dashboard
               </Button>

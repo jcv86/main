@@ -295,7 +295,7 @@ export default function ChallensingTrainingPage() {
                         {!isRecording ? (
                           <Button
                             onClick={startRecording}
-                            className="flex-1 bg-red hover:bg-red gap-2"
+                            className="flex-1 bg-red/80 hover:bg-red/70 gap-2"
                           >
                             <Mic className="w-4 h-4" />
                             Comenzar Grabación
@@ -340,7 +340,7 @@ export default function ChallensingTrainingPage() {
                     <Button
                       onClick={evaluateResponse}
                       disabled={!hasResponse || isEvaluating}
-                      className="w-full bg-purple hover:bg-purple disabled:opacity-50 gap-2"
+                      className="w-full bg-purple/80 hover:bg-purple/70 disabled:opacity-50 gap-2"
                     >
                       {isEvaluating ? (
                         <>
@@ -415,14 +415,14 @@ export default function ChallensingTrainingPage() {
                     {currentQuestion < CHALLENGING_QUESTIONS.length - 1 ? (
                       <Button
                         onClick={moveToNextQuestion}
-                        className="w-full bg-purple hover:bg-purple gap-2"
+                        className="w-full bg-purple/80 hover:bg-purple/70 gap-2"
                       >
                         Siguiente Pregunta
                       </Button>
                     ) : (
                       <Button
                         onClick={() => window.location.href = '/despega/a3'}
-                        className="w-full bg-green hover:bg-green gap-2"
+                        className="w-full bg-green/80 hover:bg-green/70 gap-2"
                       >
                         Completar Entrenamiento
                       </Button>

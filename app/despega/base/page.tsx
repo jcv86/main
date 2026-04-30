@@ -201,7 +201,7 @@ export default function BasePage() {
             </p>
             <div className="flex gap-3">
               <Link href="/despega/a2/dashboard" className="flex-1">
-                <Button className="w-full bg-green hover:bg-green text-white font-semibold" size="lg">
+                <Button className="w-full bg-green/80 hover:bg-green/70 text-white font-semibold" size="lg">
                   Continuar en A2 Sprint 1
                 </Button>
               </Link>

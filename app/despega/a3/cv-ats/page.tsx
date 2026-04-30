@@ -579,7 +579,7 @@ export default function CVATSPage() {
 
             {/* Action Buttons */}
             <div className="flex gap-3 flex-wrap">
-              <Button className="bg-purple hover:bg-purple/90">
+              <Button className="bg-purple/80 hover:bg-purple/70/90">
                 <Download className="w-4 h-4 mr-2" />
                 Descargar PDF
               </Button>

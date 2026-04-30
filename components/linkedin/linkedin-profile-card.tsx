@@ -106,7 +106,7 @@ export function LinkedInProfileCard() {
         {!profile ? (
           <div className="text-center py-6">
             <p className="text-muted-foreground mb-4">No LinkedIn profile synced yet</p>
-            <Button onClick={handleSync} className="bg-blue hover:bg-blue">
+            <Button onClick={handleSync} className="bg-blue/80 hover:bg-blue/70">
               <Linkedin className="w-4 h-4 mr-2" />
               Connect LinkedIn
             </Button>

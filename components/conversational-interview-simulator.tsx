@@ -521,7 +521,7 @@ export function ConversationalInterviewSimulator({
             </p>
             <Button
               onClick={() => setStage('question')}
-              className="w-full bg-blue hover:bg-blue text-white h-12"
+              className="w-full bg-blue/80 hover:bg-blue/70 text-white h-12"
             >
               Continuar a Preguntas
             </Button>
@@ -556,7 +556,7 @@ export function ConversationalInterviewSimulator({
 
             <Button
               onClick={() => setStage('response')}
-              className="w-full bg-blue hover:bg-blue text-white h-12"
+              className="w-full bg-blue/80 hover:bg-blue/70 text-white h-12"
             >
               <Video className="w-4 h-4 mr-2" />
               Grabar Respuesta
@@ -843,7 +843,7 @@ export function ConversationalInterviewSimulator({
               {currentAttempts.length < 2 && (
                 <Button
                   onClick={handleRetryQuestion}
-                  className="flex-1 bg-blue hover:bg-blue text-white"
+                  className="flex-1 bg-blue/80 hover:bg-blue/70 text-white"
                 >
                   <RotateCcw className="w-4 h-4 mr-2" />
                   Reintentar esta pregunta

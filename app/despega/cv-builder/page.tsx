@@ -50,7 +50,7 @@ export default function CVBuilderPage() {
               Este módulo permitirá crear y optimizar tu CV para aparecer en búsquedas ATS y captar recruiters
             </p>
           </div>
-          <Button onClick={handleSaveCV} className="bg-purple hover:bg-purple">
+          <Button onClick={handleSaveCV} className="bg-purple/80 hover:bg-purple/70">
             {loading ? 'Guardando...' : 'Marcar como completado'}
           </Button>
         </Card>

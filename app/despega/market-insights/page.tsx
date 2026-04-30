@@ -50,7 +50,7 @@ export default function MarketInsightsPage() {
               Este módulo analiza: salarios promedio, empresas que contratan, tendencias, skills demandadas, y competencia
             </p>
           </div>
-          <Button onClick={handleGenerateInsights} className="bg-purple hover:bg-purple">
+          <Button onClick={handleGenerateInsights} className="bg-purple/80 hover:bg-purple/70">
             {loading ? 'Generando...' : 'Marcar como completado'}
           </Button>
         </Card>

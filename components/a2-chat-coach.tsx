@@ -228,7 +228,7 @@ export function A2ChatCoach({
             type="submit"
             disabled={loading || !input.trim()}
             size="sm"
-            className="bg-blue hover:bg-blue dark:bg-blue dark:hover:bg-blue"
+            className="bg-blue/80 hover:bg-blue/70 dark:bg-blue dark:hover:bg-blue"
           >
             <Send className="w-4 h-4" />
           </Button>

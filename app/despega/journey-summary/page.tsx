@@ -241,7 +241,7 @@ export default function JourneySummaryPage() {
             </p>
             <div className="flex gap-3">
               <Link href="/despega/a2/dashboard" className="flex-1">
-                <Button className="w-full bg-green hover:bg-green text-white font-semibold">
+                <Button className="w-full bg-green/80 hover:bg-green/70 text-white font-semibold">
                   Ir a A2 Dashboard
                 </Button>
               </Link>

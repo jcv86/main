@@ -230,7 +230,7 @@ export default function A1ReportPage() {
             </div>
             <Button 
               onClick={() => router.push('/despega/a1-cerebral')} 
-              className="w-full bg-purple hover:bg-purple-700 text-white font-semibold py-6 text-lg"
+              className="w-full bg-purple/80 hover:bg-purple/70-700 text-white font-semibold py-6 text-lg"
             >
               <Target className="w-5 h-5 mr-2" />
               Comenzar Evaluación de Perfil Cerebral
@@ -421,7 +421,7 @@ export default function A1ReportPage() {
               <p className="text-base text-white/85 mb-6 leading-relaxed">Practica entrevistas personalizadas según tu tipo de personalidad.</p>
               <Button 
                 onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile.primary}`)} 
-                className="w-full bg-blue hover:bg-blue/90 text-white font-semibold" 
+                className="w-full bg-blue/80 hover:bg-blue/70/90 text-white font-semibold" 
                 size="sm"
               >
                 <Phone className="w-4 h-4 mr-2" />
@@ -436,7 +436,7 @@ export default function A1ReportPage() {
             </CardHeader>
             <CardContent>
               <p className="text-base text-white/85 mb-6 leading-relaxed">Diseña tu plan de 90 días personalizado para alcanzar tus objetivos.</p>
-              <Button onClick={() => router.push('/despega/conozcamonos-2')} className="w-full bg-green hover:bg-green/90 text-white font-semibold" size="sm">
+              <Button onClick={() => router.push('/despega/conozcamonos-2')} className="w-full bg-green/80 hover:bg-green/70/90 text-white font-semibold" size="sm">
                 Siguiente Fase
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>

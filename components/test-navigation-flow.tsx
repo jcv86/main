@@ -208,7 +208,7 @@ export default function TestNavigationFlow() {
                   </div>
                 </div>
               </div>
-              <Button onClick={() => startTest(recommendedTest.id)} className="bg-blue hover:bg-blue">
+              <Button onClick={() => startTest(recommendedTest.id)} className="bg-blue/80 hover:bg-blue/70">
                 Iniciar Evaluación
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
@@ -333,7 +333,7 @@ export default function TestNavigationFlow() {
               Has completado todas las evaluaciones de personalidad y carrera. Visita tu panel de control para ver tu
               perfil completo.
             </p>
-            <Button onClick={() => router.push("/dashboard")} className="bg-green hover:bg-green">
+            <Button onClick={() => router.push("/dashboard")} className="bg-green/80 hover:bg-green/70">
               Ver Perfil Completo
             </Button>
           </CardContent>

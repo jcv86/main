@@ -327,7 +327,7 @@ export default function DespegazoDashboard() {
                   className={`w-full font-bold text-sm md:text-lg py-4 md:py-6 transition-all active:scale-95 ${
                     stage.completed
                       ? 'bg-green/30 hover:bg-green/40 text-green border-2 border-green/50'
-                      : 'bg-purple hover:bg-purple/90 text-white border-2 border-purple/50'
+                      : 'bg-purple/80 hover:bg-purple/70/90 text-white border-2 border-purple/50'
                   }`}
                 >
                   {stage.completed ? 'Ver Resultados' : 'Continuar Ahora'}
@@ -350,7 +350,7 @@ export default function DespegazoDashboard() {
           </Button>
           <Button
             onClick={() => loadUserProgress()}
-            className="h-12 md:h-16 bg-purple hover:bg-purple/90 font-bold text-sm md:text-lg text-white rounded-lg md:rounded-xl border-2 border-purple/50 transition-all active:scale-95"
+            className="h-12 md:h-16 bg-purple/80 hover:bg-purple/70/90 font-bold text-sm md:text-lg text-white rounded-lg md:rounded-xl border-2 border-purple/50 transition-all active:scale-95"
           >
             <TrendingUp className="w-4 md:w-6 h-4 md:h-6 mr-2 md:mr-3" />
             Actualizar Mi Progreso

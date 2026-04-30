@@ -187,7 +187,7 @@ export function CoachChat({ coachType, userProfile }: ChatProps) {
             <Button
               onClick={handleSendMessage}
               disabled={isLoading}
-              className="bg-purple hover:bg-purple"
+              className="bg-purple/80 hover:bg-purple/70"
             >
               {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Enviar'}
             </Button>

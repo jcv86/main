@@ -15,11 +15,11 @@ export const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>
   ({ className, accent = 'purple', variant = 'primary', size = 'md', loading, children, ...props }, ref) => {
     const accentBgColors = {
       yellow: 'bg-yellow hover:bg-yellow/90',
-      orange: 'bg-orange hover:bg-orange/90',
-      red: 'bg-red hover:bg-red/90',
-      blue: 'bg-blue hover:bg-blue/90',
-      purple: 'bg-purple hover:bg-purple/90',
-      green: 'bg-green hover:bg-green/90',
+      orange: 'bg-orange/80 hover:bg-orange/70/90',
+      red: 'bg-red/80 hover:bg-red/70/90',
+      blue: 'bg-blue/80 hover:bg-blue/70/90',
+      purple: 'bg-purple/80 hover:bg-purple/70/90',
+      green: 'bg-green/80 hover:bg-green/70/90',
     }
 
     const accentBorderColors = {

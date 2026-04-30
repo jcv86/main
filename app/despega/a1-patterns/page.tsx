@@ -238,7 +238,7 @@ export default function A1PatternsPage() {
                 <p className="text-white/85 mb-4">Crea tu plan personalizado de 90 días</p>
                 <Button 
                   onClick={() => router.push('/despega/a2-routes')}
-                  className="w-full bg-purple hover:bg-purple"
+                  className="w-full bg-purple/80 hover:bg-purple/70"
                 >
                   Siguiente Etapa
                   <ArrowRight className="w-4 h-4 ml-2" />

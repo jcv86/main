@@ -147,7 +147,7 @@ export default function AvatarSetupPage() {
                       className="w-full rounded-[28px] bg-black"
                     />
                     <div className="flex gap-2">
-                      <Button onClick={capturePhoto} className="flex-1 bg-blue hover:bg-blue">
+                      <Button onClick={capturePhoto} className="flex-1 bg-blue/80 hover:bg-blue/70">
                         Capturar Foto
                       </Button>
                       <Button onClick={stopCamera} variant="outline" className="flex-1">
@@ -210,7 +210,7 @@ export default function AvatarSetupPage() {
             onClick={handleSave}
             disabled={!interviewerAvatar}
             size="lg"
-            className="bg-blue hover:bg-blue text-white"
+            className="bg-blue/80 hover:bg-blue/70 text-white"
           >
             <Sparkles className="w-4 h-4 mr-2" />
             {saved ? 'Configuración Guardada ✓' : 'Guardar Configuración'}

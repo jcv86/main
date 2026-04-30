@@ -265,7 +265,7 @@ export default function BookRecommendationsPage() {
                         <span className="text-xs text-muted-foreground">{book.pages} páginas</span>
                         <Button
                           size="sm"
-                          className="bg-purple hover:bg-purple text-white"
+                          className="bg-purple/80 hover:bg-purple/70 text-white"
                           onClick={() => router.push(`/biblioteca/${book.id}`)}
                         >
                           Explorar <ArrowRight className="ml-1 h-3 w-3" />
@@ -287,7 +287,7 @@ export default function BookRecommendationsPage() {
         <div className="text-center space-y-4 pt-8 border-t border-muted/20">
           <Button
             onClick={() => router.push("/dashboard?refetch=true")}
-            className="bg-blue hover:bg-blue text-white px-8 py-3 text-base"
+            className="bg-blue/80 hover:bg-blue/70 text-white px-8 py-3 text-base"
             size="lg"
           >
             Ir a mi Dashboard

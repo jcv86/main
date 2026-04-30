@@ -35,28 +35,28 @@ export function PillarCard({
       border: 'border-red/40 dark:border-red/60',
       icon: 'text-red dark:text-red',
       badge: 'bg-red/15 dark:bg-red/25 text-red dark:text-red',
-      button: 'bg-red hover:bg-red/80',
+      button: 'bg-red/80 hover:bg-red/70/80',
     },
     blue: {
       bg: 'bg-transparent',
       border: 'border-blue/40 dark:border-blue/60',
       icon: 'text-blue dark:text-blue',
       badge: 'bg-blue/15 dark:bg-blue/25 text-blue dark:text-blue',
-      button: 'bg-blue hover:bg-blue/80',
+      button: 'bg-blue/80 hover:bg-blue/70/80',
     },
     green: {
       bg: 'bg-transparent',
       border: 'border-green/40 dark:border-green/60',
       icon: 'text-green dark:text-green',
       badge: 'bg-green/15 dark:bg-green/25 text-green dark:text-green',
-      button: 'bg-green hover:bg-green/80',
+      button: 'bg-green/80 hover:bg-green/70/80',
     },
     purple: {
       bg: 'bg-transparent',
       border: 'border-purple/40 dark:border-purple/60',
       icon: 'text-purple dark:text-purple',
       badge: 'bg-purple/15 dark:bg-purple/25 text-purple dark:text-purple',
-      button: 'bg-purple hover:bg-purple/80',
+      button: 'bg-purple/80 hover:bg-purple/70/80',
     },
   }
 

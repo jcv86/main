@@ -119,7 +119,7 @@ export default function A3Page() {
               </div>
             )}
             <div className="flex gap-3">
-              <Button className="bg-red text-white hover:bg-red/90 font-semibold" size="lg">
+              <Button className="bg-red/80 text-white hover:bg-red/70 font-semibold" size="lg">
                 Comenzar Entrenamientos
               </Button>
               <Button className="bg-muted/90 text-white border border-muted/70 hover:bg-muted/80 font-semibold" size="lg">
@@ -250,7 +250,7 @@ export default function A3Page() {
               ))}
             </div>
             <Link href="/despega/a3/entrevista-0" className="block">
-              <Button className="w-full bg-purple hover:bg-purple">
+              <Button className="w-full bg-purple/80 hover:bg-purple/70">
                 Comenzar Diagnóstico <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </Link>

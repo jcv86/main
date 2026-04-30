@@ -129,7 +129,7 @@ export function AIAssistant({
                   setIsOpen(false)
                 }}
                 size="sm"
-                className="flex-1 bg-blue hover:bg-blue"
+                className="flex-1 bg-blue/80 hover:bg-blue/70"
               >
                 Usar como base
               </Button>
@@ -141,7 +141,7 @@ export function AIAssistant({
       {!suggestion && !loading && !error && (
         <Button
           onClick={handleGetSuggestion}
-          className="w-full bg-blue hover:bg-blue text-white"
+          className="w-full bg-blue/80 hover:bg-blue/70 text-white"
         >
           Obtener Sugerencia
         </Button>

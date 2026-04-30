@@ -579,7 +579,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
             <Button
               onClick={runAutomatedTests}
               disabled={isRunning || !touchSupport}
-              className="bg-purple hover:bg-purple"
+              className="bg-purple/80 hover:bg-purple/70"
             >
               {isRunning ? (
                 <>

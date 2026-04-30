@@ -137,7 +137,7 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
         </div>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-purple hover:bg-purple">
+            <Button className="bg-purple/80 hover:bg-purple/70">
               <Plus className="h-4 w-4 mr-2" />
               Nueva Meta
             </Button>
@@ -207,7 +207,7 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
                   onChange={(e) => setNewGoal({ ...newGoal, targetDate: e.target.value })}
                 />
               </div>
-              <Button onClick={createGoal} className="w-full bg-purple hover:bg-purple">
+              <Button onClick={createGoal} className="w-full bg-purple/80 hover:bg-purple/70">
                 Crear Meta
               </Button>
             </div>
@@ -223,7 +223,7 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
             <p className="text-muted-foreground mb-4">
               Crea tu primera meta profesional para comenzar a rastrear tu progreso
             </p>
-            <Button onClick={() => setIsDialogOpen(true)} className="bg-purple hover:bg-purple">
+            <Button onClick={() => setIsDialogOpen(true)} className="bg-purple/80 hover:bg-purple/70">
               <Plus className="h-4 w-4 mr-2" />
               Crear Primera Meta
             </Button>
@@ -271,7 +271,7 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
                       {goal.progress < 100 && (
                         <Button
                           size="sm"
-                          className="bg-green hover:bg-green"
+                          className="bg-green/80 hover:bg-green/70"
                           onClick={() => updateGoalProgress(goal.id, 100)}
                         >
                           <CheckCircle className="h-4 w-4 mr-1" />

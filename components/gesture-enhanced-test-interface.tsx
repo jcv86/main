@@ -396,7 +396,7 @@ export function GestureEnhancedTestInterface({
                   onClick={onComplete}
                   disabled={!canProceed}
                   size="lg"
-                  className="bg-green hover:bg-green touch-manipulation"
+                  className="bg-green/80 hover:bg-green/70 touch-manipulation"
                 >
                   Complete Test
                 </Button>

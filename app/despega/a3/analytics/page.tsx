@@ -232,7 +232,7 @@ export default function A3AnalyticsPage() {
         {/* Next Steps */}
         <div className="flex gap-4 flex-wrap">
           <Link href="/despega/a3/simulaciones-guiado" className="flex-1">
-            <Button className="w-full bg-blue hover:bg-blue">
+            <Button className="w-full bg-blue/80 hover:bg-blue/70">
               <Zap className="w-4 h-4 mr-2" />
               Siguiente Simulación
             </Button>

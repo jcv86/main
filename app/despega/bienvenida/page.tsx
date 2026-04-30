@@ -152,7 +152,7 @@ export default function BienvenidaPage() {
         <div className="flex gap-4 justify-center">
           <Button
             onClick={() => router.push('/despega/conozcamonos-1')}
-            className="bg-blue hover:bg-blue text-white px-8 py-6 text-base font-semibold"
+            className="bg-blue/80 hover:bg-blue/70 text-white px-8 py-6 text-base font-semibold"
           >
             Comenzar el Viaje
             <ArrowRight className="w-5 h-5 ml-2" />

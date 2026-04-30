@@ -221,7 +221,7 @@ export default function FeedbackPage() {
                 <p className="text-sm text-muted-foreground dark:text-white/85 mb-3">
                   Cuando estés listo, practica la siguiente dificultad:
                 </p>
-                <Button className="w-full bg-purple hover:bg-purple">
+                <Button className="w-full bg-purple/80 hover:bg-purple/70">
                   <Volume2 className="w-4 h-4 mr-2" />
                   Iniciar Entrevista Estructurada (Siguiente Nivel)
                 </Button>

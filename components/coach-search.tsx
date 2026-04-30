@@ -78,7 +78,7 @@ export function CoachSearch({ userProfile }: SearchProps) {
             <Button
               onClick={handleSearch}
               disabled={isLoading}
-              className="bg-blue hover:bg-blue"
+              className="bg-blue/80 hover:bg-blue/70"
             >
               {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Buscar'}
             </Button>

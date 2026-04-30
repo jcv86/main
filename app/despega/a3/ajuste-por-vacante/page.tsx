@@ -82,7 +82,7 @@ export default function JobMatchingPage() {
             <Button
               onClick={handleAnalyzeJD}
               disabled={loading || !jobDescription.trim()}
-              className="w-full bg-blue hover:bg-blue h-12"
+              className="w-full bg-blue/80 hover:bg-blue/70 h-12"
             >
               {loading ? 'Analizando...' : 'Analizar Vacante'}
               <Zap className="w-4 h-4 ml-2" />
@@ -126,7 +126,7 @@ export default function JobMatchingPage() {
                       <p className="text-sm font-semibold mb-2">Tus habilidades que piden:</p>
                       <div className="flex flex-wrap gap-2">
                         {analysis.topMatches.map((skill: string) => (
-                          <Badge key={skill} className="bg-green hover:bg-green">
+                          <Badge key={skill} className="bg-green/80 hover:bg-green/70">
                             <CheckCircle2 className="w-3 h-3 mr-1" />
                             {skill}
                           </Badge>
@@ -169,7 +169,7 @@ export default function JobMatchingPage() {
                   </CardContent>
                 </Card>
 
-                <Button className="w-full bg-blue hover:bg-blue">
+                <Button className="w-full bg-blue/80 hover:bg-blue/70">
                   Generar CV Personalizado para esta Vacante
                 </Button>
               </TabsContent>
@@ -208,7 +208,7 @@ export default function JobMatchingPage() {
                     <p className="text-white/85">
                       Práctica una entrevista simulada con preguntas específicas de esta vacante
                     </p>
-                    <Button className="bg-blue hover:bg-blue">
+                    <Button className="bg-blue/80 hover:bg-blue/70">
                       Iniciar Simulación
                     </Button>
                   </div>

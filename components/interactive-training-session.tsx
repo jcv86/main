@@ -247,7 +247,7 @@ export function InteractiveTrainingSession({
             <div className="flex gap-4">
               <Button
                 onClick={handleStopRecording}
-                className="flex-1 bg-red hover:bg-red text-white h-12"
+                className="flex-1 bg-red/80 hover:bg-red/70 text-white h-12"
                 disabled={!isRecording}
               >
                 <StopCircle className="w-5 h-5 mr-2" />

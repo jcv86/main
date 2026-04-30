@@ -312,7 +312,7 @@ export default function RecomendacionesPage() {
                     disabled={submitting}
                     className={`w-full ${`}
                       selectedRoute === route.id
-                        ? "bg-green hover:bg-green dark:bg-green dark:hover:bg-green"
+                        ? "bg-green/80 hover:bg-green/70 dark:bg-green dark:hover:bg-green"
                         : ""`}
                     }`}
                   >

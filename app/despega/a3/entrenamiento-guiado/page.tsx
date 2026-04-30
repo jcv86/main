@@ -369,13 +369,13 @@ export default function GuidedTrainingPage() {
                 {currentLesson < selectedModule.lessons.length - 1 ? (
                   <Button
                     onClick={() => setCurrentLesson(currentLesson + 1)}
-                    className="bg-blue hover:bg-blue"
+                    className="bg-blue/80 hover:bg-blue/70"
                   >
                     Siguiente
                     <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
                   </Button>
                 ) : (
-                  <Button className="bg-green hover:bg-green">
+                  <Button className="bg-green/80 hover:bg-green/70">
                     <CheckCircle2 className="w-4 h-4 mr-2" />
                     Completar Módulo
                   </Button>
@@ -475,7 +475,7 @@ export default function GuidedTrainingPage() {
                     className={`w-full ${`}
                       isLocked
                         ? 'bg-muted/30 dark:bg-muted/70 cursor-not-allowed'
-                        : 'bg-blue hover:bg-blue'`}
+                        : 'bg-blue/80 hover:bg-blue/70'`}
                     }`}
                   >
                     {isLocked ? (

@@ -128,7 +128,7 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
         {/* Controls */}
         <div className="flex gap-2">
           {!isRecording && !recordedBlob && (
-            <Button onClick={startRecording} className="flex-1 bg-red hover:bg-red h-9 text-sm">
+            <Button onClick={startRecording} className="flex-1 bg-red/80 hover:bg-red/70 h-9 text-sm">
               <Mic className="w-4 h-4 mr-1" />
               Empezar
             </Button>
@@ -152,7 +152,7 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
               <Button
                 onClick={uploadVideo}
                 disabled={isUploading}
-                className="flex-1 bg-blue hover:bg-blue h-9 text-sm"
+                className="flex-1 bg-blue/80 hover:bg-blue/70 h-9 text-sm"
               >
                 {isUploading ? (
                   <>

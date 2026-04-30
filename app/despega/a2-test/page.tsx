@@ -211,7 +211,7 @@ export default function A2TestPage() {
                 onClick={runFullTest}
                 disabled={isRunning}
                 size="lg"
-                className="h-14 text-lg font-bold bg-blue hover:bg-blue/80"
+                className="h-14 text-lg font-bold bg-blue/80 hover:bg-blue/70/80"
               >
                 {isRunning ? (
                   <>

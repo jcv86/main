@@ -238,7 +238,7 @@ export default function A2DashboardPage() {
               </CardHeader>
               <CardContent className="space-y-2">
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">Prepárate para la revisión con tu Coach. Trae datos de tu progreso y aprende qué ajustar.</p>
-                <Button className="w-full mt-2 bg-blue hover:bg-blue">Programar Revisión</Button>
+                <Button className="w-full mt-2 bg-blue/80 hover:bg-blue/70">Programar Revisión</Button>
               </CardContent>
             </Card>
           </div>
