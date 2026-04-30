@@ -68,13 +68,18 @@ const stages = [
   },
 ]
 
-// Per brandbook pillar colors
-const phaseStyles: Record<string, { text: string; border: string; bg: string; activeBg: string; activeText: string; pillBg: string; pillText: string }> = {
-  ritual:      { text: 'text-purple',  border: 'border-purple',  bg: 'bg-purple/10',  activeBg: 'bg-purple',  activeText: 'text-white', pillBg: 'bg-purple',  pillText: 'text-white' },
-  exploration: { text: 'text-blue',    border: 'border-blue',    bg: 'bg-blue/10',    activeBg: 'bg-blue',    activeText: 'text-white', pillBg: 'bg-blue',    pillText: 'text-white' },
-  training:    { text: 'text-orange',  border: 'border-orange',  bg: 'bg-orange/10',  activeBg: 'bg-orange',  activeText: 'text-white', pillBg: 'bg-orange',  pillText: 'text-white' },
-  reality:     { text: 'text-red',     border: 'border-red',     bg: 'bg-red/10',     activeBg: 'bg-red',     activeText: 'text-white', pillBg: 'bg-red',     pillText: 'text-white' },
-  info:        { text: 'text-muted-foreground', border: 'border-muted/40', bg: 'bg-muted/10', activeBg: 'bg-muted/40', activeText: 'text-white', pillBg: 'bg-muted/40', pillText: 'text-white' },
+// Per brandbook pillar colors — all classes must be static strings (no template interpolation) for Tailwind purge
+const phaseStyles: Record<string, {
+  text: string; border: string; leftBorder: string; bg: string
+  activeBg: string; activeText: string
+  pillBg: string; pillText: string
+  hoverBg: string; hoverText: string
+}> = {
+  ritual:      { text: 'text-purple',           border: 'border-purple/30',  leftBorder: 'border-l-4 border-l-purple',   bg: 'bg-purple/10',  activeBg: 'bg-purple/20',   activeText: 'text-purple',  pillBg: 'bg-purple',  pillText: 'text-white', hoverBg: 'hover:bg-purple/10',  hoverText: 'hover:text-purple'  },
+  exploration: { text: 'text-blue',             border: 'border-blue/30',    leftBorder: 'border-l-4 border-l-blue',     bg: 'bg-blue/10',    activeBg: 'bg-blue/20',     activeText: 'text-blue',    pillBg: 'bg-blue',    pillText: 'text-white', hoverBg: 'hover:bg-blue/10',    hoverText: 'hover:text-blue'    },
+  training:    { text: 'text-orange',           border: 'border-orange/30',  leftBorder: 'border-l-4 border-l-orange',   bg: 'bg-orange/10',  activeBg: 'bg-orange/20',   activeText: 'text-orange',  pillBg: 'bg-orange',  pillText: 'text-white', hoverBg: 'hover:bg-orange/10',  hoverText: 'hover:text-orange'  },
+  reality:     { text: 'text-red',              border: 'border-red/30',     leftBorder: 'border-l-4 border-l-red',      bg: 'bg-red/10',     activeBg: 'bg-red/20',      activeText: 'text-red',     pillBg: 'bg-red',     pillText: 'text-white', hoverBg: 'hover:bg-red/10',     hoverText: 'hover:text-red'     },
+  info:        { text: 'text-white/60',         border: 'border-white/10',   leftBorder: 'border-l-4 border-l-white/20', bg: 'bg-white/5',    activeBg: 'bg-white/10',    activeText: 'text-white',   pillBg: 'bg-white/10',pillText: 'text-white', hoverBg: 'hover:bg-white/5',    hoverText: 'hover:text-white'   },
 }
 
 export function DespegaNavbar() {
@@ -159,26 +164,24 @@ export function DespegaNavbar() {
                     <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} />
                   </button>
 
-                  {/* Dropdown — solid background, no bleed-through */}
+                  {/* Dropdown — solid bg, left-border accent, no heavy colored header */}
                   {isOpen && (
-                    <div className={`absolute left-0 top-full mt-1 w-52 rounded-xl border shadow-2xl z-[9999] overflow-hidden ${style.border} bg-black`}>
-                      {/* Colored header strip */}
-                      <div className={`px-3 py-2 ${style.bg} border-b ${style.border}`}>
-                        <span className={`text-xs font-bold uppercase tracking-widest ${style.text}`}>{stage.name}</span>
+                    <div className={`absolute left-0 top-full mt-2 w-56 rounded-xl border shadow-2xl z-[9999] overflow-hidden bg-[#0a0a0a] ${style.border}`}>
+                      {/* Minimal label */}
+                      <div className="px-4 pt-3 pb-2">
+                        <span className={`text-[10px] font-bold uppercase tracking-[0.15em] ${style.text}`}>{stage.name}</span>
                       </div>
-                      <div className="py-1">
+                      <div className="px-2 pb-2 space-y-0.5">
                         {stage.routes.map((route) => {
                           const isActive = pathname === route.href
                           return (
                             <Link key={route.href} href={route.href}>
-                              <div className={`flex items-center px-3 py-2.5 text-sm font-medium transition-colors cursor-pointer ${
+                              <div className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
                                 isActive
-                                  ? `${style.activeBg} ${style.activeText}`
-                                  : `text-white/70 hover:text-white hover:${style.bg}`
+                                  ? `${style.activeBg} ${style.activeText} ${style.leftBorder}`
+                                  : `text-white/60 ${style.hoverBg} ${style.hoverText}`
                               }`}>
-                                {isActive && (
-                                  <span className={`w-1.5 h-1.5 rounded-full mr-2 flex-shrink-0 bg-white`} />
-                                )}
+                                {isActive && <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${style.activeBg.replace('bg-', 'bg-').replace('/20', '')} bg-current`} />}
                                 {route.label}
                               </div>
                             </Link>
