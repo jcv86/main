@@ -51,14 +51,14 @@ export default function A3IntroPage() {
           title="Prepárate para Entrevistas Reales"
           description="Simulaciones prácticas, feedback de IA en tiempo real, y ajustes iterativos. Aquí transformas conocimiento en confianza bajo presión."
           estimatedTime="~60-90 min"
-          pillarColor="cyan"
+          pillarColor="orange"
         />
 
         <div className="space-y-8">
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2">
-                <Target className="w-6 h-6 text-blue" />
+                <Target className="w-6 h-6 text-orange" />
                 ¿Qué es Entrenamiento Intensivo?
               </CardTitle>
             </CardHeader>
@@ -66,9 +66,9 @@ export default function A3IntroPage() {
               <p className="text-white leading-relaxed text-lg">
                 Esta es tu fase de práctica de alto impacto. Realizarás simulaciones de entrevistas estructuradas donde recibirás feedback inmediato de IA y podrás iterar tu desempeño hasta llegar a la confianza de nivel profesional.
               </p>
-              <div className="bg-cyan/20 p-6 rounded-xl border-2 border-cyan/40">
+              <div className="bg-orange/10 p-6 rounded-xl border-2 border-orange/40">
                 <p className="text-white font-semibold text-lg">
-                  <span className="text-cyan">Tu objetivo aquí:</span> Pasar de "conozco las respuestas" a "puedo responder con seguridad bajo presión".
+                  <span className="text-orange">Tu objetivo aquí:</span> Pasar de "conozco las respuestas" a "puedo responder con seguridad bajo presión".
                 </p>
               </div>
             </CardContent>
@@ -117,7 +117,7 @@ export default function A3IntroPage() {
           <Card className="border-0 shadow-lg bg-muted/90 dark:bg-card">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-white flex items-center gap-2">
-                <MessageSquare className="w-6 h-6 text-cyan-400" />
+                <MessageSquare className="w-6 h-6 text-orange" />
                 El Ciclo de Mejora
               </CardTitle>
               <CardDescription className="text-muted-foreground">Cada simulación sigue este proceso</CardDescription>
@@ -125,22 +125,22 @@ export default function A3IntroPage() {
             <CardContent className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">1</div>
+                  <div className="text-3xl font-bold text-orange mb-2">1</div>
                   <p className="text-sm font-semibold text-white mb-1">Responde</p>
                   <p className="text-xs text-white/70">Simulación completa</p>
                 </div>
                 <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">2</div>
+                  <div className="text-3xl font-bold text-orange mb-2">2</div>
                   <p className="text-sm font-semibold text-white mb-1">Analiza</p>
                   <p className="text-xs text-white/70">Feedback de IA</p>
                 </div>
                 <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">3</div>
+                  <div className="text-3xl font-bold text-orange mb-2">3</div>
                   <p className="text-sm font-semibold text-white mb-1">Ajusta</p>
                   <p className="text-xs text-white/70">Mejora tu respuesta</p>
                 </div>
                 <div className="bg-muted/80/50 p-4 rounded-[28px] border border-muted/70 text-center">
-                  <div className="text-3xl font-bold text-cyan-400 mb-2">4</div>
+                  <div className="text-3xl font-bold text-orange mb-2">4</div>
                   <p className="text-sm font-semibold text-white mb-1">Repite</p>
                   <p className="text-xs text-white/70">Vuelve a simular</p>
                 </div>
@@ -173,12 +173,12 @@ export default function A3IntroPage() {
             </CardContent>
           </Card>
 
-          <div className="p-8 bg-gradient-to-r from-cyan/20 to-blue/20 border-2 border-cyan/40 rounded-xl shadow-lg">
+          <div className="p-8 bg-orange/10 border-2 border-orange/40 rounded-xl shadow-lg">
             <h3 className="text-2xl font-bold text-white mb-4">Listo para Entrenar?</h3>
             <p className="text-white/90 text-lg mb-6">Entra al dashboard, elige tu modalidad de entrenamiento y comienza a simular entrevistas reales.</p>
             <Button 
               onClick={() => router.push('/despega/a3')}
-              className="w-full bg-cyan hover:bg-cyan/90 text-black font-bold text-lg py-6"
+              className="w-full bg-orange hover:bg-orange/80 text-white font-bold text-lg py-6"
             >
               Ir a Entrenamiento Intensivo
               <ArrowRight className="w-5 h-5 ml-2" />
