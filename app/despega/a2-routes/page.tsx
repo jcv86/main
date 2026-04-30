@@ -447,89 +447,10 @@ export default function A2RoutesPage() {
           </CardContent>
         </Card>
 
-        {/* Progress */}
-        <Card className="bg-transparent border-muted/80">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white">
-              <MapPin className="w-5 h-5 text-cyan-400" />
-              Tu Progreso en A2
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center gap-4 p-4 bg-emerald-900/20 border border-green/30 rounded-lg">
-              <CheckCircle2 className="w-6 h-6 text-emerald-400 flex-shrink-0" />
-              <div>
-                <p className="font-semibold text-emerald-400">Ruta Generada</p>
-                <p className="text-sm text-white/85">Tu plan de 90 días personalizado está listo</p>
-              </div>
-            </div>
-            
-            <div className="p-4 bg-muted/80/30 border border-muted/70 rounded-lg">
-              <p className="text-white/85 text-sm mb-3">Próximo: Continúa a <span className="font-semibold">Entrenamiento Intensivo</span> para prepararte para entrevistas</p>
-              <Button 
-                onClick={() => router.push('/despega/a3-intro')}
-                className="w-full bg-blue hover:bg-cyan"
-              >
-                Ir a Entrenamiento Intensivo
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Achievements & Recommendations Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Achievements - Takes 2 columns on large screens */}
-          <Card className="bg-transparent border-muted/80 lg:col-span-2">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-white">
-                <Trophy className="w-5 h-5 text-yellow-400" />
-                Tus Logros
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <AchievementsDisplay
-                completedTasks={calculateTotalProgress().completed}
-                totalTasks={calculateTotalProgress().total}
-              />
-            </CardContent>
-          </Card>
-
-          {/* Recommendations - Takes 1 column */}
-          <Card className="bg-transparent border-muted/80">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-white">
-                <Zap className="w-5 h-5 text-purple/40" />
-                Recomendaciones
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <RecommendationsDisplay
-                recommendations={getSimpleRecommendations(
-                  completedTasks,
-                  route?.route_30days || [],
-                  route?.route_60days || [],
-                  route?.route_90days || []
-                )}
-              />
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Export PDF Button */}
-        <div className="flex justify-center pt-4">
-          <Button
-            onClick={handleExportPDF}
-            disabled={isExporting}
-            className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple text-white"
-          >
-            <Download className="w-4 h-4 mr-2" />
-            {isExporting ? 'Generando PDF...' : 'Descargar Progreso en PDF'}
-          </Button>
-        </div>
-
         {/* Resources Library Section */}
         <ResourceLibrary />
+
+        {/* Main Route Breakdown - Tus 90 Días Estructurados */}
         <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white">
@@ -661,6 +582,95 @@ export default function A2RoutesPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Tu Progreso y Logros - Now at the END */}
+        <div className="space-y-6 pt-8 border-t border-white/10">
+          <h2 className="text-3xl font-bold text-white flex items-center gap-2">
+            <Trophy className="w-8 h-8 text-yellow-400" />
+            Tu Progreso y Logros
+          </h2>
+
+          {/* Progress Card */}
+          <Card className="bg-transparent border-muted/80">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-white">
+                <MapPin className="w-5 h-5 text-purple" />
+                Tu Progreso en A2
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center gap-4 p-4 bg-emerald-900/20 border border-green/30 rounded-lg">
+                <CheckCircle2 className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+                <div>
+                  <p className="font-semibold text-emerald-400">Ruta Generada</p>
+                  <p className="text-sm text-white/85">Tu plan de 90 días personalizado está listo</p>
+                </div>
+              </div>
+              
+              <div className="p-4 bg-muted/80/30 border border-muted/70 rounded-lg">
+                <p className="text-white/85 text-sm mb-3">Próximo: Continúa a <span className="font-semibold">Entrenamiento Intensivo</span> para prepararte para entrevistas</p>
+                <Button 
+                  onClick={() => router.push('/despega/a3-intro')}
+                  className="w-full bg-blue/80 hover:bg-blue/70"
+                >
+                  Ir a Entrenamiento Intensivo
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Achievements & Recommendations Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Achievements - Takes 2 columns on large screens */}
+            <Card className="bg-transparent border-muted/80 lg:col-span-2">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <Trophy className="w-5 h-5 text-yellow-400" />
+                  Tus Logros
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <AchievementsDisplay
+                  completedTasks={calculateTotalProgress().completed}
+                  totalTasks={calculateTotalProgress().total}
+                />
+              </CardContent>
+            </Card>
+
+            {/* Recommendations - Takes 1 column */}
+            <Card className="bg-transparent border-muted/80">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <Zap className="w-5 h-5 text-purple/40" />
+                  Recomendaciones
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <RecommendationsDisplay
+                  recommendations={getSimpleRecommendations(
+                    completedTasks,
+                    route?.route_30days || [],
+                    route?.route_60days || [],
+                    route?.route_90days || []
+                  )}
+                />
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Export PDF Button */}
+          <div className="flex justify-center pt-4">
+            <Button
+              onClick={handleExportPDF}
+              disabled={isExporting}
+              className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple text-white"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              {isExporting ? 'Generando PDF...' : 'Descargar Progreso en PDF'}
+            </Button>
+          </div>
+        </div>
       </div>
     </div>
   )
