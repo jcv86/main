@@ -30,7 +30,8 @@ export function XPNavbarBadge() {
   const loadXPData = async () => {
     if (!user?.email) return
     try {
-      const response = await fetch(`/api/gamification/premium?userEmail=${encodeURIComponent(user.email)}`)
+      // Try global endpoint first (consolidated data from all sections)
+      const response = await fetch(`/api/gamification/global`)
       if (response.ok) {
         const data = await response.json()
         setXPData({
@@ -38,7 +39,7 @@ export function XPNavbarBadge() {
           current_level: data.current_level,
           xp_to_next_level: data.xp_to_next_level,
           daily_streak: data.daily_streak,
-          phase: data.current_phase || 'C1'
+          phase: 'Global'
         })
       }
     } catch (error) {
