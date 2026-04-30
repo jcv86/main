@@ -1,7 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 import { CheckCircle2, Circle, ChevronDown, ChevronUp } from 'lucide-react'
+import { useState } from 'react'
 
 interface MonthProgress {
   month: number
@@ -23,31 +24,29 @@ interface A2ProgressData {
   status: string
 }
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
+
 export function A2ProgressSidebar() {
-  const [progress, setProgress] = useState<A2ProgressData | null>(null)
   const [expandedMonth, setExpandedMonth] = useState<number | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const loadProgress = async () => {
-      try {
-        const response = await fetch('/api/a2/progress')
-        if (response.ok) {
-          const data = await response.json()
-          setProgress(data)
-          setExpandedMonth(data.current_month)
-        }
-      } catch (error) {
-        console.error('[v0] Error loading A2 progress:', error)
-      } finally {
-        setLoading(false)
-      }
+  
+  const { data: progress, isLoading } = useSWR<A2ProgressData>(
+    '/api/a2/progress',
+    fetcher,
+    {
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+      refreshInterval: 5000, // Refresca cada 5 segundos
+      dedupingInterval: 2000,
     }
+  )
 
-    loadProgress()
-  }, [])
+  // Set default expanded month when progress loads
+  const currentMonth = progress?.current_month
+  if (currentMonth && expandedMonth === null) {
+    setExpandedMonth(currentMonth)
+  }
 
-  if (loading || !progress) {
+  if (isLoading || !progress) {
     return (
       <div className="w-72 bg-muted/30 border-r border-muted/40 p-6 hidden lg:block">
         <div className="space-y-4 animate-pulse">

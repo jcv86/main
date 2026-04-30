@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 import Link from 'next/link'
 
 interface A2ProgressData {
@@ -9,29 +9,21 @@ interface A2ProgressData {
   status: string
 }
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
+
 export function A2ProgressNavbarBadge() {
-  const [progress, setProgress] = useState<A2ProgressData | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    const loadProgress = async () => {
-      try {
-        const response = await fetch('/api/a2/progress')
-        if (response.ok) {
-          const data = await response.json()
-          setProgress(data)
-        }
-      } catch (error) {
-        console.error('[v0] Error loading A2 progress:', error)
-      } finally {
-        setLoading(false)
-      }
+  const { data: progress, isLoading } = useSWR<A2ProgressData>(
+    '/api/a2/progress',
+    fetcher,
+    {
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+      refreshInterval: 5000, // Refresca cada 5 segundos
+      dedupingInterval: 2000,
     }
+  )
 
-    loadProgress()
-  }, [])
-
-  if (loading || !progress) {
+  if (isLoading || !progress) {
     return null
   }
 
