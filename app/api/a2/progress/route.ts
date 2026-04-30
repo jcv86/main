@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 /**
  * GET /api/a2/progress
  * Calculate user progress through A2 (90-day journey)
- * Returns current month and overall progress percentage
+ * Returns current month and overall progress percentage based on completed tasks
  */
 export async function GET(request: NextRequest) {
   try {
@@ -16,14 +16,9 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           current_month: 1,
-          current_week: 1,
           progress_percentage: 0,
-          month_progress: [
-            { month: 1, percentage: 0, completed: false },
-            { month: 2, percentage: 0, completed: false },
-            { month: 3, percentage: 0, completed: false },
-          ],
-          milestones: [],
+          completed_tasks: 0,
+          total_tasks: 90,
           status: 'not_started',
         },
         { status: 200 }
@@ -32,65 +27,87 @@ export async function GET(request: NextRequest) {
 
     const userId = user.id
 
-    // Fetch A2 progress from database
-    const { data: a2Progress } = await supabase
-      .from('a2_user_progress')
-      .select('mes_actual, semana_actual, progreso_porcentaje, fecha_inicio, completed_activities')
+    // Fetch user's personalized route
+    const { data: profileData } = await supabase
+      .from('despegar_profiles')
+      .select('id, personalized_route')
       .eq('user_id', userId)
       .single()
 
-    if (!a2Progress) {
+    if (!profileData?.personalized_route) {
       return NextResponse.json(
         {
           current_month: 1,
-          current_week: 1,
           progress_percentage: 0,
-          month_progress: [
-            { month: 1, percentage: 0, completed: false },
-            { month: 2, percentage: 0, completed: false },
-            { month: 3, percentage: 0, completed: false },
-          ],
-          milestones: [],
+          completed_tasks: 0,
+          total_tasks: 90,
           status: 'not_started',
         },
         { status: 200 }
       )
     }
 
-    const currentMonth = a2Progress.mes_actual || 1
-    const currentWeek = a2Progress.semana_actual || 1
-    const overallProgress = a2Progress.progreso_porcentaje || 0
+    const route = profileData.personalized_route as any
+    
+    // Fetch completed tasks for this user
+    const { data: completions } = await supabase
+      .from('task_completions')
+      .select('phase_days, task_day, task_title')
+      .eq('user_id', userId)
 
-    // Calculate progress per month (approximate)
-    const monthProgress = [
-      { month: 1, percentage: currentMonth >= 1 ? Math.min(overallProgress * 0.4, 100) : 0, completed: currentMonth > 1 },
-      { month: 2, percentage: currentMonth >= 2 ? Math.min(overallProgress * 0.35, 100) : 0, completed: currentMonth > 2 },
-      { month: 3, percentage: currentMonth >= 3 ? Math.min(overallProgress * 0.25, 100) : 0, completed: currentMonth > 3 },
+    // Convert completions to set for fast lookup
+    const completedTasks = new Set(
+      (completions || []).map(c => `${c.phase_days}-${c.task_day}-${c.task_title}`)
+    )
+
+    // Get all tasks from the route
+    const allTasks = [
+      ...(route.route_30days || []),
+      ...(route.route_60days || []),
+      ...(route.route_90days || [])
     ]
 
-    // Define milestones for each month
-    const milestones = [
-      { month: 1, title: 'Tus Objetivos', status: currentMonth >= 1 ? 'completed' : 'pending' },
-      { month: 1, title: 'Tu Ruta Personalizada', status: currentMonth >= 1 ? 'completed' : 'pending' },
-      { month: 2, title: 'Evaluaciones Intermedias', status: currentMonth >= 2 ? 'completed' : 'pending' },
-      { month: 2, title: 'Ajustes y Mejoras', status: currentMonth >= 2 ? 'completed' : 'pending' },
-      { month: 3, title: 'Evaluación Final', status: currentMonth >= 3 ? 'completed' : 'pending' },
-      { month: 3, title: 'Plan de Acción', status: currentMonth >= 3 ? 'completed' : 'pending' },
-    ]
+    // Calculate which tasks from each phase are completed
+    const completed30days = (route.route_30days || []).filter((task: any) =>
+      completedTasks.has(`30-${task.day}-${task.title}`)
+    ).length
+
+    const completed60days = (route.route_60days || []).filter((task: any) =>
+      completedTasks.has(`60-${task.day}-${task.title}`)
+    ).length
+
+    const completed90days = (route.route_90days || []).filter((task: any) =>
+      completedTasks.has(`90-${task.day}-${task.title}`)
+    ).length
+
+    const totalCompleted = completed30days + completed60days + completed90days
+    const totalTasks = allTasks.length
+    const progressPercentage = totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0
+
+    // Determine current month based on which phase has most completion
+    let currentMonth = 1
+    if (completed30days === (route.route_30days || []).length && completed30days > 0) {
+      currentMonth = 2
+      if (completed60days === (route.route_60days || []).length && completed60days > 0) {
+        currentMonth = 3
+      }
+    } else if (completed60days > 0 && completed30days < (route.route_30days || []).length) {
+      // If working on month 2
+      currentMonth = 2
+    }
 
     const status = 
-      overallProgress === 0 ? 'not_started' :
-      overallProgress < 50 ? 'in_progress' :
-      overallProgress < 100 ? 'near_completion' :
+      progressPercentage === 0 ? 'not_started' :
+      progressPercentage < 50 ? 'in_progress' :
+      progressPercentage < 100 ? 'near_completion' :
       'completed'
 
     return NextResponse.json(
       {
         current_month: currentMonth,
-        current_week: currentWeek,
-        progress_percentage: Math.round(overallProgress),
-        month_progress: monthProgress,
-        milestones: milestones.filter((m) => m.month === currentMonth),
+        progress_percentage: progressPercentage,
+        completed_tasks: totalCompleted,
+        total_tasks: totalTasks,
         status,
       },
       { status: 200 }
@@ -100,14 +117,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(
       {
         current_month: 1,
-        current_week: 1,
         progress_percentage: 0,
-        month_progress: [
-          { month: 1, percentage: 0, completed: false },
-          { month: 2, percentage: 0, completed: false },
-          { month: 3, percentage: 0, completed: false },
-        ],
-        milestones: [],
+        completed_tasks: 0,
+        total_tasks: 90,
         status: 'error',
       },
       { status: 200 }
