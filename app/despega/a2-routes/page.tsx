@@ -715,8 +715,10 @@ export default function A2RoutesPage() {
           </CardContent>
         </Card>
 
-        {/* Resources Library Section */}
-        <ResourceLibrary />
+        {/* Resources Library Section - At the END */}
+        <div className="pt-8 border-t border-white/10">
+          <ResourceLibrary />
+        </div>
       </div>
     </div>
   )
