@@ -2,6 +2,7 @@
 
 import useSWR from 'swr'
 import Link from 'next/link'
+import { ProgressThermometerBadge } from './progress-thermometer-badge'
 
 interface A2ProgressData {
   current_month: number
@@ -18,7 +19,7 @@ export function A2ProgressNavbarBadge() {
     {
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
-      refreshInterval: 5000, // Refresca cada 5 segundos
+      refreshInterval: 5000,
       dedupingInterval: 2000,
     }
   )
@@ -27,18 +28,20 @@ export function A2ProgressNavbarBadge() {
     return null
   }
 
-  const getStatusColor = () => {
-    if (progress.progress_percentage === 0) return 'bg-muted/30 text-white/60'
-    if (progress.progress_percentage < 50) return 'bg-purple/20 text-purple'
-    if (progress.progress_percentage < 100) return 'bg-blue/20 text-blue'
-    return 'bg-emerald-500/20 text-emerald-400'
+  const getColor = () => {
+    if (progress.progress_percentage === 0) return 'purple'
+    if (progress.progress_percentage < 50) return 'purple'
+    if (progress.progress_percentage < 100) return 'blue'
+    return 'emerald'
   }
 
   return (
     <Link href="/despega/a2-routes">
-      <div className={`text-xs font-semibold px-3 py-1.5 rounded-full border border-current/20 ${getStatusColor()} hover:opacity-80 transition-opacity cursor-pointer`}>
-        Mes {progress.current_month} • {progress.progress_percentage}%
-      </div>
+      <ProgressThermometerBadge
+        percentage={progress.progress_percentage}
+        label={`Mes ${progress.current_month}`}
+        color={getColor() as 'purple' | 'blue' | 'cyan' | 'emerald'}
+      />
     </Link>
   )
 }
