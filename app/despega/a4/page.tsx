@@ -16,14 +16,14 @@ import { JobRecommendationsCard } from '@/components/linkedin/job-recommendation
 import { MarketInsightsCard } from '@/components/linkedin/market-insights-card'
 import { PersonalizedRadarSystem } from '@/components/personalized-radar-system'
 
-export default function A4Page() {
+export default function EjecucionContinuaPage() {
   const { user, loading } = useAuthRedirect()
   const [activeTab, setActiveTab] = useState('dashboard')
   const router = useRouter()
 
   useEffect(() => {
     if (loading || !user?.id) return
-    console.log('[v0] A4 page accessed by user:', user.id)
+    console.log('[v0] Ejecución Continua page accessed by user:', user.id)
   }, [user?.id, loading])
 
   if (loading) {
@@ -49,60 +49,86 @@ export default function A4Page() {
               Volver
             </Button>
           </Link>
-          <Badge className="bg-teal-100 text-teal-900 dark:bg-teal-900/30 dark:text-teal-200">
-            La Realidad
+          <Badge className="bg-amber-100 text-amber-900 dark:bg-amber-900/30 dark:text-amber-200">
+            Pilar 4: Ejecución Continua
           </Badge>
         </div>
 
-        {/* Hero */}
+        {/* Hero Section */}
         <div className="mb-12 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance bg-background">
-            Tu Dashboard Ejecutivo
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance">
+            Ejecución Continua
           </h1>
-          <p className="text-xl text-muted-foreground dark:text-white/85 mb-2">
-            Coach IA 24/7 • Contexto de Mercado • Decisiones Estratégicas
+          <p className="text-xl text-muted-foreground dark:text-white/85 mb-3">
+            Colocación laboral y acompañamiento permanente
           </p>
-          <p className="text-muted-foreground dark:text-muted-foreground">
-            Monitorea tu progreso, descubre oportunidades y desarrolla criterio laboral
+          <p className="text-base text-muted-foreground dark:text-muted-foreground max-w-2xl mx-auto">
+            Aquí es donde tu aprendizaje se transforma en acción. Monitoreamos tu progreso, conectamos oportunidades reales, 
+            ofrecemos coaching IA 24/7 y te proporcionamos contexto de mercado para que tomes decisiones estratégicas con criterio laboral.
           </p>
+          
+          {/* Key Features Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 mb-8">
+            <div className="bg-muted/30 rounded-lg p-4">
+              <div className="text-2xl mb-2">🎯</div>
+              <h3 className="font-semibold mb-1">Dashboard Ejecutivo</h3>
+              <p className="text-sm text-muted-foreground">Visualiza tu desempeño y avance en tiempo real</p>
+            </div>
+            <div className="bg-muted/30 rounded-lg p-4">
+              <div className="text-2xl mb-2">💼</div>
+              <h3 className="font-semibold mb-1">Oportunidades Reales</h3>
+              <p className="text-sm text-muted-foreground">Acceso a ofertas laborales personalizadas del mercado</p>
+            </div>
+            <div className="bg-muted/30 rounded-lg p-4">
+              <div className="text-2xl mb-2">📚</div>
+              <h3 className="font-semibold mb-1">Aprendizaje Continuo</h3>
+              <p className="text-sm text-muted-foreground">Recursos, tests y análisis para crecer profesionalmente</p>
+            </div>
+          </div>
         </div>
 
-        {/* Tabs */}
+        {/* Navigation Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-5 mb-8 gap-1 bg-background/50">
             <TabsTrigger value="dashboard" className="text-sm">
               <Award className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Dashboard</span>
+              <span className="hidden sm:inline">Mi Progreso</span>
             </TabsTrigger>
             <TabsTrigger value="oportunidades" className="text-sm">
               <Briefcase className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Oportunidades</span>
+              <span className="hidden sm:inline">Empleos</span>
             </TabsTrigger>
             <TabsTrigger value="tests" className="text-sm">
               <Brain className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Tests</span>
+              <span className="hidden sm:inline">Conocimiento</span>
             </TabsTrigger>
             <TabsTrigger value="radar" className="text-sm">
               <Radar className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Radar</span>
+              <span className="hidden sm:inline">Análisis</span>
             </TabsTrigger>
             <TabsTrigger value="recursos" className="text-sm">
               <BookOpen className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Recursos</span>
+              <span className="hidden sm:inline">Biblioteca</span>
             </TabsTrigger>
           </TabsList>
 
-          {/* Dashboard Tab */}
-          <TabsContent value="dashboard" className="space-y-4">
+          {/* Mi Progreso - Dashboard */}
+          <TabsContent value="dashboard" className="space-y-6">
+            <div className="mb-6">
+              <h2 className="text-3xl font-bold mb-2">Tu Desempeño Ejecutivo</h2>
+              <p className="text-muted-foreground dark:text-muted-foreground">
+                Visualiza tu progreso integral en el programa, métricas clave de desempeño y recomendaciones personalizadas
+              </p>
+            </div>
             <ExecutiveDashboard />
           </TabsContent>
 
-          {/* Oportunidades Tab */}
-          <TabsContent value="oportunidades" className="space-y-4">
+          {/* Empleos - Oportunidades */}
+          <TabsContent value="oportunidades" className="space-y-6">
             <div className="mb-6">
-              <h2 className="text-2xl font-bold mb-2">Oportunidades en el Mercado</h2>
+              <h2 className="text-3xl font-bold mb-2">Conecta con Oportunidades Reales</h2>
               <p className="text-muted-foreground dark:text-muted-foreground">
-                Tu perfil de LinkedIn sincronizado, ofertas personalizadas y análisis del mercado laboral
+                Tu perfil profesional sincronizado con LinkedIn, ofertas laborales personalizadas según tu perfil e insights del mercado laboral chileno en tiempo real
               </p>
             </div>
             
@@ -120,24 +146,36 @@ export default function A4Page() {
             </div>
           </TabsContent>
 
-          {/* Tests Tab */}
-          <TabsContent value="tests" className="space-y-4">
+          {/* Conocimiento - Tests */}
+          <TabsContent value="tests" className="space-y-6">
             <div className="mb-6">
-              <h2 className="text-2xl font-bold mb-2">Cultura General & Tests</h2>
+              <h2 className="text-3xl font-bold mb-2">Desarrolla Criterio Laboral</h2>
               <p className="text-muted-foreground dark:text-muted-foreground">
-                Evalúa tu conocimiento sobre historia, geografía, actualidad y cultura. Acumula puntos y desbloquea badges.
+                Tests sobre historia, economía, tecnología, actualidad y cultura general. Mejora tu conocimiento contextual, acumula puntos DTC y desbloquea badges de experto
               </p>
             </div>
             <A4GamifiedTests />
           </TabsContent>
 
-          {/* Radar Tab */}
-          <TabsContent value="radar" className="space-y-4">
+          {/* Análisis - Radar */}
+          <TabsContent value="radar" className="space-y-6">
+            <div className="mb-6">
+              <h2 className="text-3xl font-bold mb-2">Radar Estratégico de Mercado</h2>
+              <p className="text-muted-foreground dark:text-muted-foreground">
+                Análisis en profundidad de tendencias del mercado laboral, señales débiles de cambio y contexto estratégico para tu posicionamiento profesional
+              </p>
+            </div>
             <PersonalizedRadarSystem />
           </TabsContent>
 
-          {/* Recursos Tab */}
-          <TabsContent value="recursos" className="space-y-4">
+          {/* Biblioteca - Recursos */}
+          <TabsContent value="recursos" className="space-y-6">
+            <div className="mb-6">
+              <h2 className="text-3xl font-bold mb-2">Biblioteca de Recursos</h2>
+              <p className="text-muted-foreground dark:text-muted-foreground">
+                Acceso a libros, artículos, cursos y herramientas curadas para fortalecer tu desarrollo profesional continuo
+              </p>
+            </div>
             <A4Biblioteca />
           </TabsContent>
         </Tabs>
