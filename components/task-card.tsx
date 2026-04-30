@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { CheckCircle2, Circle, Clock, BookOpen, Wrench, Users, ClipboardList, Trophy } from 'lucide-react'
+import { CheckCircle2, Circle, Clock, BookOpen, Wrench, Users, ClipboardList, Trophy, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { TaskDetailModal } from '@/components/task-detail-modal'
@@ -22,6 +22,7 @@ interface TaskCardProps {
   completed?: boolean
   onComplete?: (taskId: string) => void
   taskId: string
+  locked?: boolean
 }
 
 const taskTypeIcons = {
@@ -40,20 +41,40 @@ const taskTypeEmojis = {
   milestone: '🏆',
 }
 
-export function TaskCard({ task, completed = false, onComplete, taskId }: TaskCardProps) {
+export function TaskCard({ task, completed = false, onComplete, taskId, locked = false }: TaskCardProps) {
   const [isCompleted, setIsCompleted] = useState(completed)
   const [showDetailModal, setShowDetailModal] = useState(false)
   const taskDetail = getTaskDetail(task.day)
   const typeInfo = taskTypeIcons[task.type]
   const emoji = taskTypeEmojis[task.type]
 
-  const handleComplete = () => {
+  const handleComplete = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (locked) return
     setIsCompleted(!isCompleted)
     onComplete?.(taskId)
   }
 
   const hours = Math.round(task.timeEstimate / 60)
   const minutes = task.timeEstimate % 60
+
+  if (locked) {
+    return (
+      <div className="bg-muted/10 border-2 border-muted/20 rounded-[28px] p-4 opacity-50 cursor-not-allowed">
+        <div className="flex items-start gap-3">
+          <Lock className="w-6 h-6 text-muted/40 flex-shrink-0 mt-1" />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <h4 className="font-semibold text-sm text-white/40">
+                Día {task.day}: {task.title}
+              </h4>
+            </div>
+            <p className="text-xs text-white/30 mt-1">Completa el día anterior para desbloquear</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <>
@@ -119,17 +140,10 @@ export function TaskCard({ task, completed = false, onComplete, taskId }: TaskCa
                       }`}
                       disabled={isCompleted}
                     >
-                      📌 {resource}
+                      {resource}
                     </Button>
                   ))}
                 </div>
-              )}
-
-              {/* Prerequisite indicator */}
-              {task.prerequisite && (
-                <p className="text-xs text-amber-400 mt-2">
-                  ⚠️ Requiere completar tareas anteriores
-                </p>
               )}
             </div>
           </div>

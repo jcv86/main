@@ -632,6 +632,10 @@ export default function A2RoutesPage() {
                     <div className="p-4 space-y-3">
                       {tasks.map((task: any, taskIdx: number) => {
                         const taskId = getTaskId(days, task.day, task.title)
+                        // Day 1 is always unlocked; each subsequent day requires the previous day to be completed
+                        const prevTask = taskIdx > 0 ? tasks[taskIdx - 1] : null
+                        const prevTaskId = prevTask ? getTaskId(days, prevTask.day, prevTask.title) : null
+                        const isLocked = taskIdx > 0 && prevTaskId !== null && !completedTasks.has(prevTaskId)
                         return (
                           <TaskCard
                             key={taskIdx}
@@ -639,6 +643,7 @@ export default function A2RoutesPage() {
                             taskId={taskId}
                             completed={completedTasks.has(taskId)}
                             onComplete={() => handleTaskComplete(taskId)}
+                            locked={isLocked}
                           />
                         )
                       })}
