@@ -1,470 +1,408 @@
 # CTA & Button Flow Best Practices Guide
-
-## For Developers Working on Despega
-
-### Quick Start Rule
-**ONE primary CTA per page section. Everything else is a link or outline button.**
+**Implementation standards for Despega Tu Carrera**
 
 ---
 
-## The Problem We're Solving
+## Core Philosophy
 
-Users see multiple buttons and don't know which to click:
-```
-❌ WRONG:
-┌─────────────────────────────────────────┐
-│ Próximos Pasos                          │
-├─────────────────────────────────────────┤
-│ ┌───────────────┐  ┌───────────────┐   │
-│ │ Ver Detalle   │  │ Avanzar a A3  │   │
-│ └───────────────┘  └───────────────┘   │
-│ ┌───────────────────────────────────┐   │
-│ │ Hablar con el Coach               │   │
-│ └───────────────────────────────────┘   │
-└─────────────────────────────────────────┘
-   "Which button should I click?" 🤔
-```
+> **Users should never be confused about what to do next.**
+>
+> Each screen guides users toward ONE clear action. Secondary options are available but never compete with the primary CTA.
 
 ---
 
-## The Solution Pattern
+## The Despega User Journey
 
 ```
-✅ RIGHT:
-┌─────────────────────────────────────────┐
-│ Tu Siguiente Paso                       │
-├─────────────────────────────────────────┤
-│ 1. Complete your 90-day route          │
-│    Work through 3 phases...             │
-│                                         │
-│ 2. Then access Intensive Training       │
-│    ┌─────────────────────────────────┐  │
-│    │ Comenzar Entrenamiento Intensivo│  │
-│    │           →                      │  │
-│    └─────────────────────────────────┘  │
-│                                         │
-│ 💡 The plan is flexible. Chat anytime  │
-└─────────────────────────────────────────┘
-   "Clear next step!" ✓
+START
+  ↓
+Bienvenida → A2 → A3 → A4 → END
+(Welcome) (Planning) (Training) (Execution)
 ```
+
+Each page should facilitate moving to the NEXT step without distraction.
 
 ---
 
-## The 5 Commandments
+## Design Pattern 1: Hero CTA (Intro Pages)
 
-### 1. ONE Primary CTA Per Section
-```typescript
-// ✅ DO THIS
-export function MyPage() {
+**Used on**: bienvenida, a2/intro, a3-intro, a4-intro
+
+### Structure
+```
+┌──────────────────────────────┐
+│   [Icon/Badge]               │
+│   Heading (H1)               │
+│   Description (2-3 lines)    │
+│                              │
+│ [FULL-WIDTH PRIMARY CTA]     │
+│ Comenzar el Viaje            │
+│ → (arrow icon)               │
+└──────────────────────────────┘
+```
+
+### Code Example
+```tsx
+export default function Page() {
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardContent>
-          <h2>What You'll Learn</h2>
-          <p>Details about the training...</p>
+    <main className="min-h-screen bg-black flex items-center justify-center p-4">
+      <Card className="bg-gradient-to-br from-purple/10 to-blue/10 max-w-2xl w-full">
+        <CardContent className="pt-12 pb-12 px-8 text-center space-y-6">
+          {/* Icon/Badge */}
+          <div className="flex justify-center">
+            <div className="w-16 h-16 rounded-full bg-purple/30 flex items-center justify-center">
+              <span className="text-3xl">🚀</span>
+            </div>
+          </div>
+
+          {/* Heading */}
+          <h1 className="text-4xl font-bold text-white">
+            Bienvenido al Viaje de Transformación
+          </h1>
+
+          {/* Description */}
+          <p className="text-lg text-white/80 max-w-xl mx-auto">
+            Tu camino hacia la excelencia en entrevistas y desarrollo 
+            profesional está dividido en 4 pilares fundamentales.
+          </p>
+
+          {/* PRIMARY CTA - ONLY BUTTON */}
+          <div className="pt-4">
+            <Button
+              onClick={() => router.push('/despega/conozcamonos-1')}
+              className="w-full bg-purple/80 hover:bg-purple/70 text-white py-6 px-8 text-lg font-semibold rounded-lg"
+            >
+              Comenzar el Viaje
+              <ArrowRight className="w-5 h-5 ml-2" />
+            </Button>
+          </div>
+
+          {/* OPTIONAL: Secondary link (NOT button) */}
+          <p className="text-sm text-white/60 pt-2">
+            Questions? <a href="#help" className="text-purple hover:underline">Learn more</a>
+          </p>
         </CardContent>
       </Card>
-      
-      {/* SINGLE primary CTA */}
-      <Button className="w-full bg-purple/80 hover:bg-purple/70 py-6">
-        Comenzar Entrenamientos
-        <ArrowRight className="w-5 h-5 ml-2" />
-      </Button>
-    </div>
+    </main>
   )
 }
 ```
 
-```typescript
-// ❌ DON'T DO THIS
-export function MyPage() {
-  return (
-    <div className="grid grid-cols-3 gap-4">
-      {/* Multiple competing buttons - WRONG! */}
-      <Button className="bg-purple/80">Start Training</Button>
-      <Button className="bg-blue/80">View Guide</Button>
-      <Button className="bg-green/80">Chat Support</Button>
-    </div>
-  )
-}
-```
+### Rules
+✅ DO:
+- One and only ONE filled button
+- Full width or very prominent
+- Button uses primary brand color (purple/80)
+- Arrow icon on right side
+- Clear, action-oriented text
+- Optional secondary link (not button) below
 
-### 2. Secondary Actions Are Links/Outlines
-```typescript
-// ✅ DO THIS
-<div className="space-y-4">
-  {/* Primary filled button */}
-  <Button className="w-full bg-purple/80">Primary Action</Button>
-  
-  {/* Secondary as link */}
-  <Link href="/help" className="text-sm text-purple/80 hover:underline">
-    View Help Guide →
-  </Link>
-  
-  {/* Or as outline button */}
-  <Button variant="outline" className="w-full">
-    Secondary Action
-  </Button>
-</div>
-```
-
-```typescript
-// ❌ DON'T DO THIS
-<div className="grid grid-cols-2 gap-4">
-  {/* Multiple filled buttons - confusing! */}
-  <Button className="bg-purple/80">Action 1</Button>
-  <Button className="bg-blue/80">Action 2</Button>
-</div>
-```
-
-### 3. Show Clear Steps for Multi-Step Actions
-```typescript
-// ✅ DO THIS - Clear progression
-<Card className="bg-gradient-to-r from-purple/20 to-blue/20 p-6">
-  <CardContent className="space-y-6">
-    {/* Step 1 */}
-    <div className="space-y-2">
-      <p className="text-lg font-bold">1. Complete Your Route</p>
-      <p className="text-white/85">Work through phases 1-3...</p>
-    </div>
-    
-    {/* Step 2 - with CTA */}
-    <div className="space-y-3">
-      <p className="text-lg font-bold">2. Access Intensive Training</p>
-      <p className="text-white/85">Advanced practice sessions...</p>
-      <Button className="w-full bg-purple/80">
-        Ir a Entrenamientos Avanzados
-        <ArrowRight className="w-5 h-5 ml-2" />
-      </Button>
-    </div>
-  </CardContent>
-</Card>
-```
-
-### 4. Button Text Must Be Clear & Specific
-```typescript
-// ✅ DO THIS - User knows exactly what happens
-<Button>Comenzar Entrenamientos</Button>
-<Button>Ir a Entrenamiento Intensivo</Button>
-<Button>Ver Mi Progreso</Button>
-
-// ❌ DON'T DO THIS - Vague/confusing
-<Button>Continuar</Button>          // Where to?
-<Button>Siguiente</Button>          // Next what?
-<Button>OK</Button>                 // OK what?
-<Button>Avanzar a A3</Button>       // Users don't know what A3 is
-```
-
-### 5. Use Visual Hierarchy to Show Importance
-```typescript
-// ✅ DO THIS - Clear priority
-<div className="space-y-4">
-  {/* Primary - large, filled, prominent */}
-  <Button size="lg" className="w-full bg-purple/80 hover:bg-purple/70 h-12 text-base font-semibold">
-    Primary Action (most important)
-    <ArrowRight className="w-5 h-5 ml-2" />
-  </Button>
-  
-  {/* Secondary - smaller, outline */}
-  <Button variant="outline" size="sm" className="w-full">
-    Secondary Action
-  </Button>
-  
-  {/* Tertiary - link */}
-  <Link href="/help" className="text-sm text-purple/80 hover:underline text-center block">
-    Need help?
-  </Link>
-</div>
-```
+❌ DON'T:
+- Multiple buttons of equal prominence
+- "Learn More" as a button (use link)
+- Competing CTAs
+- Tiny buttons
+- Text-only next step
 
 ---
 
-## Code Patterns by Page Type
+## Design Pattern 2: Linear Journey Flow
 
-### Pattern A: Single Action Page (a3-intro)
-```typescript
-export default function Page() {
-  const router = useRouter()
-  
-  return (
-    <div className="max-w-3xl mx-auto space-y-8">
-      {/* Hero with description */}
-      <div className="space-y-4">
-        <h1 className="text-4xl font-bold">
-          Section Title
-        </h1>
-        <p className="text-lg text-white/85">
-          Description of what this section is about...
-        </p>
-      </div>
-      
-      {/* Key benefits/features */}
-      <Card>
-        <CardContent className="space-y-3">
-          <div className="flex gap-3">
-            <CheckCircle2 className="w-5 h-5 text-purple flex-shrink-0" />
-            <p>Benefit 1</p>
-          </div>
-          <div className="flex gap-3">
-            <CheckCircle2 className="w-5 h-5 text-purple flex-shrink-0" />
-            <p>Benefit 2</p>
-          </div>
-        </CardContent>
-      </Card>
-      
-      {/* SINGLE primary CTA at bottom */}
-      <Button 
-        onClick={() => router.push('/next-page')}
-        className="w-full bg-purple/80 hover:bg-purple/70 py-6 text-base font-semibold"
-      >
-        Clear Action Description
-        <ArrowRight className="w-5 h-5 ml-2" />
-      </Button>
-    </div>
-  )
-}
+**Used on**: a2-routes, any multi-step completion page
+
+### Structure
+```
+┌──────────────────────────────┐
+│ Content Section              │
+│ - Progress indicators        │
+│ - Achievements              │
+│ - Resources                 │
+└──────────────────────────────┘
+         ↓
+┌──────────────────────────────┐
+│ Your Next Step               │
+│                              │
+│ 1. Complete Phase 1          │
+│    Description of phase...   │
+│                              │
+│ 2. Then Do This             │
+│    Description...            │
+│    [PRIMARY CTA BUTTON]      │
+│                              │
+│ Need help?                  │
+│ <link>Talk to coach</link>  │
+└──────────────────────────────┘
 ```
 
-### Pattern B: Multi-Step Journey (a2-routes)
-```typescript
+### Code Example
+```tsx
 export default function Page() {
-  const router = useRouter()
-  
   return (
-    <div className="max-w-3xl mx-auto">
-      {/* Main content sections */}
-      <div className="space-y-6 mb-12">
-        {/* ... your page content ... */}
-      </div>
-      
-      {/* Single clear next step section */}
+    <main className="space-y-12 pb-12">
+      {/* Content sections */}
+      <ProgressTracker />
+      <Achievements />
+      <ResourceLibrary />
+
+      {/* NEXT STEPS - Clear linear flow */}
       <div className="pt-8 border-t border-white/10">
         <Card className="bg-gradient-to-r from-purple/20 to-blue/20 border-2 border-purple/40">
           <CardHeader>
-            <CardTitle className="text-2xl">
+            <CardTitle className="flex items-center gap-2 text-white text-2xl">
+              <CheckCircle2 className="w-6 h-6" />
               Tu Siguiente Paso
             </CardTitle>
           </CardHeader>
+
           <CardContent className="space-y-6">
             {/* Step 1 */}
             <div className="space-y-3">
-              <p className="text-white/90 text-lg">
-                <strong>1. Complete your 90-day route:</strong>
+              <p className="text-white/90 text-lg font-bold">
+                1. Completa tu ruta de 90 días
               </p>
               <p className="text-white/80">
-                Work through 3 phases, mark tasks complete...
+                Trabaja en las 3 fases de tu plan personalizado.
+                Marca cada tarea completada.
               </p>
             </div>
-            
-            {/* Step 2 - with CTA */}
+
+            {/* Step 2 - WITH PRIMARY CTA */}
             <div className="space-y-3">
-              <p className="text-white/90 text-lg">
-                <strong>2. Then access Intensive Training:</strong>
+              <p className="text-white/90 text-lg font-bold">
+                2. Accede a Entrenamiento Intensivo
               </p>
               <p className="text-white/80 mb-4">
-                Advanced practice and real interview prep...
+                Practica con entrenamientos avanzados y prepárate 
+                para entrevistas reales.
               </p>
-              <Button 
-                onClick={() => router.push('/a3')}
-                className="w-full bg-purple/80 hover:bg-purple/70 text-white py-6 text-base font-semibold"
+
+              {/* PRIMARY CTA - ONLY FILLED BUTTON */}
+              <Button
+                onClick={() => router.push('/despega/a3')}
+                className="w-full bg-purple/80 hover:bg-purple/70 py-6 text-base font-semibold"
               >
                 Comenzar Entrenamiento Intensivo
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </div>
-            
-            {/* Optional helpful tip */}
-            <div className="p-4 bg-background/80 border border-white/10 rounded-lg">
+
+            {/* Support link - NOT button */}
+            <div className="pt-4 border-t border-white/10">
               <p className="text-white/80 text-sm">
-                <strong>💡 Tip:</strong> The plan is flexible. Chat with coach anytime.
+                💡 The plan is flexible. 
+                <a href="#coach" className="text-purple hover:underline ml-1">
+                  Talk to your coach
+                </a> anytime.
               </p>
             </div>
           </CardContent>
         </Card>
       </div>
-    </div>
+    </main>
   )
 }
 ```
 
-### Pattern C: Dashboard with Tabs
-```typescript
+### Rules
+✅ DO:
+- Show progress/content FIRST
+- Use numbered steps (1, 2, 3)
+- ONE primary button (in step 2 or last step)
+- Support contact as TEXT LINK only
+- Clear progression ("1. Do this... 2. Then this...")
+
+❌ DON'T:
+- Multiple buttons at same level
+- Competing CTAs
+- Buttons for "Learn More" or "Help"
+- Unclear step progression
+- Text-only next steps
+
+---
+
+## Design Pattern 3: Dashboard with Tabs
+
+**Used on**: a4/page.tsx, a2/dashboard
+
+### Structure
+```
+┌──────────────────────────────┐
+│ [Hero CTA - Optional]        │
+│ Primary action for section   │
+│ [BUTTON]                     │
+└──────────────────────────────┘
+         ↓
+┌──────────────────────────────┐
+│ [Tab Navigation]             │
+│ Tab 1 | Tab 2 | Tab 3        │
+└──────────────────────────────┘
+         ↓
+┌──────────────────────────────┐
+│ Tab 1 Content                │
+│ (with its own CTAs)          │
+└──────────────────────────────┘
+```
+
+### Code Example
+```tsx
 export default function Page() {
-  const [activeTab, setActiveTab] = useState('primary')
-  
+  const [activeTab, setActiveTab] = useState('dashboard')
+
   return (
-    <div className="space-y-8">
-      {/* Hero with PRIMARY CTA if applicable */}
-      <div>
-        <h1 className="text-4xl font-bold mb-4">Dashboard Title</h1>
-        <p className="text-white/85 mb-6">Description...</p>
-        
-        {/* Only show primary CTA if it's the main action */}
-        <Button className="bg-purple/80 hover:bg-purple/70">
-          Primary Action
-        </Button>
-      </div>
-      
-      {/* Tabs for different views */}
+    <main className="space-y-8">
+      {/* Optional: Hero CTA for primary action */}
+      <Card className="bg-gradient-to-r from-purple/20 to-blue/20">
+        <CardContent className="pt-6 space-y-4">
+          <h2 className="text-2xl font-bold text-white">Comienza tus Entrenamientos</h2>
+          <p className="text-white/80">Selecciona un escenario y practica ahora</p>
+          <Button className="bg-purple/80 hover:bg-purple/70">
+            Comenzar Sesión de Práctica
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Tab Navigation */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="primary">Primary View</TabsTrigger>
-          <TabsTrigger value="secondary">Secondary</TabsTrigger>
-          {/* ... more tabs ... */}
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+          <TabsTrigger value="sessions">Sesiones</TabsTrigger>
+          <TabsTrigger value="results">Resultados</TabsTrigger>
         </TabsList>
-        
-        <TabsContent value="primary" className="space-y-4">
-          {/* Content for primary tab */}
+
+        {/* Tab Content - Each tab has own layout */}
+        <TabsContent value="dashboard">
+          <DashboardTab />
+        </TabsContent>
+
+        <TabsContent value="sessions">
+          <SessionsTab />
+        </TabsContent>
+
+        <TabsContent value="results">
+          <ResultsTab />
         </TabsContent>
       </Tabs>
-    </div>
+    </main>
   )
 }
 ```
 
+### Rules
+✅ DO:
+- Optional hero CTA for most important action
+- Tab navigation for different views
+- Each tab content follows its own primary CTA pattern
+- Landing tab is most important
+- Tabs are for VIEWING, not decision points
+
+❌ DON'T:
+- Competing buttons within same tab
+- Tabs with multiple CTAs of equal prominence
+- Unclear what each tab does
+- Too many tabs (limit to 3-5)
+
 ---
 
-## Common Mistakes to Avoid
+## Quick Reference: Button Styles
 
-### ❌ Mistake 1: Grid of Competing Buttons
-```typescript
+### Primary CTA Button
+```tsx
+className="w-full bg-purple/80 hover:bg-purple/70 text-white py-6 px-8 rounded-lg font-semibold text-base"
+```
+
+### Secondary Action Button
+```tsx
+className="w-full border-purple/50 hover:border-purple/40 text-white/80 hover:text-white py-3 px-6"
+// OR ghost variant
+className="text-white/60 hover:text-white/80 py-3 px-6"
+```
+
+### Tertiary Action (Link)
+```tsx
+className="text-purple/80 hover:text-purple/60 hover:underline text-sm"
+```
+
+---
+
+## Anti-Patterns to AVOID
+
+### ❌ Grid of Competing Buttons
+```tsx
 // WRONG - User doesn't know which to click
-<div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-  <Button className="bg-purple/80">Option 1</Button>
-  <Button className="bg-blue/80">Option 2</Button>
-  <Button className="bg-green/80">Option 3</Button>
+<div className="grid grid-cols-2 gap-4">
+  <Button className="bg-purple/80">Option A</Button>
+  <Button className="bg-blue/80">Option B</Button>
+  <Button className="bg-green/80">Option C</Button>
+  <Button className="bg-orange/80">Option D</Button>
+</div>
+
+// RIGHT - One primary action
+<Button className="w-full bg-purple/80">Continuar a Entrenamientos</Button>
+<div className="mt-4 text-center">
+  <a href="#" className="text-purple hover:underline text-sm">Ver otras opciones</a>
 </div>
 ```
 
-✅ **Fix**: Make all but one into links/outlines
-```typescript
-<div className="space-y-4">
-  <Button className="w-full bg-purple/80">Primary Option</Button>
-  <Link href="/option2">Secondary Option</Link>
-  <Link href="/option3">Tertiary Option</Link>
-</div>
+### ❌ "Learn More" as a Button
+```tsx
+// WRONG - Competing with primary action
+<Button>Comenzar</Button>
+<Button variant="outline">Ver Guía</Button>
+
+// RIGHT - Guide is a link
+<Button className="w-full">Comenzar</Button>
+<p className="text-sm mt-2">
+  <a href="/guide" className="text-purple hover:underline">View guide</a>
+</p>
 ```
 
-### ❌ Mistake 2: Confusing Button Text
-```typescript
-// WRONG - User confused
-<Button>Avanzar a A3</Button>
-<Button>Ir a Resultado</Button>
+### ❌ Vague Button Text
+```tsx
+// WRONG - User doesn't know what happens
 <Button>Continuar</Button>
-```
+<Button>Siguiente</Button>
+<Button>OK</Button>
 
-✅ **Fix**: Be specific and clear
-```typescript
-<Button>Comenzar Entrenamientos Intensivos</Button>
-<Button>Ver Mi Análisis de Progreso</Button>
-<Button>Hablar con el Coach</Button>
-```
-
-### ❌ Mistake 3: Mixing Multiple Filled Buttons
-```typescript
-// WRONG - All look equally important
-<div className="space-y-3">
-  <Button className="bg-purple/80">Action 1</Button>
-  <Button className="bg-blue/80">Action 2</Button>
-  <Button className="bg-green/80">Action 3</Button>
-</div>
-```
-
-✅ **Fix**: Only one filled, rest are outlines/links
-```typescript
-<div className="space-y-3">
-  <Button className="w-full bg-purple/80">Primary Action</Button>
-  <Button variant="outline" className="w-full">Secondary</Button>
-  <Link>Tertiary Option</Link>
-</div>
-```
-
-### ❌ Mistake 4: Scattered CTAs Without Clear Next Step
-```typescript
-// WRONG - Unclear progression
-<div className="space-y-4">
-  <Card with button>
-  <Card with button>
-  <Card with button>
-  <Card with button>
-  <!-- Where should user go? -->
-</div>
-```
-
-✅ **Fix**: One clear "Next Step" section at bottom
-```typescript
-<div className="space-y-4">
-  {/* Content cards without CTAs */}
-  <Card>Content</Card>
-  <Card>Content</Card>
-  
-  {/* Single clear next step at end */}
-  <Card className="border-2 border-purple/40">
-    <h3>Tu Siguiente Paso</h3>
-    <Button>Ir a Siguiente Fase</Button>
-  </Card>
-</div>
+// RIGHT - Clear, action-oriented
+<Button>Comenzar Entrenamientos</Button>
+<Button>Ir a Entrenamiento Intensivo</Button>
+<Button>Descargar Progreso en PDF</Button>
 ```
 
 ---
 
-## When to Break the Rules
+## Implementation Checklist for New Pages
 
-### OK to Have Multiple Buttons When:
-- They're all outline/ghost buttons (not filled)
-- They're links, not buttons
-- They're in a help/sidebar area (not main content flow)
-- They're in a tab interface (one tab at a time)
+Before launching, verify:
 
-### NOT OK to Have Multiple Filled Buttons:
-- In hero section
-- In primary content area
-- As "next steps" at bottom of page
-- When it confuses user about what to do next
-
----
-
-## Testing Your CTA Flow
-
-### Ask These Questions:
-1. **Can user identify primary action in 2 seconds?**
-   - YES ✅ = Good
-   - NO ❌ = Too many CTAs/confusing layout
-
-2. **Is button text clear about what happens next?**
-   - "Comenzar Entrenamientos" ✅ Clear
-   - "Continuar" ❌ Vague
-
-3. **Are secondary actions clearly secondary?**
-   - Links or outline buttons ✅ Good
-   - Filled buttons ❌ Wrong
-
-4. **Is there ONE obvious next step?**
-   - YES ✅ User knows where to go
-   - NO ❌ Need to simplify
+- [ ] **One Primary CTA** clearly identified
+- [ ] **Button Text Clear** - Verb + destination  
+- [ ] **No Competing Buttons** - Secondary options are links
+- [ ] **Mobile Responsive** - Full-width on mobile
+- [ ] **Accessibility** - WCAG AA contrast, proper labels
+- [ ] **Placement** - Natural end of content flow
+- [ ] **Visual Hierarchy** - Primary CTA obviously most prominent
+- [ ] **Brand Consistent** - Uses purple/80 color
+- [ ] **User Tested** - Can user identify next step in <2 seconds?
+- [ ] **Analytics Ready** - Click tracking in place
 
 ---
 
-## Questions & Answers
+## Summary of Best Practices
 
-**Q: What if users need multiple options?**
-A: Use a tab interface or separate sections. Only show one primary CTA per section.
-
-**Q: Can we use secondary buttons for "Skip" or "Learn More"?**
-A: YES - use outline/ghost buttons. These are secondary, not primary.
-
-**Q: What about mobile responsiveness?**
-A: Even MORE important on mobile. Users have less screen space, so clear priority is critical.
-
-**Q: How many sections can a page have?**
-A: As many as needed, but each section should have ONE primary CTA or NO CTA.
-
-**Q: What about forms?**
-A: Submit button is primary CTA. "Clear" and "Cancel" are outline/secondary.
+1. **One Primary CTA per decision point**
+2. **Secondary actions as links, not buttons**
+3. **Clear, action-oriented button text**
+4. **Visual hierarchy matters** (size, color, placement)
+5. **Mobile-first responsive design**
+6. **Accessibility is non-negotiable**
+7. **Measure and iterate** based on data
+8. **Consistency** across all pages
 
 ---
 
-## Document History
-- **2026-04-30**: Initial best practices created
-- Applies to: All pages in /despega directory
-- Status: Live - review quarterly
+**Version**: 1.0  
+**Last Updated**: April 30, 2026  
+**Maintained By**: Design & Engineering Teams  
+**Review Frequency**: Quarterly
