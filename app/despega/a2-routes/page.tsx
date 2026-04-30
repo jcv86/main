@@ -335,13 +335,11 @@ export default function A2RoutesPage() {
                 </Button>
               </div>
             </div>
-            </Card>
-          </div>
+          </Card>
         </div>
       </div>
-    </div>
-  )
-}
+    )
+  }
 
   return (
     <div className="min-h-screen bg-background p-8">
