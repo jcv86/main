@@ -478,10 +478,181 @@ export default function A2RoutesPage() {
                       <div className="text-right">
                         <p className="text-lg font-bold text-white">{Math.round(progressPercent)}%</p>
                         <p className="text-xs text-white/60">{progress.completed}/{progress.total} tareas</p>
+                      </div>
+                    </div>
+                    <div className="w-full bg-muted/60 rounded-full h-2.5">
+                      <div
+                        className="bg-gradient-to-r from-purple to-blue h-2.5 rounded-full transition-all duration-500"
+                        style={{ width: `${progressPercent}%` }}
+                      ></div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+            {/* Overall Progress Summary */}
+            <div className="mt-6 pt-6 border-t border-purple/20">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-white/80 mb-1">Progreso Total</p>
+                  <p className="text-2xl font-bold text-white">{Math.round((calculateTotalProgress().completed / calculateTotalProgress().total) * 100)}%</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-sm text-white/80 mb-1">{calculateTotalProgress().completed} de {calculateTotalProgress().total}</p>
+                  <p className="text-xs text-purple">Tareas completadas</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Current Status Card */}
+          <Card className="bg-gradient-to-br from-emerald-900/30 to-emerald-900/10 border-2 border-emerald-400/50 shadow-lg">
+            <CardContent className="pt-6">
+              <div className="flex items-start gap-4">
+                <CheckCircle2 className="w-8 h-8 text-emerald-400 flex-shrink-0 mt-1" />
+                <div className="flex-1">
+                  <h4 className="font-bold text-emerald-300 text-lg mb-1">Ruta Generada!</h4>
+                  <p className="text-sm text-white/85 mb-3">Tu plan de 90 días personalizado está listo y se adapta a tu ritmo</p>
+                  <div className="flex items-center gap-2 text-xs text-white/70">
+                    <Calendar className="w-4 h-4" />
+                    <span>Próximo hito: Completa la Fase 1 en los próximos 30 días</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Achievements & Recommendations Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <Card className="bg-transparent border-muted/80 lg:col-span-2">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <Trophy className="w-5 h-5 text-yellow-400" />
+                  Tus Logros Desbloqueados
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <AchievementsDisplay
+                  completedTasks={calculateTotalProgress().completed}
+                  totalTasks={calculateTotalProgress().total}
+                />
+              </CardContent>
+            </Card>
+
+            <Card className="bg-transparent border-muted/80">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <Zap className="w-5 h-5 text-purple" />
+                  Qué Sigue
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <RecommendationsDisplay
+                  recommendations={getSimpleRecommendations(
+                    completedTasks,
+                    route?.route_30days || [],
+                    route?.route_60days || [],
+                    route?.route_90days || []
+                  )}
+                />
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <Card className="bg-muted/30 border-muted/50 p-4">
+              <div className="text-center">
+                <p className="text-2xl font-bold text-purple mb-1">{calculateTotalProgress().completed}</p>
+                <p className="text-xs text-white/70">Tareas Completadas</p>
+              </div>
+            </Card>
+            <Card className="bg-muted/30 border-muted/50 p-4">
+              <div className="text-center">
+                <p className="text-2xl font-bold text-blue mb-1">{calculateTotalProgress().total - calculateTotalProgress().completed}</p>
+                <p className="text-xs text-white/70">Tareas Restantes</p>
+              </div>
+            </Card>
+            <Card className="bg-muted/30 border-muted/50 p-4">
+              <div className="text-center">
+                <p className="text-2xl font-bold text-emerald-400 mb-1">3</p>
+                <p className="text-xs text-white/70">Fases Disponibles</p>
+              </div>
+            </Card>
+            <Card className="bg-muted/30 border-muted/50 p-4">
+              <div className="text-center">
+                <p className="text-2xl font-bold text-yellow-400 mb-1">90</p>
+                <p className="text-xs text-white/70">Días de Plan</p>
+              </div>
+            </Card>
           </div>
         </div>
 
-        {/* Resources Library Section - At the END */}
+        {/* Main Route Breakdown - Tus 90 Días Estructurados */}
+        <Card className="bg-transparent border-muted/80">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-white text-2xl">
+              <MapPin className="w-7 h-7 text-purple" />
+              Tus 90 Días Estructurados
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {([30, 60, 90] as const).map((days) => {
+              const milestoneData = getMilestoneData(days)
+              const tasks = route[`route_${days}days` as keyof typeof route] as any[] || []
+              const phaseProgress = getPhaseProgress(days)
+              const isExpanded = expandedPhase === days
+              const phaseKey = `route_${days}days` as const
+
+              return (
+                <div key={days} className="border border-muted/50 rounded-lg overflow-hidden">
+                  <button
+                    onClick={() => setExpandedPhase(isExpanded ? null : days)}
+                    className="w-full flex items-center justify-between p-4 bg-muted/20 hover:bg-muted/30 transition-colors text-left"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${milestoneData.color}`}>
+                        {days === 30 ? '1' : days === 60 ? '2' : '3'}
+                      </div>
+                      <div>
+                        <p className="font-semibold text-white">{milestoneData.label}</p>
+                        <p className="text-xs text-white/60">{milestoneData.milestone} · {tasks.length} tareas</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-sm font-bold text-white">
+                        {phaseProgress.completed}/{phaseProgress.total}
+                      </span>
+                      <ArrowRight className={`w-4 h-4 text-white/60 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                    </div>
+                  </button>
+                  {isExpanded && (
+                    <div className="p-4 space-y-3">
+                      {tasks.map((task: any, taskIdx: number) => (
+                        <TaskCard
+                          key={taskIdx}
+                          task={task}
+                          phaseDays={days}
+                          isCompleted={completedTasks.has(getTaskId(task, days))}
+                          onToggle={(completed) => {
+                            if (completed) {
+                              markTaskComplete(task, days)
+                            } else {
+                              unmarkTaskComplete(task, days)
+                            }
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </CardContent>
+        </Card>
+
+        {/* Resources Library Section */}
         <div className="pt-8 border-t border-white/10">
           <ResourceLibrary />
         </div>
@@ -504,7 +675,6 @@ export default function A2RoutesPage() {
                   Trabaja en las 3 fases de tu plan personalizado (Fundamentos → Aceleración → Dominio). Marca cada tarea completada para rastrear tu progreso.
                 </p>
               </div>
-
               <div className="space-y-3">
                 <p className="text-white/90 text-lg">
                   <strong>2. Entonces accede a Entrenamiento Intensivo:</strong>
@@ -512,7 +682,7 @@ export default function A2RoutesPage() {
                 <p className="text-white/80 mb-4">
                   Una vez completes tu ruta, estarás listo para practicar con entrenamientos avanzados y prepararte para entrevistas reales.
                 </p>
-                <Button 
+                <Button
                   onClick={() => router.push('/despega/a3')}
                   className="w-full bg-purple/80 hover:bg-purple/70 text-white py-6 text-base font-semibold"
                 >
@@ -520,15 +690,15 @@ export default function A2RoutesPage() {
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </div>
-
               <div className="p-4 bg-background/80 border border-white/10 rounded-lg">
                 <p className="text-white/80 text-sm">
-                  <strong>💡 Tip:</strong> El plan es flexible. Si necesitas cambios o tienes preguntas, habla con el coach en cualquier momento.
+                  El plan es flexible. Si necesitas cambios o tienes preguntas, habla con el coach en cualquier momento.
                 </p>
               </div>
             </CardContent>
           </Card>
         </div>
+
       </div>
     </div>
   )
