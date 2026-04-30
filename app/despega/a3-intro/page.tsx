@@ -63,12 +63,12 @@ export default function A3IntroPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-muted-foreground dark:text-white/85">
-                A3 es tu fase de práctica de alto impacto. Realizarás simulaciones de entrevistas estructuradas donde recibirás feedback inmediato de IA y podrás iterar tu desempeño hasta llegar a la confianza de nivel profesional.
+              <p className="text-white leading-relaxed text-lg">
+                Esta es tu fase de práctica de alto impacto. Realizarás simulaciones de entrevistas estructuradas donde recibirás feedback inmediato de IA y podrás iterar tu desempeño hasta llegar a la confianza de nivel profesional.
               </p>
-              <div className="bg-blue/5 dark:bg-cyan-950 p-4 rounded-[28px] border border-blue/30 dark:border-cyan">
-                <p className="text-sm text-cyan-700 dark:text-cyan-300 font-medium">
-                  <span className="font-semibold">Tu objetivo en A3:</span> Pasar de "conozco las respuestas" a "puedo responder con seguridad bajo presión".
+              <div className="bg-cyan/20 p-6 rounded-xl border-2 border-cyan/40">
+                <p className="text-white font-semibold text-lg">
+                  <span className="text-cyan">Tu objetivo aquí:</span> Pasar de "conozco las respuestas" a "puedo responder con seguridad bajo presión".
                 </p>
               </div>
             </CardContent>
@@ -173,15 +173,15 @@ export default function A3IntroPage() {
             </CardContent>
           </Card>
 
-          <div className="p-6 bg-blue rounded-lg shadow-lg">
-            <h3 className="text-xl font-bold text-white mb-2">Listo para entrenar?</h3>
-            <p className="text-white mb-6">Entra al dashboard y elige tu modalidad de entrenamiento.</p>
+          <div className="p-8 bg-gradient-to-r from-cyan/20 to-blue/20 border-2 border-cyan/40 rounded-xl shadow-lg">
+            <h3 className="text-2xl font-bold text-white mb-4">Listo para Entrenar?</h3>
+            <p className="text-white/90 text-lg mb-6">Entra al dashboard, elige tu modalidad de entrenamiento y comienza a simular entrevistas reales.</p>
             <Button 
               onClick={() => router.push('/despega/a3')}
-              className="w-full bg-white text-cyan hover:bg-blue/5 font-semibold"
+              className="w-full bg-cyan hover:bg-cyan/90 text-black font-bold text-lg py-6"
             >
               Ir a Entrenamiento Intensivo
-              <ArrowRight className="w-4 h-4 ml-2" />
+              <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
         </div>

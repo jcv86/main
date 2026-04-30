@@ -14,33 +14,39 @@ export default function A3DashboardPage() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <div className="container max-w-6xl mx-auto px-4 py-16">
-        <div className="text-center mb-12 space-y-4">
-          <h1 className="text-5xl font-bold text-white">Tu Entrenamiento A3</h1>
-          <p className="text-xl text-white/70 max-w-2xl mx-auto">
-            Prepárate para entrevistas con práctica guiada, feedback de IA y análisis profundo.
-          </p>
+        <div className="space-y-6 mb-12">
+          <div>
+            <h1 className="text-5xl md:text-6xl font-black text-white mb-3 flex items-center gap-4">
+              <span className="text-5xl">💪</span> Entrenamiento Intensivo
+            </h1>
+            <p className="text-xl text-white/85 max-w-3xl leading-relaxed">
+              Prepárate para entrevistas reales con práctica guiada, feedback de IA en tiempo real y análisis profundo de tu desempeño.
+            </p>
+          </div>
         </div>
 
         {/* Base Foundation Section */}
-        <div className="mb-16 space-y-4">
+        <div className="mb-16 space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Tu Base Profesional</h2>
-            <p className="text-muted-foreground dark:text-muted-foreground">
-              Comienza aquí: prepara tu presencia, pitch y documentación.
+            <h2 className="text-4xl font-bold text-white mb-3">Tu Base Profesional</h2>
+            <p className="text-lg text-white/85">
+              Comienza aquí: prepara tu presencia, pitch y documentación antes de las simulaciones.
             </p>
           </div>
 
-          <Card className="border border-blue/30 hover:shadow-lg transition">
+          <Card className="border-2 border-cyan/40 hover:shadow-xl transition bg-gradient-to-br from-cyan/10 to-blue/10">
             <CardHeader>
-              <CardTitle className="text-xl">Entrevista 0: Tu Base Profesional</CardTitle>
+              <CardTitle className="text-2xl flex items-center gap-3 text-white">
+                <span className="text-3xl">🔍</span> Auditoría: Tu Base Profesional
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-muted-foreground">
-                Auditoría completa de tu entorno, presencia, audio y pitch inicial. Identifica qué mejorar antes de practicar.
+              <p className="text-white/90 text-lg leading-relaxed">
+                Auditoría completa de tu entorno, presencia, audio y pitch inicial. Identifica qué mejorar antes de practicar simulaciones.
               </p>
               <Link href="/despega/interview-0" className="block">
-                <Button className="w-full bg-blue hover:bg-cyan text-white">
-                  Comenzar Auditoría <ArrowRight className="ml-2 w-4 h-4" />
+                <Button className="w-full bg-cyan hover:bg-cyan/90 text-black font-bold text-lg py-6">
+                  Comenzar Auditoría <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
             </CardContent>
@@ -48,11 +54,11 @@ export default function A3DashboardPage() {
         </div>
 
         {/* Preparation Modules Section */}
-        <div className="space-y-4 mb-16">
+        <div className="space-y-6 mb-16">
           <div>
-            <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Módulos de Preparación</h2>
-            <p className="text-muted-foreground dark:text-muted-foreground">
-              Construye tu base profesional completa antes de practicar entrevistas simuladas.
+            <h2 className="text-4xl font-bold text-white mb-3">Módulos de Entrenamiento</h2>
+            <p className="text-lg text-white/85">
+              Elige tu modalidad y comienza a simular entrevistas reales con feedback de IA inmediato.
             </p>
           </div>
 
