@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
+import useSWR from 'swr'
 import { Button } from '@/components/ui/button'
 import { 
   Menu, 
@@ -13,10 +14,19 @@ import {
   MapPin,
   Zap,
   Radar,
-  LogOut
+  LogOut,
+  User,
+  Settings
 } from 'lucide-react'
-import { XPNavbarBadge } from './xp-navbar-badge'
-import { A2ProgressNavbarBadge } from './a2-progress-navbar-badge'
+
+interface XPData {
+  total_xp: number
+  current_level: number
+  xp_to_next_level: number
+  daily_streak: number
+}
+
+const fetcher = (url: string) => fetch(url).then((res) => res.json())
 
 const stages = [
   {
@@ -86,9 +96,22 @@ export function DespegaNavbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [expandedStage, setExpandedStage] = useState<string | null>(null)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
+  const [profileOpen, setProfileOpen] = useState(false)
   const router = useRouter()
   const pathname = usePathname()
   const dropdownRef = useRef<HTMLDivElement>(null)
+  const profileRef = useRef<HTMLDivElement>(null)
+
+  const { data: xpData, isLoading: xpLoading } = useSWR<XPData>(
+    '/api/gamification/global',
+    fetcher,
+    {
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+      refreshInterval: 5000,
+      dedupingInterval: 2000,
+    }
+  )
 
   const getCurrentPhase = () => {
     if (pathname.includes('conozcamonos-1') || pathname.includes('a1-cerebral') || pathname.includes('a1-report')) return 'ritual'
@@ -100,11 +123,14 @@ export function DespegaNavbar() {
 
   const currentPhase = getCurrentPhase()
 
-  // Close dropdown when clicking outside
+  // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
         setOpenDropdown(null)
+      }
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setProfileOpen(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -195,19 +221,91 @@ export function DespegaNavbar() {
             })}
           </div>
 
-          {/* Desktop right side */}
-          <div className="hidden md:flex items-center gap-4">
-            <A2ProgressNavbarBadge />
-            <XPNavbarBadge />
-            <Button
-              onClick={handleLogout}
-              variant="outline"
-              size="sm"
-              className="gap-1.5 border-white/20 text-white/60 hover:bg-white/5 hover:text-white text-xs"
+          {/* Desktop right side — Profile Menu */}
+          <div ref={profileRef} className="hidden md:flex items-center gap-4 relative">
+            {/* Profile Button */}
+            <button
+              onClick={() => setProfileOpen(!profileOpen)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white/10 transition-colors"
             >
-              <LogOut className="w-3.5 h-3.5" />
-              Salir
-            </Button>
+              <div className="flex flex-col items-end gap-0.5">
+                {!xpLoading && xpData && (
+                  <>
+                    <span className="text-xs font-bold text-white">L{xpData.current_level}</span>
+                    <span className="text-[10px] text-white/60">{(xpData.total_xp / 1000).toFixed(1)}k XP</span>
+                  </>
+                )}
+              </div>
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue/40 to-purple/40 border border-white/20 flex items-center justify-center flex-shrink-0">
+                <User className="w-4 h-4 text-white/80" />
+              </div>
+            </button>
+
+            {/* Profile Dropdown */}
+            {profileOpen && (
+              <div className="absolute right-0 top-full mt-2 w-48 rounded-xl bg-[#0a0a0a] border border-white/10 shadow-2xl z-[9999] overflow-hidden">
+                <div className="px-4 py-3 border-b border-white/10">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue/40 to-purple/40 border border-white/20 flex items-center justify-center">
+                      <User className="w-4 h-4 text-white/80" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-semibold text-white">Tu Perfil</p>
+                      {!xpLoading && xpData && (
+                        <p className="text-xs text-white/60">Lvl {xpData.current_level}</p>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="px-2 py-2 space-y-1">
+                  {/* XP & Stats */}
+                  {!xpLoading && xpData && (
+                    <div className="px-3 py-2 rounded-lg bg-white/5 border border-white/10">
+                      <div className="text-xs text-white/60 mb-1">Estadísticas</div>
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-white/70">XP Total</span>
+                          <span className="font-semibold text-white">{(xpData.total_xp / 1000).toFixed(1)}k</span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-white/70">Racha</span>
+                          <span className="font-semibold text-orange-400">{xpData.daily_streak} días</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Menu Items */}
+                  <Link href="/despega/progress" onClick={() => setProfileOpen(false)}>
+                    <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-white/60 hover:text-white hover:bg-white/10 transition-all cursor-pointer">
+                      <Zap className="w-4 h-4" />
+                      Mi Progreso
+                    </div>
+                  </Link>
+
+                  <Link href="/despega/settings" onClick={() => setProfileOpen(false)}>
+                    <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-white/60 hover:text-white hover:bg-white/10 transition-all cursor-pointer">
+                      <Settings className="w-4 h-4" />
+                      Preferencias
+                    </div>
+                  </Link>
+                </div>
+
+                <div className="px-2 py-2 border-t border-white/10">
+                  <button
+                    onClick={() => {
+                      setProfileOpen(false)
+                      handleLogout()
+                    }}
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-red-400/80 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    Salir
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Mobile button */}
@@ -269,15 +367,47 @@ export function DespegaNavbar() {
               )
             })}
 
-            <Button
-              onClick={handleLogout}
-              variant="outline"
-              size="sm"
-              className="w-full justify-start gap-2 mt-2 border-white/20 text-white/60 hover:bg-white/5 hover:text-white"
-            >
-              <LogOut className="w-4 h-4" />
-              Salir
-            </Button>
+            {/* Mobile Profile Section */}
+            <div className="mt-4 pt-4 border-t border-white/10 space-y-2">
+              {!xpLoading && xpData && (
+                <div className="px-3 py-2 rounded-lg bg-white/5 border border-white/10">
+                  <div className="text-xs text-white/60 mb-1">Tu Nivel</div>
+                  <div className="space-y-1">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-white">Nivel {xpData.current_level}</span>
+                      <span className="font-semibold text-white">{(xpData.total_xp / 1000).toFixed(1)}k XP</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <Link href="/despega/progress">
+                <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-white/60 hover:text-white hover:bg-white/5">
+                  <Zap className="w-4 h-4" />
+                  Mi Progreso
+                </Button>
+              </Link>
+
+              <Link href="/despega/settings">
+                <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-white/60 hover:text-white hover:bg-white/5">
+                  <Settings className="w-4 h-4" />
+                  Preferencias
+                </Button>
+              </Link>
+
+              <Button
+                onClick={() => {
+                  setIsOpen(false)
+                  handleLogout()
+                }}
+                variant="outline"
+                size="sm"
+                className="w-full justify-start gap-2 border-white/20 text-red-400/80 hover:text-red-400 hover:bg-red-500/10"
+              >
+                <LogOut className="w-4 h-4" />
+                Salir
+              </Button>
+            </div>
           </div>
         )}
       </div>
