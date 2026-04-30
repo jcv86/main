@@ -309,7 +309,7 @@ export default function A2RoutesPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="h-8 w-8 animate-spin text-white0" />
+          <Loader2 className="h-8 w-8 animate-spin text-white" />
           <p className="text-white/85">Generando tu ruta personalizada...</p>
         </div>
       </div>
