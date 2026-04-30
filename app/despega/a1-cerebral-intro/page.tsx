@@ -67,26 +67,26 @@ export default function A1CerebralIntroPage() {
                 ¿Qué es esta Evaluación?
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-white/75 dark:text-white/85">
-                El Análisis Cerebral es una evaluación de comportamiento inspirada en metodologías reconocidas que identifica tu estilo natural de comunicación y liderazgo. Basado en cuatro dimensiones principales:
+            <CardContent className="space-y-6">
+              <p className="text-lg text-white/90 leading-relaxed">
+                El Análisis Cerebral identifica tu estilo natural de comunicación y liderazgo según cuatro dimensiones:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-4 bg-red/5 dark:bg-red rounded-[28px] border border-red/20 dark:border-red">
-                  <p className="font-semibold text-white mb-1">Impulsor</p>
-                  <p className="text-sm text-white">Enfocado en resultados, decisivo, impulsivo</p>
+                <div className="p-5 bg-red/20 dark:bg-red/25 border-2 border-red rounded-xl">
+                  <p className="font-bold text-red mb-2 text-lg">🔴 Impulsor</p>
+                  <p className="text-white/85 text-sm">Enfocado en resultados, decisivo, impulsivo</p>
                 </div>
-                <div className="p-4 bg-yellow/5 dark:bg-yellow rounded-[28px] border border-yellow/20 dark:border-yellow">
-                  <p className="font-semibold text-white mb-1">Catalizador</p>
-                  <p className="text-sm text-white">Comunicativo, entusiasta, orientado a personas</p>
+                <div className="p-5 bg-yellow/20 dark:bg-yellow/25 border-2 border-yellow rounded-xl">
+                  <p className="font-bold text-yellow mb-2 text-lg">🟡 Catalizador</p>
+                  <p className="text-white/85 text-sm">Comunicativo, entusiasta, orientado a personas</p>
                 </div>
-                <div className="p-4 bg-green/5 dark:bg-green rounded-[28px] border border-green/20 dark:border-green">
-                  <p className="font-semibold text-white mb-1">Estabilizador</p>
-                  <p className="text-sm text-white">Estable, cooperativo, confiable, paciente</p>
+                <div className="p-5 bg-green/20 dark:bg-green/25 border-2 border-green rounded-xl">
+                  <p className="font-bold text-green mb-2 text-lg">🟢 Estabilizador</p>
+                  <p className="text-white/85 text-sm">Estable, cooperativo, confiable, paciente</p>
                 </div>
-                <div className="p-4 bg-blue/5 dark:bg-blue rounded-[28px] border border-blue/30 dark:border-blue/10">
-                  <p className="font-semibold text-white mb-1">Arquitecto</p>
-                  <p className="text-sm text-white">Analítico, detallista, exigente con calidad</p>
+                <div className="p-5 bg-blue/20 dark:bg-blue/25 border-2 border-blue rounded-xl">
+                  <p className="font-bold text-blue mb-2 text-lg">🔵 Arquitecto</p>
+                  <p className="text-white/85 text-sm">Analítico, detallista, exigente con calidad</p>
                 </div>
               </div>
             </CardContent>
@@ -142,8 +142,8 @@ export default function A1CerebralIntroPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   {/* MÁS column */}
                   <div>
-                    <p className="text-sm font-semibold text-green/40 mb-4 flex items-center gap-2">
-                      <span className="bg-green text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">+</span>
+                    <p className="text-base font-bold text-green mb-6 flex items-center gap-2">
+                      <span className="bg-green text-white rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold">+</span>
                       MÁS como yo
                     </p>
                     <div className="space-y-3">
@@ -168,8 +168,8 @@ export default function A1CerebralIntroPage() {
 
                   {/* MENOS column */}
                   <div>
-                    <p className="text-sm font-semibold text-red/40 mb-4 flex items-center gap-2">
-                      <span className="bg-red text-white rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">−</span>
+                    <p className="text-base font-bold text-red mb-6 flex items-center gap-2">
+                      <span className="bg-red text-white rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold">−</span>
                       MENOS como yo
                     </p>
                     <div className="space-y-3">
@@ -203,28 +203,29 @@ export default function A1CerebralIntroPage() {
           </Card>
 
           {/* Benefits */}
-          <Card className="border-0 shadow-lg bg-blue/5 dark:bg-blue">
+          <Card className="border-0 shadow-lg bg-blue dark:bg-blue/30 border-l-4 border-blue">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl text-blue dark:text-white">
+              <CardTitle className="text-2xl text-white flex items-center gap-2">
+                <Zap className="w-6 h-6 text-blue" />
                 ¿Por qué es importante?
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-blue dark:text-white">
-              <div className="flex gap-3">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue" />
-                <p>Entiende tu estilo de comunicación natural</p>
+            <CardContent className="space-y-4 text-white/85">
+              <div className="flex gap-3 items-start">
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-green mt-0.5" />
+                <p className="leading-relaxed">Entiende tu estilo de comunicación natural para adaptarte mejor en entrevistas</p>
               </div>
-              <div className="flex gap-3">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue" />
-                <p>Identifica tus fortalezas en situaciones de entrevista</p>
+              <div className="flex gap-3 items-start">
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-green mt-0.5" />
+                <p className="leading-relaxed">Identifica tus fortalezas clave que los empleadores buscan</p>
               </div>
-              <div className="flex gap-3">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue" />
-                <p>Reconoce áreas de desarrollo personal</p>
+              <div className="flex gap-3 items-start">
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-green mt-0.5" />
+                <p className="leading-relaxed">Reconoce áreas de desarrollo personal para mejorar continuamente</p>
               </div>
-              <div className="flex gap-3">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-blue" />
-                <p>Adapta tu comunicación según el contexto laboral</p>
+              <div className="flex gap-3 items-start">
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-green mt-0.5" />
+                <p className="leading-relaxed">Personaliza tus respuestas según el tipo de rol y empresa</p>
               </div>
             </CardContent>
           </Card>
