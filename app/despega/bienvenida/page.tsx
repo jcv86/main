@@ -51,24 +51,45 @@ export default function BienvenidaPage() {
         />
 
         {/* Pilares Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12 auto-rows-max">
-          {/* Step 1 */}
-          <Card className="border-0 shadow-sm bg-white dark:bg-card h-fit">
-            <CardContent className="pt-6">
-              <div className="flex flex-col items-center text-center">
-                <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-purple/10 dark:bg-purple mb-4">
-                  <span className="text-xl font-bold text-purple dark:text-purple-200">1</span>
+        <div className="space-y-6 mb-12">
+          {/* Step 1 - A1 Section - Enhanced */}
+          <Card className="border-0 shadow-md bg-gradient-to-br from-purple/10 to-pink/10 dark:from-purple/20 dark:to-pink/20">
+            <CardContent className="pt-8 pb-8 px-8">
+              <div className="flex items-start gap-6">
+                <div className="flex items-center justify-center w-16 h-16 rounded-[28px] bg-purple/30 flex-shrink-0">
+                  <span className="text-3xl font-bold text-purple">1</span>
                 </div>
-                <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Conozcámonos</h3>
-                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
-                  Responde preguntas para entender tu perfil, objetivos y contexto laboral
-                </p>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Conozcámonos</h3>
+                  <p className="text-base text-muted-foreground dark:text-muted-foreground mb-4">
+                    Diagnóstico integral de tu situación profesional actual. Entendemos tu perfil, objetivos y contexto para personalizar todo tu viaje.
+                  </p>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-purple"></div>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Evaluación de Perfil:</strong> Identifica tus fortalezas y áreas de mejora</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-purple"></div>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Contexto Laboral:</strong> Comprende tus objetivos y situación actual</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-purple"></div>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Baseline Personalizado:</strong> Creamos tu punto de partida único</p>
+                    </div>
+                  </div>
+                  <div className="mt-6 p-4 bg-background/80 rounded-lg border border-purple/20">
+                    <p className="text-sm text-muted-foreground dark:text-white/85">
+                      <strong className="text-purple">Duración:</strong> ~30 minutos | <strong className="text-purple">Resultado:</strong> Tu perfil personalizado que guía el viaje
+                    </p>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Step 2 - A2 Section - Enhanced */}
-          <Card className="border-0 shadow-md bg-gradient-to-br from-purple/10 to-blue/10 dark:from-purple/20 dark:to-blue/20 lg:col-span-2">
+          <Card className="border-0 shadow-md bg-gradient-to-br from-purple/10 to-blue/10 dark:from-purple/20 dark:to-blue/20">
             <CardContent className="pt-8 pb-8 px-8">
               <div className="flex items-start gap-6">
                 <div className="flex items-center justify-center w-16 h-16 rounded-[28px] bg-purple/30 flex-shrink-0">
@@ -77,25 +98,25 @@ export default function BienvenidaPage() {
                 <div className="flex-1">
                   <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Tu Plan A2: Ruta de 90 Días</h3>
                   <p className="text-base text-muted-foreground dark:text-muted-foreground mb-4">
-                    Recibe un plan personalizado de 90 días estructurado en 3 fases progresivas, adaptado a tu perfil DISC y objetivos de carrera
+                    Plan estratégico personalizado de 90 días estructurado en 3 fases progresivas para tu transformación profesional.
                   </p>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
                       <div className="w-2 h-2 rounded-full bg-purple"></div>
-                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Fase 1 (Días 1-30):</strong> Conocimiento - Descubre tu potencial y establece metas</p>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Fase 1 (Días 1-30):</strong> Fundamentación - Aprende principios, desarrolla storytelling, define tu valor</p>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="w-2 h-2 rounded-full bg-purple"></div>
-                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Fase 2 (Días 31-60):</strong> Exploración - Explora oportunidades y ajusta tu estrategia</p>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Fase 2 (Días 31-60):</strong> Exploración - Descubre oportunidades, construye red, mejora presencia digital</p>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="w-2 h-2 rounded-full bg-purple"></div>
-                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Fase 3 (Días 61-90):</strong> Ejecución - Implementa tu plan y alcanza tus objetivos</p>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Fase 3 (Días 61-90):</strong> Implementación - Aplica en entrevistas reales, negocia ofertas</p>
                     </div>
                   </div>
                   <div className="mt-6 p-4 bg-background/80 rounded-lg border border-purple/20">
                     <p className="text-sm text-muted-foreground dark:text-white/85">
-                      <strong className="text-purple">Tiempo de dedicación:</strong> 2-3 horas por semana de entrenamientos progresivos con feedback inmediato
+                      <strong className="text-purple">Dedicación:</strong> 2-3 horas por semana | <strong className="text-purple">Feedback:</strong> Inmediato después de cada sesión
                     </p>
                   </div>
                 </div>
@@ -103,17 +124,74 @@ export default function BienvenidaPage() {
             </CardContent>
           </Card>
 
-          {/* Step 3 */}
-          <Card className="border-0 shadow-sm bg-white dark:bg-card h-fit">
-            <CardContent className="pt-6">
-              <div className="flex flex-col items-center text-center">
-                <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-purple/10 dark:bg-purple mb-4">
-                  <span className="text-xl font-bold text-purple dark:text-purple/20">3</span>
+          {/* Step 3 - A3 Section - Enhanced */}
+          <Card className="border-0 shadow-md bg-gradient-to-br from-training/10 to-orange/10 dark:from-training/20 dark:to-orange/20">
+            <CardContent className="pt-8 pb-8 px-8">
+              <div className="flex items-start gap-6">
+                <div className="flex items-center justify-center w-16 h-16 rounded-[28px] bg-training/30 flex-shrink-0">
+                  <span className="text-3xl font-bold text-training">3</span>
                 </div>
-                <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Entrena y Analiza</h3>
-                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
-                  Practica entrenamientos y obtén análisis multimodal avanzado
-                </p>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Entrena y Analiza</h3>
+                  <p className="text-base text-muted-foreground dark:text-muted-foreground mb-4">
+                    Práctica intensiva con simulaciones realistas y feedback multimodal avanzado. Domina 4 módulos en 4 niveles de dificultad.
+                  </p>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-training"></div>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>4 Módulos:</strong> Entrevistas, Presentaciones, Decisiones Estratégicas, Comunicación Ejecutiva</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-training"></div>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>4 Niveles:</strong> Guiada → Estructurada → Desafiante → Maestría (progresión obligatoria)</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-training"></div>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Análisis Completo:</strong> Postura, tono, gestos, coherencia, contenido - feedback IA instantáneo</p>
+                    </div>
+                  </div>
+                  <div className="mt-6 p-4 bg-background/80 rounded-lg border border-training/20">
+                    <p className="text-sm text-muted-foreground dark:text-white/85">
+                      <strong className="text-training">Entrevistador IA:</strong> Conversacional y adaptativo | <strong className="text-training">Feedback:</strong> Detallado después de cada sesión
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Step 4 - A4 Section - Enhanced */}
+          <Card className="border-0 shadow-md bg-gradient-to-br from-green/10 to-emerald/10 dark:from-green/20 dark:to-emerald/20">
+            <CardContent className="pt-8 pb-8 px-8">
+              <div className="flex items-start gap-6">
+                <div className="flex items-center justify-center w-16 h-16 rounded-[28px] bg-green/30 flex-shrink-0">
+                  <span className="text-3xl font-bold text-green">4</span>
+                </div>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Ejecución Continua</h3>
+                  <p className="text-base text-muted-foreground dark:text-muted-foreground mb-4">
+                    Aplicación real en el mercado laboral. De la búsqueda a la colocación con soporte continuo y análisis de oportunidades.
+                  </p>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-green"></div>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Bolsa de Oportunidades:</strong> Empleos filtrados + contactos + referrals personalizados</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-green"></div>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Dashboard de Progreso:</strong> Métrica de empleabilidad, comparativa con benchmark, evolución en tiempo real</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-green"></div>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Feedback del Mercado:</strong> Análisis de entrevistas reales, optimización continua, contacto con reclutadores</p>
+                    </div>
+                  </div>
+                  <div className="mt-6 p-4 bg-background/80 rounded-lg border border-green/20">
+                    <p className="text-sm text-muted-foreground dark:text-white/85">
+                      <strong className="text-green">Duración:</strong> Indefinida durante búsqueda | <strong className="text-green">Soporte:</strong> Coaches + comunidad + premium
+                    </p>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -121,34 +199,42 @@ export default function BienvenidaPage() {
 
         {/* Key Features */}
         <div className="bg-white dark:bg-card rounded-lg shadow-sm p-8 mb-8 border border-muted/20 dark:border-card">
-          <h2 className="text-lg font-semibold text-muted/90 dark:text-white mb-6">Lo que conseguirás</h2>
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div className="flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
+          <h2 className="text-lg font-semibold text-muted/90 dark:text-white mb-6">Tu Viaje en 4 Pilares</h2>
+          <div className="grid sm:grid-cols-2 gap-6">
+            <div className="flex items-start gap-4">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/20 flex-shrink-0">
+                <span className="text-lg font-bold text-purple">1</span>
+              </div>
               <div>
-                <p className="font-medium text-muted/90 dark:text-white">Análisis Completo</p>
-                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Feedback detallado sobre postura, tono, gestos y coherencia</p>
+                <p className="font-medium text-muted/90 dark:text-white">Diagnóstico Personal</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Comprende tu perfil único y punto de partida profesional</p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-4">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/20 flex-shrink-0">
+                <span className="text-lg font-bold text-purple">2</span>
+              </div>
               <div>
-                <p className="font-medium text-muted/90 dark:text-white">Plan Personalizado</p>
-                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Diseñado específicamente para tu perfil y objetivos</p>
+                <p className="font-medium text-muted/90 dark:text-white">Plan Estratégico</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Ruta de 90 días personalizada en 3 fases estructuradas</p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-4">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-training/20 flex-shrink-0">
+                <span className="text-lg font-bold text-training">3</span>
+              </div>
               <div>
-                <p className="font-medium text-muted/90 dark:text-white">Entrenamientos Progresivos</p>
-                <p className="text-sm text-muted-foreground dark:text-muted-foreground">De básico a maestría en 4 niveles de dificultad</p>
+                <p className="font-medium text-muted/90 dark:text-white">Entrenamiento Intensivo</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">4 módulos × 4 niveles con feedback multimodal IA</p>
               </div>
             </div>
-            <div className="flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
+            <div className="flex items-start gap-4">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green/20 flex-shrink-0">
+                <span className="text-lg font-bold text-green">4</span>
+              </div>
               <div>
-                <p className="font-medium text-muted/90 dark:text-white">Contexto del Mercado</p>
-                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Análisis en profundidad de tendencias y oportunidades</p>
+                <p className="font-medium text-muted/90 dark:text-white">Ejecución Real</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Del mercado laboral a tu colocación con soporte continuo</p>
               </div>
             </div>
           </div>
@@ -158,14 +244,34 @@ export default function BienvenidaPage() {
         <div className="bg-purple/5 dark:bg-purple/30 rounded-[28px] p-6 border border-purple/30 dark:border-purple/10 mb-8">
           <h3 className="font-semibold text-muted/90 dark:text-white mb-3 flex items-center gap-2">
             <Target className="w-5 h-5 text-purple" />
-            Tiempo Estimado
+            Tu Viaje de Transformación
           </h3>
-          <p className="text-sm text-muted-foreground dark:text-white/85 mb-3">Tu viaje será gradual y personalizado:</p>
-          <ul className="space-y-2 text-sm text-muted-foreground dark:text-muted-foreground">
-            <li>• <strong>Hoy:</strong> Responderas preguntas de conocimiento (30 min)</li>
-            <li>• <strong>Días 1-3:</strong> Recibirás tu plan personalizado A2 (lectura: 1 hora)</li>
-            <li>• <strong>Semanas 1-12:</strong> Sigue tu plan con entrenamientos progresivos (2-3 horas/semana)</li>
-            <li>• <strong>Durante:</strong> Análisis multimodal después de cada sesión</li>
+          <p className="text-sm text-muted-foreground dark:text-white/85 mb-4">Cronología personalizada según tu ritmo:</p>
+          <ul className="space-y-3 text-sm text-muted-foreground dark:text-muted-foreground">
+            <li className="flex items-start gap-2">
+              <span className="text-purple font-bold min-w-24">Pilar 1:</span>
+              <span>Diagnóstico inicial con preguntas personalizadas (~30 minutos)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-purple font-bold min-w-24">Pilar 2:</span>
+              <span>Recibe tu plan de 90 días en 3 fases (Lectura: ~1 hora)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-training font-bold min-w-24">Pilar 3:</span>
+              <span>Entrenamientos intensivos progresivos (2-3 horas/semana, 12 semanas)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-training font-bold min-w-24">→ Cada sesión:</span>
+              <span>Feedback multimodal detallado (IA análisis en tiempo real)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green font-bold min-w-24">Pilar 4:</span>
+              <span>Ejecución continua - Del día 90 en adelante (indefinido o hasta colocación)</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-green font-bold min-w-24">→ Soporte:</span>
+              <span>Dashboard de empleabilidad, oportunidades, coaching y comunidad</span>
+            </li>
           </ul>
         </div>
 
