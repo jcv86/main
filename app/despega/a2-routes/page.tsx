@@ -38,6 +38,8 @@ export default function A2RoutesPage() {
   const [isSyncing, setIsSyncing] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
   const [isResetting, setIsResetting] = useState(false)
+  const [showRuta, setShowRuta] = useState(false)
+  const [showComoFunciona, setShowComoFunciona] = useState(false)
   const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
 
@@ -408,100 +410,95 @@ export default function A2RoutesPage() {
           </CardContent>
         </Card>
 
-        {/* Main Intro Section */}
-        <div className="bg-gradient-to-r from-purple/20 to-blue/20 border-2 border-purple/40 rounded-2xl p-10">
-          <h2 className="text-3xl font-bold text-white mb-6">Tu Ruta 7/30/90</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            {/* 7 Days */}
-            <div className="bg-background/50 border border-white/20 rounded-xl p-6">
-              <p className="text-sm font-bold text-purple uppercase tracking-wide mb-2">SEMANA 1</p>
-              <h3 className="text-2xl font-black text-white mb-4">7 Días</h3>
-              <p className="text-white/85 leading-relaxed mb-4">Prepárate para tu primera conversación de LinkedIn. Optimiza perfil, prepara pitch elevator de 30 segundos.</p>
-              <p className="text-sm text-purple font-semibold">🎯 Conversación: LinkedIn</p>
+        {/* Main Intro Section - Collapsible */}
+        <div className="border border-muted/40 rounded-xl overflow-hidden">
+          <button
+            onClick={() => setShowRuta(!showRuta)}
+            className="w-full flex items-center justify-between px-5 py-4 bg-muted/10 hover:bg-muted/20 transition-colors text-left group"
+          >
+            <div className="flex items-center gap-3">
+              <MapPin className="w-5 h-5 text-purple" />
+              <span className="font-semibold text-white text-lg">Tu Ruta 7/30/90</span>
+              {!showRuta && (
+                <span className="text-xs text-white/40 font-normal">Haz clic para ver las 3 fases</span>
+              )}
             </div>
+            <ArrowRight className={`w-4 h-4 text-white/50 transition-transform duration-200 ${showRuta ? 'rotate-90' : ''}`} />
+          </button>
 
-            {/* 30 Days */}
-            <div className="bg-background/50 border border-white/20 rounded-xl p-6">
-              <p className="text-sm font-bold text-blue uppercase tracking-wide mb-2">MES 1</p>
-              <h3 className="text-2xl font-black text-white mb-4">30 Días</h3>
-              <p className="text-white/85 leading-relaxed mb-4">Domina entrevista técnica o conductual. Practica respuestas STAR, manejo de objeciones, cierre de oportunidades.</p>
-              <p className="text-sm text-blue font-semibold">🎯 Conversación: Entrevista</p>
-            </div>
+          {showRuta && (
+            <div className="p-5 space-y-4 border-t border-muted/30">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* 7 Days */}
+                <div className="border-l-4 border-purple bg-muted/10 rounded-r-xl p-4">
+                  <p className="text-xs font-bold text-purple uppercase tracking-widest mb-1">SEMANA 1</p>
+                  <h3 className="text-xl font-black text-white mb-2">7 Días</h3>
+                  <p className="text-white/75 text-sm leading-relaxed mb-3">Prepárate para tu primera conversación de LinkedIn. Optimiza perfil, prepara pitch elevator de 30 segundos.</p>
+                  <p className="text-xs text-purple font-semibold">Conversacion: LinkedIn</p>
+                </div>
 
-            {/* 90 Days */}
-            <div className="bg-background/50 border border-white/20 rounded-xl p-6">
-              <p className="text-sm font-bold text-green uppercase tracking-wide mb-2">TRIMESTRE</p>
-              <h3 className="text-2xl font-black text-white mb-4">90 Días</h3>
-              <p className="text-white/85 leading-relaxed mb-4">Negocia tu propuesta. Habla de sueldo, beneficios, rol, visión de carrera con seguridad y profesionalismo.</p>
-              <p className="text-sm text-green font-semibold">🎯 Conversación: Career</p>
+                {/* 30 Days */}
+                <div className="border-l-4 border-blue bg-muted/10 rounded-r-xl p-4">
+                  <p className="text-xs font-bold text-blue uppercase tracking-widest mb-1">MES 1</p>
+                  <h3 className="text-xl font-black text-white mb-2">30 Días</h3>
+                  <p className="text-white/75 text-sm leading-relaxed mb-3">Domina entrevista técnica o conductual. Practica respuestas STAR, manejo de objeciones, cierre de oportunidades.</p>
+                  <p className="text-xs text-blue font-semibold">Conversacion: Entrevista</p>
+                </div>
+
+                {/* 90 Days */}
+                <div className="border-l-4 border-emerald-400 bg-muted/10 rounded-r-xl p-4">
+                  <p className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-1">TRIMESTRE</p>
+                  <h3 className="text-xl font-black text-white mb-2">90 Días</h3>
+                  <p className="text-white/75 text-sm leading-relaxed mb-3">Negocia tu propuesta. Habla de sueldo, beneficios, rol, vision de carrera con seguridad y profesionalismo.</p>
+                  <p className="text-xs text-emerald-400 font-semibold">Conversacion: Career</p>
+                </div>
+              </div>
+              <p className="text-white/60 text-sm text-center pt-2 border-t border-muted/20">
+                Cada fase te transforma en una pieza imprescindible para tus potenciales empleadores. No es solo conseguir un trabajo, es posicionar tu carrera para los proximos 10 anos.
+              </p>
             </div>
-          </div>
-          
-          <div className="bg-background/30 border border-white/10 rounded-lg p-6 text-center">
-            <p className="text-white/90 leading-relaxed text-lg">
-              Cada fase te transforma en una pieza imprescindible para tus potenciales empleadores. 
-              No es solo conseguir un trabajo, es posicionar tu carrera para los próximos 10 años.
-            </p>
-          </div>
+          )}
         </div>
 
-        {/* What is this phase */}
-        <Card className="bg-gradient-to-r from-blue/15 to-purple/15 border-2 border-blue/40">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white text-2xl">
-              <Zap className="w-6 h-6 text-blue" />
-              Cómo Funciona Tu Ruta
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-blue/20 border border-blue/40">
-                    <span className="text-blue font-bold text-lg">1</span>
-                  </div>
+        {/* What is this phase - Collapsible */}
+        <div className="border border-muted/40 rounded-xl overflow-hidden">
+          <button
+            onClick={() => setShowComoFunciona(!showComoFunciona)}
+            className="w-full flex items-center justify-between px-5 py-4 bg-muted/10 hover:bg-muted/20 transition-colors text-left"
+          >
+            <div className="flex items-center gap-3">
+              <Zap className="w-5 h-5 text-blue" />
+              <span className="font-semibold text-white text-lg">Como Funciona Tu Ruta</span>
+              {!showComoFunciona && (
+                <span className="text-xs text-white/40 font-normal">Haz clic para ver los detalles</span>
+              )}
+            </div>
+            <ArrowRight className={`w-4 h-4 text-white/50 transition-transform duration-200 ${showComoFunciona ? 'rotate-90' : ''}`} />
+          </button>
+
+          {showComoFunciona && (
+            <div className="p-5 border-t border-muted/30">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="border-l-4 border-blue bg-muted/10 rounded-r-xl p-4">
+                  <h3 className="font-bold text-white mb-1">Acciones Concretas</h3>
+                  <p className="text-white/70 text-sm">Cada tarea esta mapeada a una conversacion real: LinkedIn networking, entrevistas o negociacion de cargo.</p>
                 </div>
-                <div>
-                  <h3 className="font-bold text-white text-lg mb-2">Acciones Concretas</h3>
-                  <p className="text-white/85">Cada tarea está mapeada a una conversación real: LinkedIn networking, entrevistas o negociación de cargo.</p>
+                <div className="border-l-4 border-purple bg-muted/10 rounded-r-xl p-4">
+                  <h3 className="font-bold text-white mb-1">Progresion Estructurada</h3>
+                  <p className="text-white/70 text-sm">3 fases claramente definidas: Fundamentos, Aceleracion, Dominio. Cada una te acerca a ser imprescindible.</p>
                 </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-purple/20 border border-purple/40">
-                    <span className="text-purple font-bold text-lg">2</span>
-                  </div>
+                <div className="border-l-4 border-emerald-400 bg-muted/10 rounded-r-xl p-4">
+                  <h3 className="font-bold text-white mb-1">Personalizacion</h3>
+                  <p className="text-white/70 text-sm">Tu ruta es unica segun tu perfil cerebral, objetivos y nivel actual. No hay dos rutas iguales.</p>
                 </div>
-                <div>
-                  <h3 className="font-bold text-white text-lg mb-2">Progresión Estructurada</h3>
-                  <p className="text-white/85">3 fases claramente definidas: Fundamentos → Aceleración → Dominio. Cada una te acerca a ser imprescindible.</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-green/20 border border-green/40">
-                    <span className="text-green font-bold text-lg">3</span>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="font-bold text-white text-lg mb-2">Personalización</h3>
-                  <p className="text-white/85">Tu ruta es única según tu perfil cerebral, objetivos y nivel actual. No hay dos rutas iguales.</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0">
-                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-yellow/20 border border-yellow/40">
-                    <span className="text-yellow font-bold text-lg">4</span>
-                  </div>
-                </div>
-                <div>
-                  <h3 className="font-bold text-white text-lg mb-2">Trackeo Real</h3>
-                  <p className="text-white/85">Marca tareas como completadas y ve tu progreso en tiempo real. Gana badges y hitos conforme avanzas.</p>
+                <div className="border-l-4 border-yellow-400 bg-muted/10 rounded-r-xl p-4">
+                  <h3 className="font-bold text-white mb-1">Trackeo Real</h3>
+                  <p className="text-white/70 text-sm">Marca tareas como completadas y ve tu progreso en tiempo real. Gana badges y hitos conforme avanzas.</p>
                 </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          )}
+        </div>
 
         {/* Tu Progreso y Logros - Section at the START */}
         <div className="space-y-6 pt-8 border-t border-white/10">
