@@ -19,7 +19,7 @@ interface CerebroProfile {
   secondaryScore: number
 }
 
-export default function A2IntroPage() {
+export default function YourRouteIntroPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
   const [cerebroProfile, setCerebroProfile] = useState<CerebroProfile | null>(null)

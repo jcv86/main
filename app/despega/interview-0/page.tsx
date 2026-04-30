@@ -25,8 +25,8 @@ export default function Interview0Page() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="text-center max-w-md">
-          <h1 className="text-4xl font-bold text-cyan/40 mb-4">¡Entrevista 0 completada!</h1>
-          <p className="text-white/85 mb-8">
+          <h1 className="text-4xl font-bold text-cyan mb-4">¡Entrevista 0 completada!</h1>
+          <p className="text-lg text-white/90 mb-8">
             Excelente. Ahora tienes tu base profesional lista. Continúa con práctica guiada o entrenamiento estructurado.
           </p>
           <div className="flex flex-col gap-3">
@@ -73,8 +73,8 @@ export default function Interview0Page() {
             {stage === 'simulator' && (
               <div className="space-y-4">
                 <div className="text-center mb-8">
-                  <h2 className="text-2xl font-bold text-white">Simulación de Entrevista</h2>
-                  <p className="text-white/70 mt-2">Ahora practicaremos una entrevista real basada en tu auditoría</p>
+                  <h2 className="text-3xl font-bold text-white">Simulación de Entrevista</h2>
+                  <p className="text-white/85 mt-2">Ahora practicaremos una entrevista real basada en tu auditoría</p>
                 </div>
                 <ConversationalInterviewSimulator
                   level="basico"

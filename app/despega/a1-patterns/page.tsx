@@ -114,7 +114,7 @@ export default function A1PatternsPage() {
               {details.strengths.map((strength, idx) => (
                 <Card key={idx} className="bg-background">
                   <CardContent className="pt-6">
-                    <p className="text-green/30 font-semibold">✓ {strength}</p>
+                    <p className="text-green font-semibold text-lg">✓ {strength}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -129,7 +129,7 @@ export default function A1PatternsPage() {
               {details.challenges.map((challenge, idx) => (
                 <Card key={idx} className="bg-background">
                   <CardContent className="pt-6">
-                    <p className="text-yellow/30 font-semibold">⚠️ {challenge}</p>
+                    <p className="text-yellow font-semibold text-lg">⚠️ {challenge}</p>
                   </CardContent>
                 </Card>
               ))}
