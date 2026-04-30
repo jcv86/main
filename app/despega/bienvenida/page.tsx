@@ -52,7 +52,7 @@ export default function BienvenidaPage() {
 
         {/* Pilares Grid */}
         <div className="space-y-6 mb-12">
-          {/* Step 1 - A1 Section - Enhanced */}
+          {/* Paso 1: Conocer tu Perfil */}
           <Card className="border-0 shadow-md bg-gradient-to-br from-purple/10 to-pink/10 dark:from-purple/20 dark:to-pink/20">
             <CardContent className="pt-8 pb-8 px-8">
               <div className="flex items-start gap-6">
@@ -88,7 +88,7 @@ export default function BienvenidaPage() {
             </CardContent>
           </Card>
 
-          {/* Step 2 - A2 Section - Enhanced */}
+          {/* Paso 2: Tu Plan de 90 Días */}
           <Card className="border-0 shadow-md bg-gradient-to-br from-purple/10 to-blue/10 dark:from-purple/20 dark:to-blue/20">
             <CardContent className="pt-8 pb-8 px-8">
               <div className="flex items-start gap-6">
@@ -96,7 +96,7 @@ export default function BienvenidaPage() {
                   <span className="text-3xl font-bold text-purple">2</span>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Tu Plan A2: Ruta de 90 Días</h3>
+                  <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Tu Plan: Ruta de 90 Días</h3>
                   <p className="text-base text-muted-foreground dark:text-muted-foreground mb-4">
                     Plan estratégico personalizado de 90 días estructurado en 3 fases progresivas para tu transformación profesional.
                   </p>
@@ -124,7 +124,7 @@ export default function BienvenidaPage() {
             </CardContent>
           </Card>
 
-          {/* Step 3 - A3 Section - Enhanced */}
+          {/* Paso 3: Entrena y Analiza */}
           <Card className="border-0 shadow-md bg-gradient-to-br from-training/10 to-orange/10 dark:from-training/20 dark:to-orange/20">
             <CardContent className="pt-8 pb-8 px-8">
               <div className="flex items-start gap-6">
@@ -160,7 +160,7 @@ export default function BienvenidaPage() {
             </CardContent>
           </Card>
 
-          {/* Step 4 - A4 Section - Enhanced */}
+          {/* Paso 4: Ejecución Continua */}
           <Card className="border-0 shadow-md bg-gradient-to-br from-green/10 to-emerald/10 dark:from-green/20 dark:to-emerald/20">
             <CardContent className="pt-8 pb-8 px-8">
               <div className="flex items-start gap-6">
@@ -197,7 +197,7 @@ export default function BienvenidaPage() {
           </Card>
         </div>
 
-        {/* Key Features */}
+        {/* Tu Viaje en 4 Pilares */}
         <div className="bg-white dark:bg-card rounded-lg shadow-sm p-8 mb-8 border border-muted/20 dark:border-card">
           <h2 className="text-lg font-semibold text-muted/90 dark:text-white mb-6">Tu Viaje en 4 Pilares</h2>
           <div className="grid sm:grid-cols-2 gap-6">
