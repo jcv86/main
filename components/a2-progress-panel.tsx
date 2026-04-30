@@ -26,8 +26,7 @@ export function A2ProgressPanel() {
         current_month: 1, 
         progress_percentage: 0, 
         completed_tasks: 0,
-        total_tasks: 90,
-        status: 'loading' 
+        total_tasks: 90
       }
     }
   )
