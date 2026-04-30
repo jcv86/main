@@ -103,21 +103,21 @@ export default function A1CerebralIntroPage() {
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center font-bold">1</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold">1</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-white">28 preguntas</p>
                     <p className="text-sm text-white/75 dark:text-white/75">Responde 28 preguntas simples sobre tu comportamiento</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center font-bold">2</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold">2</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-white">Dos selecciones por pregunta</p>
                     <p className="text-sm text-white/75 dark:text-white/75">Para cada pregunta, selecciona la opción que más y menos te describe</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-blue text-white rounded-full flex items-center justify-center font-bold">3</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold">3</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-white">Análisis automático</p>
                     <p className="text-sm text-white/75 dark:text-white/75">Obtendrás tu perfil cerebral personalizado con insights sobre tu comunicación y liderazgo</p>
@@ -134,7 +134,7 @@ export default function A1CerebralIntroPage() {
               <CardDescription className="text-white/75">Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="bg-muted/80 dark:bg-muted/70 p-8 rounded-[28px] border border-muted/70">
+              <div className="p-8 rounded-[28px] border border-white/10">
                 <p className="text-xl font-semibold text-white mb-8 text-center">
                   "Cuando enfrento un desafío importante, tiendo a ser más:"
                 </p>
@@ -194,8 +194,8 @@ export default function A1CerebralIntroPage() {
                 </div>
               </div>
 
-              <div className="bg-blue/5 dark:bg-blue p-4 rounded-[28px] border border-blue/30 dark:border-blue/10">
-                <p className="text-sm text-blue dark:text-white">
+              <div className="bg-purple/20 p-4 rounded-[28px] border border-purple/30">
+                <p className="text-sm text-purple/90 dark:text-white">
                   <span className="font-semibold">¿Cómo funciona?</span> Cada pregunta tiene 4 opciones que representan los 4 estilos: Directo, Inspirador, Seguro y Consciente. Seleccionas cuál te describe MÁS y cuál te describe MENOS. El sistema cuenta tus selecciones y determina tu perfil dominante.
                 </p>
               </div>
@@ -203,10 +203,10 @@ export default function A1CerebralIntroPage() {
           </Card>
 
           {/* Benefits */}
-          <Card className="border-0 shadow-lg bg-blue dark:bg-blue/30 border-l-4 border-blue">
+          <Card className="border-0 shadow-lg bg-purple dark:bg-purple/30 border-l-4 border-purple">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl text-white flex items-center gap-2">
-                <Zap className="w-6 h-6 text-blue" />
+                <Zap className="w-6 h-6 text-purple" />
                 ¿Por qué es importante?
               </CardTitle>
             </CardHeader>
@@ -235,7 +235,7 @@ export default function A1CerebralIntroPage() {
             <Button
               onClick={() => router.push('/despega/a1-cerebral')}
               size="lg"
-              className="px-8 text-lg bg-blue hover:bg-blue text-white"
+              className="px-8 text-lg bg-purple hover:bg-purple text-white"
             >
               Comenzar Análisis Cerebral
             </Button>
