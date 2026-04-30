@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { calculateProgressPercentage, syncProgressToDatabase } from '@/lib/progress-calculation'
 
 export async function GET(request: NextRequest) {
   try {
@@ -37,14 +38,14 @@ export async function GET(request: NextRequest) {
     // Fetch interview history
     const { data: interviews } = await supabase
       .from('a3_user_entrevistas')
-      .select('tiempo_dedicado_minutos, score, created_at')
+      .select('tiempo_dedicado_minutos, score_total, created_at')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
 
     // Fetch module progress
     const { data: modules } = await supabase
       .from('a4_module_progress')
-      .select('nombre_modulo, tiempo_dedicado_minutos, completado, progreso_porcentaje')
+      .select('modulo_titulo, tiempo_dedicado_minutos, completado, progreso_porcentaje')
       .eq('user_id', userId)
 
     // Return default data if no progress record exists
@@ -68,13 +69,18 @@ export async function GET(request: NextRequest) {
     // Calculate totals
     const totalMinutes = (interviews || []).reduce((sum, iv) => sum + (iv.tiempo_dedicado_minutos || 0), 0)
     const totalSessions = interviews?.length || 0
-    const completionPercentage = Math.round(progressData.progreso_porcentaje || 0)
+    
+    // Calculate completion percentage dynamically from user activities
+    const completionPercentage = await calculateProgressPercentage(userId)
+    
+    // Sync the calculated progress back to database for future reference
+    await syncProgressToDatabase(userId, completionPercentage)
 
     // Calculate section progress
     const sectionProgress = (modules || []).map((module) => {
       const colors = ['bg-training', 'bg-purple', 'bg-emerald-500', 'bg-amber-500']
       return {
-        name: module.nombre_modulo || 'Módulo',
+        name: module.modulo_titulo || 'Módulo',
         minutes: module.tiempo_dedicado_minutos || 0,
         sessions: Math.floor((module.tiempo_dedicado_minutos || 0) / 30),
         percentage: Math.round(module.progreso_porcentaje || 0),
@@ -84,7 +90,7 @@ export async function GET(request: NextRequest) {
 
     // Calculate XP and level
     const totalXp = (progressData.puntos_dtc || 0) + totalSessions * 50 + 
-      (interviews || []).filter((iv) => iv.score >= 85).length * 100
+      (interviews || []).filter((iv) => iv.score_total >= 85).length * 100
     const currentLevel = Math.floor(totalXp / 1000) + 1
     const xpToNextLevel = currentLevel * 1000 - totalXp
 
@@ -96,7 +102,7 @@ export async function GET(request: NextRequest) {
     if (totalSessions >= 50) badges.push('👑 50 Entrenamientos')
     if (totalMinutes >= 300) badges.push('⏱️ 5 Horas')
     if (totalMinutes >= 600) badges.push('🔥 10 Horas')
-    if ((interviews || []).filter((iv) => iv.score >= 90).length >= 3) badges.push('⭐ Experto')
+    if ((interviews || []).filter((iv) => iv.score_total >= 90).length >= 3) badges.push('⭐ Experto')
 
     // Calculate streak (simple: days with at least one session)
     const dates = new Set(
