@@ -9,7 +9,7 @@ import { type DespegarProfile } from '@/lib/disc-calculator'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Loader2, Calendar, Target, CheckCircle2, AlertCircle, ArrowRight, Zap, MapPin, Download, Trophy } from 'lucide-react'
+import { Loader2, Calendar, Target, CheckCircle2, AlertCircle, ArrowRight, Zap, MapPin, Download, Trophy, RotateCcw, Lock } from 'lucide-react'
 import { TaskCard } from '@/components/task-card'
 import { PhaseProgress } from '@/components/phase-progress'
 import { AchievementsDisplay } from '@/components/achievement-badge'
@@ -20,7 +20,8 @@ import {
   markTaskComplete, 
   unmarkTaskComplete, 
   completionsToSet,
-  getTaskId 
+  getTaskId,
+  resetAllCompletions
 } from '@/lib/supabase/task-completions'
 import { calculateBadges, BADGES } from '@/lib/badge-system'
 import { getSimpleRecommendations } from '@/lib/recommendation-engine'
@@ -36,6 +37,7 @@ export default function A2RoutesPage() {
   const [completedTasks, setCompletedTasks] = useState<Set<string>>(new Set())
   const [isSyncing, setIsSyncing] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
+  const [isResetting, setIsResetting] = useState(false)
   const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
 
@@ -96,6 +98,43 @@ export default function A2RoutesPage() {
     } finally {
       setIsSyncing(false)
     }
+  }
+
+  // Reset all completions
+  const handleResetProgress = async () => {
+    if (!confirm('¿Resetear todo tu progreso a cero? Esta acción no se puede deshacer.')) return
+    setIsResetting(true)
+    try {
+      await resetAllCompletions()
+      setCompletedTasks(new Set())
+      setExpandedMilestone(30)
+    } catch (err) {
+      console.error('[v0] Error resetting progress:', err)
+    } finally {
+      setIsResetting(false)
+    }
+  }
+
+  // Check if a month phase is locked (previous month must be 100% complete)
+  const isMonthLocked = (days: 30 | 60 | 90): boolean => {
+    if (days === 30) return false
+    const prevDays = days === 60 ? 30 : 60
+    const prev = getPhaseProgressLocal(prevDays)
+    return prev.total > 0 && prev.completed < prev.total
+  }
+
+  // Calculate phase progress (local helper used inside isMonthLocked)
+  const getPhaseProgressLocal = (days: 30 | 60 | 90) => {
+    const tasksMap = {
+      30: route?.route_30days || [],
+      60: route?.route_60days || [],
+      90: route?.route_90days || []
+    }
+    const tasks = tasksMap[days]
+    const completed = tasks.filter(task =>
+      completedTasks.has(`${days}-${task.day}-${task.title}`)
+    ).length
+    return { completed, total: tasks.length }
   }
 
   // Calculate phase progress
@@ -466,10 +505,22 @@ export default function A2RoutesPage() {
 
         {/* Tu Progreso y Logros - Section at the START */}
         <div className="space-y-6 pt-8 border-t border-white/10">
-          <h2 className="text-3xl font-bold text-white flex items-center gap-2">
-            <Trophy className="w-8 h-8 text-yellow-400" />
-            Tu Progreso en la Ruta de 90 Días
-          </h2>
+          <div className="flex items-center justify-between flex-wrap gap-3">
+            <h2 className="text-3xl font-bold text-white flex items-center gap-2">
+              <Trophy className="w-8 h-8 text-yellow-400" />
+              Tu Progreso en la Ruta de 90 Días
+            </h2>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleResetProgress}
+              disabled={isResetting || completedTasks.size === 0}
+              className="border-red/40 text-red/80 hover:bg-red/10 hover:text-red hover:border-red/60 gap-2"
+            >
+              <RotateCcw className={`w-4 h-4 ${isResetting ? 'animate-spin' : ''}`} />
+              {isResetting ? 'Reseteando...' : 'Resetear progreso'}
+            </Button>
+          </div>
 
           {/* 3-Phase Progress Tracker */}
           <div className="bg-gradient-to-r from-purple/10 to-blue/10 border border-purple/20 rounded-lg p-6">
@@ -605,37 +656,45 @@ export default function A2RoutesPage() {
               const tasks = route[`route_${days}days` as keyof typeof route] as any[] || []
               const phaseProgress = getPhaseProgress(days)
               const isExpanded = expandedMilestone === days
+              const monthLocked = isMonthLocked(days)
+              const phaseNum = days === 30 ? '1' : days === 60 ? '2' : '3'
+              const prevMonthLabel = days === 60 ? 'Mes 1' : days === 90 ? 'Mes 2' : null
 
               return (
-                <div key={days} className="border border-muted/50 rounded-lg overflow-hidden">
+                <div key={days} className={`border rounded-lg overflow-hidden transition-opacity ${monthLocked ? 'border-muted/20 opacity-60' : 'border-muted/50'}`}>
                   <button
-                    onClick={() => setExpandedMilestone(isExpanded ? null : days)}
-                    className="w-full flex items-center justify-between p-4 bg-muted/20 hover:bg-muted/30 transition-colors text-left"
+                    onClick={() => !monthLocked && setExpandedMilestone(isExpanded ? null : days)}
+                    className={`w-full flex items-center justify-between p-4 transition-colors text-left ${monthLocked ? 'bg-muted/10 cursor-not-allowed' : 'bg-muted/20 hover:bg-muted/30 cursor-pointer'}`}
+                    disabled={monthLocked}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold bg-purple/30 border border-purple/50 text-purple`}>
-                        {days === 30 ? '1' : days === 60 ? '2' : '3'}
+                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${monthLocked ? 'bg-muted/20 border border-muted/30 text-muted/50' : 'bg-purple/30 border border-purple/50 text-purple'}`}>
+                        {monthLocked ? <Lock className="w-4 h-4" /> : phaseNum}
                       </div>
                       <div>
-                        <p className="font-semibold text-white">{milestoneData.label}</p>
-                        <p className="text-xs text-white/60">{milestoneData.milestone} · {tasks.length} tareas</p>
+                        <p className={`font-semibold ${monthLocked ? 'text-white/40' : 'text-white'}`}>{milestoneData.label}</p>
+                        {monthLocked
+                          ? <p className="text-xs text-white/30">Completa {prevMonthLabel} al 100% para desbloquear</p>
+                          : <p className="text-xs text-white/60">{milestoneData.milestone} · {tasks.length} tareas</p>
+                        }
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm font-bold text-white">
-                        {phaseProgress.completed}/{phaseProgress.total}
-                      </span>
-                      <ArrowRight className={`w-4 h-4 text-white/60 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
-                    </div>
+                    {!monthLocked && (
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-bold text-white">
+                          {phaseProgress.completed}/{phaseProgress.total}
+                        </span>
+                        <ArrowRight className={`w-4 h-4 text-white/60 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+                      </div>
+                    )}
                   </button>
-                  {isExpanded && (
+                  {isExpanded && !monthLocked && (
                     <div className="p-4 space-y-3">
                       {tasks.map((task: any, taskIdx: number) => {
                         const taskId = getTaskId(days, task.day, task.title)
-                        // Day 1 is always unlocked; each subsequent day requires the previous day to be completed
                         const prevTask = taskIdx > 0 ? tasks[taskIdx - 1] : null
                         const prevTaskId = prevTask ? getTaskId(days, prevTask.day, prevTask.title) : null
-                        const isLocked = taskIdx > 0 && prevTaskId !== null && !completedTasks.has(prevTaskId)
+                        const isDayLocked = taskIdx > 0 && prevTaskId !== null && !completedTasks.has(prevTaskId)
                         return (
                           <TaskCard
                             key={taskIdx}
@@ -643,7 +702,7 @@ export default function A2RoutesPage() {
                             taskId={taskId}
                             completed={completedTasks.has(taskId)}
                             onComplete={() => handleTaskComplete(taskId)}
-                            locked={isLocked}
+                            locked={isDayLocked}
                           />
                         )
                       })}

@@ -131,3 +131,28 @@ export const getPhaseCompletions = async (phase: 30 | 60 | 90): Promise<string[]
 export const completionsToSet = (completions: TaskCompletion[]): Set<string> => {
   return new Set(completions.map(c => getTaskId(c.phase, c.day, c.task_title)))
 }
+
+/**
+ * Reset all task completions for the current user
+ */
+export const resetAllCompletions = async (): Promise<boolean> => {
+  const supabase = createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    console.error('[v0] No authenticated user')
+    return false
+  }
+
+  const { error } = await supabase
+    .from('a2_user_task_completions')
+    .delete()
+    .eq('user_id', user.id)
+
+  if (error) {
+    console.error('[v0] Error resetting completions:', error)
+    return false
+  }
+
+  return true
+}
