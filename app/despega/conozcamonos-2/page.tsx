@@ -331,13 +331,13 @@ export default function Conozcamonos2Page() {
         </div>
 
         {error && (
-          <div className="bg-red/5 dark:bg-red border-2 border-red/50 dark:border-red rounded-[28px] p-6 mb-6 shadow-lg">
+          <div className="bg-red/15 dark:bg-red/20 border-2 border-red/40 dark:border-red/50 rounded-[28px] p-6 mb-6 shadow-lg">
             <div className="flex items-start gap-3">
               <span className="text-2xl flex-shrink-0">⚠️</span>
               <div className="flex-1">
-                <h3 className="font-semibold text-red dark:text-red/10 mb-1">Validación requerida</h3>
-                <p className="text-red dark:text-red/20 text-sm">{error}</p>
-                <p className="text-red dark:text-red/30 text-xs mt-2 font-medium">Corrige este campo antes de continuar →</p>
+                <h3 className="font-semibold text-red dark:text-red mb-1">Validación requerida</h3>
+                <p className="text-red dark:text-red text-sm">{error}</p>
+                <p className="text-red dark:text-red text-xs mt-2 font-medium">Corrige este campo antes de continuar →</p>
               </div>
             </div>
           </div>
