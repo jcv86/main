@@ -16,6 +16,7 @@ import {
   LogOut
 } from 'lucide-react'
 import { XPNavbarBadge } from './xp-navbar-badge'
+import { A2ProgressNavbarBadge } from './a2-progress-navbar-badge'
 
 const stages = [
   {
@@ -194,8 +195,9 @@ export function DespeganNavbar() {
             })}
           </div>
 
-          {/* Desktop XP Badge + Logout */}
+          {/* Desktop XP Badge + A2 Progress + Logout */}
           <div className="hidden md:flex items-center gap-3">
+            <A2ProgressNavbarBadge />
             <XPNavbarBadge />
             <Button onClick={handleLogout} variant="outline" size="sm" className="gap-2 border-muted-foreground text-muted-foreground hover:bg-transparent hover:text-white">
               <LogOut className="w-4 h-4" />
