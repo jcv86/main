@@ -178,10 +178,10 @@ export function DespegaNavbar() {
                             <Link key={route.href} href={route.href}>
                               <div className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
                                 isActive
-                                  ? `${style.activeBg} ${style.activeText} ${style.leftBorder}`
+                                  ? `${style.activeBg} ${style.activeText}`
                                   : `text-white/60 ${style.hoverBg} ${style.hoverText}`
                               }`}>
-                                {isActive && <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${style.activeBg.replace('bg-', 'bg-').replace('/20', '')} bg-current`} />}
+                                {isActive && <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-current" />}
                                 {route.label}
                               </div>
                             </Link>
