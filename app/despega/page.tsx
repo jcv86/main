@@ -132,7 +132,7 @@ export default function DespegazoDashboard() {
 
   const stages = [
     {
-      name: 'A1: El Ritual',
+      name: 'El Ritual',
       description: 'Descubre tu perfil DISC y potencial único',
       completed: progress.a1_completed,
       href: '/despega/a1-report',
@@ -141,7 +141,7 @@ export default function DespegazoDashboard() {
       color: 'from-purple/50'
     },
     {
-      name: 'A2: Exploración',
+      name: 'Exploración',
       description: 'Tu plan personalizado de 90 días',
       completed: progress.a2_completed,
       href: '/despega/a2-routes',
@@ -150,7 +150,7 @@ export default function DespegazoDashboard() {
       color: 'from-blue'
     },
     {
-      name: 'A3: Entrenamiento',
+      name: 'Entrenamiento',
       description: 'Prepárate para entrevistas y destaca',
       completed:
         progress.a3_progress.interview_0 &&
@@ -162,7 +162,7 @@ export default function DespegazoDashboard() {
       color: 'from-blue'
     },
     {
-      name: 'A4: La Realidad',
+      name: 'La Realidad',
       description: 'Monitoreo continuo y oportunidades',
       completed: progress.a4_active,
       href: '/despega/a4-radar',

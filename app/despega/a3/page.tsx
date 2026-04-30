@@ -105,7 +105,7 @@ export default function A3Page() {
         {/* WELCOME HERO - A3 VERSION */}
         <div className="bg-background">
           <div className="max-w-3xl space-y-4">
-            <p className="text-red/80 text-sm font-semibold uppercase tracking-wider">Fase A3: Entrenamiento Aplicado - Entrevista 0 + Preparación</p>
+            <p className="text-red/80 text-sm font-semibold uppercase tracking-wider">Entrenamiento Intensivo: Entrevista 0 + Preparación</p>
             <h1 className="text-4xl font-bold" style={{ fontFamily: 'Lora, serif' }}>Entrena como Profesional. Verdaderamente.</h1>
             <p className="text-lg text-white/85">
               Empezamos con Entrevista 0: tu diagnóstico de preparación en luz, fondo, audio, postura, presencia, y lenguaje.

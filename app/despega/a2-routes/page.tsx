@@ -643,7 +643,7 @@ export default function A2RoutesPage() {
                     className="w-full bg-blue hover:bg-blue mt-2"
                     size="sm"
                   >
-                    Ir a A3: Impulso
+                    Continúa con Entrenamiento Intensivo
                     <ArrowRight className="w-3 h-3 ml-1" />
                   </Button>
                 </CardContent>

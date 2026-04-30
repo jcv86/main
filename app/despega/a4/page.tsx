@@ -50,7 +50,7 @@ export default function A4Page() {
             </Button>
           </Link>
           <Badge className="bg-teal-100 text-teal-900 dark:bg-teal-900/30 dark:text-teal-200">
-            A4: La Realidad
+            La Realidad
           </Badge>
         </div>
 

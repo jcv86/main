@@ -163,7 +163,7 @@ export default function YourRouteIntroPage() {
         {/* Hero Section */}
         <div className="text-center space-y-4">
           <Badge className="mx-auto" variant="secondary">
-            A2: Rutas de Transformación
+            Rutas de Transformación
           </Badge>
           <h1 className="text-5xl md:text-6xl font-bold text-muted/90 dark:text-muted/5 leading-tight">
             Tu Motor de Avance
