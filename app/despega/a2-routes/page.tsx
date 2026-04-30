@@ -15,6 +15,7 @@ import { PhaseProgress } from '@/components/phase-progress'
 import { AchievementsDisplay } from '@/components/achievement-badge'
 import { RecommendationsDisplay } from '@/components/recommendations-display'
 import { ResourceLibrary } from '@/components/resource-library'
+import { A2ProgressBar } from '@/components/a2-progress-bar'
 import { 
   fetchUserCompletions, 
   markTaskComplete, 
@@ -456,6 +457,11 @@ export default function A2RoutesPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
+            {/* Progress Bar Component */}
+            <div className="bg-background/50 border border-white/10 rounded-lg p-6">
+              <A2ProgressBar />
+            </div>
+
             {([30, 60, 90] as const).map((days) => {
               const data = getMilestoneData(days)
               const isExpanded = expandedMilestone === days

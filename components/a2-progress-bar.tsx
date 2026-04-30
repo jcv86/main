@@ -1,7 +1,6 @@
 'use client'
 
 import useSWR from 'swr'
-import Link from 'next/link'
 
 interface A2ProgressData {
   current_month: number
@@ -29,38 +28,67 @@ export function A2ProgressBar() {
   const displayPercentage = Math.max(percentage, 2)
 
   return (
-    <Link href="/despega/a2-routes">
-      <div className="sticky top-16 z-40 bg-black border-b border-white/10 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-4">
-          {/* Progress bar container */}
-          <div className="flex-1 flex items-center gap-3">
-            {/* Label */}
-            <div className="whitespace-nowrap">
-              <span className="text-sm font-semibold text-white">
-                Mes {month} • {percentage}%
-              </span>
-            </div>
-
-            {/* Gradient progress bar */}
-            <div className="flex-1 h-3 bg-white/10 rounded-full relative overflow-hidden hover:bg-white/20 transition-colors cursor-pointer group">
-              <div
-                className="h-full bg-gradient-to-r from-purple via-blue to-cyan transition-all duration-500 ease-out shadow-lg rounded-full"
-                style={{
-                  width: `${displayPercentage}%`,
-                }}
-              >
-                {/* Shimmer effect */}
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-pulse rounded-full" />
-              </div>
-            </div>
-
-            {/* Percentage text */}
-            <div className="whitespace-nowrap text-right min-w-[50px]">
-              <span className="text-sm font-bold text-cyan">{percentage}%</span>
-            </div>
-          </div>
+    <div className="w-full space-y-3">
+      {/* Header with Month and Percentage */}
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm font-semibold text-white/60">Progreso Total</p>
+          <p className="text-lg font-bold text-white">Mes {month}</p>
+        </div>
+        <div className="text-right">
+          <p className="text-3xl font-black bg-gradient-to-r from-purple to-cyan bg-clip-text text-transparent">
+            {percentage}%
+          </p>
+          <p className="text-xs text-white/60">completado</p>
         </div>
       </div>
-    </Link>
+
+      {/* Progress Bar */}
+      <div className="relative h-4 bg-white/10 rounded-full overflow-hidden">
+        <div
+          className="h-full bg-gradient-to-r from-purple via-blue to-cyan transition-all duration-500 ease-out rounded-full shadow-lg"
+          style={{
+            width: `${displayPercentage}%`,
+          }}
+        >
+          {/* Shimmer effect */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-pulse rounded-full" />
+        </div>
+      </div>
+
+      {/* Month breakdown */}
+      <div className="grid grid-cols-3 gap-2 pt-2">
+        {[
+          { month: 1, label: 'Fundamentos', max: 33 },
+          { month: 2, label: 'Aceleración', max: 66 },
+          { month: 3, label: 'Dominio', max: 100 }
+        ].map((m) => {
+          const isActive = month === m.month
+          const monthProgress = isActive ? percentage : (month > m.month ? 100 : 0)
+          
+          return (
+            <div
+              key={m.month}
+              className={`p-3 rounded-lg border transition-all ${
+                isActive
+                  ? 'bg-purple/20 border-purple/50'
+                  : 'bg-white/5 border-white/10'
+              }`}
+            >
+              <p className="text-xs font-bold text-white/70">{m.label}</p>
+              <div className="mt-2 h-2 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all ${
+                    isActive ? 'bg-gradient-to-r from-purple to-blue' : 'bg-white/30'
+                  }`}
+                  style={{ width: `${monthProgress}%` }}
+                />
+              </div>
+              <p className="text-xs text-white/60 mt-1">{Math.round(monthProgress)}%</p>
+            </div>
+          )
+        })}
+      </div>
+    </div>
   )
 }
