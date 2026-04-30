@@ -208,11 +208,16 @@ Be specific and constructive. Consider the candidate's DISC profile (${userProfi
 
     // Log XP activity for A3 interview completion
     const xpAmount = overallScore >= 85 ? 150 : overallScore >= 70 ? 100 : 50
-    await logXPActivity(userId, 'interview_completed', xpAmount, 'a3', {
-      sessionId,
-      questionId,
-      score: overallScore,
-      responseId: savedResponse?.[0]?.id,
+    await logXPActivity({
+      section: 'A3',
+      activity_type: 'interview_completed',
+      xp_amount: xpAmount,
+      reference_id: sessionId,
+      metadata: {
+        questionId,
+        score: overallScore,
+        responseId: savedResponse?.[0]?.id,
+      },
     })
 
     console.log(`[v0] A3 response processed with score: ${overallScore}, XP logged: ${xpAmount}`)
