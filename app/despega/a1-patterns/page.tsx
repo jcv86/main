@@ -77,7 +77,7 @@ export default function A1PatternsPage() {
   }
 
   return (
-    <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple/50">
+    <ASection title="Tus Patrones de Personalidad" subtitle="Cómo Influyen en Tu Carrera" icon="🧠" colorClass="from-purple/50">
       <ASectionPart title={`Tu Perfil: ${label}`} icon={<Target />}>
         {/* Profile Header */}
         <div className="bg-purple rounded-xl p-8 text-white mb-8 shadow-lg">

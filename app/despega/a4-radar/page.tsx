@@ -201,7 +201,7 @@ export default function MarketRadarPage() {
               </CardHeader>
               <CardContent className="space-y-3">
                 <p className="text-sm text-white/85">
-                  Has pasado por A1 (Origen), A2 (Ruta), A3 (Impulso). Ahora con A4 (Radar), 
+                  Has pasado por Tu Perfil Cerebral, Tu Ruta de 90 Días, Entrenamiento Intensivo. Ahora con Tu Coach IA 24/7, 
                   tienes todas las herramientas para buscar y asegurar tu próxima oportunidad con confianza.
                 </p>
                 <Button 
