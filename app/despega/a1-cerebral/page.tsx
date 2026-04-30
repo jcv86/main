@@ -6,6 +6,13 @@ import { createClient } from '@/lib/supabase/client'
 import { DISC_TEST_QUESTIONS } from '@/lib/disc-test-questions'
 import { QuestionProgress } from '@/components/question-progress'
 
+type QuestionTiming = {
+  questionId: number
+  startTime: number
+  endTime?: number
+  responseTime?: number
+}
+
 export default function A1CerebralPage() {
   const [idx, setIdx] = useState(0)
   const [more, setMore] = useState<Record<number, string>>({})
@@ -13,6 +20,7 @@ export default function A1CerebralPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [authOk, setAuthOk] = useState(false)
+  const [questionTimings, setQuestionTimings] = useState<QuestionTiming[]>([])
   const router = useRouter()
   const sb = createClient()
 
@@ -24,6 +32,18 @@ export default function A1CerebralPage() {
     }
     check()
   }, [sb, router])
+
+  useEffect(() => {
+    // Track when user enters a new question
+    setQuestionTimings(prev => {
+      const updated = [...prev]
+      const existing = updated.find(t => t.questionId === DISC_TEST_QUESTIONS[idx].id)
+      if (!existing) {
+        updated.push({ questionId: DISC_TEST_QUESTIONS[idx].id, startTime: Date.now() })
+      }
+      return updated
+    })
+  }, [idx])
 
   if (!authOk) return <div className="min-h-screen flex items-center justify-center"><p>Verificando...</p></div>
 
@@ -49,6 +69,13 @@ export default function A1CerebralPage() {
   const handleNext = async () => {
     if (!bothAnswered) { setError('Selecciona ambas opciones'); return }
     
+    // Record response time for this question
+    const currentTiming = questionTimings.find(t => t.questionId === q.id)
+    if (currentTiming) {
+      currentTiming.endTime = Date.now()
+      currentTiming.responseTime = Math.round((currentTiming.endTime - currentTiming.startTime) / 1000)
+    }
+    
     // Check if same option selected for both MÁS and MENOS
     if (more[q.id] === less[q.id]) {
       setError('No puedes seleccionar la misma opción para MÁS y MENOS')
@@ -71,8 +98,9 @@ export default function A1CerebralPage() {
         
         const scores = calculateScores()
         console.log('[v0] Scores calculated:', scores)
+        console.log('[v0] Response timings:', questionTimings)
         
-        // Call API endpoint to save Cerebral assessment, passing user_id
+        // Call API endpoint to save Cerebral assessment, passing user_id and response timings
         const response = await fetch('/api/a1-cerebral-save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -81,7 +109,8 @@ export default function A1CerebralPage() {
             user_id: user.id,
             responses: { more, less },
             questions: DISC_TEST_QUESTIONS.map(q => ({ id: q.id, pregunta: q.pregunta })),
-            disc_profile: scores
+            disc_profile: scores,
+            response_timings: questionTimings
           })
         })
         
@@ -117,43 +146,73 @@ export default function A1CerebralPage() {
           estimatedTimePerQuestion={20}
           showTimeRemaining={true}
         />
-        <div className="bg-card border border-border rounded-2xl p-8 mb-8">
-          <h2 className="text-2xl font-bold mb-8 text-center">{q.pregunta}</h2>
-          <div className="grid md:grid-cols-2 gap-8">
+        
+        {/* Main Question Card */}
+        <div className="bg-card border-2 border-purple/30 rounded-2xl p-10 mb-8 shadow-lg">
+          {/* Question Header */}
+          <div className="mb-10 pb-6 border-b border-purple/20">
+            <h2 className="text-3xl font-bold text-white leading-tight">{q.pregunta}</h2>
+            <p className="text-purple mt-3 font-semibold">Instrucción: Selecciona una opción en cada columna</p>
+          </div>
+
+          {/* Response Timing Display (if available) */}
+          {questionTimings.find(t => t.questionId === q.id && t.responseTime) && (
+            <div className="mb-6 p-4 bg-blue/10 border border-blue/40 rounded-lg text-center">
+              <p className="text-sm text-blue font-semibold">
+                ⏱️ Tiempo en pregunta anterior: {questionTimings.find(t => t.questionId === DISC_TEST_QUESTIONS[Math.max(0, idx-1)].id)?.responseTime || 0}s
+              </p>
+            </div>
+          )}
+
+          {/* Two-column layout for MÁS and MENOS */}
+          <div className="grid md:grid-cols-2 gap-8 mb-8">
+            {/* MÁS como yo column */}
             <div>
-              <p className="text-lg font-semibold text-green/40 mb-4 text-center">MÁS como yo</p>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-green rounded-full w-10 h-10 flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">+</span>
+                </div>
+                <p className="text-xl font-bold text-green">MÁS como yo</p>
+              </div>
               <div className="space-y-3">
                 {q.opciones.map((opt) => (
                   <button 
                     key={`more-${opt.texto}`} 
                     onClick={() => { setMore(p => ({ ...p, [q.id]: opt.texto })); setError('') }} 
                     disabled={less[q.id] === opt.texto}
-                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm font-medium ${
+                    className={`w-full text-left p-5 rounded-xl border-2 transition-all font-semibold text-base ${
                       more[q.id] === opt.texto 
-                        ? 'border-green bg-green/10 text-white dark:bg-green/20 dark:text-white' 
+                        ? 'border-green bg-green/25 text-white shadow-lg shadow-green/20' 
                         : less[q.id] === opt.texto 
-                          ? 'border-muted/20 bg-muted/5 text-white/50 dark:border-muted/40 dark:bg-transparent dark:text-white/50 opacity-50 cursor-not-allowed' 
-                          : 'border-border text-foreground hover:border-green/50 hover:bg-green/5 dark:hover:bg-green/10'
+                          ? 'border-muted/20 bg-muted/5 text-white/40 opacity-50 cursor-not-allowed' 
+                          : 'border-green/40 text-white/90 hover:border-green hover:bg-green/15 hover:text-white'
                     }`}>
                     {opt.texto}
                   </button>
                 ))}
               </div>
             </div>
+
+            {/* MENOS como yo column */}
             <div>
-              <p className="text-lg font-semibold text-red-400 mb-4 text-center">MENOS como yo</p>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="bg-red rounded-full w-10 h-10 flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">−</span>
+                </div>
+                <p className="text-xl font-bold text-red">MENOS como yo</p>
+              </div>
               <div className="space-y-3">
                 {q.opciones.map((opt) => (
                   <button 
                     key={`less-${opt.texto}`} 
                     onClick={() => { setLess(p => ({ ...p, [q.id]: opt.texto })); setError('') }} 
                     disabled={more[q.id] === opt.texto}
-                    className={`w-full text-left p-4 rounded-[28px] border-2 transition-all text-sm font-medium ${
+                    className={`w-full text-left p-5 rounded-xl border-2 transition-all font-semibold text-base ${
                       less[q.id] === opt.texto 
-                        ? 'border-red bg-red/10 text-white dark:bg-red/20 dark:text-white' 
+                        ? 'border-red bg-red/25 text-white shadow-lg shadow-red/20' 
                         : more[q.id] === opt.texto 
-                          ? 'border-muted/20 bg-muted/5 text-white/50 dark:border-muted/40 dark:bg-transparent dark:text-white/50 opacity-50 cursor-not-allowed' 
-                          : 'border-border text-foreground hover:border-red/50 hover:bg-red/5 dark:hover:bg-red/10'
+                          ? 'border-muted/20 bg-muted/5 text-white/40 opacity-50 cursor-not-allowed' 
+                          : 'border-red/40 text-white/90 hover:border-red hover:bg-red/15 hover:text-white'
                     }`}>
                     {opt.texto}
                   </button>
@@ -161,11 +220,32 @@ export default function A1CerebralPage() {
               </div>
             </div>
           </div>
-          {error && <p className="text-destructive text-sm mt-4 text-center">{error}</p>}
+
+          {/* Error message */}
+          {error && (
+            <div className="mb-6 p-4 bg-red/15 border-2 border-red/40 rounded-lg">
+              <p className="text-red font-semibold text-center">⚠️ {error}</p>
+            </div>
+          )}
         </div>
+
+        {/* Navigation buttons */}
         <div className="flex gap-4">
-          <Button onClick={() => idx > 0 && setIdx(idx - 1)} variant="outline" disabled={idx === 0} className="flex-1">Anterior</Button>
-          <Button onClick={handleNext} disabled={!bothAnswered || loading} className="flex-1">{loading ? 'Guardando...' : isLast ? 'Ver Resultados' : 'Siguiente'}</Button>
+          <Button 
+            onClick={() => idx > 0 && setIdx(idx - 1)} 
+            variant="outline" 
+            disabled={idx === 0} 
+            className="flex-1 py-6 text-base font-semibold"
+          >
+            ← Anterior
+          </Button>
+          <Button 
+            onClick={handleNext} 
+            disabled={!bothAnswered || loading} 
+            className="flex-1 py-6 text-base font-semibold"
+          >
+            {loading ? 'Guardando...' : isLast ? 'Ver Resultados →' : 'Siguiente →'}
+          </Button>
         </div>
       </div>
     </div>
