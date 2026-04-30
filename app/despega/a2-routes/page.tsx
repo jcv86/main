@@ -38,8 +38,8 @@ export default function A2RoutesPage() {
   const [isSyncing, setIsSyncing] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
   const [isResetting, setIsResetting] = useState(false)
-  const [showRuta, setShowRuta] = useState(false)
-  const [showComoFunciona, setShowComoFunciona] = useState(false)
+  const [showRuta, setShowRuta] = useState(true)
+  const [showComoFunciona, setShowComoFunciona] = useState(true)
   const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
 
@@ -411,34 +411,34 @@ export default function A2RoutesPage() {
         </Card>
 
         {/* Main Intro Section - Collapsible */}
-        <div className="border border-muted/40 rounded-xl overflow-hidden">
+        <div className="border border-blue/30 rounded-xl overflow-hidden">
           <button
             onClick={() => setShowRuta(!showRuta)}
-            className="w-full flex items-center justify-between px-5 py-4 bg-muted/10 hover:bg-muted/20 transition-colors text-left group"
+            className="w-full flex items-center justify-between px-5 py-4 bg-blue/5 hover:bg-blue/10 transition-colors text-left group"
           >
             <div className="flex items-center gap-3">
-              <MapPin className="w-5 h-5 text-purple" />
+              <MapPin className="w-5 h-5 text-blue" />
               <span className="font-semibold text-white text-lg">Tu Ruta 7/30/90</span>
               {!showRuta && (
                 <span className="text-xs text-white/40 font-normal">Haz clic para ver las 3 fases</span>
               )}
             </div>
-            <ArrowRight className={`w-4 h-4 text-white/50 transition-transform duration-200 ${showRuta ? 'rotate-90' : ''}`} />
+            <ArrowRight className={`w-4 h-4 text-blue/60 transition-transform duration-200 ${showRuta ? 'rotate-90' : ''}`} />
           </button>
 
           {showRuta && (
-            <div className="p-5 space-y-4 border-t border-muted/30">
+            <div className="p-5 space-y-4 border-t border-blue/20">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* 7 Days */}
-                <div className="border-l-4 border-purple bg-muted/10 rounded-r-xl p-4">
-                  <p className="text-xs font-bold text-purple uppercase tracking-widest mb-1">SEMANA 1</p>
+                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
+                  <p className="text-xs font-bold text-blue uppercase tracking-widest mb-1">SEMANA 1</p>
                   <h3 className="text-xl font-black text-white mb-2">7 Días</h3>
                   <p className="text-white/75 text-sm leading-relaxed mb-3">Prepárate para tu primera conversación de LinkedIn. Optimiza perfil, prepara pitch elevator de 30 segundos.</p>
-                  <p className="text-xs text-purple font-semibold">Conversacion: LinkedIn</p>
+                  <p className="text-xs text-blue font-semibold">Conversacion: LinkedIn</p>
                 </div>
 
                 {/* 30 Days */}
-                <div className="border-l-4 border-blue bg-muted/10 rounded-r-xl p-4">
+                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
                   <p className="text-xs font-bold text-blue uppercase tracking-widest mb-1">MES 1</p>
                   <h3 className="text-xl font-black text-white mb-2">30 Días</h3>
                   <p className="text-white/75 text-sm leading-relaxed mb-3">Domina entrevista técnica o conductual. Practica respuestas STAR, manejo de objeciones, cierre de oportunidades.</p>
@@ -446,14 +446,14 @@ export default function A2RoutesPage() {
                 </div>
 
                 {/* 90 Days */}
-                <div className="border-l-4 border-emerald-400 bg-muted/10 rounded-r-xl p-4">
-                  <p className="text-xs font-bold text-emerald-400 uppercase tracking-widest mb-1">TRIMESTRE</p>
+                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
+                  <p className="text-xs font-bold text-blue uppercase tracking-widest mb-1">TRIMESTRE</p>
                   <h3 className="text-xl font-black text-white mb-2">90 Días</h3>
                   <p className="text-white/75 text-sm leading-relaxed mb-3">Negocia tu propuesta. Habla de sueldo, beneficios, rol, vision de carrera con seguridad y profesionalismo.</p>
-                  <p className="text-xs text-emerald-400 font-semibold">Conversacion: Career</p>
+                  <p className="text-xs text-blue font-semibold">Conversacion: Career</p>
                 </div>
               </div>
-              <p className="text-white/60 text-sm text-center pt-2 border-t border-muted/20">
+              <p className="text-white/60 text-sm text-center pt-2 border-t border-blue/10">
                 Cada fase te transforma en una pieza imprescindible para tus potenciales empleadores. No es solo conseguir un trabajo, es posicionar tu carrera para los proximos 10 anos.
               </p>
             </div>
@@ -461,10 +461,10 @@ export default function A2RoutesPage() {
         </div>
 
         {/* What is this phase - Collapsible */}
-        <div className="border border-muted/40 rounded-xl overflow-hidden">
+        <div className="border border-blue/30 rounded-xl overflow-hidden">
           <button
             onClick={() => setShowComoFunciona(!showComoFunciona)}
-            className="w-full flex items-center justify-between px-5 py-4 bg-muted/10 hover:bg-muted/20 transition-colors text-left"
+            className="w-full flex items-center justify-between px-5 py-4 bg-blue/5 hover:bg-blue/10 transition-colors text-left"
           >
             <div className="flex items-center gap-3">
               <Zap className="w-5 h-5 text-blue" />
@@ -473,25 +473,25 @@ export default function A2RoutesPage() {
                 <span className="text-xs text-white/40 font-normal">Haz clic para ver los detalles</span>
               )}
             </div>
-            <ArrowRight className={`w-4 h-4 text-white/50 transition-transform duration-200 ${showComoFunciona ? 'rotate-90' : ''}`} />
+            <ArrowRight className={`w-4 h-4 text-blue/60 transition-transform duration-200 ${showComoFunciona ? 'rotate-90' : ''}`} />
           </button>
 
           {showComoFunciona && (
-            <div className="p-5 border-t border-muted/30">
+            <div className="p-5 border-t border-blue/20">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border-l-4 border-blue bg-muted/10 rounded-r-xl p-4">
+                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
                   <h3 className="font-bold text-white mb-1">Acciones Concretas</h3>
                   <p className="text-white/70 text-sm">Cada tarea esta mapeada a una conversacion real: LinkedIn networking, entrevistas o negociacion de cargo.</p>
                 </div>
-                <div className="border-l-4 border-purple bg-muted/10 rounded-r-xl p-4">
+                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
                   <h3 className="font-bold text-white mb-1">Progresion Estructurada</h3>
                   <p className="text-white/70 text-sm">3 fases claramente definidas: Fundamentos, Aceleracion, Dominio. Cada una te acerca a ser imprescindible.</p>
                 </div>
-                <div className="border-l-4 border-emerald-400 bg-muted/10 rounded-r-xl p-4">
+                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
                   <h3 className="font-bold text-white mb-1">Personalizacion</h3>
                   <p className="text-white/70 text-sm">Tu ruta es unica segun tu perfil cerebral, objetivos y nivel actual. No hay dos rutas iguales.</p>
                 </div>
-                <div className="border-l-4 border-yellow-400 bg-muted/10 rounded-r-xl p-4">
+                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
                   <h3 className="font-bold text-white mb-1">Trackeo Real</h3>
                   <p className="text-white/70 text-sm">Marca tareas como completadas y ve tu progreso en tiempo real. Gana badges y hitos conforme avanzas.</p>
                 </div>
