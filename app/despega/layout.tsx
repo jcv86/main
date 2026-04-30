@@ -11,7 +11,7 @@ export default function DespegaLayout({
     <CoachProviderWrapper>
       <div className="min-h-screen flex flex-col">
         <DespegaNavbar />
-        <main className="flex-1">
+        <main className="flex-1 pt-4">
           {children}
         </main>
         <PremiumGamificationWidget />

@@ -128,11 +128,18 @@
 
   /* Links */
   a {
-    @apply text-foreground underline transition-colors;
+    @apply text-foreground transition-colors;
+    text-decoration: none;
   }
 
   a:hover {
     @apply text-blue;
+  }
+
+  /* Nav links never underline */
+  nav a, nav a:hover {
+    text-decoration: none;
+    color: inherit;
   }
 
   /* Focus styles for accessibility */

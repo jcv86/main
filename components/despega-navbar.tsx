@@ -175,8 +175,8 @@ export function DespegaNavbar() {
                         {stage.routes.map((route) => {
                           const isActive = pathname === route.href
                           return (
-                            <Link key={route.href} href={route.href}>
-                              <div className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer ${
+                            <Link key={route.href} href={route.href} className="no-underline">
+                              <div className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer whitespace-nowrap no-underline ${
                                 isActive
                                   ? `${style.activeBg} ${style.activeText}`
                                   : `text-white/60 ${style.hoverBg} ${style.hoverText}`
