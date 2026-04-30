@@ -199,17 +199,17 @@ export default function Conozcamonos2Page() {
           <div className="inline-block px-4 py-2 bg-background">
             <p className="text-sm font-semibold text-blue dark:text-blue-200">Conozcámonos 2: Tu Ruta</p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-background">
-            Explora y Diseña Tu Ruta
+          <h1 className="text-5xl md:text-6xl font-black text-white mb-4">
+            Diseña Tu Ruta de 90 Días
           </h1>
-          <p className="text-muted-foreground dark:text-white/85 mb-4">
+          <p className="text-xl text-white/90 mb-6">
             {currentStep === 'paso1'
               ? 'Paso 1: Define tu objetivo y contexto profesional'
               : 'Paso 2: Personaliza los detalles de tu desarrollo'}
           </p>
-          <Progress value={progress} className="h-2 bg-muted/20 dark:bg-muted/70" />
-          <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-3 font-medium">
-            Progreso: {completedCount} de {totalQuestions} preguntas
+          <Progress value={progress} className="h-3 bg-white/20" />
+          <p className="text-base text-white/85 mt-3 font-semibold">
+            Progreso: {completedCount} de {totalQuestions} preguntas completadas
           </p>
         </div>
 
@@ -227,10 +227,10 @@ export default function Conozcamonos2Page() {
               }`}
             >
               <div className="flex items-start gap-3 mb-4">
-                <h3 className="text-lg font-semibold text-muted/90 dark:text-white flex-1">
-                  {question.question}
-                </h3>
-                {isAnswered && <span className="text-green dark:text-green/40">✓</span>}
+              <h3 className="text-lg font-bold text-white flex-1">
+                {question.question}
+              </h3>
+              {isAnswered && <span className="text-green text-xl font-bold">✓</span>}
               </div>
 
               {question.type === 'select' && (
@@ -269,13 +269,13 @@ export default function Conozcamonos2Page() {
                   
                   {/* Validation status */}
                   {validatingIds.has(question.id) && (
-                    <p className="text-xs text-white0 flex items-center gap-1">
-                      <span className="animate-spin">⏳</span> Validando...
+                    <p className="text-sm text-white font-semibold flex items-center gap-2">
+                      <span className="animate-spin text-lg">⏳</span> Validando tu respuesta...
                     </p>
                   )}
                   
                   {error && !validatingIds.has(question.id) && (
-                    <div className="text-xs text-red dark:text-red/40 bg-red/5 dark:bg-red/30 p-2 rounded border border-red/20 dark:border-red">
+                    <div className="text-sm text-white bg-red/40 p-4 rounded-lg border-2 border-red/60 font-semibold">
                       {error}
                     </div>
                   )}
@@ -331,13 +331,13 @@ export default function Conozcamonos2Page() {
         </div>
 
         {error && (
-          <div className="bg-red/15 dark:bg-red/20 border-2 border-red/40 dark:border-red/50 rounded-[28px] p-6 mb-6 shadow-lg">
-            <div className="flex items-start gap-3">
-              <span className="text-2xl flex-shrink-0">⚠️</span>
+          <div className="bg-red/30 border-2 border-red/60 rounded-lg p-8 mb-6 shadow-lg">
+            <div className="flex items-start gap-4">
+              <span className="text-4xl flex-shrink-0">⚠️</span>
               <div className="flex-1">
-                <h3 className="font-semibold text-red dark:text-red mb-1">Validación requerida</h3>
-                <p className="text-red dark:text-red text-sm">{error}</p>
-                <p className="text-red dark:text-red text-xs mt-2 font-medium">Corrige este campo antes de continuar →</p>
+                <h3 className="font-bold text-white text-xl mb-2">Validación Requerida</h3>
+                <p className="text-white font-semibold text-lg mb-3">{error}</p>
+                <p className="text-white/90 font-semibold">Corrige este campo antes de continuar</p>
               </div>
             </div>
           </div>
