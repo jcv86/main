@@ -6,6 +6,8 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Zap, BarChart3, Target, Video, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import A3ProgressDashboard from '@/components/a3-progress-dashboard'
+import A3GamificationWidget from '@/components/a3-gamification-widget'
 
 export default function EntrenamientoIntensivePage() {
   const router = useRouter()
@@ -38,7 +40,26 @@ export default function EntrenamientoIntensivePage() {
           </div>
         </div>
 
-        {/* Step 0: Diagnostic Audit */}
+        {/* Progress and Gamification Dashboard */}
+        <div className="mb-16 space-y-6">
+          <div>
+            <h2 className="text-4xl font-bold text-white mb-3">Tu Progreso</h2>
+            <p className="text-lg text-white/85">
+              Monitorea tu desempeño, gana puntos y desbloquea badges mientras avanzas en tu entrenamiento.
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <A3ProgressDashboard />
+            </div>
+            <div>
+              <A3GamificationWidget />
+            </div>
+          </div>
+        </div>
+
+        {/* Step 1: Diagnostic Audit */}
         <div className="mb-16 space-y-6">
           <div>
             <h2 className="text-4xl font-bold text-white mb-3">Paso 1: Tu Diagnóstico Inicial</h2>
