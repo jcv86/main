@@ -101,8 +101,8 @@ export function DespeganNavbar() {
             <img src="/logos/dtc-logo.png" alt="Despega Tu Carrera" className="h-8 w-auto" />
           </Link>
 
-          {/* Phase Progress Indicator - Desktop */}
-          <div className="hidden lg:flex items-center gap-1">
+          {/* Phase Progress Indicator - Desktop - HIDDEN */}
+          {/* <div className="hidden lg:flex items-center gap-1">
             {phaseOrder.map((phase, idx) => {
               const isCompleted = false // TODO: Get from user data
               const isActive = currentPhase === phase.key
@@ -126,7 +126,7 @@ export function DespeganNavbar() {
                 </div>
               )
             })}
-          </div>
+          </div> */
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-1">
@@ -195,8 +195,8 @@ export function DespeganNavbar() {
             })}
           </div>
 
-          {/* Desktop XP Badge + A2 Progress + Logout */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Desktop A2 Progress Badge + XP Badge + Logout - More Space */}
+          <div className="hidden md:flex items-center gap-6">
             <A2ProgressNavbarBadge />
             <XPNavbarBadge />
             <Button onClick={handleLogout} variant="outline" size="sm" className="gap-2 border-muted-foreground text-muted-foreground hover:bg-transparent hover:text-white">
