@@ -1,49 +1,54 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
 
 export async function GET(request: NextRequest) {
   try {
-    // Get user from auth header
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const supabase = await createClient()
+    
+    // Get current user
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json(
+        {
+          totalMinutes: 0,
+          totalSessions: 0,
+          completionPercentage: 0,
+          sectionProgress: [],
+          currentLevel: 1,
+          xpPoints: 0,
+          xpToNextLevel: 1000,
+          badges: [],
+          streak: 0,
+        },
+        { status: 200 }
+      )
     }
 
-    const token = authHeader.replace('Bearer ', '')
-    const { data: userData, error: userError } = await supabase.auth.getUser(token)
-
-    if (userError || !userData.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const userId = userData.user.id
+    const userId = user.id
 
     // Fetch user progress data
-    const { data: progressData, error: progressError } = await supabase
+    const { data: progressData } = await supabase
       .from('a3_user_progreso')
       .select('*')
       .eq('user_id', userId)
       .single()
 
     // Fetch interview history
-    const { data: interviews, error: interviewError } = await supabase
+    const { data: interviews } = await supabase
       .from('a3_user_entrevistas')
       .select('tiempo_dedicado_minutos, score, created_at')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
 
     // Fetch module progress
-    const { data: modules, error: modulesError } = await supabase
+    const { data: modules } = await supabase
       .from('a4_module_progress')
       .select('nombre_modulo, tiempo_dedicado_minutos, completado, progreso_porcentaje')
       .eq('user_id', userId)
 
-    if (progressError || !progressData) {
+    // Return default data if no progress record exists
+    if (!progressData) {
       return NextResponse.json(
         {
           totalMinutes: 0,
@@ -124,6 +129,19 @@ export async function GET(request: NextRequest) {
     )
   } catch (error) {
     console.error('[v0] Error in /api/a3/progress:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json(
+      {
+        totalMinutes: 0,
+        totalSessions: 0,
+        completionPercentage: 0,
+        sectionProgress: [],
+        currentLevel: 1,
+        xpPoints: 0,
+        xpToNextLevel: 1000,
+        badges: [],
+        streak: 0,
+      },
+      { status: 200 }
+    )
   }
 }

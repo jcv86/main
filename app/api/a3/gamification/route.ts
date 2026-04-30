@@ -1,27 +1,34 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
-
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
 
 export async function GET(request: NextRequest) {
   try {
-    // Get user from auth header
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    const supabase = await createClient()
+    
+    // Get current user
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json(
+        {
+          currentLevel: 1,
+          totalXp: 0,
+          xpToNextLevel: 1000,
+          streak: 0,
+          badges: [],
+          nextChallenge: {
+            name: 'Iniciador',
+            description: 'Completa 5 entrenamientos',
+            reward: 100,
+            progress: 0,
+            total: 5,
+          },
+        },
+        { status: 200 }
+      )
     }
 
-    const token = authHeader.replace('Bearer ', '')
-    const { data: userData, error: userError } = await supabase.auth.getUser(token)
-
-    if (userError || !userData.user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
-    const userId = userData.user.id
+    const userId = user.id
 
     // Fetch interview history for XP calculation
     const { data: interviews } = await supabase
@@ -106,6 +113,16 @@ export async function GET(request: NextRequest) {
     )
   } catch (error) {
     console.error('[v0] Error in /api/a3/gamification:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json(
+      {
+        currentLevel: 1,
+        totalXp: 0,
+        xpToNextLevel: 1000,
+        streak: 0,
+        badges: [],
+        nextChallenge: null,
+      },
+      { status: 200 }
+    )
   }
 }

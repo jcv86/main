@@ -31,12 +31,31 @@ export default function A3ProgressDashboard() {
   useEffect(() => {
     const fetchProgress = async () => {
       try {
-        const response = await fetch('/api/a3/progress')
-        if (!response.ok) throw new Error('Failed to fetch progress')
+        const response = await fetch('/api/a3/progress', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        })
+        if (!response.ok) {
+          console.error('[v0] Progress API error:', response.status)
+          throw new Error(`Failed to fetch progress: ${response.status}`)
+        }
         const data = await response.json()
         setProgress(data)
       } catch (error) {
         console.error('[v0] Error fetching progress:', error)
+        setProgress({
+          totalMinutes: 0,
+          totalSessions: 0,
+          completionPercentage: 0,
+          sectionProgress: [],
+          currentLevel: 1,
+          xpPoints: 0,
+          xpToNextLevel: 1000,
+          badges: [],
+          streak: 0,
+        })
       } finally {
         setLoading(false)
       }

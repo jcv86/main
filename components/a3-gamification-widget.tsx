@@ -28,12 +28,28 @@ export default function A3GamificationWidget() {
   useEffect(() => {
     const fetchGamification = async () => {
       try {
-        const response = await fetch('/api/a3/gamification')
-        if (!response.ok) throw new Error('Failed to fetch gamification data')
+        const response = await fetch('/api/a3/gamification', {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          credentials: 'include',
+        })
+        if (!response.ok) {
+          console.error('[v0] Gamification API error:', response.status)
+          throw new Error(`Failed to fetch gamification: ${response.status}`)
+        }
         const data = await response.json()
         setGamification(data)
       } catch (error) {
         console.error('[v0] Error fetching gamification:', error)
+        setGamification({
+          currentLevel: 1,
+          totalXp: 0,
+          xpToNextLevel: 1000,
+          streak: 0,
+          badges: [],
+          nextChallenge: null,
+        })
       } finally {
         setLoading(false)
       }
