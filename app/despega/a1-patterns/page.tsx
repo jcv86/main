@@ -68,7 +68,7 @@ export default function A1PatternsPage() {
 
   if (loading) {
     return (
-      <ASection title="A1: Origen" subtitle="Entender Tus Patrones" icon="🧠" colorClass="from-purple/50">
+      <ASection title="Tus Patrones de Personalidad" subtitle="Cómo Influyen en Tu Carrera" icon="🧠" colorClass="from-purple/50">
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-white0" />
         </div>
@@ -232,7 +232,7 @@ export default function A1PatternsPage() {
 
             <Card className="bg-muted/80/40 border-muted/70">
               <CardHeader>
-                <CardTitle>Ir a A2: Ruta</CardTitle>
+                <CardTitle>Ir a Tu Ruta</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-white/85 mb-4">Crea tu plan personalizado de 90 días</p>

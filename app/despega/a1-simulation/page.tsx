@@ -95,7 +95,7 @@ export default function A1SimulationPage() {
   if (simulationComplete) {
     return (
       <ASection 
-        title="A1: Origen" 
+        title="Tu Perfil: Patrones en Acción" 
         subtitle="Simulación Completada" 
         icon="🎭" 
         colorClass="from-blue"
@@ -159,7 +159,7 @@ export default function A1SimulationPage() {
 
   return (
     <ASection 
-      title="A1: Origen" 
+      title="Tu Perfil: Patrones en Acción" 
       subtitle="Simulación de Entrevista" 
       icon="🎭" 
       colorClass="from-blue"

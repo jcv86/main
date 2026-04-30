@@ -115,7 +115,7 @@ export default function A3ResultadosPage() {
 
   if (error) {
     return (
-      <ASection title="A3: Entrena" subtitle="Resultados de Simulación" icon="🎬" colorClass="from-purple/50500">
+      <ASection title="Resultados: Tu Desempeño en Entrevistas" subtitle="Análisis de tu Simulación" icon="🎬" colorClass="from-purple/50">
         <ASectionPart title="Error" icon={<Target />}>
           <div className="space-y-4">
             <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
