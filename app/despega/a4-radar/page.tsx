@@ -73,30 +73,30 @@ export default function MarketRadarPage() {
       {/* FLUJO / PROCESO */}
       <ASectionPart title="Cómo Funciona el Radar" icon={<Radar />}>
         <div className="space-y-4">
-          <div className="p-4 bg-muted/80/30 border border-muted/70 rounded-lg space-y-3">
+          <div className="p-4 bg-background/50 border border-white/20 rounded-lg space-y-3">
             <div className="flex gap-3 items-start">
-              <div className="w-8 h-8 rounded-[20px] bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">1</div>
+              <div className="w-8 h-8 rounded-[20px] bg-purple/20 border border-purple/50 flex items-center justify-center flex-shrink-0 text-purple font-bold text-sm">1</div>
               <div>
                 <p className="font-semibold text-white">Tu Perfil Se Carga</p>
                 <p className="text-sm text-muted-foreground">Tus datos de A1-A3 alimentan el sistema de matching</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
-              <div className="w-8 h-8 rounded-[20px] bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">2</div>
+              <div className="w-8 h-8 rounded-[20px] bg-purple/20 border border-purple/50 flex items-center justify-center flex-shrink-0 text-purple font-bold text-sm">2</div>
               <div>
                 <p className="font-semibold text-white">Algoritmo Busca Coincidencias</p>
                 <p className="text-sm text-muted-foreground">Escaneamos el mercado por ofertas que coincidan</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
-              <div className="w-8 h-8 rounded-[20px] bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">3</div>
+              <div className="w-8 h-8 rounded-[20px] bg-purple/20 border border-purple/50 flex items-center justify-center flex-shrink-0 text-purple font-bold text-sm">3</div>
               <div>
                 <p className="font-semibold text-white">Recibes Alertas</p>
                 <p className="text-sm text-muted-foreground">Notificaciones de posiciones que son TU fit</p>
               </div>
             </div>
             <div className="flex gap-3 items-start">
-              <div className="w-8 h-8 rounded-[20px] bg-teal-500/20 border border-teal-500/50 flex items-center justify-center flex-shrink-0 text-teal-400 font-bold text-sm">4</div>
+              <div className="w-8 h-8 rounded-[20px] bg-purple/20 border border-purple/50 flex items-center justify-center flex-shrink-0 text-purple font-bold text-sm">4</div>
               <div>
                 <p className="font-semibold text-white">Tomas Acción</p>
                 <p className="text-sm text-muted-foreground">Aplicas, entrevishas, y avanzas en tu búsqueda</p>

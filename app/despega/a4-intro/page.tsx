@@ -51,14 +51,14 @@ export default function ContinuousExecutionIntroPage() {
           title="Tu Coach IA 24/7 - Inteligencia de Mercado"
           description="Monitorea el mercado laboral, obtén inteligencia competitiva y toma decisiones estratégicas con confianza. Tu ejecución comienza aquí."
           estimatedTime="Acceso continuo"
-          pillarColor="cyan"
+          pillarColor="blue"
         />
 
         <div className="space-y-8">
-          <Card className="bg-gradient-to-br from-cyan/20 to-blue/20 border-2 border-cyan/40 shadow-lg">
+          <Card className="bg-gradient-to-br from-purple/20 to-blue/20 border-2 border-purple/40 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-3xl flex items-center gap-3 text-white">
-                <Radar className="w-8 h-8 text-cyan" />
+                <Radar className="w-8 h-8 text-purple" />
                 Tu Coach IA 24/7
               </CardTitle>
             </CardHeader>
@@ -66,7 +66,7 @@ export default function ContinuousExecutionIntroPage() {
               <p className="text-white/90 text-lg leading-relaxed">
                 Esta es tu fase de ejecución continua. No terminas en entrenamiento - aquí EMPIEZAS a aplicar todo. Tu coach IA personal te proporciona contexto real del mercado laboral, tendencias de industria, inteligencia competitiva y decisiones estratégicas para que entres al mercado con ventaja.
               </p>
-              <div className="bg-cyan/25 p-6 rounded-xl border-2 border-cyan/50">
+              <div className="bg-purple/25 p-6 rounded-xl border-2 border-purple/50">
                 <p className="text-white font-bold text-lg">
                   Tu objetivo: Ejecutar tu plan con inteligencia del mercado. Conocer antes que los demás, decidir mejor, actuar con confianza.
                 </p>
@@ -74,7 +74,7 @@ export default function ContinuousExecutionIntroPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-green/20 to-teal/20 border-2 border-green/40 shadow-lg">
+          <Card className="bg-gradient-to-br from-green/20 to-emerald/20 border-2 border-green/40 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-3xl flex items-center gap-3 text-white">
                 <TrendingUp className="w-8 h-8 text-green" />
@@ -155,12 +155,12 @@ export default function ContinuousExecutionIntroPage() {
             </CardContent>
           </Card>
 
-          <div className="p-8 bg-gradient-to-r from-cyan/20 to-blue/20 border-2 border-cyan/40 rounded-xl shadow-lg">
+          <div className="p-8 bg-gradient-to-r from-purple/20 to-blue/20 border-2 border-purple/40 rounded-xl shadow-lg">
             <h3 className="text-3xl font-bold text-white mb-3">Bienvenido a Tu Ejecución Continua</h3>
             <p className="text-white/90 text-lg mb-8">Aquí es donde todo tu trabajo cobra vida. Entra al dashboard y comienza tu ejecución con inteligencia de mercado.</p>
             <Button 
               onClick={() => router.push('/despega/a4')}
-              className="w-full bg-cyan hover:bg-cyan/90 text-black font-bold text-lg py-6"
+              className="w-full bg-purple/70 hover:bg-purple/60 text-white font-bold text-lg py-6"
             >
               Ir a Ejecución Continua
               <ArrowRight className="w-5 h-5 ml-2" />
