@@ -135,7 +135,7 @@ export function DespegaNavbar() {
                   </Button>
 
                   {/* Dropdown - Colored background based on phase */}
-                  <div className={`absolute left-0 top-full mt-2 w-48 border rounded-lg shadow-lg z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ${
+                  <div className={`absolute left-0 top-full mt-2 w-48 border rounded-lg shadow-lg z-[9999] opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ${
                     stagePhase === 'ritual' 
                       ? 'bg-purple/15 border-purple/40'
                       : stagePhase === 'exploration'
