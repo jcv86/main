@@ -602,17 +602,16 @@ export default function A2RoutesPage() {
               const milestoneData = getMilestoneData(days)
               const tasks = route[`route_${days}days` as keyof typeof route] as any[] || []
               const phaseProgress = getPhaseProgress(days)
-              const isExpanded = expandedPhase === days
-              const phaseKey = `route_${days}days` as const
+              const isExpanded = expandedMilestone === days
 
               return (
                 <div key={days} className="border border-muted/50 rounded-lg overflow-hidden">
                   <button
-                    onClick={() => setExpandedPhase(isExpanded ? null : days)}
+                    onClick={() => setExpandedMilestone(isExpanded ? null : days)}
                     className="w-full flex items-center justify-between p-4 bg-muted/20 hover:bg-muted/30 transition-colors text-left"
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${milestoneData.color}`}>
+                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold bg-purple/30 border border-purple/50 text-purple`}>
                         {days === 30 ? '1' : days === 60 ? '2' : '3'}
                       </div>
                       <div>
@@ -629,21 +628,18 @@ export default function A2RoutesPage() {
                   </button>
                   {isExpanded && (
                     <div className="p-4 space-y-3">
-                      {tasks.map((task: any, taskIdx: number) => (
-                        <TaskCard
-                          key={taskIdx}
-                          task={task}
-                          phaseDays={days}
-                          isCompleted={completedTasks.has(getTaskId(task, days))}
-                          onToggle={(completed) => {
-                            if (completed) {
-                              markTaskComplete(task, days)
-                            } else {
-                              unmarkTaskComplete(task, days)
-                            }
-                          }}
-                        />
-                      ))}
+                      {tasks.map((task: any, taskIdx: number) => {
+                        const taskId = getTaskId(task, days)
+                        return (
+                          <TaskCard
+                            key={taskIdx}
+                            task={task}
+                            taskId={taskId}
+                            completed={completedTasks.has(taskId)}
+                            onComplete={() => handleTaskComplete(taskId)}
+                          />
+                        )
+                      })}
                     </div>
                   )}
                 </div>
