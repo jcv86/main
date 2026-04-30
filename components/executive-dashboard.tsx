@@ -21,13 +21,13 @@ const mockMetrics: DashboardMetric[] = [
     label: 'Tu Nivel de Criterio',
     value: 72,
     unit: '%',
-    icon: <BarChart3 className="w-6 h-6 text-cyan-400" />,
+    icon: <BarChart3 className="w-6 h-6 text-purple" />,
     trend: 12
   },
   {
     label: 'Oportunidades Identificadas',
     value: 23,
-    icon: <Target className="w-6 h-6 text-teal-400" />,
+    icon: <Target className="w-6 h-6 text-blue" />,
     trend: 5
   },
   {
@@ -41,7 +41,7 @@ const mockMetrics: DashboardMetric[] = [
     label: 'Ranking Semanal',
     value: 145,
     unit: 'º',
-    icon: <Award className="w-6 h-6 text-amber-400" />,
+    icon: <Award className="w-6 h-6 text-orange" />,
     trend: -12
   }
 ]
@@ -105,7 +105,7 @@ export function ExecutiveDashboard() {
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {mockMetrics.map((metric, idx) => (
-          <Card key={idx} className="border-t-4 border-t-cyan-500 hover:shadow-lg transition-all">
+          <Card key={idx} className="border-t-4 border-t-purple hover:shadow-lg transition-all">
             <CardContent className="p-6">
               <div className="flex items-start justify-between mb-4">
                 <div>{metric.icon}</div>
@@ -131,7 +131,7 @@ export function ExecutiveDashboard() {
           {keyInsights.map((insight, idx) => (
             <Card
               key={idx}
-              className="cursor-pointer hover:border-cyan/50 transition-colors"
+              className="cursor-pointer hover:border-purple/50 transition-colors"
               onClick={() => setExpandedInsight(expandedInsight === idx ? null : idx)}
             >
               <CardContent className="p-6">
@@ -146,7 +146,7 @@ export function ExecutiveDashboard() {
                       </p>
                     )}
                   </div>
-                  <Button size="sm" className="ml-4 whitespace-nowrap bg-cyan hover:bg-cyan">
+                  <Button size="sm" className="ml-4 whitespace-nowrap bg-purple/70 hover:bg-purple/60">
                     {insight.action}
                   </Button>
                 </div>
@@ -187,7 +187,7 @@ export function ExecutiveDashboard() {
                     size="sm" 
                     variant="outline"
                     onClick={() => handleActionClick(action.route)}
-                    className="cursor-pointer hover:bg-cyan/5 dark:hover:bg-cyan/20"
+                    className="cursor-pointer hover:bg-purple/10 dark:hover:bg-purple/20"
                   >
                     Acceder
                   </Button>
@@ -202,7 +202,7 @@ export function ExecutiveDashboard() {
       <Card className="bg-background">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-cyan" />
+            <CheckCircle2 className="w-5 h-5 text-purple" />
             Tu Progreso General
           </CardTitle>
         </CardHeader>
