@@ -49,11 +49,11 @@ export default function EntrenamientoIntensivePage() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-4 gap-4">
-            <div className="lg:col-span-2.5">
+          <div className="grid md:grid-cols-3 gap-4">
+            <div className="md:col-span-2">
               <A3ProgressDashboard />
             </div>
-            <div className="lg:col-span-1.5">
+            <div>
               <A3GamificationWidget />
             </div>
           </div>

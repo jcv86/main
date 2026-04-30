@@ -75,31 +75,31 @@ export default function A3ProgressDashboard() {
       {/* Main KPI Card - 3 Metrics */}
       <Card className="border-training/30 bg-gradient-to-br from-training/10 via-training/5 to-background overflow-hidden">
         <CardContent className="pt-8 pb-8">
-          <div className="grid grid-cols-3 gap-8">
+          <div className="grid grid-cols-3 gap-12">
             {/* Metric 1: Time */}
             <div className="text-center space-y-3">
-              <Clock className="w-8 h-8 mx-auto text-training opacity-70" />
+              <Clock className="w-10 h-10 mx-auto text-training opacity-70" />
               <div>
-                <p className="text-4xl font-bold text-white">{progress.totalMinutes}</p>
-                <p className="text-xs text-training/80 mt-1 uppercase tracking-wider">minutos entrenado</p>
+                <p className="text-5xl font-bold text-white">{progress.totalMinutes}</p>
+                <p className="text-xs text-training/80 mt-2 uppercase tracking-wider">minutos entrenado</p>
               </div>
             </div>
 
             {/* Metric 2: Sessions */}
             <div className="text-center space-y-3 border-l border-r border-training/20">
-              <Target className="w-8 h-8 mx-auto text-training opacity-70" />
+              <Target className="w-10 h-10 mx-auto text-training opacity-70" />
               <div>
-                <p className="text-4xl font-bold text-white">{progress.totalSessions}</p>
-                <p className="text-xs text-training/80 mt-1 uppercase tracking-wider">sesiones</p>
+                <p className="text-5xl font-bold text-white">{progress.totalSessions}</p>
+                <p className="text-xs text-training/80 mt-2 uppercase tracking-wider">sesiones</p>
               </div>
             </div>
 
             {/* Metric 3: Level */}
             <div className="text-center space-y-3">
-              <TrendingUp className="w-8 h-8 mx-auto text-amber-400 opacity-70" />
+              <TrendingUp className="w-10 h-10 mx-auto text-amber-400 opacity-70" />
               <div>
-                <p className="text-4xl font-bold text-white">{progress.currentLevel}</p>
-                <p className="text-xs text-amber-400/80 mt-1 uppercase tracking-wider">tu nivel</p>
+                <p className="text-5xl font-bold text-white">{progress.currentLevel}</p>
+                <p className="text-xs text-amber-400/80 mt-2 uppercase tracking-wider">tu nivel</p>
               </div>
             </div>
           </div>

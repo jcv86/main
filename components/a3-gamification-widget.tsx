@@ -75,24 +75,24 @@ export default function A3GamificationWidget() {
       <Card className="border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-background">
         <CardContent className="pt-6 pb-6">
           <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <Zap className="w-8 h-8 text-amber-400" />
+            <div className="flex items-center gap-4">
+              <Zap className="w-10 h-10 text-amber-400" />
               <div>
                 <p className="text-xs text-muted-foreground uppercase tracking-wider">Nivel</p>
-                <p className="text-3xl font-bold text-white">{gamification.currentLevel}</p>
+                <p className="text-4xl font-bold text-white">{gamification.currentLevel}</p>
               </div>
             </div>
             <div className="text-right">
               <p className="text-xs text-muted-foreground uppercase tracking-wider">XP</p>
-              <p className="text-xl font-bold text-amber-400">{gamification.totalXp}</p>
+              <p className="text-3xl font-bold text-amber-400">{gamification.totalXp}</p>
             </div>
           </div>
           
           <div className="space-y-2">
             <p className="text-xs text-muted-foreground">{gamification.xpToNextLevel} XP para siguiente</p>
-            <div className="w-full bg-muted/40 rounded-full h-2 overflow-hidden">
+            <div className="w-full bg-muted/40 rounded-full h-3 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-amber-400 to-amber-600 h-2 rounded-full transition-all duration-500"
+                className="bg-gradient-to-r from-amber-400 to-amber-600 h-3 rounded-full transition-all duration-500"
                 style={{ width: `${xpPercentage}%` }}
               />
             </div>
