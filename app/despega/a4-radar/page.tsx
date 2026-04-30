@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Loader2, Newspaper, TrendingUp, CheckCircle2, Zap, Radar, ArrowRight } from 'lucide-react'
 
-export default function A4RadarPage() {
+export default function MarketRadarPage() {
   const [loading, setLoading] = useState(true)
   const router = useRouter()
   const supabase = createClient()
@@ -53,17 +53,17 @@ export default function A4RadarPage() {
 
   return (
     <ASection
-      title="A4: Radar"
-      subtitle="Monitoreo continuo y oportunidades"
+      title="Tu Inteligencia de Mercado"
+      subtitle="Monitoreo Continuo y Oportunidades"
       icon="📡"
       colorClass="from-blue/50"
     >
       {/* EXPLICACIÓN */}
-      <ASectionPart title="¿Qué es A4: Radar?" icon={<Zap />}>
-        <p className="text-white/85 mb-4">
-          En A4: Radar, tu transformación Despega entra en la fase de acción. Aquí monitoreas oportunidades en tiempo real, 
+      <ASectionPart title="Inteligencia de Mercado Continua" icon={<Zap />}>
+        <p className="text-white/90 text-lg mb-4 leading-relaxed">
+          En esta fase de ejecución continua, tu sistema de Inteligencia de Mercado monitorea oportunidades en tiempo real, 
           recibes alertas sobre posiciones que coinciden con tu perfil, y mantienes un pulso constante del mercado. 
-          Es tu sistema de seguimiento y aceleración para conseguir resultados.
+          Es tu herramienta permanente de seguimiento para acelerar resultados.
         </p>
         <p className="text-muted-foreground text-sm">
           ⏱️ Duración: Indefinido. A4 es tu herramienta permanente mientras buscas.

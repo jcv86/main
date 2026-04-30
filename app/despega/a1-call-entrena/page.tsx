@@ -36,7 +36,7 @@ const CALL_ENTRENA_QUESTIONS: CallEntrenaQuestion[] = [
   }
 ]
 
-export default function A1CallEntrenaPage() {
+export default function CallEntrenaCoachingPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user, loading: authLoading } = useAuthRedirect()
@@ -95,7 +95,7 @@ export default function A1CallEntrenaPage() {
   if (callComplete) {
     return (
       <ASection 
-        title="A1: Origen" 
+        title="Entrenamiento: Conversación de Coaching" 
         subtitle="Call Entrena Completado" 
         icon="📞" 
         colorClass="from-blue"
@@ -160,8 +160,8 @@ export default function A1CallEntrenaPage() {
 
   return (
     <ASection 
-      title="A1: Origen" 
-      subtitle="Call Entrena - Entrenamiento de Entrevista" 
+      title="Entrenamiento: Conversación de Coaching" 
+      subtitle="Entrenamiento de Entrevista" 
       icon="📞" 
       colorClass="from-blue"
     >
