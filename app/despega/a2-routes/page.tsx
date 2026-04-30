@@ -534,12 +534,12 @@ export default function A2RoutesPage() {
         <div className="space-y-6 pt-8 border-t border-white/10">
           <h2 className="text-3xl font-bold text-white flex items-center gap-2">
             <Trophy className="w-8 h-8 text-yellow-400" />
-            Tu Progreso y Logros
+            Tu Progreso en la Ruta de 90 Días
           </h2>
 
           {/* 3-Phase Progress Tracker */}
           <div className="bg-gradient-to-r from-purple/10 to-blue/10 border border-purple/20 rounded-lg p-6">
-            <h3 className="text-lg font-bold text-white mb-6">Progreso en 3 Fases</h3>
+            <h3 className="text-lg font-bold text-white mb-6">Cómo va tu Progreso</h3>
             <div className="space-y-4">
               {([30, 60, 90] as const).map((days, idx) => {
                 const phaseData = getMilestoneData(days)
@@ -629,7 +629,7 @@ export default function A2RoutesPage() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-white">
                   <Zap className="w-5 h-5 text-purple" />
-                  Próximas Acciones
+                  Qué Sigue
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -697,18 +697,18 @@ export default function A2RoutesPage() {
 
                   <Card className="bg-muted/80/40 border-muted/70 hover:border-purple/50 transition-colors">
                     <CardHeader>
-                      <CardTitle className="text-lg">Avanzar a A3</CardTitle>
+                      <CardTitle className="text-lg">Siguiente: Entrenamiento Intensivo</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-2">
                       <p className="text-sm text-white/85">
-                        Dirígete a <span className="font-semibold">Entrenamiento Intensivo</span> para prepararte para entrevistas.
+                        Una vez completes tu ruta de 90 días, dirígete a <span className="font-semibold">Entrenamiento Intensivo</span> para practicar y prepararte para entrevistas reales.
                       </p>
                       <Button 
                         onClick={() => router.push('/despega/a3')}
                         className="w-full bg-purple/80 hover:bg-purple/70 mt-2"
                         size="sm"
                       >
-                        Continúa con Entrenamiento Intensivo
+                        Ver Entrenamiento Intensivo
                         <ArrowRight className="w-3 h-3 ml-1" />
                       </Button>
                     </CardContent>
