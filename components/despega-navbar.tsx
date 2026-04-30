@@ -68,6 +68,24 @@ export function DespeganNavbar() {
   const router = useRouter()
   const pathname = usePathname()
 
+  // Determine current phase for progress indicator
+  const getCurrentPhase = () => {
+    if (pathname.includes('conozcamonos') || pathname.includes('a1-cerebral') || pathname.includes('a1-report')) return 'ritual'
+    if (pathname.includes('conozcamonos-2') || pathname.includes('a2-')) return 'exploration'
+    if (pathname.includes('a3-') || pathname.includes('interview')) return 'training'
+    if (pathname.includes('a4-') || pathname === '/despega/a4') return 'reality'
+    return null
+  }
+
+  const currentPhase = getCurrentPhase()
+
+  const phaseOrder = [
+    { key: 'ritual', label: 'El Ritual', color: 'bg-purple' },
+    { key: 'exploration', label: 'Exploración', color: 'bg-blue' },
+    { key: 'training', label: 'Entrenamiento', color: 'bg-orange' },
+    { key: 'reality', label: 'La Realidad', color: 'bg-red' }
+  ]
+
   const handleLogout = async () => {
     await fetch('/api/auth/signout', { method: 'POST' })
     router.push('/auth/signin')
@@ -79,13 +97,40 @@ export function DespeganNavbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/despega" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 bg-background">
-              <Home className="w-4 h-4 text-white" />
+            <div className="w-8 h-8 bg-background rounded-lg flex items-center justify-center">
+              <span className="text-lg font-black text-white">D</span>
             </div>
             <span className="font-bold text-lg text-white" style={{ fontFamily: 'var(--font-playfair-display)' }}>
               Despega
             </span>
           </Link>
+
+          {/* Phase Progress Indicator - Desktop */}
+          <div className="hidden lg:flex items-center gap-1">
+            {phaseOrder.map((phase, idx) => {
+              const isCompleted = false // TODO: Get from user data
+              const isActive = currentPhase === phase.key
+              return (
+                <div key={phase.key} className="flex items-center">
+                  <button
+                    onClick={() => {
+                      if (phase.key === 'ritual') router.push('/despega/a1-cerebral')
+                      else if (phase.key === 'exploration') router.push('/despega/conozcamonos-2')
+                      else if (phase.key === 'training') router.push('/despega/a3-intro')
+                      else if (phase.key === 'reality') router.push('/despega/a4-intro')
+                    }}
+                    className={`px-3 py-1.5 rounded-lg font-semibold text-sm transition-all ${
+                      isActive ? `${phase.color} text-white shadow-lg` : 'bg-white/5 text-white/60 hover:text-white'
+                    }`}
+                    title={phase.label}
+                  >
+                    {idx + 1}
+                  </button>
+                  {idx < phaseOrder.length - 1 && <div className="w-2 h-0.5 bg-white/20 mx-1"></div>}
+                </div>
+              )
+            })}
+          </div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-1">
@@ -124,7 +169,7 @@ export function DespeganNavbar() {
                   </Button>
 
                   {/* Dropdown - Colored background based on phase */}
-                  <div className={`absolute left-0 mt-0 w-48 border rounded-surface-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ${
+                  <div className={`absolute left-0 mt-0 w-48 border rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 ${
                     stagePhaseMap[stage.name as keyof typeof stagePhaseMap] === 'ritual' 
                       ? 'bg-purple/15 border-purple/40'
                       : stagePhaseMap[stage.name as keyof typeof stagePhaseMap] === 'exploration'
@@ -140,7 +185,7 @@ export function DespeganNavbar() {
                         <Button
                           variant={pathname === route.href ? 'default' : 'ghost'}
                           size="sm"
-                          className={`w-full justify-start rounded-none first:rounded-t-surface-lg last:rounded-b-surface-lg ${
+                          className={`w-full justify-start rounded-none first:rounded-t-lg last:rounded-b-lg ${
                             pathname === route.href ? 'bg-muted/80 text-white' : 'text-muted-foreground hover:text-white hover:bg-muted/80'
                           }`}
                         >
@@ -170,6 +215,28 @@ export function DespeganNavbar() {
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
+        </div>
+
+        {/* Phase Progress Indicator - Mobile */}
+        <div className="md:hidden flex items-center justify-center gap-1 pb-3">
+          {phaseOrder.map((phase, idx) => (
+            <div key={phase.key} className="flex items-center">
+              <button
+                onClick={() => {
+                  if (phase.key === 'ritual') router.push('/despega/a1-cerebral')
+                  else if (phase.key === 'exploration') router.push('/despega/conozcamonos-2')
+                  else if (phase.key === 'training') router.push('/despega/a3-intro')
+                  else if (phase.key === 'reality') router.push('/despega/a4-intro')
+                }}
+                className={`w-8 h-8 rounded-full font-bold text-xs transition-all flex items-center justify-center ${
+                  currentPhase === phase.key ? `${phase.color} text-white shadow-lg` : 'bg-white/10 text-white/60'
+                }`}
+              >
+                {idx + 1}
+              </button>
+              {idx < phaseOrder.length - 1 && <div className="w-1 h-0.5 bg-white/20 mx-0.5"></div>}
+            </div>
+          ))}
         </div>
 
         {/* Mobile Menu */}
