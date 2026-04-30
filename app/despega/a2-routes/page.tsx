@@ -320,7 +320,7 @@ export default function A2RoutesPage() {
     return (
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-2xl mx-auto">
-          <Card className="bg-transparent border-red/50/50 p-8">
+          <Card className="bg-transparent border-red/50 p-8">
             <div className="flex items-start gap-4">
               <AlertCircle className="h-6 w-6 text-red flex-shrink-0 mt-1" />
               <div className="flex-1">
