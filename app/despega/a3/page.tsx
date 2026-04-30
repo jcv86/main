@@ -6,8 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { useCoach } from '@/contexts/coach-context'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { A3ProgressTracker } from '@/components/a3-progress-tracker'
 import { A3TrainingLevels } from '@/components/a3-training-levels'
 import Link from 'next/link'
@@ -92,7 +91,7 @@ export default function A3Page() {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="text-center space-y-4">
-          <div className="w-12 h-12 rounded-full border-4 border-red/30 border-t-red animate-spin mx-auto"></div>
+          <div className="w-12 h-12 rounded-full border-4 border-training/30 border-t-training animate-spin mx-auto"></div>
           <p className="text-white/85">Cargando entrenamientos...</p>
         </div>
       </div>
@@ -102,10 +101,28 @@ export default function A3Page() {
   return (
     <div className="min-h-screen bg-black p-6">
       <div className="max-w-7xl mx-auto space-y-8">
-        {/* WELCOME HERO - A3 VERSION */}
+        {/* Navigation Tabs */}
+        <div className="border-b border-muted/20">
+          <Tabs defaultValue="entrenamientos" className="w-full">
+            <TabsList className="bg-transparent border-b border-muted/20 rounded-none w-full justify-start">
+              <TabsTrigger 
+                value="entrenamientos" 
+                className="data-[state=active]:border-b-2 data-[state=active]:border-training text-white/80 hover:text-white rounded-none border-b-2 border-transparent px-4 py-3"
+              >
+                Entrenamientos
+              </TabsTrigger>
+              <TabsTrigger 
+                value="feedback" 
+                className="data-[state=active]:border-b-2 data-[state=active]:border-training text-white/80 hover:text-white rounded-none border-b-2 border-transparent px-4 py-3"
+              >
+                Feedback y Resultados
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="entrenamientos" className="mt-8 space-y-8">
         <div className="bg-background">
           <div className="max-w-3xl space-y-4">
-            <p className="text-red/80 text-sm font-semibold uppercase tracking-wider">Entrenamiento Intensivo: Entrevista 0 + Preparación</p>
+            <p className="text-training/80 text-sm font-semibold uppercase tracking-wider">Entrenamiento Intensivo: Entrevista 0 + Preparación</p>
             <h1 className="text-4xl font-bold" style={{ fontFamily: 'Lora, serif' }}>Entrena como Profesional. Verdaderamente.</h1>
             <p className="text-lg text-white/85">
               Empezamos con Entrevista 0: tu diagnóstico de preparación en luz, fondo, audio, postura, presencia, y lenguaje.
@@ -113,52 +130,50 @@ export default function A3Page() {
               Cada sesión te prepara para situaciones reales.
             </p>
             {userDiscProfile && (
-              <div className="p-3 bg-red/10 rounded-surface-lg border border-red/20">
-                <p className="text-sm text-red/80 font-semibold mb-1">Tu enfoque de entrenamiento:</p>
+              <div className="p-3 bg-training/10 rounded-surface-lg border border-training/20">
+                <p className="text-sm text-training/80 font-semibold mb-1">Tu enfoque de entrenamiento:</p>
                 <p className="text-base font-bold text-white">{getDiscDescription()}</p>
               </div>
             )}
-            <div className="flex gap-3">
-              <Button className="bg-red/80 text-white hover:bg-red/70 font-semibold" size="lg">
+            <div>
+              <Button className="bg-training/80 text-white hover:bg-training/70 font-semibold" size="lg">
                 Comenzar Entrenamientos
-              </Button>
-              <Button className="bg-muted/90 text-white border border-muted/70 hover:bg-muted/80 font-semibold" size="lg">
-                Ver Guía
+                <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </div>
           </div>
         </div>
 
         {/* QUICK START GUIDE - A3 VERSION */}
-        <Card className="border border-red/20 bg-muted/90">
+        <Card className="border border-training/20 bg-muted/90">
           <CardHeader>
             <CardTitle className="text-xl text-white" style={{ fontFamily: 'Lora, serif' }}>Primeros Pasos en Entrenamientos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-red text-black flex items-center justify-center font-bold">1</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-training text-black flex items-center justify-center font-bold">1</div>
                 <div>
                   <h4 className="font-semibold text-white">Entiende los Módulos de Entrenamiento</h4>
                   <p className="text-sm text-white/85">A3 tiene 3 módulos: Entrevistas, Presentaciones y Decisiones Estratégicas. Cada uno progresa del básico al experto.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-red text-black flex items-center justify-center font-bold">2</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-training text-black flex items-center justify-center font-bold">2</div>
                 <div>
                   <h4 className="font-semibold text-white">Comienza con el Módulo de Entrevistas</h4>
                   <p className="text-sm text-white/85">Practica con entrevistadores reales simulados, recibe feedback instantáneo y mejora cada respuesta.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-red text-black flex items-center justify-center font-bold">3</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-training text-black flex items-center justify-center font-bold">3</div>
                 <div>
                   <h4 className="font-semibold text-white">Practica en Progresión</h4>
                   <p className="text-sm text-white/85">No saltes niveles. El progreso es acumulativo: básico → intermedio → avanzado → maestría.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-red text-black flex items-center justify-center font-bold">4</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-training text-black flex items-center justify-center font-bold">4</div>
                 <div>
                   <h4 className="font-semibold text-white">Registra tu Empleabilidad</h4>
                   <p className="text-sm text-white/85">Tu score de empleabilidad mejora con cada sesión. Es un indicador real de qué tan preparado estás para el mercado.</p>
@@ -172,7 +187,7 @@ export default function A3Page() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Card className="bg-transparent border border-muted/80">
             <CardContent className="pt-6">
-              <div className="text-3xl font-bold text-red">
+              <div className="text-3xl font-bold text-training">
                 {a3Progress?.sessions_completed || 0}
               </div>
               <p className="text-sm text-white/85 mt-2">Sesiones Completadas</p>
@@ -181,7 +196,7 @@ export default function A3Page() {
 
           <Card className="bg-transparent border border-muted/80">
             <CardContent className="pt-6">
-              <div className="text-3xl font-bold text-red">
+              <div className="text-3xl font-bold text-training">
                 {a3Progress?.employability_score || 'Calcular'}
               </div>
               <p className="text-sm text-white/85 mt-2">Score de Empleabilidad</p>
@@ -344,61 +359,32 @@ export default function A3Page() {
                     Analizar Video <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-
-        {/* Resources Section */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-yellow dark:text-amber-400" />
-                Tips Profesionales
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex gap-3">
-                <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
-                <p className="text-sm text-white/85 dark:text-white/85">Usa el método STAR: Situación, Tarea, Acción, Resultado</p>
-              </div>
-              <div className="flex gap-3">
-                <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
-                <p className="text-sm text-white/85 dark:text-white/85">Practica frente a espejo antes de cada nivel</p>
-              </div>
-              <div className="flex gap-3">
-                <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
-                <p className="text-sm text-white/85 dark:text-white/85">Registra tus respuestas para auto-análisis</p>
-              </div>
-              <div className="flex gap-3">
-                <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
-                <p className="text-sm text-white/85 dark:text-white/85">Revisa retroalimentación después de cada intento</p>
-              </div>
             </CardContent>
           </Card>
+            </TabsContent>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-green dark:text-emerald-400" />
-                Tu Empleabilidad
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="p-4 bg-background">
-                <p className="text-3xl font-bold text-emerald-700 dark:text-emerald-300">
-                  {a3Progress?.employability_score || 'Iniciar'}
+            {/* Feedback Tab */}
+            <TabsContent value="feedback" className="mt-8 space-y-8">
+              <div className="text-center py-12">
+                <h2 className="text-3xl font-bold text-white mb-4">Tu Feedback y Progreso</h2>
+                <p className="text-white/80 mb-8 max-w-2xl mx-auto">
+                  Aquí encontrarás todos tus resultados, análisis de desempeño, y retroalimentación detallada 
+                  de cada sesión de entrenamiento. Revísalos regularmente para identificar áreas de mejora.
                 </p>
-                <p className="text-xs text-green dark:text-emerald-400 mt-1">Score de empleabilidad actual</p>
+                <Card className="bg-muted/50 border border-training/20 max-w-2xl mx-auto">
+                  <CardContent className="pt-8">
+                    <div className="space-y-4">
+                      <MessageCircle className="w-12 h-12 text-training/60 mx-auto" />
+                      <p className="text-white/80">
+                        Tu feedback personalizado aparecerá aquí después de completar tus primeras sesiones de entrenamiento.
+                      </p>
+                      <p className="text-sm text-white/60">
+                        Los análisis incluyen evaluación de respuestas, lenguaje corporal, tono de voz y áreas de mejora específicas.
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
               </div>
-              <p className="text-sm text-white/85 dark:text-white/85">
-                Tu score aumenta con cada sesión completada y cada mejora de feedback implementada.
-              </p>
-            </CardContent>
-          </Card>
+            </TabsContent>
+          </Tabs>
         </div>
-      </div>
-    </div>
-  )
-}
