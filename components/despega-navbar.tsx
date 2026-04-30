@@ -63,7 +63,7 @@ const stages = [
   },
 ]
 
-export function DespeganNavbar() {
+export function DespegaNavbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [expandedStage, setExpandedStage] = useState<string | null>(null)
   const router = useRouter()
