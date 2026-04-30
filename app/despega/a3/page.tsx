@@ -1,284 +1,82 @@
 'use client'
 
-import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
-import { useAuthRedirect } from '@/hooks/use-auth-redirect'
-import { useCoach } from '@/contexts/coach-context'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { A3ProgressTracker } from '@/components/a3-progress-tracker'
-import { A3TrainingLevels } from '@/components/a3-training-levels'
+import { Zap, BarChart3, Target, Video, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-import { Target, Zap, Brain, Video, Award, TrendingUp, ArrowRight, BarChart3, MessageCircle, Lightbulb, CheckCircle2 } from 'lucide-react'
-import { useV1Analytics } from '@/lib/v1-analytics/use-v1-analytics'
 
 export default function A3Page() {
-  const [loading, setLoading] = useState(true)
-  const [userProfile, setUserProfile] = useState<any>(null)
-  const [a3Progress, setA3Progress] = useState<any>(null)
-  const [userDiscProfile, setUserDiscProfile] = useState<string | null>(null)
-  const { user, loading: authLoading } = useAuthRedirect()
   const router = useRouter()
-  const supabase = createClient()
-  const { currentProgress, coachMessages } = useCoach()
-  const { trackEvent } = useV1Analytics()
-
-  useEffect(() => {
-    if (authLoading || !user?.id) return
-    trackEvent('a3_page_viewed')
-    loadData()
-  }, [authLoading, user?.id, trackEvent])
-
-  const loadData = async () => {
-    try {
-      setLoading(true)
-      
-      // Load user profile
-      const { data: profileData } = await supabase
-        .from('despega_user_profiles')
-        .select('*')
-        .eq('user_id', user?.id)
-        .maybeSingle()
-
-      setUserProfile(profileData)
-
-      // Get user DISC profile from A1 test results
-      const { data: a1Results } = await supabase
-        .from('a1_tests_results')
-        .select('result, profile_type')
-        .eq('user_id', user?.id)
-        .eq('test_name', 'Despega Cerebral')
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
-
-      if (a1Results) {
-        const discProfile = a1Results.profile_type || a1Results.result?.dominantProfile
-        console.log('[v0] User DISC profile for A3 personalization:', discProfile)
-        setUserDiscProfile(discProfile)
-        trackEvent('a3_training_level_started', {})
-      }
-
-      // Load A3 progress if exists
-      const { data: a3Data } = await supabase
-        .from('despega_a3_progress')
-        .select('*')
-        .eq('user_id', user.id)
-        .maybeSingle()
-
-      if (a3Data) {
-        setA3Progress(a3Data)
-      }
-    } catch (error) {
-      console.log('[v0] Error loading A3 data:', error)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const getDiscDescription = () => {
-    switch (userDiscProfile?.toUpperCase()) {
-      case 'D': return 'Entrenamientos de Liderazgo Decisivo - Enfocados en tomar decisiones rápidas, delegar y manejar conflictos'
-      case 'I': return 'Entrenamientos de Influencia - Enfocados en persuasión, networking, y construcción de relaciones estratégicas'
-      case 'S': return 'Entrenamientos de Colaboración - Enfocados en empatía, trabajo en equipo, y apoyo a otros'
-      case 'C': return 'Entrenamientos de Precisión - Enfocados en análisis, validación de datos, y excelencia técnica'
-      default: return 'Entrenamientos Personalizados'
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="w-12 h-12 rounded-full border-4 border-training/30 border-t-training animate-spin mx-auto"></div>
-          <p className="text-white/85">Cargando entrenamientos...</p>
-        </div>
-      </div>
-    )
-  }
 
   return (
-    <div className="min-h-screen bg-black p-6">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* WELCOME HERO - A3 VERSION */}
-        <div className="bg-background">
-          <div className="max-w-3xl space-y-4">
-            <p className="text-training/80 text-sm font-semibold uppercase tracking-wider">Entrenamiento Intensivo: Entrevista 0 + Preparación</p>
-            <h1 className="text-4xl font-bold" style={{ fontFamily: 'Lora, serif' }}>Entrena como Profesional. Verdaderamente.</h1>
-            <p className="text-lg text-white/85">
-              Empezamos con Entrevista 0: tu diagnóstico de preparación en luz, fondo, audio, postura, presencia, y lenguaje.
-              Luego avanzas en 4 niveles: guiada → estructurada → desafiante → maestría. 
-              Cada sesión te prepara para situaciones reales.
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <div className="container max-w-6xl mx-auto px-4 py-16">
+        <div className="space-y-6 mb-12">
+          <div>
+            <h1 className="text-5xl md:text-6xl font-black text-white mb-3 flex items-center gap-4">
+              <span className="text-5xl">💪</span> Entrenamiento Intensivo
+            </h1>
+            <p className="text-xl text-white/85 max-w-3xl leading-relaxed">
+              Prepárate para entrevistas reales con práctica guiada, feedback de IA en tiempo real y análisis profundo de tu desempeño.
             </p>
-            {userDiscProfile && (
-              <div className="p-3 bg-training/10 rounded-surface-lg border border-training/20">
-                <p className="text-sm text-training/80 font-semibold mb-1">Tu enfoque de entrenamiento:</p>
-                <p className="text-base font-bold text-white">{getDiscDescription()}</p>
-              </div>
-            )}
-            <div>
-              <Button className="bg-training/80 text-white hover:bg-training/70 font-semibold" size="lg">
-                Comenzar Entrenamientos
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </div>
           </div>
         </div>
 
-        {/* QUICK START GUIDE - A3 VERSION */}
-        <Card className="border border-training/20 bg-muted/90">
-          <CardHeader>
-            <CardTitle className="text-xl text-white" style={{ fontFamily: 'Lora, serif' }}>Primeros Pasos en Entrenamientos</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-training text-black flex items-center justify-center font-bold">1</div>
-                <div>
-                  <h4 className="font-semibold text-white">Entiende los Módulos de Entrenamiento</h4>
-                  <p className="text-sm text-white/85">A3 tiene 3 módulos: Entrevistas, Presentaciones y Decisiones Estratégicas. Cada uno progresa del básico al experto.</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-training text-black flex items-center justify-center font-bold">2</div>
-                <div>
-                  <h4 className="font-semibold text-white">Comienza con el Módulo de Entrevistas</h4>
-                  <p className="text-sm text-white/85">Practica con entrevistadores reales simulados, recibe feedback instantáneo y mejora cada respuesta.</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-training text-black flex items-center justify-center font-bold">3</div>
-                <div>
-                  <h4 className="font-semibold text-white">Practica en Progresión</h4>
-                  <p className="text-sm text-white/85">No saltes niveles. El progreso es acumulativo: básico → intermedio → avanzado → maestría.</p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-surface-pill bg-training text-black flex items-center justify-center font-bold">4</div>
-                <div>
-                  <h4 className="font-semibold text-white">Registra tu Empleabilidad</h4>
-                  <p className="text-sm text-white/85">Tu score de empleabilidad mejora con cada sesión. Es un indicador real de qué tan preparado estás para el mercado.</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-transparent border border-muted/80">
-            <CardContent className="pt-6">
-              <div className="text-3xl font-bold text-training">
-                {a3Progress?.sessions_completed || 0}
-              </div>
-              <p className="text-sm text-white/85 mt-2">Sesiones Completadas</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-transparent border border-muted/80">
-            <CardContent className="pt-6">
-              <div className="text-3xl font-bold text-training">
-                {a3Progress?.employability_score || 'Calcular'}
-              </div>
-              <p className="text-sm text-white/85 mt-2">Score de Empleabilidad</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white dark:bg-card shadow-md">
-            <CardContent className="pt-6">
-              <div className="text-3xl font-bold text-blue dark:text-blue">
-                {a3Progress?.hours_trained || 0}h
-              </div>
-              <p className="text-sm text-white/85 dark:text-white/85 mt-2">Horas Entrenadas</p>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white dark:bg-card shadow-md">
-            <CardContent className="pt-6">
-              <div className="text-3xl font-bold text-green dark:text-green">
-                {a3Progress?.interviews_mastered || 0}
-              </div>
-              <p className="text-sm text-white/85 dark:text-white/85 mt-2">Entrevistas Dominadas</p>
-            </CardContent>
-          </Card>
-        </div>
-
-      {/* PROGRESS SECTION - NEW */}
-        {user?.id && (
-          <>
-            <div>
-              <h2 className="text-2xl font-bold text-white mb-2">Tu Progreso</h2>
-              <p className="text-white/85">Monitorea tu desarrollo y mejora continua</p>
-            </div>
-            <A3ProgressTracker userId={user.id} level="basico" />
-          </>
-        )}
-
-        {/* TRAINING LEVELS SECTION */}
-        <div>
-          <h2 className="text-2xl font-bold text-white mb-2">Módulo de Entrevistas</h2>
-          <p className="text-white/85 mb-6">
-            Progresa a través de tres niveles de dificultad. Completa cada uno antes de avanzar al siguiente.
-          </p>
-        </div>
-        {user?.id && <A3TrainingLevels userProgress={a3Progress?.levelProgress} />}
-
-        {/* Diagnosis Card - Entrevista 0 */}
-        <Card className="border-2 border-purple/30 dark:border-purple hover:shadow-lg transition">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Brain className="w-5 h-5 text-purple" />
-              Entrevista 0: Tu Diagnóstico
-            </CardTitle>
-            <CardDescription>
-              Baseline de preparación profesional
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-sm text-white/85 dark:text-white/85">
-              Antes de entrenar, conoce tu punto de partida. Evaluamos luz, fondo, audio, postura, presencia y comunicación.
+        {/* Base Foundation Section */}
+        <div className="mb-16 space-y-6">
+          <div>
+            <h2 className="text-4xl font-bold text-white mb-3">Tu Base Profesional</h2>
+            <p className="text-lg text-white/85">
+              Comienza aquí: prepara tu presencia, pitch y documentación antes de las simulaciones.
             </p>
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
-              {['Luz', 'Fondo', 'Audio', 'Postura', 'Presencia', 'Lenguaje'].map((item) => (
-                <div key={item} className="p-2 bg-purple/5 dark:bg-purple/20 rounded text-center">
-                  <p className="text-xs font-semibold text-purple dark:text-purple/20">{item}</p>
-                </div>
-              ))}
-            </div>
-            <Link href="/despega/a3/entrevista-0" className="block">
-              <Button className="w-full bg-purple/80 hover:bg-purple/70">
-                Comenzar Diagnóstico <ArrowRight className="ml-2 w-4 h-4" />
-              </Button>
-            </Link>
-          </CardContent>
-        </Card>
+          </div>
+
+          <Card className="border-2 border-training/40 hover:shadow-xl transition bg-gradient-to-br from-training/10 to-training/5">
+            <CardHeader>
+              <CardTitle className="text-2xl flex items-center gap-3 text-white">
+                <span className="text-3xl">🔍</span> Auditoría: Tu Base Profesional
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-white/90 text-lg leading-relaxed">
+                Auditoría completa de tu entorno, presencia, audio y pitch inicial. Identifica qué mejorar antes de practicar simulaciones.
+              </p>
+              <Link href="/despega/interview-0" className="block">
+                <Button className="w-full bg-training hover:bg-training/90 text-black font-bold text-lg py-6">
+                  Comenzar Auditoría <ArrowRight className="ml-2 w-5 h-5" />
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
+        </div>
 
         {/* Preparation Modules Section */}
-        <div className="space-y-4">
+        <div className="space-y-6 mb-16">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Módulos de Preparación</h2>
-            <p className="text-white/85">
-              Construye tu base profesional completa antes de practicar entrevistas simuladas.
+            <h2 className="text-4xl font-bold text-white mb-3">Módulos de Entrenamiento</h2>
+            <p className="text-lg text-white/85">
+              Elige tu modalidad y comienza a simular entrevistas reales con feedback de IA inmediato.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
             {/* Module 1: Guided Training */}
-            <Card className="border border-blue/30 hover:shadow-lg transition">
+            <Card className="border border-training/30 hover:shadow-lg transition">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-blue" />
+                  <Zap className="w-5 h-5 text-training" />
                   Entrenamiento Guiado
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-white/85 dark:text-white/85">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                   Aprende el método STAR: Situación, Tarea, Acción, Resultado. Respuestas estructuradas y claras.
                 </p>
                 <Link href="/despega/a3/entrenamiento-guiado" className="block">
-                  <Button className="w-full bg-blue hover:bg-cyan text-white">
+                  <Button className="w-full bg-training hover:bg-training/90 text-black">
                     Comenzar <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -286,19 +84,19 @@ export default function A3Page() {
             </Card>
 
             {/* Module 2: CV for ATS */}
-            <Card className="border border-cyan/30 hover:shadow-lg transition">
+            <Card className="border border-training/30 hover:shadow-lg transition">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-cyan" />
+                  <BarChart3 className="w-5 h-5 text-training" />
                   CV Inteligente para ATS
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-white/85 dark:text-white/85">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                   Optimiza tu CV para sistemas de seguimiento de candidatos. Múltiples formatos profesionales.
                 </p>
                 <Link href="/despega/a3/cv-ats" className="block">
-                  <Button className="w-full bg-cyan hover:bg-cyan text-black">
+                  <Button className="w-full bg-training hover:bg-training/90 text-black">
                     Optimizar CV <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -306,19 +104,19 @@ export default function A3Page() {
             </Card>
 
             {/* Module 3: Job Matching */}
-            <Card className="border border-green/30 hover:shadow-lg transition">
+            <Card className="border border-training/30 hover:shadow-lg transition">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Target className="w-5 h-5 text-green" />
+                  <Target className="w-5 h-5 text-training" />
                   Preparación por Vacante
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-white/85 dark:text-white/85">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                   Pega una vacante y obtén análisis de match, CV personalizado y respuestas optimizadas.
                 </p>
                 <Link href="/despega/a3/ajuste-por-vacante" className="block">
-                  <Button className="w-full bg-green hover:bg-emerald-600 text-white">
+                  <Button className="w-full bg-training hover:bg-training/90 text-black">
                     Analizar Vacante <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -326,19 +124,19 @@ export default function A3Page() {
             </Card>
 
             {/* Module 4: Video Analysis */}
-            <Card className="border border-purple/30 hover:shadow-lg transition">
+            <Card className="border border-training/30 hover:shadow-lg transition">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Video className="w-5 h-5 text-purple" />
+                  <Video className="w-5 h-5 text-training" />
                   Análisis en Video
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-white/85 dark:text-white/85">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                   Grabate practicando y recibe análisis multimodal de lenguaje corporal, tono y claridad.
                 </p>
                 <Link href="/despega/a3/analisis-multimodal" className="block">
-                  <Button className="w-full bg-purple hover:bg-violet-600 text-white">
+                  <Button className="w-full bg-training hover:bg-training/90 text-black">
                     Analizar Video <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -347,54 +145,88 @@ export default function A3Page() {
           </div>
         </div>
 
-        {/* Resources Section */}
-        <div className="grid md:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Lightbulb className="w-5 h-5 text-yellow dark:text-amber-400" />
-                Tips Profesionales
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex gap-3">
-                <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
-                <p className="text-sm text-white/85 dark:text-white/85">Usa el método STAR: Situación, Tarea, Acción, Resultado</p>
-              </div>
-              <div className="flex gap-3">
-                <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
-                <p className="text-sm text-white/85 dark:text-white/85">Practica frente a espejo antes de cada nivel</p>
-              </div>
-              <div className="flex gap-3">
-                <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
-                <p className="text-sm text-white/85 dark:text-white/85">Registra tus respuestas para auto-análisis</p>
-              </div>
-              <div className="flex gap-3">
-                <CheckCircle2 className="w-4 h-4 text-green dark:text-green/40 flex-shrink-0 mt-1" />
-                <p className="text-sm text-white/85 dark:text-white/85">Revisa retroalimentación después de cada intento</p>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Training Levels Section */}
+        <div className="space-y-4">
+          <div>
+            <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Entrenamientos por Nivel</h2>
+            <p className="text-muted-foreground dark:text-muted-foreground">
+              Practica en 4 niveles de dificultad con feedback inmediato de IA.
+            </p>
+          </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-green dark:text-emerald-400" />
-                Tu Empleabilidad
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="p-4 bg-background">
-                <p className="text-3xl font-bold text-emerald-700 dark:text-emerald-300">
-                  {a3Progress?.employability_score || 'Iniciar'}
+          <div className="grid md:grid-cols-2 gap-4">
+            <Card className="border border-muted/30 hover:shadow-lg transition">
+              <CardHeader>
+                <Badge className="w-fit bg-training/20 text-training mb-2">Básico</Badge>
+                <CardTitle>Entrenamiento Guiado</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Preguntas con guía paso a paso. Feedback en tiempo real mientras practicas.
                 </p>
-                <p className="text-xs text-green dark:text-emerald-400 mt-1">Score de empleabilidad actual</p>
-              </div>
-              <p className="text-sm text-white/85 dark:text-white/85">
-                Tu score aumenta con cada sesión completada y cada mejora de feedback implementada.
-              </p>
-            </CardContent>
-          </Card>
+                <Button 
+                  onClick={() => router.push('/despega/a3/entrenamiento-guiado')}
+                  className="w-full bg-training hover:bg-training/90 text-black"
+                >
+                  Comenzar <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-muted/30 hover:shadow-lg transition">
+              <CardHeader>
+                <Badge className="w-fit bg-training/20 text-training mb-2">Intermedio</Badge>
+                <CardTitle>Entrenamiento Estructurado</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Entrenamientos conductuales y técnicos con presión moderada.
+                </p>
+                <Button 
+                  onClick={() => router.push('/despega/a3/entrenamiento-estructurado')}
+                  className="w-full bg-training hover:bg-training/90 text-black"
+                >
+                  Practicar <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-muted/30 hover:shadow-lg transition">
+              <CardHeader>
+                <Badge className="w-fit bg-training/20 text-training mb-2">Avanzado</Badge>
+                <CardTitle>Entrenamiento Desafiante</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Preguntas difíciles sin guía. Simula presión de entrevista ejecutiva.
+                </p>
+                <Button 
+                  onClick={() => router.push('/despega/a3/entrenamiento-desafiante')}
+                  className="w-full bg-training hover:bg-training/90 text-black"
+                >
+                  Desafiarse <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border border-muted/30 hover:shadow-lg transition">
+              <CardHeader>
+                <Badge className="w-fit bg-training/20 text-training mb-2">Maestría</Badge>
+                <CardTitle>Entrevista Conversacional</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Entrevista real con IA. Análisis multimodal completo con feedback profundo.
+                </p>
+                <Button 
+                  onClick={() => router.push('/despega/a3/conversational-interview')}
+                  className="w-full bg-training hover:bg-training/90 text-black"
+                >
+                  Comenzar <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       </div>
     </div>
