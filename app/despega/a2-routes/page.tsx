@@ -447,90 +447,7 @@ export default function A2RoutesPage() {
           </CardContent>
         </Card>
 
-        {/* Main Route Breakdown - Tus 90 Días Estructurados */}
-        <Card className="bg-transparent border-muted/80">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white">
-              <Calendar className="w-5 h-5 text-purple/40" />
-              Tus 90 Días Estructurados
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {([30, 60, 90] as const).map((days) => {
-              const data = getMilestoneData(days)
-              const isExpanded = expandedMilestone === days
-              
-              return (
-                <div key={days} className="bg-background">
-                  <button
-                    onClick={() => setExpandedMilestone(isExpanded ? null : days)}
-                    className={`w-full p-6 text-left bg-background`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <Calendar className="w-6 h-6 text-purple/40" />
-                        <div>
-                          <h3 className="text-2xl font-bold text-white">{data.label}</h3>
-                          <p className="text-white/80">{data.milestone}</p>
-                        </div>
-                      </div>
-                      <div className="text-3xl opacity-20 text-white">{days}</div>
-                    </div>
-                  </button>
-
-                  {isExpanded && (
-                    <div className="p-6 space-y-6 bg-muted/80/20">
-                      {/* Phase Progress */}
-                      <PhaseProgress
-                        phaseName={`Fase ${data.label}`}
-                        completed={getPhaseProgress(days).completed}
-                        total={getPhaseProgress(days).total}
-                        daysRange={`${days === 30 ? '1-30' : days === 60 ? '31-60' : '61-90'} días`}
-                      />
-
-                      {/* Tasks */}
-                      {data.tasks && data.tasks.length > 0 ? (
-                        <div className="space-y-3">
-                          {data.tasks.map((task, idx) => (
-                            <TaskCard
-                              key={`${days}-${idx}`}
-                              task={task}
-                              taskId={`${days}-${task.day}-${task.title}`}
-                              completed={completedTasks.has(`${days}-${task.day}-${task.title}`)}
-                              onComplete={handleTaskComplete}
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="text-white/75">Contenido personalizado para la fase de {days} días</p>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )
-            })}
-
-            {/* Success Metrics */}
-            <div className="bg-background">
-              <h3 className="text-lg font-bold text-emerald-400 mb-4">Métricas de Éxito</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <p className="text-white/85">Completar todas las acciones de cada fase</p>
-                </div>
-                <div className="flex gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-                  <p className="text-white/85">Dedicar el tiempo programado cada semana</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Resources Library Section */}
-        <ResourceLibrary />
-
-        {/* Tu Progreso y Logros - Now at the END */}
+        {/* Tu Progreso y Logros - Section at the START */}
         <div className="space-y-6 pt-8 border-t border-white/10">
           <h2 className="text-3xl font-bold text-white flex items-center gap-2">
             <Trophy className="w-8 h-8 text-yellow-400" />
@@ -717,6 +634,89 @@ export default function A2RoutesPage() {
             </Card>
           </div>
         </div>
+
+        {/* Main Route Breakdown - Tus 90 Días Estructurados */}
+        <Card className="bg-transparent border-muted/80">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-white">
+              <Calendar className="w-5 h-5 text-purple/40" />
+              Tus 90 Días Estructurados
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {([30, 60, 90] as const).map((days) => {
+              const data = getMilestoneData(days)
+              const isExpanded = expandedMilestone === days
+              
+              return (
+                <div key={days} className="bg-background">
+                  <button
+                    onClick={() => setExpandedMilestone(isExpanded ? null : days)}
+                    className={`w-full p-6 text-left bg-background`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-4">
+                        <Calendar className="w-6 h-6 text-purple/40" />
+                        <div>
+                          <h3 className="text-2xl font-bold text-white">{data.label}</h3>
+                          <p className="text-white/80">{data.milestone}</p>
+                        </div>
+                      </div>
+                      <div className="text-3xl opacity-20 text-white">{days}</div>
+                    </div>
+                  </button>
+
+                  {isExpanded && (
+                    <div className="p-6 space-y-6 bg-muted/80/20">
+                      {/* Phase Progress */}
+                      <PhaseProgress
+                        phaseName={`Fase ${data.label}`}
+                        completed={getPhaseProgress(days).completed}
+                        total={getPhaseProgress(days).total}
+                        daysRange={`${days === 30 ? '1-30' : days === 60 ? '31-60' : '61-90'} días`}
+                      />
+
+                      {/* Tasks */}
+                      {data.tasks && data.tasks.length > 0 ? (
+                        <div className="space-y-3">
+                          {data.tasks.map((task, idx) => (
+                            <TaskCard
+                              key={`${days}-${idx}`}
+                              task={task}
+                              taskId={`${days}-${task.day}-${task.title}`}
+                              completed={completedTasks.has(`${days}-${task.day}-${task.title}`)}
+                              onComplete={handleTaskComplete}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-white/75">Contenido personalizado para la fase de {days} días</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+
+            {/* Success Metrics */}
+            <div className="bg-background">
+              <h3 className="text-lg font-bold text-emerald-400 mb-4">Métricas de Éxito</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-white/85">Completar todas las acciones de cada fase</p>
+                </div>
+                <div className="flex gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+                  <p className="text-white/85">Dedicar el tiempo programado cada semana</p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Resources Library Section */}
+        <ResourceLibrary />
       </div>
     </div>
   )
