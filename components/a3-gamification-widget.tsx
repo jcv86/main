@@ -74,7 +74,7 @@ export default function A3GamificationWidget() {
       {/* XP and Level */}
       <Card className="border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-background">
         <CardContent className="pt-6 pb-6">
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Zap className="w-10 h-10 text-amber-400" />
               <div>
@@ -88,8 +88,11 @@ export default function A3GamificationWidget() {
             </div>
           </div>
           
-          <div className="space-y-2">
-            <p className="text-xs text-muted-foreground">{gamification.xpToNextLevel} XP para siguiente</p>
+          <div className="space-y-2 mt-4">
+            <div className="flex justify-between items-center text-xs">
+              <span className="text-muted-foreground">Progreso</span>
+              <span className="text-amber-400 font-semibold">{Math.round(xpPercentage)}%</span>
+            </div>
             <div className="w-full bg-muted/40 rounded-full h-3 overflow-hidden">
               <div
                 className="bg-gradient-to-r from-amber-400 to-amber-600 h-3 rounded-full transition-all duration-500"
@@ -103,55 +106,25 @@ export default function A3GamificationWidget() {
       {/* Streak and Badges Stats */}
       <div className="grid grid-cols-2 gap-3">
         <Card className="border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 to-background">
-          <CardContent className="pt-4 pb-4 text-center">
-            <div className="flex justify-center mb-2">
-              <Flame className="w-6 h-6 text-emerald-500" />
+          <CardContent className="pt-6 pb-6 text-center">
+            <div className="flex justify-center mb-3">
+              <Flame className="w-8 h-8 text-emerald-500" />
             </div>
-            <p className="text-3xl font-bold text-emerald-500">{gamification.streak}</p>
-            <p className="text-xs text-muted-foreground mt-1">racha de días</p>
+            <p className="text-4xl font-bold text-emerald-500">{gamification.streak}</p>
+            <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">racha</p>
           </CardContent>
         </Card>
 
         <Card className="border-purple/30 bg-gradient-to-br from-purple/10 to-background">
-          <CardContent className="pt-4 pb-4 text-center">
-            <div className="flex justify-center mb-2">
-              <Trophy className="w-6 h-6 text-purple" />
+          <CardContent className="pt-6 pb-6 text-center">
+            <div className="flex justify-center mb-3">
+              <Trophy className="w-8 h-8 text-purple" />
             </div>
-            <p className="text-3xl font-bold text-purple">{gamification.badges.length}</p>
-            <p className="text-xs text-muted-foreground mt-1">badges</p>
+            <p className="text-4xl font-bold text-purple">{gamification.badges.length}</p>
+            <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">badges</p>
           </CardContent>
         </Card>
       </div>
-
-      {/* Active Challenge */}
-      {gamification.nextChallenge && (
-        <Card className="border-training/30 bg-gradient-to-br from-training/10 to-background">
-          <CardContent className="pt-4 pb-4">
-            <div className="mb-3">
-              <p className="font-semibold text-white">{gamification.nextChallenge.name}</p>
-              <p className="text-xs text-training/80 mt-1">{gamification.nextChallenge.description}</p>
-            </div>
-            
-            <div className="space-y-2">
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-muted-foreground">{gamification.nextChallenge.progress}/{gamification.nextChallenge.total}</span>
-                <span className="text-amber-400">+{gamification.nextChallenge.reward} XP</span>
-              </div>
-              <div className="w-full bg-muted/40 rounded-full h-2 overflow-hidden">
-                <div
-                  className="bg-gradient-to-r from-training to-amber-400 h-2 rounded-full transition-all duration-500"
-                  style={{
-                    width: `${Math.min(
-                      (gamification.nextChallenge.progress / gamification.nextChallenge.total) * 100,
-                      100
-                    )}%`,
-                  }}
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   )
 }

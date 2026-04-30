@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { Clock, Target, TrendingUp } from 'lucide-react'
+import { Clock, Target, TrendingUp, Zap } from 'lucide-react'
 
 interface ProgressData {
   totalMinutes: number
@@ -22,8 +22,17 @@ interface ProgressData {
   streak: number
 }
 
+interface ChallengeData {
+  name: string
+  description: string
+  reward: number
+  progress: number
+  total: number
+}
+
 export default function A3ProgressDashboard() {
   const [progress, setProgress] = useState<ProgressData | null>(null)
+  const [challenge, setChallenge] = useState<ChallengeData | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -59,7 +68,23 @@ export default function A3ProgressDashboard() {
       }
     }
 
+    const fetchChallenge = async () => {
+      try {
+        const response = await fetch('/api/a3/gamification', {
+          credentials: 'include',
+        })
+        if (!response.ok) return
+        const data = await response.json()
+        if (data.nextChallenge) {
+          setChallenge(data.nextChallenge)
+        }
+      } catch (error) {
+        console.error('[v0] Error fetching challenge:', error)
+      }
+    }
+
     fetchProgress()
+    fetchChallenge()
   }, [])
 
   if (loading) {
@@ -121,6 +146,46 @@ export default function A3ProgressDashboard() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Active Challenge - Professional Layout */}
+      {challenge && (
+        <Card className="border-training/30 bg-gradient-to-br from-training/10 to-background">
+          <CardContent className="pt-6 pb-6">
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <Zap className="w-8 h-8 text-training opacity-70 flex-shrink-0" />
+                <div>
+                  <p className="font-bold text-white text-lg">{challenge.name}</p>
+                  <p className="text-xs text-training/80 mt-0.5">{challenge.description}</p>
+                </div>
+              </div>
+              <div className="text-right flex-shrink-0">
+                <p className="text-xs text-muted-foreground uppercase tracking-wider">Recompensa</p>
+                <p className="text-2xl font-bold text-amber-400">+{challenge.reward}</p>
+                <p className="text-xs text-amber-400/70">XP</p>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-muted-foreground font-medium">Progreso: {challenge.progress}/{challenge.total}</span>
+                <span className="text-training font-semibold">{Math.round((challenge.progress / challenge.total) * 100)}%</span>
+              </div>
+              <div className="w-full bg-muted/40 rounded-full h-2.5 overflow-hidden">
+                <div
+                  className="bg-gradient-to-r from-training to-amber-400 h-2.5 rounded-full transition-all duration-500"
+                  style={{
+                    width: `${Math.min(
+                      (challenge.progress / challenge.total) * 100,
+                      100
+                    )}%`,
+                  }}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   )
 }
