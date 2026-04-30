@@ -51,9 +51,9 @@ export default function BienvenidaPage() {
         />
 
         {/* Pilares Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12 auto-rows-max">
           {/* Step 1 */}
-          <Card className="border-0 shadow-sm bg-white dark:bg-card">
+          <Card className="border-0 shadow-sm bg-white dark:bg-card h-fit">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
                 <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-purple/10 dark:bg-purple mb-4">
@@ -67,23 +67,44 @@ export default function BienvenidaPage() {
             </CardContent>
           </Card>
 
-          {/* Step 2 */}
-          <Card className="border-0 shadow-sm bg-white dark:bg-card">
-            <CardContent className="pt-6">
-              <div className="flex flex-col items-center text-center">
-                <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-purple/10 dark:bg-purple mb-4">
-                  <span className="text-xl font-bold text-purple dark:text-purple/20">2</span>
+          {/* Step 2 - A2 Section - Enhanced */}
+          <Card className="border-0 shadow-md bg-gradient-to-br from-purple/10 to-blue/10 dark:from-purple/20 dark:to-blue/20 lg:col-span-2">
+            <CardContent className="pt-8 pb-8 px-8">
+              <div className="flex items-start gap-6">
+                <div className="flex items-center justify-center w-16 h-16 rounded-[28px] bg-purple/30 flex-shrink-0">
+                  <span className="text-3xl font-bold text-purple">2</span>
                 </div>
-                <h3 className="font-semibold text-muted/90 dark:text-white mb-2">Tu Plan A2</h3>
-                <p className="text-sm text-muted-foreground dark:text-muted-foreground">
-                  Recibe un plan personalizado de 90 días adaptado a tu perfil
-                </p>
+                <div className="flex-1">
+                  <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Tu Plan A2: Ruta de 90 Días</h3>
+                  <p className="text-base text-muted-foreground dark:text-muted-foreground mb-4">
+                    Recibe un plan personalizado de 90 días estructurado en 3 fases progresivas, adaptado a tu perfil DISC y objetivos de carrera
+                  </p>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-purple"></div>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Fase 1 (Días 1-30):</strong> Conocimiento - Descubre tu potencial y establece metas</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-purple"></div>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Fase 2 (Días 31-60):</strong> Exploración - Explora oportunidades y ajusta tu estrategia</p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="w-2 h-2 rounded-full bg-purple"></div>
+                      <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Fase 3 (Días 61-90):</strong> Ejecución - Implementa tu plan y alcanza tus objetivos</p>
+                    </div>
+                  </div>
+                  <div className="mt-6 p-4 bg-background/80 rounded-lg border border-purple/20">
+                    <p className="text-sm text-muted-foreground dark:text-white/85">
+                      <strong className="text-purple">Tiempo de dedicación:</strong> 2-3 horas por semana de entrenamientos progresivos con feedback inmediato
+                    </p>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Step 3 */}
-          <Card className="border-0 shadow-sm bg-white dark:bg-card">
+          <Card className="border-0 shadow-sm bg-white dark:bg-card h-fit">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
                 <div className="flex items-center justify-center w-12 h-12 rounded-[20px] bg-purple/10 dark:bg-purple mb-4">
