@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+// useState kept for showDetailModal
 import { CheckCircle2, Circle, Clock, BookOpen, Wrench, Users, ClipboardList, Trophy, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -42,7 +43,6 @@ const taskTypeEmojis = {
 }
 
 export function TaskCard({ task, completed = false, onComplete, taskId, locked = false }: TaskCardProps) {
-  const [isCompleted, setIsCompleted] = useState(completed)
   const [showDetailModal, setShowDetailModal] = useState(false)
   const taskDetail = getTaskDetail(task.day)
   const typeInfo = taskTypeIcons[task.type]
@@ -51,7 +51,6 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
   const handleComplete = (e: React.MouseEvent) => {
     e.stopPropagation()
     if (locked) return
-    setIsCompleted(!isCompleted)
     onComplete?.(taskId)
   }
 
@@ -78,10 +77,10 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
 
   return (
     <>
-      <div className={`transition-all duration-200 ${isCompleted ? 'opacity-60' : ''}`}>
+      <div className={`transition-all duration-200 ${completed ? 'opacity-60' : ''}`}>
         <div 
           className={`bg-muted/20 border-2 ${
-            isCompleted ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-muted/40'
+            completed ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-muted/40'
           } rounded-[28px] p-4 hover:border-muted/60 transition group cursor-pointer`}
           onClick={() => taskDetail && setShowDetailModal(true)}
         >
@@ -91,7 +90,7 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
               onClick={handleComplete}
               className="flex-shrink-0 mt-1 hover:scale-110 transition-transform"
             >
-              {isCompleted ? (
+              {completed ? (
                 <CheckCircle2 className="w-6 h-6 text-emerald-400" />
               ) : (
                 <Circle className="w-6 h-6 text-muted/60 group-hover:text-white/80" />
@@ -104,7 +103,7 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
                 <div className="flex items-center gap-2 flex-wrap">
                   <span className="text-2xl">{emoji}</span>
                   <h4 className={`font-semibold text-sm transition-all ${
-                    isCompleted ? 'text-white/60 line-through' : 'text-white'
+                    completed ? 'text-white/60 line-through' : 'text-white'
                   }`}>
                     Día {task.day}: {task.title}
                   </h4>
@@ -122,7 +121,7 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
 
               {/* Description */}
               <p className={`text-sm mt-2 transition-all ${
-                isCompleted ? 'text-white/50' : 'text-white/75'
+                completed ? 'text-white/50' : 'text-white/75'
               }`}>
                 {task.description}
               </p>
@@ -136,9 +135,9 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
                       variant="outline"
                       size="sm"
                       className={`text-xs h-7 px-2 ${
-                        isCompleted ? 'opacity-50 cursor-default' : 'hover:bg-blue/20'
+                        completed ? 'opacity-50 cursor-default' : 'hover:bg-blue/20'
                       }`}
-                      disabled={isCompleted}
+                      disabled={completed}
                     >
                       {resource}
                     </Button>
