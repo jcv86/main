@@ -23,7 +23,7 @@ export function A2ProgressBar() {
     }
   )
 
-  if (!progress || progress.progress_percentage === 0) {
+  if (!progress) {
     return null
   }
 
@@ -34,7 +34,7 @@ export function A2ProgressBar() {
         <div
           className="h-full bg-gradient-to-r from-purple via-blue to-cyan transition-all duration-500 ease-out shadow-lg"
           style={{
-            width: `${progress.progress_percentage}%`,
+            width: `${Math.max(progress.progress_percentage, 1)}%`,
           }}
         >
           {/* Shimmer effect */}
