@@ -41,19 +41,19 @@ export default function EntrenamientoIntensivePage() {
         </div>
 
         {/* Progress and Gamification Dashboard */}
-        <div className="mb-16 space-y-6">
+        <div className="mb-12 space-y-4">
           <div>
-            <h2 className="text-4xl font-bold text-white mb-3">Tu Progreso</h2>
-            <p className="text-lg text-white/85">
-              Monitorea tu desempeño, gana puntos y desbloquea badges mientras avanzas en tu entrenamiento.
+            <h2 className="text-3xl font-bold text-white mb-2">Tu Progreso</h2>
+            <p className="text-white/70 mb-4">
+              Monitorea tu desempeño, gana puntos y desbloquea badges.
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
+          <div className="grid lg:grid-cols-4 gap-4">
+            <div className="lg:col-span-2.5">
               <A3ProgressDashboard />
             </div>
-            <div>
+            <div className="lg:col-span-1.5">
               <A3GamificationWidget />
             </div>
           </div>

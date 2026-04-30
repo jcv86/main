@@ -1,10 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
-import { Badge } from '@/components/ui/badge'
-import { Clock, Zap, Target, Award } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Clock, Target, TrendingUp } from 'lucide-react'
 
 interface ProgressData {
   totalMinutes: number
@@ -65,15 +63,7 @@ export default function A3ProgressDashboard() {
   }, [])
 
   if (loading) {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        {[...Array(4)].map((_, i) => (
-          <Card key={i} className="animate-pulse">
-            <CardContent className="h-24" />
-          </Card>
-        ))}
-      </div>
-    )
+    return <div className="h-32 bg-muted/20 rounded-lg animate-pulse" />
   }
 
   if (!progress) {
@@ -81,118 +71,56 @@ export default function A3ProgressDashboard() {
   }
 
   return (
-    <div className="space-y-8 mb-12">
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="border-training/30 bg-gradient-to-br from-training/10 to-training/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
+    <div className="space-y-4">
+      {/* Main KPI Card - 3 Metrics */}
+      <Card className="border-training/30 bg-gradient-to-br from-training/10 via-training/5 to-background overflow-hidden">
+        <CardContent className="pt-8 pb-8">
+          <div className="grid grid-cols-3 gap-8">
+            {/* Metric 1: Time */}
+            <div className="text-center space-y-3">
+              <Clock className="w-8 h-8 mx-auto text-training opacity-70" />
               <div>
-                <p className="text-sm text-muted-foreground dark:text-white/70">Tiempo Total</p>
-                <p className="text-3xl font-bold text-training">{progress.totalMinutes}</p>
-                <p className="text-xs text-muted-foreground dark:text-white/60 mt-1">
-                  {Math.floor(progress.totalMinutes / 60)}h {progress.totalMinutes % 60}m
-                </p>
+                <p className="text-4xl font-bold text-white">{progress.totalMinutes}</p>
+                <p className="text-xs text-training/80 mt-1 uppercase tracking-wider">minutos entrenado</p>
               </div>
-              <Clock className="w-10 h-10 text-training/40" />
             </div>
-          </CardContent>
-        </Card>
 
-        <Card className="border-purple/30 bg-gradient-to-br from-purple/10 to-purple/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
+            {/* Metric 2: Sessions */}
+            <div className="text-center space-y-3 border-l border-r border-training/20">
+              <Target className="w-8 h-8 mx-auto text-training opacity-70" />
               <div>
-                <p className="text-sm text-muted-foreground dark:text-white/70">Sesiones</p>
-                <p className="text-3xl font-bold text-purple">{progress.totalSessions}</p>
-                <p className="text-xs text-muted-foreground dark:text-white/60 mt-1">
-                  entrenamientos completados
-                </p>
+                <p className="text-4xl font-bold text-white">{progress.totalSessions}</p>
+                <p className="text-xs text-training/80 mt-1 uppercase tracking-wider">sesiones</p>
               </div>
-              <Target className="w-10 h-10 text-purple/40" />
             </div>
-          </CardContent>
-        </Card>
 
-        <Card className="border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 to-emerald-500/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
+            {/* Metric 3: Level */}
+            <div className="text-center space-y-3">
+              <TrendingUp className="w-8 h-8 mx-auto text-amber-400 opacity-70" />
               <div>
-                <p className="text-sm text-muted-foreground dark:text-white/70">Progreso</p>
-                <p className="text-3xl font-bold text-emerald-500">{progress.completionPercentage}%</p>
-                <p className="text-xs text-muted-foreground dark:text-white/60 mt-1">
-                  del programa completado
-                </p>
+                <p className="text-4xl font-bold text-white">{progress.currentLevel}</p>
+                <p className="text-xs text-amber-400/80 mt-1 uppercase tracking-wider">tu nivel</p>
               </div>
-              <Badge className="bg-emerald-500/20 text-emerald-500 border border-emerald-500/30">
-                {progress.streak} racha 🔥
-              </Badge>
             </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-amber-500/5">
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-muted-foreground dark:text-white/70">Nivel</p>
-                <p className="text-3xl font-bold text-amber-500">{progress.currentLevel}</p>
-                <p className="text-xs text-muted-foreground dark:text-white/60 mt-1">
-                  {progress.xpToNextLevel} XP para siguiente
-                </p>
-              </div>
-              <Zap className="w-10 h-10 text-amber-500/40" />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Section Progress */}
-      <Card className="border-muted/20">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Target className="w-5 h-5 text-training" />
-            Progreso por Sección
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {progress.sectionProgress.map((section, idx) => (
-            <div key={idx} className="space-y-2">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="font-semibold text-white">{section.name}</p>
-                  <p className="text-xs text-muted-foreground dark:text-white/60">
-                    {section.sessions} sesiones • {section.minutes}m
-                  </p>
-                </div>
-                <Badge variant="outline">{section.percentage}%</Badge>
-              </div>
-              <Progress value={section.percentage} className="h-2" />
-            </div>
-          ))}
+          </div>
         </CardContent>
       </Card>
 
-      {/* Badges Section */}
-      {progress.badges.length > 0 && (
-        <Card className="border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-amber-500/2">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Award className="w-5 h-5 text-amber-500" />
-              Badges Desbloqueados ({progress.badges.length})
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-wrap gap-3">
-              {progress.badges.map((badge, idx) => (
-                <Badge key={idx} className="bg-amber-500/20 text-amber-500 border border-amber-500/30 text-sm py-2 px-3">
-                  {badge}
-                </Badge>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      {/* Completion Progress Bar */}
+      <Card className="border-muted/20 bg-muted/5">
+        <CardContent className="pt-4 pb-4">
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-sm font-semibold text-white">Progreso General del Programa</p>
+            <p className="text-sm font-bold text-training">{progress.completionPercentage}%</p>
+          </div>
+          <div className="w-full bg-muted/40 rounded-full h-3 overflow-hidden">
+            <div
+              className="bg-gradient-to-r from-training via-training to-amber-400 h-3 rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${progress.completionPercentage}%` }}
+            />
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
