@@ -97,12 +97,7 @@ export function DespeganNavbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/despega" className="flex items-center gap-3 group">
-            <div className="w-8 h-8 bg-background rounded-lg flex items-center justify-center">
-              <span className="text-lg font-black text-white">D</span>
-            </div>
-            <span className="font-bold text-lg text-white" style={{ fontFamily: 'var(--font-playfair-display)' }}>
-              Despega
-            </span>
+            <img src="/logos/dtc-logo.png" alt="Despega Tu Carrera" className="h-8 w-auto" />
           </Link>
 
           {/* Phase Progress Indicator - Desktop */}
