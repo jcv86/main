@@ -182,10 +182,10 @@ export default function A1CerebralPage() {
                     disabled={less[q.id] === opt.texto}
                     className={`w-full text-left p-5 rounded-xl border-2 transition-all font-semibold text-base ${
                       more[q.id] === opt.texto 
-                        ? 'border-blue bg-blue/25 text-white shadow-lg shadow-blue/20' 
+                        ? 'border-green bg-green/25 text-white shadow-lg shadow-green/20' 
                         : less[q.id] === opt.texto 
                           ? 'border-muted/20 bg-muted/5 text-white/70 opacity-50 cursor-not-allowed' 
-                          : 'border-blue/40 text-white/90 hover:border-blue hover:bg-blue/15 hover:text-white'
+                          : 'border-green/40 text-white/90 hover:border-green hover:bg-green/15 hover:text-white'
                     }`}>
                     {opt.texto}
                   </button>
