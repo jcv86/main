@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Zap, BarChart3, Target, Video, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
-export default function A3Page() {
+export default function A3DashboardPage() {
   const router = useRouter()
 
   return (
@@ -34,7 +34,7 @@ export default function A3Page() {
             </p>
           </div>
 
-          <Card className="border-2 border-training/40 hover:shadow-xl transition bg-gradient-to-br from-training/10 to-training/5">
+          <Card className="border-2 border-training/40 hover:shadow-xl transition bg-gradient-to-br from-training/10 to-training/10">
             <CardHeader>
               <CardTitle className="text-2xl flex items-center gap-3 text-white">
                 <span className="text-3xl">🔍</span> Auditoría: Tu Base Profesional
@@ -76,7 +76,7 @@ export default function A3Page() {
                   Aprende el método STAR: Situación, Tarea, Acción, Resultado. Respuestas estructuradas y claras.
                 </p>
                 <Link href="/despega/a3/entrenamiento-guiado" className="block">
-                  <Button className="w-full bg-training hover:bg-training/90 text-black">
+                  <Button className="w-full bg-training hover:bg-training text-white">
                     Comenzar <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -96,7 +96,7 @@ export default function A3Page() {
                   Optimiza tu CV para sistemas de seguimiento de candidatos. Múltiples formatos profesionales.
                 </p>
                 <Link href="/despega/a3/cv-ats" className="block">
-                  <Button className="w-full bg-training hover:bg-training/90 text-black">
+                  <Button className="w-full bg-training hover:bg-training text-black">
                     Optimizar CV <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -116,7 +116,7 @@ export default function A3Page() {
                   Pega una vacante y obtén análisis de match, CV personalizado y respuestas optimizadas.
                 </p>
                 <Link href="/despega/a3/ajuste-por-vacante" className="block">
-                  <Button className="w-full bg-training hover:bg-training/90 text-black">
+                  <Button className="w-full bg-training hover:bg-emerald-600 text-white">
                     Analizar Vacante <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -136,7 +136,7 @@ export default function A3Page() {
                   Grabate practicando y recibe análisis multimodal de lenguaje corporal, tono y claridad.
                 </p>
                 <Link href="/despega/a3/analisis-multimodal" className="block">
-                  <Button className="w-full bg-training hover:bg-training/90 text-black">
+                  <Button className="w-full bg-training hover:bg-violet-600 text-white">
                     Analizar Video <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -166,7 +166,7 @@ export default function A3Page() {
                 </p>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-guiado')}
-                  className="w-full bg-training hover:bg-training/90 text-black"
+                  className="w-full bg-training hover:bg-training text-white"
                 >
                   Comenzar <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
@@ -184,7 +184,7 @@ export default function A3Page() {
                 </p>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-estructurado')}
-                  className="w-full bg-training hover:bg-training/90 text-black"
+                  className="w-full bg-training hover:bg-training text-black"
                 >
                   Practicar <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
@@ -202,7 +202,7 @@ export default function A3Page() {
                 </p>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-desafiante')}
-                  className="w-full bg-training hover:bg-training/90 text-black"
+                  className="w-full bg-training hover:bg-emerald-600 text-white"
                 >
                   Desafiarse <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
@@ -220,7 +220,7 @@ export default function A3Page() {
                 </p>
                 <Button 
                   onClick={() => router.push('/despega/a3/conversational-interview')}
-                  className="w-full bg-training hover:bg-training/90 text-black"
+                  className="w-full bg-training hover:bg-violet-600 text-white"
                 >
                   Comenzar <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
