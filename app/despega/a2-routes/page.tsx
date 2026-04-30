@@ -394,12 +394,12 @@ export default function A2RoutesPage() {
         </div>
 
         {/* Success Banner - First element */}
-        <Card className="bg-gradient-to-br from-emerald-900/30 to-emerald-900/10 border-2 border-emerald-400/50 shadow-lg">
+        <Card className="bg-blue/10 border-2 border-blue/40 shadow-lg">
           <CardContent className="pt-6">
             <div className="flex items-start gap-4">
-              <CheckCircle2 className="w-8 h-8 text-emerald-400 flex-shrink-0 mt-1" />
+              <CheckCircle2 className="w-8 h-8 text-blue flex-shrink-0 mt-1" />
               <div className="flex-1">
-                <h4 className="font-bold text-emerald-300 text-lg mb-1">Ruta Generada!</h4>
+                <h4 className="font-bold text-blue text-lg mb-1">Ruta Generada!</h4>
                 <p className="text-sm text-white/85 mb-3">Tu plan de 90 días personalizado está listo y se adapta a tu ritmo</p>
                 <div className="flex items-center gap-2 text-xs text-white/70">
                   <Calendar className="w-4 h-4" />
@@ -504,7 +504,7 @@ export default function A2RoutesPage() {
         <div className="space-y-6 pt-8 border-t border-white/10">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <h2 className="text-3xl font-bold text-white flex items-center gap-2">
-              <Trophy className="w-8 h-8 text-yellow-400" />
+              <Trophy className="w-8 h-8 text-blue" />
               Tu Progreso en la Ruta de 90 Días
             </h2>
             <Button
@@ -520,7 +520,7 @@ export default function A2RoutesPage() {
           </div>
 
           {/* 3-Phase Progress Tracker */}
-          <div className="bg-gradient-to-r from-purple/10 to-blue/10 border border-purple/20 rounded-lg p-6">
+          <div className="bg-blue/5 border border-blue/20 rounded-lg p-6">
             <h3 className="text-lg font-bold text-white mb-6">Cómo va tu Progreso</h3>
             <div className="space-y-4">
               {([30, 60, 90] as const).map((days, idx) => {
@@ -532,8 +532,8 @@ export default function A2RoutesPage() {
                   <div key={days} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/30 border border-purple/50 flex-shrink-0">
-                          <span className="text-sm font-bold text-purple">{idx + 1}</span>
+                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue/20 border border-blue/40 flex-shrink-0">
+                    <span className="text-sm font-bold text-blue">{idx + 1}</span>
                         </div>
                         <div>
                           <p className="font-semibold text-white">{phaseData.label}</p>
@@ -557,7 +557,7 @@ export default function A2RoutesPage() {
             </div>
 
             {/* Overall Progress Summary */}
-            <div className="mt-6 pt-6 border-t border-purple/20">
+            <div className="mt-6 pt-6 border-t border-blue/20">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-white/80 mb-1">Progreso Total</p>
@@ -565,7 +565,7 @@ export default function A2RoutesPage() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-white/80 mb-1">{calculateTotalProgress().completed} de {calculateTotalProgress().total}</p>
-                  <p className="text-xs text-purple">Tareas completadas</p>
+                  <p className="text-xs text-blue">Tareas completadas</p>
                 </div>
               </div>
             </div>
@@ -578,7 +578,7 @@ export default function A2RoutesPage() {
             <Card className="bg-transparent border-muted/80 lg:col-span-2">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-white">
-                  <Trophy className="w-5 h-5 text-yellow-400" />
+                  <Trophy className="w-5 h-5 text-blue" />
                   Tus Logros Desbloqueados
                 </CardTitle>
               </CardHeader>
@@ -593,7 +593,7 @@ export default function A2RoutesPage() {
             <Card className="bg-transparent border-muted/80">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-white">
-                  <Zap className="w-5 h-5 text-purple" />
+                  <Zap className="w-5 h-5 text-blue" />
                   Qué Sigue
                 </CardTitle>
               </CardHeader>
@@ -614,7 +614,7 @@ export default function A2RoutesPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Card className="bg-muted/30 border-muted/50 p-4">
               <div className="text-center">
-                <p className="text-2xl font-bold text-purple mb-1">{calculateTotalProgress().completed}</p>
+                  <p className="text-2xl font-bold text-blue mb-1">{calculateTotalProgress().completed}</p>
                 <p className="text-xs text-white/70">Tareas Completadas</p>
               </div>
             </Card>
@@ -626,13 +626,13 @@ export default function A2RoutesPage() {
             </Card>
             <Card className="bg-muted/30 border-muted/50 p-4">
               <div className="text-center">
-                <p className="text-2xl font-bold text-emerald-400 mb-1">3</p>
+                  <p className="text-2xl font-bold text-blue mb-1">3</p>
                 <p className="text-xs text-white/70">Fases Disponibles</p>
               </div>
             </Card>
             <Card className="bg-muted/30 border-muted/50 p-4">
               <div className="text-center">
-                <p className="text-2xl font-bold text-yellow-400 mb-1">90</p>
+                  <p className="text-2xl font-bold text-blue mb-1">90</p>
                 <p className="text-xs text-white/70">Días de Plan</p>
               </div>
             </Card>
@@ -643,7 +643,7 @@ export default function A2RoutesPage() {
         <Card className="bg-transparent border-muted/80">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-white text-2xl">
-              <MapPin className="w-7 h-7 text-purple" />
+              <MapPin className="w-7 h-7 text-blue" />
               Tus 90 Días Estructurados
             </CardTitle>
           </CardHeader>
@@ -665,7 +665,7 @@ export default function A2RoutesPage() {
                     disabled={monthLocked}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${monthLocked ? 'bg-muted/20 border border-muted/30 text-muted/50' : 'bg-purple/30 border border-purple/50 text-purple'}`}>
+                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${monthLocked ? 'bg-muted/20 border border-muted/30 text-muted/50' : 'bg-blue/20 border border-blue/40 text-blue'}`}>
                         {monthLocked ? <Lock className="w-4 h-4" /> : phaseNum}
                       </div>
                       <div>
@@ -718,7 +718,7 @@ export default function A2RoutesPage() {
 
         {/* Tu Siguiente Paso - At the VERY END */}
         <div className="pt-8 border-t border-white/10">
-          <Card className="bg-gradient-to-r from-purple/20 to-blue/20 border-2 border-purple/40">
+          <Card className="bg-blue/10 border-2 border-blue/40">
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-white text-2xl">
                 <CheckCircle2 className="w-6 h-6 text-white" />
@@ -743,7 +743,7 @@ export default function A2RoutesPage() {
                 </p>
                 <Button
                   onClick={() => router.push('/despega/a3')}
-                  className="w-full bg-purple/80 hover:bg-purple/70 text-white py-6 text-base font-semibold"
+                  className="w-full bg-blue hover:bg-blue/80 text-white py-6 text-base font-semibold"
                 >
                   Comenzar Entrenamiento Intensivo
                   <ArrowRight className="w-5 h-5 ml-2" />

@@ -197,7 +197,7 @@ export default function Conozcamonos2Page() {
         {/* Header with brandbook styling */}
         <div className="text-center mb-8">
           <div className="inline-block px-4 py-2 bg-background">
-            <p className="text-sm font-semibold text-blue dark:text-blue-200">Conozcámonos 2: Tu Ruta</p>
+            <p className="text-sm font-semibold text-blue">Conozcámonos 2: Tu Ruta</p>
           </div>
           <h1 className="text-5xl md:text-6xl font-black text-white mb-4">
             Diseña Tu Ruta de 90 Días
@@ -222,7 +222,7 @@ export default function Conozcamonos2Page() {
               key={question.id} 
               className={`p-6 transition-all ${
                 isAnswered 
-                  ? 'border-green/20 dark:border-green/50' 
+                  ? 'border-blue/30' 
                   : 'border-muted/20 dark:border-card'
               }`}
             >
@@ -230,7 +230,7 @@ export default function Conozcamonos2Page() {
               <h3 className="text-lg font-bold text-white flex-1">
                 {question.question}
               </h3>
-              {isAnswered && <span className="text-green text-xl font-bold">✓</span>}
+              {isAnswered && <span className="text-blue text-xl font-bold">✓</span>}
               </div>
 
               {question.type === 'select' && (
@@ -257,7 +257,7 @@ export default function Conozcamonos2Page() {
                       onBlur={(e) => validateTextResponse(question.id, question.question, e.target.value)}
                       placeholder={question.placeholder}
                       maxLength={question.maxLength}
-                      className={`flex-1 p-3 border rounded-[28px] bg-white dark:bg-card text-muted/90 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple disabled:opacity-50 transition-colors ${
+                      className={`flex-1 p-3 border rounded-[28px] bg-white dark:bg-card text-muted/90 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-blue disabled:opacity-50 transition-colors ${
                         error && !validatingIds.has(question.id) 
                           ? 'border-red/50 dark:border-red/50 bg-red/5 dark:bg-red/20' 
                           : 'border-muted/30 dark:border-muted/60'
@@ -367,7 +367,7 @@ export default function Conozcamonos2Page() {
             <Button
               onClick={handleNext}
               disabled={!allStepAnswered || loading || !!error}
-              className="bg-purple hover:from-purple-700 hover:to-blue text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-blue hover:bg-blue/80 text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               title={
                 error 
                   ? 'Error de validación: ' + error
