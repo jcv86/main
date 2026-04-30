@@ -97,7 +97,7 @@ export function DespegaNavbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/despega" className="flex items-center gap-3 group">
-            <img src="/logos/dtc-logo-light.png" alt="Despega Tu Carrera" className="h-8 w-auto" />
+            <img src="/logos/dtc-logo-light-transparent.png" alt="Despega Tu Carrera" className="h-8 w-auto" />
           </Link>
 
           {/* Desktop Menu */}
