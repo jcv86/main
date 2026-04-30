@@ -7,137 +7,155 @@ import { Badge } from '@/components/ui/badge'
 import { Zap, BarChart3, Target, Video, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
 
-export default function A3DashboardPage() {
+export default function EntrenamientoIntensivePage() {
   const router = useRouter()
 
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="container max-w-6xl mx-auto px-4 py-16">
+      <div className="container max-w-6xl mx-auto px-4 py-12">
+        {/* Navigation */}
+        <div className="flex items-center justify-between mb-8">
+          <Link href="/despega">
+            <Button variant="ghost" size="sm" className="hover:bg-muted/20 dark:hover:bg-muted/70">
+              <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
+              Volver
+            </Button>
+          </Link>
+          <Badge className="bg-training/20 text-training border border-training/30">
+            Pilar 3: Entrenamiento Intensivo
+          </Badge>
+        </div>
+
         <div className="space-y-6 mb-12">
           <div>
-            <h1 className="text-5xl md:text-6xl font-black text-white mb-3 flex items-center gap-4">
-              <span className="text-5xl">💪</span> Entrenamiento Intensivo
+            <h1 className="text-5xl md:text-6xl font-bold text-white mb-3">
+              Domina Entrevistas en 4 Niveles
             </h1>
             <p className="text-xl text-white/85 max-w-3xl leading-relaxed">
-              Prepárate para entrevistas reales con práctica guiada, feedback de IA en tiempo real y análisis profundo de tu desempeño.
+              Practica con simulaciones realistas, obtén feedback multimodal inmediato de IA, y avanza de principiante a maestría con análisis profundo de tu desempeño.
             </p>
           </div>
         </div>
 
-        {/* Base Foundation Section */}
+        {/* Step 0: Diagnostic Audit */}
         <div className="mb-16 space-y-6">
           <div>
-            <h2 className="text-4xl font-bold text-white mb-3">Tu Base Profesional</h2>
+            <h2 className="text-4xl font-bold text-white mb-3">Paso 1: Tu Diagnóstico Inicial</h2>
             <p className="text-lg text-white/85">
-              Comienza aquí: prepara tu presencia, pitch y documentación antes de las simulaciones.
+              Antes de entrenar, necesitamos entender tu punto de partida. Una auditoría rápida de tu ambiente, presencia y pitch.
             </p>
           </div>
 
-          <Card className="border-2 border-training/40 hover:shadow-xl transition bg-gradient-to-br from-training/10 to-training/10">
+          <Card className="border-2 border-training/40 hover:shadow-xl transition bg-gradient-to-br from-training/10 to-training/5">
             <CardHeader>
               <CardTitle className="text-2xl flex items-center gap-3 text-white">
-                <span className="text-3xl">🔍</span> Auditoría: Tu Base Profesional
+                <span>🔍</span> Auditoría: Tu Base Profesional
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-white/90 text-lg leading-relaxed">
-                Auditoría completa de tu entorno, presencia, audio y pitch inicial. Identifica qué mejorar antes de practicar simulaciones.
+                Análisis completo de tu ambiente, iluminación, audio, presencia en cámara y pitch profesional inicial. 
+                Identifica qué mejorar antes de las simulaciones intensivas.
               </p>
               <Link href="/despega/interview-0" className="block">
                 <Button className="w-full bg-training hover:bg-training/90 text-black font-bold text-lg py-6">
-                  Comenzar Auditoría <ArrowRight className="ml-2 w-5 h-5" />
+                  Comenzar Diagnóstico <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
             </CardContent>
           </Card>
         </div>
 
-        {/* Preparation Modules Section */}
+        {/* Step 2: Preparation Tools */}
         <div className="space-y-6 mb-16">
           <div>
-            <h2 className="text-4xl font-bold text-white mb-3">Módulos de Entrenamiento</h2>
+            <h2 className="text-4xl font-bold text-white mb-3">Paso 2: Prepara tu Arsenal</h2>
             <p className="text-lg text-white/85">
-              Elige tu modalidad y comienza a simular entrevistas reales con feedback de IA inmediato.
+              Optimiza tu CV, aprende metodología STAR, analiza ofertas y practica en video. Herramientas específicas para cada fase.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
-            {/* Module 1: Guided Training */}
-            <Card className="border border-training/30 hover:shadow-lg transition">
+            {/* Tool 1: STAR Method */}
+            <Card className="border border-training/30 hover:shadow-lg transition bg-muted/20">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Zap className="w-5 h-5 text-training" />
-                  Entrenamiento Guiado
+                  Método STAR
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">
-                  Aprende el método STAR: Situación, Tarea, Acción, Resultado. Respuestas estructuradas y claras.
+                  Aprende a estructurar respuestas: Situación → Tarea → Acción → Resultado. 
+                  El estándar para respuestas profesionales claras.
                 </p>
                 <Link href="/despega/a3/entrenamiento-guiado" className="block">
-                  <Button className="w-full bg-training hover:bg-training text-white">
-                    Comenzar <ArrowRight className="ml-2 w-4 h-4" />
+                  <Button className="w-full bg-training hover:bg-training/90 text-black font-semibold">
+                    Aprender STAR <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
               </CardContent>
             </Card>
 
-            {/* Module 2: CV for ATS */}
-            <Card className="border border-training/30 hover:shadow-lg transition">
+            {/* Tool 2: CV Optimization */}
+            <Card className="border border-training/30 hover:shadow-lg transition bg-muted/20">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <BarChart3 className="w-5 h-5 text-training" />
-                  CV Inteligente para ATS
+                  CV Inteligente
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">
-                  Optimiza tu CV para sistemas de seguimiento de candidatos. Múltiples formatos profesionales.
+                  Optimiza tu CV para sistemas ATS (Applicant Tracking Systems). 
+                  Múltiples formatos y feedback instantáneo.
                 </p>
                 <Link href="/despega/a3/cv-ats" className="block">
-                  <Button className="w-full bg-training hover:bg-training text-black">
+                  <Button className="w-full bg-training hover:bg-training/90 text-black font-semibold">
                     Optimizar CV <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
               </CardContent>
             </Card>
 
-            {/* Module 3: Job Matching */}
-            <Card className="border border-training/30 hover:shadow-lg transition">
+            {/* Tool 3: Job Matching */}
+            <Card className="border border-training/30 hover:shadow-lg transition bg-muted/20">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Target className="w-5 h-5 text-training" />
-                  Preparación por Vacante
+                  Análisis de Vacante
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">
-                  Pega una vacante y obtén análisis de match, CV personalizado y respuestas optimizadas.
+                  Pega una oferta laboral y obtén: match score, CV personalizado y respuestas optimizadas. 
+                  Estrategia por cada postulación.
                 </p>
                 <Link href="/despega/a3/ajuste-por-vacante" className="block">
-                  <Button className="w-full bg-training hover:bg-emerald-600 text-white">
-                    Analizar Vacante <ArrowRight className="ml-2 w-4 h-4" />
+                  <Button className="w-full bg-training hover:bg-training/90 text-black font-semibold">
+                    Analizar Oferta <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
               </CardContent>
             </Card>
 
-            {/* Module 4: Video Analysis */}
-            <Card className="border border-training/30 hover:shadow-lg transition">
+            {/* Tool 4: Video Analysis */}
+            <Card className="border border-training/30 hover:shadow-lg transition bg-muted/20">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Video className="w-5 h-5 text-training" />
-                  Análisis en Video
+                  Análisis Multimodal
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">
-                  Grabate practicando y recibe análisis multimodal de lenguaje corporal, tono y claridad.
+                  Grábate practicando y recibe análisis de IA sobre postura, gestos, tono, claridad y contenido. 
+                  Feedback detallado en 60 segundos.
                 </p>
                 <Link href="/despega/a3/analisis-multimodal" className="block">
-                  <Button className="w-full bg-training hover:bg-violet-600 text-white">
-                    Analizar Video <ArrowRight className="ml-2 w-4 h-4" />
+                  <Button className="w-full bg-training hover:bg-training/90 text-black font-semibold">
+                    Grabar y Analizar <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
               </CardContent>
@@ -145,84 +163,120 @@ export default function A3DashboardPage() {
           </div>
         </div>
 
-        {/* Training Levels Section */}
-        <div className="space-y-4">
+        {/* Step 3: Progressive Training Levels */}
+        <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Entrenamientos por Nivel</h2>
-            <p className="text-muted-foreground dark:text-muted-foreground">
-              Practica en 4 niveles de dificultad con feedback inmediato de IA.
+            <h2 className="text-4xl font-bold text-white mb-3">Paso 3: Entrena en 4 Niveles</h2>
+            <p className="text-lg text-white/85">
+              Progresión desde principiante hasta maestría. Cada nivel aumenta complejidad, presión y feedback profundo. Avanza cuando domines el anterior.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
-            <Card className="border border-muted/30 hover:shadow-lg transition">
+            {/* Level 1: Guided */}
+            <Card className="border-2 border-training/40 hover:shadow-lg transition bg-gradient-to-br from-training/5 to-training/10">
               <CardHeader>
-                <Badge className="w-fit bg-training/20 text-training mb-2">Básico</Badge>
-                <CardTitle>Entrenamiento Guiado</CardTitle>
+                <Badge className="w-fit bg-training/30 text-training border border-training/50 mb-2">
+                  Nivel 1 - Principiante
+                </Badge>
+                <CardTitle className="text-2xl">Guiado</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Preguntas con guía paso a paso. Feedback en tiempo real mientras practicas.
+                <p className="text-sm text-muted-foreground dark:text-white/80">
+                  <strong>Contexto:</strong> Preguntas estructuradas con guía clara. Feedback en tiempo real mientras hablas.
+                </p>
+                <p className="text-sm text-muted-foreground dark:text-white/80">
+                  <strong>Duración:</strong> 30-45 min por sesión
+                </p>
+                <p className="text-sm text-muted-foreground dark:text-white/80">
+                  <strong>Ideal para:</strong> Primera vez practicando, aprender estructura STAR
                 </p>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-guiado')}
-                  className="w-full bg-training hover:bg-training text-white"
+                  className="w-full bg-training hover:bg-training/90 text-black font-semibold"
                 >
-                  Comenzar <ArrowRight className="ml-2 w-4 h-4" />
+                  Comenzar Nivel 1 <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="border border-muted/30 hover:shadow-lg transition">
+            {/* Level 2: Structured */}
+            <Card className="border-2 border-training/40 hover:shadow-lg transition bg-gradient-to-br from-training/5 to-training/10">
               <CardHeader>
-                <Badge className="w-fit bg-training/20 text-training mb-2">Intermedio</Badge>
-                <CardTitle>Entrenamiento Estructurado</CardTitle>
+                <Badge className="w-fit bg-training/30 text-training border border-training/50 mb-2">
+                  Nivel 2 - Intermedio
+                </Badge>
+                <CardTitle className="text-2xl">Estructurado</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Entrenamientos conductuales y técnicos con presión moderada.
+                <p className="text-sm text-muted-foreground dark:text-white/80">
+                  <strong>Contexto:</strong> Preguntas conductuales y técnicas realistas. Presión moderada.
+                </p>
+                <p className="text-sm text-muted-foreground dark:text-white/80">
+                  <strong>Duración:</strong> 45-60 min por sesión
+                </p>
+                <p className="text-sm text-muted-foreground dark:text-white/80">
+                  <strong>Ideal para:</strong> Ya conoces STAR, listo para escenarios reales
                 </p>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-estructurado')}
-                  className="w-full bg-training hover:bg-training text-black"
+                  className="w-full bg-training hover:bg-training/90 text-black font-semibold"
                 >
-                  Practicar <ArrowRight className="ml-2 w-4 h-4" />
+                  Practicar Nivel 2 <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="border border-muted/30 hover:shadow-lg transition">
+            {/* Level 3: Challenging */}
+            <Card className="border-2 border-training/40 hover:shadow-lg transition bg-gradient-to-br from-training/5 to-training/10">
               <CardHeader>
-                <Badge className="w-fit bg-training/20 text-training mb-2">Avanzado</Badge>
-                <CardTitle>Entrenamiento Desafiante</CardTitle>
+                <Badge className="w-fit bg-training/30 text-training border border-training/50 mb-2">
+                  Nivel 3 - Avanzado
+                </Badge>
+                <CardTitle className="text-2xl">Desafiante</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Preguntas difíciles sin guía. Simula presión de entrevista ejecutiva.
+                <p className="text-sm text-muted-foreground dark:text-white/80">
+                  <strong>Contexto:</strong> Preguntas difíciles, sin guía. Simula presión de entrevista ejecutiva.
+                </p>
+                <p className="text-sm text-muted-foreground dark:text-white/80">
+                  <strong>Duración:</strong> 60-90 min por sesión
+                </p>
+                <p className="text-sm text-muted-foreground dark:text-white/80">
+                  <strong>Ideal para:</strong> Dominas estructuras, necesitas presión real
                 </p>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-desafiante')}
-                  className="w-full bg-training hover:bg-emerald-600 text-white"
+                  className="w-full bg-training hover:bg-training/90 text-black font-semibold"
                 >
-                  Desafiarse <ArrowRight className="ml-2 w-4 h-4" />
+                  Desafiarse Nivel 3 <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </CardContent>
             </Card>
 
-            <Card className="border border-muted/30 hover:shadow-lg transition">
+            {/* Level 4: Mastery */}
+            <Card className="border-2 border-training/40 hover:shadow-lg transition bg-gradient-to-br from-training/5 to-training/10">
               <CardHeader>
-                <Badge className="w-fit bg-training/20 text-training mb-2">Maestría</Badge>
-                <CardTitle>Entrevista Conversacional</CardTitle>
+                <Badge className="w-fit bg-training/30 text-training border border-training/50 mb-2">
+                  Nivel 4 - Maestría
+                </Badge>
+                <CardTitle className="text-2xl">Conversacional</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Entrevista real con IA. Análisis multimodal completo con feedback profundo.
+                <p className="text-sm text-muted-foreground dark:text-white/80">
+                  <strong>Contexto:</strong> Entrevista conversacional real con IA. Análisis multimodal completo.
+                </p>
+                <p className="text-sm text-muted-foreground dark:text-white/80">
+                  <strong>Duración:</strong> 90-120 min por sesión
+                </p>
+                <p className="text-sm text-muted-foreground dark:text-white/80">
+                  <strong>Ideal para:</strong> Listo para tu entrevista real. Validar maestría.
                 </p>
                 <Button 
                   onClick={() => router.push('/despega/a3/conversational-interview')}
-                  className="w-full bg-training hover:bg-violet-600 text-white"
+                  className="w-full bg-training hover:bg-training/90 text-black font-semibold"
                 >
-                  Comenzar <ArrowRight className="ml-2 w-4 h-4" />
+                  Entrevista Final <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </CardContent>
             </Card>
