@@ -219,18 +219,18 @@ export default function A1ReportPage() {
 
   if (error) {
     return (
-      <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple/50">
+      <ASection title="Tu Perfil Cerebral" subtitle="Descubre Tu Tipo de Personalidad" icon="🎯" colorClass="from-purple/50">
         <ASectionPart title="Completar Evaluación" icon={<Zap />}>
           <div className="space-y-4">
-            <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
+            <div className="p-6 bg-red/20 dark:bg-red/20 border-2 border-red rounded-lg">
               <p className="text-white font-semibold text-lg">{error}</p>
-              <p className="text-white/80 text-sm mt-2">
+              <p className="text-white/85 text-base mt-3 leading-relaxed">
                 Por favor completa la evaluación de Perfil Cerebral para ver tus resultados. El proceso toma aproximadamente 10-15 minutos.
               </p>
             </div>
             <Button 
               onClick={() => router.push('/despega/a1-cerebral')} 
-              className="w-full bg-purple hover:from-purple-700 hover:to-blue text-white font-semibold py-6 text-lg"
+              className="w-full bg-purple hover:bg-purple-700 text-white font-semibold py-6 text-lg"
             >
               <Target className="w-5 h-5 mr-2" />
               Comenzar Evaluación de Perfil Cerebral
@@ -247,18 +247,18 @@ export default function A1ReportPage() {
       </ASectionPart>
 
       {/* AI-Generated Insights Section */}
-      <ASectionPart title="✨ Tu Análisis Personalizado - ESE ERES TÚ" icon={<Sparkles />}>
+      <ASectionPart title="✨ Tu Análisis Personalizado" icon={<Sparkles />}>
         {insightsLoading ? (
           <div className="flex flex-col items-center justify-center py-16">
             <Loader2 className="h-8 w-8 animate-spin text-purple mb-4" />
-            <p className="text-white/75 text-lg">Analizando tu perfil con IA...</p>
+            <p className="text-white text-lg font-semibold">Analizando tu perfil con IA...</p>
             <p className="text-white/75 text-sm mt-2">Esto toma unos segundos</p>
           </div>
         ) : insights ? (
           <div className="space-y-6">
             <div className="bg-background">
               <p className="text-white/85 text-center text-lg">
-                Basado en tu perfil de El Ritual y contexto personal, aquí está tu análisis completo:
+                Basado en tu perfil y contexto personal, aquí está tu análisis completo:
               </p>
             </div>
             <EnhancedInsightsGrid insights={insights} />
@@ -279,113 +279,114 @@ export default function A1ReportPage() {
   const secondaryLabel = discToDespega[profile.secondary as keyof typeof discToDespega]
 
   return (
-    <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple/50">
-      <ASectionPart title="Tu Perfil Cerebral" icon={<Target />}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          {/* Primary Profile Card */}
-          <div className="bg-background">
-            <p className="text-white text-sm mb-2 font-semibold">Tu Tipo Dominante</p>
-            <div className="text-4xl font-black text-white mb-3">{primaryLabel}</div>
-            <p className="font-semibold text-white mb-4 text-sm">{despegaLabels[primaryLabel as keyof typeof despegaLabels]}</p>
-            <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/30 mb-2">
-              <div className="h-full bg-background" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
-            </div>
-            <p className="text-xs text-white font-bold">{Math.max(0, Math.round(profile.primaryScore))}%</p>
-          </div>
-
-          {/* Secondary Profile Card */}
-          <div className="bg-background">
-            <p className="text-white text-sm mb-2 font-semibold">Tu Tipo Secundario</p>
-            <div className="text-4xl font-black text-white mb-3">{secondaryLabel}</div>
-            <p className="font-semibold text-white mb-4 text-sm">{despegaLabels[secondaryLabel as keyof typeof despegaLabels]}</p>
-            <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/30 mb-2">
-              <div className="h-full bg-background" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
-            </div>
-            <p className="text-xs text-white font-bold">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
-          </div>
-        </div>
-
-        {/* All 4 Profiles Breakdown */}
-        <div className="bg-background">
-          <h3 className="font-bold text-2xl text-white mb-6">Tu Perfil Cerebral Completo</h3>
-          <div className="space-y-4">
-            {[
-              { label: 'Impulsor', score: profile.D, color: 'from-red-500/50', icon: '⚡' },
-              { label: 'Catalizador', score: profile.I, color: 'from-yellow-500400', icon: '🔥' },
-              { label: 'Estabilizador', score: profile.S, color: 'from-green', icon: '🛡️' },
-              { label: 'Arquitecto', score: profile.C, color: 'from-blue/50', icon: '🏗️' }
-            ].map((dim, idx) => (
-              <div key={idx} className="flex items-center gap-4 p-3 bg-muted/70/50 rounded-[28px] border border-muted/60 hover:border-muted/50 transition-colors">
-                <span className="text-2xl">{dim.icon}</span>
-                <p className="font-bold text-white w-32">{dim.label}</p>
-                <div className="flex-1 h-4 bg-muted/60 rounded-full overflow-hidden border border-muted/50">
-                  <div className={`h-full bg-background`} style={{ width: `${(dim.score / 10) * 100}%` }} />
+    <ASection title="Tu Perfil Cerebral" subtitle="Descubre Tu Tipo de Personalidad" icon="🧠" colorClass="from-purple/50">
+      <ASectionPart title="Tu Perfil Cerebral Completo" icon={<Target />}>
+        <div className="space-y-8">
+          {/* Primary and Secondary Profile Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Primary Profile Card */}
+            <div className="bg-gradient-to-br from-purple/20 to-purple/5 border-2 border-purple/40 rounded-2xl p-8">
+              <p className="text-purple font-bold text-sm uppercase tracking-wide mb-3">Tu Tipo Principal</p>
+              <h2 className="text-5xl font-black text-white mb-2">{primaryLabel.split(' - ')[0]}</h2>
+              <p className="text-white/75 text-base mb-6 leading-relaxed">{primaryLabel.split(' - ')[1]}</p>
+              <div className="flex items-center gap-4">
+                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden border border-white/30">
+                  <div className="h-full bg-purple" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
                 </div>
-                <div className="flex items-center gap-2">
-                  <p className="w-16 text-right font-bold text-lg text-white">{Math.max(0, Math.round(dim.score))}%</p>
-                </div>
+                <p className="text-2xl font-bold text-white w-16 text-right">{Math.max(0, Math.round(profile.primaryScore))}%</p>
               </div>
-            ))}
+            </div>
+
+            {/* Secondary Profile Card */}
+            <div className="bg-gradient-to-br from-blue/20 to-blue/5 border-2 border-blue/40 rounded-2xl p-8">
+              <p className="text-blue font-bold text-sm uppercase tracking-wide mb-3">Tu Tipo Secundario</p>
+              <h2 className="text-5xl font-black text-white mb-2">{secondaryLabel.split(' - ')[0]}</h2>
+              <p className="text-white/75 text-base mb-6 leading-relaxed">{secondaryLabel.split(' - ')[1]}</p>
+              <div className="flex items-center gap-4">
+                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden border border-white/30">
+                  <div className="h-full bg-blue" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
+                </div>
+                <p className="text-2xl font-bold text-white w-16 text-right">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
+              </div>
+            </div>
+          </div>
+
+          {/* All 4 Profiles Breakdown */}
+          <div className="bg-card border border-border rounded-2xl p-8">
+            <h3 className="font-bold text-2xl text-white mb-8">Desglose Completo de Dimensiones</h3>
+            <div className="space-y-5">
+              {[
+                { label: 'Impulsor', score: profile.D, color: 'from-red-500', icon: '⚡', description: 'Orientado a resultados' },
+                { label: 'Catalizador', score: profile.I, color: 'from-yellow-500', icon: '🔥', description: 'Influyente y comunicativo' },
+                { label: 'Estabilizador', score: profile.S, color: 'from-green', icon: '🛡️', description: 'Constante y confiable' },
+                { label: 'Arquitecto', score: profile.C, color: 'from-blue', icon: '🏗️', description: 'Analítico y preciso' }
+              ].map((dim, idx) => (
+                <div key={idx} className="flex items-center gap-4 p-4 bg-background/50 hover:bg-background transition-all rounded-xl border border-white/10 hover:border-white/20">
+                  <span className="text-3xl">{dim.icon}</span>
+                  <div className="flex-1">
+                    <div className="flex items-baseline gap-2">
+                      <p className="font-bold text-white text-lg">{dim.label}</p>
+                      <p className="text-white/60 text-sm">{dim.description}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 w-40">
+                    <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden border border-white/30">
+                      <div className={`h-full bg-gradient-to-r ${dim.color}`} style={{ width: `${(dim.score / 10) * 100}%` }} />
+                    </div>
+                    <p className="text-lg font-bold text-white w-10 text-right">{Math.max(0, Math.round(dim.score))}%</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </ASectionPart>
 
-      {/* AI-Generated Insights Section - EL CORAZÓN DEL WOW EFFECT */}
-      <ASectionPart title="✨ Tu Análisis Personalizado - ESE ERES TÚ" icon={<Sparkles />}>
+      {/* AI-Generated Insights Section */}
+      <ASectionPart title="✨ Tu Análisis Personalizado" icon={<Sparkles />}>
         {insightsLoading ? (
-          <div className="flex flex-col items-center justify-center py-16">
-            <Loader2 className="h-8 w-8 animate-spin text-purple mb-4" />
-            <p className="text-white/85 text-lg font-semibold">Generando tu análisis personalizado con IA...</p>
-            <p className="text-white/75 text-sm mt-2">Esto toma unos segundos mientras analizamos tu perfil</p>
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="h-10 w-10 animate-spin text-purple mb-4" />
+            <p className="text-white text-lg font-semibold">Generando tu análisis con IA...</p>
+            <p className="text-white/75 text-sm mt-2">Analizando tu perfil personalizado</p>
           </div>
         ) : insights ? (
           <div className="space-y-8">
-            {/* Resumen Ejecutivo */}
-            <div className="bg-background">
-              <div className="flex items-start gap-4">
-                <div className="text-4xl">🎯</div>
-                <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-white mb-3">Tu Perfil: {primaryLabel} + {secondaryLabel}</h3>
-                  <p className="text-white/80 leading-relaxed text-base">
-                    Eres una persona con características únicas. Tu combinación {profile.primary}/{profile.secondary} 
-                    te hace especial en cómo tomas decisiones, te relacionas con otros, y enfrentas desafíos. 
-                    Los siguientes 8 insights te mostrarán exactamente qué te hace diferente y cómo aprovecharlo.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Introducción */}
-            <div className="bg-muted/80/50 border border-muted/70 rounded-xl p-6 text-center">
-              <p className="text-white/85 text-lg">
-                Basado en tu Perfil de El Ritual y tu contexto personal, aquí está tu análisis completo:
+            {/* Executive Summary */}
+            <div className="bg-gradient-to-r from-purple/15 to-blue/15 border-l-4 border-purple rounded-xl p-8">
+              <h3 className="text-3xl font-bold text-white mb-4">
+                Tu Perfil: {primaryLabel.split(' - ')[0]} + {secondaryLabel.split(' - ')[0]}
+              </h3>
+              <p className="text-white/85 text-lg leading-relaxed">
+                Eres una persona con características únicas. Tu combinación te hace especial en cómo tomas decisiones, te relacionas con otros, y enfrentas desafíos. 
+                Los siguientes insights te mostrarán exactamente qué te hace diferente y cómo aprovecharlo en tu carrera.
               </p>
             </div>
 
-            {/* Los 8 Insights con Grid */}
+            {/* AI-Generated Insights Grid */}
             <EnhancedInsightsGrid insights={insights} />
 
             {/* Phase Transition Handler */}
             <PhaseTransitionHandler
               currentPhase="a1"
               isComplete={true}
-              nextPhaseLabel="Exploración: Diseña Tu Ruta"
+              nextPhaseLabel="Siguiente Fase: Diseña Tu Ruta"
               nextPhaseUrl="/despega/conozcamonos-2"
             />
           </div>
         ) : (
           <div className="bg-red/20 border-2 border-red/50 rounded-xl p-8 text-center">
-            <p className="text-red/30 text-lg font-semibold">Los insights no pudieron ser generados</p>
-            <p className="text-red/40 text-sm mt-2">Por favor intenta de nuevo. Si el problema persiste, contacta con soporte.</p>
+            <p className="text-red font-semibold text-lg">No se pudieron generar los insights</p>
+            <p className="text-red/80 text-base mt-2">Por favor intenta de nuevo. Si el problema persiste, contacta con soporte.</p>
           </div>
         )}
       </ASectionPart>
 
-      {/* A1 WOW REPORT - El Reporte de Transformación */}
-      <ASectionPart title="🚀 Tu Reporte de Transformación" icon={<Sparkles />}>
-        <div className="mb-6">
-          <p className="text-white/85 text-center text-lg mb-6">
-            Ahora que entiendes tu perfil, aquí está tu mapa de acción. Las 5 herramientas que te hacen imprescindible.
+      {/* Wow Report - Action Map */}
+      <ASectionPart title="🚀 Tu Mapa de Acción" icon={<Sparkles />}>
+        <div className="mb-8">
+          <p className="text-white/85 text-center text-lg leading-relaxed">
+            Ahora que entiendes tu perfil cerebral, aquí está tu mapa de acción personalizado. Estas son las 5 herramientas clave que te hacen imprescindible.
           </p>
         </div>
         {profile && insights ? (
@@ -397,46 +398,47 @@ export default function A1ReportPage() {
         ) : null}
       </ASectionPart>
 
+      {/* Next Steps */}
       <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="bg-muted/80/40 border-muted/70">
+          <Card className="bg-gradient-to-br from-purple/20 to-purple/5 border-2 border-purple/40 hover:border-purple/60 transition-all">
             <CardHeader>
-              <CardTitle className="text-lg">Entender Tus Patrones</CardTitle>
+              <CardTitle className="text-xl text-white">🔍 Patrones Profundos</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-white/75 mb-4">Descubre cómo tu perfil te ayuda en entrevistas y equipos.</p>
-              <Button onClick={() => router.push('/despega/a1-patterns')} variant="outline" className="border-muted/60" size="sm">
-                Ver Detalles
+              <p className="text-base text-white/85 mb-6 leading-relaxed">Descubre cómo tu perfil te ayuda en entrevistas, equipos y liderazgo.</p>
+              <Button onClick={() => router.push('/despega/a1-patterns')} variant="outline" className="border-purple/40 w-full" size="sm">
+                Explorar Patrones
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="bg-background">
+          <Card className="bg-gradient-to-br from-blue/20 to-blue/5 border-2 border-blue/40 hover:border-blue/60 transition-all">
             <CardHeader>
-              <CardTitle className="text-lg text-white">📞 Call Entrena</CardTitle>
+              <CardTitle className="text-xl text-white">📞 Entrena de Entrevistas</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-white/85 mb-4">Practica entrevistas con un entrenamiento personalizado para tu perfil {primaryLabel}.</p>
+              <p className="text-base text-white/85 mb-6 leading-relaxed">Practica entrevistas personalizadas según tu tipo de personalidad.</p>
               <Button 
                 onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile.primary}`)} 
-                className="w-full bg-blue hover:from-blue hover:to-blue text-white" 
+                className="w-full bg-blue hover:bg-blue/90 text-white font-semibold" 
                 size="sm"
               >
-                <Phone className="w-3 h-3 mr-1" />
-                Comenzar Call Entrena
+                <Phone className="w-4 h-4 mr-2" />
+                Comenzar
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="bg-muted/80/40 border-muted/70">
+          <Card className="bg-gradient-to-br from-green/20 to-green/5 border-2 border-green/40 hover:border-green/60 transition-all">
             <CardHeader>
-              <CardTitle className="text-lg">Avanzar a A2</CardTitle>
+              <CardTitle className="text-xl text-white">🗺️ Crea Tu Ruta</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-white/75 mb-4">Crea tu plan de 90 días.</p>
-              <Button onClick={() => router.push('/despega/a2-routes')} className="w-full bg-purple hover:bg-purple" size="sm">
-                Ir a A2: Ruta
-                <ArrowRight className="w-3 h-3 ml-1" />
+              <p className="text-base text-white/85 mb-6 leading-relaxed">Diseña tu plan de 90 días personalizado para alcanzar tus objetivos.</p>
+              <Button onClick={() => router.push('/despega/conozcamonos-2')} className="w-full bg-green hover:bg-green/90 text-white font-semibold" size="sm">
+                Siguiente Fase
+                <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </CardContent>
           </Card>
