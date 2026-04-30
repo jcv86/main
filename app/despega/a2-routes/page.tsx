@@ -653,7 +653,7 @@ export default function A2RoutesPage() {
           <CardContent className="space-y-6">
             {([30, 60, 90] as const).map((days) => {
               const milestoneData = getMilestoneData(days)
-              const tasks = route[`route_${days}days` as keyof typeof route] as any[] || []
+              const tasks = ([...(route[`route_${days}days` as keyof typeof route] as any[] || [])]).sort((a: any, b: any) => a.day - b.day)
               const phaseProgress = getPhaseProgress(days)
               const isExpanded = expandedMilestone === days
               const monthLocked = isMonthLocked(days)
