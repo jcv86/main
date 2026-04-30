@@ -527,59 +527,6 @@ export default function A2RoutesPage() {
           </CardContent>
         </Card>
 
-        {/* Next Steps */}
-        <Card className="bg-transparent border-muted/80">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white">
-              <CheckCircle2 className="w-5 h-5 text-white0" />
-              Próximos Pasos
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              <Card className="bg-muted/80/40 border-muted/70 hover:border-blue/50/50 transition-colors">
-                <CardHeader>
-                  <CardTitle className="text-lg">Ver Detalle del Plan</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <p className="text-sm text-white/85">
-                    Expande cada fase (30, 60, 90 días) para ver las acciones detalladas.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-muted/80/40 border-muted/70 hover:border-blue/50/50 transition-colors">
-                <CardHeader>
-                  <CardTitle className="text-lg">Avanzar a A3</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <p className="text-sm text-white/85">
-                    Dirígete a <span className="font-semibold">Entrenamiento Intensivo</span> para prepararte para entrevistas.
-                  </p>
-                  <Button 
-                    onClick={() => router.push('/despega/a3')}
-                    className="w-full bg-blue/80 hover:bg-blue/70 mt-2"
-                    size="sm"
-                  >
-                    Continúa con Entrenamiento Intensivo
-                    <ArrowRight className="w-3 h-3 ml-1" />
-                  </Button>
-                </CardContent>
-              </Card>
-            </div>
-
-            <div className="p-6 bg-background">
-              <p className="text-white/85 mb-4">
-                <strong>Este es tu plan. Adáptalo según sea necesario.</strong> La vida acontece, y el plan puede cambiar. 
-                Si necesitas ajustes o tienes preguntas, habla con el coach.
-              </p>
-              <Button variant="outline" className="border-blue/50 hover:border-blue/40 hover:text-blue/40">
-                Hablar con el Coach
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Resources Library Section */}
         <ResourceLibrary />
 
@@ -669,6 +616,61 @@ export default function A2RoutesPage() {
               <Download className="w-4 h-4 mr-2" />
               {isExporting ? 'Generando PDF...' : 'Descargar Progreso en PDF'}
             </Button>
+          </div>
+
+          {/* Próximos Pasos - Now at the END */}
+          <div className="pt-8 border-t border-white/10">
+            <Card className="bg-transparent border-muted/80">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-white">
+                  <CheckCircle2 className="w-5 h-5 text-white" />
+                  Próximos Pasos
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  <Card className="bg-muted/80/40 border-muted/70 hover:border-purple/50 transition-colors">
+                    <CardHeader>
+                      <CardTitle className="text-lg">Ver Detalle del Plan</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <p className="text-sm text-white/85">
+                        Expande cada fase (30, 60, 90 días) para ver las acciones detalladas.
+                      </p>
+                    </CardContent>
+                  </Card>
+
+                  <Card className="bg-muted/80/40 border-muted/70 hover:border-purple/50 transition-colors">
+                    <CardHeader>
+                      <CardTitle className="text-lg">Avanzar a A3</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <p className="text-sm text-white/85">
+                        Dirígete a <span className="font-semibold">Entrenamiento Intensivo</span> para prepararte para entrevistas.
+                      </p>
+                      <Button 
+                        onClick={() => router.push('/despega/a3')}
+                        className="w-full bg-purple/80 hover:bg-purple/70 mt-2"
+                        size="sm"
+                      >
+                        Continúa con Entrenamiento Intensivo
+                        <ArrowRight className="w-3 h-3 ml-1" />
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div className="p-6 bg-background">
+                  <p className="text-white/85 mb-4">
+                    <strong>Este es tu plan. Adáptalo según sea necesario.</strong> La vida acontece, y el plan puede cambiar. 
+                    Si necesitas ajustes o tienes preguntas, habla con el coach.
+                  </p>
+                  <Button variant="outline" className="border-purple/50 hover:border-purple/40 hover:text-purple/40">
+                    Hablar con el Coach
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
