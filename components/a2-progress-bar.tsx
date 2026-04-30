@@ -30,22 +30,22 @@ export function A2ProgressBar() {
 
   return (
     <Link href="/despega/a2-routes">
-      <div className="h-1 bg-white/5 relative overflow-hidden cursor-pointer group hover:bg-white/10 transition-colors">
+      <div className="h-2 bg-white/10 relative overflow-hidden cursor-pointer group hover:bg-white/20 transition-colors">
         {/* Gradient bar that fills */}
         <div
-          className="h-full bg-gradient-to-r from-purple via-blue to-cyan transition-all duration-500 ease-out shadow-lg"
+          className="h-full bg-gradient-to-r from-purple to-cyan transition-all duration-500 ease-out shadow-lg"
           style={{
             width: `${displayPercentage}%`,
           }}
         >
           {/* Shimmer effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent animate-pulse" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-pulse" />
         </div>
 
         {/* Progress text on hover */}
-        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/40">
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/50">
           <span className="text-xs font-semibold text-white">
-            Mes {month} • {percentage}% completado
+            Mes {month} • {percentage}%
           </span>
         </div>
       </div>
