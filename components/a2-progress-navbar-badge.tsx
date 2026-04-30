@@ -43,7 +43,7 @@ export function A2ProgressNavbarBadge() {
   }
 
   return (
-    <Link href="/despega/a2">
+    <Link href="/despega/a2-routes">
       <div className={`text-xs font-semibold px-3 py-1.5 rounded-full border border-current/20 ${getStatusColor()} hover:opacity-80 transition-opacity cursor-pointer`}>
         Mes {progress.current_month} • {progress.progress_percentage}%
       </div>
