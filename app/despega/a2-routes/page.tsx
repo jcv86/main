@@ -324,8 +324,8 @@ export default function A2RoutesPage() {
             <div className="flex items-start gap-4">
               <AlertCircle className="h-6 w-6 text-red flex-shrink-0 mt-1" />
               <div className="flex-1">
-                <h2 className="text-xl font-bold text-white mb-2">Error en A2: Ruta</h2>
-                <p className="text-red/40 text-lg mb-6">{error || 'No se encontró ruta personalizada'}</p>
+                <h2 className="text-xl font-bold text-white mb-2">Ruta de 90 Días - Diseña Tu Camino</h2>
+                <p className="text-red text-lg mb-6">{error || 'No se encontró ruta personalizada'}</p>
                 <Button 
                   onClick={() => loadAndGenerateRoute()}
                   className="bg-blue hover:bg-blue text-white"
@@ -346,29 +346,104 @@ export default function A2RoutesPage() {
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="space-y-2">
-          <h1 className="text-4xl font-bold text-white flex items-center gap-3">
-            <span className="text-3xl">🗺️</span> A2: Ruta
+          <h1 className="text-5xl font-black text-white flex items-center gap-3">
+            <span className="text-4xl">🗺️</span> Tu Ruta: De Aquí a Imprescindible
           </h1>
-          <p className="text-lg text-white/75">Tu plan personalizado de 90 días</p>
+          <p className="text-xl text-white/85">Tu plan personalizado de 90 días mapeado a conversaciones reales</p>
         </div>
 
-        {/* What is A2 */}
-        <Card className="bg-transparent border-muted/80">
+        {/* Main Intro Section */}
+        <div className="bg-gradient-to-r from-purple/20 to-blue/20 border-2 border-purple/40 rounded-2xl p-10">
+          <h2 className="text-3xl font-bold text-white mb-6">Tu Ruta 7/30/90</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            {/* 7 Days */}
+            <div className="bg-background/50 border border-white/20 rounded-xl p-6">
+              <p className="text-sm font-bold text-purple uppercase tracking-wide mb-2">SEMANA 1</p>
+              <h3 className="text-2xl font-black text-white mb-4">7 Días</h3>
+              <p className="text-white/85 leading-relaxed mb-4">Prepárate para tu primera conversación de LinkedIn. Optimiza perfil, prepara pitch elevator de 30 segundos.</p>
+              <p className="text-sm text-purple font-semibold">🎯 Conversación: LinkedIn</p>
+            </div>
+
+            {/* 30 Days */}
+            <div className="bg-background/50 border border-white/20 rounded-xl p-6">
+              <p className="text-sm font-bold text-blue uppercase tracking-wide mb-2">MES 1</p>
+              <h3 className="text-2xl font-black text-white mb-4">30 Días</h3>
+              <p className="text-white/85 leading-relaxed mb-4">Domina entrevista técnica o conductual. Practica respuestas STAR, manejo de objeciones, cierre de oportunidades.</p>
+              <p className="text-sm text-blue font-semibold">🎯 Conversación: Entrevista</p>
+            </div>
+
+            {/* 90 Days */}
+            <div className="bg-background/50 border border-white/20 rounded-xl p-6">
+              <p className="text-sm font-bold text-green uppercase tracking-wide mb-2">TRIMESTRE</p>
+              <h3 className="text-2xl font-black text-white mb-4">90 Días</h3>
+              <p className="text-white/85 leading-relaxed mb-4">Negocia tu propuesta. Habla de sueldo, beneficios, rol, visión de carrera con seguridad y profesionalismo.</p>
+              <p className="text-sm text-green font-semibold">🎯 Conversación: Career</p>
+            </div>
+          </div>
+          
+          <div className="bg-background/30 border border-white/10 rounded-lg p-6 text-center">
+            <p className="text-white/90 leading-relaxed text-lg">
+              Cada fase te transforma en una pieza imprescindible para tus potenciales empleadores. 
+              No es solo conseguir un trabajo, es posicionar tu carrera para los próximos 10 años.
+            </p>
+          </div>
+        </div>
+
+        {/* What is this phase */}
+        <Card className="bg-gradient-to-r from-blue/15 to-purple/15 border-2 border-blue/40">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white">
-              <Zap className="w-5 h-5 text-orange-400" />
-              Tu Ruta de 90 Días (Fase de Visualización)
+            <CardTitle className="flex items-center gap-2 text-white text-2xl">
+              <Zap className="w-6 h-6 text-blue" />
+              Cómo Funciona Tu Ruta
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
-            <p className="text-white/85">
-              Basado en tu perfil DISC y objetivos, hemos generado tu plan personalizado de 90 días. 
-              Este es el resultado de A2: Diseño de tu Ruta. Aquí visualizas las acciones, milestones y recursos 
-              organizados en 3 fases progresivas para llevar tu carrera al siguiente nivel.
-            </p>
-            <p className="text-white/75 text-sm">
-              📋 Estructura: 3 fases de 30 días cada una con tareas específicas, recursos y hitos de progreso.
-            </p>
+          <CardContent className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex gap-4">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-blue/20 border border-blue/40">
+                    <span className="text-blue font-bold text-lg">1</span>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-bold text-white text-lg mb-2">Acciones Concretas</h3>
+                  <p className="text-white/85">Cada tarea está mapeada a una conversación real: LinkedIn networking, entrevistas o negociación de cargo.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-purple/20 border border-purple/40">
+                    <span className="text-purple font-bold text-lg">2</span>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-bold text-white text-lg mb-2">Progresión Estructurada</h3>
+                  <p className="text-white/85">3 fases claramente definidas: Fundamentos → Aceleración → Dominio. Cada una te acerca a ser imprescindible.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-green/20 border border-green/40">
+                    <span className="text-green font-bold text-lg">3</span>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-bold text-white text-lg mb-2">Personalización</h3>
+                  <p className="text-white/85">Tu ruta es única según tu perfil cerebral, objetivos y nivel actual. No hay dos rutas iguales.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="flex-shrink-0">
+                  <div className="flex items-center justify-center h-10 w-10 rounded-lg bg-yellow/20 border border-yellow/40">
+                    <span className="text-yellow font-bold text-lg">4</span>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-bold text-white text-lg mb-2">Trackeo Real</h3>
+                  <p className="text-white/85">Marca tareas como completadas y ve tu progreso en tiempo real. Gana badges y hitos conforme avanzas.</p>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
