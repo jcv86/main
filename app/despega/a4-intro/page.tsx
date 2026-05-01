@@ -51,14 +51,14 @@ export default function ContinuousExecutionIntroPage() {
           title="Tu Coach IA 24/7 - Inteligencia de Mercado"
           description="Monitorea el mercado laboral, obtén inteligencia competitiva y toma decisiones estratégicas con confianza. Tu ejecución comienza aquí."
           estimatedTime="Acceso continuo"
-          pillarColor="blue"
+          pillarColor="red"
         />
 
         <div className="space-y-8">
-          <Card className="bg-gradient-to-br from-purple/20 to-blue/20 border-2 border-purple/40 shadow-lg">
+          <Card className="bg-red/10 border-2 border-red/40 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-3xl flex items-center gap-3 text-white">
-                <Radar className="w-8 h-8 text-purple" />
+                <Radar className="w-8 h-8 text-red" />
                 Tu Coach IA 24/7
               </CardTitle>
             </CardHeader>
@@ -66,7 +66,7 @@ export default function ContinuousExecutionIntroPage() {
               <p className="text-white/90 text-lg leading-relaxed">
                 Esta es tu fase de ejecución continua. No terminas en entrenamiento - aquí EMPIEZAS a aplicar todo. Tu coach IA personal te proporciona contexto real del mercado laboral, tendencias de industria, inteligencia competitiva y decisiones estratégicas para que entres al mercado con ventaja.
               </p>
-              <div className="bg-purple/25 p-6 rounded-xl border-2 border-purple/50">
+              <div className="bg-red/25 p-6 rounded-xl border-2 border-red/50">
                 <p className="text-white font-bold text-lg">
                   Tu objetivo: Ejecutar tu plan con inteligencia del mercado. Conocer antes que los demás, decidir mejor, actuar con confianza.
                 </p>
@@ -74,26 +74,26 @@ export default function ContinuousExecutionIntroPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-green/20 to-emerald/20 border-2 border-green/40 shadow-lg">
+          <Card className="bg-red/10 border-2 border-red/40 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-3xl flex items-center gap-3 text-white">
-                <TrendingUp className="w-8 h-8 text-green" />
+                <TrendingUp className="w-8 h-8 text-red" />
                 Tus 7 Herramientas de Inteligencia
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 {[
-                  { icon: Newspaper, label: 'Noticias y Tendencias', desc: 'Alertas sobre industria, empresas y roles en tu área', color: 'blue' },
-                  { icon: MapPin, label: 'Radar de Oportunidades', desc: 'Empresas contratando, posiciones abiertas, crecimiento', color: 'purple' },
+                  { icon: Newspaper, label: 'Noticias y Tendencias', desc: 'Alertas sobre industria, empresas y roles en tu área', color: 'red' },
+                  { icon: MapPin, label: 'Radar de Oportunidades', desc: 'Empresas contratando, posiciones abiertas, crecimiento', color: 'red' },
                   { icon: Brain, label: 'Análisis de Mercado', desc: 'Salarios, demanda de skills, tendencias de carrera', color: 'red' },
-                  { icon: Zap, label: 'Benchmark Competitivo', desc: 'Cómo te comparas con otros perfiles en el mercado', color: 'yellow' },
-                  { icon: TrendingUp, label: 'Decisiones Estratégicas', desc: 'Recomendaciones personalizadas para tu perfil y mercado', color: 'green' }
+                  { icon: Zap, label: 'Benchmark Competitivo', desc: 'Cómo te comparas con otros perfiles en el mercado', color: 'red' },
+                  { icon: TrendingUp, label: 'Decisiones Estratégicas', desc: 'Recomendaciones personalizadas para tu perfil y mercado', color: 'red' }
                 ].map((tool, idx) => {
                   const IconComponent = tool.icon
                   return (
-                    <div key={idx} className={`p-5 bg-${tool.color}/15 border-2 border-${tool.color}/40 rounded-xl flex gap-4 hover:shadow-lg transition-all`}>
-                      <IconComponent className={`w-7 h-7 text-${tool.color} flex-shrink-0 mt-1`} />
+                    <div key={idx} className={`p-5 bg-red/15 border-2 border-red/40 rounded-xl flex gap-4 hover:shadow-lg transition-all`}>
+                      <IconComponent className={`w-7 h-7 text-red flex-shrink-0 mt-1`} />
                       <div className="flex-1">
                         <p className="font-bold text-white text-lg">{tool.label}</p>
                         <p className="text-white/85 text-base">{tool.desc}</p>
@@ -105,7 +105,7 @@ export default function ContinuousExecutionIntroPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-purple/20 to-indigo/20 border-2 border-purple/40 shadow-lg">
+          <Card className="bg-red/10 border-2 border-red/40 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-3xl text-white">Tu Flujo de Ejecución</CardTitle>
               <CardDescription className="text-white/75 text-lg">Cómo funciona tu ejecución continua</CardDescription>
@@ -117,16 +117,16 @@ export default function ContinuousExecutionIntroPage() {
                   { num: '2', label: 'Analiza', desc: 'Te proporciona insights estratégicos personalizados' },
                   { num: '3', label: 'Ejecuta', desc: 'Tú actúas con inteligencia de mercado real' }
                 ].map((step, idx) => (
-                  <div key={idx} className="bg-background/50 border-2 border-white/20 p-6 rounded-xl text-center hover:border-purple/50 transition-all">
-                    <div className="text-5xl font-black text-purple mb-3">{step.num}</div>
+                  <div key={idx} className="bg-background/50 border-2 border-white/20 p-6 rounded-xl text-center hover:border-red/50 transition-all">
+                    <div className="text-5xl font-black text-red mb-3">{step.num}</div>
                     <p className="font-bold text-white text-xl mb-2">{step.label}</p>
                     <p className="text-white/85 text-base">{step.desc}</p>
                   </div>
                 ))}
               </div>
-              <div className="bg-purple/30 border-2 border-purple/50 p-6 rounded-xl">
+              <div className="bg-red/30 border-2 border-red/50 p-6 rounded-xl">
                 <p className="text-white text-lg font-semibold text-center">
-                  <span className="text-purple">Coach IA 24/7:</span> Tu asistente personal que nunca duerme, siempre actualizado, siempre disponible para ayudarte a tomar las mejores decisiones.
+                  <span className="text-red">Coach IA 24/7:</span> Tu asistente personal que nunca duerme, siempre actualizado, siempre disponible para ayudarte a tomar las mejores decisiones.
                 </p>
               </div>
             </CardContent>
@@ -155,12 +155,12 @@ export default function ContinuousExecutionIntroPage() {
             </CardContent>
           </Card>
 
-          <div className="p-8 bg-gradient-to-r from-purple/20 to-blue/20 border-2 border-purple/40 rounded-xl shadow-lg">
+          <div className="p-8 bg-red/10 border-2 border-red/40 rounded-xl shadow-lg">
             <h3 className="text-3xl font-bold text-white mb-3">Bienvenido a Tu Ejecución Continua</h3>
             <p className="text-white/90 text-lg mb-8">Aquí es donde todo tu trabajo cobra vida. Entra al dashboard y comienza tu ejecución con inteligencia de mercado.</p>
             <Button 
               onClick={() => router.push('/despega/a4')}
-              className="w-full bg-purple/70 hover:bg-purple/60 text-white font-bold text-lg py-6"
+              className="w-full bg-red hover:bg-red/80 text-white font-bold text-lg py-6"
             >
               Ir a Ejecución Continua
               <ArrowRight className="w-5 h-5 ml-2" />
