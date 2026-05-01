@@ -321,8 +321,8 @@ export default function ProfileDashboard() {
           <div className="space-y-3">
             {stages.map((stage, i) => {
               const stageColors = [
+                { border: 'border-purple/40', bg: 'bg-purple/5', hover: 'hover:border-purple/60', text: 'text-purple', progress: 'from-purple to-purple/60', label: 'text-purple' },
                 { border: 'border-blue/40', bg: 'bg-blue/5', hover: 'hover:border-blue/60', text: 'text-blue', progress: 'from-blue to-blue/60', label: 'text-blue' },
-                { border: 'border-cyan/40', bg: 'bg-cyan/5', hover: 'hover:border-cyan/60', text: 'text-cyan', progress: 'from-cyan to-cyan/60', label: 'text-cyan' },
                 { border: 'border-orange/40', bg: 'bg-orange/5', hover: 'hover:border-orange/60', text: 'text-orange', progress: 'from-orange to-orange/60', label: 'text-orange' },
                 { border: 'border-red/40', bg: 'bg-red/5', hover: 'hover:border-red/60', text: 'text-red', progress: 'from-red to-red/60', label: 'text-red' }
               ]
@@ -374,7 +374,10 @@ export default function ProfileDashboard() {
                     className={`w-full font-bold text-sm py-4 transition-all active:scale-95 ${
                       stage.completed
                         ? 'bg-green/30 hover:bg-green/40 text-green border-2 border-green/50'
-                        : `bg-${i === 0 ? 'blue' : i === 1 ? 'cyan' : i === 2 ? 'orange' : 'red'}/70 hover:bg-${i === 0 ? 'blue' : i === 1 ? 'cyan' : i === 2 ? 'orange' : 'red'}/60 text-white border-2 border-${i === 0 ? 'blue' : i === 1 ? 'cyan' : i === 2 ? 'orange' : 'red'}/50`
+                        : i === 0 ? 'bg-purple/70 hover:bg-purple/60 text-white border-2 border-purple/50'
+                        : i === 1 ? 'bg-blue/70 hover:bg-blue/60 text-white border-2 border-blue/50'
+                        : i === 2 ? 'bg-orange/70 hover:bg-orange/60 text-white border-2 border-orange/50'
+                        : 'bg-red/70 hover:bg-red/60 text-white border-2 border-red/50'
                     }`}
                   >
                     {stage.completed ? 'Ver Resultados' : 'Continuar Ahora'}
