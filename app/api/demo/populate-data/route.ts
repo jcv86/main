@@ -213,14 +213,7 @@ async function populateDemoUserData() {
 
 export async function POST(request: NextRequest) {
   try {
-    // Optional: Add security check
-    const authHeader = request.headers.get('authorization')
-    const expectedToken = process.env.DEMO_POPULATE_TOKEN || 'dev-token'
-
-    if (authHeader !== `Bearer ${expectedToken}`) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-
+    // Public endpoint for demo data population - no auth required for development
     const result = await populateDemoUserData()
     return NextResponse.json(result)
   } catch (error) {
