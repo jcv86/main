@@ -147,7 +147,17 @@ export function DespegaNavbar() {
   }, [pathname])
 
   const handleLogout = async () => {
-    await fetch('/api/auth/signout', { method: 'POST' })
+    // Clear demo user from localStorage if exists
+    localStorage.removeItem('demo_user')
+    document.cookie = 'demo_user=; path=/; max-age=0'
+    
+    // Try to sign out from Supabase if there's a real session
+    try {
+      await fetch('/api/auth/signout', { method: 'POST' })
+    } catch (err) {
+      console.error('[v0] Error signing out:', err)
+    }
+    
     router.push('/auth/signin')
   }
 
