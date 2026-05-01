@@ -97,11 +97,7 @@ export default function SignInPage() {
     setIsLoadingDemo(true)
 
     try {
-      // For demo access, bypass auth and redirect to dashboard
-      // In production, users must sign in with OAuth
-      const supabase = createClient()
-      
-      // Create a demo session directly
+      // For demo access, create a demo session and set cookie
       const demoUser = {
         id: `demo-${testEmail.split('@')[0]}`,
         email: testEmail,
@@ -109,7 +105,10 @@ export default function SignInPage() {
         role: 'authenticated',
       }
 
-      // Store demo session in localStorage temporarily
+      // Store demo user in cookie (server-side readable for middleware)
+      document.cookie = `demo_user=${JSON.stringify(demoUser)}; path=/; max-age=86400`
+      
+      // Also store in localStorage for client-side
       localStorage.setItem('demo_user', JSON.stringify(demoUser))
       
       router.push('/dashboard')

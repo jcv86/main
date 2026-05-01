@@ -23,6 +23,18 @@ export function DashboardContent() {
   const shouldRefetch = searchParams?.get("refetch") === "true"
 
   const loadData = async () => {
+    // Check if this is a demo user
+    const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
+    const demoUser = demoUserStr ? JSON.parse(demoUserStr) : null
+    
+    if (demoUser) {
+      // For demo users, skip loading data and show demo dashboard
+      console.log('[v0] Demo user detected, skipping Supabase data load')
+      setUserData({ demo: true, email: demoUser.email })
+      setLoading(false)
+      return
+    }
+
     if (!sessionUser?.id) return
 
     const supabase = createClient()
