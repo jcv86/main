@@ -7,10 +7,12 @@ import { ContactFormModal } from './contact-form-modal'
 
 export default function Footer() {
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear())
+  const [lastUpdate, setLastUpdate] = useState('')
   const [contactOpen, setContactOpen] = useState(false)
 
   useEffect(() => {
     setCurrentYear(new Date().getFullYear())
+    setLastUpdate(new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' }))
   }, [])
 
   // Contact information
@@ -109,7 +111,7 @@ export default function Footer() {
           <div className="border-t border-muted/20 dark:border-muted/80 pt-8">
             <div className="flex flex-col md:flex-row justify-between items-center text-sm text-foreground/60">
               <p>&copy; {currentYear} Despega Tu Carrera. Todos los derechos reservados.</p>
-              <p>Última actualización: {new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+              {lastUpdate && <p>Última actualización: {lastUpdate}</p>}
             </div>
           </div>
         </div>
