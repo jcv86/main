@@ -15,36 +15,33 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient()
 
-    // Fetch user by email from auth.users
-    const { data, error: listError } = await supabase.auth.admin.listUsers()
+    // Use generateLink to create a magic link session for demo user
+    const { data, error: linkError } = await supabase.auth.admin.generateLink({
+      type: 'magiclink',
+      email: email,
+    })
 
-    if (listError || !data) {
-      console.error('[v0] Error listing users:', listError)
+    if (linkError) {
+      console.error('[v0] Error generating link:', linkError)
       return NextResponse.json(
-        { error: 'Error fetching user' },
+        { error: 'Error creating demo session' },
         { status: 500 }
       )
     }
 
-    const users = data.users as any[]
-    const user = users.find((u) => u.email === email)
-
-    if (!user) {
+    if (!data) {
       return NextResponse.json(
-        { error: 'User not found' },
-        { status: 404 }
+        { error: 'Failed to generate demo session' },
+        { status: 500 }
       )
     }
 
-    // Create a session directly (admin bypass for demo)
-    const { data: sessionData, error: sessionError } = await supabase.auth.admin.createSession({
-      userId: user.id,
-    })
+    // Extract session from the generated link
+    const { user, session } = data
 
-    if (sessionError) {
-      console.error('[v0] Error creating session:', sessionError)
+    if (!user || !session) {
       return NextResponse.json(
-        { error: 'Error creating session' },
+        { error: 'Failed to create demo session' },
         { status: 500 }
       )
     }
@@ -56,9 +53,9 @@ export async function POST(request: NextRequest) {
         email: user.email,
       },
       session: {
-        access_token: sessionData.session?.access_token,
-        refresh_token: sessionData.session?.refresh_token,
-        expires_at: sessionData.session?.expires_at,
+        access_token: session.access_token,
+        refresh_token: session.refresh_token,
+        expires_at: session.expires_at,
       },
     })
   } catch (error) {
