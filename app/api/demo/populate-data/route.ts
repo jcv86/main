@@ -82,50 +82,56 @@ async function populateDemoUserData() {
       })
 
     // 5. Create test results (A4 strategic tests)
-    await supabase
-      .from('a4_user_test_completions')
-      .insert({
-        user_id: demoUser.id,
-        test_id: 'strategic-intelligence-test',
-        score: 75,
-        answers: JSON.stringify({ q1: 'a', q2: 'b', q3: 'c' }),
-        completed_at: new Date().toISOString(),
-        created_at: new Date().toISOString(),
-      })
-      .throwOnError()
-      .catch(() => null) // Ignore if duplicate
+    try {
+      await supabase
+        .from('a4_user_test_completions')
+        .insert({
+          user_id: demoUser.id,
+          test_id: 'strategic-intelligence-test',
+          score: 75,
+          answers: JSON.stringify({ q1: 'a', q2: 'b', q3: 'c' }),
+          completed_at: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+        })
+    } catch (e) {
+      console.log('[v0] Test result already exists')
+    }
 
     // 6. Create module progress (A4)
-    await supabase
-      .from('a4_module_progress')
-      .insert({
-        user_id: demoUser.id,
-        module_id: 'module-estrategia-1',
-        modulo_titulo: 'Estrategia Empresarial Básica',
-        progreso_porcentaje: 85,
-        completado: false,
-        tiempo_dedicado_minutos: 120,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .throwOnError()
-      .catch(() => null)
+    try {
+      await supabase
+        .from('a4_module_progress')
+        .insert({
+          user_id: demoUser.id,
+          module_id: 'module-estrategia-1',
+          modulo_titulo: 'Estrategia Empresarial Básica',
+          progreso_porcentaje: 85,
+          completado: false,
+          tiempo_dedicado_minutos: 120,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+    } catch (e) {
+      console.log('[v0] Module progress already exists')
+    }
 
     // 7. Create a few entries in points history
-    await supabase
-      .from('a4_points_history')
-      .insert({
-        user_id: demoUser.id,
-        relacionado_a: 'module_completion',
-        relacionado_id: 'module-1',
-        razon: 'Completar módulo de estrategia',
-        puntos_ganados: 150,
-        balance_anterior: 100,
-        balance_nuevo: 250,
-        created_at: new Date().toISOString(),
-      })
-      .throwOnError()
-      .catch(() => null)
+    try {
+      await supabase
+        .from('a4_points_history')
+        .insert({
+          user_id: demoUser.id,
+          relacionado_a: 'module_completion',
+          relacionado_id: 'module-1',
+          razon: 'Completar módulo de estrategia',
+          puntos_ganados: 150,
+          balance_anterior: 100,
+          balance_nuevo: 250,
+          created_at: new Date().toISOString(),
+        })
+    } catch (e) {
+      console.log('[v0] Points history already exists')
+    }
 
     // 8. Create badges
     await supabase
