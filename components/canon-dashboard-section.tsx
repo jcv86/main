@@ -129,13 +129,13 @@ export function CanonDashboardSection() {
           </p>
           <div className="bg-muted/70/50 border border-muted/60 rounded-[28px] p-4 space-y-3">
             <p className="text-sm text-white/85">
-              <span className="font-semibold text-emerald-400">✓ Ya completaste:</span> Test A1 (Perfil DISC)
+              <span className="font-semibold text-emerald-400"> Ya completaste:</span> Test A1 (Perfil DISC)
             </p>
             <p className="text-sm text-white/85">
               <span className="font-semibold text-blue/40">→ Siguiente:</span> Conozcámonos 2 - Paso 1 (Contexto de ejecución)
             </p>
             <p className="text-sm text-white/85">
-              <span className="font-semibold text-purple/40">📊 Resultado:</span> Ruta 30/60/90 personalizada con trazabilidad
+              <span className="font-semibold text-purple/40"> Resultado:</span> Ruta 30/60/90 personalizada con trazabilidad
             </p>
           </div>
           <Link href="/despega/onboarding" className="block mt-6">

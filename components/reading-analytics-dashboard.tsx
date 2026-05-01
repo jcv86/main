@@ -121,7 +121,7 @@ export default function ReadingAnalyticsDashboard() {
   return (
     <div className="space-y-6 p-6">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-4">📊 Análisis de Lectura</h1>
+        <h1 className="text-4xl font-bold mb-4"> Análisis de Lectura</h1>
         <p className="text-xl text-muted-foreground">Seguimiento detallado de tu progreso y hábitos de lectura</p>
       </div>
 

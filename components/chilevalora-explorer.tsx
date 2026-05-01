@@ -408,7 +408,7 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
               >
                 {gap.competencia}
                 <div className="text-xs mt-1">
-                  {gap.estado === 'acquired' ? '✓' : '○'}
+                  {gap.estado === 'acquired' ? '' : '○'}
                 </div>
               </div>
             ))}

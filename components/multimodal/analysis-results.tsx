@@ -174,7 +174,7 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
           <ul className="space-y-2">
             {analysis.key_strengths.map((strength: string, i: number) => (
               <li key={i} className="flex gap-2 text-sm">
-                <span className="text-green font-bold">✓</span>
+                <span className="text-green font-bold"></span>
                 <span>{strength}</span>
               </li>
             ))}

@@ -70,17 +70,17 @@ export default function EjecucionContinuaPage() {
           {/* Key Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 mb-8">
             <div className="bg-red/10 border-2 border-red/30 rounded-lg p-4">
-              <div className="text-2xl mb-2">🎯</div>
+              <div className="text-2xl mb-2"></div>
               <h3 className="font-semibold mb-1 text-red">Dashboard Ejecutivo</h3>
               <p className="text-sm text-muted-foreground">Visualiza tu desempeño y avance en tiempo real</p>
             </div>
             <div className="bg-red/10 border-2 border-red/30 rounded-lg p-4">
-              <div className="text-2xl mb-2">💼</div>
+              <div className="text-2xl mb-2"></div>
               <h3 className="font-semibold mb-1 text-red">Oportunidades Reales</h3>
               <p className="text-sm text-muted-foreground">Acceso a ofertas laborales personalizadas del mercado</p>
             </div>
             <div className="bg-red/10 border-2 border-red/30 rounded-lg p-4">
-              <div className="text-2xl mb-2">📚</div>
+              <div className="text-2xl mb-2"></div>
               <h3 className="font-semibold mb-1 text-red">Aprendizaje Continuo</h3>
               <p className="text-sm text-muted-foreground">Recursos, tests y análisis para crecer profesionalmente</p>
             </div>

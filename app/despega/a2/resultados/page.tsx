@@ -21,13 +21,13 @@ interface A2Insights {
 const insightCards = [
   {
     key: 'alineacionMision',
-    icon: '🎯',
+    icon: '',
     title: 'Alineación de Misión',
     color: 'from-green/50'
   },
   {
     key: 'rutaAprendizaje',
-    icon: '📚',
+    icon: '',
     title: 'Ruta de Aprendizaje',
     color: 'from-blue'
   },

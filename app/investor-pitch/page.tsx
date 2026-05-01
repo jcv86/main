@@ -57,7 +57,7 @@ export default function InvestorPitch() {
         <section className="mb-12">
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-muted/20">
             <h2 className="text-3xl font-bold mb-6 text-foreground flex items-center gap-3">
-              <span className="w-12 h-12 bg-red/10 rounded-xl flex items-center justify-center text-2xl">🎯</span>
+              <span className="w-12 h-12 bg-red/10 rounded-xl flex items-center justify-center text-2xl"></span>
               El Problema
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
@@ -91,7 +91,7 @@ export default function InvestorPitch() {
           <div className="bg-purple rounded-2xl p-8 shadow-lg text-white">
             <h2 className="text-3xl font-bold mb-6 flex items-center gap-3">
               <span className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center text-2xl backdrop-blur-sm">
-                ✨
+                
               </span>
               Nuestra Solución
             </h2>
@@ -102,21 +102,21 @@ export default function InvestorPitch() {
 
             <div className="grid md:grid-cols-3 gap-6">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="text-4xl mb-3">🧠</div>
+                <div className="text-4xl mb-3"></div>
                 <h3 className="font-bold text-lg mb-2">Sistema Cerebro AI</h3>
                 <p className="text-purple/10 text-sm">
                   Coach impulsado por GPT-4 con búsqueda semántica en 120+ libros y 100+ recursos del mercado chileno
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="text-4xl mb-3">📊</div>
+                <div className="text-4xl mb-3"></div>
                 <h3 className="font-bold text-lg mb-2">6 Pruebas Psicométricas</h3>
                 <p className="text-purple/10 text-sm">
                   Pruebas DISC, MBTI, Big Five, RIASEC, EQ y Soft Skills con insights generados por IA
                 </p>
               </div>
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                <div className="text-4xl mb-3">📚</div>
+                <div className="text-4xl mb-3"></div>
                 <h3 className="font-bold text-lg mb-2">Biblioteca Profesional</h3>
                 <p className="text-purple/10 text-sm">
                   120+ libros completos en texto sobre liderazgo, productividad, EQ y desarrollo de carrera
@@ -231,10 +231,10 @@ export default function InvestorPitch() {
                 <h3 className="font-bold text-xl mb-4 text-foreground">Freemium (Lanzamiento)</h3>
                 <div className="text-3xl font-bold text-purple mb-2">$0</div>
                 <ul className="space-y-2 text-muted text-sm mb-4">
-                  <li>✓ Todas las 6 pruebas psicométricas</li>
-                  <li>✓ Acceso completo a la biblioteca (120+ libros)</li>
-                  <li>✓ Coaching básico de IA</li>
-                  <li>✓ Resultados e insights</li>
+                  <li> Todas las 6 pruebas psicométricas</li>
+                  <li> Acceso completo a la biblioteca (120+ libros)</li>
+                  <li> Coaching básico de IA</li>
+                  <li> Resultados e insights</li>
                 </ul>
                 <p className="text-xs text-muted-foreground">
                   Construye base de usuarios y recopila datos para ajuste producto-mercado
@@ -245,11 +245,11 @@ export default function InvestorPitch() {
                 <h3 className="font-bold text-xl mb-4 text-foreground">Premium Individual</h3>
                 <div className="text-3xl font-bold text-blue mb-2">$29/mes</div>
                 <ul className="space-y-2 text-muted text-sm mb-4">
-                  <li>✓ Todo en Gratuito</li>
-                  <li>✓ Sesiones de coaching de IA ilimitadas</li>
-                  <li>✓ Análisis avanzados y seguimiento</li>
-                  <li>✓ Simulaciones de trayectoria de carrera</li>
-                  <li>✓ Soporte prioritario</li>
+                  <li> Todo en Gratuito</li>
+                  <li> Sesiones de coaching de IA ilimitadas</li>
+                  <li> Análisis avanzados y seguimiento</li>
+                  <li> Simulaciones de trayectoria de carrera</li>
+                  <li> Soporte prioritario</li>
                 </ul>
                 <p className="text-xs text-muted-foreground">Objetivo: conversión de 5-10% de usuarios gratuitos</p>
               </div>
@@ -258,11 +258,11 @@ export default function InvestorPitch() {
                 <h3 className="font-bold text-xl mb-4 text-foreground">Empresarial (B2B)</h3>
                 <div className="text-3xl font-bold text-green mb-2">Personalizado</div>
                 <ul className="space-y-2 text-muted text-sm mb-4">
-                  <li>✓ Dashboards y análisis de equipo</li>
-                  <li>✓ Evaluaciones masivas</li>
-                  <li>✓ Opciones de marca blanca</li>
-                  <li>✓ Integración con sistemas HR</li>
-                  <li>✓ Soporte dedicado</li>
+                  <li> Dashboards y análisis de equipo</li>
+                  <li> Evaluaciones masivas</li>
+                  <li> Opciones de marca blanca</li>
+                  <li> Integración con sistemas HR</li>
+                  <li> Soporte dedicado</li>
                 </ul>
                 <p className="text-xs text-muted-foreground">Objetivo: grandes empresas chilenas y consultorías de HR</p>
               </div>
@@ -274,14 +274,14 @@ export default function InvestorPitch() {
         <section className="mb-12">
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-muted/20">
             <h2 className="text-3xl font-bold mb-6 text-foreground flex items-center gap-3">
-              <span className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center text-2xl">🚀</span>
+              <span className="w-12 h-12 bg-orange/10 rounded-xl flex items-center justify-center text-2xl"></span>
               Ventaja Competitiva
             </h2>
 
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div className="bg-purple/5 rounded-lg p-5 border border-purple/10">
-                  <h3 className="font-bold text-lg mb-2 text-foreground">🧠 Tecnología AI Avanzada</h3>
+                  <h3 className="font-bold text-lg mb-2 text-foreground"> Tecnología AI Avanzada</h3>
                   <p className="text-muted text-sm">
                     Sistema Cerebro propio con búsqueda semántica en 120+ libros. Los competidores ofrecen chatbots
                     básicos sin bases de conocimiento personalizadas.
@@ -298,7 +298,7 @@ export default function InvestorPitch() {
                 </div>
 
                 <div className="bg-green/5 rounded-lg p-5 border border-emerald-100">
-                  <h3 className="font-bold text-lg mb-2 text-foreground">📊 Conjunto Completo de Evaluaciones</h3>
+                  <h3 className="font-bold text-lg mb-2 text-foreground"> Conjunto Completo de Evaluaciones</h3>
                   <p className="text-muted text-sm">
                     6 pruebas validadas científicamente en una plataforma. Los competidores suelen ofrecer 1-2 pruebas,
                     requiriendo que los usuarios utilicen múltiples plataformas.
@@ -308,7 +308,7 @@ export default function InvestorPitch() {
 
               <div className="space-y-4">
                 <div className="bg-orange/5 rounded-lg p-5 border border-orange/10">
-                  <h3 className="font-bold text-lg mb-2 text-foreground">💡 Plataforma Todo en Uno</h3>
+                  <h3 className="font-bold text-lg mb-2 text-foreground"> Plataforma Todo en Uno</h3>
                   <p className="text-muted text-sm">
                     Pruebas + Biblioteca + Coaching de IA en una sola plataforma. Los usuarios actualmente necesitan 3-4
                     suscripciones diferentes con un costo total de $100+ mensual.
@@ -324,7 +324,7 @@ export default function InvestorPitch() {
                 </div>
 
                 <div className="bg-blue/5 rounded-lg p-5 border border-indigo-100">
-                  <h3 className="font-bold text-lg mb-2 text-foreground">🎯 Acceso Freemium</h3>
+                  <h3 className="font-bold text-lg mb-2 text-foreground"> Acceso Freemium</h3>
                   <p className="text-muted text-sm">
                     Acceso completo a las características principales de forma gratuita. Los competidores cobran $50-300
                     al inicio, limitando la accesibilidad y la penetración del mercado.
@@ -488,7 +488,7 @@ export default function InvestorPitch() {
               <h3 className="text-2xl font-bold mb-4">¿Por Qué Invertir Ahora?</h3>
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">✓</span>
+                  <span className="text-2xl"></span>
                   <div>
                     <div className="font-bold mb-1">Plataforma Completa Construida</div>
                     <div className="text-purple/10 text-sm">
@@ -497,14 +497,14 @@ export default function InvestorPitch() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">✓</span>
+                  <span className="text-2xl"></span>
                   <div>
                     <div className="font-bold mb-1">Mercado Dirigible Grande</div>
                     <div className="text-purple/10 text-sm">$65B+ mercado LATAM con crecimiento anual del 15%</div>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">✓</span>
+                  <span className="text-2xl"></span>
                   <div>
                     <div className="font-bold mb-1">Monetización Clara</div>
                     <div className="text-purple/10 text-sm">
@@ -513,7 +513,7 @@ export default function InvestorPitch() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-2xl">✓</span>
+                  <span className="text-2xl"></span>
                   <div>
                     <div className="font-bold mb-1">Ventaja Primero en IA</div>
                     <div className="text-purple/10 text-sm">

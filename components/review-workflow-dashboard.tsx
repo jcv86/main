@@ -126,7 +126,7 @@ export default function ReviewWorkflowDashboard() {
       case "multiple_issues":
         return "🚨"
       default:
-        return "⚠️"
+        return ""
     }
   }
 

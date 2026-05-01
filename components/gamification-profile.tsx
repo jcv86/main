@@ -31,13 +31,13 @@ const LEVEL_ICONS = {
   Silver: '🥈',
   Gold: '🥇',
   Platinum: '💎',
-  Diamond: '✨'
+  Diamond: ''
 }
 
 const BADGE_ICONS: Record<string, string> = {
   'First Interview': '🎬',
-  'Interview Starter': '🚀',
-  'Interview Master': '🎯',
+  'Interview Starter': '',
+  'Interview Master': '',
   'Interview Legend': '👑',
   'Week Warrior': '🔥',
   'Monthly Master': '⚡',
@@ -180,7 +180,7 @@ export function GamificationProfile({
                 : `You're on a ${streak}-day streak! Complete another interview tomorrow to keep it going.`}
             </p>
             <p className="text-xs text-muted-foreground mt-2">
-              💡 Tip: Streaks are the best way to develop interview skills consistently
+               Tip: Streaks are the best way to develop interview skills consistently
             </p>
           </div>
         </div>

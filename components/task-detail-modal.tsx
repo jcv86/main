@@ -211,7 +211,7 @@ export function TaskDetailModal({ task, isOpen, onClose }: TaskDetailModalProps)
                     key={idx}
                     className="flex items-start gap-3 p-2 sm:p-3 bg-ritual/5 border border-ritual/20 rounded-lg"
                   >
-                    <span className="text-ritual font-bold text-lg flex-shrink-0">✓</span>
+                    <span className="text-ritual font-bold text-lg flex-shrink-0"></span>
                     <span className="text-xs sm:text-sm text-muted-foreground">{criterion}</span>
                   </div>
                 ))}

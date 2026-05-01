@@ -248,7 +248,7 @@ export default function AICoachTestScenarios() {
 
   const generateMockResponse = (scenario: TestScenario): string => {
     const responses = {
-      "test-1": `🎯 **Te recomiendo empezar con el Test DISC:**
+      "test-1": ` **Te recomiendo empezar con el Test DISC:**
 
 **¿Por qué DISC primero?**
 • Es rápido (15 minutos) y fácil de completar
@@ -263,7 +263,7 @@ export default function AICoachTestScenarios() {
 
 ¿Te gustaría que te explique más sobre alguno de estos tests? 🤔`,
 
-      "test-2": `📊 **Test DISC - Todo lo que necesitas saber:**
+      "test-2": ` **Test DISC - Todo lo que necesitas saber:**
 
 **¿Qué mide?**
 • **D**ominancia - Cómo enfrentas problemas y desafíos
@@ -280,9 +280,9 @@ export default function AICoachTestScenarios() {
 **Tiempo:** 15 minutos
 **Dificultad:** Fácil
 
-¿Estás listo para descubrir tu perfil DISC? 🚀`,
+¿Estás listo para descubrir tu perfil DISC? `,
 
-      "book-1": `📚 **Libros Esenciales de Liderazgo:**
+      "book-1": ` **Libros Esenciales de Liderazgo:**
 
 **Para Principiantes:**
 • **"El Líder que no Tenía Cargo"** - Robin Sharma
@@ -302,7 +302,7 @@ export default function AICoachTestScenarios() {
 • **"The 7 Habits of Highly Effective People"** - Stephen Covey
   Principios fundamentales de efectividad
 
-¿Te interesa algún área específica del liderazgo? (equipos, comunicación, estrategia) 🎯`,
+¿Te interesa algún área específica del liderazgo? (equipos, comunicación, estrategia) `,
 
       "skill-1": `🗣️ **Plan de Desarrollo: Habilidades de Comunicación**
 
@@ -327,7 +327,7 @@ export default function AICoachTestScenarios() {
 ✅ Feedback positivo de colegas
 ✅ Reducción de malentendidos
 
-¿Te gustaría un plan más específico para algún aspecto? 🎯`,
+¿Te gustaría un plan más específico para algún aspecto? `,
 
       "career-1": `🔄 **Guía para Cambio de Carrera:**
 

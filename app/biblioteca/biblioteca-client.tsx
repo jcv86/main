@@ -345,7 +345,7 @@ export default function BibliotecaPage() {
             Todos ({books.length})
           </TabsTrigger>
           <TabsTrigger value="libros" className="flex items-center gap-2">
-            📚 Libros ({originalBooks.length})
+             Libros ({originalBooks.length})
           </TabsTrigger>
           <TabsTrigger value="recursos" className="flex items-center gap-2">
             📋 Recursos ({chileanResources.length})

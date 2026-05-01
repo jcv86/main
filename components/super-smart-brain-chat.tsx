@@ -189,7 +189,7 @@ export function SuperSmartBrainChat() {
                 <Alert className="bg-background">
                   <Brain className="h-5 w-5" />
                   <AlertDescription>
-                    <p className="font-semibold mb-3">🚀 Cerebro Avanzado de IA</p>
+                    <p className="font-semibold mb-3"> Cerebro Avanzado de IA</p>
                     <div className="grid grid-cols-2 gap-3 text-sm">
                       <div className="flex items-start gap-2">
                         <Sparkles className="h-4 w-4 text-purple mt-0.5" />

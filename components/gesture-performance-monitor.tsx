@@ -442,7 +442,7 @@ export function GesturePerformanceMonitor() {
                   )}
                   {Object.values(stats.gestureBreakdown).some((g) => g.successRate >= 95) && (
                     <div className="flex items-center gap-2 text-green">
-                      <span>🎯</span>
+                      <span></span>
                       <span>Some gestures have near-perfect accuracy</span>
                     </div>
                   )}
@@ -453,7 +453,7 @@ export function GesturePerformanceMonitor() {
                 <div className="space-y-2 text-sm">
                   {stats.averageResponseTime > 200 && (
                     <div className="flex items-center gap-2 text-yellow">
-                      <span>⚠️</span>
+                      <span></span>
                       <span>Consider optimizing gesture detection algorithms</span>
                     </div>
                   )}
@@ -465,12 +465,12 @@ export function GesturePerformanceMonitor() {
                   )}
                   {Object.values(stats.gestureBreakdown).some((g) => g.successRate < 70) && (
                     <div className="flex items-center gap-2 text-yellow">
-                      <span>🎯</span>
+                      <span></span>
                       <span>Focus on improving low-performing gestures</span>
                     </div>
                   )}
                   <div className="flex items-center gap-2 text-blue">
-                    <span>📊</span>
+                    <span></span>
                     <span>Continue monitoring for trend analysis</span>
                   </div>
                 </div>

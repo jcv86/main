@@ -97,7 +97,7 @@ export default function CallEntrenaCoachingPage() {
       <ASection 
         title="Entrenamiento: Conversación de Coaching" 
         subtitle="Call Entrena Completado" 
-        icon="📞" 
+        icon="" 
         colorClass="from-blue"
       >
         <ASectionPart title="¡Excelente!" icon={<CheckCircle2 />}>
@@ -162,7 +162,7 @@ export default function CallEntrenaCoachingPage() {
     <ASection 
       title="Entrenamiento: Conversación de Coaching" 
       subtitle="Entrenamiento de Entrevista" 
-      icon="📞" 
+      icon="" 
       colorClass="from-blue"
     >
       <ASectionPart title={`Pregunta ${currentQuestion + 1} de ${CALL_ENTRENA_QUESTIONS.length}`} icon={<Phone />}>
@@ -192,22 +192,22 @@ export default function CallEntrenaCoachingPage() {
         <div className="grid grid-cols-1 gap-3 mb-8">
           {[
             {
-              label: '💪 Respuesta Fuerte',
+              label: 'Respuesta Fuerte',
               description: 'Enfocada en resultados y acción',
               value: 'strong'
             },
             {
-              label: '🤝 Respuesta Equilibrada',
+              label: 'Respuesta Equilibrada',
               description: 'Considera personas y proceso',
               value: 'balanced'
             },
             {
-              label: '🧠 Respuesta Analítica',
+              label: 'Respuesta Analítica',
               description: 'Detallada y fundamentada',
               value: 'analytical'
             },
             {
-              label: '⏰ Respuesta Pragmática',
+              label: 'Respuesta Pragmática',
               description: 'Realista y orientada al tiempo',
               value: 'pragmatic'
             }

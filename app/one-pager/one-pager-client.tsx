@@ -83,17 +83,17 @@ export default function OnePagerClient() {
                 <div className="bg-purple/5 rounded-lg p-4 border border-purple/10">
                   <div className="grid grid-cols-3 gap-3 text-center text-xs">
                     <div>
-                      <div className="text-2xl mb-1">🧠</div>
+                      <div className="text-2xl mb-1"></div>
                       <div className="font-bold text-foreground">Cerebro AI</div>
                       <div className="text-muted-foreground">GPT-4 Coach</div>
                     </div>
                     <div>
-                      <div className="text-2xl mb-1">📊</div>
+                      <div className="text-2xl mb-1"></div>
                       <div className="font-bold text-foreground">6 Pruebas</div>
                       <div className="text-muted-foreground">Psicométricas</div>
                     </div>
                     <div>
-                      <div className="text-2xl mb-1">📚</div>
+                      <div className="text-2xl mb-1"></div>
                       <div className="font-bold text-foreground">120+ Libros</div>
                       <div className="text-muted-foreground">Profesionales</div>
                     </div>
@@ -332,7 +332,7 @@ export default function OnePagerClient() {
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Estado de la Plataforma:</span>
-                    <span className="font-bold text-green">✓ Completo</span>
+                    <span className="font-bold text-green"> Completo</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-muted-foreground">Objetivo de Lanzamiento:</span>

@@ -133,10 +133,10 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
           </p>
 
           <div className="space-y-2 text-sm text-white/70">
-            <p>✓ Auditoría de entorno (luz, fondo, ruido)</p>
-            <p>✓ Validación de presencia (postura, mirada, energía)</p>
-            <p>✓ Prueba de audio y cámara</p>
-            <p>✓ Preparación de pitch inicial</p>
+            <p> Auditoría de entorno (luz, fondo, ruido)</p>
+            <p> Validación de presencia (postura, mirada, energía)</p>
+            <p> Prueba de audio y cámara</p>
+            <p> Preparación de pitch inicial</p>
           </div>
 
           <Button

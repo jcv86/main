@@ -283,7 +283,7 @@ export default function DemoPage() {
 
             {/* Trust Signals */}
             <div className="text-center text-sm text-foreground/60">
-              <p>✓ Método científicamente validado • ✓ Sin spam • ✓ 100% gratuito</p>
+              <p> Método científicamente validado •  Sin spam •  100% gratuito</p>
             </div>
           </div>
         )}

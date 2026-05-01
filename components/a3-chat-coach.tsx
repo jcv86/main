@@ -231,23 +231,23 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
             <h3 className="font-semibold">Cómo funciona:</h3>
             <ul className="space-y-2 text-sm">
               <li className="flex gap-2">
-                <span className="text-purple">✓</span>
+                <span className="text-purple"></span>
                 <span>Propongo un escenario realista</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-purple">✓</span>
+                <span className="text-purple"></span>
                 <span>Explores diferentes respuestas</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-purple">✓</span>
+                <span className="text-purple"></span>
                 <span>Pausamos para explicar patrones interesantes</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-purple">✓</span>
+                <span className="text-purple"></span>
                 <span>Probamos variaciones (micro-experimentos)</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-purple">✓</span>
+                <span className="text-purple"></span>
                 <span>Resumimos lo aprendido sin evaluación</span>
               </li>
             </ul>

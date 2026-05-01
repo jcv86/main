@@ -27,7 +27,7 @@ export default function A2CaminoPage() {
     {
       id: "profesional",
       name: "Camino Profesional",
-      icon: "💼",
+      icon: "",
       description: "Domina tu carrera, liderazgo y ejecución",
       examples: ["Carrera", "Liderazgo", "Productividad", "Estrategia"],
     },

@@ -82,7 +82,7 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-[28px] bg-purple/10 flex items-center justify-center text-xl">
-            📚
+            
           </div>
           <div>
             <h2 className="text-2xl font-bold">Módulos de Contexto Profesional</h2>

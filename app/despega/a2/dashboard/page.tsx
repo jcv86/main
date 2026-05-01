@@ -152,7 +152,7 @@ export default function A2DashboardPage() {
           </div>
         </div>
 
-        {/* ⭐ A2 V2: SMART CHECKPOINTS */}
+        {/*  A2 V2: SMART CHECKPOINTS */}
         <div>
           <div className="mb-4">
             <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5 mb-1">Checkpoints del Sprint Actual</h2>
@@ -232,7 +232,7 @@ export default function A2DashboardPage() {
             <Card className="border-2 border-blue/30 dark:border-blue/10">
               <CardHeader className="pb-3">
                 <CardTitle className="text-base flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-[20px] bg-blue/50 flex items-center justify-center text-white text-xs font-bold">✓</div>
+                  <div className="w-6 h-6 rounded-[20px] bg-blue/50 flex items-center justify-center text-white text-xs font-bold"></div>
                   Revisión del Sprint 1
                 </CardTitle>
               </CardHeader>
@@ -244,7 +244,7 @@ export default function A2DashboardPage() {
           </div>
         </div>
 
-        {/* ⭐ A2 V2: WEEKLY REVIEW RITUAL */}
+        {/*  A2 V2: WEEKLY REVIEW RITUAL */}
         <div>
           <Card className="border-2 border-blue/30 dark:border-blue bg-blue/5/30 dark:bg-blue/10">
             <CardHeader>

@@ -102,7 +102,7 @@ export function ProgressDashboard() {
               <div key={idx} className="p-4 border rounded-lg text-center space-y-2">
                 <p className="font-semibold">{achievement.name}</p>
                 <p className="text-sm text-muted-foreground">{achievement.description}</p>
-                <Badge className="mx-auto block w-fit">✓ Desbloqueado</Badge>
+                <Badge className="mx-auto block w-fit"> Desbloqueado</Badge>
               </div>
             ))}
           </div>

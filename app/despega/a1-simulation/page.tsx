@@ -97,7 +97,7 @@ export default function A1SimulationPage() {
       <ASection 
         title="Tu Perfil: Patrones en Acción" 
         subtitle="Simulación Completada" 
-        icon="🎭" 
+        icon="" 
         colorClass="from-blue"
       >
         <ASectionPart title="¡Excelente!" icon={<CheckCircle2 />}>
@@ -161,7 +161,7 @@ export default function A1SimulationPage() {
     <ASection 
       title="Tu Perfil: Patrones en Acción" 
       subtitle="Simulación de Entrevista" 
-      icon="🎭" 
+      icon="" 
       colorClass="from-blue"
     >
       <ASectionPart title={`Pregunta ${currentQuestion + 1} de ${SIMULATION_QUESTIONS.length}`} icon={<Zap />}>
@@ -191,22 +191,22 @@ export default function A1SimulationPage() {
         <div className="grid grid-cols-1 gap-3 mb-8">
           {[
             {
-              label: '💪 Respuesta Fuerte',
+              label: ' Respuesta Fuerte',
               description: 'Enfocada en resultados y acción',
               value: 'strong'
             },
             {
-              label: '🤝 Respuesta Equilibrada',
+              label: ' Respuesta Equilibrada',
               description: 'Considera personas y proceso',
               value: 'balanced'
             },
             {
-              label: '🧠 Respuesta Analítica',
+              label: ' Respuesta Analítica',
               description: 'Detallada y fundamentada',
               value: 'analytical'
             },
             {
-              label: '⏰ Respuesta Pragmática',
+              label: ' Respuesta Pragmática',
               description: 'Realista y orientada al tiempo',
               value: 'pragmatic'
             }

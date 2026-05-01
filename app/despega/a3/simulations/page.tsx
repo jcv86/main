@@ -142,7 +142,7 @@ export default function SimulationsPage() {
                     </div>
                     <ul className="text-sm space-y-1 text-muted-foreground dark:text-white/85">
                       {ent.features.map((feature, idx) => (
-                        <li key={idx}>✓ {feature}</li>
+                        <li key={idx}> {feature}</li>
                       ))}
                     </ul>
                   </div>
@@ -166,15 +166,15 @@ export default function SimulationsPage() {
         {/* Tips Card */}
         <Card className="bg-background">
           <CardContent className="pt-6 flex gap-3">
-            <div className="w-5 h-5 flex-shrink-0 text-purple text-lg">💡</div>
+            <div className="w-5 h-5 flex-shrink-0 text-purple text-lg"></div>
             <div>
               <div className="font-semibold text-purple dark:text-purple/10 mb-2">Cómo progresar en entrenamiento de entrevistas</div>
               <ul className="text-sm text-purple dark:text-purple/30 space-y-1">
-                <li>✓ Domina cada nivel antes de subir (practica hasta sentirte cómodo)</li>
-                <li>✓ Revisa el feedback del coach después de cada entrenamiento</li>
-                <li>✓ Identifica patrones en tus fortalezas y debilidades</li>
-                <li>✓ Practica 3-4 entrenamientos por semana para avance real</li>
-                <li>✓ Repite el mismo entrenamiento si necesitas reforzar un aspecto específico</li>
+                <li> Domina cada nivel antes de subir (practica hasta sentirte cómodo)</li>
+                <li> Revisa el feedback del coach después de cada entrenamiento</li>
+                <li> Identifica patrones en tus fortalezas y debilidades</li>
+                <li> Practica 3-4 entrenamientos por semana para avance real</li>
+                <li> Repite el mismo entrenamiento si necesitas reforzar un aspecto específico</li>
               </ul>
             </div>
           </CardContent>

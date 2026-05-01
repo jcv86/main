@@ -426,8 +426,8 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
                 <SelectValue placeholder="Ordenar por" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="relevance">🎯 Relevancia</SelectItem>
-                <SelectItem value="popularity">⭐ Popularidad</SelectItem>
+                <SelectItem value="relevance"> Relevancia</SelectItem>
+                <SelectItem value="popularity"> Popularidad</SelectItem>
                 <SelectItem value="title">📖 Título A-Z</SelectItem>
                 <SelectItem value="author">✍️ Autor A-Z</SelectItem>
                 <SelectItem value="recent">📅 Más recientes</SelectItem>
@@ -477,7 +477,7 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
                                 : key === "content"
                                   ? "📄 Contenido"
                                   : key === "popularity"
-                                    ? "⭐ Popularidad"
+                                    ? " Popularidad"
                                     : key === "category"
                                       ? "📂 Categoría"
                                       : key}
@@ -496,7 +496,7 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
                   ))}
                 </div>
                 <div className="text-sm text-muted-foreground bg-white p-2 rounded border">
-                  💡 <strong>Pesos totales:</strong> {Object.values(weights).reduce((sum, val) => sum + val, 0)}% | El
+                   <strong>Pesos totales:</strong> {Object.values(weights).reduce((sum, val) => sum + val, 0)}% | El
                   algoritmo usa similitud de strings, coincidencias de palabras y Levenshtein distance
                 </div>
               </div>
@@ -510,10 +510,10 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
                 <span>
                   🔍 <strong>"{searchTerm}"</strong>
                 </span>
-                <span>📊 {searchResults.length} resultados</span>
+                <span> {searchResults.length} resultados</span>
                 {searchResults.length > 0 && (
                   <>
-                    <span>⭐ Máx: {Math.max(...searchResults.map((r) => r.relevanceScore)).toFixed(3)}</span>
+                    <span> Máx: {Math.max(...searchResults.map((r) => r.relevanceScore)).toFixed(3)}</span>
                     <span>
                       📈 Prom:{" "}
                       {(searchResults.reduce((sum, r) => sum + r.relevanceScore, 0) / searchResults.length).toFixed(3)}
@@ -536,7 +536,7 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
                 </p>
                 {searchTerm && (
                   <div className="space-y-2">
-                    <p className="text-sm text-muted-foreground">💡 Sugerencias:</p>
+                    <p className="text-sm text-muted-foreground"> Sugerencias:</p>
                     <ul className="text-sm text-muted-foreground space-y-1">
                       <li>• Intenta con términos más generales</li>
                       <li>• Reduce la relevancia mínima</li>
@@ -669,14 +669,14 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
         <div className="px-6 py-3 border-t bg-muted/5 text-xs text-muted-foreground">
           <div className="flex justify-between items-center">
             <div className="flex gap-4">
-              <span>🧠 Algoritmo: Similitud Inteligente + Pesos Configurables</span>
+              <span> Algoritmo: Similitud Inteligente + Pesos Configurables</span>
               <span>⚡ Rendimiento: ~{Math.max(1, Math.ceil(searchResults.length / 20))}ms</span>
             </div>
             <div className="flex gap-2">
               <span>
-                📊 T{weights.title}% A{weights.author}% E{weights.tags}%
+                 T{weights.title}% A{weights.author}% E{weights.tags}%
               </span>
-              <span>🎯 Min: {minRelevance[0]}%</span>
+              <span> Min: {minRelevance[0]}%</span>
             </div>
           </div>
         </div>

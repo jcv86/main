@@ -131,7 +131,7 @@ export function AssessmentQuiz() {
             <p className="text-3xl font-bold capitalize">
               {userLevel === 'beginner' && '🌱 Principiante'}
               {userLevel === 'intermediate' && '📈 Intermedio'}
-              {userLevel === 'advanced' && '🚀 Avanzado'}
+              {userLevel === 'advanced' && ' Avanzado'}
             </p>
           </div>
           <Button onClick={() => window.location.href = '/biblioteca'} className="w-full">

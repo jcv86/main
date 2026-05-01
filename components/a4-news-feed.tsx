@@ -40,7 +40,7 @@ const getRelevanceIcon = (score: number) => {
   if (score >= 80) return "🔥"
   if (score >= 60) return "📈"
   if (score >= 40) return "📰"
-  return "💡"
+  return ""
 }
 
 const getRelevanceBadge = (score: number) => {

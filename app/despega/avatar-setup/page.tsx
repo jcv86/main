@@ -213,7 +213,7 @@ export default function AvatarSetupPage() {
             className="bg-blue/80 hover:bg-blue/70 text-white"
           >
             <Sparkles className="w-4 h-4 mr-2" />
-            {saved ? 'Configuración Guardada ✓' : 'Guardar Configuración'}
+            {saved ? 'Configuración Guardada ' : 'Guardar Configuración'}
           </Button>
 
           <Link href="/despega/a3">
@@ -228,7 +228,7 @@ export default function AvatarSetupPage() {
         <Card className="border-yellow/30 dark:border-yellow bg-yellow/5 dark:bg-amber-950/20">
           <CardContent className="pt-6">
             <p className="text-sm text-amber-800 dark:text-amber-200">
-              💡 Puedes cambiar tu entrevistador en cualquier momento. Los cambios se aplican inmediatamente a tus nuevos entrenamientos.
+               Puedes cambiar tu entrevistador en cualquier momento. Los cambios se aplican inmediatamente a tus nuevos entrenamientos.
             </p>
           </CardContent>
         </Card>

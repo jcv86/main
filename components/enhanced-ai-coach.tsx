@@ -161,8 +161,8 @@ Puedo ayudarte con:
     return `¡Hola! Soy tu **AI Coach Personal** con acceso completo al **cerebro de la plataforma**.
 
 Tengo conocimiento especializado sobre:
-🧠 **Tests Psicométricos** (DISC, Big Five, MBTI, RIASEC, Habilidades Blandas)
-🎯 **Desarrollo de Carrera** y transiciones profesionales
+ **Tests Psicométricos** (DISC, Big Five, MBTI, RIASEC, Habilidades Blandas)
+ **Desarrollo de Carrera** y transiciones profesionales
 📈 **Estrategias de Mejora** por competencias específicas
 🔍 **Interpretación Avanzada** de combinaciones de resultados
 

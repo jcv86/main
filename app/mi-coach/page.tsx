@@ -363,7 +363,7 @@ export default function MiCoachPage() {
                                   rel="noopener noreferrer"
                                   className="inline-flex items-center gap-1 px-2 py-1 text-xs bg-blue/5 dark:bg-blue/30 text-blue dark:text-blue/40 border border-blue/20 dark:border-blue/10 rounded hover:bg-blue/10 dark:hover:bg-blue/50 transition"
                                 >
-                                  {link.type === 'internal' ? '📚' : link.type === 'amazon' ? '🛍️' : link.type === 'goodreads' ? '⭐' : '🔗'}
+                                  {link.type === 'internal' ? '' : link.type === 'amazon' ? '🛍️' : link.type === 'goodreads' ? '' : '🔗'}
                                   {link.title}
                                 </a>
                               ))}

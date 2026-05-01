@@ -59,7 +59,7 @@ export default function AnalisisMercadoChilePage() {
               <h3 className="text-2xl font-bold mb-4">🚨 Crisis de Empleabilidad</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
-                  <span className="text-2xl">📊</span>
+                  <span className="text-2xl"></span>
                   <div>
                     <strong>8.1%</strong> desempleo profesional (Q1 2025) - máximo histórico
                     <br />
@@ -95,7 +95,7 @@ export default function AnalisisMercadoChilePage() {
 
             {/* Escasez de Talento */}
             <div className="bg-orange rounded-2xl shadow-lg p-8 text-white">
-              <h3 className="text-2xl font-bold mb-4">💼 Escasez Crítica de Talento</h3>
+              <h3 className="text-2xl font-bold mb-4"> Escasez Crítica de Talento</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
                   <span className="text-2xl">🏢</span>
@@ -114,7 +114,7 @@ export default function AnalisisMercadoChilePage() {
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-2xl">💻</span>
+                  <span className="text-2xl"></span>
                   <div>
                     Habilidades más escasas:
                     <br />
@@ -124,7 +124,7 @@ export default function AnalisisMercadoChilePage() {
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-2xl">🤝</span>
+                  <span className="text-2xl"></span>
                   <div>
                     <strong>85%</strong> del éxito laboral depende de soft skills
                     <br />
@@ -176,7 +176,7 @@ export default function AnalisisMercadoChilePage() {
           <h2 className="text-3xl font-bold text-muted/90 mb-8">2. Tamaño y Oportunidad de Mercado</h2>
 
           <div className="bg-blue rounded-2xl shadow-lg p-8 text-white mb-8">
-            <h3 className="text-2xl font-bold mb-6">📊 Segmentos de Mercado Primarios</h3>
+            <h3 className="text-2xl font-bold mb-6"> Segmentos de Mercado Primarios</h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
                 <div className="text-4xl font-bold mb-2">1.39M</div>
@@ -210,7 +210,7 @@ export default function AnalisisMercadoChilePage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="bg-white rounded-2xl shadow-lg p-8 border border-muted/20">
-              <h3 className="text-xl font-bold text-muted/90 mb-4">🎯 Mercado B2B (Universidades)</h3>
+              <h3 className="text-xl font-bold text-muted/90 mb-4"> Mercado B2B (Universidades)</h3>
               <div className="space-y-4">
                 <div className="flex justify-between items-center pb-3 border-b border-muted/20">
                   <span className="text-muted-foreground">Universidades tradicionales</span>
@@ -367,7 +367,7 @@ export default function AnalisisMercadoChilePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                  <span className="text-3xl">🧠</span>
+                  <span className="text-3xl"></span>
                   <div>
                     <strong className="text-lg">Sistema Cerebro Único</strong>
                     <p className="text-green/5 text-sm mt-1">
@@ -387,7 +387,7 @@ export default function AnalisisMercadoChilePage() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-3xl">📊</span>
+                  <span className="text-3xl"></span>
                   <div>
                     <strong className="text-lg">6 Tests Psicométricos Profesionales</strong>
                     <p className="text-green/5 text-sm mt-1">
@@ -445,19 +445,19 @@ export default function AnalisisMercadoChilePage() {
               </div>
               <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-start gap-2">
-                  <span className="text-green mt-1">✓</span>
+                  <span className="text-green mt-1"></span>
                   <span>
                     <strong>93%</strong> de empresas optimistas sobre impacto positivo de IA
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green mt-1">✓</span>
+                  <span className="text-green mt-1"></span>
                   <span>
                     <strong>80%</strong> de grandes empresas ya usan IA
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green mt-1">✓</span>
+                  <span className="text-green mt-1"></span>
                   <span>Chile lidera LATAM en capacidades de IA (ILIA 2024)</span>
                 </li>
                 <li className="flex items-start gap-2">
@@ -475,28 +475,28 @@ export default function AnalisisMercadoChilePage() {
 
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-muted/20">
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-4xl">📱</span>
+                <span className="text-4xl"></span>
                 <h3 className="text-xl font-bold text-muted/90">Crecimiento EdTech LATAM</h3>
               </div>
               <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-start gap-2">
-                  <span className="text-green mt-1">✓</span>
+                  <span className="text-green mt-1"></span>
                   <span>
                     Chile: <strong>114 startups EdTech</strong>, 3er ecosistema más grande LATAM
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green mt-1">✓</span>
+                  <span className="text-green mt-1"></span>
                   <span>
                     Demanda alta en <strong>upskilling, workforce skills, tutoring</strong>
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green mt-1">✓</span>
+                  <span className="text-green mt-1"></span>
                   <span>Colegium crece 20%/año, adquiere 5 empresas desde 2020</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green mt-1">✓</span>
+                  <span className="text-green mt-1"></span>
                   <span>Alianzas: U. Central + Coursera, UAH + Ucampus</span>
                 </li>
               </ul>
@@ -510,18 +510,18 @@ export default function AnalisisMercadoChilePage() {
 
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-muted/20">
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-4xl">🎯</span>
+                <span className="text-4xl"></span>
                 <h3 className="text-xl font-bold text-muted/90">Prioridad en Soft Skills</h3>
               </div>
               <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-start gap-2">
-                  <span className="text-green mt-1">✓</span>
+                  <span className="text-green mt-1"></span>
                   <span>
                     <strong>85%</strong> del éxito profesional depende de soft skills
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green mt-1">✓</span>
+                  <span className="text-green mt-1"></span>
                   <span>
                     <strong>92%</strong> de reclutadores priorizan soft skills sobre técnicas
                   </span>
@@ -545,24 +545,24 @@ export default function AnalisisMercadoChilePage() {
 
             <div className="bg-white rounded-2xl shadow-lg p-6 border border-muted/20">
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-4xl">💼</span>
+                <span className="text-4xl"></span>
                 <h3 className="text-xl font-bold text-muted/90">Demanda de Upskilling</h3>
               </div>
               <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-start gap-2">
-                  <span className="text-green mt-1">✓</span>
+                  <span className="text-green mt-1"></span>
                   <span>
                     Empresas priorizan <strong>desarrollo interno (27%)</strong> para cubrir escasez
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green mt-1">✓</span>
+                  <span className="text-green mt-1"></span>
                   <span>
                     Programas de <strong>reskilling y upskilling</strong> en alta demanda
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green mt-1">✓</span>
+                  <span className="text-green mt-1"></span>
                   <span>
                     Profesionales buscan <strong>cultura, experiencia</strong>, no solo salario
                   </span>
@@ -592,7 +592,7 @@ export default function AnalisisMercadoChilePage() {
             {/* Recomendación 1 */}
             <div className="bg-blue rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
-                <span className="text-5xl">🎯</span>
+                <span className="text-5xl"></span>
                 <div>
                   <h3 className="text-2xl font-bold">1. Posicionamiento: "El Sistema Nervioso de tu Carrera"</h3>
                   <p className="text-blue/10 mt-1">
@@ -633,7 +633,7 @@ export default function AnalisisMercadoChilePage() {
             {/* Recomendación 2 */}
             <div className="bg-background">
               <div className="flex items-center gap-4 mb-4">
-                <span className="text-5xl">🚀</span>
+                <span className="text-5xl"></span>
                 <div>
                   <h3 className="text-2xl font-bold">2. Agregar Módulos de "AI Literacy" y Habilidades Futuras</h3>
                   <p className="text-purple/10 mt-1">
@@ -669,7 +669,7 @@ export default function AnalisisMercadoChilePage() {
             {/* Recomendación 3 */}
             <div className="bg-green rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
-                <span className="text-5xl">💼</span>
+                <span className="text-5xl"></span>
                 <div>
                   <h3 className="text-2xl font-bold">3. Lanzar Vertical B2B Enterprise (Empresas)</h3>
                   <p className="text-green/10 mt-1">
@@ -715,7 +715,7 @@ export default function AnalisisMercadoChilePage() {
             {/* Recomendación 4 */}
             <div className="bg-orange rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
-                <span className="text-5xl">📊</span>
+                <span className="text-5xl"></span>
                 <div>
                   <h3 className="text-2xl font-bold">4. Profundizar Datos y Métricas de Impacto</h3>
                   <p className="text-orange/10 mt-1">
@@ -851,7 +851,7 @@ export default function AnalisisMercadoChilePage() {
           <h2 className="text-3xl font-bold text-muted/90 mb-8">6. Plan de Acción Inmediato (Q1 2026)</h2>
 
           <div className="bg-muted/90 rounded-2xl shadow-2xl p-8 text-white">
-            <h3 className="text-2xl font-bold mb-6">🎯 Prioridades de Lanzamiento</h3>
+            <h3 className="text-2xl font-bold mb-6"> Prioridades de Lanzamiento</h3>
             <div className="space-y-6">
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-3">

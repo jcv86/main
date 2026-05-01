@@ -157,7 +157,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
   const getPlatformIcon = () => {
     switch (deviceInfo.platform) {
       case "iOS":
-        return "📱"
+        return ""
       case "Android":
         return "🤖"
       case "Windows":
@@ -167,7 +167,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
       case "Linux":
         return "🐧"
       default:
-        return "💻"
+        return ""
     }
   }
 
@@ -299,7 +299,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
             )}
             {deviceInfo.type === "desktop" && !deviceInfo.touchSupport && (
               <>
-                <p>• ⚠️ Limited gesture testing capability</p>
+                <p>•  Limited gesture testing capability</p>
                 <p>• Mouse events will simulate touch</p>
                 <p>• Pinch gestures not available</p>
                 <p>• Use developer tools for mobile simulation</p>

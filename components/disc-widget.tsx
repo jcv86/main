@@ -29,14 +29,14 @@ const DISC_DETAILS = {
     label: 'Estable',
     description: 'Reflexivo, orientado al equipo',
     color: 'bg-green/10 dark:bg-green/30 text-green dark:text-green/30',
-    icon: '🤝',
+    icon: '',
     traits: ['Leal', 'Paciente', 'Colaborativo', 'Consistente'],
   },
   C: {
     label: 'Concienzudo',
     description: 'Analítico, orientado a la calidad',
     color: 'bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue-200',
-    icon: '🎯',
+    icon: '',
     traits: ['Preciso', 'Detallista', 'Analítico', 'Riguroso'],
   },
 }

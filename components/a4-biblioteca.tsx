@@ -76,11 +76,11 @@ const RECURSOS_DEFAULT: Recurso[] = [
 
 const getTipoColor = (tipo: string) => {
   const colors: Record<string, { badge: string; icon: string }> = {
-    libro: { badge: 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-200', icon: '📚' },
+    libro: { badge: 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-200', icon: '' },
     articulo: { badge: 'bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple/20', icon: '📄' },
     podcast: { badge: 'bg-green/10 text-green dark:bg-green/30 dark:text-green/30', icon: '🎧' },
     video: { badge: 'bg-red/10 text-red dark:bg-red/30 dark:text-red/30', icon: '🎬' },
-    reporte: { badge: 'bg-orange/10 text-orange dark:bg-orange/30 dark:text-orange/30', icon: '📊' },
+    reporte: { badge: 'bg-orange/10 text-orange dark:bg-orange/30 dark:text-orange/30', icon: '' },
   }
   return colors[tipo] || { badge: 'bg-muted/10 text-gray-800', icon: '📖' }
 }
@@ -168,7 +168,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-[28px] bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-xl">
-            📚
+            
           </div>
           <div>
             <h2 className="text-2xl font-bold">Biblioteca Curada</h2>

@@ -218,7 +218,7 @@ export function DashboardContent() {
                 {/* I Score - Catalizador */}
                 <div className="p-4 bg-yellow/5 dark:bg-yellow/20 rounded-[28px] border border-yellow/20 dark:border-yellow">
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="text-2xl">✨</span>
+                    <span className="text-2xl"></span>
                     <span className="text-2xl font-bold text-yellow">{testResults.test_results.i_score || 0}%</span>
                   </div>
                   <p className="text-sm font-medium text-yellow dark:text-yellow/20">Catalizador</p>

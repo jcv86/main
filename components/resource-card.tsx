@@ -19,9 +19,9 @@ const getResourceIcon = (type: string) => {
     'Video': '🎥',
     'Video Course': '🎬',
     'Tool': '🛠️',
-    'Platform': '💼',
-    'Report': '📊',
-    'Database': '📚',
+    'Platform': '',
+    'Report': '',
+    'Database': '',
     'Certificate': '🏆',
   }
   return iconMap[type] || '🔗'
@@ -107,7 +107,7 @@ export function ResourceCard({ resource }: ResourceCardProps) {
         {/* Verified badge */}
         {resource.verified && (
           <div className="text-xs text-white/50 text-center">
-            ✓ Verificado
+             Verificado
           </div>
         )}
       </div>

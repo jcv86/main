@@ -145,7 +145,7 @@ export default function LearningFlowOnboarding() {
                       )}
 
                       {!isActive && isCompleted && (
-                        <p className="text-sm text-green font-medium">✓ Completado</p>
+                        <p className="text-sm text-green font-medium"> Completado</p>
                       )}
 
                       {!isActive && !isCompleted && (

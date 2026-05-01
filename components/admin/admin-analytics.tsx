@@ -143,10 +143,10 @@ export function AdminAnalytics() {
         </CardHeader>
         <CardContent className="space-y-3">
           {[
-            { badge: "Lector Ávido", users: 342, icon: "📚" },
+            { badge: "Lector Ávido", users: 342, icon: "" },
             { badge: "Estudiante", users: 298, icon: "✅" },
             { badge: "Consistencia", users: 156, icon: "🔥" },
-            { badge: "Perfeccionista", users: 89, icon: "⭐" },
+            { badge: "Perfeccionista", users: 89, icon: "" },
           ].map((item) => (
             <div key={item.badge} className="flex items-center justify-between p-3 bg-muted/50 rounded-[28px] border border-border/50">
               <div className="flex items-center gap-2">

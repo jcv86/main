@@ -378,7 +378,7 @@ export function MiniPrueba() {
                   }`}
                 >
                   {idx === currentQuestion.correctAnswer && isAnswered ? (
-                    "✓"
+                    ""
                   ) : idx === userAnswer && !isCorrect && isAnswered ? (
                     "✗"
                   ) : (

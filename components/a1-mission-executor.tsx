@@ -42,7 +42,7 @@ const getTipoConfig = (tipo: string) => {
     accion: { icon: "⚡", color: "bg-green/5 border-green/20", label: "Acción" },
     quiz: { icon: "❓", color: "bg-orange/5 border-orange/20", label: "Quiz" },
     habito: { icon: "🔄", color: "bg-indigo-50 border-indigo-200", label: "Hábito" },
-    proyecto: { icon: "🎯", color: "bg-pink-50 border-pink-200", label: "Proyecto" },
+    proyecto: { icon: "", color: "bg-pink-50 border-pink-200", label: "Proyecto" },
   }
   return configs[tipo] || configs.accion
 }

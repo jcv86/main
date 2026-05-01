@@ -20,13 +20,13 @@ interface A4Insights {
 const insightCards = [
   {
     key: 'posicionamientoEstrategico',
-    icon: '🎯',
+    icon: '',
     title: 'Posicionamiento Estratégico',
     color: 'from-green/50'
   },
   {
     key: 'inteligenciaMercado',
-    icon: '📊',
+    icon: '',
     title: 'Inteligencia de Mercado',
     color: 'from-blue'
   },
@@ -50,7 +50,7 @@ const insightCards = [
   },
   {
     key: 'visionLargo',
-    icon: '🚀',
+    icon: '',
     title: 'Visión a Largo Plazo',
     color: 'from-blue/50'
   }

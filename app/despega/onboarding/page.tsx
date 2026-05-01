@@ -235,13 +235,13 @@ export default function DespegaOnboarding() {
 
                 <div className="space-y-2">
                   <p className="text-muted-foreground dark:text-muted-foreground">
-                    ✓ No hay respuestas correctas o incorrectas.
+                     No hay respuestas correctas o incorrectas.
                   </p>
                   <p className="text-muted-foreground dark:text-muted-foreground">
-                    ✓ No hay perfiles mejores que otros.
+                     No hay perfiles mejores que otros.
                   </p>
                   <p className="text-muted-foreground dark:text-muted-foreground">
-                    ✓ Existen distintos patrones naturales de acción.
+                     Existen distintos patrones naturales de acción.
                   </p>
                 </div>
 
@@ -427,15 +427,15 @@ export default function DespegaOnboarding() {
             <div className="flex justify-center gap-3 text-sm text-muted-foreground dark:text-muted-foreground pt-2">
               <span>⏱️ 3 minutos</span>
               <span>•</span>
-              <span>📊 Resultados inmediatos</span>
+              <span> Resultados inmediatos</span>
               <span>��</span>
-              <span>🎯 100% Preciso</span>
+              <span> 100% Preciso</span>
             </div>
 
             {onboardingAlreadyCompleted && (
               <div className="mt-6 p-4 bg-blue/10 border-l-4 border-blue/50 rounded">
                 <p className="text-blue font-semibold">
-                  ✓ Ya has completado tu Despega Cerebral. Tus resultados están guardados.
+                   Ya has completado tu Despega Cerebral. Tus resultados están guardados.
                 </p>
                 <p className="text-blue text-sm mt-2">
                   <Link href="/despega/journey" className="underline hover:text-blue font-semibold">
@@ -511,7 +511,7 @@ export default function DespegaOnboarding() {
               <CardContent className="p-6">
                 <div className="grid md:grid-cols-4 gap-6">
                   <div className="md:col-span-1">
-                    <div className="text-6xl mb-3">✨</div>
+                    <div className="text-6xl mb-3"></div>
                     <h3 className="text-2xl font-bold text-yellow dark:text-yellow/40 mb-2">I</h3>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">CATALIZADOR</p>
                     <div className="w-8 h-1 bg-orange rounded mt-2"></div>
@@ -634,7 +634,7 @@ export default function DespegaOnboarding() {
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <div className="text-2xl min-w-fit">✓</div>
+                    <div className="text-2xl min-w-fit"></div>
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10">Sin respuestas correctas</p>
                       <p className="text-sm text-muted-foreground dark:text-muted-foreground">No hay perfil superior. Todos son igualmente valiosos y necesarios.</p>
@@ -643,7 +643,7 @@ export default function DespegaOnboarding() {
                 </div>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <div className="text-2xl min-w-fit">✓</div>
+                    <div className="text-2xl min-w-fit"></div>
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10">Honestidad total</p>
                       <p className="text-sm text-muted-foreground dark:text-muted-foreground">Responde como REALMENTE eres, no como crees que deberías ser.</p>
@@ -652,7 +652,7 @@ export default function DespegaOnboarding() {
                 </div>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <div className="text-2xl min-w-fit">✓</div>
+                    <div className="text-2xl min-w-fit"></div>
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10">Primer instinto</p>
                       <p className="text-sm text-muted-foreground dark:text-muted-foreground">Responde rápidamente. Tu instinto natural es lo más preciso.</p>
@@ -661,7 +661,7 @@ export default function DespegaOnboarding() {
                 </div>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <div className="text-2xl min-w-fit">✓</div>
+                    <div className="text-2xl min-w-fit"></div>
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-muted/10">Estilo flexible</p>
                       <p className="text-sm text-muted-foreground dark:text-muted-foreground">Adaptamos nuestro estilo según el contexto y las personas.</p>
@@ -678,21 +678,21 @@ export default function DespegaOnboarding() {
               <h2 className="text-2xl font-bold mb-6 text-muted/90 dark:text-muted/5">Qué Obtendrás de Este Test</h2>
               <div className="space-y-4">
                 <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
-                  <div className="text-3xl min-w-fit">📊</div>
+                  <div className="text-3xl min-w-fit"></div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Tu Perfil Personalizado</p>
                     <p className="text-sm text-muted-foreground dark:text-muted-foreground">Descubre tu estilo natural, tus fortalezas y áreas donde puedes crecer</p>
                   </div>
                 </div>
                 <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-teal-500">
-                  <div className="text-3xl min-w-fit">🎯</div>
+                  <div className="text-3xl min-w-fit"></div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Insights Accionables</p>
                     <p className="text-sm text-muted-foreground dark:text-muted-foreground">Cómo comunicar mejor, trabajar más efectivamente y liderar según tu estilo</p>
                   </div>
                 </div>
                 <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
-                  <div className="text-3xl min-w-fit">📚</div>
+                  <div className="text-3xl min-w-fit"></div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Libros Recomendados</p>
                     <p className="text-sm text-muted-foreground dark:text-muted-foreground">Seleccionamos libros estratégicos adaptados a tu perfil para acelerar tu desarrollo</p>
@@ -919,7 +919,7 @@ export default function DespegaOnboarding() {
               </div>
               <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded border border-blue/30 dark:border-blue/10">
                 <p className="text-xs text-foreground">
-                  💡 <strong>Recuerda:</strong> No hay respuestas correctas. Sé honesto contigo mismo para obtener un análisis preciso.
+                   <strong>Recuerda:</strong> No hay respuestas correctas. Sé honesto contigo mismo para obtener un análisis preciso.
                 </p>
               </div>
               <div className="space-y-2">
@@ -938,7 +938,7 @@ export default function DespegaOnboarding() {
               {/* MÁS COMO YO */}
               <div className="space-y-3">
                 <h4 className="font-semibold text-green bg-green/5 p-3 rounded">
-                  ✓ MÁS como yo
+                   MÁS como yo
                 </h4>
                 <div className="space-y-2">
                   {question?.opciones.map((option) => {
@@ -969,7 +969,7 @@ export default function DespegaOnboarding() {
                               : "border-muted/30"
                           }`}>
                             {selectedMas === option.dimension && (
-                              <span className="text-white text-sm">✓</span>
+                              <span className="text-white text-sm"></span>
                             )}
                           </div>
                           <span className={`text-sm ${isDisabledInMas ? "text-muted-foreground" : ""}`}>
@@ -1339,10 +1339,10 @@ export default function DespegaOnboarding() {
                   Se está creando tu plan personalizado de 30/60/90 días basado en:
                 </p>
                 <ul className="text-xs text-emerald-800 dark:text-emerald-200 space-y-1 text-left">
-                  <li>✓ Tu Perfil de Liderazgo</li>
-                  <li>✓ Tu contexto personal y profesional</li>
-                  <li>✓ Tu ambiente de ejecución</li>
-                  <li>✓ Tus objetivos 30/60/90</li>
+                  <li> Tu Perfil de Liderazgo</li>
+                  <li> Tu contexto personal y profesional</li>
+                  <li> Tu ambiente de ejecución</li>
+                  <li> Tus objetivos 30/60/90</li>
                 </ul>
               </div>
               <p className="text-xs text-muted-foreground">Redirigiendo en un momento...</p>

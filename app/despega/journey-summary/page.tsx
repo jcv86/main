@@ -81,14 +81,14 @@ export default function JourneySummaryPage() {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="text-3xl">🧠</div>
+                    <div className="text-3xl"></div>
                     <div>
                       <h3 className="font-bold text-lg">A1: Autoconocimiento (Cerebral)</h3>
                       <p className="text-sm text-muted-foreground dark:text-muted-foreground">Descubrimiento de tu perfil DISC y valores</p>
                     </div>
                   </div>
                   <div className="mt-3 space-y-1 text-sm">
-                    <p><span className="font-semibold">Estado:</span> Completado ✓</p>
+                    <p><span className="font-semibold">Estado:</span> Completado </p>
                     <p><span className="font-semibold">Tiempo:</span> 15 días</p>
                     <p><span className="font-semibold">Logro:</span> Test DISC realizado, perfil identificado</p>
                   </div>
@@ -129,7 +129,7 @@ export default function JourneySummaryPage() {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <div className="text-3xl">🎯</div>
+                    <div className="text-3xl"></div>
                     <div>
                       <h3 className="font-bold text-lg">A3: Aterrizaje y Simulación</h3>
                       <p className="text-sm text-muted-foreground dark:text-muted-foreground">Entrenamientos realistas y feedback en vivo</p>

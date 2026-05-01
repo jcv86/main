@@ -393,7 +393,7 @@ export function PerfilIntegralClient() {
                   )}
 
                   <div className="bg-red/5 border border-red/10 rounded-lg p-4">
-                    <p className="text-sm font-medium text-red mb-2">💡 Para tu vida personal</p>
+                    <p className="text-sm font-medium text-red mb-2"> Para tu vida personal</p>
                     <p className="text-sm text-red">
                       Tu nivel de inteligencia emocional impacta directamente en tus relaciones con pareja, familia y
                       amigos. Una alta IE te permite conectar más profundamente, resolver conflictos de forma
@@ -468,7 +468,7 @@ export function PerfilIntegralClient() {
                   </div>
 
                   <div className="bg-blue/5 border border-blue/10 rounded-lg p-4">
-                    <p className="text-sm font-medium text-blue mb-2">💡 En tu vida diaria</p>
+                    <p className="text-sm font-medium text-blue mb-2"> En tu vida diaria</p>
                     <p className="text-sm text-blue">
                       Tu estilo DISC influye en cómo te comunicas con tu familia, manejas el estrés en casa, y organizas
                       tu vida personal. Entenderlo te ayuda a mejorar tus relaciones y bienestar.
@@ -519,7 +519,7 @@ export function PerfilIntegralClient() {
                   </div>
 
                   <div className="bg-orange/5 border border-orange/10 rounded-lg p-4">
-                    <p className="text-sm font-medium text-orange mb-2">💡 Más allá del trabajo</p>
+                    <p className="text-sm font-medium text-orange mb-2"> Más allá del trabajo</p>
                     <p className="text-sm text-orange">
                       Estos intereses también pueden guiar tus hobbies, voluntariados y cómo contribuyes a tu comunidad.
                       No se trata solo de trabajo, sino de cómo quieres vivir tu vida.
@@ -569,7 +569,7 @@ export function PerfilIntegralClient() {
                   </div>
 
                   <div className="bg-teal-50 border border-teal-100 rounded-lg p-4">
-                    <p className="text-sm font-medium text-teal-900 mb-2">💡 En tus relaciones personales</p>
+                    <p className="text-sm font-medium text-teal-900 mb-2"> En tus relaciones personales</p>
                     <p className="text-sm text-teal-800">
                       Estas habilidades son fundamentales para tu vida personal: comunicarte efectivamente con tu
                       pareja, resolver conflictos familiares con empatía, colaborar con amigos, y construir relaciones

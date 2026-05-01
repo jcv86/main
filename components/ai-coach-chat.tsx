@@ -218,7 +218,7 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
           <div className="flex items-center gap-2">
             {currentCoach && (
               <Badge variant="outline" className="text-xs">
-                {currentCoach === "sofia" ? "🌟 Sofia" : "🎯 Dani"}
+                {currentCoach === "sofia" ? " Sofia" : " Dani"}
               </Badge>
             )}
             <Badge variant="secondary" className="text-xs">
@@ -245,7 +245,7 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
                 >
                   {message.role === "assistant" && message.coachName && (
                     <p className="text-xs font-semibold mb-1 text-blue">
-                      {message.coachName === "Sofia" ? "🌟 Sofia" : "🎯 Dani"}
+                      {message.coachName === "Sofia" ? " Sofia" : " Dani"}
                     </p>
                   )}
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>

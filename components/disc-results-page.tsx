@@ -37,7 +37,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
     },
     I: {
       name: 'Catalizador - Influyente',
-      emoji: '✨',
+      emoji: '',
       color: 'from-yellow-500400',
       tagColor: 'bg-orange',
       description: 'Eres entusiasta, comunicativo y motivador. Te encanta conectar con las personas y contagiar tu energía positiva.',
@@ -53,7 +53,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
     },
     C: {
       name: 'Arquitecto - Analítico',
-      emoji: '🧠',
+      emoji: '',
       color: 'from-blue-600/50',
       tagColor: 'bg-blue',
       description: 'Eres detallista, metódico y buscas precisión. Te importa que todo esté bien hecho y entiendes la importancia de los detalles.',
@@ -66,7 +66,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
   const sections = [
     {
       id: 'strengths',
-      icon: '💪',
+      icon: '',
       title: 'Tus Fortalezas',
       content: {
         D: ['Tomas decisiones rápidas y firmes', 'Estableces objetivos claros y ambiciosos', 'Conduces equipos con visión y dirección', 'Actúas con determinación bajo presión', 'Impulsa el progreso sin estancamientos'],
@@ -121,7 +121,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
     },
     {
       id: 'ideal-role',
-      icon: '🎯',
+      icon: '',
       title: 'Dónde Brillas',
       content: {
         D: ['Liderando proyectos ambiciosos', 'En entornos de ritmo rápido y dinámico', 'Tomando decisiones bajo presión', 'En roles con autoridad y responsabilidad directa', 'Donde hay oportunidad de transformación'],
@@ -236,7 +236,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
                     <ul className="space-y-2">
                       {(section.content[profile] as string[]).map((item: string, idx: number) => (
                         <li key={idx} className="flex gap-3 text-white/80">
-                          <span className="text-emerald-500 font-bold flex-shrink-0">✓</span>
+                          <span className="text-emerald-500 font-bold flex-shrink-0"></span>
                           <span>{item}</span>
                         </li>
                       ))}

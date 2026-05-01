@@ -152,7 +152,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
           <ul className="space-y-2">
             {diagnosis?.strengths?.map((strength: string, idx: number) => (
               <li key={idx} className="text-sm text-muted flex items-start gap-2">
-                <span className="text-green font-bold">✓</span>
+                <span className="text-green font-bold"></span>
                 {strength}
               </li>
             ))}

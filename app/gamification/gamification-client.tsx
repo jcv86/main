@@ -57,7 +57,7 @@ export default function GamificationClient() {
       id: "1",
       title: "Primer Paso",
       description: "Completa tu primer test de personalidad",
-      icon: "🎯",
+      icon: "",
       category: "tests",
       earned_at: "2024-01-15",
     },
@@ -73,7 +73,7 @@ export default function GamificationClient() {
       id: "3",
       title: "Lector Dedicado",
       description: "Lee 5 libros completos",
-      icon: "📚",
+      icon: "",
       category: "lectura",
       earned_at: null,
     },
@@ -81,7 +81,7 @@ export default function GamificationClient() {
       id: "4",
       title: "Simulador Experto",
       description: "Completa 10 simulaciones",
-      icon: "🎭",
+      icon: "",
       category: "simulaciones",
       earned_at: "2024-02-20",
     },
@@ -301,7 +301,7 @@ export default function GamificationClient() {
           {/* Daily Missions */}
           <div>
             <h3 className="text-xl font-semibold mb-4 flex items-center gap-2">
-              <span className="p-1.5 bg-blue/10 rounded">☀️</span>
+              <span className="p-1.5 bg-blue/10 rounded"></span>
               Misiones Diarias
             </h3>
             <div className="grid gap-4">

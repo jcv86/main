@@ -372,7 +372,7 @@ export function A3InterviewSimulation({ level, type, interviewerId, onComplete }
 
           {/* Strengths */}
           <div className="bg-green/5 p-4 rounded border border-green/20">
-            <div className="font-medium text-sm mb-2">✓ Lo que funcionó</div>
+            <div className="font-medium text-sm mb-2"> Lo que funcionó</div>
             <ul className="space-y-1">
               {feedback.strengths.map((str: string, idx: number) => (
                 <li key={idx} className="text-sm text-muted">• {str}</li>

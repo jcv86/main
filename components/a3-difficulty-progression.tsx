@@ -129,7 +129,7 @@ export function A3DifficultyProgression({
             <Alert className="border-orange/30 bg-orange/5">
               <AlertTriangle className="h-4 w-4 text-orange" />
               <AlertDescription className="text-orange">
-                <div className="font-medium mb-1">⚠️ Desafío Difícil</div>
+                <div className="font-medium mb-1"> Desafío Difícil</div>
                 <p className="text-sm">
                   Este desafío es difícil para tu nivel actual (P_success ≤ 15%). Si decides intentarlo, el riesgo vale más la recompensa. 
                   Bonus por dificultad asumida: +50% de puntos.

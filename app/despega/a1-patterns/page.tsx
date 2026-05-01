@@ -68,7 +68,7 @@ export default function A1PatternsPage() {
 
   if (loading) {
     return (
-      <ASection title="Tus Patrones de Personalidad" subtitle="Cómo Influyen en Tu Carrera" icon="🧠" colorClass="from-purple/50">
+      <ASection title="Tus Patrones de Personalidad" subtitle="Cómo Influyen en Tu Carrera" icon="Target" colorClass="from-purple/50">
         <div className="flex items-center justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-white0" />
         </div>
@@ -77,7 +77,7 @@ export default function A1PatternsPage() {
   }
 
   return (
-    <ASection title="Tus Patrones de Personalidad" subtitle="Cómo Influyen en Tu Carrera" icon="🧠" colorClass="from-purple/50">
+    <ASection title="Tus Patrones de Personalidad" subtitle="Cómo Influyen en Tu Carrera" icon="Target" colorClass="from-purple/50">
       <ASectionPart title={`Tu Perfil: ${label}`} icon={<Target />}>
         {/* Profile Header */}
         <div className="bg-purple rounded-xl p-8 text-white mb-8 shadow-lg">
@@ -98,10 +98,10 @@ export default function A1PatternsPage() {
                   : 'bg-muted/70 text-white/85 hover:bg-muted/60'
               }`}
             >
-              {tab === 'strengths' && '💪 Fortalezas'}
-              {tab === 'challenges' && '⚠️ Desafíos'}
-              {tab === 'interview' && '📞 En Entrevistas'}
-              {tab === 'career' && '🚀 Carreras'}
+              {tab === 'strengths' && 'Fortalezas'}
+              {tab === 'challenges' && 'Desafíos'}
+              {tab === 'interview' && 'En Entrevistas'}
+              {tab === 'career' && 'Carreras'}
             </button>
           ))}
         </div>
@@ -114,7 +114,7 @@ export default function A1PatternsPage() {
               {details.strengths.map((strength, idx) => (
                 <Card key={idx} className="bg-background">
                   <CardContent className="pt-6">
-                    <p className="text-green font-semibold text-lg">✓ {strength}</p>
+                    <p className="text-green font-semibold text-lg">{strength}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -129,7 +129,7 @@ export default function A1PatternsPage() {
               {details.challenges.map((challenge, idx) => (
                 <Card key={idx} className="bg-background">
                   <CardContent className="pt-6">
-                    <p className="text-yellow font-semibold text-lg">⚠️ {challenge}</p>
+                    <p className="text-yellow font-semibold text-lg">{challenge}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -157,34 +157,34 @@ export default function A1PatternsPage() {
               <CardContent className="space-y-3">
                 {profile === 'D' && (
                   <>
-                    <p>✓ Muestra ejemplos de liderazgo y resultados cuantificables</p>
-                    <p>✓ Destaca tu capacidad para manejar situaciones de presión</p>
-                    <p>✓ Menciona cómo has motivado a otros</p>
-                    <p>✓ Sé conciso y directo en tus respuestas</p>
+                    <p> Muestra ejemplos de liderazgo y resultados cuantificables</p>
+                    <p> Destaca tu capacidad para manejar situaciones de presión</p>
+                    <p> Menciona cómo has motivado a otros</p>
+                    <p> Sé conciso y directo en tus respuestas</p>
                   </>
                 )}
                 {profile === 'I' && (
                   <>
-                    <p>✓ Cuenta historias que muestren tu carisma</p>
-                    <p>✓ Destaca tus habilidades de comunicación</p>
-                    <p>✓ Muestra entusiasmo genuino por la rol</p>
-                    <p>✓ Enfatiza tus capacidades para inspirar a otros</p>
+                    <p> Cuenta historias que muestren tu carisma</p>
+                    <p> Destaca tus habilidades de comunicación</p>
+                    <p> Muestra entusiasmo genuino por la rol</p>
+                    <p> Enfatiza tus capacidades para inspirar a otros</p>
                   </>
                 )}
                 {profile === 'S' && (
                   <>
-                    <p>✓ Destaca tu lealtad y confiabilidad</p>
-                    <p>✓ Muestra ejemplos de trabajo en equipo</p>
-                    <p>✓ Sé honesto sobre tu preferencia por ambientes estables</p>
-                    <p>✓ Enfatiza tu capacidad para mantener relaciones a largo plazo</p>
+                    <p> Destaca tu lealtad y confiabilidad</p>
+                    <p> Muestra ejemplos de trabajo en equipo</p>
+                    <p> Sé honesto sobre tu preferencia por ambientes estables</p>
+                    <p> Enfatiza tu capacidad para mantener relaciones a largo plazo</p>
                   </>
                 )}
                 {profile === 'C' && (
                   <>
-                    <p>✓ Presenta datos y análisis concretos</p>
-                    <p>✓ Muestra tu atención al detalle</p>
-                    <p>✓ Destaca procesos que has mejorado</p>
-                    <p>✓ Sé honesto sobre tu necesidad de claridad y estructura</p>
+                    <p> Presenta datos y análisis concretos</p>
+                    <p> Muestra tu atención al detalle</p>
+                    <p> Destaca procesos que has mejorado</p>
+                    <p> Sé honesto sobre tu necesidad de claridad y estructura</p>
                   </>
                 )}
               </CardContent>
@@ -199,7 +199,7 @@ export default function A1PatternsPage() {
               {details.career.map((role, idx) => (
                 <Card key={idx} className="bg-background">
                   <CardContent className="pt-6">
-                    <p className="text-white font-semibold text-lg">🎯 {role}</p>
+                    <p className="text-white font-semibold text-lg"> {role}</p>
                   </CardContent>
                 </Card>
               ))}

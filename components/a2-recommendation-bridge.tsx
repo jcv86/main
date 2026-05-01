@@ -38,11 +38,11 @@ interface A2RecommendationProps {
 const getPilarIcon = (pilar: string) => {
   const icons: Record<string, string> = {
     "energia": "⚡",
-    "enfoque": "🎯",
-    "relaciones": "🤝",
+    "enfoque": "",
+    "relaciones": "",
     "plan_ejecutivo": "📋",
   }
-  return icons[pilar] || "🎯"
+  return icons[pilar] || ""
 }
 
 const getPilarColor = (pilar: string) => {

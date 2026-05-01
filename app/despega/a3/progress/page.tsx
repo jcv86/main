@@ -167,9 +167,9 @@ export default function ProgressPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
-                { badge: '🎯 Primer Paso', desc: 'Completa tu diagnosis' },
-                { badge: '✨ Consistencia', desc: '5 entrenamientos completados' },
-                { badge: '🚀 Progresista', desc: 'Alcanza nivel Intermedio' },
+                { badge: ' Primer Paso', desc: 'Completa tu diagnosis' },
+                { badge: ' Consistencia', desc: '5 entrenamientos completados' },
+                { badge: ' Progresista', desc: 'Alcanza nivel Intermedio' },
               ].map((item) => (
                 <Card key={item.badge} className="bg-background">
                   <CardContent className="pt-6 text-center">
@@ -185,15 +185,15 @@ export default function ProgressPage() {
         {/* Tips */}
         <Card className="bg-background">
           <CardContent className="pt-6 flex gap-3">
-            <div className="w-5 h-5 flex-shrink-0 text-purple text-lg">💡</div>
+            <div className="w-5 h-5 flex-shrink-0 text-purple text-lg"></div>
             <div>
               <div className="font-semibold text-purple dark:text-purple/10 mb-2">Cómo acelerar tu progreso</div>
               <ul className="text-sm text-purple dark:text-purple/30 space-y-1">
-                <li>✓ Realiza al menos 1 simulación diaria</li>
-                <li>✓ Revisa el feedback del coach en detalle</li>
-                <li>✓ Practica específicamente los gaps identificados</li>
-                <li>✓ Comparte entrenamientos con mentores o amigos para feedback externo</li>
-                <li>✓ Documenta lo que aprendes después de cada sesión</li>
+                <li> Realiza al menos 1 simulación diaria</li>
+                <li> Revisa el feedback del coach en detalle</li>
+                <li> Practica específicamente los gaps identificados</li>
+                <li> Comparte entrenamientos con mentores o amigos para feedback externo</li>
+                <li> Documenta lo que aprendes después de cada sesión</li>
               </ul>
             </div>
           </CardContent>

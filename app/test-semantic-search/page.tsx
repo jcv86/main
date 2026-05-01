@@ -455,10 +455,10 @@ export default function TestSemanticSearchPage() {
                 <CardTitle className="text-lg text-green">Consejos de Búsqueda</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2 text-sm text-green">
-                <p>✓ Usa preguntas completas y específicas</p>
-                <p>✓ Incluye contexto relevante en tu búsqueda</p>
-                <p>✓ Ajusta el umbral de similitud según necesites</p>
-                <p>✓ Prueba diferentes formulaciones de tu pregunta</p>
+                <p> Usa preguntas completas y específicas</p>
+                <p> Incluye contexto relevante en tu búsqueda</p>
+                <p> Ajusta el umbral de similitud según necesites</p>
+                <p> Prueba diferentes formulaciones de tu pregunta</p>
               </CardContent>
             </Card>
           </div>

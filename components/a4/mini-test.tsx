@@ -127,7 +127,7 @@ export function MiniTest({
 
             {/* Hint */}
             <p className="text-xs text-muted-foreground mt-4 text-center">
-              💡 Piensa en cómo cambios en oferta/demanda afectan negociación salarial
+               Piensa en cómo cambios en oferta/demanda afectan negociación salarial
             </p>
           </>
         )}

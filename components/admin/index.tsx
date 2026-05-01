@@ -180,7 +180,7 @@ export function AdminBibliotecaManager() {
             </div>
             <div className="flex items-center gap-2">
               {resource.verified ? (
-                <Badge variant="secondary" className="text-xs">✓ Verificado</Badge>
+                <Badge variant="secondary" className="text-xs"> Verificado</Badge>
               ) : (
                 <Badge variant="outline" className="text-xs">Pendiente</Badge>
               )}

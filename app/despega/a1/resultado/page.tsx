@@ -162,19 +162,19 @@ export default function A1ResultadoPage() {
             <CardContent className="space-y-2">
               <ul className="space-y-2 text-muted-foreground dark:text-white/85">
                 <li className="flex gap-2">
-                  <span className="text-green font-bold">✓</span>
+                  <span className="text-green font-bold"></span>
                   <span>Tomas decisiones con confianza y claridad</span>
                 </li>
                 <li className="flex gap-2">
-                  <span className="text-green font-bold">✓</span>
+                  <span className="text-green font-bold"></span>
                   <span>Mueves proyectos hacia adelante con energía</span>
                 </li>
                 <li className="flex gap-2">
-                  <span className="text-green font-bold">✓</span>
+                  <span className="text-green font-bold"></span>
                   <span>Comunicas directamente lo que piensas</span>
                 </li>
                 <li className="flex gap-2">
-                  <span className="text-green font-bold">✓</span>
+                  <span className="text-green font-bold"></span>
                   <span>Lidera grupos hacia resultados concretos</span>
                 </li>
               </ul>
@@ -238,7 +238,7 @@ export default function A1ResultadoPage() {
           </Card>
         </div>
 
-        {/* ⭐ A1 V2: INTERNAL TENSIONS */}
+        {/*  A1 V2: INTERNAL TENSIONS */}
         <Card className="mb-8 border-0 shadow-lg border-2 border-yellow/30 dark:border-yellow bg-yellow/5/50 dark:bg-amber-900/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-amber-900 dark:text-amber-200">
@@ -262,11 +262,11 @@ export default function A1ResultadoPage() {
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-1">Querés hacerlo bien (Enfoque), pero a veces necesitás soltar y iterar (Energía). El balance entre "listo" y "perfecto" es donde crecés.</p>
               </div>
             </div>
-            <p className="text-xs text-yellow dark:text-amber-300 mt-4 italic">💡 En A2, los 3 sprints de 30 días te ayudarán a convertir estas tensiones en superpotencias.</p>
+            <p className="text-xs text-yellow dark:text-amber-300 mt-4 italic"> En A2, los 3 sprints de 30 días te ayudarán a convertir estas tensiones en superpotencias.</p>
           </CardContent>
         </Card>
 
-        {/* ⭐ A1 V2: ADVANCEMENT PATTERN */}
+        {/*  A1 V2: ADVANCEMENT PATTERN */}
         <Card className="mb-8 border-0 shadow-lg border-2 border-green/20 dark:border-emerald-800 bg-green/5/50 dark:bg-emerald-900/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-emerald-900 dark:text-emerald-200">
@@ -278,7 +278,7 @@ export default function A1ResultadoPage() {
           <CardContent>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-3">
-                <p className="font-semibold text-emerald-900 dark:text-emerald-200">🚀 ACELERAS EN:</p>
+                <p className="font-semibold text-emerald-900 dark:text-emerald-200"> ACELERAS EN:</p>
                 <ul className="space-y-2 text-sm text-muted-foreground dark:text-muted-foreground">
                   <li className="flex gap-2">
                     <span className="text-green font-bold">▸</span>
@@ -299,7 +299,7 @@ export default function A1ResultadoPage() {
                 </ul>
               </div>
               <div className="space-y-3">
-                <p className="font-semibold text-orange dark:text-orange/20">⚠️ TE FRENA:</p>
+                <p className="font-semibold text-orange dark:text-orange/20"> TE FRENA:</p>
                 <ul className="space-y-2 text-sm text-muted-foreground dark:text-muted-foreground">
                   <li className="flex gap-2">
                     <span className="text-orange font-bold">■</span>
@@ -320,11 +320,11 @@ export default function A1ResultadoPage() {
                 </ul>
               </div>
             </div>
-            <p className="text-xs text-emerald-700 dark:text-emerald-300 mt-4 italic">💡 Tu Misión 90 días usará tus fortalezas de aceleración y construirá capacidad donde frenas.</p>
+            <p className="text-xs text-emerald-700 dark:text-emerald-300 mt-4 italic"> Tu Misión 90 días usará tus fortalezas de aceleración y construirá capacidad donde frenas.</p>
           </CardContent>
         </Card>
 
-        {/* ⭐ A1 V2: PREDICTIVE INSIGHTS */}
+        {/*  A1 V2: PREDICTIVE INSIGHTS */}
         <Card className="mb-8 border-0 shadow-lg border-2 border-blue/30 dark:border-blue bg-blue/5/50 dark:bg-blue/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-indigo-900 dark:text-blue-300">
@@ -366,10 +366,10 @@ export default function A1ResultadoPage() {
             <p>Tu perfil Despega Cerebral no es una etiqueta, es un mapa de cómo avanzas naturalmente.</p>
             <p>Lo que viene a continuación (tu Misión 90 días en 3 sprints) estará diseñado para:</p>
             <ul className="space-y-1 ml-4">
-              <li>✓ Jugar a tus fortalezas sin dejarlas estancadas</li>
-              <li>✓ Trabajar las áreas que te traban, sin que se note como "corrección"</li>
-              <li>✓ Llevar tu energía, enfoque, relaciones y plan ejecutivo al siguiente nivel</li>
-              <li>✓ Prepararte para lo que viene después (A3: entrevistas reales, A4: radar estratégico)</li>
+              <li> Jugar a tus fortalezas sin dejarlas estancadas</li>
+              <li> Trabajar las áreas que te traban, sin que se note como "corrección"</li>
+              <li> Llevar tu energía, enfoque, relaciones y plan ejecutivo al siguiente nivel</li>
+              <li> Prepararte para lo que viene después (A3: entrevistas reales, A4: radar estratégico)</li>
             </ul>
           </CardContent>
         </Card>

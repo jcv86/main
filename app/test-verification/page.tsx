@@ -117,7 +117,7 @@ export default function TestVerificationPage() {
 
         completedChecks++
         setProgress((completedChecks / totalChecks) * 100)
-        addLog(`${passed ? '✓' : '✗'} ${check.name}`)
+        addLog(`${passed ? '' : '✗'} ${check.name}`)
       }
 
       const allPassed = flow.checks.every((c) => c.status === 'passed')

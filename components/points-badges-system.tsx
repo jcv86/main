@@ -25,13 +25,13 @@ const BADGE_DEFINITIONS: Record<string, { name: string; icon: string; color: str
   },
   "5-articles": {
     name: "Lector Ávido",
-    icon: "📚",
+    icon: "",
     color: "bg-green/50/10",
     requirement: "Lee 5 artículos",
   },
   "test-master": {
     name: "Maestro de Tests",
-    icon: "🧠",
+    icon: "",
     color: "bg-purple/50/10",
     requirement: "Completa 5 tests",
   },

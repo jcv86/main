@@ -64,7 +64,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
     if (rule.includes('productividad')) return '⚡'
     if (rule.includes('miedo')) return '🛡️'
     if (rule.includes('tiempo')) return '⏱️'
-    if (rule.includes('ambición')) return '🚀'
+    if (rule.includes('ambición')) return ''
     return '📌'
   }
 
@@ -85,7 +85,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
                   <div className="text-3xl font-bold text-blue/40 mb-2">{phaseMissions.length}</div>
                   <p className="text-sm text-muted-foreground">Misiones Día {phase}</p>
                   <div className="mt-3 text-2xl">
-                    {phase === '30' ? '🎯' : phase === '60' ? '🔥' : '🏆'}
+                    {phase === '30' ? '' : phase === '60' ? '🔥' : '🏆'}
                   </div>
                 </div>
               </CardContent>
@@ -114,7 +114,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
       {(['30', '60', '90'] as const).map((phase) => (
         <div key={phase}>
           <h2 className="text-2xl font-bold text-white mb-4">
-            {phase === '30' ? '🎯 Fase 1: Primeros 30 Días' : phase === '60' ? '🔥 Fase 2: Días 31-60' : '🏆 Fase 3: Días 61-90'}
+            {phase === '30' ? ' Fase 1: Primeros 30 Días' : phase === '60' ? '🔥 Fase 2: Días 31-60' : '🏆 Fase 3: Días 61-90'}
           </h2>
           
           <div className="space-y-3">

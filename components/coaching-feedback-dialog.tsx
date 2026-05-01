@@ -194,8 +194,8 @@ export function CoachingFeedbackDialog({
           {/* Engagement Info */}
           <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded-lg">
             <p>
-              📊 Mensajes en esta sesión: <strong>{messageCount}</strong>
-              {messageCount >= 2 && " ✓ Meta alcanzada"}
+               Mensajes en esta sesión: <strong>{messageCount}</strong>
+              {messageCount >= 2 && "  Meta alcanzada"}
             </p>
           </div>
         </div>

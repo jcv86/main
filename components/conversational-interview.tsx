@@ -457,17 +457,17 @@ export function ConversationalInterview({
 function getAvatarEmoji(avatarId: string, type: 'user' | 'interviewer'): string {
   const emojiMap: Record<string, string> = {
     'professional-1': '👔',
-    'creative-1': '🎨',
-    'tech-1': '💻',
+    'creative-1': '',
+    'tech-1': '',
     'business-1': '🏢',
     'casual-1': '😎',
     'formal-1': '🎩',
-    'interviewer-classic-1': '👩‍💼',
-    'interviewer-classic-2': '👨‍💻',
-    'interviewer-classic-3': '👩‍💼',
-    'interviewer-classic-4': '👨‍💼',
+    'interviewer-classic-1': '👩‍',
+    'interviewer-classic-2': '👨‍',
+    'interviewer-classic-3': '👩‍',
+    'interviewer-classic-4': '👨‍',
     'interviewer-modern-1': '🧑‍🏫',
-    'interviewer-modern-2': '🎯',
+    'interviewer-modern-2': '',
   }
   return emojiMap[avatarId] || (type === 'user' ? '👤' : '👥')
 }

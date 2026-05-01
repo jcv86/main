@@ -185,7 +185,7 @@ export function RadarEstrategico() {
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <h4 className="font-medium text-sm line-clamp-2">{noticia.titulo}</h4>
                   <Badge variant="secondary" className="text-xs flex-shrink-0">
-                    {noticia.capa_1_tesis ? "✓" : "−"}
+                    {noticia.capa_1_tesis ? "" : "−"}
                   </Badge>
                 </div>
                 <p className="text-xs text-muted-foreground line-clamp-2">{noticia.descripcion}</p>

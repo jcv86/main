@@ -117,7 +117,7 @@ export default function AterrizajePage() {
           </Link>
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-[28px] bg-orange/10 flex items-center justify-center text-2xl">
-              🎯
+              
             </div>
             <div>
               <h1 className="text-2xl font-bold">Aterrizaje</h1>

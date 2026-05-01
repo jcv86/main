@@ -129,7 +129,7 @@ export default function BasePage() {
               {/* A1 */}
               <Link href="/despega/a1-cerebral" className="flex-1">
                 <div className="bg-white/20 backdrop-blur hover:bg-white/30 transition-all p-4 rounded-[28px] cursor-pointer border border-white/30 text-center">
-                  <div className="text-2xl mb-2">🧠</div>
+                  <div className="text-2xl mb-2"></div>
                   <h3 className="font-bold text-sm">A1: Autoconocimiento</h3>
                   <p className="text-xs text-white mt-1">Descubre tu perfil DISC</p>
                   <Badge className="mt-2 bg-white text-indigo-700 text-xs">Completado</Badge>
@@ -155,7 +155,7 @@ export default function BasePage() {
               {/* A3 */}
               <Link href="/despega/a3" className="flex-1">
                 <div className="bg-white/10 backdrop-blur hover:bg-white/20 transition-all p-4 rounded-[28px] cursor-pointer border border-white/20 text-center opacity-70">
-                  <div className="text-2xl mb-2">🎯</div>
+                  <div className="text-2xl mb-2"></div>
                   <h3 className="font-bold text-sm">A3: Aterrizaje</h3>
                   <p className="text-xs text-indigo-200 mt-1">Entrena con simulaciones</p>
                   <Badge variant="outline" className="mt-2 text-xs bg-white/10">Próximo</Badge>
@@ -192,7 +192,7 @@ export default function BasePage() {
         <Card className="border-2 border-green bg-green/5 dark:bg-green/30 shadow-lg">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
-              <span className="text-2xl">🎯</span> Tu Próximo Paso
+              <span className="text-2xl"></span> Tu Próximo Paso
             </CardTitle>
           </CardHeader>
           <CardContent>

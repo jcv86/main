@@ -137,7 +137,7 @@ export default function DespegazoDashboard() {
       completed: progress.a1_completed,
       href: '/despega/a1-report',
       score: readiness.a1_completeness,
-      icon: '🎯',
+      icon: '',
       color: 'from-purple/50'
     },
     {
@@ -251,7 +251,7 @@ export default function DespegazoDashboard() {
               {readiness.strengths.length > 0 ? (
                 readiness.strengths.map((strength, i) => (
                   <li key={i} className="text-white/90 text-sm md:text-lg font-semibold flex gap-2 md:gap-3">
-                    <span className="text-green flex-shrink-0">✓</span> <span>{strength}</span>
+                    <span className="text-green flex-shrink-0"></span> <span>{strength}</span>
                   </li>
                 ))
               ) : (
@@ -307,7 +307,7 @@ export default function DespegazoDashboard() {
                   
                   {stage.completed ? (
                     <Badge className="bg-green/30 text-green border-2 border-green/50 px-3 md:px-4 py-1 md:py-2 text-xs md:text-base font-bold flex-shrink-0">
-                      ✓ Completado
+                       Completado
                     </Badge>
                   ) : (
                     <div className="text-center flex-shrink-0">

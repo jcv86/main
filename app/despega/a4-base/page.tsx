@@ -424,15 +424,15 @@ export default function A4Page() {
         {/* Tips */}
         <Card className="mt-8 bg-background">
           <CardContent className="pt-6 flex gap-3">
-            <div className="w-5 h-5 flex-shrink-0 text-blue text-lg">💡</div>
+            <div className="w-5 h-5 flex-shrink-0 text-blue text-lg"></div>
             <div>
               <div className="font-semibold text-cyan dark:text-white mb-2">A4 - El Contexto Real: Tu Nueva Identidad en Acción</div>
               <ul className="text-sm text-cyan dark:text-cyan/20 space-y-1">
-                <li>✓ <strong>Dashboard:</strong> Tu progreso, puntos y logros en tiempo real</li>
-                <li>✓ <strong>Noticias:</strong> Contexto del mercado donde vivirá tu nueva identidad</li>
-                <li>✓ <strong>Módulos:</strong> Aprende habilidades específicas para tu transformación</li>
-                <li>✓ <strong>Biblioteca:</strong> Recursos curados y verificados para tu aprendizaje</li>
-                <li>✓ <strong>Coach IA (Sidebar):</strong> Sofia y Dani siempre disponibles para guiarte</li>
+                <li> <strong>Dashboard:</strong> Tu progreso, puntos y logros en tiempo real</li>
+                <li> <strong>Noticias:</strong> Contexto del mercado donde vivirá tu nueva identidad</li>
+                <li> <strong>Módulos:</strong> Aprende habilidades específicas para tu transformación</li>
+                <li> <strong>Biblioteca:</strong> Recursos curados y verificados para tu aprendizaje</li>
+                <li> <strong>Coach IA (Sidebar):</strong> Sofia y Dani siempre disponibles para guiarte</li>
               </ul>
             </div>
           </CardContent>

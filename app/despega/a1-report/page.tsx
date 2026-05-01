@@ -219,7 +219,7 @@ export default function A1ReportPage() {
 
   if (error) {
     return (
-      <ASection title="Tu Perfil Cerebral" subtitle="Descubre Tu Tipo de Personalidad" icon="🎯" colorClass="from-purple/50">
+      <ASection title="Tu Perfil Cerebral" subtitle="Descubre Tu Tipo de Personalidad" icon="" colorClass="from-purple/50">
         <ASectionPart title="Completar Evaluación" icon={<Zap />}>
           <div className="space-y-4">
             <div className="p-6 bg-red/20 dark:bg-red/20 border-2 border-red rounded-lg">
@@ -247,7 +247,7 @@ export default function A1ReportPage() {
       </ASectionPart>
 
       {/* AI-Generated Insights Section */}
-      <ASectionPart title="✨ Tu Análisis Personalizado" icon={<Sparkles />}>
+      <ASectionPart title=" Tu Análisis Personalizado" icon={<Sparkles />}>
         {insightsLoading ? (
           <div className="flex flex-col items-center justify-center py-16">
             <Loader2 className="h-8 w-8 animate-spin text-purple mb-4" />
@@ -279,7 +279,7 @@ export default function A1ReportPage() {
   const secondaryLabel = discToDespega[profile.secondary as keyof typeof discToDespega]
 
   return (
-    <ASection title="Tu Perfil Cerebral" subtitle="Descubre Tu Tipo de Personalidad" icon="🧠" colorClass="from-purple/50">
+    <ASection title="Tu Perfil Cerebral" subtitle="Descubre Tu Tipo de Personalidad" icon="" colorClass="from-purple/50">
       <ASectionPart title="Tu Perfil Cerebral Completo" icon={<Target />}>
         <div className="space-y-8">
           {/* Primary and Secondary Profile Cards */}
@@ -343,7 +343,7 @@ export default function A1ReportPage() {
       </ASectionPart>
 
       {/* AI-Generated Insights Section */}
-      <ASectionPart title="✨ Tu Análisis Personalizado" icon={<Sparkles />}>
+      <ASectionPart title=" Tu Análisis Personalizado" icon={<Sparkles />}>
         {insightsLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <Loader2 className="h-10 w-10 animate-spin text-purple mb-4" />
@@ -383,7 +383,7 @@ export default function A1ReportPage() {
       </ASectionPart>
 
       {/* Wow Report - Action Map */}
-      <ASectionPart title="🚀 Tu Mapa de Acción" icon={<Sparkles />}>
+      <ASectionPart title=" Tu Mapa de Acción" icon={<Sparkles />}>
         <div className="mb-8">
           <p className="text-white/85 text-center text-lg leading-relaxed">
             Ahora que entiendes tu perfil cerebral, aquí está tu mapa de acción personalizado. Estas son las 5 herramientas clave que te hacen imprescindible.
@@ -415,7 +415,7 @@ export default function A1ReportPage() {
 
           <Card className="bg-gradient-to-br from-blue/20 to-blue/5 border-2 border-blue/40 hover:border-blue/60 transition-all">
             <CardHeader>
-              <CardTitle className="text-xl text-white">📞 Entrena de Entrevistas</CardTitle>
+              <CardTitle className="text-xl text-white"> Entrena de Entrevistas</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-base text-white/85 mb-6 leading-relaxed">Practica entrevistas personalizadas según tu tipo de personalidad.</p>

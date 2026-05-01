@@ -69,7 +69,7 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
     const configs: Record<string, { icon: string; color: string; label: string }> = {
       decision: { icon: "🤔", color: "bg-blue/10", label: "Toma de Decisión" },
       comunicacion: { icon: "💬", color: "bg-green/10", label: "Comunicación" },
-      negociacion: { icon: "🤝", color: "bg-orange/10", label: "Negociación" },
+      negociacion: { icon: "", color: "bg-orange/10", label: "Negociación" },
       liderazgo: { icon: "👥", color: "bg-purple/10", label: "Liderazgo" },
       crisis: { icon: "🚨", color: "bg-red/10", label: "Gestión de Crisis" },
       planificacion: { icon: "📋", color: "bg-blue/10", label: "Planificación" },

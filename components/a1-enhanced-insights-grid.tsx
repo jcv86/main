@@ -98,21 +98,21 @@ export function EnhancedInsightsGrid({ insights }: EnhancedInsightsGridProps) {
       content: insights.fortalezasPrincipales,
       icon: <Sparkles className="w-full h-full" />,
       color: 'purple',
-      emoji: '⭐'
+      emoji: ''
     },
     {
       title: 'Áreas de Desarrollo',
       content: insights.areasDesarrollo,
       icon: <Target className="w-full h-full" />,
       color: 'blue',
-      emoji: '🎯'
+      emoji: ''
     },
     {
       title: 'Tu Estilo en Entrevistas',
       content: insights.estiloEntrevista,
       icon: <Brain className="w-full h-full" />,
       color: 'orange',
-      emoji: '🧠'
+      emoji: ''
     },
     {
       title: 'Dinámica de Equipo',
@@ -126,7 +126,7 @@ export function EnhancedInsightsGrid({ insights }: EnhancedInsightsGridProps) {
       content: insights.carreraAlign,
       icon: <Briefcase className="w-full h-full" />,
       color: 'pink',
-      emoji: '💼'
+      emoji: ''
     },
     {
       title: 'Comunicación Efectiva',
@@ -170,7 +170,7 @@ export function EnhancedInsightsGrid({ insights }: EnhancedInsightsGridProps) {
       {/* Divider */}
       <div className="flex items-center gap-4 my-8">
         <div className="flex-1 h-px bg-background" />
-        <div className="text-2xl">✨</div>
+        <div className="text-2xl"></div>
         <div className="flex-1 h-px bg-background" />
       </div>
     </div>

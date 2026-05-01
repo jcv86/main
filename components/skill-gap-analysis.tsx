@@ -213,7 +213,7 @@ export function SkillGapAnalysis({ userEmail }: SkillGapAnalysisProps) {
         <Alert className="bg-background">
           <Zap className="h-4 w-4" />
           <AlertDescription>
-            <p className="font-semibold mb-2">💡 Recomendación del Sistema</p>
+            <p className="font-semibold mb-2"> Recomendación del Sistema</p>
             <p className="text-sm">
               Enfócate primero en las brechas de prioridad alta. El sistema te recomienda rutas de aprendizaje
               personalizadas para cada habilidad.

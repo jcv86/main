@@ -172,7 +172,7 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
 
         {recordedBlob && (
           <div className="bg-green/5 dark:bg-green border border-green/20 dark:border-green rounded-[28px] p-2 text-xs text-green dark:text-green/30">
-            ✓ Video recorded: {(recordedBlob.size / 1024 / 1024).toFixed(2)} MB
+             Video recorded: {(recordedBlob.size / 1024 / 1024).toFixed(2)} MB
           </div>
         )}
       </CardContent>

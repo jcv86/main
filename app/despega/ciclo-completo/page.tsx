@@ -290,9 +290,9 @@ export default function CycleCompletionPage() {
                   <div className="p-3 bg-purple/5 rounded-[28px] border">
                     <p className="text-sm text-muted-foreground mb-2">Basada en tu contexto:</p>
                     <ul className="text-sm space-y-1 text-foreground">
-                      <li>✓ Perfil DISC: {profileType}</li>
-                      <li>✓ Ambiente de ejecución personalizado</li>
-                      <li>✓ Objetivos 30/60/90 definidos</li>
+                      <li> Perfil DISC: {profileType}</li>
+                      <li> Ambiente de ejecución personalizado</li>
+                      <li> Objetivos 30/60/90 definidos</li>
                     </ul>
                   </div>
                 </div>
@@ -392,9 +392,9 @@ export default function CycleCompletionPage() {
                   <div className="p-3 bg-purple/5 rounded-[28px] border">
                     <p className="text-sm text-muted-foreground mb-2">Contexto personalizado para ti:</p>
                     <ul className="text-sm space-y-1 text-foreground">
-                      <li>✓ Noticias del mercado filtradas por tu perfil</li>
-                      <li>✓ Tendencias en tu industria</li>
-                      <li>✓ Recursos curados según tus intereses</li>
+                      <li> Noticias del mercado filtradas por tu perfil</li>
+                      <li> Tendencias en tu industria</li>
+                      <li> Recursos curados según tus intereses</li>
                     </ul>
                   </div>
                 </div>

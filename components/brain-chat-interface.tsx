@@ -284,7 +284,7 @@ export function BrainChatInterface() {
                             <div className="mt-4 space-y-2">
                               <Separator className="my-2" />
                               <div className="text-xs font-semibold text-muted dark:text-white/85 mb-2">
-                                📚 Fuentes consultadas:
+                                 Fuentes consultadas:
                               </div>
                               <div className="space-y-2">
                                 {message.sources.map((source, idx) => (

@@ -393,10 +393,10 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
             <div className="text-sm text-muted-foreground bg-blue/5 p-3 rounded">
               <div className="flex items-center gap-4">
                 <span>🔍 Búsqueda: "{searchTerm}"</span>
-                <span>📊 {searchResults.length} resultados</span>
+                <span> {searchResults.length} resultados</span>
                 {searchResults.length > 0 && (
                   <>
-                    <span>⭐ Relevancia máx: {Math.max(...searchResults.map((r) => r.relevanceScore)).toFixed(2)}</span>
+                    <span> Relevancia máx: {Math.max(...searchResults.map((r) => r.relevanceScore)).toFixed(2)}</span>
                     <span>
                       📈 Promedio:{" "}
                       {(searchResults.reduce((sum, r) => sum + r.relevanceScore, 0) / searchResults.length).toFixed(2)}
@@ -567,9 +567,9 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
             </div>
             <div className="flex gap-2">
               <span>
-                📊 Pesos: T{weights.title}% A{weights.author}% E{weights.tags}%
+                 Pesos: T{weights.title}% A{weights.author}% E{weights.tags}%
               </span>
-              <span>🎯 Min: {minRelevance[0]}%</span>
+              <span> Min: {minRelevance[0]}%</span>
             </div>
           </div>
         </div>

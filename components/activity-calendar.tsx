@@ -100,7 +100,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
 
   const scheduleReminder = (activity: Activity) => {
     if (!phoneNumber) {
-      alert("⚠️ Configura tu número de teléfono primero en Ajustes")
+      alert(" Configura tu número de teléfono primero en Ajustes")
       return
     }
 
@@ -110,7 +110,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
 
   const sendDailySummary = () => {
     if (!phoneNumber) {
-      alert("⚠️ Configura tu número de teléfono primero en Ajustes")
+      alert(" Configura tu número de teléfono primero en Ajustes")
       return
     }
 
@@ -120,7 +120,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
 
   const sendMotivation = () => {
     if (!phoneNumber) {
-      alert("⚠️ Configura tu número de teléfono primero en Ajustes")
+      alert(" Configura tu número de teléfono primero en Ajustes")
       return
     }
 

@@ -164,7 +164,7 @@ export function InteractiveTrainingSession({
             {/* Guía */}
             <div className="bg-blue/30 p-6 rounded-[28px] border border-blue/50/20">
               <h3 className="text-sm font-semibold text-blue/30 mb-3 flex items-center gap-2">
-                <span>💡 GUÍA PARA RESPONDER:</span>
+                <span> GUÍA PARA RESPONDER:</span>
               </h3>
               <div className="text-white/85 space-y-2 text-sm leading-relaxed">
                 {guidance}
@@ -267,7 +267,7 @@ export function InteractiveTrainingSession({
         <Card className="border-green/30 bg-background">
           <CardHeader>
             <CardTitle className="text-green/30 flex items-center gap-2">
-              <span>✓</span>
+              <span></span>
               Grabación Completada
             </CardTitle>
           </CardHeader>

@@ -230,7 +230,7 @@ export function PromptBankDashboard() {
                         </Badge>
                         <Badge variant="outline">{prompt.nivel}</Badge>
                         <Badge variant="outline">
-                          {prompt.tono === "sofia" ? "👩 Sofia" : prompt.tono === "dani" ? "👨 Dani" : "🤝 Híbrido"}
+                          {prompt.tono === "sofia" ? "👩 Sofia" : prompt.tono === "dani" ? "👨 Dani" : " Híbrido"}
                         </Badge>
                         <Badge variant="secondary">ID: {prompt.prompt_id}</Badge>
                       </CardDescription>

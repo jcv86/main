@@ -302,7 +302,7 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
                 {audioValidationResult.tips.length > 0 && (
                   <div className="mt-2 space-y-1">
                     {audioValidationResult.tips.map((tip, idx) => (
-                      <p key={idx} className="text-xs text-white/70">✓ {tip}</p>
+                      <p key={idx} className="text-xs text-white/70"> {tip}</p>
                     ))}
                   </div>
                 )}

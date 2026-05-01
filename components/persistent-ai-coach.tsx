@@ -634,7 +634,7 @@ export function PersistentAICoach() {
             <div className="bg-transparent rounded-[28px] p-4 border border-green/20 dark:border-green">
               <div className="flex items-start gap-3 mb-2">
                 <Lightbulb className="h-5 w-5 text-green dark:text-green/40 flex-shrink-0 mt-0.5" />
-                <h3 className="font-semibold text-foreground">💡 Sugerencias</h3>
+                <h3 className="font-semibold text-foreground"> Sugerencias</h3>
               </div>
               <p className="text-sm text-muted-foreground">
                 Recomendaciones personalizadas basadas en tus resultados de evaluación, diseñadas para acelerar tu
@@ -646,7 +646,7 @@ export function PersistentAICoach() {
             <div className="bg-transparent rounded-[28px] p-4 border border-purple/20 dark:border-purple">
               <div className="flex items-start gap-3 mb-2">
                 <Sparkles className="h-5 w-5 text-purple dark:text-purple/40 flex-shrink-0 mt-0.5" />
-                <h3 className="font-semibold text-foreground">✨ Insights</h3>
+                <h3 className="font-semibold text-foreground"> Insights</h3>
               </div>
               <p className="text-sm text-muted-foreground">
                 Análisis profundos de tu perfil, fortalezas clave y oportunidades de desarrollo identificadas por IA.
@@ -784,7 +784,7 @@ export function PersistentAICoach() {
 
                 {(suggestions.length > 0 || messages.length <= 1) && (
                   <div className="mt-4 pt-4 border-t border-border">
-                    <p className="text-xs text-mutedForeground font-medium mb-3">💡 Preguntas sugeridas:</p>
+                    <p className="text-xs text-mutedForeground font-medium mb-3"> Preguntas sugeridas:</p>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                       {(suggestions.length > 0 ? suggestions : quickStartQuestions.map((q) => ({ text: q }))).map(
                         (suggestion, index) => (

@@ -42,10 +42,10 @@ export default function A4DashboardPage() {
               📖 Casos
             </TabsTrigger>
             <TabsTrigger value="biblioteca" className="text-xs sm:text-sm">
-              📚 Biblioteca
+               Biblioteca
             </TabsTrigger>
             <TabsTrigger value="engagement" className="text-xs sm:text-sm">
-              🎯 Progreso
+               Progreso
             </TabsTrigger>
             <TabsTrigger value="badges" className="text-xs sm:text-sm">
               🏆 Insignias

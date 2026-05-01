@@ -81,7 +81,7 @@ export function WhitepaperClient() {
             <div className="grid md:grid-cols-3 gap-6 mb-8">
               {/* Cerebro - Brain System */}
               <div className="bg-white rounded-lg p-6 shadow-sm border border-purple/20">
-                <div className="text-3xl mb-3">🧠</div>
+                <div className="text-3xl mb-3"></div>
                 <h4 className="text-xl font-bold mb-3 text-purple">Cerebro (Brain System)</h4>
                 <p className="text-muted mb-4 text-sm">
                   Advanced AI reasoning system powered by GPT-4 with semantic search capabilities
@@ -143,7 +143,7 @@ export function WhitepaperClient() {
 
               {/* Psychometric Tests */}
               <div className="bg-white rounded-lg p-6 shadow-sm border border-green/20">
-                <div className="text-3xl mb-3">📊</div>
+                <div className="text-3xl mb-3"></div>
                 <h4 className="text-xl font-bold mb-3 text-green">6 Psychometric Tests</h4>
                 <p className="text-muted mb-4 text-sm">
                   Scientifically-validated assessments with AI-powered analysis
@@ -180,7 +180,7 @@ export function WhitepaperClient() {
             {/* Additional Platform Features */}
             <div className="grid md:grid-cols-2 gap-6">
               <div className="bg-background">
-                <h4 className="text-lg font-bold mb-3 text-orange">📚 Professional Library</h4>
+                <h4 className="text-lg font-bold mb-3 text-orange"> Professional Library</h4>
                 <p className="text-muted text-sm">
                   120+ professional development books with full-text access, progress tracking, highlights, notes, and
                   intelligent recommendations
@@ -188,7 +188,7 @@ export function WhitepaperClient() {
               </div>
 
               <div className="bg-background">
-                <h4 className="text-lg font-bold mb-3 text-red">🎯 Personalized Insights</h4>
+                <h4 className="text-lg font-bold mb-3 text-red"> Personalized Insights</h4>
                 <p className="text-muted text-sm">
                   AI-generated career analysis, percentile rankings, radar charts, development plans, and tailored
                   recommendations based on complete psychometric profile

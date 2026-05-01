@@ -44,13 +44,13 @@ const insightCards = [
   },
   {
     key: 'fortalezasAplicar',
-    icon: '💪',
+    icon: '',
     title: 'Fortalezas a Aplicar',
     color: 'from-red/50500'
   },
   {
     key: 'estrategiaIntegracion',
-    icon: '🎯',
+    icon: '',
     title: 'Estrategia de Integración',
     color: 'from-blue/50'
   }

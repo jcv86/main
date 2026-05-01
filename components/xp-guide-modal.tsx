@@ -255,7 +255,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
                   </div>
                 ))}
                 <div className="mt-4 p-4 bg-orange/10 dark:bg-orange/30 border border-orange/30 dark:border-orange rounded-lg text-sm text-orange dark:text-orange/10">
-                  <strong>💡 Tip:</strong> Cada día que visitas la plataforma suma a tu racha. ¡No la rompas para maximizar tus ganancias de XP!
+                  <strong> Tip:</strong> Cada día que visitas la plataforma suma a tu racha. ¡No la rompas para maximizar tus ganancias de XP!
                 </div>
               </CardContent>
             </Card>

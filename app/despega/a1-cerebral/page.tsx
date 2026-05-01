@@ -224,7 +224,7 @@ export default function A1CerebralPage() {
           {/* Error message */}
           {error && (
             <div className="mb-6 p-4 bg-red/15 border-2 border-red/40 rounded-lg">
-              <p className="text-red font-semibold text-center">⚠️ {error}</p>
+              <p className="text-red font-semibold text-center"> {error}</p>
             </div>
           )}
         </div>

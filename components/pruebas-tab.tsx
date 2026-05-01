@@ -164,7 +164,7 @@ export function PruebasTab() {
             variant={completed.has(selectedCase.id) ? "default" : "outline"}
             onClick={() => handleMarkComplete(selectedCase.id)}
           >
-            {completed.has(selectedCase.id) ? "✓ Caso Completado" : "Marcar como Completado"}
+            {completed.has(selectedCase.id) ? " Caso Completado" : "Marcar como Completado"}
           </Button>
         </CardContent>
       </Card>

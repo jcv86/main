@@ -40,7 +40,7 @@ export default function UniversityPartnershipsPage() {
 
         {/* El Desafío */}
         <div className="bg-background">
-          <h2 className="text-3xl font-bold text-muted/90 mb-6">🎯 El Desafío de la Empleabilidad en Chile</h2>
+          <h2 className="text-3xl font-bold text-muted/90 mb-6"> El Desafío de la Empleabilidad en Chile</h2>
 
           <div className="grid md:grid-cols-2 gap-6 mb-6">
             <div className="bg-white rounded-xl p-6">
@@ -88,7 +88,7 @@ export default function UniversityPartnershipsPage() {
           </div>
 
           <div className="bg-white rounded-xl p-6">
-            <h3 className="text-lg font-bold text-muted/90 mb-3">💡 La Oportunidad</h3>
+            <h3 className="text-lg font-bold text-muted/90 mb-3"> La Oportunidad</h3>
             <p className="text-muted-foreground">
               Las universidades que inviertan en <strong>tecnología educativa (EdTech)</strong> para complementar sus
               servicios de empleabilidad tendrán una ventaja competitiva significativa en rankings de empleabilidad y
@@ -99,7 +99,7 @@ export default function UniversityPartnershipsPage() {
 
         {/* La Solución DTC */}
         <div className="bg-background">
-          <h2 className="text-3xl font-bold text-muted/90 mb-6">✨ Despega Tu Carrera: La Solución Integral</h2>
+          <h2 className="text-3xl font-bold text-muted/90 mb-6"> Despega Tu Carrera: La Solución Integral</h2>
 
           <div className="space-y-6">
             {/* Cerebro */}
@@ -116,7 +116,7 @@ export default function UniversityPartnershipsPage() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold text-muted/90 mb-2">🧠 CEREBRO - Sistema de Conocimiento con IA</h3>
+                  <h3 className="text-xl font-bold text-muted/90 mb-2"> CEREBRO - Sistema de Conocimiento con IA</h3>
                   <ul className="space-y-2 text-muted-foreground">
                     <li className="flex items-start gap-2">
                       <span className="text-blue mt-1">•</span>
@@ -160,7 +160,7 @@ export default function UniversityPartnershipsPage() {
                   </svg>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-xl font-bold text-muted/90 mb-2">📊 6 Evaluaciones Psicométricas Científicas</h3>
+                  <h3 className="text-xl font-bold text-muted/90 mb-2"> 6 Evaluaciones Psicométricas Científicas</h3>
                   <div className="grid md:grid-cols-2 gap-3 text-muted-foreground">
                     <div>
                       <p className="font-semibold text-blue">Personalidad y Comportamiento:</p>
@@ -242,19 +242,19 @@ export default function UniversityPartnershipsPage() {
               <h3 className="text-xl font-bold text-green mb-4">📈 Mejora en Rankings</h3>
               <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-start gap-2">
-                  <span className="text-green">✓</span>
+                  <span className="text-green"></span>
                   <span>
                     <strong>Empleabilidad:</strong> Estudiantes mejor preparados para el mercado laboral
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green">✓</span>
+                  <span className="text-green"></span>
                   <span>
                     <strong>Satisfacción estudiantil:</strong> Servicios de valor agregado diferenciadores
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green">✓</span>
+                  <span className="text-green"></span>
                   <span>
                     <strong>Prestigio institucional:</strong> Liderazgo en innovación educativa
                   </span>
@@ -266,19 +266,19 @@ export default function UniversityPartnershipsPage() {
               <h3 className="text-xl font-bold text-emerald-700 mb-4">💰 Optimización de Recursos</h3>
               <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-start gap-2">
-                  <span className="text-green">✓</span>
+                  <span className="text-green"></span>
                   <span>
                     <strong>Escalabilidad:</strong> Atención a todos los estudiantes sin aumentar personal
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green">✓</span>
+                  <span className="text-green"></span>
                   <span>
                     <strong>Complemento al CDC:</strong> Coach IA libera tiempo para casos complejos
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-green">✓</span>
+                  <span className="text-green"></span>
                   <span>
                     <strong>Implementación rápida:</strong> Plataforma lista, sin desarrollo interno
                   </span>
@@ -287,22 +287,22 @@ export default function UniversityPartnershipsPage() {
             </div>
 
             <div className="bg-white rounded-xl p-6">
-              <h3 className="text-xl font-bold text-teal-700 mb-4">📊 Datos y Analytics</h3>
+              <h3 className="text-xl font-bold text-teal-700 mb-4"> Datos y Analytics</h3>
               <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-start gap-2">
-                  <span className="text-blue">✓</span>
+                  <span className="text-blue"></span>
                   <span>
                     <strong>Dashboard institucional:</strong> Métricas de uso y engagement
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue">✓</span>
+                  <span className="text-blue"></span>
                   <span>
                     <strong>Insights agregados:</strong> Tendencias y necesidades estudiantiles
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue">✓</span>
+                  <span className="text-blue"></span>
                   <span>
                     <strong>Reportes personalizables:</strong> KPIs relevantes para cada institución
                   </span>
@@ -314,19 +314,19 @@ export default function UniversityPartnershipsPage() {
               <h3 className="text-xl font-bold text-cyan mb-4">🏆 Ventaja Competitiva</h3>
               <ul className="space-y-2 text-muted-foreground">
                 <li className="flex items-start gap-2">
-                  <span className="text-blue">✓</span>
+                  <span className="text-blue"></span>
                   <span>
                     <strong>Diferenciación:</strong> Servicio único en el mercado chileno
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue">✓</span>
+                  <span className="text-blue"></span>
                   <span>
                     <strong>Atracción de talentos:</strong> Argumento de valor en admisión
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-blue">✓</span>
+                  <span className="text-blue"></span>
                   <span>
                     <strong>Retención:</strong> Mayor satisfacción y compromiso estudiantil
                   </span>
@@ -338,7 +338,7 @@ export default function UniversityPartnershipsPage() {
 
         {/* Modelos de Convenio */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-          <h2 className="text-3xl font-bold text-muted/90 mb-6">🤝 Modelos de Convenio Propuestos</h2>
+          <h2 className="text-3xl font-bold text-muted/90 mb-6"> Modelos de Convenio Propuestos</h2>
 
           <div className="space-y-6">
             {/* Modelo 1 */}
@@ -486,7 +486,7 @@ export default function UniversityPartnershipsPage() {
 
         {/* Casos de Éxito Potenciales */}
         <div className="bg-background">
-          <h2 className="text-3xl font-bold text-muted/90 mb-6">🌟 Casos de Uso y Beneficiarios</h2>
+          <h2 className="text-3xl font-bold text-muted/90 mb-6"> Casos de Uso y Beneficiarios</h2>
 
           <div className="space-y-4">
             <div className="bg-white rounded-xl p-6">
@@ -545,7 +545,7 @@ export default function UniversityPartnershipsPage() {
 
         {/* Implementación */}
         <div className="bg-white rounded-2xl shadow-lg p-8 mb-8">
-          <h2 className="text-3xl font-bold text-muted/90 mb-6">🚀 Proceso de Implementación</h2>
+          <h2 className="text-3xl font-bold text-muted/90 mb-6"> Proceso de Implementación</h2>
 
           <div className="space-y-4">
             <div className="flex items-start gap-4">
@@ -621,7 +621,7 @@ export default function UniversityPartnershipsPage() {
 
         {/* Próximos Pasos */}
         <div className="bg-background">
-          <h2 className="text-3xl font-bold mb-6">📞 Próximos Pasos</h2>
+          <h2 className="text-3xl font-bold mb-6"> Próximos Pasos</h2>
 
           <div className="space-y-4 mb-8">
             <p className="text-lg text-blue/10">

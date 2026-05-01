@@ -77,7 +77,7 @@ export function CanonProgressCard({
                 </p>
                 {c1CompletedAt && (
                   <p className="text-xs text-green dark:text-green/40 mt-1">
-                    ✓ Completado {new Date(c1CompletedAt).toLocaleDateString()}
+                     Completado {new Date(c1CompletedAt).toLocaleDateString()}
                   </p>
                 )}
               </div>
@@ -101,7 +101,7 @@ export function CanonProgressCard({
                 </p>
                 {a1CompletedAt && (
                   <p className="text-xs text-green dark:text-green/40 mt-1">
-                    ✓ Completado {new Date(a1CompletedAt).toLocaleDateString()}
+                     Completado {new Date(a1CompletedAt).toLocaleDateString()}
                   </p>
                 )}
               </div>
@@ -125,7 +125,7 @@ export function CanonProgressCard({
                 </p>
                 {c2CompletedAt && (
                   <p className="text-xs text-green dark:text-green/40 mt-1">
-                    ✓ Completado {new Date(c2CompletedAt).toLocaleDateString()}
+                     Completado {new Date(c2CompletedAt).toLocaleDateString()}
                   </p>
                 )}
               </div>
@@ -194,7 +194,7 @@ export function CanonProgressCard({
                   {generatedRoute.factores_exito.map((factor, idx) => (
                     <li key={idx} className="flex gap-2 text-sm">
                       <Badge className="bg-green/10 text-green dark:bg-green dark:text-green/20">
-                        ✓
+                        
                       </Badge>
                       <span className="text-muted-foreground dark:text-white/85">{factor}</span>
                     </li>

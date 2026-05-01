@@ -103,7 +103,7 @@ export function SuggestedQuestions({
     <Card className={`border border-border/50 bg-background/50 backdrop-blur-sm ${className}`}>
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
-          <span className="text-lg">💡</span>
+          <span className="text-lg"></span>
           {title}
         </CardTitle>
         {description && <CardDescription className="text-xs">{description}</CardDescription>}

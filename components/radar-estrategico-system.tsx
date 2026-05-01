@@ -488,17 +488,17 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
                       </div>
 
                       <div>
-                        <h4 className="text-xs font-semibold text-yellow/40 uppercase mb-1">⚠️ Qué no encaja</h4>
+                        <h4 className="text-xs font-semibold text-yellow/40 uppercase mb-1"> Qué no encaja</h4>
                         <p className="text-white/85 text-sm">{noticia.noEncaja}</p>
                       </div>
 
                       <div>
-                        <h4 className="text-xs font-semibold text-white/85 uppercase mb-1">🎯 Incentivos detrás</h4>
+                        <h4 className="text-xs font-semibold text-white/85 uppercase mb-1"> Incentivos detrás</h4>
                         <p className="text-white/85 text-sm">{noticia.incentivos}</p>
                       </div>
 
                       <div className="bg-muted/90/50 p-3 rounded border border-muted/70/50">
-                        <h4 className="text-xs font-semibold text-white/85 uppercase mb-2">📊 Impacto temporal</h4>
+                        <h4 className="text-xs font-semibold text-white/85 uppercase mb-2"> Impacto temporal</h4>
                         <div className="space-y-1 text-xs">
                           <p><span className="text-green/40">Corto:</span> {noticia.impactoTemporal.corto}</p>
                           <p><span className="text-yellow/40">Medio:</span> {noticia.impactoTemporal.medio}</p>
@@ -533,7 +533,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
                       )}
 
                       <div>
-                        <h4 className="text-xs font-semibold text-muted-foreground uppercase mb-1">📚 Fuentes</h4>
+                        <h4 className="text-xs font-semibold text-muted-foreground uppercase mb-1"> Fuentes</h4>
                         <p className="text-white/85 text-xs">{noticia.fuentes.join(' • ')}</p>
                       </div>
                     </CardContent>

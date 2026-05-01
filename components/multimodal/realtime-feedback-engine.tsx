@@ -145,7 +145,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
                   <p className="text-sm font-medium">
                     {getIconForType(item.type)} {item.message}
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">💡 {item.suggestion}</p>
+                  <p className="text-xs text-muted-foreground mt-1"> {item.suggestion}</p>
                 </div>
               </div>
             </div>
@@ -170,7 +170,7 @@ function getIconForType(type: string): string {
     'posture': '🧍',
     'pace': '🗣️',
     'clarity': '📢',
-    'confidence': '💪',
+    'confidence': '',
     'gestures': '🙌'
   }
   return icons[type] || '📝'

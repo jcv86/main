@@ -121,10 +121,10 @@ export default function MarketRadarPage() {
                 Noticias y actualizaciones sobre empresas e industrias de tu interés
               </p>
               <ul className="space-y-1 text-xs text-muted-foreground">
-                <li>✓ Hirings en tu industria</li>
-                <li>✓ Funding rounds y crecimiento</li>
-                <li>✓ Cambios en liderazgo</li>
-                <li>✓ Tendencias del mercado</li>
+                <li> Hirings en tu industria</li>
+                <li> Funding rounds y crecimiento</li>
+                <li> Cambios en liderazgo</li>
+                <li> Tendencias del mercado</li>
               </ul>
             </CardContent>
           </Card>
@@ -141,10 +141,10 @@ export default function MarketRadarPage() {
                 Análisis automático del fit entre tu perfil y posiciones disponibles
               </p>
               <ul className="space-space-y-1 text-xs text-muted-foreground">
-                <li>✓ Análisis de skills match</li>
-                <li>✓ Fit cultural basado en DISC</li>
-                <li>✓ Análisis salarial</li>
-                <li>✓ Ranking de oportunidades</li>
+                <li> Análisis de skills match</li>
+                <li> Fit cultural basado en DISC</li>
+                <li> Análisis salarial</li>
+                <li> Ranking de oportunidades</li>
               </ul>
             </CardContent>
           </Card>
@@ -161,10 +161,10 @@ export default function MarketRadarPage() {
                 Sigue tu avance completo desde A1 hasta oportunidades aplicadas
               </p>
               <ul className="space-y-1 text-xs text-muted-foreground">
-                <li>✓ Readiness score en tiempo real</li>
-                <li>✓ Aplicaciones enviadas</li>
-                <li>✓ Entrevistas coordinadas</li>
-                <li>✓ Ofrecimiento recibidos</li>
+                <li> Readiness score en tiempo real</li>
+                <li> Aplicaciones enviadas</li>
+                <li> Entrevistas coordinadas</li>
+                <li> Ofrecimiento recibidos</li>
               </ul>
             </CardContent>
           </Card>
@@ -181,10 +181,10 @@ export default function MarketRadarPage() {
                 Asistente inteligente disponible en todos los stages
               </p>
               <ul className="space-y-1 text-xs text-muted-foreground">
-                <li>✓ Preguntas sobre estrategia</li>
-                <li>✓ Revisión de documentos</li>
-                <li>✓ Prep de entrevistas</li>
-                <li>✓ Negociación de ofertas</li>
+                <li> Preguntas sobre estrategia</li>
+                <li> Revisión de documentos</li>
+                <li> Prep de entrevistas</li>
+                <li> Negociación de ofertas</li>
               </ul>
             </CardContent>
           </Card>
@@ -224,10 +224,10 @@ export default function MarketRadarPage() {
                   A4 es permanente. Vuelve regularmente para:
                 </p>
                 <ul className="space-y-1 text-xs text-muted-foreground">
-                  <li>✓ Ver nuevas oportunidades</li>
-                  <li>✓ Revisar tu readiness score</li>
-                  <li>✓ Hablar con el coach</li>
-                  <li>✓ Trackear aplicaciones</li>
+                  <li> Ver nuevas oportunidades</li>
+                  <li> Revisar tu readiness score</li>
+                  <li> Hablar con el coach</li>
+                  <li> Trackear aplicaciones</li>
                 </ul>
               </CardContent>
             </Card>

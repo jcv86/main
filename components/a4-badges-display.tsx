@@ -37,13 +37,13 @@ const RARITY_COLORS = {
 
 const BADGE_ICONS: Record<string, string> = {
   'Explorador': '🔍',
-  'Lector Voraz': '📚',
-  'Participante': '🎯',
+  'Lector Voraz': '',
+  'Participante': '',
   'Experto': '🏆',
   'Estratega': '♟️',
-  'Conexiones': '🤝',
+  'Conexiones': '',
   'Consistente': '🔥',
-  'Innovador': '💡',
+  'Innovador': '',
   'Maestría': '👑',
 }
 
@@ -120,7 +120,7 @@ export function A4BadgesDisplay({ data }: A4BadgesDisplayProps) {
                     RARITY_COLORS[badge.rarity]
                   }`}
                 >
-                  <div className="text-3xl mb-2">{BADGE_ICONS[badge.name] || '⭐'}</div>
+                  <div className="text-3xl mb-2">{BADGE_ICONS[badge.name] || ''}</div>
                   <p className="font-semibold text-sm mb-1">{badge.name}</p>
                   <p className="text-xs opacity-75">{badge.description}</p>
                   <p className="text-xs opacity-50 mt-2">

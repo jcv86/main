@@ -77,7 +77,7 @@ export function TestCompletionScreen({
 
           {/* Highlighted Insight */}
           <div className="border-l-4 border-purple pl-4 py-2">
-            <p className="font-medium text-lg">💡 {keyInsight || highlightedInsight}</p>
+            <p className="font-medium text-lg"> {keyInsight || highlightedInsight}</p>
           </div>
 
           {/* Next steps */}

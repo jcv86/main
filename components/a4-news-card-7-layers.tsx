@@ -63,9 +63,9 @@ export function A4NewsCard7Layers({ news, onEngagement }: Props) {
 
   const getCategoryEmoji = (cat: string) => {
     switch (cat.toLowerCase()) {
-      case 'mercado laboral': return '💼'
+      case 'mercado laboral': return ''
       case 'industrias': return '🏭'
-      case 'economía': return '📊'
+      case 'economía': return ''
       case 'tendencias globales': return '🌍'
       default: return '📰'
     }

@@ -106,7 +106,7 @@ export default function RecomendacionesPage() {
         id: "enfoque",
         name: "Enfoque y Productividad",
         description: "Domina tu atención y logra resultados con precisión",
-        icon: "🎯",
+        icon: "",
         color: "from-green",
         borderColor: "border-green/20 dark:border-green",
         bgColor: "bg-green/5 dark:bg-green/20",
@@ -122,7 +122,7 @@ export default function RecomendacionesPage() {
         id: "relaciones",
         name: "Relaciones Significativas",
         description: "Construye conexiones profundas y comunicación efectiva",
-        icon: "🤝",
+        icon: "",
         color: "from-red/50500",
         borderColor: "border-red/20 dark:border-pink-800",
         bgColor: "bg-red/5 dark:bg-red/20",
@@ -336,7 +336,7 @@ export default function RecomendacionesPage() {
         <Card className="border-0 bg-yellow/5 dark:bg-amber-900/20 border-l-4 border-l-amber-500">
           <CardContent className="p-4">
             <p className="text-sm text-muted-foreground dark:text-white/85">
-              <strong>💡 Consejo:</strong> Todas estas rutas son poderosas. Elige la que resuena más con tu objetivo inmediato. Puedes explorar otras después.
+              <strong> Consejo:</strong> Todas estas rutas son poderosas. Elige la que resuena más con tu objetivo inmediato. Puedes explorar otras después.
             </p>
           </CardContent>
         </Card>

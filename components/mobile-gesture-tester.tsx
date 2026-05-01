@@ -429,7 +429,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
   const runAutomatedTests = async () => {
     setIsRunning(true)
     setProgress(0)
-    addLog("🚀 Starting automated gesture testing...")
+    addLog(" Starting automated gesture testing...")
 
     // Reset all tests
     setGestureTests((prev) =>
@@ -696,7 +696,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                   </p>
                   {!touchSupport && (
                     <p className="text-xs text-red bg-red/10 p-2 rounded">
-                      ⚠️ Touch events not supported on this device
+                       Touch events not supported on this device
                     </p>
                   )}
                 </div>

@@ -21,14 +21,14 @@ const ROUTE_INFO = {
   },
   enfoque: {
     name: "Enfoque y Productividad",
-    icon: "🎯",
+    icon: "",
     color: "from-green",
     bgColor: "bg-green/5 dark:bg-green/20",
     textColor: "text-green dark:text-green/10",
   },
   relaciones: {
     name: "Relaciones Significativas",
-    icon: "🤝",
+    icon: "",
     color: "from-red/50500",
     bgColor: "bg-red/5 dark:bg-red/20",
     textColor: "text-pink-900 dark:text-pink-100",

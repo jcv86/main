@@ -63,7 +63,7 @@ export function EnvironmentCheck({ onComplete }: EnvironmentCheckProps) {
               className="mt-1"
             />
             <div className="flex-1">
-              <p className="font-semibold text-white">💡 Iluminación adecuada</p>
+              <p className="font-semibold text-white"> Iluminación adecuada</p>
               <p className="text-sm text-white/60 mt-1">
                 Tu cara está bien iluminada, sin sombras marcadas. Evita la luz de frente o de espalda.
               </p>

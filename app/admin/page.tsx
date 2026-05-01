@@ -30,7 +30,7 @@ export default function AdminDashboardPage() {
           <Tabs defaultValue="analytics" className="w-full">
             <TabsList className="grid w-full grid-cols-2 lg:grid-cols-6 mb-8 bg-background/50 backdrop-blur-sm border border-border">
               <TabsTrigger value="analytics" className="text-xs sm:text-sm">
-                📊 Analíticas
+                 Analíticas
               </TabsTrigger>
               <TabsTrigger value="users" className="text-xs sm:text-sm">
                 👥 Usuarios
@@ -45,7 +45,7 @@ export default function AdminDashboardPage() {
                 ✅ Pruebas
               </TabsTrigger>
               <TabsTrigger value="biblioteca" className="text-xs sm:text-sm">
-                📚 Biblioteca
+                 Biblioteca
               </TabsTrigger>
             </TabsList>
 

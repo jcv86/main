@@ -286,7 +286,7 @@ export default function CVATSPage() {
       <div className="bg-muted/5 dark:bg-card p-4 rounded-[28px]">
         <h3 className="font-bold text-blue dark:text-blue mb-2">Información de Contacto</h3>
         <p className="text-sm">📧 {cvData.personalInfo.email}</p>
-        <p className="text-sm">📱 {cvData.personalInfo.phone}</p>
+        <p className="text-sm"> {cvData.personalInfo.phone}</p>
         <p className="text-sm">📍 {cvData.personalInfo.location}</p>
       </div>
 
@@ -631,7 +631,7 @@ export default function CVATSPage() {
         {format === 'standard' && (
           <Card className="bg-green/5 dark:bg-green/20 border-green/20 dark:border-green">
             <CardHeader>
-              <CardTitle className="text-base">✨ Formato Estándar</CardTitle>
+              <CardTitle className="text-base"> Formato Estándar</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground dark:text-white/85 space-y-2">
               <p>Formato profesional tradicional con buen balance entre diseño y legibilidad.</p>
@@ -648,7 +648,7 @@ export default function CVATSPage() {
         {format === 'creative' && (
           <Card className="bg-purple/5 dark:bg-purple/20 border-purple/30 dark:border-purple">
             <CardHeader>
-              <CardTitle className="text-base">🎨 Formato Creativo</CardTitle>
+              <CardTitle className="text-base"> Formato Creativo</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground dark:text-white/85 space-y-2">
               <p>Diseño moderno y atractivo. Perfecto para industrias creativas, startups y posiciones innovadoras.</p>
@@ -682,7 +682,7 @@ export default function CVATSPage() {
         {format === 'linkedin' && (
           <Card className="bg-sky-50 dark:bg-sky-900/20 border-sky-200 dark:border-sky-800">
             <CardHeader>
-              <CardTitle className="text-base">💼 Formato LinkedIn</CardTitle>
+              <CardTitle className="text-base"> Formato LinkedIn</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground dark:text-white/85 space-y-2">
               <p>Optimizado para compartir como documento PDF en LinkedIn. Mantiene el look profesional de LinkedIn.</p>

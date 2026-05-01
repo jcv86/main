@@ -109,7 +109,7 @@ export default function Conozcamonos2Page() {
 
     // Prevent next if there's an active error
     if (error) {
-      setError('⚠️ Corrige los errores de validación antes de continuar')
+      setError(' Corrige los errores de validación antes de continuar')
       return
     }
 
@@ -230,7 +230,7 @@ export default function Conozcamonos2Page() {
               <h3 className="text-lg font-bold text-white flex-1">
                 {question.question}
               </h3>
-              {isAnswered && <span className="text-blue text-xl font-bold">✓</span>}
+              {isAnswered && <span className="text-blue text-xl font-bold"></span>}
               </div>
 
               {question.type === 'select' && (
@@ -333,7 +333,7 @@ export default function Conozcamonos2Page() {
         {error && (
           <div className="bg-red/30 border-2 border-red/60 rounded-lg p-8 mb-6 shadow-lg">
             <div className="flex items-start gap-4">
-              <span className="text-4xl flex-shrink-0">⚠️</span>
+              <span className="text-4xl flex-shrink-0"></span>
               <div className="flex-1">
                 <h3 className="font-bold text-white text-xl mb-2">Validación Requerida</h3>
                 <p className="text-white font-semibold text-lg mb-3">{error}</p>

@@ -35,9 +35,9 @@ const taskTypeIcons = {
 }
 
 const taskTypeEmojis = {
-  learning: '📚',
+  learning: '',
   practice: '🛠️',
-  networking: '🤝',
+  networking: '',
   planning: '📋',
   milestone: '🏆',
 }

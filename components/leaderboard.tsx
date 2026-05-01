@@ -17,10 +17,10 @@ interface LeaderboardUser {
 
 const MOCK_LEADERBOARD: LeaderboardUser[] = [
   { rank: 1, name: 'María García', points: 5240, booksCompleted: 12, streak: 45, avatar: '🏆' },
-  { rank: 2, name: 'Carlos López', points: 4890, booksCompleted: 11, streak: 32, avatar: '⭐' },
-  { rank: 3, name: 'Ana Martínez', points: 4650, booksCompleted: 10, streak: 28, avatar: '🌟' },
-  { rank: 4, name: 'Roberto Silva', points: 4120, booksCompleted: 9, streak: 21, avatar: '📚' },
-  { rank: 5, name: 'Sandra Ruiz', points: 3890, booksCompleted: 8, streak: 18, avatar: '💡' },
+  { rank: 2, name: 'Carlos López', points: 4890, booksCompleted: 11, streak: 32, avatar: '' },
+  { rank: 3, name: 'Ana Martínez', points: 4650, booksCompleted: 10, streak: 28, avatar: '' },
+  { rank: 4, name: 'Roberto Silva', points: 4120, booksCompleted: 9, streak: 21, avatar: '' },
+  { rank: 5, name: 'Sandra Ruiz', points: 3890, booksCompleted: 8, streak: 18, avatar: '' },
 ]
 
 export function Leaderboard() {

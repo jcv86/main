@@ -183,8 +183,8 @@ He revisado tu diagnóstico A1 y tengo algunas recomendaciones personalizadas pa
                 <p className="text-sm">{message.content}</p>
                 {message.type && message.sender === "coach" && (
                   <Badge variant="outline" className="mt-2 text-xs">
-                    {message.type === "insight" && "💡 Insight"}
-                    {message.type === "suggestion" && "✨ Sugerencia"}
+                    {message.type === "insight" && " Insight"}
+                    {message.type === "suggestion" && " Sugerencia"}
                     {message.type === "question" && "❓ Pregunta"}
                   </Badge>
                 )}
