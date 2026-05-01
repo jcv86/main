@@ -192,6 +192,15 @@ export function DespegaNavbar() {
               const isOpen = openDropdown === stage.name
               const hasActiveRoute = stage.routes.some(r => pathname === r.href)
 
+              // Custom colors for each phase
+              const phaseColors: Record<string, string> = {
+                ritual: 'rgb(80, 160, 170)',      // teal
+                exploration: 'rgb(90, 90, 150)',   // deep purple
+                training: 'rgb(170, 70, 170)',     // magenta
+                reality: 'rgb(225, 120, 130)',     // salmon rose
+                info: 'currentColor'
+              }
+
               return (
                 <div key={stage.name} className="relative">
                   <button
@@ -199,12 +208,13 @@ export function DespegaNavbar() {
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-150 ${
                       hasActiveRoute || isActivePhase
                         ? `${style.pillBg} ${style.pillText}`
-                        : `${style.text} hover:bg-white/5`
+                        : `hover:bg-white/5`
                     }`}
+                    style={!hasActiveRoute && !isActivePhase ? { color: phaseColors[stage.phase] } : undefined}
                   >
-                    <stage.icon className="w-3.5 h-3.5 flex-shrink-0" />
+                    <stage.icon className="w-3.5 h-3.5 flex-shrink-0" style={!hasActiveRoute && !isActivePhase ? { color: phaseColors[stage.phase] } : undefined} />
                     <span>{stage.name}</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} style={!hasActiveRoute && !isActivePhase ? { color: phaseColors[stage.phase] } : undefined} />
                   </button>
 
                   {/* Dropdown — solid bg, left-border accent, no heavy colored header */}
