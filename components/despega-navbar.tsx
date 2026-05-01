@@ -104,9 +104,13 @@ export function DespegaNavbar() {
   const profileRef = useRef<HTMLDivElement>(null)
   
   const { user } = useAuthRedirect()
+  
+  // Check if this is a demo user
+  const isDemoUser = typeof window !== 'undefined' ? localStorage.getItem('demo_user') !== null : false
 
+  // Only fetch XP data for real authenticated users, not demo users
   const { data: xpData, isLoading: xpLoading } = useSWR<XPData>(
-    '/api/gamification/global',
+    isDemoUser ? null : '/api/gamification/global',
     fetcher,
     {
       revalidateOnFocus: true,
