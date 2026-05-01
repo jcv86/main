@@ -1,44 +1,82 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
-import { Trophy, Flame, BookMarked } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Trophy, Flame, Zap } from 'lucide-react'
+import { getRankingTier } from '@/lib/gamification/calculations'
 
-interface LeaderboardUser {
+interface LeaderboardEntry {
   rank: number
-  name: string
-  points: number
-  booksCompleted: number
-  streak: number
-  avatar?: string
+  user: {
+    id: string
+    full_name: string
+    avatar_url?: string
+  }
+  scores: {
+    general: number
+    a1_cerebral: number
+    a2_rutas: number
+  }
+  stats: {
+    active_days: number
+    current_streak: number
+    missions_completed: number
+  }
 }
 
-const MOCK_LEADERBOARD: LeaderboardUser[] = [
-  { rank: 1, name: 'María García', points: 5240, booksCompleted: 12, streak: 45, avatar: '🏆' },
-  { rank: 2, name: 'Carlos López', points: 4890, booksCompleted: 11, streak: 32, avatar: '' },
-  { rank: 3, name: 'Ana Martínez', points: 4650, booksCompleted: 10, streak: 28, avatar: '' },
-  { rank: 4, name: 'Roberto Silva', points: 4120, booksCompleted: 9, streak: 21, avatar: '' },
-  { rank: 5, name: 'Sandra Ruiz', points: 3890, booksCompleted: 8, streak: 18, avatar: '' },
-]
+interface UserStats {
+  rank?: number
+  streak?: number
+  missions?: number
+}
 
 export function Leaderboard() {
   const [activeTab, setActiveTab] = useState('points')
+  const [rankings, setRankings] = useState<LeaderboardEntry[]>([])
+  const [userStats, setUserStats] = useState<UserStats>({})
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const getSortedData = (sortBy: string) => {
-    const sorted = [...MOCK_LEADERBOARD]
-    if (sortBy === 'books') sorted.sort((a, b) => b.booksCompleted - a.booksCompleted)
-    if (sortBy === 'streak') sorted.sort((a, b) => b.streak - a.streak)
-    return sorted.map((user, idx) => ({ ...user, rank: idx + 1 }))
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch rankings
+        const rankRes = await fetch('/api/gamification/rankings?limit=50')
+        const rankData = await rankRes.json()
 
-  const getMedalColor = (rank: number) => {
-    if (rank === 1) return 'bg-orange'
-    if (rank === 2) return 'bg-muted/40'
-    if (rank === 3) return 'bg-orange'
-    return 'bg-muted/30 dark:bg-muted/60'
-  }
+        if (rankData.rankings) {
+          setRankings(rankData.rankings)
+          setUserStats({
+            rank: rankData.current_user_rank,
+          })
+        }
+
+        // Fetch user stats
+        const globalRes = await fetch('/api/gamification/global')
+        const globalData = await globalRes.json()
+
+        if (globalData) {
+          setUserStats((prev) => ({
+            ...prev,
+            streak: globalData.daily_streak,
+            missions: globalData.sections?.missions_completed || 0,
+          }))
+        }
+
+        setError(null)
+      } catch (err) {
+        console.error('[v0] Error fetching leaderboard data:', err)
+        setError('Failed to load leaderboard')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
 
   const getMedalEmoji = (rank: number) => {
     if (rank === 1) return '🥇'
@@ -47,69 +85,111 @@ export function Leaderboard() {
     return rank
   }
 
-  const renderLeaderboard = (sortBy: string) => (
+  const renderLeaderboard = () => (
     <div className="space-y-2">
-      {getSortedData(sortBy).map((user) => (
-        <div key={user.rank} className="flex items-center justify-between p-4 rounded-[28px] border hover:bg-muted transition">
-          <div className="flex items-center gap-4 flex-1">
-            <div className={`w-10 h-10 ${getMedalColor(user.rank)} rounded-full flex items-center justify-center text-white font-bold text-sm`}>
-              {getMedalEmoji(user.rank)}
-            </div>
-            <div>
-              <p className="font-semibold text-foreground">{user.name}</p>
-              <p className="text-sm text-muted-foreground">{user.avatar} Nivel {Math.floor(Math.random() * 10) + 1}</p>
-            </div>
-          </div>
-          <div className="text-right space-y-1">
-            {sortBy === 'points' && <p className="text-lg font-bold">{user.points} pts</p>}
-            {sortBy === 'books' && <p className="text-lg font-bold">{user.booksCompleted} libros</p>}
-            {sortBy === 'streak' && <p className="text-lg font-bold">{user.streak} días</p>}
-          </div>
+      {loading ? (
+        <div className="space-y-3">
+          {[...Array(10)].map((_, i) => (
+            <div key={i} className="h-16 bg-muted animate-pulse rounded-lg" />
+          ))}
         </div>
-      ))}
+      ) : rankings.length === 0 ? (
+        <div className="text-center py-8 text-muted-foreground">No rankings available yet</div>
+      ) : (
+        rankings.map((entry) => {
+          const tierInfo = getRankingTier(entry.rank)
+          const initials = entry.user.full_name
+            .split(' ')
+            .map((n) => n[0])
+            .join('')
+            .toUpperCase()
+
+          return (
+            <div
+              key={entry.rank}
+              className="flex items-center justify-between p-4 rounded-lg border hover:bg-muted transition"
+            >
+              <div className="flex items-center gap-4 flex-1">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center bg-gradient-to-br from-blue-100 to-purple-100 font-bold text-sm flex-shrink-0">
+                  {getMedalEmoji(entry.rank)}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <Avatar className="h-6 w-6">
+                      <AvatarImage src={entry.user.avatar_url} alt={entry.user.full_name} />
+                      <AvatarFallback className="text-xs">{initials}</AvatarFallback>
+                    </Avatar>
+                    <p className="font-semibold text-foreground truncate">{entry.user.full_name}</p>
+                    <Badge className="text-xs" style={{ backgroundColor: tierInfo.color, color: '#fff' }}>
+                      {tierInfo.tier}
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    🔥 {entry.stats.current_streak} days • 🎯 {entry.stats.missions_completed} missions
+                  </p>
+                </div>
+              </div>
+              <div className="text-right flex-shrink-0">
+                <p className="text-lg font-bold">{entry.scores.general}</p>
+                <p className="text-xs text-muted-foreground">pts</p>
+              </div>
+            </div>
+          )
+        })
+      )}
     </div>
   )
+
+  if (error) {
+    return (
+      <Card className="border-red-200 bg-red-50">
+        <CardContent className="pt-6 text-red-800">{error}</CardContent>
+      </Card>
+    )
+  }
 
   return (
     <div className="w-full space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
           <CardContent className="pt-6 text-center">
-            <Trophy className="w-8 h-8 mx-auto mb-2 text-orange" />
-            <p className="text-sm text-muted-foreground">Tu Posición</p>
-            <p className="text-3xl font-bold">#47</p>
+            <Trophy className="w-8 h-8 mx-auto mb-2 text-amber-600" />
+            <p className="text-sm text-muted-foreground">Your Rank</p>
+            <p className="text-3xl font-bold">{userStats.rank ? `#${userStats.rank}` : 'N/A'}</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6 text-center">
-            <Flame className="w-8 h-8 mx-auto mb-2 text-orange" />
-            <p className="text-sm text-muted-foreground">Tu Racha</p>
-            <p className="text-3xl font-bold">12 días</p>
+            <Flame className="w-8 h-8 mx-auto mb-2 text-orange-600" />
+            <p className="text-sm text-muted-foreground">Current Streak</p>
+            <p className="text-3xl font-bold">{userStats.streak || 0} days</p>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="pt-6 text-center">
-            <BookMarked className="w-8 h-8 mx-auto mb-2 text-blue/50" />
-            <p className="text-sm text-muted-foreground">Libros Completados</p>
-            <p className="text-3xl font-bold">5</p>
+            <Zap className="w-8 h-8 mx-auto mb-2 text-yellow-600" />
+            <p className="text-sm text-muted-foreground">Missions Completed</p>
+            <p className="text-3xl font-bold">{userStats.missions || 0}</p>
           </CardContent>
         </Card>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Top Lectores</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Trophy className="h-5 w-5" />
+            Global Leaderboard
+          </CardTitle>
+          <CardDescription>Top performers on Despega</CardDescription>
         </CardHeader>
         <CardContent>
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="points">Puntos</TabsTrigger>
-              <TabsTrigger value="books">Libros</TabsTrigger>
-              <TabsTrigger value="streak">Racha</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-1">
+              <TabsTrigger value="points">By Points</TabsTrigger>
             </TabsList>
-            <TabsContent value="points" className="mt-6">{renderLeaderboard('points')}</TabsContent>
-            <TabsContent value="books" className="mt-6">{renderLeaderboard('books')}</TabsContent>
-            <TabsContent value="streak" className="mt-6">{renderLeaderboard('streak')}</TabsContent>
+            <TabsContent value="points" className="mt-6">
+              {renderLeaderboard()}
+            </TabsContent>
           </Tabs>
         </CardContent>
       </Card>

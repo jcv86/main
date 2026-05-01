@@ -60,12 +60,30 @@ export async function POST(request: NextRequest) {
     }
 
     if (action === 'earn') {
-      // Add points from interviews, achievements, etc.
-      const { data } = await supabase
+      // Get current balance first
+      const { data: currentBalance } = await supabase
+        .from('user_dtc_balance')
+        .select('balance, lifetime_earned')
+        .eq('user_id', userId)
+        .single()
+
+      if (!currentBalance) {
+        return NextResponse.json(
+          { error: 'User balance not found' },
+          { status: 404 }
+        )
+      }
+
+      // Update balance with correct calculations
+      const newBalance = currentBalance.balance + amount
+      const newLifetimeEarned = currentBalance.lifetime_earned + amount
+
+      const { data: updatedBalance } = await supabase
         .from('user_dtc_balance')
         .update({
-          balance: supabase.from('user_dtc_balance').select('balance'),
-          lifetime_earned: supabase.from('user_dtc_balance').select('lifetime_earned')
+          balance: newBalance,
+          lifetime_earned: newLifetimeEarned,
+          updated_at: new Date().toISOString()
         })
         .eq('user_id', userId)
         .select()
@@ -86,13 +104,13 @@ export async function POST(request: NextRequest) {
         success: true,
         action: 'earn',
         amount,
-        newBalance: data?.balance
+        newBalance: updatedBalance?.balance
       })
     } else if (action === 'spend') {
       // Spend points on premium features
       const { data: balance } = await supabase
         .from('user_dtc_balance')
-        .select('balance')
+        .select('balance, lifetime_spent')
         .eq('user_id', userId)
         .single()
 
@@ -105,13 +123,18 @@ export async function POST(request: NextRequest) {
 
       // Deduct points
       const newBalance = balance.balance - amount
-      await supabase
+      const newLifetimeSpent = balance.lifetime_spent + amount
+
+      const { data: updatedBalance } = await supabase
         .from('user_dtc_balance')
         .update({
           balance: newBalance,
-          lifetime_spent: supabase.from('user_dtc_balance').select('lifetime_spent')
+          lifetime_spent: newLifetimeSpent,
+          updated_at: new Date().toISOString()
         })
         .eq('user_id', userId)
+        .select()
+        .single()
 
       // Record transaction
       await supabase
@@ -128,7 +151,7 @@ export async function POST(request: NextRequest) {
         success: true,
         action: 'spend',
         amount,
-        newBalance
+        newBalance: updatedBalance?.balance
       })
     }
 
