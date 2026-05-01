@@ -30,7 +30,7 @@ export default function LandingPageOptimized() {
         <div className="flex justify-end mb-4">
         </div>
         <div className="text-center max-w-5xl mx-auto">
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-background">
+          <h1 className="text-5xl md:text-7xl font-light mb-8 bg-background">
             Entiende cómo funcionas.<br />Ordena tu camino.<br />Avanza con más claridad.
           </h1>
           <p className="text-xl md:text-2xl text-foreground/70 mb-12 max-w-3xl mx-auto leading-relaxed">
