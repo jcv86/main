@@ -32,6 +32,17 @@ export default function Conozcamonos1Page() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        // Check for demo user first
+        const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
+        const demoUser = demoUserStr ? JSON.parse(demoUserStr) : null
+        
+        if (demoUser) {
+          console.log('[v0] Demo user detected in conozcamonos-1:', demoUser.email)
+          setAuthChecked(true)
+          return
+        }
+
+        // Check Supabase auth for real users
         const { data: { user }, error } = await supabase.auth.getUser()
         console.log('[v0] conozcamonos-1 auth check - user:', user?.email, 'error:', error?.message)
         
