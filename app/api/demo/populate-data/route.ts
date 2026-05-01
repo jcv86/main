@@ -134,82 +134,92 @@ async function populateDemoUserData() {
     }
 
     // 8. Create badges
-    await supabase
-      .from('a4_user_badges')
-      .insert({
-        user_id: demoUser.id,
-        badge_id: 'badge-strategist',
-        badge_name: 'Estratega',
-        badge_description: 'Completa el módulo de estrategia',
-        badge_icon: '🎯',
-        desbloqueado_at: new Date().toISOString(),
-        created_at: new Date().toISOString(),
-      })
-      .throwOnError()
-      .catch(() => null)
+    try {
+      await supabase
+        .from('a4_user_badges')
+        .insert({
+          user_id: demoUser.id,
+          badge_id: 'badge-strategist',
+          badge_name: 'Estratega',
+          badge_description: 'Completa el módulo de estrategia',
+          badge_icon: '🎯',
+          desbloqueado_at: new Date().toISOString(),
+          created_at: new Date().toISOString(),
+        })
+    } catch (e) {
+      console.log('[v0] Badge already exists')
+    }
 
     // 9. Create A3 training data
-    await supabase
-      .from('a3_user_progreso')
-      .insert({
-        user_id: demoUser.id,
-        fase: 'intermediate',
-        entrevistas_completadas: 8,
-        score_promedio: 78,
-        competencias_desarrolladas: JSON.stringify(['communication', 'confidence', 'clarity']),
-        logros: JSON.stringify(['first_interview', 'perfect_score', 'streak_5']),
-        empleadores_interesados: 3,
-        recomendaciones: JSON.stringify(['Practice eye contact', 'Improve pace', 'Add examples']),
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .throwOnError()
-      .catch(() => null)
+    try {
+      await supabase
+        .from('a3_user_progreso')
+        .insert({
+          user_id: demoUser.id,
+          fase: 'intermediate',
+          entrevistas_completadas: 8,
+          score_promedio: 78,
+          competencias_desarrolladas: JSON.stringify(['communication', 'confidence', 'clarity']),
+          logros: JSON.stringify(['first_interview', 'perfect_score', 'streak_5']),
+          empleadores_interesados: 3,
+          recomendaciones: JSON.stringify(['Practice eye contact', 'Improve pace', 'Add examples']),
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+    } catch (e) {
+      console.log('[v0] A3 progress already exists')
+    }
 
     // 10. Create A2 route progress
-    await supabase
-      .from('a2_user_route_progress')
-      .insert({
-        user_id: demoUser.id,
-        route_id: 'route-profesional',
-        porcentaje_completado: 45,
-        estado: 'in_progress',
-        dia_actual: 22,
-        modulo_actual_id: 'modulo-5',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .throwOnError()
-      .catch(() => null)
+    try {
+      await supabase
+        .from('a2_user_route_progress')
+        .insert({
+          user_id: demoUser.id,
+          route_id: 'route-profesional',
+          porcentaje_completado: 45,
+          estado: 'in_progress',
+          dia_actual: 22,
+          modulo_actual_id: 'modulo-5',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+    } catch (e) {
+      console.log('[v0] A2 route progress already exists')
+    }
 
     // 11. Create strategic score
-    await supabase
-      .from('a4_strategic_score')
-      .insert({
-        user_id: demoUser.id,
-        score: 72.5,
-        score_7day_average: 70.8,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .throwOnError()
-      .catch(() => null)
+    try {
+      await supabase
+        .from('a4_strategic_score')
+        .insert({
+          user_id: demoUser.id,
+          score: 72.5,
+          score_7day_average: 70.8,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+    } catch (e) {
+      console.log('[v0] Strategic score already exists')
+    }
 
     // 12. Create engagement data
-    await supabase
-      .from('a4_engagement_tracking')
-      .insert({
-        user_id: demoUser.id,
-        event_type: 'module_started',
-        feature: 'strategic_module',
-        completed: true,
-        duration_seconds: 1800,
-        a4_score_at_event: 70.5,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .throwOnError()
-      .catch(() => null)
+    try {
+      await supabase
+        .from('a4_engagement_tracking')
+        .insert({
+          user_id: demoUser.id,
+          event_type: 'module_started',
+          feature: 'strategic_module',
+          completed: true,
+          duration_seconds: 1800,
+          a4_score_at_event: 70.5,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+    } catch (e) {
+      console.log('[v0] Engagement data already exists')
+    }
 
     console.log(`[v0] Completed populating data for ${demoUser.name}`)
   }
