@@ -5,19 +5,15 @@ import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Chrome, Linkedin, AlertCircle, Loader2, Sparkles, Eye, EyeOff } from 'lucide-react'
+import { Chrome, Linkedin, AlertCircle, Loader2, Sparkles } from 'lucide-react'
 
 export default function SignInPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
   const [isLoadingGoogle, setIsLoadingGoogle] = useState(false)
   const [isLoadingLinkedIn, setIsLoadingLinkedIn] = useState(false)
   const [isLoadingDemo, setIsLoadingDemo] = useState(false)
-  const [isLoadingEmail, setIsLoadingEmail] = useState(false)
 
   // Check for OAuth errors in URL
   useEffect(() => {
@@ -124,47 +120,7 @@ export default function SignInPage() {
     }
   }
 
-  const handleEmailSignIn = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setIsLoadingEmail(true)
-
-    try {
-      if (!email || !password) {
-        setError('Por favor ingresa tu email y contraseña')
-        setIsLoadingEmail(false)
-        return
-      }
-
-      const supabase = createClient()
-      if (!supabase) {
-        setError('Error de configuracion: Supabase no esta disponible')
-        setIsLoadingEmail(false)
-        return
-      }
-
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      })
-
-      if (signInError) {
-        setError(signInError.message || 'Error al iniciar sesión')
-        setIsLoadingEmail(false)
-        return
-      }
-
-      // Successfully signed in
-      router.push('/dashboard')
-      router.refresh()
-    } catch (err) {
-      console.error('[v0] Email signin error:', err)
-      setError('Error al iniciar sesión. Por favor intenta nuevamente.')
-      setIsLoadingEmail(false)
-    }
-  }
-
-  const isLoading = isLoadingGoogle || isLoadingLinkedIn || isLoadingDemo || isLoadingEmail
+  const isLoading = isLoadingGoogle || isLoadingLinkedIn || isLoadingDemo
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
@@ -238,63 +194,6 @@ export default function SignInPage() {
               )}
               Continuar con LinkedIn
             </Button>
-
-            {/* Divider */}
-            <div className="relative my-2">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-muted/20 dark:border-card" />
-              </div>
-              <div className="relative flex justify-center text-xs">
-                <span className="px-2 bg-white dark:bg-background text-muted-foreground dark:text-muted-foreground">o accede con email</span>
-              </div>
-            </div>
-
-            {/* Email/Password Form */}
-            <form onSubmit={handleEmailSignIn} className="space-y-3">
-              <div>
-                <input
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={isLoading}
-                  className="w-full px-4 py-2 rounded-lg border border-muted/20 dark:border-card bg-white dark:bg-background text-foreground dark:text-foreground placeholder-muted-foreground dark:placeholder-muted-foreground focus:outline-none focus:border-cyan/50 focus:ring-1 focus:ring-cyan/30 transition-all"
-                />
-              </div>
-              <div className="relative">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Contraseña"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={isLoading}
-                  className="w-full px-4 py-2 rounded-lg border border-muted/20 dark:border-card bg-white dark:bg-background text-foreground dark:text-foreground placeholder-muted-foreground dark:placeholder-muted-foreground focus:outline-none focus:border-cyan/50 focus:ring-1 focus:ring-cyan/30 transition-all"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground dark:text-muted-foreground hover:text-foreground dark:hover:text-foreground transition-colors"
-                  disabled={isLoading}
-                >
-                  {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </button>
-              </div>
-              <Button
-                type="submit"
-                disabled={isLoading}
-                className="w-full h-12 text-base gap-2 bg-cyan/40 hover:bg-cyan/50 text-foreground dark:text-foreground shadow-md hover:shadow-lg transition-all duration-200"
-              >
-                {isLoadingEmail ? (
-                  <Loader2 className="h-5 w-5 animate-spin" />
-                ) : (
-                  "Iniciar sesión"
-                )}
-              </Button>
-            </form>
 
             {/* Divider */}
             <div className="relative my-2">
