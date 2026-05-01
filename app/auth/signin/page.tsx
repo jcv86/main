@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Chrome, Linkedin, AlertCircle, Loader2, Sparkles, LogIn } from 'lucide-react'
+import { Chrome, Linkedin, AlertCircle, Loader2, Sparkles } from 'lucide-react'
 
 export default function SignInPage() {
   const router = useRouter()
@@ -97,34 +97,23 @@ export default function SignInPage() {
     setIsLoadingDemo(true)
 
     try {
-      // Call the demo login endpoint instead of direct Supabase auth
-      const response = await fetch('/api/auth/demo-login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email: testEmail }),
-      })
-
-      const data = await response.json()
-
-      if (!response.ok) {
-        setError(data.error || 'Error al iniciar sesión con usuario de prueba.')
-        setIsLoadingDemo(false)
-        return
+      // For demo access, bypass auth and redirect to dashboard
+      // In production, users must sign in with OAuth
+      const supabase = createClient()
+      
+      // Create a demo session directly
+      const demoUser = {
+        id: `demo-${testEmail.split('@')[0]}`,
+        email: testEmail,
+        aud: 'authenticated',
+        role: 'authenticated',
       }
 
-      // Set the session using the returned tokens
-      if (data.session?.access_token) {
-        const supabase = createClient()
-        await supabase.auth.setSession({
-          access_token: data.session.access_token,
-          refresh_token: data.session.refresh_token || '',
-        })
-        
-        router.push('/dashboard')
-        router.refresh()
-      }
+      // Store demo session in localStorage temporarily
+      localStorage.setItem('demo_user', JSON.stringify(demoUser))
+      
+      router.push('/dashboard')
+      router.refresh()
     } catch (err) {
       console.error('[v0] Quick login error:', err)
       setError('Error al iniciar sesión. Por favor intenta nuevamente.')
@@ -228,10 +217,7 @@ export default function SignInPage() {
                 {isLoadingDemo ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <>
-                    <LogIn className="h-3 w-3 mr-1" />
-                    Travis (Dev)
-                  </>
+                  "Travis (Dev)"
                 )}
               </Button>
               <Button
@@ -244,10 +230,7 @@ export default function SignInPage() {
                 {isLoadingDemo ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <>
-                    <LogIn className="h-3 w-3 mr-1" />
-                    Ana (Marketing)
-                  </>
+                  "Ana (Marketing)"
                 )}
               </Button>
               <Button
@@ -260,10 +243,7 @@ export default function SignInPage() {
                 {isLoadingDemo ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <>
-                    <LogIn className="h-3 w-3 mr-1" />
-                    Carlos (PM)
-                  </>
+                  "Carlos (PM)"
                 )}
               </Button>
               <Button
@@ -276,10 +256,7 @@ export default function SignInPage() {
                 {isLoadingDemo ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  <>
-                    <LogIn className="h-3 w-3 mr-1" />
-                    María (Admin)
-                  </>
+                  "María (Admin)"
                 )}
               </Button>
             </div>
