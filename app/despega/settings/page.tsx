@@ -145,10 +145,15 @@ export default function SettingsPage() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8 pb-20">
-      {/* Header */}
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-white mb-2">Preferencias de Perfil</h1>
-        <p className="text-white/60">Personaliza tu experiencia en Despega Tu Carrera</p>
+      {/* Header with pillar color accent */}
+      <div className="mb-8 border-l-4 border-l-purple pl-6">
+        <h1 className="text-4xl font-bold text-white mb-2">Preferencias de Perfil</h1>
+        <p className="text-white/70 text-lg">Personaliza tu experiencia en Despega Tu Carrera</p>
+        
+        {/* Pillar color indicators */}
+        <div className="flex gap-2 mt-4">
+          <div className="h-1 flex-1 bg-gradient-to-r from-blue via-orange to-purple rounded"></div>
+        </div>
       </div>
 
       {/* Alerts */}
@@ -169,13 +174,16 @@ export default function SettingsPage() {
       {/* Sections */}
       <div className="space-y-6">
 
-        {/* Display & Theme */}
-        <div className="rounded-lg border border-white/10 bg-white/5 p-6">
+        {/* Display & Theme - A2 Ritual (Blue) */}
+        <div className="rounded-lg border-2 border-blue/30 bg-blue/5 p-6 backdrop-blur-sm hover:border-blue/50 transition-colors">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-blue/20">
+            <div className="p-2 rounded-lg bg-blue/30 border border-blue/50">
               <Sun className="w-5 h-5 text-blue" />
             </div>
-            <h2 className="text-xl font-semibold text-white">Apariencia y Tema</h2>
+            <div>
+              <h2 className="text-xl font-semibold text-white">Apariencia y Tema</h2>
+              <p className="text-xs text-blue/60">Personaliza tu interfaz</p>
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -222,13 +230,16 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* Notifications */}
-        <div className="rounded-lg border border-white/10 bg-white/5 p-6">
+        {/* Notifications - A3 Exploration (Orange) */}
+        <div className="rounded-lg border-2 border-orange/30 bg-orange/5 p-6 backdrop-blur-sm hover:border-orange/50 transition-colors">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-orange/20">
+            <div className="p-2 rounded-lg bg-orange/30 border border-orange/50">
               <Bell className="w-5 h-5 text-orange" />
             </div>
-            <h2 className="text-xl font-semibold text-white">Notificaciones</h2>
+            <div>
+              <h2 className="text-xl font-semibold text-white">Notificaciones</h2>
+              <p className="text-xs text-orange/60">Mantente actualizado</p>
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -252,13 +263,16 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* Learning Preferences */}
-        <div className="rounded-lg border border-white/10 bg-white/5 p-6">
+        {/* Learning Preferences - A1 Information (Purple) */}
+        <div className="rounded-lg border-2 border-purple/30 bg-purple/5 p-6 backdrop-blur-sm hover:border-purple/50 transition-colors">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-purple/20">
+            <div className="p-2 rounded-lg bg-purple/30 border border-purple/50">
               <Volume2 className="w-5 h-5 text-purple" />
             </div>
-            <h2 className="text-xl font-semibold text-white">Preferencias de Aprendizaje</h2>
+            <div>
+              <h2 className="text-xl font-semibold text-white">Preferencias de Aprendizaje</h2>
+              <p className="text-xs text-purple/60">Tu estilo de aprendizaje</p>
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -304,13 +318,16 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* Communication Preferences */}
-        <div className="rounded-lg border border-white/10 bg-white/5 p-6">
+        {/* Communication Preferences - A4 Reality (Red) */}
+        <div className="rounded-lg border-2 border-red/30 bg-red/5 p-6 backdrop-blur-sm hover:border-red/50 transition-colors">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-red/20">
+            <div className="p-2 rounded-lg bg-red/30 border border-red/50">
               <LogIn className="w-5 h-5 text-red" />
             </div>
-            <h2 className="text-xl font-semibold text-white">Comunicación</h2>
+            <div>
+              <h2 className="text-xl font-semibold text-white">Comunicación</h2>
+              <p className="text-xs text-red/60">Tu preferencia de contacto</p>
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -353,13 +370,16 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* Privacy & Data */}
-        <div className="rounded-lg border border-white/10 bg-white/5 p-6">
+        {/* Privacy & Data - Data Protection (Cyan) */}
+        <div className="rounded-lg border-2 border-cyan/30 bg-cyan/5 p-6 backdrop-blur-sm hover:border-cyan/50 transition-colors">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-blue/20">
-              <Eye className="w-5 h-5 text-blue" />
+            <div className="p-2 rounded-lg bg-cyan/30 border border-cyan/50">
+              <Eye className="w-5 h-5 text-cyan" />
             </div>
-            <h2 className="text-xl font-semibold text-white">Privacidad y Datos</h2>
+            <div>
+              <h2 className="text-xl font-semibold text-white">Privacidad y Datos</h2>
+              <p className="text-xs text-cyan/60">Controla tu información</p>
+            </div>
           </div>
 
           <div className="space-y-4">
@@ -367,7 +387,7 @@ export default function SettingsPage() {
               <input
                 type="checkbox"
                 defaultChecked
-                className="w-4 h-4 rounded accent-blue mt-0.5"
+                className="w-4 h-4 rounded accent-cyan mt-0.5"
               />
               <div>
                 <span className="text-white/80 block">Compartir datos anónimos para mejorar la plataforma</span>
@@ -379,7 +399,7 @@ export default function SettingsPage() {
               <input
                 type="checkbox"
                 defaultChecked
-                className="w-4 h-4 rounded accent-blue mt-0.5"
+                className="w-4 h-4 rounded accent-cyan mt-0.5"
               />
               <div>
                 <span className="text-white/80 block">Usar mi perfil para recomendaciones</span>
