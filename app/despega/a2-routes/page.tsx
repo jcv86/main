@@ -394,21 +394,21 @@ export default function A2RoutesPage() {
         </div>
 
         {/* Success Banner - First element */}
-        <Card className="bg-blue/10 border-2 border-blue/40 shadow-lg">
-          <CardContent className="pt-6">
-            <div className="flex items-start gap-4">
-              <CheckCircle2 className="w-8 h-8 text-blue flex-shrink-0 mt-1" />
-              <div className="flex-1">
-                <h4 className="font-bold text-blue text-lg mb-1">Ruta Generada!</h4>
-                <p className="text-sm text-white/85 mb-3">Tu plan de 90 días personalizado está listo y se adapta a tu ritmo</p>
-                <div className="flex items-center gap-2 text-xs text-white/70">
-                  <Calendar className="w-4 h-4" />
-                  <span>Próximo hito: Completa la Fase 1 en los próximos 30 días</span>
-                </div>
+        <div className="rounded-sm p-10 mb-12 bg-cyan/20 border-0">
+          <div className="flex items-start gap-4">
+            <div className="flex items-center justify-center w-16 h-16 rounded-[28px] bg-cyan/60 flex-shrink-0">
+              <CheckCircle2 className="w-8 h-8 text-cyan" />
+            </div>
+            <div className="flex-1">
+              <h4 className="font-bold text-cyan text-lg mb-1">Ruta Generada!</h4>
+              <p className="text-sm text-white/85 mb-3">Tu plan de 90 días personalizado está listo y se adapta a tu ritmo</p>
+              <div className="flex items-center gap-2 text-xs text-white/70">
+                <Calendar className="w-4 h-4" />
+                <span>Próximo hito: Completa la Fase 1 en los próximos 30 días</span>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
 
         {/* Main Intro Section - Collapsible */}
         <div className="border border-blue/30 rounded-xl overflow-hidden">
@@ -520,7 +520,7 @@ export default function A2RoutesPage() {
           </div>
 
           {/* 3-Phase Progress Tracker */}
-          <div className="bg-blue/5 border border-blue/20 rounded-lg p-6">
+          <div className="bg-cyan/20 rounded-sm p-6 border-0">
             <h3 className="text-lg font-bold text-white mb-6">Cómo va tu Progreso</h3>
             <div className="space-y-4">
               {([30, 60, 90] as const).map((days, idx) => {
@@ -528,12 +528,19 @@ export default function A2RoutesPage() {
                 const progress = getPhaseProgress(days)
                 const progressPercent = progress.total > 0 ? (progress.completed / progress.total) * 100 : 0
                 
+                const phaseColors = {
+                  0: { bg: 'bg-cyan/40', text: 'text-cyan' },
+                  1: { bg: 'bg-purple/40', text: 'text-purple' },
+                  2: { bg: 'bg-pink/40', text: 'text-pink' }
+                }
+                const colors = phaseColors[idx as keyof typeof phaseColors]
+                
                 return (
                   <div key={days} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                  <div className="flex items-center justify-center w-10 h-10 rounded-full bg-blue/20 border border-blue/40 flex-shrink-0">
-                    <span className="text-sm font-bold text-blue">{idx + 1}</span>
+                        <div className={`flex items-center justify-center w-10 h-10 rounded-full ${colors.bg} border-0 flex-shrink-0`}>
+                          <span className={`text-sm font-bold ${colors.text}`}>{idx + 1}</span>
                         </div>
                         <div>
                           <p className="font-semibold text-white">{phaseData.label}</p>
@@ -557,7 +564,7 @@ export default function A2RoutesPage() {
             </div>
 
             {/* Overall Progress Summary */}
-            <div className="mt-6 pt-6 border-t border-blue/20">
+            <div className="mt-6 pt-6 border-t border-cyan/20">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-white/80 mb-1">Progreso Total</p>
@@ -565,7 +572,7 @@ export default function A2RoutesPage() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-white/80 mb-1">{calculateTotalProgress().completed} de {calculateTotalProgress().total}</p>
-                  <p className="text-xs text-blue">Tareas completadas</p>
+                  <p className="text-xs text-cyan">Tareas completadas</p>
                 </div>
               </div>
             </div>
