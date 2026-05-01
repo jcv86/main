@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import useSWR from 'swr'
+import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { Button } from '@/components/ui/button'
 import { 
   Menu, 
@@ -101,6 +102,8 @@ export function DespegaNavbar() {
   const pathname = usePathname()
   const dropdownRef = useRef<HTMLDivElement>(null)
   const profileRef = useRef<HTMLDivElement>(null)
+  
+  const { user } = useAuthRedirect()
 
   const { data: xpData, isLoading: xpLoading } = useSWR<XPData>(
     '/api/gamification/global',
@@ -250,7 +253,7 @@ export function DespegaNavbar() {
                       <User className="w-4 h-4 text-white/80" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-semibold text-white">Tu Perfil</p>
+                      <p className="text-sm font-semibold text-white truncate">{user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuario'}</p>
                       {!xpLoading && xpData && (
                         <p className="text-xs text-white/60">Lvl {xpData.current_level}</p>
                       )}
@@ -369,6 +372,11 @@ export function DespegaNavbar() {
 
             {/* Mobile Profile Section */}
             <div className="mt-4 pt-4 border-t border-white/10 space-y-2">
+              <div className="px-3 py-2 rounded-lg bg-white/5 border border-white/10">
+                <p className="text-xs text-white/60 mb-1">Tu Nombre</p>
+                <p className="text-sm font-semibold text-white truncate">{user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuario'}</p>
+              </div>
+
               {!xpLoading && xpData && (
                 <div className="px-3 py-2 rounded-lg bg-white/5 border border-white/10">
                   <div className="text-xs text-white/60 mb-1">Tu Nivel</div>
