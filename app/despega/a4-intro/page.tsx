@@ -16,15 +16,32 @@ export default function ContinuousExecutionIntroPage() {
   useEffect(() => {
     const check = async () => {
       const { data: { user } } = await supabase.auth.getUser()
+      
+      // Check if user exists in Supabase or is a demo user
+      let userId = user?.id
       if (!user) {
-        router.push('/auth/signin')
-        return
+        // Check if demo user exists in localStorage
+        const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
+        if (demoUserStr) {
+          try {
+            const demoUser = JSON.parse(demoUserStr)
+            userId = demoUser.id
+            console.log('[v0] Demo user found for a4-intro:', demoUser.email)
+          } catch (e) {
+            console.error('[v0] Error parsing demo user:', e)
+            router.push('/auth/signin')
+            return
+          }
+        } else {
+          router.push('/auth/signin')
+          return
+        }
       }
       
       const { error: updateError } = await supabase
         .from('despega_user_profiles')
         .upsert({
-          user_id: user.id,
+          user_id: userId,
           a4_intro_seen: true,
           a4_intro_seen_at: new Date().toISOString()
         }, { onConflict: 'user_id' })
