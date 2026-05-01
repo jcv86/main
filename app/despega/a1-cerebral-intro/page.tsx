@@ -71,7 +71,7 @@ export default function A1CerebralIntroPage() {
           title="Descubre Tu Perfil Cerebral"
           description="Una evaluación profunda de cómo funcionas, tu estilo de comunicación y tu potencial único. Responde 28 preguntas simples y obtén insights personalizados sobre tu perfil."
           estimatedTime="~10 min"
-          pillarColor="purple"
+          pillarColor="teal"
         />
 
         {/* Main Content */}
@@ -80,7 +80,7 @@ export default function A1CerebralIntroPage() {
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2">
-                <Zap className="w-6 h-6 text-purple" />
+                <Zap className="w-6 h-6 text-teal-400" />
                 ¿Qué es esta Evaluación?
               </CardTitle>
             </CardHeader>

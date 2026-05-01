@@ -80,16 +80,17 @@ const stages = [
 ]
 
 // Per brandbook pillar colors — all classes must be static strings (no template interpolation) for Tailwind purge
+// Note: Ritual now uses teal color to match navbar branding (rgb(80, 160, 170))
 const phaseStyles: Record<string, {
   text: string; border: string; leftBorder: string; bg: string
   activeBg: string; activeText: string
   pillBg: string; pillText: string
   hoverBg: string; hoverText: string
 }> = {
-  ritual:      { text: 'text-purple',           border: 'border-purple/30',  leftBorder: 'border-l-4 border-l-purple',   bg: 'bg-purple/10',  activeBg: 'bg-purple/20',   activeText: 'text-purple',  pillBg: 'bg-purple',  pillText: 'text-white', hoverBg: 'hover:bg-purple/10',  hoverText: 'hover:text-purple'  },
-  exploration: { text: 'text-cyan',             border: 'border-cyan/30',    leftBorder: 'border-l-4 border-l-cyan',     bg: 'bg-cyan/10',    activeBg: 'bg-cyan/20',     activeText: 'text-cyan',    pillBg: 'bg-cyan',    pillText: 'text-white', hoverBg: 'hover:bg-cyan/10',    hoverText: 'hover:text-cyan'    },
-  training:    { text: 'text-purple',           border: 'border-purple/30',  leftBorder: 'border-l-4 border-l-purple',   bg: 'bg-purple/10',  activeBg: 'bg-purple/20',   activeText: 'text-purple',  pillBg: 'bg-purple',  pillText: 'text-white', hoverBg: 'hover:bg-purple/10',  hoverText: 'hover:text-purple'  },
-  reality:     { text: 'text-pink',             border: 'border-pink/30',    leftBorder: 'border-l-4 border-l-pink',     bg: 'bg-pink/10',    activeBg: 'bg-pink/20',     activeText: 'text-pink',    pillBg: 'bg-pink',    pillText: 'text-white', hoverBg: 'hover:bg-pink/10',    hoverText: 'hover:text-pink'    },
+  ritual:      { text: 'text-teal-400',         border: 'border-teal-400/30',  leftBorder: 'border-l-4 border-l-teal-400',   bg: 'bg-teal-400/10',  activeBg: 'bg-teal-400/20',   activeText: 'text-teal-400',  pillBg: 'bg-teal-400',  pillText: 'text-white', hoverBg: 'hover:bg-teal-400/10',  hoverText: 'hover:text-teal-400'  },
+  exploration: { text: 'text-blue-700',        border: 'border-blue-700/30',    leftBorder: 'border-l-4 border-l-blue-700',     bg: 'bg-blue-700/10',    activeBg: 'bg-blue-700/20',     activeText: 'text-blue-700',    pillBg: 'bg-blue-700',    pillText: 'text-white', hoverBg: 'hover:bg-blue-700/10',    hoverText: 'hover:text-blue-700'    },
+  training:    { text: 'text-purple-500',       border: 'border-purple-500/30',  leftBorder: 'border-l-4 border-l-purple-500',   bg: 'bg-purple-500/10',  activeBg: 'bg-purple-500/20',   activeText: 'text-purple-500',  pillBg: 'bg-purple-500',  pillText: 'text-white', hoverBg: 'hover:bg-purple-500/10',  hoverText: 'hover:text-purple-500'  },
+  reality:     { text: 'text-rose-400',        border: 'border-rose-400/30',    leftBorder: 'border-l-4 border-l-rose-400',     bg: 'bg-rose-400/10',    activeBg: 'bg-rose-400/20',     activeText: 'text-rose-400',    pillBg: 'bg-rose-400',    pillText: 'text-white', hoverBg: 'hover:bg-rose-400/10',    hoverText: 'hover:text-rose-400'    },
   info:        { text: 'text-white/60',         border: 'border-white/10',   leftBorder: 'border-l-4 border-l-white/20', bg: 'bg-white/5',    activeBg: 'bg-white/10',    activeText: 'text-white',   pillBg: 'bg-white/10',pillText: 'text-white', hoverBg: 'hover:bg-white/5',    hoverText: 'hover:text-white'   },
 }
 

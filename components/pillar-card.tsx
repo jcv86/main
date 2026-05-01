@@ -15,7 +15,7 @@ interface PillarCardProps {
   nextStep: string
   href: string
   icon: React.ReactNode
-  color: 'red' | 'blue' | 'green' | 'purple'
+  color: 'red' | 'blue' | 'green' | 'purple' | 'teal'
 }
 
 export function PillarCard({
@@ -57,6 +57,13 @@ export function PillarCard({
       icon: 'text-purple dark:text-purple',
       badge: 'bg-purple/15 dark:bg-purple/25 text-purple dark:text-purple',
       button: 'bg-purple/80 hover:bg-purple/70/80',
+    },
+    teal: {
+      bg: 'bg-transparent',
+      border: 'border-teal-400/40 dark:border-teal-400/60',
+      icon: 'text-teal-400 dark:text-teal-400',
+      badge: 'bg-teal-400/15 dark:bg-teal-400/25 text-teal-400 dark:text-teal-400',
+      button: 'bg-teal-400/80 hover:bg-teal-400/70',
     },
   }
 

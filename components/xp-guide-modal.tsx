@@ -33,7 +33,7 @@ export function XPGuideModal({ open, onOpenChange }: XPGuideProps) {
     // EL RITUAL (A1)
     {
       category: 'El Ritual',
-      color: 'from-blue-500500',
+      color: 'from-teal-500',
       activities: [
         {
           action: 'Completar Conozcámonos 1',

@@ -165,7 +165,7 @@ export default function DashboardPage() {
               nextStep="-"
               href="/despega/onboarding/result"
               icon={<Zap className="w-6 h-6" />}
-              color="red"
+              color="teal"
             />
             <PillarCard
               pillar="A2"
