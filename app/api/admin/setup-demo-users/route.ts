@@ -1,3 +1,4 @@
+import { NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import { hash } from 'bcryptjs'
 
@@ -117,7 +118,7 @@ export async function POST(request: Request) {
       }
     }
 
-    return Response.json(
+    return NextResponse.json(
       {
         message: 'Demo users setup completed',
         results,
@@ -126,7 +127,7 @@ export async function POST(request: Request) {
     )
   } catch (error) {
     console.error('Unexpected error:', error)
-    return Response.json(
+    return NextResponse.json(
       { error: 'Failed to create demo users', details: String(error) },
       { status: 500 }
     )
