@@ -373,7 +373,10 @@ export default function ProfileDashboard() {
                     }}
                     className={`w-full font-bold text-sm py-4 transition-all active:scale-95 ${
                       stage.completed
-                        ? 'bg-green/30 hover:bg-green/40 text-green border-2 border-green/50'
+                        ? i === 0 ? 'bg-purple/30 hover:bg-purple/40 text-purple border-2 border-purple/50'
+                        : i === 1 ? 'bg-blue/30 hover:bg-blue/40 text-blue border-2 border-blue/50'
+                        : i === 2 ? 'bg-orange/30 hover:bg-orange/40 text-orange border-2 border-orange/50'
+                        : 'bg-red/30 hover:bg-red/40 text-red border-2 border-red/50'
                         : i === 0 ? 'bg-purple/70 hover:bg-purple/60 text-white border-2 border-purple/50'
                         : i === 1 ? 'bg-blue/70 hover:bg-blue/60 text-white border-2 border-blue/50'
                         : i === 2 ? 'bg-orange/70 hover:bg-orange/60 text-white border-2 border-orange/50'
