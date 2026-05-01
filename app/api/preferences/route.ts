@@ -1,33 +1,19 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient, createAdminClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-)
-
+/**
+ * GET: Fetch user preferences
+ * POST: Save user preferences
+ */
 export async function GET(request: NextRequest) {
   try {
-    // Get user ID from auth header
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader) {
-      return NextResponse.json(
-        { error: 'No authorization header' },
-        { status: 401 }
-      )
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const token = authHeader.replace('Bearer ', '')
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
-
-    // Get preferences from database
     const { data, error } = await supabase
       .from('user_preferences')
       .select('*')
@@ -35,92 +21,58 @@ export async function GET(request: NextRequest) {
       .single()
 
     if (error && error.code !== 'PGRST116') {
-      throw error
+      console.error('[v0] Error fetching preferences:', error)
+      return NextResponse.json({ error: 'Failed to fetch preferences' }, { status: 500 })
     }
 
     // Return default preferences if not found
-    if (!data) {
-      return NextResponse.json({
-        language: 'es',
-        timezone: 'America/Santiago',
-        theme: 'dark',
-        email_notifications: true,
-        notifications_enabled: true,
-        achievement_notifications: true,
-        goal_reminders: true,
-        weekly_insights_email: true,
-        learning_style: 'visual',
-        difficulty_level: 'intermediate',
-        preferred_contact: 'email',
-      })
-    }
-
-    return NextResponse.json(data)
+    return NextResponse.json(data || {
+      language: 'es',
+      timezone: 'America/Santiago',
+      theme: 'dark',
+      email_notifications: true,
+    })
   } catch (error) {
-    console.error('Error fetching preferences:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch preferences' },
-      { status: 500 }
-    )
+    console.error('[v0] GET preferences error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    // Get user ID from auth header
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader) {
-      return NextResponse.json(
-        { error: 'No authorization header' },
-        { status: 401 }
-      )
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const token = authHeader.replace('Bearer ', '')
-    const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+    const body = await request.json() as Record<string, unknown>
 
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
-    }
+    const supabaseAdmin = createAdminClient()
 
-    const preferences = await request.json()
-
-    // Upsert preferences
-    const { data, error } = await supabase
+    // Upsert user preferences
+    const { data, error } = await supabaseAdmin
       .from('user_preferences')
       .upsert(
         {
           user_id: user.id,
-          language: preferences.language || 'es',
-          timezone: preferences.timezone || 'America/Santiago',
-          theme: preferences.theme || 'dark',
-          email_notifications: preferences.email_notifications ?? true,
-          notifications_enabled: preferences.notifications_enabled ?? true,
-          achievement_notifications: preferences.achievement_notifications ?? true,
-          goal_reminders: preferences.goal_reminders ?? true,
-          weekly_insights_email: preferences.weekly_insights_email ?? true,
           updated_at: new Date().toISOString(),
+          ...body
         },
-        {
-          onConflict: 'user_id',
-        }
+        { onConflict: 'user_id' }
       )
       .select()
       .single()
 
     if (error) {
-      throw error
+      console.error('[v0] Error saving preferences:', error)
+      return NextResponse.json({ error: 'Failed to save preferences' }, { status: 500 })
     }
 
     return NextResponse.json(data)
   } catch (error) {
-    console.error('Error saving preferences:', error)
-    return NextResponse.json(
-      { error: 'Failed to save preferences' },
-      { status: 500 }
-    )
+    console.error('[v0] POST preferences error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

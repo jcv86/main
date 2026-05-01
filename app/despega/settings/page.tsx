@@ -96,10 +96,14 @@ export default function SettingsPage() {
   }
 
   const handleSave = async () => {
+    if (!user?.id) {
+      setError('User not authenticated')
+      return
+    }
+
     setLoading(true)
     setError('')
-    setSaveSuccess(false)
-
+    
     try {
       const response = await fetch('/api/preferences', {
         method: 'POST',
@@ -108,14 +112,14 @@ export default function SettingsPage() {
       })
 
       if (!response.ok) {
-        throw new Error('Error al guardar las preferencias')
+        throw new Error('Failed to save preferences')
       }
 
       setSaveSuccess(true)
       mutate()
       setTimeout(() => setSaveSuccess(false), 3000)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error desconocido')
+      setError(err instanceof Error ? err.message : 'Failed to save preferences')
     } finally {
       setLoading(false)
     }
