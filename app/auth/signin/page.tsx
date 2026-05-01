@@ -2,16 +2,18 @@
 
 import { createClient } from '@/lib/supabase/client'
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Chrome, Linkedin, AlertCircle, Loader2, Sparkles } from 'lucide-react'
+import { Chrome, Linkedin, AlertCircle, Loader2, Sparkles, LogIn } from 'lucide-react'
 
 export default function SignInPage() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const [error, setError] = useState('')
   const [isLoadingGoogle, setIsLoadingGoogle] = useState(false)
   const [isLoadingLinkedIn, setIsLoadingLinkedIn] = useState(false)
+  const [isLoadingDemo, setIsLoadingDemo] = useState(false)
 
   // Check for OAuth errors in URL
   useEffect(() => {
@@ -90,7 +92,32 @@ export default function SignInPage() {
     }
   }
 
-  const isLoading = isLoadingGoogle || isLoadingLinkedIn
+  const quickLogin = async (testEmail: string, testPassword: string) => {
+    setError('')
+    setIsLoadingDemo(true)
+
+    try {
+      const supabase = createClient()
+      const { error } = await supabase.auth.signInWithPassword({
+        email: testEmail,
+        password: testPassword,
+      })
+
+      if (error) {
+        setError('Error al iniciar sesión con usuario de prueba.')
+      } else {
+        router.push('/dashboard')
+        router.refresh()
+      }
+    } catch (err) {
+      console.error('Quick login error:', err)
+      setError('Error al iniciar sesión. Por favor intenta nuevamente.')
+    } finally {
+      setIsLoadingDemo(false)
+    }
+  }
+
+  const isLoading = isLoadingGoogle || isLoadingLinkedIn || isLoadingDemo
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
@@ -170,12 +197,80 @@ export default function SignInPage() {
                 <div className="w-full border-t border-muted/20 dark:border-card" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="px-2 bg-white dark:bg-background text-muted-foreground dark:text-muted-foreground">o</span>
+                <span className="px-2 bg-white dark:bg-background text-muted-foreground dark:text-muted-foreground">o accede como demo</span>
               </div>
             </div>
 
+            {/* Demo Login Buttons */}
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => quickLogin("travis@nuanu.com", "travis123")}
+                disabled={isLoading}
+                className="text-xs h-10"
+              >
+                {isLoadingDemo ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    <LogIn className="h-3 w-3 mr-1" />
+                    Travis (Dev)
+                  </>
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => quickLogin("demo@despegaturcarrera.com", "demo123")}
+                disabled={isLoading}
+                className="text-xs h-10"
+              >
+                {isLoadingDemo ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    <LogIn className="h-3 w-3 mr-1" />
+                    Ana (Marketing)
+                  </>
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => quickLogin("test@dtc.com", "test123")}
+                disabled={isLoading}
+                className="text-xs h-10"
+              >
+                {isLoadingDemo ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    <LogIn className="h-3 w-3 mr-1" />
+                    Carlos (PM)
+                  </>
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => quickLogin("admin@dtc.com", "admin123")}
+                disabled={isLoading}
+                className="text-xs h-10"
+              >
+                {isLoadingDemo ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    <LogIn className="h-3 w-3 mr-1" />
+                    María (Admin)
+                  </>
+                )}
+              </Button>
+            </div>
+
             {/* Trust indicators */}
-            <div className="grid grid-cols-3 gap-3 py-2">
+            <div className="grid grid-cols-3 gap-3 py-2 border-t border-muted/10 pt-4">
               <div className="text-center">
                 <div className="text-2xl font-bold text-purple dark:text-purple/40">6</div>
                 <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium">Tests</p>
