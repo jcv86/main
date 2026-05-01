@@ -237,16 +237,44 @@ export function DespegaNavbar() {
                         </span>
                       </div>
                       <div className="px-2 pb-2 space-y-0.5">
-                        {stage.routes.map((route) => {
+                        {stage.routes.map((route, idx) => {
                           const isActive = pathname === route.href
+                          const isFirstRoute = idx === 0
+                          
+                          // Get phase-specific colors for pill highlighting
+                          const pillColors: Record<string, string> = {
+                            ritual: 'rgba(80, 160, 170, 0.3)',
+                            exploration: 'rgba(90, 90, 150, 0.3)',
+                            training: 'rgba(170, 70, 170, 0.3)',
+                            reality: 'rgba(225, 120, 130, 0.3)',
+                          }
+                          
+                          const textColors: Record<string, string> = {
+                            ritual: 'rgb(80, 160, 170)',
+                            exploration: 'rgb(90, 90, 150)',
+                            training: 'rgb(170, 70, 170)',
+                            reality: 'rgb(225, 120, 130)',
+                          }
+                          
+                          const shouldHighlight = isFirstRoute && ['ritual', 'exploration', 'training', 'reality'].includes(stage.phase)
+                          
                           return (
                             <Link key={route.href} href={route.href} className="no-underline">
-                              <div className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer whitespace-nowrap no-underline ${
-                                isActive
-                                  ? `${style.activeBg} ${style.activeText}`
-                                  : `text-white/60 ${style.hoverBg} ${style.hoverText}`
-                              }`}>
-                                {isActive && <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-current" />}
+                              <div 
+                                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer whitespace-nowrap no-underline ${
+                                  shouldHighlight
+                                    ? 'border border-current'
+                                    : isActive
+                                    ? `${style.activeBg} ${style.activeText}`
+                                    : `text-white/60 ${style.hoverBg} ${style.hoverText}`
+                                }`}
+                                style={shouldHighlight ? {
+                                  backgroundColor: pillColors[stage.phase] || 'transparent',
+                                  borderColor: textColors[stage.phase] || 'currentColor',
+                                  color: textColors[stage.phase] || 'currentColor'
+                                } : undefined}
+                              >
+                                {(isActive || shouldHighlight) && <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-current" />}
                                 {route.label}
                               </div>
                             </Link>
