@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
       .from('a2_user_route_progress')
       .select(
         `id, route_id, porcentaje_completado, estado, 
-         a2_learning_routes!inner(nombre)`
+         a2_learning_routes(nombre)`
       )
       .eq('user_id', userId)
       .eq('route_id', routeId || null)
@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      route_name: routeProgress.a2_learning_routes?.nombre || 'Learning Route',
+      route_name: (routeProgress?.a2_learning_routes as any)?.nombre || 'Learning Route',
       progress_percentage: progressPercentage,
       missions_completed: completedMissions,
       total_missions: totalMissions,
