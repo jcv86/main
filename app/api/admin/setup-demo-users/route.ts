@@ -44,75 +44,75 @@ export async function POST(request: Request) {
 
     for (const user of DEMO_USERS) {
       try {
-        // Check if user already exists
-        const { data: existingUser } = await supabase.auth.admin.getUserById(
-          user.email,
-          { userEmail: user.email }
-        )
+        // Try to create user - if it exists, the error will be caught
+        const { data, error } = await supabase.auth.admin.createUser({
+          email: user.email,
+          password: user.password,
+          email_confirm: true,
+          user_metadata: {
+            name: user.fullName,
+            role: user.role,
+          },
+        })
 
-        if (existingUser) {
-          console.log(`User ${user.email} already exists`)
+        if (error) {
+          // Check if error is because user already exists
+          if (error.message.includes('already exists')) {
+            console.log(`User ${user.email} already exists`)
+            results.push({
+              email: user.email,
+              success: false,
+              message: 'User already exists',
+            })
+            continue
+          }
+          
+          console.error(`Error creating user ${user.email}:`, error)
           results.push({
             email: user.email,
             success: false,
-            message: 'User already exists',
+            message: error.message,
           })
           continue
         }
+
+        // Create user profile
+        if (data?.user) {
+          const { error: profileError } = await supabase
+            .from('users')
+            .upsert(
+              {
+                id: data.user.id,
+                email: user.email,
+                full_name: user.fullName,
+                updated_at: new Date(),
+              },
+              { onConflict: 'id' }
+            )
+
+          if (profileError) {
+            console.error(`Error creating profile for ${user.email}:`, profileError)
+            results.push({
+              email: user.email,
+              success: false,
+              message: `User created but profile failed: ${profileError.message}`,
+            })
+            continue
+          }
+
+          results.push({
+            email: user.email,
+            success: true,
+            userId: data.user.id,
+            message: 'Demo user created successfully',
+          })
+        }
       } catch (e) {
-        // User doesn't exist, continue with creation
-      }
-
-      // Create user
-      const { data, error } = await supabase.auth.admin.createUser({
-        email: user.email,
-        password: user.password,
-        email_confirm: true,
-        user_metadata: {
-          name: user.fullName,
-          role: user.role,
-        },
-      })
-
-      if (error) {
-        console.error(`Error creating user ${user.email}:`, error)
+        console.error(`Exception creating user ${user.email}:`, e)
         results.push({
           email: user.email,
           success: false,
-          message: error.message,
-        })
-        continue
-      }
-
-      // Create user profile
-      if (data.user) {
-        const { error: profileError } = await supabase
-          .from('users')
-          .upsert(
-            {
-              id: data.user.id,
-              email: user.email,
-              full_name: user.fullName,
-              updated_at: new Date(),
-            },
-            { onConflict: 'id' }
-          )
-
-        if (profileError) {
-          console.error(`Error creating profile for ${user.email}:`, profileError)
-          results.push({
-            email: user.email,
-            success: false,
-            message: `User created but profile failed: ${profileError.message}`,
-          })
-          continue
-        }
-
-        results.push({
-          email: user.email,
-          success: true,
-          userId: data.user.id,
-          message: 'Demo user created successfully',
+          message: `Exception: ${String(e)}`,
         })
       }
     }
