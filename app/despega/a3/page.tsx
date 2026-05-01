@@ -6,8 +6,6 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Zap, BarChart3, Target, Video, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-import A3ProgressDashboard from '@/components/a3-progress-dashboard'
-import A3GamificationWidget from '@/components/a3-gamification-widget'
 
 export default function EntrenamientoIntensivePage() {
   const router = useRouter()
@@ -37,25 +35,6 @@ export default function EntrenamientoIntensivePage() {
             <p className="text-xl text-white/85 max-w-3xl leading-relaxed">
               Practica con simulaciones realistas, obtén feedback multimodal inmediato de IA, y avanza de principiante a maestría con análisis profundo de tu desempeño.
             </p>
-          </div>
-        </div>
-
-        {/* Progress and Gamification Dashboard */}
-        <div className="mb-12 space-y-4">
-          <div>
-            <h2 className="text-3xl font-bold text-white mb-2">Tu Progreso</h2>
-            <p className="text-white/70 mb-4">
-              Monitorea tu desempeño, gana puntos y desbloquea badges.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="md:col-span-2">
-              <A3ProgressDashboard />
-            </div>
-            <div>
-              <A3GamificationWidget />
-            </div>
           </div>
         </div>
 
