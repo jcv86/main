@@ -237,11 +237,10 @@ export function DespegaNavbar() {
                         </span>
                       </div>
                       <div className="px-2 pb-2 space-y-0.5">
-                        {stage.routes.map((route, idx) => {
+                        {stage.routes.map((route) => {
                           const isActive = pathname === route.href
-                          const isFirstRoute = idx === 0
                           
-                          // Get phase-specific colors for pill highlighting
+                          // Get phase-specific colors for hover highlighting
                           const pillColors: Record<string, string> = {
                             ritual: 'rgba(80, 160, 170, 0.3)',
                             exploration: 'rgba(90, 90, 150, 0.3)',
@@ -256,25 +255,35 @@ export function DespegaNavbar() {
                             reality: 'rgb(225, 120, 130)',
                           }
                           
-                          const shouldHighlight = isFirstRoute && ['ritual', 'exploration', 'training', 'reality'].includes(stage.phase)
-                          
                           return (
                             <Link key={route.href} href={route.href} className="no-underline">
                               <div 
-                                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer whitespace-nowrap no-underline ${
-                                  shouldHighlight
-                                    ? 'border border-current'
-                                    : isActive
-                                    ? `${style.activeBg} ${style.activeText}`
-                                    : `text-white/60 ${style.hoverBg} ${style.hoverText}`
-                                }`}
-                                style={shouldHighlight ? {
-                                  backgroundColor: pillColors[stage.phase] || 'transparent',
+                                className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer whitespace-nowrap no-underline text-white/60 hover:border hover:border-current"
+                                style={{
+                                  backgroundColor: isActive ? (pillColors[stage.phase] || 'transparent') : 'transparent',
+                                  color: isActive ? (textColors[stage.phase] || 'currentColor') : 'inherit',
                                   borderColor: textColors[stage.phase] || 'currentColor',
-                                  color: textColors[stage.phase] || 'currentColor'
-                                } : undefined}
+                                  '--hover-bg': pillColors[stage.phase],
+                                  '--hover-color': textColors[stage.phase],
+                                } as React.CSSProperties & Record<string, any>}
+                                onMouseEnter={(e) => {
+                                  const el = e.currentTarget as HTMLElement
+                                  if (!isActive) {
+                                    el.style.backgroundColor = pillColors[stage.phase] || 'transparent'
+                                    el.style.color = textColors[stage.phase] || 'currentColor'
+                                    el.style.borderStyle = 'solid'
+                                  }
+                                }}
+                                onMouseLeave={(e) => {
+                                  const el = e.currentTarget as HTMLElement
+                                  if (!isActive) {
+                                    el.style.backgroundColor = 'transparent'
+                                    el.style.color = ''
+                                    el.style.borderStyle = ''
+                                  }
+                                }}
                               >
-                                {(isActive || shouldHighlight) && <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-current" />}
+                                {isActive && <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-current" />}
                                 {route.label}
                               </div>
                             </Link>
