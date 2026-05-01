@@ -135,11 +135,11 @@ export default function SignInPage() {
         {/* Header section */}
         <div className="text-center space-y-3 mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="p-2 bg-purple/50 rounded-lg">
+            <div className="p-2 rounded-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}>
               <Sparkles className="w-6 h-6 text-white" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold text-purple ">
+          <h1 className="text-4xl" style={{ color: 'rgba(80, 160, 170, 0.8)', fontWeight: '500' }}>
             Despega Tu Carrera
           </h1>
           <p className="text-lg text-muted-foreground dark:text-white/85">
@@ -151,7 +151,7 @@ export default function SignInPage() {
         </div>
 
         {/* Main Card */}
-        <Card className="border-2 border-purple/20/50 dark:border-purple/50 shadow-xl backdrop-blur-sm bg-white/80 dark:bg-background/80">
+        <Card className="border-2 shadow-xl backdrop-blur-sm dark:bg-background/80" style={{ borderColor: 'rgba(80, 160, 170, 0.6)', backgroundColor: 'rgba(0, 0, 0, 0)' }}>
           <CardContent className="pt-8 pb-8 space-y-5">
             {/* OAuth Error Alert */}
             {error && (
@@ -184,7 +184,8 @@ export default function SignInPage() {
             <Button
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
-              className="w-full h-12 text-base gap-2 bg-blue hover:bg-blue/80 text-white shadow-md hover:shadow-lg transition-all duration-200 "
+              className="w-full h-12 text-base gap-2 text-white shadow-md hover:shadow-lg transition-all duration-200"
+              style={{ backgroundColor: 'rgba(14, 118, 168, 0.6)' }}
             >
               {isLoadingLinkedIn ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -261,17 +262,17 @@ export default function SignInPage() {
             </div>
 
             {/* Trust indicators */}
-            <div className="grid grid-cols-3 gap-3 py-2 border-t border-muted/10 pt-4">
+            <div className="grid grid-cols-3 gap-3 py-2 border-t border-muted/10 pt-4" style={{ borderColor: 'rgb(80, 160, 170, 0.6)' }}>
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple dark:text-purple/40">6</div>
+                <div className="text-2xl font-bold" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>6</div>
                 <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium">Tests</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue dark:text-blue/40">120+</div>
+                <div className="text-2xl font-bold" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>120+</div>
                 <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium">Recursos</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-cyan dark:text-cyan/40">24/7</div>
+                <div className="text-2xl font-bold" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>24/7</div>
                 <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium">Coach IA</p>
               </div>
             </div>
@@ -279,11 +280,11 @@ export default function SignInPage() {
             {/* Terms */}
             <p className="text-xs text-center text-muted-foreground dark:text-muted-foreground leading-relaxed pt-2">
               Al ingresar, aceptas nuestros{' '}
-              <a href="/terms" className="text-blue dark:text-blue/40 hover:underline font-medium">
+              <a href="/terms" className="hover:underline font-medium" style={{ color: 'rgba(80, 160, 170)' }}>
                 términos de servicio
               </a>
               {' '}y{' '}
-              <a href="/privacy" className="text-blue dark:text-blue/40 hover:underline font-medium">
+              <a href="/privacy" className="hover:underline font-medium" style={{ color: 'rgba(80, 160, 170)' }}>
                 política de privacidad
               </a>
             </p>
