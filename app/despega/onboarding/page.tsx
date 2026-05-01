@@ -206,10 +206,10 @@ export default function DespegaOnboarding() {
           {/* Hero Section */}
           <div className="text-center space-y-4">
             <div className="space-y-2">
-              <h1 className="text-5xl md:text-6xl text-foreground dark:text-foreground leading-tight" style={{ fontWeight: '300' }}>
+              <h1 className="text-5xl md:text-6xl font-light text-foreground dark:text-foreground leading-tight">
                 Despega Cerebral
               </h1>
-              <p className="text-xl dark:text-muted-foreground" style={{ color: 'rgb(80, 160, 170, 0.6)' }}>
+              <p className="text-xl text-muted-foreground dark:text-muted-foreground">
                 Tu punto de partida en DespegaTuCarrera
               </p>
             </div>
@@ -219,7 +219,7 @@ export default function DespegaOnboarding() {
           <Card className="border-0 shadow-lg bg-white dark:bg-background">
             <CardContent className="pt-8 space-y-6">
               <div className="space-y-4">
-                <p className="text-foreground dark:text-foreground leading-relaxed" style={{ fontSize: '16px' }}>
+                <p className="text-base text-foreground dark:text-foreground leading-relaxed">
                   Antes de hablar de metas, decisiones o próximos pasos, necesitamos entender algo más profundo: <strong>tu patrón natural de acción</strong>.
                 </p>
                 
@@ -228,24 +228,24 @@ export default function DespegaOnboarding() {
                 </p>
 
                 <div className="p-4 bg-muted/5 dark:bg-card/50 rounded-[28px] border border-muted/20 dark:border-card my-4">
-                  <p className="text-muted-foreground dark:text-muted-foreground" style={{ fontSize: '14px' }}>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     En las próximas 28 preguntas explorarás cómo tiendes a actuar cuando nadie te está mirando, cuando decides rápido, cuando dudas o cuando lideras.
                   </p>
                 </div>
 
                 <div className="space-y-2">
                   <p className="text-muted-foreground dark:text-muted-foreground">
-                     - No hay respuestas correctas o incorrectas.
+                     No hay respuestas correctas o incorrectas.
                   </p>
                   <p className="text-muted-foreground dark:text-muted-foreground">
-                     - No hay perfiles mejores que otros.
+                     No hay perfiles mejores que otros.
                   </p>
                   <p className="text-muted-foreground dark:text-muted-foreground">
-                     - Existen distintos patrones naturales de acción.
+                     Existen distintos patrones naturales de acción.
                   </p>
                 </div>
 
-                <p className="italic pt-2" style={{ color: 'rgb(246, 245, 244)' }}>
+                <p className="text-sm italic pt-2 text-foreground dark:text-foreground">
                   En unos minutos descubrirás cuál describe mejor tu forma de moverte en el mundo.
                 </p>
               </div>
@@ -256,7 +256,7 @@ export default function DespegaOnboarding() {
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="border-0 shadow-lg bg-background">
               <CardContent className="pt-8">
-                <h3 className="text-xl mb-3" style={{ fontWeight: '600', color: 'rgb(80, 160, 170)' }}>¿Qué es Despega Cerebral?</h3>
+                <h3 className="text-xl font-semibold mb-3 text-cyan dark:text-cyan">¿Qué es Despega Cerebral?</h3>
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground leading-relaxed">
                   Es la base de tu recorrido dentro de DespegaTuCarrera. Se inspira en marcos conductuales ampliamente estudiados, pero no busca encasillarte.
                 </p>
@@ -268,11 +268,11 @@ export default function DespegaOnboarding() {
 
             <Card className="border-0 shadow-lg bg-background">
               <CardContent className="pt-8">
-                <h3 className="text-xl font-bold mb-3" style={{ color: 'rgb(200, 200, 200, 0.6)' }}>¿Por qué empezar por aquí?</h3>
-                <p className="text-sm leading-relaxed font-semibold" style={{ color: 'rgb(186, 184, 181)' }}>
+                <h3 className="text-xl font-bold mb-3 text-muted-foreground dark:text-muted-foreground/60">¿Por qué empezar por aquí?</h3>
+                <p className="text-sm leading-relaxed font-semibold text-muted-foreground dark:text-muted-foreground">
                   Porque sin autoconocimiento, cualquier meta es aleatoria.
                 </p>
-                <p className="text-sm leading-relaxed mt-3" style={{ color: 'rgb(186, 184, 181)' }}>
+                <p className="text-sm leading-relaxed mt-3 text-muted-foreground dark:text-muted-foreground">
                   DespegaTuCarrera no parte por decirte qué hacer. Parte por ayudarte a entender cómo funcionas.
                 </p>
               </CardContent>
@@ -286,21 +286,21 @@ export default function DespegaOnboarding() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-4">
-                <div className="text-2xl min-w-fit" style={{ color: 'rgb(80, 160, 170)' }}>1</div>
+                <div className="text-2xl min-w-fit text-cyan dark:text-cyan">1</div>
                 <div>
                   <p className="font-semibold text-foreground dark:text-foreground">Responde con honestidad total</p>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground">No pienses en cómo deberías ser, sino en cómo realmente actúas.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="text-2xl min-w-fit" style={{ color: 'rgb(80, 160, 170)' }}>2</div>
+                <div className="text-2xl min-w-fit text-cyan dark:text-cyan">2</div>
                 <div>
                   <p className="font-semibold text-foreground dark:text-foreground">Tu primer impulso es el más preciso</p>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground">No pienses demasiado en las opciones. Tu instinto es lo más acertado.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="text-2xl min-w-fit" style={{ color: 'rgb(80, 160, 170)' }}>3</div>
+                <div className="text-2xl min-w-fit text-cyan dark:text-cyan">3</div>
                 <div>
                   <p className="font-semibold text-foreground dark:text-foreground">Este es tu punto de partida</p>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground">Primero claridad. Luego dirección.</p>
@@ -310,7 +310,7 @@ export default function DespegaOnboarding() {
           </Card>
 
           {/* Example Question Preview */}
-          <Card className="bg-background" style={{ borderColor: 'rgb(80, 160, 170, 0.4)', borderWidth: '2px' }}>
+          <Card className="bg-background border-2 border-cyan/40">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <span>Así se ve una pregunta</span>
@@ -321,8 +321,8 @@ export default function DespegaOnboarding() {
                 <span className="font-semibold text-muted-foreground dark:text-muted-foreground">Evaluación Despega Cerebral</span>
                 <span className="text-muted-foreground dark:text-muted-foreground">1/28</span>
               </div>
-              <div className="h-1 rounded-full overflow-hidden" style={{ backgroundColor: 'rgb(70, 100, 110)' }}>
-                <div className="h-full rounded-full" style={{ width: '4%', backgroundColor: 'rgb(0, 200, 200)' }}></div>
+              <div className="h-1 rounded-full overflow-hidden bg-slate-600 dark:bg-slate-600">
+                <div className="h-full rounded-full w-1 bg-cyan dark:bg-cyan"></div>
               </div>
               
               <div className="space-y-4">
@@ -398,7 +398,7 @@ export default function DespegaOnboarding() {
                 </Button>
               </>
             ) : (
-              <Button onClick={() => setStep("conozcamonos1")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all" style={{ backgroundColor: 'rgb(80, 160, 170, 0.4)', borderRadius: '2px' }}>
+              <Button onClick={() => setStep("conozcamonos1")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-sm bg-cyan/40 hover:bg-cyan/50 text-foreground dark:text-foreground">
                 Cuando estés listo, comienza
               </Button>
             )}
