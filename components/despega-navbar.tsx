@@ -234,7 +234,12 @@ export function DespegaNavbar() {
                       </div>
                       <div className="px-2 pb-2 space-y-0.5">
                         {stage.routes.map((route) => {
+                          // Only mark as active if this stage's dropdown is open AND the route matches
+                          // OR if we're truly on this route
                           const isActive = pathname === route.href
+                          if (isActive) {
+                            console.log(`[v0] ACTIVE ROUTE DETECTED: stage="${stage.name}" route="${route.label}" href="${route.href}" matches pathname="${pathname}"`)
+                          }
                           
                           // Get phase-specific colors for hover highlighting
                           const pillColors: Record<string, string> = {
