@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import useSWR from 'swr'
+import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { 
   Save, 
   Moon, 
@@ -12,7 +13,8 @@ import {
   Eye, 
   LogIn,
   Volume2,
-  AlertCircle
+  AlertCircle,
+  CheckCircle2
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -63,6 +65,7 @@ const CONTACT_METHODS = [
 ]
 
 export default function SettingsPage() {
+  const { user } = useAuthRedirect()
   const [preferences, setPreferences] = useState<Partial<UserPreferences & {
     learning_style: string
     difficulty_level: string
@@ -141,7 +144,7 @@ export default function SettingsPage() {
       {/* Alerts */}
       {saveSuccess && (
         <div className="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400 text-sm flex items-center gap-2">
-          <Check className="w-4 h-4" />
+          <CheckCircle2 className="w-4 h-4" />
           Preferencias guardadas exitosamente
         </div>
       )}
@@ -390,13 +393,5 @@ export default function SettingsPage() {
         <p className="text-white/60 text-sm">Tus cambios se guardan de forma segura</p>
       </div>
     </div>
-  )
-}
-
-function Check({ className }: { className: string }) {
-  return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-    </svg>
   )
 }
