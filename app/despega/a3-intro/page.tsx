@@ -77,33 +77,33 @@ export default function A3IntroPage() {
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2">
-                <CheckCircle2 className="w-6 h-6 text-green" />
+                <CheckCircle2 className="w-6 h-6 text-orange" />
                 Las 3 Modalidades de Entrenamiento
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
-                <div className="p-4 bg-green/5 dark:bg-green/30 rounded-[28px] border border-green/20 dark:border-green">
+                <div className="p-4 bg-orange/5 dark:bg-orange/30 rounded-[28px] border border-orange/20 dark:border-orange">
                   <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-green text-white rounded-full flex items-center justify-center font-bold">1</div>
+                    <div className="flex-shrink-0 w-8 h-8 bg-orange text-white rounded-full flex items-center justify-center font-bold">1</div>
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-white">Simulación Guiada</p>
                       <p className="text-sm text-muted-foreground dark:text-muted-foreground">Con hints y orientación. Perfecto para aprender técnicas nuevas.</p>
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-yellow/5 dark:bg-yellow/30 rounded-[28px] border border-yellow/20 dark:border-yellow">
+                <div className="p-4 bg-orange/10 dark:bg-orange/40 rounded-[28px] border border-orange/30 dark:border-orange">
                   <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-yellow text-white rounded-full flex items-center justify-center font-bold">2</div>
+                    <div className="flex-shrink-0 w-8 h-8 bg-orange/80 text-white rounded-full flex items-center justify-center font-bold">2</div>
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-white">Simulación Estructurada</p>
                       <p className="text-sm text-muted-foreground dark:text-muted-foreground">Preguntas realistas sin ayuda. Te prepara para el verdadero escenario.</p>
                     </div>
                   </div>
                 </div>
-                <div className="p-4 bg-red/5 dark:bg-red/30 rounded-[28px] border border-red/20 dark:border-red">
+                <div className="p-4 bg-orange/15 dark:bg-orange/50 rounded-[28px] border border-orange/40 dark:border-orange">
                   <div className="flex gap-3">
-                    <div className="flex-shrink-0 w-8 h-8 bg-red text-white rounded-full flex items-center justify-center font-bold">3</div>
+                    <div className="flex-shrink-0 w-8 h-8 bg-orange/60 text-white rounded-full flex items-center justify-center font-bold">3</div>
                     <div>
                       <p className="font-semibold text-muted/90 dark:text-white">Simulación Desafiante</p>
                       <p className="text-sm text-muted-foreground dark:text-muted-foreground">Preguntas difíciles bajo presión de tiempo. Máxima dificultad.</p>
@@ -151,7 +151,7 @@ export default function A3IntroPage() {
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2">
-                <Zap className="w-6 h-6 text-yellow" />
+                <Zap className="w-6 h-6 text-orange" />
                 Lo que Practicarás
               </CardTitle>
             </CardHeader>
