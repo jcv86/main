@@ -395,7 +395,7 @@ export default function LandingPageOptimized() {
       {/* PARA TI SI */}
       <section className="container mx-auto px-4 py-20 bg-muted/5 dark:bg-transparent/50 rounded-3xl">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+          <h2 className="text-3xl md:text-4xl text-center mb-4" style={{ fontWeight: '500' }}>
             DTC es para ti si...
           </h2>
           <p className="text-lg text-center text-foreground/70 mb-12 max-w-2xl mx-auto">
@@ -403,9 +403,9 @@ export default function LandingPageOptimized() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-purple/50 hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 hover:shadow-lg transition-shadow" style={{ borderColor: 'rgba(80, 160, 170, 0.6)' }}>
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-purple dark:text-purple/40" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: 'rgba(100, 100, 100)' }}>
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Te sientes estancado
@@ -415,9 +415,9 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-blue/50 hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 hover:shadow-lg transition-shadow" style={{ borderColor: 'rgba(80, 160, 170, 0.6)' }}>
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-blue dark:text-blue/40" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: 'rgba(100, 100, 100)' }}>
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Estás en transición
@@ -427,9 +427,9 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-green hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 hover:shadow-lg transition-shadow" style={{ borderColor: 'rgba(80, 160, 170, 0.8)' }}>
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-green dark:text-green/40" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: 'rgba(200, 200, 200)' }}>
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Quieres reenfocarte
@@ -439,9 +439,9 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-red/50 hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 hover:shadow-lg transition-shadow" style={{ borderColor: 'rgba(80, 160, 170, 0.8)' }}>
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-red dark:text-red/40" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: 'rgba(200, 200, 200)' }}>
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Necesitas estructura
@@ -451,9 +451,9 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-orange hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 hover:shadow-lg transition-shadow" style={{ borderColor: 'rgba(80, 160, 170)' }}>
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-orange dark:text-orange/40" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: 'rgba(250, 250, 250)' }}>
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Quieres entrenar entrevistas
@@ -463,9 +463,9 @@ export default function LandingPageOptimized() {
               </p>
             </div>
 
-            <div className="bg-transparent rounded-[28px] p-6 border-l-4 border-yellow/50 hover:shadow-lg transition-shadow">
+            <div className="bg-transparent rounded-[28px] p-6 border-l-4 hover:shadow-lg transition-shadow" style={{ borderColor: 'rgba(80, 160, 170)' }}>
               <h3 className="font-bold text-lg mb-3 flex items-center gap-2">
-                <svg className="w-5 h-5 text-yellow dark:text-yellow/40" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" style={{ color: 'rgba(250, 250, 250)' }}>
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
                 Buscas avanzar con criterio
@@ -476,10 +476,9 @@ export default function LandingPageOptimized() {
             </div>
           </div>
 
-          <div className="mt-12 p-8 bg-blue/5 dark:bg-blue/20 rounded-[28px] border border-blue/20 dark:border-blue">
+          <div className="mt-12 p-8 rounded-[28px]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderColor: 'rgba(80, 160, 170, 0.4)' }}>
             <p className="text-center text-foreground text-lg">
-              Si alguna de estas situaciones es tuya, <span className="font-bold">DTC está diseñado para ti</span>.
-            </p>
+              Si alguna de estas situaciones es tuya, <span className="font-bold" style={{ color: 'rgb(80, 160, 170)' }}>DTC está diseñado para ti</span>.</p>
           </div>
         </div>
       </section>
@@ -487,7 +486,7 @@ export default function LandingPageOptimized() {
       {/* FAQ ESTRATÉGICO */}
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+          <h2 className="text-3xl md:text-4xl text-center mb-4" style={{ fontWeight: '300' }}>
             Preguntas frecuentes
           </h2>
           <p className="text-lg text-center text-foreground/70 mb-12 max-w-2xl mx-auto">
@@ -495,9 +494,9 @@ export default function LandingPageOptimized() {
           </p>
 
           <div className="space-y-4">
-            <details className="group bg-transparent rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
-              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
-                <span>¿Es DTC un test cualquiera o algo más?</span>
+            <details className="group rounded-[28px] p-6 hover:shadow-md transition-shadow cursor-pointer" style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)', borderStyle: 'none' }}>
+              <summary className="flex items-center justify-between text-lg text-foreground">
+                <span style={{ fontWeight: '500' }}>¿Es DTC un test cualquiera o algo más?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
               </summary>
               <div className="mt-4 pt-4 border-t border-muted/20 dark:border-muted/70 text-foreground/80 text-sm space-y-2">
@@ -507,9 +506,9 @@ export default function LandingPageOptimized() {
               </div>
             </details>
 
-            <details className="group bg-transparent rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
-              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
-                <span>¿Qué pasa si estoy estancado? ¿Realmente ayuda?</span>
+            <details className="group rounded-[28px] p-6 hover:shadow-md transition-shadow cursor-pointer" style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)', borderStyle: 'none' }}>
+              <summary className="flex items-center justify-between text-lg text-foreground">
+                <span style={{ fontWeight: '500' }}>¿Qué pasa si estoy estancado? ¿Realmente ayuda?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
               </summary>
               <div className="mt-4 pt-4 border-t border-muted/20 dark:border-muted/70 text-foreground/80 text-sm space-y-2">
@@ -519,9 +518,9 @@ export default function LandingPageOptimized() {
               </div>
             </details>
 
-            <details className="group bg-transparent rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
-              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
-                <span>¿Es solo para buscar trabajo o también para crecimiento integral?</span>
+            <details className="group rounded-[28px] p-6 hover:shadow-md transition-shadow cursor-pointer" style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)', borderStyle: 'none' }}>
+              <summary className="flex items-center justify-between text-lg text-foreground">
+                <span style={{ fontWeight: '500' }}>¿Es solo para buscar trabajo o también para crecimiento integral?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
               </summary>
               <div className="mt-4 pt-4 border-t border-muted/20 dark:border-muted/70 text-foreground/80 text-sm space-y-2">
@@ -531,9 +530,9 @@ export default function LandingPageOptimized() {
               </div>
             </details>
 
-            <details className="group bg-transparent rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
-              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
-                <span>¿Cómo me diferencio realmente en el mercado?</span>
+            <details className="group rounded-[28px] p-6 hover:shadow-md transition-shadow cursor-pointer" style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)', borderStyle: 'none' }}>
+              <summary className="flex items-center justify-between text-lg text-foreground">
+                <span style={{ fontWeight: '500' }}>¿Cómo me diferencio realmente en el mercado?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
               </summary>
               <div className="mt-4 pt-4 border-t border-muted/20 dark:border-muted/70 text-foreground/80 text-sm space-y-2">
@@ -543,9 +542,9 @@ export default function LandingPageOptimized() {
               </div>
             </details>
 
-            <details className="group bg-transparent rounded-[28px] border border-muted/20 dark:border-muted/70 p-6 hover:shadow-md transition-shadow cursor-pointer">
-              <summary className="flex items-center justify-between font-semibold text-lg text-foreground">
-                <span>¿Es útil si ya tengo experiencia o es solo para junior?</span>
+            <details className="group rounded-[28px] p-6 hover:shadow-md transition-shadow cursor-pointer" style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)', borderStyle: 'none' }}>
+              <summary className="flex items-center justify-between text-lg text-foreground">
+                <span style={{ fontWeight: '500' }}>¿Es útil si ya tengo experiencia o es solo para junior?</span>
                 <ChevronRight className="w-6 h-6 transition-transform group-open:rotate-90" />
               </summary>
               <div className="mt-4 pt-4 border-t border-muted/20 dark:border-muted/70 text-foreground/80 text-sm space-y-2">
@@ -561,7 +560,7 @@ export default function LandingPageOptimized() {
       {/* FINAL CTA */}
       <section className="container mx-auto px-4 py-20 bg-background">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl mb-4" style={{ fontWeight: '300' }}>
             ¿Listo para entenderte mejor?
           </h2>
           <p className="text-xl text-foreground/75 mb-8 max-w-2xl mx-auto">
@@ -571,7 +570,8 @@ export default function LandingPageOptimized() {
             <Link href="/auth/signin" prefetch={true}>
               <Button
                 size="lg"
-                className="bg-background"
+                className="text-white"
+                style={{ backgroundColor: 'rgba(80, 160, 170)', lineHeight: '2em' }}
               >
                 Quiero empezar mi proceso
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -580,8 +580,8 @@ export default function LandingPageOptimized() {
             <Link href="#how-it-works" prefetch={true}>
               <Button
                 size="lg"
-                variant="outline"
-                className="text-lg px-8 py-6 w-full sm:w-auto border-2 hover:bg-transparent dark:hover:bg-transparent"
+                className="text-lg px-8 w-full sm:w-auto"
+                style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)', borderWidth: '0px' }}
               >
                 Despejar dudas primero
               </Button>
