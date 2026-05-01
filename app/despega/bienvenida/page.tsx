@@ -237,42 +237,42 @@ export default function BienvenidaPage() {
         </div>
 
         {/* Tu Viaje en 4 Pilares */}
-        <div className="bg-white dark:bg-card rounded-lg shadow-sm p-8 mb-8 border border-muted/20 dark:border-card">
+        <div className="bg-white dark:bg-card rounded-[2px] shadow-sm p-8 mb-8 border-0 dark:border-card" style={{ backgroundColor: 'rgb(10, 30, 30)' }}>
           <h2 className="text-lg font-semibold text-muted/90 dark:text-white mb-6">Tu Viaje en 4 Pilares</h2>
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="flex items-start gap-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/20 flex-shrink-0">
-                <span className="text-lg font-bold text-purple">1</span>
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/20 flex-shrink-0" style={{ backgroundColor: 'rgb(80, 160, 170, 0.4)' }}>
+                <span className="text-lg font-bold text-purple" style={{ color: 'rgb(80, 160, 170)' }}>1</span>
               </div>
               <div>
-                <p className="font-medium text-muted/90 dark:text-white">Diagnóstico Personal</p>
+                <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(80, 160, 170)' }}>Diagnóstico Personal</p>
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">Comprende tu perfil único y punto de partida profesional</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/20 flex-shrink-0">
-                <span className="text-lg font-bold text-purple">2</span>
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/20 flex-shrink-0" style={{ backgroundColor: 'rgb(90, 90, 150, 0.4)' }}>
+                <span className="text-lg font-bold text-purple" style={{ color: 'rgb(90, 90, 150)' }}>2</span>
               </div>
               <div>
-                <p className="font-medium text-muted/90 dark:text-white">Plan Estratégico</p>
+                <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(90, 90, 150)' }}>Plan Estratégico</p>
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">Ruta de 90 días personalizada en 3 fases estructuradas</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-training/20 flex-shrink-0">
-                <span className="text-lg font-bold text-training">3</span>
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-training/20 flex-shrink-0" style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)' }}>
+                <span className="text-lg font-bold text-training" style={{ color: 'rgb(170, 70, 170)' }}>3</span>
               </div>
               <div>
-                <p className="font-medium text-muted/90 dark:text-white">Entrenamiento Intensivo</p>
+                <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(170, 70, 170)' }}>Entrenamiento Intensivo</p>
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">4 módulos × 4 niveles con feedback multimodal IA</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green/20 flex-shrink-0">
-                <span className="text-lg font-bold text-green">4</span>
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green/20 flex-shrink-0" style={{ backgroundColor: 'rgb(225, 120, 130, 0.4)' }}>
+                <span className="text-lg font-bold text-green" style={{ color: 'rgb(225, 120, 130)' }}>4</span>
               </div>
               <div>
-                <p className="font-medium text-muted/90 dark:text-white">Ejecución Real</p>
+                <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(225, 120, 130)' }}>Ejecución Real</p>
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">Del mercado laboral a tu colocación con soporte continuo</p>
               </div>
             </div>
