@@ -280,10 +280,10 @@ export function DespegaNavbar() {
                   )}
 
                   {/* Menu Items */}
-                  <Link href="/despega/progress" onClick={() => setProfileOpen(false)}>
+                  <Link href="/despega/profile" onClick={() => setProfileOpen(false)}>
                     <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-white/60 hover:text-white hover:bg-white/10 transition-all cursor-pointer">
-                      <Zap className="w-4 h-4" />
-                      Mi Progreso
+                      <User className="w-4 h-4" />
+                      Mi Perfil
                     </div>
                   </Link>
 
@@ -389,10 +389,10 @@ export function DespegaNavbar() {
                 </div>
               )}
 
-              <Link href="/despega/progress">
+              <Link href="/despega/profile">
                 <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-white/60 hover:text-white hover:bg-white/5">
-                  <Zap className="w-4 h-4" />
-                  Mi Progreso
+                  <User className="w-4 h-4" />
+                  Mi Perfil
                 </Button>
               </Link>
 
