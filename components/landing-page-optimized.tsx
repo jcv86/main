@@ -64,12 +64,12 @@ export default function LandingPageOptimized() {
       {/* SOCIAL PROOF BAND - THE 4 PILLARS */}
       <section className="container mx-auto px-4 py-12">
         <div className="max-w-6xl mx-auto">
-          <p className="text-center text-sm font-semibold text-foreground/60 mb-8 uppercase tracking-wider">Las 4 Fases de Tu Transformación</p>
+          <p className="text-center text-sm font-semibold text-foreground/60 mb-8 uppercase tracking-wider" style={{ fontSize: '24px' }}>Las 4 Fases de Tu Transformación</p>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {/* Pilar 1: El Ritual - Quién Eres Ahora (Purple #A855F7) */}
-            <div className="bg-transparent border-2 rounded-[28px] p-6 hover:shadow-lg transition-shadow" style={{ borderColor: 'rgb(0, 0, 0)', backgroundColor: 'rgba(80, 160, 170, 0.4)' }}>
-              <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 flex-shrink-0" style={{ backgroundColor: 'rgb(80, 160, 170, 0.8)' }}>
+            <div className="bg-transparent border-2 rounded-[28px] p-6 hover:shadow-lg transition-shadow" style={{ borderColor: 'rgba(0, 0, 0)', backgroundColor: 'rgba(80, 160, 170, 0.4)' }}>
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 flex-shrink-0" style={{ backgroundColor: 'rgba(80, 160, 170, 0.8)' }}>
                 <svg className="w-6 h-6 text-white" fill="white" viewBox="0 0 24 24">
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
                 </svg>
@@ -80,7 +80,7 @@ export default function LandingPageOptimized() {
 
             {/* Pilar 2: Exploración - Aprende Nuevas Formas (Blue #3B82F6) */}
             <div className="bg-transparent rounded-[28px] p-6 hover:shadow-lg transition-shadow" style={{ borderStyle: 'none', borderColor: 'rgba(80, 160, 170, 0.6)', backgroundColor: 'rgba(90, 90, 150, 0.4)' }}>
-              <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 flex-shrink-0" style={{ backgroundColor: 'rgb(90, 90, 150, 0.8)' }}>
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 flex-shrink-0" style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}>
                 <svg className="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M3 6c0 2 1 3 2 4c2 1 3 2 3 5c0 3-1 4-3 5c-1 1-2 2-2 4" strokeLinecap="round"/>
                   <path d="M21 6c0 2 -1 3 -2 4c-2 1 -3 2 -3 5c0 3 1 4 3 5c1 1 2 2 2 4" strokeLinecap="round" opacity="0.4"/>
@@ -95,7 +95,7 @@ export default function LandingPageOptimized() {
 
             {/* Pilar 3: Entrenamiento - Practica Siendo (Orange #F97316) */}
             <div className="bg-transparent rounded-[28px] p-6 hover:shadow-lg transition-shadow" style={{ borderStyle: 'none', backgroundColor: 'rgba(170, 70, 170, 0.4)' }}>
-              <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 flex-shrink-0" style={{ backgroundColor: 'rgb(170, 70, 170, 0.8)' }}>
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 flex-shrink-0" style={{ backgroundColor: 'rgba(170, 70, 170, 0.8)' }}>
                 <svg className="w-6 h-6 text-white" fill="white" viewBox="0 0 24 24">
                   <path d="M6 2a1 1 0 0 0-1 1v3H2a1 1 0 0 0 0 2h3v4H2a1 1 0 0 0 0 2h3v4H2a1 1 0 0 0 0 2h3v3a1 1 0 0 0 1 1h3v3a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-3h4a1 1 0 0 0 1-1v-4h3a1 1 0 0 0 0-2h-3v-4h3a1 1 0 0 0 0-2h-3V5a1 1 0 0 0-1-1h-4V1a1 1 0 0 0-1-1H6v2zm2 4v12h4V6H8z"/>
                 </svg>
@@ -106,7 +106,7 @@ export default function LandingPageOptimized() {
 
             {/* Pilar 4: La Realidad - Acción y Mercado (Red #FF0000) */}
             <div className="bg-transparent rounded-[28px] p-6 hover:shadow-lg transition-shadow" style={{ borderStyle: 'none', borderColor: 'rgba(255, 120, 130, 0.4)', backgroundColor: 'rgba(255, 120, 130, 0.4)' }}>
-              <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 flex-shrink-0" style={{ backgroundColor: 'rgb(255, 120, 130, 0.8)' }}>
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center mb-4 flex-shrink-0" style={{ backgroundColor: 'rgba(255, 120, 130, 0.8)' }}>
                 <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                   <circle cx="12" cy="12" r="2"/>
                   <circle cx="6" cy="9" r="2"/>
@@ -129,7 +129,7 @@ export default function LandingPageOptimized() {
       {/* THE PROBLEM SECTION */}
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
+          <h2 className="text-4xl md:text-5xl text-center mb-4" style={{ fontWeight: '300' }}>
             El Problema
           </h2>
           <p className="text-lg text-center text-foreground/70 mb-12 max-w-2xl mx-auto">
@@ -137,10 +137,10 @@ export default function LandingPageOptimized() {
           </p>
 
           <div className="grid grid-cols-1 gap-4">
-            <div className="flex gap-4 p-6 bg-transparent rounded-xl border border-red/40 hover:shadow-lg transition-shadow hover:border-red/60">
+            <div className="flex gap-4 p-6 bg-transparent rounded-xl border" style={{ borderColor: 'rgba(80, 160, 170, 0.4)' }}>
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-red/10 dark:bg-red/30 rounded-lg flex items-center justify-center">
-                  <span className="text-xl font-bold text-red dark:text-red/40">01</span>
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)' }}>
+                  <span className="text-xl font-bold" style={{ color: 'rgba(200, 200, 200)' }}>01</span>
                 </div>
               </div>
               <div>
@@ -149,10 +149,10 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            <div className="flex gap-4 p-6 bg-transparent rounded-xl border border-amber-400/40 hover:shadow-lg transition-shadow hover:border-amber-400/60">
+            <div className="flex gap-4 p-6 bg-transparent rounded-xl border" style={{ borderColor: 'rgba(80, 160, 170, 0.4)' }}>
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-amber-100 dark:bg-amber-900/30 rounded-lg flex items-center justify-center">
-                  <span className="text-xl font-bold text-amber-600 dark:text-amber-400">02</span>
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(80, 160, 170, 0.5)' }}>
+                  <span className="text-xl font-bold" style={{ color: 'rgba(200, 200, 200)' }}>02</span>
                 </div>
               </div>
               <div>
@@ -161,10 +161,10 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            <div className="flex gap-4 p-6 bg-transparent rounded-xl border border-orange/40 hover:shadow-lg transition-shadow hover:border-orange/60">
+            <div className="flex gap-4 p-6 bg-transparent rounded-xl border" style={{ borderColor: 'rgba(80, 160, 170, 0.4)' }}>
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-orange/10 dark:bg-orange/30 rounded-lg flex items-center justify-center">
-                  <span className="text-xl font-bold text-orange dark:text-orange/40">03</span>
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}>
+                  <span className="text-xl font-bold" style={{ color: 'rgba(200, 200, 200)' }}>03</span>
                 </div>
               </div>
               <div>
@@ -173,10 +173,10 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            <div className="flex gap-4 p-6 bg-transparent rounded-xl border border-blue/40 hover:shadow-lg transition-shadow hover:border-blue/60">
+            <div className="flex gap-4 p-6 bg-transparent rounded-xl border" style={{ borderColor: 'rgba(80, 160, 170, 0.4)' }}>
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-blue/10 dark:bg-blue/30 rounded-lg flex items-center justify-center">
-                  <span className="text-xl font-bold text-blue dark:text-blue/40">04</span>
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}>
+                  <span className="text-xl font-bold" style={{ color: 'rgba(200, 200, 200)' }}>04</span>
                 </div>
               </div>
               <div>
@@ -185,10 +185,10 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            <div className="flex gap-4 p-6 bg-transparent rounded-xl border border-purple/40 hover:shadow-lg transition-shadow hover:border-purple/60">
+            <div className="flex gap-4 p-6 bg-transparent rounded-xl border" style={{ borderColor: 'rgba(80, 160, 170, 0.4)' }}>
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-violet-100 dark:bg-violet-900/30 rounded-lg flex items-center justify-center">
-                  <span className="text-xl font-bold text-violet-600 dark:text-violet-400">05</span>
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(80, 160, 170, 0.8)' }}>
+                  <span className="text-xl font-bold" style={{ color: 'rgba(200, 200, 200)' }}>05</span>
                 </div>
               </div>
               <div>
@@ -197,10 +197,10 @@ export default function LandingPageOptimized() {
               </div>
             </div>
 
-            <div className="flex gap-4 p-6 bg-transparent rounded-xl border border-cyan/20 dark:border-cyan/30 hover:shadow-lg transition-shadow">
+            <div className="flex gap-4 p-6 bg-transparent rounded-xl border" style={{ borderColor: 'rgba(80, 160, 170, 0.4)' }}>
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-cyan/10 dark:bg-cyan/30 rounded-lg flex items-center justify-center">
-                  <span className="text-lg font-bold text-cyan dark:text-cyan/40">→</span>
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(80, 160, 170, 0.9)' }}>
+                  <span className="text-lg font-bold" style={{ color: 'rgba(80, 160, 170, 0.6)' }}>→</span>
                 </div>
               </div>
               <div>
@@ -222,7 +222,7 @@ export default function LandingPageOptimized() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             {/* Pilar 1: El Ritual */}
             <div className="text-center">
-              <div className="w-16 h-16 bg-purple dark:bg-purple rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#A855F7' }}>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.8)' }}>
                 <span className="text-2xl font-bold text-white">01</span>
               </div>
               <h3 className="font-bold text-xl mb-2 text-center">El Ritual - Quién Eres Ahora</h3>
@@ -233,7 +233,7 @@ export default function LandingPageOptimized() {
 
             {/* Pilar 2: Exploración */}
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue dark:bg-blue rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#3B82F6' }}>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}>
                 <span className="text-2xl font-bold text-white">02</span>
               </div>
               <h3 className="font-bold text-xl mb-2 text-center">Exploración - Diseña Tu Ruta</h3>
@@ -244,7 +244,7 @@ export default function LandingPageOptimized() {
 
             {/* Pilar 3: Entrenamiento */}
             <div className="text-center">
-              <div className="w-16 h-16 bg-orange dark:bg-orange rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#F97316' }}>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: 'rgba(170, 70, 170, 0.8)' }}>
                 <span className="text-2xl font-bold text-white">03</span>
               </div>
               <h3 className="font-bold text-xl mb-2 text-center">Entrenamiento - Simulación Intensiva</h3>
@@ -255,7 +255,7 @@ export default function LandingPageOptimized() {
 
             {/* Pilar 4: La Realidad */}
             <div className="text-center">
-              <div className="w-16 h-16 bg-red dark:bg-red rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: '#FF0000' }}>
+              <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg" style={{ backgroundColor: 'rgba(255, 120, 130, 0.8)' }}>
                 <span className="text-2xl font-bold text-white">04</span>
               </div>
               <h3 className="font-bold text-xl mb-2 text-center">La Realidad - Ejecución y Contexto</h3>
@@ -270,7 +270,7 @@ export default function LandingPageOptimized() {
       {/* DIFERENCIADORES */}
       <section className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4">
+          <h2 className="text-3xl md:text-4xl text-center mb-4" style={{ fontWeight: '300' }}>
             ¿Por qué DTC es diferente?
           </h2>
           <p className="text-lg text-center text-foreground/70 mb-12 max-w-2xl mx-auto">
@@ -281,15 +281,15 @@ export default function LandingPageOptimized() {
             {/* 1. Interpretamos - Brain icon */}
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-blue dark:bg-blue rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md" style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)' }}>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" style={{ color: 'rgba(80, 160, 170, 0.6)' }}>
                     <path strokeLinecap="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
                     <circle cx="12" cy="12" r="10"/>
                   </svg>
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-lg mb-2">Interpretamos, no solo medimos</h3>
+                <h3 className="text-lg mb-2" style={{ fontWeight: '500' }}>Interpretamos, no solo medimos</h3>
                 <p className="text-foreground/70 text-sm">
                   Los tests dan números. DTC interpreta qué significan realmente tus patrones y tensiones en tu contexto.
                 </p>
@@ -299,14 +299,14 @@ export default function LandingPageOptimized() {
             {/* 2. Personalizamos - User icon */}
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-blue dark:bg-blue rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md" style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)' }}>
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" style={{ color: 'rgba(80, 160, 170, 0.6)' }}>
                     <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
                   </svg>
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-lg mb-2">Personalizamos, no estandarizamos</h3>
+                <h3 className="text-lg mb-2" style={{ fontWeight: '500' }}>Personalizamos, no estandarizamos</h3>
                 <p className="text-foreground/70 text-sm">
                   Tu ruta, entrenamiento y asesoría se adaptan a tu perfil. No hay rutas genéricas para todos.
                 </p>
@@ -316,14 +316,14 @@ export default function LandingPageOptimized() {
             {/* 3. Entrenamos - Hands/Practice icon */}
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-blue dark:bg-blue rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md" style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)' }}>
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" style={{ color: 'rgba(80, 160, 170, 0.6)' }}>
                     <path d="M10 9h4V5h4l-7-7-7 7h4v4zm-1 2H3v8h16v-8h-6v4h-4v-4zm7-2h4v8h-4v-4z"/>
                   </svg>
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-lg mb-2">Entrenamos, no solo informamos</h3>
+                <h3 className="text-lg mb-2" style={{ fontWeight: '500' }}>Entrenamos, no solo informamos</h3>
                 <p className="text-foreground/70 text-sm">
                   Practicas habilidades reales con feedback de verdad. Aprendes haciendo, no leyendo.
                 </p>
@@ -333,14 +333,14 @@ export default function LandingPageOptimized() {
             {/* 4. Acompañamos - Support/Heart icon */}
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-blue dark:bg-blue rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md" style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)' }}>
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" style={{ color: 'rgba(80, 160, 170, 0.6)' }}>
                     <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
                   </svg>
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-lg mb-2">Acompañamos, no solo entregamos</h3>
+                <h3 className="text-lg mb-2" style={{ fontWeight: '500' }}>Acompañamos, no solo entregamos</h3>
                 <p className="text-foreground/70 text-sm">
                   Coach con IA disponible 24/7. Tu progreso se monitorea, ajusta y celebra en el camino.
                 </p>
@@ -350,22 +350,22 @@ export default function LandingPageOptimized() {
             {/* 5. Conectamos - Network/Layers icon */}
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-blue dark:bg-blue rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
-                  <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md" style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)' }}>
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" style={{ color: 'rgba(80, 160, 170, 0.6)' }}>
                     <circle cx="12" cy="12" r="2"/>
                     <circle cx="6" cy="9" r="2"/>
                     <circle cx="18" cy="9" r="2"/>
                     <circle cx="6" cy="15" r="2"/>
                     <circle cx="18" cy="15" r="2"/>
-                    <line x1="12" y1="14" x2="6" y2="17" stroke="white" strokeWidth="2"/>
-                    <line x1="12" y1="14" x2="18" y2="17" stroke="white" strokeWidth="2"/>
-                    <line x1="12" y1="10" x2="6" y2="7" stroke="white" strokeWidth="2"/>
-                    <line x1="12" y1="10" x2="18" y2="7" stroke="white" strokeWidth="2"/>
+                    <line x1="12" y1="14" x2="6" y2="17" stroke="currentColor" strokeWidth="2"/>
+                    <line x1="12" y1="14" x2="18" y2="17" stroke="currentColor" strokeWidth="2"/>
+                    <line x1="12" y1="10" x2="6" y2="7" stroke="currentColor" strokeWidth="2"/>
+                    <line x1="12" y1="10" x2="18" y2="7" stroke="currentColor" strokeWidth="2"/>
                   </svg>
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-lg mb-2">Conectamos desarrollo con contexto real</h3>
+                <h3 className="text-lg mb-2" style={{ fontWeight: '500' }}>Conectamos desarrollo con contexto real</h3>
                 <p className="text-foreground/70 text-sm">
                   No es autoconocimiento por autoconocimiento. Todo se traduce en oportunidades y direcciones reales del mercado.
                 </p>
@@ -375,14 +375,14 @@ export default function LandingPageOptimized() {
             {/* 6. Estructura - Balance/Flexibility icon */}
             <div className="flex gap-4">
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 bg-blue dark:bg-blue rounded-lg flex items-center justify-center flex-shrink-0 shadow-md">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 shadow-md" style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)' }}>
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" style={{ color: 'rgba(80, 160, 170, 0.6)' }}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                   </svg>
                 </div>
               </div>
               <div>
-                <h3 className="font-bold text-lg mb-2">Estructura con flexibilidad</h3>
+                <h3 className="text-lg mb-2" style={{ fontWeight: '500' }}>Estructura con flexibilidad</h3>
                 <p className="text-foreground/70 text-sm">
                   90 días bien planificados pero que se ajustan. Progreso medible sin ser rígido.
                 </p>
