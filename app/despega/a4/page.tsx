@@ -49,14 +49,14 @@ export default function EjecucionContinuaPage() {
               Volver
             </Button>
           </Link>
-          <Badge className="bg-amber-100 text-amber-900 dark:bg-amber-900/30 dark:text-amber-200">
+          <Badge className="bg-red/20 text-red border-2 border-red/40">
             Pilar 4: Ejecución Continua
           </Badge>
         </div>
 
         {/* Hero Section */}
         <div className="mb-12 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance">
+          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance text-red">
             Ejecución Continua
           </h1>
           <p className="text-xl text-muted-foreground dark:text-white/85 mb-3">
@@ -69,19 +69,19 @@ export default function EjecucionContinuaPage() {
           
           {/* Key Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 mb-8">
-            <div className="bg-muted/30 rounded-lg p-4">
+            <div className="bg-red/10 border-2 border-red/30 rounded-lg p-4">
               <div className="text-2xl mb-2">🎯</div>
-              <h3 className="font-semibold mb-1">Dashboard Ejecutivo</h3>
+              <h3 className="font-semibold mb-1 text-red">Dashboard Ejecutivo</h3>
               <p className="text-sm text-muted-foreground">Visualiza tu desempeño y avance en tiempo real</p>
             </div>
-            <div className="bg-muted/30 rounded-lg p-4">
+            <div className="bg-red/10 border-2 border-red/30 rounded-lg p-4">
               <div className="text-2xl mb-2">💼</div>
-              <h3 className="font-semibold mb-1">Oportunidades Reales</h3>
+              <h3 className="font-semibold mb-1 text-red">Oportunidades Reales</h3>
               <p className="text-sm text-muted-foreground">Acceso a ofertas laborales personalizadas del mercado</p>
             </div>
-            <div className="bg-muted/30 rounded-lg p-4">
+            <div className="bg-red/10 border-2 border-red/30 rounded-lg p-4">
               <div className="text-2xl mb-2">📚</div>
-              <h3 className="font-semibold mb-1">Aprendizaje Continuo</h3>
+              <h3 className="font-semibold mb-1 text-red">Aprendizaje Continuo</h3>
               <p className="text-sm text-muted-foreground">Recursos, tests y análisis para crecer profesionalmente</p>
             </div>
           </div>
@@ -89,24 +89,24 @@ export default function EjecucionContinuaPage() {
 
         {/* Navigation Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8 gap-1 bg-background/50">
-            <TabsTrigger value="dashboard" className="text-sm">
+          <TabsList className="grid w-full grid-cols-5 mb-8 gap-1 bg-background/50 border-2 border-red/20">
+            <TabsTrigger value="dashboard" className="text-sm data-[state=active]:bg-red/20 data-[state=active]:text-red">
               <Award className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Mi Progreso</span>
             </TabsTrigger>
-            <TabsTrigger value="oportunidades" className="text-sm">
+            <TabsTrigger value="oportunidades" className="text-sm data-[state=active]:bg-red/20 data-[state=active]:text-red">
               <Briefcase className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Empleos</span>
             </TabsTrigger>
-            <TabsTrigger value="tests" className="text-sm">
+            <TabsTrigger value="tests" className="text-sm data-[state=active]:bg-red/20 data-[state=active]:text-red">
               <Brain className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Conocimiento</span>
             </TabsTrigger>
-            <TabsTrigger value="radar" className="text-sm">
+            <TabsTrigger value="radar" className="text-sm data-[state=active]:bg-red/20 data-[state=active]:text-red">
               <Radar className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Análisis</span>
             </TabsTrigger>
-            <TabsTrigger value="recursos" className="text-sm">
+            <TabsTrigger value="recursos" className="text-sm data-[state=active]:bg-red/20 data-[state=active]:text-red">
               <BookOpen className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Biblioteca</span>
             </TabsTrigger>
@@ -114,8 +114,8 @@ export default function EjecucionContinuaPage() {
 
           {/* Mi Progreso - Dashboard */}
           <TabsContent value="dashboard" className="space-y-6">
-            <div className="mb-6">
-              <h2 className="text-3xl font-bold mb-2">Tu Desempeño Ejecutivo</h2>
+            <div className="mb-6 border-l-4 border-l-red pl-6">
+              <h2 className="text-3xl font-bold mb-2 text-red">Tu Desempeño Ejecutivo</h2>
               <p className="text-muted-foreground dark:text-muted-foreground">
                 Visualiza tu progreso integral en el programa, métricas clave de desempeño y recomendaciones personalizadas
               </p>
@@ -125,8 +125,8 @@ export default function EjecucionContinuaPage() {
 
           {/* Empleos - Oportunidades */}
           <TabsContent value="oportunidades" className="space-y-6">
-            <div className="mb-6">
-              <h2 className="text-3xl font-bold mb-2">Conecta con Oportunidades Reales</h2>
+            <div className="mb-6 border-l-4 border-l-red pl-6">
+              <h2 className="text-3xl font-bold mb-2 text-red">Conecta con Oportunidades Reales</h2>
               <p className="text-muted-foreground dark:text-muted-foreground">
                 Tu perfil profesional sincronizado con LinkedIn, ofertas laborales personalizadas según tu perfil e insights del mercado laboral chileno en tiempo real
               </p>
@@ -148,8 +148,8 @@ export default function EjecucionContinuaPage() {
 
           {/* Conocimiento - Tests */}
           <TabsContent value="tests" className="space-y-6">
-            <div className="mb-6">
-              <h2 className="text-3xl font-bold mb-2">Desarrolla Criterio Laboral</h2>
+            <div className="mb-6 border-l-4 border-l-red pl-6">
+              <h2 className="text-3xl font-bold mb-2 text-red">Desarrolla Criterio Laboral</h2>
               <p className="text-muted-foreground dark:text-muted-foreground">
                 Tests sobre historia, economía, tecnología, actualidad y cultura general. Mejora tu conocimiento contextual, acumula puntos DTC y desbloquea badges de experto
               </p>
@@ -159,8 +159,8 @@ export default function EjecucionContinuaPage() {
 
           {/* Análisis - Radar */}
           <TabsContent value="radar" className="space-y-6">
-            <div className="mb-6">
-              <h2 className="text-3xl font-bold mb-2">Radar Estratégico de Mercado</h2>
+            <div className="mb-6 border-l-4 border-l-red pl-6">
+              <h2 className="text-3xl font-bold mb-2 text-red">Radar Estratégico de Mercado</h2>
               <p className="text-muted-foreground dark:text-muted-foreground">
                 Análisis en profundidad de tendencias del mercado laboral, señales débiles de cambio y contexto estratégico para tu posicionamiento profesional
               </p>
@@ -170,8 +170,8 @@ export default function EjecucionContinuaPage() {
 
           {/* Biblioteca - Recursos */}
           <TabsContent value="recursos" className="space-y-6">
-            <div className="mb-6">
-              <h2 className="text-3xl font-bold mb-2">Biblioteca de Recursos</h2>
+            <div className="mb-6 border-l-4 border-l-red pl-6">
+              <h2 className="text-3xl font-bold mb-2 text-red">Biblioteca de Recursos</h2>
               <p className="text-muted-foreground dark:text-muted-foreground">
                 Acceso a libros, artículos, cursos y herramientas curadas para fortalecer tu desarrollo profesional continuo
               </p>
