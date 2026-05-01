@@ -105,20 +105,26 @@ export default function SettingsPage() {
     setError('')
     
     try {
+      console.log('[v0] Saving preferences:', preferences)
       const response = await fetch('/api/preferences', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(preferences)
       })
 
+      console.log('[v0] Save response status:', response.status)
+      const responseData = await response.json()
+      console.log('[v0] Save response data:', responseData)
+
       if (!response.ok) {
-        throw new Error('Failed to save preferences')
+        throw new Error(responseData.error || 'Failed to save preferences')
       }
 
       setSaveSuccess(true)
       mutate()
       setTimeout(() => setSaveSuccess(false), 3000)
     } catch (err) {
+      console.error('[v0] Save error:', err)
       setError(err instanceof Error ? err.message : 'Failed to save preferences')
     } finally {
       setLoading(false)

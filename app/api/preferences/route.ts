@@ -48,6 +48,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json() as Record<string, unknown>
+    console.log('[v0] POST preferences body:', body)
 
     const supabaseAdmin = createAdminClient()
 
@@ -63,16 +64,16 @@ export async function POST(request: NextRequest) {
         { onConflict: 'user_id' }
       )
       .select()
-      .single()
 
     if (error) {
-      console.error('[v0] Error saving preferences:', error)
-      return NextResponse.json({ error: 'Failed to save preferences' }, { status: 500 })
+      console.error('[v0] Error saving preferences - DB error:', error)
+      return NextResponse.json({ error: error.message || 'Failed to save preferences' }, { status: 500 })
     }
 
-    return NextResponse.json(data)
+    console.log('[v0] Preferences saved:', data)
+    return NextResponse.json(data?.[0] || { user_id: user.id })
   } catch (error) {
     console.error('[v0] POST preferences error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Internal server error' }, { status: 500 })
   }
 }
