@@ -92,27 +92,42 @@ export default function SignInPage() {
     }
   }
 
-  const quickLogin = async (testEmail: string, testPassword: string) => {
+  const quickLogin = async (testEmail: string) => {
     setError('')
     setIsLoadingDemo(true)
 
     try {
-      const supabase = createClient()
-      const { error } = await supabase.auth.signInWithPassword({
-        email: testEmail,
-        password: testPassword,
+      // Call the demo login endpoint instead of direct Supabase auth
+      const response = await fetch('/api/auth/demo-login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: testEmail }),
       })
 
-      if (error) {
-        setError('Error al iniciar sesión con usuario de prueba.')
-      } else {
+      const data = await response.json()
+
+      if (!response.ok) {
+        setError(data.error || 'Error al iniciar sesión con usuario de prueba.')
+        setIsLoadingDemo(false)
+        return
+      }
+
+      // Set the session using the returned tokens
+      if (data.session?.access_token) {
+        const supabase = createClient()
+        await supabase.auth.setSession({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token || '',
+        })
+        
         router.push('/dashboard')
         router.refresh()
       }
     } catch (err) {
-      console.error('Quick login error:', err)
+      console.error('[v0] Quick login error:', err)
       setError('Error al iniciar sesión. Por favor intenta nuevamente.')
-    } finally {
       setIsLoadingDemo(false)
     }
   }
@@ -206,7 +221,7 @@ export default function SignInPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => quickLogin("travis@nuanu.com", "travis123")}
+                onClick={() => quickLogin("travis@nuanu.com")}
                 disabled={isLoading}
                 className="text-xs h-10"
               >
@@ -222,7 +237,7 @@ export default function SignInPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => quickLogin("demo@despegaturcarrera.com", "demo123")}
+                onClick={() => quickLogin("demo@despegaturcarrera.com")}
                 disabled={isLoading}
                 className="text-xs h-10"
               >
@@ -238,7 +253,7 @@ export default function SignInPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => quickLogin("test@dtc.com", "test123")}
+                onClick={() => quickLogin("test@dtc.com")}
                 disabled={isLoading}
                 className="text-xs h-10"
               >
@@ -254,7 +269,7 @@ export default function SignInPage() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => quickLogin("admin@dtc.com", "admin123")}
+                onClick={() => quickLogin("admin@dtc.com")}
                 disabled={isLoading}
                 className="text-xs h-10"
               >
