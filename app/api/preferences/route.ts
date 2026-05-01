@@ -49,29 +49,36 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json() as Record<string, unknown>
     console.log('[v0] POST preferences body:', body)
+    console.log('[v0] User ID:', user.id)
 
     const supabaseAdmin = createAdminClient()
 
-    // Upsert user preferences
+    // Build the upsert data - include all fields from body
+    const upsertData = {
+      user_id: user.id,
+      updated_at: new Date().toISOString(),
+      ...body
+    }
+    console.log('[v0] Upsert data:', upsertData)
+
+    // Upsert user preferences using user_id as conflict column
     const { data, error } = await supabaseAdmin
       .from('user_preferences')
-      .upsert(
-        {
-          user_id: user.id,
-          updated_at: new Date().toISOString(),
-          ...body
-        },
-        { onConflict: 'user_id' }
-      )
+      .upsert([upsertData], { onConflict: 'user_id' })
       .select()
 
     if (error) {
-      console.error('[v0] Error saving preferences - DB error:', error)
+      console.error('[v0] Error saving preferences - DB error:', {
+        message: error.message,
+        code: error.code,
+        details: error.details,
+        hint: error.hint
+      })
       return NextResponse.json({ error: error.message || 'Failed to save preferences' }, { status: 500 })
     }
 
     console.log('[v0] Preferences saved:', data)
-    return NextResponse.json(data?.[0] || { user_id: user.id })
+    return NextResponse.json(data?.[0] || { user_id: user.id, ...body })
   } catch (error) {
     console.error('[v0] POST preferences error:', error)
     return NextResponse.json({ error: error instanceof Error ? error.message : 'Internal server error' }, { status: 500 })
