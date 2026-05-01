@@ -206,18 +206,12 @@ export function DespegaNavbar() {
                 <div key={stage.name} className="relative">
                   <button
                     onClick={() => setOpenDropdown(isOpen ? null : stage.name)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-150 relative ${
-                      hasActiveRoute
-                        ? `${style.pillBg} ${style.pillText}`
-                        : `hover:bg-white/5`
-                    }`}
-                    style={!hasActiveRoute ? { color: phaseColors[stage.phase] } : undefined}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-150 hover:bg-white/5"
+                    style={{ color: phaseColors[stage.phase] }}
                   >
-                    <stage.icon className="w-3.5 h-3.5 flex-shrink-0" style={!hasActiveRoute ? { color: phaseColors[stage.phase] } : undefined} />
+                    <stage.icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: phaseColors[stage.phase] }} />
                     <span>{stage.name}</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} style={!hasActiveRoute ? { color: phaseColors[stage.phase] } : undefined} />
-                    {/* Active indicator dot */}
-                    {hasActiveRoute && <span className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full bg-current"></span>}
+                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} style={{ color: phaseColors[stage.phase] }} />
                   </button>
 
                   {/* Dropdown — solid bg, left-border accent, no heavy colored header */}
