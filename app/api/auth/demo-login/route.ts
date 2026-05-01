@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient()
 
     // Fetch user by email from auth.users
-    const { data: { users }, error: listError } = await supabase.auth.admin.listUsers()
+    const { data: { users = [] }, error: listError } = await supabase.auth.admin.listUsers()
 
     if (listError) {
       console.error('[v0] Error listing users:', listError)
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const user = users.find((u) => u.email === email)
+    const user = (users as any[]).find((u: any) => u.email === email)
 
     if (!user) {
       return NextResponse.json(
