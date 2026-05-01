@@ -1074,7 +1074,7 @@ export default function DISCResultsPage() {
 
                 <div className="bg-white rounded-lg p-6 border-l-4 border-purple">
                   <h3 className="font-semibold text-lg mb-3 text-purple">
-                    💡 Recuerda: Tu trabajo es solo una parte de tu vida
+                     Recuerda: Tu trabajo es solo una parte de tu vida
                   </h3>
                   <p className="text-muted leading-relaxed">
                     Este test te ayuda primero a mejorar tus relaciones personales, tu bienestar emocional y tu vida
@@ -1313,10 +1313,10 @@ export default function DISCResultsPage() {
                     </CardHeader>
                     <CardContent>
                       <ul className="text-sm text-muted space-y-1">
-                        <li>✓ Habré completado 3+ tests DTC</li>
-                        <li>✓ Tendré 10+ experimentos documentados</li>
-                        <li>✓ Habré recibido feedback positivo sobre mi versatilidad</li>
-                        <li>✓ Tendré un sistema personal de desarrollo activo</li>
+                        <li> Habré completado 3+ tests DTC</li>
+                        <li> Tendré 10+ experimentos documentados</li>
+                        <li> Habré recibido feedback positivo sobre mi versatilidad</li>
+                        <li> Tendré un sistema personal de desarrollo activo</li>
                       </ul>
                     </CardContent>
                   </Card>
@@ -1400,7 +1400,7 @@ export default function DISCResultsPage() {
                       time: "15 min",
                       actions: [
                         "Lee completo tu informe DISC (sí, todo)",
-                        "Marca con ⭐ las 5 frases que más te resonaron",
+                        "Marca con  las 5 frases que más te resonaron",
                         "Comparte 1 insight con alguien cercano",
                       ],
                     },
@@ -2037,7 +2037,7 @@ export default function DISCResultsPage() {
                 <div className="space-y-6">
                   <Card className="bg-blue/5 border-blue/20">
                     <CardHeader>
-                      <CardTitle className="text-base text-blue">✓ Día 30: Checkpoint "Autoconocimiento"</CardTitle>
+                      <CardTitle className="text-base text-blue"> Día 30: Checkpoint "Autoconocimiento"</CardTitle>
                       <CardDescription className="text-sm text-blue">
                         Ya debes tener claridad sobre tu perfil y haber empezado a observarte
                       </CardDescription>
@@ -2095,7 +2095,7 @@ export default function DISCResultsPage() {
 
                   <Card className="bg-green/5 border-green/20">
                     <CardHeader>
-                      <CardTitle className="text-base text-green">✓ Día 60: Checkpoint "Experimentación"</CardTitle>
+                      <CardTitle className="text-base text-green"> Día 60: Checkpoint "Experimentación"</CardTitle>
                       <CardDescription className="text-sm text-green">
                         Ya debes haber salido de tu zona de confort varias veces
                       </CardDescription>
@@ -2159,7 +2159,7 @@ export default function DISCResultsPage() {
 
                   <Card className="bg-purple/5 border-purple/20">
                     <CardHeader>
-                      <CardTitle className="text-base text-purple">✓ Día 90: Checkpoint "Consolidación"</CardTitle>
+                      <CardTitle className="text-base text-purple"> Día 90: Checkpoint "Consolidación"</CardTitle>
                       <CardDescription className="text-sm text-purple">
                         Ya debes tener un sistema personal de desarrollo continuo activo
                       </CardDescription>

@@ -722,7 +722,7 @@ export default function MBTIResultsPage() {
 
                 <div className="bg-white rounded-lg p-6 border-l-4 border-purple">
                   <h3 className="font-semibold text-lg mb-3 text-purple">
-                    💡 Recuerda: Tu personalidad es para vivir mejor, no solo para trabajar mejor
+                     Recuerda: Tu personalidad es para vivir mejor, no solo para trabajar mejor
                   </h3>
                   <p className="text-muted leading-relaxed">
                     Conocer tu tipo MBTI te ayuda a entenderte en tus relaciones personales, a comunicarte mejor con tu
@@ -1220,7 +1220,7 @@ export default function MBTIResultsPage() {
                   <AccordionItem value="identidad">
                     <AccordionTrigger className="bg-blue/5 px-4 rounded-lg">
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl">🎭</span>
+                        <span className="text-2xl"></span>
                         <span className="font-semibold">Identidad y Autenticidad</span>
                       </div>
                     </AccordionTrigger>
@@ -1336,7 +1336,7 @@ export default function MBTIResultsPage() {
                   <AccordionItem value="carrera">
                     <AccordionTrigger className="bg-purple/5 px-4 rounded-lg">
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl">💼</span>
+                        <span className="text-2xl"></span>
                         <span className="font-semibold">Carrera y Propósito</span>
                       </div>
                     </AccordionTrigger>

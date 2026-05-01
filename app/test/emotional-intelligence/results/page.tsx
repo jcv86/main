@@ -767,7 +767,7 @@ export default function EmotionalIntelligenceResults() {
 
                 <div className="bg-white rounded-lg p-6 border-l-4 border-purple">
                   <h3 className="font-semibold text-lg mb-3 text-purple">
-                    💡 Recuerda: Tu inteligencia emocional es para tu vida, no solo para tu trabajo
+                     Recuerda: Tu inteligencia emocional es para tu vida, no solo para tu trabajo
                   </h3>
                   <p className="text-muted leading-relaxed">
                     La IE es la base para relaciones sanas con tu pareja, familia y amigos. Una alta IE mejora tu
@@ -1355,7 +1355,7 @@ export default function EmotionalIntelligenceResults() {
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <div className="w-8 h-8 bg-blue/10 rounded-full flex items-center justify-center text-lg">
-                          🎯
+                          
                         </div>
                         Despega Cerebral (DISC)
                       </CardTitle>
@@ -1387,7 +1387,7 @@ export default function EmotionalIntelligenceResults() {
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <div className="w-8 h-8 bg-purple/10 rounded-full flex items-center justify-center text-lg">
-                          🧠
+                          
                         </div>
                         Mapa de Personalidad (MBTI)
                       </CardTitle>
@@ -1420,7 +1420,7 @@ export default function EmotionalIntelligenceResults() {
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <div className="w-8 h-8 bg-green/10 rounded-full flex items-center justify-center text-lg">
-                          ⭐
+                          
                         </div>
                         5 Dimensiones (Big Five)
                       </CardTitle>
@@ -1453,7 +1453,7 @@ export default function EmotionalIntelligenceResults() {
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <div className="w-8 h-8 bg-orange/10 rounded-full flex items-center justify-center text-lg">
-                          💼
+                          
                         </div>
                         Brújula Vocacional (RIASEC)
                       </CardTitle>
@@ -1486,7 +1486,7 @@ export default function EmotionalIntelligenceResults() {
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <div className="w-8 h-8 bg-red/10 rounded-full flex items-center justify-center text-lg">
-                          💡
+                          
                         </div>
                         Competencias Blandas
                       </CardTitle>
@@ -1879,10 +1879,10 @@ export default function EmotionalIntelligenceResults() {
                     </CardHeader>
                     <CardContent className="pt-4">
                       <ul className="space-y-2 text-sm">
-                        <li>✓ Diario emocional diario</li>
-                        <li>✓ Escaneo corporal 2x/día</li>
-                        <li>✓ Identificar patrones y triggers</li>
-                        <li>✓ Crear mapa emocional personal</li>
+                        <li> Diario emocional diario</li>
+                        <li> Escaneo corporal 2x/día</li>
+                        <li> Identificar patrones y triggers</li>
+                        <li> Crear mapa emocional personal</li>
                       </ul>
                     </CardContent>
                   </Card>
@@ -1893,10 +1893,10 @@ export default function EmotionalIntelligenceResults() {
                     </CardHeader>
                     <CardContent className="pt-4">
                       <ul className="space-y-2 text-sm">
-                        <li>✓ Técnicas de respiración 4-7-8</li>
-                        <li>✓ Pausa de 90 segundos</li>
-                        <li>✓ Reencuadre cognitivo ABC</li>
-                        <li>✓ Protocolo personal de regulación</li>
+                        <li> Técnicas de respiración 4-7-8</li>
+                        <li> Pausa de 90 segundos</li>
+                        <li> Reencuadre cognitivo ABC</li>
+                        <li> Protocolo personal de regulación</li>
                       </ul>
                     </CardContent>
                   </Card>
@@ -1907,10 +1907,10 @@ export default function EmotionalIntelligenceResults() {
                     </CardHeader>
                     <CardContent className="pt-4">
                       <ul className="space-y-2 text-sm">
-                        <li>✓ Escucha activa profunda</li>
-                        <li>✓ Ponerse en zapatos del otro</li>
-                        <li>✓ Comunicación "Yo siento..."</li>
-                        <li>✓ Manifiesto personal de IE</li>
+                        <li> Escucha activa profunda</li>
+                        <li> Ponerse en zapatos del otro</li>
+                        <li> Comunicación "Yo siento..."</li>
+                        <li> Manifiesto personal de IE</li>
                       </ul>
                     </CardContent>
                   </Card>

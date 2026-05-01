@@ -105,7 +105,7 @@ export default function QuickTestPage() {
                     className="flex-1"
                     variant={isComplete ? 'outline' : 'default'}
                   >
-                    {isRunning ? 'Testing...' : isComplete ? 'Completado ✓' : 'Ejecutar Test'}
+                    {isRunning ? 'Testing...' : isComplete ? 'Completado ' : 'Ejecutar Test'}
                     {!isRunning && <Play className="ml-2 h-4 w-4" />}
                   </Button>
                   <a href={test.route} target="_blank" rel="noopener noreferrer">
@@ -124,7 +124,7 @@ export default function QuickTestPage() {
           <Card className="bg-background">
             <CardHeader>
               <CardTitle className="text-green dark:text-green/10">
-                ✓ {Object.keys(results).length}/{tests.length} Pilares Probados
+                 {Object.keys(results).length}/{tests.length} Pilares Probados
               </CardTitle>
             </CardHeader>
             <CardContent className="text-green dark:text-green/20">

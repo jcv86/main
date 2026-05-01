@@ -222,18 +222,18 @@ export default function ApiConfigPage() {
             {isOpenAIConfigured && isSupabaseConfigured && (
               <>
                 <div className="flex gap-2">
-                  <span>✓</span>
+                  <span></span>
                   <p>
                     Ejecuta el script 249 para habilitar soporte de vectores:{" "}
                     <code className="bg-blue/10 px-2 py-1 rounded">scripts/249-add-embeddings-support.sql</code>
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <span>✓</span>
+                  <span></span>
                   <p>Genera embeddings para tu contenido en /admin/embeddings</p>
                 </div>
                 <div className="flex gap-2">
-                  <span>✓</span>
+                  <span></span>
                   <p>Prueba la búsqueda semántica en /test-semantic-search</p>
                 </div>
               </>

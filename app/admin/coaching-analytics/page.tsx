@@ -197,7 +197,7 @@ export default function CoachingAnalyticsPage() {
             <div className="text-2xl font-bold">{aggregates.avgSatisfaction.toFixed(1)}★</div>
             <div className="flex items-center gap-2 mt-2">
               <Badge variant={aggregates.meetsSatisfactionTarget ? "default" : "secondary"}>
-                {aggregates.meetsSatisfactionTarget ? "✓ Meta: 4.0+" : "⚠ Bajo meta"}
+                {aggregates.meetsSatisfactionTarget ? " Meta: 4.0+" : "⚠ Bajo meta"}
               </Badge>
             </div>
           </CardContent>
@@ -212,7 +212,7 @@ export default function CoachingAnalyticsPage() {
             <div className="text-2xl font-bold">{aggregates.avgEngagement.toFixed(1)} msg</div>
             <div className="flex items-center gap-2 mt-2">
               <Badge variant={aggregates.meetsEngagementTarget ? "default" : "secondary"}>
-                {aggregates.meetsEngagementTarget ? "✓ Meta: 2+" : "⚠ Bajo meta"}
+                {aggregates.meetsEngagementTarget ? " Meta: 2+" : "⚠ Bajo meta"}
               </Badge>
             </div>
           </CardContent>
@@ -227,7 +227,7 @@ export default function CoachingAnalyticsPage() {
             <div className="text-2xl font-bold">{aggregates.completionRate.toFixed(0)}%</div>
             <div className="flex items-center gap-2 mt-2">
               <Badge variant={aggregates.meetsActionTarget ? "default" : "secondary"}>
-                {aggregates.meetsActionTarget ? "✓ Meta: 60%+" : "⚠ Bajo meta"}
+                {aggregates.meetsActionTarget ? " Meta: 60%+" : "⚠ Bajo meta"}
               </Badge>
             </div>
           </CardContent>
@@ -345,7 +345,7 @@ export default function CoachingAnalyticsPage() {
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-purple/10 flex items-center justify-center">
-                    <span className="text-2xl">👩‍💼</span>
+                    <span className="text-2xl">👩‍</span>
                   </div>
                   <div>
                     <CardTitle>Sofia</CardTitle>
@@ -380,7 +380,7 @@ export default function CoachingAnalyticsPage() {
               <CardHeader>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 rounded-full bg-blue/10 flex items-center justify-center">
-                    <span className="text-2xl">👨‍💼</span>
+                    <span className="text-2xl">👨‍</span>
                   </div>
                   <div>
                     <CardTitle>Dani</CardTitle>

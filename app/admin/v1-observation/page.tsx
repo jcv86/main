@@ -189,17 +189,17 @@ export default function V1ObservationDashboard() {
         <CardContent className="space-y-2">
           {metrics.totalErrors > 0 && (
             <div className="p-3 bg-red/5 text-red rounded">
-              ⚠️ {metrics.totalErrors} errores detectados - Revisar logs
+               {metrics.totalErrors} errores detectados - Revisar logs
             </div>
           )}
           {(metrics.conversionC1toA1 as number) < 0.5 && (
             <div className="p-3 bg-red/5 text-red rounded">
-              ⚠️ Baja conversión C1→A1 ({(metrics.conversionC1toA1 as number * 100).toFixed(1)}%) - Confusión en resultado de A1
+               Baja conversión C1→A1 ({(metrics.conversionC1toA1 as number * 100).toFixed(1)}%) - Confusión en resultado de A1
             </div>
           )}
           {(metrics.conversionA1toA2 as number) < 0.3 && (
             <div className="p-3 bg-red/5 text-red rounded">
-              ⚠️ Muy baja conversión A1→A2 ({(metrics.conversionA1toA2 as number * 100).toFixed(1)}%) - Bridge CTA no funciona
+               Muy baja conversión A1→A2 ({(metrics.conversionA1toA2 as number * 100).toFixed(1)}%) - Bridge CTA no funciona
             </div>
           )}
           {metrics.byStage.a3 === 0 && (

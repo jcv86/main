@@ -7,9 +7,9 @@ export default function AuthTestPage() {
       <p className="mb-4">If you see this page, the auth system is working.</p>
       
       <div className="space-y-4">
-        <p><strong>Google OAuth:</strong> Configured ✓</p>
-        <p><strong>LinkedIn OAuth:</strong> Configured ✓</p>
-        <p><strong>NextAuth:</strong> Configured ✓</p>
+        <p><strong>Google OAuth:</strong> Configured </p>
+        <p><strong>LinkedIn OAuth:</strong> Configured </p>
+        <p><strong>NextAuth:</strong> Configured </p>
       </div>
 
       <div className="mt-8">

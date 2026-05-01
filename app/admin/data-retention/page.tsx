@@ -115,7 +115,7 @@ export default function DataRetentionPage() {
                     </div>
                     <div>
                       <p className="text-muted-foreground">Auto-limpieza</p>
-                      <p className="font-medium">{policy.auto_cleanup_enabled ? "✓ Activa" : "✗ Inactiva"}</p>
+                      <p className="font-medium">{policy.auto_cleanup_enabled ? " Activa" : "✗ Inactiva"}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Total Eliminado</p>

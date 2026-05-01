@@ -676,7 +676,7 @@ export default function RIASECResults() {
 
                 {/* Top 5 ideas sobre ti */}
                 <div className="bg-background">
-                  <h3 className="font-semibold text-lg mb-4 text-blue">💡 Top 5 Ideas Sobre Ti</h3>
+                  <h3 className="font-semibold text-lg mb-4 text-blue"> Top 5 Ideas Sobre Ti</h3>
                   <div className="space-y-3">
                     <div className="flex gap-3">
                       <Badge className="bg-blue">1</Badge>
@@ -795,7 +795,7 @@ export default function RIASECResults() {
 
                 {/* 3 movimientos clave */}
                 <div className="bg-white rounded-lg p-6 border border-muted/20">
-                  <h3 className="font-semibold text-lg mb-4 text-foreground">🎯 Tus 3 Movimientos Clave (90 días)</h3>
+                  <h3 className="font-semibold text-lg mb-4 text-foreground"> Tus 3 Movimientos Clave (90 días)</h3>
                   <div className="space-y-4">
                     <div className="flex gap-3">
                       <div className="w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-semibold flex-shrink-0">
@@ -1991,7 +1991,7 @@ export default function RIASECResults() {
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-purple/10 rounded-full flex items-center justify-center text-lg">
-                              🧠
+                              
                             </div>
                             Mapa de Personalidad Despega
                           </CardTitle>
@@ -2023,7 +2023,7 @@ export default function RIASECResults() {
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-yellow/10 rounded-full flex items-center justify-center text-lg">
-                              ⭐
+                              
                             </div>
                             5 Dimensiones Despega
                           </CardTitle>
@@ -2056,7 +2056,7 @@ export default function RIASECResults() {
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-red/10 rounded-full flex items-center justify-center text-lg">
-                              💡
+                              
                             </div>
                             Competencias Blandas Despega
                           </CardTitle>
@@ -2220,7 +2220,7 @@ export default function RIASECResults() {
                   <AccordionItem value="alineacion">
                     <AccordionTrigger className="bg-blue/5 px-4 rounded-lg hover:bg-blue/10">
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl">🎯</span>
+                        <span className="text-2xl"></span>
                         <span className="font-semibold">Alineación Vocacional</span>
                       </div>
                     </AccordionTrigger>
@@ -2336,7 +2336,7 @@ export default function RIASECResults() {
                   <AccordionItem value="proposito">
                     <AccordionTrigger className="bg-purple/5 px-4 rounded-lg hover:bg-purple/10">
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl">✨</span>
+                        <span className="text-2xl"></span>
                         <span className="font-semibold">Propósito y Contribución</span>
                       </div>
                     </AccordionTrigger>
@@ -2394,7 +2394,7 @@ export default function RIASECResults() {
                   <AccordionItem value="accion">
                     <AccordionTrigger className="bg-green/5 px-4 rounded-lg hover:bg-green/10">
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl">🚀</span>
+                        <span className="text-2xl"></span>
                         <span className="font-semibold">Plan de Acción</span>
                       </div>
                     </AccordionTrigger>

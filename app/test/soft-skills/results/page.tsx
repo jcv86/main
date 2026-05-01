@@ -1033,7 +1033,7 @@ export default function SoftSkillsResults() {
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-blue/10 rounded-full flex items-center justify-center text-lg">
-                              🎯
+                              
                             </div>
                             Despega Cerebral (DISC)
                           </CardTitle>
@@ -1099,7 +1099,7 @@ export default function SoftSkillsResults() {
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-purple/10 rounded-full flex items-center justify-center text-lg">
-                              🧠
+                              
                             </div>
                             Mapa de Personalidad (MBTI)
                           </CardTitle>
@@ -1132,7 +1132,7 @@ export default function SoftSkillsResults() {
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-green/10 rounded-full flex items-center justify-center text-lg">
-                              ⭐
+                              
                             </div>
                             5 Dimensiones (Big Five)
                           </CardTitle>
@@ -1165,7 +1165,7 @@ export default function SoftSkillsResults() {
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
                             <div className="w-8 h-8 bg-orange/10 rounded-full flex items-center justify-center text-lg">
-                              💼
+                              
                             </div>
                             Brújula Vocacional (RIASEC)
                           </CardTitle>
@@ -1918,7 +1918,7 @@ export default function SoftSkillsResults() {
                         </TableCell>
                         <TableCell>
                           <div className="space-y-1">
-                            <p className="font-medium text-sm">📱 App "Headspace" - Meditación y Mindfulness</p>
+                            <p className="font-medium text-sm"> App "Headspace" - Meditación y Mindfulness</p>
                             <p className="text-xs text-muted-foreground">+ Módulos de relaciones</p>
                           </div>
                         </TableCell>

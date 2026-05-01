@@ -143,7 +143,7 @@ export default function AdminBrainPage() {
         throw new Error(data.error || "Error al subir documento")
       }
 
-      console.log("[v0] ✓ Upload successful!")
+      console.log("[v0]  Upload successful!")
 
       toast({
         title: "Documento Subido",

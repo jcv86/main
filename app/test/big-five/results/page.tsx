@@ -353,7 +353,7 @@ export default function BigFiveResults() {
 
                 {/* Top 5 Ideas */}
                 <div>
-                  <h3 className="font-semibold text-lg mb-3 text-blue">💡 Top 5 Ideas sobre tu Personalidad</h3>
+                  <h3 className="font-semibold text-lg mb-3 text-blue"> Top 5 Ideas sobre tu Personalidad</h3>
                   <div className="space-y-3">
                     <div className="bg-blue/5 rounded-lg p-4 border-l-4 border-blue/40">
                       <span className="font-semibold text-blue">1. Cómo te ves a ti mismo:</span>
@@ -438,7 +438,7 @@ export default function BigFiveResults() {
                 {/* 3 Movimientos Clave */}
                 <div>
                   <h3 className="font-semibold text-lg mb-3 text-blue">
-                    🎯 3 Movimientos Clave para los próximos 90 días
+                     3 Movimientos Clave para los próximos 90 días
                   </h3>
                   <div className="space-y-3">
                     <div className="flex items-start gap-3 bg-white rounded-lg p-4 border border-muted/20">
@@ -544,7 +544,7 @@ export default function BigFiveResults() {
 
                 <div className="bg-white rounded-lg p-6 border-l-4 border-purple">
                   <h3 className="font-semibold text-lg mb-3 text-purple">
-                    💡 Recuerda: Tu personalidad impacta tu felicidad, no solo tu productividad
+                     Recuerda: Tu personalidad impacta tu felicidad, no solo tu productividad
                   </h3>
                   <p className="text-muted leading-relaxed">
                     Los Big Five te ayudan a entender cómo te relacionas con otros, cómo manejas tus emociones, y cómo
@@ -1141,7 +1141,7 @@ export default function BigFiveResults() {
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <div className="w-8 h-8 bg-blue/10 rounded-full flex items-center justify-center text-lg">
-                          💼
+                          
                         </div>
                         Despega Cerebral (DISC)
                       </CardTitle>
@@ -1205,7 +1205,7 @@ export default function BigFiveResults() {
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <div className="w-8 h-8 bg-purple/10 rounded-full flex items-center justify-center text-lg">
-                          🧠
+                          
                         </div>
                         Mapa de Personalidad Despega (MBTI)
                       </CardTitle>
@@ -1237,7 +1237,7 @@ export default function BigFiveResults() {
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <div className="w-8 h-8 bg-green/10 rounded-full flex items-center justify-center text-lg">
-                          🎯
+                          
                         </div>
                         Brújula Vocacional Despega (RIASEC)
                       </CardTitle>
@@ -1269,7 +1269,7 @@ export default function BigFiveResults() {
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
                         <div className="w-8 h-8 bg-yellow/10 rounded-full flex items-center justify-center text-lg">
-                          💡
+                          
                         </div>
                         Competencias Blandas Despega
                       </CardTitle>
@@ -1989,7 +1989,7 @@ export default function BigFiveResults() {
                 </div>
 
                 <div className="mt-6 bg-blue/5 rounded-lg p-6 border-l-4 border-blue">
-                  <h3 className="font-semibold text-lg mb-2 text-blue">💡 Enfoque DTC: Vida Personal Primero</h3>
+                  <h3 className="font-semibold text-lg mb-2 text-blue"> Enfoque DTC: Vida Personal Primero</h3>
                   <p className="text-muted leading-relaxed">
                     Estos recursos están diseñados para mejorar tu bienestar, tus relaciones y tu desarrollo personal
                     antes que tu productividad laboral. El éxito profesional es consecuencia de una vida personal
