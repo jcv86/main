@@ -388,7 +388,7 @@ export default function A2RoutesPage() {
         {/* Header */}
         <div className="space-y-2">
           <h1 className="text-5xl font-black text-white flex items-center gap-3">
-            <span className="text-4xl">🗺️</span> Tu Ruta: De Aquí a Imprescindible
+            Tu Ruta: De Aquí a Imprescindible
           </h1>
           <p className="text-xl text-white/85">Tu plan personalizado de 90 días mapeado a conversaciones reales</p>
         </div>
