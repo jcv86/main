@@ -8,12 +8,27 @@ export async function GET(request: NextRequest) {
     // Get current user
     const { data: { user }, error: userError } = await supabase.auth.getUser()
     
-    if (userError || !user) {
-      console.log('[v0] User not authenticated')
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    let user_id = user?.id
+    
+    // If no Supabase user, check for demo user in cookies
+    if (!user_id) {
+      console.log('[v0] No Supabase user, checking for demo user')
+      const demoUserCookie = request.cookies.get('demo_user')?.value
+      if (demoUserCookie) {
+        try {
+          const demoUser = JSON.parse(demoUserCookie)
+          user_id = demoUser.id
+          console.log('[v0] Demo user found in dashboard endpoint:', demoUser.email)
+        } catch (e) {
+          console.error('[v0] Error parsing demo user from cookie:', e)
+          return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+        }
+      } else {
+        console.log('[v0] User not authenticated and no demo user')
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+      }
     }
 
-    const user_id = user.id
     console.log('[v0] Fetching dashboard data for user:', user_id)
 
     // Fetch user profile

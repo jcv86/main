@@ -20,6 +20,13 @@ export default function DashboardPage() {
       try {
         console.log('[v0] Loading user data from dashboard endpoint')
         
+        // Ensure demo user is in cookie for server-side access
+        const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
+        if (demoUserStr) {
+          document.cookie = `demo_user=${demoUserStr}; path=/; max-age=86400`
+          console.log('[v0] Demo user synced to cookie')
+        }
+        
         // Call the dashboard data endpoint
         const response = await fetch('/rest/dashboard-data')
         

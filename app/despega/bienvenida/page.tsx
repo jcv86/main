@@ -21,11 +21,29 @@ export default function BienvenidaPage() {
     const checkAuth = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser()
+        
+        // Check if user exists in Supabase or is a demo user
+        let userEmail = user?.email
         if (!user) {
-          router.push('/auth/signin')
-          return
+          // Check if demo user exists in localStorage
+          const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
+          if (demoUserStr) {
+            try {
+              const demoUser = JSON.parse(demoUserStr)
+              userEmail = demoUser.email
+              console.log('[v0] Demo user found for bienvenida:', demoUser.email)
+            } catch (e) {
+              console.error('[v0] Error parsing demo user:', e)
+              router.push('/auth/signin')
+              return
+            }
+          } else {
+            router.push('/auth/signin')
+            return
+          }
         }
-        setUserName(user.email?.split('@')[0] || 'Despega Pro')
+        
+        setUserName(userEmail?.split('@')[0] || 'Despega Pro')
         setLoading(false)
       } catch (err) {
         console.error('[v0] Auth error:', err)
