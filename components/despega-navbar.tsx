@@ -206,7 +206,7 @@ export function DespegaNavbar() {
                 <div key={stage.name} className="relative">
                   <button
                     onClick={() => setOpenDropdown(isOpen ? null : stage.name)}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-150 ${
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-150 relative ${
                       hasActiveRoute || isActivePhase
                         ? `${style.pillBg} ${style.pillText}`
                         : `hover:bg-white/5`
@@ -216,6 +216,8 @@ export function DespegaNavbar() {
                     <stage.icon className="w-3.5 h-3.5 flex-shrink-0" style={!hasActiveRoute && !isActivePhase ? { color: phaseColors[stage.phase] } : undefined} />
                     <span>{stage.name}</span>
                     <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} style={!hasActiveRoute && !isActivePhase ? { color: phaseColors[stage.phase] } : undefined} />
+                    {/* Active indicator dot */}
+                    {(hasActiveRoute || isActivePhase) && <span className="absolute bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 rounded-full bg-current"></span>}
                   </button>
 
                   {/* Dropdown — solid bg, left-border accent, no heavy colored header */}
@@ -258,32 +260,26 @@ export function DespegaNavbar() {
                           return (
                             <Link key={route.href} href={route.href} className="no-underline">
                               <div 
-                                className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer whitespace-nowrap no-underline text-white/60 hover:border hover:border-current"
+                                className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer whitespace-nowrap no-underline text-white/60"
                                 style={{
-                                  backgroundColor: isActive ? (pillColors[stage.phase] || 'transparent') : 'transparent',
-                                  color: isActive ? (textColors[stage.phase] || 'currentColor') : 'inherit',
                                   borderColor: textColors[stage.phase] || 'currentColor',
-                                  '--hover-bg': pillColors[stage.phase],
-                                  '--hover-color': textColors[stage.phase],
                                 } as React.CSSProperties & Record<string, any>}
                                 onMouseEnter={(e) => {
                                   const el = e.currentTarget as HTMLElement
-                                  if (!isActive) {
-                                    el.style.backgroundColor = pillColors[stage.phase] || 'transparent'
-                                    el.style.color = textColors[stage.phase] || 'currentColor'
-                                    el.style.borderStyle = 'solid'
-                                  }
+                                  el.style.backgroundColor = pillColors[stage.phase] || 'transparent'
+                                  el.style.color = textColors[stage.phase] || 'currentColor'
+                                  el.style.borderStyle = 'solid'
+                                  el.style.borderWidth = '1px'
                                 }}
                                 onMouseLeave={(e) => {
                                   const el = e.currentTarget as HTMLElement
-                                  if (!isActive) {
-                                    el.style.backgroundColor = 'transparent'
-                                    el.style.color = ''
-                                    el.style.borderStyle = ''
-                                  }
+                                  el.style.backgroundColor = 'transparent'
+                                  el.style.color = ''
+                                  el.style.borderStyle = ''
+                                  el.style.borderWidth = ''
                                 }}
                               >
-                                {isActive && <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-current" />}
+                                {isActive && <span className="w-1.5 h-1.5 rounded-full flex-shrink-0 bg-current" style={{ backgroundColor: textColors[stage.phase] }} />}
                                 {route.label}
                               </div>
                             </Link>
