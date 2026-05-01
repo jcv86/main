@@ -16,7 +16,7 @@ export default function LandingPageOptimized() {
             <div className="flex items-center gap-4 ml-auto">
               <ThemeToggle />
               <Link href="/auth/signin" prefetch={true}>
-                <Button size="sm" className="bg-purple hover:bg-purple/80 text-white">
+                <Button size="sm" className="rounded-full text-white" style={{ backgroundColor: 'rgba(90, 200, 220, 0.80)' }}>
                   Entrar
                 </Button>
               </Link>
@@ -40,7 +40,8 @@ export default function LandingPageOptimized() {
             <Link href="/auth/signin" prefetch={true}>
               <Button
                 size="lg"
-                className="bg-purple hover:from-purple/80 hover:to-blue/80 text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all text-white"
+                className="text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all text-white"
+                style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}
               >
                 Quiero comenzar mi diagnóstico
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -50,7 +51,8 @@ export default function LandingPageOptimized() {
               <Button
                 size="lg"
                 variant="outline"
-                className="text-lg px-8 py-6 w-full sm:w-auto border-2 hover:bg-transparent dark:hover:bg-transparent"
+                className="text-lg px-8 py-6 w-full sm:w-auto border-2 hover:bg-transparent dark:hover:bg-transparent border-transparent"
+                style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)' }}
               >
                 Ver cómo funciona DTC
               </Button>
