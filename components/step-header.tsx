@@ -8,7 +8,7 @@ interface StepHeaderProps {
   title: string
   description: string
   estimatedTime?: string
-  pillarColor?: "purple" | "blue" | "orange" | "cyan" | "red"
+  pillarColor?: "purple" | "blue" | "orange" | "cyan" | "red" | "teal"
 }
 
 const pillarColors = {
@@ -17,6 +17,7 @@ const pillarColors = {
   orange: "bg-gradient-to-br from-orange to-orange/80 text-white border-2 border-orange/40",
   cyan: "bg-gradient-to-br from-cyan to-cyan/80 text-white border-2 border-cyan/40",
   red: "bg-gradient-to-br from-red to-red/80 text-white border-2 border-red/40",
+  teal: "bg-gradient-to-br from-ritual to-ritual/80 text-white border-2 border-ritual/40",
 }
 
 const pillarBgLight = {
@@ -25,6 +26,7 @@ const pillarBgLight = {
   orange: "bg-gradient-to-br from-orange/20 to-orange/10 border-2 border-orange/40",
   cyan: "bg-gradient-to-br from-cyan/20 to-cyan/10 border-2 border-cyan/40",
   red: "bg-gradient-to-br from-red/20 to-red/10 border-2 border-red/40",
+  teal: "bg-gradient-to-br from-ritual/20 to-ritual/10 border-2 border-ritual/40",
 }
 
 export function StepHeader({
