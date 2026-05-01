@@ -24,16 +24,33 @@ export default function A1ResultadoPage() {
   const loadResults = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
-      if (!user?.id) {
-        router.push('/auth/signin')
-        return
+      
+      // Check if user exists in Supabase or is a demo user
+      let userId = user?.id
+      if (!user) {
+        // Check if demo user exists in localStorage
+        const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
+        if (demoUserStr) {
+          try {
+            const demoUser = JSON.parse(demoUserStr)
+            userId = demoUser.id
+            console.log('[v0] Demo user found for a1-resultado:', demoUser.email)
+          } catch (e) {
+            console.error('[v0] Error parsing demo user:', e)
+            router.push('/auth/signin')
+            return
+          }
+        } else {
+          router.push('/auth/signin')
+          return
+        }
       }
 
       // Get latest A1 assessment
       const { data: assessment, error: fetchError } = await supabase
         .from('a1_cerebral_assessment')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', userId)
         .order('completed_at', { ascending: false })
         .limit(1)
         .single()

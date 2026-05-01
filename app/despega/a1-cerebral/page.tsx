@@ -27,7 +27,27 @@ export default function A1CerebralPage() {
   useEffect(() => {
     const check = async () => {
       const { data: { user } } = await sb.auth.getUser()
-      if (!user) { router.push('/auth/signin'); return }
+      
+      // Check if user exists in Supabase or is a demo user
+      let userId = user?.id
+      if (!user) {
+        // Check if demo user exists in localStorage
+        const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
+        if (demoUserStr) {
+          try {
+            const demoUser = JSON.parse(demoUserStr)
+            userId = demoUser.id
+            console.log('[v0] Demo user found for a1-cerebral:', demoUser.email)
+          } catch (e) {
+            console.error('[v0] Error parsing demo user:', e)
+            router.push('/auth/signin')
+            return
+          }
+        } else {
+          router.push('/auth/signin')
+          return
+        }
+      }
       setAuthOk(true)
     }
     check()
