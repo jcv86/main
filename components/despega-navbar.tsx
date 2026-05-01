@@ -80,17 +80,17 @@ const stages = [
 ]
 
 // Per brandbook pillar colors — all classes must be static strings (no template interpolation) for Tailwind purge
-// Note: Ritual now uses teal color to match navbar branding (rgb(80, 160, 170))
+// Note: Ritual now uses the custom ritual color variable to match navbar branding
 const phaseStyles: Record<string, {
   text: string; border: string; leftBorder: string; bg: string
   activeBg: string; activeText: string
   pillBg: string; pillText: string
   hoverBg: string; hoverText: string
 }> = {
-  ritual:      { text: 'text-teal-400',         border: 'border-teal-400/30',  leftBorder: 'border-l-4 border-l-teal-400',   bg: 'bg-teal-400/10',  activeBg: 'bg-teal-400/20',   activeText: 'text-teal-400',  pillBg: 'bg-teal-400',  pillText: 'text-white', hoverBg: 'hover:bg-teal-400/10',  hoverText: 'hover:text-teal-400'  },
-  exploration: { text: 'text-blue-700',        border: 'border-blue-700/30',    leftBorder: 'border-l-4 border-l-blue-700',     bg: 'bg-blue-700/10',    activeBg: 'bg-blue-700/20',     activeText: 'text-blue-700',    pillBg: 'bg-blue-700',    pillText: 'text-white', hoverBg: 'hover:bg-blue-700/10',    hoverText: 'hover:text-blue-700'    },
-  training:    { text: 'text-purple-500',       border: 'border-purple-500/30',  leftBorder: 'border-l-4 border-l-purple-500',   bg: 'bg-purple-500/10',  activeBg: 'bg-purple-500/20',   activeText: 'text-purple-500',  pillBg: 'bg-purple-500',  pillText: 'text-white', hoverBg: 'hover:bg-purple-500/10',  hoverText: 'hover:text-purple-500'  },
-  reality:     { text: 'text-rose-400',        border: 'border-rose-400/30',    leftBorder: 'border-l-4 border-l-rose-400',     bg: 'bg-rose-400/10',    activeBg: 'bg-rose-400/20',     activeText: 'text-rose-400',    pillBg: 'bg-rose-400',    pillText: 'text-white', hoverBg: 'hover:bg-rose-400/10',    hoverText: 'hover:text-rose-400'    },
+  ritual:      { text: 'text-ritual',         border: 'border-ritual/30',  leftBorder: 'border-l-4 border-l-ritual',   bg: 'bg-ritual/10',  activeBg: 'bg-ritual/20',   activeText: 'text-ritual',  pillBg: 'bg-ritual',  pillText: 'text-white', hoverBg: 'hover:bg-ritual/10',  hoverText: 'hover:text-ritual'  },
+  exploration: { text: 'text-exploration',        border: 'border-exploration/30',    leftBorder: 'border-l-4 border-l-exploration',     bg: 'bg-exploration/10',    activeBg: 'bg-exploration/20',     activeText: 'text-exploration',    pillBg: 'bg-exploration',    pillText: 'text-white', hoverBg: 'hover:bg-exploration/10',    hoverText: 'hover:text-exploration'    },
+  training:    { text: 'text-training',       border: 'border-training/30',  leftBorder: 'border-l-4 border-l-training',   bg: 'bg-training/10',  activeBg: 'bg-training/20',   activeText: 'text-training',  pillBg: 'bg-training',  pillText: 'text-white', hoverBg: 'hover:bg-training/10',  hoverText: 'hover:text-training'  },
+  reality:     { text: 'text-reality',        border: 'border-reality/30',    leftBorder: 'border-l-4 border-l-reality',     bg: 'bg-reality/10',    activeBg: 'bg-reality/20',     activeText: 'text-reality',    pillBg: 'bg-reality',    pillText: 'text-white', hoverBg: 'hover:bg-reality/10',    hoverText: 'hover:text-reality'    },
   info:        { text: 'text-white/60',         border: 'border-white/10',   leftBorder: 'border-l-4 border-l-white/20', bg: 'bg-white/5',    activeBg: 'bg-white/10',    activeText: 'text-white',   pillBg: 'bg-white/10',pillText: 'text-white', hoverBg: 'hover:bg-white/5',    hoverText: 'hover:text-white'   },
 }
 
@@ -124,7 +124,7 @@ export function DespegaNavbar() {
   const getCurrentPhase = () => {
     if (pathname.includes('conozcamonos-1') || pathname.includes('a1-cerebral') || pathname.includes('a1-report')) return 'ritual'
     if (pathname.includes('conozcamonos-2') || pathname.includes('a2-')) return 'exploration'
-    if (pathname.includes('a3-') || pathname.includes('interview')) return 'training'
+    if (pathname.includes('a3-') || pathname.includes('interview') || pathname === '/despega/a3') return 'training'
     if (pathname.includes('a4-') || pathname === '/despega/a4') return 'reality'
     return null
   }
