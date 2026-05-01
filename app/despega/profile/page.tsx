@@ -319,55 +319,70 @@ export default function ProfileDashboard() {
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-white">Tu Camino de 4 Etapas</h2>
           <div className="space-y-3">
-            {stages.map((stage, i) => (
-              <div
-                key={i}
-                onClick={() => router.push(stage.href)}
-                className="group cursor-pointer bg-gradient-to-r from-background to-background/50 border-2 border-white/10 hover:border-white/30 rounded-lg p-6 transition-all hover:shadow-xl hover:bg-background/80"
-              >
-                <div className="flex items-start justify-between gap-6 mb-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-xl font-bold text-white group-hover:text-purple transition-colors">
-                        {stage.name}
-                      </h3>
-                      <span className="text-xs font-bold px-3 py-1 rounded-full bg-white/10 text-white/75">
-                        Etapa {i + 1}
-                      </span>
-                    </div>
-                    <p className="text-white/80 text-sm">{stage.description}</p>
-                  </div>
-                  
-                  {stage.completed ? (
-                    <Badge className="bg-green/30 text-green border-2 border-green/50 px-3 py-1 text-xs font-bold flex-shrink-0 h-fit">
-                      Completado
-                    </Badge>
-                  ) : (
-                    <div className="text-center flex-shrink-0">
-                      <div className="text-2xl font-bold text-purple mb-0.5">{Math.round(stage.score)}%</div>
-                      <p className="text-white/60 text-xs font-semibold">Progreso</p>
-                    </div>
-                  )}
-                </div>
+            {stages.map((stage, i) => {
+              const stageColors = [
+                { border: 'border-blue/40', bg: 'bg-blue/5', hover: 'hover:border-blue/60', text: 'text-blue', progress: 'from-blue to-blue/60', label: 'text-blue' },
+                { border: 'border-cyan/40', bg: 'bg-cyan/5', hover: 'hover:border-cyan/60', text: 'text-cyan', progress: 'from-cyan to-cyan/60', label: 'text-cyan' },
+                { border: 'border-orange/40', bg: 'bg-orange/5', hover: 'hover:border-orange/60', text: 'text-orange', progress: 'from-orange to-orange/60', label: 'text-orange' },
+                { border: 'border-red/40', bg: 'bg-red/5', hover: 'hover:border-red/60', text: 'text-red', progress: 'from-red to-red/60', label: 'text-red' }
+              ]
+              const colors = stageColors[i]
 
-                <Progress value={stage.score} className="h-2 bg-white/20 rounded-full mb-4" />
-
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    router.push(stage.href)
-                  }}
-                  className={`w-full font-bold text-sm py-4 transition-all active:scale-95 ${
-                    stage.completed
-                      ? 'bg-green/30 hover:bg-green/40 text-green border-2 border-green/50'
-                      : 'bg-purple/70 hover:bg-purple/60 text-white border-2 border-purple/50'
-                  }`}
+              return (
+                <div
+                  key={i}
+                  onClick={() => router.push(stage.href)}
+                  className={`group cursor-pointer bg-gradient-to-r from-background to-background/50 border-2 ${colors.border} ${colors.hover} rounded-lg p-6 transition-all hover:shadow-xl hover:bg-background/80`}
                 >
-                  {stage.completed ? 'Ver Resultados' : 'Continuar Ahora'}
-                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </div>
-            ))}
+                  <div className="flex items-start justify-between gap-6 mb-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className={`text-xl font-bold text-white group-hover:${colors.text} transition-colors`}>
+                          {stage.name}
+                        </h3>
+                        <span className={`text-xs font-bold px-3 py-1 rounded-full ${colors.bg} border border-white/20 ${colors.label}`}>
+                          Etapa {i + 1}
+                        </span>
+                      </div>
+                      <p className="text-white/80 text-sm">{stage.description}</p>
+                    </div>
+                    
+                    {stage.completed ? (
+                      <Badge className={`bg-green/30 text-green border-2 border-green/50 px-3 py-1 text-xs font-bold flex-shrink-0 h-fit`}>
+                        Completado
+                      </Badge>
+                    ) : (
+                      <div className="text-center flex-shrink-0">
+                        <div className={`text-2xl font-bold ${colors.text} mb-0.5`}>{Math.round(stage.score)}%</div>
+                        <p className="text-white/60 text-xs font-semibold">Progreso</p>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className={`w-full bg-muted/40 rounded-full h-2 overflow-hidden mb-4`}>
+                    <div
+                      className={`bg-gradient-to-r ${colors.progress} h-2 rounded-full transition-all`}
+                      style={{ width: `${stage.score}%` }}
+                    />
+                  </div>
+
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      router.push(stage.href)
+                    }}
+                    className={`w-full font-bold text-sm py-4 transition-all active:scale-95 ${
+                      stage.completed
+                        ? 'bg-green/30 hover:bg-green/40 text-green border-2 border-green/50'
+                        : `bg-${i === 0 ? 'blue' : i === 1 ? 'cyan' : i === 2 ? 'orange' : 'red'}/70 hover:bg-${i === 0 ? 'blue' : i === 1 ? 'cyan' : i === 2 ? 'orange' : 'red'}/60 text-white border-2 border-${i === 0 ? 'blue' : i === 1 ? 'cyan' : i === 2 ? 'orange' : 'red'}/50`
+                    }`}
+                  >
+                    {stage.completed ? 'Ver Resultados' : 'Continuar Ahora'}
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </div>
+              )
+            })}
           </div>
         </div>
 
