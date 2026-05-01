@@ -471,7 +471,7 @@ export default function DespegaOnboarding() {
               <CardContent className="p-6">
                 <div className="grid md:grid-cols-4 gap-6">
                   <div className="md:col-span-1">
-                    <div className="text-6xl mb-3">⚡</div>
+                    <div className="text-6xl mb-3"></div>
                     <h3 className="text-2xl font-bold text-red dark:text-red/40 mb-2">D</h3>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">IMPULSOR</p>
                     <div className="w-8 h-1 bg-red/50 rounded mt-2"></div>

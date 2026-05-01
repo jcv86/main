@@ -316,7 +316,7 @@ export default function InvestorPitch() {
                 </div>
 
                 <div className="bg-red/5 rounded-lg p-5 border border-pink-100">
-                  <h3 className="font-bold text-lg mb-2 text-foreground">⚡ Stack Tecnológico Moderno</h3>
+                  <h3 className="font-bold text-lg mb-2 text-foreground"> Stack Tecnológico Moderno</h3>
                   <p className="text-muted text-sm">
                     Construido con Next.js 15, React 19, PostgreSQL con pgvector. Los competidores utilizan tecnología
                     obsoleta con sistemas más lentos y menos inteligentes.

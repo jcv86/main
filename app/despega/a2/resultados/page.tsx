@@ -51,7 +51,7 @@ const insightCards = [
   },
   {
     key: 'riesgosOportunidades',
-    icon: '⚡',
+    icon: '',
     title: 'Riesgos & Oportunidades',
     color: 'from-blue/50'
   }
@@ -144,7 +144,7 @@ export default function A2ResultadosPage() {
 
   if (error) {
     return (
-      <ASection title="Resultados: Tu Plan de Ruta" subtitle="Análisis de Tu Estrategia" icon="🗺️" colorClass="from-blue">
+      <ASection title="Resultados: Tu Plan de Ruta" subtitle="Análisis de Tu Estrategia" icon="" colorClass="from-blue">
         <ASectionPart title="Error" icon={<Target />}>
           <div className="space-y-4">
             <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
@@ -164,7 +164,7 @@ export default function A2ResultadosPage() {
   }
 
   return (
-    <ASection title="A2: Camino" subtitle="Resultados de tu Misión" icon="🗺️" colorClass="from-blue">
+    <ASection title="A2: Camino" subtitle="Resultados de tu Misión" icon="" colorClass="from-blue">
       <ASectionPart title="Insights Generados" icon={<Zap />}>
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

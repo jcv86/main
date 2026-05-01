@@ -146,7 +146,7 @@ export default function DespegazoDashboard() {
       completed: progress.a2_completed,
       href: '/despega/a2-routes',
       score: readiness.a2_completeness,
-      icon: '🗺️',
+      icon: '',
       color: 'from-blue'
     },
     {
@@ -158,7 +158,7 @@ export default function DespegazoDashboard() {
         progress.a3_progress.market_insights,
       href: '/despega/a3',
       score: readiness.a3_completeness,
-      icon: '⚡',
+      icon: '',
       color: 'from-blue'
     },
     {
@@ -167,7 +167,7 @@ export default function DespegazoDashboard() {
       completed: progress.a4_active,
       href: '/despega/a4-radar',
       score: readiness.a4_completeness,
-      icon: '📡',
+      icon: '',
       color: 'from-blue/50'
     }
   ]

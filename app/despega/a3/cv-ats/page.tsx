@@ -665,7 +665,7 @@ export default function CVATSPage() {
         {format === 'modern' && (
           <Card className="bg-yellow/5 dark:bg-amber-900/20 border-yellow/30 dark:border-yellow">
             <CardHeader>
-              <CardTitle className="text-base">⚡ Formato Moderno</CardTitle>
+              <CardTitle className="text-base"> Formato Moderno</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground dark:text-white/85 space-y-2">
               <p>Diseño contemporáneo con timeline visual. Perfecto para tech companies y roles dinámicos.</p>

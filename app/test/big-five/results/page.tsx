@@ -400,7 +400,7 @@ export default function BigFiveResults() {
 
                 {/* Mapa de Impacto */}
                 <div>
-                  <h3 className="font-semibold text-lg mb-3 text-blue">🗺️ Mapa de Impacto en tu Vida</h3>
+                  <h3 className="font-semibold text-lg mb-3 text-blue"> Mapa de Impacto en tu Vida</h3>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div className="bg-background">
                       <h4 className="font-semibold text-green mb-2 flex items-center gap-2">

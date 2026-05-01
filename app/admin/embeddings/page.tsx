@@ -290,7 +290,7 @@ export default function EmbeddingsAdminPage() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <Badge variant={result.sourceType === "book" ? "default" : "secondary"}>
-                            {result.sourceType === "book" ? "📚 Libro" : "🌐 Web"}
+                            {result.sourceType === "book" ? " Libro" : " Web"}
                           </Badge>
                           <Badge variant="outline">{result.category}</Badge>
                         </div>

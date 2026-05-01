@@ -30,7 +30,7 @@ export default function A4DashboardPage() {
         <Tabs defaultValue="radar" className="w-full">
           <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 mb-8 bg-background/50 backdrop-blur-sm border border-border overflow-x-auto">
             <TabsTrigger value="radar" className="text-xs sm:text-sm">
-              📡 Radar
+               Radar
             </TabsTrigger>
             <TabsTrigger value="noticias" className="text-xs sm:text-sm">
               📰 Noticias

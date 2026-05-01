@@ -90,7 +90,7 @@ export default function RecomendacionesPage() {
         id: "energia",
         name: "Energía y Vitalidad",
         description: "Optimiza tu energía física y mental para un rendimiento sostenible",
-        icon: "⚡",
+        icon: "",
         color: "from-yellow-500500",
         borderColor: "border-yellow/20 dark:border-yellow",
         bgColor: "bg-yellow/5 dark:bg-yellow/20",

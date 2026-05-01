@@ -14,7 +14,7 @@ import { ArrowRight, CheckCircle } from "lucide-react"
 const ROUTE_INFO = {
   energia: {
     name: "Energía y Vitalidad",
-    icon: "⚡",
+    icon: "",
     color: "from-yellow-500500",
     bgColor: "bg-yellow/5 dark:bg-yellow/20",
     textColor: "text-yellow dark:text-yellow/10",

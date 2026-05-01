@@ -36,7 +36,7 @@ export default function AdminDashboardPage() {
                 👥 Usuarios
               </TabsTrigger>
               <TabsTrigger value="tesis" className="text-xs sm:text-sm">
-                📡 Tesis
+                 Tesis
               </TabsTrigger>
               <TabsTrigger value="noticias" className="text-xs sm:text-sm">
                 📰 Noticias

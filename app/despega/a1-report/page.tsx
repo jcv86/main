@@ -316,7 +316,7 @@ export default function A1ReportPage() {
             <h3 className="font-bold text-2xl text-white mb-8">Desglose Completo de Dimensiones</h3>
             <div className="space-y-5">
               {[
-                { label: 'Impulsor', score: profile.D, color: 'from-red-500', icon: '⚡', description: 'Orientado a resultados' },
+                { label: 'Impulsor', score: profile.D, color: 'from-red-500', icon: '', description: 'Orientado a resultados' },
                 { label: 'Catalizador', score: profile.I, color: 'from-yellow-500', icon: '🔥', description: 'Influyente y comunicativo' },
                 { label: 'Estabilizador', score: profile.S, color: 'from-green', icon: '🛡️', description: 'Constante y confiable' },
                 { label: 'Arquitecto', score: profile.C, color: 'from-blue', icon: '🏗️', description: 'Analítico y preciso' }
@@ -432,7 +432,7 @@ export default function A1ReportPage() {
 
           <Card className="bg-gradient-to-br from-green/20 to-green/5 border-2 border-green/40 hover:border-green/60 transition-all">
             <CardHeader>
-              <CardTitle className="text-xl text-white">🗺️ Crea Tu Ruta</CardTitle>
+              <CardTitle className="text-xl text-white"> Crea Tu Ruta</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-base text-white/85 mb-6 leading-relaxed">Diseña tu plan de 90 días personalizado para alcanzar tus objetivos.</p>

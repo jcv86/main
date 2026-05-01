@@ -55,7 +55,7 @@ export default function MarketRadarPage() {
     <ASection
       title="Tu Inteligencia de Mercado"
       subtitle="Monitoreo Continuo y Oportunidades"
-      icon="📡"
+      icon=""
       colorClass="from-blue/50"
     >
       {/* EXPLICACIÓN */}

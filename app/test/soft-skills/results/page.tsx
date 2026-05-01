@@ -1862,7 +1862,7 @@ export default function SoftSkillsResults() {
                         </TableCell>
                         <TableCell>
                           <div className="space-y-1">
-                            <p className="font-medium text-sm">📚 "Los 5 Lenguajes del Amor" - Gary Chapman</p>
+                            <p className="font-medium text-sm"> "Los 5 Lenguajes del Amor" - Gary Chapman</p>
                             <p className="text-xs text-muted-foreground">Aplicable a todas las relaciones</p>
                           </div>
                         </TableCell>

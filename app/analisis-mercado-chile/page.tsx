@@ -419,7 +419,7 @@ export default function AnalisisMercadoChilePage() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <span className="text-3xl">⚡</span>
+                  <span className="text-3xl"></span>
                   <div>
                     <strong className="text-lg">Tecnología de Punta (Next.js 16, Supabase, OpenAI)</strong>
                     <p className="text-green/5 text-sm mt-1">

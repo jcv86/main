@@ -16,7 +16,7 @@ const RUTAS = [
     id: "energia",
     name: "Ruta Energía",
     description: "Optimiza tu vitalidad física y mental",
-    icon: "⚡",
+    icon: "",
     color: "bg-orange",
     lightColor: "bg-yellow/10",
     textColor: "text-yellow",

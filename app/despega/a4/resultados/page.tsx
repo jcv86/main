@@ -116,7 +116,7 @@ export default function A4ResultadosPage() {
 
   if (error) {
     return (
-      <ASection title="Resultados: Tu Inteligencia Estratégica" subtitle="Análisis y Recomendaciones" icon="📡" colorClass="from-blue/50">
+      <ASection title="Resultados: Tu Inteligencia Estratégica" subtitle="Análisis y Recomendaciones" icon="" colorClass="from-blue/50">
         <ASectionPart title="Error" icon={<Target />}>
           <div className="space-y-4">
             <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
@@ -136,7 +136,7 @@ export default function A4ResultadosPage() {
   }
 
   return (
-    <ASection title="A4: Radar" subtitle="Resultados Estratégicos" icon="📡" colorClass="from-blue/50">
+    <ASection title="A4: Radar" subtitle="Resultados Estratégicos" icon="" colorClass="from-blue/50">
       <ASectionPart title="Análisis Estratégico Completo" icon={<Zap />}>
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

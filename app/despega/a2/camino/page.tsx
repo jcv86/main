@@ -34,7 +34,7 @@ export default function A2CaminoPage() {
     {
       id: "hibrido",
       name: "Camino Híbrido",
-      icon: "⚡",
+      icon: "",
       description: "Lo mejor de ambos mundos integrado",
       examples: ["Personal + Profesional", "Integración", "Momentum", "Transformación"],
     },
