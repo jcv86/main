@@ -48,8 +48,9 @@ export function StepHeader({
             className={`w-14 h-14 rounded-full ${pillarColor === "red" ? "" : pillarColors[pillarColor]} flex items-center justify-center flex-shrink-0 font-black shadow-lg`}
             style={stepNumber === 0 ? { 
               backgroundColor: "rgba(80, 160, 170, 0.2)",
-              border: "2px solid rgba(255, 255, 255, 0.32)",
-              fontSize: "30px"
+              border: "none",
+              fontSize: "30px",
+              color: "white"
             } : pillarColor === "red" ? { 
               backgroundColor: "rgba(225, 120, 130, 0.8)",
               border: "1px solid rgba(225, 120, 130, 0.2)"
