@@ -202,12 +202,14 @@ export default function Conozcamonos2Page() {
           <h1 className="text-5xl md:text-6xl text-white mb-4" style={{ fontWeight: 200 }}>
             Diseña Tu Ruta de 90 Días
           </h1>
-          <p className="mb-6" style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.6)' }}>
+          <p className="mb-6" style={{ fontSize: '24px', color: 'rgba(255, 255, 255, 0.6)' }}>
             {currentStep === 'paso1'
               ? 'Paso 1: Define tu objetivo y contexto profesional'
               : 'Paso 2: Personaliza los detalles de tu desarrollo'}
           </p>
-          <Progress value={progress} className="h-3" style={{ backgroundColor: 'rgba(90, 90, 150, 0.4)' }} />
+          <Progress value={progress} className="h-3" style={{ backgroundColor: 'rgba(90, 90, 150, 0.4)' }}>
+            <div className="h-full w-full transition-all" style={{ backgroundColor: 'rgb(110, 130, 190)' }}></div>
+          </Progress>
           <p className="mt-3" style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.6)', fontWeight: 300 }}>
             Progreso: {completedCount} de {totalQuestions} preguntas completadas
           </p>
@@ -227,7 +229,7 @@ export default function Conozcamonos2Page() {
               }`}
             >
               <div className="flex items-start gap-3 mb-4">
-              <h3 className="text-lg font-bold text-white flex-1">
+              <h3 className="text-lg text-white flex-1" style={{ fontWeight: 500 }}>
                 {question.question}
               </h3>
               {isAnswered && <span className="text-blue text-xl font-bold"></span>}
