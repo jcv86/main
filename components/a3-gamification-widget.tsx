@@ -76,7 +76,7 @@ export default function A3GamificationWidget() {
         <CardContent className="pt-6 pb-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Zap className="w-10 h-10 text-amber-400" />
+              <Zap className="w-10 h-10" style={{ color: 'rgb(170, 70, 170)' }} />
               <div>
                 <p className="text-xs text-muted-foreground uppercase tracking-wider">Nivel</p>
                 <p className="text-4xl font-bold text-white">{gamification.currentLevel}</p>
@@ -84,19 +84,19 @@ export default function A3GamificationWidget() {
             </div>
             <div className="text-right">
               <p className="text-xs text-muted-foreground uppercase tracking-wider">XP</p>
-              <p className="text-3xl font-bold text-amber-400">{gamification.totalXp}</p>
+              <p className="text-3xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>{gamification.totalXp}</p>
             </div>
           </div>
           
           <div className="space-y-2 mt-4">
             <div className="flex justify-between items-center text-xs">
               <span className="text-muted-foreground">Progreso</span>
-              <span className="text-amber-400 font-semibold">{Math.round(xpPercentage)}%</span>
+              <span className="font-semibold" style={{ color: 'rgb(170, 70, 170)' }}>{Math.round(xpPercentage)}%</span>
             </div>
             <div className="w-full bg-muted/40 rounded-full h-3 overflow-hidden">
               <div
-                className="bg-gradient-to-r from-amber-400 to-amber-600 h-3 rounded-full transition-all duration-500"
-                style={{ width: `${xpPercentage}%` }}
+                className="h-3 rounded-full transition-all duration-500"
+                style={{ width: `${xpPercentage}%`, backgroundColor: 'rgb(170, 70, 170)' }}
               />
             </div>
           </div>
@@ -108,20 +108,20 @@ export default function A3GamificationWidget() {
         <Card className="border-emerald-500/30 bg-gradient-to-br from-emerald-500/10 to-background">
           <CardContent className="pt-6 pb-6 text-center">
             <div className="flex justify-center mb-3">
-              <Flame className="w-8 h-8 text-emerald-500" />
+              <Flame className="w-8 h-8" style={{ color: 'rgb(170, 70, 170)' }} />
             </div>
-            <p className="text-4xl font-bold text-emerald-500">{gamification.streak}</p>
-            <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">racha</p>
+            <p className="text-4xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>{gamification.streak}</p>
+            <p className="text-xs text-white mt-1 uppercase tracking-wider">racha</p>
           </CardContent>
         </Card>
 
         <Card className="border-purple/30 bg-gradient-to-br from-purple/10 to-background">
           <CardContent className="pt-6 pb-6 text-center">
             <div className="flex justify-center mb-3">
-              <Trophy className="w-8 h-8 text-purple" />
+              <Trophy className="w-8 h-8" style={{ color: 'rgb(170, 70, 170)' }} />
             </div>
-            <p className="text-4xl font-bold text-purple">{gamification.badges.length}</p>
-            <p className="text-xs text-muted-foreground mt-1 uppercase tracking-wider">badges</p>
+            <p className="text-4xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>{gamification.badges.length}</p>
+            <p className="text-xs text-white mt-1 uppercase tracking-wider">badges</p>
           </CardContent>
         </Card>
       </div>
