@@ -21,11 +21,11 @@ export function QuestionProgress({
   const estimatedTimeRemaining = (totalQuestions - currentQuestion + 1) * estimatedTimePerQuestion
 
   return (
-    <div className="bg-muted/5 dark:bg-transparent rounded-[28px] p-4 mb-6 border border-muted/20 dark:border-muted/80">
+    <div className="bg-muted/5 dark:bg-transparent rounded-[28px] p-4 mb-6 border" style={{ borderRadius: '2px', borderStyle: 'none', backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-4">
           <div>
-            <p className="text-sm font-semibold text-foreground/70">Pregunta {currentQuestion} de {totalQuestions}</p>
+            <p className="text-sm font-semibold" style={{ color: 'rgba(80, 160, 170)', fontWeight: '900' }}>Pregunta {currentQuestion} de {totalQuestions}</p>
             <p className="text-xs text-foreground/60 mt-0.5">Código: <span className="font-mono font-semibold text-foreground/80">{questionCode}</span></p>
           </div>
         </div>
@@ -38,10 +38,10 @@ export function QuestionProgress({
       </div>
 
       {/* Progress bar */}
-      <div className="w-full bg-muted/20 dark:bg-transparent rounded-full h-2 overflow-hidden">
+      <div className="w-full rounded-full h-2 overflow-hidden" style={{ backgroundColor: 'rgba(70, 90, 110)' }}>
         <div
-          className="bg-blue h-full transition-all duration-300 ease-out"
-          style={{ width: `${progressPercentage}%` }}
+          className="h-full transition-all duration-300 ease-out"
+          style={{ width: `${progressPercentage}%`, backgroundColor: 'rgb(0, 190, 200)' }}
         />
       </div>
 

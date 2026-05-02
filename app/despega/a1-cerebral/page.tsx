@@ -159,20 +159,22 @@ export default function A1CerebralPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12 max-w-3xl">
-        <QuestionProgress
-          currentQuestion={idx + 1}
-          totalQuestions={DISC_TEST_QUESTIONS.length}
-          questionCode={questionCode}
-          estimatedTimePerQuestion={20}
-          showTimeRemaining={true}
-        />
+        <div style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderStyle: 'none', padding: '1rem', marginBottom: '1.5rem' }}>
+          <QuestionProgress
+            currentQuestion={idx + 1}
+            totalQuestions={DISC_TEST_QUESTIONS.length}
+            questionCode={questionCode}
+            estimatedTimePerQuestion={20}
+            showTimeRemaining={true}
+          />
+        </div>
         
         {/* Main Question Card */}
-        <div className="bg-card border-2 border-purple/30 rounded-2xl p-10 mb-8 shadow-lg">
+        <div className="bg-card border-2 rounded-2xl p-10 mb-8 shadow-lg" style={{ borderStyle: 'none', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderRadius: '2px' }}>
           {/* Question Header */}
           <div className="mb-10 pb-6 border-b border-purple/20">
-            <h2 className="text-3xl font-bold text-white leading-tight">{q.pregunta}</h2>
-            <p className="text-purple mt-3 font-semibold">Instrucción: Selecciona una opción en cada columna</p>
+            <h2 className="text-3xl text-white leading-tight" style={{ fontWeight: '500' }}>{q.pregunta}</h2>
+            <p className="mt-3 font-semibold" style={{ color: 'rgba(80, 160, 170)', fontWeight: '700' }}>Instrucción: Selecciona una opción en cada columna</p>
           </div>
 
           {/* Response Timing Display (if available) */}
@@ -250,7 +252,7 @@ export default function A1CerebralPage() {
         </div>
 
         {/* Navigation buttons */}
-        <div className="flex gap-4">
+        <div className="flex gap-4" style={{ borderRadius: '30px' }}>
           <Button 
             onClick={() => idx > 0 && setIdx(idx - 1)} 
             variant="outline" 
