@@ -311,7 +311,8 @@ export default function Conozcamonos1Page() {
                 <textarea
                   value={responses[question.id] || ''}
                   onChange={(e) => handleAnswer(e.target.value)}
-                  className="flex-1 p-4 bg-background border border-border rounded-lg text-foreground"
+                  className="flex-1 p-4 bg-background border border-border text-foreground"
+                  style={{ borderRadius: '2px' }}
                   rows={4}
                   placeholder="Escribe tu respuesta aquí o usa el micrófono..."
                 />

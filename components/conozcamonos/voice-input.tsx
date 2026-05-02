@@ -45,6 +45,11 @@ export function VoiceInput({ onTranscript, isDisabled = false }: VoiceInputProps
       variant={isListening ? 'destructive' : 'outline'}
       size="sm"
       className="gap-2"
+      style={!isListening ? {
+        backgroundColor: 'rgb(80, 160, 170, 0.6)',
+        color: 'rgba(255, 255, 255, 0.92)',
+        border: 'none'
+      } : undefined}
       title={isListening ? 'Detener grabación' : 'Usar micrófono para responder'}
     >
       {isListening ? (
