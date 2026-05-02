@@ -238,7 +238,7 @@ export default function BienvenidaPage() {
 
         {/* Tu Viaje en 4 Pilares */}
         <div className="rounded-[2px] shadow-sm p-8 mb-8 border-0" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
-          <h2 className="text-lg font-semibold text-muted/90 dark:text-white mb-6">Tu Viaje en 4 Pilares</h2>
+          <h2 className="text-lg font-semibold mb-6" style={{ color: 'rgb(80, 160, 170)' }}>Tu Viaje en 4 Pilares</h2>
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="flex items-start gap-4">
               <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/20 flex-shrink-0" style={{ backgroundColor: 'rgb(80, 160, 170, 0.4)' }}>
@@ -280,8 +280,8 @@ export default function BienvenidaPage() {
         </div>
 
         {/* Timeline */}
-        <div className="bg-purple/5 dark:bg-purple/30 rounded-[28px] p-6 border-0 mb-8">
-          <h3 className="font-semibold text-muted/90 dark:text-white mb-3 flex items-center gap-2">
+        <div className="rounded-[28px] p-6 border-0 mb-8" style={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}>
+          <h3 className="font-semibold mb-3 flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)' }}>
             <Target className="w-5 h-5" style={{ color: 'rgb(80, 160, 170, 0.6)' }} />
             Tu Viaje de Transformación
           </h3>
