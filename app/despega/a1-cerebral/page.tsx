@@ -258,13 +258,24 @@ export default function A1CerebralPage() {
             variant="outline" 
             disabled={idx === 0} 
             className="flex-1 py-6 text-base font-semibold"
+            style={{
+              borderRadius: '20px',
+              borderColor: 'rgba(80, 160, 170, 0.6)',
+              color: 'rgba(80, 160, 170, 0.6)',
+              backgroundColor: 'transparent',
+              border: '2px solid rgba(80, 160, 170, 0.6)'
+            }}
           >
             ← Anterior
           </Button>
           <Button 
             onClick={handleNext} 
             disabled={!bothAnswered || loading} 
-            className="flex-1 py-6 text-base font-semibold"
+            className="flex-1 py-6 text-base font-semibold text-white"
+            style={{
+              backgroundColor: 'rgba(80, 160, 170, 0.6)',
+              borderRadius: '20px'
+            }}
           >
             {loading ? 'Guardando...' : isLast ? 'Ver Resultados →' : 'Siguiente →'}
           </Button>
