@@ -8,6 +8,7 @@ interface AIAssistantProps {
   onUseSuggestion?: (suggestion: string) => void
   buttonLabel?: string
   title?: string
+  pillarColor?: string
 }
 
 export function AIAssistant({ 
@@ -15,7 +16,8 @@ export function AIAssistant({
   currentResponse, 
   onUseSuggestion,
   buttonLabel = 'Asistencia Tu Coach',
-  title = 'Tu Coach IA'
+  title = 'Tu Coach IA',
+  pillarColor = 'rgba(80, 160, 170, 0.6)'
 }: AIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [suggestion, setSuggestion] = useState<string | null>(null)
@@ -61,7 +63,7 @@ export function AIAssistant({
         size="sm"
         className="gap-2"
         style={{
-          backgroundColor: 'rgba(80, 160, 170, 0.6)',
+          backgroundColor: pillarColor,
           color: 'rgba(255, 255, 255, 0.92)',
           border: 'none',
           borderRadius: '20px'
@@ -77,8 +79,8 @@ export function AIAssistant({
     <div 
       className="space-y-3 p-4"
       style={{
-        backgroundColor: 'rgb(80, 160, 170, 0.2)',
-        border: '1px solid rgb(80, 160, 170, 0.6)',
+        backgroundColor: `${pillarColor.replace('0.6', '0.2')}`,
+        border: `1px solid ${pillarColor}`,
         borderRadius: '2px'
       }}
     >
@@ -158,7 +160,7 @@ export function AIAssistant({
                 size="sm"
                 className="flex-1 text-white"
                 style={{
-                  backgroundColor: 'rgb(80, 160, 170, 0.4)',
+                  backgroundColor: `${pillarColor.replace('0.6', '0.4')}`,
                   borderRadius: '20px'
                 }}
               >
@@ -174,7 +176,7 @@ export function AIAssistant({
           onClick={handleGetSuggestion}
           className="w-full text-white"
           style={{
-            backgroundColor: 'rgb(80, 160, 170, 0.4)',
+            backgroundColor: `${pillarColor.replace('0.6', '0.4')}`,
             borderRadius: '20px'
           }}
         >

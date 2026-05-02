@@ -6,9 +6,10 @@ import { useEffect, useRef } from 'react'
 interface VoiceInputProps {
   onTranscript: (text: string) => void
   isDisabled?: boolean
+  pillarColor?: string
 }
 
-export function VoiceInput({ onTranscript, isDisabled = false }: VoiceInputProps) {
+export function VoiceInput({ onTranscript, isDisabled = false, pillarColor = 'rgba(80, 160, 170, 0.6)' }: VoiceInputProps) {
   const { isListening, isSupported, transcript, isFinal, startListening, stopListening, resetTranscript } = useSpeechRecognition({
     language: 'es-ES',
     continuous: false,
@@ -46,7 +47,7 @@ export function VoiceInput({ onTranscript, isDisabled = false }: VoiceInputProps
       size="sm"
       className="gap-2"
       style={!isListening ? {
-        backgroundColor: 'rgba(80, 160, 170, 0.6)',
+        backgroundColor: pillarColor,
         color: 'rgba(255, 255, 255, 0.92)',
         border: 'none',
         borderRadius: '20px'

@@ -294,6 +294,7 @@ export default function Conozcamonos2Page() {
                         handleAnswer(question.id, (responses[question.id] as string || '') + (responses[question.id] ? ' ' : '') + text)
                       }}
                       isDisabled={loading || validatingIds.has(question.id)}
+                      pillarColor="rgba(90, 90, 150, 0.6)"
                     />
                     <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                       O habla para dictar tu respuesta
@@ -305,6 +306,7 @@ export default function Conozcamonos2Page() {
                     onUseSuggestion={(suggestion) => {
                       handleAnswer(question.id, suggestion)
                     }}
+                    pillarColor="rgba(90, 90, 150, 0.6)"
                   />
                 </div>
               )}
