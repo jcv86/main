@@ -64,7 +64,7 @@ export default function EjecucionContinuaPage() {
         <div className="mb-12 text-center">
           <h1 
             className="text-5xl md:text-6xl font-medium mb-4 text-balance"
-            style={{ color: "rgba(225, 120, 130, 0.6)" }}
+            style={{ color: "rgba(225, 120, 130)" }}
           >
             Ejecución Continua
           </h1>
@@ -82,8 +82,8 @@ export default function EjecucionContinuaPage() {
           {/* Key Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 mb-8">
             <div 
-              className="rounded-lg p-4"
-              style={{ backgroundColor: "rgba(225, 120, 130, 0.2)" }}
+              className="p-4"
+              style={{ backgroundColor: "rgba(225, 120, 130, 0.2)", borderRadius: "2px" }}
             >
               <div className="text-2xl mb-2"></div>
               <h3 
@@ -95,8 +95,8 @@ export default function EjecucionContinuaPage() {
               <p className="text-sm text-muted-foreground">Visualiza tu desempeño y avance en tiempo real</p>
             </div>
             <div 
-              className="rounded-lg p-4"
-              style={{ backgroundColor: "rgba(225, 120, 130, 0.2)" }}
+              className="p-4"
+              style={{ backgroundColor: "rgba(225, 120, 130, 0.2)", borderRadius: "2px" }}
             >
               <div className="text-2xl mb-2"></div>
               <h3 
@@ -108,8 +108,8 @@ export default function EjecucionContinuaPage() {
               <p className="text-sm text-muted-foreground">Acceso a ofertas laborales personalizadas del mercado</p>
             </div>
             <div 
-              className="rounded-lg p-4"
-              style={{ backgroundColor: "rgba(225, 120, 130, 0.2)" }}
+              className="p-4"
+              style={{ backgroundColor: "rgba(225, 120, 130, 0.2)", borderRadius: "2px" }}
             >
               <div className="text-2xl mb-2"></div>
               <h3 
@@ -125,7 +125,13 @@ export default function EjecucionContinuaPage() {
 
         {/* Navigation Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-5 mb-8 gap-1 bg-background/50 border-2 border-red/20">
+          <TabsList 
+            className="grid w-full grid-cols-5 mb-8 gap-1 rounded-[20px]"
+            style={{ 
+              backgroundColor: "rgba(20, 20, 20)",
+              border: "1px solid rgba(255, 120, 130, 0.4)"
+            }}
+          >
             <TabsTrigger 
               value="dashboard" 
               className="text-sm data-[state=active]:text-[rgba(225,120,130,0.9)]"
@@ -170,8 +176,16 @@ export default function EjecucionContinuaPage() {
 
           {/* Mi Progreso - Dashboard */}
           <TabsContent value="dashboard" className="space-y-6">
-            <div className="mb-6 border-l-4 border-l-red pl-6">
-              <h2 className="text-3xl font-bold mb-2 text-red">Tu Desempeño Ejecutivo</h2>
+            <div 
+              className="mb-6 border-l-4 pl-6"
+              style={{ borderLeftColor: "rgba(255, 120, 130, 0.4)" }}
+            >
+              <h2 
+                className="text-3xl font-medium mb-2"
+                style={{ color: "rgba(225, 120, 130)" }}
+              >
+                Tu Desempeño Ejecutivo
+              </h2>
               <p className="text-muted-foreground dark:text-muted-foreground">
                 Visualiza tu progreso integral en el programa, métricas clave de desempeño y recomendaciones personalizadas
               </p>

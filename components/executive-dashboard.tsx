@@ -21,27 +21,27 @@ const mockMetrics: DashboardMetric[] = [
     label: 'Tu Nivel de Criterio',
     value: 72,
     unit: '%',
-    icon: <BarChart3 className="w-6 h-6 text-purple" />,
+    icon: <BarChart3 className="w-6 h-6" style={{ color: 'rgba(255, 120, 130, 0.4)' }} />,
     trend: 12
   },
   {
     label: 'Oportunidades Identificadas',
     value: 23,
-    icon: <Target className="w-6 h-6 text-blue" />,
+    icon: <Target className="w-6 h-6" style={{ color: 'rgba(255, 120, 130, 0.4)' }} />,
     trend: 5
   },
   {
     label: 'Horas de Aprendizaje',
     value: 47,
     unit: 'h',
-    icon: <Clock className="w-6 h-6 text-emerald-400" />,
+    icon: <Clock className="w-6 h-6" style={{ color: 'rgba(255, 120, 130, 0.4)' }} />,
     trend: 8
   },
   {
     label: 'Ranking Semanal',
     value: 145,
     unit: 'º',
-    icon: <Award className="w-6 h-6 text-orange" />,
+    icon: <Award className="w-6 h-6" style={{ color: 'rgba(255, 120, 130, 0.4)' }} />,
     trend: -12
   }
 ]
@@ -105,12 +105,28 @@ export function ExecutiveDashboard() {
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {mockMetrics.map((metric, idx) => (
-          <Card key={idx} className="border-t-4 border-t-purple hover:shadow-lg transition-all">
-            <CardContent className="p-6">
+          <Card 
+            key={idx} 
+            className="hover:shadow-lg transition-all"
+            style={{ 
+              borderRadius: "2px",
+              border: "1px solid rgba(255, 120, 130, 0.4)"
+            }}
+          >
+            <CardContent 
+              className="p-6"
+              style={{ backgroundColor: "rgba(50, 50, 50)", borderRadius: "2px" }}
+            >
               <div className="flex items-start justify-between mb-4">
                 <div>{metric.icon}</div>
                 {metric.trend && (
-                  <Badge className={metric.trend > 0 ? 'bg-emerald-100 text-emerald-800' : 'bg-red/10 text-red'}>
+                  <Badge 
+                    style={{
+                      backgroundColor: 'rgba(255, 120, 130, 0.2)',
+                      color: 'rgba(255, 120, 130, 0.8)',
+                      border: 'none'
+                    }}
+                  >
                     {metric.trend > 0 ? '+' : ''}{metric.trend}%
                   </Badge>
                 )}
@@ -131,13 +147,23 @@ export function ExecutiveDashboard() {
           {keyInsights.map((insight, idx) => (
             <Card
               key={idx}
-              className="cursor-pointer hover:border-purple/50 transition-colors"
+              className="cursor-pointer transition-colors"
               onClick={() => setExpandedInsight(expandedInsight === idx ? null : idx)}
+              style={{ 
+                borderRadius: "2px",
+                border: "none"
+              }}
             >
-              <CardContent className="p-6">
+              <CardContent 
+                className="p-6"
+                style={{ backgroundColor: "rgba(50, 50, 50)", borderRadius: "2px" }}
+              >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <h3 className="font-bold text-white mb-1">
+                    <h3 
+                      className="font-medium text-white mb-1"
+                      style={{ fontSize: "20px" }}
+                    >
                       {insight.title}
                     </h3>
                     {expandedInsight === idx && (
@@ -146,7 +172,16 @@ export function ExecutiveDashboard() {
                       </p>
                     )}
                   </div>
-                  <Button size="sm" className="ml-4 whitespace-nowrap bg-purple/70 hover:bg-purple/60">
+                  <Button 
+                    size="sm" 
+                    className="ml-4 whitespace-nowrap"
+                    style={{ 
+                      backgroundColor: 'rgba(255, 120, 130, 0.4)',
+                      color: 'rgba(255, 120, 130, 0.8)',
+                      borderRadius: "20px",
+                      border: 'none'
+                    }}
+                  >
                     {insight.action}
                   </Button>
                 </div>
@@ -161,20 +196,33 @@ export function ExecutiveDashboard() {
         <h2 className="text-2xl font-bold mb-4">Tu Próxima Semana</h2>
         <div className="space-y-3">
           {upcomingActions.map((action, idx) => (
-            <Card key={idx} className="border-l-4 border-l-teal-500">
-              <CardContent className="p-6">
+            <Card 
+              key={idx} 
+              style={{ 
+                borderRadius: "2px",
+                border: "none",
+                borderLeft: "4px solid rgba(255, 120, 130, 0.4)"
+              }}
+            >
+              <CardContent 
+                className="p-6"
+                style={{ backgroundColor: "rgba(50, 50, 50)", borderRadius: "2px" }}
+              >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-bold text-white">
+                      <h3 
+                        className="text-white"
+                        style={{ fontSize: "20px", fontWeight: "500" }}
+                      >
                         {action.title}
                       </h3>
                       <Badge
-                        className={
-                          action.priority === 'Alta'
-                            ? 'bg-red/10 text-red-400'
-                            : 'bg-amber-100 text-amber-900'
-                        }
+                        style={{
+                          backgroundColor: 'rgba(255, 120, 130, 0.2)',
+                          color: action.priority === 'Alta' ? 'rgb(120, 53, 15)' : 'rgb(120, 53, 15)',
+                          border: 'none'
+                        }}
                       >
                         {action.priority}
                       </Badge>
@@ -187,7 +235,10 @@ export function ExecutiveDashboard() {
                     size="sm" 
                     variant="outline"
                     onClick={() => handleActionClick(action.route)}
-                    className="cursor-pointer hover:bg-purple/10 dark:hover:bg-purple/20"
+                    style={{ 
+                      borderRadius: "20px",
+                      border: 'none'
+                    }}
                   >
                     Acceder
                   </Button>
@@ -202,7 +253,7 @@ export function ExecutiveDashboard() {
       <Card className="bg-background">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-purple" />
+            <CheckCircle2 className="w-5 h-5" style={{ color: 'rgba(255, 120, 130, 0.4)' }} />
             Tu Progreso General
           </CardTitle>
         </CardHeader>
@@ -212,7 +263,25 @@ export function ExecutiveDashboard() {
               <span className="text-sm font-semibold">Ciclo Completo C1→A4</span>
               <span className="text-sm text-muted-foreground dark:text-muted-foreground">72%</span>
             </div>
-            <Progress value={72} className="h-2" />
+            <div 
+              style={{ 
+                position: 'relative', 
+                width: '100%', 
+                height: '8px', 
+                backgroundColor: 'rgba(255, 120, 130, 0.2)',
+                borderRadius: '20px',
+                overflow: 'hidden'
+              }}
+            >
+              <div
+                style={{
+                  height: '100%',
+                  width: '72%',
+                  backgroundColor: 'rgba(255, 120, 130, 0.6)',
+                  transition: 'width 0.3s ease'
+                }}
+              />
+            </div>
           </div>
           <p className="text-sm text-muted-foreground dark:text-muted-foreground">
             Estás en fase A4. Has completado el 100% de A1, A2 y el 85% de A3. 

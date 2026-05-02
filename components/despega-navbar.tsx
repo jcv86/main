@@ -307,7 +307,10 @@ export function DespegaNavbar() {
                   </>
                 )}
               </div>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue/40 to-purple/40 border border-white/20 flex items-center justify-center flex-shrink-0">
+              <div 
+                className="w-8 h-8 rounded-full border flex items-center justify-center flex-shrink-0"
+                style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)', border: 'none' }}
+              >
                 <User className="w-4 h-4 text-white/80" />
               </div>
             </button>
@@ -317,7 +320,10 @@ export function DespegaNavbar() {
               <div className="absolute right-0 top-full mt-2 w-48 rounded-xl bg-[#0a0a0a] border border-white/10 shadow-2xl z-[9999] overflow-hidden">
                 <div className="px-4 py-3 border-b border-white/10">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue/40 to-purple/40 border border-white/20 flex items-center justify-center">
+                    <div 
+                      className="w-8 h-8 rounded-full border flex items-center justify-center"
+                      style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)', border: 'none' }}
+                    >
                       <User className="w-4 h-4 text-white/80" />
                     </div>
                     <div className="flex-1">
