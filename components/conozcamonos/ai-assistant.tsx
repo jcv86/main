@@ -124,7 +124,13 @@ export function AIAssistant({
 
       {suggestion && (
         <div className="space-y-3">
-          <div className="p-3 bg-transparent rounded border border-blue/10 dark:border-blue">
+          <div 
+            className="p-3 rounded"
+            style={{
+              backgroundColor: 'rgba(80, 160, 170, 0)',
+              border: 'none'
+            }}
+          >
             <p className="text-sm text-muted-foreground dark:text-white/85 whitespace-pre-wrap">
               {suggestion}
             </p>
