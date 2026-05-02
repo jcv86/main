@@ -7,7 +7,6 @@ import { Badge } from '@/components/ui/badge'
 import { Zap, BarChart3, Target, Video, ArrowRight, Clock, Zap as ZapIcon, Flame } from 'lucide-react'
 import Link from 'next/link'
 import A3ProgressDashboard from '@/components/a3-progress-dashboard'
-import A3GamificationWidget from '@/components/a3-gamification-widget'
 
 export default function EntrenamientoIntensivePage() {
   const router = useRouter()
@@ -52,9 +51,6 @@ export default function EntrenamientoIntensivePage() {
           <div className="grid md:grid-cols-3 gap-4">
             <div className="md:col-span-2">
               <A3ProgressDashboard />
-            </div>
-            <div>
-              <A3GamificationWidget />
             </div>
           </div>
         </div>

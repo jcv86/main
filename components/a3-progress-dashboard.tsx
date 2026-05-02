@@ -97,10 +97,10 @@ export default function A3ProgressDashboard() {
 
   return (
     <div className="space-y-4">
-      {/* Main KPI Card - 3 Metrics */}
+      {/* Main KPI Card - 2 Metrics */}
       <Card className="border-training/30 bg-gradient-to-br from-training/10 via-training/5 to-background overflow-hidden">
         <CardContent className="pt-8 pb-8">
-          <div className="grid grid-cols-3 gap-12">
+          <div className="grid grid-cols-2 gap-12">
             {/* Metric 1: Time */}
             <div className="text-center space-y-3">
               <Clock className="w-10 h-10 mx-auto opacity-70" style={{ color: 'rgb(170, 70, 170)' }} />
@@ -110,16 +110,7 @@ export default function A3ProgressDashboard() {
               </div>
             </div>
 
-            {/* Metric 2: Sessions */}
-            <div className="text-center space-y-3 border-l border-r border-training/20">
-              <Target className="w-10 h-10 mx-auto opacity-70" style={{ color: 'rgb(170, 70, 170)' }} />
-              <div>
-                <p className="text-5xl font-bold text-white">{progress.totalSessions}</p>
-                <p className="text-xs mt-2 uppercase tracking-wider text-white">sesiones</p>
-              </div>
-            </div>
-
-            {/* Metric 3: Level */}
+            {/* Metric 2: Level */}
             <div className="text-center space-y-3">
               <TrendingUp className="w-10 h-10 mx-auto opacity-70" style={{ color: 'rgb(170, 70, 170)' }} />
               <div>
@@ -131,62 +122,6 @@ export default function A3ProgressDashboard() {
         </CardContent>
       </Card>
 
-      {/* Completion Progress Bar */}
-      <Card className="border-muted/20 bg-muted/5">
-        <CardContent className="pt-4 pb-4">
-          <div className="flex items-center justify-between mb-3">
-            <p className="text-sm font-semibold text-white">Progreso General del Programa</p>
-            <p className="text-sm font-bold" style={{ color: 'rgb(170, 70, 170)' }}>{progress.completionPercentage}%</p>
-          </div>
-          <div className="w-full bg-muted/40 rounded-full h-3 overflow-hidden">
-            <div
-              className="h-3 rounded-full transition-all duration-500 ease-out"
-              style={{ width: `${progress.completionPercentage}%`, backgroundColor: 'rgb(170, 70, 170)' }}
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Active Challenge - Professional Layout */}
-      {challenge && (
-        <Card className="border-training/30 bg-gradient-to-br from-training/10 to-background">
-          <CardContent className="pt-6 pb-6">
-            <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-3">
-                <Zap className="w-8 h-8 opacity-70 flex-shrink-0" style={{ color: 'rgb(170, 70, 170)' }} />
-                <div>
-                  <p className="font-bold text-white text-lg">{challenge.name}</p>
-                  <p className="text-xs mt-0.5" style={{ color: 'rgb(170, 70, 170)' }}>{challenge.description}</p>
-                </div>
-              </div>
-              <div className="text-right flex-shrink-0">
-                <p className="text-xs text-white uppercase tracking-wider">Recompensa</p>
-                <p className="text-2xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>+{challenge.reward}</p>
-                <p className="text-xs" style={{ color: 'rgb(170, 70, 170)' }}>XP</p>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-muted-foreground font-medium">Progreso: {challenge.progress}/{challenge.total}</span>
-                <span className="font-semibold" style={{ color: 'rgb(170, 70, 170)' }}>{Math.round((challenge.progress / challenge.total) * 100)}%</span>
-              </div>
-              <div className="w-full bg-muted/40 rounded-full h-2.5 overflow-hidden">
-                <div
-                  className="h-2.5 rounded-full transition-all duration-500"
-                  style={{
-                    width: `${Math.min(
-                      (challenge.progress / challenge.total) * 100,
-                      100
-                    )}%`,
-                    backgroundColor: 'rgb(170, 70, 170)'
-                  }}
-                />
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   )
 }
