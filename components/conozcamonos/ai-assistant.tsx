@@ -73,13 +73,20 @@ export function AIAssistant({
   }
 
   return (
-    <div className="space-y-3 p-4 bg-blue/5 dark:bg-blue border border-blue/20 dark:border-blue rounded-lg">
+    <div 
+      className="space-y-3 p-4"
+      style={{
+        backgroundColor: 'rgb(80, 160, 170, 0.2)',
+        border: '1px solid rgb(80, 160, 170, 0.6)',
+        borderRadius: '2px'
+      }}
+    >
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-2">
-          <Lightbulb className="w-5 h-5 text-blue dark:text-blue/40 mt-0.5 flex-shrink-0" />
+          <Lightbulb className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'rgba(255, 255, 255, 0.40)' }} />
           <div>
-            <p className="font-semibold text-blue dark:text-blue/10">{title}</p>
-            <p className="text-sm text-blue dark:text-blue-300 mt-0.5">
+            <p className="font-semibold" style={{ color: 'rgba(255, 255, 255, 0.50)' }}>{title}</p>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(200, 200, 200)' }}>
               {suggestion ? 'Aquí está mi sugerencia:' : 'Obtén ayuda para responder esta pregunta'}
             </p>
           </div>
@@ -128,7 +135,10 @@ export function AIAssistant({
               onClick={handleGetSuggestion}
               variant="outline"
               size="sm"
-              className="flex-1 text-blue border-blue/20"
+              className="flex-1"
+              style={{
+                borderRadius: '20px'
+              }}
             >
               Otra sugerencia
             </Button>
@@ -139,7 +149,11 @@ export function AIAssistant({
                   setIsOpen(false)
                 }}
                 size="sm"
-                className="flex-1 bg-blue/80 hover:bg-blue/70"
+                className="flex-1 text-white"
+                style={{
+                  backgroundColor: 'rgb(80, 160, 170, 0.4)',
+                  borderRadius: '20px'
+                }}
               >
                 Usar como base
               </Button>
@@ -151,7 +165,11 @@ export function AIAssistant({
       {!suggestion && !loading && !error && (
         <Button
           onClick={handleGetSuggestion}
-          className="w-full bg-blue/80 hover:bg-blue/70 text-white"
+          className="w-full text-white"
+          style={{
+            backgroundColor: 'rgb(80, 160, 170, 0.4)',
+            borderRadius: '20px'
+          }}
         >
           Obtener Sugerencia
         </Button>

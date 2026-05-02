@@ -217,12 +217,11 @@ export default function Conozcamonos1Page() {
             className="inline-flex items-center gap-2 px-4 py-3 mb-4"
             style={{ 
               backgroundColor: 'rgb(80, 160, 170, 0.2)',
-              border: '2px solid rgb(80, 160, 170)',
-              borderRadius: '2px'
+              borderRadius: '20px'
             }}
           >
-            <span className="font-bold" style={{ color: 'rgb(80, 160, 170)' }}>●</span>
-            <p className="text-base font-bold" style={{ color: 'rgb(80, 160, 170)' }}>El Ritual: Paso 1 - Conocámonos</p>
+            <span style={{ color: 'rgb(80, 160, 170)' }}>●</span>
+            <p className="text-base" style={{ color: 'rgb(80, 160, 170)', fontWeight: 400 }}>El Ritual: Paso 1 - Conocámonos</p>
           </div>
           <h1 
             className="text-5xl md:text-6xl text-white mb-4 leading-tight"
@@ -230,7 +229,7 @@ export default function Conozcamonos1Page() {
           >
             Antes de Empezar, Cuéntame Tu Historia
           </h1>
-          <p className="text-xl text-white/90 font-medium leading-relaxed">Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
+          <p className="text-xl font-medium leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
         </div>
 
         <div 
@@ -240,7 +239,7 @@ export default function Conozcamonos1Page() {
             borderRadius: '2px'
           }}
         >
-          <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-6">{question.question}</h2>
+          <h2 className="text-2xl text-muted/90 dark:text-white mb-6" style={{ fontWeight: 500 }}>{question.question}</h2>
 
           {question.type === 'select' && (
             <div className="space-y-3">
