@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { Clock, Target, TrendingUp, Zap } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Clock, Target, TrendingUp, Zap, CheckCircle2 } from 'lucide-react'
 
 interface ProgressData {
   totalMinutes: number
@@ -34,6 +35,7 @@ export default function A3ProgressDashboard() {
   const [progress, setProgress] = useState<ProgressData | null>(null)
   const [challenge, setChallenge] = useState<ChallengeData | null>(null)
   const [loading, setLoading] = useState(true)
+  const [claimingReward, setClaimingReward] = useState(false)
 
   useEffect(() => {
     const fetchProgress = async () => {
@@ -86,6 +88,51 @@ export default function A3ProgressDashboard() {
     fetchProgress()
     fetchChallenge()
   }, [])
+
+  const handleClaimReward = async () => {
+    if (!challenge) return
+    
+    setClaimingReward(true)
+    try {
+      const response = await fetch('/api/a3/gamification/claim', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          challengeName: challenge.name,
+          reward: challenge.reward,
+        }),
+      })
+
+      if (response.ok) {
+        // Refresh data after claiming
+        const progressResponse = await fetch('/api/a3/progress', {
+          credentials: 'include',
+        })
+        if (progressResponse.ok) {
+          const updatedProgress = await progressResponse.json()
+          setProgress(updatedProgress)
+        }
+
+        // Refresh challenge
+        const challengeResponse = await fetch('/api/a3/gamification', {
+          credentials: 'include',
+        })
+        if (challengeResponse.ok) {
+          const challengeData = await challengeResponse.json()
+          if (challengeData.nextChallenge) {
+            setChallenge(challengeData.nextChallenge)
+          }
+        }
+      }
+    } catch (error) {
+      console.error('[v0] Error claiming reward:', error)
+    } finally {
+      setClaimingReward(false)
+    }
+  }
 
   if (loading) {
     return <div className="h-32 bg-muted/20 rounded-lg animate-pulse" />
@@ -199,6 +246,23 @@ export default function A3ProgressDashboard() {
                   />
                 </div>
               </div>
+
+              {/* CTA Button */}
+              {challenge.progress >= challenge.total ? (
+                <Button
+                  onClick={handleClaimReward}
+                  disabled={claimingReward}
+                  className="w-full mt-4 gap-2"
+                  style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff' }}
+                >
+                  <CheckCircle2 className="w-4 h-4" />
+                  {claimingReward ? 'Reclamando...' : 'Reclamar Recompensa'}
+                </Button>
+              ) : (
+                <div className="text-center text-xs text-muted-foreground mt-4 p-3 rounded-lg" style={{ backgroundColor: 'rgba(170, 70, 170, 0.05)' }}>
+                  Completa {challenge.total - challenge.progress} más para desbloquear esta recompensa
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
