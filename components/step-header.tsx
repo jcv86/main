@@ -16,7 +16,7 @@ const pillarColors = {
   blue: "bg-gradient-to-br from-blue to-blue/80 text-white border-2 border-blue/40",
   orange: "bg-gradient-to-br from-orange to-orange/80 text-white border-2 border-orange/40",
   cyan: "bg-gradient-to-br from-cyan to-cyan/80 text-white border-2 border-cyan/40",
-  red: "bg-gradient-to-br from-red to-red/80 text-white border-2 border-red/40",
+  red: "text-white",
   teal: "bg-gradient-to-br from-ritual to-ritual/80 text-white border-2 border-ritual/40",
 }
 
@@ -25,7 +25,7 @@ const pillarBgLight = {
   blue: "bg-gradient-to-br from-blue/20 to-blue/10 border-2 border-blue/40",
   orange: "bg-gradient-to-br from-orange/20 to-orange/10 border-2 border-orange/40",
   cyan: "bg-gradient-to-br from-cyan/20 to-cyan/10 border-2 border-cyan/40",
-  red: "bg-gradient-to-br from-red/20 to-red/10 border-2 border-red/40",
+  red: "shadow-lg",
   teal: "bg-gradient-to-br from-ritual/20 to-ritual/10 border-2 border-ritual/40",
 }
 
@@ -38,10 +38,19 @@ export function StepHeader({
   pillarColor = "blue",
 }: StepHeaderProps) {
   return (
-    <div className={`rounded-2xl p-10 mb-12 ${pillarBgLight[pillarColor]} shadow-lg`}>
+    <div 
+      className={`rounded-2xl p-10 mb-12 ${pillarBgLight[pillarColor]}`}
+      style={pillarColor === "red" ? { backgroundColor: "rgba(225, 120, 130, 0.2)" } : undefined}
+    >
       <div className="flex items-start justify-between gap-6 mb-6">
         <div className="flex items-start gap-6">
-          <div className={`w-14 h-14 rounded-full ${pillarColors[pillarColor]} flex items-center justify-center flex-shrink-0 text-xl font-black shadow-lg`}>
+          <div 
+            className={`w-14 h-14 rounded-full ${pillarColor === "red" ? "" : pillarColors[pillarColor]} flex items-center justify-center flex-shrink-0 text-xl font-black shadow-lg`}
+            style={pillarColor === "red" ? { 
+              backgroundColor: "rgba(225, 120, 130, 0.8)",
+              border: "1px solid rgba(225, 120, 130, 0.2)"
+            } : undefined}
+          >
             {stepNumber}
           </div>
           <div className="flex-1">
