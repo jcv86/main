@@ -207,9 +207,7 @@ export default function Conozcamonos2Page() {
               ? 'Paso 1: Define tu objetivo y contexto profesional'
               : 'Paso 2: Personaliza los detalles de tu desarrollo'}
           </p>
-          <Progress value={progress} className="h-3" style={{ backgroundColor: 'rgba(90, 90, 150, 0.4)' }}>
-            <div className="h-full w-full transition-all" style={{ backgroundColor: 'rgb(110, 130, 190)' }}></div>
-          </Progress>
+          <Progress value={progress} className="h-3" indicatorColor="rgb(90, 90, 150)" />
           <p className="mt-3" style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.6)', fontWeight: 300 }}>
             Progreso: {completedCount} de {totalQuestions} preguntas completadas
           </p>
