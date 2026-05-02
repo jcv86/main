@@ -52,14 +52,12 @@ export default function EntrenamientoIntensivePage() {
             <div className="md:col-span-2">
               <A3ProgressDashboard />
             </div>
-            <div className="flex items-center justify-center">
-              <div style={{ borderColor: 'rgb(170, 70, 170)', borderRadius: '0px' }} className="border-2 p-4 h-full flex items-center justify-center bg-background/50">
-                <img 
-                  src="/images/rocket-teal.jpg" 
-                  alt="Rocket placeholder" 
-                  className="w-full h-auto object-contain max-h-96"
-                />
-              </div>
+            <div className="flex items-center justify-center bg-background">
+              <img 
+                src="/images/rocket-teal.jpg" 
+                alt="Rocket placeholder" 
+                className="w-full h-auto object-contain max-h-96"
+              />
             </div>
           </div>
         </div>
