@@ -237,12 +237,12 @@ export default function ChallensingTrainingPage() {
         {/* Header */}
         <div className="flex-shrink-0 border-b border-muted/80 bg-background">
           <div className="flex items-center justify-between">
-            <Link href="/despega/a3" className="flex items-center gap-2 text-cyan hover:text-cyan/80">
+            <Link href="/despega/a3" className="flex items-center gap-2 text-purple/60 hover:text-purple/80">
               <ArrowLeft className="w-4 h-4" />
               Volver al Dashboard
             </Link>
             <div className="flex gap-4 items-center">
-              <Badge className="bg-red">DESAFÍO MÁXIMO</Badge>
+              <Badge className="bg-purple/60">DESAFÍO MÁXIMO</Badge>
               <Badge className="bg-purple">{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
             </div>
           </div>
@@ -276,12 +276,12 @@ export default function ChallensingTrainingPage() {
                 
                 {/* Question Display */}
                 <div className="space-y-2">
-                  <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-start justify-between gap-4">
                     <div>
                       <h3 className="text-sm font-bold text-muted-foreground mb-2">Pregunta {currentQuestion + 1} de {CHALLENGING_QUESTIONS.length}</h3>
                       <p className="text-lg text-white font-semibold">{question.question}</p>
                     </div>
-                    <Badge className={question.difficulty === 'Crítico' ? 'bg-red' : 'bg-yellow'}>{question.difficulty}</Badge>
+                    <Badge className={question.difficulty === 'Crítico' ? 'bg-purple/40' : 'bg-yellow'}>{question.difficulty}</Badge>
                   </div>
                 </div>
 
@@ -295,7 +295,7 @@ export default function ChallensingTrainingPage() {
                         {!isRecording ? (
                           <Button
                             onClick={startRecording}
-                            className="flex-1 bg-red/80 hover:bg-red/70 gap-2"
+                            className="flex-1 bg-purple/80 hover:bg-purple/70 gap-2 rounded-[20px]"
                           >
                             <Mic className="w-4 h-4" />
                             Comenzar Grabación
@@ -323,7 +323,7 @@ export default function ChallensingTrainingPage() {
                           setHasResponse(e.target.value.trim().length > 0)
                         }}
                         placeholder="Escribe aquí tu respuesta detallada... (mínimo 50 caracteres)"
-                        className="w-full h-24 bg-muted/80 text-white border border-muted/70 rounded-[28px] p-3 text-sm focus:border-purple/50 focus:outline-none resize-none"
+                        className="w-full h-24 bg-purple/40 text-purple/60 border border-muted/70 rounded-[28px] p-3 text-sm focus:border-purple/50 focus:outline-none resize-none"
                       />
                       {textResponse && <p className="text-xs text-green/40 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />Respuesta escrita ({textResponse.length} caracteres)</p>}
                     </div>
@@ -368,7 +368,7 @@ export default function ChallensingTrainingPage() {
                     <div className="bg-background">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-semibold text-white/85">Tu Puntuación</p>
-                        <div className="text-3xl font-bold text-purple/40">{evaluation.score}</div>
+                        <div className="text-3xl font-bold text-purple">{evaluation.score}</div>
                       </div>
                       <p className="text-sm text-white/85">{evaluation.scoreExplanation}</p>
                     </div>
@@ -438,7 +438,7 @@ export default function ChallensingTrainingPage() {
               {/* Score Overview */}
               <div className="p-4 border-b border-muted/80 flex-shrink-0">
                 <h3 className="text-lg font-bold flex items-center gap-2 text-white mb-4">
-                  <BarChart3 className="w-5 h-5 text-purple" />
+                  <BarChart3 className="w-5 h-5 text-purple/60" />
                   Puntuación Ejecutiva
                 </h3>
                 <div className="space-y-4">
@@ -477,7 +477,7 @@ export default function ChallensingTrainingPage() {
                     disabled={!completedQuestions.includes(idx) && idx !== currentQuestion}
                     className={`w-full text-left p-3 rounded-lg transition-all text-xs disabled:opacity-50 ${
                       idx === currentQuestion
-                        ? 'bg-purple/30 border border-purple/50 text-white'
+                        ? 'bg-purple/20 border border-purple/60 text-white'
                         : completedQuestions.includes(idx)
                         ? 'bg-green/20 border border-green/40 cursor-pointer hover:bg-green/30 text-white'
                         : 'bg-white/10 border border-white/20 text-white/80'
