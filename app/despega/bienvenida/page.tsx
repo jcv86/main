@@ -72,7 +72,7 @@ export default function BienvenidaPage() {
         {/* Pilares Grid */}
         <div className="space-y-6 mb-12">
           {/* Paso 1: Conocer tu Perfil */}
-          <Card className="border-0 shadow-md bg-gradient-to-br from-purple/10 to-pink/10 dark:from-purple/20 dark:to-pink/20">
+          <Card className="border-0 shadow-md rounded-[2px]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
             <CardContent className="pt-8 pb-8 px-8">
               <div className="flex items-start gap-6">
                 <div className="flex items-center justify-center w-16 h-16 rounded-[28px] flex-shrink-0" style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)' }}>
@@ -113,7 +113,7 @@ export default function BienvenidaPage() {
           </Card>
 
           {/* Paso 2: Tu Plan de 90 Días */}
-          <Card className="border-0 shadow-md bg-gradient-to-br from-purple/10 to-blue/10 dark:from-purple/20 dark:to-blue/20">
+          <Card className="border-0 shadow-md rounded-[2px]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
             <CardContent className="pt-8 pb-8 px-8">
               <div className="flex items-start gap-6">
                 <div className="flex items-center justify-center w-16 h-16 rounded-[28px] flex-shrink-0" style={{ backgroundColor: 'rgba(90, 90, 150, 0.4)' }}>
@@ -154,7 +154,7 @@ export default function BienvenidaPage() {
           </Card>
 
           {/* Paso 3: Entrena y Analiza */}
-          <Card className="border-0 shadow-md bg-gradient-to-br from-training/10 to-orange/10 dark:from-training/20 dark:to-orange/20">
+          <Card className="border-0 shadow-md rounded-[2px]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
             <CardContent className="pt-8 pb-8 px-8">
               <div className="flex items-start gap-6">
                 <div className="flex items-center justify-center w-16 h-16 rounded-[28px] flex-shrink-0" style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)' }}>
@@ -195,7 +195,7 @@ export default function BienvenidaPage() {
           </Card>
 
           {/* Paso 4: Ejecución Continua */}
-          <Card className="border-0 shadow-md bg-gradient-to-br from-green/10 to-emerald/10 dark:from-green/20 dark:to-emerald/20">
+          <Card className="border-0 shadow-md rounded-[2px]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
             <CardContent className="pt-8 pb-8 px-8">
               <div className="flex items-start gap-6">
                 <div className="flex items-center justify-center w-16 h-16 rounded-[28px] flex-shrink-0" style={{ backgroundColor: 'rgba(225, 120, 130, 0.4)' }}>
@@ -237,7 +237,7 @@ export default function BienvenidaPage() {
         </div>
 
         {/* Tu Viaje en 4 Pilares */}
-        <div className="bg-white dark:bg-card rounded-[2px] shadow-sm p-8 mb-8 border-0 dark:border-card" style={{ backgroundColor: 'rgb(10, 30, 30)' }}>
+        <div className="rounded-[2px] shadow-sm p-8 mb-8 border-0" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
           <h2 className="text-lg font-semibold text-muted/90 dark:text-white mb-6">Tu Viaje en 4 Pilares</h2>
           <div className="grid sm:grid-cols-2 gap-6">
             <div className="flex items-start gap-4">
