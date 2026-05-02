@@ -177,7 +177,7 @@ export function ExecutiveDashboard() {
                     className="ml-4 whitespace-nowrap"
                     style={{ 
                       backgroundColor: 'rgba(255, 120, 130, 0.4)',
-                      color: 'rgba(255, 120, 130, 0.8)',
+                      color: idx === 0 ? 'rgba(243, 243, 243, 0.80)' : idx === 1 ? 'rgba(230, 230, 230, 0.80)' : 'rgba(255, 120, 130)',
                       borderRadius: "20px",
                       border: 'none'
                     }}
@@ -220,7 +220,7 @@ export function ExecutiveDashboard() {
                       <Badge
                         style={{
                           backgroundColor: 'rgba(255, 120, 130, 0.2)',
-                          color: action.priority === 'Alta' ? 'rgb(120, 53, 15)' : 'rgb(120, 53, 15)',
+                          color: 'rgba(255, 120, 130)',
                           border: 'none'
                         }}
                       >
@@ -237,7 +237,8 @@ export function ExecutiveDashboard() {
                     onClick={() => handleActionClick(action.route)}
                     style={{ 
                       borderRadius: "20px",
-                      border: 'none'
+                      border: 'none',
+                      color: '#eaeaea'
                     }}
                   >
                     Acceder
