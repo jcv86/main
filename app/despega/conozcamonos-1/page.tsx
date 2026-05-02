@@ -213,17 +213,31 @@ export default function Conozcamonos1Page() {
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <div className="mb-8">
-          <div className="inline-flex items-center gap-2 px-4 py-3 bg-purple/10 border border-purple/30 rounded-lg mb-4">
-            <span className="text-purple font-bold">●</span>
-            <p className="text-base font-bold text-purple">El Ritual: Paso 1 - Conocámonos</p>
+          <div 
+            className="inline-flex items-center gap-2 px-4 py-3 rounded-lg mb-4"
+            style={{ 
+              backgroundColor: 'rgb(80, 160, 170, 0.2)',
+              border: 'none'
+            }}
+          >
+            <span className="font-bold" style={{ color: 'rgb(80, 160, 170)' }}>●</span>
+            <p className="text-base font-bold" style={{ color: 'rgb(80, 160, 170)' }}>El Ritual: Paso 1 - Conocámonos</p>
           </div>
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 leading-tight">
+          <h1 
+            className="text-5xl md:text-6xl text-white mb-4 leading-tight"
+            style={{ fontWeight: 300 }}
+          >
             Antes de Empezar, Cuéntame Tu Historia
           </h1>
           <p className="text-xl text-white/90 font-medium leading-relaxed">Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
         </div>
 
-        <div className="bg-white dark:bg-background border-2 border-purple/30 dark:border-purple/50 rounded-2xl p-8 mb-8 shadow-lg">
+        <div 
+          className="bg-white dark:bg-background rounded-2xl p-8 mb-8 shadow-lg"
+          style={{ 
+            border: '2px solid rgb(80, 160, 170, 0.4)'
+          }}
+        >
           <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-6">{question.question}</h2>
 
           {question.type === 'select' && (
