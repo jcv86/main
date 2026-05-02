@@ -145,7 +145,7 @@ export default function A3ProgressDashboard() {
   return (
     <div className="space-y-6">
       {/* Main KPI Card - 2 Metrics */}
-      <Card className="border-training/30 bg-gradient-to-br from-training/10 via-training/5 to-background overflow-hidden">
+      <Card className="border-training/30 bg-gradient-to-br from-training/10 via-training/5 to-background overflow-hidden" style={{ borderRadius: '0px' }}>
         <CardContent className="pt-8 pb-8">
           <div className="grid grid-cols-2 gap-12">
             {/* Metric 1: Time */}
@@ -170,12 +170,12 @@ export default function A3ProgressDashboard() {
       </Card>
 
       {/* Overall Progress Section */}
-      <Card className="border-training/20 bg-gradient-to-br from-training/5 to-background">
+      <Card className="border-training/20 bg-gradient-to-br from-training/5 to-background" style={{ borderRadius: '0px' }}>
         <CardContent className="pt-6 pb-6">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)' }}>
+                <div className="p-2" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)' }}>
                   <TrendingUp className="w-5 h-5" style={{ color: 'rgb(170, 70, 170)' }} />
                 </div>
                 <div>
@@ -187,9 +187,9 @@ export default function A3ProgressDashboard() {
             </div>
 
             {/* Progress Bar */}
-            <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden border border-training/10">
+            <div className="w-full bg-muted/30 h-2 overflow-hidden border border-training/10">
               <div
-                className="h-2 rounded-full transition-all duration-700 ease-out"
+                className="h-2 transition-all duration-700 ease-out"
                 style={{ 
                   width: `${progress.completionPercentage}%`, 
                   backgroundColor: 'rgb(170, 70, 170)'
@@ -205,13 +205,13 @@ export default function A3ProgressDashboard() {
 
       {/* Active Challenge Card */}
       {challenge && (
-        <Card className="border-training/30 bg-gradient-to-br from-training/10 to-background overflow-hidden">
+        <Card className="border-training/30 bg-gradient-to-br from-training/10 to-background overflow-hidden" style={{ borderRadius: '0px' }}>
           <CardContent className="pt-6 pb-6">
             <div className="space-y-4">
               {/* Challenge Header */}
               <div className="flex items-start justify-between">
                 <div className="flex items-start gap-3 flex-1">
-                  <div className="p-2 rounded-lg mt-0.5" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)' }}>
+                  <div className="p-2 mt-0.5" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)' }}>
                     <Zap className="w-5 h-5 flex-shrink-0" style={{ color: 'rgb(170, 70, 170)' }} />
                   </div>
                   <div>
@@ -233,9 +233,9 @@ export default function A3ProgressDashboard() {
                     {Math.round((challenge.progress / challenge.total) * 100)}%
                   </span>
                 </div>
-                <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden border border-training/10">
+                <div className="w-full bg-muted/30 h-2 overflow-hidden border border-training/10">
                   <div
-                    className="h-2 rounded-full transition-all duration-700 ease-out"
+                    className="h-2 transition-all duration-700 ease-out"
                     style={{
                       width: `${Math.min(
                         (challenge.progress / challenge.total) * 100,
@@ -253,13 +253,13 @@ export default function A3ProgressDashboard() {
                   onClick={handleClaimReward}
                   disabled={claimingReward}
                   className="w-full mt-4 gap-2"
-                  style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff' }}
+                  style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff', borderRadius: '0px' }}
                 >
                   <CheckCircle2 className="w-4 h-4" />
                   {claimingReward ? 'Reclamando...' : 'Reclamar Recompensa'}
                 </Button>
               ) : (
-                <div className="text-center text-xs text-muted-foreground mt-4 p-3 rounded-lg" style={{ backgroundColor: 'rgba(170, 70, 170, 0.05)' }}>
+                <div className="text-center text-xs text-muted-foreground mt-4 p-3" style={{ backgroundColor: 'rgba(170, 70, 170, 0.05)' }}>
                   Completa {challenge.total - challenge.progress} más para desbloquear esta recompensa
                 </div>
               )}
