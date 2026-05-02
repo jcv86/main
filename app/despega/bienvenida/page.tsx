@@ -103,7 +103,7 @@ export default function BienvenidaPage() {
                     </p>
                   </div>
                   <Link href="/despega/conocer" className="block mt-6">
-                    <Button className="w-full text-white font-bold text-lg py-6" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}>
+                    <Button className="w-full text-white font-bold text-lg py-6 rounded-[20px]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}>
                       Comenzar Diagnóstico <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>
                   </Link>
@@ -116,35 +116,35 @@ export default function BienvenidaPage() {
           <Card className="border-0 shadow-md bg-gradient-to-br from-purple/10 to-blue/10 dark:from-purple/20 dark:to-blue/20">
             <CardContent className="pt-8 pb-8 px-8">
               <div className="flex items-start gap-6">
-                <div className="flex items-center justify-center w-16 h-16 rounded-[28px] bg-purple/30 flex-shrink-0">
-                  <span className="text-3xl font-bold text-purple">2</span>
+                <div className="flex items-center justify-center w-16 h-16 rounded-[28px] flex-shrink-0" style={{ backgroundColor: 'rgba(90, 90, 150, 0.4)' }}>
+                  <span className="text-3xl font-bold" style={{ color: 'rgba(90, 90, 150)' }}>2</span>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Tu Plan: Ruta de 90 Días</h3>
+                  <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Exploración: Ruta de 90 Días</h3>
                   <p className="text-base text-muted-foreground dark:text-muted-foreground mb-4">
                     Plan estratégico personalizado de 90 días estructurado en 3 fases progresivas para tu transformación profesional.
                   </p>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-purple"></div>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(90, 90, 150)' }}></div>
                       <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Fase 1 (Días 1-30):</strong> Fundamentación - Aprende principios, desarrolla storytelling, define tu valor</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-purple"></div>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(90, 90, 150)' }}></div>
                       <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Fase 2 (Días 31-60):</strong> Exploración - Descubre oportunidades, construye red, mejora presencia digital</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-purple"></div>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(90, 90, 150)' }}></div>
                       <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Fase 3 (Días 61-90):</strong> Implementación - Aplica en entrevistas reales, negocia ofertas</p>
                     </div>
                   </div>
-                  <div className="mt-6 p-4 bg-background/80 rounded-lg border border-purple/20">
+                  <div className="mt-6 p-4 bg-background/80 rounded-[2px] border border-purple/20">
                     <p className="text-sm text-muted-foreground dark:text-white/85">
-                      <strong className="text-purple">Dedicación:</strong> 2-3 horas por semana | <strong className="text-purple">Feedback:</strong> Inmediato después de cada sesión
+                      <strong style={{ color: 'rgba(90, 90, 150)' }}>Dedicación:</strong> 2-3 horas por semana | <strong style={{ color: 'rgba(90, 90, 150)' }}>Feedback:</strong> Inmediato después de cada sesión
                     </p>
                   </div>
                   <Link href="/despega/plan" className="block mt-6">
-                    <Button className="w-full bg-purple hover:bg-purple/90 text-white font-bold text-lg py-6">
+                    <Button className="w-full text-white font-bold text-lg py-6 rounded-[20px]" style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}>
                       Ver Tu Plan <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>
                   </Link>
@@ -157,35 +157,35 @@ export default function BienvenidaPage() {
           <Card className="border-0 shadow-md bg-gradient-to-br from-training/10 to-orange/10 dark:from-training/20 dark:to-orange/20">
             <CardContent className="pt-8 pb-8 px-8">
               <div className="flex items-start gap-6">
-                <div className="flex items-center justify-center w-16 h-16 rounded-[28px] bg-training/30 flex-shrink-0">
-                  <span className="text-3xl font-bold text-training">3</span>
+                <div className="flex items-center justify-center w-16 h-16 rounded-[28px] flex-shrink-0" style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)' }}>
+                  <span className="text-3xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>3</span>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Entrena y Analiza</h3>
+                  <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Entrenamiento: Entrena y Analiza</h3>
                   <p className="text-base text-muted-foreground dark:text-muted-foreground mb-4">
                     Práctica intensiva con simulaciones realistas y feedback multimodal avanzado. Domina 4 módulos en 4 niveles de dificultad.
                   </p>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-training"></div>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgb(170, 70, 170)' }}></div>
                       <p className="text-sm text-muted-foreground dark:text-white/80"><strong>4 Módulos:</strong> Entrevistas, Presentaciones, Decisiones Estratégicas, Comunicación Ejecutiva</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-training"></div>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgb(170, 70, 170)' }}></div>
                       <p className="text-sm text-muted-foreground dark:text-white/80"><strong>4 Niveles:</strong> Guiada → Estructurada → Desafiante → Maestría (progresión obligatoria)</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-training"></div>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgb(170, 70, 170)' }}></div>
                       <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Análisis Completo:</strong> Postura, tono, gestos, coherencia, contenido - feedback IA instantáneo</p>
                     </div>
                   </div>
-                  <div className="mt-6 p-4 bg-background/80 rounded-lg border border-training/20">
+                  <div className="mt-6 p-4 bg-background/80 rounded-[2px] border border-training/20">
                     <p className="text-sm text-muted-foreground dark:text-white/85">
-                      <strong className="text-training">Entrevistador IA:</strong> Conversacional y adaptativo | <strong className="text-training">Feedback:</strong> Detallado después de cada sesión
+                      <strong style={{ color: 'rgb(170, 70, 170)' }}>Entrevistador IA:</strong> Conversacional y adaptativo | <strong style={{ color: 'rgb(170, 70, 170)' }}>Feedback:</strong> Detallado después de cada sesión
                     </p>
                   </div>
                   <Link href="/despega/a3" className="block mt-6">
-                    <Button className="w-full bg-training hover:bg-training/90 text-black font-bold text-lg py-6">
+                    <Button className="w-full text-white font-bold text-lg py-6 rounded-[20px]" style={{ backgroundColor: 'rgb(170, 70, 170, 0.8)' }}>
                       Comenzar Entrenamiento <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>
                   </Link>
@@ -198,35 +198,35 @@ export default function BienvenidaPage() {
           <Card className="border-0 shadow-md bg-gradient-to-br from-green/10 to-emerald/10 dark:from-green/20 dark:to-emerald/20">
             <CardContent className="pt-8 pb-8 px-8">
               <div className="flex items-start gap-6">
-                <div className="flex items-center justify-center w-16 h-16 rounded-[28px] bg-green/30 flex-shrink-0">
-                  <span className="text-3xl font-bold text-green">4</span>
+                <div className="flex items-center justify-center w-16 h-16 rounded-[28px] flex-shrink-0" style={{ backgroundColor: 'rgba(225, 120, 130, 0.4)' }}>
+                  <span className="text-3xl font-bold" style={{ color: 'rgba(225, 120, 130)' }}>4</span>
                 </div>
                 <div className="flex-1">
-                  <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Ejecución Continua</h3>
+                  <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">La Realidad: Ejecución Continua</h3>
                   <p className="text-base text-muted-foreground dark:text-muted-foreground mb-4">
                     Aplicación real en el mercado laboral. De la búsqueda a la colocación con soporte continuo y análisis de oportunidades.
                   </p>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-green"></div>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(225, 120, 130)' }}></div>
                       <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Bolsa de Oportunidades:</strong> Empleos filtrados + contactos + referrals personalizados</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-green"></div>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(225, 120, 130)' }}></div>
                       <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Dashboard de Progreso:</strong> Métrica de empleabilidad, comparativa con benchmark, evolución en tiempo real</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-green"></div>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(225, 120, 130)' }}></div>
                       <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Feedback del Mercado:</strong> Análisis de entrevistas reales, optimización continua, contacto con reclutadores</p>
                     </div>
                   </div>
-                  <div className="mt-6 p-4 bg-background/80 rounded-lg border border-green/20">
+                  <div className="mt-6 p-4 bg-background/80 rounded-[2px] border border-green/20">
                     <p className="text-sm text-muted-foreground dark:text-white/85">
-                      <strong className="text-green">Duración:</strong> Indefinida durante búsqueda | <strong className="text-green">Soporte:</strong> Coaches + comunidad + premium
+                      <strong style={{ color: 'rgba(225, 120, 130)' }}>Duración:</strong> Indefinida durante búsqueda | <strong style={{ color: 'rgba(225, 120, 130)' }}>Soporte:</strong> Coaches + comunidad + premium
                     </p>
                   </div>
                   <Link href="/despega/a4" className="block mt-6">
-                    <Button className="w-full bg-green hover:bg-green/90 text-white font-bold text-lg py-6">
+                    <Button className="w-full text-white font-bold text-lg py-6 rounded-[20px]" style={{ backgroundColor: 'rgba(225, 120, 130, 0.6)' }}>
                       Acceder Dashboard <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>
                   </Link>
@@ -280,35 +280,35 @@ export default function BienvenidaPage() {
         </div>
 
         {/* Timeline */}
-        <div className="bg-purple/5 dark:bg-purple/30 rounded-[28px] p-6 border border-purple/30 dark:border-purple/10 mb-8">
+        <div className="bg-purple/5 dark:bg-purple/30 rounded-[28px] p-6 border-0 mb-8">
           <h3 className="font-semibold text-muted/90 dark:text-white mb-3 flex items-center gap-2">
-            <Target className="w-5 h-5 text-purple" />
+            <Target className="w-5 h-5" style={{ color: 'rgb(80, 160, 170, 0.6)' }} />
             Tu Viaje de Transformación
           </h3>
           <p className="text-sm text-muted-foreground dark:text-white/85 mb-4">Cronología personalizada según tu ritmo:</p>
           <ul className="space-y-3 text-sm text-muted-foreground dark:text-muted-foreground">
             <li className="flex items-start gap-2">
-              <span className="text-purple font-bold min-w-24">Pilar 1:</span>
+              <span className="font-bold min-w-24" style={{ color: 'rgb(80, 160, 170)' }}>Pilar 1:</span>
               <span>Diagnóstico inicial con preguntas personalizadas (~30 minutos)</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-purple font-bold min-w-24">Pilar 2:</span>
+              <span className="font-bold min-w-24" style={{ color: 'rgb(90, 90, 150)' }}>Pilar 2:</span>
               <span>Recibe tu plan de 90 días en 3 fases (Lectura: ~1 hora)</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-training font-bold min-w-24">Pilar 3:</span>
+              <span className="font-bold min-w-24" style={{ color: 'rgb(170, 70, 170)' }}>Pilar 3:</span>
               <span>Entrenamientos intensivos progresivos (2-3 horas/semana, 12 semanas)</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-training font-bold min-w-24">→ Cada sesión:</span>
+              <span className="font-bold min-w-24" style={{ color: 'rgb(170, 70, 170)' }}>→ Cada sesión:</span>
               <span>Feedback multimodal detallado (IA análisis en tiempo real)</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-green font-bold min-w-24">Pilar 4:</span>
+              <span className="font-bold min-w-24" style={{ color: 'rgb(225, 120, 130)' }}>Pilar 4:</span>
               <span>Ejecución continua - Del día 90 en adelante (indefinido o hasta colocación)</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-green font-bold min-w-24">→ Soporte:</span>
+              <span className="font-bold min-w-24" style={{ color: 'rgb(225, 120, 130)' }}>→ Soporte:</span>
               <span>Dashboard de empleabilidad, oportunidades, coaching y comunidad</span>
             </li>
           </ul>
@@ -318,7 +318,8 @@ export default function BienvenidaPage() {
         <div className="flex gap-4 justify-center">
           <Button
             onClick={() => router.push('/despega/conozcamonos-1')}
-            className="bg-purple/80 hover:bg-purple/70 text-white px-8 py-6 text-base font-semibold"
+            className="text-white px-8 py-6 text-base font-semibold rounded-[20px]"
+            style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}
           >
             Comenzar el Viaje
             <ArrowRight className="w-5 h-5 ml-2" />
@@ -326,7 +327,8 @@ export default function BienvenidaPage() {
           <Button
             variant="outline"
             onClick={() => router.push('/despega')}
-            className="px-8 py-6 text-base"
+            className="px-8 py-6 text-base rounded-[20px]"
+            style={{ backgroundColor: 'rgb(80, 160, 170, 0.4)' }}
           >
             Ir al Dashboard
           </Button>
