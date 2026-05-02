@@ -45,10 +45,9 @@ export function StepHeader({
       <div className="flex items-start justify-between gap-6 mb-6">
         <div className="flex items-start gap-6">
           <div 
-            className={`w-14 h-14 rounded-full ${pillarColor === "red" ? "" : pillarColors[pillarColor]} flex items-center justify-center flex-shrink-0 font-black shadow-lg`}
+            className={`w-14 h-14 rounded-full ${stepNumber === 0 ? "" : pillarColor === "red" ? "" : pillarColors[pillarColor]} flex items-center justify-center flex-shrink-0 font-black shadow-lg`}
             style={stepNumber === 0 ? { 
               backgroundColor: "rgba(80, 160, 170, 0.2)",
-              border: "none",
               fontSize: "30px",
               color: "white"
             } : pillarColor === "red" ? { 
