@@ -44,6 +44,8 @@ export default function A3ProgressDashboard() {
 
   useEffect(() => {
     if (!isHydrated) return
+
+    const fetchProgress = async () => {
       try {
         const response = await fetch('/api/a3/progress', {
           headers: {
