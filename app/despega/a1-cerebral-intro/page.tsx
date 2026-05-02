@@ -79,30 +79,30 @@ export default function A1CerebralIntroPage() {
           {/* What is Cerebral Assessment */}
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <Zap className="w-6 h-6 text-teal-400" />
+              <CardTitle className="text-2xl flex items-center gap-2" style={{ color: 'rgba(80, 160, 170, 0.6)', fontWeight: '500' }}>
+                <Zap className="w-6 h-6" style={{ color: 'rgba(80, 160, 170, 0.6)' }} />
                 ¿Qué es esta Evaluación?
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <p className="text-lg text-white/90 leading-relaxed">
+              <p className="text-lg text-white/90 leading-relaxed" style={{ fontSize: '14px', fontWeight: '400' }}>
                 El Análisis Cerebral identifica tu estilo natural de comunicación y liderazgo según cuatro dimensiones:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-5 bg-red/20 dark:bg-red/25 border-2 border-red rounded-xl">
-                  <p className="font-bold text-red mb-2 text-lg">🔴 Impulsor</p>
+                <div className="p-5 bg-red/20 dark:bg-red/25 border-2 border-red rounded-xl" style={{ borderColor: 'rgba(255, 0, 0, 0.4)', backgroundColor: 'rgba(255, 0, 0, 0.15)', borderRadius: '2px' }}>
+                  <p className="font-bold text-red mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🔴 Impulsor</p>
                   <p className="text-white/85 text-sm">Enfocado en resultados, decisivo, impulsivo</p>
                 </div>
-                <div className="p-5 bg-yellow/20 dark:bg-yellow/25 border-2 border-yellow rounded-xl">
-                  <p className="font-bold text-yellow mb-2 text-lg">🟡 Catalizador</p>
+                <div className="p-5 bg-yellow/20 dark:bg-yellow/25 border-2 border-yellow rounded-xl" style={{ borderColor: 'rgba(255, 200, 0, 0.4)', backgroundColor: 'rgba(255, 200, 0, 0.15)', borderRadius: '2px' }}>
+                  <p className="font-bold text-yellow mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🟡 Catalizador</p>
                   <p className="text-white/85 text-sm">Comunicativo, entusiasta, orientado a personas</p>
                 </div>
-                <div className="p-5 bg-green/20 dark:bg-green/25 border-2 border-green rounded-xl">
-                  <p className="font-bold text-green mb-2 text-lg">🟢 Estabilizador</p>
+                <div className="p-5 bg-green/20 dark:bg-green/25 border-2 border-green rounded-xl" style={{ borderColor: 'rgba(0, 128, 0, 0.4)', backgroundColor: 'rgba(0, 128, 0, 0.15)', borderRadius: '2px' }}>
+                  <p className="font-bold text-green mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🟢 Estabilizador</p>
                   <p className="text-white/85 text-sm">Estable, cooperativo, confiable, paciente</p>
                 </div>
-                <div className="p-5 bg-blue/20 dark:bg-blue/25 border-2 border-blue rounded-xl">
-                  <p className="font-bold text-blue mb-2 text-lg">🔵 Arquitecto</p>
+                <div className="p-5 bg-blue/20 dark:bg-blue/25 border-2 border-blue rounded-xl" style={{ borderColor: 'rgb(0, 0, 255, 0.4)', backgroundColor: 'rgba(0, 0, 255, 0.15)', borderRadius: '2px' }}>
+                  <p className="font-bold text-blue mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🔵 Arquitecto</p>
                   <p className="text-white/85 text-sm">Analítico, detallista, exigente con calidad</p>
                 </div>
               </div>
@@ -112,29 +112,29 @@ export default function A1CerebralIntroPage() {
           {/* How it Works */}
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl flex items-center gap-2">
-                <CheckCircle2 className="w-6 h-6 text-green" />
+              <CardTitle className="text-2xl flex items-center gap-2" style={{ color: 'rgba(80, 160, 170, 0.8)', fontWeight: '500' }}>
+                <CheckCircle2 className="w-6 h-6" style={{ color: 'rgba(80, 160, 170, 0.6)' }} />
                 ¿Cómo funciona el test?
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold">1</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold" style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)' }}>1</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-white">28 preguntas</p>
                     <p className="text-sm text-white/75 dark:text-white/75">Responde 28 preguntas simples sobre tu comportamiento</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold">2</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold" style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)' }}>2</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-white">Dos selecciones por pregunta</p>
                     <p className="text-sm text-white/75 dark:text-white/75">Para cada pregunta, selecciona la opción que más y menos te describe</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold">3</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold" style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)' }}>3</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-white">Análisis automático</p>
                     <p className="text-sm text-white/75 dark:text-white/75">Obtendrás tu perfil cerebral personalizado con insights sobre tu comunicación y liderazgo</p>
@@ -151,7 +151,7 @@ export default function A1CerebralIntroPage() {
               <CardDescription className="text-white/75">Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="p-8 rounded-[28px] border border-white/10">
+              <div className="p-8 rounded-[28px] border border-white/10" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
                 <p className="text-xl font-semibold text-white mb-8 text-center">
                   "Cuando enfrento un desafío importante, tiendo a ser más:"
                 </p>
@@ -211,7 +211,7 @@ export default function A1CerebralIntroPage() {
                 </div>
               </div>
 
-              <div className="bg-purple/20 p-4 rounded-[28px] border border-purple/30">
+              <div className="bg-purple/20 p-4 rounded-[28px] border" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderColor: 'none' }}>
                 <p className="text-sm text-purple/90 dark:text-white">
                   <span className="font-semibold">¿Cómo funciona?</span> Cada pregunta tiene 4 opciones que representan los 4 estilos: Directo, Inspirador, Seguro y Consciente. Seleccionas cuál te describe MÁS y cuál te describe MENOS. El sistema cuenta tus selecciones y determina tu perfil dominante.
                 </p>
@@ -220,28 +220,28 @@ export default function A1CerebralIntroPage() {
           </Card>
 
           {/* Benefits */}
-          <Card className="border-0 shadow-lg bg-purple dark:bg-purple/30 border-l-4 border-purple">
+          <Card className="border-0 shadow-lg border-l-4" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.4)', borderColor: 'rgba(80, 160, 170, 0.8)' }}>
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl text-white flex items-center gap-2">
-                <Zap className="w-6 h-6 text-purple" />
+              <CardTitle className="text-2xl text-white flex items-center gap-2" style={{ color: 'rgba(80, 160, 170)' }}>
+                <Zap className="w-6 h-6" style={{ color: 'rgba(80, 160, 170)' }} />
                 ¿Por qué es importante?
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4 text-white/85">
               <div className="flex gap-3 items-start">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-green mt-0.5" />
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: 'rgba(80, 160, 170)' }} />
                 <p className="leading-relaxed">Entiende tu estilo de comunicación natural para adaptarte mejor en entrevistas</p>
               </div>
               <div className="flex gap-3 items-start">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-green mt-0.5" />
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: 'rgba(80, 160, 170)' }} />
                 <p className="leading-relaxed">Identifica tus fortalezas clave que los empleadores buscan</p>
               </div>
               <div className="flex gap-3 items-start">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-green mt-0.5" />
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: 'rgba(80, 160, 170)' }} />
                 <p className="leading-relaxed">Reconoce áreas de desarrollo personal para mejorar continuamente</p>
               </div>
               <div className="flex gap-3 items-start">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0 text-green mt-0.5" />
+                <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: 'rgba(80, 160, 170)' }} />
                 <p className="leading-relaxed">Personaliza tus respuestas según el tipo de rol y empresa</p>
               </div>
             </CardContent>
@@ -252,7 +252,8 @@ export default function A1CerebralIntroPage() {
             <Button
               onClick={() => router.push('/despega/a1-cerebral')}
               size="lg"
-              className="px-8 text-lg bg-purple/80 hover:bg-purple/70 text-white"
+              className="px-8 text-lg text-white"
+              style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)', borderRadius: '20px' }}
             >
               Comenzar Análisis Cerebral
             </Button>
@@ -261,6 +262,7 @@ export default function A1CerebralIntroPage() {
               size="lg"
               variant="outline"
               className="px-8 text-lg"
+              style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)', borderRadius: '20px' }}
             >
               Volver al Dashboard
             </Button>
