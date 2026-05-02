@@ -347,14 +347,14 @@ export default function Conozcamonos1Page() {
         </div>
 
         <div className="flex gap-4">
-          <Button onClick={handleBack} variant="outline" disabled={currentQuestion === 0} className="flex-1">Atrás</Button>
+          <Button onClick={handleBack} variant="outline" disabled={currentQuestion === 0} className="flex-1" style={{ borderRadius: '20px' }}>Atrás</Button>
           <Button 
             onClick={handleNext} 
             disabled={!isAnswered() || loading || validating} 
             className="flex-1"
             style={{
-              backgroundColor: 'rgb(80, 160, 170, 0.8)',
-              borderRadius: '0'
+              backgroundColor: 'rgba(80, 160, 170, 0.6)',
+              borderRadius: '20px'
             }}
           >
             {validating ? 'Validando...' : loading ? 'Guardando...' : isLastQuestion ? 'Continuar' : 'Siguiente'}
