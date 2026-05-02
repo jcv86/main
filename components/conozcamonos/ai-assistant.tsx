@@ -59,7 +59,12 @@ export function AIAssistant({
         onClick={() => setIsOpen(true)}
         variant="outline"
         size="sm"
-        className="gap-2 text-blue border-blue/20 hover:border-blue/30 hover:bg-blue/5 dark:text-blue/40 dark:border-blue dark:hover:bg-blue"
+        className="gap-2"
+        style={{
+          backgroundColor: 'rgb(80, 160, 170, 0.6)',
+          color: 'rgba(255, 255, 255, 0.92)',
+          border: 'none'
+        }}
       >
         <Lightbulb className="w-4 h-4" />
         {buttonLabel}
@@ -85,7 +90,12 @@ export function AIAssistant({
             setSuggestion(null)
             setError('')
           }}
-          className="text-blue hover:text-blue dark:text-blue/40 dark:hover:text-blue/30"
+          className="p-1 rounded"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.60)',
+            color: '#ffffff',
+            border: '1px solid #ffffff'
+          }}
         >
           <X className="w-4 h-4" />
         </button>
