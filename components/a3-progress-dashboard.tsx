@@ -96,7 +96,7 @@ export default function A3ProgressDashboard() {
   }
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Main KPI Card - 2 Metrics */}
       <Card className="border-training/30 bg-gradient-to-br from-training/10 via-training/5 to-background overflow-hidden">
         <CardContent className="pt-8 pb-8">
@@ -121,6 +121,88 @@ export default function A3ProgressDashboard() {
           </div>
         </CardContent>
       </Card>
+
+      {/* Overall Progress Section */}
+      <Card className="border-training/20 bg-gradient-to-br from-training/5 to-background">
+        <CardContent className="pt-6 pb-6">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)' }}>
+                  <TrendingUp className="w-5 h-5" style={{ color: 'rgb(170, 70, 170)' }} />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold text-white">Progreso General</p>
+                  <p className="text-xs text-muted-foreground">Tu avance en el programa</p>
+                </div>
+              </div>
+              <p className="text-2xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>{progress.completionPercentage}%</p>
+            </div>
+
+            {/* Progress Bar */}
+            <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden border border-training/10">
+              <div
+                className="h-2 rounded-full transition-all duration-700 ease-out"
+                style={{ 
+                  width: `${progress.completionPercentage}%`, 
+                  backgroundColor: 'rgb(170, 70, 170)'
+                }}
+              />
+            </div>
+
+            {/* Progress Text */}
+            <p className="text-xs text-muted-foreground text-center">Sigue entrenando para desbloquear nuevos desafíos</p>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Active Challenge Card */}
+      {challenge && (
+        <Card className="border-training/30 bg-gradient-to-br from-training/10 to-background overflow-hidden">
+          <CardContent className="pt-6 pb-6">
+            <div className="space-y-4">
+              {/* Challenge Header */}
+              <div className="flex items-start justify-between">
+                <div className="flex items-start gap-3 flex-1">
+                  <div className="p-2 rounded-lg mt-0.5" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)' }}>
+                    <Zap className="w-5 h-5 flex-shrink-0" style={{ color: 'rgb(170, 70, 170)' }} />
+                  </div>
+                  <div>
+                    <p className="font-bold text-white text-base">{challenge.name}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{challenge.description}</p>
+                  </div>
+                </div>
+                <div className="text-right flex-shrink-0">
+                  <p className="text-2xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>+{challenge.reward}</p>
+                  <p className="text-xs text-muted-foreground">puntos</p>
+                </div>
+              </div>
+
+              {/* Challenge Progress */}
+              <div className="space-y-2 pt-2 border-t border-training/10">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-muted-foreground font-medium">Progreso: {challenge.progress}/{challenge.total}</span>
+                  <span className="font-semibold" style={{ color: 'rgb(170, 70, 170)' }}>
+                    {Math.round((challenge.progress / challenge.total) * 100)}%
+                  </span>
+                </div>
+                <div className="w-full bg-muted/30 rounded-full h-2 overflow-hidden border border-training/10">
+                  <div
+                    className="h-2 rounded-full transition-all duration-700 ease-out"
+                    style={{
+                      width: `${Math.min(
+                        (challenge.progress / challenge.total) * 100,
+                        100
+                      )}%`,
+                      backgroundColor: 'rgb(170, 70, 170)'
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
     </div>
   )
