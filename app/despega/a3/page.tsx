@@ -31,10 +31,10 @@ export default function EntrenamientoIntensivePage() {
 
         <div className="space-y-6 mb-12">
           <div>
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-3">
+            <h1 className="text-5xl md:text-6xl font-light text-white mb-3" style={{ color: 'rgb(170, 70, 170)' }}>
               Domina Entrevistas en 4 Niveles
             </h1>
-            <p className="text-xl text-white/85 max-w-3xl leading-relaxed">
+            <p className="text-xl text-white/85 max-w-3xl leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               Practica con simulaciones realistas, obtén feedback multimodal inmediato de IA, y avanza de principiante a maestría con análisis profundo de tu desempeño.
             </p>
           </div>
@@ -43,7 +43,7 @@ export default function EntrenamientoIntensivePage() {
         {/* A3 Progress Section */}
         <div className="mb-12 space-y-4">
           <div>
-            <h2 className="text-3xl font-bold text-white mb-2">Tu Progreso en Entrenamiento</h2>
+            <h2 className="text-3xl font-medium text-white mb-2">Tu Progreso en Entrenamiento</h2>
             <p className="text-white/70 mb-4">
               Monitorea tu desempeño en esta sección, gana puntos y desbloquea badges.
             </p>
@@ -63,24 +63,24 @@ export default function EntrenamientoIntensivePage() {
         <div className="mb-16 space-y-6">
           <div>
             <h2 className="text-4xl font-bold text-white mb-3">Paso 1: Tu Diagnóstico Inicial</h2>
-            <p className="text-lg text-white/85">
+            <p className="text-lg text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               Antes de entrenar, necesitamos entender tu punto de partida. Una auditoría rápida de tu ambiente, presencia y pitch.
             </p>
           </div>
 
-          <Card className="border-2 border-training/40 hover:shadow-xl transition bg-gradient-to-br from-training/10 to-training/5">
+          <Card className="border-2 border-training/40 hover:shadow-xl transition" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderColor: 'rgb(170, 70, 170, 0.4)', borderStyle: 'none' }}>
             <CardHeader>
               <CardTitle className="text-2xl flex items-center gap-3 text-white">
-                <span>🔍</span> Auditoría: Tu Base Profesional
+                <span></span> Auditoría: Tu Base Profesional
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-white/90 text-lg leading-relaxed">
+              <p className="text-white/90 text-lg leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
                 Análisis completo de tu ambiente, iluminación, audio, presencia en cámara y pitch profesional inicial. 
                 Identifica qué mejorar antes de las simulaciones intensivas.
               </p>
               <Link href="/despega/interview-0" className="block">
-                <Button className="w-full bg-training hover:bg-training/90 text-black font-bold text-lg py-6">
+                <Button className="w-full font-bold text-lg py-6" style={{ backgroundColor: 'rgb(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}>
                   Comenzar Diagnóstico <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
@@ -91,18 +91,18 @@ export default function EntrenamientoIntensivePage() {
         {/* Step 2: Preparation Tools */}
         <div className="space-y-6 mb-16">
           <div>
-            <h2 className="text-4xl font-bold text-white mb-3">Paso 2: Prepara tu Arsenal</h2>
-            <p className="text-lg text-white/85">
+            <h2 className="text-4xl font-medium text-white mb-3">Paso 2: Prepara tu Arsenal</h2>
+            <p className="text-lg text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               Optimiza tu CV, aprende metodología STAR, analiza ofertas y practica en video. Herramientas específicas para cada fase.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
             {/* Tool 1: STAR Method */}
-            <Card className="border border-training/30 hover:shadow-lg transition bg-muted/20">
+            <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgb(170, 70, 170, 0.4)', borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderStyle: 'none' }}>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Zap className="w-5 h-5 text-training" />
+                  <Zap className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
                   Método STAR
                 </CardTitle>
               </CardHeader>
@@ -112,7 +112,7 @@ export default function EntrenamientoIntensivePage() {
                   El estándar para respuestas profesionales claras.
                 </p>
                 <Link href="/despega/a3/entrenamiento-guiado" className="block">
-                  <Button className="w-full bg-training hover:bg-training/90 text-black font-semibold">
+                  <Button className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}>
                     Aprender STAR <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -120,10 +120,10 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Tool 2: CV Optimization */}
-            <Card className="border border-training/30 hover:shadow-lg transition bg-muted/20">
+            <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgb(170, 70, 170, 0.4)', borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderStyle: 'none' }}>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5 text-training" />
+                  <BarChart3 className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
                   CV Inteligente
                 </CardTitle>
               </CardHeader>
@@ -133,7 +133,7 @@ export default function EntrenamientoIntensivePage() {
                   Múltiples formatos y feedback instantáneo.
                 </p>
                 <Link href="/despega/a3/cv-ats" className="block">
-                  <Button className="w-full bg-training hover:bg-training/90 text-black font-semibold">
+                  <Button className="w-full font-semibold" style={{ backgroundColor: 'rgb(170, 70, 170, 0.8)', color: '#ffffff', borderRadius: '20px' }}>
                     Optimizar CV <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -141,10 +141,10 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Tool 3: Job Matching */}
-            <Card className="border border-training/30 hover:shadow-lg transition bg-muted/20">
+            <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgb(170, 70, 170, 0.4)', borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderStyle: 'none' }}>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Target className="w-5 h-5 text-training" />
+                  <Target className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
                   Análisis de Vacante
                 </CardTitle>
               </CardHeader>
@@ -154,7 +154,7 @@ export default function EntrenamientoIntensivePage() {
                   Estrategia por cada postulación.
                 </p>
                 <Link href="/despega/a3/ajuste-por-vacante" className="block">
-                  <Button className="w-full bg-training hover:bg-training/90 text-black font-semibold">
+                  <Button className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}>
                     Analizar Oferta <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -162,10 +162,10 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Tool 4: Video Analysis */}
-            <Card className="border border-training/30 hover:shadow-lg transition bg-muted/20">
+            <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgb(170, 70, 170, 0.4)', borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderStyle: 'none' }}>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <Video className="w-5 h-5 text-training" />
+                  <Video className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
                   Análisis Multimodal
                 </CardTitle>
               </CardHeader>
@@ -175,7 +175,7 @@ export default function EntrenamientoIntensivePage() {
                   Feedback detallado en 60 segundos.
                 </p>
                 <Link href="/despega/a3/analisis-multimodal" className="block">
-                  <Button className="w-full bg-training hover:bg-training/90 text-black font-semibold">
+                  <Button className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}>
                     Grabar y Analizar <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -187,17 +187,17 @@ export default function EntrenamientoIntensivePage() {
         {/* Step 3: Progressive Training Levels */}
         <div className="space-y-6">
           <div>
-            <h2 className="text-4xl font-bold text-white mb-3">Paso 3: Entrena en 4 Niveles</h2>
-            <p className="text-lg text-white/85">
+            <h2 className="text-4xl font-medium text-white mb-3">Paso 3: Entrena en 4 Niveles</h2>
+            <p className="text-lg text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               Progresión desde principiante hasta maestría. Cada nivel aumenta complejidad, presión y feedback profundo. Avanza cuando domines el anterior.
             </p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
             {/* Level 1: Guided */}
-            <Card className="border-2 border-training/40 hover:shadow-lg transition bg-gradient-to-br from-training/5 to-training/10">
+            <Card className="border-2 hover:shadow-lg transition" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderRadius: '2px', borderStyle: 'none' }}>
               <CardHeader>
-                <Badge className="w-fit bg-training/30 text-training border border-training/50 mb-2">
+                <Badge className="w-fit mb-2" style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)', color: 'rgb(170, 70, 170, 0.8)', border: 'none' }}>
                   Nivel 1 - Principiante
                 </Badge>
                 <CardTitle className="text-2xl">Guiado</CardTitle>
@@ -214,7 +214,7 @@ export default function EntrenamientoIntensivePage() {
                 </p>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-guiado')}
-                  className="w-full bg-training hover:bg-training/90 text-black font-semibold"
+                  className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
                 >
                   Comenzar Nivel 1 <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
@@ -222,9 +222,9 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Level 2: Structured */}
-            <Card className="border-2 border-training/40 hover:shadow-lg transition bg-gradient-to-br from-training/5 to-training/10">
+            <Card className="border-2 hover:shadow-lg transition" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderRadius: '2px', borderStyle: 'none' }}>
               <CardHeader>
-                <Badge className="w-fit bg-training/30 text-training border border-training/50 mb-2">
+                <Badge className="w-fit mb-2" style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)', color: 'rgb(170, 70, 170, 0.8)', border: 'none' }}>
                   Nivel 2 - Intermedio
                 </Badge>
                 <CardTitle className="text-2xl">Estructurado</CardTitle>
@@ -241,7 +241,7 @@ export default function EntrenamientoIntensivePage() {
                 </p>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-estructurado')}
-                  className="w-full bg-training hover:bg-training/90 text-black font-semibold"
+                  className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
                 >
                   Practicar Nivel 2 <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
@@ -249,9 +249,9 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Level 3: Challenging */}
-            <Card className="border-2 border-training/40 hover:shadow-lg transition bg-gradient-to-br from-training/5 to-training/10">
+            <Card className="border-2 hover:shadow-lg transition" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderRadius: '2px', borderStyle: 'none' }}>
               <CardHeader>
-                <Badge className="w-fit bg-training/30 text-training border border-training/50 mb-2">
+                <Badge className="w-fit mb-2" style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)', color: 'rgb(170, 70, 170, 0.8)', border: 'none' }}>
                   Nivel 3 - Avanzado
                 </Badge>
                 <CardTitle className="text-2xl">Desafiante</CardTitle>
@@ -268,7 +268,7 @@ export default function EntrenamientoIntensivePage() {
                 </p>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-desafiante')}
-                  className="w-full bg-training hover:bg-training/90 text-black font-semibold"
+                  className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
                 >
                   Desafiarse Nivel 3 <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
@@ -276,9 +276,9 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Level 4: Mastery */}
-            <Card className="border-2 border-training/40 hover:shadow-lg transition bg-gradient-to-br from-training/5 to-training/10">
+            <Card className="border-2 hover:shadow-lg transition" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderRadius: '2px', borderStyle: 'none' }}>
               <CardHeader>
-                <Badge className="w-fit bg-training/30 text-training border border-training/50 mb-2">
+                <Badge className="w-fit mb-2" style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)', color: 'rgb(170, 70, 170, 0.8)', border: 'none' }}>
                   Nivel 4 - Maestría
                 </Badge>
                 <CardTitle className="text-2xl">Conversacional</CardTitle>
@@ -295,7 +295,7 @@ export default function EntrenamientoIntensivePage() {
                 </p>
                 <Button 
                   onClick={() => router.push('/despega/a3/conversational-interview')}
-                  className="w-full bg-training hover:bg-training/90 text-black font-semibold"
+                  className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
                 >
                   Entrevista Final <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
