@@ -122,10 +122,10 @@ export default function A1ResultadoPage() {
             <Brain className="w-4 h-4 text-purple dark:text-purple/40" />
             <span className="text-sm font-semibold text-purple dark:text-purple/20">Tu Perfil Despega Cerebral</span>
           </div>
-          <h1 className="text-5xl font-bold text-purple400400 mb-4">
+          <h1 className="text-5xl font-bold mb-4" style={{ color: 'rgb(80, 160, 170)', fontWeight: '200' }}>
             Tu Mapa está Listo
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-white/85">
+          <p className="text-lg text-muted-foreground dark:text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
             Una visión clara de cómo te relacionas con el mundo, tus fortalezas naturales y tu potencial
           </p>
         </div>

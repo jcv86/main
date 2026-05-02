@@ -222,7 +222,7 @@ export default function A1ReportPage() {
       <ASection title="Tu Perfil Cerebral" subtitle="Descubre Tu Tipo de Personalidad" icon="" colorClass="from-purple/50">
         <ASectionPart title="Completar Evaluación" icon={<Zap />}>
           <div className="space-y-4">
-            <div className="p-6 bg-red/20 dark:bg-red/20 border-2 border-red rounded-lg">
+            <div className="p-6 border-2 rounded-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderStyle: 'none', borderRadius: '2px' }}>
               <p className="text-white font-semibold text-lg">{error}</p>
               <p className="text-white/85 text-base mt-3 leading-relaxed">
                 Por favor completa la evaluación de Perfil Cerebral para ver tus resultados. El proceso toma aproximadamente 10-15 minutos.
@@ -230,7 +230,8 @@ export default function A1ReportPage() {
             </div>
             <Button 
               onClick={() => router.push('/despega/a1-cerebral')} 
-              className="w-full bg-purple/80 hover:bg-purple/70-700 text-white font-semibold py-6 text-lg"
+              className="w-full text-white font-semibold py-6 text-lg"
+              style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)', borderRadius: '20px' }}
             >
               <Target className="w-5 h-5 mr-2" />
               Comenzar Evaluación de Perfil Cerebral
@@ -239,6 +240,7 @@ export default function A1ReportPage() {
               onClick={() => router.push('/despega')} 
               variant="outline"
               className="w-full"
+              style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)', borderRadius: '20px' }}
             >
               <ArrowRight className="w-5 h-5 mr-2" />
               Volver al Dashboard

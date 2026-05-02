@@ -25,13 +25,13 @@ export function ASection({ title, subtitle, icon, colorClass, children }: ASecti
           <div className="flex items-start gap-8 mb-8">
             <span className="text-7xl flex-shrink-0">{icon}</span>
             <div className="flex-1">
-              <h1 className="text-6xl md:text-7xl font-black text-white leading-tight mb-4">
+              <h1 className="text-6xl md:text-7xl leading-tight mb-4" style={{ color: 'rgb(80, 160, 170)', fontWeight: '200' }}>
                 {title}
               </h1>
-              <p className="text-2xl text-white/90 leading-relaxed">{subtitle}</p>
+              <p className="text-2xl leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>{subtitle}</p>
             </div>
           </div>
-          <div className="h-1.5 w-40 rounded-full bg-gradient-to-r from-purple to-blue"></div>
+          <div className="h-1.5 w-40 rounded-full" style={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}></div>
         </div>
 
         {children}
@@ -44,8 +44,8 @@ export function ASectionPart({ title, icon, children, defaultOpen = true }: ASec
   return (
     <div className="mb-16">
       <div className="flex items-center gap-4 mb-8">
-        <div className="text-4xl flex-shrink-0">{icon}</div>
-        <h2 className="text-4xl font-black text-white">{title}</h2>
+        <div className="text-4xl flex-shrink-0" style={{ color: 'rgba(80, 160, 170, 0.6)' }}>{icon}</div>
+        <h2 className="text-4xl text-white" style={{ fontWeight: '300' }}>{title}</h2>
       </div>
       
       <div className="bg-background">
