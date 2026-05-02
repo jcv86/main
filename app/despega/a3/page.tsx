@@ -57,6 +57,7 @@ export default function EntrenamientoIntensivePage() {
                 src="/images/rocket-teal.jpg" 
                 alt="Rocket placeholder" 
                 className="w-full h-auto object-contain max-h-96"
+                style={{ borderRadius: '1px', borderColor: '#000000' }}
               />
             </div>
           </div>
