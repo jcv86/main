@@ -21,12 +21,12 @@ const pillarColors = {
 }
 
 const pillarBgLight = {
-  purple: "bg-gradient-to-br from-purple/20 to-purple/10 border-2 border-purple/40",
-  blue: "bg-gradient-to-br from-blue/20 to-blue/10 border-2 border-blue/40",
-  orange: "bg-gradient-to-br from-orange/20 to-orange/10 border-2 border-orange/40",
-  cyan: "bg-gradient-to-br from-cyan/20 to-cyan/10 border-2 border-cyan/40",
+  purple: "shadow-lg",
+  blue: "shadow-lg",
+  orange: "shadow-lg",
+  cyan: "shadow-lg",
   red: "shadow-lg",
-  teal: "bg-gradient-to-br from-ritual/20 to-ritual/10 border-2 border-ritual/40",
+  teal: "shadow-lg",
 }
 
 export function StepHeader({
@@ -46,7 +46,9 @@ export function StepHeader({
         <div className="flex items-start gap-6">
           <div 
             className={`w-14 h-14 rounded-full ${pillarColor === "red" ? "" : pillarColors[pillarColor]} flex items-center justify-center flex-shrink-0 text-xl font-black shadow-lg`}
-            style={pillarColor === "red" ? { 
+            style={stepNumber === 0 ? { 
+              backgroundColor: "#717171"
+            } : pillarColor === "red" ? { 
               backgroundColor: "rgba(225, 120, 130, 0.8)",
               border: "1px solid rgba(225, 120, 130, 0.2)"
             } : undefined}
@@ -55,7 +57,7 @@ export function StepHeader({
           </div>
           <div className="flex-1">
             <p className="text-sm font-bold text-white/75 uppercase tracking-widest mb-2">{pillarName}</p>
-            <h1 className="text-4xl md:text-5xl font-black text-white leading-tight">{title}</h1>
+            <h1 className="text-4xl md:text-5xl text-white leading-tight" style={{ fontWeight: stepNumber === 0 ? 300 : 900 }}>{title}</h1>
           </div>
         </div>
         {estimatedTime && (

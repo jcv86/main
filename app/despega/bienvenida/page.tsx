@@ -75,8 +75,8 @@ export default function BienvenidaPage() {
           <Card className="border-0 shadow-md bg-gradient-to-br from-purple/10 to-pink/10 dark:from-purple/20 dark:to-pink/20">
             <CardContent className="pt-8 pb-8 px-8">
               <div className="flex items-start gap-6">
-                <div className="flex items-center justify-center w-16 h-16 rounded-[28px] bg-purple/30 flex-shrink-0">
-                  <span className="text-3xl font-bold text-purple">1</span>
+                <div className="flex items-center justify-center w-16 h-16 rounded-[28px] flex-shrink-0" style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)' }}>
+                  <span className="text-3xl font-bold" style={{ color: 'rgba(80, 160, 170)' }}>1</span>
                 </div>
                 <div className="flex-1">
                   <h3 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">Conozcámonos</h3>
@@ -85,25 +85,25 @@ export default function BienvenidaPage() {
                   </p>
                   <div className="space-y-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-purple"></div>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(80, 160, 170)' }}></div>
                       <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Evaluación de Perfil:</strong> Identifica tus fortalezas y áreas de mejora</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-purple"></div>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(80, 160, 170)' }}></div>
                       <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Contexto Laboral:</strong> Comprende tus objetivos y situación actual</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-purple"></div>
+                      <div className="w-2 h-2 rounded-full" style={{ backgroundColor: 'rgba(80, 160, 170)' }}></div>
                       <p className="text-sm text-muted-foreground dark:text-white/80"><strong>Baseline Personalizado:</strong> Creamos tu punto de partida único</p>
                     </div>
                   </div>
                   <div className="mt-6 p-4 bg-background/80 rounded-lg border border-purple/20">
                     <p className="text-sm text-muted-foreground dark:text-white/85">
-                      <strong className="text-purple">Duración:</strong> ~30 minutos | <strong className="text-purple">Resultado:</strong> Tu perfil personalizado que guía el viaje
+                      <strong style={{ color: 'rgba(80, 160, 170, 0.8)' }}>Duración:</strong> ~30 minutos | <strong style={{ color: 'rgba(80, 160, 170, 0.8)' }}>Resultado:</strong> Tu perfil personalizado que guía el viaje
                     </p>
                   </div>
                   <Link href="/despega/conocer" className="block mt-6">
-                    <Button className="w-full bg-purple hover:bg-purple/90 text-white font-bold text-lg py-6">
+                    <Button className="w-full text-white font-bold text-lg py-6" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}>
                       Comenzar Diagnóstico <ArrowRight className="ml-2 w-5 h-5" />
                     </Button>
                   </Link>
