@@ -214,10 +214,11 @@ export default function Conozcamonos1Page() {
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <div className="mb-8">
           <div 
-            className="inline-flex items-center gap-2 px-4 py-3 rounded-lg mb-4"
+            className="inline-flex items-center gap-2 px-4 py-3 mb-4"
             style={{ 
               backgroundColor: 'rgb(80, 160, 170, 0.2)',
-              border: 'none'
+              border: '2px solid rgb(80, 160, 170)',
+              borderRadius: '2px'
             }}
           >
             <span className="font-bold" style={{ color: 'rgb(80, 160, 170)' }}>●</span>
@@ -233,9 +234,10 @@ export default function Conozcamonos1Page() {
         </div>
 
         <div 
-          className="bg-white dark:bg-background rounded-2xl p-8 mb-8 shadow-lg"
+          className="bg-white dark:bg-background p-8 mb-8 shadow-lg"
           style={{ 
-            border: '2px solid rgb(80, 160, 170, 0.4)'
+            border: '2px solid rgb(80, 160, 170, 0.4)',
+            borderRadius: '2px'
           }}
         >
           <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-6">{question.question}</h2>
@@ -251,11 +253,12 @@ export default function Conozcamonos1Page() {
                   <div key={option} className="space-y-2">
                     <button
                       onClick={() => handleAnswer(option)}
-                      className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${
-                        isSelected
-                          ? 'border-purple bg-purple/10'
-                          : 'border-border hover:border-border/80'
-                      }`}
+                      className="w-full text-left p-4 border-2 transition-all"
+                      style={{
+                        borderRadius: '28px',
+                        borderColor: isSelected ? 'rgb(80, 160, 170, 0.6)' : 'var(--border)',
+                        backgroundColor: isSelected ? 'rgb(80, 160, 170, 0.1)' : 'transparent'
+                      }}
                     >
                       {option}
                     </button>
@@ -345,7 +348,15 @@ export default function Conozcamonos1Page() {
 
         <div className="flex gap-4">
           <Button onClick={handleBack} variant="outline" disabled={currentQuestion === 0} className="flex-1">Atrás</Button>
-          <Button onClick={handleNext} disabled={!isAnswered() || loading || validating} className="flex-1">
+          <Button 
+            onClick={handleNext} 
+            disabled={!isAnswered() || loading || validating} 
+            className="flex-1"
+            style={{
+              backgroundColor: 'rgb(80, 160, 170, 0.8)',
+              borderRadius: '0'
+            }}
+          >
             {validating ? 'Validando...' : loading ? 'Guardando...' : isLastQuestion ? 'Continuar' : 'Siguiente'}
           </Button>
         </div>
