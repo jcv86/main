@@ -49,39 +49,75 @@ export default function EjecucionContinuaPage() {
               Volver
             </Button>
           </Link>
-          <Badge className="bg-red/20 text-red border-2 border-red/40">
+          <Badge 
+            className="border-none"
+            style={{ 
+              backgroundColor: "rgba(225, 120, 130, 0.2)",
+              color: "rgba(225, 120, 130, 0.9)"
+            }}
+          >
             Pilar 4: Ejecución Continua
           </Badge>
         </div>
 
         {/* Hero Section */}
         <div className="mb-12 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-4 text-balance text-red">
+          <h1 
+            className="text-5xl md:text-6xl font-medium mb-4 text-balance"
+            style={{ color: "rgba(225, 120, 130, 0.6)" }}
+          >
             Ejecución Continua
           </h1>
           <p className="text-xl text-muted-foreground dark:text-white/85 mb-3">
             Colocación laboral y acompañamiento permanente
           </p>
-          <p className="text-base text-muted-foreground dark:text-muted-foreground max-w-2xl mx-auto">
+          <p 
+            className="text-base max-w-2xl mx-auto"
+            style={{ color: "rgb(150, 150, 150)" }}
+          >
             Aquí es donde tu aprendizaje se transforma en acción. Monitoreamos tu progreso, conectamos oportunidades reales, 
             ofrecemos coaching IA 24/7 y te proporcionamos contexto de mercado para que tomes decisiones estratégicas con criterio laboral.
           </p>
           
           {/* Key Features Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 mb-8">
-            <div className="bg-red/10 border-2 border-red/30 rounded-lg p-4">
+            <div 
+              className="rounded-lg p-4"
+              style={{ backgroundColor: "rgba(225, 120, 130, 0.2)" }}
+            >
               <div className="text-2xl mb-2"></div>
-              <h3 className="font-semibold mb-1 text-red">Dashboard Ejecutivo</h3>
+              <h3 
+                className="font-medium mb-1"
+                style={{ color: "rgba(225, 120, 130)" }}
+              >
+                Dashboard Ejecutivo
+              </h3>
               <p className="text-sm text-muted-foreground">Visualiza tu desempeño y avance en tiempo real</p>
             </div>
-            <div className="bg-red/10 border-2 border-red/30 rounded-lg p-4">
+            <div 
+              className="rounded-lg p-4"
+              style={{ backgroundColor: "rgba(225, 120, 130, 0.2)" }}
+            >
               <div className="text-2xl mb-2"></div>
-              <h3 className="font-semibold mb-1 text-red">Oportunidades Reales</h3>
+              <h3 
+                className="font-medium mb-1"
+                style={{ color: "rgba(225, 120, 130)" }}
+              >
+                Oportunidades Reales
+              </h3>
               <p className="text-sm text-muted-foreground">Acceso a ofertas laborales personalizadas del mercado</p>
             </div>
-            <div className="bg-red/10 border-2 border-red/30 rounded-lg p-4">
+            <div 
+              className="rounded-lg p-4"
+              style={{ backgroundColor: "rgba(225, 120, 130, 0.2)" }}
+            >
               <div className="text-2xl mb-2"></div>
-              <h3 className="font-semibold mb-1 text-red">Aprendizaje Continuo</h3>
+              <h3 
+                className="font-medium mb-1"
+                style={{ color: "rgba(225, 120, 130)" }}
+              >
+                Aprendizaje Continuo
+              </h3>
               <p className="text-sm text-muted-foreground">Recursos, tests y análisis para crecer profesionalmente</p>
             </div>
           </div>
@@ -90,23 +126,43 @@ export default function EjecucionContinuaPage() {
         {/* Navigation Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-5 mb-8 gap-1 bg-background/50 border-2 border-red/20">
-            <TabsTrigger value="dashboard" className="text-sm data-[state=active]:bg-red/20 data-[state=active]:text-red">
+            <TabsTrigger 
+              value="dashboard" 
+              className="text-sm"
+              style={{}}
+            >
               <Award className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Mi Progreso</span>
             </TabsTrigger>
-            <TabsTrigger value="oportunidades" className="text-sm data-[state=active]:bg-red/20 data-[state=active]:text-red">
+            <TabsTrigger 
+              value="oportunidades" 
+              className="text-sm"
+              style={{}}
+            >
               <Briefcase className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Empleos</span>
             </TabsTrigger>
-            <TabsTrigger value="tests" className="text-sm data-[state=active]:bg-red/20 data-[state=active]:text-red">
+            <TabsTrigger 
+              value="tests" 
+              className="text-sm"
+              style={{}}
+            >
               <Brain className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Conocimiento</span>
             </TabsTrigger>
-            <TabsTrigger value="radar" className="text-sm data-[state=active]:bg-red/20 data-[state=active]:text-red">
+            <TabsTrigger 
+              value="radar" 
+              className="text-sm"
+              style={{}}
+            >
               <Radar className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Análisis</span>
             </TabsTrigger>
-            <TabsTrigger value="recursos" className="text-sm data-[state=active]:bg-red/20 data-[state=active]:text-red">
+            <TabsTrigger 
+              value="recursos" 
+              className="text-sm"
+              style={{}}
+            >
               <BookOpen className="w-4 h-4 mr-2" />
               <span className="hidden sm:inline">Biblioteca</span>
             </TabsTrigger>
