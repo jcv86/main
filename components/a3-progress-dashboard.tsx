@@ -145,7 +145,7 @@ export default function A3ProgressDashboard() {
   return (
     <div className="space-y-6">
       {/* Main KPI Card - 2 Metrics */}
-      <Card className="border-training/30 bg-gradient-to-br from-training/10 via-training/5 to-background overflow-hidden" style={{ borderRadius: '0px' }}>
+      <Card className="bg-gradient-to-br from-training/10 via-training/5 to-background overflow-hidden" style={{ borderRadius: '0px', borderColor: 'rgb(170, 70, 170)' }}>
         <CardContent className="pt-8 pb-8">
           <div className="grid grid-cols-2 gap-12">
             {/* Metric 1: Time */}
@@ -170,7 +170,7 @@ export default function A3ProgressDashboard() {
       </Card>
 
       {/* Overall Progress Section */}
-      <Card className="border-training/20 bg-gradient-to-br from-training/5 to-background" style={{ borderRadius: '0px' }}>
+      <Card className="bg-gradient-to-br from-training/5 to-background" style={{ borderRadius: '0px', borderColor: 'rgb(170, 70, 170)' }}>
         <CardContent className="pt-6 pb-6">
           <div className="space-y-4">
             <div className="flex items-center justify-between">
@@ -187,7 +187,7 @@ export default function A3ProgressDashboard() {
             </div>
 
             {/* Progress Bar */}
-            <div className="w-full bg-muted/30 h-2 overflow-hidden border border-training/10">
+            <div className="w-full bg-muted/30 h-2 overflow-hidden" style={{ borderColor: 'rgb(170, 70, 170)' }}>
               <div
                 className="h-2 transition-all duration-700 ease-out"
                 style={{ 
@@ -205,7 +205,7 @@ export default function A3ProgressDashboard() {
 
       {/* Active Challenge Card */}
       {challenge && (
-        <Card className="border-training/30 bg-gradient-to-br from-training/10 to-background overflow-hidden" style={{ borderRadius: '0px' }}>
+        <Card className="bg-gradient-to-br from-training/10 to-background overflow-hidden" style={{ borderRadius: '0px', borderColor: 'rgb(170, 70, 170)' }}>
           <CardContent className="pt-6 pb-6">
             <div className="space-y-4">
               {/* Challenge Header */}
@@ -226,14 +226,14 @@ export default function A3ProgressDashboard() {
               </div>
 
               {/* Challenge Progress */}
-              <div className="space-y-2 pt-2 border-t border-training/10">
+              <div className="space-y-2 pt-2" style={{ borderTopColor: 'rgb(170, 70, 170)' }}>
                 <div className="flex justify-between items-center text-xs">
                   <span className="text-muted-foreground font-medium">Progreso: {challenge.progress}/{challenge.total}</span>
                   <span className="font-semibold" style={{ color: 'rgb(170, 70, 170)' }}>
                     {Math.round((challenge.progress / challenge.total) * 100)}%
                   </span>
                 </div>
-                <div className="w-full bg-muted/30 h-2 overflow-hidden border border-training/10">
+                <div className="w-full bg-muted/30 h-2 overflow-hidden" style={{ borderColor: 'rgb(170, 70, 170)' }}>
                   <div
                     className="h-2 transition-all duration-700 ease-out"
                     style={{
