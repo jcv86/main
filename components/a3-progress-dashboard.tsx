@@ -36,9 +36,14 @@ export default function A3ProgressDashboard() {
   const [challenge, setChallenge] = useState<ChallengeData | null>(null)
   const [loading, setLoading] = useState(true)
   const [claimingReward, setClaimingReward] = useState(false)
+  const [isHydrated, setIsHydrated] = useState(false)
 
   useEffect(() => {
-    const fetchProgress = async () => {
+    setIsHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    if (!isHydrated) return
       try {
         const response = await fetch('/api/a3/progress', {
           headers: {
@@ -87,7 +92,7 @@ export default function A3ProgressDashboard() {
 
     fetchProgress()
     fetchChallenge()
-  }, [])
+  }, [isHydrated])
 
   const handleClaimReward = async () => {
     if (!challenge) return
@@ -140,6 +145,16 @@ export default function A3ProgressDashboard() {
 
   if (!progress) {
     return null
+  }
+
+  if (!isHydrated) {
+    return (
+      <div className="space-y-6">
+        <div className="h-24 bg-muted/20 animate-pulse" style={{ borderRadius: '0px', borderColor: 'rgb(170, 70, 170)' }} />
+        <div className="h-24 bg-muted/20 animate-pulse" style={{ borderRadius: '0px', borderColor: 'rgb(170, 70, 170)' }} />
+        <div className="h-32 bg-muted/20 animate-pulse" style={{ borderRadius: '0px', borderColor: 'rgb(170, 70, 170)' }} />
+      </div>
+    )
   }
 
   return (
