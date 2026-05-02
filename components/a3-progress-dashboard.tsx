@@ -45,7 +45,7 @@ export default function A3ProgressDashboard() {
   useEffect(() => {
     if (!isHydrated) return
 
-    const fetchProgress = async () => {
+    const loadData = async () => {
       try {
         const response = await fetch('/api/a3/progress', {
           headers: {
@@ -77,7 +77,7 @@ export default function A3ProgressDashboard() {
       }
     }
 
-    const fetchChallenge = async () => {
+    const loadChallenge = async () => {
       try {
         const response = await fetch('/api/a3/gamification', {
           credentials: 'include',
@@ -92,8 +92,8 @@ export default function A3ProgressDashboard() {
       }
     }
 
-    fetchProgress()
-    fetchChallenge()
+    loadData()
+    loadChallenge()
   }, [isHydrated])
 
   const handleClaimReward = async () => {
