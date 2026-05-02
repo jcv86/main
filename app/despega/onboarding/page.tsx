@@ -812,7 +812,7 @@ export default function DespegaOnboarding() {
       <div className="min-h-screen bg-background">
         <Card className="w-full max-w-2xl">
           <CardHeader>
-            <CardTitle>Conozcámonos - Contexto Inicial</CardTitle>
+            <CardTitle style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }}>Conozcámonos - Contexto Inicial</CardTitle>
             <CardDescription>7 preguntas para personalizar tu experiencia</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
