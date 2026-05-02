@@ -372,7 +372,7 @@ export default function Conozcamonos2Page() {
               disabled={!allStepAnswered || loading || !!error}
               className="text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
               style={{
-                backgroundColor: 'rgb(90, 90, 150, 0.6)',
+                backgroundColor: 'rgba(80, 160, 170, 0.6)',
                 borderRadius: '20px'
               }}
               title={
