@@ -128,7 +128,7 @@ export default function EjecucionContinuaPage() {
           <TabsList className="grid w-full grid-cols-5 mb-8 gap-1 bg-background/50 border-2 border-red/20">
             <TabsTrigger 
               value="dashboard" 
-              className="text-sm data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-b-[rgba(225,120,130,0.9)]"
+              className="text-sm data-[state=active]:text-[rgba(225,120,130,0.9)] data-[state=active]:border-b-2 data-[state=active]:border-b-[rgba(225,120,130,0.9)]"
               style={{}}
             >
               <Award className="w-4 h-4 mr-2" />
@@ -136,7 +136,7 @@ export default function EjecucionContinuaPage() {
             </TabsTrigger>
             <TabsTrigger 
               value="oportunidades" 
-              className="text-sm data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-b-[rgba(225,120,130,0.9)]"
+              className="text-sm data-[state=active]:text-[rgba(225,120,130,0.9)] data-[state=active]:border-b-2 data-[state=active]:border-b-[rgba(225,120,130,0.9)]"
               style={{}}
             >
               <Briefcase className="w-4 h-4 mr-2" />
@@ -144,7 +144,7 @@ export default function EjecucionContinuaPage() {
             </TabsTrigger>
             <TabsTrigger 
               value="tests" 
-              className="text-sm data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-b-[rgba(225,120,130,0.9)]"
+              className="text-sm data-[state=active]:text-[rgba(225,120,130,0.9)] data-[state=active]:border-b-2 data-[state=active]:border-b-[rgba(225,120,130,0.9)]"
               style={{}}
             >
               <Brain className="w-4 h-4 mr-2" />
@@ -152,7 +152,7 @@ export default function EjecucionContinuaPage() {
             </TabsTrigger>
             <TabsTrigger 
               value="radar" 
-              className="text-sm data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-b-[rgba(225,120,130,0.9)]"
+              className="text-sm data-[state=active]:text-[rgba(225,120,130,0.9)] data-[state=active]:border-b-2 data-[state=active]:border-b-[rgba(225,120,130,0.9)]"
               style={{}}
             >
               <Radar className="w-4 h-4 mr-2" />
@@ -160,7 +160,7 @@ export default function EjecucionContinuaPage() {
             </TabsTrigger>
             <TabsTrigger 
               value="recursos" 
-              className="text-sm data-[state=active]:bg-transparent data-[state=active]:border-b-2 data-[state=active]:border-b-[rgba(225,120,130,0.9)]"
+              className="text-sm data-[state=active]:text-[rgba(225,120,130,0.9)] data-[state=active]:border-b-2 data-[state=active]:border-b-[rgba(225,120,130,0.9)]"
               style={{}}
             >
               <BookOpen className="w-4 h-4 mr-2" />
