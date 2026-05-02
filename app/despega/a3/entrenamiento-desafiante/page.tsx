@@ -237,13 +237,13 @@ export default function ChallensingTrainingPage() {
         {/* Header */}
         <div className="flex-shrink-0 border-b border-muted/80 bg-background">
           <div className="flex items-center justify-between">
-            <Link href="/despega/a3" className="flex items-center gap-2 text-purple/60 hover:text-purple/80">
+            <Link href="/despega/a3" className="flex items-center gap-2 hover:text-purple/80" style={{ color: 'rgb(170, 70, 170)' }}>
               <ArrowLeft className="w-4 h-4" />
               Volver al Dashboard
             </Link>
             <div className="flex gap-4 items-center">
-              <Badge className="bg-purple/60">DESAFÍO MÁXIMO</Badge>
-              <Badge className="bg-purple">{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
+              <Badge style={{ backgroundColor: 'rgb(170, 70, 170, 0.6)', color: '#ffffff', border: 'none' }}>DESAFÍO MÁXIMO</Badge>
+              <Badge style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff', border: 'none' }}>{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
             </div>
           </div>
         </div>
@@ -264,7 +264,7 @@ export default function ChallensingTrainingPage() {
                   className="w-full h-full object-cover"
                 />
                 {isRecording && (
-                  <div className="absolute top-4 right-4 flex items-center gap-2 bg-red px-3 py-2 rounded-lg">
+                  <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ backgroundColor: 'rgb(170, 70, 170)' }}>
                     <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
                     <span className="text-white text-sm font-mono">{formatTime(recordingTime)}</span>
                   </div>
@@ -281,7 +281,7 @@ export default function ChallensingTrainingPage() {
                       <h3 className="text-sm font-bold text-muted-foreground mb-2">Pregunta {currentQuestion + 1} de {CHALLENGING_QUESTIONS.length}</h3>
                       <p className="text-lg text-white font-semibold">{question.question}</p>
                     </div>
-                    <Badge className={question.difficulty === 'Crítico' ? 'bg-purple/40' : 'bg-yellow'}>{question.difficulty}</Badge>
+                    <Badge style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)', color: '#ffffff', border: 'none' }}>{question.difficulty}</Badge>
                   </div>
                 </div>
 
@@ -295,7 +295,8 @@ export default function ChallensingTrainingPage() {
                         {!isRecording ? (
                           <Button
                             onClick={startRecording}
-                            className="flex-1 bg-purple/80 hover:bg-purple/70 gap-2 rounded-[20px]"
+                            className="flex-1 gap-2 rounded-[20px]"
+                            style={{ backgroundColor: 'rgb(170, 70, 170, 0.8)', color: '#ffffff' }}
                           >
                             <Mic className="w-4 h-4" />
                             Comenzar Grabación
@@ -323,7 +324,8 @@ export default function ChallensingTrainingPage() {
                           setHasResponse(e.target.value.trim().length > 0)
                         }}
                         placeholder="Escribe aquí tu respuesta detallada... (mínimo 50 caracteres)"
-                        className="w-full h-24 bg-purple/40 text-purple/60 border border-muted/70 rounded-[28px] p-3 text-sm focus:border-purple/50 focus:outline-none resize-none"
+                        className="w-full h-24 border border-muted/70 rounded-[28px] p-3 text-sm focus:outline-none resize-none"
+                        style={{ backgroundColor: 'rgb(170, 70, 170, 0.2)', color: 'rgb(170, 70, 170, 0.7)' }}
                       />
                       {textResponse && <p className="text-xs text-green/40 flex items-center gap-2"><CheckCircle2 className="w-4 h-4" />Respuesta escrita ({textResponse.length} caracteres)</p>}
                     </div>
@@ -340,7 +342,8 @@ export default function ChallensingTrainingPage() {
                     <Button
                       onClick={evaluateResponse}
                       disabled={!hasResponse || isEvaluating}
-                      className="w-full bg-purple/80 hover:bg-purple/70 disabled:opacity-50 gap-2"
+                      className="w-full disabled:opacity-50 gap-2"
+                      style={{ backgroundColor: 'rgb(170, 70, 170, 0.8)', color: '#ffffff' }}
                     >
                       {isEvaluating ? (
                         <>
@@ -368,7 +371,7 @@ export default function ChallensingTrainingPage() {
                     <div className="bg-background">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-semibold text-white/85">Tu Puntuación</p>
-                        <div className="text-3xl font-bold text-purple">{evaluation.score}</div>
+                        <div className="text-3xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>{evaluation.score}</div>
                       </div>
                       <p className="text-sm text-white/85">{evaluation.scoreExplanation}</p>
                     </div>
@@ -415,14 +418,16 @@ export default function ChallensingTrainingPage() {
                     {currentQuestion < CHALLENGING_QUESTIONS.length - 1 ? (
                       <Button
                         onClick={moveToNextQuestion}
-                        className="w-full bg-purple/80 hover:bg-purple/70 gap-2"
+                        className="w-full gap-2"
+                        style={{ backgroundColor: 'rgb(170, 70, 170, 0.8)', color: '#ffffff' }}
                       >
                         Siguiente Pregunta
                       </Button>
                     ) : (
                       <Button
                         onClick={() => window.location.href = '/despega/a3'}
-                        className="w-full bg-green/80 hover:bg-green/70 gap-2"
+                        className="w-full gap-2"
+                        style={{ backgroundColor: 'rgb(34, 197, 94)', color: '#ffffff' }}
                       >
                         Completar Entrenamiento
                       </Button>
@@ -438,7 +443,7 @@ export default function ChallensingTrainingPage() {
               {/* Score Overview */}
               <div className="p-4 border-b border-muted/80 flex-shrink-0">
                 <h3 className="text-lg font-bold flex items-center gap-2 text-white mb-4">
-                  <BarChart3 className="w-5 h-5 text-purple/60" />
+                  <BarChart3 className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.6)' }} />
                   Puntuación Ejecutiva
                 </h3>
                 <div className="space-y-4">
@@ -454,7 +459,7 @@ export default function ChallensingTrainingPage() {
                   {currentScore !== undefined && (
                     <div className="pt-4 border-t border-muted/70">
                       <p className="text-xs text-white/60 font-semibold mb-2">Esta Pregunta</p>
-                      <span className="text-2xl font-bold text-purple">{currentScore}</span>
+                      <span className="text-2xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>{currentScore}</span>
                     </div>
                   )}
                 </div>
@@ -477,11 +482,12 @@ export default function ChallensingTrainingPage() {
                     disabled={!completedQuestions.includes(idx) && idx !== currentQuestion}
                     className={`w-full text-left p-3 rounded-lg transition-all text-xs disabled:opacity-50 ${
                       idx === currentQuestion
-                        ? 'bg-purple/20 border border-purple/60 text-white'
+                        ? 'text-white'
                         : completedQuestions.includes(idx)
                         ? 'bg-green/20 border border-green/40 cursor-pointer hover:bg-green/30 text-white'
                         : 'bg-white/10 border border-white/20 text-white/80'
                     }`}
+                    style={idx === currentQuestion ? { backgroundColor: 'rgb(170, 70, 170, 0.2)', border: '1px solid rgb(170, 70, 170, 0.6)' } : {}}
                   >
                     <div className="flex items-start gap-2">
                       <div className="mt-0.5">
