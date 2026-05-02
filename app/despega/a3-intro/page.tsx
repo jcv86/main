@@ -196,7 +196,7 @@ export default function A3IntroPage() {
             <Button 
               onClick={() => router.push('/despega/a3')}
               className="w-full text-white font-bold text-lg py-6"
-              style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)' }}
+              style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '20px' }}
             >
               Ir a Entrenamiento Intensivo
               <ArrowRight className="w-5 h-5 ml-2" />

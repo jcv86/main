@@ -61,9 +61,10 @@ export function AIAssistant({
         size="sm"
         className="gap-2"
         style={{
-          backgroundColor: 'rgb(90, 90, 150, 0.6)',
+          backgroundColor: 'rgba(90, 90, 150, 0.6)',
           color: 'rgba(255, 255, 255, 0.92)',
-          border: 'none'
+          border: 'none',
+          borderRadius: '20px'
         }}
       >
         <Lightbulb className="w-4 h-4" />

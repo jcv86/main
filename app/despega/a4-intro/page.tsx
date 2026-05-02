@@ -178,7 +178,7 @@ export default function ContinuousExecutionIntroPage() {
             <Button 
               onClick={() => router.push('/despega/a4')}
               className="w-full text-white font-bold text-lg py-6"
-              style={{ backgroundColor: 'rgba(225, 120, 130, 0.6)' }}
+              style={{ backgroundColor: 'rgba(225, 120, 130, 0.6)', borderRadius: '20px' }}
             >
               Ir a Ejecución Continua
               <ArrowRight className="w-5 h-5 ml-2" />
