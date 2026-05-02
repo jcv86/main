@@ -61,7 +61,7 @@ export function AIAssistant({
         size="sm"
         className="gap-2"
         style={{
-          backgroundColor: 'rgba(90, 90, 150, 0.6)',
+          backgroundColor: 'rgba(80, 160, 170, 0.6)',
           color: 'rgba(255, 255, 255, 0.92)',
           border: 'none',
           borderRadius: '20px'
