@@ -53,12 +53,17 @@ export default function EntrenamientoIntensivePage() {
               <A3ProgressDashboard />
             </div>
             <div className="flex items-center justify-center bg-background">
-              <img 
-                src="/images/rocket-teal.jpg" 
-                alt="Rocket placeholder" 
-                className="w-full h-auto object-contain max-h-96"
+              <video 
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-3/4 h-auto object-contain max-h-96"
                 style={{ borderRadius: '1px', borderColor: '#000000' }}
-              />
+              >
+                <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/video5456517059192072708-4x4BoFPTrPyPGPszqW0UjXCtGBOzqg.mp4" type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
             </div>
           </div>
         </div>
