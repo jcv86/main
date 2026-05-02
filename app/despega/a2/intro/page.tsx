@@ -279,8 +279,9 @@ export default function YourRouteIntroPage() {
         <div className="space-y-3">
           <Button 
             onClick={() => router.push("/despega/conozcamonos-2")}
-            className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg"
+            className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all text-white"
             size="lg"
+            style={{ backgroundColor: 'rgba(90, 90, 150, 0.6)', borderRadius: '20px' }}
           >
             Comenzar Mi A2 <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
