@@ -197,18 +197,18 @@ export default function Conozcamonos2Page() {
         {/* Header with brandbook styling */}
         <div className="text-center mb-8">
           <div className="inline-block px-4 py-2 bg-background">
-            <p className="text-sm font-semibold text-blue">Conozcámonos 2: Tu Ruta</p>
+            <p className="text-sm font-semibold" style={{ color: 'rgb(90, 90, 150)' }}>Conozcámonos 2: Tu Ruta</p>
           </div>
-          <h1 className="text-5xl md:text-6xl font-black text-white mb-4">
+          <h1 className="text-5xl md:text-6xl text-white mb-4" style={{ fontWeight: 200 }}>
             Diseña Tu Ruta de 90 Días
           </h1>
-          <p className="text-xl text-white/90 mb-6">
+          <p className="mb-6" style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.6)' }}>
             {currentStep === 'paso1'
               ? 'Paso 1: Define tu objetivo y contexto profesional'
               : 'Paso 2: Personaliza los detalles de tu desarrollo'}
           </p>
-          <Progress value={progress} className="h-3 bg-white/20" />
-          <p className="text-base text-white/85 mt-3 font-semibold">
+          <Progress value={progress} className="h-3" style={{ backgroundColor: 'rgba(90, 90, 150, 0.4)' }} />
+          <p className="mt-3" style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.6)', fontWeight: 300 }}>
             Progreso: {completedCount} de {totalQuestions} preguntas completadas
           </p>
         </div>
@@ -257,11 +257,12 @@ export default function Conozcamonos2Page() {
                       onBlur={(e) => validateTextResponse(question.id, question.question, e.target.value)}
                       placeholder={question.placeholder}
                       maxLength={question.maxLength}
-                      className={`flex-1 p-3 border rounded-[28px] bg-white dark:bg-card text-muted/90 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-blue disabled:opacity-50 transition-colors ${
+                      className={`flex-1 p-3 border bg-white dark:bg-card text-muted/90 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-blue disabled:opacity-50 transition-colors ${
                         error && !validatingIds.has(question.id) 
                           ? 'border-red/50 dark:border-red/50 bg-red/5 dark:bg-red/20' 
                           : 'border-muted/30 dark:border-muted/60'
                       }`}
+                      style={{ borderRadius: '2px' }}
                       rows={3}
                       disabled={validatingIds.has(question.id)}
                     />
@@ -367,7 +368,10 @@ export default function Conozcamonos2Page() {
             <Button
               onClick={handleNext}
               disabled={!allStepAnswered || loading || !!error}
-              className="bg-blue hover:bg-blue/80 text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              className="text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                backgroundColor: 'rgb(90, 90, 150, 0.6)'
+              }}
               title={
                 error 
                   ? 'Error de validación: ' + error
