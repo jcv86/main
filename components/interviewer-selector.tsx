@@ -73,9 +73,9 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
       </div>
 
       {/* Main Layout: Portrait (Left) + Info (Left-Center) + Selection Grid (Right) */}
-      <div className="flex gap-8">
+      <div className="flex gap-8 items-start">
         {/* Large Portrait Image - Left */}
-        <div className={`relative w-64 aspect-[3/4] rounded-lg overflow-hidden border-2 border-muted/20 transition-opacity duration-300 flex-shrink-0 ${isChanging ? 'opacity-50' : 'opacity-100'}`}>
+        <div className={`relative w-56 aspect-[3/4] rounded-lg overflow-hidden border-2 border-muted/20 transition-opacity duration-300 flex-shrink-0 ${isChanging ? 'opacity-50' : 'opacity-100'}`}>
           <Image
             src={selected.image}
             alt={selected.name}
@@ -86,38 +86,38 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
         </div>
 
         {/* Profile Info - Left-Center */}
-        <div className="flex flex-col justify-start pt-4 gap-4 w-48 flex-shrink-0">
+        <div className="flex flex-col justify-start gap-3 w-40 flex-shrink-0">
           <div>
-            <h2 className="text-3xl font-bold text-white">{selected.name}</h2>
-            <p className="text-sm text-muted-foreground mt-1">{selected.role}</p>
+            <h2 className="text-2xl font-bold text-white">{selected.name}</h2>
+            <p className="text-xs text-muted-foreground mt-1">{selected.role}</p>
           </div>
           
           {/* Description */}
           {selected.description && (
-            <div className="text-xs text-muted-foreground whitespace-pre-line leading-relaxed">
+            <div className="text-xs text-muted-foreground whitespace-pre-line leading-tight">
               {selected.description}
             </div>
           )}
           
           {/* Level Badge */}
-          <Badge className="inline-block text-xs bg-muted/20 text-foreground border-muted/40 border px-3 py-1 w-fit">
+          <Badge className="inline-block text-xs bg-muted/20 text-foreground border-muted/40 border px-2 py-1 w-fit">
             Nivel: {selected.level}
           </Badge>
         </div>
 
         {/* Right Panel - Selection Grid with Thumbnails */}
         <div className="flex-1">
-          <div className="grid grid-cols-3 gap-6 auto-rows-max">
+          <div className="grid grid-cols-3 gap-4">
             {INTERVIEWERS.map(interviewer => (
               <button
                 key={interviewer.id}
                 onClick={() => handleSelect(interviewer.id)}
-                className={`flex flex-col items-center gap-3 transition-all group ${
+                className={`flex flex-col items-center gap-2 transition-all group ${
                   value === interviewer.id ? 'opacity-100' : 'opacity-60 hover:opacity-100'
                 }`}
               >
                 {/* Thumbnail Portrait */}
-                <div className={`relative w-40 aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all ${
+                <div className={`relative w-32 aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all ${
                   value === interviewer.id
                     ? 'border-white shadow-lg shadow-white/30 scale-105'
                     : 'border-muted/30 group-hover:border-white/50'
@@ -127,13 +127,13 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
                     alt={interviewer.name}
                     fill
                     className="object-cover"
-                    sizes="160px"
+                    sizes="128px"
                   />
                 </div>
 
                 {/* Name and Level Label */}
                 <div className="text-center w-full">
-                  <p className="font-semibold text-white text-sm leading-tight">{interviewer.name}</p>
+                  <p className="font-semibold text-white text-xs leading-tight">{interviewer.name}</p>
                   <p className="text-xs text-muted-foreground">{interviewer.level}</p>
                 </div>
               </button>
