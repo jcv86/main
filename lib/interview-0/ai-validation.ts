@@ -105,11 +105,13 @@ Provide specific, actionable feedback.`,
     }
   } catch (error) {
     console.error('[v0] Audio validation error:', error)
+    // Lowered threshold from 12 to 8 to match the local detection threshold for "fair"
+    // Allow any audio detection >= 8%
     return {
-      isValid: audioLevel >= 12,
-      score: Math.min(100, audioLevel * 3),
-      issues: audioLevel < 15 ? ['Audio muy bajo - acércate al micrófono'] : [],
-      tips: ['Prueba en ambiente tranquilo', 'Habla con claridad', 'Verifica que no haya ruido de fondo']
+      isValid: audioLevel >= 8,
+      score: Math.min(100, audioLevel * 5),
+      issues: audioLevel < 8 ? ['Audio muy bajo - acércate al micrófono'] : [],
+      tips: audioLevel < 20 ? ['Prueba en ambiente tranquilo', 'Habla con claridad', 'Verifica que no haya ruido de fondo'] : []
     }
   }
 }
