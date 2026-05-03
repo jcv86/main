@@ -83,7 +83,7 @@ export function AdvancedAnalyticsReporting() {
       </div>
 
       <Tabs defaultValue="progress" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 bg-opacity-10">
+        <TabsList className="grid w-full grid-cols-4" style={{ backgroundColor: 'rgba(219, 217, 215, 0.15)' }}>
           <TabsTrigger value="progress" className="text-opacity-75">Progreso</TabsTrigger>
           <TabsTrigger value="benchmarks">Benchmarks</TabsTrigger>
           <TabsTrigger value="components">Componentes</TabsTrigger>
