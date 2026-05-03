@@ -9,8 +9,8 @@ const INTERVIEWERS = [
   { id: 'interviewer-classic-2', name: 'Marco', role: 'Manager Senior', level: 'Intermedio', description: 'Some description\nMaybe some more description', image: '/images/interviewers/marco.jpg', color: 'from-yellow-500 to-yellow-600' },
   { id: 'interviewer-classic-3', name: 'Elena', role: 'VP Talent', level: 'Intermedio+', description: 'Some description\nMaybe some more description', image: '/images/interviewers/elena.jpg', color: 'from-purple-500 to-purple' },
   { id: 'interviewer-classic-4', name: 'David', role: 'Tech Lead', level: 'Intermedio', description: 'Some description\nMaybe some more description', image: '/images/interviewers/david.jpg', color: 'from-orange-500 to-orange-600' },
-  { id: 'interviewer-modern-1', name: 'Alexandra', role: 'Director', level: 'Avanzado', description: 'Some description\nMaybe some more description', image: '/images/interviewers/alex.jpg', color: 'from-blue-500 to-blue-600' },
-  { id: 'interviewer-modern-2', name: 'Bruno', role: 'Executive', level: 'Avanzado', description: 'Some description\nMaybe some more description', image: '/images/interviewers/jordan.jpg', color: 'from-red to-red' }
+  { id: 'interviewer-modern-1', name: 'Alexandra', role: 'Director', level: 'Avanzado', description: 'Some description\nMaybe some more description', image: '/images/interviewers/alexandra.jpg', color: 'from-blue-500 to-blue-600' },
+  { id: 'interviewer-modern-2', name: 'Bruno', role: 'Executive', level: 'Avanzado', description: 'Some description\nMaybe some more description', image: '/images/interviewers/bruno.jpg', color: 'from-red to-red' }
 ]
 
 interface InterviewerSelectorProps {
