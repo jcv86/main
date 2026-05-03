@@ -313,46 +313,8 @@ export default function GuidedInterviewPage() {
       </div>
     )
   }
+}
 
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-5xl mx-auto space-y-6 px-4 py-8">
-        {/* Header */}
-        <Link href="/despega/a3">
-          <Button variant="outline" className="mb-4">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Volver
-          </Button>
-        </Link>
-
-        {/* Progress */}
-        <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
-              Entrevista Guiada - Práctica Básica
-            </h1>
-            <Badge variant="secondary">
-              Pregunta {currentQuestionIndex + 1}/{GUIDED_INTERVIEW_QUESTIONS.length}
-            </Badge>
-          </div>
-          <Progress value={progress} className="h-2" />
-        </div>
-
-        {/* Two-Column Layout: Sofia + Question */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Sofia Interviewer */}
-          <div>
-            <SofiaInterviewer 
-              state={isRecording ? 'listening' : 'idle'} 
-              autoPlay={true}
-              loop={true}
-            />
-          </div>
-
-          {/* Question and Response Section */}
-          <div className="space-y-6">
-            {/* Question Card */}
-            <Card className="p-8 border-2 border-training/30 dark:border-training/10">
               <div className="space-y-6">
                 {/* Question */}
                 <div>

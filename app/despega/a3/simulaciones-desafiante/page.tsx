@@ -291,12 +291,6 @@ export default function GuidedInterviewPage() {
   )
 }
 
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-          <Progress value={progress} className="h-2" />
         </div>
 
         {/* Question Card */}
