@@ -291,7 +291,6 @@ export default function GuidedInterviewPage() {
   )
 }
 
-        <div className="flex gap-4 justify-between">
           <Button
             onClick={handlePrevious}
             disabled={currentQuestionIndex === 0}
