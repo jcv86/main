@@ -238,7 +238,8 @@ export function ConversationalInterviewSimulator({
       setIsLoading(true)
       clearError()
 
-      // Validate that response is contextually relevant to the question
+      // Step 1: AI Validation - Check if response is contextually relevant
+      console.log('[v0] Step 1: Validating response context...')
       const validation = await validateContextRelevance(
         currentQuestion.text,
         userResponse,
@@ -251,8 +252,9 @@ export function ConversationalInterviewSimulator({
         return
       }
 
-      // Call smart interviewer agent API for intelligent feedback
-      console.log('[v0] Calling interviewer agent for:', selectedInterviewerId)
+      console.log('[v0] Context validation passed, calling interviewer agent...')
+      
+      // Step 2: Intelligent Interviewer Evaluation - Get AI feedback on response quality
       const evaluatorResponse = await fetch('/api/interview/evaluator', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -261,7 +263,8 @@ export function ConversationalInterviewSimulator({
           question: currentQuestion.text,
           userResponse,
           questionCategory: currentQuestion.category,
-          difficulty: level
+          difficulty: level,
+          shouldMonitor: true  // Flag to enable monitoring
         })
       })
 
@@ -270,7 +273,17 @@ export function ConversationalInterviewSimulator({
       }
 
       const evaluatorData = await evaluatorResponse.json()
-      const { score, feedback, followUp } = evaluatorData
+      const { score, feedback, followUp, isResponseQuality } = evaluatorData
+
+      // Step 3: Quality Check - If response quality is too low, suggest revision
+      if (evaluatorData.quality && evaluatorData.quality < 50) {
+        console.log('[v0] Low quality response detected, suggesting revision')
+        setError(`La IA ha detectado que tu respuesta necesita mejoras: ${evaluatorData.qualityFeedback}`)
+        setIsLoading(false)
+        return
+      }
+
+      console.log('[v0] Response approved by AI monitoring - Score:', score)
 
       const newAttempt: AttemptResult = {
         attemptNumber: currentAttempts.length + 1,

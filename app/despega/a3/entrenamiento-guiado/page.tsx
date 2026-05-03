@@ -85,12 +85,50 @@ export default function GuidedTrainingPage() {
   const [showVideoSession, setShowVideoSession] = useState(false)
   const [aiTip, setAiTip] = useState<string | null>(null)
   const [aiLoading, setAiLoading] = useState(false)
+  const [isCompletingModule, setIsCompletingModule] = useState(false)
 
   const handleStartModule = (module: any) => {
     if (module.status !== 'locked') {
       setSelectedModule(module)
       setCurrentLesson(0)
       setAiTip(null) // Reset tips when changing modules
+    }
+  }
+
+  const handleCompleteModule = async () => {
+    if (!selectedModule) return
+
+    setIsCompletingModule(true)
+    try {
+      console.log('[v0] Completing module:', selectedModule.name)
+      
+      // Call AI to validate the module completion
+      const validationResponse = await fetch('/api/conozcamonos/ai-suggestion', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          question: `El usuario ha completado todos los temas del módulo "${selectedModule.name}". Proporciona una validación breve de que está listo para el siguiente módulo.`,
+          currentResponse: ''
+        })
+      })
+
+      if (!validationResponse.ok) {
+        throw new Error('Failed to validate module completion')
+      }
+
+      const validationData = await validationResponse.json()
+      console.log('[v0] AI validation:', validationData.suggestion)
+
+      // Mark module as completed in local state
+      // In a real app, this would be saved to the database
+      setSelectedModule(null)
+      setCurrentLesson(0)
+      alert(`¡Módulo "${selectedModule.name}" completado! ${validationData.suggestion}`)
+    } catch (error) {
+      console.error('[v0] Error completing module:', error)
+      alert('Error al completar el módulo. Intenta de nuevo.')
+    } finally {
+      setIsCompletingModule(false)
     }
   }
 
@@ -379,9 +417,22 @@ export default function GuidedTrainingPage() {
                     <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
                   </Button>
                 ) : (
-                  <Button className="text-white" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)', borderRadius: '20px' }}>
-                    <CheckCircle2 className="w-4 h-4 mr-2" />
-                    Completar Módulo
+                  <Button 
+                    onClick={handleCompleteModule}
+                    disabled={isCompletingModule}
+                    className="text-white" 
+                    style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)', borderRadius: '20px' }}>
+                    {isCompletingModule ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Validando...
+                      </>
+                    ) : (
+                      <>
+                        <CheckCircle2 className="w-4 h-4 mr-2" />
+                        Completar Módulo
+                      </>
+                    )}
                   </Button>
                 )}
               </div>
