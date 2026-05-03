@@ -126,8 +126,8 @@ export default function GuidedTrainingPage() {
     const Icon = selectedModule.icon
 
     return (
-      <div className="min-h-screen bg-background">
-        <div className="max-w-3xl mx-auto space-y-6">
+      <div className="min-h-screen bg-background pt-4">
+        <div className="max-w-3xl mx-auto px-4 space-y-6">
           {/* Header */}
           <Button
             variant="outline"
@@ -146,7 +146,7 @@ export default function GuidedTrainingPage() {
                 {selectedModule.name}
               </h1>
             </div>
-            <Progress value={selectedModule.progress} className="h-2" />
+            <Progress value={selectedModule.progress} className="h-2" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }} />
             <p className="text-sm text-muted-foreground dark:text-muted-foreground">
               Lección {currentLesson + 1} de {selectedModule.lessons.length}
             </p>
@@ -335,7 +335,7 @@ export default function GuidedTrainingPage() {
                 </Button>
               </div>
             ) : (
-              <div className="fixed inset-0 bg-black z-50 flex flex-col h-screen">
+              <div className="fixed inset-0 bg-black z-50 flex flex-col" style={{ top: '0', left: '0', right: '0', bottom: '0' }}>
                 <div className="flex-shrink-0 border-b border-muted/80 bg-background">
                   <Button
                     onClick={() => setShowVideoSession(false)}
