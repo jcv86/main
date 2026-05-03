@@ -35,7 +35,7 @@ export default function ConversationalInterviewPage() {
   if (selectedRole && selectedIndustry && selectedLevel) {
     return (
       <main className="min-h-screen bg-black">
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col min-h-screen">
           <div className="flex-shrink-0 border-b border-muted/80 bg-background">
             <Link href="/despega/a3">
               <Button variant="ghost" className="text-purple-400 hover:text-purple-400/80">
@@ -44,7 +44,7 @@ export default function ConversationalInterviewPage() {
               </Button>
             </Link>
           </div>
-          <div className="flex-1 overflow-y-auto p-4">
+          <div className="flex-1 overflow-y-auto">
             <ConversationalInterviewSimulator
               level={selectedLevel}
               onComplete={() => {
