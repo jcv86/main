@@ -448,10 +448,10 @@ export function ConversationalInterviewSimulator({
       {/* Setup Stage */}
       {stage === 'setup' && (
         <div className="space-y-6">
-          <Card className="border-2 border-emerald-500/20">
+          <Card className="border-2" style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Zap className="w-5 h-5 text-emerald-600" />
+                <Zap className="w-5 h-5" style={{ color: 'rgb(170, 70, 170)' }} />
                 Simulador Conversacional de Entrevista
               </CardTitle>
               <CardDescription>
@@ -459,24 +459,24 @@ export function ConversationalInterviewSimulator({
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="bg-emerald-50 dark:bg-emerald-900/20 p-4 rounded-[28px] border border-emerald-200 dark:border-emerald-800 space-y-3">
-                <p className="font-bold text-emerald-900 dark:text-emerald-200">Aquí está el diferencial:</p>
-                <ul className="space-y-2 text-sm text-emerald-800 dark:text-emerald-300">
+              <div className="p-4 rounded-[28px] border space-y-3" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', borderColor: 'rgb(170, 70, 170)' }}>
+                <p className="font-bold" style={{ color: 'rgb(170, 70, 170)' }}>Aquí está el diferencial:</p>
+                <ul className="space-y-2 text-sm">
                   <li className="flex gap-2">
                     <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span><strong>Respuestas vagas?</strong> Te pediré ejemplo. <strong>Demasiado largo?</strong> Te interrumpiré.</span>
+                    <span style={{ color: 'rgb(170, 70, 170)' }}><strong>Respuestas vagas?</strong> Te pediré ejemplo. <strong>Demasiado largo?</strong> Te interrumpiré.</span>
                   </li>
                   <li className="flex gap-2">
                     <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span><strong>Segundo intento inmediato.</strong> Las mejores respuestas salen en el segundo round.</span>
+                    <span style={{ color: 'rgb(170, 70, 170)' }}><strong>Segundo intento inmediato.</strong> Las mejores respuestas salen en el segundo round.</span>
                   </li>
                   <li className="flex gap-2">
                     <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span><strong>Debrief STAR detallado:</strong> Dónde ganaste puntos, dónde perdiste, y cómo sonarías mejor.</span>
+                    <span style={{ color: 'rgb(170, 70, 170)' }}><strong>Debrief STAR detallado:</strong> Dónde ganaste puntos, dónde perdiste, y cómo sonarías mejor.</span>
                   </li>
                   <li className="flex gap-2">
                     <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span><strong>Lenguaje para copiar-pegar.</strong> Frases exactas que sonarían mejor en esa situación.</span>
+                    <span style={{ color: 'rgb(170, 70, 170)' }}><strong>Lenguaje para copiar-pegar.</strong> Frases exactas que sonarían mejor en esa situación.</span>
                   </li>
                 </ul>
               </div>
@@ -491,7 +491,8 @@ export function ConversationalInterviewSimulator({
 
           <Button
             onClick={handleStartInterview}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12 text-lg"
+            className="w-full text-white h-12 text-lg"
+            style={{ backgroundColor: 'rgb(170, 70, 170)' }}
           >
             Comenzar Simulación
           </Button>
