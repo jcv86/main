@@ -233,7 +233,6 @@ export function ConversationalInterviewSimulator({
     // First time: show greeting video
     setStage('greeting_video')
   }
-  }
 
   const handleSubmitResponse = async () => {
     if (!userResponse.trim()) return
