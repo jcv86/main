@@ -23,11 +23,11 @@ export default function MultimodalAnalysisPage() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-8">
-      {/* Header - Enhanced with pillar color */}
-      <div className="bg-gradient-to-r from-training/10 to-training/5 border border-training/20 rounded-lg p-6 space-y-3">
+      {/* Header - Enhanced with pillar color (purple) */}
+      <div className="bg-gradient-to-r from-ritual/10 to-ritual/5 border border-ritual/20 rounded-lg p-6 space-y-3">
         <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-lg bg-training/20 border border-training/30 flex items-center justify-center">
-            <Zap className="w-6 h-6 text-training" />
+          <div className="w-12 h-12 rounded-lg bg-ritual/20 border border-ritual/30 flex items-center justify-center">
+            <Zap className="w-6 h-6 text-ritual" />
           </div>
           <div>
             <h1 className="text-3xl font-bold text-foreground">
@@ -40,16 +40,16 @@ export default function MultimodalAnalysisPage() {
         </div>
       </div>
 
-      {/* Error Alert - Training color */}
+      {/* Error Alert - Ritual/Purple color */}
       {error && (
-        <Card className="border-training/40 bg-training/10">
+        <Card className="border-ritual/40 bg-ritual/10">
           <CardContent className="pt-4 flex gap-3">
-            <AlertCircle className="w-5 h-5 text-training flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 text-ritual flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-sm font-semibold text-training">{error}</p>
+              <p className="text-sm font-semibold text-ritual">{error}</p>
               <button
                 onClick={() => setError('')}
-                className="text-xs text-training/70 hover:text-training mt-2 font-medium"
+                className="text-xs text-ritual/70 hover:text-ritual mt-2 font-medium"
               >
                 Descartar
               </button>
@@ -58,7 +58,7 @@ export default function MultimodalAnalysisPage() {
         </Card>
       )}
 
-      {/* Type Selection - Better contrast with training color */}
+      {/* Type Selection - Better contrast with purple */}
       <div className="space-y-3">
         <h2 className="text-sm font-bold text-foreground uppercase tracking-wide">
           Tipo de Entrenamiento
@@ -70,18 +70,18 @@ export default function MultimodalAnalysisPage() {
               onClick={() => setEntrenamillentoType(type.id)}
               className={`p-4 rounded-lg border-2 transition-all duration-200 ${
                 entrenamillentoType === type.id
-                  ? 'border-training bg-training/15 shadow-lg shadow-training/20'
-                  : 'border-border/50 bg-card hover:border-training/50 hover:bg-card/80'
+                  ? 'border-ritual bg-ritual/15 shadow-lg shadow-ritual/20'
+                  : 'border-border/50 bg-card hover:border-ritual/50 hover:bg-card/80'
               }`}
             >
               <div className="flex items-start gap-2">
                 {entrenamillentoType === type.id && (
-                  <Check className="w-5 h-5 text-training mt-0.5 flex-shrink-0 font-bold" />
+                  <Check className="w-5 h-5 text-ritual mt-0.5 flex-shrink-0 font-bold" />
                 )}
                 <div className="flex-1 text-left">
                   <p className={`font-bold text-sm transition-colors ${
                     entrenamillentoType === type.id 
-                      ? 'text-training' 
+                      ? 'text-ritual' 
                       : 'text-foreground'
                   }`}>
                     {type.label}
@@ -99,26 +99,26 @@ export default function MultimodalAnalysisPage() {
         <TabsList className="grid w-full grid-cols-4 text-sm h-12 bg-card border border-border/50">
           <TabsTrigger 
             value="capture" 
-            className="data-[state=active]:bg-training/20 data-[state=active]:text-training data-[state=active]:border-b-2 data-[state=active]:border-training"
+            className="data-[state=active]:bg-ritual/20 data-[state=active]:text-ritual data-[state=active]:border-b-2 data-[state=active]:border-ritual"
           >
             Capturar
           </TabsTrigger>
           <TabsTrigger 
             value="results" 
             disabled={!activeSession}
-            className="data-[state=active]:bg-training/20 data-[state=active]:text-training data-[state=active]:border-b-2 data-[state=active]:border-training disabled:opacity-50 disabled:cursor-not-allowed"
+            className="data-[state=active]:bg-ritual/20 data-[state=active]:text-ritual data-[state=active]:border-b-2 data-[state=active]:border-ritual disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Resultados
           </TabsTrigger>
           <TabsTrigger 
             value="analytics"
-            className="data-[state=active]:bg-training/20 data-[state=active]:text-training data-[state=active]:border-b-2 data-[state=active]:border-training"
+            className="data-[state=active]:bg-ritual/20 data-[state=active]:text-ritual data-[state=active]:border-b-2 data-[state=active]:border-ritual"
           >
             Resumen
           </TabsTrigger>
           <TabsTrigger 
             value="advanced"
-            className="data-[state=active]:bg-training/20 data-[state=active]:text-training data-[state=active]:border-b-2 data-[state=active]:border-training"
+            className="data-[state=active]:bg-ritual/20 data-[state=active]:text-ritual data-[state=active]:border-b-2 data-[state=active]:border-ritual"
           >
             Avanzado
           </TabsTrigger>
