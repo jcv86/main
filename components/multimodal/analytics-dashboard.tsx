@@ -16,10 +16,17 @@ export function MultimodalAnalyticsDashboard() {
     const fetchAnalytics = async () => {
       try {
         const response = await fetch('/api/multimodal/analytics?period=month')
+        if (!response.ok) {
+          console.error('[v0] Analytics API error:', response.status, response.statusText)
+          setMetrics(null)
+          setLoading(false)
+          return
+        }
         const data = await response.json()
         setMetrics(data)
       } catch (error) {
         console.error('[v0] Error fetching analytics:', error)
+        setMetrics(null)
       } finally {
         setLoading(false)
       }

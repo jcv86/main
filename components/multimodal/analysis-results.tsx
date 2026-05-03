@@ -19,6 +19,11 @@ export function AnalysisResults({ sessionId }: AnalysisResultsProps) {
     const checkStatus = async () => {
       try {
         const response = await fetch(`/api/multimodal/status?sessionId=${sessionId}`)
+        if (!response.ok) {
+          console.error('[v0] Status API error:', response.status, response.statusText)
+          setLoading(false)
+          return
+        }
         const data = await response.json()
 
         setStatus(data.status)

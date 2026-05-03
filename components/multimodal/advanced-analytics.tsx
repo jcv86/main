@@ -22,11 +22,19 @@ export function AdvancedAnalyticsReporting() {
 
   const fetchAnalytics = async () => {
     try {
+      setLoading(true)
       const response = await fetch(`/api/multimodal/advanced-analytics?period=${timeRange}`)
+      if (!response.ok) {
+        console.error('[v0] Advanced analytics API error:', response.status, response.statusText)
+        setAnalytics(null)
+        setLoading(false)
+        return
+      }
       const data = await response.json()
       setAnalytics(data)
     } catch (error) {
       console.error('[v0] Analytics error:', error)
+      setAnalytics(null)
     } finally {
       setLoading(false)
     }
