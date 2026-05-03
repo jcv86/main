@@ -151,13 +151,13 @@ export function ConversationalInterviewSimulator({
     silenceTimeout: 2000
   })
   
-  const [stage, setStage] = useState<'setup' | 'greeting_video' | 'question' | 'response' | 'feedback' | 'complete'>('setup')
+  const [stage, setStage] = useState<'setup' | 'greeting_video' | 'question' | 'response' | 'feedback' | 'farewell_video' | 'complete'>('setup')
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
   const [videoEnabled, setVideoEnabled] = useState(true)
   const [userResponse, setUserResponse] = useState('')
-  const [stage, setStage] = useState<'welcome' | 'greeting_video' | 'question' | 'response' | 'follow_up' | 'complete'>('welcome')
   const [showContinueButton, setShowContinueButton] = useState(false)
   const [sofiaGreetingShown, setSofiaGreetingShown] = useState(false)
+  const [sofiaState, setSofiaState] = useState<'greeting' | 'listening' | 'farewell'>('greeting')
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
@@ -362,7 +362,8 @@ export function ConversationalInterviewSimulator({
       attempts
     })
 
-    setStage('complete')
+    setSofiaState('farewell')
+    setStage('farewell_video')
   }
 
   const getAvatarName = (id: string, type: 'avatar' | 'interviewer') => {
@@ -525,7 +526,10 @@ export function ConversationalInterviewSimulator({
               state="greeting" 
               autoPlay={true}
               loop={false}
-              onEnded={() => setShowContinueButton(true)}
+              onEnded={() => {
+                setSofiaGreetingShown(true)
+                setShowContinueButton(true)
+              }}
             />
             <p className="text-center mt-4 text-white/70">Sofia, tu entrevistadora IA</p>
           </div>
@@ -895,6 +899,32 @@ export function ConversationalInterviewSimulator({
             </div>
           </CardContent>
         </Card>
+      )}
+
+      {/* Farewell Video Stage */}
+      {stage === 'farewell_video' && (
+        <div className="space-y-6">
+          {/* Sofia Farewell Video */}
+          <Card className="border-training/40 overflow-hidden">
+            <div className="relative w-full max-w-md mx-auto">
+              <SofiaInterviewer 
+                state="thinking"
+                autoPlay={true}
+                loop={false}
+                onEnded={() => setStage('complete')}
+              />
+            </div>
+          </Card>
+
+          {/* Farewell Message */}
+          <Card className="border-training/30 bg-training/5">
+            <CardContent className="pt-6">
+              <p className="text-white/85 text-center">
+                Sofia se está despidiendo... Espera a que termine el video
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       )}
 
       {/* Complete Stage */}
