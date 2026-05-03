@@ -315,7 +315,6 @@ export default function GuidedInterviewPage() {
   }
 }
 
-              <div className="space-y-6">
                 {/* Question */}
                 <div>
                   <p className="text-2xl font-bold text-muted/90 dark:text-white mb-4">

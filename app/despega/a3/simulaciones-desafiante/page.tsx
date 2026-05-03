@@ -291,7 +291,6 @@ export default function GuidedInterviewPage() {
   )
 }
 
-        </div>
 
         {/* Question Card */}
         <Card className="p-8 border-2 border-training/30 dark:border-training/10">
