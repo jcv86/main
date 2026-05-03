@@ -262,13 +262,13 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
               ? 'bg-blue-500/10 border-blue/50/30'
               : 'bg-yellow/50/10 border-yellow-500/30'
           }`}>
-            <p className={`font-semibold ${
-              audioTestResult === 'good'
-                ? 'text-emerald-400'
+            <p className="font-semibold" style={{
+              color: audioTestResult === 'good'
+                ? 'rgb(52, 211, 153)'
                 : audioTestResult === 'fair'
-                ? 'text-blue/40'
-                : 'text-yellow-400'
-            }`}>
+                ? 'rgba(239, 239, 239, 0.40)'
+                : 'rgb(250, 204, 21)'
+            }}>
               {audioTestResult === 'good' && 'Excelente calidad de audio'}
               {audioTestResult === 'fair' && 'Audio detectado correctamente'}
               {audioTestResult === 'poor' && 'Audio bajo - considera acercarte al micrófono'}
