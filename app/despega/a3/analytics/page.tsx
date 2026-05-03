@@ -240,14 +240,6 @@ export default function A3AnalyticsPage() {
             </div>
           </CardContent>
         </Card>
-          </Link>
-          <Link href="/despega/a3/entrenamiento-guiado" className="flex-1">
-            <Button variant="outline" className="w-full">
-              <Target className="w-4 h-4 mr-2" />
-              Continuar Entrenamiento
-            </Button>
-          </Link>
-        </div>
       </div>
     </div>
   )
