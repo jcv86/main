@@ -96,7 +96,7 @@ export default function MultimodalAnalysisPage() {
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="capture" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 text-sm h-12 bg-card border border-border/50">
+        <TabsList className="grid w-full grid-cols-4 text-sm h-12 bg-card border-2 border-training/40 rounded-lg">
           <TabsTrigger 
             value="capture" 
             className="data-[state=active]:bg-training/20 data-[state=active]:text-training data-[state=active]:border-b-2 data-[state=active]:border-training"

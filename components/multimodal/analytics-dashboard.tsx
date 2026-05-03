@@ -30,9 +30,9 @@ export function MultimodalAnalyticsDashboard() {
 
   if (loading) {
     return (
-      <Card>
+      <Card className="border-2 border-training/40">
         <CardContent className="pt-6 flex justify-center">
-          <Loader2 className="w-6 h-6 animate-spin text-blue" />
+          <Loader2 className="w-6 h-6 animate-spin text-training" />
         </CardContent>
       </Card>
     )
@@ -40,7 +40,7 @@ export function MultimodalAnalyticsDashboard() {
 
   if (!metrics) {
     return (
-      <Card>
+      <Card className="border-2 border-training/40">
         <CardContent className="pt-6 text-center text-muted-foreground">
           No hay datos disponibles aún
         </CardContent>
@@ -52,21 +52,21 @@ export function MultimodalAnalyticsDashboard() {
     <div className="space-y-6">
       {/* Key Metrics */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
+        <Card className="border-2 border-training/40">
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground mb-1">Sesiones Totales</p>
             <p className="text-3xl font-bold">{metrics.total_sessions}</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-2 border-training/40">
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground mb-1">Puntuación Promedio</p>
             <p className="text-3xl font-bold">{metrics.average_score}/100</p>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-2 border-training/40">
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground mb-1">Mejora Detectada</p>
             <p className="text-3xl font-bold text-training">
@@ -75,7 +75,7 @@ export function MultimodalAnalyticsDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-2 border-training/40">
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground mb-1">Coherencia Promedio</p>
             <p className="text-3xl font-bold text-training">{metrics.coherence_average}%</p>
@@ -84,7 +84,7 @@ export function MultimodalAnalyticsDashboard() {
       </div>
 
       {/* Metrics by Type */}
-      <Card>
+      <Card className="border-2 border-training/40">
         <CardHeader>
           <CardTitle>Desempeño por Tipo de Entrenamiento</CardTitle>
         </CardHeader>
@@ -111,7 +111,7 @@ export function MultimodalAnalyticsDashboard() {
 
       {/* Component Scores */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
+        <Card className="border-2 border-training/40">
           <CardHeader>
             <CardTitle className="text-lg">Visual</CardTitle>
           </CardHeader>
@@ -121,7 +121,7 @@ export function MultimodalAnalyticsDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-2 border-training/40">
           <CardHeader>
             <CardTitle className="text-lg">Audio</CardTitle>
           </CardHeader>
@@ -131,7 +131,7 @@ export function MultimodalAnalyticsDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="border-2 border-training/40">
           <CardHeader>
             <CardTitle className="text-lg">Coherencia</CardTitle>
           </CardHeader>
@@ -143,7 +143,7 @@ export function MultimodalAnalyticsDashboard() {
       </div>
 
       {/* Top Strengths */}
-      <Card>
+      <Card className="border-2 border-training/40">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TrendingUp className="w-5 h-5 text-training" />
@@ -154,9 +154,9 @@ export function MultimodalAnalyticsDashboard() {
           <div className="space-y-2">
             {metrics.top_strengths && metrics.top_strengths.length > 0 ? (
               metrics.top_strengths.map((item: any, i: number) => (
-                <div key={i} className="flex justify-between items-center p-3 bg-green/5 rounded-lg">
+                <div key={i} className="flex justify-between items-center p-3 bg-training/5 rounded-lg">
                   <span className="text-sm">{item.strength}</span>
-                  <span className="text-xs bg-green/20 text-green px-2 py-1 rounded">{item.count}x</span>
+                  <span className="text-xs bg-training/20 text-training px-2 py-1 rounded">{item.count}x</span>
                 </div>
               ))
             ) : (
@@ -167,7 +167,7 @@ export function MultimodalAnalyticsDashboard() {
       </Card>
 
       {/* Top Improvements */}
-      <Card>
+      <Card className="border-2 border-training/40">
         <CardHeader>
           <CardTitle>Áreas para Mejorar</CardTitle>
         </CardHeader>
@@ -175,9 +175,9 @@ export function MultimodalAnalyticsDashboard() {
           <div className="space-y-2">
             {metrics.top_improvements && metrics.top_improvements.length > 0 ? (
               metrics.top_improvements.map((item: any, i: number) => (
-                <div key={i} className="flex justify-between items-center p-3 bg-orange/5 rounded-lg">
+                <div key={i} className="flex justify-between items-center p-3 bg-training/5 rounded-lg">
                   <span className="text-sm">{item.improvement}</span>
-                  <span className="text-xs bg-orange/20 text-orange px-2 py-1 rounded">{item.count}x</span>
+                  <span className="text-xs bg-training/20 text-training px-2 py-1 rounded">{item.count}x</span>
                 </div>
               ))
             ) : (

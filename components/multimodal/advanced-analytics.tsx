@@ -51,9 +51,9 @@ export function AdvancedAnalyticsReporting() {
 
   if (loading) {
     return (
-      <Card>
+      <Card className="border-2 border-training/40">
         <CardContent className="pt-6 flex justify-center">
-          <Loader2 className="w-6 h-6 animate-spin text-blue" />
+          <Loader2 className="w-6 h-6 animate-spin text-training" />
         </CardContent>
       </Card>
     )
@@ -83,7 +83,7 @@ export function AdvancedAnalyticsReporting() {
       </div>
 
       <Tabs defaultValue="progress" className="w-full">
-        <TabsList className="grid w-full grid-cols-4" style={{ backgroundColor: 'rgba(219, 217, 215, 0.15)' }}>
+        <TabsList className="grid w-full grid-cols-4 border-2 border-training/40 rounded-lg" style={{ backgroundColor: 'rgba(219, 217, 215, 0.15)' }}>
           <TabsTrigger value="progress" className="text-opacity-75">Progreso</TabsTrigger>
           <TabsTrigger value="benchmarks">Benchmarks</TabsTrigger>
           <TabsTrigger value="components">Componentes</TabsTrigger>
@@ -93,7 +93,7 @@ export function AdvancedAnalyticsReporting() {
         {/* Progress Tab */}
         <TabsContent value="progress" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card>
+            <Card className="border-2 border-training/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Mejora Detectada</CardTitle>
               </CardHeader>
@@ -105,7 +105,7 @@ export function AdvancedAnalyticsReporting() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2 border-training/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Consistency Score</CardTitle>
               </CardHeader>
@@ -115,7 +115,7 @@ export function AdvancedAnalyticsReporting() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2 border-training/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Strongest Area</CardTitle>
               </CardHeader>
@@ -127,7 +127,7 @@ export function AdvancedAnalyticsReporting() {
           </div>
 
           {/* Progress Chart */}
-          <Card>
+          <Card className="border-2 border-training/40">
             <CardHeader>
               <CardTitle>Progresión de Puntuaciones</CardTitle>
             </CardHeader>
@@ -161,7 +161,7 @@ export function AdvancedAnalyticsReporting() {
 
         {/* Benchmarks Tab */}
         <TabsContent value="benchmarks" className="space-y-6">
-          <Card>
+          <Card className="border-2 border-training/40">
             <CardHeader>
               <CardTitle>Tu Desempeño vs. Benchmark</CardTitle>
               <CardDescription>Comparación con usuarios similares en Despega</CardDescription>
@@ -173,14 +173,14 @@ export function AdvancedAnalyticsReporting() {
                     <div className="flex justify-between mb-2">
                       <span className="text-sm font-medium">{item.metric}</span>
                       <div className="flex gap-2 text-sm">
-                        <span className="text-blue font-semibold">Tu: {item.your_score}%</span>
+                        <span className="text-training font-semibold">Tu: {item.your_score}%</span>
                         <span className="text-muted-foreground">Benchmark: {item.benchmark}%</span>
                       </div>
                     </div>
                     <div className="flex gap-2">
                       <div className="flex-1 h-2 bg-muted/20 rounded-full overflow-hidden">
                         <div
-                          className="bg-blue h-full rounded-full"
+                          className="bg-training h-full rounded-full"
                           style={{ width: `${Math.min(item.your_score, 100)}%` }}
                         />
                       </div>
@@ -192,7 +192,7 @@ export function AdvancedAnalyticsReporting() {
                       </div>
                     </div>
                     {item.your_score > item.benchmark && (
-                      <Badge className="mt-2 bg-green/10 text-green">
+                      <Badge className="mt-2 bg-training/10 text-training">
                         Mejor que el {Math.round(100 - item.percentile)}% de usuarios
                       </Badge>
                     )}
@@ -205,7 +205,7 @@ export function AdvancedAnalyticsReporting() {
 
         {/* Components Tab */}
         <TabsContent value="components" className="space-y-6">
-          <Card>
+          <Card className="border-2 border-training/40">
             <CardHeader>
               <CardTitle>Desglose por Componente</CardTitle>
             </CardHeader>
@@ -240,7 +240,7 @@ export function AdvancedAnalyticsReporting() {
         {/* Insights Tab */}
         <TabsContent value="insights" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
+            <Card className="border-2 border-training/40">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Award className="w-5 h-5 text-training" />
@@ -250,7 +250,7 @@ export function AdvancedAnalyticsReporting() {
               <CardContent>
                 <div className="space-y-2">
                   {analytics.achievements && analytics.achievements.map((achievement: any) => (
-                    <div key={achievement.id} className="flex items-center gap-3 p-2 bg-yellow/5 rounded-lg">
+                    <div key={achievement.id} className="flex items-center gap-3 p-2 bg-training/5 rounded-lg">
                       <span className="text-2xl">{achievement.icon}</span>
                       <div>
                         <p className="font-medium text-sm">{achievement.title}</p>
@@ -262,7 +262,7 @@ export function AdvancedAnalyticsReporting() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2 border-training/40">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Target className="w-5 h-5 text-training" />
@@ -290,14 +290,14 @@ export function AdvancedAnalyticsReporting() {
             </Card>
           </div>
 
-          <Card>
+          <Card className="border-2 border-training/40">
             <CardHeader>
               <CardTitle>AI-Generated Insights</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {analytics.ai_insights && analytics.ai_insights.map((insight: string, idx: number) => (
-                <div key={idx} className="flex gap-3 p-3 bg-blue/5 rounded-lg">
-                  <span className="text-blue font-bold flex-shrink-0">{idx + 1}.</span>
+                <div key={idx} className="flex gap-3 p-3 bg-training/5 rounded-lg">
+                  <span className="text-training font-bold flex-shrink-0">{idx + 1}.</span>
                   <p className="text-sm text-muted">{insight}</p>
                 </div>
               ))}
