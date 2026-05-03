@@ -20,10 +20,12 @@ const TRAINING_MODULES = [
     difficulty: 'Básico',
     status: 'available',
     progress: 0,
-    duration: '15 min',
+    duration: '45 min',
     lessons: [
-      { title: 'Lección 1: ¿Qué es STAR?', description: 'Entiende la estructura', completed: false },
-      { title: 'Lección 2: Situación', description: 'Establece el contexto', completed: false },
+      { title: 'Lección 1: Intro a STAR', description: 'Por qué STAR es efectivo', completed: false },
+      { title: 'Lección 2: Situación y Tarea', description: 'Cómo plantear el contexto', completed: false },
+      { title: 'Lección 3: Acción y Resultado', description: 'Dónde está el impacto real', completed: false },
+      { title: 'Lección 4: Dominando STAR', description: 'Poniéndolo todo junto', completed: false },
     ],
   },
 ]

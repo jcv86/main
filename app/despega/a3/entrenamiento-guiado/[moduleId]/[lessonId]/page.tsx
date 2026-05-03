@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -42,7 +42,15 @@ export default function LessonPage() {
   const lessonId = params.lessonId as string
   
   const [showingSofia, setShowingSofia] = useState(true)
+  const videoRef = useRef<HTMLVideoElement>(null)
   const lessonData = LESSONS_DATA[moduleId]?.[lessonId]
+
+  const handleReplay = () => {
+    if (videoRef.current) {
+      videoRef.current.currentTime = 0
+      videoRef.current.play()
+    }
+  }
 
   if (!lessonData) {
     return (
@@ -199,7 +207,7 @@ export default function LessonPage() {
                     Lección anterior
                   </Button>
                   <Button
-                    onClick={() => setShowingSofia(true)}
+                    onClick={handleReplay}
                     className="flex-1 bg-training hover:bg-training/90 text-white"
                   >
                     <Volume2 className="w-4 h-4 mr-2" />
