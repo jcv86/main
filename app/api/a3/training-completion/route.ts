@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
 
     const userId = user.id
 
-    // Save training assignment completion
+    // Save training assignment completion with actual elapsed time
     const { data: existingAssignment, error: searchError } = await supabase
       .from('a3_training_assignments')
       .select('id')
@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
         .update({
           completed_at: new Date().toISOString(),
           estado: 'completed',
+          tiempo_dedicado_minutos: tiempo_dedicado_minutos || 45,
         })
         .eq('id', existingAssignment.id)
         .select()
@@ -50,6 +51,7 @@ export async function POST(request: NextRequest) {
           completed_at: new Date().toISOString(),
           started_at: new Date().toISOString(),
           estado: 'completed',
+          tiempo_dedicado_minutos: tiempo_dedicado_minutos || 45,
         })
         .select()
     }
@@ -98,11 +100,12 @@ export async function POST(request: NextRequest) {
         .eq('user_id', userId)
     }
 
-    console.log('[v0] Training completion saved for user:', userId, 'Training:', training_id)
+    console.log('[v0] Training completion saved for user:', userId, 'Training:', training_id, 'Minutes:', tiempo_dedicado_minutos)
 
     return NextResponse.json({
       success: true,
       message: 'Training completion saved successfully',
+      savedMinutes: tiempo_dedicado_minutos || 45,
     })
   } catch (error) {
     console.error('[v0] Error in training-completion:', error)

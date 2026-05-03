@@ -75,9 +75,18 @@ export async function GET(request: NextRequest) {
 
     // Calculate totals
     const interviewMinutes = (interviews || []).reduce((sum, iv) => sum + (iv.tiempo_dedicado_minutos || 0), 0)
-    const trainingMinutes = (trainingCompletions || []).length * 45 // Estimate 45 minutes per training module completed
+    
+    // Get actual elapsed time from training assignments instead of hardcoded estimate
+    const trainingMinutesQuery = (trainingCompletions || []).reduce((sum, training) => {
+      // Check if the training has a duration field (we'll need to add this)
+      return sum + (training.tiempo_dedicado_minutos || 45) // Fall back to 45 if not set
+    }, 0)
+    const trainingMinutes = trainingMinutesQuery
+    
     const totalMinutes = interviewMinutes + trainingMinutes
     const totalSessions = (interviews?.length || 0) + (trainingCompletions?.length || 0)
+    
+    console.log('[v0] Progress calculation - Interviews:', interviewMinutes, 'Training:', trainingMinutes, 'Total:', totalMinutes)
     
     // Calculate completion percentage dynamically from user activities
     const completionPercentage = await calculateProgressPercentage(userId)

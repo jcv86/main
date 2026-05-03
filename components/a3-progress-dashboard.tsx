@@ -58,6 +58,7 @@ export default function A3ProgressDashboard() {
           throw new Error(`Failed to fetch progress: ${response.status}`)
         }
         const data = await response.json()
+        console.log('[v0] Progress data loaded:', data)
         setProgress(data)
       } catch (error) {
         console.error('[v0] Error fetching progress:', error)
@@ -92,8 +93,18 @@ export default function A3ProgressDashboard() {
       }
     }
 
+    // Initial load
     loadData()
     loadChallenge()
+
+    // Refresh every 5 seconds to show live updates from training sessions
+    const interval = setInterval(() => {
+      console.log('[v0] Auto-refreshing progress data')
+      loadData()
+      loadChallenge()
+    }, 5000)
+
+    return () => clearInterval(interval)
   }, [isHydrated])
 
   const handleClaimReward = async () => {
