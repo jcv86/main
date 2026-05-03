@@ -116,10 +116,12 @@ export default function GuidedTrainingPage() {
     
     // Mark lesson as completed
     if (!completedLessons.includes(currentLesson)) {
-      setCompletedLessons(prev => [...prev, currentLesson])
+      setCompletedLessons(prev => {
+        const updated = [...prev, currentLesson]
+        console.log('[v0] Lessons completed:', updated.length, 'of', selectedModule.lessons.length)
+        return updated
+      })
     }
-
-    console.log('[v0] XP awarded:', xpEarned, 'Total XP:', userXP + xpEarned)
 
     // Move to next lesson
     setCurrentLesson(currentLesson + 1)
@@ -135,16 +137,24 @@ export default function GuidedTrainingPage() {
   const handleCompleteModule = async () => {
     if (!selectedModule) return
 
-    // Verify all lessons are completed
-    const allLessonsCompleted = completedLessons.length === selectedModule.lessons.length
-    if (!allLessonsCompleted) {
-      alert(`Por favor, completa todos los ${selectedModule.lessons.length} temas antes de terminar el módulo.`)
+    // Check if all lessons have responses (more reliable than tracking completed lessons)
+    const allLessonsAnswered = selectedModule.lessons.every((_, idx) => {
+      const response = userResponses[idx]
+      return response && response.trim().length >= 10
+    })
+
+    if (!allLessonsAnswered) {
+      const unansweredCount = selectedModule.lessons.filter((_, idx) => {
+        const response = userResponses[idx]
+        return !response || response.trim().length < 10
+      }).length
+      alert(`Por favor, completa todos los ${selectedModule.lessons.length} temas antes de terminar el módulo. (${unansweredCount} sin completar)`)
       return
     }
 
     setIsCompletingModule(true)
     try {
-      console.log('[v0] Completing module:', selectedModule.name)
+      console.log('[v0] Completing module:', selectedModule.name, 'Total responses:', Object.keys(userResponses).length)
       
       // Award bonus XP for module completion
       const bonusXP = 250

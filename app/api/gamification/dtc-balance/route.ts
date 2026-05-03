@@ -25,19 +25,27 @@ export async function GET(request: NextRequest) {
       .single()
 
     if (!balance) {
-      const { data: newBalance } = await supabase
+      const { data: newBalance, error: insertError } = await supabase
         .from('user_dtc_balance')
-        .insert([{ user_id: userId }])
+        .insert([{ user_id: userId, balance: 0, lifetime_earned: 0, lifetime_spent: 0 }])
         .select()
         .single()
+      
+      if (insertError) {
+        console.error('[v0] Error creating DTC balance:', insertError)
+        return NextResponse.json(
+          { success: true, balance: 0, lifetime_earned: 0, lifetime_spent: 0 },
+          { status: 200 }
+        )
+      }
       balance = newBalance
     }
 
     return NextResponse.json({
       success: true,
-      balance: balance.balance,
-      lifetime_earned: balance.lifetime_earned,
-      lifetime_spent: balance.lifetime_spent
+      balance: balance?.balance || 0,
+      lifetime_earned: balance?.lifetime_earned || 0,
+      lifetime_spent: balance?.lifetime_spent || 0
     })
   } catch (error) {
     console.error('Error fetching DTC balance:', error)
