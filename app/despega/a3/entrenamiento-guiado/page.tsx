@@ -86,6 +86,9 @@ export default function GuidedTrainingPage() {
   const [aiTip, setAiTip] = useState<string | null>(null)
   const [aiLoading, setAiLoading] = useState(false)
   const [isCompletingModule, setIsCompletingModule] = useState(false)
+  const [userResponses, setUserResponses] = useState<{ [lessonIndex: number]: string }>({})
+  const [userXP, setUserXP] = useState(0)
+  const [completedLessons, setCompletedLessons] = useState<number[]>([])
 
   const handleStartModule = (module: any) => {
     if (module.status !== 'locked') {
@@ -95,23 +98,69 @@ export default function GuidedTrainingPage() {
     }
   }
 
+  const handleCompleteLesson = async () => {
+    const lesson = selectedModule.lessons[currentLesson]
+    const response = userResponses[currentLesson]
+
+    // Validate that user has provided a response
+    if (!response || response.trim().length < 10) {
+      alert('Por favor, proporciona una respuesta con al menos 10 caracteres antes de continuar.')
+      return
+    }
+
+    console.log('[v0] Completing lesson:', lesson.title, 'Response length:', response.length)
+
+    // Award XP for completing the lesson
+    const xpEarned = 100
+    setUserXP(prev => prev + xpEarned)
+    
+    // Mark lesson as completed
+    if (!completedLessons.includes(currentLesson)) {
+      setCompletedLessons(prev => [...prev, currentLesson])
+    }
+
+    console.log('[v0] XP awarded:', xpEarned, 'Total XP:', userXP + xpEarned)
+
+    // Move to next lesson
+    setCurrentLesson(currentLesson + 1)
+  }
+
+  const handleLessonResponseChange = (text: string) => {
+    setUserResponses(prev => ({
+      ...prev,
+      [currentLesson]: text
+    }))
+  }
+
   const handleCompleteModule = async () => {
     if (!selectedModule) return
+
+    // Verify all lessons are completed
+    const allLessonsCompleted = completedLessons.length === selectedModule.lessons.length
+    if (!allLessonsCompleted) {
+      alert(`Por favor, completa todos los ${selectedModule.lessons.length} temas antes de terminar el módulo.`)
+      return
+    }
 
     setIsCompletingModule(true)
     try {
       console.log('[v0] Completing module:', selectedModule.name)
       
-      // Simulate a brief validation delay to show the user something is happening
+      // Award bonus XP for module completion
+      const bonusXP = 250
+      setUserXP(prev => prev + bonusXP)
+      
       await new Promise(resolve => setTimeout(resolve, 800))
 
-      // Mark module as completed
+      // Save progress to database would go here
       const moduleName = selectedModule.name
       setSelectedModule(null)
       setCurrentLesson(0)
+      setUserResponses({})
+      setCompletedLessons([])
       
-      console.log('[v0] Module completed successfully:', moduleName)
-      alert(`¡Congratulations! You've completed the "${moduleName}" module. Great job! 🎉`)
+      console.log('[v0] Module completed successfully:', moduleName, 'Total XP:', userXP + bonusXP)
+      alert(`¡Congratulations! You've completed the "${moduleName}" module. Great job! You earned ${bonusXP} bonus XP.`)
     } catch (error) {
       console.error('[v0] Error completing module:', error)
       alert('Error al completar el módulo. Intenta de nuevo.')
@@ -356,6 +405,25 @@ export default function GuidedTrainingPage() {
               </div>
             </div>
 
+            {/* Your Response Section */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-bold text-lg text-white">Tu Respuesta:</h3>
+                <span className="text-sm text-muted-foreground">
+                  {(userResponses[currentLesson] || '').length} caracteres
+                </span>
+              </div>
+              <textarea
+                value={userResponses[currentLesson] || ''}
+                onChange={(e) => handleLessonResponseChange(e.target.value)}
+                placeholder="Escribe tu respuesta aquí. Mínimo 10 caracteres para continuar..."
+                className="w-full bg-slate-900/50 border border-muted/30 text-white placeholder-muted-foreground p-4 rounded-lg focus:outline-none focus:border-purple/50 min-h-[120px] leading-relaxed"
+              />
+              <p className="text-xs text-muted-foreground">
+                Responder todas las lecciones es obligatorio para completar el módulo y ganar XP.
+              </p>
+            </div>
+
             {/* Practice Section */}
             {!showVideoSession ? (
               <div className="bg-yellow/5 dark:bg-amber-900/20 border p-6 space-y-4" style={{ borderColor: 'rgba(170, 70, 170, 0.4)', borderRadius: '2px' }}>
@@ -410,10 +478,17 @@ export default function GuidedTrainingPage() {
                 Anterior
               </Button>
 
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center">
+                {/* XP Display */}
+                <div className="px-4 py-2 rounded-full bg-slate-900/60 border border-purple/30">
+                  <p className="text-sm font-bold text-white">
+                    <span style={{ color: 'rgba(170, 70, 170, 0.8)' }}>⭐ {userXP}</span> XP
+                  </p>
+                </div>
+
                 {currentLesson < selectedModule.lessons.length - 1 ? (
                   <Button
-                    onClick={() => setCurrentLesson(currentLesson + 1)}
+                    onClick={handleCompleteLesson}
                     className="text-white"
                     style={{ backgroundColor: 'rgba(170, 70, 170, 0.8)', borderRadius: '20px' }}
                   >
