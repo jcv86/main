@@ -236,8 +236,8 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
           </div>
           <div className="w-full h-2 bg-muted/20 rounded-full overflow-hidden">
             <div
-              className="h-full bg-blue transition-all"
-              style={{ width: `${score}%` }}
+              className="h-full transition-all"
+              style={{ width: `${score}%`, backgroundColor: 'rgb(170, 70, 170)' }}
             />
           </div>
         </div>
@@ -312,6 +312,7 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
                 }}
                 variant="outline"
                 className="w-full mt-3 text-white"
+                style={{ borderColor: 'rgb(170, 70, 170)' }}
               >
                 Intentar Nuevamente
               </Button>
@@ -323,11 +324,14 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
         <Button
           onClick={handleContinue}
           disabled={!allValid || isValidatingAI}
-          className={`w-full h-12 font-semibold ${
-            allValid && !isValidatingAI
-              ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-              : 'bg-muted/20 text-white/50 cursor-not-allowed'
-          }`}
+          className={`w-full h-12 font-semibold`}
+          style={{
+            backgroundColor: allValid && !isValidatingAI
+              ? 'rgb(170, 70, 170)'
+              : 'rgba(107, 114, 128, 0.2)',
+            color: allValid && !isValidatingAI ? 'white' : 'rgba(255, 255, 255, 0.5)',
+            cursor: allValid && !isValidatingAI ? 'pointer' : 'not-allowed'
+          }}
         >
           {isValidatingAI ? (
             <>

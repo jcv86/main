@@ -216,13 +216,16 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
         <Button
           onClick={handleTestAudio}
           disabled={isTestingAudio || micStatus !== 'ready'}
-          className={`w-full h-12 font-semibold ${
-            isTestingAudio
-              ? 'bg-red-600 text-white'
+          className={`w-full h-12 font-semibold`}
+          style={{
+            backgroundColor: isTestingAudio 
+              ? 'rgb(239, 68, 68)' 
               : micStatus === 'ready'
-              ? 'bg-blue hover:bg-cyan text-white'
-              : 'bg-muted/20 text-white/50 cursor-not-allowed'
-          }`}
+              ? 'rgba(170, 70, 170, 0.6)'
+              : 'rgba(107, 114, 128, 0.2)',
+            color: micStatus === 'ready' ? 'white' : 'rgba(255, 255, 255, 0.5)',
+            cursor: micStatus === 'ready' ? 'pointer' : 'not-allowed'
+          }}
         >
           {isTestingAudio ? 'Probando... Habla ahora' : 'Probar Micrófono'}
         </Button>
@@ -315,11 +318,14 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
         <Button
           onClick={handleValidateAndContinue}
           disabled={!passed || isValidatingAudio}
-          className={`w-full h-12 font-semibold ${
-            passed && !isValidatingAudio
-              ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-              : 'bg-muted/20 text-white/50 cursor-not-allowed'
-          }`}
+          className={`w-full h-12 font-semibold`}
+          style={{
+            backgroundColor: passed && !isValidatingAudio 
+              ? 'rgb(170, 70, 170)'
+              : 'rgba(107, 114, 128, 0.2)',
+            color: passed && !isValidatingAudio ? 'white' : 'rgba(255, 255, 255, 0.5)',
+            cursor: passed && !isValidatingAudio ? 'pointer' : 'not-allowed'
+          }}
         >
           {isValidatingAudio ? (
             <>
