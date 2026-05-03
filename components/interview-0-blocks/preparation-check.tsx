@@ -181,9 +181,10 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
             placeholder="Ej: Ingeniero de Software, Product Manager, Data Analyst"
             value={role}
             onChange={(e) => handleRoleChange(e.target.value)}
-            className={`bg-muted/20 border-muted/40 text-white placeholder-white/40 ${
-              validationErrors.role ? 'border-red-500/50' : ''
-            }`}
+            className="bg-muted/20 text-white placeholder-white/40 border-2"
+            style={{
+              borderColor: validationErrors.role ? 'rgba(239, 68, 68, 0.5)' : 'rgba(170, 70, 170, 0.4)'
+            }}
           />
           <p className={`text-xs ${validationErrors.role ? 'text-red-400' : 'text-white/50'}`}>
             {validationErrors.role || 'Cargo objetivo (3-50 caracteres)'}
@@ -200,9 +201,10 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
             placeholder="Ej: Google, Startup X, Mi propia empresa"
             value={company}
             onChange={(e) => handleCompanyChange(e.target.value)}
-            className={`bg-muted/20 border-muted/40 text-white placeholder-white/40 ${
-              validationErrors.company ? 'border-red-500/50' : ''
-            }`}
+            className="bg-muted/20 text-white placeholder-white/40 border-2"
+            style={{
+              borderColor: validationErrors.company ? 'rgba(239, 68, 68, 0.5)' : 'rgba(170, 70, 170, 0.4)'
+            }}
           />
           <p className={`text-xs ${validationErrors.company ? 'text-red-400' : 'text-white/50'}`}>
             {validationErrors.company || 'Empresa u objetivo (2-50 caracteres)'}
@@ -219,9 +221,10 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
             placeholder="Ej:&#10;- Lideré proyecto X que incrementó ventas 30%&#10;- Certificado en AWS&#10;- 5 años en industria tech"
             value={achievements}
             onChange={(e) => handleAchievementsChange(e.target.value)}
-            className={`bg-muted/20 border-muted/40 text-white placeholder-white/40 resize-none min-h-[120px] ${
-              validationErrors.achievements ? 'border-red-500/50' : ''
-            }`}
+            className="bg-muted/20 text-white placeholder-white/40 resize-none min-h-[120px] border-2"
+            style={{
+              borderColor: validationErrors.achievements ? 'rgba(239, 68, 68, 0.5)' : 'rgba(170, 70, 170, 0.4)'
+            }}
           />
           <p className={`text-xs ${validationErrors.achievements ? 'text-red-400' : 'text-white/50'}`}>
             {validationErrors.achievements || `Logros (${achievements.length}/20 mín.)`}
