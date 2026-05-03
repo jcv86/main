@@ -42,7 +42,7 @@ export function EnvironmentCheck({ onComplete }: EnvironmentCheckProps) {
     <Card className="border-muted/30">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <span className="text-2xl">🌍</span>
+          <span className="text-2xl"></span>
           Auditoría de Entorno
         </CardTitle>
         <p className="text-sm text-white/70 mt-2">
@@ -81,7 +81,7 @@ export function EnvironmentCheck({ onComplete }: EnvironmentCheckProps) {
               className="mt-1"
             />
             <div className="flex-1">
-              <p className="font-semibold text-white">📍 Fondo profesional</p>
+              <p className="font-semibold text-white"> Fondo profesional</p>
               <p className="text-sm text-white/60 mt-1">
                 El fondo es limpio, ordenado y profesional. Sin distracciones ni objetos inapropiados.
               </p>
@@ -99,7 +99,7 @@ export function EnvironmentCheck({ onComplete }: EnvironmentCheckProps) {
               className="mt-1"
             />
             <div className="flex-1">
-              <p className="font-semibold text-white">🔇 Ambiente silencioso</p>
+              <p className="font-semibold text-white">Ambiente silencioso</p>
               <p className="text-sm text-white/60 mt-1">
                 Estás en un lugar quieto sin ruidos de fondo. Cierra puertas y avisa a quienes conviven contigo.
               </p>
@@ -117,7 +117,7 @@ export function EnvironmentCheck({ onComplete }: EnvironmentCheckProps) {
               className="mt-1"
             />
             <div className="flex-1">
-              <p className="font-semibold text-white">🌐 Conexión estable</p>
+              <p className="font-semibold text-white">Conexión estable</p>
               <p className="text-sm text-white/60 mt-1">
                 Tienes buena conexión a internet. Prueba tu velocidad y conecta vía WiFi o cable.
               </p>
@@ -133,8 +133,8 @@ export function EnvironmentCheck({ onComplete }: EnvironmentCheckProps) {
           </div>
           <div className="w-full h-2 bg-muted/20 rounded-full overflow-hidden">
             <div
-              className="h-full bg-emerald-500 transition-all"
-              style={{ width: `${score}%` }}
+              className="h-full transition-all"
+              style={{ width: `${score}%`, backgroundColor: 'rgb(170, 70, 170)' }}
             />
           </div>
         </div>
@@ -142,11 +142,12 @@ export function EnvironmentCheck({ onComplete }: EnvironmentCheckProps) {
         {/* CTA */}
         <Button
           onClick={handleContinue}
-          className={`w-full h-12 font-semibold ${
-            allChecked
-              ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-              : 'bg-muted/20 text-white/50 cursor-not-allowed'
-          }`}
+          className={`w-full h-12 font-semibold rounded-3xl`}
+          style={{
+            backgroundColor: allChecked ? 'rgb(170, 70, 170)' : 'rgba(170, 70, 170, 0.3)',
+            color: allChecked ? 'white' : 'rgba(255, 255, 255, 0.5)',
+            cursor: allChecked ? 'pointer' : 'not-allowed'
+          }}
           disabled={!allChecked}
         >
           {allChecked ? (

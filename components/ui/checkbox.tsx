@@ -17,12 +17,13 @@ const Checkbox = React.forwardRef<
       className,
     )}
     style={{
-      border: '1px solid rgb(90, 90, 150)',
-      backgroundColor: 'transparent'
+      border: '1px solid rgb(170, 70, 170)',
+      backgroundColor: 'transparent',
+      borderRadius: '8px'
     }}
     {...props}
   >
-    <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current" style={{ color: 'rgb(90, 90, 150)' }}>
+    <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current" style={{ color: 'rgb(170, 70, 170)' }}>
       <Check className="h-4 w-4" />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
