@@ -159,15 +159,15 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
-        {/* Permission Error Alert */}
+        {/* Permission Error Alert - Training color */}
         {permissionError && (
-          <div className="flex items-start gap-3 p-3 bg-red/5 dark:bg-red/20 border border-red/20 dark:border-red/30 rounded-lg">
-            <AlertCircle className="w-4 h-4 text-red flex-shrink-0 mt-0.5" />
+          <div className="flex items-start gap-3 p-3 bg-training/10 border border-training/30 rounded-lg">
+            <AlertCircle className="w-4 h-4 text-training flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-xs font-medium text-red dark:text-red">{permissionError}</p>
+              <p className="text-xs font-bold text-training">{permissionError}</p>
               <button
                 onClick={() => setPermissionError('')}
-                className="text-xs text-red hover:text-red/80 dark:text-red mt-1"
+                className="text-xs text-training/70 hover:text-training font-medium mt-1"
               >
                 Descartar
               </button>
@@ -176,7 +176,7 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
         )}
 
         {/* Video Preview */}
-        <div className="bg-black rounded-lg overflow-hidden border border-muted/30 dark:border-muted/60">
+        <div className="bg-black rounded-lg overflow-hidden border-2 border-training/40">
           <video
             ref={videoRef}
             autoPlay
@@ -185,53 +185,53 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
           />
         </div>
 
-        {/* Recording Status Indicator */}
+        {/* Recording Status Indicator - Training color */}
         {isRecording && (
-          <div className="flex items-center justify-between px-3 py-2 bg-red/5 dark:bg-red/20 rounded-[28px] border border-red/20 dark:border-red/30">
+          <div className="flex items-center justify-between px-4 py-3 bg-training/10 rounded-lg border-2 border-training/30">
             <div className="flex items-center gap-2">
-              <span className="animate-pulse w-2 h-2 rounded-full bg-red"></span>
-              <span className="text-xs font-medium text-red dark:text-red">Grabando...</span>
+              <span className="animate-pulse w-3 h-3 rounded-full bg-training"></span>
+              <span className="text-sm font-bold text-training">Grabando...</span>
             </div>
-            <div className="flex items-center gap-2 text-xs font-semibold text-red dark:text-red">
-              <Clock className="w-3 h-3" />
+            <div className="flex items-center gap-2 text-sm font-bold text-training">
+              <Clock className="w-4 h-4" />
               {formatTime(recordingTime)}
             </div>
           </div>
         )}
 
-        {/* Recording Duration Info */}
+        {/* Recording Duration Info - Training color */}
         {recordedBlob && (
-          <div className="bg-blue/5 dark:bg-blue/20 border border-blue/20 dark:border-blue/30 rounded-[28px] p-3 space-y-1">
-            <p className="text-xs text-blue dark:text-blue font-semibold">
-              Video recorded: {formatTime(recordingTime)}
+          <div className="bg-training/5 border-2 border-training/20 rounded-lg p-4 space-y-2">
+            <p className="text-sm font-bold text-training">
+              Video grabado: {formatTime(recordingTime)}
             </p>
-            <p className="text-xs text-blue/70 dark:text-blue/60">
-              Size: {(recordedBlob.size / 1024 / 1024).toFixed(2)} MB
+            <p className="text-xs text-training/70">
+              Tamaño: {(recordedBlob.size / 1024 / 1024).toFixed(2)} MB
             </p>
             {recordingTime < 120 && (
-              <p className="text-xs text-orange dark:text-orange">
-                ⚠ Video must be at least 2 minutes long
+              <p className="text-xs text-orange/80 font-bold">
+                ⚠ El video debe tener al menos 2 minutos
               </p>
             )}
             {recordingTime > 900 && (
-              <p className="text-xs text-orange dark:text-orange">
-                ⚠ Video is longer than 15 minutes
+              <p className="text-xs text-orange/80 font-bold">
+                ⚠ El video no puede superar 15 minutos
               </p>
             )}
           </div>
         )}
 
-        {/* Controls */}
+        {/* Controls - Training color primary */}
         <div className="flex gap-2">
           {!isRecording && !recordedBlob && (
-            <Button onClick={startRecording} className="flex-1 bg-red/80 hover:bg-red/70 h-9 text-sm">
-              <Mic className="w-4 h-4 mr-1" />
+            <Button onClick={startRecording} className="flex-1 bg-training hover:bg-training/90 text-black font-bold h-10 text-sm shadow-lg shadow-training/30">
+              <Mic className="w-4 h-4 mr-2" />
               Empezar
             </Button>
           )}
 
           {isRecording && (
-            <Button onClick={stopRecording} className="flex-1 bg-muted/60 hover:bg-muted/70 h-9 text-sm">
+            <Button onClick={stopRecording} className="flex-1 bg-muted/20 hover:bg-muted/30 border border-muted/40 text-foreground font-bold h-10 text-sm">
               Detener
             </Button>
           )}
@@ -244,23 +244,23 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
                   setRecordingTime(0)
                 }}
                 variant="outline" 
-                className="flex-1 h-9 text-sm"
+                className="flex-1 h-10 text-sm font-bold border-training/40 hover:bg-training/5"
               >
                 Repetir
               </Button>
               <Button
                 onClick={uploadVideo}
                 disabled={isUploading || recordingTime < 120 || recordingTime > 900}
-                className="flex-1 bg-blue/80 hover:bg-blue/70 h-9 text-sm"
+                className="flex-1 bg-training hover:bg-training/90 text-black font-bold h-10 text-sm shadow-lg shadow-training/30 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isUploading ? (
                   <>
-                    <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     Subiendo
                   </>
                 ) : (
                   <>
-                    <Upload className="w-3 h-3 mr-1" />
+                    <Upload className="w-4 h-4 mr-2" />
                     Analizar
                   </>
                 )}
@@ -269,9 +269,9 @@ export function VideoRecorder({ entrenamillentoType, onUploadComplete, onError }
           )}
         </div>
 
-        {/* Info Badge */}
-        <div className="flex items-center gap-2 text-xs text-muted-foreground dark:text-muted-foreground">
-          <span className="inline-block w-2 h-2 bg-blue rounded-full"></span>
+        {/* Info Badge - Training color */}
+        <div className="flex items-center gap-2 text-xs font-medium text-training bg-training/5 border border-training/20 px-4 py-3 rounded-lg">
+          <span className="inline-block w-2 h-2 bg-training rounded-full"></span>
           <span>El análisis tardará 60 segundos aproximadamente</span>
         </div>
       </CardContent>
