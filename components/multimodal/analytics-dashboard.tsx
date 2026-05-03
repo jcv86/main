@@ -146,7 +146,7 @@ export function MultimodalAnalyticsDashboard() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-green" />
+            <TrendingUp className="w-5 h-5 text-training" />
             Fortalezas Principales
           </CardTitle>
         </CardHeader>
