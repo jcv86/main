@@ -79,7 +79,7 @@ export default function FeedbackPage() {
       case 'improvement':
         return 'border-l-4 border-orange bg-orange/5 dark:bg-orange/20'
       case 'insight':
-        return 'border-l-4 border-blue/50 bg-blue/5 dark:bg-blue/20'
+        return 'border-l-4 border-training/50 bg-training/5 dark:bg-training/20'
       default:
         return ''
     }
@@ -118,13 +118,13 @@ export default function FeedbackPage() {
                   onClick={() => setSelectedInterview(key)}
                   className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${
                     selectedInterview === key
-                      ? 'border-blue/50 bg-blue/5 dark:bg-blue/20'
-                      : 'border-muted/20 dark:border-card hover:border-blue/30'
+                      ? 'border-training/50 bg-training/5 dark:bg-training/20'
+                      : 'border-muted/20 dark:border-card hover:border-training/30'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
                     <p className="font-semibold text-muted/90 dark:text-white">{value.simulation}</p>
-                    <Badge className="bg-blue">{value.overallScore}%</Badge>
+                    <Badge className="bg-training text-white">{value.overallScore}%</Badge>
                   </div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground">{value.date}</p>
                 </button>
@@ -136,7 +136,7 @@ export default function FeedbackPage() {
         {/* Feedback Content */}
         <div className="space-y-6">
           {/* Overall Score */}
-          <Card className="bg-blue text-white border-0">
+          <Card className="bg-training text-white border-0">
             <CardContent className="pt-6 pb-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -164,7 +164,7 @@ export default function FeedbackPage() {
                           ? 'text-green dark:text-green/40'
                           : item.type === 'development'
                           ? 'text-yellow dark:text-yellow/40'
-                          : 'text-blue dark:text-blue/40'
+                          : 'text-training dark:text-training/40'
                       }`} />
                       <div className="flex-1">
                         <div className="flex items-start justify-between mb-2">
@@ -178,7 +178,7 @@ export default function FeedbackPage() {
                             <Badge className="bg-orange">Mejorar</Badge>
                           )}
                           {item.type === 'insight' && (
-                            <Badge className="bg-blue">Insight</Badge>
+                            <Badge className="bg-training">Insight</Badge>
                           )}
                         </div>
                         <p className="text-muted-foreground dark:text-white/85 mb-3">

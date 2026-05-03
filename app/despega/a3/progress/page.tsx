@@ -41,7 +41,7 @@ export default function ProgressPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 rounded-full border-4 border-purple/30 border-t-purple-600 animate-spin mx-auto mb-4"></div>
+          <div className="w-12 h-12 rounded-full border-4 border-training/30 border-t-training animate-spin mx-auto mb-4"></div>
           <p className="text-muted-foreground dark:text-muted-foreground">Cargando progreso...</p>
         </div>
       </div>
@@ -70,12 +70,12 @@ export default function ProgressPage() {
 
         {/* Main Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-white dark:bg-card">
+          <Card className="bg-white dark:bg-card border-2 border-training/40">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Sesiones Completadas</p>
-                  <div className="text-3xl font-bold text-purple">
+                  <div className="text-3xl font-bold text-training">
                     {a3Progress?.sessions_completed || 0}
                   </div>
                 </div>

@@ -88,8 +88,8 @@ export default function ConversationalInterviewPage() {
                   onClick={() => setSelectedRole(role)}
                   className={`p-3 rounded-[28px] border-2 transition ${
                     selectedRole === role
-                      ? 'border-blue bg-blue/5 dark:bg-cyan/20'
-                      : 'border-muted/20 dark:border-card hover:border-cyan/40'
+                      ? 'border-training bg-training/5 dark:bg-training/20'
+                      : 'border-muted/20 dark:border-card hover:border-training/40'
                   }`}
                 >
                   {role}
@@ -109,8 +109,8 @@ export default function ConversationalInterviewPage() {
                     onClick={() => setSelectedIndustry(industry)}
                     className={`p-3 rounded-[28px] border-2 transition ${
                       selectedIndustry === industry
-                        ? 'border-blue bg-blue/5 dark:bg-cyan/20'
-                        : 'border-muted/20 dark:border-card hover:border-cyan/40'
+                        ? 'border-training bg-training/5 dark:bg-training/20'
+                        : 'border-muted/20 dark:border-card hover:border-training/40'
                     }`}
                   >
                     {industry}
@@ -131,8 +131,8 @@ export default function ConversationalInterviewPage() {
                     onClick={() => setSelectedLevel(level.id as any)}
                     className={`w-full p-4 rounded-[28px] border-2 transition text-left ${
                       selectedLevel === level.id
-                        ? 'border-blue bg-blue/5 dark:bg-cyan/20'
-                        : 'border-muted/20 dark:border-card hover:border-cyan/40'
+                        ? 'border-training bg-training/5 dark:bg-training/20'
+                        : 'border-muted/20 dark:border-card hover:border-training/40'
                     }`}
                   >
                     <div className="font-semibold">{level.label}</div>
@@ -142,7 +142,7 @@ export default function ConversationalInterviewPage() {
               </div>
 
               <Button
-                className="w-full mt-6 py-6 bg-blue hover:bg-cyan text-white text-lg"
+                className="w-full mt-6 py-6 bg-training hover:bg-training/90 text-white text-lg"
                 onClick={() => {}}
               >
                 Comenzar Entrevista

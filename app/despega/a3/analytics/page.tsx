@@ -94,7 +94,7 @@ export default function A3AnalyticsPage() {
               label: 'Entrenamientos',
               value: userData?.simulationAttempts,
               total: 10,
-              color: 'text-blue'
+              color: 'text-training'
             },
             {
               icon: Target,
@@ -102,21 +102,21 @@ export default function A3AnalyticsPage() {
               value: userData?.trainingCompletion,
               total: 100,
               suffix: '%',
-              color: 'text-purple'
+              color: 'text-training'
             },
             {
               icon: TrendingUp,
               label: 'Mejora',
               value: '+12%',
               subtitle: 'última semana',
-              color: 'text-green'
+              color: 'text-training'
             },
             {
               icon: BarChart3,
               label: 'Consistencia',
               value: '85%',
               subtitle: 'en respuestas',
-              color: 'text-yellow'
+              color: 'text-training'
             }
           ].map((metric, idx) => {
             const Icon = metric.icon
@@ -212,30 +212,34 @@ export default function A3AnalyticsPage() {
         </Card>
 
         {/* Recommendations */}
-        <Card className="bg-blue/5 dark:bg-blue/20 border-blue/30 dark:border-blue/10">
+        <Card className="bg-training/5 dark:bg-training/20 border-training/30 dark:border-training/10">
           <CardHeader>
-            <CardTitle className="text-lg">Recomendaciones del Coach IA</CardTitle>
+            <CardTitle className="text-training">Insights y Recomendaciones</CardTitle>
           </CardHeader>
-          <CardContent className="text-muted-foreground dark:text-white/85 space-y-3">
-            <p>
-              Basado en tu análisis: Tu comunicación es excepcional, pero necesitas ser más específico con números.
-            </p>
-            <ol className="list-decimal list-inside space-y-2 text-sm">
-              <li>Practica la lección "Acción y Resultados" en Guided Training</li>
-                <li>Intenta 3 más entrenamientos con enfoque en cuantificación</li>
-              <li>Revisa tus grabaciones para identificar dónde falta claridad</li>
-              <li>Ajusta tu CV para destacar logros mensurables</li>
-            </ol>
+          <CardContent className="space-y-3">
+            {userData?.insights?.map((insight: string, idx: number) => (
+              <div key={idx} className="flex gap-2 text-sm text-muted-foreground dark:text-white/85">
+                <span className="text-training font-bold">•</span>
+                <span>{insight}</span>
+              </div>
+            ))}
           </CardContent>
         </Card>
 
-        {/* Next Steps */}
-        <div className="flex gap-4 flex-wrap">
-          <Link href="/despega/a3/simulaciones-guiado" className="flex-1">
-            <Button className="w-full bg-blue/80 hover:bg-blue/70">
-              <Zap className="w-4 h-4 mr-2" />
-              Siguiente Simulación
-            </Button>
+        {/* Call to Action */}
+        <Card className="bg-gradient-to-r from-training/10 to-training/5 border-training/30">
+          <CardContent className="pt-6">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="font-semibold text-white">Próximo desafío disponible</p>
+                <p className="text-sm text-white/70 mt-1">Avanza al siguiente nivel y desbloquea nuevas habilidades</p>
+              </div>
+              <Button className="bg-training hover:bg-training/90 text-white">
+                Ver Desafíos
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
           </Link>
           <Link href="/despega/a3/entrenamiento-guiado" className="flex-1">
             <Button variant="outline" className="w-full">

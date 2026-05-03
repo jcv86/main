@@ -39,7 +39,7 @@ export default function GamificationPage() {
   if (authLoading || loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Loader2 className="w-8 h-8 animate-spin text-blue/50" />
+        <Loader2 className="w-8 h-8 animate-spin text-training/50" />
       </div>
     )
   }
@@ -50,11 +50,11 @@ export default function GamificationPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-4xl font-bold text-foreground">Interview Mastery</h1>
+            <h1 className="text-4xl font-bold text-training">Interview Mastery</h1>
             <p className="text-muted-foreground mt-2">Track your progress and unlock achievements</p>
           </div>
           <Link href="/despega/a3/dtc-shop">
-            <Button>Get Premium Tips</Button>
+            <Button className="bg-training hover:bg-training/90 text-white">Get Premium Tips</Button>
           </Link>
         </div>
 
@@ -72,7 +72,7 @@ export default function GamificationPage() {
             totalTipsEarned={profileData.total_tips_earned_free + profileData.total_tips_earned_premium || 0}
           />
         ) : (
-          <Card>
+          <Card className="border-2 border-training/40">
             <CardContent className="p-8 text-center">
               <p className="text-muted-foreground">
                 Start your first interview to unlock achievements and begin climbing the ranks!
