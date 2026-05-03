@@ -98,7 +98,7 @@ export function AdvancedAnalyticsReporting() {
                 <CardTitle className="text-sm font-medium">Mejora Detectada</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className={`text-3xl font-bold ${analytics.improvement_trend >= 0 ? 'text-green' : 'text-red'}`}>
+                <p className="text-3xl font-bold text-training">
                   {analytics.improvement_trend >= 0 ? '+' : ''}{analytics.improvement_trend}%
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">vs. período anterior</p>
@@ -110,7 +110,7 @@ export function AdvancedAnalyticsReporting() {
                 <CardTitle className="text-sm font-medium">Consistency Score</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-3xl font-bold text-blue">{analytics.consistency_score}%</p>
+                <p className="text-3xl font-bold text-training">{analytics.consistency_score}%</p>
                 <p className="text-xs text-muted-foreground mt-1">Variación mínima en sesiones</p>
               </CardContent>
             </Card>
