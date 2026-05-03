@@ -161,6 +161,7 @@ export function ConversationalInterviewSimulator({
   const [error, setError] = useState<string | null>(null)
   const [showCoachTip, setShowCoachTip] = useState(true)
   const [selectedInterviewerId, setSelectedInterviewerId] = useState(preferences?.interviewer_avatar_id || 'interviewer-classic-1')
+  const [showContinueButton, setShowContinueButton] = useState(false)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
@@ -522,6 +523,7 @@ export function ConversationalInterviewSimulator({
               state="greeting" 
               autoPlay={true}
               loop={false}
+              onEnded={() => setShowContinueButton(true)}
             />
             <p className="text-center mt-4 text-white/70">Sofia, tu entrevistadora IA</p>
           </div>
@@ -551,10 +553,14 @@ export function ConversationalInterviewSimulator({
                 </li>
               </ul>
               <Button
-                onClick={() => setStage('question')}
-                className="w-full text-white h-12 bg-training hover:bg-training/90"
+                onClick={() => {
+                  setStage('question')
+                  setShowContinueButton(false)
+                }}
+                disabled={!showContinueButton}
+                className="w-full text-white h-12 bg-training hover:bg-training/90 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Comenzar Práctica
+                {showContinueButton ? 'Comenzar Práctica' : 'Sofia está presentándose...'}
               </Button>
             </CardContent>
           </Card>

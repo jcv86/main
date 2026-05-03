@@ -7,14 +7,18 @@ interface SofiaInterviewerProps {
   state: 'greeting' | 'listening' | 'thinking' | 'idle'
   loop?: boolean
   autoPlay?: boolean
+  onEnded?: () => void
 }
 
-export function SofiaInterviewer({ state = 'idle', loop = true, autoPlay = true }: SofiaInterviewerProps) {
+export function SofiaInterviewer({ state = 'idle', loop = false, autoPlay = true, onEnded }: SofiaInterviewerProps) {
   const [isPlaying, setIsPlaying] = useState(autoPlay)
 
   useEffect(() => {
     setIsPlaying(autoPlay)
   }, [autoPlay])
+
+  // For greeting, don't loop. For listening/thinking, loop by default
+  const shouldLoop = state === 'greeting' ? false : loop
 
   const getVideoSource = () => {
     switch (state) {
@@ -62,12 +66,13 @@ export function SofiaInterviewer({ state = 'idle', loop = true, autoPlay = true 
         <video
           src={videoSource}
           autoPlay={isPlaying}
-          loop={loop}
-          muted
+          loop={shouldLoop}
+          muted={state !== 'greeting'}
           playsInline
           className="w-full h-full object-cover"
           onPlay={() => setIsPlaying(true)}
           onPause={() => setIsPlaying(false)}
+          onEnded={onEnded}
         />
         
         {/* Video Label */}
