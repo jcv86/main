@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -37,6 +37,7 @@ const LESSONS_DATA: Record<string, Record<string, any>> = {
 
 export default function LessonPage() {
   const params = useParams()
+  const router = useRouter()
   const moduleId = params.moduleId as string
   const lessonId = params.lessonId as string
   
@@ -109,9 +110,10 @@ export default function LessonPage() {
                 <div className="bg-training/5 border border-training/30 rounded-lg p-4">
                   <p className="text-sm font-semibold text-training mb-2">Tu Coach IA explica:</p>
                   <p className="text-sm text-white/85 leading-relaxed">
-                    {lessonId === 1 && 'STAR es una estructura que tu entrevistador reconoce y aprecia porque permite que demuestres cómo piensas y actúas bajo presión.'}
-                    {lessonId === 2 && 'El contexto de tu historia debe validar por qué actuaste como lo hiciste. Sin contexto, tus acciones parecen impulsivas.'}
-                    {lessonId === 3 && 'Lo que HICISTE tú específicamente es lo que separa una buena respuesta de una excepcional. Sé concreto, cuantifica el impacto.'}
+                    {lessonId === '1' && 'STAR es una estructura que tu entrevistador reconoce y aprecia porque permite que demuestres cómo piensas y actúas bajo presión.'}
+                    {lessonId === '2' && 'El contexto de tu historia debe validar por qué actuaste como lo hiciste. Sin contexto, tus acciones parecen impulsivas.'}
+                    {lessonId === '3' && 'Lo que HICISTE tú específicamente es lo que separa una buena respuesta de una excepcional. Sé concreto, cuantifica el impacto.'}
+                    {lessonId === '4' && 'Integra todos los componentes de STAR en una narrativa cohesiva y convincente. Practica hasta que suene natural.'}
                   </p>
                 </div>
 
