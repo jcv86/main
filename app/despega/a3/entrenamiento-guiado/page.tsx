@@ -97,11 +97,16 @@ export default function GuidedTrainingPage() {
     let interval: NodeJS.Timeout | null = null
 
     if (selectedModule && trainingStartTime) {
+      // Update immediately on mount
+      const now = Date.now()
+      const minutes = Math.floor((now - trainingStartTime) / 60000)
+      setElapsedMinutes(Math.max(minutes, 1)) // Minimum 1 minute from start
+
       interval = setInterval(() => {
         const now = Date.now()
         const minutes = Math.floor((now - trainingStartTime) / 60000)
-        setElapsedMinutes(minutes)
-      }, 1000) // Update every second to show live progress
+        setElapsedMinutes(Math.max(minutes, 1)) // Update every second, minimum 1 minute
+      }, 1000)
     }
 
     return () => {
@@ -179,10 +184,14 @@ export default function GuidedTrainingPage() {
     setIsCompletingModule(true)
     try {
       console.log('[v0] Completing module:', selectedModule.name, 'Total responses:', Object.keys(userResponses).length)
+      console.log('[v0] Elapsed time:', elapsedMinutes, 'minutes, Start time was:', trainingStartTime ? new Date(trainingStartTime).toISOString() : 'not set')
       
       // Award bonus XP for module completion
       const bonusXP = 250
       setUserXP(prev => prev + bonusXP)
+      
+      // Calculate actual elapsed time, with minimum of 2 minutes
+      const actualElapsedMinutes = Math.max(elapsedMinutes, 2)
       
       // Save training completion to database with actual elapsed time
       const trainingSaveResponse = await fetch('/api/a3/training-completion', {
@@ -193,15 +202,16 @@ export default function GuidedTrainingPage() {
         body: JSON.stringify({
           training_id: selectedModule.id,
           module_name: selectedModule.name,
-          tiempo_dedicado_minutos: Math.max(elapsedMinutes, 1), // Use actual elapsed time, minimum 1 minute
+          tiempo_dedicado_minutos: actualElapsedMinutes, // Use actual elapsed time, minimum 2 minutes
           competencias_desarrolladas: [selectedModule.name],
         }),
       })
 
       if (!trainingSaveResponse.ok) {
-        console.error('[v0] Error saving training to database:', trainingSaveResponse.statusText)
+        console.error('[v0] Error saving training to database:', trainingSaveResponse.status, trainingSaveResponse.statusText)
       } else {
-        console.log('[v0] Training completion saved to database for module:', selectedModule.name, 'Duration:', elapsedMinutes, 'minutes')
+        const responseData = await trainingSaveResponse.json()
+        console.log('[v0] Training completion saved successfully:', responseData)
       }
       
       await new Promise(resolve => setTimeout(resolve, 800))
