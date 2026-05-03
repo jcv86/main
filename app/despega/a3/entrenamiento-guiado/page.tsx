@@ -187,10 +187,17 @@ export default function GuidedTrainingPage() {
           {/* Lesson Content */}
           <Card className="p-8 space-y-6">
             <div>
-              <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">
-                {lesson.title}
-              </h2>
-              <p className="text-white/85">{lesson.description}</p>
+              {(() => {
+                const lesson = selectedModule.lessons[currentLesson]
+                return (
+                  <>
+                    <h2 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">
+                      {lesson.title}
+                    </h2>
+                    <p className="text-white/85">{lesson.description}</p>
+                  </>
+                )
+              })()}
             </div>
 
             {/* Coach Content Area */}
@@ -202,7 +209,10 @@ export default function GuidedTrainingPage() {
                     Tu Coach IA explica:
                   </p>
                   <Button
-                    onClick={() => generateAiTip(lesson.title, lesson.description)}
+                    onClick={() => {
+                      const lesson = selectedModule.lessons[currentLesson]
+                      generateAiTip(lesson.title, lesson.description)
+                    }}
                     disabled={aiLoading}
                     size="sm"
                     variant="outline"
