@@ -10,30 +10,35 @@ import { Progress } from '@/components/ui/progress'
 import { SofiaInterviewer } from '@/components/sofia-interviewer'
 import { ArrowLeft, Volume2 } from 'lucide-react'
 
-const LESSONS_DATA: Record<number, Record<string, any>> = {
-  1: { // Module 1: STAR
-    1: {
+const LESSONS_DATA: Record<string, Record<string, any>> = {
+  'intro-to-star': {
+    '1': {
       title: 'Intro a STAR',
       description: 'Por qué STAR es efectivo en entrevistas',
-      content: 'STAR es una estructura que tu entrevistador reconoce y aprecia porque...'
+      content: 'STAR es una estructura que tu entrevistador reconoce y aprecia porque te permite demostrar cómo piensas y actúas bajo presión en situaciones reales.'
     },
-    2: {
+    '2': {
       title: 'Situación y Tarea',
       description: 'Cómo plantear el contexto correctamente',
-      content: 'El contexto es fundamental para que tu historia tenga sentido...'
+      content: 'El contexto es fundamental para que tu historia tenga sentido. Sin un contexto claro, tu audiencia no puede evaluar correctamente tus acciones.'
     },
-    3: {
+    '3': {
       title: 'Acción y Resultado',
       description: 'Dónde está el impacto real',
-      content: 'Lo que HICISTE tú específicamente es lo que separa una buena respuesta...'
+      content: 'Lo que HICISTE tú específicamente es lo que separa una buena respuesta de una excepcional. El equipo puede tener logros, pero el entrevistador quiere saber qué fue TU contribución.'
+    },
+    '4': {
+      title: 'Dominando STAR',
+      description: 'Poniéndolo todo junto',
+      content: 'Ahora que entiendes cada componente de STAR, es momento de integrarlos en una narrativa cohesiva y convincente.'
     }
   }
 }
 
 export default function LessonPage() {
   const params = useParams()
-  const moduleId = parseInt(params.moduleId as string)
-  const lessonId = parseInt(params.lessonId as string)
+  const moduleId = params.moduleId as string
+  const lessonId = params.lessonId as string
   
   const [showingSofia, setShowingSofia] = useState(true)
   const lessonData = LESSONS_DATA[moduleId]?.[lessonId]
@@ -66,7 +71,7 @@ export default function LessonPage() {
             <h1 className="text-3xl font-bold text-white">{lessonData.title}</h1>
             <Badge variant="secondary">Lección {lessonId} de 4</Badge>
           </div>
-          <Progress value={(lessonId / 4) * 100} className="h-2" />
+          <Progress value={(parseInt(lessonId) / 4) * 100} className="h-2" />
         </div>
 
         {/* Main Content with Sofia */}
@@ -114,7 +119,7 @@ export default function LessonPage() {
                 <div>
                   <h3 className="font-semibold text-white mb-3">Puntos clave a recordar:</h3>
                   <ul className="space-y-2">
-                    {lessonId === 1 && (
+                    {lessonId === '1' && (
                       <>
                         <li className="flex gap-2 text-white/80">
                           <span className="text-training">•</span>
@@ -130,7 +135,7 @@ export default function LessonPage() {
                         </li>
                       </>
                     )}
-                    {lessonId === 2 && (
+                    {lessonId === '2' && (
                       <>
                         <li className="flex gap-2 text-white/80">
                           <span className="text-training">•</span>
@@ -146,7 +151,7 @@ export default function LessonPage() {
                         </li>
                       </>
                     )}
-                    {lessonId === 3 && (
+                    {lessonId === '3' && (
                       <>
                         <li className="flex gap-2 text-white/80">
                           <span className="text-training">•</span>
@@ -162,6 +167,22 @@ export default function LessonPage() {
                         </li>
                       </>
                     )}
+                    {lessonId === '4' && (
+                      <>
+                        <li className="flex gap-2 text-white/80">
+                          <span className="text-training">•</span>
+                          <span>Integra todos los componentes de STAR</span>
+                        </li>
+                        <li className="flex gap-2 text-white/80">
+                          <span className="text-training">•</span>
+                          <span>Practica tu narrativa hasta que suene natural</span>
+                        </li>
+                        <li className="flex gap-2 text-white/80">
+                          <span className="text-training">•</span>
+                          <span>Estás listo para practicar con Sofia</span>
+                        </li>
+                      </>
+                    )}
                   </ul>
                 </div>
 
@@ -169,7 +190,8 @@ export default function LessonPage() {
                 <div className="flex gap-3 pt-4">
                   <Button
                     variant="outline"
-                    disabled={lessonId === 1}
+                    disabled={lessonId === '1'}
+                    onClick={() => router.push(`/despega/a3/entrenamiento-guiado/${moduleId}/${parseInt(lessonId) - 1}`)}
                     className="flex-1"
                   >
                     Lección anterior
@@ -182,7 +204,8 @@ export default function LessonPage() {
                     Escuchar de nuevo
                   </Button>
                   <Button
-                    disabled={lessonId === 3}
+                    disabled={lessonId === '4'}
+                    onClick={() => router.push(`/despega/a3/entrenamiento-guiado/${moduleId}/${parseInt(lessonId) + 1}`)}
                     className="flex-1 bg-training hover:bg-training/90 text-white"
                   >
                     Siguiente lección
@@ -198,9 +221,10 @@ export default function LessonPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-white/85">
-                  {lessonId === 1 && 'Piensa en un proyecto importante que lideraste. Déjame guiarte a través de STAR.'}
-                  {lessonId === 2 && 'Ahora, construyamos la sección "Situación" de tu historia. ¿Cuál era el contexto?'}
-                  {lessonId === 3 && 'Ahora, construyamos la sección "Acción" de tu historia. ¿Qué fue lo específico que HICISTE tú?'}
+                  {lessonId === '1' && 'Piensa en un proyecto importante que lideraste. Déjame guiarte a través de STAR.'}
+                  {lessonId === '2' && 'Ahora, construyamos la sección "Situación" de tu historia. ¿Cuál era el contexto?'}
+                  {lessonId === '3' && 'Ahora, construyamos la sección "Acción" de tu historia. ¿Qué fue lo específico que HICISTE tú?'}
+                  {lessonId === '4' && 'Ahora practicaremos todo junto. Cuéntame tu mejor historia STAR.'}
                 </p>
                 <Button className="w-full bg-training hover:bg-training/90 text-white h-12">
                   Practicar con Sofia
