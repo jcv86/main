@@ -315,7 +315,6 @@ export default function GuidedInterviewPage() {
   }
 }
 
-                  <p className="text-2xl font-bold text-muted/90 dark:text-white mb-4">
                     {currentQuestion.question}
                   </p>
                   <div className="bg-training/5 dark:bg-training/20 border border-training/30 dark:border-training/10 rounded-[28px] p-4">
