@@ -75,7 +75,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
       {/* Main Layout: Selected Info (Left) + Grid Avatars (Right) */}
       <div className="flex gap-8">
         {/* Left Panel - Selected Coach Info */}
-        <div className="w-96 bg-muted/20 rounded-xl p-8 border border-muted/20 flex flex-col justify-center relative overflow-hidden">
+        <div className="w-96 bg-muted/20 rounded-xl p-8 border border-muted/20 flex flex-col justify-between relative overflow-hidden h-80">
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 opacity-30">
             <Image
@@ -87,13 +87,24 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
           </div>
           
-          {/* Content - positioned above background */}
-          <div className={`transition-opacity duration-300 ${isChanging ? 'opacity-50' : 'opacity-100'} relative z-10`}>
-            <h2 className="text-4xl font-bold text-white mb-4">{selected.name}</h2>
-            <p className="text-lg text-muted-foreground mb-6">{selected.role}</p>
-            <Badge className="text-sm bg-blue-500/40 text-blue-100 border-blue/50/60 border px-4 py-1">
-              Nivel: {selected.level}
-            </Badge>
+          {/* Content - positioned above background, distributed vertically */}
+          <div className={`transition-opacity duration-300 ${isChanging ? 'opacity-50' : 'opacity-100'} relative z-10 flex flex-col justify-between h-full`}>
+            {/* Top - Name */}
+            <div>
+              <h2 className="text-4xl font-bold text-white">{selected.name}</h2>
+            </div>
+            
+            {/* Middle - Role */}
+            <div>
+              <p className="text-lg text-muted-foreground">{selected.role}</p>
+            </div>
+            
+            {/* Bottom - Level Badge */}
+            <div>
+              <Badge className="text-sm bg-blue-500/40 text-blue-100 border-blue/50/60 border px-4 py-1">
+                Nivel: {selected.level}
+              </Badge>
+            </div>
           </div>
         </div>
 
