@@ -176,6 +176,8 @@ export default function GuidedTrainingPage() {
       />
     )
   }
+
+  const handleLessonResponseChange = (text: string) => {
     setUserResponses(prev => ({
       ...prev,
       [currentLesson]: text
