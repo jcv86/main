@@ -92,6 +92,8 @@ export default function GuidedInterviewPage() {
     ? GUIDED_INTERVIEW_QUESTIONS.filter(q => q.id === 3 || q.id === 4) // STAR focused questions
     : GUIDED_INTERVIEW_QUESTIONS
 
+  const currentQuestion = QUESTIONS_TO_USE[currentQuestionIndex]
+
   useEffect(() => {
     if (timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
