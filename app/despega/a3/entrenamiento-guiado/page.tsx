@@ -643,5 +643,8 @@ export default function GuidedTrainingPage() {
         </div>
       </div>
     </div>
-  )
-}
+    )
+  }
+
+  // Main return when no module is selected
+  return (

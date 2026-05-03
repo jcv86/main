@@ -266,103 +266,31 @@ export default function GuidedInterviewPage() {
     )
   }
 
-  
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="max-w-2xl mx-auto space-y-8">
-          <div className="text-center space-y-4">
-            <div className="w-24 h-24 mx-auto bg-background">
-              <Check className="w-12 h-12 text-white" />
-            </div>
-            <h1 className="text-3xl font-bold text-muted/90 dark:text-white">Entrevista Completada</h1>
-            <div className="text-6xl font-bold text-transparent bg-clip-text bg-background">
-              {score}%
-            </div>
-            <p className="text-lg text-muted-foreground dark:text-muted-foreground">
-              Excelente progreso. Tu coach IA está analizando tus respuestas...
-            </p>
-          </div>
-
-          <Card className="p-6">
-            <h2 className="text-xl font-bold mb-4">Próximos Pasos</h2>
-            <ul className="space-y-3 text-muted-foreground dark:text-white/85">
-              <li className="flex gap-3">
-                <span className="text-green font-bold">1.</span>
-                <span>Revisa el feedback detallado de tu entrevista</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-training font-bold">2.</span>
-                <span>Intenta la próxima dificultad (Entrevista Estructurada)</span>
-              </li>
-              <li className="flex gap-3">
-                <span className="text-purple font-bold">3.</span>
-                <span>Trabaja los temas donde necesitas mejorar</span>
-              </li>
-            </ul>
-          </Card>
-
-          <div className="flex gap-4">
-            <Link href="/despega/a3/simulations" className="flex-1">
-              <Button variant="outline" className="w-full">Volver a Entrenamientos</Button>
-            </Link>
-            <Button onClick={() => handleNext()} className="flex-1 bg-training/80 hover:bg-training/70">
-              Ver Análisis Detallado
-            </Button>
-          </div>
-
-          {/* Challenge Invitation */}
-          <ChallengeInvitation
-            title="Desafío Experto Disponible"
-            description="Ya dominaste este nivel. ¿Listo para el próximo desafío?"
-            challengeHref="/despega/a3/simulaciones-estructurada"
-            xpReward={250}
-            difficulty="expert"
-            unlocked={true}
-          />
-        </div>
-      </div>
-    )
-  }
-
+  // Main return when not started
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto space-y-6 px-4 py-8">
         {/* Header */}
-        <Link href="/despega/a3/simulations">
+        <Link href="/despega/a3">
           <Button variant="outline" className="mb-4">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Volver
           </Button>
         </Link>
 
-        {/* Progress */}
         <div className="space-y-2">
-          <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
-              Entrevista Guiada - Práctica Básica
-            </h1>
-            <Badge variant="secondary">
-              Pregunta {currentQuestionIndex + 1}/{GUIDED_INTERVIEW_QUESTIONS.length}
-            </Badge>
-          </div>
-          <Progress value={progress} className="h-2" />
+          <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
+            Entrevistas Disponibles
+          </h1>
+          <p className="text-muted-foreground dark:text-muted-foreground">
+            Selecciona el tipo de entrevista que deseas practicar
+          </p>
         </div>
+      </div>
+    </div>
+  )
+}
 
-        {/* Two-Column Layout: Sofia + Question */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Sofia Interviewer */}
-          <div>
-            <SofiaInterviewer 
-              state={isRecording ? 'listening' : 'idle'} 
-              autoPlay={true}
-              loop={true}
-            />
-          </div>
-
-          {/* Question and Response Section */}
-          <div className="space-y-6">
-            {/* Question Card */}
-            <Card className="p-8 border-2 border-training/30 dark:border-training/10">
               <div className="space-y-6">
                 {/* Question */}
                 <div>
