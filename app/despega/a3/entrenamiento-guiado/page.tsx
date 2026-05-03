@@ -315,11 +315,11 @@ export default function GuidedTrainingPage() {
 
             {/* Practice Section */}
             {!showVideoSession ? (
-              <div className="bg-yellow/5 dark:bg-amber-900/20 border p-6 space-y-4" style={{ borderColor: 'rgba(170, 70, 170, 0.4)', borderRadius: '0px' }}>
-                <p className="font-bold text-amber-900 dark:text-amber-200">
+              <div className="bg-yellow/5 dark:bg-amber-900/20 border p-6 space-y-4" style={{ borderColor: 'rgba(170, 70, 170, 0.4)', borderRadius: '2px' }}>
+                <p className="font-bold text-amber-900 dark:text-amber-200" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
                   Practica conmigo:
                 </p>
-                <p className="text-sm text-amber-800 dark:text-amber-300">
+                <p className="text-sm text-amber-800 dark:text-amber-300" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
                   {currentLesson === 0 && 'Piensa en un proyecto importante que lideraste. Déjame guiarte a través de STAR.'}
                   {currentLesson === 2 && 'Ahora, construyamos la sección "Acción" de tu historia. ¿Qué fue lo específico que HICISTE tú?'}
                 </p>
@@ -327,7 +327,7 @@ export default function GuidedTrainingPage() {
                 <Button
                   onClick={() => setShowVideoSession(true)}
                   className="w-full text-white"
-                  style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '4px' }}
+                  style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '20px' }}
                 >
                   <Video className="w-4 h-4 mr-2" />
                   Practicar con Video
@@ -361,6 +361,7 @@ export default function GuidedTrainingPage() {
                 onClick={() => setCurrentLesson(Math.max(0, currentLesson - 1))}
                 disabled={currentLesson === 0}
                 variant="outline"
+                style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)', borderRadius: '20px' }}
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Anterior
@@ -371,13 +372,13 @@ export default function GuidedTrainingPage() {
                   <Button
                     onClick={() => setCurrentLesson(currentLesson + 1)}
                     className="text-white"
-                    style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)' }}
+                    style={{ backgroundColor: 'rgba(170, 70, 170, 0.8)', borderRadius: '20px' }}
                   >
                     Siguiente
                     <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
                   </Button>
                 ) : (
-                  <Button className="text-white" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}>
+                  <Button className="text-white" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)', borderRadius: '20px' }}>
                     <CheckCircle2 className="w-4 h-4 mr-2" />
                     Completar Módulo
                   </Button>
