@@ -155,13 +155,9 @@ export function ConversationalInterviewSimulator({
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
   const [videoEnabled, setVideoEnabled] = useState(true)
   const [userResponse, setUserResponse] = useState('')
-  const [attempts, setAttempts] = useState<Record<string, AttemptResult[]>>({})
-  const [isLoading, setIsLoading] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [showCoachTip, setShowCoachTip] = useState(true)
-  const [selectedInterviewerId, setSelectedInterviewerId] = useState(preferences?.interviewer_avatar_id || 'interviewer-classic-1')
+  const [stage, setStage] = useState<'welcome' | 'greeting_video' | 'question' | 'response' | 'follow_up' | 'complete'>('welcome')
   const [showContinueButton, setShowContinueButton] = useState(false)
+  const [sofiaGreetingShown, setSofiaGreetingShown] = useState(false)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
@@ -224,13 +220,19 @@ export function ConversationalInterviewSimulator({
 
   const handleStartInterview = () => {
     console.log('[v0] Starting interview with interviewerId:', selectedInterviewerId)
-    // Show greeting video first, then go to question
-    setStage('greeting_video')
     setCurrentQuestionIdx(0)
     // Save selected interviewer to preferences
     if (selectedInterviewerId !== preferences?.interviewer_avatar_id) {
       updatePreferences?.({ interviewer_avatar_id: selectedInterviewerId })
     }
+    // If greeting already shown, skip directly to first question
+    if (sofiaGreetingShown) {
+      setStage('response')
+      return
+    }
+    // First time: show greeting video
+    setStage('greeting_video')
+  }
   }
 
   const handleSubmitResponse = async () => {
@@ -554,6 +556,7 @@ export function ConversationalInterviewSimulator({
               </ul>
               <Button
                 onClick={() => {
+                  setSofiaGreetingShown(true)
                   setStage('question')
                   setShowContinueButton(false)
                 }}
