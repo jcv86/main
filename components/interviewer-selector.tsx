@@ -72,40 +72,37 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
         </p>
       </div>
 
-      {/* Main Layout: Full-size Portrait (Left) + Selection Grid (Right) */}
-      <div className="flex gap-12">
-        {/* Left Panel - Large Professional Portrait */}
-        <div className="w-96 flex flex-col items-center gap-6">
-          {/* Large Portrait Image */}
-          <div className={`relative w-full aspect-[3/4] rounded-lg overflow-hidden border-2 border-muted/20 transition-opacity duration-300 ${isChanging ? 'opacity-50' : 'opacity-100'}`}>
-            <Image
-              src={selected.image}
-              alt={selected.name}
-              fill
-              className="object-cover"
-              priority
-            />
+      {/* Main Layout: Portrait (Left) + Info (Left-Center) + Selection Grid (Right) */}
+      <div className="flex gap-8">
+        {/* Large Portrait Image - Left */}
+        <div className={`relative w-64 aspect-[3/4] rounded-lg overflow-hidden border-2 border-muted/20 transition-opacity duration-300 flex-shrink-0 ${isChanging ? 'opacity-50' : 'opacity-100'}`}>
+          <Image
+            src={selected.image}
+            alt={selected.name}
+            fill
+            className="object-cover"
+            priority
+          />
+        </div>
+
+        {/* Profile Info - Left-Center */}
+        <div className="flex flex-col justify-start pt-4 gap-4 w-48 flex-shrink-0">
+          <div>
+            <h2 className="text-3xl font-bold text-white">{selected.name}</h2>
+            <p className="text-sm text-muted-foreground mt-1">{selected.role}</p>
           </div>
           
-          {/* Profile Info */}
-          <div className="w-full space-y-3 text-center">
-            <div>
-              <h2 className="text-3xl font-bold text-white">{selected.name}</h2>
-              <p className="text-sm text-muted-foreground mt-1">{selected.role}</p>
+          {/* Description */}
+          {selected.description && (
+            <div className="text-xs text-muted-foreground whitespace-pre-line leading-relaxed">
+              {selected.description}
             </div>
-            
-            {/* Description */}
-            {selected.description && (
-              <div className="text-xs text-muted-foreground whitespace-pre-line">
-                {selected.description}
-              </div>
-            )}
-            
-            {/* Level Badge */}
-            <Badge className="inline-block text-xs bg-muted/20 text-foreground border-muted/40 border px-3 py-1">
-              Nivel: {selected.level}
-            </Badge>
-          </div>
+          )}
+          
+          {/* Level Badge */}
+          <Badge className="inline-block text-xs bg-muted/20 text-foreground border-muted/40 border px-3 py-1 w-fit">
+            Nivel: {selected.level}
+          </Badge>
         </div>
 
         {/* Right Panel - Selection Grid with Thumbnails */}
