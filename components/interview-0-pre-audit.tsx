@@ -141,7 +141,8 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
 
           <Button
             onClick={() => setStage('environment')}
-            className="w-full bg-blue hover:bg-cyan text-white h-12"
+            className="w-full text-white h-12"
+            style={{ backgroundColor: 'rgb(170, 70, 170, 0.6)', borderRadius: '20px' }}
           >
             Comenzar revisión
             <ChevronRight className="w-4 h-4 ml-2" />
