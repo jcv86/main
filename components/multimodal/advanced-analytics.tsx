@@ -67,6 +67,16 @@ export function AdvancedAnalyticsReporting() {
     )
   }
 
+  if (!analytics) {
+    return (
+      <Card className="border-2 border-training/40">
+        <CardContent className="pt-6 text-center text-muted-foreground">
+          No hay datos disponibles. Por favor intenta más tarde.
+        </CardContent>
+      </Card>
+    )
+  }
+
   return (
     <div className="space-y-6">
       {/* Header */}
