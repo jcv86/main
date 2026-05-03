@@ -202,113 +202,188 @@ export default function EntrenamientoIntensivePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid md:grid-cols-2 gap-6">
             {/* Level 1: Guided */}
-            <Card className="border-2 hover:shadow-lg transition" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderRadius: '2px', borderStyle: 'none' }}>
-              <CardHeader>
-                <Badge className="w-fit mb-2" style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)', color: 'rgb(170, 70, 170, 0.8)', border: 'none' }}>
-                  Nivel 1 - Principiante
-                </Badge>
+            <Card className="rounded-[28px] border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderColor: 'rgb(170, 70, 170, 0.4)', borderRadius: '2px' }}>
+              <div className="flex flex-col">
+                <div className="flex items-start p-6 pt-6">
+                  <div className="flex items-center gap-1">
+                    <svg className="w-5 h-5" style={{ color: 'rgba(170, 70, 170, 0.6)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <circle cx="12" cy="12" r="6"></circle>
+                      <circle cx="12" cy="12" r="2"></circle>
+                    </svg>
+                  </div>
+                  <div className="flex gap-2 ml-auto">
+                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80" style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)', color: '#71c450' }}>
+                      Básico
+                    </div>
+                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgb(170, 70, 170, 0.6)', color: '#ffffff' }}>
+                      En Progreso
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 pt-0">
                 <CardTitle className="text-2xl">Guiado</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground dark:text-white/80">
-                  <strong>Contexto:</strong> Preguntas estructuradas con guía clara. Feedback en tiempo real mientras hablas.
-                </p>
-                <p className="text-sm text-muted-foreground dark:text-white/80">
-                  <strong>Duración:</strong> 30-45 min por sesión
-                </p>
-                <p className="text-sm text-muted-foreground dark:text-white/80">
-                  <strong>Ideal para:</strong> Primera vez practicando, aprender estructura STAR
-                </p>
+                <CardDescription className="text-base mt-2">Preguntas estructuradas con guía clara. Feedback en tiempo real mientras hablas.</CardDescription>
+                <div className="space-y-2 mt-4">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-4 h-4" style={{ color: 'rgba(170, 70, 170, 0.8)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span className="text-sm">30-45 min por sesión</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <svg className="w-4 h-4" style={{ color: 'rgba(170, 70, 170, 0.8)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span className="text-sm">Primera vez practicando, aprender estructura STAR</span>
+                  </div>
+                </div>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-guiado')}
-                  className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
+                  className="w-full mt-4 font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
                 >
                   Comenzar Nivel 1 <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
-              </CardContent>
+              </div>
             </Card>
 
             {/* Level 2: Structured */}
-            <Card className="border-2 hover:shadow-lg transition" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderRadius: '2px', borderStyle: 'none' }}>
-              <CardHeader>
-                <Badge className="w-fit mb-2" style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)', color: 'rgb(170, 70, 170, 0.8)', border: 'none' }}>
-                  Nivel 2 - Intermedio
-                </Badge>
+            <Card className="rounded-[28px] border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderColor: 'rgb(170, 70, 170, 0.4)', borderRadius: '2px' }}>
+              <div className="flex flex-col">
+                <div className="flex items-start p-6 pt-6">
+                  <div className="flex items-center gap-1">
+                    <svg className="w-5 h-5" style={{ color: 'rgba(170, 70, 170, 0.6)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 21H3V3h18v18z"></path>
+                      <path d="M15 9l-6 6M9 9l6 6"></path>
+                    </svg>
+                  </div>
+                  <div className="flex gap-2 ml-auto">
+                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(150, 150, 150)', color: '#ffffff' }}>
+                      Intermedio
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 pt-0">
                 <CardTitle className="text-2xl">Estructurado</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground dark:text-white/80">
-                  <strong>Contexto:</strong> Preguntas conductuales y técnicas realistas. Presión moderada.
-                </p>
-                <p className="text-sm text-muted-foreground dark:text-white/80">
-                  <strong>Duración:</strong> 45-60 min por sesión
-                </p>
-                <p className="text-sm text-muted-foreground dark:text-white/80">
-                  <strong>Ideal para:</strong> Ya conoces STAR, listo para escenarios reales
-                </p>
+                <CardDescription className="text-base mt-2">Preguntas conductuales y técnicas realistas. Presión moderada.</CardDescription>
+                <div className="space-y-2 mt-4">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-4 h-4" style={{ color: 'rgb(80, 160, 170, 0.8)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                      <path d="M16 2v4M8 2v4M3 10h18"></path>
+                    </svg>
+                    <span className="text-sm">45-60 min por sesión</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <svg className="w-4 h-4" style={{ color: 'rgb(80, 160, 170, 0.8)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span className="text-sm">Ya conoces STAR, listo para escenarios reales</span>
+                  </div>
+                </div>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-estructurado')}
-                  className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
+                  className="w-full mt-4 font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
                 >
                   Practicar Nivel 2 <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
-              </CardContent>
+              </div>
             </Card>
 
             {/* Level 3: Challenging */}
-            <Card className="border-2 hover:shadow-lg transition" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderRadius: '2px', borderStyle: 'none' }}>
-              <CardHeader>
-                <Badge className="w-fit mb-2" style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)', color: 'rgb(170, 70, 170, 0.8)', border: 'none' }}>
-                  Nivel 3 - Avanzado
-                </Badge>
+            <Card className="rounded-[28px] border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderColor: 'rgb(170, 70, 170, 0.4)', borderRadius: '2px' }}>
+              <div className="flex flex-col">
+                <div className="flex items-start p-6 pt-6">
+                  <div className="flex items-center gap-1">
+                    <svg className="w-5 h-5" style={{ color: 'rgba(170, 70, 170, 0.6)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 21H3V3h18v18z"></path>
+                      <path d="M15 9l-6 6M9 9l6 6"></path>
+                    </svg>
+                  </div>
+                  <div className="flex gap-2 ml-auto">
+                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(150, 150, 150)', color: '#ffffff' }}>
+                      Avanzado
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 pt-0">
                 <CardTitle className="text-2xl">Desafiante</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground dark:text-white/80">
-                  <strong>Contexto:</strong> Preguntas difíciles, sin guía. Simula presión de entrevista ejecutiva.
-                </p>
-                <p className="text-sm text-muted-foreground dark:text-white/80">
-                  <strong>Duración:</strong> 60-90 min por sesión
-                </p>
-                <p className="text-sm text-muted-foreground dark:text-white/80">
-                  <strong>Ideal para:</strong> Dominas estructuras, necesitas presión real
-                </p>
+                <CardDescription className="text-base mt-2">Preguntas difíciles, sin guía. Simula presión de entrevista ejecutiva.</CardDescription>
+                <div className="space-y-2 mt-4">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-4 h-4" style={{ color: 'rgba(170, 70, 170, 0.8)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span className="text-sm">60-90 min por sesión</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <svg className="w-4 h-4" style={{ color: 'rgba(170, 70, 170, 0.8)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span className="text-sm">Dominas estructuras, necesitas presión real</span>
+                  </div>
+                </div>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-desafiante')}
-                  className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
+                  className="w-full mt-4 font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
                 >
                   Desafiarse Nivel 3 <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
-              </CardContent>
+              </div>
             </Card>
 
             {/* Level 4: Mastery */}
-            <Card className="border-2 hover:shadow-lg transition" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderRadius: '2px', borderStyle: 'none' }}>
-              <CardHeader>
-                <Badge className="w-fit mb-2" style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)', color: 'rgb(170, 70, 170, 0.8)', border: 'none' }}>
-                  Nivel 4 - Maestría
-                </Badge>
+            <Card className="rounded-[28px] border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderColor: 'rgb(170, 70, 170, 0.4)', borderRadius: '2px' }}>
+              <div className="flex flex-col">
+                <div className="flex items-start p-6 pt-6">
+                  <div className="flex items-center gap-1">
+                    <svg className="w-5 h-5" style={{ color: 'rgba(170, 70, 170, 0.6)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </div>
+                  <div className="flex gap-2 ml-auto">
+                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(150, 150, 150)', color: '#ffffff' }}>
+                      Maestría
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 pt-0">
                 <CardTitle className="text-2xl">Conversacional</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground dark:text-white/80">
-                  <strong>Contexto:</strong> Entrevista conversacional real con IA. Análisis multimodal completo.
-                </p>
-                <p className="text-sm text-muted-foreground dark:text-white/80">
-                  <strong>Duración:</strong> 90-120 min por sesión
-                </p>
-                <p className="text-sm text-muted-foreground dark:text-white/80">
-                  <strong>Ideal para:</strong> Listo para tu entrevista real. Validar maestría.
-                </p>
+                <CardDescription className="text-base mt-2">Entrevista conversacional real con IA. Análisis multimodal completo.</CardDescription>
+                <div className="space-y-2 mt-4">
+                  <div className="flex items-center gap-2">
+                    <svg className="w-4 h-4" style={{ color: 'rgba(170, 70, 170, 0.8)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
+                    <span className="text-sm">90-120 min por sesión</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <svg className="w-4 h-4" style={{ color: 'rgba(170, 70, 170, 0.8)' }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span className="text-sm">Listo para tu entrevista real. Validar maestría.</span>
+                  </div>
+                </div>
                 <Button 
                   onClick={() => router.push('/despega/a3/conversational-interview')}
-                  className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
+                  className="w-full mt-4 font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
                 >
                   Entrevista Final <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
-              </CardContent>
+              </div>
             </Card>
           </div>
         </div>
