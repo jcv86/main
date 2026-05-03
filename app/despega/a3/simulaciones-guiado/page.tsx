@@ -313,4 +313,7 @@ export default function GuidedInterviewPage() {
       </div>
     )
   }
+  
+  // Default return - should not reach here
+  return null
 }
