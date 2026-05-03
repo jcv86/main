@@ -228,9 +228,9 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
 
         {/* Coach IA Tip */}
         {coachTip && (
-          <div className="flex gap-2 items-start bg-blue/10 p-3 rounded border border-blue/30">
-            <Lightbulb className="w-4 h-4 text-blue/60 mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-blue/80">{coachTip}</p>
+          <div className="flex gap-2 items-start p-3 rounded border" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.4)' }}>
+            <Lightbulb className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'rgba(170, 70, 170, 0.6)' }} />
+            <p className="text-xs" style={{ color: 'rgba(170, 70, 170)' }}>{coachTip}</p>
           </div>
         )}
 
