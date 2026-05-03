@@ -25,14 +25,15 @@ export default function Interview0Page() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <div className="text-center max-w-md">
-          <h1 className="text-4xl font-bold text-cyan mb-4">¡Entrevista 0 completada!</h1>
+          <h1 className="text-4xl font-bold text-purple-400 mb-4">¡Entrevista 0 completada!</h1>
           <p className="text-lg text-white/90 mb-8">
             Excelente. Ahora tienes tu base profesional lista. Continúa con práctica guiada o entrenamiento estructurado.
           </p>
           <div className="flex flex-col gap-3">
             <Button
               onClick={() => setStage('audit')}
-              className="bg-blue hover:bg-cyan text-white"
+              className="text-white h-12"
+              style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '20px' }}
             >
               Hacer otra auditoría
             </Button>
@@ -56,7 +57,7 @@ export default function Interview0Page() {
         <div className="flex-shrink-0 border-b border-muted/80 bg-background py-3 px-4">
           <button
             onClick={() => router.push('/despega/a3')}
-            className="inline-flex items-center gap-2 text-cyan/40 hover:text-white transition"
+            className="inline-flex items-center gap-2 text-purple-400/60 hover:text-white transition"
           >
             <ArrowLeft className="w-4 h-4" />
             Volver a Entrenamientos

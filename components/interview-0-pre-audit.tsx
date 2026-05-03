@@ -156,8 +156,8 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
     return (
       <Card className="border-muted/30 max-w-2xl mx-auto">
         <CardContent className="pt-8 pb-8 space-y-6">
-          <div className={`${status.bg} border border-current rounded-xl p-6 text-center space-y-2`}>
-            <p className={`text-sm font-semibold ${status.color} uppercase`}>{status.text}</p>
+          <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-6 text-center space-y-2">
+            <p className="text-sm font-semibold text-purple-400 uppercase">Listo para practicar</p>
             <div className="text-5xl font-bold text-white">{totalScore}</div>
             <p className="text-white/70">Puntuación General</p>
           </div>
@@ -169,7 +169,7 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
               <div key={key} className="flex items-center justify-between">
                 <span className="text-white/70 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
                 <div className="flex items-center gap-2">
-                  <Progress value={value.score} className="w-24 h-2" />
+                  <Progress value={value.score} className="w-24 h-2" style={{ accentColor: 'rgb(170, 70, 170)' }} />
                   <span className="text-white font-semibold w-12 text-right">{value.score}</span>
                 </div>
               </div>
@@ -177,8 +177,8 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
           </div>
 
           {totalScore >= 80 ? (
-            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-4 text-center">
-              <p className="text-emerald-400 font-semibold">Excelente preparación</p>
+            <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 text-center">
+              <p className="text-purple-400 font-semibold">Excelente preparación</p>
               <p className="text-white/70 text-sm mt-1">Estás listo para comenzar la simulación de entrevista</p>
             </div>
           ) : totalScore >= 60 ? (
@@ -195,7 +195,8 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
 
           <Button
             onClick={handleComplete}
-            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white h-12"
+            className="w-full text-white h-12"
+            style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '20px' }}
           >
             Continuar a Simulación de Entrevista
           </Button>
