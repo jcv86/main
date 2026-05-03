@@ -291,7 +291,6 @@ export default function GuidedInterviewPage() {
   )
 }
 
-        {/* Navigation */}
         <div className="flex gap-4 justify-between">
           <Button
             onClick={handlePrevious}
