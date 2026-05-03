@@ -175,6 +175,7 @@ export default function GuidedTrainingPage() {
                     size="sm"
                     variant="outline"
                     className="gap-2"
+                    style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)', borderRadius: '20px' }}
                   >
                     {aiLoading ? (
                       <>
