@@ -5,12 +5,12 @@ import Image from 'next/image'
 import { Badge } from '@/components/ui/badge'
 
 const INTERVIEWERS = [
-  { id: 'interviewer-classic-1', name: 'Sofia', role: 'Reclutadora Senior', level: 'Básico', image: '/images/interviewers/sofia.jpg', color: 'from-green-500 to-green-600' },
-  { id: 'interviewer-classic-2', name: 'Marco', role: 'Manager Senior Ingeniería', level: 'Intermedio', image: '/images/interviewers/marco.jpg', color: 'from-yellow-500 to-yellow-600' },
-  { id: 'interviewer-classic-3', name: 'Elena', role: 'VP Talent & Culture', level: 'Intermedio+', image: '/images/interviewers/elena.jpg', color: 'from-purple-500 to-purple' },
-  { id: 'interviewer-classic-4', name: 'David', role: 'Tech Lead & Architect', level: 'Intermedio+', image: '/images/interviewers/david.jpg', color: 'from-orange-500 to-orange-600' },
-  { id: 'interviewer-modern-1', name: 'Alex', role: 'Product Manager', level: 'Avanzado', image: '/images/interviewers/alex.jpg', color: 'from-blue-500 to-blue-600' },
-  { id: 'interviewer-modern-2', name: 'Jordan', role: 'CEO Advisor', level: 'Avanzado', image: '/images/interviewers/jordan.jpg', color: 'from-red to-red' }
+  { id: 'interviewer-classic-1', name: 'Sofia', role: 'Reclutadora', level: 'Básico', description: 'Some description\nMaybe some more description', image: '/images/interviewers/sofia.jpg', color: 'from-green-500 to-green-600' },
+  { id: 'interviewer-classic-2', name: 'Marco', role: 'Manager Senior', level: 'Intermedio', description: 'Some description\nMaybe some more description', image: '/images/interviewers/marco.jpg', color: 'from-yellow-500 to-yellow-600' },
+  { id: 'interviewer-classic-3', name: 'Elena', role: 'VP Talent', level: 'Intermedio+', description: 'Some description\nMaybe some more description', image: '/images/interviewers/elena.jpg', color: 'from-purple-500 to-purple' },
+  { id: 'interviewer-classic-4', name: 'David', role: 'Tech Lead', level: 'Intermedio', description: 'Some description\nMaybe some more description', image: '/images/interviewers/david.jpg', color: 'from-orange-500 to-orange-600' },
+  { id: 'interviewer-modern-1', name: 'Alexandra', role: 'Director', level: 'Avanzado', description: 'Some description\nMaybe some more description', image: '/images/interviewers/alex.jpg', color: 'from-blue-500 to-blue-600' },
+  { id: 'interviewer-modern-2', name: 'Bruno', role: 'Executive', level: 'Avanzado', description: 'Some description\nMaybe some more description', image: '/images/interviewers/jordan.jpg', color: 'from-red to-red' }
 ]
 
 interface InterviewerSelectorProps {
@@ -72,75 +72,72 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
         </p>
       </div>
 
-      {/* Main Layout: Selected Info (Left) + Grid Avatars (Right) */}
-      <div className="flex gap-8">
-        {/* Left Panel - Selected Coach Info */}
-        <div className="w-80 bg-muted/20 rounded-xl p-6 border border-muted/20 flex flex-col justify-between relative overflow-hidden h-72">
-          {/* Background Image with Overlay */}
-          <div className="absolute inset-0 opacity-30">
+      {/* Main Layout: Full-size Portrait (Left) + Selection Grid (Right) */}
+      <div className="flex gap-12">
+        {/* Left Panel - Large Professional Portrait */}
+        <div className="w-96 flex flex-col items-center gap-6">
+          {/* Large Portrait Image */}
+          <div className={`relative w-full aspect-[3/4] rounded-lg overflow-hidden border-2 border-muted/20 transition-opacity duration-300 ${isChanging ? 'opacity-50' : 'opacity-100'}`}>
             <Image
               src={selected.image}
               alt={selected.name}
               fill
               className="object-cover"
+              priority
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
           </div>
           
-          {/* Content - positioned above background, distributed vertically */}
-          <div className={`transition-opacity duration-300 ${isChanging ? 'opacity-50' : 'opacity-100'} relative z-10 flex flex-col justify-between h-full`}>
-            {/* Top - Name */}
+          {/* Profile Info */}
+          <div className="w-full space-y-3 text-center">
             <div>
               <h2 className="text-3xl font-bold text-white">{selected.name}</h2>
+              <p className="text-sm text-muted-foreground mt-1">{selected.role}</p>
             </div>
             
-            {/* Middle - Role */}
-            <div>
-              <p className="text-sm text-muted-foreground">{selected.role}</p>
-            </div>
+            {/* Description */}
+            {selected.description && (
+              <div className="text-xs text-muted-foreground whitespace-pre-line">
+                {selected.description}
+              </div>
+            )}
             
-            {/* Bottom - Level Badge */}
-            <div>
-              <Badge className="text-xs bg-blue-500/40 text-blue-100 border-blue/50/60 border px-3 py-1">
-                Nivel: {selected.level}
-              </Badge>
-            </div>
+            {/* Level Badge */}
+            <Badge className="inline-block text-xs bg-muted/20 text-foreground border-muted/40 border px-3 py-1">
+              Nivel: {selected.level}
+            </Badge>
           </div>
         </div>
 
-        {/* Right Panel - Grid of Circular Avatars */}
+        {/* Right Panel - Selection Grid with Thumbnails */}
         <div className="flex-1">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-3 gap-6 auto-rows-max">
             {INTERVIEWERS.map(interviewer => (
               <button
                 key={interviewer.id}
                 onClick={() => handleSelect(interviewer.id)}
-                className="flex flex-col items-center gap-2 transition-all group"
+                className={`flex flex-col items-center gap-3 transition-all group ${
+                  value === interviewer.id ? 'opacity-100' : 'opacity-60 hover:opacity-100'
+                }`}
               >
-                {/* Circular Avatar with Gradient Background */}
-                <div className={`relative w-28 h-28 rounded-full overflow-hidden border-4 transition-all ${
+                {/* Thumbnail Portrait */}
+                <div className={`relative w-40 aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all ${
                   value === interviewer.id
-                    ? 'border-white shadow-lg shadow-white/50 scale-110'
-                    : 'border-muted/30 group-hover:border-white/50 group-hover:scale-105'
+                    ? 'border-white shadow-lg shadow-white/30 scale-105'
+                    : 'border-muted/30 group-hover:border-white/50'
                 }`}>
-                  {/* Gradient Background */}
-                  <div className={`absolute inset-0 bg-gradient-to-br ${interviewer.color} opacity-40`} />
-                  {/* Image */}
-                  <div className="absolute inset-0">
-                    <Image
-                      src={interviewer.image}
-                      alt={interviewer.name}
-                      fill
-                      className="object-cover"
-                      sizes="112px"
-                    />
-                  </div>
+                  <Image
+                    src={interviewer.image}
+                    alt={interviewer.name}
+                    fill
+                    className="object-cover"
+                    sizes="160px"
+                  />
                 </div>
 
-                {/* Name and Level */}
-                <div className="text-center">
-                  <p className="font-semibold text-white text-xs">{interviewer.name}</p>
-                  <p className="text-xs text-muted-foreground leading-tight">{interviewer.level}</p>
+                {/* Name and Level Label */}
+                <div className="text-center w-full">
+                  <p className="font-semibold text-white text-sm leading-tight">{interviewer.name}</p>
+                  <p className="text-xs text-muted-foreground">{interviewer.level}</p>
                 </div>
               </button>
             ))}
