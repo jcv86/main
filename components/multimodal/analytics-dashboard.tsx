@@ -152,12 +152,16 @@ export function MultimodalAnalyticsDashboard() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            {metrics.top_strengths.map((item: any, i: number) => (
-              <div key={i} className="flex justify-between items-center p-3 bg-green/5 rounded-lg">
-                <span className="text-sm">{item.strength}</span>
-                <span className="text-xs bg-green/20 text-green px-2 py-1 rounded">{item.count}x</span>
-              </div>
-            ))}
+            {metrics.top_strengths && metrics.top_strengths.length > 0 ? (
+              metrics.top_strengths.map((item: any, i: number) => (
+                <div key={i} className="flex justify-between items-center p-3 bg-green/5 rounded-lg">
+                  <span className="text-sm">{item.strength}</span>
+                  <span className="text-xs bg-green/20 text-green px-2 py-1 rounded">{item.count}x</span>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-muted-foreground text-center py-4">No hay datos disponibles</p>
+            )}
           </div>
         </CardContent>
       </Card>
@@ -169,12 +173,16 @@ export function MultimodalAnalyticsDashboard() {
         </CardHeader>
         <CardContent>
           <div className="space-y-2">
-            {metrics.top_improvements.map((item: any, i: number) => (
-              <div key={i} className="flex justify-between items-center p-3 bg-orange/5 rounded-lg">
-                <span className="text-sm">{item.improvement}</span>
-                <span className="text-xs bg-orange/20 text-orange px-2 py-1 rounded">{item.count}x</span>
-              </div>
-            ))}
+            {metrics.top_improvements && metrics.top_improvements.length > 0 ? (
+              metrics.top_improvements.map((item: any, i: number) => (
+                <div key={i} className="flex justify-between items-center p-3 bg-orange/5 rounded-lg">
+                  <span className="text-sm">{item.improvement}</span>
+                  <span className="text-xs bg-orange/20 text-orange px-2 py-1 rounded">{item.count}x</span>
+                </div>
+              ))
+            ) : (
+              <p className="text-sm text-muted-foreground text-center py-4">No hay datos disponibles</p>
+            )}
           </div>
         </CardContent>
       </Card>
