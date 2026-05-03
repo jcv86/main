@@ -96,7 +96,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
           {userProgress?.[level.id]?.completed && (
             <div className="absolute top-4 right-4">
               <Badge className="bg-green text-white flex items-center gap-1">
-                <CheckCircle2 className="w-3 h-3" />
+                <CheckCircle2 className="w-3 h-3" style={{ color: 'rgba(170, 70, 170)' }} />
                 Completado
               </Badge>
             </div>
@@ -155,13 +155,13 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
             <Button
               asChild
               disabled={level.isLocked}
-              className={`w-full gap-2 ${`}
-                level.isLocked
-                  ? 'opacity-50 cursor-not-allowed'
-                  : userProgress?.[level.id]?.completed
-                  ? 'bg-green/80 hover:bg-green/70'
-                  : ''`}
-              }`}
+              className="w-full gap-2"
+              style={{
+                backgroundColor: level.isLocked ? 'rgba(219, 217, 215, 0.7)' : 'rgba(170, 70, 170, 0.6)',
+                borderRadius: '20px',
+                opacity: level.isLocked ? 0.5 : 1,
+                cursor: level.isLocked ? 'not-allowed' : 'pointer'
+              }}
             >
               <Link href={`/despega/a3/conversational-interview?level=${level.id}`}>
                 {level.isLocked ? (
@@ -171,7 +171,7 @@ export function A3TrainingLevels({ userProgress }: A3TrainingLevelsProps) {
                   </>
                 ) : userProgress?.[level.id]?.completed ? (
                   <>
-                    <CheckCircle2 className="w-4 h-4" />
+                    <CheckCircle2 className="w-4 h-4" style={{ color: 'rgba(170, 70, 170)' }} />
                     Practicar de Nuevo
                   </>
                 ) : (
