@@ -75,7 +75,7 @@ export function AdvancedAnalyticsReporting() {
             <option value="quarter">Último Trimestre</option>
             <option value="all">Todo el Tiempo</option>
           </select>
-          <Button onClick={exportReport} disabled={exporting} className="gap-2">
+          <Button onClick={exportReport} disabled={exporting} className="gap-2 bg-training hover:bg-training/90 text-white">
             <Download className="w-4 h-4" />
             {exporting ? 'Exportando...' : 'Exportar Reporte'}
           </Button>
@@ -243,7 +243,7 @@ export function AdvancedAnalyticsReporting() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Award className="w-5 h-5 text-yellow" />
+                  <Award className="w-5 h-5 text-training" />
                   Logros Desbloqueados
                 </CardTitle>
               </CardHeader>
@@ -265,7 +265,7 @@ export function AdvancedAnalyticsReporting() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Target className="w-5 h-5 text-blue" />
+                  <Target className="w-5 h-5 text-training" />
                   Próximos Objetivos
                 </CardTitle>
               </CardHeader>
