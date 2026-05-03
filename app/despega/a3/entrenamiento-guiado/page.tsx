@@ -150,6 +150,26 @@ export default function GuidedTrainingPage() {
       const bonusXP = 250
       setUserXP(prev => prev + bonusXP)
       
+      // Save training completion to database
+      const trainingSaveResponse = await fetch('/api/a3/training-completion', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          training_id: selectedModule.id,
+          module_name: selectedModule.name,
+          tiempo_dedicado_minutos: 45, // Default estimate for module
+          competencias_desarrolladas: [selectedModule.name],
+        }),
+      })
+
+      if (!trainingSaveResponse.ok) {
+        console.error('[v0] Error saving training to database:', trainingSaveResponse.statusText)
+      } else {
+        console.log('[v0] Training completion saved to database for module:', selectedModule.name)
+      }
+      
       await new Promise(resolve => setTimeout(resolve, 800))
 
       // Save progress to database would go here

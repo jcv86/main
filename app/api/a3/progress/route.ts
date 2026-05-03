@@ -42,6 +42,13 @@ export async function GET(request: NextRequest) {
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
 
+    // Fetch training completions
+    const { data: trainingCompletions } = await supabase
+      .from('a3_training_assignments')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('estado', 'completed')
+
     // Fetch module progress
     const { data: modules } = await supabase
       .from('a4_module_progress')
@@ -67,8 +74,10 @@ export async function GET(request: NextRequest) {
     }
 
     // Calculate totals
-    const totalMinutes = (interviews || []).reduce((sum, iv) => sum + (iv.tiempo_dedicado_minutos || 0), 0)
-    const totalSessions = interviews?.length || 0
+    const interviewMinutes = (interviews || []).reduce((sum, iv) => sum + (iv.tiempo_dedicado_minutos || 0), 0)
+    const trainingMinutes = (trainingCompletions || []).length * 45 // Estimate 45 minutes per training module completed
+    const totalMinutes = interviewMinutes + trainingMinutes
+    const totalSessions = (interviews?.length || 0) + (trainingCompletions?.length || 0)
     
     // Calculate completion percentage dynamically from user activities
     const completionPercentage = await calculateProgressPercentage(userId)
