@@ -52,45 +52,51 @@ export default function CVATSPage() {
 
   const renderATSFormat = () => (
     <div className="bg-white dark:bg-background p-8 text-black dark:text-white font-mono text-sm space-y-4">
-      <div>
-        <p className="font-bold text-lg">{cvData.personalInfo.name}</p>
-        <p>{cvData.personalInfo.title}</p>
-        <p>{cvData.personalInfo.email} | {cvData.personalInfo.phone} | {cvData.personalInfo.location}</p>
+      {/* Header */}
+      <div className="bg-muted/5 dark:bg-muted/10 p-4 rounded-lg border-l-4 border-training">
+        <p className="font-bold text-lg text-training">{cvData.personalInfo.name}</p>
+        <p className="text-white/90">{cvData.personalInfo.title}</p>
+        <p className="text-white/80 text-xs">{cvData.personalInfo.email} | {cvData.personalInfo.phone} | {cvData.personalInfo.location}</p>
       </div>
 
-      <div>
-        <p className="font-bold">PROFESSIONAL SUMMARY</p>
-        <p>{cvData.personalInfo.summary}</p>
+      {/* Professional Summary */}
+      <div className="bg-muted/8 dark:bg-muted/20 p-4 rounded-lg">
+        <p className="font-bold text-training uppercase text-xs tracking-wide mb-2">PROFESSIONAL SUMMARY</p>
+        <p className="text-white/85 leading-relaxed">{cvData.personalInfo.summary}</p>
       </div>
 
-      <div>
-        <p className="font-bold">EXPERIENCE</p>
+      {/* Experience */}
+      <div className="space-y-3">
+        <p className="font-bold text-training uppercase text-xs tracking-wide">EXPERIENCE</p>
         {cvData.experience.map((exp) => (
-          <div key={exp.id} className="mt-2">
-            <p className="font-bold">{exp.position} | {exp.company}</p>
-            <p>{exp.duration}</p>
-            <p>{exp.description}</p>
-            <p>Skills: {exp.skills.join(', ')}</p>
+          <div key={exp.id} className="bg-muted/8 dark:bg-muted/20 p-3 rounded-lg border-l-2 border-training/50">
+            <p className="font-bold text-white">{exp.position} | <span className="text-training">{exp.company}</span></p>
+            <p className="text-white/70 text-xs">{exp.duration}</p>
+            <p className="text-white/80 mt-1">{exp.description}</p>
+            <p className="text-training text-xs mt-1">Skills: {exp.skills.join(', ')}</p>
           </div>
         ))}
       </div>
 
-      <div>
-        <p className="font-bold">EDUCATION</p>
+      {/* Education */}
+      <div className="bg-muted/8 dark:bg-muted/20 p-4 rounded-lg">
+        <p className="font-bold text-training uppercase text-xs tracking-wide mb-2">EDUCATION</p>
         {cvData.education.map((edu, idx) => (
-          <p key={idx}>{edu.degree} - {edu.school} ({edu.year})</p>
+          <p key={idx} className="text-white/85">{edu.degree} - {edu.school} ({edu.year})</p>
         ))}
       </div>
 
-      <div>
-        <p className="font-bold">TECHNICAL SKILLS</p>
-        <p>{cvData.skills.join(', ')}</p>
+      {/* Technical Skills */}
+      <div className="bg-muted/8 dark:bg-muted/20 p-4 rounded-lg">
+        <p className="font-bold text-training uppercase text-xs tracking-wide mb-2">TECHNICAL SKILLS</p>
+        <p className="text-white/85">{cvData.skills.join(', ')}</p>
       </div>
 
-      <div>
-        <p className="font-bold">CERTIFICATIONS</p>
+      {/* Certifications */}
+      <div className="bg-muted/8 dark:bg-muted/20 p-4 rounded-lg">
+        <p className="font-bold text-training uppercase text-xs tracking-wide mb-2">CERTIFICATIONS</p>
         {cvData.certifications.map((cert, idx) => (
-          <p key={idx}>{cert.name} - {cert.issuer} ({cert.year})</p>
+          <p key={idx} className="text-white/85">{cert.name} - {cert.issuer} ({cert.year})</p>
         ))}
       </div>
     </div>
@@ -143,7 +149,7 @@ export default function CVATSPage() {
 
       {/* Education & Skills */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white dark:bg-muted/70 rounded-[28px] p-6">
+        <div className="bg-muted/30 dark:bg-muted/40 rounded-[28px] p-6">
           <h3 className="text-sm font-bold text-training dark:text-training uppercase tracking-wide mb-4">Educación</h3>
           <div className="space-y-3">
             {cvData.education.map((edu, idx) => (
@@ -156,7 +162,7 @@ export default function CVATSPage() {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-muted/70 rounded-[28px] p-6">
+        <div className="bg-muted/30 dark:bg-muted/40 rounded-[28px] p-6">
           <h3 className="text-sm font-bold text-training dark:text-training uppercase tracking-wide mb-4">Certificaciones</h3>
           <div className="space-y-3">
             {cvData.certifications.map((cert, idx) => (
@@ -170,7 +176,7 @@ export default function CVATSPage() {
       </div>
 
       {/* Skills Cloud */}
-      <div className="bg-white dark:bg-muted/70 rounded-[28px] p-6">
+      <div className="bg-muted/30 dark:bg-muted/40 rounded-[28px] p-6">
         <h3 className="text-sm font-bold text-training dark:text-training uppercase tracking-wide mb-4">Competencias Técnicas</h3>
         <div className="flex flex-wrap gap-2">
           {cvData.skills.map((skill) => (
@@ -197,13 +203,14 @@ export default function CVATSPage() {
       </div>
 
       {/* Summary Box */}
-      <div className="bg-muted/5 dark:bg-card rounded-[28px] p-6 border-l-4 border-training">
-        <p className="text-secondary dark:text-muted/10 leading-relaxed">{cvData.personalInfo.summary}</p>
+      <div className="bg-muted/30 dark:bg-muted/40 rounded-[28px] p-6 border-l-4 border-training">
+        <h2 className="text-sm font-bold text-training uppercase mb-2">Resumen</h2>
+        <p className="text-white/85 dark:text-white/85 leading-relaxed">{cvData.personalInfo.summary}</p>
       </div>
 
       {/* Timeline Experience */}
       <div>
-        <h2 className="text-2xl font-bold mb-6">Trayectoria Profesional</h2>
+        <h2 className="text-2xl font-bold mb-6 text-white">Trayectoria Profesional</h2>
         <div className="space-y-6">
           {cvData.experience.map((exp, idx) => (
             <div key={exp.id} className="flex gap-4">
@@ -211,18 +218,18 @@ export default function CVATSPage() {
                 <div className="w-4 h-4 rounded-[20px] bg-training mt-1"></div>
                 {idx < cvData.experience.length - 1 && <div className="w-0.5 h-20 bg-training/20 dark:bg-training my-2"></div>}
               </div>
-              <div className="pb-4">
-                <div className="flex justify-between items-start">
+              <div className="pb-4 bg-muted/30 dark:bg-muted/40 rounded-lg p-4 w-full">
+                <div className="flex justify-between items-start mb-2">
                   <div>
-                    <p className="text-lg font-bold text-muted/90 dark:text-white">{exp.position}</p>
+                    <p className="text-lg font-bold text-white">{exp.position}</p>
                     <p className="text-training dark:text-training font-semibold">{exp.company}</p>
                   </div>
-                  <span className="text-sm text-muted-foreground dark:text-muted-foreground">{exp.duration}</span>
+                  <span className="text-sm text-white/70 bg-training/20 px-2 py-1 rounded">{exp.duration}</span>
                 </div>
-                <p className="text-muted-foreground dark:text-white/85 mt-2 text-sm">{exp.description}</p>
+                <p className="text-white/85 mt-2 text-sm">{exp.description}</p>
                 <div className="flex flex-wrap gap-1 mt-2">
                   {exp.skills.map((skill) => (
-                    <span key={skill} className="text-xs bg-training/10 dark:bg-training/30 text-training dark:text-training-200 px-2 py-1 rounded">{skill}</span>
+                    <span key={skill} className="text-xs bg-training/30 text-training px-2 py-1 rounded">{skill}</span>
                   ))}
                 </div>
               </div>
@@ -429,58 +436,66 @@ export default function CVATSPage() {
 
   const renderStandardFormat = () => (
     <div className="space-y-8 bg-white dark:bg-background p-8 text-muted/90 dark:text-white">
-      <div className="border-b-2 border-muted/30 dark:border-card pb-4">
-        <h1 className="text-3xl font-bold">{cvData.personalInfo.name}</h1>
-        <p className="text-lg font-semibold text-muted-foreground dark:text-white/85">{cvData.personalInfo.title}</p>
-        <p className="text-sm">{cvData.personalInfo.email} • {cvData.personalInfo.phone} • {cvData.personalInfo.location}</p>
+      {/* Header */}
+      <div className="bg-muted/5 dark:bg-muted/10 p-6 rounded-lg border-l-4 border-training">
+        <h1 className="text-3xl font-bold text-training">{cvData.personalInfo.name}</h1>
+        <p className="text-lg font-semibold text-white/80">{cvData.personalInfo.title}</p>
+        <p className="text-sm text-white/70">{cvData.personalInfo.email} • {cvData.personalInfo.phone} • {cvData.personalInfo.location}</p>
       </div>
 
-      <div>
-        <h2 className="text-xl font-bold mb-2">Professional Summary</h2>
-        <p className="text-muted-foreground dark:text-white/85">{cvData.personalInfo.summary}</p>
+      {/* Professional Summary */}
+      <div className="bg-muted/8 dark:bg-muted/20 p-6 rounded-lg">
+        <h2 className="text-xl font-bold text-training mb-3">Professional Summary</h2>
+        <p className="text-white/85 leading-relaxed">{cvData.personalInfo.summary}</p>
       </div>
 
+      {/* Experience */}
       <div>
-        <h2 className="text-xl font-bold mb-3">Experience</h2>
-        {cvData.experience.map((exp) => (
-          <div key={exp.id} className="mb-4">
-            <div className="flex justify-between">
-              <div>
-                <p className="font-bold">{exp.position}</p>
-                <p className="text-muted-foreground dark:text-muted-foreground">{exp.company}</p>
+        <h2 className="text-xl font-bold text-training mb-4">Experience</h2>
+        <div className="space-y-4">
+          {cvData.experience.map((exp) => (
+            <div key={exp.id} className="bg-muted/8 dark:bg-muted/20 p-4 rounded-lg border-l-2 border-training/50">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <p className="font-bold text-white">{exp.position}</p>
+                  <p className="text-training font-semibold">{exp.company}</p>
+                </div>
+                <p className="text-sm text-white/70">{exp.duration}</p>
               </div>
-              <p className="text-muted-foreground dark:text-muted-foreground">{exp.duration}</p>
+              <p className="text-sm text-white/85 mb-2">{exp.description}</p>
+              <p className="text-xs text-training">Skills: {exp.skills.join(', ')}</p>
             </div>
-            <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">{exp.description}</p>
-            <p className="text-xs text-muted-foreground mt-1">Skills: {exp.skills.join(', ')}</p>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
 
-      <div>
-        <h2 className="text-xl font-bold mb-2">Education</h2>
+      {/* Education */}
+      <div className="bg-muted/8 dark:bg-muted/20 p-6 rounded-lg">
+        <h2 className="text-xl font-bold text-training mb-3">Education</h2>
         {cvData.education.map((edu, idx) => (
-          <p key={idx} className="text-sm">
+          <p key={idx} className="text-white/85 mb-1">
             <strong>{edu.degree}</strong> - {edu.school} ({edu.year})
           </p>
         ))}
       </div>
 
-      <div>
-        <h2 className="text-xl font-bold mb-2">Technical Skills</h2>
+      {/* Technical Skills */}
+      <div className="bg-muted/8 dark:bg-muted/20 p-6 rounded-lg">
+        <h2 className="text-xl font-bold text-training mb-3">Technical Skills</h2>
         <div className="flex flex-wrap gap-2">
           {cvData.skills.map((skill) => (
-            <span key={skill} className="bg-training/10 dark:bg-training/30 text-training dark:text-training-300 px-3 py-1 rounded-[20px] text-sm">
+            <span key={skill} className="bg-training/20 text-training px-3 py-1 rounded-[20px] text-sm">
               {skill}
             </span>
           ))}
         </div>
       </div>
 
-      <div>
-        <h2 className="text-xl font-bold mb-2">Certifications</h2>
+      {/* Certifications */}
+      <div className="bg-muted/8 dark:bg-muted/20 p-6 rounded-lg">
+        <h2 className="text-xl font-bold text-training mb-3">Certifications</h2>
         {cvData.certifications.map((cert, idx) => (
-          <p key={idx} className="text-sm">
+          <p key={idx} className="text-white/85 mb-1">
             <strong>{cert.name}</strong> - {cert.issuer} ({cert.year})
           </p>
         ))}
