@@ -159,6 +159,7 @@ export function ConversationalInterviewSimulator({
   const [sofiaGreetingShown, setSofiaGreetingShown] = useState(false)
   const [sofiaState, setSofiaState] = useState<'greeting' | 'listening' | 'farewell'>('greeting')
   const [attempts, setAttempts] = useState<Record<string, AttemptResult[]>>({})
+  const [error, setError] = useState<string | null>(null)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
