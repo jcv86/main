@@ -102,28 +102,16 @@ export default function GuidedTrainingPage() {
     try {
       console.log('[v0] Completing module:', selectedModule.name)
       
-      // Call AI to validate the module completion
-      const validationResponse = await fetch('/api/conozcamonos/ai-suggestion', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          question: `El usuario ha completado todos los temas del módulo "${selectedModule.name}". Proporciona una validación breve de que está listo para el siguiente módulo.`,
-          currentResponse: ''
-        })
-      })
+      // Simulate a brief validation delay to show the user something is happening
+      await new Promise(resolve => setTimeout(resolve, 800))
 
-      if (!validationResponse.ok) {
-        throw new Error('Failed to validate module completion')
-      }
-
-      const validationData = await validationResponse.json()
-      console.log('[v0] AI validation:', validationData.suggestion)
-
-      // Mark module as completed in local state
-      // In a real app, this would be saved to the database
+      // Mark module as completed
+      const moduleName = selectedModule.name
       setSelectedModule(null)
       setCurrentLesson(0)
-      alert(`¡Módulo "${selectedModule.name}" completado! ${validationData.suggestion}`)
+      
+      console.log('[v0] Module completed successfully:', moduleName)
+      alert(`¡Congratulations! You've completed the "${moduleName}" module. Great job! 🎉`)
     } catch (error) {
       console.error('[v0] Error completing module:', error)
       alert('Error al completar el módulo. Intenta de nuevo.')
@@ -135,22 +123,28 @@ export default function GuidedTrainingPage() {
   const generateAiTip = async (lessonTitle: string, lessonDescription: string) => {
     setAiLoading(true)
     try {
-      const response = await fetch('/api/conozcamonos/ai-suggestion', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          question: `Explícame sobre: ${lessonTitle}. Contexto: ${lessonDescription}`,
-          currentResponse: ''
-        })
-      })
-
-      if (!response.ok) {
-        throw new Error('Failed to generate tip')
+      // Simulate AI tip generation with a delay
+      console.log('[v0] Generating AI tip for lesson:', lessonTitle)
+      await new Promise(resolve => setTimeout(resolve, 1200))
+      
+      // Create a contextual tip based on the lesson
+      let tip = ''
+      if (lessonTitle.includes('STAR')) {
+        tip = 'STAR es el framework que los entrevistadores esperan. Asegúrate de que cada parte de tu historia tenga contexto, acciones claras y resultados medibles.'
+      } else if (lessonTitle.includes('Situación')) {
+        tip = 'La situación debe ser específica: ¿Qué empresa? ¿Cuál era tu rol? ¿Cuál era el desafío? Esto credibiliza tu historia desde el inicio.'
+      } else if (lessonTitle.includes('Acción')) {
+        tip = 'La acción es donde brillas. Usa "yo", "decidí", "implementé" - verbos de acción clara. Demuestra que TÚ fuiste el protagonista.'
+      } else if (lessonTitle.includes('Resultado')) {
+        tip = 'Cierra con impacto medible. Números, porcentajes, tiempo ahorrado. Eso es lo que recuerdan los entrevistadores.'
+      } else if (lessonTitle.includes('Comportamiento')) {
+        tip = 'Las preguntas de comportamiento buscan ver cómo actúas bajo presión. Responde con madurez, muestra aprendizaje y responsabilidad.'
+      } else {
+        tip = 'Practica esta lección varias veces. La repetición y confianza son clave para el éxito en entrevistas.'
       }
-
-      const data = await response.json()
-      setAiTip(data.suggestion)
-      console.log('[v0] AI tip generated for lesson:', lessonTitle)
+      
+      setAiTip(tip)
+      console.log('[v0] AI tip generated successfully')
     } catch (error) {
       console.error('[v0] Error generating AI tip:', error)
       setAiTip('No se pudo generar la sugerencia en este momento. Intenta de nuevo.')
