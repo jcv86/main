@@ -55,15 +55,22 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
 
     try {
       stream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: true, noiseSuppression: true },
+        audio: { 
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false
+        },
         video: false
       })
 
       audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
       const analyser = audioContext.createAnalyser()
-      analyser.fftSize = 256 // Smaller FFT for better low-frequency detection
+      analyser.fftSize = 2048
       const source = audioContext.createMediaStreamSource(stream)
       source.connect(analyser)
+      
+      // Connect to destination to ensure audio processing
+      analyser.connect(audioContext.destination)
 
       const dataArray = new Uint8Array(analyser.frequencyBinCount)
       let isRunning = true
@@ -74,9 +81,8 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
         if (!isRunning) return
         analyser.getByteFrequencyData(dataArray)
         
-        // Focus on lower frequencies (speech range: 85-255Hz)
-        const lowFreqData = dataArray.slice(0, Math.floor(dataArray.length * 0.3))
-        const average = lowFreqData.reduce((a, b) => a + b) / lowFreqData.length
+        // Check all frequency ranges, not just low frequencies
+        const average = dataArray.reduce((a, b) => a + b) / dataArray.length
         const level = Math.round((average / 255) * 100)
         
         setAudioLevel(level)
@@ -84,22 +90,24 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
         setMaxAudioLevel(max)
         sampleCount++
         
+        console.log('[v0] Audio level:', level, 'Max:', max)
+        
         requestAnimationFrame(checkAudio)
       }
 
       checkAudio()
 
-      // Stop after 3 seconds and evaluate with LOWER thresholds
+      // Stop after 3 seconds and evaluate
       setTimeout(() => {
         isRunning = false
         setIsTestingAudio(false)
         
-        // Much lower thresholds since Web Audio API is naturally quiet
-        // good: 25%+, fair: 12%+, poor: < 12%
+        // Adjusted thresholds for better detection
+        // good: 20%+, fair: 8%+, poor: < 8%
         let result: 'good' | 'fair' | 'poor'
-        if (max >= 25) {
+        if (max >= 20) {
           result = 'good'
-        } else if (max >= 12) {
+        } else if (max >= 8) {
           result = 'fair'
         } else {
           result = 'poor'
