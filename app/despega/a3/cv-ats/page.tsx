@@ -99,9 +99,9 @@ export default function CVATSPage() {
   const renderCreativeFormat = () => (
     <div className="bg-background/80/90 p-12 text-muted/90 dark:text-white space-y-6">
       {/* Header with gradient accent */}
-      <div className="border-l-4 border-purple pl-6">
-        <h1 className="text-4xl font-black bg-clip-text text-transparent bg-purple">{cvData.personalInfo.name}</h1>
-        <p className="text-xl font-bold text-purple dark:text-purple mt-1">{cvData.personalInfo.title}</p>
+      <div className="border-l-4 border-training pl-6">
+        <h1 className="text-4xl font-black bg-clip-text text-transparent bg-training">{cvData.personalInfo.name}</h1>
+        <p className="text-xl font-bold text-training dark:text-training mt-1">{cvData.personalInfo.title}</p>
         <div className="flex gap-4 text-sm mt-2 flex-wrap">
           <span>{cvData.personalInfo.email}</span>
           <span>•</span>
@@ -112,8 +112,8 @@ export default function CVATSPage() {
       </div>
 
       {/* Summary */}
-      <div className="bg-white dark:bg-muted/70 rounded-[28px] p-6 border-l-4 border-purple">
-        <h2 className="text-sm font-bold text-purple dark:text-purple uppercase tracking-wide mb-2">Resumen Profesional</h2>
+      <div className="bg-white dark:bg-muted/70 rounded-[28px] p-6 border-l-4 border-training">
+        <h2 className="text-sm font-bold text-training dark:text-training uppercase tracking-wide mb-2">Resumen Profesional</h2>
         <p className="text-muted-foreground dark:text-white/80 leading-relaxed">{cvData.personalInfo.summary}</p>
       </div>
 
@@ -122,18 +122,18 @@ export default function CVATSPage() {
         <h2 className="text-2xl font-bold mb-4 text-muted/90 dark:text-white">Experiencia</h2>
         <div className="space-y-4">
           {cvData.experience.map((exp) => (
-            <div key={exp.id} className="bg-white dark:bg-muted/70 rounded-[28px] p-6 border-l-4 border-blue/50 hover:shadow-lg transition-shadow">
+            <div key={exp.id} className="bg-white dark:bg-muted/70 rounded-[28px] p-6 border-l-4 border-training/50 hover:shadow-lg transition-shadow">
               <div className="flex justify-between items-start mb-2">
                 <div>
                   <p className="font-bold text-lg text-muted/90 dark:text-white">{exp.position}</p>
-                  <p className="text-blue dark:text-blue font-semibold">{exp.company}</p>
+                  <p className="text-training dark:text-training font-semibold">{exp.company}</p>
                 </div>
                 <span className="text-sm text-muted-foreground dark:text-muted-foreground bg-muted/10 dark:bg-muted/60 px-3 py-1 rounded">{exp.duration}</span>
               </div>
               <p className="text-muted-foreground dark:text-white/85 text-sm mb-3">{exp.description}</p>
               <div className="flex flex-wrap gap-2">
                 {exp.skills.map((skill) => (
-                  <span key={skill} className="text-xs bg-purple/10 dark:bg-purple/30 text-purple dark:text-purple/20 px-2 py-1 rounded">{skill}</span>
+                  <span key={skill} className="text-xs bg-training/10 dark:bg-training/30 text-training dark:text-training/20 px-2 py-1 rounded">{skill}</span>
                 ))}
               </div>
             </div>
@@ -144,7 +144,7 @@ export default function CVATSPage() {
       {/* Education & Skills */}
       <div className="grid grid-cols-2 gap-4">
         <div className="bg-white dark:bg-muted/70 rounded-[28px] p-6">
-          <h3 className="text-sm font-bold text-purple dark:text-purple uppercase tracking-wide mb-4">Educación</h3>
+          <h3 className="text-sm font-bold text-training dark:text-training uppercase tracking-wide mb-4">Educación</h3>
           <div className="space-y-3">
             {cvData.education.map((edu, idx) => (
               <div key={idx}>
@@ -157,7 +157,7 @@ export default function CVATSPage() {
         </div>
 
         <div className="bg-white dark:bg-muted/70 rounded-[28px] p-6">
-          <h3 className="text-sm font-bold text-purple dark:text-purple uppercase tracking-wide mb-4">Certificaciones</h3>
+          <h3 className="text-sm font-bold text-training dark:text-training uppercase tracking-wide mb-4">Certificaciones</h3>
           <div className="space-y-3">
             {cvData.certifications.map((cert, idx) => (
               <div key={idx}>
@@ -171,7 +171,7 @@ export default function CVATSPage() {
 
       {/* Skills Cloud */}
       <div className="bg-white dark:bg-muted/70 rounded-[28px] p-6">
-        <h3 className="text-sm font-bold text-purple dark:text-purple uppercase tracking-wide mb-4">Competencias Técnicas</h3>
+        <h3 className="text-sm font-bold text-training dark:text-training uppercase tracking-wide mb-4">Competencias Técnicas</h3>
         <div className="flex flex-wrap gap-2">
           {cvData.skills.map((skill) => (
             <span key={skill} className="bg-background">{skill}</span>
@@ -190,14 +190,14 @@ export default function CVATSPage() {
         </div>
         <div>
           <h1 className="text-4xl font-bold">{cvData.personalInfo.name}</h1>
-          <p className="text-2xl text-purple dark:text-purple font-semibold">{cvData.personalInfo.title}</p>
+          <p className="text-2xl text-training dark:text-training font-semibold">{cvData.personalInfo.title}</p>
           <p className="text-muted-foreground dark:text-muted-foreground mt-1">{cvData.personalInfo.email} • {cvData.personalInfo.phone}</p>
           <p className="text-muted-foreground dark:text-muted-foreground">{cvData.personalInfo.location}</p>
         </div>
       </div>
 
       {/* Summary Box */}
-      <div className="bg-muted/5 dark:bg-card rounded-[28px] p-6 border-l-4 border-purple">
+      <div className="bg-muted/5 dark:bg-card rounded-[28px] p-6 border-l-4 border-training">
         <p className="text-secondary dark:text-muted/10 leading-relaxed">{cvData.personalInfo.summary}</p>
       </div>
 
@@ -208,21 +208,21 @@ export default function CVATSPage() {
           {cvData.experience.map((exp, idx) => (
             <div key={exp.id} className="flex gap-4">
               <div className="flex flex-col items-center">
-                <div className="w-4 h-4 rounded-[20px] bg-purple mt-1"></div>
-                {idx < cvData.experience.length - 1 && <div className="w-0.5 h-20 bg-purple/20 dark:bg-purple my-2"></div>}
+                <div className="w-4 h-4 rounded-[20px] bg-training mt-1"></div>
+                {idx < cvData.experience.length - 1 && <div className="w-0.5 h-20 bg-training/20 dark:bg-training my-2"></div>}
               </div>
               <div className="pb-4">
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="text-lg font-bold text-muted/90 dark:text-white">{exp.position}</p>
-                    <p className="text-purple dark:text-purple font-semibold">{exp.company}</p>
+                    <p className="text-training dark:text-training font-semibold">{exp.company}</p>
                   </div>
                   <span className="text-sm text-muted-foreground dark:text-muted-foreground">{exp.duration}</span>
                 </div>
                 <p className="text-muted-foreground dark:text-white/85 mt-2 text-sm">{exp.description}</p>
                 <div className="flex flex-wrap gap-1 mt-2">
                   {exp.skills.map((skill) => (
-                    <span key={skill} className="text-xs bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue-200 px-2 py-1 rounded">{skill}</span>
+                    <span key={skill} className="text-xs bg-training/10 dark:bg-training/30 text-training dark:text-training-200 px-2 py-1 rounded">{skill}</span>
                   ))}
                 </div>
               </div>
@@ -276,15 +276,15 @@ export default function CVATSPage() {
   const renderLinkedInFormat = () => (
     <div className="bg-white dark:bg-background p-8 text-muted/90 dark:text-white space-y-6">
       {/* LinkedIn Header */}
-      <div className="bg-blue text-white p-8 rounded-[28px] -mx-8 -mt-8 mb-4">
+      <div className="bg-training text-white p-8 rounded-[28px] -mx-8 -mt-8 mb-4">
         <h1 className="text-3xl font-bold">{cvData.personalInfo.name}</h1>
         <p className="text-lg mt-1">{cvData.personalInfo.title}</p>
-        <p className="text-blue/10 mt-2">{cvData.personalInfo.location}</p>
+        <p className="text-training/10 mt-2">{cvData.personalInfo.location}</p>
       </div>
 
       {/* Contact Info */}
       <div className="bg-muted/5 dark:bg-card p-4 rounded-[28px]">
-        <h3 className="font-bold text-blue dark:text-blue mb-2">Información de Contacto</h3>
+        <h3 className="font-bold text-training dark:text-training mb-2">Información de Contacto</h3>
         <p className="text-sm">📧 {cvData.personalInfo.email}</p>
         <p className="text-sm"> {cvData.personalInfo.phone}</p>
         <p className="text-sm">📍 {cvData.personalInfo.location}</p>
@@ -301,9 +301,9 @@ export default function CVATSPage() {
         <h3 className="text-lg font-bold text-muted/90 dark:text-white mb-3">Experiencia Laboral</h3>
         <div className="space-y-4">
           {cvData.experience.map((exp) => (
-            <div key={exp.id} className="border-l-4 border-blue pl-4">
+            <div key={exp.id} className="border-l-4 border-training pl-4">
               <p className="font-bold text-muted/90 dark:text-white">{exp.position}</p>
-              <p className="text-blue dark:text-blue text-sm font-semibold">{exp.company}</p>
+              <p className="text-training dark:text-training text-sm font-semibold">{exp.company}</p>
               <p className="text-muted-foreground dark:text-muted-foreground text-sm">{exp.duration}</p>
               <p className="text-muted-foreground dark:text-white/85 text-sm mt-2">{exp.description}</p>
               <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-2">
@@ -333,7 +333,7 @@ export default function CVATSPage() {
         <h3 className="text-lg font-bold text-muted/90 dark:text-white mb-3">Competencias</h3>
         <div className="flex flex-wrap gap-2">
           {cvData.skills.map((skill) => (
-            <span key={skill} className="text-sm bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue-200 px-3 py-1 rounded-full">{skill}</span>
+            <span key={skill} className="text-sm bg-training/10 dark:bg-training/30 text-training dark:text-training-200 px-3 py-1 rounded-full">{skill}</span>
           ))}
         </div>
       </div>
@@ -470,7 +470,7 @@ export default function CVATSPage() {
         <h2 className="text-xl font-bold mb-2">Technical Skills</h2>
         <div className="flex flex-wrap gap-2">
           {cvData.skills.map((skill) => (
-            <span key={skill} className="bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue-300 px-3 py-1 rounded-[20px] text-sm">
+            <span key={skill} className="bg-training/10 dark:bg-training/30 text-training dark:text-training-300 px-3 py-1 rounded-[20px] text-sm">
               {skill}
             </span>
           ))}
@@ -511,42 +511,42 @@ export default function CVATSPage() {
           <Button
             onClick={() => setFormat('ats')}
             variant={format === 'ats' ? 'default' : 'outline'}
-            className={format === 'ats' ? 'bg-purple' : ''}
+            className={format === 'ats' ? 'bg-training hover:bg-training/90' : 'border-training/40 text-training'}
           >
             Formato ATS
           </Button>
           <Button
             onClick={() => setFormat('standard')}
             variant={format === 'standard' ? 'default' : 'outline'}
-            className={format === 'standard' ? 'bg-purple' : ''}
+            className={format === 'standard' ? 'bg-training hover:bg-training/90' : 'border-training/40 text-training'}
           >
             Estándar
           </Button>
           <Button
             onClick={() => setFormat('creative')}
             variant={format === 'creative' ? 'default' : 'outline'}
-            className={format === 'creative' ? 'bg-purple' : ''}
+            className={format === 'creative' ? 'bg-training hover:bg-training/90' : 'border-training/40 text-training'}
           >
             Creativo
           </Button>
           <Button
             onClick={() => setFormat('modern')}
             variant={format === 'modern' ? 'default' : 'outline'}
-            className={format === 'modern' ? 'bg-purple' : ''}
+            className={format === 'modern' ? 'bg-training hover:bg-training/90' : 'border-training/40 text-training'}
           >
             Moderno
           </Button>
           <Button
             onClick={() => setFormat('linkedin')}
             variant={format === 'linkedin' ? 'default' : 'outline'}
-            className={format === 'linkedin' ? 'bg-purple' : ''}
+            className={format === 'linkedin' ? 'bg-training hover:bg-training/90' : 'border-training/40 text-training'}
           >
             LinkedIn
           </Button>
           <Button
             onClick={() => setFormat('executive')}
             variant={format === 'executive' ? 'default' : 'outline'}
-            className={format === 'executive' ? 'bg-purple' : ''}
+            className={format === 'executive' ? 'bg-training hover:bg-training/90' : 'border-training/40 text-training'}
           >
             Ejecutivo
           </Button>
@@ -554,7 +554,7 @@ export default function CVATSPage() {
 
         {/* Tabs */}
         <Tabs value={view} onValueChange={setView} className="w-full">
-          <TabsList>
+          <TabsList className="border-2 border-training/40">
             <TabsTrigger value="preview">
               <Eye className="w-4 h-4 mr-2" />
               Vista Previa
@@ -566,7 +566,7 @@ export default function CVATSPage() {
           </TabsList>
 
           <TabsContent value="preview" className="space-y-4">
-            <Card className="overflow-hidden">
+            <Card className="overflow-hidden border-2 border-training/40">
               <div className="bg-muted/10 dark:bg-card p-6 rounded-[28px]">
                 {format === 'ats' && renderATSFormat()}
                 {format === 'standard' && renderStandardFormat()}
