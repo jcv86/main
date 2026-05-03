@@ -907,11 +907,13 @@ export function ConversationalInterviewSimulator({
         <div className="space-y-6">
           {/* Sofia Farewell Video */}
           <Card className="border-training/40 overflow-hidden">
-            <div className="relative w-full max-w-md mx-auto">
-              <SofiaInterviewer 
-                state="thinking"
-                autoPlay={true}
-                loop={false}
+            <div className="relative aspect-[3/4] w-full max-w-md mx-auto bg-black">
+              <video
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-jqewmHgGSy0aNTnSXKpYDRGBDYj1rT.mov"
+                autoPlay
+                muted
+                playsInline
+                className="w-full h-full object-contain"
                 onEnded={() => setStage('complete')}
               />
             </div>
