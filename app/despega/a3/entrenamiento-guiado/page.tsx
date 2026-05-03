@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -11,6 +12,7 @@ import { InteractiveTrainingSession } from '@/components/interactive-training-se
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { ConversationalInterviewSimulator } from '@/components/conversational-interview-simulator'
 import { SofiaInterviewer } from '@/components/sofia-interviewer'
+import { SofiaWelcome } from '@/components/sofia-welcome'
 
 const TRAINING_MODULES = [
   {
@@ -81,7 +83,10 @@ const TRAINING_MODULES = [
 ]
 
 export default function GuidedTrainingPage() {
+  const router = useRouter()
   const [selectedModule, setSelectedModule] = useState<any>(null)
+  const [showWelcome, setShowWelcome] = useState(false)
+  const [welcomeModule, setWelcomeModule] = useState<any>(null)
   const [currentLesson, setCurrentLesson] = useState(0)
   const [showVideoSession, setShowVideoSession] = useState(false)
   const [aiTip, setAiTip] = useState<string | null>(null)
@@ -117,14 +122,9 @@ export default function GuidedTrainingPage() {
 
   const handleStartModule = (module: any) => {
     if (module.status !== 'locked') {
-      setSelectedModule(module)
-      setCurrentLesson(0)
-      setAiTip(null)
-      setTrainingStartTime(Date.now()) // Start the timer
-      setElapsedMinutes(0) // Reset elapsed time
-      setUserResponses({}) // Clear previous responses
-      setCompletedLessons([]) // Reset completed lessons
-      console.log('[v0] Started training module:', module.name)
+      setWelcomeModule(module)
+      setShowWelcome(true)
+      console.log('[v0] Showing welcome screen for module:', module.name)
     }
   }
 
@@ -157,7 +157,25 @@ export default function GuidedTrainingPage() {
     setCurrentLesson(currentLesson + 1)
   }
 
-  const handleLessonResponseChange = (text: string) => {
+  const handleContinueFromWelcome = () => {
+    if (welcomeModule) {
+      // Navigate to first lesson with Sofia
+      router.push(`/despega/a3/entrenamiento-guiado/${welcomeModule.id}/1`)
+      setShowWelcome(false)
+    }
+  }
+
+  // Show welcome screen
+  if (showWelcome && welcomeModule) {
+    return (
+      <SofiaWelcome 
+        moduleId={welcomeModule.id}
+        moduleName={welcomeModule.name}
+        moduleLessonCount={welcomeModule.lessons.length}
+        onContinue={handleContinueFromWelcome}
+      />
+    )
+  }
     setUserResponses(prev => ({
       ...prev,
       [currentLesson]: text
