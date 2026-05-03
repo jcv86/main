@@ -1,7 +1,7 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { Card, CardHeader, CardContent, CardTitle } from '@/components/ui/card'
+import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Zap, BarChart3, Target, Video, ArrowRight, Clock, Zap as ZapIcon, Flame } from 'lucide-react'
