@@ -141,7 +141,7 @@ export default function GuidedTrainingPage() {
           {/* Module Info */}
           <div className="space-y-2">
             <div className="flex items-center gap-3">
-              <Icon className="w-8 h-8 text-blue" />
+              <Icon className="w-8 h-8" style={{ color: 'rgba(170, 70, 170, 0.7)' }} />
               <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
                 {selectedModule.name}
               </h1>
@@ -166,7 +166,7 @@ export default function GuidedTrainingPage() {
               <div className="space-y-4 text-white/85">
                 <div className="flex items-center justify-between">
                   <p className="font-bold text-lg text-muted/90 dark:text-white flex items-center gap-2">
-                    <Lightbulb className="w-5 h-5 text-blue" />
+                    <Lightbulb className="w-5 h-5" style={{ color: 'rgba(170, 70, 170, 0.7)' }} />
                     Tu Coach IA explica:
                   </p>
                   <Button
@@ -183,7 +183,7 @@ export default function GuidedTrainingPage() {
                       </>
                     ) : (
                       <>
-                        <Lightbulb className="w-4 h-4" />
+                        <Lightbulb className="w-4 h-4" style={{ color: 'rgba(170, 70, 170, 0.7)' }} />
                         Consejo IA
                       </>
                     )}
@@ -191,7 +191,7 @@ export default function GuidedTrainingPage() {
                 </div>
 
                 {aiTip ? (
-                  <div className="bg-white dark:bg-background p-4 rounded-[28px] border-l-4 border-blue space-y-3">
+                  <div className="bg-white dark:bg-background p-4 border-l-4 space-y-3" style={{ borderColor: 'rgba(170, 70, 170, 0.7)', borderRadius: '0px' }}>
                     <p className="text-muted/90 dark:text-white">{aiTip}</p>
                   </div>
                 ) : (
@@ -216,7 +216,7 @@ export default function GuidedTrainingPage() {
                         <p>
                           La Situación y Tarea son el contexto que da credibilidad a tu historia.
                         </p>
-                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-blue">
+                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 space-y-3" style={{ borderColor: 'rgba(170, 70, 170, 0.7)' }}>
                           <p className="font-semibold mb-2">Ejemplo BUENO:</p>
                           <p className="text-sm">
                             "En mi anterior empresa, como Tech Lead de un equipo de 5 developers, nos asignaron migrar una base de datos legacy a PostgreSQL bajo presión..."
@@ -233,7 +233,7 @@ export default function GuidedTrainingPage() {
                         <p>
                           La Acción es donde demuestras TU impacto personal. No lo que el equipo hizo, sino específicamente qué HICISTE TÚ.
                         </p>
-                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-blue">
+                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 space-y-3" style={{ borderColor: 'rgba(170, 70, 170, 0.7)' }}>
                           <p className="font-semibold mb-2">Ejemplo BUENO:</p>
                           <p className="text-sm">
                             "YO rediseñé la arquitectura, implementé testing automático, y mentoricé a 3 developers junior"
@@ -256,7 +256,7 @@ export default function GuidedTrainingPage() {
                         <p>
                           El Resultado es el cierre que lo hace memorable. Cuantifica siempre que puedas.
                         </p>
-                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-blue">
+                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 space-y-3" style={{ borderColor: 'rgba(170, 70, 170, 0.7)' }}>
                           <p className="font-semibold mb-2">Ejemplo BUENO:</p>
                           <p className="text-sm">
                             "La migración se completó 2 semanas antes, con zero downtime. Redujimos queries en un 40% y el equipo ganó confianza en nuevas tecnologías."
@@ -294,7 +294,7 @@ export default function GuidedTrainingPage() {
                         <p>
                           Poder explicar conceptos técnicos complejos a personas no-técnicas es un superpoder.
                         </p>
-                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-blue">
+                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 space-y-3" style={{ borderColor: 'rgba(170, 70, 170, 0.7)' }}>
                           <p className="font-semibold mb-2">Ejemplo:</p>
                           <p className="text-sm">
                             En lugar de "Implementé microservicios con Docker y Kubernetes"...
@@ -315,7 +315,7 @@ export default function GuidedTrainingPage() {
 
             {/* Practice Section */}
             {!showVideoSession ? (
-              <div className="bg-yellow/5 dark:bg-amber-900/20 border border-yellow/30 dark:border-yellow rounded-[28px] p-6 space-y-4">
+              <div className="bg-yellow/5 dark:bg-amber-900/20 border p-6 space-y-4" style={{ borderColor: 'rgba(170, 70, 170, 0.4)', borderRadius: '0px' }}>
                 <p className="font-bold text-amber-900 dark:text-amber-200">
                   Practica conmigo:
                 </p>
@@ -326,7 +326,8 @@ export default function GuidedTrainingPage() {
                 
                 <Button
                   onClick={() => setShowVideoSession(true)}
-                  className="w-full bg-yellow hover:bg-amber-700 text-white"
+                  className="w-full text-white"
+                  style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '4px' }}
                 >
                   <Video className="w-4 h-4 mr-2" />
                   Practicar con Video
@@ -369,13 +370,14 @@ export default function GuidedTrainingPage() {
                 {currentLesson < selectedModule.lessons.length - 1 ? (
                   <Button
                     onClick={() => setCurrentLesson(currentLesson + 1)}
-                    className="bg-blue/80 hover:bg-blue/70"
+                    className="text-white"
+                    style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)' }}
                   >
                     Siguiente
                     <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
                   </Button>
                 ) : (
-                  <Button className="bg-green/80 hover:bg-green/70">
+                  <Button className="text-white" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}>
                     <CheckCircle2 className="w-4 h-4 mr-2" />
                     Completar Módulo
                   </Button>
@@ -417,25 +419,35 @@ export default function GuidedTrainingPage() {
             return (
               <Card
                 key={module.id}
-                className={`cursor-pointer transition-all hover:shadow-lg ${`}
-                  isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:border-blue'`}
-                }`}
+                className={`!rounded-none cursor-pointer transition-all hover:shadow-lg ${isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:border-purple'}`}
+                style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)', borderColor: 'rgba(170, 70, 170, 0.3)' }}
               >
                 <CardHeader>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <Icon className="w-8 h-8 text-blue" />
+                      <Icon className="w-8 h-8" style={{ color: 'rgba(170, 70, 170, 0.6)' }} />
                       <div>
                         <CardTitle className="text-xl">{module.name}</CardTitle>
                         <CardDescription>{module.description}</CardDescription>
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Badge variant="secondary">{module.difficulty}</Badge>
+                      <Badge 
+                        variant="secondary" 
+                        style={{ 
+                          backgroundColor: 'rgba(80, 160, 170, 0.4)', 
+                          color: 'rgba(80, 160, 170, 1)',
+                          border: 'none'
+                        }}
+                      >
+                        {module.difficulty}
+                      </Badge>
                       {module.status === 'in-progress' && (
-                        <Badge className="bg-blue">En Progreso</Badge>
+                        <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', border: 'none' }}>
+                          En Progreso
+                        </Badge>
                       )}
-                      {isLocked && <Lock className="w-5 h-5 text-yellow" />}
+                      {isLocked && <Lock className="w-5 h-5" style={{ color: 'rgba(170, 70, 170, 0.8)' }} />}
                     </div>
                   </div>
 
