@@ -207,13 +207,6 @@ export default function LessonPage() {
                     Lección anterior
                   </Button>
                   <Button
-                    onClick={handleReplay}
-                    className="flex-1 bg-training hover:bg-training/90 text-white"
-                  >
-                    <Volume2 className="w-4 h-4 mr-2" />
-                    Escuchar de nuevo
-                  </Button>
-                  <Button
                     disabled={lessonId === '4'}
                     onClick={() => router.push(`/despega/a3/entrenamiento-guiado/${moduleId}/${parseInt(lessonId) + 1}`)}
                     className="flex-1 bg-training hover:bg-training/90 text-white"
