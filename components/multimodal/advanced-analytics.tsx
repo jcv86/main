@@ -84,7 +84,7 @@ export function AdvancedAnalyticsReporting() {
 
       <Tabs defaultValue="progress" className="w-full">
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="progress">Progreso</TabsTrigger>
+          <TabsTrigger value="progress" className="text-opacity-75">Progreso</TabsTrigger>
           <TabsTrigger value="benchmarks">Benchmarks</TabsTrigger>
           <TabsTrigger value="components">Componentes</TabsTrigger>
           <TabsTrigger value="insights">Insights</TabsTrigger>
