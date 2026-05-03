@@ -208,7 +208,7 @@ export default function GuidedInterviewPage() {
                 <span>Revisa el feedback detallado de tu entrevista</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-blue font-bold">2.</span>
+                <span className="text-training font-bold">2.</span>
                 <span>Intenta la próxima dificultad (Entrevista Estructurada)</span>
               </li>
               <li className="flex gap-3">
@@ -222,7 +222,7 @@ export default function GuidedInterviewPage() {
             <Link href="/despega/a3/simulations" className="flex-1">
               <Button variant="outline" className="w-full">Volver a Entrenamientos</Button>
             </Link>
-            <Button onClick={() => handleNext()} className="flex-1 bg-blue/80 hover:bg-blue/70">
+            <Button onClick={() => handleNext()} className="flex-1 bg-training/80 hover:bg-training/70">
               Ver Análisis Detallado
             </Button>
           </div>
@@ -256,15 +256,15 @@ export default function GuidedInterviewPage() {
         </div>
 
         {/* Question Card */}
-        <Card className="p-8 border-2 border-blue/30 dark:border-blue/10">
+        <Card className="p-8 border-2 border-training/30 dark:border-training/10">
           <div className="space-y-6">
             {/* Question */}
             <div>
               <p className="text-2xl font-bold text-muted/90 dark:text-white mb-4">
                 {currentQuestion.question}
               </p>
-              <div className="bg-blue/5 dark:bg-blue/20 border border-blue/30 dark:border-blue/10 rounded-[28px] p-4">
-                <p className="text-sm text-blue dark:text-blue-300">
+              <div className="bg-training/5 dark:bg-training/20 border border-training/30 dark:border-training/10 rounded-[28px] p-4">
+                <p className="text-sm text-training dark:text-training-300">
                   <strong>Guidance del Coach:</strong> {currentQuestion.guidance}
                 </p>
               </div>
@@ -296,7 +296,7 @@ export default function GuidedInterviewPage() {
                     Palabras escritas: {(responses[currentQuestion.id] || '').split(/\s+/).filter(w => w).length}
                   </p>
                   {validatingIds.has(currentQuestion.id) && (
-                    <span className="text-xs text-blue dark:text-blue/40 animate-pulse">
+                    <span className="text-xs text-training dark:text-training/40 animate-pulse">
                       Coach revisando...
                     </span>
                   )}
@@ -362,7 +362,7 @@ export default function GuidedInterviewPage() {
                 </Button>
                 <Button
                   onClick={handleNext}
-                  className="bg-blue/80 hover:bg-blue/70"
+                  className="bg-training/80 hover:bg-training/70"
                 >
                   Siguiente
                   <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
