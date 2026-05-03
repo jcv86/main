@@ -69,7 +69,7 @@ export function MultimodalAnalyticsDashboard() {
         <Card>
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground mb-1">Mejora Detectada</p>
-            <p className={`text-3xl font-bold ${metrics.improvement_trend >= 0 ? 'text-green' : 'text-red'}`}>
+            <p className="text-3xl font-bold text-training">
               {metrics.improvement_trend >= 0 ? '+' : ''}{metrics.improvement_trend}%
             </p>
           </CardContent>
@@ -78,7 +78,7 @@ export function MultimodalAnalyticsDashboard() {
         <Card>
           <CardContent className="pt-6">
             <p className="text-sm text-muted-foreground mb-1">Coherencia Promedio</p>
-            <p className="text-3xl font-bold">{metrics.coherence_average}%</p>
+            <p className="text-3xl font-bold text-training">{metrics.coherence_average}%</p>
           </CardContent>
         </Card>
       </div>
@@ -116,7 +116,7 @@ export function MultimodalAnalyticsDashboard() {
             <CardTitle className="text-lg">Visual</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-purple">{metrics.visual_average}%</p>
+            <p className="text-3xl font-bold text-training">{metrics.visual_average}%</p>
             <p className="text-sm text-muted-foreground mt-2">Postura, gestos, contacto visual</p>
           </CardContent>
         </Card>
@@ -126,7 +126,7 @@ export function MultimodalAnalyticsDashboard() {
             <CardTitle className="text-lg">Audio</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-green">{metrics.audio_average}%</p>
+            <p className="text-3xl font-bold text-training">{metrics.audio_average}%</p>
             <p className="text-sm text-muted-foreground mt-2">Tono, claridad, confianza</p>
           </CardContent>
         </Card>
@@ -136,7 +136,7 @@ export function MultimodalAnalyticsDashboard() {
             <CardTitle className="text-lg">Coherencia</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-orange">{metrics.coherence_average}%</p>
+            <p className="text-3xl font-bold text-training">{metrics.coherence_average}%</p>
             <p className="text-sm text-muted-foreground mt-2">Visual + Audio alineados</p>
           </CardContent>
         </Card>
