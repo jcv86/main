@@ -147,23 +147,23 @@ export function InteractiveTrainingSession({
     <div className="space-y-6">
       {/* Paso 1: Intro */}
       {step === 'intro' && (
-        <Card className="border-cyan/50/30 bg-background">
+        <Card className="border-purple/50/30 bg-background">
           <CardHeader>
             <CardTitle className="text-xl flex items-center gap-2">
-              <Video className="w-5 h-5 text-cyan/40" />
+              <Video className="w-5 h-5" style={{ color: 'rgba(170, 70, 170, 0.4)' }} />
               Entrenamiento Interactivo con Video
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Pregunta */}
-            <div className="bg-slate-950/50 p-6 rounded-[28px] border border-muted/70">
+            <div className="bg-slate-950/50 p-6 !rounded-none border border-muted/70" style={{ borderRadius: '2px' }}>
               <h3 className="text-sm font-semibold text-muted-foreground mb-2">PREGUNTA:</h3>
               <p className="text-white text-lg leading-relaxed">{question}</p>
             </div>
 
             {/* Guía */}
-            <div className="bg-blue/30 p-6 rounded-[28px] border border-blue/50/20">
-              <h3 className="text-sm font-semibold text-blue/30 mb-3 flex items-center gap-2">
+            <div className="p-6 !rounded-none border border-purple/50/20" style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)', borderRadius: '2px' }}>
+              <h3 className="text-sm font-semibold mb-3 flex items-center gap-2" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>
                 <span> GUÍA PARA RESPONDER:</span>
               </h3>
               <div className="text-white/85 space-y-2 text-sm leading-relaxed">
@@ -176,15 +176,15 @@ export function InteractiveTrainingSession({
               <h4 className="font-semibold text-white">¿Qué va a pasar?</h4>
               <ul className="space-y-2 text-sm text-white/85">
                 <li className="flex gap-3">
-                  <span className="text-cyan/40 font-bold">1.</span>
+                  <span className="font-bold" style={{ color: 'rgba(170, 70, 170, 0.6)' }}>1.</span>
                   <span>Grabarás tu respuesta EN VIVO con cámara y micrófono</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-cyan/40 font-bold">2.</span>
+                  <span className="font-bold" style={{ color: 'rgba(170, 70, 170, 0.6)' }}>2.</span>
                   <span>La IA analizará tu postura, gestos, tono y contenido</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-cyan/40 font-bold">3.</span>
+                  <span className="font-bold" style={{ color: 'rgba(170, 70, 170, 0.6)' }}>3.</span>
                   <span>Recibirás feedback específico y sugerencias de mejora</span>
                 </li>
               </ul>
@@ -204,7 +204,8 @@ export function InteractiveTrainingSession({
 
             <Button
               onClick={handleStartRecording}
-              className="w-full bg-cyan hover:bg-cyan text-white h-12 text-lg"
+              className="w-full text-white h-12 text-lg"
+              style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '20px' }}
             >
               <Video className="w-5 h-5 mr-2" />
               Comenzar Grabación
@@ -215,14 +216,14 @@ export function InteractiveTrainingSession({
 
       {/* Paso 2: Grabación */}
       {step === 'recording' && (
-        <Card className="border-cyan/50/50 bg-background">
+        <Card className="border-purple/50/50 bg-background" style={{ borderColor: 'rgba(170, 70, 170, 0.3)' }}>
           <CardHeader>
             <CardTitle className="text-white flex items-center justify-between">
               <span className="flex items-center gap-2">
-                <span className="w-3 h-3 bg-red/50 rounded-full animate-pulse" />
+                <span className="w-3 h-3 rounded-full animate-pulse" style={{ backgroundColor: 'rgba(170, 70, 170, 0.8)' }} />
                 GRABANDO
               </span>
-              <Badge className="bg-red">EN VIVO</Badge>
+              <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.8)', color: '#ffffff' }}>EN VIVO</Badge>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -239,7 +240,7 @@ export function InteractiveTrainingSession({
             </div>
 
             {/* Pregunta visible mientras grabas */}
-            <div className="bg-slate-950/50 p-4 rounded border border-muted/70 max-h-24 overflow-y-auto">
+            <div className="bg-slate-950/50 p-4 !rounded-none border border-muted/70 max-h-24 overflow-y-auto" style={{ borderRadius: '2px' }}>
               <p className="text-white font-semibold">{question}</p>
             </div>
 
@@ -247,8 +248,9 @@ export function InteractiveTrainingSession({
             <div className="flex gap-4">
               <Button
                 onClick={handleStopRecording}
-                className="flex-1 bg-red/80 hover:bg-red/70 text-white h-12"
+                className="flex-1 text-white h-12"
                 disabled={!isRecording}
+                style={{ backgroundColor: 'rgba(170, 70, 170, 0.8)', borderRadius: '20px' }}
               >
                 <StopCircle className="w-5 h-5 mr-2" />
                 Detener Grabación
@@ -264,10 +266,10 @@ export function InteractiveTrainingSession({
 
       {/* Paso 3: Revisión */}
       {step === 'review' && recordedVideo && (
-        <Card className="border-green/30 bg-background">
+        <Card className="border-purple/30 bg-background" style={{ borderColor: 'rgba(170, 70, 170, 0.3)' }}>
           <CardHeader>
-            <CardTitle className="text-green/30 flex items-center gap-2">
-              <span></span>
+            <CardTitle className="flex items-center gap-2" style={{ color: 'rgba(170, 70, 170, 0.8)' }}>
+              <span>✓</span>
               Grabación Completada
             </CardTitle>
           </CardHeader>
@@ -305,7 +307,8 @@ export function InteractiveTrainingSession({
             {/* Upload */}
             <Button
               onClick={handleUploadVideo}
-              className="w-full bg-cyan hover:bg-cyan text-white h-12"
+              className="w-full text-white h-12"
+              style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '20px' }}
             >
               {sessionId ? (
                 <>
@@ -321,8 +324,8 @@ export function InteractiveTrainingSession({
             </Button>
 
             {sessionId && (
-              <Alert className="bg-green/20 border-green/30">
-                <AlertDescription className="text-green/30">
+              <Alert className="border-purple/30" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)' }}>
+                <AlertDescription style={{ color: 'rgba(170, 70, 170, 0.8)' }}>
                   Sesión guardada: {sessionId}
                 </AlertDescription>
               </Alert>
