@@ -444,7 +444,7 @@ export function ConversationalInterviewSimulator({
   const lastAttempt = currentAttempts[currentAttempts.length - 1]
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-3xl mx-auto px-4 py-6">
       {/* Setup Stage */}
       {stage === 'setup' && (
         <div className="space-y-6">
