@@ -181,7 +181,7 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
             placeholder="Ej: Ingeniero de Software, Product Manager, Data Analyst"
             value={role}
             onChange={(e) => handleRoleChange(e.target.value)}
-            className="bg-muted/20 text-white placeholder-white/40 border-2"
+            className="bg-muted/20 text-white placeholder-white/40 border-2 focus:ring-0 focus:border-[rgb(170,70,170)]"
             style={{
               borderColor: validationErrors.role ? 'rgba(239, 68, 68, 0.5)' : 'rgba(170, 70, 170, 0.4)'
             }}
@@ -201,7 +201,7 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
             placeholder="Ej: Google, Startup X, Mi propia empresa"
             value={company}
             onChange={(e) => handleCompanyChange(e.target.value)}
-            className="bg-muted/20 text-white placeholder-white/40 border-2"
+            className="bg-muted/20 text-white placeholder-white/40 border-2 focus:ring-0 focus:border-[rgb(170,70,170)]"
             style={{
               borderColor: validationErrors.company ? 'rgba(239, 68, 68, 0.5)' : 'rgba(170, 70, 170, 0.4)'
             }}
@@ -221,7 +221,7 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
             placeholder="Ej:&#10;- Lideré proyecto X que incrementó ventas 30%&#10;- Certificado en AWS&#10;- 5 años en industria tech"
             value={achievements}
             onChange={(e) => handleAchievementsChange(e.target.value)}
-            className="bg-muted/20 text-white placeholder-white/40 resize-none min-h-[120px] border-2"
+            className="bg-muted/20 text-white placeholder-white/40 resize-none min-h-[120px] border-2 focus:ring-0 focus:border-[rgb(170,70,170)]"
             style={{
               borderColor: validationErrors.achievements ? 'rgba(239, 68, 68, 0.5)' : 'rgba(170, 70, 170, 0.4)'
             }}
