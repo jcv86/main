@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
 import { ChallengeInvitation } from '@/components/a3-challenge-invitation'
+import { SofiaInterviewer } from '@/components/sofia-interviewer'
 
 const GUIDED_INTERVIEW_QUESTIONS = [
   {
@@ -80,6 +81,7 @@ export default function GuidedInterviewPage() {
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore] = useState<number | null>(null)
   const [validatingIds, setValidatingIds] = useState<Set<number>>(new Set())
+  const [started, setStarted] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
@@ -184,7 +186,87 @@ export default function GuidedInterviewPage() {
     }
   }
 
-  if (submitted && score !== null) {
+  if (!started) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="max-w-5xl mx-auto space-y-6 px-4 py-8">
+          <Link href="/despega/a3">
+            <Button variant="outline" className="mb-4">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Volver
+            </Button>
+          </Link>
+
+          {/* Welcome Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+            {/* Sofia Greeting */}
+            <div>
+              <SofiaInterviewer 
+                state="greeting" 
+                autoPlay={true}
+                loop={true}
+              />
+              <p className="text-center mt-4 text-white/70">Sofia, tu entrevistadora IA</p>
+            </div>
+
+            {/* Welcome Info */}
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-4xl font-bold text-training mb-2">Entrevista Desafiante</h1>
+                <p className="text-lg text-white/85">
+                  Práctica avanzada con preguntas provocadoras y desafiantes
+                </p>
+              </div>
+
+              <Card className="border-training/40">
+                <CardContent className="pt-6 space-y-4">
+                  <div className="space-y-3">
+                    <h3 className="font-bold text-white flex items-center gap-2">
+                      <Trophy className="w-5 h-5 text-training" />
+                      Lo que aprenderás
+                    </h3>
+                    <ul className="space-y-2 text-white/85">
+                      <li className="flex gap-2">
+                        <span className="text-training">•</span>
+                        <span>Responder preguntas provocadoras con confianza</span>
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="text-training">•</span>
+                        <span>Mantener la compostura bajo presión</span>
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="text-training">•</span>
+                        <span>Defender tu propuesta de valor efectivamente</span>
+                      </li>
+                      <li className="flex gap-2">
+                        <span className="text-training">•</span>
+                        <span>Demostrar experiencia real con ejemplos concretos</span>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div className="bg-training/10 dark:bg-training/20 rounded-[20px] p-4 border border-training/30">
+                    <p className="text-sm text-white/80">
+                      <strong className="text-training">Nota:</strong> Esta práctica es más exigente. Las preguntas están diseñadas para retar tus límites y ayudarte a crecer.
+                    </p>
+                  </div>
+
+                  <Button 
+                    onClick={() => setStarted(true)}
+                    className="w-full bg-training hover:bg-training/90 text-white h-12"
+                  >
+                    Comenzar Entrevista
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  
     return (
       <div className="min-h-screen bg-background">
         <div className="max-w-2xl mx-auto space-y-8">
@@ -244,7 +326,7 @@ export default function GuidedInterviewPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="max-w-5xl mx-auto space-y-6 px-4 py-8">
         {/* Header */}
         <Link href="/despega/a3/simulations">
           <Button variant="outline" className="mb-4">
@@ -263,6 +345,100 @@ export default function GuidedInterviewPage() {
               Pregunta {currentQuestionIndex + 1}/{GUIDED_INTERVIEW_QUESTIONS.length}
             </Badge>
           </div>
+          <Progress value={progress} className="h-2" />
+        </div>
+
+        {/* Two-Column Layout: Sofia + Question */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Sofia Interviewer */}
+          <div>
+            <SofiaInterviewer 
+              state={isRecording ? 'listening' : 'idle'} 
+              autoPlay={true}
+              loop={true}
+            />
+          </div>
+
+          {/* Question and Response Section */}
+          <div className="space-y-6">
+            {/* Question Card */}
+            <Card className="p-8 border-2 border-training/30 dark:border-training/10">
+              <div className="space-y-6">
+                {/* Question */}
+                <div>
+                  <p className="text-2xl font-bold text-muted/90 dark:text-white mb-4">
+                    {currentQuestion.question}
+                  </p>
+                  <div className="bg-training/5 dark:bg-training/20 border border-training/30 dark:border-training/10 rounded-[28px] p-4">
+                    <p className="text-sm text-training dark:text-training-300">
+                      <strong>Guidance del Coach:</strong> {currentQuestion.guidance}
+                    </p>
+                  </div>
+                </div>
+
+                {/* Timer */}
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold">Tiempo disponible:</span>
+                  <div className={`text-2xl font-bold ${timeLeft < 30 ? 'text-red' : 'text-muted-foreground dark:text-muted-foreground'}`}>
+                    {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
+                  </div>
+                </div>
+
+                {/* Response Input */}
+                <div className="space-y-3">
+                  <label className="text-sm font-semibold text-muted-foreground dark:text-white/85">
+                    Tu respuesta:
+                  </label>
+                  <div className="space-y-2">
+                    <Textarea
+                      value={responses[currentQuestion.id] || ''}
+                      onChange={(e) => handleResponseChange(e.target.value)}
+                      placeholder="Escribe tu respuesta aquí..."
+                      className="min-h-32 resize-none"
+                    />
+                    {responses[currentQuestion.id]?.length > 0 && (
+                      <p className="text-xs text-muted-foreground dark:text-muted-foreground">
+                        {responses[currentQuestion.id].length} caracteres
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Controls */}
+                <div className="flex gap-3">
+                  <Button
+                    onClick={handlePrevious}
+                    disabled={currentQuestionIndex === 0}
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    Anterior
+                  </Button>
+                  <Button
+                    onClick={handleNext}
+                    disabled={currentQuestionIndex === GUIDED_INTERVIEW_QUESTIONS.length - 1}
+                    variant="outline"
+                    className="flex-1"
+                  >
+                    Siguiente
+                  </Button>
+                  {currentQuestionIndex === GUIDED_INTERVIEW_QUESTIONS.length - 1 && (
+                    <Button
+                      onClick={handleSubmit}
+                      disabled={loading}
+                      className="flex-1 bg-training hover:bg-training/90"
+                    >
+                      {loading ? 'Enviando...' : 'Enviar Entrevista'}
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </Card>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
           <Progress value={progress} className="h-2" />
         </div>
 
