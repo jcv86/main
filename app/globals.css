@@ -24,7 +24,7 @@
     /* Pillar System (4 phases) - for UI navigation */
     --ritual: 264 85% 54%;           /* #A855F7 - El Ritual (A1) - Purple: Encourages Creativity */
     --exploration: 217 91% 60%;      /* #3B82F6 - Exploración (A2) - Blue: Increases Productivity */
-    --training: 17 96% 61%;          /* #F97316 - Entrenamiento (A3) - Orange: Stimulates Appetite */
+    --training: 300 41% 47%;         /* #AA46AA - Entrenamiento (A3) - Purple/Magenta */
     --reality: 0 100% 50%;           /* #FF0000 - La Realidad (A4) - Red: Encourages Action */
     
     /* Support Colors */
@@ -37,7 +37,7 @@
     /* Legacy compatibility (will be phased out) */
     --primary: 217 91% 60%;          /* Blue - Exploración (A2) */
     --primary-foreground: 40 11% 96%;
-    --secondary: 17 96% 61%;         /* Orange - Entrenamiento (A3) */
+    --secondary: 300 41% 47%;         /* Purple/Magenta - Entrenamiento (A3) */
     --secondary-foreground: 0 0% 0%;
     --accent: 0 84% 60%;             /* Red for errors */
     --accent-foreground: 40 11% 96%;
@@ -50,7 +50,7 @@
     /* Chart colors - brand-aligned */
     --chart-1: 264 85% 54%;          /* Purple - El Ritual */
     --chart-2: 217 91% 60%;          /* Blue - Exploración */
-    --chart-3: 17 96% 61%;           /* Orange - Entrenamiento */
+    --chart-3: 300 41% 47%;          /* Purple/Magenta - Entrenamiento (A3) */
     --chart-4: 186 100% 42%;         /* Cyan - La Realidad */
     --chart-5: 142 71% 45%;          /* Green - Success */
   }
