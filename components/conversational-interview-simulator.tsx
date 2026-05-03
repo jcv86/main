@@ -522,7 +522,8 @@ export function ConversationalInterviewSimulator({
             </p>
             <Button
               onClick={() => setStage('question')}
-              className="w-full bg-blue/80 hover:bg-blue/70 text-white h-12"
+              className="w-full text-white h-12"
+              style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '20px' }}
             >
               Continuar a Preguntas
             </Button>
@@ -573,11 +574,11 @@ export function ConversationalInterviewSimulator({
             <CardTitle>Graba tu respuesta</CardTitle>
             <CardDescription>Mira la pregunta, mantén contacto visual con la cámara y responde como en entrevista real</CardDescription>
           </CardHeader>
-          <CardContent>
-            {/* Layout: Video (60%) + Response Panel (40%) */}
-            <div className="grid grid-cols-[3fr_2fr] gap-4 items-start">
+          <CardContent className="space-y-6">
+            {/* Layout: Video on top, Response Panel below */}
+            <div className="space-y-6">
 
-              {/* LEFT: User video with Sofia PIP + question bar */}
+              {/* User video with Sofia PIP + question bar */}
               <div className="relative bg-black rounded-xl overflow-hidden aspect-video">
                 {/* User webcam */}
                 <video
@@ -622,8 +623,8 @@ export function ConversationalInterviewSimulator({
                 </div>
               </div>
 
-              {/* RIGHT: Response textarea + Tips */}
-              <div className="flex flex-col gap-4">
+              {/* Response Panel */}
+              <div className="space-y-4">
 
                 {/* Tu respuesta */}
                 <div className="bg-slate-900/80 border border-muted/30 rounded-xl p-5 space-y-3">
@@ -670,7 +671,8 @@ export function ConversationalInterviewSimulator({
                     <button
                       onClick={handleSubmitResponse}
                       disabled={isLoading}
-                      className="flex-1 bg-blue-600/80 hover:bg-blue-600 disabled:bg-blue-600/40 text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
+                      className="flex-1 text-white font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2"
+                      style={{ backgroundColor: isLoading ? 'rgba(170, 70, 170, 0.4)' : 'rgba(170, 70, 170, 0.6)', borderRadius: '20px' }}
                     >
                       {isLoading ? (
                         <>
@@ -687,7 +689,8 @@ export function ConversationalInterviewSimulator({
                   )}
                   <button
                     onClick={handleMoveNext}
-                    className="px-4 py-3 bg-emerald-700/70 hover:bg-emerald-700 text-white font-bold rounded-lg transition-all flex items-center gap-2"
+                    className="px-4 py-3 text-white font-bold rounded-lg transition-all flex items-center gap-2"
+                    style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '20px' }}
                   >
                     <ChevronRight className="w-4 h-4" />
                     Siguiente
@@ -696,7 +699,7 @@ export function ConversationalInterviewSimulator({
 
                 {/* Tip buttons */}
                 <div className="grid grid-cols-2 gap-3">
-                  <button className="bg-purple-600 hover:bg-purple-500 text-white text-sm font-semibold py-4 rounded-xl transition-all flex items-center justify-center gap-2">
+                  <button className="text-white text-sm font-semibold py-4 rounded-xl transition-all flex items-center justify-center gap-2" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '20px' }}>
                     <Zap className="w-4 h-4" />
                     Tip Gratis (1/3)
                   </button>
