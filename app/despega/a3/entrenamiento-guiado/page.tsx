@@ -240,8 +240,8 @@ export default function GuidedTrainingPage() {
                             "YO rediseñé la arquitectura, implementé testing automático, y mentoricé a 3 developers junior"
                           </p>
                         </div>
-                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-red">
-                          <p className="font-semibold mb-2 text-red">Ejemplo MALO:</p>
+                        <div className="bg-white dark:bg-background p-4 rounded border-l-4 border-red-500">
+                          <p className="font-semibold mb-2" style={{ color: '#ef4444' }}>Ejemplo MALO:</p>
                           <p className="text-sm">
                             "El equipo trabajó duro y mejoramos el sistema"
                           </p>
@@ -340,7 +340,7 @@ export default function GuidedTrainingPage() {
                   <Button
                     onClick={() => setShowVideoSession(false)}
                     variant="outline"
-                    className="text-cyan hover:text-cyan/80"
+                    style={{ color: 'rgba(80, 160, 170, 0.8)' }}
                   >
                     <ArrowLeft className="w-4 h-4 mr-2" />
                     Volver a la Lección
@@ -453,7 +453,7 @@ export default function GuidedTrainingPage() {
                     </div>
                   </div>
 
-                  <Progress value={module.progress} className="h-2 mb-2" />
+                  <Progress value={module.progress} className="h-2 mb-2" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }} />
                   <p className="text-xs text-muted-foreground">
                     {module.progress}% completo • {module.duration}
                   </p>
@@ -468,7 +468,7 @@ export default function GuidedTrainingPage() {
                         className="flex items-center gap-3 p-2 rounded hover:bg-transparent dark:hover:bg-muted/80/50"
                       >
                         {lesson.completed ? (
-                          <CheckCircle2 className="w-5 h-5 text-green flex-shrink-0" />
+                          <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: 'rgba(170, 70, 170, 0.8)' }} />
                         ) : (
                           <div className="w-5 h-5 border-2 border-muted/30 rounded-full flex-shrink-0" />
                         )}
@@ -486,11 +486,13 @@ export default function GuidedTrainingPage() {
                   <Button
                     onClick={() => handleStartModule(module)}
                     disabled={isLocked}
-                    className={`w-full ${`}
-                      isLocked
-                        ? 'bg-muted/30 dark:bg-muted/70 cursor-not-allowed'
-                        : 'bg-blue/80 hover:bg-blue/70'`}
-                    }`}
+                    className="w-full text-white"
+                    style={{
+                      backgroundColor: isLocked ? 'rgba(219, 217, 215, 0.7)' : 'rgba(170, 70, 170, 0.6)',
+                      borderRadius: '20px',
+                      cursor: isLocked ? 'not-allowed' : 'pointer',
+                      opacity: isLocked ? 0.5 : 1
+                    }}
                   >
                     {isLocked ? (
                       <>
