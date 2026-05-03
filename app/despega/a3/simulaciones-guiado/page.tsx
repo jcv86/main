@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
-import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -83,10 +83,14 @@ export default function GuidedInterviewPage() {
   const [validatingIds, setValidatingIds] = useState<Set<number>>(new Set())
   const [started, setStarted] = useState(false)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
 
-  const currentQuestion = GUIDED_INTERVIEW_QUESTIONS[currentQuestionIndex]
-  const progress = ((currentQuestionIndex + 1) / GUIDED_INTERVIEW_QUESTIONS.length) * 100
+  // Filter questions based on lesson type
+  const lesson = searchParams.get('lesson')
+  const QUESTIONS_TO_USE = lesson === 'star' 
+    ? GUIDED_INTERVIEW_QUESTIONS.filter(q => q.id === 3 || q.id === 4) // STAR focused questions
+    : GUIDED_INTERVIEW_QUESTIONS
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -137,7 +141,7 @@ export default function GuidedInterviewPage() {
   }
 
   const handleNext = () => {
-    if (currentQuestionIndex < GUIDED_INTERVIEW_QUESTIONS.length - 1) {
+    if (currentQuestionIndex < QUESTIONS_TO_USE.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
   }
@@ -162,9 +166,9 @@ export default function GuidedInterviewPage() {
         .from('user_a3_guided_interview')
         .insert({
           user_id: user.id,
-          simulation_type: 'guided',
+          simulation_type: lesson === 'star' ? 'guided_star' : 'guided',
           responses: responses,
-          total_questions: GUIDED_INTERVIEW_QUESTIONS.length,
+          total_questions: QUESTIONS_TO_USE.length,
           completed_at: new Date().toISOString()
         })
 
@@ -173,7 +177,7 @@ export default function GuidedInterviewPage() {
       // Calculate score (simple heuristic based on response length and completeness)
       const totalLength = Object.values(responses).reduce((acc, r) => acc + r.length, 0)
       const avgLength = totalLength / Object.keys(responses).length
-      const completeness = (Object.keys(responses).length / GUIDED_INTERVIEW_QUESTIONS.length) * 100
+      const completeness = (Object.keys(responses).length / QUESTIONS_TO_USE.length) * 100
       const calculatedScore = Math.round((avgLength / 200) * 50 + (completeness / 100) * 50)
 
       setScore(Math.min(calculatedScore, 100))
