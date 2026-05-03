@@ -266,7 +266,7 @@ export default function GuidedInterviewPage() {
     )
   }
 
-  
+  if (submitted) {
     return (
       <div className="min-h-screen bg-background">
         <div className="max-w-2xl mx-auto space-y-8">
@@ -313,7 +313,7 @@ export default function GuidedInterviewPage() {
       </div>
     )
   }
-  
-  // Default return - should not reach here
+
+  // Default return when no condition matches
   return null
 }
