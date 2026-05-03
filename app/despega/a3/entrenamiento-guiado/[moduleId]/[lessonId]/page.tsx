@@ -239,6 +239,15 @@ export default function LessonPage() {
                 </Button>
               </CardContent>
             </Card>
+
+            {/* Finish Button */}
+            <Button 
+              onClick={() => router.push(`/despega/a3`)}
+              variant="outline"
+              className="w-full h-12 text-base font-semibold text-white border-white/30 hover:bg-white/10"
+            >
+              Terminar Entrenamiento
+            </Button>
           </div>
         </div>
       </div>
