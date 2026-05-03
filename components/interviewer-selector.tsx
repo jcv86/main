@@ -75,7 +75,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
       {/* Main Layout: Selected Info (Left) + Grid Avatars (Right) */}
       <div className="flex gap-8">
         {/* Left Panel - Selected Coach Info */}
-        <div className="w-96 bg-muted/20 rounded-xl p-8 border border-muted/20 flex flex-col justify-between relative overflow-hidden h-80">
+        <div className="w-80 bg-muted/20 rounded-xl p-6 border border-muted/20 flex flex-col justify-between relative overflow-hidden h-72">
           {/* Background Image with Overlay */}
           <div className="absolute inset-0 opacity-30">
             <Image
@@ -91,17 +91,17 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
           <div className={`transition-opacity duration-300 ${isChanging ? 'opacity-50' : 'opacity-100'} relative z-10 flex flex-col justify-between h-full`}>
             {/* Top - Name */}
             <div>
-              <h2 className="text-4xl font-bold text-white">{selected.name}</h2>
+              <h2 className="text-3xl font-bold text-white">{selected.name}</h2>
             </div>
             
             {/* Middle - Role */}
             <div>
-              <p className="text-lg text-muted-foreground">{selected.role}</p>
+              <p className="text-sm text-muted-foreground">{selected.role}</p>
             </div>
             
             {/* Bottom - Level Badge */}
             <div>
-              <Badge className="text-sm bg-blue-500/40 text-blue-100 border-blue/50/60 border px-4 py-1">
+              <Badge className="text-xs bg-blue-500/40 text-blue-100 border-blue/50/60 border px-3 py-1">
                 Nivel: {selected.level}
               </Badge>
             </div>
@@ -110,15 +110,15 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
 
         {/* Right Panel - Grid of Circular Avatars */}
         <div className="flex-1">
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-4">
             {INTERVIEWERS.map(interviewer => (
               <button
                 key={interviewer.id}
                 onClick={() => handleSelect(interviewer.id)}
-                className="flex flex-col items-center gap-3 transition-all group"
+                className="flex flex-col items-center gap-2 transition-all group"
               >
                 {/* Circular Avatar with Gradient Background */}
-                <div className={`relative w-32 h-32 rounded-full overflow-hidden border-4 transition-all ${
+                <div className={`relative w-28 h-28 rounded-full overflow-hidden border-4 transition-all ${
                   value === interviewer.id
                     ? 'border-white shadow-lg shadow-white/50 scale-110'
                     : 'border-muted/30 group-hover:border-white/50 group-hover:scale-105'
@@ -132,15 +132,15 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
                       alt={interviewer.name}
                       fill
                       className="object-cover"
-                      sizes="128px"
+                      sizes="112px"
                     />
                   </div>
                 </div>
 
                 {/* Name and Level */}
                 <div className="text-center">
-                  <p className="font-semibold text-white text-sm">{interviewer.name}</p>
-                  <p className="text-xs text-muted-foreground">{interviewer.level}</p>
+                  <p className="font-semibold text-white text-xs">{interviewer.name}</p>
+                  <p className="text-xs text-muted-foreground leading-tight">{interviewer.level}</p>
                 </div>
               </button>
             ))}
