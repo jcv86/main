@@ -216,12 +216,12 @@ export default function Conozcamonos1Page() {
           <div 
             className="inline-flex items-center gap-2 px-4 py-3 mb-4"
             style={{ 
-              backgroundColor: 'rgb(80, 160, 170, 0.2)',
+              backgroundColor: 'rgba(170, 70, 170, 0.2)',
               borderRadius: '20px'
             }}
           >
-            <span style={{ color: 'rgb(80, 160, 170)' }}>●</span>
-            <p className="text-base" style={{ color: 'rgb(80, 160, 170)', fontWeight: 400 }}>El Ritual: Paso 1 - Conocámonos</p>
+            <span style={{ color: 'rgb(170, 70, 170)' }}>●</span>
+            <p className="text-base" style={{ color: 'rgb(170, 70, 170)', fontWeight: 400 }}>Entrenamiento: Preparación Básica</p>
           </div>
           <h1 
             className="text-5xl md:text-6xl text-white mb-4 leading-tight"
@@ -235,7 +235,7 @@ export default function Conozcamonos1Page() {
         <div 
           className="bg-white dark:bg-background p-8 mb-8 shadow-lg"
           style={{ 
-            border: '2px solid rgb(80, 160, 170, 0.4)',
+            border: '2px solid rgba(170, 70, 170, 0.4)',
             borderRadius: '2px'
           }}
         >
@@ -255,8 +255,8 @@ export default function Conozcamonos1Page() {
                       className="w-full text-left p-4 border-2 transition-all"
                       style={{
                         borderRadius: '28px',
-                        borderColor: isSelected ? 'rgb(80, 160, 170, 0.6)' : 'var(--border)',
-                        backgroundColor: isSelected ? 'rgb(80, 160, 170, 0.1)' : 'transparent'
+                        borderColor: isSelected ? 'rgba(170, 70, 170, 0.6)' : 'var(--border)',
+                        backgroundColor: isSelected ? 'rgba(170, 70, 170, 0.1)' : 'transparent'
                       }}
                     >
                       {option}
