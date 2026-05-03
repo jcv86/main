@@ -10,6 +10,7 @@ import { ArrowLeft, BookOpen, Play, Lock, CheckCircle2, Brain, Target, Video, Li
 import { InteractiveTrainingSession } from '@/components/interactive-training-session'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { ConversationalInterviewSimulator } from '@/components/conversational-interview-simulator'
+import { SofiaInterviewer } from '@/components/sofia-interviewer'
 
 const TRAINING_MODULES = [
   {
@@ -490,23 +491,54 @@ export default function GuidedTrainingPage() {
 
             {/* Practice Section */}
             {!showVideoSession ? (
-              <div className="bg-yellow/5 dark:bg-amber-900/20 border p-6 space-y-4" style={{ borderColor: 'rgba(170, 70, 170, 0.4)', borderRadius: '2px' }}>
-                <p className="font-bold text-amber-900 dark:text-amber-200" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
-                  Practica conmigo:
-                </p>
-                <p className="text-sm text-amber-800 dark:text-amber-300" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-                  {currentLesson === 0 && 'Piensa en un proyecto importante que lideraste. Déjame guiarte a través de STAR.'}
-                  {currentLesson === 2 && 'Ahora, construyamos la sección "Acción" de tu historia. ¿Qué fue lo específico que HICISTE tú?'}
-                </p>
-                
-                <Button
-                  onClick={() => setShowVideoSession(true)}
-                  className="w-full text-white"
-                  style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '20px' }}
-                >
-                  <Video className="w-4 h-4 mr-2" />
-                  Practicar con Video
-                </Button>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+                {/* Sofia Preview */}
+                <div>
+                  <div className="rounded-xl overflow-hidden border-2 border-training/40">
+                    <SofiaInterviewer 
+                      state="greeting" 
+                      autoPlay={true}
+                      loop={true}
+                    />
+                  </div>
+                  <p className="text-center mt-4 text-white/70 font-semibold">Sofia, tu coach de práctica IA</p>
+                </div>
+
+                {/* Call to Action */}
+                <Card className="border-training/40 bg-training/5 dark:bg-training/20">
+                  <CardContent className="pt-6 space-y-4">
+                    <h3 className="font-bold text-white text-lg">Practica conmigo</h3>
+                    <p className="text-white/85">
+                      {currentLesson === 0 && 'Piensa en un proyecto importante que lideraste. Déjame guiarte a través de STAR.'}
+                      {currentLesson === 2 && 'Ahora, construyamos la sección "Acción" de tu historia. ¿Qué fue lo específico que HICISTE tú?'}
+                    </p>
+                    
+                    <div className="space-y-3">
+                      <ul className="space-y-2 text-sm text-white/80">
+                        <li className="flex gap-2">
+                          <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5 text-training" />
+                          <span>Feedback inmediato en tu respuesta</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5 text-training" />
+                          <span>Follow-ups como en entrevista real</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <CheckCircle2 className="w-4 h-4 flex-shrink-0 mt-0.5 text-training" />
+                          <span>Recomendaciones de mejora al final</span>
+                        </li>
+                      </ul>
+                    </div>
+                    
+                    <Button
+                      onClick={() => setShowVideoSession(true)}
+                      className="w-full text-white bg-training hover:bg-training/90 h-12"
+                    >
+                      <Video className="w-4 h-4 mr-2" />
+                      Practicar con Sofia
+                    </Button>
+                  </CardContent>
+                </Card>
               </div>
             ) : (
               <div className="fixed inset-0 bg-black z-50 flex flex-col" style={{ top: '0', left: '0', right: '0', bottom: '0' }}>

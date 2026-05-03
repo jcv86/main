@@ -10,6 +10,7 @@ import { useAvatarPreferences } from '@/lib/hooks/use-avatar-preferences'
 import { useGamification } from '@/lib/hooks/use-gamification'
 import { InterviewerSelector } from '@/components/interviewer-selector'
 import { InterviewTips } from '@/components/interview-tips'
+import { SofiaInterviewer } from '@/components/sofia-interviewer'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -514,34 +515,50 @@ export function ConversationalInterviewSimulator({
 
       {/* Greeting Video Stage */}
       {stage === 'greeting_video' && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Bienvenida del Entrevistador</CardTitle>
-            <CardDescription>Mira el video de presentación antes de comenzar</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="bg-muted/20 rounded-lg overflow-hidden aspect-video flex items-center justify-center">
-              <video
-                src={`/videos/avatars/${selectedInterviewerId}/greeting.mp4`}
-                autoPlay
-                playsInline
-                controls
-                className="w-full h-full object-contain"
-                onEnded={() => setStage('question')}
-              />
-            </div>
-            <p className="text-sm text-white/80">
-              El entrevistador te está dando la bienvenida. Cuando termine el video, procederemos con las preguntas.
-            </p>
-            <Button
-              onClick={() => setStage('question')}
-              className="w-full text-white h-12"
-              style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '20px' }}
-            >
-              Continuar a Preguntas
-            </Button>
-          </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
+          {/* Sofia Video */}
+          <div>
+            <SofiaInterviewer 
+              state="greeting" 
+              autoPlay={true}
+              loop={false}
+            />
+            <p className="text-center mt-4 text-white/70">Sofia, tu entrevistadora IA</p>
+          </div>
+
+          {/* Welcome Info */}
+          <Card className="border-training/40">
+            <CardHeader>
+              <CardTitle>Bienvenida del Entrevistador</CardTitle>
+              <CardDescription>Sofia está lista para comenzar la práctica</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-white/85">
+                Sofia te guiará a través de esta práctica conversacional. Ella hará preguntas reales y responderá con follow-ups según tus respuestas, tal como lo haría un entrevistador profesional.
+              </p>
+              <ul className="space-y-2 text-sm text-white/80">
+                <li className="flex gap-2">
+                  <Check className="w-4 h-4 flex-shrink-0 mt-0.5 text-training" />
+                  <span>Sé natural y auténtico en tus respuestas</span>
+                </li>
+                <li className="flex gap-2">
+                  <Check className="w-4 h-4 flex-shrink-0 mt-0.5 text-training" />
+                  <span>Puedes intentar de nuevo después</span>
+                </li>
+                <li className="flex gap-2">
+                  <Check className="w-4 h-4 flex-shrink-0 mt-0.5 text-training" />
+                  <span>Recibirás feedback detallado al final</span>
+                </li>
+              </ul>
+              <Button
+                onClick={() => setStage('question')}
+                className="w-full text-white h-12 bg-training hover:bg-training/90"
+              >
+                Comenzar Práctica
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       )}
 
       {/* Question Display Stage */}
@@ -613,22 +630,11 @@ export function ConversationalInterviewSimulator({
 
                 {/* Sofia PIP - circular, bottom left */}
                 <div className="absolute bottom-14 left-3 w-32 h-32 rounded-full overflow-hidden border-2 border-white/60 shadow-xl z-20 bg-black">
-                  {selectedInterviewerId ? (
-                    <video
-                      key={`pip-${selectedInterviewerId}`}
-                      src={`/videos/avatars/${selectedInterviewerId}/listening.mp4`}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      onError={() => console.log('[v0] Avatar video load failed:', selectedInterviewerId)}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-muted/20 flex items-center justify-center">
-                      <span className="text-xs text-muted-foreground">No avatar</span>
-                    </div>
-                  )}
+                  <SofiaInterviewer 
+                    state="listening" 
+                    autoPlay={true}
+                    loop={true}
+                  />
                 </div>
 
                 {/* Question bar - bottom overlay */}
