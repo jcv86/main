@@ -285,7 +285,8 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
           <Button
             onClick={handleAnalyzePresence}
             disabled={cameraError || isAnalyzing}
-            className="w-full bg-blue hover:bg-cyan text-white h-12 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full text-white h-12 font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)' }}
           >
             {isAnalyzing ? (
               <>
