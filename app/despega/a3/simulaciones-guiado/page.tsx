@@ -414,7 +414,7 @@ export default function GuidedInterviewPage() {
           description="Avanza a una entrevista desafiante con preguntas más complejas"
           challengeHref="/despega/a3/simulaciones-desafiante"
           xpReward={300}
-          difficulty="challenging"
+          difficulty="advanced"
           unlocked={true}
         />
       </div>
