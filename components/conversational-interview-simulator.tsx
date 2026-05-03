@@ -459,24 +459,24 @@ export function ConversationalInterviewSimulator({
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="p-4 rounded-[28px] border space-y-3" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', borderColor: 'rgb(170, 70, 170)' }}>
-                <p className="font-bold" style={{ color: 'rgb(170, 70, 170)' }}>Aquí está el diferencial:</p>
+              <div className="p-4 border space-y-3" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.4)', borderRadius: '2px' }}>
+                <p className="font-bold" style={{ color: '#e0e0e0' }}>Aquí está el diferencial:</p>
                 <ul className="space-y-2 text-sm">
                   <li className="flex gap-2">
                     <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span style={{ color: 'rgb(170, 70, 170)' }}><strong>Respuestas vagas?</strong> Te pediré ejemplo. <strong>Demasiado largo?</strong> Te interrumpiré.</span>
+                    <span style={{ color: '#ffffff' }}><strong>Respuestas vagas?</strong> Te pediré ejemplo. <strong>Demasiado largo?</strong> Te interrumpiré.</span>
                   </li>
                   <li className="flex gap-2">
                     <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span style={{ color: 'rgb(170, 70, 170)' }}><strong>Segundo intento inmediato.</strong> Las mejores respuestas salen en el segundo round.</span>
+                    <span style={{ color: '#ffffff' }}><strong>Segundo intento inmediato.</strong> Las mejores respuestas salen en el segundo round.</span>
                   </li>
                   <li className="flex gap-2">
                     <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span style={{ color: 'rgb(170, 70, 170)' }}><strong>Debrief STAR detallado:</strong> Dónde ganaste puntos, dónde perdiste, y cómo sonarías mejor.</span>
+                    <span style={{ color: '#ffffff' }}><strong>Debrief STAR detallado:</strong> Dónde ganaste puntos, dónde perdiste, y cómo sonarías mejor.</span>
                   </li>
                   <li className="flex gap-2">
                     <Check className="w-4 h-4 flex-shrink-0 mt-0.5" />
-                    <span style={{ color: 'rgb(170, 70, 170)' }}><strong>Lenguaje para copiar-pegar.</strong> Frases exactas que sonarían mejor en esa situación.</span>
+                    <span style={{ color: '#ffffff' }}><strong>Lenguaje para copiar-pegar.</strong> Frases exactas que sonarían mejor en esa situación.</span>
                   </li>
                 </ul>
               </div>
@@ -492,7 +492,7 @@ export function ConversationalInterviewSimulator({
           <Button
             onClick={handleStartInterview}
             className="w-full text-white h-12 text-lg"
-            style={{ backgroundColor: 'rgb(170, 70, 170)' }}
+            style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '20px' }}
           >
             Comenzar Simulación
           </Button>
