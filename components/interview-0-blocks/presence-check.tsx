@@ -163,7 +163,7 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
           {isAnalyzing && (
             <div className="absolute inset-0 flex items-center justify-center bg-black/60">
               <div className="text-center space-y-2">
-                <Loader className="w-8 h-8 animate-spin text-cyan mx-auto" />
+                <Loader className="w-8 h-8 animate-spin" style={{ color: 'rgb(170, 70, 170)' }} />
                 <p className="text-white text-sm">Analizando tu presencia...</p>
               </div>
             </div>
@@ -201,17 +201,17 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
         {isRecording && (
           <div className={`rounded-lg p-4 text-center border ${
             score >= 80
-              ? 'bg-emerald-500/10 border-emerald-500/30'
+              ? 'bg-green/10 border-green/30'
               : score >= 60
-              ? 'bg-blue-500/10 border-blue/50/30'
+              ? 'bg-purple-500/10 border-purple-500/30'
               : 'bg-yellow/50/10 border-yellow-500/30'
           }`}>
             <p className="text-white/70 text-sm">Puntuación de Presencia</p>
             <p className={`text-4xl font-bold mt-1 ${
               score >= 80
-                ? 'text-emerald-400'
+                ? 'text-green-400'
                 : score >= 60
-                ? 'text-blue/40'
+                ? 'text-purple-400'
                 : 'text-yellow-400'
             }`}>
               {Math.round(score)}

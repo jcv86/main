@@ -281,7 +281,7 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
 
         {/* Coach IA Tip */}
         {coachTip && (
-          <div className="flex gap-2 items-start bg-blue/10 p-3 rounded border" style={{ borderColor: 'rgba(170, 70, 170, 0.4)' }}>
+          <div className="flex gap-2 items-start p-3 rounded border" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.4)' }}>
             <Lightbulb className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'rgba(170, 70, 170, 0.6)' }} />
             <p className="text-xs" style={{ color: 'rgba(170, 70, 170)' }}>{coachTip}</p>
           </div>
@@ -291,17 +291,17 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
         {audioValidationResult && (
           <div className={`rounded-lg p-4 border ${
             audioValidationResult.isValid
-              ? 'bg-emerald-500/10 border-emerald-500/30'
+              ? 'bg-green/10 border-green/30'
               : 'bg-red-500/10 border-red-500/30'
           }`}>
             <div className="flex items-start gap-3">
               {audioValidationResult.isValid ? (
-                <Check className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
+                <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
               ) : (
                 <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
               )}
               <div className="flex-1">
-                <p className={`font-semibold ${audioValidationResult.isValid ? 'text-emerald-400' : 'text-red-400'}`}>
+                <p className={`font-semibold ${audioValidationResult.isValid ? 'text-green-400' : 'text-red-400'}`}>
                   {audioValidationResult.isValid ? 'Audio Aceptable' : 'Audio Rechazado'}
                 </p>
                 {audioValidationResult.issues.length > 0 && (

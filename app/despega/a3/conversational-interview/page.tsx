@@ -24,7 +24,7 @@ export default function ConversationalInterviewPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400"></div>
       </div>
     )
   }
@@ -38,7 +38,7 @@ export default function ConversationalInterviewPage() {
         <div className="flex flex-col h-screen">
           <div className="flex-shrink-0 border-b border-muted/80 bg-background">
             <Link href="/despega/a3">
-              <Button variant="ghost" className="text-cyan/40 hover:text-cyan/30">
+              <Button variant="ghost" className="text-purple-400 hover:text-purple-400/80">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Volver al Dashboard
               </Button>
