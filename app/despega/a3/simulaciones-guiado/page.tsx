@@ -8,10 +8,11 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
-import { ArrowLeft, Mic, Volume2, SkipForward, Check, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Mic, Volume2, SkipForward, Check, AlertCircle, Trophy, Zap } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
+import { ChallengeInvitation } from '@/components/a3-challenge-invitation'
 
 const GUIDED_INTERVIEW_QUESTIONS = [
   {
@@ -406,6 +407,16 @@ export default function GuidedInterviewPage() {
             </ul>
           </CardContent>
         </Card>
+
+        {/* Challenge Invitation */}
+        <ChallengeInvitation
+          title="Próximo Nivel Desbloqueado"
+          description="Avanza a una entrevista desafiante con preguntas más complejas"
+          challengeHref="/despega/a3/simulaciones-desafiante"
+          xpReward={300}
+          difficulty="challenging"
+          unlocked={true}
+        />
       </div>
     </div>
   )
