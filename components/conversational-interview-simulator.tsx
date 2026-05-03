@@ -547,7 +547,7 @@ export function ConversationalInterviewSimulator({
             <Progress value={((currentQuestionIdx + 1) / questions.length) * 100} className="h-2" />
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="bg-blue/5 dark:bg-blue/20 p-6 rounded-[28px] border border-blue/20 dark:border-blue">
+            <div className="p-6 !rounded-none border border-purple/30" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', borderRadius: '2px' }}>
               <p className="text-lg font-semibold text-muted/90 dark:text-white mb-3">
                 {currentQuestion.text}
               </p>
@@ -558,7 +558,8 @@ export function ConversationalInterviewSimulator({
 
             <Button
               onClick={() => setStage('response')}
-              className="w-full bg-blue/80 hover:bg-blue/70 text-white h-12"
+              className="w-full text-white h-12"
+              style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '20px' }}
             >
               <Video className="w-4 h-4 mr-2" />
               Grabar Respuesta
@@ -569,12 +570,12 @@ export function ConversationalInterviewSimulator({
 
       {/* Response Recording Stage */}
       {stage === 'response' && (
-        <Card className="w-full">
+        <Card className="w-full overflow-visible">
           <CardHeader>
             <CardTitle>Graba tu respuesta</CardTitle>
             <CardDescription>Mira la pregunta, mantén contacto visual con la cámara y responde como en entrevista real</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-6 overflow-visible">
             {/* Layout: Video on top, Response Panel below */}
             <div className="space-y-6">
 
@@ -607,10 +608,13 @@ export function ConversationalInterviewSimulator({
                       loop
                       muted
                       playsInline
+                      onError={() => console.log('[v0] Avatar video load failed:', selectedInterviewerId)}
                       className="w-full h-full object-cover"
                     />
                   ) : (
-                    <div className="w-full h-full bg-muted/20" />
+                    <div className="w-full h-full bg-muted/20 flex items-center justify-center">
+                      <span className="text-xs text-muted-foreground">No avatar</span>
+                    </div>
                   )}
                 </div>
 
@@ -847,7 +851,8 @@ export function ConversationalInterviewSimulator({
               {currentAttempts.length < 2 && (
                 <Button
                   onClick={handleRetryQuestion}
-                  className="flex-1 bg-blue/80 hover:bg-blue/70 text-white"
+                  className="flex-1 text-white"
+                  style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', borderRadius: '20px' }}
                 >
                   <RotateCcw className="w-4 h-4 mr-2" />
                   Reintentar esta pregunta
@@ -855,7 +860,8 @@ export function ConversationalInterviewSimulator({
               )}
               <Button
                 onClick={handleMoveNext}
-                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white"
+                className="flex-1 text-white"
+                style={{ backgroundColor: 'rgba(16, 185, 129, 0.6)', borderRadius: '20px' }}
               >
                 {currentQuestionIdx < questions.length - 1 ? 'Siguiente pregunta' : 'Completar simulación'}
               </Button>
@@ -887,11 +893,11 @@ export function ConversationalInterviewSimulator({
               />
 
               {/* Results Calculating Message */}
-              <div className="bg-gradient-to-r from-blue/10 to-purple/10 border border-blue/30 rounded-xl p-6 text-center space-y-3">
+              <div className="border rounded-xl p-6 text-center space-y-3" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.3)', borderRadius: '2px' }}>
                 <div className="flex justify-center gap-1">
-                  <div className="w-2 h-2 rounded-full bg-blue animate-bounce" style={{ animationDelay: '0s' }} />
-                  <div className="w-2 h-2 rounded-full bg-blue animate-bounce" style={{ animationDelay: '0.2s' }} />
-                  <div className="w-2 h-2 rounded-full bg-blue animate-bounce" style={{ animationDelay: '0.4s' }} />
+                  <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: 'rgba(170, 70, 170, 0.8)', animationDelay: '0s' }} />
+                  <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: 'rgba(170, 70, 170, 0.8)', animationDelay: '0.2s' }} />
+                  <div className="w-2 h-2 rounded-full animate-bounce" style={{ backgroundColor: 'rgba(170, 70, 170, 0.8)', animationDelay: '0.4s' }} />
                 </div>
                 <div>
                   <p className="text-lg font-semibold text-white mb-1">Calculando tus resultados...</p>
@@ -909,10 +915,10 @@ export function ConversationalInterviewSimulator({
 
               {/* XP Rewards */}
               {gamification && (
-                <div className="bg-blue/5 dark:bg-blue/20 p-4 rounded-[28px] space-y-2">
+                <div className="p-4 !rounded-none space-y-2" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', borderRadius: '2px' }}>
                   <div className="flex items-center justify-center gap-2">
-                    <Zap className="w-5 h-5 text-blue" />
-                    <span className="font-bold text-blue">+150 XP Ganados</span>
+                    <Zap className="w-5 h-5" style={{ color: 'rgba(170, 70, 170, 0.8)' }} />
+                    <span className="font-bold" style={{ color: 'rgba(170, 70, 170, 0.8)' }}>+150 XP Ganados</span>
                   </div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     Nivel: {gamification.current_level} • Racha: {gamification.current_streak} días
@@ -927,7 +933,8 @@ export function ConversationalInterviewSimulator({
 
             <div className="flex gap-3">
               <Button 
-                className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white h-12"
+                className="flex-1 text-white h-12"
+                style={{ backgroundColor: 'rgba(16, 185, 129, 0.6)', borderRadius: '20px' }}
                 onClick={() => {
                   // Award XP for completing interview
                   awardXP(150, 'conversational-interview-simulator')
