@@ -78,7 +78,7 @@ export default function LessonPage() {
         <div className="space-y-2">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold text-white">{lessonData.title}</h1>
-            <Badge variant="secondary">Lección {lessonId} de 4</Badge>
+            <Badge className="text-lg px-4 py-2 bg-training/80 text-white hover:bg-training/70">Lección {lessonId} de 4</Badge>
           </div>
           <Progress value={(parseInt(lessonId) / 4) * 100} className="h-2" />
         </div>
@@ -229,7 +229,10 @@ export default function LessonPage() {
                   {lessonId === '3' && 'Ahora, construyamos la sección "Acción" de tu historia. ¿Qué fue lo específico que HICISTE tú?'}
                   {lessonId === '4' && 'Ahora practicaremos todo junto. Cuéntame tu mejor historia STAR.'}
                 </p>
-                <Button className="w-full bg-training hover:bg-training/90 text-white h-12">
+                <Button 
+                  onClick={() => router.push(`/despega/a3/simulaciones-guiado`)}
+                  className="w-full bg-training hover:bg-training/90 text-white h-12 text-base font-semibold"
+                >
                   Practicar con Sofia
                 </Button>
               </CardContent>
