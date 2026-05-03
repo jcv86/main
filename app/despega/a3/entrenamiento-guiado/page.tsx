@@ -89,12 +89,36 @@ export default function GuidedTrainingPage() {
   const [userResponses, setUserResponses] = useState<{ [lessonIndex: number]: string }>({})
   const [userXP, setUserXP] = useState(0)
   const [completedLessons, setCompletedLessons] = useState<number[]>([])
+  const [trainingStartTime, setTrainingStartTime] = useState<number | null>(null)
+  const [elapsedMinutes, setElapsedMinutes] = useState(0)
+
+  // Timer effect to track training duration
+  useEffect(() => {
+    let interval: NodeJS.Timeout | null = null
+
+    if (selectedModule && trainingStartTime) {
+      interval = setInterval(() => {
+        const now = Date.now()
+        const minutes = Math.floor((now - trainingStartTime) / 60000)
+        setElapsedMinutes(minutes)
+      }, 1000) // Update every second to show live progress
+    }
+
+    return () => {
+      if (interval) clearInterval(interval)
+    }
+  }, [selectedModule, trainingStartTime])
 
   const handleStartModule = (module: any) => {
     if (module.status !== 'locked') {
       setSelectedModule(module)
       setCurrentLesson(0)
-      setAiTip(null) // Reset tips when changing modules
+      setAiTip(null)
+      setTrainingStartTime(Date.now()) // Start the timer
+      setElapsedMinutes(0) // Reset elapsed time
+      setUserResponses({}) // Clear previous responses
+      setCompletedLessons([]) // Reset completed lessons
+      console.log('[v0] Started training module:', module.name)
     }
   }
 
@@ -160,7 +184,7 @@ export default function GuidedTrainingPage() {
       const bonusXP = 250
       setUserXP(prev => prev + bonusXP)
       
-      // Save training completion to database
+      // Save training completion to database with actual elapsed time
       const trainingSaveResponse = await fetch('/api/a3/training-completion', {
         method: 'POST',
         headers: {
@@ -169,7 +193,7 @@ export default function GuidedTrainingPage() {
         body: JSON.stringify({
           training_id: selectedModule.id,
           module_name: selectedModule.name,
-          tiempo_dedicado_minutos: 45, // Default estimate for module
+          tiempo_dedicado_minutos: Math.max(elapsedMinutes, 1), // Use actual elapsed time, minimum 1 minute
           competencias_desarrolladas: [selectedModule.name],
         }),
       })
@@ -177,7 +201,7 @@ export default function GuidedTrainingPage() {
       if (!trainingSaveResponse.ok) {
         console.error('[v0] Error saving training to database:', trainingSaveResponse.statusText)
       } else {
-        console.log('[v0] Training completion saved to database for module:', selectedModule.name)
+        console.log('[v0] Training completion saved to database for module:', selectedModule.name, 'Duration:', elapsedMinutes, 'minutes')
       }
       
       await new Promise(resolve => setTimeout(resolve, 800))
@@ -509,6 +533,13 @@ export default function GuidedTrainingPage() {
               </Button>
 
               <div className="flex gap-2 items-center">
+                {/* Time Spent Display */}
+                <div className="px-4 py-2 rounded-full bg-slate-900/60 border border-teal/30">
+                  <p className="text-sm font-bold text-white">
+                    <span style={{ color: 'rgba(80, 160, 170, 0.8)' }}>⏱ {elapsedMinutes}</span> min
+                  </p>
+                </div>
+
                 {/* XP Display */}
                 <div className="px-4 py-2 rounded-full bg-slate-900/60 border border-purple/30">
                   <p className="text-sm font-bold text-white">
