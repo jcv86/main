@@ -61,7 +61,7 @@ export default function EntrenamientoIntensivePage() {
                 className="w-3/4 h-auto object-contain max-h-96"
                 style={{ borderRadius: '1px', borderColor: '#000000' }}
               >
-                <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/video5456517059192072708-4x4BoFPTrPyPGPszqW0UjXCtGBOzqg.mp4" type="video/mp4" />
+                <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/dtcroket-LnbDcsYKMB3l7CjXgdufaz9Nm61op9.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>
