@@ -62,14 +62,14 @@ export function SofiaInterviewer({ state = 'idle', loop = false, autoPlay = true
 
   return (
     <Card className="bg-black border-training/40 overflow-hidden">
-      <div className="relative aspect-video w-full bg-black">
+      <div className="relative aspect-[3/4] w-full bg-black">
         <video
           src={videoSource}
           autoPlay={isPlaying}
           loop={shouldLoop}
           muted={state !== 'greeting'}
           playsInline
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain"
           onPlay={() => setIsPlaying(true)}
           onPause={() => setIsPlaying(false)}
           onEnded={onEnded}
