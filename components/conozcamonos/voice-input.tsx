@@ -13,22 +13,29 @@ export function VoiceInput({ onTranscript, isDisabled = false, pillarColor = 'rg
   const { isListening, isSupported, transcript, isFinal, startListening, stopListening, resetTranscript } = useSpeechRecognition({
     language: 'es-ES',
     continuous: false,
-    interimResults: false,
+    interimResults: true,
     silenceTimeout: 2000
   })
 
   const lastTranscriptRef = useRef<string>('')
 
   useEffect(() => {
-    // Only trigger callback when we have a FINAL result (not intermediate)
-    if (transcript && isFinal && transcript !== lastTranscriptRef.current) {
+    // Fire callback immediately when we have any transcript (interim or final)
+    if (transcript && transcript.trim() && transcript !== lastTranscriptRef.current) {
+      console.log('[v0] Voice input detected:', { transcript, isFinal })
       lastTranscriptRef.current = transcript
       onTranscript(transcript)
-      // Reset for next recording
-      resetTranscript()
-      lastTranscriptRef.current = ''
+      
+      // If final result, stop listening after short delay
+      if (isFinal) {
+        setTimeout(() => {
+          stopListening()
+          resetTranscript()
+          lastTranscriptRef.current = ''
+        }, 500)
+      }
     }
-  }, [transcript, isFinal, onTranscript, resetTranscript])
+  }, [transcript, isFinal, onTranscript, stopListening, resetTranscript])
 
   if (!isSupported) {
     return (
