@@ -638,8 +638,7 @@ export function ConversationalInterviewSimulator({
                 <div className="absolute bottom-14 left-3 w-32 h-32 rounded-full overflow-hidden border-2 border-white/60 shadow-xl z-20 bg-black">
                   <SofiaInterviewer 
                     state="listening" 
-                    autoPlay={true}
-                    loop={true}
+                    variant="pip"
                   />
                 </div>
 

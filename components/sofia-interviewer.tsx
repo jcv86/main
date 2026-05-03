@@ -8,17 +8,18 @@ interface SofiaInterviewerProps {
   loop?: boolean
   autoPlay?: boolean
   onEnded?: () => void
+  variant?: 'default' | 'pip'
 }
 
-export function SofiaInterviewer({ state = 'idle', loop = false, autoPlay = true, onEnded }: SofiaInterviewerProps) {
+export function SofiaInterviewer({ state = 'idle', loop = false, autoPlay = true, onEnded, variant = 'default' }: SofiaInterviewerProps) {
   const [isPlaying, setIsPlaying] = useState(autoPlay)
 
   useEffect(() => {
     setIsPlaying(autoPlay)
   }, [autoPlay])
 
-  // For greeting, don't loop. For listening/thinking, loop by default
-  const shouldLoop = state === 'greeting' ? false : loop
+  // For greeting, don't loop. For listening/thinking, always loop
+  const shouldLoop = state === 'greeting' ? false : true
 
   const getVideoSource = () => {
     switch (state) {
@@ -60,6 +61,21 @@ export function SofiaInterviewer({ state = 'idle', loop = false, autoPlay = true
     )
   }
 
+  // PIP variant - minimal, no card wrapper, optimized for circular container
+  if (variant === 'pip') {
+    return (
+      <video
+        src={videoSource}
+        autoPlay={true}
+        loop={true}
+        muted
+        playsInline
+        className="w-full h-full object-cover"
+      />
+    )
+  }
+
+  // Default variant - full card with label
   return (
     <Card className="bg-black border-training/40 overflow-hidden">
       <div className="relative aspect-[3/4] w-full bg-black">
