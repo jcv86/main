@@ -16,7 +16,6 @@ export default function BienvenidaPage() {
   const [userName, setUserName] = useState('')
   const [loading, setLoading] = useState(true)
   const [expandedPilares, setExpandedPilares] = useState(false)
-  const [expandedTransformacion, setExpandedTransformacion] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
@@ -238,86 +237,78 @@ export default function BienvenidaPage() {
           </Card>
         </div>
 
-        {/* Tu Viaje en 4 Pilares - Collapsible */}
+        {/* Tu Viaje en 4 Pilares + Tu Viaje de Transformación - Combined Expandable */}
         <div className="rounded-[2px] shadow-sm p-8 mb-8 border-0" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
-          <button
-            onClick={() => setExpandedPilares(!expandedPilares)}
-            className="w-full flex items-center justify-between hover:opacity-80 transition"
-          >
+          {/* Header - Always visible */}
+          <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold" style={{ color: 'rgb(80, 160, 170)' }}>Tu Viaje en 4 Pilares</h2>
-            <ChevronDown 
-              className="w-5 h-5 transition-transform" 
-              style={{ 
-                color: 'rgb(80, 160, 170)',
-                transform: expandedPilares ? 'rotate(180deg)' : 'rotate(0deg)'
-              }} 
-            />
-          </button>
-          
-          {expandedPilares && (
-            <div className="grid sm:grid-cols-2 gap-6 mt-6">
-              <div className="flex items-start gap-4">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/20 flex-shrink-0" style={{ backgroundColor: 'rgb(80, 160, 170, 0.4)' }}>
-                  <span className="text-lg font-bold text-purple" style={{ color: 'rgb(80, 160, 170)' }}>1</span>
-                </div>
-                <div>
-                  <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(80, 160, 170)' }}>Diagnóstico Personal</p>
-                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Comprende tu perfil único y punto de partida profesional</p>
-                </div>
+          </div>
+
+          {/* 4 Pilares Grid - Always visible */}
+          <div className="grid sm:grid-cols-2 gap-6 mb-6">
+            <div className="flex items-start gap-4">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/20 flex-shrink-0" style={{ backgroundColor: 'rgb(80, 160, 170, 0.4)' }}>
+                <span className="text-lg font-bold text-purple" style={{ color: 'rgb(80, 160, 170)' }}>1</span>
               </div>
-              <div className="flex items-start gap-4">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/20 flex-shrink-0" style={{ backgroundColor: 'rgb(90, 90, 150, 0.4)' }}>
-                  <span className="text-lg font-bold text-purple" style={{ color: 'rgb(90, 90, 150)' }}>2</span>
-                </div>
-                <div>
-                  <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(90, 90, 150)' }}>Plan Estratégico</p>
-                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Ruta de 90 días personalizada en 3 fases estructuradas</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-training/20 flex-shrink-0" style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)' }}>
-                  <span className="text-lg font-bold text-training" style={{ color: 'rgb(170, 70, 170)' }}>3</span>
-                </div>
-                <div>
-                  <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(170, 70, 170)' }}>Entrenamiento Intensivo</p>
-                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">4 módulos × 4 niveles con feedback multimodal IA</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-4">
-                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green/20 flex-shrink-0" style={{ backgroundColor: 'rgb(225, 120, 130, 0.4)' }}>
-                  <span className="text-lg font-bold text-green" style={{ color: 'rgb(225, 120, 130)' }}>4</span>
-                </div>
-                <div>
-                  <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(225, 120, 130)' }}>Ejecución Real</p>
-                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Del mercado laboral a tu colocación con soporte continuo</p>
-                </div>
+              <div>
+                <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(80, 160, 170)' }}>Diagnóstico Personal</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Comprende tu perfil único y punto de partida profesional</p>
               </div>
             </div>
-          )}
-        </div>
+            <div className="flex items-start gap-4">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/20 flex-shrink-0" style={{ backgroundColor: 'rgb(90, 90, 150, 0.4)' }}>
+                <span className="text-lg font-bold text-purple" style={{ color: 'rgb(90, 90, 150)' }}>2</span>
+              </div>
+              <div>
+                <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(90, 90, 150)' }}>Plan Estratégico</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Ruta de 90 días personalizada en 3 fases estructuradas</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-training/20 flex-shrink-0" style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)' }}>
+                <span className="text-lg font-bold text-training" style={{ color: 'rgb(170, 70, 170)' }}>3</span>
+              </div>
+              <div>
+                <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(170, 70, 170)' }}>Entrenamiento Intensivo</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">4 módulos × 4 niveles con feedback multimodal IA</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-4">
+              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-green/20 flex-shrink-0" style={{ backgroundColor: 'rgb(225, 120, 130, 0.4)' }}>
+                <span className="text-lg font-bold text-green" style={{ color: 'rgb(225, 120, 130)' }}>4</span>
+              </div>
+              <div>
+                <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(225, 120, 130)' }}>Ejecución Real</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Del mercado laboral a tu colocación con soporte continuo</p>
+              </div>
+            </div>
+          </div>
 
-        {/* Timeline - Tu Viaje de Transformación - Collapsible */}
-        <div className="rounded-[28px] p-6 border-0 mb-8" style={{ backgroundColor: 'rgba(0, 0, 0, 0)' }}>
-          <button
-            onClick={() => setExpandedTransformacion(!expandedTransformacion)}
-            className="flex items-center justify-between hover:opacity-80 transition w-full"
-          >
-            <h3 className="font-semibold flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)' }}>
-              <Target className="w-5 h-5" style={{ color: 'rgb(80, 160, 170, 0.6)' }} />
-              Tu Viaje de Transformación
-            </h3>
-            <ChevronDown 
-              className="w-5 h-5 transition-transform" 
-              style={{ 
-                color: 'rgb(80, 160, 170)',
-                transform: expandedTransformacion ? 'rotate(180deg)' : 'rotate(0deg)'
-              }} 
-            />
-          </button>
-          
-          {expandedTransformacion && (
-            <>
-              <p className="text-sm text-muted-foreground dark:text-white/85 mb-4 mt-4">Cronología personalizada según tu ritmo:</p>
+          {/* Leer más button - Bottom right */}
+          <div className="flex justify-end">
+            <button
+              onClick={() => setExpandedPilares(!expandedPilares)}
+              className="text-sm font-medium hover:opacity-80 transition flex items-center gap-1"
+              style={{ color: 'rgb(80, 160, 170)' }}
+            >
+              {expandedPilares ? 'Leer menos' : '+ Leer más'}
+              <ChevronDown 
+                className="w-4 h-4 transition-transform" 
+                style={{ 
+                  transform: expandedPilares ? 'rotate(180deg)' : 'rotate(0deg)'
+                }} 
+              />
+            </button>
+          </div>
+
+          {/* Tu Viaje de Transformación - Expanded content */}
+          {expandedPilares && (
+            <div className="border-t border-white/10 mt-6 pt-6">
+              <h3 className="font-semibold mb-3 flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)' }}>
+                <Target className="w-5 h-5" style={{ color: 'rgb(80, 160, 170, 0.6)' }} />
+                Tu Viaje de Transformación
+              </h3>
+              <p className="text-sm text-muted-foreground dark:text-white/85 mb-4">Cronología personalizada según tu ritmo:</p>
               <ul className="space-y-3 text-sm text-muted-foreground dark:text-muted-foreground">
                 <li className="flex items-start gap-2">
                   <span className="font-bold min-w-24" style={{ color: 'rgb(80, 160, 170)' }}>Pilar 1:</span>
@@ -344,7 +335,7 @@ export default function BienvenidaPage() {
                   <span>Dashboard de empleabilidad, oportunidades, coaching y comunidad</span>
                 </li>
               </ul>
-            </>
+            </div>
           )}
         </div>
 
