@@ -3,15 +3,19 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { ArrowLeft } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { ConversationalInterviewSimulator } from '@/components/conversational-interview-simulator'
 
 export default function ConversationalInterviewPage() {
+  const router = useRouter()
   const { user, loading } = useAuthRedirect()
   const [selectedRole, setSelectedRole] = useState<string | null>(null)
   const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null)
   const [selectedLevel, setSelectedLevel] = useState<'basico' | 'intermedio' | 'avanzado' | null>(null)
+  const [showingFarewell, setShowingFarewell] = useState(false)
 
   const roles = ['Software Engineer', 'Product Manager', 'Data Scientist', 'Operations Manager', 'Marketing Lead']
   const industries = ['Tech', 'Finance', 'Healthcare', 'E-commerce', 'Consulting']
@@ -26,6 +30,44 @@ export default function ConversationalInterviewPage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-400"></div>
       </div>
+    )
+  }
+
+  if (!user) return null
+
+  if (showingFarewell) {
+    return (
+      <main className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="max-w-md w-full space-y-6">
+          <Card className="border-training/40 overflow-hidden">
+            <div className="relative aspect-[3/4] w-full bg-black">
+              <video
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-JJXsroDrldJQrOQgg1lHrJzODwH1Uf.mov"
+                autoPlay
+                playsInline
+                crossOrigin="anonymous"
+                className="w-full h-full object-contain"
+                onEnded={() => {
+                  setSelectedLevel(null)
+                  setSelectedRole(null)
+                  setSelectedIndustry(null)
+                  setShowingFarewell(false)
+                  router.push('/despega/a3')
+                }}
+                style={{ width: '100%', height: '100%' }}
+              />
+            </div>
+          </Card>
+
+          <Card className="border-training/30 bg-training/5">
+            <CardContent className="pt-6">
+              <p className="text-white/85 text-center">
+                Sofia se está despidiendo...
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
     )
   }
 
@@ -48,9 +90,7 @@ export default function ConversationalInterviewPage() {
             <ConversationalInterviewSimulator
               level={selectedLevel}
               onComplete={() => {
-                setSelectedLevel(null)
-                setSelectedRole(null)
-                setSelectedIndustry(null)
+                setShowingFarewell(true)
               }}
             />
           </div>

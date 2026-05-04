@@ -3,7 +3,9 @@
 import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
+import { Card, CardContent } from '@/components/ui/card'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import {
   ArrowLeft,
   Crown,
@@ -69,9 +71,11 @@ const CHALLENGING_QUESTIONS = [
 ]
 
 export default function ChallensingTrainingPage() {
+  const router = useRouter()
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [completedQuestions, setCompletedQuestions] = useState<number[]>([])
   const [scores, setScores] = useState<Record<number, number>>({})
+  const [showingFarewell, setShowingFarewell] = useState(false)
   
   // Recording state
   const [isRecording, setIsRecording] = useState(false)
@@ -233,6 +237,34 @@ export default function ChallensingTrainingPage() {
 
   return (
     <main className="min-h-screen bg-black">
+      {showingFarewell ? (
+        <div className="flex items-center justify-center px-4 min-h-screen">
+          <div className="max-w-md w-full space-y-6">
+            <Card className="border-training/40 overflow-hidden">
+              <div className="relative aspect-[3/4] w-full bg-black">
+                <video
+                  src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-JJXsroDrldJQrOQgg1lHrJzODwH1Uf.mov"
+                  autoPlay
+                  playsInline
+                  crossOrigin="anonymous"
+                  className="w-full h-full object-contain"
+                  onEnded={() => router.push('/despega/a3')}
+                  style={{ width: '100%', height: '100%' }}
+                />
+              </div>
+            </Card>
+
+            <Card className="border-training/30 bg-training/5">
+              <CardContent className="pt-6">
+                <p className="text-white/85 text-center">
+                  Sofia se está despidiendo...
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      ) : (
+        <>
       <div className="flex flex-col h-screen">
         {/* Header */}
         <div className="flex-shrink-0 border-b border-muted/80 bg-background">
@@ -425,7 +457,7 @@ export default function ChallensingTrainingPage() {
                       </Button>
                     ) : (
                       <Button
-                        onClick={() => window.location.href = '/despega/a3'}
+                        onClick={() => setShowingFarewell(true)}
                         className="w-full gap-2"
                         style={{ backgroundColor: 'rgb(34, 197, 94)', color: '#ffffff' }}
                       >
@@ -520,9 +552,11 @@ export default function ChallensingTrainingPage() {
                 <p className="text-xs text-white/85">75+ = Listo para entrevista executiva<br/>60-74 = Mejora necesaria<br/>{'<'}60 = Requiere trabajo</p>
               </div>
             </div>
+            </div>
           </div>
         </div>
-      </div>
+      </>
+      )}
     </main>
   )
 }
