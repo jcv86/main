@@ -102,7 +102,7 @@ export default function EntrenamientoIntensivePage() {
                 Identifica qué mejorar antes de las simulaciones intensivas.
               </p>
               <Link href="/despega/interview-0" className="block">
-                <Button className="w-full font-bold text-lg py-6" style={{ backgroundColor: 'rgb(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}>
+                <Button className="w-full font-bold text-lg py-6" style={{ backgroundColor: 'rgba(170, 70, 170, 0.4)', color: '#ffffff', borderRadius: '20px' }}>
                   Comenzar Diagnóstico <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
@@ -134,7 +134,7 @@ export default function EntrenamientoIntensivePage() {
                   El estándar para respuestas profesionales claras.
                 </p>
                 <Link href="/despega/a3/entrenamiento-guiado" className="block">
-                  <Button className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}>
+                  <Button className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.5)', color: '#ffffff', borderRadius: '20px' }}>
                     Aprender STAR <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -155,7 +155,7 @@ export default function EntrenamientoIntensivePage() {
                   Múltiples formatos y feedback instantáneo.
                 </p>
                 <Link href="/despega/a3/cv-ats" className="block">
-                  <Button className="w-full font-semibold" style={{ backgroundColor: 'rgb(170, 70, 170, 0.8)', color: '#ffffff', borderRadius: '20px' }}>
+                  <Button className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.5)', color: '#ffffff', borderRadius: '20px' }}>
                     Optimizar CV <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -176,7 +176,7 @@ export default function EntrenamientoIntensivePage() {
                   Estrategia por cada postulación.
                 </p>
                 <Link href="/despega/a3/ajuste-por-vacante" className="block">
-                  <Button className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}>
+                  <Button className="w-full font-semibold" style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff', borderRadius: '20px' }}>
                     Analizar Oferta <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -197,7 +197,7 @@ export default function EntrenamientoIntensivePage() {
                   Feedback detallado en 60 segundos.
                 </p>
                 <Link href="/despega/a3/analisis-multimodal" className="block">
-                  <Button className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}>
+                  <Button className="w-full font-semibold" style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff', borderRadius: '20px' }}>
                     Grabar y Analizar <ArrowRight className="ml-2 w-4 h-4" />
                   </Button>
                 </Link>
@@ -258,7 +258,7 @@ export default function EntrenamientoIntensivePage() {
                 </div>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-guiado')}
-                  className="w-full mt-4 font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
+                  className="w-full mt-4 font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.8)', color: '#ffffff', borderRadius: '20px' }}
                 >
                   Comenzar Nivel 1 <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
@@ -303,7 +303,7 @@ export default function EntrenamientoIntensivePage() {
                 </div>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-estructurado')}
-                  className="w-full mt-4 font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
+                  className="w-full mt-4 font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.8)', color: '#ffffff', borderRadius: '20px' }}
                 >
                   Practicar Nivel 2 <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
@@ -348,7 +348,7 @@ export default function EntrenamientoIntensivePage() {
                 </div>
                 <Button 
                   onClick={() => router.push('/despega/a3/entrenamiento-desafiante')}
-                  className="w-full mt-4 font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
+                  className="w-full mt-4 font-semibold" style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff', borderRadius: '20px' }}
                 >
                   Desafiarse Nivel 3 <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
@@ -392,7 +392,7 @@ export default function EntrenamientoIntensivePage() {
                 </div>
                 <Button 
                   onClick={() => router.push('/despega/a3/conversational-interview')}
-                  className="w-full mt-4 font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}
+                  className="w-full mt-4 font-semibold" style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff', borderRadius: '20px' }}
                 >
                   Entrevista Final <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
