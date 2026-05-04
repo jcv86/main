@@ -90,7 +90,7 @@ export default function EntrenamientoIntensivePage() {
             </p>
           </div>
 
-          <Card className="border-2 border-training/40 hover:shadow-xl transition" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderColor: 'rgb(170, 70, 170, 0.4)', borderStyle: 'none' }}>
+          <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgba(170, 70, 170, 0.6)', borderWidth: '0px 0px 0px 6px', backgroundColor: 'rgba(80, 160, 170, 0.1)', borderRadius: '20px' }}>
             <CardHeader>
               <CardTitle className="text-2xl flex items-center gap-3 text-white">
                 <span></span> Auditoría: Tu Base Profesional
@@ -121,7 +121,7 @@ export default function EntrenamientoIntensivePage() {
 
           <div className="grid md:grid-cols-2 gap-4">
             {/* Tool 1: STAR Method */}
-            <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgb(170, 70, 170, 0.4)', borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderStyle: 'none' }}>
+            <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgba(170, 70, 170, 0.6)', borderWidth: '0px 0px 0px 6px', backgroundColor: 'rgba(80, 160, 170, 0.1)', borderRadius: '20px' }}>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Zap className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
@@ -142,7 +142,7 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Tool 2: CV Optimization */}
-            <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgb(170, 70, 170, 0.4)', borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderStyle: 'none' }}>
+            <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgba(170, 70, 170, 0.6)', borderWidth: '0px 0px 0px 6px', backgroundColor: 'rgba(80, 160, 170, 0.1)', borderRadius: '20px' }}>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <BarChart3 className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
@@ -163,7 +163,7 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Tool 3: Job Matching */}
-            <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgb(170, 70, 170, 0.4)', borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderStyle: 'none' }}>
+            <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgba(170, 70, 170, 0.8)', borderWidth: '0px 0px 0px 6px', backgroundColor: 'rgba(80, 160, 170, 0.1)', borderRadius: '20px' }}>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Target className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
@@ -184,7 +184,7 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Tool 4: Video Analysis */}
-            <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgb(170, 70, 170, 0.4)', borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderStyle: 'none' }}>
+            <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgba(170, 70, 170, 0.8)', borderWidth: '0px 0px 0px 6px', backgroundColor: 'rgba(80, 160, 170, 0.1)', borderRadius: '20px' }}>
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Video className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
