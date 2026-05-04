@@ -51,9 +51,6 @@ export default function InformacionPage() {
       <div className="max-w-6xl mx-auto px-4 py-12">
         {/* Coach Video Welcome - Split Layout */}
         <div className="mb-16">
-          <h1 className="text-4xl font-bold mb-2">Bienvenido, {userName}</h1>
-          <p className="text-lg text-muted-foreground mb-8">Tu entrenador personal te habla sobre el programa</p>
-          
           {/* Split Container: 60% Video + 40% Text */}
           <div className="flex gap-6">
             {/* Video Section - 60% */}
@@ -62,8 +59,6 @@ export default function InformacionPage() {
                 <video 
                   width="100%" 
                   height="100%" 
-                  controls
-                  controlsList="nodownload"
                   className="w-full h-full object-cover"
                 >
                   <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/cogvideo_1777055904531-CuLRB7XMrrLX2U2jhiPKKaapS2onmO.mp4" type="video/mp4" />
@@ -74,6 +69,9 @@ export default function InformacionPage() {
 
             {/* Text Section - 40% */}
             <div className="flex-[0.4] flex flex-col justify-center">
+              <h1 className="text-3xl font-bold mb-2">Bienvenido, {userName}</h1>
+              <p className="text-lg text-muted-foreground mb-8">Tu entrenador personal te habla sobre el programa</p>
+              
               {/* Coach Message - Visible for Accessibility */}
               <div className="p-6 h-full" role="region" aria-label="Transcripción del video del coach">
                 <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
