@@ -283,11 +283,13 @@ export default function GuidedInterviewPage() {
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-jqewmHgGSy0aNTnSXKpYDRGBDYj1rT.mov"
                 autoPlay
                 playsInline
+                crossOrigin="anonymous"
                 className="w-full h-full object-contain"
                 onEnded={() => {
                   console.log('[v0] Farewell video ended, showing results')
                   setSubmitted(true)
                 }}
+                style={{ width: '100%', height: '100%' }}
               />
             </div>
           </Card>

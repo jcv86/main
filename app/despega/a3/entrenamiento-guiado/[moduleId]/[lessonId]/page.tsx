@@ -76,8 +76,10 @@ export default function LessonPage() {
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-JJXsroDrldJQrOQgg1lHrJzODwH1Uf.mov"
                 autoPlay
                 playsInline
+                crossOrigin="anonymous"
                 className="w-full h-full object-contain"
                 onEnded={() => router.push('/despega/a3')}
+                style={{ width: '100%', height: '100%' }}
               />
             </div>
           </Card>
