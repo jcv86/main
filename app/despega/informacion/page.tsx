@@ -49,41 +49,47 @@ export default function InformacionPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto px-4 py-12">
-        {/* Coach Video Welcome */}
+        {/* Coach Video Welcome - Split Layout */}
         <div className="mb-16">
           <h1 className="text-4xl font-bold mb-2">Bienvenido, {userName}</h1>
           <p className="text-lg text-muted-foreground mb-8">Tu entrenador personal te habla sobre el programa</p>
           
-          <div className="space-y-6">
-            {/* Video Player */}
-            <div className="relative w-full bg-black rounded-lg overflow-hidden shadow-lg" style={{ aspectRatio: '16/9' }}>
-              <video 
-                width="100%" 
-                height="100%" 
-                controls
-                controlsList="nodownload"
-                className="w-full h-full object-cover"
-              >
-                <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/cogvideo_1777055904531-CuLRB7XMrrLX2U2jhiPKKaapS2onmO.mp4" type="video/mp4" />
-                Tu navegador no soporta videos HTML5
-              </video>
+          {/* Split Container: 60% Video + 40% Text */}
+          <div className="flex gap-6">
+            {/* Video Section - 60% */}
+            <div className="flex-[0.6]">
+              <div className="relative w-full bg-black rounded-lg overflow-hidden shadow-lg" style={{ aspectRatio: '3/4' }}>
+                <video 
+                  width="100%" 
+                  height="100%" 
+                  controls
+                  controlsList="nodownload"
+                  className="w-full h-full object-cover"
+                >
+                  <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/cogvideo_1777055904531-CuLRB7XMrrLX2U2jhiPKKaapS2onmO.mp4" type="video/mp4" />
+                  Tu navegador no soporta videos HTML5
+                </video>
+              </div>
             </div>
 
-            {/* Coach Message - Visible for Accessibility */}
-            <div className="p-6 bg-gradient-to-r from-teal-500/10 to-purple-500/10 rounded-lg border border-white/20" role="region" aria-label="Transcripción del video del coach">
-              <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
-                <span className="w-2 h-2 bg-teal-400 rounded-full"></span>
-                Mensaje del Coach
-              </h3>
-              <p className="text-white/90 leading-relaxed whitespace-pre-line text-base">
-                Hola, bienvenido a Despega Tu Carrera. Soy tu coach y estaré contigo en cada paso.
+            {/* Text Section - 40% */}
+            <div className="flex-[0.4] flex flex-col justify-center">
+              {/* Coach Message - Visible for Accessibility */}
+              <div className="p-6 bg-gradient-to-r from-teal-500/10 to-purple-500/10 rounded-lg border border-white/20 h-full" role="region" aria-label="Transcripción del video del coach">
+                <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
+                  <span className="w-2 h-2 bg-teal-400 rounded-full"></span>
+                  Mensaje del Coach
+                </h3>
+                <p className="text-white/90 leading-relaxed whitespace-pre-line text-sm">
+                  Hola, bienvenido a Despega Tu Carrera. Soy tu coach y estaré contigo en cada paso.
 
 Los próximos 90 días transformamos tu empleabilidad. Diagnóstico, plan, entrenamiento intensivo, ejecución real.
 
 Lo importante: no desaparece en el día 90. Sigo aquí.
 
 Lee bien lo que viene y comenzamos.
-              </p>
+                </p>
+              </div>
             </div>
           </div>
           
