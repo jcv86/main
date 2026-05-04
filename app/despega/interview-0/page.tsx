@@ -3,13 +3,14 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { ArrowLeft, ChevronRight } from 'lucide-react'
 import { Interview0PreAudit } from '@/components/interview-0-pre-audit'
 import { ConversationalInterviewSimulator } from '@/components/conversational-interview-simulator'
 
 export default function Interview0Page() {
   const router = useRouter()
-  const [stage, setStage] = useState<'audit' | 'simulator' | 'complete'>('audit')
+  const [stage, setStage] = useState<'audit' | 'simulator' | 'farewell' | 'complete'>('audit')
 
   const handleAuditComplete = (result: any) => {
     console.log('[v0] Audit completed:', result)
@@ -18,7 +19,37 @@ export default function Interview0Page() {
 
   const handleSimulatorComplete = (result: any) => {
     console.log('[v0] Interview 0 fully completed:', result)
-    setStage('complete')
+    setStage('farewell')
+  }
+
+  if (stage === 'farewell') {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="max-w-md w-full space-y-6">
+          <Card className="border-training/40 overflow-hidden">
+            <div className="relative aspect-[3/4] w-full bg-black">
+              <video
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-JJXsroDrldJQrOQgg1lHrJzODwH1Uf.mov"
+                autoPlay
+                playsInline
+                crossOrigin="anonymous"
+                className="w-full h-full object-contain"
+                onEnded={() => setStage('complete')}
+                style={{ width: '100%', height: '100%' }}
+              />
+            </div>
+          </Card>
+
+          <Card className="border-training/30 bg-training/5">
+            <CardContent className="pt-6">
+              <p className="text-white/85 text-center">
+                Sofia se está despidiendo...
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    )
   }
 
   if (stage === 'complete') {
