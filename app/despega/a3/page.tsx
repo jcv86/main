@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Zap, BarChart3, Target, Video, ArrowRight, Clock, Zap as ZapIcon, Flame } from 'lucide-react'
 import Link from 'next/link'
 import A3ProgressDashboard from '@/components/a3-progress-dashboard'
+import { TrainingProgressDashboard } from '@/components/training-progress-dashboard'
 
 export default function EntrenamientoIntensivePage() {
   const router = useRouter()
@@ -66,6 +67,18 @@ export default function EntrenamientoIntensivePage() {
               </video>
             </div>
           </div>
+        </div>
+
+        {/* Training Statistics */}
+        <div className="mb-16 space-y-6">
+          <div>
+            <h2 className="text-4xl font-bold text-white mb-3">Estadísticas de Entrenamiento</h2>
+            <p className="text-lg text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+              Visualiza tu progreso completo: XP ganados, racha de entrenamientos, logros desbloqueados y más.
+            </p>
+          </div>
+
+          <TrainingProgressDashboard />
         </div>
 
         {/* Step 1: Diagnostic Audit */}
