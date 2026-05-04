@@ -64,7 +64,7 @@ export default function Interview0Page() {
           totalQuestions: 5,
           timeSpent: 600,
           level: 'basico',
-          trainingType: 'Etapa 1: Preparación Inicial'
+          trainingType: 'Preparación Inicial'
         }}
         onContinue={() => {
           setStage('intro')
@@ -98,10 +98,10 @@ export default function Interview0Page() {
                   <div className="space-y-2">
                     <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 mb-4">
                       <Video className="w-4 h-4 text-purple-400" />
-                      <span className="text-sm font-semibold text-purple-400">Etapa 1: Preparación Inicial</span>
+                      <span className="text-sm font-semibold text-purple-400">Guía del Coach</span>
                     </div>
-                    <h1 className="text-4xl font-bold text-white">Tu Guía Inicial con el Coach</h1>
-                    <p className="text-lg text-white/70">Prepara tu escenario, presencia y pitch antes de simular entrevistas</p>
+                    <h1 className="text-4xl font-bold text-white">Preparación Inicial con el Coach</h1>
+                    <p className="text-lg text-white/70">Auditoría completa: ambiente, presencia, audio y primer feedback</p>
                   </div>
 
                   <p className="text-white/80 max-w-md mx-auto">
@@ -148,10 +148,10 @@ export default function Interview0Page() {
                 <div className="text-center mb-8">
                   <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 mb-4">
                     <Video className="w-4 h-4 text-purple-400" />
-                    <span className="text-sm font-semibold text-purple-400">Continuación: Primera Práctica</span>
+                    <span className="text-sm font-semibold text-purple-400">Guía del Coach</span>
                   </div>
-                  <h2 className="text-3xl font-bold text-white">Tu Primera Simulación de Entrevista</h2>
-                  <p className="text-white/85 mt-2">Ahora practicaremos una entrevista real guiada por el coach basada en tu auditoría</p>
+                  <h2 className="text-3xl font-bold text-white">Primera Simulación de Entrevista</h2>
+                  <p className="text-white/85 mt-2">Tu coach te guiará basándose en tu auditoría inicial</p>
                 </div>
                 <ConversationalInterviewSimulator
                   level="basico"

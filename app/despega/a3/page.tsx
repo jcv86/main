@@ -84,9 +84,9 @@ export default function EntrenamientoIntensivePage() {
         {/* Step 1: Diagnostic Audit */}
         <div className="mb-16 space-y-6">
           <div>
-            <h2 className="text-4xl font-bold text-white mb-3">Paso 1: Etapa 1 - Preparación Inicial con el Coach</h2>
+            <h2 className="text-4xl font-bold text-white mb-3">Paso 1: Guía del Coach - Auditoría Inicial</h2>
             <p className="text-lg text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-              Tu coach te guiará personalmente en esta primera etapa. Auditoría rápida de tu ambiente, presencia, audio y pitch inicial para establecer una base sólida.
+              Tu coach te guiará a través de una auditoría completa de tu ambiente, presencia, audio y pitch. Este es el cimiento para toda tu preparación.
             </p>
           </div>
 
@@ -98,18 +98,15 @@ export default function EntrenamientoIntensivePage() {
                     <Video className="w-5 h-5" style={{ color: 'rgb(170, 70, 170)' }} />
                   </div>
                   <div>
-                    <CardTitle className="text-2xl">Guía Inicial del Coach</CardTitle>
-                    <p className="text-sm text-white/70 mt-1">Auditoría supervisada y primer feedback</p>
+                    <CardTitle className="text-2xl">Preparación Inicial</CardTitle>
+                    <p className="text-sm text-white/70 mt-1">Auditoría supervisada con feedback del coach</p>
                   </div>
                 </div>
-                <Badge className="bg-purple-500/20 text-purple-400 border border-purple-500/30">
-                  Etapa 1
-                </Badge>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-white/90 text-lg leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                Comenzarás con una sesión guiada por el coach donde revisará: tu entorno, iluminación, audio, presencia en cámara y te ayudará a preparar tu pitch profesional. 
+                Revisaremos: tu entorno, iluminación, audio, presencia en cámara y te ayudaremos a preparar tu pitch profesional. 
                 <span className="block mt-2 font-semibold">Este es el cimiento para toda tu preparación de entrevistas.</span>
               </p>
               <div className="grid md:grid-cols-2 gap-3 mt-4 text-sm">
@@ -132,7 +129,7 @@ export default function EntrenamientoIntensivePage() {
               </div>
               <Link href="/despega/interview-0" className="block">
                 <Button className="w-full font-bold text-lg py-6" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}>
-                  Comenzar Etapa 1 <ArrowRight className="ml-2 w-5 h-5" />
+                  Comenzar Paso 1 <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
             </CardContent>
@@ -142,9 +139,9 @@ export default function EntrenamientoIntensivePage() {
         {/* Step 2: Preparation Tools */}
         <div className="space-y-6 mb-16">
           <div>
-            <h2 className="text-4xl font-medium text-white mb-3">Paso 2: Etapa 2 - Preparación Intensiva con el Coach</h2>
+            <h2 className="text-4xl font-medium text-white mb-3">Paso 2: Herramientas de Preparación</h2>
             <p className="text-lg text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-              Una vez completada la Etapa 1, tu coach te ayudará a dominar las herramientas y técnicas que necesitas. Desde STAR method hasta análisis de ofertas y video feedback personalizado.
+              Optimiza tu CV, aprende metodología STAR, analiza ofertas y practica en video. Herramientas específicas con guía del coach.
             </p>
           </div>
 
@@ -242,9 +239,9 @@ export default function EntrenamientoIntensivePage() {
         {/* Step 3: Progressive Training Levels */}
         <div className="space-y-6">
           <div>
-            <h2 className="text-4xl font-medium text-white mb-3">Paso 3: Etapa 2 Continuación - Entrenamientos Progresivos</h2>
+            <h2 className="text-4xl font-medium text-white mb-3">Paso 3: Entrenamientos Progresivos</h2>
             <p className="text-lg text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-              Con el arsenal preparado, tu coach te guiará a través de 4 niveles de dificultad. Progresa desde principiante hasta maestría con feedback personalizado en cada etapa.
+              4 niveles de dificultad progresiva con feedback del coach. Progresa desde principiante hasta maestría. Avanza cuando domines cada nivel.
             </p>
           </div>
 
