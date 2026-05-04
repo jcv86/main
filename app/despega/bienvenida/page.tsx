@@ -15,7 +15,6 @@ export default function BienvenidaPage() {
   const router = useRouter()
   const [userName, setUserName] = useState('')
   const [loading, setLoading] = useState(true)
-  const [expandedPilares, setExpandedPilares] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
@@ -236,9 +235,10 @@ export default function BienvenidaPage() {
             </CardContent>
           </Card>
         </div>
-
-        {/* Tu Viaje en 4 Pilares + Tu Viaje de Transformación - Combined Expandable */}
-        <div className="rounded-[2px] shadow-sm p-8 mb-8 border-0" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
+      </div>
+    </div>
+  )
+}
           {/* Header - Always visible */}
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-semibold" style={{ color: 'rgb(80, 160, 170)' }}>Tu Viaje en 4 Pilares</h2>
