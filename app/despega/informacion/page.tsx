@@ -54,22 +54,42 @@ export default function InformacionPage() {
           <h1 className="text-4xl font-bold mb-2">Bienvenido, {userName}</h1>
           <p className="text-lg text-muted-foreground mb-8">Tu entrenador personal te habla sobre el programa</p>
           
-          <div className="relative w-full bg-black rounded-lg overflow-hidden shadow-lg" style={{ aspectRatio: '16/9' }}>
-            {/* Video Placeholder - Será reemplazado con video real */}
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/10 mb-4">
-                  <Play className="w-8 h-8 text-white fill-white" />
+          <div className="space-y-6">
+            {/* Video Player */}
+            <div className="relative w-full bg-black rounded-lg overflow-hidden shadow-lg" style={{ aspectRatio: '16/9' }}>
+              {/* Video Placeholder - Será reemplazado con video real */}
+              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
+                <div className="text-center">
+                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/10 mb-4">
+                    <Play className="w-8 h-8 text-white fill-white" />
+                  </div>
+                  <p className="text-white/60 text-sm">Video de bienvenida del coach</p>
+                  <p className="text-white/40 text-xs mt-1">Próximamente disponible</p>
                 </div>
-                <p className="text-white/60 text-sm">Video de bienvenida del coach</p>
-                <p className="text-white/40 text-xs mt-1">Próximamente disponible</p>
               </div>
+              {/* Video Element - Reemplazar src cuando tengas el video */}
+              {/* <video width="100%" height="100%" controls>
+                <source src="/videos/coach-welcome.mp4" type="video/mp4" />
+                Tu navegador no soporta videos HTML5
+              </video> */}
             </div>
-            {/* Video Element - Reemplazar src cuando tengas el video */}
-            {/* <video width="100%" height="100%" controls>
-              <source src="/videos/coach-welcome.mp4" type="video/mp4" />
-              Tu navegador no soporta videos HTML5
-            </video> */}
+
+            {/* Coach Message - Visible for Accessibility */}
+            <div className="p-6 bg-gradient-to-r from-teal-500/10 to-purple-500/10 rounded-lg border border-white/20" role="region" aria-label="Transcripción del video del coach">
+              <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
+                <span className="w-2 h-2 bg-teal-400 rounded-full"></span>
+                Mensaje del Coach
+              </h3>
+              <p className="text-white/90 leading-relaxed whitespace-pre-line text-base">
+                Hola, bienvenido a Despega Tu Carrera. Soy tu coach y estaré contigo en cada paso.
+
+Los próximos 90 días transformamos tu empleabilidad. Diagnóstico, plan, entrenamiento intensivo, ejecución real.
+
+Lo importante: no desaparece en el día 90. Sigo aquí.
+
+Lee bien lo que viene y comenzamos.
+              </p>
+            </div>
           </div>
           
           <div className="mt-6 p-4 bg-white/5 rounded-lg border border-white/10">
