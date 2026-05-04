@@ -15,8 +15,15 @@ export default function BienvenidaPage() {
   const router = useRouter()
   const [userName, setUserName] = useState('')
   const [loading, setLoading] = useState(true)
-  const [expandedDetails, setExpandedDetails] = useState(false)
+  const [expandedPilars, setExpandedPilars] = useState<Record<number, boolean>>({})
   const supabase = createClient()
+
+  const togglePilar = (index: number) => {
+    setExpandedPilars(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }))
+  }
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -70,26 +77,8 @@ export default function BienvenidaPage() {
           pillarColor="purple"
         />
 
-        {/* Pilares Grid with Expandable Details */}
-        <div className="relative mb-12">
-          {/* Leer más button - Top right corner */}
-          <div className="absolute -top-12 right-0 z-10">
-            <button
-              onClick={() => setExpandedDetails(!expandedDetails)}
-              className="text-sm font-medium hover:opacity-80 transition flex items-center gap-1"
-              style={{ color: 'rgb(80, 160, 170)' }}
-            >
-              {expandedDetails ? 'Leer menos' : '+ Leer más'}
-              <ChevronDown 
-                className="w-4 h-4 transition-transform" 
-                style={{ 
-                  transform: expandedDetails ? 'rotate(180deg)' : 'rotate(0deg)'
-                }} 
-              />
-            </button>
-          </div>
-
-          <div className="space-y-6">
+        {/* Pilares Grid */}
+        <div className="space-y-6 mb-12">
           {/* Paso 1: Conocer tu Perfil */}
           <Card className="border-0 shadow-md rounded-[2px]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
             <CardContent className="pt-8 pb-8 px-8">
@@ -121,6 +110,45 @@ export default function BienvenidaPage() {
                       <strong style={{ color: 'rgba(80, 160, 170, 0.8)' }}>Duración:</strong> ~30 minutos | <strong style={{ color: 'rgba(80, 160, 170, 0.8)' }}>Resultado:</strong> Tu perfil personalizado que guía el viaje
                     </p>
                   </div>
+
+                  {/* Leer más button */}
+                  <div className="flex justify-end mt-4 mb-4">
+                    <button
+                      onClick={() => togglePilar(1)}
+                      className="text-sm font-medium hover:opacity-80 transition flex items-center gap-1"
+                      style={{ color: 'rgb(80, 160, 170)' }}
+                    >
+                      {expandedPilars[1] ? 'Leer menos' : '+ Leer más'}
+                      <ChevronDown 
+                        className="w-4 h-4 transition-transform" 
+                        style={{ 
+                          transform: expandedPilars[1] ? 'rotate(180deg)' : 'rotate(0deg)'
+                        }} 
+                      />
+                    </button>
+                  </div>
+
+                  {/* Expanded details for Pilar 1 */}
+                  {expandedPilars[1] && (
+                    <div className="bg-white/5 rounded-lg p-4 mb-4 border border-white/10">
+                      <h4 className="font-semibold text-white mb-3">Detalles del Diagnóstico:</h4>
+                      <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/85">
+                        <li className="flex gap-2">
+                          <span className="text-teal-400">•</span>
+                          <span><strong>Evaluación de Perfil:</strong> Analizamos tus fortalezas comunicativas, puntos técnicos y blandos, y definimos tu diferencial único.</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span className="text-teal-400">•</span>
+                          <span><strong>Contexto Laboral:</strong> Comprendemos tus objetivos de carrera, sector preferido, nivel de experiencia y expectativas salariales.</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span className="text-teal-400">•</span>
+                          <span><strong>Baseline Personalizado:</strong> Creamos tu punto de partida único con métricas iniciales para medir tu progreso en los 90 días.</span>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                  
                   <Link href="/despega/conocer" className="block mt-6">
                     <Button className="w-full text-white font-bold text-lg py-6 rounded-[20px]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}>
                       Comenzar Diagnóstico <ArrowRight className="ml-2 w-5 h-5" />
@@ -162,6 +190,45 @@ export default function BienvenidaPage() {
                       <strong style={{ color: 'rgba(90, 90, 150)' }}>Dedicación:</strong> 2-3 horas por semana | <strong style={{ color: 'rgba(90, 90, 150)' }}>Feedback:</strong> Inmediato después de cada sesión
                     </p>
                   </div>
+
+                  {/* Leer más button */}
+                  <div className="flex justify-end mt-4 mb-4">
+                    <button
+                      onClick={() => togglePilar(2)}
+                      className="text-sm font-medium hover:opacity-80 transition flex items-center gap-1"
+                      style={{ color: 'rgba(90, 90, 150)' }}
+                    >
+                      {expandedPilars[2] ? 'Leer menos' : '+ Leer más'}
+                      <ChevronDown 
+                        className="w-4 h-4 transition-transform" 
+                        style={{ 
+                          transform: expandedPilars[2] ? 'rotate(180deg)' : 'rotate(0deg)'
+                        }} 
+                      />
+                    </button>
+                  </div>
+
+                  {/* Expanded details for Pilar 2 */}
+                  {expandedPilars[2] && (
+                    <div className="bg-white/5 rounded-lg p-4 mb-4 border border-white/10">
+                      <h4 className="font-semibold text-white mb-3">Detalles del Plan de 90 Días:</h4>
+                      <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/85">
+                        <li className="flex gap-2">
+                          <span style={{ color: 'rgba(90, 90, 150)' }}>•</span>
+                          <span><strong>Fase 1 (Días 1-30):</strong> Fundamentación - Domina principios clave, desarrolla tu storytelling único, define tu propuesta de valor.</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span style={{ color: 'rgba(90, 90, 150)' }}>•</span>
+                          <span><strong>Fase 2 (Días 31-60):</strong> Exploración - Descubre oportunidades, construye red profesional, optimiza presencia digital.</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span style={{ color: 'rgba(90, 90, 150)' }}>•</span>
+                          <span><strong>Fase 3 (Días 61-90):</strong> Implementación - Aplica en entrevistas reales, negocia ofertas, consolida tu posición en el mercado.</span>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                  
                   <Link href="/despega/plan" className="block mt-6">
                     <Button className="w-full text-white font-bold text-lg py-6 rounded-[20px]" style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}>
                       Ver Tu Plan <ArrowRight className="ml-2 w-5 h-5" />
@@ -203,6 +270,45 @@ export default function BienvenidaPage() {
                       <strong style={{ color: 'rgb(170, 70, 170)' }}>Entrevistador IA:</strong> Conversacional y adaptativo | <strong style={{ color: 'rgb(170, 70, 170)' }}>Feedback:</strong> Detallado después de cada sesión
                     </p>
                   </div>
+
+                  {/* Leer más button */}
+                  <div className="flex justify-end mt-4 mb-4">
+                    <button
+                      onClick={() => togglePilar(3)}
+                      className="text-sm font-medium hover:opacity-80 transition flex items-center gap-1"
+                      style={{ color: 'rgb(170, 70, 170)' }}
+                    >
+                      {expandedPilars[3] ? 'Leer menos' : '+ Leer más'}
+                      <ChevronDown 
+                        className="w-4 h-4 transition-transform" 
+                        style={{ 
+                          transform: expandedPilars[3] ? 'rotate(180deg)' : 'rotate(0deg)'
+                        }} 
+                      />
+                    </button>
+                  </div>
+
+                  {/* Expanded details for Pilar 3 */}
+                  {expandedPilars[3] && (
+                    <div className="bg-white/5 rounded-lg p-4 mb-4 border border-white/10">
+                      <h4 className="font-semibold text-white mb-3">Detalles del Entrenamiento:</h4>
+                      <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/85">
+                        <li className="flex gap-2">
+                          <span style={{ color: 'rgb(170, 70, 170)' }}>•</span>
+                          <span><strong>4 Módulos:</strong> Entrevistas situacionales y técnicas, Presentaciones y pitches, Decisiones estratégicas, Comunicación ejecutiva y liderazgo.</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span style={{ color: 'rgb(170, 70, 170)' }}>•</span>
+                          <span><strong>4 Niveles:</strong> Guiada (con coach) → Estructurada (autonomía) → Desafiante (presión) → Maestría (sin límites).</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span style={{ color: 'rgb(170, 70, 170)' }}>•</span>
+                          <span><strong>Feedback Multimodal:</strong> Análisis IA instantáneo de postura, tonalidad, lenguaje verbal, coherencia y recomendaciones personalizadas.</span>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                  
                   <Link href="/despega/a3" className="block mt-6">
                     <Button className="w-full text-white font-bold text-lg py-6 rounded-[20px]" style={{ backgroundColor: 'rgb(170, 70, 170, 0.8)' }}>
                       Comenzar Entrenamiento <ArrowRight className="ml-2 w-5 h-5" />
@@ -244,6 +350,45 @@ export default function BienvenidaPage() {
                       <strong style={{ color: 'rgba(225, 120, 130)' }}>Duración:</strong> Indefinida durante búsqueda | <strong style={{ color: 'rgba(225, 120, 130)' }}>Soporte:</strong> Coaches + comunidad + premium
                     </p>
                   </div>
+
+                  {/* Leer más button */}
+                  <div className="flex justify-end mt-4 mb-4">
+                    <button
+                      onClick={() => togglePilar(4)}
+                      className="text-sm font-medium hover:opacity-80 transition flex items-center gap-1"
+                      style={{ color: 'rgba(225, 120, 130)' }}
+                    >
+                      {expandedPilars[4] ? 'Leer menos' : '+ Leer más'}
+                      <ChevronDown 
+                        className="w-4 h-4 transition-transform" 
+                        style={{ 
+                          transform: expandedPilars[4] ? 'rotate(180deg)' : 'rotate(0deg)'
+                        }} 
+                      />
+                    </button>
+                  </div>
+
+                  {/* Expanded details for Pilar 4 */}
+                  {expandedPilars[4] && (
+                    <div className="bg-white/5 rounded-lg p-4 mb-4 border border-white/10">
+                      <h4 className="font-semibold text-white mb-3">Detalles de Ejecución:</h4>
+                      <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/85">
+                        <li className="flex gap-2">
+                          <span style={{ color: 'rgba(225, 120, 130)' }}>•</span>
+                          <span><strong>Bolsa de Oportunidades:</strong> Empleos filtrados por tu perfil, conexión con reclutadores, referrals personalizados y análisis de ofertas.</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span style={{ color: 'rgba(225, 120, 130)' }}>•</span>
+                          <span><strong>Dashboard de Empleabilidad:</strong> Métrica visual, comparativa con benchmark, evolución en tiempo real y feedback del mercado.</span>
+                        </li>
+                        <li className="flex gap-2">
+                          <span style={{ color: 'rgba(225, 120, 130)' }}>•</span>
+                          <span><strong>Soporte Continuo:</strong> Coaching personalizado, acceso a mentores, sesiones específicas por empresa y soporte hasta colocación.</span>
+                        </li>
+                      </ul>
+                    </div>
+                  )}
+                  
                   <Link href="/despega/a4" className="block mt-6">
                     <Button className="w-full text-white font-bold text-lg py-6 rounded-[20px]" style={{ backgroundColor: 'rgba(225, 120, 130, 0.6)' }}>
                       Acceder Dashboard <ArrowRight className="ml-2 w-5 h-5" />
@@ -254,10 +399,10 @@ export default function BienvenidaPage() {
             </CardContent>
           </Card>
         </div>
-        </div>
-
-        {/* Expanded Details Section */}
-        {expandedDetails && (
+      </div>
+    </div>
+  )
+}
           <div className="mb-12 space-y-6">
             {/* Pilar 1 Details */}
             <Card className="border-0 shadow-md rounded-[2px]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)' }}>
