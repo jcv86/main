@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { ArrowRight, ChevronRight, Target, Users, TrendingUp, Zap, Loader2, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { createElement } from 'react'
+import RouteProgressDashboard from '@/components/route-progress-dashboard'
 
 interface Route {
   id: string
@@ -236,6 +237,17 @@ export default function A2RoutasPage() {
               </p>
             </div>
           )}
+        </div>
+
+        {/* Route Progress Dashboard */}
+        <div className="mb-12">
+          <RouteProgressDashboard 
+            routeName="Tu Ruta Personalizada"
+            totalDays={90}
+            completedDays={0}
+            streak={0}
+            badges={[]}
+          />
         </div>
 
         {/* Routes Grid */}
