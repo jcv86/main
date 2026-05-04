@@ -282,7 +282,7 @@ export default function GuidedInterviewPage() {
               <video
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-jqewmHgGSy0aNTnSXKpYDRGBDYj1rT.mov"
                 autoPlay
-                muted
+                controls
                 playsInline
                 className="w-full h-full object-contain"
                 onEnded={() => {
