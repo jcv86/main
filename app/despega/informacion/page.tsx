@@ -556,7 +556,7 @@ export default function InformacionPage() {
 
         {/* CTA Button */}
         <div className="mt-16 flex justify-center">
-          <Link href="/despega/bienvenida">
+          <Link href="/despega/conozcamonos-1">
             <Button size="lg" className="bg-gradient-to-r from-teal-500 to-purple-500 hover:opacity-90">
               Comenzar Mi Transformación
             </Button>

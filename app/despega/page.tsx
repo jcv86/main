@@ -73,10 +73,10 @@ export default function DespegazoDashboard() {
         .eq('user_id', user.id)
         .limit(1)
 
-      // If A1 is not completed, redirect to welcome page
+      // If A1 is not completed, redirect to information page
       if (!a1 || a1.length === 0) {
-        console.log('[v0] A1 not completed, redirecting to welcome')
-        router.push('/despega/bienvenida')
+        console.log('[v0] A1 not completed, redirecting to informacion')
+        router.push('/despega/informacion')
         return
       }
 
