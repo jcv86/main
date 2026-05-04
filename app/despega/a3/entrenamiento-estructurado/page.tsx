@@ -5,13 +5,18 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { useRouter } from 'next/navigation'
 import { ConversationalInterviewSimulator } from '@/components/conversational-interview-simulator'
+import { TrainingResultsCard } from '@/components/training-results-card'
 
 export default function StructuredTrainingPage() {
-  const [stage, setStage] = useState<'training' | 'farewell' | 'complete'>('training')
+  const router = useRouter()
+  const [stage, setStage] = useState<'training' | 'farewell' | 'results'>('training')
+  const [score, setScore] = useState(0)
 
   const handleComplete = (result: any) => {
     console.log('[v0] Interview simulation completed:', result)
+    setScore(result.score || 85)
     setStage('farewell')
   }
 
@@ -27,7 +32,7 @@ export default function StructuredTrainingPage() {
                 playsInline
                 crossOrigin="anonymous"
                 className="w-full h-full object-contain"
-                onEnded={() => setStage('complete')}
+                onEnded={() => setStage('results')}
                 style={{ width: '100%', height: '100%' }}
               />
             </div>
@@ -42,6 +47,22 @@ export default function StructuredTrainingPage() {
           </Card>
         </div>
       </main>
+    )
+  }
+
+  if (stage === 'results') {
+    return (
+      <TrainingResultsCard
+        result={{
+          score: score,
+          questionsCompleted: 5,
+          totalQuestions: 5,
+          timeSpent: 1200,
+          level: 'intermedio',
+          trainingType: 'Entrenamiento Estructurado'
+        }}
+        onContinue={() => router.push('/despega/a3')}
+      />
     )
   }
 

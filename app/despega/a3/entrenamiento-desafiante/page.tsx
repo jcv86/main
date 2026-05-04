@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { TrainingResultsCard } from '@/components/training-results-card'
 import {
   ArrowLeft,
   Crown,
@@ -76,6 +77,8 @@ export default function ChallensingTrainingPage() {
   const [completedQuestions, setCompletedQuestions] = useState<number[]>([])
   const [scores, setScores] = useState<Record<number, number>>({})
   const [showingFarewell, setShowingFarewell] = useState(false)
+  const [showingResults, setShowingResults] = useState(false)
+  const [finalScore, setFinalScore] = useState(0)
   
   // Recording state
   const [isRecording, setIsRecording] = useState(false)
@@ -237,7 +240,19 @@ export default function ChallensingTrainingPage() {
 
   return (
     <main className="min-h-screen bg-black">
-      {showingFarewell ? (
+      {showingResults ? (
+        <TrainingResultsCard
+          result={{
+            score: finalScore,
+            questionsCompleted: completedQuestions.length,
+            totalQuestions: 10,
+            timeSpent: 1800,
+            level: 'avanzado',
+            trainingType: 'Entrenamiento Desafiante'
+          }}
+          onContinue={() => router.push('/despega/a3')}
+        />
+      ) : showingFarewell ? (
         <div className="flex items-center justify-center px-4 min-h-screen">
           <div className="max-w-md w-full space-y-6">
             <Card className="border-training/40 overflow-hidden">
@@ -248,7 +263,13 @@ export default function ChallensingTrainingPage() {
                   playsInline
                   crossOrigin="anonymous"
                   className="w-full h-full object-contain"
-                  onEnded={() => router.push('/despega/a3')}
+                  onEnded={() => {
+                    const avgScore = completedQuestions.length > 0
+                      ? Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / completedQuestions.length)
+                      : 85
+                    setFinalScore(avgScore)
+                    setShowingResults(true)
+                  }}
                   style={{ width: '100%', height: '100%' }}
                 />
               </div>

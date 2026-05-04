@@ -8,6 +8,7 @@ import { ArrowLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { ConversationalInterviewSimulator } from '@/components/conversational-interview-simulator'
+import { TrainingResultsCard } from '@/components/training-results-card'
 
 export default function ConversationalInterviewPage() {
   const router = useRouter()
@@ -16,6 +17,8 @@ export default function ConversationalInterviewPage() {
   const [selectedIndustry, setSelectedIndustry] = useState<string | null>(null)
   const [selectedLevel, setSelectedLevel] = useState<'basico' | 'intermedio' | 'avanzado' | null>(null)
   const [showingFarewell, setShowingFarewell] = useState(false)
+  const [showingResults, setShowingResults] = useState(false)
+  const [score, setScore] = useState(0)
 
   const roles = ['Software Engineer', 'Product Manager', 'Data Scientist', 'Operations Manager', 'Marketing Lead']
   const industries = ['Tech', 'Finance', 'Healthcare', 'E-commerce', 'Consulting']
@@ -34,6 +37,59 @@ export default function ConversationalInterviewPage() {
   }
 
   if (!user) return null
+
+  if (showingResults) {
+    return (
+      <TrainingResultsCard
+        result={{
+          score: score,
+          questionsCompleted: 3,
+          totalQuestions: 3,
+          timeSpent: 900,
+          level: selectedLevel || 'intermedio',
+          trainingType: 'Entrevista Conversacional'
+        }}
+        onContinue={() => {
+          setSelectedLevel(null)
+          setSelectedRole(null)
+          setSelectedIndustry(null)
+          setShowingResults(false)
+          setShowingFarewell(false)
+          router.push('/despega/a3')
+        }}
+      />
+    )
+  }
+
+  if (showingFarewell) {
+    return (
+      <main className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="max-w-md w-full space-y-6">
+          <Card className="border-training/40 overflow-hidden">
+            <div className="relative aspect-[3/4] w-full bg-black">
+              <video
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-JJXsroDrldJQrOQgg1lHrJzODwH1Uf.mov"
+                autoPlay
+                playsInline
+                crossOrigin="anonymous"
+                className="w-full h-full object-contain"
+                onEnded={() => setShowingResults(true)}
+                style={{ width: '100%', height: '100%' }}
+              />
+            </div>
+          </Card>
+
+          <Card className="border-training/30 bg-training/5">
+            <CardContent className="pt-6">
+              <p className="text-white/85 text-center">
+                Sofia se está despidiendo...
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+    )
+  }
 
   if (showingFarewell) {
     return (
@@ -89,7 +145,8 @@ export default function ConversationalInterviewPage() {
           <div className="flex-1 overflow-y-auto">
             <ConversationalInterviewSimulator
               level={selectedLevel}
-              onComplete={() => {
+              onComplete={(result: any) => {
+                setScore(result.score || 85)
                 setShowingFarewell(true)
               }}
             />

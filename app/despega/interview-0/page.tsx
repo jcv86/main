@@ -7,10 +7,12 @@ import { Card, CardContent } from '@/components/ui/card'
 import { ArrowLeft, ChevronRight } from 'lucide-react'
 import { Interview0PreAudit } from '@/components/interview-0-pre-audit'
 import { ConversationalInterviewSimulator } from '@/components/conversational-interview-simulator'
+import { TrainingResultsCard } from '@/components/training-results-card'
 
 export default function Interview0Page() {
   const router = useRouter()
-  const [stage, setStage] = useState<'audit' | 'simulator' | 'farewell' | 'complete'>('audit')
+  const [stage, setStage] = useState<'audit' | 'simulator' | 'farewell' | 'results'>('audit')
+  const [score, setScore] = useState(0)
 
   const handleAuditComplete = (result: any) => {
     console.log('[v0] Audit completed:', result)
@@ -19,6 +21,7 @@ export default function Interview0Page() {
 
   const handleSimulatorComplete = (result: any) => {
     console.log('[v0] Interview 0 fully completed:', result)
+    setScore(result.score || 85)
     setStage('farewell')
   }
 
@@ -34,7 +37,7 @@ export default function Interview0Page() {
                 playsInline
                 crossOrigin="anonymous"
                 className="w-full h-full object-contain"
-                onEnded={() => setStage('complete')}
+                onEnded={() => setStage('results')}
                 style={{ width: '100%', height: '100%' }}
               />
             </div>
@@ -49,6 +52,26 @@ export default function Interview0Page() {
           </Card>
         </div>
       </div>
+    )
+  }
+
+  if (stage === 'results') {
+    return (
+      <TrainingResultsCard
+        result={{
+          score: score,
+          questionsCompleted: 5,
+          totalQuestions: 5,
+          timeSpent: 600,
+          level: 'basico',
+          trainingType: 'Entrevista 0'
+        }}
+        onContinue={() => {
+          setStage('audit')
+          setScore(0)
+          router.push('/despega/a3')
+        }}
+      />
     )
   }
 
