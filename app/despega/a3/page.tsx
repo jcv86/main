@@ -1,5 +1,6 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Card, CardHeader, CardContent, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -11,6 +12,15 @@ import { TrainingProgressDashboard } from '@/components/training-progress-dashbo
 
 export default function EntrenamientoIntensivePage() {
   const router = useRouter()
+  const [isHydrated, setIsHydrated] = useState(false)
+
+  useEffect(() => {
+    setIsHydrated(true)
+  }, [])
+
+  if (!isHydrated) {
+    return null
+  }
 
   return (
     <div className="min-h-screen bg-background">

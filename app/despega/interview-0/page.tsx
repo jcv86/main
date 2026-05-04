@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -13,6 +13,7 @@ export default function Interview0Page() {
   const router = useRouter()
   const [stage, setStage] = useState<'intro' | 'audit' | 'simulator' | 'farewell' | 'results'>('intro')
   const [score, setScore] = useState(0)
+  const [isHydrated, setIsHydrated] = useState(false)
 
   const handleAuditComplete = (result: any) => {
     console.log('[v0] Audit completed:', result)
@@ -23,6 +24,14 @@ export default function Interview0Page() {
     console.log('[v0] Interview 0 fully completed:', result)
     setScore(result.score || 85)
     setStage('farewell')
+  }
+
+  useEffect(() => {
+    setIsHydrated(true)
+  }, [])
+
+  if (!isHydrated) {
+    return null
   }
 
   if (stage === 'farewell') {
