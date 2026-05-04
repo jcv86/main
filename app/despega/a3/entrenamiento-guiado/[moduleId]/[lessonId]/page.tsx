@@ -42,6 +42,7 @@ export default function LessonPage() {
   const lessonId = params.lessonId as string
   
   const [showingSofia, setShowingSofia] = useState(true)
+  const [showingFarewell, setShowingFarewell] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const lessonData = LESSONS_DATA[moduleId]?.[lessonId]
 
@@ -60,6 +61,35 @@ export default function LessonPage() {
           <Link href="/despega/a3/entrenamiento-guiado">
             <Button variant="outline">Volver al entrenamiento</Button>
           </Link>
+        </div>
+      </div>
+    )
+  }
+
+  if (showingFarewell) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="max-w-md w-full space-y-6">
+          <Card className="border-training/40 overflow-hidden">
+            <div className="relative aspect-[3/4] w-full bg-black">
+              <video
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-JJXsroDrldJQrOQgg1lHrJzODwH1Uf.mov"
+                autoPlay
+                muted
+                playsInline
+                className="w-full h-full object-contain"
+                onEnded={() => router.push('/despega/a3')}
+              />
+            </div>
+          </Card>
+
+          <Card className="border-training/30 bg-training/5">
+            <CardContent className="pt-6">
+              <p className="text-white/85 text-center">
+                Sofia se está despidiendo... ¡Felicidades por completar el entrenamiento!
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </div>
     )
@@ -242,7 +272,7 @@ export default function LessonPage() {
 
             {/* Finish Button */}
             <Button 
-              onClick={() => router.push(`/despega/a3`)}
+              onClick={() => setShowingFarewell(true)}
               variant="outline"
               className="w-full h-12 text-base font-semibold text-white border-white/30 hover:bg-white/10"
             >
