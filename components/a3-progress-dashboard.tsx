@@ -173,10 +173,10 @@ export default function A3ProgressDashboard() {
   return (
     <div className="space-y-6">
       {/* GAMIFIED HEADER - Duolingo Style */}
-      <div className="relative overflow-hidden rounded-lg p-8" style={{ backgroundColor: 'linear-gradient(135deg, rgba(170, 70, 170, 0.15) 0%, rgba(170, 70, 170, 0.05) 100%)', border: '2px solid rgb(170, 70, 170)' }}>
+      <div className="relative overflow-hidden rounded-lg p-8" style={{ backgroundColor: 'linear-gradient(135deg, rgba(170, 70, 170, 0.15) 0%, rgba(80, 160, 170, 0.1) 100%)', border: '2px solid rgb(170, 70, 170)' }}>
         {/* Animated background elements */}
         <div className="absolute top-0 right-0 w-40 h-40 opacity-10" style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '50%', animation: 'pulse 3s infinite' }} />
-        <div className="absolute bottom-0 left-10 w-32 h-32 opacity-10" style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '50%', animation: 'pulse 4s infinite 1s' }} />
+        <div className="absolute bottom-0 left-10 w-32 h-32 opacity-10" style={{ backgroundColor: 'rgb(80, 160, 170)', borderRadius: '50%', animation: 'pulse 4s infinite 1s' }} />
         
         <div className="relative z-10 space-y-6">
           {/* Level Badge + Streak */}
@@ -184,11 +184,11 @@ export default function A3ProgressDashboard() {
             <div className="flex items-center gap-4">
               {/* Level Badge */}
               <div className="relative">
-                <div className="w-20 h-20 rounded-full flex items-center justify-center font-bold text-2xl text-white" style={{ backgroundColor: 'rgb(170, 70, 170)', boxShadow: '0 8px 24px rgba(170, 70, 170, 0.3)' }}>
+                <div className="w-20 h-20 rounded-full flex items-center justify-center font-bold text-2xl text-white" style={{ background: 'linear-gradient(135deg, rgb(170, 70, 170) 0%, rgb(80, 160, 170) 100%)', boxShadow: '0 8px 24px rgba(170, 70, 170, 0.4)' }}>
                   {progress.currentLevel}
                 </div>
-                <div className="absolute -bottom-1 -right-1 bg-yellow-400 rounded-full p-1" style={{ boxShadow: '0 4px 12px rgba(250, 204, 21, 0.3)' }}>
-                  <Star className="w-5 h-5 text-yellow-900 fill-yellow-900" />
+                <div className="absolute -bottom-1 -right-1 bg-amber-400 rounded-full p-1" style={{ boxShadow: '0 4px 12px rgba(251, 191, 36, 0.4)' }}>
+                  <Star className="w-5 h-5 text-amber-900 fill-amber-900" />
                 </div>
               </div>
               
@@ -219,7 +219,7 @@ export default function A3ProgressDashboard() {
                 className="h-full transition-all duration-1000 ease-out rounded-full"
                 style={{ 
                   width: `${(progress.xpPoints / (progress.xpPoints + progress.xpToNextLevel)) * 100}%`,
-                  backgroundColor: 'rgb(170, 70, 170)',
+                  background: 'linear-gradient(90deg, rgb(170, 70, 170) 0%, rgb(236, 72, 153) 100%)',
                   boxShadow: '0 0 20px rgba(170, 70, 170, 0.6)'
                 }}
               />
@@ -228,42 +228,42 @@ export default function A3ProgressDashboard() {
         </div>
       </div>
 
-      {/* Main KPI Cards Grid - 3 Metrics */}
+      {/* Main KPI Cards Grid - Training Colors */}
       <div className="grid grid-cols-3 gap-4">
-        {/* Metric 1: Time */}
-        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 overflow-hidden border-0" style={{ borderLeft: '4px solid rgb(59, 130, 246)' }}>
+        {/* Metric 1: Time - Blue */}
+        <Card className="bg-gradient-to-br from-blue-500/10 to-blue-600/5 overflow-hidden border-0 relative" style={{ borderLeft: '4px solid rgb(59, 130, 246)' }}>
           <CardContent className="pt-6 pb-6">
             <div className="flex flex-col items-center text-center space-y-3">
               <Clock className="w-8 h-8 text-blue-500" />
               <div>
                 <p className="text-4xl font-bold text-white">{progress.totalMinutes}</p>
-                <p className="text-xs mt-2 text-white/70">minutos entrenado</p>
+                <p className="text-xs mt-2 text-blue-300">minutos entrenado</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Metric 2: Sessions */}
-        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 overflow-hidden border-0" style={{ borderLeft: '4px solid rgb(168, 85, 247)' }}>
+        {/* Metric 2: Sessions - Purple (Training Primary) */}
+        <Card className="bg-gradient-to-br from-purple-500/10 to-purple-600/5 overflow-hidden border-0 relative" style={{ borderLeft: '4px solid rgb(170, 70, 170)' }}>
           <CardContent className="pt-6 pb-6">
             <div className="flex flex-col items-center text-center space-y-3">
-              <Target className="w-8 h-8 text-purple-500" />
+              <Target className="w-8 h-8" style={{ color: 'rgb(170, 70, 170)' }} />
               <div>
                 <p className="text-4xl font-bold text-white">{progress.totalSessions}</p>
-                <p className="text-xs mt-2 text-white/70">sesiones completadas</p>
+                <p className="text-xs mt-2" style={{ color: 'rgb(170, 70, 170)' }}>sesiones completadas</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Metric 3: Completion */}
-        <Card className="bg-gradient-to-br from-emerald-500/10 to-emerald-600/5 overflow-hidden border-0" style={{ borderLeft: '4px solid rgb(16, 185, 129)' }}>
+        {/* Metric 3: Completion - Cyan/Teal */}
+        <Card className="bg-gradient-to-br from-cyan-500/10 to-teal-600/5 overflow-hidden border-0 relative" style={{ borderLeft: '4px solid rgb(80, 160, 170)' }}>
           <CardContent className="pt-6 pb-6">
             <div className="flex flex-col items-center text-center space-y-3">
-              <TrendingUp className="w-8 h-8 text-emerald-500" />
+              <TrendingUp className="w-8 h-8" style={{ color: 'rgb(80, 160, 170)' }} />
               <div>
                 <p className="text-4xl font-bold text-white">{progress.completionPercentage}%</p>
-                <p className="text-xs mt-2 text-white/70">del programa</p>
+                <p className="text-xs mt-2" style={{ color: 'rgb(80, 160, 170)' }}>del programa</p>
               </div>
             </div>
           </CardContent>
@@ -384,14 +384,14 @@ export default function A3ProgressDashboard() {
                   onClick={handleClaimReward}
                   disabled={claimingReward}
                   className="w-full mt-4 gap-2 font-bold text-base py-6 hover:shadow-lg transition-shadow"
-                  style={{ backgroundColor: 'rgb(236, 72, 153)', color: '#ffffff' }}
+                  style={{ background: 'linear-gradient(135deg, rgb(170, 70, 170) 0%, rgb(236, 72, 153) 100%)', color: '#ffffff', border: 'none' }}
                 >
                   <CheckCircle2 className="w-5 h-5" />
-                  {claimingReward ? '🎁 Reclamando...' : '🎉 ¡Reclamar Recompensa!'}
+                  {claimingReward ? 'Reclamando...' : '¡Reclamar Recompensa!'}
                 </Button>
               ) : (
                 <div className="text-center text-sm font-semibold mt-4 p-4 rounded-lg" style={{ backgroundColor: 'rgba(236, 72, 153, 0.1)', color: 'rgb(236, 72, 153)' }}>
-                  ⏳ Completa {challenge.total - challenge.progress} más para desbloquear esta recompensa
+                  Completa {challenge.total - challenge.progress} más para desbloquear esta recompensa
                 </div>
               )}
             </div>
