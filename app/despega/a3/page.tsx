@@ -84,8 +84,13 @@ export default function EntrenamientoIntensivePage() {
         {/* Step 1: Diagnostic Audit */}
         <div className="mb-16 space-y-6">
           <div>
-            <h2 className="text-4xl font-bold text-white mb-3">Paso 1: Guía del Coach - Auditoría Inicial</h2>
-            <p className="text-lg text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+            <div className="flex items-center gap-4 mb-3">
+              <div className="text-5xl font-bold text-purple-400" style={{ color: 'rgb(170, 70, 170)' }}>1</div>
+              <div>
+                <h2 className="text-3xl font-bold text-white">Guía del Coach - Auditoría Inicial</h2>
+              </div>
+            </div>
+            <p className="text-lg text-white/85 ml-24" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               Tu coach te guiará a través de una auditoría completa de tu ambiente, presencia, audio y pitch. Este es el cimiento para toda tu preparación.
             </p>
           </div>
@@ -129,7 +134,7 @@ export default function EntrenamientoIntensivePage() {
               </div>
               <Link href="/despega/interview-0" className="block">
                 <Button className="w-full font-bold text-lg py-6" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}>
-                  Comenzar Paso 1 <ArrowRight className="ml-2 w-5 h-5" />
+                  Comenzar <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
             </CardContent>
@@ -139,8 +144,13 @@ export default function EntrenamientoIntensivePage() {
         {/* Step 2: Preparation Tools */}
         <div className="space-y-6 mb-16">
           <div>
-            <h2 className="text-4xl font-medium text-white mb-3">Paso 2: Herramientas de Preparación</h2>
-            <p className="text-lg text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+            <div className="flex items-center gap-4 mb-3">
+              <div className="text-5xl font-bold text-purple-400" style={{ color: 'rgb(170, 70, 170)' }}>2</div>
+              <div>
+                <h2 className="text-3xl font-medium text-white">Herramientas de Preparación</h2>
+              </div>
+            </div>
+            <p className="text-lg text-white/85 ml-24" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               Optimiza tu CV, aprende metodología STAR, analiza ofertas y practica en video. Herramientas específicas con guía del coach.
             </p>
           </div>
@@ -239,8 +249,13 @@ export default function EntrenamientoIntensivePage() {
         {/* Step 3: Progressive Training Levels */}
         <div className="space-y-6">
           <div>
-            <h2 className="text-4xl font-medium text-white mb-3">Paso 3: Entrenamientos Progresivos</h2>
-            <p className="text-lg text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+            <div className="flex items-center gap-4 mb-3">
+              <div className="text-5xl font-bold text-purple-400" style={{ color: 'rgb(170, 70, 170)' }}>3</div>
+              <div>
+                <h2 className="text-3xl font-medium text-white">Entrenamientos Progresivos</h2>
+              </div>
+            </div>
+            <p className="text-lg text-white/85 ml-24" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               4 niveles de dificultad progresiva con feedback del coach. Progresa desde principiante hasta maestría. Avanza cuando domines cada nivel.
             </p>
           </div>
