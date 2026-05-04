@@ -75,7 +75,7 @@ export default function InformacionPage() {
             {/* Text Section - 40% */}
             <div className="flex-[0.4] flex flex-col justify-center">
               {/* Coach Message - Visible for Accessibility */}
-              <div className="p-6 bg-gradient-to-r from-teal-500/10 to-purple-500/10 rounded-lg border border-white/20 h-full" role="region" aria-label="Transcripción del video del coach">
+              <div className="p-6 h-full" role="region" aria-label="Transcripción del video del coach">
                 <h3 className="font-semibold text-white mb-4 flex items-center gap-2">
                   <span className="w-2 h-2 bg-teal-400 rounded-full"></span>
                   Mensaje del Coach
@@ -91,14 +91,6 @@ Lee bien lo que viene y comenzamos.
                 </p>
               </div>
             </div>
-          </div>
-          
-          <div className="mt-6 p-4 bg-white/5 rounded-lg border border-white/10">
-            <p className="text-sm text-white/80 leading-relaxed">
-              En este video, tu entrenador te presenta el programa completo, explica cómo funcionan los 4 pilares, 
-              y te motiva a comenzar tu transformación profesional. Lee la información detallada abajo para entender exactamente 
-              qué esperar en cada fase y cómo máximizar tu progreso.
-            </p>
           </div>
         </div>
 
