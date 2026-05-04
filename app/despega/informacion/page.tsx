@@ -57,21 +57,16 @@ export default function InformacionPage() {
           <div className="space-y-6">
             {/* Video Player */}
             <div className="relative w-full bg-black rounded-lg overflow-hidden shadow-lg" style={{ aspectRatio: '16/9' }}>
-              {/* Video Placeholder - Será reemplazado con video real */}
-              <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
-                <div className="text-center">
-                  <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-white/10 mb-4">
-                    <Play className="w-8 h-8 text-white fill-white" />
-                  </div>
-                  <p className="text-white/60 text-sm">Video de bienvenida del coach</p>
-                  <p className="text-white/40 text-xs mt-1">Próximamente disponible</p>
-                </div>
-              </div>
-              {/* Video Element - Reemplazar src cuando tengas el video */}
-              {/* <video width="100%" height="100%" controls>
-                <source src="/videos/coach-welcome.mp4" type="video/mp4" />
+              <video 
+                width="100%" 
+                height="100%" 
+                controls
+                controlsList="nodownload"
+                className="w-full h-full object-cover"
+              >
+                <source src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/cogvideo_1777055904531-CuLRB7XMrrLX2U2jhiPKKaapS2onmO.mp4" type="video/mp4" />
                 Tu navegador no soporta videos HTML5
-              </video> */}
+              </video>
             </div>
 
             {/* Coach Message - Visible for Accessibility */}
@@ -196,7 +191,7 @@ Lee bien lo que viene y comenzamos.
 
                         <div className="bg-white/5 rounded p-4 border border-teal-400/20">
                           <h5 className="font-semibold text-teal-300 mb-2">4. Documento de Estrategia Personal</h5>
-                          <p className="text-sm text-muted-foreground dark:text-white/80 mb-2">Recibirás un documento PDF + acceso online con:</p>
+                          <p className="text-sm text-muted-foreground dark:text-white/80 mb-2">Recibir��s un documento PDF + acceso online con:</p>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
                             <li>• Resumen ejecutivo de tu perfil (quién eres profesionalmente)</li>
                             <li>• Listado de 5 fortalezas clave + cómo usarlas en entrevistas</li>
