@@ -160,6 +160,7 @@ export function ConversationalInterviewSimulator({
   const [sofiaState, setSofiaState] = useState<'greeting' | 'listening' | 'farewell'>('greeting')
   const [attempts, setAttempts] = useState<Record<string, AttemptResult[]>>({})
   const [error, setError] = useState<string | null>(null)
+  const [selectedInterviewerId, setSelectedInterviewerId] = useState<string>(preferences?.interviewer_avatar_id || 'sofia')
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
@@ -426,7 +427,7 @@ export function ConversationalInterviewSimulator({
   // Helper functions for avatar data
   const getAvatarEmoji = (avatarId: string, type: 'user' | 'interviewer'): string => {
     const emojiMap: Record<string, string> = {
-      'professional-1': '👔',
+      'professional-1': '���',
       'creative-1': '',
       'tech-1': '',
       'business-1': '🏢',
