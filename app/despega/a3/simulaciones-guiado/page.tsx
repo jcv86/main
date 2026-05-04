@@ -183,8 +183,8 @@ export default function GuidedInterviewPage() {
       const calculatedScore = Math.round((avgLength / 200) * 50 + (completeness / 100) * 50)
 
       setScore(Math.min(calculatedScore, 100))
-      setSubmitted(true)
-      console.log('[v0] Guided interview submitted successfully')
+      setShowingFarewell(true)
+      console.log('[v0] Showing farewell video, calculated score:', calculatedScore)
     } catch (error) {
       console.error('[v0] Error submitting interview:', error)
     } finally {
@@ -267,6 +267,38 @@ export default function GuidedInterviewPage() {
               </Card>
             </div>
           </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (showingFarewell) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="max-w-md w-full space-y-6">
+          <Card className="border-training/40 overflow-hidden">
+            <div className="relative aspect-[3/4] w-full bg-black">
+              <video
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-jqewmHgGSy0aNTnSXKpYDRGBDYj1rT.mov"
+                autoPlay
+                muted
+                playsInline
+                className="w-full h-full object-contain"
+                onEnded={() => {
+                  console.log('[v0] Farewell video ended, showing results')
+                  setSubmitted(true)
+                }}
+              />
+            </div>
+          </Card>
+
+          <Card className="border-training/30 bg-training/5">
+            <CardContent className="pt-6">
+              <p className="text-white/85 text-center">
+                Sofia se está despidiendo...
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </div>
     )
