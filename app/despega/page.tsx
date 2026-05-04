@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { calculateReadinessScore, type ReadinessScore } from '@/lib/readiness-score'
 import { Card } from '@/components/ui/card'
@@ -23,6 +23,7 @@ export default function DespegazoDashboard() {
   const [loading, setLoading] = useState(true)
   const [userName, setUserName] = useState('')
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
 
   useEffect(() => {
@@ -66,6 +67,14 @@ export default function DespegazoDashboard() {
       }
 
       setUserName(user.email?.split('@')[0] || 'User')
+
+      // Check if reset parameter is set to force onboarding flow
+      const resetParam = searchParams.get('reset')
+      if (resetParam === 'true') {
+        console.log('[v0] Reset parameter detected, redirecting to informacion')
+        router.push('/despega/informacion')
+        return
+      }
 
       const { data: a1 } = await supabase
         .from('a1_cerebral_assessment')
