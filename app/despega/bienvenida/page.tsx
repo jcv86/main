@@ -254,6 +254,7 @@ export default function BienvenidaPage() {
             </CardContent>
           </Card>
         </div>
+        </div>
 
         {/* Expanded Details Section */}
         {expandedDetails && (
