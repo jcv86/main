@@ -82,6 +82,7 @@ export default function GuidedInterviewPage() {
   const [score, setScore] = useState<number | null>(null)
   const [validatingIds, setValidatingIds] = useState<Set<number>>(new Set())
   const [started, setStarted] = useState(false)
+  const [showingFarewell, setShowingFarewell] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const supabase = createClient()
