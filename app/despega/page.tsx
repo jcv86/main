@@ -31,8 +31,36 @@ export default function DespegazoDashboard() {
 
   const loadUserProgress = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      let user = null
+      
+      // Check if demo credentials are available in environment
+      const demoEmail = process.env.NEXT_PUBLIC_DEMO_EMAIL
+      const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD
+      
+      if (demoEmail && demoPassword) {
+        // Auto-login as demo user
+        console.log('[v0] Demo mode enabled, attempting auto-login')
+        const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
+          email: demoEmail,
+          password: demoPassword
+        })
+        
+        if (authError) {
+          console.error('[v0] Demo login failed:', authError)
+          router.push('/auth/signin')
+          return
+        }
+        
+        user = authData.user
+        console.log('[v0] Demo user authenticated:', user?.email)
+      } else {
+        // Normal authentication flow
+        const { data: { user: currentUser } } = await supabase.auth.getUser()
+        user = currentUser
+      }
+      
       if (!user?.id) {
+        console.log('[v0] No user found, redirecting to signin')
         router.push('/auth/signin')
         return
       }
