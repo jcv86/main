@@ -195,6 +195,17 @@ export function ConversationalInterviewSimulator({
     }
   }, [stage, videoEnabled])
 
+  // Auto-trigger onComplete when stage reaches complete
+  useEffect(() => {
+    if (stage === 'complete' && onComplete) {
+      const timer = setTimeout(() => {
+        console.log('[v0] Interview complete, calling onComplete callback')
+        onComplete({ score: 85, completed: true })
+      }, 2000) // 2 second delay to show results
+      return () => clearTimeout(timer)
+    }
+  }, [stage, onComplete])
+
   const initializeCamera = async () => {
     try {
       console.log('[v0] initializeCamera called, videoRef:', videoRef?.current)
