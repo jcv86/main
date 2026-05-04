@@ -15,6 +15,7 @@ export default function BienvenidaPage() {
   const router = useRouter()
   const [userName, setUserName] = useState('')
   const [loading, setLoading] = useState(true)
+  const [expandedDetails, setExpandedDetails] = useState(false)
   const supabase = createClient()
 
   useEffect(() => {
@@ -69,8 +70,26 @@ export default function BienvenidaPage() {
           pillarColor="purple"
         />
 
-        {/* Pilares Grid */}
-        <div className="space-y-6 mb-12">
+        {/* Pilares Grid with Expandable Details */}
+        <div className="relative mb-12">
+          {/* Leer más button - Top right corner */}
+          <div className="absolute -top-12 right-0 z-10">
+            <button
+              onClick={() => setExpandedDetails(!expandedDetails)}
+              className="text-sm font-medium hover:opacity-80 transition flex items-center gap-1"
+              style={{ color: 'rgb(80, 160, 170)' }}
+            >
+              {expandedDetails ? 'Leer menos' : '+ Leer más'}
+              <ChevronDown 
+                className="w-4 h-4 transition-transform" 
+                style={{ 
+                  transform: expandedDetails ? 'rotate(180deg)' : 'rotate(0deg)'
+                }} 
+              />
+            </button>
+          </div>
+
+          <div className="space-y-6">
           {/* Paso 1: Conocer tu Perfil */}
           <Card className="border-0 shadow-md rounded-[2px]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
             <CardContent className="pt-8 pb-8 px-8">
@@ -235,29 +254,111 @@ export default function BienvenidaPage() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Expanded Details Section */}
+        {expandedDetails && (
+          <div className="mb-12 space-y-6">
+            {/* Pilar 1 Details */}
+            <Card className="border-0 shadow-md rounded-[2px]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)' }}>
+              <CardContent className="pt-8 pb-8 px-8">
+                <h3 className="text-xl font-bold text-muted/90 dark:text-white mb-4" style={{ color: 'rgba(80, 160, 170)' }}>
+                  Pilar 1: Conozcámonos - Descripción Detallada
+                </h3>
+                <div className="space-y-4 text-sm text-muted-foreground dark:text-muted-foreground">
+                  <div>
+                    <p className="font-semibold text-muted/90 dark:text-white mb-2">Evaluación de Perfil:</p>
+                    <p>Analizamos tus fortalezas comunicativas, puntos de mejora técnicos y blandos, y definimos tu diferencial único en el mercado laboral.</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-muted/90 dark:text-white mb-2">Contexto Laboral:</p>
+                    <p>Comprendemos tus objetivos de carrera, sector preferido, tipo de rol, ubicación, nivel de experiencia y expectativas salariales para personalizar todo tu viaje.</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-muted/90 dark:text-white mb-2">Baseline Personalizado:</p>
+                    <p>Creamos tu punto de partida único con métricas iniciales de desempeño en comunicación, presencia y confianza que te permitirá medir tu progreso a lo largo de los 90 días.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Pilar 2 Details */}
+            <Card className="border-0 shadow-md rounded-[2px]" style={{ backgroundColor: 'rgba(90, 90, 150, 0.15)' }}>
+              <CardContent className="pt-8 pb-8 px-8">
+                <h3 className="text-xl font-bold text-muted/90 dark:text-white mb-4" style={{ color: 'rgba(90, 90, 150)' }}>
+                  Pilar 2: Exploración - Descripción Detallada
+                </h3>
+                <div className="space-y-4 text-sm text-muted-foreground dark:text-muted-foreground">
+                  <div>
+                    <p className="font-semibold text-muted/90 dark:text-white mb-2">Fase 1 (Días 1-30) - Fundamentación:</p>
+                    <p>Domina los principios clave de comunicación ejecutiva, desarrolla tu storytelling profesional único, define tu propuesta de valor y construye la mentalidad ganadora necesaria.</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-muted/90 dark:text-white mb-2">Fase 2 (Días 31-60) - Exploración:</p>
+                    <p>Descubre oportunidades en el mercado, construye una red profesional estratégica, optimiza tu presencia digital (LinkedIn, portafolio) y prepárate para el siguiente nivel.</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-muted/90 dark:text-white mb-2">Fase 3 (Días 61-90) - Implementación:</p>
+                    <p>Aplica todo lo aprendido en entrevistas reales, negocia ofertas laborales, perfecciona tu pitch ejecutivo y consolida tu posición en el mercado laboral.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Pilar 3 Details */}
+            <Card className="border-0 shadow-md rounded-[2px]" style={{ backgroundColor: 'rgba(170, 70, 170, 0.15)' }}>
+              <CardContent className="pt-8 pb-8 px-8">
+                <h3 className="text-xl font-bold text-muted/90 dark:text-white mb-4" style={{ color: 'rgb(170, 70, 170)' }}>
+                  Pilar 3: Entrenamiento - Descripción Detallada
+                </h3>
+                <div className="space-y-4 text-sm text-muted-foreground dark:text-muted-foreground">
+                  <div>
+                    <p className="font-semibold text-muted/90 dark:text-white mb-2">4 Módulos Especializados:</p>
+                    <p><strong>Entrevistas:</strong> Situacionales, técnicas y ejecutivas | <strong>Presentaciones:</strong> Pitch, demos, keynotes | <strong>Decisiones Estratégicas:</strong> Case studies y resolución de problemas | <strong>Comunicación Ejecutiva:</strong> Negociación, liderazgo y persuasión.</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-muted/90 dark:text-white mb-2">4 Niveles de Progresión:</p>
+                    <p><strong>Guiada:</strong> Coach te acompaña paso a paso | <strong>Estructurada:</strong> Más autonomía, mismo soporte | <strong>Desafiante:</strong> Presión de tiempo y contextos complejos | <strong>Maestría:</strong> Entrevistas libre sin límites con máximo realismo.</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-muted/90 dark:text-white mb-2">Análisis Multimodal IA:</p>
+                    <p>Feedback instantáneo en postura corporal, tonalidad de voz, lenguaje verbal, coherencia del mensaje, impacto emocional y recomendaciones personalizadas para cada sesión.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Pilar 4 Details */}
+            <Card className="border-0 shadow-md rounded-[2px]" style={{ backgroundColor: 'rgba(225, 120, 130, 0.15)' }}>
+              <CardContent className="pt-8 pb-8 px-8">
+                <h3 className="text-xl font-bold text-muted/90 dark:text-white mb-4" style={{ color: 'rgba(225, 120, 130)' }}>
+                  Pilar 4: La Realidad - Descripción Detallada
+                </h3>
+                <div className="space-y-4 text-sm text-muted-foreground dark:text-muted-foreground">
+                  <div>
+                    <p className="font-semibold text-muted/90 dark:text-white mb-2">Aplicación Real en el Mercado:</p>
+                    <p>Después del día 90, pasas a ejecución continua donde aplicas todo en entrevistas reales con empresas. El soporte y coaching continúan a lo largo de toda tu búsqueda laboral.</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-muted/90 dark:text-white mb-2">Bolsa de Oportunidades:</p>
+                    <p>Acceso a oportunidades laborales filtradas por tu perfil, conexión con reclutadores, referrals personalizados y análisis de ofertas para negociación óptima.</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-muted/90 dark:text-white mb-2">Dashboard de Empleabilidad:</p>
+                    <p>Métrica visual de tu empleabilidad, comparativa con benchmark del mercado, evolución de tu desempeño en tiempo real y feedback del mercado basado en entrevistas reales.</p>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-muted/90 dark:text-white mb-2">Soporte Continuo:</p>
+                    <p>Coaching personalizado, acceso a comunidad de mentores y profesionales, sesiones de preparación específicas por empresa y soporte hasta tu colocación exitosa.</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   )
 }
-          {/* Header - Always visible */}
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold" style={{ color: 'rgb(80, 160, 170)' }}>Tu Viaje en 4 Pilares</h2>
-          </div>
-
-          {/* 4 Pilares Grid - Always visible */}
-          <div className="grid sm:grid-cols-2 gap-6 mb-6">
-            <div className="flex items-start gap-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/20 flex-shrink-0" style={{ backgroundColor: 'rgb(80, 160, 170, 0.4)' }}>
-                <span className="text-lg font-bold text-purple" style={{ color: 'rgb(80, 160, 170)' }}>1</span>
-              </div>
-              <div>
-                <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(80, 160, 170)' }}>Diagnóstico Personal</p>
-                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Comprende tu perfil único y punto de partida profesional</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-4">
-              <div className="flex items-center justify-center w-10 h-10 rounded-full bg-purple/20 flex-shrink-0" style={{ backgroundColor: 'rgb(90, 90, 150, 0.4)' }}>
-                <span className="text-lg font-bold text-purple" style={{ color: 'rgb(90, 90, 150)' }}>2</span>
               </div>
               <div>
                 <p className="font-medium text-muted/90 dark:text-white" style={{ color: 'rgb(90, 90, 150)' }}>Plan Estratégico</p>
