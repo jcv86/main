@@ -217,7 +217,7 @@ export default function EntrenamientoIntensivePage() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Level 1: Guided */}
-            <Card className="!rounded-none border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.6)', borderWidth: '0px 0px 0px 6px', borderRadius: '20px' }}>
+            <Card className="border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.6)', borderWidth: '0px 0px 0px 6px', borderRadius: '20px' }}>
               <div className="flex flex-col">
                 <div className="flex items-start p-6 pt-6">
                   <div className="flex items-center gap-1">
@@ -266,7 +266,7 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Level 2: Structured */}
-            <Card className="!rounded-none border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.6)', borderWidth: '0px 0px 0px 6px', borderRadius: '20px' }}>
+            <Card className="border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.6)', borderWidth: '0px 0px 0px 6px', borderRadius: '20px' }}>
               <div className="flex flex-col">
                 <div className="flex items-start p-6 pt-6">
                   <div className="flex items-center gap-1">
@@ -311,7 +311,7 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Level 3: Challenging */}
-            <Card className="!rounded-none border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.8)', borderWidth: '0px 0px 0px 6px', borderRadius: '20px' }}>
+            <Card className="border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.8)', borderWidth: '0px 0px 0px 6px', borderRadius: '20px' }}>
               <div className="flex flex-col">
                 <div className="flex items-start p-6 pt-6">
                   <div className="flex items-center gap-1">
@@ -356,7 +356,7 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Level 4: Mastery */}
-            <Card className="!rounded-none border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.8)', borderWidth: '0px 0px 0px 6px', borderRadius: '20px' }}>
+            <Card className="border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.8)', borderWidth: '0px 0px 0px 6px', borderRadius: '20px' }}>
               <div className="flex flex-col">
                 <div className="flex items-start p-6 pt-6">
                   <div className="flex items-center gap-1">
