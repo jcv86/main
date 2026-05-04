@@ -217,7 +217,7 @@ export default function EntrenamientoIntensivePage() {
 
           <div className="grid md:grid-cols-2 gap-6">
             {/* Level 1: Guided */}
-            <Card className="!rounded-none border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderColor: 'rgb(170, 70, 170, 0.4)' }}>
+            <Card className="!rounded-none border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.6)', borderWidth: '0px 0px 0px 6px', borderRadius: '20px' }}>
               <div className="flex flex-col">
                 <div className="flex items-start p-6 pt-6">
                   <div className="flex items-center gap-1">
@@ -228,9 +228,13 @@ export default function EntrenamientoIntensivePage() {
                     </svg>
                   </div>
                   <div className="flex gap-2 ml-auto">
-                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80" style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)', color: '#71c450' }}>
+                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
                       Básico
                     </div>
+                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff' }}>
+                      En Progreso
+                    </div>
+                  </div>
                     <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgb(170, 70, 170, 0.6)', color: '#ffffff' }}>
                       En Progreso
                     </div>
@@ -266,7 +270,7 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Level 2: Structured */}
-            <Card className="!rounded-none border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderColor: 'rgb(170, 70, 170, 0.4)' }}>
+            <Card className="!rounded-none border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.6)', borderWidth: '0px 0px 0px 6px', borderRadius: '20px' }}>
               <div className="flex flex-col">
                 <div className="flex items-start p-6 pt-6">
                   <div className="flex items-center gap-1">
@@ -276,7 +280,7 @@ export default function EntrenamientoIntensivePage() {
                     </svg>
                   </div>
                   <div className="flex gap-2 ml-auto">
-                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(150, 150, 150)', color: '#ffffff' }}>
+                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: '#b2c450' }}>
                       Intermedio
                     </div>
                   </div>
@@ -311,7 +315,7 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Level 3: Challenging */}
-            <Card className="!rounded-none border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderColor: 'rgb(170, 70, 170, 0.4)' }}>
+            <Card className="!rounded-none border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.8)', borderWidth: '0px 0px 0px 6px', borderRadius: '20px' }}>
               <div className="flex flex-col">
                 <div className="flex items-start p-6 pt-6">
                   <div className="flex items-center gap-1">
@@ -321,7 +325,7 @@ export default function EntrenamientoIntensivePage() {
                     </svg>
                   </div>
                   <div className="flex gap-2 ml-auto">
-                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(150, 150, 150)', color: '#ffffff' }}>
+                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: '#ffde47' }}>
                       Avanzado
                     </div>
                   </div>
@@ -356,7 +360,7 @@ export default function EntrenamientoIntensivePage() {
             </Card>
 
             {/* Level 4: Mastery */}
-            <Card className="!rounded-none border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderColor: 'rgb(170, 70, 170, 0.4)' }}>
+            <Card className="!rounded-none border cursor-pointer transition-all hover:shadow-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.8)', borderWidth: '0px 0px 0px 6px', borderRadius: '20px' }}>
               <div className="flex flex-col">
                 <div className="flex items-start p-6 pt-6">
                   <div className="flex items-center gap-1">
@@ -365,7 +369,7 @@ export default function EntrenamientoIntensivePage() {
                     </svg>
                   </div>
                   <div className="flex gap-2 ml-auto">
-                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(150, 150, 150)', color: '#ffffff' }}>
+                    <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: '#ffb21f' }}>
                       Maestría
                     </div>
                   </div>
