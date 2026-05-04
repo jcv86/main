@@ -4,14 +4,14 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { ArrowLeft, ChevronRight } from 'lucide-react'
+import { ArrowLeft, ChevronRight, Video, Lightbulb } from 'lucide-react'
 import { Interview0PreAudit } from '@/components/interview-0-pre-audit'
 import { ConversationalInterviewSimulator } from '@/components/conversational-interview-simulator'
 import { TrainingResultsCard } from '@/components/training-results-card'
 
 export default function Interview0Page() {
   const router = useRouter()
-  const [stage, setStage] = useState<'audit' | 'simulator' | 'farewell' | 'results'>('audit')
+  const [stage, setStage] = useState<'intro' | 'audit' | 'simulator' | 'farewell' | 'results'>('intro')
   const [score, setScore] = useState(0)
 
   const handleAuditComplete = (result: any) => {
@@ -46,7 +46,7 @@ export default function Interview0Page() {
           <Card className="border-training/30 bg-training/5">
             <CardContent className="pt-6">
               <p className="text-white/85 text-center">
-                Sofia se está despidiendo...
+                Tu coach está completando la sesión...
               </p>
             </CardContent>
           </Card>
@@ -64,10 +64,10 @@ export default function Interview0Page() {
           totalQuestions: 5,
           timeSpent: 600,
           level: 'basico',
-          trainingType: 'Entrevista 0'
+          trainingType: 'Etapa 1: Preparación Inicial'
         }}
         onContinue={() => {
-          setStage('audit')
+          setStage('intro')
           setScore(0)
           router.push('/despega/a3')
         }}
@@ -92,6 +92,53 @@ export default function Interview0Page() {
         {/* Content */}
         <div className="flex-1 overflow-auto p-4 md:p-6">
           <div className="max-w-4xl mx-auto">
+            {stage === 'intro' && (
+              <Card className="border-muted/30 max-w-2xl mx-auto">
+                <CardContent className="pt-12 pb-8 text-center space-y-6">
+                  <div className="space-y-2">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 mb-4">
+                      <Video className="w-4 h-4 text-purple-400" />
+                      <span className="text-sm font-semibold text-purple-400">Etapa 1: Preparación Inicial</span>
+                    </div>
+                    <h1 className="text-4xl font-bold text-white">Tu Guía Inicial con el Coach</h1>
+                    <p className="text-lg text-white/70">Prepara tu escenario, presencia y pitch antes de simular entrevistas</p>
+                  </div>
+
+                  <p className="text-white/80 max-w-md mx-auto">
+                    Tu coach te guiará a través de una auditoría completa de tu ambiente, presencia, cámara y audio. Esto establece tu base profesional antes de entrenar con simulaciones intensivas.
+                  </p>
+
+                  <div className="space-y-3 text-sm text-white/70 text-left max-w-md mx-auto">
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                      <Lightbulb className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                      <p><span className="font-semibold text-white">Auditoría de Entorno</span> - Luz, fondo, ruido y profesionalismo</p>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                      <Lightbulb className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                      <p><span className="font-semibold text-white">Validación de Presencia</span> - Postura, contacto visual y energía</p>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                      <Lightbulb className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                      <p><span className="font-semibold text-white">Prueba de Audio/Cámara</span> - Sonido claro y video de calidad</p>
+                    </div>
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                      <Lightbulb className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
+                      <p><span className="font-semibold text-white">Pitch Inicial</span> - Presentación profesional en 60 segundos</p>
+                    </div>
+                  </div>
+
+                  <Button
+                    onClick={() => setStage('audit')}
+                    className="w-full text-white h-12"
+                    style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '20px' }}
+                  >
+                    Comenzar Guía del Coach
+                    <ChevronRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </CardContent>
+              </Card>
+            )}
+
             {stage === 'audit' && (
               <Interview0PreAudit onComplete={handleAuditComplete} />
             )}
@@ -99,8 +146,12 @@ export default function Interview0Page() {
             {stage === 'simulator' && (
               <div className="space-y-4">
                 <div className="text-center mb-8">
-                  <h2 className="text-3xl font-bold text-white">Simulación de Entrevista</h2>
-                  <p className="text-white/85 mt-2">Ahora practicaremos una entrevista real basada en tu auditoría</p>
+                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 mb-4">
+                    <Video className="w-4 h-4 text-purple-400" />
+                    <span className="text-sm font-semibold text-purple-400">Continuación: Primera Práctica</span>
+                  </div>
+                  <h2 className="text-3xl font-bold text-white">Tu Primera Simulación de Entrevista</h2>
+                  <p className="text-white/85 mt-2">Ahora practicaremos una entrevista real guiada por el coach basada en tu auditoría</p>
                 </div>
                 <ConversationalInterviewSimulator
                   level="basico"

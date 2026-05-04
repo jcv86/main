@@ -84,26 +84,55 @@ export default function EntrenamientoIntensivePage() {
         {/* Step 1: Diagnostic Audit */}
         <div className="mb-16 space-y-6">
           <div>
-            <h2 className="text-4xl font-bold text-white mb-3">Paso 1: Tu Diagnóstico Inicial</h2>
+            <h2 className="text-4xl font-bold text-white mb-3">Paso 1: Etapa 1 - Preparación Inicial con el Coach</h2>
             <p className="text-lg text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-              Antes de entrenar, necesitamos entender tu punto de partida. Una auditoría rápida de tu ambiente, presencia y pitch.
+              Tu coach te guiará personalmente en esta primera etapa. Auditoría rápida de tu ambiente, presencia, audio y pitch inicial para establecer una base sólida.
             </p>
           </div>
 
           <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgba(170, 70, 170, 0.6)', borderWidth: '0px 0px 0px 6px', backgroundColor: 'rgba(80, 160, 170, 0.1)', borderRadius: '20px' }}>
             <CardHeader>
-              <CardTitle className="text-2xl flex items-center gap-3 text-white">
-                <span></span> Auditoría: Tu Base Profesional
-              </CardTitle>
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-lg bg-purple-500/10">
+                    <Video className="w-5 h-5" style={{ color: 'rgb(170, 70, 170)' }} />
+                  </div>
+                  <div>
+                    <CardTitle className="text-2xl">Guía Inicial del Coach</CardTitle>
+                    <p className="text-sm text-white/70 mt-1">Auditoría supervisada y primer feedback</p>
+                  </div>
+                </div>
+                <Badge className="bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                  Etapa 1
+                </Badge>
+              </div>
             </CardHeader>
             <CardContent className="space-y-4">
-              <p className="text-white/90 text-lg leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-                Análisis completo de tu ambiente, iluminación, audio, presencia en cámara y pitch profesional inicial. 
-                Identifica qué mejorar antes de las simulaciones intensivas.
+              <p className="text-white/90 text-lg leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                Comenzarás con una sesión guiada por el coach donde revisará: tu entorno, iluminación, audio, presencia en cámara y te ayudará a preparar tu pitch profesional. 
+                <span className="block mt-2 font-semibold">Este es el cimiento para toda tu preparación de entrevistas.</span>
               </p>
+              <div className="grid md:grid-cols-2 gap-3 mt-4 text-sm">
+                <div className="flex items-start gap-2 p-2 rounded bg-white/5">
+                  <span className="text-purple-400">✓</span>
+                  <span className="text-white/80">Auditoría de ambiente y técnica</span>
+                </div>
+                <div className="flex items-start gap-2 p-2 rounded bg-white/5">
+                  <span className="text-purple-400">✓</span>
+                  <span className="text-white/80">Validación de presencia profesional</span>
+                </div>
+                <div className="flex items-start gap-2 p-2 rounded bg-white/5">
+                  <span className="text-purple-400">✓</span>
+                  <span className="text-white/80">Primera práctica de entrevista</span>
+                </div>
+                <div className="flex items-start gap-2 p-2 rounded bg-white/5">
+                  <span className="text-purple-400">✓</span>
+                  <span className="text-white/80">Feedback personalizado inmediato</span>
+                </div>
+              </div>
               <Link href="/despega/interview-0" className="block">
-                <Button className="w-full font-bold text-lg py-6" style={{ backgroundColor: 'rgba(170, 70, 170, 0.4)', color: '#ffffff', borderRadius: '20px' }}>
-                  Comenzar Diagnóstico <ArrowRight className="ml-2 w-5 h-5" />
+                <Button className="w-full font-bold text-lg py-6" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}>
+                  Comenzar Etapa 1 <ArrowRight className="ml-2 w-5 h-5" />
                 </Button>
               </Link>
             </CardContent>
@@ -113,9 +142,9 @@ export default function EntrenamientoIntensivePage() {
         {/* Step 2: Preparation Tools */}
         <div className="space-y-6 mb-16">
           <div>
-            <h2 className="text-4xl font-medium text-white mb-3">Paso 2: Prepara tu Arsenal</h2>
+            <h2 className="text-4xl font-medium text-white mb-3">Paso 2: Etapa 2 - Preparación Intensiva con el Coach</h2>
             <p className="text-lg text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-              Optimiza tu CV, aprende metodología STAR, analiza ofertas y practica en video. Herramientas específicas para cada fase.
+              Una vez completada la Etapa 1, tu coach te ayudará a dominar las herramientas y técnicas que necesitas. Desde STAR method hasta análisis de ofertas y video feedback personalizado.
             </p>
           </div>
 
@@ -127,11 +156,12 @@ export default function EntrenamientoIntensivePage() {
                   <Zap className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
                   Método STAR
                 </CardTitle>
+                <CardDescription className="text-xs mt-1">Estructuración de respuestas</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">
-                  Aprende a estructurar respuestas: Situación → Tarea → Acción → Resultado. 
-                  El estándar para respuestas profesionales claras.
+                  Tu coach te enseñará a estructurar respuestas: Situación → Tarea → Acción → Resultado. 
+                  El estándar para respuestas profesionales claras y memorables.
                 </p>
                 <Link href="/despega/a3/entrenamiento-guiado" className="block">
                   <Button className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.5)', color: '#ffffff', borderRadius: '20px' }}>
@@ -148,11 +178,12 @@ export default function EntrenamientoIntensivePage() {
                   <BarChart3 className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
                   CV Inteligente
                 </CardTitle>
+                <CardDescription className="text-xs mt-1">Optimización para ATS</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                   Optimiza tu CV para sistemas ATS (Applicant Tracking Systems). 
-                  Múltiples formatos y feedback instantáneo.
+                  El coach te guiará en formatos, palabras clave y estrategia de presentación.
                 </p>
                 <Link href="/despega/a3/cv-ats" className="block">
                   <Button className="w-full font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.5)', color: '#ffffff', borderRadius: '20px' }}>
@@ -169,11 +200,12 @@ export default function EntrenamientoIntensivePage() {
                   <Target className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
                   Análisis de Vacante
                 </CardTitle>
+                <CardDescription className="text-xs mt-1">Estrategia por oferta</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                   Pega una oferta laboral y obtén: match score, CV personalizado y respuestas optimizadas. 
-                  Estrategia por cada postulación.
+                  Tu coach analiza cada detalle con estrategia específica por posición.
                 </p>
                 <Link href="/despega/a3/ajuste-por-vacante" className="block">
                   <Button className="w-full font-semibold" style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff', borderRadius: '20px' }}>
@@ -190,10 +222,11 @@ export default function EntrenamientoIntensivePage() {
                   <Video className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
                   Análisis Multimodal
                 </CardTitle>
+                <CardDescription className="text-xs mt-1">Feedback del coach en video</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground dark:text-muted-foreground">
-                  Grábate practicando y recibe análisis de IA sobre postura, gestos, tono, claridad y contenido. 
+                  Grábate practicando y recibe análisis de IA con feedback personalizado del coach sobre postura, gestos, tono, claridad y contenido. 
                   Feedback detallado en 60 segundos.
                 </p>
                 <Link href="/despega/a3/analisis-multimodal" className="block">
@@ -209,9 +242,9 @@ export default function EntrenamientoIntensivePage() {
         {/* Step 3: Progressive Training Levels */}
         <div className="space-y-6">
           <div>
-            <h2 className="text-4xl font-medium text-white mb-3">Paso 3: Entrena en 4 Niveles</h2>
+            <h2 className="text-4xl font-medium text-white mb-3">Paso 3: Etapa 2 Continuación - Entrenamientos Progresivos</h2>
             <p className="text-lg text-white/85" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-              Progresión desde principiante hasta maestría. Cada nivel aumenta complejidad, presión y feedback profundo. Avanza cuando domines el anterior.
+              Con el arsenal preparado, tu coach te guiará a través de 4 niveles de dificultad. Progresa desde principiante hasta maestría con feedback personalizado en cada etapa.
             </p>
           </div>
 
