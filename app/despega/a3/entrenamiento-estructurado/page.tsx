@@ -4,17 +4,48 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
 import { ConversationalInterviewSimulator } from '@/components/conversational-interview-simulator'
 
 export default function StructuredTrainingPage() {
-  const [isComplete, setIsComplete] = useState(false)
+  const [stage, setStage] = useState<'training' | 'farewell' | 'complete'>('training')
 
   const handleComplete = (result: any) => {
     console.log('[v0] Interview simulation completed:', result)
-    setIsComplete(true)
+    setStage('farewell')
   }
 
-  if (isComplete) {
+  if (stage === 'farewell') {
+    return (
+      <main className="min-h-screen bg-background flex items-center justify-center px-4">
+        <div className="max-w-md w-full space-y-6">
+          <Card className="border-training/40 overflow-hidden">
+            <div className="relative aspect-[3/4] w-full bg-black">
+              <video
+                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-JJXsroDrldJQrOQgg1lHrJzODwH1Uf.mov"
+                autoPlay
+                playsInline
+                crossOrigin="anonymous"
+                className="w-full h-full object-contain"
+                onEnded={() => setStage('complete')}
+                style={{ width: '100%', height: '100%' }}
+              />
+            </div>
+          </Card>
+
+          <Card className="border-training/30 bg-training/5">
+            <CardContent className="pt-6">
+              <p className="text-white/85 text-center">
+                Sofia se está despidiendo...
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+    )
+  }
+
+  if (stage === 'complete') {
     return (
       <main className="min-h-screen bg-background">
         <div className="container max-w-3xl mx-auto px-4 py-8">
@@ -29,7 +60,7 @@ export default function StructuredTrainingPage() {
               Excelente trabajo. Ahora tienes el material para sonar como un profesional en tu próxima entrevista.
             </p>
             <Button 
-              onClick={() => setIsComplete(false)}
+              onClick={() => setStage('training')}
               className="text-white h-12 px-8"
               style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '20px' }}
             >
