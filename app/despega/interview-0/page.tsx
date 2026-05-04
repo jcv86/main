@@ -75,35 +75,6 @@ export default function Interview0Page() {
     )
   }
 
-  if (stage === 'complete') {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="text-center max-w-md">
-          <h1 className="text-4xl font-bold text-purple-400 mb-4">¡Entrevista 0 completada!</h1>
-          <p className="text-lg text-white/90 mb-8">
-            Excelente. Ahora tienes tu base profesional lista. Continúa con práctica guiada o entrenamiento estructurado.
-          </p>
-          <div className="flex flex-col gap-3">
-            <Button
-              onClick={() => setStage('audit')}
-              className="text-white h-12"
-              style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '20px' }}
-            >
-              Hacer otra auditoría
-            </Button>
-            <Button
-              onClick={() => router.push('/despega/a3')}
-              variant="outline"
-              className="text-white"
-            >
-              Volver a entrenamientos
-            </Button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   return (
     <main className="min-h-screen bg-black">
       <div className="flex flex-col h-screen">

@@ -66,33 +66,6 @@ export default function StructuredTrainingPage() {
     )
   }
 
-  if (stage === 'complete') {
-    return (
-      <main className="min-h-screen bg-background">
-        <div className="container max-w-3xl mx-auto px-4 py-8">
-          <Link href="/despega/a3" className="inline-flex items-center gap-2 text-purple-400 hover:text-purple-400/80 mb-8">
-            <ArrowLeft className="w-4 h-4" />
-            Volver al Dashboard
-          </Link>
-          
-          <div className="text-center py-12">
-            <h1 className="text-4xl font-bold text-purple-400 mb-4">¡Entrenamiento Completado!</h1>
-            <p className="text-white/85 text-lg mb-8">
-              Excelente trabajo. Ahora tienes el material para sonar como un profesional en tu próxima entrevista.
-            </p>
-            <Button 
-              onClick={() => setStage('training')}
-              className="text-white h-12 px-8"
-              style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '20px' }}
-            >
-              Hacer otro entrenamiento
-            </Button>
-          </div>
-        </div>
-      </main>
-    )
-  }
-
   return (
     <main className="min-h-screen bg-black">
       <div className="flex flex-col h-screen">
