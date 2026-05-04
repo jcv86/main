@@ -162,6 +162,7 @@ export function ConversationalInterviewSimulator({
   const [error, setError] = useState<string | null>(null)
   const [selectedInterviewerId, setSelectedInterviewerId] = useState<string>(preferences?.interviewer_avatar_id || 'sofia')
   const [isLoading, setIsLoading] = useState(false)
+  const [copied, setCopied] = useState(false)
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
