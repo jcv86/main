@@ -75,7 +75,6 @@ export default function LessonPage() {
               <video
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-JJXsroDrldJQrOQgg1lHrJzODwH1Uf.mov"
                 autoPlay
-                controls
                 playsInline
                 className="w-full h-full object-contain"
                 onEnded={() => router.push('/despega/a3')}
