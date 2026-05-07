@@ -408,11 +408,21 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
         <p className="text-muted-foreground text-sm">{radarData.fecha} • Zona horaria: {radarData.timezone}</p>
       </div>
 
+      {/* Main strategic reading card */}
+      <Card className="rounded-[28px] border" style={{ backgroundColor: "rgba(225, 120, 130, 0.1)", borderColor: "rgba(225, 120, 130, 0.2)", borderRadius: "2px" }}>
+        <CardHeader>
+          <CardTitle className="text-xl flex items-center gap-2" style={{ color: "rgba(225, 120, 130, 0.8)", fontSize: "24px" }}>
+            <BookOpen className="w-6 h-6" />
+            Análisis Profundo
+          </CardTitle>
+        </CardHeader>
+      </Card>
+
       {/* Lectura Base - Capa 1 */}
-      <Card className="border-cyan/50/30 bg-background">
+      <Card className="bg-background" style={{ backgroundColor: "rgba(0, 193, 214, 0.2)", borderColor: "rgba(0, 193, 214, 0.4)" }}>
         <CardHeader>
           <CardTitle className="text-xl flex items-center gap-2">
-            <Target className="w-5 h-5 text-cyan/40" />
+            <Target className="w-5 h-5" style={{ color: "rgba(0, 193, 214, 0.6)" }} />
             Lectura Estratégica del Día
           </CardTitle>
         </CardHeader>
@@ -444,8 +454,8 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
 
       {/* Noticias Profundas - Capa 2 */}
       <div>
-        <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-          <BookOpen className="w-5 h-5 text-cyan/40" />
+        <h3 className="text-2xl font-normal mb-4 flex items-center gap-2" style={{ color: "rgba(225, 120, 130, 0.8)", fontSize: "24px" }}>
+          <BookOpen className="w-6 h-6" style={{ color: "rgba(225, 120, 130, 0.8)" }} />
           Análisis Profundo
         </h3>
         
@@ -461,11 +471,11 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
               {radarData.noticias
                 .filter((n) => n.prioridad === prioridad)
                 .map((noticia) => (
-                  <Card key={noticia.id} className="border-muted/70/50 bg-slate-950/50">
+                  <Card key={noticia.id} className="border-none" style={{ backgroundColor: "rgba(225, 120, 130, 0.1)", borderRadius: "2px" }}>
                     <CardHeader>
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
-                          <CardTitle className="text-lg mb-2">{noticia.titulo}</CardTitle>
+                          <CardTitle className="text-lg font-normal mb-2" style={{ color: "rgba(225, 120, 130, 0.8)", fontSize: "24px" }}>{noticia.titulo}</CardTitle>
                           <p className="text-xs text-muted-foreground">{noticia.fecha} • {noticia.hora}</p>
                         </div>
                       </div>
@@ -497,8 +507,8 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
                         <p className="text-white/85 text-sm">{noticia.incentivos}</p>
                       </div>
 
-                      <div className="bg-muted/90/50 p-3 rounded border border-muted/70/50">
-                        <h4 className="text-xs font-semibold text-white/85 uppercase mb-2"> Impacto temporal</h4>
+                      <div className="p-3 rounded border" style={{ backgroundColor: "rgba(225, 120, 130, 0.1)", borderColor: "rgba(225, 120, 130, 0.1)" }}>
+                        <h4 className="text-xs font-semibold uppercase mb-2" style={{ color: "rgba(225, 120, 130)" }}> Impacto temporal</h4>
                         <div className="space-y-1 text-xs">
                           <p><span className="text-green/40">Corto:</span> {noticia.impactoTemporal.corto}</p>
                           <p><span className="text-yellow/40">Medio:</span> {noticia.impactoTemporal.medio}</p>
@@ -512,23 +522,23 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
                       </div>
 
                       <div>
-                        <h4 className="text-xs font-semibold text-white/85 uppercase mb-2">🗺️ Mapa de exposición</h4>
+                        <h4 className="text-xs font-bold uppercase mb-2" style={{ color: "rgba(225, 120, 130)", fontWeight: "700" }}> Mapa de exposición</h4>
                         <div className="space-y-1 text-xs">
-                          <p><span className="text-emerald-400">🇨🇱 Chile:</span> {noticia.mapeoExposicion.chile}</p>
-                          <p><span className="text-blue/40">🌍 Global:</span> {noticia.mapeoExposicion.global}</p>
-                          <p><span className="text-purple/40">👤 Personal:</span> {noticia.mapeoExposicion.personal}</p>
+                          <p><span style={{ color: "rgba(225, 120, 130, 0.8)", fontWeight: "500" }}>Chile:</span> {noticia.mapeoExposicion.chile}</p>
+                          <p><span style={{ color: "rgba(225, 120, 130, 0.8)", fontWeight: "500" }}>Global:</span> {noticia.mapeoExposicion.global}</p>
+                          <p><span style={{ color: "rgba(225, 120, 130, 0.8)", fontWeight: "500" }}> Personal:</span> {noticia.mapeoExposicion.personal}</p>
                         </div>
                       </div>
 
-                      <div className="border-t border-muted/70/50 pt-3">
-                        <h4 className="text-xs font-semibold text-white/85 uppercase mb-1">📖 Evolución narrativa</h4>
-                        <p className="text-white/85 text-sm">{noticia.evolucionNarrativa}</p>
+                      <div className="border-t pt-3" style={{ borderColor: "rgba(225, 120, 130, 0.4)" }}>
+                        <h4 className="text-xs font-bold uppercase mb-1" style={{ color: "rgba(225, 120, 130)", fontWeight: "700" }}>Evolución narrativa</h4>
+                        <p className="text-sm" style={{ color: "rgba(225, 120, 130)" }}>{noticia.evolucionNarrativa}</p>
                       </div>
 
                       {noticia.narrativaZombie && (
-                        <div className="bg-red/20 p-2 rounded border border-red/30">
-                          <h4 className="text-xs font-semibold text-red/40 uppercase mb-1">🧟 Narrativa zombie</h4>
-                          <p className="text-white/85 text-sm">{noticia.narrativaZombie}</p>
+                        <div className="p-2 rounded" style={{ backgroundColor: "rgba(225, 120, 130, 0.4)", border: "none" }}>
+                          <h4 className="text-xs font-semibold uppercase mb-1" style={{ color: "rgb(253, 230, 138)" }}>Narrativa zombie</h4>
+                          <p className="text-sm" style={{ color: "rgb(253, 230, 138, 0.8)" }}>{noticia.narrativaZombie}</p>
                         </div>
                       )}
 
@@ -546,28 +556,28 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
 
       {/* Sistema Vivo - Capa 4 */}
       <div className="grid md:grid-cols-2 gap-4">
-        <Card className="border-muted/70/50 bg-slate-950/50">
+        <Card className="border-none" style={{ backgroundColor: "rgba(225, 120, 130, 0.4)" }}>
           <CardHeader>
-            <CardTitle className="text-base">📋 Watchlist Activa</CardTitle>
+            <CardTitle className="text-base">Watchlist Activa</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {radarData.watchlist.map((item, idx) => (
-              <div key={idx} className="text-sm text-white/85 flex gap-2">
-                <span className="text-cyan/40">▸</span>
+              <div key={idx} className="text-sm flex gap-2">
+                <span>▸</span>
                 <span>{item}</span>
               </div>
             ))}
           </CardContent>
         </Card>
 
-        <Card className="border-muted/70/50 bg-slate-950/50">
+        <Card className="border-none" style={{ backgroundColor: "rgba(225, 120, 130, 0.4)" }}>
           <CardHeader>
-            <CardTitle className="text-base">🔍 Narrativas en Observación</CardTitle>
+            <CardTitle className="text-base">Narrativas en Observación</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2">
             {radarData.narrativasEnObservacion.map((item, idx) => (
-              <div key={idx} className="text-sm text-white/85 flex gap-2">
-                <span className="text-yellow/40">▸</span>
+              <div key={idx} className="text-sm flex gap-2">
+                <span>▸</span>
                 <span>{item}</span>
               </div>
             ))}

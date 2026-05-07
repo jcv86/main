@@ -229,8 +229,8 @@ export default function EjecucionContinuaPage() {
 
           {/* Análisis - Radar */}
           <TabsContent value="radar" className="space-y-6">
-            <div className="mb-6 border-l-4 border-l-red pl-6">
-              <h2 className="text-3xl font-bold mb-2 text-red">Radar Estratégico de Mercado</h2>
+            <div className="mb-6 border-l-4 pl-6" style={{ borderLeftColor: "rgba(225, 120, 130, 0.6)" }}>
+              <h2 className="text-3xl font-normal mb-2" style={{ color: "rgba(225, 120, 130, 0.8)" }}>Radar Estratégico de Mercado</h2>
               <p className="text-muted-foreground dark:text-muted-foreground">
                 Análisis en profundidad de tendencias del mercado laboral, señales débiles de cambio y contexto estratégico para tu posicionamiento profesional
               </p>
