@@ -58,10 +58,10 @@ export function MarketInsightsCard() {
   return (
     <div className="grid gap-4 lg:grid-cols-2">
       {/* Trending Skills Card */}
-      <Card className="border-cyan/20 bg-background">
+      <Card className="bg-background" style={{ borderColor: "rgba(225, 120, 130, 0.2)", borderRadius: "2px" }}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
-            <TrendingUp className="w-5 h-5 text-cyan" />
+            <TrendingUp className="w-5 h-5" style={{ color: "rgba(225, 120, 130)" }} />
             Trending Skills
           </CardTitle>
         </CardHeader>
@@ -86,10 +86,10 @@ export function MarketInsightsCard() {
       </Card>
 
       {/* Skill Gap Analysis Card */}
-      <Card className="border-purple/20 bg-background">
+      <Card className="bg-background" style={{ borderColor: "rgba(225, 120, 130, 0.2)", borderRadius: "2px" }}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
-            <Target className="w-5 h-5 text-purple" />
+            <Target className="w-5 h-5" style={{ color: "rgba(225, 120, 130)" }} />
             Your Skill Gap
           </CardTitle>
         </CardHeader>
@@ -145,35 +145,35 @@ export function MarketInsightsCard() {
       </Card>
 
       {/* Market Snapshot Card */}
-      <Card className="border-teal-200 bg-background">
+      <Card className="bg-background" style={{ borderColor: "rgba(225, 120, 130, 0.2)", borderRadius: "2px" }}>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
-            <AlertCircle className="w-5 h-5 text-teal-600" />
+            <AlertCircle className="w-5 h-5" style={{ color: "rgba(225, 120, 130)" }} />
             Market Snapshot
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-teal-600">
+              <p className="text-2xl font-bold" style={{ color: "rgba(225, 120, 130)" }}>
                 {marketData?.market_snapshot.total_jobs_tracked || 0}
               </p>
               <p className="text-xs text-muted-foreground mt-1">Jobs Tracked</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-cyan">
+              <p className="text-2xl font-bold" style={{ color: "rgba(225, 120, 130)" }}>
                 {marketData?.trending_skills.length || 0}
               </p>
               <p className="text-xs text-muted-foreground mt-1">Trending Skills</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-purple">
+              <p className="text-2xl font-bold" style={{ color: "rgba(225, 120, 130)" }}>
                 {skillGap?.current_strengths.length || 0}
               </p>
               <p className="text-xs text-muted-foreground mt-1">Your Strengths</p>
             </div>
             <div className="text-center">
-              <p className="text-2xl font-bold text-amber-600">
+              <p className="text-2xl font-bold" style={{ color: "rgba(225, 120, 130)" }}>
                 {skillGap?.skills_to_learn.length || 0}
               </p>
               <p className="text-xs text-muted-foreground mt-1">To Learn</p>

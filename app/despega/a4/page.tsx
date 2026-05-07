@@ -195,8 +195,8 @@ export default function EjecucionContinuaPage() {
 
           {/* Empleos - Oportunidades */}
           <TabsContent value="oportunidades" className="space-y-6">
-            <div className="mb-6 border-l-4 border-l-red pl-6">
-              <h2 className="text-3xl font-bold mb-2 text-red">Conecta con Oportunidades Reales</h2>
+            <div className="mb-6 border-l-4 pl-6" style={{ borderLeftColor: "rgba(225, 120, 130, 0.6)" }}>
+              <h2 className="text-3xl font-normal mb-2" style={{ color: "rgba(225, 120, 130)" }}>Conecta con Oportunidades Reales</h2>
               <p className="text-muted-foreground dark:text-muted-foreground">
                 Tu perfil profesional sincronizado con LinkedIn, ofertas laborales personalizadas según tu perfil e insights del mercado laboral chileno en tiempo real
               </p>

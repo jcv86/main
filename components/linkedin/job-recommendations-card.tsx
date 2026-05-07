@@ -61,10 +61,10 @@ export function JobRecommendationsCard() {
   }
 
   return (
-    <Card className="border-amber-200 bg-background">
+    <Card className="border-none" style={{ backgroundColor: "rgba(225, 120, 130, 0.2)", borderRadius: "20px" }}>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Briefcase className="w-5 h-5 text-amber-600" />
+          <Briefcase className="w-5 h-5" style={{ color: "rgba(225, 120, 130)" }} />
           Recommended Opportunities
         </CardTitle>
       </CardHeader>
@@ -79,7 +79,7 @@ export function JobRecommendationsCard() {
         {jobs.length === 0 ? (
           <div className="text-center py-6 text-muted-foreground">
             <p>No recommendations yet. Connect your LinkedIn profile to discover personalized opportunities.</p>
-            <Button onClick={loadJobs} className="mt-4" variant="outline">
+            <Button onClick={loadJobs} className="mt-4 border-none" style={{ backgroundColor: "rgba(14, 118, 168, 0.4)", borderRadius: "20px" }}>
               Try Again
             </Button>
           </div>

@@ -75,19 +75,19 @@ export function LinkedInProfileCard() {
   }
 
   return (
-    <Card className="border-blue/20 bg-background">
+    <Card className="border-none bg-background">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <Linkedin className="w-5 h-5 text-blue" />
+            <Linkedin className="w-5 h-5" style={{ color: "rgba(14, 118, 168)" }} />
             LinkedIn Profile
           </CardTitle>
           <Button
             onClick={handleSync}
             disabled={syncing}
-            variant="outline"
             size="sm"
-            className="text-xs"
+            className="text-xs border-none"
+            style={{ backgroundColor: "rgba(225, 120, 130, 0.4)", borderRadius: "20px" }}
           >
             <RefreshCw className={`w-3 h-3 mr-1 ${syncing ? 'animate-spin' : ''}`} />
             {syncing ? 'Syncing...' : 'Sync'}
@@ -106,7 +106,7 @@ export function LinkedInProfileCard() {
         {!profile ? (
           <div className="text-center py-6">
             <p className="text-muted-foreground mb-4">No LinkedIn profile synced yet</p>
-            <Button onClick={handleSync} className="bg-blue/80 hover:bg-blue/70">
+            <Button onClick={handleSync} style={{ backgroundColor: "rgba(14, 118, 168, 0.6)", borderRadius: "20px" }}>
               <Linkedin className="w-4 h-4 mr-2" />
               Connect LinkedIn
             </Button>
