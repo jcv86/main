@@ -218,8 +218,8 @@ export default function EjecucionContinuaPage() {
 
           {/* Conocimiento - Tests */}
           <TabsContent value="tests" className="space-y-6">
-            <div className="mb-6 border-l-4 border-l-red pl-6">
-              <h2 className="text-3xl font-bold mb-2 text-red">Desarrolla Criterio Laboral</h2>
+            <div className="mb-6 border-l-4 pl-6" style={{ borderLeftColor: "rgba(225, 120, 130, 0.6)" }}>
+              <h2 className="text-3xl font-normal mb-2" style={{ color: "rgba(225, 120, 130, 0.8)" }}>Desarrolla Criterio Laboral</h2>
               <p className="text-muted-foreground dark:text-muted-foreground">
                 Tests sobre historia, economía, tecnología, actualidad y cultura general. Mejora tu conocimiento contextual, acumula puntos DTC y desbloquea badges de experto
               </p>

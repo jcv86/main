@@ -109,12 +109,24 @@ export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4Gamif
   }
 
   const getNivelColor = (nivel: string) => {
-    const colors: Record<string, string> = {
-      "basico": "bg-green/10 text-green dark:bg-green/40 dark:text-green/30",
-      "intermedio": "bg-blue/10 text-blue dark:bg-blue/40 dark:text-blue-200",
-      "avanzado": "bg-purple/10 text-purple dark:bg-purple/40 dark:text-purple/20",
+    // Return inline styles for difficulty level badges
+    if (nivel === "basico") {
+      return "" // Will use inline style
+    } else if (nivel === "intermedio") {
+      return "" // Will use inline style
+    } else if (nivel === "avanzado") {
+      return "" // Will use inline style
     }
-    return colors[nivel] || "bg-muted/10"
+    return "bg-muted/10"
+  }
+
+  const getNivelStyle = (nivel: string) => {
+    const styles: Record<string, React.CSSProperties> = {
+      "basico": { backgroundColor: "rgba(225, 120, 130, 0.4)", color: "#78c657" },
+      "intermedio": { backgroundColor: "rgba(225, 120, 130, 0.4)", color: "rgba(255, 255, 255, 0.6)" },
+      "avanzado": { backgroundColor: "rgba(225, 120, 130, 0.4)", color: "#e08b93" },
+    }
+    return styles[nivel] || {}
   }
 
   if (!selectedTest) {
@@ -143,7 +155,7 @@ export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4Gamif
         <div className="flex items-center gap-3 mb-6">
           <Trophy className="w-8 h-8 text-yellow" />
           <div>
-            <h2 className="text-2xl font-bold">Tests Gamificados</h2>
+            <h2 className="text-2xl font-normal">Tests Gamificados</h2>
             <p className="text-sm text-muted-foreground">
               Completa tests de contexto profesional y gana puntos + badges
             </p>
@@ -159,7 +171,7 @@ export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4Gamif
                     <CardTitle className="text-lg">{test.titulo}</CardTitle>
                     <CardDescription>{test.descripcion}</CardDescription>
                   </div>
-                  <Badge className={getNivelColor(test.nivel)}>
+                  <Badge style={getNivelStyle(test.nivel)}>
                     {test.nivel}
                   </Badge>
                 </div>
@@ -179,7 +191,7 @@ export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4Gamif
                   {test.preguntas.length} preguntas
                   {test.tiempo_limite_minutos && ` • ${test.tiempo_limite_minutos} min`}
                 </div>
-                <Button className="w-full">Comenzar Test</Button>
+                <Button className="w-full border-none" style={{ backgroundColor: "rgba(225, 120, 130, 0.6)", borderRadius: "20px" }}>Comenzar Test</Button>
               </CardContent>
             </Card>
           ))}
@@ -203,7 +215,7 @@ export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4Gamif
                 Pregunta {currentQuestion + 1} de {selectedTest.preguntas.length}
               </CardDescription>
             </div>
-            <Badge className={getNivelColor(selectedTest.nivel)}>
+            <Badge style={getNivelStyle(selectedTest.nivel)}>
               {selectedTest.nivel}
             </Badge>
           </div>
