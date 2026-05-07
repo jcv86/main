@@ -240,8 +240,8 @@ export default function EjecucionContinuaPage() {
 
           {/* Biblioteca - Recursos */}
           <TabsContent value="recursos" className="space-y-6">
-            <div className="mb-6 border-l-4 border-l-red pl-6">
-              <h2 className="text-3xl font-bold mb-2 text-red">Biblioteca de Recursos</h2>
+            <div className="mb-6 border-l-4 pl-6" style={{ borderLeftColor: "rgba(225, 120, 130, 0.6)" }}>
+              <h2 className="text-3xl font-normal mb-2" style={{ color: "rgba(225, 120, 130, 0.8)" }}>Biblioteca de Recursos</h2>
               <p className="text-muted-foreground dark:text-muted-foreground">
                 Acceso a libros, artículos, cursos y herramientas curadas para fortalecer tu desarrollo profesional continuo
               </p>

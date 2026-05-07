@@ -75,8 +75,8 @@ const RECURSOS_DEFAULT: Recurso[] = [
 ]
 
 const getTipoColor = (tipo: string) => {
-  const colors: Record<string, { badge: string; icon: string }> = {
-    libro: { badge: 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-200', icon: '' },
+  const colors: Record<string, { badge: string; icon: string; color?: string }> = {
+    libro: { badge: 'rounded-[16px]', icon: '', color: 'rgba(225, 120, 130, 0.40)' },
     articulo: { badge: 'bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple/20', icon: '📄' },
     podcast: { badge: 'bg-green/10 text-green dark:bg-green/30 dark:text-green/30', icon: '🎧' },
     video: { badge: 'bg-red/10 text-red dark:bg-red/30 dark:text-red/30', icon: '🎬' },
@@ -198,6 +198,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
                 variant={selectedTipo === null ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedTipo(null)}
+                style={{ backgroundColor: selectedTipo === null ? "rgba(225, 120, 130, 0.4)" : undefined, borderRadius: "20px" }}
               >
                 Todos
               </Button>
@@ -209,6 +210,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
                     variant={selectedTipo === tipo ? "default" : "outline"}
                     size="sm"
                     onClick={() => setSelectedTipo(tipo)}
+                    style={{ borderRadius: "20px" }}
                   >
                     {tipoInfo.icon} {tipo}
                   </Button>
@@ -224,6 +226,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
                 variant={selectedCategoria === null ? "default" : "outline"}
                 size="sm"
                 onClick={() => setSelectedCategoria(null)}
+                style={{ backgroundColor: selectedCategoria === null ? "rgba(225, 120, 130, 0.4)" : undefined, borderRadius: "20px" }}
               >
                 Todas
               </Button>
@@ -233,6 +236,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
                   variant={selectedCategoria === categoria ? "default" : "outline"}
                   size="sm"
                   onClick={() => setSelectedCategoria(categoria)}
+                  style={{ borderRadius: "20px" }}
                 >
                   {categoria}
                 </Button>
@@ -263,7 +267,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
             const isSaved = savedItems.has(recurso.id)
 
             return (
-              <Card key={recurso.id} className="hover:shadow-lg transition-all group border-l-4 border-l-muted hover:border-l-primary">
+              <Card key={recurso.id} className="hover:shadow-lg transition-all group border-0" style={{ borderLeft: "3px solid rgb(225, 120, 130)" }}>
                 <CardContent className="pt-6 space-y-3">
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex-1">
@@ -280,15 +284,21 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
                   </p>
 
                   <div className="flex items-center gap-2 flex-wrap">
-                    <Badge className={tipoInfo.badge} variant="secondary">
+                    <div 
+                      className={`inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent hover:bg-secondary/80`}
+                      style={{ 
+                        backgroundColor: tipoInfo.color || "rgba(225, 120, 130, 0.40)",
+                        color: tipoInfo.color ? "rgba(225, 120, 130, 0.80)" : undefined
+                      }}
+                    >
                       {recurso.tipo}
-                    </Badge>
+                    </div>
                     <Badge className={getCategoriaColor(recurso.categoria)} variant="secondary">
                       {recurso.categoria}
                     </Badge>
                   </div>
 
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t">
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground pt-2 border-t" style={{ borderTopColor: "rgba(225, 120, 130, 0.60)" }}>
                     <span className="flex items-center gap-1">
                       <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
                       {recurso.rating}
@@ -305,6 +315,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
                       size="sm"
                       className="flex-1 text-xs"
                       onClick={() => handleSave(recurso.id)}
+                      style={{ borderRadius: "20px" }}
                     >
                       <Bookmark
                         className={`w-3 h-3 mr-1 ${`}
@@ -319,6 +330,7 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
                         size="sm"
                         className="flex-1 text-xs"
                         asChild
+                        style={{ borderRadius: "20px" }}
                       >
                         <a href={recurso.enlace} target="_blank" rel="noopener noreferrer">
                           <ExternalLink className="w-3 h-3 mr-1" />
@@ -348,21 +360,21 @@ export function A4Biblioteca({ recursos: initialRecursos }: A4BibliotecaProps) {
       </div>
 
       <div className="grid grid-cols-3 gap-4 py-4">
-        <Card className="bg-background">
+        <Card className="bg-background" style={{ backgroundColor: "rgba(225, 120, 130, 0.4)", borderColor: "rgba(225, 120, 130, 0.4)" }}>
           <CardContent className="pt-4 text-center">
-            <div className="text-2xl font-bold text-blue">{recursos.length}</div>
+            <div className="text-2xl font-bold" style={{ color: "rgba(225, 120, 130, 0.80)" }}>{recursos.length}</div>
             <p className="text-xs text-muted-foreground mt-1">Recursos</p>
           </CardContent>
         </Card>
-        <Card className="bg-background">
+        <Card className="bg-background" style={{ backgroundColor: "rgba(225, 120, 130, 0.4)", borderColor: "rgba(225, 120, 130, 0.4)" }}>
           <CardContent className="pt-4 text-center">
-            <div className="text-2xl font-bold text-amber-600">{tipos.length}</div>
+            <div className="text-2xl font-bold" style={{ color: "rgba(225, 120, 130, 0.80)" }}>{tipos.length}</div>
             <p className="text-xs text-muted-foreground mt-1">Tipos</p>
           </CardContent>
         </Card>
-        <Card className="bg-background">
+        <Card className="bg-background" style={{ backgroundColor: "rgba(225, 120, 130, 0.4)", borderColor: "rgba(225, 120, 130, 0.4)" }}>
           <CardContent className="pt-4 text-center">
-            <div className="text-2xl font-bold text-green">{savedItems.size}</div>
+            <div className="text-2xl font-bold" style={{ color: "rgba(225, 120, 130, 0.80)" }}>{savedItems.size}</div>
             <p className="text-xs text-muted-foreground mt-1">Guardados</p>
           </CardContent>
         </Card>
