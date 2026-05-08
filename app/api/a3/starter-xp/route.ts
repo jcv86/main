@@ -53,7 +53,7 @@ export async function POST(request: NextRequest) {
       .insert({
         user_id: userId,
         training_type: 'STARTER_XP',
-        training_module_id: 'starter-welcome',
+        training_module_id: '00000000-0000-0000-0000-000000000001', // Valid UUID for starter
         xp_amount: STARTER_XP,
         xp_awarded_at: new Date().toISOString(),
         is_first_completion: true,

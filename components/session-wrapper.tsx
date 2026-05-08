@@ -30,6 +30,12 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
   const supabase = createClient()
 
   useEffect(() => {
+    // Skip if supabase client is not available
+    if (!supabase) {
+      setIsLoading(false)
+      return
+    }
+
     // Get initial session
     const getInitialSession = async () => {
       try {
@@ -55,7 +61,7 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
     return () => {
       subscription.unsubscribe()
     }
-  }, [supabase.auth])
+  }, [supabase])
 
   // Transform Supabase session to our User interface
   const user: User | null = session?.user
