@@ -109,7 +109,7 @@ export default function JobMatchingPage() {
 
             {/* Analysis Tabs */}
             <Tabs defaultValue="match" className="w-full">
-              <TabsList className="grid w-full grid-cols-4 border-2 border-training/40">
+              <TabsList className="grid w-full grid-cols-4 border-2 border-training/40" style={{ backgroundColor: 'rgba(219, 217, 215, 0.2)' }}>
                 <TabsTrigger value="match">Match</TabsTrigger>
                 <TabsTrigger value="resume">CV Ajustado</TabsTrigger>
                 <TabsTrigger value="responses">Respuestas</TabsTrigger>
@@ -208,7 +208,7 @@ export default function JobMatchingPage() {
                     <p className="text-white/85">
                       Práctica una entrevista simulada con preguntas específicas de esta vacante
                     </p>
-                    <Button className="bg-training hover:bg-training/90 text-white">
+                    <Button className="bg-training hover:bg-training/90 text-white" style={{ borderRadius: '20px' }}>
                       Iniciar Simulación
                     </Button>
                   </div>
