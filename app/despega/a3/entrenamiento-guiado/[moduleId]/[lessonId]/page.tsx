@@ -299,6 +299,7 @@ export default function LessonPage() {
                     disabled={lessonId === '1'}
                     onClick={() => router.push(`/despega/a3/entrenamiento-guiado/${moduleId}/${parseInt(lessonId) - 1}`)}
                     className="flex-1"
+                    style={{ borderRadius: '20px' }}
                   >
                     Lección anterior
                   </Button>
@@ -306,6 +307,7 @@ export default function LessonPage() {
                     <Button
                       onClick={() => setShowingFarewell(true)}
                       className="flex-1 bg-training hover:bg-training/90 text-white font-semibold"
+                      style={{ borderRadius: '20px' }}
                     >
                       Completar Entrenamiento
                     </Button>
@@ -313,6 +315,7 @@ export default function LessonPage() {
                     <Button
                       onClick={() => router.push(`/despega/a3/entrenamiento-guiado/${moduleId}/${parseInt(lessonId) + 1}`)}
                       className="flex-1 bg-training hover:bg-training/90 text-white"
+                      style={{ borderRadius: '20px' }}
                     >
                       Siguiente lección
                     </Button>
