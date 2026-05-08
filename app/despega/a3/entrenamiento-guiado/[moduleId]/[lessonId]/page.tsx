@@ -161,6 +161,7 @@ export default function LessonPage() {
         currentStep={parseInt(lessonId)}
         totalSteps={4}
         currentLabel={lessonData.title}
+        isCompleted={false}  // Individual lessons don't complete the module
       />
 
       <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">

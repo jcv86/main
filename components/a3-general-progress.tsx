@@ -4,6 +4,7 @@ interface GeneralProgressProps {
   currentStep: number
   totalSteps: number
   currentLabel: string
+  isCompleted?: boolean  // Only show 100% if true, otherwise 0%
   variant?: 'default' | 'compact'
 }
 
@@ -11,9 +12,11 @@ export function A3GeneralProgress({
   currentStep, 
   totalSteps, 
   currentLabel,
+  isCompleted = false,  // Module is not completed by default
   variant = 'default'
 }: GeneralProgressProps) {
-  const percent = Math.round(((currentStep - 1) / totalSteps) * 100)
+  // Only show progress if module is completed, otherwise 0%
+  const percent = isCompleted ? 100 : 0
   
   if (variant === 'compact') {
     return (
@@ -26,7 +29,7 @@ export function A3GeneralProgress({
               <span className="text-xs text-training font-medium">{currentLabel}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-white/50">Paso {currentStep} de {totalSteps}</span>
+              <span className="text-xs text-white/50">{isCompleted ? 'Completado' : `Paso ${currentStep} de ${totalSteps}`}</span>
               <span className="text-sm font-semibold text-white">{percent}%</span>
             </div>
           </div>
@@ -54,7 +57,7 @@ export function A3GeneralProgress({
             <span className="text-xs text-training font-medium">{currentLabel}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-white/50">Paso {currentStep} de {totalSteps}</span>
+            <span className="text-xs text-white/50">{isCompleted ? 'Completado' : `Paso ${currentStep} de ${totalSteps}`}</span>
             <span className="text-sm font-semibold text-white">{percent}%</span>
           </div>
         </div>
