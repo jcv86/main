@@ -9,8 +9,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { validateEnvironment } from "@/lib/env-validation"
 import LLMOOptimizedFooter from "@/components/footer"
 
-// Validate environment on startup
-if (typeof window === "undefined") {
+// Validate environment on startup (skip for test routes)
+if (typeof window === "undefined" && !process.env.SKIP_ENV_VALIDATION) {
   validateEnvironment()
 }
 
