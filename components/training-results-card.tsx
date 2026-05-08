@@ -201,11 +201,10 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
                 <Card className="border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-background overflow-hidden relative">
                   {/* Floating +XP animation */}
                   <motion.div
-                    className="absolute inset-0 flex items-center justify-center"
+                    className="absolute inset-0 flex items-center justify-center pointer-events-none"
                     initial={{ opacity: 1, y: 0, scale: 1 }}
                     animate={{ opacity: 0, y: -100, scale: 1.2 }}
                     transition={{ duration: 2, delay: 0.3 }}
-                    pointerEvents="none"
                   >
                     <div className="text-5xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>
                       +{progressMetrics.xpEarned} XP
