@@ -7,15 +7,16 @@ import { Badge } from '@/components/ui/badge'
 import { Zap, Flame, Trophy, Target, TrendingUp, Clock, Award } from 'lucide-react'
 
 interface TrainingProgress {
-  total_trainings: number
-  total_time_spent: number
-  average_score: number
-  total_xp_earned: number
-  total_rewards_earned: number
-  consecutive_days: number
-  best_score: number
-  training_streak: number
-  unlocked_badges: string[]
+  totalSessions: number
+  totalMinutes: number
+  completionPercentage: number
+  totalPointsEarned: number
+  totalPossiblePoints: number
+  currentLevel: number
+  streak: number
+  badges: string[]
+  xpPoints: number
+  xpToNextLevel: number
 }
 
 interface TrainingSession {
@@ -129,7 +130,7 @@ export function TrainingProgressDashboard() {
                   <div>
                     <p className="text-white/60 text-sm uppercase tracking-wider">Total XP</p>
                     <p className="text-3xl font-bold text-purple-400 mt-2">
-                      {progress.total_xp_earned.toLocaleString()}
+                      {(progress.totalPointsEarned ?? 0).toLocaleString()}
                     </p>
                   </div>
                   <Zap className="w-8 h-8 text-purple-400/60" />
@@ -144,7 +145,7 @@ export function TrainingProgressDashboard() {
                   <div>
                     <p className="text-white/60 text-sm uppercase tracking-wider">Racha</p>
                     <p className="text-3xl font-bold text-orange-400 mt-2">
-                      {progress.training_streak}
+                      {progress.streak ?? 0}
                     </p>
                   </div>
                   <Flame className="w-8 h-8 text-orange-400/60" />
@@ -157,9 +158,9 @@ export function TrainingProgressDashboard() {
               <CardContent className="pt-6 pb-6">
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-white/60 text-sm uppercase tracking-wider">Promedio</p>
+                    <p className="text-white/60 text-sm uppercase tracking-wider">Progreso</p>
                     <p className="text-3xl font-bold text-blue-400 mt-2">
-                      {progress.average_score}%
+                      {progress.completionPercentage ?? 0}%
                     </p>
                   </div>
                   <Target className="w-8 h-8 text-blue-400/60" />
@@ -174,7 +175,7 @@ export function TrainingProgressDashboard() {
                   <div>
                     <p className="text-white/60 text-sm uppercase tracking-wider">Entrenamientos</p>
                     <p className="text-3xl font-bold text-green-400 mt-2">
-                      {progress.total_trainings}
+                      {progress.totalSessions ?? 0}
                     </p>
                   </div>
                   <Trophy className="w-8 h-8 text-green-400/60" />
@@ -194,7 +195,7 @@ export function TrainingProgressDashboard() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-4xl font-bold text-purple-400">{progress.best_score}/100</p>
+                <p className="text-4xl font-bold text-purple-400">{progress.completionPercentage ?? 0}/100</p>
                 <p className="text-white/60 text-sm mt-2">Tu máximo logrado</p>
               </CardContent>
             </Card>
@@ -209,7 +210,7 @@ export function TrainingProgressDashboard() {
               </CardHeader>
               <CardContent>
                 <p className="text-4xl font-bold text-purple-400">
-                  {Math.round(progress.total_time_spent / 3600)}h {Math.round((progress.total_time_spent % 3600) / 60)}m
+                  {Math.floor((progress.totalMinutes ?? 0) / 60)}h {(progress.totalMinutes ?? 0) % 60}m
                 </p>
                 <p className="text-white/60 text-sm mt-2">Dedicado al entrenamiento</p>
               </CardContent>
@@ -217,17 +218,17 @@ export function TrainingProgressDashboard() {
           </div>
 
           {/* Unlocked Badges */}
-          {progress.unlocked_badges && progress.unlocked_badges.length > 0 && (
+          {progress.badges && progress.badges.length > 0 && (
             <Card className="border-training/40 bg-training/5">
               <CardHeader>
                 <CardTitle className="text-lg flex items-center gap-2">
                   <Award className="w-5 h-5" />
-                  Logros Desbloqueados ({progress.unlocked_badges.length})
+                  Logros Desbloqueados ({progress.badges.length})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {progress.unlocked_badges.map((badge, idx) => (
+                  {progress.badges.map((badge, idx) => (
                     <motion.div
                       key={idx}
                       initial={{ scale: 0 }}
