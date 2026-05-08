@@ -8,7 +8,6 @@ import { Badge } from '@/components/ui/badge'
 import { Zap, BarChart3, Target, Video, ArrowRight, Clock, Zap as ZapIcon, Flame } from 'lucide-react'
 import Link from 'next/link'
 import A3ProgressDashboard from '@/components/a3-progress-dashboard'
-import { TrainingProgressDashboard } from '@/components/training-progress-dashboard'
 
 export default function EntrenamientoIntensivePage() {
   const router = useRouter()
@@ -121,7 +120,7 @@ export default function EntrenamientoIntensivePage() {
             </p>
           </div>
 
-          <TrainingProgressDashboard />
+          {/* Progress displayed in A3ProgressDashboard above */}
         </div>
 
         {/* Step 1: Diagnostic Audit */}
