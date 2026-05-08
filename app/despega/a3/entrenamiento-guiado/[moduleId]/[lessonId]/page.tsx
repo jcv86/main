@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { SofiaInterviewer } from '@/components/sofia-interviewer'
 import { ArrowLeft, Volume2 } from 'lucide-react'
+import { A3GeneralProgress } from '@/components/a3-general-progress'
 
 const LESSONS_DATA: Record<string, Record<string, any>> = {
   'intro-to-star': {
@@ -98,6 +99,13 @@ export default function LessonPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      {/* General Progress Bar */}
+      <A3GeneralProgress 
+        currentStep={parseInt(lessonId)}
+        totalSteps={4}
+        currentLabel={lessonData.title}
+      />
+
       <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
         {/* Header */}
         <Link href="/despega/a3/entrenamiento-guiado" className="inline-flex items-center gap-2 text-training hover:text-training/80">
@@ -105,7 +113,7 @@ export default function LessonPage() {
           Volver
         </Link>
 
-        {/* Progress */}
+        {/* Lesson Progress */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold text-white">{lessonData.title}</h1>

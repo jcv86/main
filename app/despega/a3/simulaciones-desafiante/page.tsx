@@ -14,6 +14,7 @@ import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
 import { ChallengeInvitation } from '@/components/a3-challenge-invitation'
 import { SofiaInterviewer } from '@/components/sofia-interviewer'
+import { A3GeneralProgress } from '@/components/a3-general-progress'
 
 const GUIDED_INTERVIEW_QUESTIONS = [
   {
@@ -189,6 +190,12 @@ export default function GuidedInterviewPage() {
   if (!started) {
     return (
       <div className="min-h-screen bg-background">
+        {/* General Progress Bar */}
+        <A3GeneralProgress 
+          currentStep={1}
+          totalSteps={GUIDED_INTERVIEW_QUESTIONS.length + 1}
+          currentLabel="Preparación"
+        />
         <div className="max-w-5xl mx-auto space-y-6 px-4 py-8">
           <Link href="/despega/a3">
             <Button variant="outline" className="mb-4">

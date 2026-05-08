@@ -12,6 +12,7 @@ import { ArrowLeft, Mic, Volume2, SkipForward, Check, AlertCircle } from 'lucide
 import { Textarea } from '@/components/ui/textarea'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
+import { A3GeneralProgress } from '@/components/a3-general-progress'
 
 const GUIDED_INTERVIEW_QUESTIONS = [
   {
@@ -233,7 +234,14 @@ export default function GuidedInterviewPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-3xl mx-auto space-y-6">
+      {/* General Progress Bar */}
+      <A3GeneralProgress 
+        currentStep={currentQuestionIndex + 1}
+        totalSteps={GUIDED_INTERVIEW_QUESTIONS.length}
+        currentLabel={`Pregunta ${currentQuestionIndex + 1}`}
+      />
+      
+      <div className="max-w-3xl mx-auto space-y-6 px-4 py-8">
         {/* Header */}
         <Link href="/despega/a3/simulations">
           <Button variant="outline" className="mb-4">
