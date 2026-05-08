@@ -9,6 +9,8 @@ interface ProgressData {
   totalMinutes: number
   totalSessions: number
   completionPercentage: number
+  totalPointsEarned?: number
+  totalPossiblePoints?: number
   sectionProgress: {
     name: string
     minutes: number
@@ -25,6 +27,7 @@ interface ProgressData {
   nextAchievement?: any
   pointsToNextMilestone?: number
   unlockedAchievements?: any[]
+  moduleProgress?: Record<string, number>
 }
 
 interface ChallengeData {
@@ -71,6 +74,8 @@ export default function A3ProgressDashboard() {
           totalMinutes: 0,
           totalSessions: 0,
           completionPercentage: 0,
+          totalPointsEarned: 0,
+          totalPossiblePoints: 1000,
           sectionProgress: [],
           currentLevel: 1,
           xpPoints: 0,
@@ -357,6 +362,34 @@ export default function A3ProgressDashboard() {
               </CardContent>
             </Card>
           </div>
+
+          {/* Points Section */}
+          {progress.totalPointsEarned !== undefined && progress.totalPossiblePoints && (
+            <Card className="bg-gray-900 overflow-hidden border-0 relative" style={{ borderLeft: '3px solid rgb(170, 70, 170)' }}>
+              <CardContent className="pt-6 pb-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Zap className="w-5 h-5 text-gray-400" />
+                      <span className="text-sm font-semibold text-white">Puntos Pillar 3</span>
+                    </div>
+                    <span className="text-2xl font-bold text-gray-300">{Math.round(progress.totalPointsEarned)} / {progress.totalPossiblePoints}</span>
+                  </div>
+                  <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
+                    <div
+                      className="h-3 transition-all duration-1000 ease-out rounded-full"
+                      style={{
+                        width: `${(progress.totalPointsEarned / progress.totalPossiblePoints) * 100}%`,
+                        backgroundColor: 'rgb(170, 70, 170)',
+                        boxShadow: '0 0 8px rgba(170, 70, 170, 0.3)',
+                      }}
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 text-center">Completa las 7 partes de Pillar 3 para obtener 1000 puntos</p>
+                </div>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Badges Section - Achievements */}
           {progress.badges.length > 0 && (
