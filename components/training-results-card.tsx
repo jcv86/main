@@ -14,6 +14,8 @@ interface TrainingResult {
   timeSpent: number
   level: 'basico' | 'intermedio' | 'avanzado'
   trainingType: string
+  moduleXpEarned?: number
+  moduleXpTotal?: number
 }
 
 interface ProgressMetrics {
@@ -137,9 +139,9 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
                 className="space-y-2"
               >
                 <div className="text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400">
-                  {displayScore}
+                  {result.moduleXpEarned ?? displayScore}
                 </div>
-                <p className="text-white/70 text-lg">/ 100</p>
+                <p className="text-white/70 text-lg">/ {result.moduleXpTotal ?? 100}</p>
               </motion.div>
 
               {/* Title */}

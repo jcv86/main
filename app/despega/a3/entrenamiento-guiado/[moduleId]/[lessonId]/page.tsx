@@ -106,6 +106,20 @@ export default function LessonPage() {
     // Only show results if completing the last lesson (lesson 4)
     const isLastLesson = parseInt(lessonId) === 4
     
+    // Map modules to XP amounts (120 XP per module)
+    const moduleXpMap: Record<string, number> = {
+      'intro-to-star': 120,
+      'cv-inteligente': 120,
+      'job-analysis': 120,
+      'multimodal-analysis': 120,
+      'training-guided': 120,
+      'training-structured': 120,
+      'training-challenging': 120,
+      'training-conversational': 120,
+    }
+    
+    const moduleXp = moduleXpMap[moduleId] || 120
+    
     return (
       <TrainingResultsCard
         result={{
@@ -114,7 +128,9 @@ export default function LessonPage() {
           totalQuestions: 4,
           timeSpent: 1800, // 30 minutes for full course
           level: 'basico',
-          trainingType: isLastLesson ? 'Dominio STAR Completo' : 'Método STAR'
+          trainingType: isLastLesson ? 'Dominio STAR Completo' : 'Método STAR',
+          moduleXpEarned: moduleXp,
+          moduleXpTotal: 120
         }}
         onContinue={() => {
           // Always return to dashboard after results
