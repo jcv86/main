@@ -42,6 +42,7 @@ export default function ProfileDashboard() {
   const [data, setData] = useState<GlobalGamificationData | null>(null)
   const [progress, setProgress] = useState<UserProgress | null>(null)
   const [readiness, setReadiness] = useState<ReadinessScore | null>(null)
+  const [a3Progress, setA3Progress] = useState<{ progress: number; total_points: number }>({ progress: 0, total_points: 0 })
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -52,6 +53,20 @@ export default function ProfileDashboard() {
         if (response.ok) {
           const gamificationData = await response.json()
           setData(gamificationData)
+        }
+
+        // Load A3 progress data (to sync with A3 dashboard)
+        let a3ProgressData = { progress: 0, total_points: 0 }
+        try {
+          const a3Response = await fetch('/api/a3/progress', { credentials: 'include' })
+          if (a3Response.ok) {
+            const a3Data = await a3Response.json()
+            a3ProgressData = { progress: a3Data.completionPercentage || 0, total_points: a3Data.totalPointsEarned || 0 }
+            setA3Progress(a3ProgressData)
+            console.log('[v0] A3 progress synced:', a3ProgressData)
+          }
+        } catch (error) {
+          console.error('[v0] Error fetching A3 progress:', error)
         }
 
         // Load stage progress data
@@ -175,7 +190,7 @@ export default function ProfileDashboard() {
         progress.a3_progress.cv_prepared &&
         progress.a3_progress.market_insights,
       href: '/despega/a3',
-      score: readiness.a3_completeness,
+      score: a3Progress.progress, // Use synced A3 progress instead of readiness calculation
     },
     {
       name: 'La Realidad',
@@ -344,7 +359,7 @@ export default function ProfileDashboard() {
               const stageColors = [
                 { border: 'border-purple/40', bg: 'bg-purple/5', hover: 'hover:border-purple/60', text: 'text-purple', progress: 'from-purple to-purple/60', label: 'text-purple' },
                 { border: 'border-blue/40', bg: 'bg-blue/5', hover: 'hover:border-blue/60', text: 'text-blue', progress: 'from-blue to-blue/60', label: 'text-blue' },
-                { border: 'border-orange/40', bg: 'bg-orange/5', hover: 'hover:border-orange/60', text: 'text-orange', progress: 'from-orange to-orange/60', label: 'text-orange' },
+                { border: 'border-purple/40', bg: 'bg-purple/5', hover: 'hover:border-purple/60', text: 'text-purple', progress: 'from-purple to-purple/60', label: 'text-purple' },
                 { border: 'border-red/40', bg: 'bg-red/5', hover: 'hover:border-red/60', text: 'text-red', progress: 'from-red to-red/60', label: 'text-red' }
               ]
               const colors = stageColors[i]
@@ -396,11 +411,11 @@ export default function ProfileDashboard() {
                       stage.completed
                         ? i === 0 ? 'bg-purple/30 hover:bg-purple/40 text-purple border-2 border-purple/50'
                         : i === 1 ? 'bg-blue/30 hover:bg-blue/40 text-blue border-2 border-blue/50'
-                        : i === 2 ? 'bg-orange/30 hover:bg-orange/40 text-orange border-2 border-orange/50'
+                        : i === 2 ? 'bg-purple/30 hover:bg-purple/40 text-purple border-2 border-purple/50'
                         : 'bg-red/30 hover:bg-red/40 text-red border-2 border-red/50'
                         : i === 0 ? 'bg-purple/70 hover:bg-purple/60 text-white border-2 border-purple/50'
                         : i === 1 ? 'bg-blue/70 hover:bg-blue/60 text-white border-2 border-blue/50'
-                        : i === 2 ? 'bg-orange/70 hover:bg-orange/60 text-white border-2 border-orange/50'
+                        : i === 2 ? 'bg-purple/70 hover:bg-purple/60 text-white border-2 border-purple/50'
                         : 'bg-red/70 hover:bg-red/60 text-white border-2 border-red/50'
                     }`}
                   >
@@ -419,19 +434,19 @@ export default function ProfileDashboard() {
             <h2 className="text-xl font-bold text-white">Desempeño por Sección</h2>
             <div className="grid md:grid-cols-2 gap-4">
               {data.sections?.a3 && (
-                <Card className="border-orange/30 bg-orange/5 hover:border-orange/50 transition-colors">
+                <Card className="border-purple/30 bg-purple/5 hover:border-purple/50 transition-colors" style={{ borderColor: 'rgba(170, 70, 170, 0.3)', backgroundColor: 'rgba(170, 70, 170, 0.05)' }}>
                   <CardContent className="pt-6 pb-6">
-                    <p className="text-sm text-orange uppercase tracking-wider font-semibold mb-3">
+                    <p className="text-sm uppercase tracking-wider font-semibold mb-3" style={{ color: 'rgb(170, 70, 170)' }}>
                       {data.sections.a3.name}
                     </p>
                     <div className="space-y-3">
                       <div className="flex justify-between">
                         <span className="text-white/70 text-sm">XP Ganado</span>
-                        <span className="font-bold text-orange">{data.sections.a3.xp}</span>
+                        <span className="font-bold" style={{ color: 'rgb(170, 70, 170)' }}>{data.sections.a3.xp}</span>
                       </div>
                       <div className="flex justify-between">
                         <span className="text-white/70 text-sm">Progreso</span>
-                        <span className="font-bold text-orange/80">{data.sections.a3.progress}%</span>
+                        <span className="font-bold" style={{ color: 'rgba(170, 70, 170, 0.8)' }}>{data.sections.a3.progress}%</span>
                       </div>
                     </div>
                   </CardContent>
