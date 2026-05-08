@@ -150,7 +150,7 @@ export default function EntrenamientoIntensivePage() {
                     <p className="text-sm text-white/70 mt-1">Auditoría supervisada con feedback del coach</p>
                   </div>
                 </div>
-                <div style={{ fontSize: '28px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace', textAlign: 'right' }}>
+                <div style={{ fontSize: '28px', fontWeight: 'bold', color: 'rgb(170, 70, 170)', fontFamily: 'monospace', textAlign: 'right' }}>
                   40 XP
                 </div>
               </div>
@@ -213,7 +213,7 @@ export default function EntrenamientoIntensivePage() {
                     <Zap className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
                     Método STAR
                   </CardTitle>
-                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace' }}>
+                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'rgb(170, 70, 170)', fontFamily: 'monospace' }}>
                     120 XP
                   </div>
                 </div>
@@ -240,7 +240,7 @@ export default function EntrenamientoIntensivePage() {
                     <BarChart3 className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
                     CV Inteligente
                   </CardTitle>
-                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace' }}>
+                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'rgb(170, 70, 170)', fontFamily: 'monospace' }}>
                     120 XP
                   </div>
                 </div>
@@ -267,7 +267,7 @@ export default function EntrenamientoIntensivePage() {
                     <Target className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
                     Análisis de Vacante
                   </CardTitle>
-                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace' }}>
+                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'rgb(170, 70, 170)', fontFamily: 'monospace' }}>
                     120 XP
                   </div>
                 </div>
@@ -294,7 +294,7 @@ export default function EntrenamientoIntensivePage() {
                     <Video className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
                     Análisis Multimodal
                   </CardTitle>
-                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace' }}>
+                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'rgb(170, 70, 170)', fontFamily: 'monospace' }}>
                     120 XP
                   </div>
                 </div>
@@ -353,7 +353,7 @@ export default function EntrenamientoIntensivePage() {
                     </svg>
                   </div>
                   <div className="flex gap-2 ml-auto items-center">
-                    <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace', marginRight: '8px' }}>
+                    <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'rgb(170, 70, 170)', fontFamily: 'monospace', marginRight: '8px' }}>
                       120 XP
                     </div>
                     <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
@@ -404,7 +404,7 @@ export default function EntrenamientoIntensivePage() {
                     </svg>
                   </div>
                   <div className="flex gap-2 ml-auto items-center">
-                    <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace', marginRight: '8px' }}>
+                    <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'rgb(170, 70, 170)', fontFamily: 'monospace', marginRight: '8px' }}>
                       120 XP
                     </div>
                     <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: '#b2c450' }}>
@@ -452,7 +452,7 @@ export default function EntrenamientoIntensivePage() {
                     </svg>
                   </div>
                   <div className="flex gap-2 ml-auto items-center">
-                    <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace', marginRight: '8px' }}>
+                    <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'rgb(170, 70, 170)', fontFamily: 'monospace', marginRight: '8px' }}>
                       120 XP
                     </div>
                     <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: '#ffde47' }}>
@@ -499,7 +499,7 @@ export default function EntrenamientoIntensivePage() {
                     </svg>
                   </div>
                   <div className="flex gap-2 ml-auto items-center">
-                    <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace', marginRight: '8px' }}>
+                    <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'rgb(170, 70, 170)', fontFamily: 'monospace', marginRight: '8px' }}>
                       120 XP
                     </div>
                     <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: '#ffb21f' }}>
