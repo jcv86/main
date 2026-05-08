@@ -337,15 +337,15 @@ export default function ProfileDashboard() {
 
         {/* Streak Card */}
         {data?.daily_streak !== undefined && (
-          <Card className="border-emerald/30 bg-gradient-to-br from-emerald/10 to-background">
+          <Card className="border-cyan/30 bg-gradient-to-br from-cyan/10 to-background">
             <CardContent className="pt-6 pb-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs text-muted-foreground uppercase tracking-wider">Racha Actual</p>
-                  <p className="text-4xl font-bold text-emerald-500">{data.daily_streak}</p>
-                  <p className="text-sm text-emerald-600 mt-1">días consecutivos</p>
+                  <p className="text-4xl font-bold" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>{data.daily_streak}</p>
+                  <p className="text-sm mt-1" style={{ color: 'rgba(80, 160, 170)' }}>días consecutivos</p>
                 </div>
-                <Flame className="w-12 h-12 text-emerald-500/60" />
+                <Flame className="w-12 h-12" style={{ color: 'rgba(80, 160, 170, 0.4)' }} />
               </div>
             </CardContent>
           </Card>
@@ -357,10 +357,10 @@ export default function ProfileDashboard() {
           <div className="space-y-3">
             {stages.map((stage, i) => {
               const stageColors = [
-                { border: 'border-purple/40', bg: 'bg-purple/5', hover: 'hover:border-purple/60', text: 'text-purple', progress: 'from-purple to-purple/60', label: 'text-purple' },
-                { border: 'border-blue/40', bg: 'bg-blue/5', hover: 'hover:border-blue/60', text: 'text-blue', progress: 'from-blue to-blue/60', label: 'text-blue' },
-                { border: 'border-purple/40', bg: 'bg-purple/5', hover: 'hover:border-purple/60', text: 'text-purple', progress: 'from-purple to-purple/60', label: 'text-purple' },
-                { border: 'border-red/40', bg: 'bg-red/5', hover: 'hover:border-red/60', text: 'text-red', progress: 'from-red to-red/60', label: 'text-red' }
+                { border: 'border-cyan/40', bg: 'bg-cyan/5', hover: 'hover:border-cyan/60', text: 'text-cyan', progress: 'from-cyan to-cyan/60', label: 'text-cyan' },
+                { border: 'border-indigo/40', bg: 'bg-indigo/5', hover: 'hover:border-indigo/60', text: 'text-indigo', progress: 'from-indigo to-indigo/60', label: 'text-indigo' },
+                { border: 'border-violet/40', bg: 'bg-violet/5', hover: 'hover:border-violet/60', text: 'text-violet', progress: 'from-violet to-violet/60', label: 'text-violet' },
+                { border: 'border-rose/40', bg: 'bg-rose/5', hover: 'hover:border-rose/60', text: 'text-rose', progress: 'from-rose to-rose/60', label: 'text-rose' }
               ]
               const colors = stageColors[i]
 
@@ -407,16 +407,16 @@ export default function ProfileDashboard() {
                       e.stopPropagation()
                       router.push(stage.href)
                     }}
-                    className={`w-full font-bold text-sm py-4 transition-all active:scale-95 ${
+                    className={`w-full font-bold text-sm py-4 transition-all active:scale-95 rounded-[20px] ${
                       stage.completed
-                        ? i === 0 ? 'bg-purple/30 hover:bg-purple/40 text-purple border-2 border-purple/50'
-                        : i === 1 ? 'bg-blue/30 hover:bg-blue/40 text-blue border-2 border-blue/50'
-                        : i === 2 ? 'bg-purple/30 hover:bg-purple/40 text-purple border-2 border-purple/50'
-                        : 'bg-red/30 hover:bg-red/40 text-red border-2 border-red/50'
-                        : i === 0 ? 'bg-purple/70 hover:bg-purple/60 text-white border-2 border-purple/50'
-                        : i === 1 ? 'bg-blue/70 hover:bg-blue/60 text-white border-2 border-blue/50'
-                        : i === 2 ? 'bg-purple/70 hover:bg-purple/60 text-white border-2 border-purple/50'
-                        : 'bg-red/70 hover:bg-red/60 text-white border-2 border-red/50'
+                        ? i === 0 ? 'bg-cyan/30 hover:bg-cyan/40 text-cyan border-2 border-cyan/50'
+                        : i === 1 ? 'bg-indigo/30 hover:bg-indigo/40 text-indigo border-2 border-indigo/50'
+                        : i === 2 ? 'bg-violet/30 hover:bg-violet/40 text-violet border-2 border-violet/50'
+                        : 'bg-rose/30 hover:bg-rose/40 text-rose border-2 border-rose/50'
+                        : i === 0 ? 'bg-cyan/70 hover:bg-cyan/60 text-white border-2 border-cyan/50'
+                        : i === 1 ? 'bg-indigo/70 hover:bg-indigo/60 text-white border-2 border-indigo/50'
+                        : i === 2 ? 'bg-violet/70 hover:bg-violet/60 text-white border-2 border-violet/50'
+                        : 'bg-rose/70 hover:bg-rose/60 text-white border-2 border-rose/50'
                     }`}
                   >
                     {stage.completed ? 'Ver Resultados' : 'Continuar Ahora'}
