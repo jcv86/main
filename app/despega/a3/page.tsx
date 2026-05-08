@@ -150,6 +150,9 @@ export default function EntrenamientoIntensivePage() {
                     <p className="text-sm text-white/70 mt-1">Auditoría supervisada con feedback del coach</p>
                   </div>
                 </div>
+                <div style={{ fontSize: '28px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace', textAlign: 'right' }}>
+                  40 XP
+                </div>
               </div>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -205,10 +208,15 @@ export default function EntrenamientoIntensivePage() {
             {/* Tool 1: STAR Method */}
             <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgba(170, 70, 170, 0.6)', borderWidth: '0px 0px 0px 6px', backgroundColor: 'rgba(80, 160, 170, 0.1)', borderRadius: '20px' }}>
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Zap className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
-                  Método STAR
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Zap className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
+                    Método STAR
+                  </CardTitle>
+                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace' }}>
+                    120 XP
+                  </div>
+                </div>
                 <CardDescription className="text-xs mt-1">Estructuración de respuestas</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -227,10 +235,15 @@ export default function EntrenamientoIntensivePage() {
             {/* Tool 2: CV Optimization */}
             <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgba(170, 70, 170, 0.6)', borderWidth: '0px 0px 0px 6px', backgroundColor: 'rgba(80, 160, 170, 0.1)', borderRadius: '20px' }}>
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
-                  CV Inteligente
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
+                    CV Inteligente
+                  </CardTitle>
+                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace' }}>
+                    120 XP
+                  </div>
+                </div>
                 <CardDescription className="text-xs mt-1">Optimización para ATS</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -249,10 +262,15 @@ export default function EntrenamientoIntensivePage() {
             {/* Tool 3: Job Matching */}
             <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgba(170, 70, 170, 0.8)', borderWidth: '0px 0px 0px 6px', backgroundColor: 'rgba(80, 160, 170, 0.1)', borderRadius: '20px' }}>
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Target className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
-                  Análisis de Vacante
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Target className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
+                    Análisis de Vacante
+                  </CardTitle>
+                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace' }}>
+                    120 XP
+                  </div>
+                </div>
                 <CardDescription className="text-xs mt-1">Estrategia por oferta</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -271,10 +289,15 @@ export default function EntrenamientoIntensivePage() {
             {/* Tool 4: Video Analysis */}
             <Card className="border hover:shadow-lg transition" style={{ borderColor: 'rgba(170, 70, 170, 0.8)', borderWidth: '0px 0px 0px 6px', backgroundColor: 'rgba(80, 160, 170, 0.1)', borderRadius: '20px' }}>
               <CardHeader>
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Video className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
-                  Análisis Multimodal
-                </CardTitle>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-lg flex items-center gap-2">
+                    <Video className="w-5 h-5" style={{ color: 'rgb(170, 70, 170, 0.8)' }} />
+                    Análisis Multimodal
+                  </CardTitle>
+                  <div style={{ fontSize: '24px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace' }}>
+                    120 XP
+                  </div>
+                </div>
                 <CardDescription className="text-xs mt-1">Feedback del coach en video</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -329,7 +352,10 @@ export default function EntrenamientoIntensivePage() {
                       <circle cx="12" cy="12" r="2"></circle>
                     </svg>
                   </div>
-                  <div className="flex gap-2 ml-auto">
+                  <div className="flex gap-2 ml-auto items-center">
+                    <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace', marginRight: '8px' }}>
+                      120 XP
+                    </div>
                     <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
                       Básico
                     </div>
@@ -377,7 +403,10 @@ export default function EntrenamientoIntensivePage() {
                       <path d="M15 9l-6 6M9 9l6 6"></path>
                     </svg>
                   </div>
-                  <div className="flex gap-2 ml-auto">
+                  <div className="flex gap-2 ml-auto items-center">
+                    <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace', marginRight: '8px' }}>
+                      120 XP
+                    </div>
                     <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: '#b2c450' }}>
                       Intermedio
                     </div>
@@ -422,7 +451,10 @@ export default function EntrenamientoIntensivePage() {
                       <path d="M15 9l-6 6M9 9l6 6"></path>
                     </svg>
                   </div>
-                  <div className="flex gap-2 ml-auto">
+                  <div className="flex gap-2 ml-auto items-center">
+                    <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace', marginRight: '8px' }}>
+                      120 XP
+                    </div>
                     <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: '#ffde47' }}>
                       Avanzado
                     </div>
@@ -466,7 +498,10 @@ export default function EntrenamientoIntensivePage() {
                       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                   </div>
-                  <div className="flex gap-2 ml-auto">
+                  <div className="flex gap-2 ml-auto items-center">
+                    <div style={{ fontSize: '20px', fontWeight: 'bold', color: 'rgb(0, 255, 127)', fontFamily: 'monospace', marginRight: '8px' }}>
+                      120 XP
+                    </div>
                     <div className="inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: '#ffb21f' }}>
                       Maestría
                     </div>
