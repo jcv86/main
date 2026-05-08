@@ -252,16 +252,16 @@ export default function ProfileDashboard() {
         {/* Main Stats Grid */}
         <div className="grid md:grid-cols-3 gap-6">
           {/* Level and XP Card */}
-          <Card className="border-purple/30 bg-gradient-to-br from-purple/10 to-background">
+          <Card className="border-cyan/30 bg-gradient-to-br from-cyan/10 to-background" style={{ borderColor: 'rgba(80, 160, 170, 0.4)', backgroundColor: 'rgba(80, 160, 170, 0.1)' }}>
             <CardContent className="pt-6 pb-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs text-muted-foreground uppercase tracking-wider">Nivel Actual</p>
                     <p className="text-4xl font-bold text-white">{levelName}</p>
-                    <p className="text-sm text-purple/80 mt-1">Nivel {data?.current_level || 0}</p>
+                    <p className="text-sm mt-1" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>Nivel {data?.current_level || 0}</p>
                   </div>
-                  <Zap className="w-12 h-12 text-purple/60" />
+                  <Zap className="w-12 h-12" style={{ color: 'rgba(80, 160, 170, 0.6)' }} />
                 </div>
 
                 <div className="space-y-2">
@@ -284,16 +284,16 @@ export default function ProfileDashboard() {
           </Card>
 
           {/* Points Card */}
-          <Card className="border-green-500/30 bg-gradient-to-br from-green-500/10 to-background">
+          <Card className="border-cyan/30 bg-gradient-to-br from-cyan/10 to-background" style={{ borderColor: 'rgba(80, 160, 170, 0.4)', backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
             <CardContent className="pt-6 pb-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs text-muted-foreground uppercase tracking-wider">Puntos Disponibles</p>
-                    <p className="text-4xl font-bold text-green-500">{data?.total_points || 0}</p>
-                    <p className="text-sm text-green-600 mt-1">Moneda Acumulada</p>
+                    <p className="text-4xl font-bold" style={{ color: 'rgba(80, 160, 170, 0.6)' }}>{data?.total_points || 0}</p>
+                    <p className="text-sm mt-1" style={{ color: 'rgba(80, 160, 170)' }}>Moneda Acumulada</p>
                   </div>
-                  <Award className="w-12 h-12 text-green-500/60" />
+                  <Award className="w-12 h-12" style={{ color: 'rgba(80, 160, 170, 0.6)' }} />
                 </div>
 
                 <div className="space-y-2">
@@ -304,16 +304,16 @@ export default function ProfileDashboard() {
           </Card>
 
           {/* Readiness Score Card */}
-          <Card className="border-orange/30 bg-gradient-to-br from-orange/10 to-background">
+          <Card className="border-cyan/30 bg-gradient-to-br from-cyan/10 to-background" style={{ borderColor: 'rgba(80, 160, 170, 0.4)', backgroundColor: 'rgba(80, 160, 170, 0.3)' }}>
             <CardContent className="pt-6 pb-6">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs text-muted-foreground uppercase tracking-wider">Readiness Score</p>
-                    <p className="text-4xl font-bold text-orange">{readiness.overall_score}</p>
-                    <p className="text-sm text-orange/60 mt-1">Progreso Global</p>
+                    <p className="text-4xl font-bold" style={{ color: 'rgba(80, 160, 170, 0.6)' }}>{readiness.overall_score}</p>
+                    <p className="text-sm mt-1" style={{ color: 'rgba(80, 160, 170)' }}>Progreso Global</p>
                   </div>
-                  <Trophy className="w-12 h-12 text-orange/60" />
+                  <Trophy className="w-12 h-12" style={{ color: 'rgba(80, 160, 170, 0.6)' }} />
                 </div>
 
                 <div className="space-y-2">
@@ -367,7 +367,13 @@ export default function ProfileDashboard() {
                 <div
                   key={i}
                   onClick={() => router.push(stage.href)}
-                  className={`group cursor-pointer bg-gradient-to-r from-background to-background/50 border-2 ${colors.border} ${colors.hover} rounded-lg p-6 transition-all hover:shadow-xl hover:bg-background/80`}
+                  className={`group cursor-pointer bg-gradient-to-r from-background to-background/50 border-2 rounded-lg p-6 transition-all hover:shadow-xl hover:bg-background/80`}
+                  style={{
+                    borderColor: i === 0 ? 'rgba(80, 160, 170, 0.6)'
+                      : i === 1 ? 'rgba(90, 90, 150, 0.6)'
+                      : i === 2 ? 'rgba(170, 70, 170, 0.4)'
+                      : 'rgba(225, 120, 130, 0.4)'
+                  }}
                 >
                   <div className="flex items-start justify-between gap-6 mb-4">
                     <div className="flex-1">
