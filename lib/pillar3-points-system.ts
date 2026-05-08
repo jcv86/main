@@ -193,7 +193,14 @@ export function getTotalModules(): number {
 export function calculateModuleProgress(
   completedTrainings: Array<{ training_id: string; completed_at: string }>
 ) {
-  const modules = getAllModules()
+  const modules = Object.entries(PILLAR3_POINTS_CONFIG).map(([key, config]) => ({
+    id: config.id,
+    name: config.name,
+    description: config.description,
+    totalPoints: config.totalPoints,
+    lessons: config.lessons,
+    pointsPerLesson: config.pointsPerLesson,
+  }))
 
   return modules.map((module) => {
     const completedCount = completedTrainings.filter((t) =>
