@@ -61,9 +61,9 @@ export async function GET(request: NextRequest) {
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
 
-    // Fetch training sessions (actual completed trainings with dates)
+    // Fetch training assignments (actual completed trainings with dates)
     const { data: trainingSessions } = await supabase
-      .from('a3_training_sessions')
+      .from('a3_training_assignments')
       .select('*')
       .eq('user_id', userId)
       .not('completed_at', 'is', null)
@@ -81,34 +81,16 @@ export async function GET(request: NextRequest) {
     // Count completed trainings per module type
     if (trainingSessions) {
       trainingSessions.forEach((session) => {
-        // Map training type to module and add points
-        if (session.training_type?.includes('audit_initial')) {
-          moduleProgress['audit_initial'] = (moduleProgress['audit_initial'] || 0) + PILLAR3_POINTS_CONFIG.audit_initial.pointsPerLesson
-        }
-        if (session.training_type?.includes('star_method')) {
-          moduleProgress['star_method'] = (moduleProgress['star_method'] || 0) + PILLAR3_POINTS_CONFIG.star_method.pointsPerLesson
-        }
-        if (session.training_type?.includes('cv_intelligent')) {
-          moduleProgress['cv_intelligent'] = (moduleProgress['cv_intelligent'] || 0) + PILLAR3_POINTS_CONFIG.cv_intelligent.pointsPerLesson
-        }
-        if (session.training_type?.includes('job_analysis')) {
-          moduleProgress['job_analysis'] = (moduleProgress['job_analysis'] || 0) + PILLAR3_POINTS_CONFIG.job_analysis.pointsPerLesson
-        }
-        if (session.training_type?.includes('multimodal_analysis')) {
-          moduleProgress['multimodal_analysis'] = (moduleProgress['multimodal_analysis'] || 0) + PILLAR3_POINTS_CONFIG.multimodal_analysis.pointsPerLesson
-        }
-        if (session.training_type?.includes('training_guided')) {
-          moduleProgress['training_guided'] = (moduleProgress['training_guided'] || 0) + PILLAR3_POINTS_CONFIG.training_guided.pointsPerLesson
-        }
-        if (session.training_type?.includes('training_structured')) {
-          moduleProgress['training_structured'] = (moduleProgress['training_structured'] || 0) + PILLAR3_POINTS_CONFIG.training_structured.pointsPerLesson
-        }
-        if (session.training_type?.includes('training_challenging')) {
-          moduleProgress['training_challenging'] = (moduleProgress['training_challenging'] || 0) + PILLAR3_POINTS_CONFIG.training_challenging.pointsPerLesson
-        }
-        if (session.training_type?.includes('training_conversational')) {
-          moduleProgress['training_conversational'] = (moduleProgress['training_conversational'] || 0) + PILLAR3_POINTS_CONFIG.training_conversational.pointsPerLesson
-        }
+        // Map training module to module type and add points
+        // Since a3_training_assignments links to training_module_id, we can use that
+        const moduleId = session.training_module_id?.toString() || ''
+        
+        // Give points for each completed training
+        const basePoints = PILLAR3_POINTS_CONFIG.audit_initial.pointsPerLesson // ~20-30 points per training
+        totalPointsEarned += basePoints
+        
+        // Track completion by module
+        moduleProgress['completed_sessions'] = (moduleProgress['completed_sessions'] || 0) + 1
       })
     }
 
@@ -124,30 +106,6 @@ export async function GET(request: NextRequest) {
       .from('a4_module_progress')
       .select('modulo_titulo, tiempo_dedicado_minutos, completado, progreso_porcentaje')
       .eq('user_id', userId)
-
-      const currentAchievement = getCurrentAchievement(0)
-      const nextAchievement = getNextAchievement(0)
-      return NextResponse.json(
-        {
-          totalMinutes: 0,
-          totalSessions: 0,
-          completionPercentage: 0,
-          totalPointsEarned: 0,
-          totalPossiblePoints: getTotalPossiblePoints(),
-          sectionProgress: [],
-          currentLevel: 1,
-          xpPoints: 0,
-          xpToNextLevel: 1000,
-          badges: [],
-          streak: 0,
-          achievement: currentAchievement,
-          nextAchievement: nextAchievement,
-          pointsToNextMilestone: getPointsToNextMilestone(0),
-          unlockedAchievements: getUnlockedAchievements(0),
-          moduleProgress: {},
-        },
-        { status: 200 }
-      )
 
     // Calculate totals
     const interviewMinutes = (interviews || []).reduce((sum, iv) => sum + (iv.tiempo_dedicado_minutos || 0), 0)

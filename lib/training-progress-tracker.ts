@@ -1,10 +1,12 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient as createServerClient } from '@/lib/supabase/server'
 import { getCurrentUser } from './auth-helper'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-)
+/**
+ * Get Supabase server client
+ */
+async function getSupabaseClient() {
+  return await createServerClient()
+}
 
 export interface TrainingSession {
   user_id: string
@@ -40,6 +42,7 @@ export interface TrainingProgress {
  */
 export async function saveTrainingSession(session: TrainingSession) {
   try {
+    const supabase = await getSupabaseClient()
     const user = await getCurrentUser()
     if (!user) {
       throw new Error('User not authenticated')
@@ -162,6 +165,7 @@ export async function saveTrainingSession(session: TrainingSession) {
  */
 export async function getUserTrainingProgress(): Promise<TrainingProgress> {
   try {
+    const supabase = await getSupabaseClient()
     const user = await getCurrentUser()
     if (!user) {
       throw new Error('User not authenticated')
@@ -232,6 +236,7 @@ export async function getUserTrainingProgress(): Promise<TrainingProgress> {
  */
 export async function getTrainingHistory(limit = 10, offset = 0) {
   try {
+    const supabase = await getSupabaseClient()
     const user = await getCurrentUser()
     if (!user) {
       throw new Error('User not authenticated')
@@ -264,6 +269,7 @@ async function updateGamificationProfile(
   score: number
 ) {
   try {
+    const supabase = await getSupabaseClient()
     // Get current profile
     const { data: profile, error: fetchError } = await supabase
       .from('user_gamification_profile')
@@ -336,6 +342,7 @@ async function trackTrainingAnalytics(
   isFirstCompletion: boolean = true
 ) {
   try {
+    const supabase = await getSupabaseClient()
     await supabase
       .from('v1_analytics')
       .insert([
