@@ -69,6 +69,22 @@ export async function GET(request: NextRequest) {
       .not('completed_at', 'is', null)
       .order('completed_at', { ascending: false })
 
+    // Fetch training module completions (tracks XP awards)
+    const { data: completions } = await supabase
+      .from('a3_training_module_completions')
+      .select('*')
+      .eq('user_id', userId)
+
+    // Calculate XP from first completions
+    let totalXPEarned = 0
+    if (completions) {
+      completions.forEach((completion) => {
+        totalXPEarned += completion.xp_amount || 0
+      })
+    }
+
+    console.log('[v0] Training completions:', completions?.length || 0, 'Total XP:', totalXPEarned)
+
     // Calculate points from training sessions
     let totalPointsEarned = 0
     const moduleProgress: Record<string, number> = {}
@@ -78,14 +94,14 @@ export async function GET(request: NextRequest) {
       moduleProgress[module.id] = 0
     })
 
-    // Count completed trainings per module type
+    // Count completed trainings per module type (for points, not XP)
     if (trainingSessions) {
       trainingSessions.forEach((session) => {
         // Map training module to module type and add points
         // Since a3_training_assignments links to training_module_id, we can use that
         const moduleId = session.training_module_id?.toString() || ''
         
-        // Give points for each completed training
+        // Give points for each completed training (separate from XP)
         const basePoints = PILLAR3_POINTS_CONFIG.audit_initial.pointsPerLesson // ~20-30 points per training
         totalPointsEarned += basePoints
         
@@ -97,9 +113,9 @@ export async function GET(request: NextRequest) {
     // Calculate total points from modules
     totalPointsEarned = Object.values(moduleProgress).reduce((sum, points) => sum + points, 0)
 
-    // Calculate completion percentage based on earned points (0-100%)
-    const totalPossible = getTotalPossiblePoints()
-    const pointsBasedCompletion = Math.min((totalPointsEarned / totalPossible) * 100, 100)
+    // Calculate completion percentage based on EARNED XP (1000 XP = 100%)
+    const totalPossibleXP = 1000
+    const xpBasedCompletion = Math.min((totalXPEarned / totalPossibleXP) * 100, 100)
 
     // Fetch module progress
     const { data: modules } = await supabase
@@ -116,10 +132,10 @@ export async function GET(request: NextRequest) {
     const totalMinutes = interviewMinutes + trainingMinutes
     const totalSessions = (interviews?.length || 0) + (trainingSessions?.length || 0)
     
-    console.log('[v0] Progress calculation - Interviews:', interviewMinutes, 'Training:', trainingMinutes, 'Total:', totalMinutes, 'Points Earned:', totalPointsEarned, 'Completion %:', pointsBasedCompletion)
+    console.log('[v0] Progress calculation - Interviews:', interviewMinutes, 'Training:', trainingMinutes, 'Total:', totalMinutes, 'XP Earned:', totalXPEarned, 'Completion %:', xpBasedCompletion)
     
-    // Use points-based completion percentage (0-100% based on earned points)
-    const completionPercentage = Math.round(pointsBasedCompletion)
+    // Use XP-based completion percentage (0-100% based on earned XP out of 1000)
+    const completionPercentage = Math.round(xpBasedCompletion)
     
     // Sync the calculated progress back to database for future reference
     await syncProgressToDatabase(userId, completionPercentage)
@@ -172,8 +188,8 @@ export async function GET(request: NextRequest) {
         totalMinutes,
         totalSessions,
         completionPercentage,
-        totalPointsEarned,
-        totalPossiblePoints: totalPossible,
+        totalPointsEarned: totalXPEarned,
+        totalPossiblePoints: totalPossibleXP,
         sectionProgress,
         currentLevel,
         xpPoints: totalXp,
