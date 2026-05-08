@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Clock, Target, TrendingUp, Zap, CheckCircle2, Flame, Star, Award, Sparkles } from 'lucide-react'
+import { Clock, Target, TrendingUp, Zap, CheckCircle2, Flame, Star, Award, Sparkles, ArrowRight } from 'lucide-react'
 
 interface ProgressData {
   totalMinutes: number
