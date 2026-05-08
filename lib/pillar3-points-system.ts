@@ -158,13 +158,33 @@ export const MODULE_TO_TRAINING_TYPE = {
 }
 
 /**
- * Get all modules configuration
+ * Get all modules in order
  */
-export function getAllModules() {
-  return Object.values(PILLAR3_POINTS_CONFIG).map((module) => ({
-    ...module,
-    progressPercentage: 0, // Will be calculated based on user progress
-  }))
+export const ALL_MODULES_ORDER = [
+  'audit_initial',
+  'star_method',
+  'cv_intelligent',
+  'job_analysis',
+  'multimodal_analysis',
+  'training_guided',
+  'training_structured',
+  'training_challenging',
+  'training_conversational',
+]
+
+/**
+ * Get the position of a module among all 9 training modules
+ */
+export function getModulePosition(moduleId: string): number {
+  const position = ALL_MODULES_ORDER.findIndex((id) => id === moduleId)
+  return position !== -1 ? position + 1 : 1 // Returns 1-indexed position
+}
+
+/**
+ * Get total number of training modules
+ */
+export function getTotalModules(): number {
+  return ALL_MODULES_ORDER.length
 }
 
 /**

@@ -11,6 +11,7 @@ import { SofiaInterviewer } from '@/components/sofia-interviewer'
 import { ArrowLeft, Volume2 } from 'lucide-react'
 import { A3GeneralProgress } from '@/components/a3-general-progress'
 import { TrainingResultsCard } from '@/components/training-results-card'
+import { getModulePosition, getTotalModules } from '@/lib/pillar3-points-system'
 
 const LESSONS_DATA: Record<string, Record<string, any>> = {
   'intro-to-star': {
@@ -172,12 +173,13 @@ export default function LessonPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* General Progress Bar */}
+      {/* General Progress Bar - Shows module position (Paso X de 9) */}
       <A3GeneralProgress 
-        currentStep={parseInt(lessonId)}
-        totalSteps={4}
+        currentStep={getModulePosition(moduleId)}
+        totalSteps={getTotalModules()}
         currentLabel={lessonData.title}
-        isCompleted={false}  // Individual lessons don't complete the module
+        isCompleted={false}
+        variant="compact"
       />
 
       <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
