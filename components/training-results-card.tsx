@@ -304,7 +304,20 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
           className="flex gap-3 pt-4"
         >
           <Button
-            onClick={onContinue}
+            onClick={() => {
+              // Force a refresh of the progress data before navigating
+              console.log('[v0] Triggering progress refresh after training completion')
+              // Trigger a refresh by calling the progress API
+              fetch('/api/a3/progress').then(response => {
+                if (response.ok) {
+                  console.log('[v0] Progress refreshed successfully')
+                }
+              }).catch(error => {
+                console.error('[v0] Error refreshing progress:', error)
+              })
+              // Give it a moment to refresh, then continue
+              setTimeout(() => onContinue(), 500)
+            }}
             className="flex-1 h-12 text-base font-semibold text-white"
             style={{ backgroundColor: 'rgb(170, 70, 170)' }}
           >

@@ -12,7 +12,7 @@ export async function calculateProgressPercentage(userId: string): Promise<numbe
     const supabase = await createClient()
 
     // Get all required data in parallel for efficiency
-    const [modulesData, interviewsData, trainingData] = await Promise.all([
+    const [modulesData, interviewsData, trainingSessionsData] = await Promise.all([
       // Module progress data
       supabase
         .from('a4_module_progress')
@@ -25,11 +25,12 @@ export async function calculateProgressPercentage(userId: string): Promise<numbe
         .select('score_total')
         .eq('user_id', userId),
       
-      // Training assignments
+      // Training sessions (from training-progress-tracker)
       supabase
-        .from('a3_training_assignments')
-        .select('completed_at')
-        .eq('user_id', userId),
+        .from('a3_training_sessions')
+        .select('user_id, completed_at, xp_earned')
+        .eq('user_id', userId)
+        .not('completed_at', 'is', null),
     ])
 
     // Calculate module progress (35%)
@@ -49,10 +50,10 @@ export async function calculateProgressPercentage(userId: string): Promise<numbe
         ? interviews.reduce((sum, iv) => sum + (iv.score_total || 0), 0) / interviews.length / 100
         : 0
 
-    // Calculate training progress (20%)
-    const trainings = trainingData.data || []
-    const completedTrainings = trainings.filter((t) => t.completed_at !== null).length
-    const targetTrainings = 5 // Target number of trainings
+    // Calculate training progress (20%) - using training_sessions table
+    const trainingSessions = trainingSessionsData.data || []
+    const completedTrainings = trainingSessions.length
+    const targetTrainings = 11 // Total expected training modules in Pillar 3
     const trainingProgress = Math.min(completedTrainings / targetTrainings, 1)
 
     // Apply weighted calculation
