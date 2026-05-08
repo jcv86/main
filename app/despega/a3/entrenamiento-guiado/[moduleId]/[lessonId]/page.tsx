@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import { useParams, useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
@@ -48,6 +48,39 @@ export default function LessonPage() {
   const [showingResults, setShowingResults] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const lessonData = LESSONS_DATA[moduleId]?.[lessonId]
+  const isLastLesson = parseInt(lessonId) === 4
+
+  // Track lesson completion when showing results
+  useEffect(() => {
+    if (showingResults && isLastLesson) {
+      const trackCompletion = async () => {
+        try {
+          console.log('[v0] Tracking lesson completion for:', moduleId)
+          
+          // Call training completion API
+          const response = await fetch('/api/a3/training-completion', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              training_id: `guided-training-${moduleId}`,
+              module_name: moduleId,
+              tiempo_dedicado_minutos: 45,
+              competencias_desarrolladas: ['STAR Method', 'Interview Skills', 'Story Telling']
+            })
+          })
+          
+          if (response.ok) {
+            const data = await response.json()
+            console.log('[v0] Training completion tracked:', data)
+          }
+        } catch (error) {
+          console.error('[v0] Error tracking training completion:', error)
+        }
+      }
+      
+      trackCompletion()
+    }
+  }, [showingResults, isLastLesson, moduleId])
 
   const handleReplay = () => {
     if (videoRef.current) {
