@@ -8,34 +8,36 @@ const supabase = createClient(
 
 export async function getCurrentUser() {
   try {
-    const {
-      data: { user },
-      error
-    } = await supabase.auth.admin.getUserById(
-      (await cookies()).get('sb-auth-token')?.value || ''
-    )
+    const cookieStore = await cookies()
+    const authToken = cookieStore.get('sb-auth-token')?.value
 
-    if (error || !user) {
-      // Try alternative method
-      const cookieStore = await cookies()
-      const authToken = cookieStore.get('sb-auth-token')?.value
-
-      if (!authToken) {
-        return null
-      }
-
-      // Decode JWT token to get user ID
-      try {
-        const payload = JSON.parse(
-          Buffer.from(authToken.split('.')[1], 'base64').toString()
-        )
-        return { id: payload.sub }
-      } catch {
-        return null
-      }
+    if (!authToken) {
+      return null
     }
 
-    return user
+    // Decode JWT token to get user ID
+    try {
+      const parts = authToken.split('.')
+      if (parts.length !== 3) {
+        console.error('[v0] Invalid token format')
+        return null
+      }
+
+      // Decode the JWT payload (second part)
+      const payload = JSON.parse(
+        Buffer.from(parts[1], 'base64').toString('utf-8')
+      )
+      
+      if (!payload.sub) {
+        console.error('[v0] No user ID in token')
+        return null
+      }
+
+      return { id: payload.sub }
+    } catch (decodeError) {
+      console.error('[v0] Error decoding JWT token:', decodeError)
+      return null
+    }
   } catch (error) {
     console.error('[v0] Error getting current user:', error)
     return null
