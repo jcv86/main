@@ -70,23 +70,22 @@ export default function LessonPage() {
   }
 
   if (showingResults) {
+    // Only show results if completing the last lesson (lesson 4)
+    const isLastLesson = parseInt(lessonId) === 4
+    
     return (
       <TrainingResultsCard
         result={{
-          score: 85,
+          score: 95,
           questionsCompleted: parseInt(lessonId),
           totalQuestions: 4,
-          timeSpent: 600,
+          timeSpent: 1800, // 30 minutes for full course
           level: 'basico',
-          trainingType: 'Método STAR'
+          trainingType: isLastLesson ? 'Dominio STAR Completo' : 'Método STAR'
         }}
         onContinue={() => {
-          // Go to next lesson or back to dashboard if last lesson
-          if (parseInt(lessonId) < 4) {
-            router.push(`/despega/a3/entrenamiento-guiado/${moduleId}/${parseInt(lessonId) + 1}`)
-          } else {
-            router.push('/despega/a3')
-          }
+          // Always return to dashboard after results
+          router.push('/despega/a3')
         }}
       />
     )
@@ -270,25 +269,24 @@ export default function LessonPage() {
                   >
                     Lección anterior
                   </Button>
-                  <Button
-                    disabled={lessonId === '4'}
-                    onClick={() => router.push(`/despega/a3/entrenamiento-guiado/${moduleId}/${parseInt(lessonId) + 1}`)}
-                    className="flex-1 bg-training hover:bg-training/90 text-white"
-                  >
-                    Siguiente lección
-                  </Button>
+                  {lessonId === '4' ? (
+                    <Button
+                      onClick={() => setShowingFarewell(true)}
+                      className="flex-1 bg-training hover:bg-training/90 text-white font-semibold"
+                    >
+                      Completar Entrenamiento
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={() => router.push(`/despega/a3/entrenamiento-guiado/${moduleId}/${parseInt(lessonId) + 1}`)}
+                      className="flex-1 bg-training hover:bg-training/90 text-white"
+                    >
+                      Siguiente lección
+                    </Button>
+                  )}
                 </div>
               </CardContent>
             </Card>
-
-            {/* Finish Button */}
-            <Button 
-              onClick={() => setShowingFarewell(true)}
-              variant="outline"
-              className="w-full h-12 text-base font-semibold text-white border-white/30 hover:bg-white/10"
-            >
-              Terminar Entrenamiento
-            </Button>
           </div>
         </div>
       </div>
