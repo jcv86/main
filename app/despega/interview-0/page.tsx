@@ -84,6 +84,20 @@ export default function Interview0Page() {
     )
   }
 
+  // Calculate general progress based on stage
+  const getGeneralProgress = () => {
+    switch (stage) {
+      case 'intro': return { step: 1, total: 4, percent: 0, label: 'Introducción' }
+      case 'audit': return { step: 2, total: 4, percent: 33, label: 'Auditoría' }
+      case 'simulator': return { step: 3, total: 4, percent: 66, label: 'Simulación' }
+      case 'farewell': return { step: 4, total: 4, percent: 90, label: 'Finalizando' }
+      case 'results': return { step: 4, total: 4, percent: 100, label: 'Completado' }
+      default: return { step: 1, total: 4, percent: 0, label: 'Introducción' }
+    }
+  }
+
+  const progress = getGeneralProgress()
+
   return (
     <main className="min-h-screen bg-black">
       <div className="flex flex-col h-screen">
@@ -96,6 +110,32 @@ export default function Interview0Page() {
             <ArrowLeft className="w-4 h-4" />
             Volver a Entrenamientos
           </button>
+        </div>
+
+        {/* General Progress Bar */}
+        <div className="flex-shrink-0 bg-background/50 backdrop-blur-sm border-b border-muted/30 px-4 py-3">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-medium text-white/60">Progreso General</span>
+                <span className="text-xs text-white/40">|</span>
+                <span className="text-xs text-purple-400 font-medium">{progress.label}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-white/50">Paso {progress.step} de {progress.total}</span>
+                <span className="text-sm font-semibold text-white">{progress.percent}%</span>
+              </div>
+            </div>
+            <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+              <div 
+                className="h-full rounded-full transition-all duration-500 ease-out"
+                style={{ 
+                  width: `${progress.percent}%`,
+                  background: 'linear-gradient(90deg, rgba(168, 85, 247, 0.8) 0%, rgba(236, 72, 153, 0.8) 100%)'
+                }}
+              />
+            </div>
+          </div>
         </div>
 
         {/* Content */}
