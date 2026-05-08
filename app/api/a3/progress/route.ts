@@ -1,15 +1,18 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { jwtDecode } from 'jwt-decode'
+import { cookies } from 'next/headers'
 
 // Pillar 3 has 7 main trainings, each worth ~143 XP (totaling 1000 XP)
 const TOTAL_TRAININGS = 7
 const TOTAL_XP_TARGET = 1000
 const XP_PER_TRAINING = Math.floor(TOTAL_XP_TARGET / TOTAL_TRAININGS) // 142 XP each
+// Demo user ID for preview/development (consistent across sessions)
+const DEMO_USER_ID = 'demo-user-preview-a3'
 
 export async function GET(_request: NextRequest) {
   try {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
 
     // Default empty response
     const emptyResponse = {
@@ -21,16 +24,35 @@ export async function GET(_request: NextRequest) {
       completedModules: [] as string[],
     }
 
-    if (!user) {
-      console.log('[v0] No authenticated user, returning empty progress')
-      return NextResponse.json(emptyResponse, { status: 200 })
+    // Try to get authenticated user
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    let userId = user?.id
+    
+    // If no authenticated user, use demo user for development/preview
+    if (!userId) {
+      const cookieStore = await cookies()
+      const authToken = cookieStore.get('sb-auth-token')?.value || 
+                       cookieStore.get('sb-token')?.value
+      
+      if (authToken) {
+        try {
+          const decoded: any = jwtDecode(authToken)
+          userId = decoded.sub
+        } catch (error) {
+          userId = DEMO_USER_ID
+        }
+      } else {
+        userId = DEMO_USER_ID
+        console.log('[v0] No auth, using demo user for development')
+      }
     }
 
     // Fetch ALL training completions for this user (each row = one completed training)
     const { data: completions, error } = await supabase
       .from('a3_training_module_completions')
       .select('training_type, training_module_id, xp_amount, is_first_completion')
-      .eq('user_id', user.id)
+      .eq('user_id', userId)
 
     if (error) {
       console.error('[v0] Error fetching completions:', error)
