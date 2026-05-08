@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { cookies } from 'next/headers'
+import { jwtDecode } from 'jwt-decode'
 
 export async function POST(request: NextRequest) {
   try {
@@ -8,26 +10,38 @@ export async function POST(request: NextRequest) {
 
     console.log('[v0] Training completion request received:', { training_id, module_name, tiempo_dedicado_minutos })
 
+    // Get auth token from cookies to extract user ID
+    const cookieStore = await cookies()
+    const authToken = cookieStore.get('sb-auth-token')?.value || 
+                     cookieStore.get('sb-token')?.value
+
+    if (!authToken) {
+      console.warn('[v0] No auth token found in cookies for training-completion')
+      return NextResponse.json(
+        { error: 'Authentication required' },
+        { status: 401 }
+      )
+    }
+
+    // Extract user ID from JWT token
+    let userId: string
+    try {
+      const decoded: any = jwtDecode(authToken)
+      userId = decoded.sub
+      
+      if (!userId) {
+        throw new Error('No user ID in token')
+      }
+      console.log('[v0] Extracted user ID from token:', userId)
+    } catch (decodeError) {
+      console.error('[v0] Error decoding auth token:', decodeError)
+      return NextResponse.json(
+        { error: 'Invalid authentication token' },
+        { status: 401 }
+      )
+    }
+
     const supabase = await createClient()
-
-    // Get current user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError) {
-      console.error('[v0] Auth error in training-completion:', authError)
-    }
-
-    if (!user) {
-      console.warn('[v0] No user found in training-completion API')
-      // Return success anyway - the data might still need to be processed
-      return NextResponse.json({
-        success: true,
-        message: 'Training completion processed (no auth)',
-        savedMinutes: tiempo_dedicado_minutos || 45,
-      })
-    }
-
-    const userId = user.id
     console.log('[v0] Processing training for user:', userId)
 
     // Save training assignment completion with actual elapsed time
