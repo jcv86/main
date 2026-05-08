@@ -82,17 +82,32 @@ export async function GET(request: NextRequest) {
     if (trainingSessions) {
       trainingSessions.forEach((session) => {
         // Map training type to module and add points
-        if (session.training_type?.includes('entrenamiento_guiado')) {
+        if (session.training_type?.includes('audit_initial')) {
+          moduleProgress['audit_initial'] = (moduleProgress['audit_initial'] || 0) + PILLAR3_POINTS_CONFIG.audit_initial.pointsPerLesson
+        }
+        if (session.training_type?.includes('star_method')) {
           moduleProgress['star_method'] = (moduleProgress['star_method'] || 0) + PILLAR3_POINTS_CONFIG.star_method.pointsPerLesson
         }
-        if (session.training_type?.includes('simulaciones_guiado')) {
+        if (session.training_type?.includes('cv_intelligent')) {
+          moduleProgress['cv_intelligent'] = (moduleProgress['cv_intelligent'] || 0) + PILLAR3_POINTS_CONFIG.cv_intelligent.pointsPerLesson
+        }
+        if (session.training_type?.includes('job_analysis')) {
+          moduleProgress['job_analysis'] = (moduleProgress['job_analysis'] || 0) + PILLAR3_POINTS_CONFIG.job_analysis.pointsPerLesson
+        }
+        if (session.training_type?.includes('multimodal_analysis')) {
+          moduleProgress['multimodal_analysis'] = (moduleProgress['multimodal_analysis'] || 0) + PILLAR3_POINTS_CONFIG.multimodal_analysis.pointsPerLesson
+        }
+        if (session.training_type?.includes('training_guided')) {
           moduleProgress['training_guided'] = (moduleProgress['training_guided'] || 0) + PILLAR3_POINTS_CONFIG.training_guided.pointsPerLesson
         }
-        if (session.training_type?.includes('simulaciones_estructurada') || session.training_type?.includes('simulaciones_desafiante') || session.training_type?.includes('simulaciones_maestria')) {
-          moduleProgress['training_advanced'] = (moduleProgress['training_advanced'] || 0) + PILLAR3_POINTS_CONFIG.training_advanced.pointsPerLesson
+        if (session.training_type?.includes('training_structured')) {
+          moduleProgress['training_structured'] = (moduleProgress['training_structured'] || 0) + PILLAR3_POINTS_CONFIG.training_structured.pointsPerLesson
         }
-        if (session.training_type?.includes('interview')) {
-          moduleProgress['audit_initial'] = (moduleProgress['audit_initial'] || 0) + PILLAR3_POINTS_CONFIG.audit_initial.pointsPerLesson
+        if (session.training_type?.includes('training_challenging')) {
+          moduleProgress['training_challenging'] = (moduleProgress['training_challenging'] || 0) + PILLAR3_POINTS_CONFIG.training_challenging.pointsPerLesson
+        }
+        if (session.training_type?.includes('training_conversational')) {
+          moduleProgress['training_conversational'] = (moduleProgress['training_conversational'] || 0) + PILLAR3_POINTS_CONFIG.training_conversational.pointsPerLesson
         }
       })
     }

@@ -1,7 +1,15 @@
 /**
  * Pillar 3 Points Distribution System
- * Total: 1000 points divided across 7 main training parts
- * Points are awarded when users complete lessons/tests
+ * Total: 1000 points = 100% progress
+ * - Guía del Coach - Auditoría Inicial: 40 points
+ * - Metodo STAR: 120 points
+ * - CV Inteligente: 120 points
+ * - Análisis de Vacante: 120 points
+ * - Análisis Multimodal: 120 points
+ * - Entrenamientos Guiados: 120 points
+ * - Entrenamientos Estructurados: 120 points
+ * - Entrenamientos Desafiantes: 120 points
+ * - Entrenamientos Conversionales: 120 points
  */
 
 export const PILLAR3_POINTS_CONFIG = {
@@ -10,9 +18,9 @@ export const PILLAR3_POINTS_CONFIG = {
     id: 'audit_initial',
     name: 'Guía del Coach - Auditoría Inicial',
     description: 'Initial preparation and audit with coach',
-    totalPoints: 100,
+    totalPoints: 40,
     lessons: 1,
-    pointsPerLesson: 100,
+    pointsPerLesson: 40,
   },
 
   // Part 2a: Método STAR (STAR Method Training)
@@ -20,9 +28,9 @@ export const PILLAR3_POINTS_CONFIG = {
     id: 'star_method',
     name: 'Método STAR',
     description: 'Structured response methodology',
-    totalPoints: 150,
-    lessons: 4, // 4 lessons in guided training
-    pointsPerLesson: 37.5,
+    totalPoints: 120,
+    lessons: 4,
+    pointsPerLesson: 30,
   },
 
   // Part 2b: CV Inteligente (CV Optimization)
@@ -30,9 +38,9 @@ export const PILLAR3_POINTS_CONFIG = {
     id: 'cv_intelligent',
     name: 'CV Inteligente',
     description: 'ATS optimization and CV enhancement',
-    totalPoints: 100,
-    lessons: 1,
-    pointsPerLesson: 100,
+    totalPoints: 120,
+    lessons: 4,
+    pointsPerLesson: 30,
   },
 
   // Part 2c: Análisis de Vacante (Job Analysis)
@@ -40,9 +48,9 @@ export const PILLAR3_POINTS_CONFIG = {
     id: 'job_analysis',
     name: 'Análisis de Vacante',
     description: 'Job posting analysis and strategy',
-    totalPoints: 100,
-    lessons: 1,
-    pointsPerLesson: 100,
+    totalPoints: 120,
+    lessons: 4,
+    pointsPerLesson: 30,
   },
 
   // Part 2d: Análisis Multimodal (Video Analysis)
@@ -50,9 +58,9 @@ export const PILLAR3_POINTS_CONFIG = {
     id: 'multimodal_analysis',
     name: 'Análisis Multimodal',
     description: 'AI video feedback and coach analysis',
-    totalPoints: 100,
-    lessons: 1,
-    pointsPerLesson: 100,
+    totalPoints: 120,
+    lessons: 4,
+    pointsPerLesson: 30,
   },
 
   // Part 3a: Entrenamientos Progresivos - Guiado (Guided Level)
@@ -60,19 +68,39 @@ export const PILLAR3_POINTS_CONFIG = {
     id: 'training_guided',
     name: 'Entrenamientos Progresivos - Guiado',
     description: 'Guided training level with structured questions',
-    totalPoints: 150,
-    lessons: 4, // Multiple simulation questions
-    pointsPerLesson: 37.5,
+    totalPoints: 120,
+    lessons: 4,
+    pointsPerLesson: 30,
   },
 
-  // Part 3b: Entrenamientos Progresivos - Avanzado (Structured/Challenging/Conversational)
-  training_advanced: {
-    id: 'training_advanced',
-    name: 'Entrenamientos Progresivos - Avanzado',
-    description: 'Advanced training: Structured, Challenging, and Conversational levels',
-    totalPoints: 200,
-    lessons: 12, // 4 questions × 3 levels
-    pointsPerLesson: 16.67,
+  // Part 3b: Entrenamientos Progresivos - Estructurado (Structured Level)
+  training_structured: {
+    id: 'training_structured',
+    name: 'Entrenamientos Progresivos - Estructurado',
+    description: 'Structured training level',
+    totalPoints: 120,
+    lessons: 4,
+    pointsPerLesson: 30,
+  },
+
+  // Part 3c: Entrenamientos Progresivos - Desafiante (Challenging Level)
+  training_challenging: {
+    id: 'training_challenging',
+    name: 'Entrenamientos Progresivos - Desafiante',
+    description: 'Challenging training level',
+    totalPoints: 120,
+    lessons: 4,
+    pointsPerLesson: 30,
+  },
+
+  // Part 3d: Entrenamientos Progresivos - Conversacional (Conversational Level)
+  training_conversational: {
+    id: 'training_conversational',
+    name: 'Entrenamientos Progresivos - Conversacional',
+    description: 'Conversational training level',
+    totalPoints: 120,
+    lessons: 4,
+    pointsPerLesson: 30,
   },
 }
 
@@ -119,12 +147,14 @@ export function getCompletionPercentage(pointsEarned: number): number {
  */
 export const MODULE_TO_TRAINING_TYPE = {
   audit_initial: 'audit_initial',
-  star_method: 'entrenamiento_guiado',
-  cv_intelligent: 'cv_optimization',
+  star_method: 'star_method',
+  cv_intelligent: 'cv_intelligent',
   job_analysis: 'job_analysis',
   multimodal_analysis: 'multimodal_analysis',
-  training_guided: 'simulaciones_guiado',
-  training_advanced: 'simulaciones_avanzado',
+  training_guided: 'training_guided',
+  training_structured: 'training_structured',
+  training_challenging: 'training_challenging',
+  training_conversational: 'training_conversational',
 }
 
 /**
