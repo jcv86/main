@@ -281,29 +281,6 @@ export default function LessonPage() {
               </CardContent>
             </Card>
 
-            {/* Practice Section */}
-            <Card className="border-training/30 bg-training/5">
-              <CardHeader>
-                <CardTitle className="text-training">
-                  {lessonId === '4' ? 'Practica tu historia STAR completa' : 'Practica conmigo'}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-white/85">
-                  {lessonId === '1' && 'Piensa en un proyecto importante que lideraste. Déjame guiarte a través de STAR.'}
-                  {lessonId === '2' && 'Ahora, construyamos la sección "Situación" de tu historia. ¿Cuál era el contexto?'}
-                  {lessonId === '3' && 'Ahora, construyamos la sección "Acción" de tu historia. ¿Qué fue lo específico que HICISTE tú?'}
-                  {lessonId === '4' && 'Ahora practicaremos todo junto. Integra los componentes de STAR en una narrativa cohesiva y convencente. Cuéntame tu mejor historia STAR.'}
-                </p>
-                <Button 
-                  onClick={() => router.push(`/despega/a3/simulaciones-guiado?lesson=star`)}
-                  className="w-full bg-training hover:bg-training/90 text-white h-12 text-base font-semibold"
-                >
-                  {lessonId === '4' ? 'Practicar STAR Completo con Sofia' : 'Practicar con Sofia'}
-                </Button>
-              </CardContent>
-            </Card>
-
             {/* Finish Button */}
             <Button 
               onClick={() => setShowingFarewell(true)}
