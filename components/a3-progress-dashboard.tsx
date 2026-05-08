@@ -182,67 +182,53 @@ export default function A3ProgressDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* GAMIFIED HEADER - Minimalist Grayscale */}
-      <div className="relative overflow-hidden rounded-lg p-8" style={{ backgroundColor: 'rgb(20, 20, 20)', border: '1px solid rgb(50, 50, 50)' }}>
-        {/* Subtle animated background elements */}
-        <div className="absolute top-0 right-0 w-40 h-40 opacity-5" style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '50%', animation: 'pulse 3s infinite' }} />
-        <div className="absolute bottom-0 left-10 w-32 h-32 opacity-5" style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '50%', animation: 'pulse 4s infinite 1s' }} />
-        
-        <div className="relative z-10 space-y-6">
-          {/* Level Badge + Streak */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              {/* Level Badge */}
-              <div className="relative">
-                <div className="w-20 h-20 rounded-full flex items-center justify-center font-bold text-2xl text-white" style={{ backgroundColor: 'rgb(170, 70, 170)', boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)' }}>
-                  {progress.currentLevel}
-                </div>
-                <div className="absolute -bottom-1 -right-1 bg-gray-600 rounded-full p-1" style={{ boxShadow: '0 4px 12px rgba(0, 0, 0, 0.4)' }}>
-                  <Star className="w-5 h-5 text-gray-300 fill-gray-300" />
-                </div>
-              </div>
-              
-              <div>
-                <p className="text-white font-bold text-lg">Excelente progreso</p>
-                <p className="text-sm text-gray-400">Nivel {progress.currentLevel} • {progress.xpToNextLevel} XP al siguiente nivel</p>
-              </div>
+      {/* PROGRESS BAR - SIMPLIFIED PROFILE STYLE */}
+      <div className="border-2 border-violet/40 rounded-lg p-6 transition-all hover:shadow-lg hover:bg-background/80" style={{ backgroundColor: 'rgb(5, 5, 5)' }}>
+        <div className="space-y-4">
+          {/* Header with Title and Progress % */}
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <h3 className="text-xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>
+                Progreso Entrenamiento
+              </h3>
+              <span className="text-xs font-bold px-3 py-1 rounded-full" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', border: '1px solid rgba(170, 70, 170, 0.3)', color: 'rgb(170, 70, 170)' }}>
+                Etapa 3
+              </span>
             </div>
-            
-            {/* Streak Display */}
             <div className="text-right">
-              <div className="flex items-center justify-end gap-2 mb-2">
-                <Flame className="w-6 h-6 text-gray-400" style={{ fill: 'currentColor' }} />
-                <span className="text-3xl font-bold text-gray-300">{progress.streak}</span>
+              <div style={{ color: 'rgb(170, 70, 170)', fontSize: '24px', fontWeight: 'bold' }}>
+                {progress.completionPercentage}%
               </div>
-              <p className="text-xs text-gray-500">días seguidos</p>
-            </div>
-          </div>
-          
-          {/* XP Progress to Next Level */}
-          <div className="space-y-2">
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-semibold text-gray-300">Experiencia</span>
-              <span className="text-sm font-bold text-gray-400">{progress.xpPoints} / {progress.xpPoints + progress.xpToNextLevel} XP</span>
-            </div>
-            <div className="w-full h-3 bg-gray-800 rounded-full overflow-hidden">
-              <div 
-                className="h-full transition-all duration-1000 ease-out rounded-full"
-                style={{ 
-                  width: `${(progress.xpPoints / (progress.xpPoints + progress.xpToNextLevel)) * 100}%`,
-                  backgroundColor: 'rgb(170, 70, 170)',
-                  boxShadow: '0 0 8px rgba(170, 70, 170, 0.4)'
-                }}
-              />
+              <p className="text-xs text-white/60">Progreso</p>
             </div>
           </div>
 
-          {/* "Leer más" Button */}
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-sm font-medium text-gray-400 hover:text-white transition-colors pt-2"
+          {/* Description */}
+          <p className="text-sm text-white/70">Prepárate para entrevistas y destaca</p>
+
+          {/* Simple Progress Bar */}
+          <div className="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+            <div 
+              className="h-full transition-all duration-1000 ease-out rounded-full"
+              style={{ 
+                width: `${progress.completionPercentage}%`,
+                backgroundColor: 'rgb(170, 70, 170)',
+                boxShadow: '0 0 8px rgba(170, 70, 170, 0.4)'
+              }}
+            />
+          </div>
+
+          {/* Action Button */}
+          <Button 
+            className="w-full font-bold text-sm py-4 transition-all active:scale-95 rounded-[20px] text-white border-2"
+            style={{
+              backgroundColor: 'rgb(170, 70, 170, 0.6)',
+              borderColor: 'rgb(170, 70, 170, 0.6)'
+            }}
           >
-            {isExpanded ? '↓ Ver menos' : '↑ Leer más'}
-          </button>
+            Continuar Ahora
+            <ArrowRight className="w-4 h-4 ml-2" />
+          </Button>
         </div>
       </div>
 
