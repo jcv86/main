@@ -17,6 +17,7 @@ interface GlobalGamificationData {
   current_level: number
   xp_to_next_level: number
   daily_streak: number
+  total_points: number
   badges: string[]
   sections: Record<string, any>
   breakdown: {
@@ -235,7 +236,7 @@ export default function ProfileDashboard() {
         </Card>
 
         {/* Main Stats Grid */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-3 gap-6">
           {/* Level and XP Card */}
           <Card className="border-purple/30 bg-gradient-to-br from-purple/10 to-background">
             <CardContent className="pt-6 pb-6">
@@ -263,6 +264,26 @@ export default function ProfileDashboard() {
                   <p className="text-xs text-muted-foreground text-right">
                     {data?.xp_to_next_level || 0} XP para siguiente nivel
                   </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Points Card */}
+          <Card className="border-green-500/30 bg-gradient-to-br from-green-500/10 to-background">
+            <CardContent className="pt-6 pb-6">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wider">Puntos Disponibles</p>
+                    <p className="text-4xl font-bold text-green-500">{data?.total_points || 0}</p>
+                    <p className="text-sm text-green-600 mt-1">Moneda Acumulada</p>
+                  </div>
+                  <Award className="w-12 h-12 text-green-500/60" />
+                </div>
+
+                <div className="space-y-2">
+                  <p className="text-xs text-white/70">Usa tus puntos en diferentes partes del portal</p>
                 </div>
               </div>
             </CardContent>

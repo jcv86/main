@@ -15,6 +15,7 @@ export interface TrainingSession {
   questions_completed: number
   total_questions: number
   xp_earned: number
+  points_earned: number
   rewards_earned: string[]
   started_at: string
   completed_at: string
@@ -26,6 +27,7 @@ export interface TrainingProgress {
   total_time_spent: number
   average_score: number
   total_xp_earned: number
+  total_points_earned: number
   total_rewards_earned: number
   consecutive_days: number
   best_score: number
@@ -49,6 +51,10 @@ export async function saveTrainingSession(session: TrainingSession) {
     const completionBonus = session.questions_completed === session.total_questions ? 50 : 0
     const totalXP = baseXP + timeBonus + completionBonus
 
+    // Calculate Points (fixed amount per completion)
+    const pointsPerCompletion = 100
+    const totalPoints = pointsPerCompletion
+
     // Determine rewards/achievements
     const rewards: string[] = []
     if (session.score >= 90) rewards.push('excellent_performance')
@@ -70,6 +76,7 @@ export async function saveTrainingSession(session: TrainingSession) {
           questions_completed: session.questions_completed,
           total_questions: session.total_questions,
           xp_earned: totalXP,
+          points_earned: totalPoints,
           rewards_earned: rewards,
           started_at: session.started_at,
           completed_at: session.completed_at,
@@ -80,13 +87,13 @@ export async function saveTrainingSession(session: TrainingSession) {
 
     if (error) throw error
 
-    // Update user gamification profile
-    await updateGamificationProfile(user.id, totalXP, rewards, session.score)
+    // Update user gamification profile (XP and Points)
+    await updateGamificationProfile(user.id, totalXP, totalPoints, rewards, session.score)
 
     // Track analytics
     await trackTrainingAnalytics(user.id, session.training_type, session.level, session.score)
 
-    return { success: true, xpEarned: totalXP, rewards }
+    return { success: true, xpEarned: totalXP, pointsEarned: totalPoints, rewards }
   } catch (error) {
     console.error('[v0] Error saving training session:', error)
     throw error
@@ -118,6 +125,7 @@ export async function getUserTrainingProgress(): Promise<TrainingProgress> {
         total_time_spent: 0,
         average_score: 0,
         total_xp_earned: 0,
+        total_points_earned: 0,
         total_rewards_earned: 0,
         consecutive_days: 0,
         best_score: 0,
@@ -131,6 +139,7 @@ export async function getUserTrainingProgress(): Promise<TrainingProgress> {
     const total_time_spent = sessions.reduce((sum, s) => sum + (s.time_spent_seconds || 0), 0)
     const average_score = Math.round(sessions.reduce((sum, s) => sum + s.score, 0) / total_trainings)
     const total_xp_earned = sessions.reduce((sum, s) => sum + (s.xp_earned || 0), 0)
+    const total_points_earned = sessions.reduce((sum, s) => sum + (s.points_earned || 0), 0)
     
     // Get unique rewards
     const allRewards = sessions.flatMap(s => s.rewards_earned || [])
@@ -148,6 +157,7 @@ export async function getUserTrainingProgress(): Promise<TrainingProgress> {
       total_time_spent,
       average_score,
       total_xp_earned,
+      total_points_earned,
       total_rewards_earned,
       consecutive_days: streak,
       best_score,
@@ -192,6 +202,7 @@ export async function getTrainingHistory(limit = 10, offset = 0) {
 async function updateGamificationProfile(
   userId: string,
   xpEarned: number,
+  pointsEarned: number,
   rewards: string[],
   score: number
 ) {
@@ -209,6 +220,7 @@ async function updateGamificationProfile(
     const newTotalXP = currentXP + xpEarned
     const newLevel = Math.floor(newTotalXP / 1000) + 1
 
+    // Update gamification profile with both XP and Points
     const { error: updateError } = await supabase
       .from('user_gamification_profile')
       .upsert([
@@ -224,6 +236,33 @@ async function updateGamificationProfile(
       ])
 
     if (updateError) console.error('[v0] Error updating gamification profile:', updateError)
+
+    // Track points in a separate transaction/history if needed
+    // (You may want to add a points_history table for audit trail)
+    // For now, points are stored in user_dtc_balance table
+    const { data: dtcBalance, error: fetchDTCError } = await supabase
+      .from('user_dtc_balance')
+      .select('*')
+      .eq('user_id', userId)
+      .single()
+
+    if (fetchDTCError && fetchDTCError.code !== 'PGRST116') throw fetchDTCError
+
+    const currentBalance = dtcBalance?.balance || 0
+    const newBalance = currentBalance + pointsEarned
+
+    const { error: updateDTCError } = await supabase
+      .from('user_dtc_balance')
+      .upsert([
+        {
+          user_id: userId,
+          balance: newBalance,
+          lifetime_earned: (dtcBalance?.lifetime_earned || 0) + pointsEarned,
+          updated_at: new Date().toISOString()
+        }
+      ])
+
+    if (updateDTCError) console.error('[v0] Error updating DTC balance:', updateDTCError)
   } catch (error) {
     console.error('[v0] Error in updateGamificationProfile:', error)
   }

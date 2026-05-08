@@ -18,6 +18,7 @@ interface TrainingResult {
 
 interface ProgressMetrics {
   xpEarned: number
+  pointsEarned: number
   rewards: string[]
   totalXP: number
   level: number
@@ -59,6 +60,7 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
           console.log('[v0] Session saved:', data)
           setProgressMetrics({
             xpEarned: data.xpEarned || 0,
+            pointsEarned: data.pointsEarned || 0,
             rewards: data.rewards || [],
             totalXP: data.totalXP || 0,
             level: data.level || 1,
@@ -180,7 +182,7 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="grid grid-cols-2 gap-4"
+            className="grid grid-cols-3 gap-4"
           >
             {/* XP Earned */}
             <Card className="border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-background">
@@ -197,6 +199,24 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
                   +{progressMetrics.xpEarned}
                 </p>
                 <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">XP Ganados</p>
+              </CardContent>
+            </Card>
+
+            {/* Points Earned */}
+            <Card className="border-green-500/30 bg-gradient-to-br from-green-500/10 to-background">
+              <CardContent className="pt-6 pb-6 text-center">
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.75, type: 'spring' }}
+                  className="mb-3"
+                >
+                  <Award className="w-8 h-8 mx-auto" style={{ color: 'rgb(34, 197, 94)' }} />
+                </motion.div>
+                <p className="text-3xl font-bold" style={{ color: 'rgb(34, 197, 94)' }}>
+                  +{progressMetrics.pointsEarned}
+                </p>
+                <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">Puntos</p>
               </CardContent>
             </Card>
 

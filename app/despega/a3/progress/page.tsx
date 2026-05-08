@@ -88,6 +88,20 @@ export default function ProgressPage() {
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Puntos Acumulados</p>
+                  <div className="text-3xl font-bold text-green-500">
+                    {a3Progress?.total_points || 0}
+                  </div>
+                </div>
+                <Award className="w-8 h-8 text-green-500/30" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white dark:bg-card">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Score de Empleabilidad</p>
                   <div className="text-3xl font-bold text-blue">
                     {a3Progress?.employability_score || 0}/100
@@ -108,20 +122,6 @@ export default function ProgressPage() {
                   </div>
                 </div>
                 <Zap className="w-8 h-8 text-blue/30" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white dark:bg-card">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Entrevistas Dominadas</p>
-                  <div className="text-3xl font-bold text-green">
-                    {a3Progress?.interviews_mastered || 0}
-                  </div>
-                </div>
-                <Award className="w-8 h-8 text-green/30" />
               </div>
             </CardContent>
           </Card>
