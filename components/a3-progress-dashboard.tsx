@@ -196,8 +196,13 @@ export default function A3ProgressDashboard() {
               </span>
             </div>
             <div className="text-right">
-              <div style={{ color: 'rgb(170, 70, 170)', fontSize: '24px', fontWeight: 'bold' }}>
-                {progress.completionPercentage}%
+              <div className="flex items-center justify-end gap-2">
+                <div style={{ color: 'rgb(0, 255, 127)', fontSize: '28px', fontWeight: 'bold', fontFamily: 'monospace' }}>
+                  {progress?.totalPointsEarned || 0}/{progress?.totalPossiblePoints || 1000} XP
+                </div>
+                <div style={{ color: 'rgb(0, 255, 127)', fontSize: '24px', fontWeight: 'bold' }}>
+                  {progress?.completionPercentage || 0}%
+                </div>
               </div>
               <p className="text-xs text-white/60">Progreso</p>
             </div>
@@ -211,9 +216,9 @@ export default function A3ProgressDashboard() {
             <div 
               className="h-full transition-all duration-1000 ease-out rounded-full"
               style={{ 
-                width: `${progress.completionPercentage}%`,
-                backgroundColor: 'rgb(170, 70, 170)',
-                boxShadow: '0 0 8px rgba(170, 70, 170, 0.4)'
+                width: `${progress?.completionPercentage || 0}%`,
+                backgroundColor: 'rgb(0, 255, 127)',
+                boxShadow: '0 0 8px rgba(0, 255, 127, 0.4)'
               }}
             />
           </div>
