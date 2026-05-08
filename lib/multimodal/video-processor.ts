@@ -34,7 +34,9 @@ export async function extractFrames(
     )
 
     const [duration, frameRate, width, height] = ffprobeOutput.trim().split(',')
-    const fps = eval(frameRate) // Convert "30000/1001" to number
+    // Safely parse frame rate fraction like "30000/1001"
+    const fpsMatch = frameRate.match(/(\d+)\/(\d+)/)
+    const fps = fpsMatch ? parseInt(fpsMatch[1]) / parseInt(fpsMatch[2]) : parseFloat(frameRate)
     const durationSeconds = parseFloat(duration)
 
     // Extract frames at specified interval
