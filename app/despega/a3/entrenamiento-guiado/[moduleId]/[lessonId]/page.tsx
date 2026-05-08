@@ -10,6 +10,7 @@ import { Progress } from '@/components/ui/progress'
 import { SofiaInterviewer } from '@/components/sofia-interviewer'
 import { ArrowLeft, Volume2 } from 'lucide-react'
 import { A3GeneralProgress } from '@/components/a3-general-progress'
+import { TrainingResultsCard } from '@/components/training-results-card'
 
 const LESSONS_DATA: Record<string, Record<string, any>> = {
   'intro-to-star': {
@@ -44,6 +45,7 @@ export default function LessonPage() {
   
   const [showingSofia, setShowingSofia] = useState(true)
   const [showingFarewell, setShowingFarewell] = useState(false)
+  const [showingResults, setShowingResults] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const lessonData = LESSONS_DATA[moduleId]?.[lessonId]
 
@@ -67,6 +69,29 @@ export default function LessonPage() {
     )
   }
 
+  if (showingResults) {
+    return (
+      <TrainingResultsCard
+        result={{
+          score: 85,
+          questionsCompleted: parseInt(lessonId),
+          totalQuestions: 4,
+          timeSpent: 600,
+          level: 'basico',
+          trainingType: 'Método STAR'
+        }}
+        onContinue={() => {
+          // Go to next lesson or back to dashboard if last lesson
+          if (parseInt(lessonId) < 4) {
+            router.push(`/despega/a3/entrenamiento-guiado/${moduleId}/${parseInt(lessonId) + 1}`)
+          } else {
+            router.push('/despega/a3')
+          }
+        }}
+      />
+    )
+  }
+
   if (showingFarewell) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
@@ -79,7 +104,7 @@ export default function LessonPage() {
                 playsInline
                 crossOrigin="anonymous"
                 className="w-full h-full object-contain"
-                onEnded={() => router.push('/despega/a3')}
+                onEnded={() => setShowingResults(true)}
                 style={{ width: '100%', height: '100%' }}
               />
             </div>
@@ -88,7 +113,7 @@ export default function LessonPage() {
           <Card className="border-training/30 bg-training/5">
             <CardContent className="pt-6">
               <p className="text-white/85 text-center">
-                Sofia se está despidiendo... ¡Felicidades por completar el entrenamiento!
+                Sofia se está despidiendo... ¡Felicidades por completar la lección!
               </p>
             </CardContent>
           </Card>

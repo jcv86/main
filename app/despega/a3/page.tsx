@@ -22,6 +22,21 @@ export default function EntrenamientoIntensivePage() {
     return null
   }
 
+  // Determine the recommended next step based on user progress
+  const getNextStep = () => {
+    // This would typically come from user session data
+    // For now, we'll show the first step as default
+    return {
+      stepNumber: 1,
+      title: 'Comenzar: Auditoría Inicial',
+      description: 'Aprende técnicas fundamentales de presencia en video y auditoría de tu setup',
+      action: '/despega/interview-0',
+      actionLabel: 'Ir a Auditoría →'
+    }
+  }
+
+  const nextStep = getNextStep()
+
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
@@ -49,6 +64,24 @@ export default function EntrenamientoIntensivePage() {
             </p>
           </div>
         </div>
+
+        {/* Quick Next Step Card */}
+        <Card className="mb-12 border-training/40 bg-gradient-to-r from-training/20 to-training/10" style={{ borderWidth: '0px 0px 0px 4px', borderColor: 'rgba(170, 70, 170, 0.8)' }}>
+          <CardContent className="pt-6 pb-6">
+            <div className="flex items-center justify-between">
+              <div className="flex-1">
+                <p className="text-xs text-training uppercase font-semibold tracking-wider">Tu Próximo Paso</p>
+                <h3 className="text-2xl font-bold text-white mt-1">{nextStep.title}</h3>
+                <p className="text-white/70 mt-2">{nextStep.description}</p>
+              </div>
+              <Link href={nextStep.action} className="flex-shrink-0 ml-6">
+                <Button className="px-6 h-12 font-semibold" style={{ backgroundColor: 'rgba(170, 70, 170, 0.8)', color: '#ffffff', borderRadius: '20px' }}>
+                  {nextStep.actionLabel}
+                </Button>
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* A3 Progress Section */}
         <div className="mb-12 space-y-4">
@@ -142,11 +175,14 @@ export default function EntrenamientoIntensivePage() {
                   <span className="text-white/80">Feedback personalizado inmediato</span>
                 </div>
               </div>
-              <Link href="/despega/interview-0" className="block">
-                <Button className="w-full font-bold text-lg py-6" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}>
-                  Comenzar <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
+              <div className="pt-2 space-y-3 border-t border-white/10">
+                <Link href="/despega/interview-0" className="block">
+                  <Button className="w-full font-bold text-lg py-6" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)', color: '#ffffff', borderRadius: '20px' }}>
+                    Comenzar <ArrowRight className="ml-2 w-5 h-5" />
+                  </Button>
+                </Link>
+                <p className="text-xs text-white/50 text-center">⏱ Tiempo estimado: 45-60 minutos</p>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -268,6 +304,17 @@ export default function EntrenamientoIntensivePage() {
             <p className="text-lg text-white/85 ml-24" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
               4 niveles de dificultad progresiva con feedback del coach. Progresa desde principiante hasta maestría. Avanza cuando domines cada nivel.
             </p>
+          </div>
+
+          {/* Level Progression Indicator */}
+          <div className="mb-6 px-4 py-3 rounded-lg bg-white/5 border border-white/10">
+            <div className="flex items-center justify-between text-sm">
+              <div className="flex items-center gap-2">
+                <span className="text-white/60">Ruta de aprendizaje:</span>
+                <span className="text-training font-semibold">Guiado → Estructurado → Desafiante → Maestría</span>
+              </div>
+              <span className="text-white/40">Completa cada nivel para desbloquear el siguiente</span>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
