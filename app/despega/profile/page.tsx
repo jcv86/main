@@ -63,7 +63,6 @@ export default function ProfileDashboard() {
             const a3Data = await a3Response.json()
             a3ProgressData = { progress: a3Data.completionPercentage || 0, total_points: a3Data.totalPointsEarned || 0 }
             setA3Progress(a3ProgressData)
-            console.log('[v0] A3 progress synced:', a3ProgressData)
           }
         } catch (error) {
           console.error('[v0] Error fetching A3 progress:', error)
