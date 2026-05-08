@@ -167,37 +167,37 @@ export default function ProfileDashboard() {
   const xpPercentage = data ? (data.total_xp % 1000) / 10 : 0
 
   const stages = [
-    {
-      name: 'El Ritual',
-      description: 'Descubre tu perfil DISC y potencial único',
-      completed: progress.a1_completed,
-      href: '/despega/a1-report',
-      score: readiness.a1_completeness,
-    },
-    {
-      name: 'Exploración',
-      description: 'Tu plan personalizado de 90 días',
-      completed: progress.a2_completed,
-      href: '/despega/a2-routes',
-      score: readiness.a2_completeness,
-    },
-    {
-      name: 'Entrenamiento',
-      description: 'Prepárate para entrevistas y destaca',
-      completed:
-        progress.a3_progress.interview_0 &&
-        progress.a3_progress.cv_prepared &&
-        progress.a3_progress.market_insights,
-      href: '/despega/a3',
-      score: a3Progress.progress, // Use synced A3 progress instead of readiness calculation
-    },
-    {
-      name: 'La Realidad',
-      description: 'Monitoreo continuo y oportunidades',
-      completed: progress.a4_active,
-      href: '/despega/a4-radar',
-      score: readiness.a4_completeness,
-    }
+  {
+  name: 'Progreso El Ritual',
+  description: 'Descubre tu perfil DISC y potencial único',
+  completed: progress.a1_completed,
+  href: '/despega/a1-report',
+  score: readiness.a1_completeness,
+  },
+  {
+  name: 'Progreso Exploración',
+  description: 'Tu plan personalizado de 90 días',
+  completed: progress.a2_completed,
+  href: '/despega/a2-routes',
+  score: readiness.a2_completeness,
+  },
+  {
+  name: 'Progreso Entrenamiento',
+  description: 'Prepárate para entrevistas y destaca',
+  completed:
+  progress.a3_progress.interview_0 &&
+  progress.a3_progress.cv_prepared &&
+  progress.a3_progress.market_insights,
+  href: '/despega/a3',
+  score: a3Progress.progress, // Use synced A3 progress instead of readiness calculation
+  },
+  {
+  name: 'Progreso La Realidad',
+  description: 'Monitoreo continuo y oportunidades',
+  completed: progress.a4_active,
+  href: '/despega/a4-radar',
+  score: readiness.a4_completeness,
+  }
   ]
 
   return (
@@ -372,10 +372,25 @@ export default function ProfileDashboard() {
                   <div className="flex items-start justify-between gap-6 mb-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <h3 className={`text-xl font-bold text-white group-hover:${colors.text} transition-colors`}>
+                        <h3 
+                          className={`text-xl font-bold transition-colors`}
+                          style={{ 
+                            color: i === 0 ? 'rgba(80, 160, 170, 0.8)' 
+                              : i === 1 ? 'rgb(90, 90, 150)' 
+                              : i === 2 ? 'rgb(170, 70, 170)' 
+                              : 'rgb(225, 120, 130)'
+                          }}
+                        >
                           {stage.name}
                         </h3>
-                        <span className={`text-xs font-bold px-3 py-1 rounded-full ${colors.bg} border border-white/20 ${colors.label}`}>
+                        <span className={`text-xs font-bold px-3 py-1 rounded-full ${colors.bg} border border-white/20`}
+                          style={{
+                            color: i === 0 ? 'rgb(246, 245, 244)' 
+                              : i === 1 ? 'rgb(246, 245, 244)'
+                              : i === 2 ? 'rgb(246, 245, 244)'
+                              : 'rgb(246, 245, 244)'
+                          }}
+                        >
                           Etapa {i + 1}
                         </span>
                       </div>
@@ -386,12 +401,22 @@ export default function ProfileDashboard() {
                       <Badge className={`bg-green/30 text-green border-2 border-green/50 px-3 py-1 text-xs font-bold flex-shrink-0 h-fit`}>
                         Completado
                       </Badge>
-                    ) : (
-                      <div className="text-center flex-shrink-0">
-                        <div className={`text-2xl font-bold ${colors.text} mb-0.5`}>{Math.round(stage.score)}%</div>
-                        <p className="text-white/60 text-xs font-semibold">Progreso</p>
-                      </div>
-                    )}
+                  ) : (
+                  <div className="text-center flex-shrink-0">
+                  <div 
+                    className={`text-2xl font-bold mb-0.5`}
+                    style={{
+                      color: i === 0 ? 'rgba(80, 160, 170, 0.8)'
+                        : i === 1 ? 'rgb(90, 90, 150, 0.8)'
+                        : i === 2 ? 'rgb(170, 70, 170, 0.8)'
+                        : 'rgb(225, 120, 130, 0.8)'
+                    }}
+                  >
+                    {Math.round(stage.score)}%
+                  </div>
+                  <p className="text-white/60 text-xs font-semibold">Progreso</p>
+                  </div>
+                  )}
                   </div>
 
                   <div className={`w-full bg-muted/40 rounded-full h-2 overflow-hidden mb-4`}>
@@ -406,17 +431,17 @@ export default function ProfileDashboard() {
                       e.stopPropagation()
                       router.push(stage.href)
                     }}
-                    className={`w-full font-bold text-sm py-4 transition-all active:scale-95 rounded-[20px] ${
-                      stage.completed
-                        ? i === 0 ? 'bg-cyan/30 hover:bg-cyan/40 text-cyan border-2 border-cyan/50'
-                        : i === 1 ? 'bg-indigo/30 hover:bg-indigo/40 text-indigo border-2 border-indigo/50'
-                        : i === 2 ? 'bg-violet/30 hover:bg-violet/40 text-violet border-2 border-violet/50'
-                        : 'bg-rose/30 hover:bg-rose/40 text-rose border-2 border-rose/50'
-                        : i === 0 ? 'bg-cyan/70 hover:bg-cyan/60 text-white border-2 border-cyan/50'
-                        : i === 1 ? 'bg-indigo/70 hover:bg-indigo/60 text-white border-2 border-indigo/50'
-                        : i === 2 ? 'bg-violet/70 hover:bg-violet/60 text-white border-2 border-violet/50'
-                        : 'bg-rose/70 hover:bg-rose/60 text-white border-2 border-rose/50'
-                    }`}
+                    className={`w-full font-bold text-sm py-4 transition-all active:scale-95 rounded-[20px] text-white border-2`}
+                    style={{
+                      backgroundColor: i === 0 ? 'rgba(80, 160, 170, 0.6)'
+                        : i === 1 ? 'rgb(90, 90, 150, 0.6)'
+                        : i === 2 ? 'rgb(170, 70, 170, 0.6)'
+                        : 'rgb(225, 120, 130, 0.6)',
+                      borderColor: i === 0 ? 'rgba(80, 160, 170, 0.6)'
+                        : i === 1 ? 'rgb(90, 90, 150, 0.6)'
+                        : i === 2 ? 'rgb(170, 70, 170, 0.6)'
+                        : 'rgb(225, 120, 130, 0.6)'
+                    }}
                   >
                     {stage.completed ? 'Ver Resultados' : 'Continuar Ahora'}
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
