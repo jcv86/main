@@ -322,7 +322,7 @@ export default function A3ProgressDashboard() {
           )}
           
           {/* Main KPI Cards Grid - Grayscale */}
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-4 gap-4">
             {/* Metric 1: Time */}
             <Card className="bg-gray-900 overflow-hidden border-0 relative" style={{ borderLeft: '3px solid rgb(100, 100, 100)' }}>
               <CardContent className="pt-6 pb-6">
@@ -349,7 +349,20 @@ export default function A3ProgressDashboard() {
               </CardContent>
             </Card>
 
-            {/* Metric 3: Completion */}
+            {/* Metric 3: Points */}
+            <Card className="bg-gray-900 overflow-hidden border-0 relative" style={{ borderLeft: '3px solid rgb(34, 197, 94)' }}>
+              <CardContent className="pt-6 pb-6">
+                <div className="flex flex-col items-center text-center space-y-3">
+                  <Award className="w-8 h-8" style={{ color: 'rgb(34, 197, 94)' }} />
+                  <div>
+                    <p className="text-4xl font-bold text-white">{Math.round(progress.totalPointsEarned || 0)}</p>
+                    <p className="text-xs mt-2 text-gray-500">puntos ganados</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Metric 4: Completion */}
             <Card className="bg-gray-900 overflow-hidden border-0 relative" style={{ borderLeft: '3px solid rgb(100, 100, 100)' }}>
               <CardContent className="pt-6 pb-6">
                 <div className="flex flex-col items-center text-center space-y-3">

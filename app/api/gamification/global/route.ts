@@ -54,6 +54,7 @@ export async function GET(request: NextRequest) {
           current_level: 1,
           xp_to_next_level: 1000,
           daily_streak: 0,
+          total_points: 0,
           badges: [],
           sections: {},
           breakdown: {
@@ -70,7 +71,7 @@ export async function GET(request: NextRequest) {
     const xpToNextLevel = profile.current_level * 1000 - profile.xp_global_total
 
     // Fetch section details for additional context
-    const [{ data: a3Progress }, { data: a4Modules }, { data: interviews }] = await Promise.all([
+    const [{ data: a3Progress }, { data: a4Modules }, { data: interviews }, { data: dtcBalance }] = await Promise.all([
       supabase
         .from('a3_user_progreso')
         .select('tiempo_dedicado_minutos, sesiones_completadas, progreso_porcentaje')
@@ -84,6 +85,11 @@ export async function GET(request: NextRequest) {
         .from('a3_user_entrevistas')
         .select('score_total')
         .eq('user_id', userId),
+      supabase
+        .from('user_dtc_balance')
+        .select('balance')
+        .eq('user_id', userId)
+        .single(),
     ])
 
     const completedModules = (a4Modules || []).filter((m) => m.completado).length
@@ -125,6 +131,7 @@ export async function GET(request: NextRequest) {
         current_level: profile.current_level,
         xp_to_next_level: xpToNextLevel,
         daily_streak: profile.daily_streak || 0,
+        total_points: dtcBalance?.balance || 0,
         badges: [...new Set(badges)], // Remove duplicates
         sections,
         breakdown: {
@@ -143,6 +150,7 @@ export async function GET(request: NextRequest) {
         current_level: 1,
         xp_to_next_level: 1000,
         daily_streak: 0,
+        total_points: 0,
         badges: [],
         sections: {},
         breakdown: {
