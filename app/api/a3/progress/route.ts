@@ -1,6 +1,13 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
 import { calculateProgressPercentage, syncProgressToDatabase } from '@/lib/progress-calculation'
+import { 
+  getCurrentAchievement, 
+  getNextAchievement, 
+  getPointsToNextMilestone,
+  getUnlockedAchievements,
+  calculateTotalPoints
+} from '@/lib/pillar3-achievements'
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,6 +17,8 @@ export async function GET(request: NextRequest) {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
+      const currentAchievement = getCurrentAchievement(0)
+      const nextAchievement = getNextAchievement(0)
       return NextResponse.json(
         {
           totalMinutes: 0,
@@ -21,6 +30,10 @@ export async function GET(request: NextRequest) {
           xpToNextLevel: 1000,
           badges: [],
           streak: 0,
+          achievement: currentAchievement,
+          nextAchievement: nextAchievement,
+          pointsToNextMilestone: getPointsToNextMilestone(0),
+          unlockedAchievements: getUnlockedAchievements(0),
         },
         { status: 200 }
       )
@@ -57,6 +70,8 @@ export async function GET(request: NextRequest) {
 
     // Return default data if no progress record exists
     if (!progressData) {
+      const currentAchievement = getCurrentAchievement(0)
+      const nextAchievement = getNextAchievement(0)
       return NextResponse.json(
         {
           totalMinutes: 0,
@@ -68,6 +83,10 @@ export async function GET(request: NextRequest) {
           xpToNextLevel: 1000,
           badges: [],
           streak: 0,
+          achievement: currentAchievement,
+          nextAchievement: nextAchievement,
+          pointsToNextMilestone: getPointsToNextMilestone(0),
+          unlockedAchievements: getUnlockedAchievements(0),
         },
         { status: 200 }
       )
@@ -148,11 +167,17 @@ export async function GET(request: NextRequest) {
         xpToNextLevel,
         badges,
         streak,
+        achievement: getCurrentAchievement(completionPercentage),
+        nextAchievement: getNextAchievement(completionPercentage),
+        pointsToNextMilestone: getPointsToNextMilestone(completionPercentage),
+        unlockedAchievements: getUnlockedAchievements(completionPercentage),
       },
       { status: 200 }
     )
   } catch (error) {
     console.error('[v0] Error in /api/a3/progress:', error)
+    const currentAchievement = getCurrentAchievement(0)
+    const nextAchievement = getNextAchievement(0)
     return NextResponse.json(
       {
         totalMinutes: 0,
@@ -164,6 +189,10 @@ export async function GET(request: NextRequest) {
         xpToNextLevel: 1000,
         badges: [],
         streak: 0,
+        achievement: currentAchievement,
+        nextAchievement: nextAchievement,
+        pointsToNextMilestone: getPointsToNextMilestone(0),
+        unlockedAchievements: getUnlockedAchievements(0),
       },
       { status: 200 }
     )

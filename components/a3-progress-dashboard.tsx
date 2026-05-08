@@ -21,6 +21,10 @@ interface ProgressData {
   xpToNextLevel: number
   badges: string[]
   streak: number
+  achievement?: any
+  nextAchievement?: any
+  pointsToNextMilestone?: number
+  unlockedAchievements?: any[]
 }
 
 interface ChallengeData {
@@ -240,6 +244,78 @@ export default function A3ProgressDashboard() {
       {/* Expandable Content Section */}
       {isExpanded && (
         <div className="space-y-4 animate-in fade-in duration-300">
+          {/* Achievement Milestones */}
+          {progress.unlockedAchievements && progress.unlockedAchievements.length > 0 && (
+            <Card className="bg-gray-900 border-0 overflow-hidden" style={{ borderLeft: '3px solid rgb(170, 70, 170)' }}>
+              <CardContent className="pt-6 pb-6">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Star className="w-5 h-5 text-gray-400" />
+                    <h3 className="font-bold text-white">Logros de Hito</h3>
+                  </div>
+                  
+                  {/* Milestone Progress */}
+                  <div className="space-y-3">
+                    {/* Achievement Bars */}
+                    <div className="flex gap-2 items-center">
+                      {[0, 25, 50, 75, 100].map((milestone) => {
+                        const isUnlocked = progress.completionPercentage >= milestone
+                        return (
+                          <div key={milestone} className="flex-1 text-center">
+                            <div 
+                              className="h-12 rounded-lg flex items-center justify-center text-xs font-bold transition-all duration-300"
+                              style={{
+                                backgroundColor: isUnlocked ? 'rgb(170, 70, 170)' : 'rgb(50, 50, 50)',
+                                color: isUnlocked ? '#ffffff' : 'rgb(100, 100, 100)',
+                                boxShadow: isUnlocked ? '0 0 12px rgba(170, 70, 170, 0.3)' : 'none',
+                              }}
+                            >
+                              {milestone}%
+                            </div>
+                          </div>
+                        )
+                      })}
+                    </div>
+                    
+                    {/* Current Achievement */}
+                    {progress.achievement && (
+                      <div className="p-4 bg-gray-800 rounded-lg border border-gray-700">
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl">{progress.achievement.icon}</span>
+                          <div className="flex-1">
+                            <p className="font-bold text-white text-sm">{progress.achievement.title}</p>
+                            <p className="text-xs text-gray-400">{progress.achievement.description}</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-lg font-bold text-gray-300">+{progress.achievement.points}</p>
+                            <p className="text-xs text-gray-600">puntos</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Next Achievement */}
+                    {progress.nextAchievement && progress.pointsToNextMilestone && progress.pointsToNextMilestone > 0 && (
+                      <div className="p-4 bg-gray-800/50 rounded-lg border border-gray-700 border-dashed">
+                        <div className="flex items-center gap-3">
+                          <span className="text-2xl opacity-50">{progress.nextAchievement.icon}</span>
+                          <div className="flex-1">
+                            <p className="font-bold text-gray-500 text-sm">{progress.nextAchievement.title}</p>
+                            <p className="text-xs text-gray-600">Próximo hito</p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-lg font-bold text-gray-500">{progress.pointsToNextMilestone} pts</p>
+                            <p className="text-xs text-gray-600">para desbloquear</p>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+          
           {/* Main KPI Cards Grid - Grayscale */}
           <div className="grid grid-cols-3 gap-4">
             {/* Metric 1: Time */}
