@@ -90,8 +90,6 @@ export default function Interview0Page() {
       case 'intro': return { step: 1, total: 4, percent: 0, label: 'Introducción' }
       case 'audit': return { step: 2, total: 4, percent: 33, label: 'Auditoría' }
       case 'simulator': return { step: 3, total: 4, percent: 66, label: 'Simulación' }
-      case 'farewell': return { step: 4, total: 4, percent: 90, label: 'Finalizando' }
-      case 'results': return { step: 4, total: 4, percent: 100, label: 'Completado' }
       default: return { step: 1, total: 4, percent: 0, label: 'Introducción' }
     }
   }
