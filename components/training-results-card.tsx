@@ -25,6 +25,8 @@ interface ProgressMetrics {
   totalXP: number
   level: number
   streak: number
+  isFirstCompletion?: boolean
+  message?: string
 }
 
 export function TrainingResultsCard({ result, onContinue }: { result: TrainingResult; onContinue: () => void }) {
@@ -33,6 +35,7 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
   const [showCelebration, setShowCelebration] = useState(false)
   const [progressMetrics, setProgressMetrics] = useState<ProgressMetrics | null>(null)
   const [isSaving, setIsSaving] = useState(true)
+  const [showXPAnimation, setShowXPAnimation] = useState(false)
 
   // Save training session and animate score counting
   useEffect(() => {
@@ -66,8 +69,14 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
             rewards: data.rewards || [],
             totalXP: data.totalXP || 0,
             level: data.level || 1,
-            streak: data.streak || 0
+            streak: data.streak || 0,
+            isFirstCompletion: data.isFirstCompletion ?? true,
+            message: data.message || ''
           })
+          // Show XP animation only for first completion
+          if (data.isFirstCompletion) {
+            setShowXPAnimation(true)
+          }
         }
       } catch (error) {
         console.error('[v0] Error saving training session:', error)
@@ -186,23 +195,75 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
             transition={{ delay: 0.6 }}
             className="grid grid-cols-3 gap-4"
           >
-            {/* XP Earned */}
-            <Card className="border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-background">
-              <CardContent className="pt-6 pb-6 text-center">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.7, type: 'spring' }}
-                  className="mb-3"
-                >
-                  <Zap className="w-8 h-8 mx-auto" style={{ color: 'rgb(170, 70, 170)' }} />
-                </motion.div>
-                <p className="text-3xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>
-                  +{progressMetrics.xpEarned}
-                </p>
-                <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">XP Ganados</p>
-              </CardContent>
-            </Card>
+        {/* XP Earned */}
+            {showXPAnimation && progressMetrics?.isFirstCompletion && (
+              <motion.div>
+                <Card className="border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-background overflow-hidden relative">
+                  {/* Floating +XP animation */}
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center"
+                    initial={{ opacity: 1, y: 0, scale: 1 }}
+                    animate={{ opacity: 0, y: -100, scale: 1.2 }}
+                    transition={{ duration: 2, delay: 0.3 }}
+                    pointerEvents="none"
+                  >
+                    <div className="text-5xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>
+                      +{progressMetrics.xpEarned} XP
+                    </div>
+                  </motion.div>
+                  <CardContent className="pt-6 pb-6 text-center">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.7, type: 'spring' }}
+                      className="mb-3"
+                    >
+                      <Zap className="w-8 h-8 mx-auto" style={{ color: 'rgb(170, 70, 170)' }} />
+                    </motion.div>
+                    <p className="text-3xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>
+                      +{progressMetrics.xpEarned}
+                    </p>
+                    <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">XP Ganados</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+            {!showXPAnimation && progressMetrics && !progressMetrics.isFirstCompletion && (
+              <Card className="border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-background">
+                <CardContent className="pt-6 pb-6 text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.7, type: 'spring' }}
+                    className="mb-3"
+                  >
+                    <TrendingUp className="w-8 h-8 mx-auto" style={{ color: 'rgb(180, 83, 9)' }} />
+                  </motion.div>
+                  <p className="text-sm" style={{ color: 'rgb(180, 83, 9)' }}>
+                    Repitiendo
+                  </p>
+                  <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">Ya ganaste XP</p>
+                </CardContent>
+              </Card>
+            )}
+            {!progressMetrics && (
+              <Card className="border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-background">
+                <CardContent className="pt-6 pb-6 text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.7, type: 'spring' }}
+                    className="mb-3"
+                  >
+                    <Zap className="w-8 h-8 mx-auto" style={{ color: 'rgb(170, 70, 170)' }} />
+                  </motion.div>
+                  <p className="text-3xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>
+                    +{result.score}
+                  </p>
+                  <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">XP Ganados</p>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Points Earned */}
             <Card className="border-green-500/30 bg-gradient-to-br from-green-500/10 to-background">
@@ -301,19 +362,27 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
           transition={{ delay: 1.2 }}
           className="bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-500/30 rounded-lg p-4 text-center"
         >
-          {displayScore >= 90 && (
+          {progressMetrics?.isFirstCompletion ? (
+            <>
+              {displayScore >= 90 && (
+                <p className="text-white">
+                  ¡Excelente desempeño! Ganaste {progressMetrics.xpEarned} XP. Estás listo para tu próxima entrevista. Continúa practicando para mejorar aún más.
+                </p>
+              )}
+              {displayScore >= 75 && displayScore < 90 && (
+                <p className="text-white">
+                  Muy bien hecho. Ganaste {progressMetrics.xpEarned} XP. Tienes una sólida base. Practica con los escenarios más desafiantes para perfeccionar tus habilidades.
+                </p>
+              )}
+              {displayScore < 75 && (
+                <p className="text-white">
+                  Buen comienzo. Ganaste {progressMetrics.xpEarned} XP. Revisa las áreas donde puedas mejorar y vuelve a intentar. Cada práctica te acerca a la excelencia.
+                </p>
+              )}
+            </>
+          ) : (
             <p className="text-white">
-              ¡Excelente desempeño! Estás listo para tu próxima entrevista. Continúa practicando para mejorar aún más.
-            </p>
-          )}
-          {displayScore >= 75 && displayScore < 90 && (
-            <p className="text-white">
-              Muy bien hecho. Tienes una sólida base. Practica con los escenarios más desafiantes para perfeccionar tus habilidades.
-            </p>
-          )}
-          {displayScore < 75 && (
-            <p className="text-white">
-              Buen comienzo. Revisa las áreas donde puedas mejorar y vuelve a intentar. Cada práctica te acerca a la excelencia.
+              {progressMetrics?.message || 'Excelente práctica! No hay XP adicional esta vez (ya ganaste XP en tu primer intento). Sigue practicando para mejorar tus habilidades.'}
             </p>
           )}
         </motion.div>

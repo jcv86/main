@@ -63,6 +63,45 @@ export async function saveTrainingSession(session: TrainingSession) {
     if (session.questions_completed === session.total_questions) rewards.push('completion_master')
     if (session.level === 'avanzado' && session.score >= 85) rewards.push('advanced_challenger')
 
+    // Check if this training module was already completed for XP purposes
+    const { data: existingCompletion } = await supabase
+      .from('a3_training_module_completions')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('training_type', session.training_type)
+      .single()
+
+    let xpToAward = totalXP
+    let isFirstCompletion = true
+    let completionId: string | null = null
+
+    if (existingCompletion) {
+      // User already completed this training - no XP awarded, but they can still practice
+      isFirstCompletion = false
+      xpToAward = 0
+      completionId = existingCompletion.id
+    } else {
+      // First completion - award XP and track it
+      const { data: newCompletion, error: insertError } = await supabase
+        .from('a3_training_module_completions')
+        .insert([
+          {
+            user_id: user.id,
+            training_type: session.training_type,
+            xp_amount: totalXP,
+            xp_awarded_at: new Date().toISOString(),
+            is_first_completion: true
+          }
+        ])
+        .select()
+
+      if (insertError) {
+        console.error('[v0] Error tracking completion:', insertError)
+      } else if (newCompletion && newCompletion.length > 0) {
+        completionId = newCompletion[0].id
+      }
+    }
+
     // Insert training session record
     const { data, error } = await supabase
       .from('a3_training_sessions')
@@ -75,25 +114,43 @@ export async function saveTrainingSession(session: TrainingSession) {
           time_spent_seconds: session.time_spent_seconds,
           questions_completed: session.questions_completed,
           total_questions: session.total_questions,
-          xp_earned: totalXP,
+          xp_earned: xpToAward,
           points_earned: totalPoints,
           rewards_earned: rewards,
           started_at: session.started_at,
           completed_at: session.completed_at,
-          metadata: session.metadata || {}
+          metadata: {
+            ...session.metadata,
+            is_first_completion: isFirstCompletion,
+            completion_tracking_id: completionId
+          } || {}
         }
       ])
       .select()
 
     if (error) throw error
 
-    // Update user gamification profile (XP and Points)
-    await updateGamificationProfile(user.id, totalXP, totalPoints, rewards, session.score)
+    // Update user gamification profile (XP only if first completion)
+    if (isFirstCompletion) {
+      await updateGamificationProfile(user.id, xpToAward, totalPoints, rewards, session.score)
+    } else {
+      // Still update points even on repeat, but don't add XP
+      await updateGamificationProfile(user.id, 0, totalPoints, rewards, session.score)
+    }
 
     // Track analytics
-    await trackTrainingAnalytics(user.id, session.training_type, session.level, session.score)
+    await trackTrainingAnalytics(user.id, session.training_type, session.level, session.score, isFirstCompletion)
 
-    return { success: true, xpEarned: totalXP, pointsEarned: totalPoints, rewards }
+    return { 
+      success: true, 
+      xpEarned: xpToAward, 
+      pointsEarned: totalPoints, 
+      rewards,
+      isFirstCompletion,
+      message: isFirstCompletion 
+        ? `+${xpToAward} XP awarded for first completion!` 
+        : 'Great practice! No additional XP this time (you already earned XP for this module)'
+    }
   } catch (error) {
     console.error('[v0] Error saving training session:', error)
     throw error
@@ -275,7 +332,8 @@ async function trackTrainingAnalytics(
   userId: string,
   trainingType: string,
   level: string,
-  score: number
+  score: number,
+  isFirstCompletion: boolean = true
 ) {
   try {
     await supabase
@@ -288,6 +346,7 @@ async function trackTrainingAnalytics(
           metadata: {
             level,
             score,
+            isFirstCompletion,
             timestamp: new Date().toISOString()
           },
           created_at: new Date().toISOString()
