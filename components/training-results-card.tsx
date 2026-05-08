@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Trophy, Star, Zap, Target, TrendingUp, Flame, Gift } from 'lucide-react'
+import { Trophy, Star, Zap, Target, TrendingUp, Flame, Gift, Award } from 'lucide-react'
 
 interface TrainingResult {
   score: number
