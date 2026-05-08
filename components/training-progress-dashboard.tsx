@@ -41,27 +41,15 @@ export function TrainingProgressDashboard() {
 
   const fetchProgress = async () => {
     try {
-      const res = await fetch('/api/a3/training-progress', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'get-progress' })
-      })
+      // Use the correct progress API endpoint
+      const res = await fetch('/api/a3/progress')
 
       if (res.ok) {
         const data = await res.json()
+        console.log('[v0] Progress data loaded:', data)
         setProgress(data)
-      }
-
-      // Fetch history
-      const historyRes = await fetch('/api/a3/training-progress', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'get-history', limit: 10, offset: 0 })
-      })
-
-      if (historyRes.ok) {
-        const historyData = await historyRes.json()
-        setHistory(historyData.sessions || [])
+      } else {
+        console.error('[v0] Error fetching progress:', res.status, res.statusText)
       }
     } catch (error) {
       console.error('[v0] Error fetching progress:', error)

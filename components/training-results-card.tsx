@@ -41,22 +41,19 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
   useEffect(() => {
     const saveAndAnimate = async () => {
       try {
-        // Save training session
-        const response = await fetch('/api/a3/training-progress', {
+        // Save training session and award XP
+        const response = await fetch('/api/a3/training-completion', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            action: 'save-session',
-            session: {
-              training_type: result.trainingType,
-              level: result.level,
-              score: result.score,
-              time_spent_seconds: result.timeSpent,
-              questions_completed: result.questionsCompleted,
-              total_questions: result.totalQuestions,
-              started_at: new Date(Date.now() - result.timeSpent * 1000).toISOString(),
-              completed_at: new Date().toISOString()
-            }
+            training_id: result.trainingType,
+            module_name: result.trainingType,
+            tiempo_dedicado_minutos: Math.round(result.timeSpent / 60),
+            competencias_desarrolladas: [],
+            score: result.score,
+            level: result.level,
+            questions_completed: result.questionsCompleted,
+            total_questions: result.totalQuestions,
           })
         })
 
