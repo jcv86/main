@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, Zap, TrendingUp, Target, Award, Rocket } from 'lucide-react'
+import { ArrowRight, Zap, TrendingUp, Target, Award, Rocket, Flame, Sparkles, Zap as Lightning } from 'lucide-react'
 import { mockDashboardData } from './data/mock-dashboard'
 import { ProgressBar } from '@/components/a3/progress-bar'
 import { SkillsGrid } from '@/components/a3/skills-grid'
@@ -13,119 +13,229 @@ import { BadgesGrid } from '@/components/a3/badges-grid'
 
 export default function A3EntrenamientoIntensivo() {
   const [dashboardData] = useState(mockDashboardData)
+  const [hoveredStat, setHoveredStat] = useState<number | null>(null)
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container max-w-7xl mx-auto px-4 py-12 space-y-16">
-        {/* ========== HEADER SECTION ========== */}
-        <div className="space-y-6">
+    <div className="min-h-screen bg-background overflow-hidden">
+      {/* Epic animated background grid */}
+      <div className="fixed inset-0 -z-10 opacity-20">
+        <div className="absolute inset-0 bg-gradient-to-br from-training/20 via-transparent to-training/10"></div>
+        <div className="absolute top-20 left-20 w-72 h-72 bg-training/30 rounded-full mix-blend-screen filter blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 right-20 w-72 h-72 bg-training/20 rounded-full mix-blend-screen filter blur-3xl animate-pulse delay-1000"></div>
+      </div>
+
+      <div className="container max-w-7xl mx-auto px-4 py-12 space-y-16 relative z-10">
+        {/* ========== EPIC HEADER ========== */}
+        <div className="space-y-8">
           {/* Navigation */}
           <div className="flex items-center justify-between">
             <Link href="/despega">
-              <Button variant="ghost" size="sm" className="hover:bg-muted/20">
+              <Button variant="ghost" size="sm" className="hover:bg-muted/20 transition-all">
                 <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
                 Volver
               </Button>
             </Link>
-            <Badge className="bg-training/20 text-training border border-training/30">
-              <Rocket className="w-3 h-3 mr-2" />
+            <Badge className="bg-training/30 text-training border border-training/50 shadow-lg shadow-training/20 animate-pulse">
+              <Rocket className="w-3 h-3 mr-2 animate-bounce" />
               Pilar 3: Entrenamiento Intensivo
             </Badge>
           </div>
 
-          {/* Hero Title */}
-          <div className="space-y-3">
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-training to-training/60 bg-clip-text text-transparent">
-              Domina Entrevistas en 4 Niveles
+          {/* Epic Hero Title */}
+          <div className="space-y-4 relative">
+            {/* Animated gradient background */}
+            <div className="absolute -inset-4 bg-gradient-to-r from-training/20 via-transparent to-training/20 rounded-2xl blur-2xl -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <h1 className="text-7xl md:text-8xl font-black bg-gradient-to-r from-training via-training/80 to-training/60 bg-clip-text text-transparent drop-shadow-2xl">
+              🚀 Domina Entrevistas
             </h1>
-            <p className="text-lg text-white/70 max-w-3xl">
-              Entrena desde tu primera auditoría hasta una simulación real. Cada hito desbloquea nuevas herramientas, evidencia de avance y mayor preparación para entrevistas reales.
+            <h2 className="text-4xl md:text-5xl font-bold text-white/90">en 4 Niveles Épicos</h2>
+            
+            <p className="text-lg md:text-xl text-white/80 max-w-3xl leading-relaxed font-light">
+              Desde tu primera <span className="text-training font-semibold">auditoría</span> hasta una <span className="text-training font-semibold">simulación real</span>. 
+              Cada hito desbloquea nuevas herramientas, evidencia de avance y mayor preparación para entrevistas que importan.
             </p>
+
+            {/* Quick CTA */}
+            <Link href="/despega/a3/entrenamiento-guiado" className="inline-block">
+              <Button className="bg-gradient-to-r from-training to-training/80 hover:shadow-lg hover:shadow-training/50 transition-all transform hover:scale-105 text-white px-8 py-6 text-lg font-bold">
+                <Zap className="w-5 h-5 mr-2 animate-pulse" />
+                Comenzar Ahora
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
           </div>
         </div>
 
-        {/* ========== CURRENT STATE CARD ========== */}
+        {/* ========== EPIC STATE CARDS ========== */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Level and Milestone */}
-          <div className="md:col-span-2 border border-training/30 rounded-lg p-6 bg-gradient-to-br from-training/10 to-training/5">
-            <p className="text-xs text-training uppercase font-semibold tracking-wider mb-2">Estado Actual</p>
-            <h2 className="text-3xl font-bold text-white mb-1">{dashboardData.currentLevel}</h2>
-            <p className="text-white/60 mb-4">Siguiente: {dashboardData.nextMilestone}</p>
-            <p className="text-sm text-white/50">{dashboardData.nextReward}</p>
+          {/* Main Level Card */}
+          <div className="md:col-span-2 group relative overflow-hidden rounded-xl border border-training/40 bg-gradient-to-br from-training/20 to-training/5 p-8 hover:border-training/60 transition-all duration-300 shadow-lg shadow-training/10 hover:shadow-training/30">
+            <div className="absolute inset-0 bg-gradient-to-r from-training/0 via-training/10 to-training/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            
+            <div className="relative z-10">
+              <div className="flex items-center gap-2 mb-2">
+                <Flame className="w-5 h-5 text-training animate-pulse" />
+                <p className="text-xs text-training uppercase font-bold tracking-widest">Estado Actual</p>
+              </div>
+              <h2 className="text-4xl font-black text-transparent bg-gradient-to-r from-white to-white/70 bg-clip-text mb-2">
+                {dashboardData.currentLevel}
+              </h2>
+              <div className="space-y-2">
+                <p className="text-training font-bold flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" />
+                  Próximo: {dashboardData.nextMilestone}
+                </p>
+                <p className="text-sm text-white/60">{dashboardData.nextReward}</p>
+              </div>
+            </div>
           </div>
 
-          {/* Stats */}
+          {/* Epic Stats */}
           {[
-            { icon: Zap, label: 'XP Ganados', value: `${dashboardData.totalXp}/${dashboardData.maxXp}` },
-            { icon: Award, label: 'Completados', value: `${dashboardData.completedModules}/${dashboardData.totalModules}` },
-            { icon: TrendingUp, label: 'Progreso', value: `${dashboardData.progressPct}%` }
+            { icon: Zap, label: 'XP Ganados', value: `${dashboardData.totalXp}`, max: `/${dashboardData.maxXp}`, color: 'from-yellow-500/50 to-training/50' },
+            { icon: Award, label: 'Completados', value: `${dashboardData.completedModules}`, max: `/${dashboardData.totalModules}`, color: 'from-green-500/50 to-training/50' },
+            { icon: TrendingUp, label: 'Progreso', value: `${dashboardData.progressPct}`, max: '%', color: 'from-blue-500/50 to-training/50' }
           ].map((stat, i) => {
             const Icon = stat.icon
             return (
-              <div key={i} className="border border-white/10 rounded-lg p-6 bg-white/5 hover:bg-white/10 transition">
-                <div className="flex items-start justify-between mb-2">
-                  <Icon className="w-5 h-5 text-training" />
-                  <p className="text-xs text-white/50">{stat.label}</p>
+              <div
+                key={i}
+                className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-6 hover:bg-white/10 hover:border-training/50 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-training/30"
+                onMouseEnter={() => setHoveredStat(i)}
+                onMouseLeave={() => setHoveredStat(null)}
+              >
+                <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}></div>
+                <div className="relative z-10">
+                  <Icon className={`w-6 h-6 mb-3 transition-all duration-300 ${hoveredStat === i ? 'text-training scale-125 animate-bounce' : 'text-white/60'}`} />
+                  <p className="text-xs text-white/60 uppercase font-bold tracking-wide mb-2">{stat.label}</p>
+                  <div className="flex items-baseline gap-1">
+                    <p className="text-4xl font-black text-white">{stat.value}</p>
+                    <p className="text-sm text-white/60 font-bold">{stat.max}</p>
+                  </div>
                 </div>
-                <p className="text-2xl font-bold text-white">{stat.value}</p>
               </div>
             )
           })}
         </div>
 
-        {/* ========== MAIN PROGRESS BAR ========== */}
-        <div className="border border-training/20 rounded-lg p-6 bg-gradient-to-r from-training/10 to-training/5">
-          <ProgressBar
-            percentage={dashboardData.progressPct}
-            currentXp={dashboardData.totalXp}
-            maxXp={dashboardData.maxXp}
-            label="Progreso hacia entrevista real"
-            animated={true}
-          />
+        {/* ========== EPIC PROGRESS BAR ========== */}
+        <div className="group relative overflow-hidden rounded-xl border border-training/30 bg-gradient-to-r from-training/15 to-training/5 p-8 hover:border-training/50 transition-all duration-300 shadow-2xl shadow-training/20">
+          <div className="absolute inset-0 bg-gradient-to-r from-training/20 via-transparent to-training/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+          <div className="relative z-10">
+            <ProgressBar
+              percentage={dashboardData.progressPct}
+              currentXp={dashboardData.totalXp}
+              maxXp={dashboardData.maxXp}
+              label="🎯 Progreso hacia Entrevista Real"
+              animated={true}
+            />
+          </div>
         </div>
 
-        {/* ========== SKILLS SECTION ========== */}
-        <div className="space-y-4">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Habilidades Entrenadas</h2>
-            <p className="text-white/60">Cada módulo mejora una habilidad específica. Mira tu progreso en cada área.</p>
+        {/* ========== SKILLS SECTION - EPIC ========== */}
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-4xl font-black text-white flex items-center gap-3">
+              <Target className="w-10 h-10 text-training animate-pulse" />
+              Habilidades en Combate
+            </h2>
+            <p className="text-white/70 text-lg">Cada módulo fortalece una habilidad. Mira tu arsenal crecer.</p>
           </div>
           <SkillsGrid skills={dashboardData.skills} />
         </div>
 
-        {/* ========== LEVELS & MODULES SECTION ========== */}
-        <div className="space-y-4">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Tu Camino de Entrenamiento</h2>
-            <p className="text-white/60">Completa cada nivel para desbloquear herramientas y entrenamientos nuevos.</p>
+        {/* ========== EPIC LEVELS SECTION ========== */}
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-4xl font-black text-white flex items-center gap-3">
+              <Rocket className="w-10 h-10 text-training animate-bounce" />
+              Tu Jornada Épica
+            </h2>
+            <p className="text-white/70 text-lg">Completa cada nivel para desbloquear superpoderes y entrenamientos legendarios.</p>
           </div>
           <LevelsAccordion modules={dashboardData.modules} />
         </div>
 
-        {/* ========== BADGES SECTION ========== */}
+        {/* ========== BADGES SECTION - EPIC ========== */}
         <div className="space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-4xl font-black text-white flex items-center gap-3">
+              <Award className="w-10 h-10 text-training animate-pulse" />
+              Insignias & Logros
+            </h2>
+            <p className="text-white/70 text-lg">Desbloquea badges exclusivas mientras avanzas. ¡Colecciónalas todas!</p>
+          </div>
           <BadgesGrid badges={dashboardData.badges} />
         </div>
 
-        {/* ========== MOTIVATIONAL MESSAGE ========== */}
-        <div className="border border-green-500/30 rounded-lg p-6 bg-gradient-to-r from-green-500/10 to-emerald-500/10">
-          <div className="flex gap-4">
-            <div className="text-3xl">🎯</div>
-            <div>
-              <h3 className="text-lg font-semibold text-white mb-1">Tu Próximo Paso</h3>
-              <p className="text-white/70">
-                {dashboardData.progressPct < 25
-                  ? 'Comienza con la Auditoría Inicial. Este es el cimiento para toda tu preparación. Revisa tu cámara, luz, audio y presencia.'
-                  : dashboardData.progressPct < 50
-                  ? 'Continúa con las herramientas de preparación. Domina el Método STAR y prepara tu CV para crear una base sólida.'
-                  : dashboardData.progressPct < 75
-                  ? 'Ahora es tiempo de entrenar en entrevistas reales. Comienza con la Entrevista Guiada y aumenta la dificultad.'
-                  : 'Ya estás listo. Realiza la Simulación Real para verificar que estás preparado para una entrevista verdadera.'}
-              </p>
+        {/* ========== EPIC MOTIVATIONAL MESSAGE ========== */}
+        <div className="group relative overflow-hidden rounded-2xl border-2 border-training/60 bg-gradient-to-r from-training/20 via-training/10 to-training/5 p-8 md:p-12 shadow-2xl shadow-training/30 hover:shadow-training/50 transition-all duration-300">
+          <div className="absolute -inset-1 bg-gradient-to-r from-training/40 via-training/20 to-training/40 opacity-20 group-hover:opacity-40 blur transition-opacity duration-300 -z-10"></div>
+          
+          <div className="relative z-10 space-y-4">
+            <div className="flex items-start gap-4">
+              <div className="text-6xl animate-bounce">🎯</div>
+              <div className="flex-1">
+                <h3 className="text-3xl md:text-4xl font-black text-transparent bg-gradient-to-r from-white to-training bg-clip-text mb-3">
+                  {dashboardData.progressPct < 25
+                    ? '🚀 Inicia tu Viaje'
+                    : dashboardData.progressPct < 50
+                    ? '⚡ Acelera tu Entrenamiento'
+                    : dashboardData.progressPct < 75
+                    ? '🔥 Domina las Entrevistas'
+                    : '👑 Eres Prácticamente Invencible'}
+                </h3>
+                <p className="text-lg md:text-xl text-white/90 leading-relaxed">
+                  {dashboardData.progressPct < 25
+                    ? '🎬 Comienza con la Auditoría Inicial. Este es el cimiento de todo. Revisa tu cámara, luz, audio, presencia y pitch. ¡Tu futuro se construye hoy!'
+                    : dashboardData.progressPct < 50
+                    ? '📚 Domina el Método STAR y prepara tu CV. Estás construyendo una base sólida que te hará destacar en cualquier entrevista.'
+                    : dashboardData.progressPct < 75
+                    ? '🎤 Es hora de entrenar en entrevistas reales. Comienza con la Guiada y aumenta la dificultad. ¡Cada entrevista es una victoria!'
+                    : '🏆 ¡Ya estás listo! Realiza la Simulación Real para verificar que estás en top form. ¡Nada puede detenerte ahora!'}
+                </p>
+              </div>
             </div>
+            
+            <Link href="/despega/a3/entrenamiento-guiado" className="inline-block">
+              <Button className="bg-gradient-to-r from-training to-training/80 hover:shadow-lg hover:shadow-training/60 transition-all transform hover:scale-110 text-white px-8 py-6 text-lg font-bold mt-4">
+                <Flame className="w-5 h-5 mr-2 animate-pulse" />
+                {dashboardData.progressPct < 25 ? 'Comenzar Ahora' : 'Continuar Entrenando'}
+                <ArrowRight className="w-5 h-5 ml-2" />
+              </Button>
+            </Link>
           </div>
         </div>
+
+        {/* ========== EPIC FOOTER MESSAGE ========== */}
+        <div className="border-t border-white/10 pt-12 text-center space-y-4">
+          <p className="text-2xl font-black text-transparent bg-gradient-to-r from-training via-white to-training bg-clip-text">
+            ✨ La excelencia no es un destino, es un viaje. ✨
+          </p>
+          <p className="text-white/60 text-lg">
+            Cada entrenamiento te acerca más a dominar entrevistas. ¡No rendirse! 💪
+          </p>
+        </div>
       </div>
+
+      {/* Animated decorative elements */}
+      <style jsx>{`
+        @keyframes float {
+          0%, 100% { transform: translateY(0px); }
+          50% { transform: translateY(-20px); }
+        }
+        @keyframes glow {
+          0%, 100% { box-shadow: 0 0 20px rgba(170, 70, 170, 0.3); }
+          50% { box-shadow: 0 0 40px rgba(170, 70, 170, 0.6); }
+        }
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+        .animate-glow {
+          animation: glow 3s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   )
 }
