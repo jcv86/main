@@ -50,12 +50,6 @@ export function CoachStrategicProvider({ children }: CoachStrategicProviderProps
       try {
         const supabase = createClient()
         
-        // Skip if supabase is not available
-        if (!supabase) {
-          console.log('[v0] Supabase not available, skipping strategic context load')
-          return
-        }
-        
         // Get current user
         const { data: { user } } = await supabase.auth.getUser()
         if (!user?.id) return

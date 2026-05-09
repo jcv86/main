@@ -1,8 +1,10 @@
-import type { Metadata } from "next"
-import "@/app/globals.css"
+// Skip env validation for test routes
+if (typeof process !== 'undefined') {
+  process.env.SKIP_ENV_VALIDATION = 'true'
+}
 
-export const metadata: Metadata = {
-  title: "Progress Dashboard Test",
+export const metadata = {
+  title: 'Progress Dashboard Test',
 }
 
 export default function TestLayout({
@@ -10,15 +12,5 @@ export default function TestLayout({
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <html className="bg-black" suppressHydrationWarning>
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </head>
-      <body className="bg-black min-h-screen">
-        {children}
-      </body>
-    </html>
-  )
+  return children
 }

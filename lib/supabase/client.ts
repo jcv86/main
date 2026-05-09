@@ -3,7 +3,7 @@ import { createBrowserClient } from '@supabase/ssr'
 let supabaseInstance: ReturnType<typeof createBrowserClient> | null = null
 
 export function createClient() {
-  // Return existing instance if available (singleton pattern for better persistence)
+  // Return existing instance if available (singleton pattern)
   if (supabaseInstance) {
     return supabaseInstance
   }
@@ -20,17 +20,6 @@ export function createClient() {
     return null as any
   }
 
-  // Create browser client with session persistence enabled
-  supabaseInstance = createBrowserClient(supabaseUrl, supabaseKey, {
-    auth: {
-      persistSession: true, // Ensure session persists across page reloads
-      autoRefreshToken: true, // Auto-refresh tokens before they expire
-      detectSessionInUrl: true, // Detect auth redirects
-      flowType: 'pkce', // Use PKCE flow for better security
-    },
-  })
-  
-  console.log('[v0] Supabase client initialized with session persistence enabled')
+  supabaseInstance = createBrowserClient(supabaseUrl, supabaseKey)
   return supabaseInstance
 }
-
