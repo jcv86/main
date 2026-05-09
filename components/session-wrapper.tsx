@@ -53,9 +53,11 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
     )
 
     return () => {
-      subscription.unsubscribe()
+      if (unsubscribe) {
+        unsubscribe()
+      }
     }
-  }, [supabase.auth])
+  }, [supabase])
 
   // Transform Supabase session to our User interface
   const user: User | null = session?.user
@@ -68,7 +70,9 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
     : null
 
   const signOut = async () => {
-    await supabase.auth.signOut()
+    if (supabase) {
+      await supabase.auth.signOut()
+    }
     setSession(null)
   }
 

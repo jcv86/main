@@ -45,13 +45,19 @@ export async function updateSession(request: NextRequest) {
       data: { user },
     } = await supabase.auth.getUser()
 
-    // Protect /despega/* routes - redirect to signin if not authenticated
-    if (request.nextUrl.pathname.startsWith('/despega') && !user) {
+    // Protect /despega/* routes - BUT ALLOW /despega/a3 for DEMO/PREVIEW
+    // Allow /despega/a3 routes without authentication (for demo/preview purposes)
+    const isA3Route = request.nextUrl.pathname.startsWith('/despega/a3')
+    const isDespegaRoute = request.nextUrl.pathname.startsWith('/despega')
+    
+    if (isDespegaRoute && !isA3Route && !user) {
+      // Redirect to signin ONLY for non-A3 despega routes
       const url = request.nextUrl.clone()
       url.pathname = '/auth/signin'
       url.searchParams.set('next', request.nextUrl.pathname)
       return NextResponse.redirect(url)
     }
+    // A3 routes are accessible without authentication for demo/preview
   } catch (error) {
     // If auth fails (build time or missing env vars), just continue without auth
     console.log('[v0] Auth middleware skipped (likely build time)')
