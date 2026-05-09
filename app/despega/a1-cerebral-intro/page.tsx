@@ -79,8 +79,8 @@ export default function A1CerebralIntroPage() {
           {/* What is Cerebral Assessment */}
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl flex items-center gap-2" style={{ color: 'rgba(80, 160, 170, 0.6)', fontWeight: '500' }}>
-                <Zap className="w-6 h-6" style={{ color: 'rgba(80, 160, 170, 0.6)' }} />
+              <CardTitle className="text-2xl flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }}>
+                <Zap className="w-6 h-6" style={{ color: 'rgb(80, 160, 170)' }} />
                 ¿Qué es esta Evaluación?
               </CardTitle>
             </CardHeader>
@@ -112,29 +112,29 @@ export default function A1CerebralIntroPage() {
           {/* How it Works */}
           <Card className="border-0 shadow-lg">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl flex items-center gap-2" style={{ color: 'rgba(80, 160, 170, 0.8)', fontWeight: '500' }}>
-                <CheckCircle2 className="w-6 h-6" style={{ color: 'rgba(80, 160, 170, 0.6)' }} />
+              <CardTitle className="text-2xl flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }}>
+                <CheckCircle2 className="w-6 h-6" style={{ color: 'rgb(80, 160, 170)' }} />
                 ¿Cómo funciona el test?
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold" style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)' }}>1</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>1</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-white">28 preguntas</p>
                     <p className="text-sm text-white/75 dark:text-white/75">Responde 28 preguntas simples sobre tu comportamiento</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold" style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)' }}>2</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>2</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-white">Dos selecciones por pregunta</p>
                     <p className="text-sm text-white/75 dark:text-white/75">Para cada pregunta, selecciona la opción que más y menos te describe</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold" style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)' }}>3</div>
+                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>3</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-white">Análisis automático</p>
                     <p className="text-sm text-white/75 dark:text-white/75">Obtendrás tu perfil cerebral personalizado con insights sobre tu comunicación y liderazgo</p>
@@ -151,7 +151,7 @@ export default function A1CerebralIntroPage() {
               <CardDescription className="text-white/75">Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="p-8 rounded-[28px] border border-white/10" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
+              <div className="p-8 rounded-[28px] border border-white/10" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.15)' }}>
                 <p className="text-xl font-semibold text-white mb-8 text-center">
                   "Cuando enfrento un desafío importante, tiendo a ser más:"
                 </p>
@@ -211,7 +211,7 @@ export default function A1CerebralIntroPage() {
                 </div>
               </div>
 
-              <div className="bg-purple/20 p-4 rounded-[28px] border" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.2)', borderColor: 'none' }}>
+              <div className="bg-purple/20 p-4 rounded-[28px] border" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.15)', borderColor: 'rgba(80, 160, 170, 0.4)' }}>
                 <p className="text-sm text-purple/90 dark:text-white">
                   <span className="font-semibold">¿Cómo funciona?</span> Cada pregunta tiene 4 opciones que representan los 4 estilos: Directo, Inspirador, Seguro y Consciente. Seleccionas cuál te describe MÁS y cuál te describe MENOS. El sistema cuenta tus selecciones y determina tu perfil dominante.
                 </p>
@@ -220,10 +220,10 @@ export default function A1CerebralIntroPage() {
           </Card>
 
           {/* Benefits */}
-          <Card className="border-0 shadow-lg border-l-4" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.4)', borderColor: 'rgba(80, 160, 170, 0.8)' }}>
+          <Card className="border-0 shadow-lg border-l-4" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.15)', borderColor: 'rgb(80, 160, 170)' }}>
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl text-white flex items-center gap-2" style={{ color: 'rgba(80, 160, 170)' }}>
-                <Zap className="w-6 h-6" style={{ color: 'rgba(80, 160, 170)' }} />
+              <CardTitle className="text-2xl text-white flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)' }}>
+                <Zap className="w-6 h-6" style={{ color: 'rgb(80, 160, 170)' }} />
                 ¿Por qué es importante?
               </CardTitle>
             </CardHeader>
@@ -253,7 +253,7 @@ export default function A1CerebralIntroPage() {
               onClick={() => router.push('/despega/a1-cerebral')}
               size="lg"
               className="px-8 text-lg text-white"
-              style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)', borderRadius: '20px' }}
+              style={{ backgroundColor: 'rgb(80, 160, 170)', borderRadius: '20px' }}
             >
               Comenzar Análisis Cerebral
             </Button>
@@ -262,7 +262,7 @@ export default function A1CerebralIntroPage() {
               size="lg"
               variant="outline"
               className="px-8 text-lg"
-              style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)', borderRadius: '20px' }}
+              style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)', borderRadius: '20px', borderColor: 'rgb(80, 160, 170)', color: 'rgb(80, 160, 170)' }}
             >
               Volver al Dashboard
             </Button>
