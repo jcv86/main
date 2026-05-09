@@ -120,21 +120,21 @@ export default function A1CerebralIntroPage() {
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>1</div>
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-ritual to-ritual/80 text-white border-2 border-ritual/40 flex items-center justify-center flex-shrink-0 font-black shadow-lg">1</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-white">28 preguntas</p>
                     <p className="text-sm text-white/75 dark:text-white/75">Responde 28 preguntas simples sobre tu comportamiento</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>2</div>
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-ritual to-ritual/80 text-white border-2 border-ritual/40 flex items-center justify-center flex-shrink-0 font-black shadow-lg">2</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-white">Dos selecciones por pregunta</p>
                     <p className="text-sm text-white/75 dark:text-white/75">Para cada pregunta, selecciona la opción que más y menos te describe</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="flex-shrink-0 w-8 h-8 bg-purple text-white rounded-full flex items-center justify-center font-bold" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>3</div>
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-ritual to-ritual/80 text-white border-2 border-ritual/40 flex items-center justify-center flex-shrink-0 font-black shadow-lg">3</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-white">Análisis automático</p>
                     <p className="text-sm text-white/75 dark:text-white/75">Obtendrás tu perfil cerebral personalizado con insights sobre tu comunicación y liderazgo</p>
