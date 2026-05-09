@@ -318,9 +318,9 @@ export default function A2RoutesPage() {
       // Save route to a2_rutas_personalizadas table
       const { error: saveError } = await supabase.from('a2_rutas_personalizadas').upsert({
         user_id: user?.id,
-        ruta_30_dias: { phase: 30, data: generatedRoute },
-        ruta_60_dias: { phase: 60, data: generatedRoute },
-        ruta_90_dias: { phase: 90, data: generatedRoute },
+        ruta_30_dias: generatedRoute.route_30days,
+        ruta_60_dias: generatedRoute.route_60days,
+        ruta_90_dias: generatedRoute.route_90days,
         focos_priorizados: skills,
         orden_avance: { objective, timePerWeek },
         ruta_activa: '30',
