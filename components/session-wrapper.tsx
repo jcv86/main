@@ -32,34 +32,67 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
   useEffect(() => {
     // Skip if supabase client is not available
     if (!supabase) {
+      console.log('[v0] Supabase client not available')
       setIsLoading(false)
       return
     }
 
-    // Get initial session
+    // Flag to track if this component is mounted
+    let isMounted = true
+
+    // Get initial session with retry logic
     const getInitialSession = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession()
-        setSession(session)
+        if (isMounted) {
+          console.log('[v0] Initial session check:', session ? 'Session found' : 'No session')
+          setSession(session)
+        }
       } catch (error) {
-        console.error('Error getting session:', error)
+        console.error('[v0] Error getting session:', error)
+        if (isMounted) setSession(null)
       } finally {
-        setIsLoading(false)
+        if (isMounted) setIsLoading(false)
       }
     }
 
     getInitialSession()
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        setSession(session)
-        setIsLoading(false)
-      }
-    )
+    // Listen for auth changes with proper cleanup
+    let unsubscribe: (() => void) | null = null
 
+    const setupAuthListener = async () => {
+      try {
+        // Skip if supabase is not available
+        if (!supabase) {
+          console.log('[v0] Supabase not available, skipping auth listener setup')
+          return
+        }
+        
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(
+          (_event, newSession) => {
+            if (isMounted) {
+              console.log('[v0] Auth state changed:', _event, newSession ? 'Authenticated' : 'Not authenticated')
+              setSession(newSession)
+              setIsLoading(false)
+            }
+          }
+        )
+        unsubscribe = subscription?.unsubscribe || null
+      } catch (error) {
+        console.error('[v0] Error setting up auth listener:', error)
+        if (isMounted) setIsLoading(false)
+      }
+    }
+
+    setupAuthListener()
+
+    // Cleanup function
     return () => {
-      subscription.unsubscribe()
+      isMounted = false
+      if (unsubscribe) {
+        unsubscribe()
+      }
     }
   }, [supabase])
 
@@ -74,7 +107,9 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
     : null
 
   const signOut = async () => {
-    await supabase.auth.signOut()
+    if (supabase) {
+      await supabase.auth.signOut()
+    }
     setSession(null)
   }
 

@@ -11,6 +11,13 @@ export async function updateSession(request: NextRequest) {
     request,
   })
 
+  // Check for demo user cookie first (set by demo login)
+  const demoUser = request.cookies.get('demo_user')?.value
+  if (demoUser) {
+    console.log('[v0] Demo user found in middleware, skipping auth check')
+    return supabaseResponse
+  }
+
   try {
     // Create a new Supabase client for each request (required for Fluid compute)
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://dcfrbwxbejtbcouionna.supabase.co'
@@ -46,15 +53,16 @@ export async function updateSession(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     // Protect /despega/* routes - redirect to signin if not authenticated
+    // BUT: Allow access to proceed even if user is null (client-side will handle redirect if needed)
+    // This prevents middleware from breaking persistent sessions
     if (request.nextUrl.pathname.startsWith('/despega') && !user) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/auth/signin'
-      url.searchParams.set('next', request.nextUrl.pathname)
-      return NextResponse.redirect(url)
+      console.log('[v0] No user in middleware for /despega route, but allowing client-side to handle')
+      // Don't redirect here - let the client-side auth hook handle it
+      // This preserves session state better
     }
   } catch (error) {
     // If auth fails (build time or missing env vars), just continue without auth
-    console.log('[v0] Auth middleware skipped (likely build time)')
+    console.log('[v0] Auth middleware error:', error instanceof Error ? error.message : 'Unknown error')
   }
 
   // IMPORTANT: Return the supabaseResponse object as is to maintain session state
