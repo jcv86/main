@@ -27,14 +27,14 @@ export default function A3EntrenamientoIntensivo() {
                 Volver
               </Button>
             </Link>
-            <Badge className="bg-purple-500/20 text-purple-300 border border-purple-500/30">
+            <Badge className="bg-training/20 text-training border border-training/30">
               Pilar 3: Entrenamiento Intensivo
             </Badge>
           </div>
 
           {/* Hero Title */}
           <div className="space-y-3">
-            <h1 className="text-6xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <h1 className="text-6xl font-bold bg-gradient-to-r from-training to-training/60 bg-clip-text text-transparent">
               Domina Entrevistas en 4 Niveles
             </h1>
             <p className="text-lg text-white/70 max-w-3xl">
@@ -46,8 +46,8 @@ export default function A3EntrenamientoIntensivo() {
         {/* ========== CURRENT STATE CARD ========== */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Level and Milestone */}
-          <div className="md:col-span-2 border border-purple-500/30 rounded-lg p-6 bg-gradient-to-br from-purple-500/10 to-purple-500/5">
-            <p className="text-xs text-purple-400 uppercase font-semibold tracking-wider mb-2">Estado Actual</p>
+          <div className="md:col-span-2 border border-training/30 rounded-lg p-6 bg-gradient-to-br from-training/10 to-training/5">
+            <p className="text-xs text-training uppercase font-semibold tracking-wider mb-2">Estado Actual</p>
             <h2 className="text-3xl font-bold text-white mb-1">{dashboardData.currentLevel}</h2>
             <p className="text-white/60 mb-4">Siguiente: {dashboardData.nextMilestone}</p>
             <p className="text-sm text-white/50">{dashboardData.nextReward}</p>
@@ -63,7 +63,7 @@ export default function A3EntrenamientoIntensivo() {
             return (
               <div key={i} className="border border-white/10 rounded-lg p-6 bg-white/5 hover:bg-white/10 transition">
                 <div className="flex items-start justify-between mb-2">
-                  <Icon className="w-5 h-5 text-purple-400" />
+                  <Icon className="w-5 h-5 text-training" />
                   <p className="text-xs text-white/50">{stat.label}</p>
                 </div>
                 <p className="text-2xl font-bold text-white">{stat.value}</p>
@@ -73,7 +73,7 @@ export default function A3EntrenamientoIntensivo() {
         </div>
 
         {/* ========== MAIN PROGRESS BAR ========== */}
-        <div className="border border-purple-500/20 rounded-lg p-6 bg-gradient-to-r from-purple-500/10 to-pink-500/10">
+        <div className="border border-training/20 rounded-lg p-6 bg-gradient-to-r from-training/10 to-training/5">
           <ProgressBar
             percentage={dashboardData.progressPct}
             currentXp={dashboardData.totalXp}

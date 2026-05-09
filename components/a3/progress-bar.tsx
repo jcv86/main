@@ -53,7 +53,7 @@ export function ProgressBar({
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold text-white">{label}</h3>
         <div className="text-right">
-          <div className="text-sm font-mono text-transparent bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text">
+          <div className="text-sm font-mono text-transparent bg-gradient-to-r from-training to-training/60 bg-clip-text">
             {Math.round(displayPercentage)}%
           </div>
           <div className="text-xs text-white/60">{currentXp} / {maxXp} XP</div>
@@ -63,7 +63,7 @@ export function ProgressBar({
       {/* Main progress bar */}
       <div className="relative h-3 w-full bg-white/5 rounded-full overflow-hidden border border-white/10">
         <div
-          className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500 ease-out rounded-full shadow-lg shadow-purple-500/50"
+          className="h-full bg-gradient-to-r from-training to-training/60 transition-all duration-500 ease-out rounded-full shadow-lg shadow-training/50"
           style={{ width: `${Math.min(displayPercentage, 100)}%` }}
         />
         

@@ -67,7 +67,7 @@ export function LevelsAccordion({ modules }: LevelsAccordionProps) {
             >
               <div className="flex-1 text-left space-y-1">
                 <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-training to-training/60 flex items-center justify-center">
                     <span className="text-sm font-bold text-white">{levelGroup.level}</span>
                   </div>
                   <h3 className="text-lg font-semibold text-white">{levelGroup.title}</h3>
@@ -80,10 +80,10 @@ export function LevelsAccordion({ modules }: LevelsAccordionProps) {
               
               <div className="flex items-center gap-4 ml-4">
                 <div className="text-right text-sm">
-                  <div className="font-mono text-purple-400">{completedCount}/{totalCount}</div>
+                  <div className="font-mono text-training">{completedCount}/{totalCount}</div>
                   <div className="text-xs text-white/60">completados</div>
                 </div>
-                <div className="group-hover:text-purple-400 transition">
+                <div className="group-hover:text-training transition">
                   {isExpanded ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                 </div>
               </div>

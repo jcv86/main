@@ -19,7 +19,7 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
       case 'completed':
         return 'from-green-500/20 to-green-500/10'
       case 'in_progress':
-        return 'from-purple-500/20 to-purple-500/10'
+        return 'from-training/20 to-training/10'
       case 'available':
         return 'from-blue-500/20 to-blue-500/10'
       default:
@@ -32,7 +32,7 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
       case 'completed':
         return <span className="text-xs font-semibold text-green-400 bg-green-500/20 px-2 py-1 rounded">Completado</span>
       case 'in_progress':
-        return <span className="text-xs font-semibold text-purple-400 bg-purple-500/20 px-2 py-1 rounded">En progreso</span>
+        return <span className="text-xs font-semibold text-training bg-training/20 px-2 py-1 rounded">En progreso</span>
       case 'available':
         return <span className="text-xs font-semibold text-blue-400 bg-blue-500/20 px-2 py-1 rounded">Disponible</span>
       default:
@@ -74,7 +74,7 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
           {(module.status === 'in_progress' || module.status === 'completed') && (
             <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
               <div
-                className="h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-500 rounded-full"
+                className="h-full bg-gradient-to-r from-training to-training/60 transition-all duration-500 rounded-full"
                 style={{ width: `${Math.min(module.progress || 0, 100)}%` }}
               />
             </div>
