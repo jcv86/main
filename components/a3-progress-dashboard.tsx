@@ -19,27 +19,6 @@ export default function A3ProgressDashboard() {
   const [data, setData] = useState<ProgressData | null>(null)
   const [loading, setLoading] = useState(true)
   const [animatedPercentage, setAnimatedPercentage] = useState(0)
-  const [starterXpAwarded, setStarterXpAwarded] = useState(false)
-
-  // Award starter XP on first visit
-  const awardStarterXp = async () => {
-    try {
-      const res = await fetch('/api/a3/starter-xp', {
-        method: 'POST',
-        credentials: 'include',
-      })
-      const result = await res.json()
-      if (result.success && !result.alreadyAwarded) {
-        console.log('[v0] Starter XP awarded! Refreshing progress...')
-        setStarterXpAwarded(true)
-        // Refetch progress after awarding
-        await new Promise(r => setTimeout(r, 500))
-        fetchProgress()
-      }
-    } catch (err) {
-      console.error('[v0] Error awarding starter XP:', err)
-    }
-  }
 
   // Fetch progress data
   const fetchProgress = async () => {
@@ -68,18 +47,12 @@ export default function A3ProgressDashboard() {
     }
   }
 
-  // Initial load: award starter XP then fetch progress
+  // Initial load + auto-refresh every 5s
   useEffect(() => {
-    awardStarterXp()
-  }, [])
-
-  // Auto-refresh every 5s
-  useEffect(() => {
-    if (!starterXpAwarded && loading) return
-    
+    fetchProgress()
     const interval = setInterval(fetchProgress, 5000)
     return () => clearInterval(interval)
-  }, [starterXpAwarded, loading])
+  }, [])
 
   // Animate the progress bar smoothly when data changes
   useEffect(() => {
