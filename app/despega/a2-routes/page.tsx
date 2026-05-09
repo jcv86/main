@@ -315,17 +315,51 @@ export default function A2RoutesPage() {
 
       console.log('[v0] Route generated, saving to BD...')
 
+      // Check if route already exists for this user
+      const { data: existingRoute, error: checkError } = await supabase
+        .from('a2_rutas_personalizadas')
+        .select('id')
+        .eq('user_id', user?.id)
+        .limit(1)
+        .maybeSingle()
+
+      console.log('[v0] Existing route check:', { hasRoute: !!existingRoute, checkError })
+
       // Save route to a2_rutas_personalizadas table
-      const { error: saveError } = await supabase.from('a2_rutas_personalizadas').upsert({
-        user_id: user?.id,
-        ruta_30_dias: generatedRoute.route_30days,
-        ruta_60_dias: generatedRoute.route_60days,
-        ruta_90_dias: generatedRoute.route_90days,
-        focos_priorizados: skills,
-        orden_avance: { objective, timePerWeek },
-        ruta_activa: '30',
-        updated_at: new Date().toISOString()
-      })
+      let saveError
+      if (existingRoute?.id) {
+        // Update existing route
+        const { error } = await supabase
+          .from('a2_rutas_personalizadas')
+          .update({
+            ruta_30_dias: generatedRoute.route_30days,
+            ruta_60_dias: generatedRoute.route_60days,
+            ruta_90_dias: generatedRoute.route_90days,
+            focos_priorizados: skills,
+            orden_avance: { objective, timePerWeek },
+            ruta_activa: '30',
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', existingRoute.id)
+        saveError = error
+        console.log('[v0] Route updated')
+      } else {
+        // Insert new route
+        const { error } = await supabase
+          .from('a2_rutas_personalizadas')
+          .insert({
+            user_id: user?.id,
+            ruta_30_dias: generatedRoute.route_30days,
+            ruta_60_dias: generatedRoute.route_60days,
+            ruta_90_dias: generatedRoute.route_90days,
+            focos_priorizados: skills,
+            orden_avance: { objective, timePerWeek },
+            ruta_activa: '30',
+            updated_at: new Date().toISOString()
+          })
+        saveError = error
+        console.log('[v0] Route inserted')
+      }
 
       if (saveError) {
         console.error('[v0] Error saving route:', saveError)
