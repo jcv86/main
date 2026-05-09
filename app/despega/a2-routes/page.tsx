@@ -416,13 +416,13 @@ export default function A2RoutesPage() {
         </div>
 
         {/* Success Banner - First element */}
-        <div className="rounded-sm p-10 mb-12 bg-cyan/20 border-0">
+        <div className="rounded-sm p-10 mb-12 bg-white/10 border-0" style={{ borderColor: 'rgba(90, 90, 150, 0.3)', backgroundColor: 'rgba(90, 90, 150, 0.15)' }}>
           <div className="flex items-start gap-4">
-            <div className="flex items-center justify-center w-16 h-16 rounded-[28px] bg-cyan/60 flex-shrink-0">
-              <CheckCircle2 className="w-8 h-8 text-cyan" />
+            <div className="flex items-center justify-center w-16 h-16 rounded-[28px] flex-shrink-0" style={{ backgroundColor: 'rgba(90, 90, 150, 0.6)' }}>
+              <CheckCircle2 className="w-8 h-8" style={{ color: 'rgb(90, 90, 150)' }} />
             </div>
             <div className="flex-1">
-              <h4 className="font-bold text-cyan text-lg mb-1">Ruta Generada!</h4>
+              <h4 className="font-bold text-lg mb-1" style={{ color: 'rgb(90, 90, 150)' }}>Ruta Generada!</h4>
               <p className="text-sm text-white/85 mb-3">Tu plan de 90 días personalizado está listo y se adapta a tu ritmo</p>
               <div className="flex items-center gap-2 text-xs text-white/70">
                 <Calendar className="w-4 h-4" />
@@ -433,49 +433,50 @@ export default function A2RoutesPage() {
         </div>
 
         {/* Main Intro Section - Collapsible */}
-        <div className="border border-blue/30 rounded-xl overflow-hidden">
+        <div className="border rounded-xl overflow-hidden" style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}>
           <button
             onClick={() => setShowRuta(!showRuta)}
-            className="w-full flex items-center justify-between px-5 py-4 bg-blue/5 hover:bg-blue/10 transition-colors text-left group"
+            className="w-full flex items-center justify-between px-5 py-4 transition-colors text-left group"
+            style={{ backgroundColor: 'rgba(90, 90, 150, 0.05)', borderBottom: `1px solid rgba(90, 90, 150, 0.2)` }}
           >
             <div className="flex items-center gap-3">
-              <MapPin className="w-5 h-5 text-blue" />
+              <MapPin className="w-5 h-5" style={{ color: 'rgb(90, 90, 150)' }} />
               <span className="font-semibold text-white text-lg">Tu Ruta 7/30/90</span>
               {!showRuta && (
                 <span className="text-xs text-white/40 font-normal">Haz clic para ver las 3 fases</span>
               )}
             </div>
-            <ArrowRight className={`w-4 h-4 text-blue/60 transition-transform duration-200 ${showRuta ? 'rotate-90' : ''}`} />
+            <ArrowRight className="w-4 h-4 transition-transform duration-200" style={{ color: 'rgba(90, 90, 150, 0.6)', transform: showRuta ? 'rotate(90deg)' : 'rotate(0)' }} />
           </button>
 
           {showRuta && (
-            <div className="p-5 space-y-4 border-t border-blue/20">
+            <div className="p-5 space-y-4" style={{ borderTop: `1px solid rgba(90, 90, 150, 0.2)` }}>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* 7 Days */}
-                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
-                  <p className="text-xs font-bold text-blue uppercase tracking-widest mb-1">SEMANA 1</p>
+                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
+                  <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'rgb(90, 90, 150)' }}>SEMANA 1</p>
                   <h3 className="text-xl font-black text-white mb-2">7 Días</h3>
                   <p className="text-white/75 text-sm leading-relaxed mb-3">Prepárate para tu primera conversación de LinkedIn. Optimiza perfil, prepara pitch elevator de 30 segundos.</p>
-                  <p className="text-xs text-blue font-semibold">Conversacion: LinkedIn</p>
+                  <p className="text-xs font-semibold" style={{ color: 'rgb(90, 90, 150)' }}>Conversacion: LinkedIn</p>
                 </div>
 
                 {/* 30 Days */}
-                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
-                  <p className="text-xs font-bold text-blue uppercase tracking-widest mb-1">MES 1</p>
+                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
+                  <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'rgb(90, 90, 150)' }}>MES 1</p>
                   <h3 className="text-xl font-black text-white mb-2">30 Días</h3>
                   <p className="text-white/75 text-sm leading-relaxed mb-3">Domina entrevista técnica o conductual. Practica respuestas STAR, manejo de objeciones, cierre de oportunidades.</p>
-                  <p className="text-xs text-blue font-semibold">Conversacion: Entrevista</p>
+                  <p className="text-xs font-semibold" style={{ color: 'rgb(90, 90, 150)' }}>Conversacion: Entrevista</p>
                 </div>
 
                 {/* 90 Days */}
-                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
-                  <p className="text-xs font-bold text-blue uppercase tracking-widest mb-1">TRIMESTRE</p>
+                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
+                  <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'rgb(90, 90, 150)' }}>TRIMESTRE</p>
                   <h3 className="text-xl font-black text-white mb-2">90 Días</h3>
                   <p className="text-white/75 text-sm leading-relaxed mb-3">Negocia tu propuesta. Habla de sueldo, beneficios, rol, vision de carrera con seguridad y profesionalismo.</p>
-                  <p className="text-xs text-blue font-semibold">Conversacion: Career</p>
+                  <p className="text-xs font-semibold" style={{ color: 'rgb(90, 90, 150)' }}>Conversacion: Career</p>
                 </div>
               </div>
-              <p className="text-white/60 text-sm text-center pt-2 border-t border-blue/10">
+              <p className="text-white/60 text-sm text-center pt-2" style={{ borderTop: `1px solid rgba(90, 90, 150, 0.1)` }}>
                 Cada fase te transforma en una pieza imprescindible para tus potenciales empleadores. No es solo conseguir un trabajo, es posicionar tu carrera para los proximos 10 anos.
               </p>
             </div>
@@ -483,37 +484,38 @@ export default function A2RoutesPage() {
         </div>
 
         {/* What is this phase - Collapsible */}
-        <div className="border border-blue/30 rounded-xl overflow-hidden">
+        <div className="border rounded-xl overflow-hidden" style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}>
           <button
             onClick={() => setShowComoFunciona(!showComoFunciona)}
-            className="w-full flex items-center justify-between px-5 py-4 bg-blue/5 hover:bg-blue/10 transition-colors text-left"
+            className="w-full flex items-center justify-between px-5 py-4 transition-colors text-left"
+            style={{ backgroundColor: 'rgba(90, 90, 150, 0.05)', borderBottom: `1px solid rgba(90, 90, 150, 0.2)` }}
           >
             <div className="flex items-center gap-3">
-              <Zap className="w-5 h-5 text-blue" />
+              <Zap className="w-5 h-5" style={{ color: 'rgb(90, 90, 150)' }} />
               <span className="font-semibold text-white text-lg">Como Funciona Tu Ruta</span>
               {!showComoFunciona && (
                 <span className="text-xs text-white/40 font-normal">Haz clic para ver los detalles</span>
               )}
             </div>
-            <ArrowRight className={`w-4 h-4 text-blue/60 transition-transform duration-200 ${showComoFunciona ? 'rotate-90' : ''}`} />
+            <ArrowRight className="w-4 h-4 transition-transform duration-200" style={{ color: 'rgba(90, 90, 150, 0.6)', transform: showComoFunciona ? 'rotate(90deg)' : 'rotate(0)' }} />
           </button>
 
           {showComoFunciona && (
-            <div className="p-5 border-t border-blue/20">
+            <div className="p-5" style={{ borderTop: `1px solid rgba(90, 90, 150, 0.2)` }}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
+                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
                   <h3 className="font-bold text-white mb-1">Acciones Concretas</h3>
                   <p className="text-white/70 text-sm">Cada tarea esta mapeada a una conversacion real: LinkedIn networking, entrevistas o negociacion de cargo.</p>
                 </div>
-                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
+                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
                   <h3 className="font-bold text-white mb-1">Progresion Estructurada</h3>
                   <p className="text-white/70 text-sm">3 fases claramente definidas: Fundamentos, Aceleracion, Dominio. Cada una te acerca a ser imprescindible.</p>
                 </div>
-                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
+                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
                   <h3 className="font-bold text-white mb-1">Personalizacion</h3>
                   <p className="text-white/70 text-sm">Tu ruta es unica segun tu perfil cerebral, objetivos y nivel actual. No hay dos rutas iguales.</p>
                 </div>
-                <div className="border-l-4 border-blue bg-blue/5 rounded-r-xl p-4">
+                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
                   <h3 className="font-bold text-white mb-1">Trackeo Real</h3>
                   <p className="text-white/70 text-sm">Marca tareas como completadas y ve tu progreso en tiempo real. Gana badges y hitos conforme avanzas.</p>
                 </div>
@@ -523,10 +525,10 @@ export default function A2RoutesPage() {
         </div>
 
         {/* Tu Progreso y Logros - Section at the START */}
-        <div className="space-y-6 pt-8 border-t border-white/10">
+        <div className="space-y-6 pt-8" style={{ borderTop: `1px solid rgba(90, 90, 150, 0.1)` }}>
           <div className="flex items-center justify-between flex-wrap gap-3">
             <h2 className="text-3xl font-bold text-white flex items-center gap-2">
-              <Trophy className="w-8 h-8 text-blue" />
+              <Trophy className="w-8 h-8" style={{ color: 'rgb(90, 90, 150)' }} />
               Tu Progreso en la Ruta de 90 Días
             </h2>
             <Button
@@ -542,7 +544,7 @@ export default function A2RoutesPage() {
           </div>
 
           {/* 3-Phase Progress Tracker */}
-          <div className="bg-cyan/20 rounded-sm p-6 border-0">
+          <div className="rounded-sm p-6 border-0" style={{ backgroundColor: 'rgba(90, 90, 150, 0.15)' }}>
             <h3 className="text-lg font-bold text-white mb-6">Cómo va tu Progreso</h3>
             <div className="space-y-4">
               {([30, 60, 90] as const).map((days, idx) => {
@@ -551,9 +553,9 @@ export default function A2RoutesPage() {
                 const progressPercent = progress.total > 0 ? (progress.completed / progress.total) * 100 : 0
                 
                 const phaseColors = {
-                  0: { bg: 'bg-cyan/40', text: 'text-cyan' },
-                  1: { bg: 'bg-purple/40', text: 'text-purple' },
-                  2: { bg: 'bg-pink/40', text: 'text-pink' }
+                  0: { bg: 'rgba(90, 90, 150, 0.4)', text: 'rgb(90, 90, 150)' },
+                  1: { bg: 'rgba(90, 90, 150, 0.3)', text: 'rgb(90, 90, 150)' },
+                  2: { bg: 'rgba(90, 90, 150, 0.2)', text: 'rgb(90, 90, 150)' }
                 }
                 const colors = phaseColors[idx as keyof typeof phaseColors]
                 
@@ -561,8 +563,8 @@ export default function A2RoutesPage() {
                   <div key={days} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className={`flex items-center justify-center w-10 h-10 rounded-full ${colors.bg} border-0 flex-shrink-0`}>
-                          <span className={`text-sm font-bold ${colors.text}`}>{idx + 1}</span>
+                        <div className="flex items-center justify-center w-10 h-10 rounded-full border-0 flex-shrink-0" style={{ backgroundColor: colors.bg }}>
+                          <span className="text-sm font-bold" style={{ color: colors.text }}>{idx + 1}</span>
                         </div>
                         <div>
                           <p className="font-semibold text-white">{phaseData.label}</p>
@@ -576,8 +578,8 @@ export default function A2RoutesPage() {
                     </div>
                     <div className="w-full bg-muted/60 rounded-full h-2.5">
                       <div
-                        className="bg-gradient-to-r from-purple to-blue h-2.5 rounded-full transition-all duration-500"
-                        style={{ width: `${progressPercent}%` }}
+                        className="h-2.5 rounded-full transition-all duration-500"
+                        style={{ width: `${progressPercent}%`, background: `linear-gradient(to right, rgb(90, 90, 150), rgba(90, 90, 150, 0.7))` }}
                       ></div>
                     </div>
                   </div>
@@ -586,7 +588,7 @@ export default function A2RoutesPage() {
             </div>
 
             {/* Overall Progress Summary */}
-            <div className="mt-6 pt-6 border-t border-cyan/20">
+            <div className="mt-6 pt-6" style={{ borderTop: `1px solid rgba(90, 90, 150, 0.2)` }}>
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-white/80 mb-1">Progreso Total</p>
@@ -594,7 +596,7 @@ export default function A2RoutesPage() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm text-white/80 mb-1">{calculateTotalProgress().completed} de {calculateTotalProgress().total}</p>
-                  <p className="text-xs text-cyan">Tareas completadas</p>
+                  <p className="text-xs" style={{ color: 'rgb(90, 90, 150)' }}>Tareas completadas</p>
                 </div>
               </div>
             </div>
