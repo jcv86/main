@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, Zap, TrendingUp, Target, Award } from 'lucide-react'
+import { ArrowRight, Zap, TrendingUp, Target, Award, Rocket } from 'lucide-react'
 import { mockDashboardData } from './data/mock-dashboard'
 import { ProgressBar } from '@/components/a3/progress-bar'
 import { SkillsGrid } from '@/components/a3/skills-grid'
@@ -28,6 +28,7 @@ export default function A3EntrenamientoIntensivo() {
               </Button>
             </Link>
             <Badge className="bg-training/20 text-training border border-training/30">
+              <Rocket className="w-3 h-3 mr-2" />
               Pilar 3: Entrenamiento Intensivo
             </Badge>
           </div>
