@@ -49,13 +49,13 @@ export interface Pillar3LevelConfig {
  * Sum of DTC across all modules = 100
  */
 export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
-  // LEVEL 1: Audit (1 module, 40 XP / 4 DTC)
+  // LEVEL 1: Audit (1 module, 70 XP / 4 DTC)
   'auditoria-inicial': {
     id: 'auditoria-inicial',
     name: 'Auditoría Inicial',
     description: 'Auditoría completa: ambiente, presencia, audio y primer feedback. Tu coach te guía a través de una evaluación profesional antes de entrenar con simulaciones intensivas.',
     level: 1,
-    xp: 40,
+    xp: 70,
     dtc: 4,
     legacyIds: ['audit_initial', 'entrevista-0', 'entrevista 0', 'preparacion-inicial'],
   },
