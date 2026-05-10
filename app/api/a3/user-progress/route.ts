@@ -40,13 +40,13 @@ export async function GET() {
       totalXp = profile.total_xp
     }
 
-    console.log('[v0] User progress calculation:', { user_id: user.id, totalXp, completions_count: completions?.length, progressPct })
-
     // Calculate progress based on completions
     const completedModules = completions?.length || 0
     const totalModules = 9 // Total modules in the journey
     const maxXp = 1000
     const progressPct = Math.min(Math.round((totalXp / maxXp) * 100), 100)
+
+    console.log('[v0] User progress calculation:', { user_id: user.id, totalXp, completions_count: completions?.length, progressPct })
 
     // Check which modules are completed
     const completedModuleIds = completions?.map(c => c.training_type) || []
