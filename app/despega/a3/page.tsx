@@ -6,19 +6,22 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ArrowRight, Loader2, Lock, CheckCircle2 } from 'lucide-react'
-import { mockDashboardData, DashboardState } from './data/mock-dashboard'
+import { DashboardState } from './data/mock-dashboard'
 import { A3GeneralProgress } from '@/components/a3-general-progress'
-import { ProgressBar } from '@/components/a3/progress-bar'
-import { SkillsGrid } from '@/components/a3/skills-grid'
 import { LevelsAccordion } from '@/components/a3/levels-accordion'
-import { BadgesGrid } from '@/components/a3/badges-grid'
 import { Pillar3DetailedProgress } from '@/components/pillar3-detailed-progress'
 
 export default function A3EntrenamientoIntensivo() {
   const searchParams = useSearchParams()
   const refreshParam = searchParams?.get('refresh')
   
-  const [dashboardData, setDashboardData] = useState<DashboardState>(mockDashboardData)
+  const [dashboardData, setDashboardData] = useState<DashboardState>({
+    totalXp: 0,
+    maxXp: 280,
+    modules: [],
+    moduleStates: {},
+    completedModuleIds: [],
+  })
   const [isLoading, setIsLoading] = useState(true)
   const [completedSections, setCompletedSections] = useState(0)
 
@@ -55,18 +58,11 @@ export default function A3EntrenamientoIntensivo() {
           // Update dashboard data with real progress
           setDashboardData(prev => {
             const updated = { ...prev }
-            updated.currentLevel = progress.currentLevel
-            updated.progressPct = progress.progressPct
             updated.totalXp = progress.totalXp
             updated.maxXp = progress.maxXp
-            updated.totalDtc = progress.totalDtc ?? 0
-            updated.maxDtc = progress.maxDtc ?? 100
-            updated.nextMilestone = progress.nextMilestone
-            updated.nextReward = progress.nextReward
-            updated.completedModules = progress.completedModules
             
             // Update module statuses based on real completion data
-            updated.modules = prev.modules.map(module => {
+            updated.modules = prev.modules.length > 0 ? prev.modules.map(module => {
               const status = progress.moduleStates[module.id]
               if (status) {
                 console.log(`[v0] Module ${module.id} status: ${module.status} -> ${status}`)
@@ -92,7 +88,7 @@ export default function A3EntrenamientoIntensivo() {
                 }
               }
               return module
-            })
+            }) : progress.modules || []
 
             // Update module states and completed IDs for detailed progress component
             updated.moduleStates = progress.moduleStates
@@ -102,21 +98,22 @@ export default function A3EntrenamientoIntensivo() {
             const sections = calculateCompletedSections(updated.modules)
             setCompletedSections(sections)
 
-            // Update skills with real values
-            updated.skills = prev.skills.map(skill => ({
-              ...skill,
-              value: progress.skills[skill.id] || skill.value
-            }))
-
             return updated
           })
         } else {
-          console.warn('[v0] A3 page: API returned non-OK status', response.status)
+          console.error('[v0] A3 page: API returned error', response.status)
+          throw new Error(`API returned ${response.status}`)
         }
       } catch (error) {
-        console.warn('[v0] A3 page: API fetch failed, using mock data', error)
-        // Use mock data if API fails
-      } finally {
+        console.error('[v0] A3 page: API fetch failed', error)
+        // Show error state - user needs real data
+        setDashboardData({
+          totalXp: 0,
+          maxXp: 280,
+          modules: [],
+          moduleStates: {},
+          completedModuleIds: [],
+        })
         setIsLoading(false)
       }
     }
