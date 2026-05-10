@@ -232,7 +232,7 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
               <div className="space-y-2 text-sm text-white/60 bg-white/5 rounded-lg p-4">
                 <p>✓ {completedBlocks} / 4 secciones completadas</p>
                 <p>✓ Se desbloquean entrenamientos en Pillar 3</p>
-                <p>✓ Acceso a herramientas de preparación</p>
+                <p>✓ Acceso a herramientas de preparación: Método STAR, CV Inteligente, Análisis de Vacante, Análisis Multicanal</p>
               </div>
 
               <Button
