@@ -10,7 +10,7 @@ interface AudioCameraCheckProps {
 }
 
 export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
-  const [cameraStatus, setCameraStatus] = useState<'ready' | 'error'>('ready')
+  const [cameraStatus, setCameraStatus] = useState<'checking' | 'ready' | 'error'>('checking')
   const [micStatus, setMicStatus] = useState<'checking' | 'ready' | 'error'>('checking')
   const [isValidating, setIsValidating] = useState(false)
 
