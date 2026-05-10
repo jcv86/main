@@ -38,6 +38,12 @@ export async function POST(request: NextRequest) {
       .from('a3_entrevista_0')
       .upsert({
         user_id: user.id,
+        conditions_reviewed: {
+          environment: body.environment_check ?? null,
+          presence: body.presence_check ?? null,
+          audio: body.audio_check ?? null,
+          preparation: body.preparation_check ?? null
+        },
         interview_0_completed: body.interview_0_completed ?? null,
         interview_0_score: body.interview_0_score ?? null,
         interview_0_status: body.interview_0_status ?? 'in_progress',
