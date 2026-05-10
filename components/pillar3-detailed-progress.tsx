@@ -1,5 +1,3 @@
-'use client'
-
 import { useState } from 'react'
 import { ChevronDown, ChevronUp, Lock, CheckCircle2, Circle, Coins, Zap } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
@@ -13,6 +11,7 @@ import {
   getLevelXp,
   getLevelDtc,
   resolveCanonicalId,
+  buildModuleStates,
   type Pillar3LevelId,
   type Pillar3ModuleId,
 } from '@/lib/pillar3-config'
@@ -41,11 +40,16 @@ export function Pillar3DetailedProgress({
       .filter((id): id is Pillar3ModuleId => id !== null)
   )
 
-  const safeModuleStates = moduleStates ?? {}
+  // If moduleStates is empty/undefined, derive from canonical config
+  // This ensures Level 1 is always 'in_progress' by default
+  const derivedModuleStates =
+    moduleStates && Object.keys(moduleStates).length > 0
+      ? moduleStates
+      : buildModuleStates(completedModuleIds)
 
   const getModuleStatus = (moduleId: Pillar3ModuleId): ModuleStatus => {
     if (completedCanonical.has(moduleId)) return 'completed'
-    return (safeModuleStates[moduleId] as ModuleStatus) ?? 'locked'
+    return (derivedModuleStates[moduleId] as ModuleStatus) ?? 'locked'
   }
 
   // Aggregate progress per level
