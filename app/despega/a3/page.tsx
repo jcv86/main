@@ -71,11 +71,25 @@ export default function A3EntrenamientoIntensivo() {
               const status = progress.moduleStates[module.id]
               if (status) {
                 console.log(`[v0] Module ${module.id} status: ${module.status} -> ${status}`)
+                // Calculate progress based on status and milestones
+                let newProgress = module.progress
+                if (status === 'completed') {
+                  newProgress = 100
+                } else if (status === 'available') {
+                  newProgress = 0
+                } else if (status === 'locked') {
+                  newProgress = 0
+                } else if (status === 'in_progress' && module.milestones) {
+                  // For in_progress modules, calculate based on completed milestones
+                  const completedMilestones = module.milestones.filter(m => m.completed).length
+                  newProgress = Math.round((completedMilestones / module.milestones.length) * 100)
+                }
+                
                 return {
                   ...module,
                   status: status as 'available' | 'in_progress' | 'completed' | 'locked',
                   xp: status === 'completed' ? module.maxXp : module.xp,
-                  progress: status === 'completed' ? 100 : status === 'in_progress' ? 60 : 0,
+                  progress: newProgress,
                 }
               }
               return module
