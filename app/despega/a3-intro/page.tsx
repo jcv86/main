@@ -125,48 +125,163 @@ export default function A3IntroPage() {
             ))}
           </div>
 
-          {/* Three modalities */}
-          <div className="space-y-4">
-            <h2 className="text-3xl font-bold text-white mb-6">Tres Modalidades de Entrenamiento</h2>
+          {/* Three modalities with Instructor Personas */}
+          <div className="space-y-8">
+            <h2 className="text-3xl font-bold text-white mb-6">Elige tu Modalidad de Entrenamiento</h2>
             
-            <div className="space-y-4">
-              {[
-                {
-                  level: 1,
-                  title: 'Simulación Guiada',
-                  description: 'Con hints y orientación. Perfecto para aprender nuevas técnicas.',
-                  color: 'from-training/30 to-training/20'
-                },
-                {
-                  level: 2,
-                  title: 'Simulación Estructurada',
-                  description: 'Preguntas realistas sin ayuda. Te prepara para escenarios reales.',
-                  color: 'from-training/40 to-training/25'
-                },
-                {
-                  level: 3,
-                  title: 'Simulación Desafiante',
-                  description: 'Preguntas difíciles bajo presión de tiempo. Máxima dificultad.',
-                  color: 'from-training/50 to-training/35'
-                }
-              ].map((mode, i) => (
-                <div
-                  key={i}
-                  className={`group relative overflow-hidden rounded-2xl border border-training/40 bg-gradient-to-r ${mode.color} p-6 hover:border-training/70 transition-all duration-300 cursor-pointer hover:shadow-lg hover:shadow-training/30`}
-                >
-                  <div className="flex items-start gap-6">
-                    <div className="flex-shrink-0">
-                      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-training/60 text-white font-bold text-lg">
-                        {mode.level}
-                      </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Sofia - Guiada */}
+              <div className="group relative overflow-hidden rounded-2xl border border-training/40 bg-gradient-to-br from-training/25 to-training/10 hover:border-training/70 transition-all duration-300 hover:shadow-xl hover:shadow-training/40 cursor-pointer">
+                <div className="flex flex-col h-full">
+                  {/* Image Container */}
+                  <div className="relative h-64 bg-training/20 overflow-hidden flex-shrink-0">
+                    <img
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia-gv1XEYj0ETiDdlWQjVRZrA8U0qTMn1.jpg"
+                      alt="Sofia - Simulación Guiada"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 space-y-4 flex-1 flex flex-col">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-widest text-training/80 mb-2">Nivel 1</p>
+                      <h3 className="text-2xl font-bold text-white mb-1">Sofia</h3>
+                      <p className="text-sm font-semibold text-white/70">Simulación Guiada</p>
                     </div>
-                    <div className="flex-1 space-y-2">
-                      <h3 className="text-xl font-bold text-white">{mode.title}</h3>
-                      <p className="text-white/80">{mode.description}</p>
+
+                    <p className="text-white/80 text-sm leading-relaxed flex-1">
+                      Con hints y orientación. Perfecto para aprender nuevas técnicas y ganar confianza inicial.
+                    </p>
+
+                    <div className="pt-4 space-y-2 border-t border-training/20">
+                      <p className="text-xs text-white/60 font-semibold">Incluye:</p>
+                      <ul className="space-y-1.5 text-xs text-white/70">
+                        <li className="flex items-start gap-2">
+                          <span className="text-training mt-1">→</span>
+                          <span>Sugerencias en tiempo real</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-training mt-1">→</span>
+                          <span>Estructura de respuestas</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-training mt-1">→</span>
+                          <span>Feedback pausado</span>
+                        </li>
+                      </ul>
                     </div>
+
+                    <button className="mt-4 w-full py-2 px-4 rounded-lg bg-training/20 hover:bg-training/30 border border-training/40 text-white font-semibold transition-all duration-200 text-sm">
+                      Comenzar con Sofia
+                    </button>
                   </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Alexandra - Estructurada */}
+              <div className="group relative overflow-hidden rounded-2xl border border-training/40 bg-gradient-to-br from-training/25 to-training/10 hover:border-training/70 transition-all duration-300 hover:shadow-xl hover:shadow-training/40 cursor-pointer md:scale-105">
+                <div className="flex flex-col h-full">
+                  {/* Image Container */}
+                  <div className="relative h-64 bg-training/20 overflow-hidden flex-shrink-0">
+                    <img
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Alexandra-IegPblNEUgXckY71ITZGGLp40c9yBK.jpg"
+                      alt="Alexandra - Simulación Estructurada"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                    <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-amber-500/90 text-xs font-bold text-white">
+                      RECOMENDADO
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 space-y-4 flex-1 flex flex-col">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-widest text-training/80 mb-2">Nivel 2</p>
+                      <h3 className="text-2xl font-bold text-white mb-1">Alexandra</h3>
+                      <p className="text-sm font-semibold text-white/70">Simulación Estructurada</p>
+                    </div>
+
+                    <p className="text-white/80 text-sm leading-relaxed flex-1">
+                      Preguntas realistas sin ayuda. Te prepara para escenarios reales con presión moderada.
+                    </p>
+
+                    <div className="pt-4 space-y-2 border-t border-training/20">
+                      <p className="text-xs text-white/60 font-semibold">Incluye:</p>
+                      <ul className="space-y-1.5 text-xs text-white/70">
+                        <li className="flex items-start gap-2">
+                          <span className="text-training mt-1">→</span>
+                          <span>Sin pistas durante la prueba</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-training mt-1">→</span>
+                          <span>Feedback detallado después</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-training mt-1">→</span>
+                          <span>Análisis de desempeño</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <button className="mt-4 w-full py-2 px-4 rounded-lg bg-training/30 hover:bg-training/40 border border-training/60 text-white font-semibold transition-all duration-200 text-sm">
+                      Comenzar con Alexandra
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bruno - Desafiante */}
+              <div className="group relative overflow-hidden rounded-2xl border border-training/40 bg-gradient-to-br from-training/25 to-training/10 hover:border-training/70 transition-all duration-300 hover:shadow-xl hover:shadow-training/40 cursor-pointer">
+                <div className="flex flex-col h-full">
+                  {/* Image Container */}
+                  <div className="relative h-64 bg-training/20 overflow-hidden flex-shrink-0">
+                    <img
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bruno-JmnqUbeYI3fT3xFowFVw7COQZuVg8v.jpg"
+                      alt="Bruno - Simulación Desafiante"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 space-y-4 flex-1 flex flex-col">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-widest text-training/80 mb-2">Nivel 3</p>
+                      <h3 className="text-2xl font-bold text-white mb-1">Bruno</h3>
+                      <p className="text-sm font-semibold text-white/70">Simulación Desafiante</p>
+                    </div>
+
+                    <p className="text-white/80 text-sm leading-relaxed flex-1">
+                      Preguntas difíciles bajo presión de tiempo. Máxima dificultad para dominar completamente.
+                    </p>
+
+                    <div className="pt-4 space-y-2 border-t border-training/20">
+                      <p className="text-xs text-white/60 font-semibold">Incluye:</p>
+                      <ul className="space-y-1.5 text-xs text-white/70">
+                        <li className="flex items-start gap-2">
+                          <span className="text-training mt-1">→</span>
+                          <span>Tiempo limitado stricto</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-training mt-1">→</span>
+                          <span>Preguntas complejas</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-training mt-1">→</span>
+                          <span>Feedback competitivo</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <button className="mt-4 w-full py-2 px-4 rounded-lg bg-training/20 hover:bg-training/30 border border-training/40 text-white font-semibold transition-all duration-200 text-sm">
+                      Comenzar con Bruno
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
