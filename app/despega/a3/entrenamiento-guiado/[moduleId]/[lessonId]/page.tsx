@@ -174,11 +174,12 @@ export default function LessonPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* General Progress Bar - Shows module position (Paso X de 9) */}
+      {/* Only 0% until module is 100% complete (isCompleted=true after lesson 4) */}
       <A3GeneralProgress 
         currentStep={getModulePosition(moduleId)}
         totalSteps={getTotalModules()}
         currentLabel={lessonData.title}
-        isCompleted={false}
+        isCompleted={isLastLesson}
         variant="compact"
       />
 
