@@ -117,13 +117,13 @@ export const mockDashboardData: DashboardState = {
       xp: 40,
       maxXp: 70,
       progress: 60,
-      description: 'Revisa cámara, luz, audio, fondo y presencia antes de practicar.',
+      description: 'Auditoría completa: ambiente, presencia, audio y primer feedback. Tu coach te guía a través de una evaluación profesional antes de entrenar con simulaciones intensivas.',
       icon: 'video',
       milestones: [
-        { id: 'm1', title: 'Cámara lista', completed: true, xp: 10 },
-        { id: 'm2', title: 'Audio listo', completed: true, xp: 10 },
-        { id: 'm3', title: 'Luz y fondo revisados', completed: true, xp: 10 },
-        { id: 'm4', title: 'Feedback inicial generado', completed: false, xp: 40 }
+        { id: 'm1', title: 'Auditoría de Entorno', completed: true, xp: 10 },
+        { id: 'm2', title: 'Validación de Presencia', completed: true, xp: 10 },
+        { id: 'm3', title: 'Prueba de Audio/Cámara', completed: true, xp: 10 },
+        { id: 'm4', title: 'Pitch Inicial', completed: false, xp: 40 }
       ]
     },
     

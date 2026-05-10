@@ -53,7 +53,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
   'auditoria-inicial': {
     id: 'auditoria-inicial',
     name: 'Auditoría Inicial',
-    description: 'Evaluación base de tu presentación profesional',
+    description: 'Auditoría completa: ambiente, presencia, audio y primer feedback. Tu coach te guía a través de una evaluación profesional antes de entrenar con simulaciones intensivas.',
     level: 1,
     xp: 40,
     dtc: 4,
