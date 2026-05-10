@@ -217,21 +217,6 @@ export function DespegaNavbar() {
                   {/* Dropdown — solid bg, left-border accent, no heavy colored header */}
                   {isOpen && (
                     <div className={`absolute left-0 top-full mt-2 w-56 rounded-xl border shadow-2xl z-[9999] overflow-hidden bg-[#0a0a0a] ${style.border}`}>
-                      {/* Minimal label */}
-                      <div className="px-4 pt-3 pb-2">
-                        <span 
-                          className="text-[10px] font-bold uppercase tracking-[0.15em]"
-                          style={{
-                            color: stage.phase === 'ritual' ? 'rgba(80, 160, 170, 0.6)' :
-                                   stage.phase === 'exploration' ? 'rgba(90, 90, 150, 0.6)' :
-                                   stage.phase === 'training' ? 'rgba(170, 70, 170, 0.6)' :
-                                   stage.phase === 'reality' ? 'rgba(225, 120, 130, 0.6)' :
-                                   'currentColor'
-                          }}
-                        >
-                          {stage.name}
-                        </span>
-                      </div>
                       <div className="px-2 pb-2 space-y-0.5">
                         {stage.routes.map((route) => {
                           // Only mark as active if this stage's dropdown is open AND the route matches
