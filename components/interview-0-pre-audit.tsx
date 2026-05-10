@@ -153,55 +153,102 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
   }
 
   if (stage === 'complete') {
+    // Calculate XP and DTC points based on audit score
+    const xpAwarded = Math.round((totalScore / 100) * 250) // Max 250 XP for audit
+    const dtcAwarded = Math.round(xpAwarded * 0.1) // 10% of XP
+    
     return (
-      <Card className="border-muted/30 max-w-2xl mx-auto">
-        <CardContent className="pt-8 pb-8 space-y-6">
-          <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-6 text-center space-y-2">
-            <p className="text-sm font-semibold text-purple-400 uppercase">Listo para practicar</p>
-            <div className="text-5xl font-bold text-white">{totalScore}</div>
-            <p className="text-white/70">Puntuación General</p>
-          </div>
+      <div className="max-w-3xl mx-auto space-y-6">
+        <Card className="border-muted/30">
+          <CardContent className="pt-8 pb-8 space-y-6">
+            {/* Score display */}
+            <div className="bg-purple-500/10 border border-purple-500/30 rounded-xl p-6 text-center space-y-2">
+              <p className="text-sm font-semibold text-purple-400 uppercase">Listo para practicar</p>
+              <div className="text-5xl font-bold text-white">{totalScore}</div>
+              <p className="text-white/70">Puntuación General</p>
+            </div>
 
-          {/* Score breakdown */}
-          <div className="space-y-3">
-            <p className="text-sm font-semibold text-white/70 uppercase">Detalles por Área</p>
-            {Object.entries(results).map(([key, value]) => (
-              <div key={key} className="flex items-center justify-between">
-                <span className="text-white/70 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
-                <div className="flex items-center gap-2">
-                  <Progress value={value.score} className="w-24 h-2" style={{ accentColor: 'rgb(170, 70, 170)' }} />
-                  <span className="text-white font-semibold w-12 text-right">{value.score}</span>
+            {/* Score breakdown */}
+            <div className="space-y-3">
+              <p className="text-sm font-semibold text-white/70 uppercase">Detalles por Área</p>
+              {Object.entries(results).map(([key, value]) => (
+                <div key={key} className="flex items-center justify-between">
+                  <span className="text-white/70 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</span>
+                  <div className="flex items-center gap-2">
+                    <Progress value={value.score} className="w-24 h-2" style={{ accentColor: 'rgb(170, 70, 170)' }} />
+                    <span className="text-white font-semibold w-12 text-right">{value.score}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Status message */}
+            {totalScore >= 80 ? (
+              <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 text-center">
+                <p className="text-purple-400 font-semibold">Excelente preparación</p>
+                <p className="text-white/70 text-sm mt-1">Estás listo para comenzar entrenamientos</p>
+              </div>
+            ) : totalScore >= 60 ? (
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4 text-center">
+                <p className="text-yellow-400 font-semibold">Algunos ajustes recomendados</p>
+                <p className="text-white/70 text-sm mt-1">Revisa las áreas con puntuación más baja para mejorar</p>
+              </div>
+            ) : (
+              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center">
+                <p className="text-red-400 font-semibold">Revisa tu configuración</p>
+                <p className="text-white/70 text-sm mt-1">Completa los checks pendientes para una mejor experiencia</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Rewards display */}
+        <Card className="border-muted/30 bg-gradient-to-br from-purple-500/10 to-pink-500/10">
+          <CardContent className="pt-8 pb-8">
+            <div className="text-center space-y-6">
+              <div className="space-y-2">
+                <h2 className="text-2xl font-bold text-white">¡Auditoría Completada!</h2>
+                <p className="text-white/70">Has ganado experiencia y puntos por completar tu auditoría inicial</p>
+              </div>
+
+              {/* XP Reward */}
+              <div className="flex items-center justify-center gap-8">
+                <div className="text-center space-y-2">
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500/40 to-purple-600/20 flex items-center justify-center">
+                    <div className="text-4xl font-bold text-purple-300">+{xpAwarded}</div>
+                  </div>
+                  <p className="text-sm font-semibold text-white/70">Experiencia</p>
+                </div>
+
+                <div className="w-px h-16 bg-white/10" />
+
+                {/* DTC Reward */}
+                <div className="text-center space-y-2">
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-pink-500/40 to-pink-600/20 flex items-center justify-center">
+                    <div className="text-4xl font-bold text-pink-300">+{dtcAwarded}</div>
+                  </div>
+                  <p className="text-sm font-semibold text-white/70">DTC</p>
                 </div>
               </div>
-            ))}
-          </div>
 
-          {totalScore >= 80 ? (
-            <div className="bg-purple-500/10 border border-purple-500/30 rounded-lg p-4 text-center">
-              <p className="text-purple-400 font-semibold">Excelente preparación</p>
-              <p className="text-white/70 text-sm mt-1">Estás listo para comenzar la simulación de entrevista</p>
-            </div>
-          ) : totalScore >= 60 ? (
-            <div className="bg-yellow/50/10 border border-yellow-500/30 rounded-lg p-4 text-center">
-              <p className="text-yellow-400 font-semibold">Algunos ajustes recomendados</p>
-              <p className="text-white/70 text-sm mt-1">Revisa las áreas con puntuación más baja antes de continuar</p>
-            </div>
-          ) : (
-            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center">
-              <p className="text-red-400 font-semibold">Revisa tu configuración</p>
-              <p className="text-white/70 text-sm mt-1">Completa los checks pendientes para una mejor experiencia</p>
-            </div>
-          )}
+              <div className="space-y-2 text-sm text-white/60 bg-white/5 rounded-lg p-4">
+                <p>✓ Auditoría inicial completada</p>
+                <p>✓ Se desbloquean entrenamientos en Pillar 3</p>
+                <p>✓ Acceso a herramientas de preparación</p>
+              </div>
 
-          <Button
-            onClick={handleComplete}
-            className="w-full text-white h-12"
-            style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '20px' }}
-          >
-            Continuar a Simulación de Entrevista
-          </Button>
-        </CardContent>
-      </Card>
+              <Button
+                onClick={handleComplete}
+                className="w-full text-white h-12"
+                style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '20px' }}
+              >
+                Ir al Dashboard
+                <ChevronRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     )
   }
 
