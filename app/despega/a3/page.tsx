@@ -203,7 +203,7 @@ export default function A3EntrenamientoIntensivo() {
             </p>
 
             {/* Quick CTA */}
-            <Link href="/despega/a3/entrenamiento-guiado" className="inline-block">
+            <Link href="/despega/a3/entrenamiento-guiado/intro-to-star/1" className="inline-block">
               <Button className="bg-gradient-to-r from-training to-training/80 hover:shadow-lg hover:shadow-training/50 transition-all transform hover:scale-105 text-white px-8 py-6 text-lg font-bold">
                 Comenzar Ahora
                 <ArrowRight className="w-5 h-5 ml-2" />
