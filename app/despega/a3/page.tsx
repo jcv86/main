@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ArrowRight, Loader2, Lock, CheckCircle2 } from 'lucide-react'
-import { DashboardState } from './data/mock-dashboard'
+import { DashboardState, Module } from './data/mock-dashboard'
 import { A3GeneralProgress } from '@/components/a3-general-progress'
 import { LevelsAccordion } from '@/components/a3/levels-accordion'
 import { Pillar3DetailedProgress } from '@/components/pillar3-detailed-progress'
@@ -27,7 +27,7 @@ export default function A3EntrenamientoIntensivo() {
 
   // Calculate completed sections (Pillar 3 has 4 sections)
   // A section is complete when all its modules are 100% done
-  const calculateCompletedSections = (modules: typeof mockDashboardData.modules) => {
+  const calculateCompletedSections = (modules: Module[]) => {
     // Group modules by section (level)
     const sections = [1, 2, 3, 4] // 4 sections in Pillar 3
     let completed = 0
