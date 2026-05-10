@@ -10,6 +10,34 @@ import { DashboardState, Module } from './data/mock-dashboard'
 import { A3GeneralProgress } from '@/components/a3-general-progress'
 import { LevelsAccordion } from '@/components/a3/levels-accordion'
 import { Pillar3DetailedProgress } from '@/components/pillar3-detailed-progress'
+import { PILLAR3_MODULES, PILLAR3_LEVELS } from '@/lib/pillar3-config'
+
+// Build modules array from pillar3 config with moduleStates
+function buildModulesFromConfig(moduleStates: Record<string, string>): Module[] {
+  const modules: Module[] = []
+  
+  for (const levelId of [1, 2, 3, 4] as const) {
+    const level = PILLAR3_LEVELS[levelId]
+    for (const moduleId of level.moduleIds) {
+      const config = PILLAR3_MODULES[moduleId]
+      const status = (moduleStates[moduleId] || 'locked') as 'available' | 'in_progress' | 'completed' | 'locked'
+      
+      modules.push({
+        id: config.id,
+        level: config.level,
+        title: config.name,
+        description: config.description,
+        status,
+        xp: status === 'completed' ? config.xp : 0,
+        maxXp: config.xp,
+        progress: status === 'completed' ? 100 : status === 'in_progress' ? 50 : 0,
+        unlockText: levelId > 1 ? `Se desbloquea tras completar: ${PILLAR3_LEVELS[(levelId - 1) as 1 | 2 | 3].name}` : undefined,
+      })
+    }
+  }
+  
+  return modules
+}
 
 export default function A3EntrenamientoIntensivo() {
   const searchParams = useSearchParams()
@@ -55,63 +83,49 @@ export default function A3EntrenamientoIntensivo() {
             totalXp: progress.totalXp,
           })
           
+          // Build modules from config using moduleStates from API
+          const modules = buildModulesFromConfig(progress.moduleStates || {})
+          
+          // Calculate completed sections
+          const sections = calculateCompletedSections(modules)
+          setCompletedSections(sections)
+          
           // Update dashboard data with real progress
-          setDashboardData(prev => {
-            const updated = { ...prev }
-            updated.totalXp = progress.totalXp
-            updated.maxXp = progress.maxXp
-            
-            // Update module statuses based on real completion data
-            updated.modules = prev.modules.length > 0 ? prev.modules.map(module => {
-              const status = progress.moduleStates[module.id]
-              if (status) {
-                console.log(`[v0] Module ${module.id} status: ${module.status} -> ${status}`)
-                // Calculate progress based on status and milestones
-                let newProgress = module.progress
-                if (status === 'completed') {
-                  newProgress = 100
-                } else if (status === 'available') {
-                  newProgress = 0
-                } else if (status === 'locked') {
-                  newProgress = 0
-                } else if (status === 'in_progress' && module.milestones) {
-                  // For in_progress modules, calculate based on completed milestones
-                  const completedMilestones = module.milestones.filter(m => m.completed).length
-                  newProgress = Math.round((completedMilestones / module.milestones.length) * 100)
-                }
-                
-                return {
-                  ...module,
-                  status: status as 'available' | 'in_progress' | 'completed' | 'locked',
-                  xp: status === 'completed' ? module.maxXp : module.xp,
-                  progress: newProgress,
-                }
-              }
-              return module
-            }) : progress.modules || []
-
-            // Update module states and completed IDs for detailed progress component
-            updated.moduleStates = progress.moduleStates
-            updated.completedModuleIds = progress.completedModuleIds
-
-            // Calculate completed sections for the general progress bar
-            const sections = calculateCompletedSections(updated.modules)
-            setCompletedSections(sections)
-
-            return updated
+          setDashboardData({
+            totalXp: progress.totalXp || 0,
+            maxXp: progress.maxXp || 280,
+            modules,
+            moduleStates: progress.moduleStates || {},
+            completedModuleIds: progress.completedModuleIds || [],
           })
+          
+          setIsLoading(false)
         } else {
           console.error('[v0] A3 page: API returned error', response.status)
           throw new Error(`API returned ${response.status}`)
         }
       } catch (error) {
         console.error('[v0] A3 page: API fetch failed', error)
-        // Show error state - user needs real data
+        // Build default modules with Level 1 available, rest locked
+        const defaultModuleStates: Record<string, string> = {
+          'auditoria-inicial': 'available',
+          'metodo-star': 'locked',
+          'cv-inteligente': 'locked',
+          'analisis-vacante': 'locked',
+          'analisis-multimodal': 'locked',
+          'entrenamiento-guiado': 'locked',
+          'entrenamiento-estructurado': 'locked',
+          'entrenamiento-desafiante': 'locked',
+          'entrenamiento-conversacional': 'locked',
+          'simulacion-real': 'locked',
+        }
+        const modules = buildModulesFromConfig(defaultModuleStates)
+        
         setDashboardData({
           totalXp: 0,
           maxXp: 280,
-          modules: [],
-          moduleStates: {},
+          modules,
+          moduleStates: defaultModuleStates,
           completedModuleIds: [],
         })
         setIsLoading(false)
