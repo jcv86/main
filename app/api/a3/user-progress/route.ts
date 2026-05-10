@@ -1,105 +1,143 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import {
+  PILLAR3_LEVELS,
+  TOTAL_PILLAR3_XP,
+  TOTAL_PILLAR3_DTC,
+  buildModuleStates,
+  calculateLevelCompletion,
+  calculateEarnedRewards,
+  resolveCanonicalId,
+} from '@/lib/pillar3-config'
 
 export async function GET() {
   const supabase = await createClient()
-
-  const { data: { user } } = await supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
 
   if (!user) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
   try {
-    // Fetch user's gamification profile
-    const { data: profile } = await supabase
-      .from('user_gamification_profile')
-      .select('current_xp, total_xp, current_level, total_interviews_completed')
-      .eq('user_id', user.id)
-      .single()
-
-    // Fetch completed training modules
+    // Fetch completed training modules for canonical XP/DTC calculation
     const { data: completions } = await supabase
       .from('a3_training_module_completions')
-      .select('training_type, xp_amount, is_first_completion, first_completion_at')
+      .select('training_type, xp_amount, is_first_completion')
       .eq('user_id', user.id)
 
-    // Calculate progress based on completions
-    const completedModules = completions?.length || 0
-    const totalModules = 9 // Total modules in the journey
-    const totalXp = profile?.total_xp || 0
-    const maxXp = 1000
+    const completedRawIds = (completions || [])
+      .filter((c) => c.is_first_completion)
+      .map((c) => c.training_type)
+
+    // Resolve to canonical IDs and calculate level/module completion
+    const { level1, level2, level3, level4, canonicalCompleted } =
+      calculateLevelCompletion(completedRawIds)
+
+    // Calculate XP and DTC earned from canonical config (single source of truth)
+    const { totalXp, totalDtc: totalDtcFromConfig } = calculateEarnedRewards(completedRawIds)
+
+    // Also fetch actual DTC balance for live total
+    const { data: dtcBalance } = await supabase
+      .from('user_dtc_balance')
+      .select('balance, lifetime_earned')
+      .eq('user_id', user.id)
+      .maybeSingle()
+
+    // Use the live DTC balance if it exists, else fall back to config-derived total
+    const totalDtc = dtcBalance?.balance ?? totalDtcFromConfig
+
+    const maxXp = TOTAL_PILLAR3_XP
+    const maxDtc = TOTAL_PILLAR3_DTC
     const progressPct = Math.min(Math.round((totalXp / maxXp) * 100), 100)
+    const dtcPct = Math.min(Math.round((totalDtc / maxDtc) * 100), 100)
 
-    // Check which modules are completed
-    const completedModuleIds = completions?.map(c => c.training_type) || []
+    console.log('[v0] User progress (canonical):', {
+      user_id: user.id,
+      completedCanonical: canonicalCompleted,
+      level1Complete: level1,
+      level2Complete: level2,
+      level3Complete: level3,
+      totalXp,
+      totalDtc,
+      progressPct,
+    })
 
-    // Determine module statuses based on completions
-    const auditoriaCompleted = completedModuleIds.some(id => 
-      id.toLowerCase().includes('auditoria') || id.toLowerCase().includes('entrevista 0') || id.toLowerCase().includes('preparación inicial')
-    )
+    // Build moduleStates using the canonical config
+    const moduleStates = buildModuleStates(completedRawIds)
 
-    // Build module states
-    const moduleStates = {
-      'auditoria-inicial': auditoriaCompleted ? 'completed' : 'in_progress',
-      'metodo-star': auditoriaCompleted ? 'available' : 'locked',
-      'cv-inteligente': auditoriaCompleted ? 'available' : 'locked',
-      'analisis-vacante': auditoriaCompleted ? 'available' : 'locked',
-      'analisis-multicanal': auditoriaCompleted ? 'available' : 'locked',
-      // Level 3 modules unlock after 2 preparation tools
-      'entrevista-guiada': completedModules >= 3 ? 'available' : 'locked',
-      'entrevista-estructurada': completedModules >= 3 ? 'available' : 'locked',
-      'entrevista-desafiante': completedModules >= 3 ? 'available' : 'locked',
-      'entrevista-conversacional': completedModules >= 3 ? 'available' : 'locked',
-      // Level 4 unlocks after 2 training interviews
-      'simulacion-completa': completedModules >= 5 ? 'available' : 'locked',
-    }
+    // Skill values derived from canonical level completion
+    const level2CompletedCount = PILLAR3_LEVELS[2].moduleIds.filter((id) =>
+      canonicalCompleted.includes(id)
+    ).length
+    const level3CompletedCount = PILLAR3_LEVELS[3].moduleIds.filter((id) =>
+      canonicalCompleted.includes(id)
+    ).length
 
-    // Calculate skill values based on completions
     const skills = {
-      presencia: auditoriaCompleted ? 60 : 35,
-      claridad: completedModules >= 2 ? 40 : 10,
-      estructura: completedModuleIds.some(id => id.includes('star')) ? 50 : 0,
-      preparacion: completedModuleIds.some(id => id.includes('cv') || id.includes('vacante')) ? 60 : 25,
-      'manejo-presion': completedModuleIds.some(id => id.includes('desafiante')) ? 50 : 0,
+      presencia: level1 ? 60 : 35,
+      claridad: level2CompletedCount > 0 ? 40 + level2CompletedCount * 10 : 10,
+      estructura: canonicalCompleted.includes('metodo-star') ? 60 : 0,
+      preparacion: level2CompletedCount > 1 ? 60 + level2CompletedCount * 5 : 25,
+      'manejo-presion': canonicalCompleted.includes('entrenamiento-desafiante') ? 70 : 0,
     }
 
-    // Determine current level text
-    let currentLevel = 'Auditoría Inicial'
-    let nextMilestone = 'Completar Entrevista 0'
-    let nextReward = 'Desbloqueas Método STAR + CV Inteligente + Análisis de Vacante'
+    // Determine current level / next milestone
+    let currentLevel = PILLAR3_LEVELS[1].name
+    let nextMilestone = `Completar ${PILLAR3_LEVELS[1].name}`
+    let nextReward = `Desbloqueas ${PILLAR3_LEVELS[2].name} (4 herramientas)`
 
-    if (auditoriaCompleted) {
-      currentLevel = 'Herramientas de Preparación'
-      nextMilestone = 'Completar 2 herramientas de preparación'
-      nextReward = 'Desbloqueas Entrenamientos de Entrevista'
+    if (level1 && !level2) {
+      currentLevel = PILLAR3_LEVELS[2].name
+      nextMilestone = `Completar 4 herramientas (${level2CompletedCount}/4)`
+      nextReward = `Desbloqueas ${PILLAR3_LEVELS[3].name}`
     }
-    if (completedModules >= 3) {
-      currentLevel = 'Entrenamientos Progresivos'
-      nextMilestone = 'Completar 2 entrenamientos'
-      nextReward = 'Desbloqueas Simulación Real'
+    if (level2 && !level3) {
+      currentLevel = PILLAR3_LEVELS[3].name
+      nextMilestone = `Completar 4 entrenamientos (${level3CompletedCount}/4)`
+      nextReward = `Desbloqueas ${PILLAR3_LEVELS[4].name}`
     }
-    if (completedModules >= 5) {
-      currentLevel = 'Simulación Real'
-      nextMilestone = 'Completar Simulación Completa'
+    if (level3 && !level4) {
+      currentLevel = PILLAR3_LEVELS[4].name
+      nextMilestone = `Completar Simulación Real`
       nextReward = 'Badge: Listo para Entrevista Real'
     }
+    if (level4) {
+      currentLevel = 'Pillar 3 Completado'
+      nextMilestone = 'Has completado todos los niveles'
+      nextReward = 'Listo para entrevistas reales'
+    }
+
+    const completedModules = canonicalCompleted.length
+
+    // Convert legacy IDs to canonical for the frontend
+    const completedModuleIds = canonicalCompleted
 
     return NextResponse.json({
       success: true,
       progress: {
         currentLevel,
         progressPct,
+        dtcPct,
         totalXp,
         maxXp,
+        totalDtc,
+        maxDtc,
         nextMilestone,
         nextReward,
         completedModules,
-        totalModules,
+        totalModules: 10,
         moduleStates,
         skills,
         completedModuleIds,
-      }
+        levelCompletion: {
+          level1,
+          level2,
+          level3,
+          level4,
+        },
+      },
     })
   } catch (error) {
     console.error('[v0] Error fetching user progress:', error)

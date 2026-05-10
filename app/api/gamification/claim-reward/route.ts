@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     // Update user gamification profile with XP
     const { data: profile, error: profileError } = await supabase
       .from('user_gamification_profile')
-      .select('xp_a2_total, total_xp')
+      .select('total_xp, current_level, interview_streak')
       .eq('user_id', user.id)
       .single()
 
@@ -43,14 +43,15 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const newA2XP = (profile.xp_a2_total || 0) + xpAmount
     const newTotalXP = (profile.total_xp || 0) + xpAmount
+    const currentLevel = profile.current_level || 'Bronze'
 
+    // Update profile with new XP and increment streak
     const { error: updateProfileError } = await supabase
       .from('user_gamification_profile')
       .update({
-        xp_a2_total: newA2XP,
         total_xp: newTotalXP,
+        interview_streak: (profile.interview_streak || 0) + 1,
         updated_at: new Date().toISOString(),
       })
       .eq('user_id', user.id)
@@ -106,11 +107,21 @@ export async function POST(request: NextRequest) {
         earned_at: new Date().toISOString(),
       }])
 
+    console.log('[v0] Rewards claimed successfully:', {
+      userId: user.id,
+      xpAwarded: xpAmount,
+      dtcAwarded: dtcAmount,
+      newTotalXP,
+      currentLevel
+    })
+
     return NextResponse.json({
       success: true,
       xp_awarded: xpAmount,
       dtc_awarded: dtcAmount,
       new_total_xp: newTotalXP,
+      current_level: currentLevel,
+      new_streak: (profile.interview_streak || 0) + 1,
       message: 'Rewards claimed successfully!'
     })
   } catch (error) {

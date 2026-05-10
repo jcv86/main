@@ -6,22 +6,20 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { ArrowLeft, ChevronRight, Video, Lightbulb } from 'lucide-react'
 import { Interview0PreAudit } from '@/components/interview-0-pre-audit'
-import { ConversationalInterviewSimulator } from '@/components/conversational-interview-simulator'
 import { TrainingResultsCard } from '@/components/training-results-card'
 
 export default function Interview0Page() {
   const router = useRouter()
-  const [stage, setStage] = useState<'intro' | 'audit' | 'simulator' | 'farewell' | 'results'>('intro')
+  const [stage, setStage] = useState<'intro' | 'audit' | 'farewell' | 'results'>('intro')
   const [score, setScore] = useState(0)
   const [isHydrated, setIsHydrated] = useState(false)
+  const [auditProgress, setAuditProgress] = useState(0) // Track granular audit progress (0-100 in 25% increments)
 
-  const handleAuditComplete = () => {
-    setStage('simulator')
-  }
-
-  const handleSimulatorComplete = (result: any) => {
-    setScore(result.score || 85)
-    setStage('farewell')
+  const handleAuditComplete = (result: any) => {
+    // Store audit score and go to results/rewards screen
+    setScore(result.score || 75)
+    setAuditProgress(100) // Mark audit as 100% complete
+    setStage('results')
   }
 
   useEffect(() => {
@@ -32,64 +30,45 @@ export default function Interview0Page() {
     return null
   }
 
-  if (stage === 'farewell') {
+  if (stage === 'results') {
+    // XP/DTC are awarded by the canonical config inside the training-completion API
+    // (40 XP / 4 DTC for 'auditoria-inicial' on first completion)
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center px-4">
-        <div className="max-w-md w-full space-y-6">
-          <Card className="border-training/40 overflow-hidden">
-            <div className="relative aspect-[3/4] w-full bg-black">
-              <video
-                src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-JJXsroDrldJQrOQgg1lHrJzODwH1Uf.mov"
-                autoPlay
-                playsInline
-                crossOrigin="anonymous"
-                className="w-full h-full object-contain"
-                onEnded={() => setStage('results')}
-                style={{ width: '100%', height: '100%' }}
-              />
-            </div>
-          </Card>
-
-          <Card className="border-training/30 bg-training/5">
-            <CardContent className="pt-6">
-              <p className="text-white/85 text-center">
-                Tu coach está completando la sesión...
-              </p>
-            </CardContent>
-          </Card>
+      <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
+        <div className="max-w-2xl w-full">
+          <TrainingResultsCard
+            result={{
+              score: score,
+              questionsCompleted: 4,
+              totalQuestions: 4,
+              timeSpent: 300,
+              level: 'basico',
+              trainingType: 'auditoria-inicial',
+              moduleXpEarned: 70,
+              moduleXpTotal: 70,
+            }}
+            onContinue={() => {
+              setStage('intro')
+              setScore(0)
+              setAuditProgress(0)
+              // Wait for completion to be saved, then redirect and hard-refresh dashboard
+              setTimeout(() => {
+                router.push('/despega/a3?refresh=' + Date.now())
+              }, 500)
+            }}
+          />
         </div>
       </div>
     )
   }
 
-  if (stage === 'results') {
-    return (
-      <TrainingResultsCard
-        result={{
-          score: score,
-          questionsCompleted: 5,
-          totalQuestions: 5,
-          timeSpent: 600,
-          level: 'basico',
-          trainingType: 'auditoria-inicial'
-        }}
-        onContinue={() => {
-          setStage('intro')
-          setScore(0)
-          // Navigate to A3 dashboard where user can see unlocked modules
-          router.push('/despega/a3')
-        }}
-      />
-    )
-  }
-
   // Calculate general progress based on stage
+  // intro=0%, audit progresses from 0-100 based on blocks completed
   const getGeneralProgress = () => {
     switch (stage) {
-      case 'intro': return { step: 1, total: 4, percent: 0, label: 'Introducción' }
-      case 'audit': return { step: 2, total: 4, percent: 33, label: 'Auditoría' }
-      case 'simulator': return { step: 3, total: 4, percent: 66, label: 'Simulación' }
-      default: return { step: 1, total: 4, percent: 0, label: 'Introducción' }
+      case 'intro': return { step: 1, total: 2, percent: 0, label: 'Introducción' }
+      case 'audit': return { step: 2, total: 2, percent: auditProgress, label: 'Auditoría' }
+      default: return { step: 1, total: 2, percent: 0, label: 'Introducción' }
     }
   }
 
@@ -186,24 +165,10 @@ export default function Interview0Page() {
             )}
 
             {stage === 'audit' && (
-              <Interview0PreAudit onComplete={handleAuditComplete} />
-            )}
-
-            {stage === 'simulator' && (
-              <div className="space-y-4">
-                <div className="text-center mb-8">
-                  <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/30 mb-4">
-                    <Video className="w-4 h-4 text-purple-400" />
-                    <span className="text-sm font-semibold text-purple-400">Guía del Coach</span>
-                  </div>
-                  <h2 className="text-3xl font-bold text-white">Primera Simulación de Entrevista</h2>
-                  <p className="text-white/85 mt-2">Tu coach te guiará basándose en tu auditoría inicial</p>
-                </div>
-                <ConversationalInterviewSimulator
-                  level="basico"
-                  onComplete={handleSimulatorComplete}
-                />
-              </div>
+              <Interview0PreAudit 
+                onComplete={handleAuditComplete}
+                onProgressUpdate={(progress) => setAuditProgress(progress)}
+              />
             )}
           </div>
         </div>

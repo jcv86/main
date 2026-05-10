@@ -20,6 +20,7 @@ interface TrainingResult {
 
 interface ProgressMetrics {
   xpEarned: number
+  dtcEarned: number
   pointsEarned: number
   rewards: string[]
   totalXP: number
@@ -62,6 +63,7 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
           console.log('[v0] Session saved:', data)
           setProgressMetrics({
             xpEarned: data.xpEarned || 0,
+            dtcEarned: data.dtcEarned || data.pointsEarned || 0,
             pointsEarned: data.pointsEarned || 0,
             rewards: data.rewards || [],
             totalXP: data.totalXP || 0,
@@ -206,13 +208,13 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
           </CardContent>
         </Card>
 
-        {/* XP and Rewards Section */}
+        {/* XP and DTC Rewards Section */}
         {!isSaving && progressMetrics && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6 }}
-            className="grid grid-cols-3 gap-4"
+            className="grid grid-cols-2 gap-4"
           >
         {/* XP Earned */}
             {showXPAnimation && progressMetrics?.isFirstCompletion && (
@@ -226,7 +228,7 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
                     transition={{ duration: 2, delay: 0.3 }}
                   >
                     <div className="text-5xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>
-                      +{progressMetrics.xpEarned} XP
+                      +{progressMetrics.xpEarned}
                     </div>
                   </motion.div>
                   <CardContent className="pt-6 pb-6 text-center">
@@ -241,7 +243,7 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
                     <p className="text-3xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>
                       +{progressMetrics.xpEarned}
                     </p>
-                    <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">XP Ganados</p>
+                    <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">Experiencia</p>
                   </CardContent>
                 </Card>
               </motion.div>
@@ -278,30 +280,81 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
                   <p className="text-3xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>
                     +{result.score}
                   </p>
-                  <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">XP Ganados</p>
+                  <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">Experiencia</p>
                 </CardContent>
               </Card>
             )}
 
-            {/* Points Earned */}
-            <Card className="border-green-500/30 bg-gradient-to-br from-green-500/10 to-background">
-              <CardContent className="pt-6 pb-6 text-center">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.75, type: 'spring' }}
-                  className="mb-3"
-                >
-                  <Award className="w-8 h-8 mx-auto" style={{ color: 'rgb(34, 197, 94)' }} />
-                </motion.div>
-                <p className="text-3xl font-bold" style={{ color: 'rgb(34, 197, 94)' }}>
-                  +{progressMetrics.pointsEarned}
-                </p>
-                <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">Puntos</p>
-              </CardContent>
-            </Card>
+            {/* DTC Earned */}
+            {showXPAnimation && progressMetrics?.isFirstCompletion && (
+              <motion.div>
+                <Card className="border-yellow-500/30 bg-gradient-to-br from-yellow-500/10 to-background overflow-hidden relative">
+                  {/* Floating +DTC animation */}
+                  <motion.div
+                    className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                    initial={{ opacity: 1, y: 0, scale: 1 }}
+                    animate={{ opacity: 0, y: -100, scale: 1.2 }}
+                    transition={{ duration: 2, delay: 0.5 }}
+                  >
+                    <div className="text-5xl font-bold text-yellow-400">
+                      +{progressMetrics.dtcEarned}
+                    </div>
+                  </motion.div>
+                  <CardContent className="pt-6 pb-6 text-center">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ delay: 0.9, type: 'spring' }}
+                      className="mb-3"
+                    >
+                      <Gift className="w-8 h-8 mx-auto text-yellow-400" />
+                    </motion.div>
+                    <p className="text-3xl font-bold text-yellow-400">
+                      +{progressMetrics.dtcEarned}
+                    </p>
+                    <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">DTC Ganados</p>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            )}
+            {!showXPAnimation && progressMetrics && !progressMetrics.isFirstCompletion && (
+              <Card className="border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-background">
+                <CardContent className="pt-6 pb-6 text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.9, type: 'spring' }}
+                    className="mb-3"
+                  >
+                    <TrendingUp className="w-8 h-8 mx-auto" style={{ color: 'rgb(180, 83, 9)' }} />
+                  </motion.div>
+                  <p className="text-sm" style={{ color: 'rgb(180, 83, 9)' }}>
+                    Repitiendo
+                  </p>
+                  <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">Ya ganaste DTC</p>
+                </CardContent>
+              </Card>
+            )}
+            {!progressMetrics && (
+              <Card className="border-yellow-500/30 bg-gradient-to-br from-yellow-500/10 to-background">
+                <CardContent className="pt-6 pb-6 text-center">
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.9, type: 'spring' }}
+                    className="mb-3"
+                  >
+                    <Gift className="w-8 h-8 mx-auto text-yellow-400" />
+                  </motion.div>
+                  <p className="text-3xl font-bold text-yellow-400">
+                    {Math.round(result.score / 10)}
+                  </p>
+                  <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">DTC Ganados</p>
+                </CardContent>
+              </Card>
+            )}
 
-            {/* Total Rewards */}
+            {/* Achievements Unlocked */}
             <Card className="border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-background">
               <CardContent className="pt-6 pb-6 text-center">
                 <motion.div
@@ -310,10 +363,10 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
                   transition={{ delay: 0.8, type: 'spring' }}
                   className="mb-3"
                 >
-                  <Gift className="w-8 h-8 mx-auto" style={{ color: 'rgb(170, 70, 170)' }} />
+                  <Trophy className="w-8 h-8 mx-auto" style={{ color: 'rgb(170, 70, 170)' }} />
                 </motion.div>
                 <p className="text-3xl font-bold" style={{ color: 'rgb(170, 70, 170)' }}>
-                  {progressMetrics.rewards.length}
+                  {progressMetrics?.rewards.length || 0}
                 </p>
                 <p className="text-xs text-white/60 mt-2 uppercase tracking-wider">Logros Desbloqueados</p>
               </CardContent>

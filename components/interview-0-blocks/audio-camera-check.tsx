@@ -3,174 +3,61 @@
 import { useState, useEffect } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Check, Mic, Lightbulb, AlertCircle, Loader } from 'lucide-react'
-import { validateAudioQuality } from '@/lib/interview-0/ai-validation'
-import { coachPrompts } from '@/lib/interview-0/ai-coach-prompts'
+import { Check, Mic, AlertCircle, Loader } from 'lucide-react'
 
 interface AudioCameraCheckProps {
   onComplete: (data: { passed: boolean; score: number }) => void
 }
 
 export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
+  const [cameraStatus, setCameraStatus] = useState<'checking' | 'ready' | 'error'>('checking')
   const [micStatus, setMicStatus] = useState<'checking' | 'ready' | 'error'>('checking')
-  const [isTestingAudio, setIsTestingAudio] = useState(false)
-  const [audioLevel, setAudioLevel] = useState(0)
+  const [isValidating, setIsValidating] = useState(false)
 
-  // Only check microphone on mount - camera already verified in previous step
+  // Check both camera and microphone on mount
   useEffect(() => {
-    const checkMicrophone = async () => {
+    const checkDevices = async () => {
       try {
+        // Check camera
+        const cameraStream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user' },
+          audio: false
+        })
+        cameraStream.getTracks().forEach(track => track.stop())
+        setCameraStatus('ready')
+
+        // Check microphone
         const audioStream = await navigator.mediaDevices.getUserMedia({
           audio: { echoCancellation: true, noiseSuppression: true },
           video: false
         })
-        setMicStatus('ready')
         audioStream.getTracks().forEach(track => track.stop())
+        setMicStatus('ready')
       } catch (err) {
-        console.error('[v0] Microphone check error:', err)
+        console.error('[v0] Device check error:', err)
+        if (cameraStatus === 'checking') setCameraStatus('error')
         setMicStatus('error')
       }
     }
 
-    checkMicrophone()
+    checkDevices()
   }, [])
 
-  const [maxAudioLevel, setMaxAudioLevel] = useState(0)
-  const [audioTestResult, setAudioTestResult] = useState<'good' | 'fair' | 'poor' | null>(null)
-  const [coachTip, setCoachTip] = useState<string | null>(null)
-  const [isValidatingAudio, setIsValidatingAudio] = useState(false)
-  const [audioValidationResult, setAudioValidationResult] = useState<{
-    isValid: boolean
-    score: number
-    issues: string[]
-    tips: string[]
-  } | null>(null)
+  const handleContinue = async () => {
+    if (micStatus !== 'ready' || cameraStatus !== 'ready') return
 
-  const handleTestAudio = async () => {
-    setIsTestingAudio(true)
-    setMaxAudioLevel(0)
-    setAudioTestResult(null)
-    let stream: MediaStream | null = null
-    let audioContext: AudioContext | null = null
-
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({
-        audio: { 
-          echoCancellation: false,
-          noiseSuppression: false,
-          autoGainControl: false
-        },
-        video: false
+    setIsValidating(true)
+    // Simulate brief validation
+    setTimeout(() => {
+      onComplete({
+        passed: true,
+        score: 100
       })
-
-      audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
-      const analyser = audioContext.createAnalyser()
-      analyser.fftSize = 2048
-      const source = audioContext.createMediaStreamSource(stream)
-      source.connect(analyser)
-      
-      // Connect to destination to ensure audio processing
-      analyser.connect(audioContext.destination)
-
-      const dataArray = new Uint8Array(analyser.frequencyBinCount)
-      let isRunning = true
-      let max = 0
-      let sampleCount = 0
-
-      const checkAudio = () => {
-        if (!isRunning) return
-        analyser.getByteFrequencyData(dataArray)
-        
-        // Check all frequency ranges, not just low frequencies
-        const average = dataArray.reduce((a, b) => a + b) / dataArray.length
-        const level = Math.round((average / 255) * 100)
-        
-        setAudioLevel(level)
-        max = Math.max(max, level)
-        setMaxAudioLevel(max)
-        sampleCount++
-        
-        console.log('[v0] Audio level:', level, 'Max:', max)
-        
-        requestAnimationFrame(checkAudio)
-      }
-
-      checkAudio()
-
-      // Stop after 3 seconds and evaluate
-      setTimeout(() => {
-        isRunning = false
-        setIsTestingAudio(false)
-        
-        // Adjusted thresholds for better detection
-        // good: 20%+, fair: 8%+, poor: < 8%
-        let result: 'good' | 'fair' | 'poor'
-        if (max >= 20) {
-          result = 'good'
-        } else if (max >= 8) {
-          result = 'fair'
-        } else {
-          result = 'poor'
-        }
-        setAudioTestResult(result)
-        console.log('[v0] Audio test - max level:', max, 'result:', result)
-        
-        // Show Coach tip based on result
-        if (result === 'poor') {
-          setCoachTip(coachPrompts.tips.audio[0]) // "Prueba el audio en un ambiente tranquilo..."
-        } else if (result === 'fair') {
-          setCoachTip(coachPrompts.tips.audio[Math.floor(Math.random() * coachPrompts.tips.audio.length)])
-        }
-        
-        if (stream) {
-          stream.getTracks().forEach(track => track.stop())
-        }
-        if (audioContext && audioContext.state !== 'closed') {
-          audioContext.close()
-        }
-      }, 3000)
-    } catch (err) {
-      console.error('[v0] Audio test error:', err)
-      setIsTestingAudio(false)
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop())
-      }
-      if (audioContext && audioContext.state !== 'closed') {
-        audioContext.close()
-      }
-    }
+      setIsValidating(false)
+    }, 1000)
   }
 
-  // Allow passing with any audio detection (good/fair/poor), just with different scores
-  const audioQualityScore = audioTestResult === 'good' ? 100 : audioTestResult === 'fair' ? 80 : audioTestResult === 'poor' ? 60 : 0
-  const passed = micStatus === 'ready' && audioTestResult !== null // Allow any audio level
-  const score = audioQualityScore
-
-  const handleValidateAndContinue = async () => {
-    setIsValidatingAudio(true)
-    try {
-      const result = await validateAudioQuality(maxAudioLevel)
-      setAudioValidationResult(result)
-      
-      if (result.isValid) {
-        onComplete({
-          passed: true,
-          score: result.score
-        })
-      }
-    } catch (error) {
-      console.error('[v0] Audio validation error:', error)
-      // Allow user to continue but show warning
-      setAudioValidationResult({
-        isValid: false,
-        score: audioQualityScore,
-        issues: ['Error en validación con IA'],
-        tips: ['Continúa pero verifica tu audio manualmente']
-      })
-    } finally {
-      setIsValidatingAudio(false)
-    }
-  }
+  const allReady = micStatus === 'ready' && cameraStatus === 'ready'
 
   return (
     <Card className="border-muted/30">
@@ -180,144 +67,81 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
           Audio & Cámara
         </CardTitle>
         <p className="text-sm text-white/70 mt-2">
-          Verificaremos que tu micrófono y cámara funcionen correctamente
+          Verificaremos que tu micrófono y cámara están activos
         </p>
       </CardHeader>
       <CardContent className="space-y-6">
         
         {/* Device Status */}
         <div className="space-y-3">
-          {/* Camera - Already verified */}
-          <div className="flex items-center justify-between">
+          {/* Camera Status */}
+          <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
             <div className="flex items-center gap-2">
               <span className="text-lg">📹</span>
               <span className="text-white font-semibold">Cámara</span>
             </div>
-            <div className="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
-              <Check className="w-4 h-4" />
-              Verificada
-            </div>
+            {cameraStatus === 'ready' ? (
+              <div className="flex items-center gap-2 text-green-400 text-sm font-semibold">
+                <Check className="w-4 h-4" />
+                Verificada
+              </div>
+            ) : cameraStatus === 'error' ? (
+              <div className="flex items-center gap-2 text-red-400 text-sm font-semibold">
+                <AlertCircle className="w-4 h-4" />
+                Error
+              </div>
+            ) : (
+              <Loader className="w-4 h-4 animate-spin text-white/60" />
+            )}
           </div>
 
-          {/* Microphone */}
-          <div className="flex items-center justify-between">
+          {/* Microphone Status */}
+          <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
             <div className="flex items-center gap-2">
               <span className="text-lg">🎤</span>
               <span className="text-white font-semibold">Micrófono</span>
             </div>
             {micStatus === 'ready' ? (
-              <div className="flex items-center gap-2 text-emerald-400 text-sm font-semibold">
+              <div className="flex items-center gap-2 text-green-400 text-sm font-semibold">
                 <Check className="w-4 h-4" />
                 Listo
               </div>
             ) : micStatus === 'error' ? (
               <div className="flex items-center gap-2 text-red-400 text-sm font-semibold">
+                <AlertCircle className="w-4 h-4" />
                 Error
               </div>
             ) : (
-              <span className="text-white/60 text-sm">Verificando...</span>
+              <Loader className="w-4 h-4 animate-spin text-white/60" />
             )}
           </div>
         </div>
 
-        {/* Audio Test Button */}
-        <Button
-          onClick={handleTestAudio}
-          disabled={isTestingAudio || micStatus !== 'ready'}
-          className={`w-full h-12 font-semibold`}
-          style={{
-            backgroundColor: isTestingAudio 
-              ? 'rgb(239, 68, 68)' 
-              : micStatus === 'ready'
-              ? 'rgba(170, 70, 170, 0.6)'
-              : 'rgba(107, 114, 128, 0.2)',
-            color: micStatus === 'ready' ? 'white' : 'rgba(255, 255, 255, 0.5)',
-            cursor: micStatus === 'ready' ? 'pointer' : 'not-allowed',
-            borderRadius: '20px'
-          }}
-        >
-          {isTestingAudio ? 'Probando... Habla ahora' : 'Probar Micrófono'}
-        </Button>
-
-        {/* Audio Level Indicator */}
-        {isTestingAudio && (
-          <div className="bg-slate-900/80 border border-muted/30 rounded-lg p-4 space-y-3">
-            <p className="text-sm text-white/70">Nivel de Audio</p>
-            <div className="h-12 bg-black rounded flex items-center justify-center overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-blue to-cyan transition-all"
-                style={{ width: `${audioLevel}%` }}
-              />
+        {/* Ready State */}
+        {allReady && (
+          <div className="rounded-lg p-4 bg-green-500/10 border border-green-500/30">
+            <div className="flex items-center gap-2">
+              <Check className="w-5 h-5 text-green-400" />
+              <div>
+                <p className="font-semibold text-green-400">Dispositivos Listos</p>
+                <p className="text-sm text-white/70 mt-1">Cámara y micrófono están activos. Continúa cuando estés listo.</p>
+              </div>
             </div>
-            <p className="text-center text-2xl font-bold text-white">{audioLevel}%</p>
           </div>
         )}
 
-        {/* Audio Test Result */}
-        {audioTestResult && (
-          <div className={`rounded-lg p-4 text-center border ${
-            audioTestResult === 'good' 
-              ? 'bg-emerald-500/10 border-emerald-500/30' 
-              : audioTestResult === 'fair'
-              ? 'bg-blue-500/10 border-blue/50/30'
-              : 'bg-yellow/50/10 border-yellow-500/30'
-          }`}>
-            <p className="font-semibold" style={{
-              color: audioTestResult === 'good'
-                ? 'rgb(52, 211, 153)'
-                : audioTestResult === 'fair'
-                ? 'rgba(239, 239, 239, 0.40)'
-                : 'rgb(250, 204, 21)'
-            }}>
-              {audioTestResult === 'good' && 'Excelente calidad de audio'}
-              {audioTestResult === 'fair' && 'Audio detectado correctamente'}
-              {audioTestResult === 'poor' && 'Audio bajo - considera acercarte al micrófono'}
-            </p>
-            <p className="text-sm text-white/70 mt-1">
-              Nivel máximo detectado: {maxAudioLevel}%
-            </p>
-          </div>
-        )}
-
-        {/* Coach IA Tip */}
-        {coachTip && (
-          <div className="flex gap-2 items-start p-3 rounded border" style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', borderColor: 'rgba(170, 70, 170, 0.4)' }}>
-            <Lightbulb className="w-4 h-4 mt-0.5 flex-shrink-0" style={{ color: 'rgba(170, 70, 170, 0.6)' }} />
-            <p className="text-xs" style={{ color: 'rgba(170, 70, 170)' }}>{coachTip}</p>
-          </div>
-        )}
-
-        {/* Audio IA Validation Result */}
-        {audioValidationResult && (
-          <div className={`rounded-lg p-4 border ${
-            audioValidationResult.isValid
-              ? 'bg-green/10 border-green/30'
-              : 'bg-red-500/10 border-red-500/30'
-          }`}>
+        {/* Error State */}
+        {(cameraStatus === 'error' || micStatus === 'error') && (
+          <div className="rounded-lg p-4 bg-red-500/10 border border-red-500/30">
             <div className="flex items-start gap-3">
-              {audioValidationResult.isValid ? (
-                <Check className="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" />
-              ) : (
-                <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
-              )}
-              <div className="flex-1">
-                <p className={`font-semibold ${audioValidationResult.isValid ? 'text-green-400' : 'text-red-400'}`}>
-                  {audioValidationResult.isValid ? 'Audio Aceptable' : 'Audio Rechazado'}
+              <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="font-semibold text-red-400">Dispositivos No Disponibles</p>
+                <p className="text-sm text-white/70 mt-2">
+                  {cameraStatus === 'error' && 'No se puede acceder a la cámara. '}
+                  {micStatus === 'error' && 'No se puede acceder al micrófono. '}
+                  Verifica que has otorgado los permisos necesarios en tu navegador.
                 </p>
-                {audioValidationResult.issues.length > 0 && (
-                  <div className="mt-2 space-y-1">
-                    {audioValidationResult.issues.map((issue, idx) => (
-                      <p key={idx} className="text-xs text-white/70">• {issue}</p>
-                    ))}
-                  </div>
-                )}
-                {audioValidationResult.tips.length > 0 && (
-                  <div className="mt-2 space-y-1">
-                    {audioValidationResult.tips.map((tip, idx) => (
-                      <p key={idx} className="text-xs text-white/70"> {tip}</p>
-                    ))}
-                  </div>
-                )}
               </div>
             </div>
           </div>
@@ -325,33 +149,28 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
 
         {/* CTA */}
         <Button
-          onClick={handleValidateAndContinue}
-          disabled={!passed || isValidatingAudio}
-          className={`w-full h-12 font-semibold`}
+          onClick={handleContinue}
+          disabled={!allReady || isValidating}
+          className="w-full text-white h-12 font-semibold"
           style={{
-            backgroundColor: passed && !isValidatingAudio 
-              ? 'rgb(170, 70, 170, 0.8)'
-              : 'rgba(107, 114, 128, 0.2)',
-            color: passed && !isValidatingAudio ? 'white' : 'rgba(255, 255, 255, 0.5)',
-            cursor: passed && !isValidatingAudio ? 'pointer' : 'not-allowed',
+            backgroundColor: allReady ? 'rgb(170, 70, 170)' : 'rgba(170, 70, 170, 0.4)',
             borderRadius: '20px'
           }}
         >
-          {isValidatingAudio ? (
+          {isValidating ? (
             <>
               <Loader className="w-4 h-4 mr-2 animate-spin" />
-              Validando Audio...
+              Validando...
             </>
-          ) : passed ? (
+          ) : (
             <>
               <Check className="w-4 h-4 mr-2" />
               Continuar
             </>
-          ) : (
-            'Prueba tu micrófono para continuar'
           )}
         </Button>
       </CardContent>
     </Card>
   )
 }
+

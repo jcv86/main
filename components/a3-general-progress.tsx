@@ -4,7 +4,8 @@ interface GeneralProgressProps {
   currentStep: number
   totalSteps: number
   currentLabel: string
-  isCompleted?: boolean  // Only show 100% if true, otherwise 0%
+  completedSections?: number  // Number of completed sections (out of 4)
+  totalSections?: number      // Total sections (4 for Pillar 3)
   variant?: 'default' | 'compact'
 }
 
@@ -12,11 +13,14 @@ export function A3GeneralProgress({
   currentStep, 
   totalSteps, 
   currentLabel,
-  isCompleted = false,  // Module is not completed by default
+  completedSections = 0,      // Default to 0 completed sections
+  totalSections = 4,          // Pillar 3 has 4 sections
   variant = 'default'
 }: GeneralProgressProps) {
-  // Only show progress if module is completed, otherwise 0%
-  const percent = isCompleted ? 100 : 0
+  // Progress is based on COMPLETED SECTIONS only
+  // Each section = 25% (4 sections total)
+  const percent = (completedSections / totalSections) * 100
+  const isFullyComplete = completedSections === totalSections
   
   if (variant === 'compact') {
     return (
@@ -29,8 +33,13 @@ export function A3GeneralProgress({
               <span className="text-xs text-training font-medium">{currentLabel}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-white/50">{isCompleted ? 'Completado' : `Paso ${currentStep} de ${totalSteps}`}</span>
-              <span className="text-sm font-semibold text-white">{percent}%</span>
+              <span className="text-xs text-white/50">
+                {isFullyComplete 
+                  ? 'Pillar 3 Completado!' 
+                  : `${completedSections}/${totalSections} secciones`
+                }
+              </span>
+              <span className="text-sm font-semibold text-white">{Math.round(percent)}%</span>
             </div>
           </div>
           <div className="h-1 bg-white/10 rounded-full overflow-hidden">
@@ -57,8 +66,13 @@ export function A3GeneralProgress({
             <span className="text-xs text-training font-medium">{currentLabel}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-white/50">{isCompleted ? 'Completado' : `Paso ${currentStep} de ${totalSteps}`}</span>
-            <span className="text-sm font-semibold text-white">{percent}%</span>
+            <span className="text-xs text-white/50">
+              {isFullyComplete 
+                ? 'Pillar 3 Completado!' 
+                : `${completedSections}/${totalSections} secciones`
+              }
+            </span>
+            <span className="text-sm font-semibold text-white">{Math.round(percent)}%</span>
           </div>
         </div>
         <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">

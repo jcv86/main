@@ -239,7 +239,8 @@ export default function GuidedInterviewPage() {
         currentStep={currentQuestionIndex + 1}
         totalSteps={GUIDED_INTERVIEW_QUESTIONS.length}
         currentLabel={`Pregunta ${currentQuestionIndex + 1}`}
-        isCompleted={false}  // Not completed until practice finishes
+        completedSections={0}
+        totalSections={4}
       />
       
       <div className="max-w-3xl mx-auto space-y-6 px-4 py-8">

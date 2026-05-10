@@ -61,7 +61,8 @@ export default function StructuredSimulationPage() {
           currentStep={1}
           totalSteps={3}
           currentLabel="Simulación Estructurada"
-          isCompleted={false}  // Not completed until practice finishes
+          completedSections={0}
+          totalSections={4}
         />
 
         <div className="flex-shrink-0 border-b border-muted/80 bg-background">

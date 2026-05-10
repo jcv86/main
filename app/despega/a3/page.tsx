@@ -1,28 +1,57 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, Zap, TrendingUp, Award, Rocket, Loader2 } from 'lucide-react'
+import { ArrowRight, Zap, Award, Rocket, Loader2, Coins } from 'lucide-react'
 import { mockDashboardData, DashboardState } from './data/mock-dashboard'
+import { A3GeneralProgress } from '@/components/a3-general-progress'
 import { ProgressBar } from '@/components/a3/progress-bar'
 import { SkillsGrid } from '@/components/a3/skills-grid'
 import { LevelsAccordion } from '@/components/a3/levels-accordion'
 import { BadgesGrid } from '@/components/a3/badges-grid'
+import { Pillar3DetailedProgress } from '@/components/pillar3-detailed-progress'
 
 export default function A3EntrenamientoIntensivo() {
+  const searchParams = useSearchParams()
+  const refreshParam = searchParams?.get('refresh')
+  
   const [dashboardData, setDashboardData] = useState<DashboardState>(mockDashboardData)
   const [hoveredStat, setHoveredStat] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [completedSections, setCompletedSections] = useState(0)
 
-  // Fetch real user progress on mount
+  // Calculate completed sections (Pillar 3 has 4 sections)
+  // A section is complete when all its modules are 100% done
+  const calculateCompletedSections = (modules: typeof mockDashboardData.modules) => {
+    // Group modules by section (level)
+    const sections = [1, 2, 3, 4] // 4 sections in Pillar 3
+    let completed = 0
+
+    sections.forEach(sectionNum => {
+      const sectionModules = modules.filter(m => m.level === sectionNum)
+      const allComplete = sectionModules.length > 0 && sectionModules.every(m => m.status === 'completed')
+      if (allComplete) completed++
+    })
+
+    return completed
+  }
+
+  // Fetch real user progress on mount and on route change
   useEffect(() => {
     const fetchProgress = async () => {
       try {
+        console.log('[v0] A3 page: Fetching user progress...')
         const response = await fetch('/api/a3/user-progress')
         if (response.ok) {
           const { progress } = await response.json()
+          console.log('[v0] A3 page: API response received', {
+            moduleStates: progress.moduleStates,
+            completedModuleIds: progress.completedModuleIds,
+            totalXp: progress.totalXp,
+          })
           
           // Update dashboard data with real progress
           setDashboardData(prev => {
@@ -31,6 +60,8 @@ export default function A3EntrenamientoIntensivo() {
             updated.progressPct = progress.progressPct
             updated.totalXp = progress.totalXp
             updated.maxXp = progress.maxXp
+            updated.totalDtc = progress.totalDtc ?? 0
+            updated.maxDtc = progress.maxDtc ?? 100
             updated.nextMilestone = progress.nextMilestone
             updated.nextReward = progress.nextReward
             updated.completedModules = progress.completedModules
@@ -39,6 +70,7 @@ export default function A3EntrenamientoIntensivo() {
             updated.modules = prev.modules.map(module => {
               const status = progress.moduleStates[module.id]
               if (status) {
+                console.log(`[v0] Module ${module.id} status: ${module.status} -> ${status}`)
                 return {
                   ...module,
                   status: status as 'available' | 'in_progress' | 'completed' | 'locked',
@@ -49,6 +81,14 @@ export default function A3EntrenamientoIntensivo() {
               return module
             })
 
+            // Update module states and completed IDs for detailed progress component
+            updated.moduleStates = progress.moduleStates
+            updated.completedModuleIds = progress.completedModuleIds
+
+            // Calculate completed sections for the general progress bar
+            const sections = calculateCompletedSections(updated.modules)
+            setCompletedSections(sections)
+
             // Update skills with real values
             updated.skills = prev.skills.map(skill => ({
               ...skill,
@@ -57,16 +97,31 @@ export default function A3EntrenamientoIntensivo() {
 
             return updated
           })
+        } else {
+          console.warn('[v0] A3 page: API returned non-OK status', response.status)
         }
-      } catch {
+      } catch (error) {
+        console.warn('[v0] A3 page: API fetch failed, using mock data', error)
         // Use mock data if API fails
       } finally {
         setIsLoading(false)
       }
     }
 
+    // Initial fetch on mount
     fetchProgress()
-  }, [])
+
+    // Refetch when page becomes visible (user returns from subpage)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        console.log('[v0] Page visible, refreshing progress...')
+        fetchProgress()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+  }, [refreshParam])
 
   if (isLoading) {
     return (
@@ -150,9 +205,9 @@ export default function A3EntrenamientoIntensivo() {
 
           {/* Epic Stats */}
           {[
-            { icon: Zap, label: 'XP Ganados', value: `${dashboardData.totalXp}`, max: `/${dashboardData.maxXp}`, color: 'from-yellow-500/50 to-training/50' },
-            { icon: Award, label: 'Completados', value: `${dashboardData.completedModules}`, max: `/${dashboardData.totalModules}`, color: 'from-green-500/50 to-training/50' },
-            { icon: TrendingUp, label: 'Progreso', value: `${dashboardData.progressPct}`, max: '%', color: 'from-blue-500/50 to-training/50' }
+            { icon: Zap, label: 'XP Ganados', value: `${dashboardData.totalXp}`, max: `/${dashboardData.maxXp}`, color: 'from-cyan-500/50 to-training/50' },
+            { icon: Coins, label: 'DTC Ganados', value: `${dashboardData.totalDtc}`, max: `/${dashboardData.maxDtc}`, color: 'from-yellow-500/50 to-training/50' },
+            { icon: Award, label: 'Módulos', value: `${dashboardData.completedModules}`, max: `/${dashboardData.totalModules}`, color: 'from-green-500/50 to-training/50' },
           ].map((stat, i) => {
             const Icon = stat.icon
             return (
@@ -205,7 +260,33 @@ export default function A3EntrenamientoIntensivo() {
             <h2 className="text-3xl font-black text-white">Tu Jornada Épica</h2>
             <p className="text-white/70">Completa cada nivel para desbloquear superpoderes y entrenamientos legendarios.</p>
           </div>
+          
+          {/* General Progress Bar - Shows Pillar 3 completion based on sections */}
+          <A3GeneralProgress 
+            currentStep={1}
+            totalSteps={4}
+            currentLabel="Pillar 3 - Entrenamiento Intensivo"
+            completedSections={completedSections}
+            totalSections={4}
+            variant="default"
+          />
+          
           <LevelsAccordion modules={dashboardData.modules} />
+        </div>
+
+        {/* ========== DETAILED PILLAR 3 PROGRESS ========== */}
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-black text-white">Desglose Detallado de Progreso</h2>
+            <p className="text-white/70">Visualiza tu avance módulo por módulo en todos los 4 niveles.</p>
+          </div>
+          
+          <Pillar3DetailedProgress
+            moduleStates={dashboardData.moduleStates || {}}
+            completedModuleIds={dashboardData.completedModuleIds || []}
+            totalXp={dashboardData.totalXp}
+            totalDtc={dashboardData.totalDtc}
+          />
         </div>
 
         {/* ========== BADGES SECTION - EPIC ========== */}
