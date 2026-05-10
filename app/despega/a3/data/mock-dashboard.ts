@@ -50,6 +50,8 @@ export interface DashboardState {
   skills: Skill[]
   modules: Module[]
   badges: Badge[]
+  moduleStates?: { [key: string]: 'locked' | 'available' | 'in_progress' | 'completed' }
+  completedModuleIds?: string[]
 }
 
 // Mock data - simulating a user with some progress
@@ -294,5 +296,22 @@ export const mockDashboardData: DashboardState = {
       unlocked: false,
       icon: 'target'
     }
-  ]
+  ],
+
+  // Module states for comprehensive progress bar
+  moduleStates: {
+    'auditoria-inicial': 'completed',
+    'metodo-star': 'locked',
+    'cv-inteligente': 'locked',
+    'analisis-vacante': 'locked',
+    'analisis-multicanal': 'locked',
+    'entrevista-guiada': 'locked',
+    'entrevista-estructurada': 'locked',
+    'entrevista-desafiante': 'locked',
+    'entrevista-conversacional': 'locked',
+    'simulacion-completa': 'locked',
+  },
+
+  // Completed module IDs for tracking XP
+  completedModuleIds: ['auditoria-inicial']
 }

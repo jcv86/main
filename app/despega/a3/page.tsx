@@ -11,6 +11,7 @@ import { ProgressBar } from '@/components/a3/progress-bar'
 import { SkillsGrid } from '@/components/a3/skills-grid'
 import { LevelsAccordion } from '@/components/a3/levels-accordion'
 import { BadgesGrid } from '@/components/a3/badges-grid'
+import { Pillar3DetailedProgress } from '@/components/pillar3-detailed-progress'
 
 export default function A3EntrenamientoIntensivo() {
   const [dashboardData, setDashboardData] = useState<DashboardState>(mockDashboardData)
@@ -239,6 +240,20 @@ export default function A3EntrenamientoIntensivo() {
           />
           
           <LevelsAccordion modules={dashboardData.modules} />
+        </div>
+
+        {/* ========== DETAILED PILLAR 3 PROGRESS ========== */}
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-black text-white">Desglose Detallado de Progreso</h2>
+            <p className="text-white/70">Visualiza tu avance módulo por módulo en todos los 4 niveles.</p>
+          </div>
+          
+          <Pillar3DetailedProgress
+            moduleStates={dashboardData.moduleStates || {}}
+            completedModuleIds={dashboardData.completedModuleIds || []}
+            totalXp={dashboardData.totalXp}
+          />
         </div>
 
         {/* ========== BADGES SECTION - EPIC ========== */}
