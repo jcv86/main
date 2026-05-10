@@ -5,6 +5,17 @@ export async function GET(request: NextRequest) {
   try {
     const supabase = await createClient()
     
+    // Check session first
+    const { data: { session } } = await supabase.auth.getSession()
+    
+    if (!session) {
+      console.warn('[v0] API interview-0/get: No active session found')
+      return NextResponse.json(
+        { error: 'No active session' },
+        { status: 401 }
+      )
+    }
+    
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
       return NextResponse.json(

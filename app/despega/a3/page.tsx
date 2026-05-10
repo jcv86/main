@@ -74,7 +74,11 @@ export default function A3EntrenamientoIntensivo() {
     const fetchProgress = async () => {
       try {
         console.log('[v0] A3 page: Fetching user progress...')
-        const response = await fetch('/api/a3/user-progress')
+        const response = await fetch('/api/a3/user-progress', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include', // CRITICAL: Send session cookies
+        })
         if (response.ok) {
           const { progress } = await response.json()
           console.log('[v0] A3 page: API response received', {

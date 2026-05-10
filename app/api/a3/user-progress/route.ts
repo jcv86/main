@@ -10,17 +10,38 @@ import {
   resolveCanonicalId,
 } from '@/lib/pillar3-config'
 
-export async function GET() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
+export async function GET(request: Request) {
   try {
+    const supabase = await createClient()
+    
+    // Check session first to avoid unnecessary warnings
+    const { data: { session } } = await supabase.auth.getSession()
+    
+    if (!session) {
+      console.warn('[v0] API user-progress: No active session found', {
+        timestamp: new Date().toISOString(),
+        url: request.url
+      })
+      return NextResponse.json(
+        { error: 'No active session' },
+        { status: 401 }
+      )
+    }
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      console.warn('[v0] API user-progress: Session exists but no user', {
+        timestamp: new Date().toISOString(),
+        sessionId: session.id?.substring(0, 8)
+      })
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
+    }
+
+    console.log('[v0] API user-progress: Processing request for user', user.id.substring(0, 8))
     // Fetch completed training modules for canonical XP/DTC calculation
     const { data: completions } = await supabase
       .from('a3_training_module_completions')
