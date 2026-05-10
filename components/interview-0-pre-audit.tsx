@@ -80,10 +80,20 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
     setResults(newResults)
 
     try {
-      await saveInterview0Status({
-        [blockName]: data,
+      // Map blockName to the correct database field names
+      const fieldMap = {
+        environment: 'environment_check',
+        presence: 'presence_check',
+        audioCamera: 'audio_check',
+        preparation: 'preparation_check'
+      } as const
+      
+      const saveData: any = {
         interview_0_status: 'in_progress'
-      })
+      }
+      saveData[fieldMap[blockName]] = data
+      
+      await saveInterview0Status(saveData)
     } catch (err) {
       console.error(`[v0] Failed to save ${blockName}:`, err)
     }
