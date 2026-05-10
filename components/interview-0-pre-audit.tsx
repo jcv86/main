@@ -136,10 +136,10 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
 
     // Save final state in background - don't block completion
     try {
-      const finalData = {
+      const finalData: Interview0Status = {
         interview_0_completed: true,
         interview_0_score: totalScore,
-        interview_0_status: 'completed',
+        interview_0_status: 'completed' as const,
         environment_check: results.environment,
         presence_check: results.presence,
         audio_check: results.audioCamera,
