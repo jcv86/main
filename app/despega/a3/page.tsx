@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, Zap, Award, Rocket, Loader2, Coins } from 'lucide-react'
+import { ArrowRight, Loader2, Lock, CheckCircle2 } from 'lucide-react'
 import { mockDashboardData, DashboardState } from './data/mock-dashboard'
 import { A3GeneralProgress } from '@/components/a3-general-progress'
 import { ProgressBar } from '@/components/a3/progress-bar'
@@ -19,7 +19,6 @@ export default function A3EntrenamientoIntensivo() {
   const refreshParam = searchParams?.get('refresh')
   
   const [dashboardData, setDashboardData] = useState<DashboardState>(mockDashboardData)
-  const [hoveredStat, setHoveredStat] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [completedSections, setCompletedSections] = useState(0)
 
@@ -199,80 +198,38 @@ export default function A3EntrenamientoIntensivo() {
           </div>
         </div>
 
-        {/* ========== EPIC STATE CARDS ========== */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Main Level Card */}
-          <div className="md:col-span-2 group relative overflow-hidden rounded-xl border border-training/40 bg-gradient-to-br from-training/20 to-training/5 p-8 hover:border-training/60 transition-all duration-300 shadow-lg shadow-training/10 hover:shadow-training/30">
-            <div className="absolute inset-0 bg-gradient-to-r from-training/0 via-training/10 to-training/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            
-            <div className="relative z-10">
-              <p className="text-xs text-training uppercase font-bold tracking-widest mb-4">Estado Actual</p>
-              <h2 className="text-4xl font-black text-transparent bg-gradient-to-r from-white to-white/70 bg-clip-text mb-3">
-                {dashboardData.currentLevel}
-              </h2>
-              <div className="space-y-2">
-                <p className="text-training font-bold">Próximo: {dashboardData.nextMilestone}</p>
-                <p className="text-sm text-white/60">{dashboardData.nextReward}</p>
+        {/* ========== CLEAR PROGRESS & UNLOCK STATUS ========== */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Overall Progress */}
+          <div className="md:col-span-2 rounded-lg border border-training/30 bg-white/5 p-6">
+            <p className="text-sm text-white/60 uppercase font-bold mb-3">Progreso General</p>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <p className="text-white font-semibold">{completedSections} / 4 Niveles Completados</p>
+                <span className="text-training font-bold">{Math.round((completedSections / 4) * 100)}%</span>
+              </div>
+              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                <div 
+                  className="h-full bg-gradient-to-r from-training to-training/60 transition-all duration-500"
+                  style={{ width: `${(completedSections / 4) * 100}%` }}
+                />
               </div>
             </div>
           </div>
 
-          {/* Epic Stats */}
-          {[
-            { icon: Zap, label: 'XP Ganados', value: `${dashboardData.totalXp}`, max: `/${dashboardData.maxXp}`, color: 'from-cyan-500/50 to-training/50' },
-            { icon: Coins, label: 'DTC Ganados', value: `${dashboardData.totalDtc}`, max: `/${dashboardData.maxDtc}`, color: 'from-yellow-500/50 to-training/50' },
-            { icon: Award, label: 'Módulos', value: `${dashboardData.completedModules}`, max: `/${dashboardData.totalModules}`, color: 'from-green-500/50 to-training/50' },
-          ].map((stat, i) => {
-            const Icon = stat.icon
-            return (
-              <div
-                key={i}
-                className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-6 hover:bg-white/10 hover:border-training/50 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-training/30"
-                onMouseEnter={() => setHoveredStat(i)}
-                onMouseLeave={() => setHoveredStat(null)}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}></div>
-                <div className="relative z-10">
-                  <Icon className={`w-6 h-6 mb-3 transition-all duration-300 ${hoveredStat === i ? 'text-training scale-125 animate-bounce' : 'text-white/60'}`} />
-                  <p className="text-xs text-white/60 uppercase font-bold tracking-wide mb-2">{stat.label}</p>
-                  <div className="flex items-baseline gap-1">
-                    <p className="text-4xl font-black text-white">{stat.value}</p>
-                    <p className="text-sm text-white/60 font-bold">{stat.max}</p>
-                  </div>
-                </div>
-              </div>
-            )
-          })}
-        </div>
-
-        {/* ========== EPIC PROGRESS BAR ========== */}
-        <div className="group relative overflow-hidden rounded-xl border border-training/30 bg-gradient-to-r from-training/15 to-training/5 p-8 hover:border-training/50 transition-all duration-300 shadow-2xl shadow-training/20">
-          <div className="absolute inset-0 bg-gradient-to-r from-training/20 via-transparent to-training/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <div className="relative z-10">
-            <ProgressBar
-              percentage={dashboardData.progressPct}
-              currentXp={dashboardData.totalXp}
-              maxXp={dashboardData.maxXp}
-              label="Progreso hacia Entrevista Real"
-              animated={true}
-            />
+          {/* XP Reward Tracker */}
+          <div className="rounded-lg border border-training/30 bg-white/5 p-6">
+            <p className="text-sm text-white/60 uppercase font-bold mb-3">XP Ganados</p>
+            <p className="text-3xl font-bold text-training">{dashboardData.totalXp}</p>
+            <p className="text-xs text-white/50 mt-1">de {dashboardData.maxXp} XP totales</p>
           </div>
-        </div>
-
-        {/* ========== SKILLS SECTION - EPIC ========== */}
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-black text-white">Habilidades en Combate</h2>
-            <p className="text-white/70">Cada módulo fortalece una habilidad. Mira tu arsenal crecer.</p>
-          </div>
-          <SkillsGrid skills={dashboardData.skills} />
         </div>
 
         {/* ========== EPIC LEVELS SECTION ========== */}
         <div className="space-y-6">
           <div className="space-y-2">
-            <h2 className="text-3xl font-black text-white">Tu Jornada Épica</h2>
-            <p className="text-white/70">Completa cada nivel para desbloquear superpoderes y entrenamientos legendarios.</p>
+            <h2 className="text-2xl font-bold text-white">Tu Camino de Aprendizaje</h2>
+            <p className="text-white/70">Completa cada nivel para desbloquear el siguiente.</p>
           </div>
           
           {/* General Progress Bar - Shows Pillar 3 completion based on sections */}
@@ -291,8 +248,8 @@ export default function A3EntrenamientoIntensivo() {
         {/* ========== DETAILED PILLAR 3 PROGRESS ========== */}
         <div className="space-y-6">
           <div className="space-y-2">
-            <h2 className="text-3xl font-black text-white">Desglose Detallado de Progreso</h2>
-            <p className="text-white/70">Visualiza tu avance módulo por módulo en todos los 4 niveles.</p>
+            <h2 className="text-2xl font-bold text-white">Estado de Cada Módulo</h2>
+            <p className="text-white/70">Visualiza tu progreso por módulo y desbloquea el siguiente al completar.</p>
           </div>
           
           <Pillar3DetailedProgress
@@ -303,78 +260,37 @@ export default function A3EntrenamientoIntensivo() {
           />
         </div>
 
-        {/* ========== BADGES SECTION - EPIC ========== */}
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-black text-white">Insignias & Logros</h2>
-            <p className="text-white/70">Desbloquea badges exclusivas mientras avanzas. ¡Colecciónalas todas!</p>
+        {/* ========== SIMPLE NEXT STEP MESSAGE ========== */}
+        <div className="rounded-lg border border-training/30 bg-white/5 p-8">
+          <div className="space-y-4">
+            <h3 className="text-xl font-bold text-white">Tu Próximo Paso</h3>
+            {completedSections === 0 && (
+              <p className="text-white/80">Comienza con la <strong>Auditoría Inicial</strong>. Este es el primer paso para prepararte correctamente.</p>
+            )}
+            {completedSections === 1 && (
+              <p className="text-white/80">Felicidades. Ahora puedes acceder a las <strong>Herramientas de Preparación</strong> para mejorar tu CV y respuestas.</p>
+            )}
+            {completedSections === 2 && (
+              <p className="text-white/80">Excelente progreso. Continúa con los <strong>Entrenamientos Progresivos</strong> para ganar experiencia.</p>
+            )}
+            {completedSections === 3 && (
+              <p className="text-white/80">Casi listo. Completa la <strong>Simulación Real</strong> para verificar que estás preparado.</p>
+            )}
+            {completedSections >= 4 && (
+              <p className="text-white/80">¡Completaste todos los niveles! Has ganado <strong>{dashboardData.totalXp} XP</strong> en total.</p>
+            )}
           </div>
-          <BadgesGrid badges={dashboardData.badges} />
-        </div>
-
-        {/* ========== EPIC MOTIVATIONAL MESSAGE ========== */}
-        <div className="group relative overflow-hidden rounded-2xl border-2 border-training/60 bg-gradient-to-r from-training/20 via-training/10 to-training/5 p-8 md:p-12 shadow-2xl shadow-training/30 hover:shadow-training/50 transition-all duration-300">
-          <div className="absolute -inset-1 bg-gradient-to-r from-training/40 via-training/20 to-training/40 opacity-20 group-hover:opacity-40 blur transition-opacity duration-300 -z-10"></div>
-          
-          <div className="relative z-10 space-y-4">
-            <div className="flex items-start gap-4">
-              <div className="flex-1">
-                <h3 className="text-3xl md:text-4xl font-black text-transparent bg-gradient-to-r from-white to-training bg-clip-text mb-3">
-                  {dashboardData.progressPct < 25
-                    ? 'Inicia tu Viaje'
-                    : dashboardData.progressPct < 50
-                    ? 'Acelera tu Entrenamiento'
-                    : dashboardData.progressPct < 75
-                    ? 'Domina las Entrevistas'
-                    : 'Eres Prácticamente Invencible'}
-                </h3>
-                <p className="text-lg md:text-xl text-white/90 leading-relaxed">
-                  {dashboardData.progressPct < 25
-                    ? 'Comienza con la Auditoría Inicial. Este es el cimiento de todo. Revisa tu cámara, luz, audio, presencia y pitch. ¡Tu futuro se construye hoy!'
-                    : dashboardData.progressPct < 50
-                    ? 'Domina el Método STAR y prepara tu CV. Estás construyendo una base sólida que te hará destacar en cualquier entrevista.'
-                    : dashboardData.progressPct < 75
-                    ? 'Es hora de entrenar en entrevistas reales. Comienza con la Guiada y aumenta la dificultad. ¡Cada entrevista es una victoria!'
-                    : '¡Ya estás listo! Realiza la Simulación Real para verificar que estás en top form. ¡Nada puede detenerte ahora!'}
-                </p>
-              </div>
-            </div>
-            
-            <Link href="/despega/a3/entrenamiento-guiado" className="inline-block">
-              <Button className="bg-gradient-to-r from-training to-training/80 hover:shadow-lg hover:shadow-training/60 transition-all transform hover:scale-110 text-white px-8 py-6 text-lg font-bold mt-4">
-                {dashboardData.progressPct < 25 ? 'Comenzar Ahora' : 'Continuar Entrenando'}
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-          </div>
-        </div>
-
-        {/* ========== EPIC FOOTER MESSAGE ========== */}
-        <div className="border-t border-white/10 pt-12 text-center space-y-4">
-          <p className="text-2xl font-black text-transparent bg-gradient-to-r from-training via-white to-training bg-clip-text">
-            La excelencia no es un destino, es un viaje.
-          </p>
-          <p className="text-white/60 text-lg">
-            Cada entrenamiento te acerca más a dominar entrevistas.
-          </p>
         </div>
       </div>
 
-      {/* Animated decorative elements */}
+      {/* Simplified CSS for essential animations */}
       <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
+        @keyframes slideUp {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
-        @keyframes glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(170, 70, 170, 0.3); }
-          50% { box-shadow: 0 0 40px rgba(170, 70, 170, 0.6); }
-        }
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-        .animate-glow {
-          animation: glow 3s ease-in-out infinite;
+        .animate-slideup {
+          animation: slideUp 0.3s ease-out;
         }
       `}</style>
     </div>

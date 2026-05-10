@@ -22,91 +22,19 @@ export interface Module {
   icon?: string
 }
 
-export interface Skill {
-  id: string
-  name: string
-  value: number
-  maxValue: number
-  description: string
-}
-
-export interface Badge {
-  id: string
-  title: string
-  description: string
-  unlocked: boolean
-  icon: string
-}
-
 export interface DashboardState {
-  currentLevel: string
-  progressPct: number
   totalXp: number
   maxXp: number
-  totalDtc: number
-  maxDtc: number
-  nextMilestone: string
-  nextReward: string
-  completedModules: number
-  totalModules: number
-  skills: Skill[]
   modules: Module[]
-  badges: Badge[]
   moduleStates?: { [key: string]: 'locked' | 'available' | 'in_progress' | 'completed' }
   completedModuleIds?: string[]
 }
 
-// Mock data - default zeroed state; real values come from /api/a3/user-progress
+// Mock data - default state; real values come from /api/a3/user-progress
 export const mockDashboardData: DashboardState = {
-  currentLevel: 'Auditoría Inicial',
-  progressPct: 0,
   totalXp: 0,
-  maxXp: 1000,
-  totalDtc: 0,
-  maxDtc: 100,
-  nextMilestone: 'Completar Auditoría Inicial',
-  nextReward: 'Desbloqueas Herramientas de Preparación (4 herramientas)',
-  completedModules: 0,
-  totalModules: 10,
-  
-  skills: [
-    {
-      id: 'presencia',
-      name: 'Presencia',
-      value: 35,
-      maxValue: 100,
-      description: 'Cámara, luz, postura y entorno'
-    },
-    {
-      id: 'claridad',
-      name: 'Claridad',
-      value: 10,
-      maxValue: 100,
-      description: 'Capacidad de responder con foco'
-    },
-    {
-      id: 'estructura',
-      name: 'Estructura',
-      value: 0,
-      maxValue: 100,
-      description: 'Orden narrativo y Método STAR'
-    },
-    {
-      id: 'preparacion',
-      name: 'Preparación',
-      value: 25,
-      maxValue: 100,
-      description: 'CV, vacante y contexto'
-    },
-    {
-      id: 'manejo-presion',
-      name: 'Manejo de Presión',
-      value: 0,
-      maxValue: 100,
-      description: 'Preguntas difíciles y simulación'
-    }
-  ],
-  
+  maxXp: 280, // 70 per level x 4 levels
+
   modules: [
     // NIVEL 1: Auditoría Inicial
     {
@@ -238,14 +166,21 @@ export const mockDashboardData: DashboardState = {
     }
   ],
   
-  badges: [
-    {
-      id: 'entorno-preparado',
-      title: 'Entorno Preparado',
-      description: 'Completaste la revisión básica de cámara, luz, audio y presencia.',
-      unlocked: true,
-      icon: 'camera'
-    },
+  // Audit completed - Level 2 unlocked
+  completedModuleIds: ['auditoria-inicial'],
+  
+  moduleStates: {
+    'auditoria-inicial': 'completed',
+    'metodo-star': 'available',
+    'cv-inteligente': 'available',
+    'analisis-vacante': 'available',
+    'analisis-multicanal': 'available',
+    'entrenamiento-guiado': 'locked',
+    'entrenamiento-estructurado': 'locked',
+    'entrenamiento-desafiante': 'locked',
+    'entrenamiento-conversacional': 'locked',
+    'simulacion-real': 'locked',
+  },
     {
       id: 'respuesta-estructurada',
       title: 'Respuesta Estructurada',
