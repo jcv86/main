@@ -18,16 +18,33 @@ export async function GET() {
       .eq('user_id', user.id)
       .single()
 
-    // Fetch completed training modules
+    // Fetch completed training modules for XP calculation
     const { data: completions } = await supabase
       .from('a3_training_module_completions')
-      .select('training_type, xp_amount, is_first_completion, first_completion_at')
+      .select('training_type, xp_amount, is_first_completion')
       .eq('user_id', user.id)
+
+    // Calculate total XP earned from completed trainings
+    let totalXp = 0
+    if (completions) {
+      completions.forEach((c) => {
+        // Only count XP from first completions
+        if (c.is_first_completion) {
+          totalXp += c.xp_amount || 0
+        }
+      })
+    }
+
+    // If no trainings completed, use profile total_xp as fallback
+    if (totalXp === 0 && profile?.total_xp) {
+      totalXp = profile.total_xp
+    }
+
+    console.log('[v0] User progress calculation:', { user_id: user.id, totalXp, completions_count: completions?.length, progressPct })
 
     // Calculate progress based on completions
     const completedModules = completions?.length || 0
     const totalModules = 9 // Total modules in the journey
-    const totalXp = profile?.total_xp || 0
     const maxXp = 1000
     const progressPct = Math.min(Math.round((totalXp / maxXp) * 100), 100)
 
