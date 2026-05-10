@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { ChevronDown, ChevronUp, Lock, CheckCircle2, Circle, Coins, Zap } from 'lucide-react'
+import { ChevronDown, ChevronUp, Lock, CheckCircle2, Circle, Coins, Zap, Play } from 'lucide-react'
+import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import {
@@ -323,35 +324,48 @@ export function Pillar3DetailedProgress({
                                 </p>
                               </div>
                             </div>
-                            <div className="text-right text-xs space-y-0.5 ml-4">
-                              <div className="flex items-center justify-end gap-1">
-                                <Zap
-                                  className={`w-3 h-3 ${
-                                    isCompleted ? 'text-green-400' : 'text-cyan-400/70'
-                                  }`}
-                                />
-                                <span
-                                  className={`font-semibold ${
-                                    isCompleted ? 'text-green-400' : 'text-white/70'
-                                  }`}
-                                >
-                                  {isCompleted ? module.xp : 0}/{module.xp} XP
-                                </span>
+                            <div className="flex items-center gap-3 ml-4">
+                              <div className="text-right text-xs space-y-0.5">
+                                <div className="flex items-center justify-end gap-1">
+                                  <Zap
+                                    className={`w-3 h-3 ${
+                                      isCompleted ? 'text-green-400' : 'text-cyan-400/70'
+                                    }`}
+                                  />
+                                  <span
+                                    className={`font-semibold ${
+                                      isCompleted ? 'text-green-400' : 'text-white/70'
+                                    }`}
+                                  >
+                                    {isCompleted ? module.xp : 0}/{module.xp} XP
+                                  </span>
+                                </div>
+                                <div className="flex items-center justify-end gap-1">
+                                  <Coins
+                                    className={`w-3 h-3 ${
+                                      isCompleted ? 'text-green-400' : 'text-yellow-400/70'
+                                    }`}
+                                  />
+                                  <span
+                                    className={`font-semibold ${
+                                      isCompleted ? 'text-green-400' : 'text-white/70'
+                                    }`}
+                                  >
+                                    {isCompleted ? module.dtc : 0}/{module.dtc} DTC
+                                  </span>
+                                </div>
                               </div>
-                              <div className="flex items-center justify-end gap-1">
-                                <Coins
-                                  className={`w-3 h-3 ${
-                                    isCompleted ? 'text-green-400' : 'text-yellow-400/70'
-                                  }`}
-                                />
-                                <span
-                                  className={`font-semibold ${
-                                    isCompleted ? 'text-green-400' : 'text-white/70'
-                                  }`}
+                              
+                              {/* Launch button for audit module */}
+                              {moduleId === 'auditoria-inicial' && !isCompleted && (
+                                <Link
+                                  href="/despega/interview-0"
+                                  className="px-3 py-1.5 bg-cyan-600 hover:bg-cyan-700 text-white text-xs font-semibold rounded-md flex items-center gap-1.5 transition whitespace-nowrap"
                                 >
-                                  {isCompleted ? module.dtc : 0}/{module.dtc} DTC
-                                </span>
-                              </div>
+                                  <Play className="w-3.5 h-3.5" />
+                                  Comenzar
+                                </Link>
+                              )}
                             </div>
                           </div>
 
