@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ArrowRight, Zap, TrendingUp, Award, Rocket, Loader2 } from 'lucide-react'
 import { mockDashboardData, DashboardState } from './data/mock-dashboard'
+import { A3GeneralProgress } from '@/components/a3-general-progress'
 import { ProgressBar } from '@/components/a3/progress-bar'
 import { SkillsGrid } from '@/components/a3/skills-grid'
 import { LevelsAccordion } from '@/components/a3/levels-accordion'
@@ -15,6 +16,23 @@ export default function A3EntrenamientoIntensivo() {
   const [dashboardData, setDashboardData] = useState<DashboardState>(mockDashboardData)
   const [hoveredStat, setHoveredStat] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [completedSections, setCompletedSections] = useState(0)
+
+  // Calculate completed sections (Pillar 3 has 4 sections)
+  // A section is complete when all its modules are 100% done
+  const calculateCompletedSections = (modules: typeof mockDashboardData.modules) => {
+    // Group modules by section (level)
+    const sections = [1, 2, 3, 4] // 4 sections in Pillar 3
+    let completed = 0
+
+    sections.forEach(sectionNum => {
+      const sectionModules = modules.filter(m => m.level === sectionNum)
+      const allComplete = sectionModules.length > 0 && sectionModules.every(m => m.status === 'completed')
+      if (allComplete) completed++
+    })
+
+    return completed
+  }
 
   // Fetch real user progress on mount
   useEffect(() => {
@@ -48,6 +66,10 @@ export default function A3EntrenamientoIntensivo() {
               }
               return module
             })
+
+            // Calculate completed sections for the general progress bar
+            const sections = calculateCompletedSections(updated.modules)
+            setCompletedSections(sections)
 
             // Update skills with real values
             updated.skills = prev.skills.map(skill => ({
@@ -205,6 +227,17 @@ export default function A3EntrenamientoIntensivo() {
             <h2 className="text-3xl font-black text-white">Tu Jornada Épica</h2>
             <p className="text-white/70">Completa cada nivel para desbloquear superpoderes y entrenamientos legendarios.</p>
           </div>
+          
+          {/* General Progress Bar - Shows Pillar 3 completion based on sections */}
+          <A3GeneralProgress 
+            currentStep={1}
+            totalSteps={4}
+            currentLabel="Pillar 3 - Entrenamiento Intensivo"
+            completedSections={completedSections}
+            totalSections={4}
+            variant="default"
+          />
+          
           <LevelsAccordion modules={dashboardData.modules} />
         </div>
 
