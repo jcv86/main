@@ -115,7 +115,7 @@ export const mockDashboardData: DashboardState = {
       title: 'Entrevista 0 / Auditoría Inicial',
       status: 'in_progress',
       xp: 40,
-      maxXp: 100,
+      maxXp: 70,
       progress: 60,
       description: 'Revisa cámara, luz, audio, fondo y presencia antes de practicar.',
       icon: 'video',
@@ -123,8 +123,7 @@ export const mockDashboardData: DashboardState = {
         { id: 'm1', title: 'Cámara lista', completed: true, xp: 10 },
         { id: 'm2', title: 'Audio listo', completed: true, xp: 10 },
         { id: 'm3', title: 'Luz y fondo revisados', completed: true, xp: 10 },
-        { id: 'm4', title: 'Presencia revisada', completed: false, xp: 10 },
-        { id: 'm5', title: 'Feedback inicial generado', completed: false, xp: 40 }
+        { id: 'm4', title: 'Feedback inicial generado', completed: false, xp: 40 }
       ]
     },
     
