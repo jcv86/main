@@ -168,16 +168,36 @@ export async function POST(request: NextRequest) {
         .eq('user_id', userId)
     }
 
-    console.log('[v0] Training completion saved for user:', userId, 'Training:', training_id, 'Minutes:', tiempo_dedicado_minutos, 'XP:', xpAwarded, 'First:', isFirstCompletion)
+    // Calculate DTC points (10% of XP, min 10, max 50)
+    const dtcPoints = Math.min(50, Math.max(10, Math.floor(xpAwarded * 0.1)))
+
+    // Get current gamification profile to return level info
+    const { data: gamificationProfile } = await supabase
+      .from('user_gamification_profile')
+      .select('current_level, total_xp, current_xp')
+      .eq('user_id', userId)
+      .maybeSingle()
+
+    let currentLevel = gamificationProfile?.current_level || 'Bronze'
+    let totalXP = (gamificationProfile?.total_xp || 0) + xpAwarded
+
+    console.log('[v0] Training completion saved for user:', userId, 'Training:', training_id, 'Minutes:', tiempo_dedicado_minutos, 'XP:', xpAwarded, 'DTC:', dtcPoints, 'First:', isFirstCompletion)
 
     return NextResponse.json({
       success: true,
       message: isFirstCompletion 
-        ? `Training completed! +${xpAwarded} XP earned!` 
-        : 'Great practice! No additional XP (already completed before)',
+        ? `Training completed! +${xpAwarded} XP and +${dtcPoints} DTC earned!` 
+        : 'Great practice! No additional XP/DTC (already completed before)',
       savedMinutes: tiempo_dedicado_minutos || 45,
       xpEarned: xpAwarded,
+      pointsEarned: dtcPoints,
+      level: currentLevel,
+      totalXP: totalXP,
       isFirstCompletion,
+      rewards: isFirstCompletion ? [
+        { type: 'xp', amount: xpAwarded, label: 'Experience Points' },
+        { type: 'dtc', amount: dtcPoints, label: 'DTC Points' }
+      ] : [],
     })
   } catch (error) {
     console.error('[v0] Error in training-completion:', error)
