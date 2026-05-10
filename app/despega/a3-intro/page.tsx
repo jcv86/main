@@ -4,11 +4,25 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
-import { ArrowRight, CheckCircle2 } from 'lucide-react'
+import { ArrowRight, CheckCircle2, Lock } from 'lucide-react'
 import { StepHeader } from '@/components/step-header'
+
+interface InstructorLevel {
+  id: number
+  name: string
+  level: number
+  subtitle: string
+  description: string
+  image: string
+  isLocked: boolean
+  isActive: boolean
+  features: string[]
+  isRecommended?: boolean
+}
 
 export default function A3IntroPage() {
   const [authOk, setAuthOk] = useState(false)
+  const [unlockedLevels, setUnlockedLevels] = useState<number>(1)
   const router = useRouter()
   const supabase = createClient()
 
@@ -35,6 +49,20 @@ export default function A3IntroPage() {
         }
       }
       
+      // Fetch user progress from API
+      try {
+        const response = await fetch('/api/a3-training-progress')
+        if (response.ok) {
+          const { unlockedLevel } = await response.json()
+          setUnlockedLevels(unlockedLevel)
+          console.log('[v0] Unlocked level:', unlockedLevel)
+        } else {
+          console.log('[v0] Could not fetch training progress, using default (level 1)')
+        }
+      } catch (err) {
+        console.log('[v0] Error fetching training progress:', err)
+      }
+      
       const { error: updateError } = await supabase
         .from('despega_user_profiles')
         .upsert({
@@ -52,8 +80,146 @@ export default function A3IntroPage() {
     check()
   }, [supabase, router])
 
+  const instructors: InstructorLevel[] = [
+    {
+      id: 1,
+      name: 'Sofia',
+      level: 1,
+      subtitle: 'Simulación Guiada',
+      description: 'Con hints y orientación. Perfecto para aprender nuevas técnicas y ganar confianza inicial.',
+      image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia-gv1XEYj0ETiDdlWQjVRZrA8U0qTMn1.jpg',
+      isLocked: false,
+      isActive: unlockedLevels >= 1,
+      features: ['Sugerencias en tiempo real', 'Estructura de respuestas', 'Feedback pausado']
+    },
+    {
+      id: 2,
+      name: 'Alexandra',
+      level: 2,
+      subtitle: 'Simulación Estructurada',
+      description: 'Preguntas realistas sin ayuda. Te prepara para escenarios reales con presión moderada.',
+      image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Alexandra-IegPblNEUgXckY71ITZGGLp40c9yBK.jpg',
+      isLocked: unlockedLevels < 2,
+      isActive: unlockedLevels >= 2,
+      isRecommended: true,
+      features: ['Sin pistas durante la prueba', 'Feedback detallado después', 'Análisis de desempeño']
+    },
+    {
+      id: 3,
+      name: 'Bruno',
+      level: 3,
+      subtitle: 'Simulación Desafiante',
+      description: 'Preguntas difíciles bajo presión de tiempo. Máxima dificultad para dominar completamente.',
+      image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bruno-JmnqUbeYI3fT3xFowFVw7COQZuVg8v.jpg',
+      isLocked: unlockedLevels < 3,
+      isActive: unlockedLevels >= 3,
+      features: ['Tiempo limitado stricto', 'Preguntas complejas', 'Feedback competitivo']
+    },
+    {
+      id: 4,
+      name: 'David',
+      level: 4,
+      subtitle: 'Simulación Conversacional',
+      description: 'Simula una conversación natural, flexible y realista. Práctica de interacción auténtica.',
+      image: 'https://hebbkx1anhila5yf.public.blob.vercel-storage.com/David-zAa0Fmmd6xRxwxgJH2bSbv0ROzS9XQ.jpg',
+      isLocked: unlockedLevels < 4,
+      isActive: unlockedLevels >= 4,
+      features: ['Diálogo natural y fluido', 'Adaptación en tiempo real', 'Experiencia de conversación auténtica']
+    }
+  ]
+
   if (!authOk) {
     return <div className="min-h-screen flex items-center justify-center"><p>Verificando...</p></div>
+  }
+
+  const InstructorCard = ({ instructor }: { instructor: InstructorLevel }) => {
+    const handleStartTraining = async () => {
+      if (instructor.isLocked) return
+
+      try {
+        // Navigate to training session
+        router.push(`/despega/a3-entrenamiento/${instructor.level}`)
+      } catch (err) {
+        console.error('[v0] Error navigating to training:', err)
+      }
+    }
+
+    return (
+      <div
+        className={`group relative overflow-hidden rounded-2xl border transition-all duration-300 cursor-pointer ${
+          instructor.isLocked
+            ? 'border-training/20 bg-gradient-to-br from-training/10 to-training/5 opacity-60'
+            : 'border-training/40 bg-gradient-to-br from-training/25 to-training/10 hover:border-training/70 hover:shadow-xl hover:shadow-training/40'
+        }`}
+      >
+        <div className="flex flex-col h-full">
+          {/* Image Container */}
+          <div className="relative h-64 bg-training/20 overflow-hidden flex-shrink-0">
+            <img
+              src={instructor.image}
+              alt={`${instructor.name} - ${instructor.subtitle}`}
+              className={`w-full h-full object-cover transition-transform duration-300 ${
+                !instructor.isLocked && 'group-hover:scale-105'
+              }`}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+
+            {/* Lock Icon - appears on hover for locked cards */}
+            {instructor.isLocked && (
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40">
+                <Lock className="w-16 h-16 text-white" />
+              </div>
+            )}
+
+            {/* Recommended Badge */}
+            {instructor.isRecommended && !instructor.isLocked && (
+              <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-amber-500/90 text-xs font-bold text-white">
+                RECOMENDADO
+              </div>
+            )}
+          </div>
+
+          {/* Content */}
+          <div className={`p-6 space-y-4 flex-1 flex flex-col ${instructor.isLocked && 'opacity-70'}`}>
+            <div>
+              <p className="text-xs font-bold uppercase tracking-widest text-training/80 mb-2">Nivel {instructor.level}</p>
+              <h3 className="text-2xl font-bold text-white mb-1">{instructor.name}</h3>
+              <p className="text-sm font-semibold text-white/70">{instructor.subtitle}</p>
+            </div>
+
+            <p className="text-white/80 text-sm leading-relaxed flex-1">
+              {instructor.description}
+            </p>
+
+            <div className="pt-4 space-y-2 border-t border-training/20">
+              <p className="text-xs text-white/60 font-semibold">Incluye:</p>
+              <ul className="space-y-1.5 text-xs text-white/70">
+                {instructor.features.map((feature, idx) => (
+                  <li key={idx} className="flex items-start gap-2">
+                    <span className="text-training mt-1">→</span>
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <button
+              disabled={instructor.isLocked}
+              onClick={handleStartTraining}
+              className={`mt-4 w-full py-2 px-4 rounded-lg font-semibold transition-all duration-200 text-sm ${
+                instructor.isLocked
+                  ? 'bg-training/10 border border-training/20 text-white/50 cursor-not-allowed'
+                  : instructor.isActive
+                    ? 'bg-training/30 hover:bg-training/40 border border-training/60 text-white'
+                    : 'bg-training/20 hover:bg-training/30 border border-training/40 text-white'
+              }`}
+            >
+              {instructor.isLocked ? 'Bloqueado' : `Comenzar con ${instructor.name}`}
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -130,208 +296,9 @@ export default function A3IntroPage() {
             <h2 className="text-3xl font-bold text-white mb-6">Elige tu Modalidad de Entrenamiento</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Sofia - Guiada */}
-              <div className="group relative overflow-hidden rounded-2xl border border-training/40 bg-gradient-to-br from-training/25 to-training/10 hover:border-training/70 transition-all duration-300 hover:shadow-xl hover:shadow-training/40 cursor-pointer">
-                <div className="flex flex-col h-full">
-                  {/* Image Container */}
-                  <div className="relative h-64 bg-training/20 overflow-hidden flex-shrink-0">
-                    <img
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia-gv1XEYj0ETiDdlWQjVRZrA8U0qTMn1.jpg"
-                      alt="Sofia - Simulación Guiada"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 space-y-4 flex-1 flex flex-col">
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-widest text-training/80 mb-2">Nivel 1</p>
-                      <h3 className="text-2xl font-bold text-white mb-1">Sofia</h3>
-                      <p className="text-sm font-semibold text-white/70">Simulación Guiada</p>
-                    </div>
-
-                    <p className="text-white/80 text-sm leading-relaxed flex-1">
-                      Con hints y orientación. Perfecto para aprender nuevas técnicas y ganar confianza inicial.
-                    </p>
-
-                    <div className="pt-4 space-y-2 border-t border-training/20">
-                      <p className="text-xs text-white/60 font-semibold">Incluye:</p>
-                      <ul className="space-y-1.5 text-xs text-white/70">
-                        <li className="flex items-start gap-2">
-                          <span className="text-training mt-1">→</span>
-                          <span>Sugerencias en tiempo real</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-training mt-1">→</span>
-                          <span>Estructura de respuestas</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-training mt-1">→</span>
-                          <span>Feedback pausado</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <button className="mt-4 w-full py-2 px-4 rounded-lg bg-training/20 hover:bg-training/30 border border-training/40 text-white font-semibold transition-all duration-200 text-sm">
-                      Comenzar con Sofia
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Alexandra - Estructurada */}
-              <div className="group relative overflow-hidden rounded-2xl border border-training/40 bg-gradient-to-br from-training/25 to-training/10 hover:border-training/70 transition-all duration-300 hover:shadow-xl hover:shadow-training/40 cursor-pointer">
-                <div className="flex flex-col h-full">
-                  {/* Image Container */}
-                  <div className="relative h-64 bg-training/20 overflow-hidden flex-shrink-0">
-                    <img
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Alexandra-IegPblNEUgXckY71ITZGGLp40c9yBK.jpg"
-                      alt="Alexandra - Simulación Estructurada"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                    <div className="absolute top-3 right-3 px-3 py-1 rounded-full bg-amber-500/90 text-xs font-bold text-white">
-                      RECOMENDADO
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 space-y-4 flex-1 flex flex-col">
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-widest text-training/80 mb-2">Nivel 2</p>
-                      <h3 className="text-2xl font-bold text-white mb-1">Alexandra</h3>
-                      <p className="text-sm font-semibold text-white/70">Simulación Estructurada</p>
-                    </div>
-
-                    <p className="text-white/80 text-sm leading-relaxed flex-1">
-                      Preguntas realistas sin ayuda. Te prepara para escenarios reales con presión moderada.
-                    </p>
-
-                    <div className="pt-4 space-y-2 border-t border-training/20">
-                      <p className="text-xs text-white/60 font-semibold">Incluye:</p>
-                      <ul className="space-y-1.5 text-xs text-white/70">
-                        <li className="flex items-start gap-2">
-                          <span className="text-training mt-1">→</span>
-                          <span>Sin pistas durante la prueba</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-training mt-1">→</span>
-                          <span>Feedback detallado después</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-training mt-1">→</span>
-                          <span>Análisis de desempeño</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <button className="mt-4 w-full py-2 px-4 rounded-lg bg-training/30 hover:bg-training/40 border border-training/60 text-white font-semibold transition-all duration-200 text-sm">
-                      Comenzar con Alexandra
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bruno - Desafiante */}
-              <div className="group relative overflow-hidden rounded-2xl border border-training/40 bg-gradient-to-br from-training/25 to-training/10 hover:border-training/70 transition-all duration-300 hover:shadow-xl hover:shadow-training/40 cursor-pointer">
-                <div className="flex flex-col h-full">
-                  {/* Image Container */}
-                  <div className="relative h-64 bg-training/20 overflow-hidden flex-shrink-0">
-                    <img
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Bruno-JmnqUbeYI3fT3xFowFVw7COQZuVg8v.jpg"
-                      alt="Bruno - Simulación Desafiante"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 space-y-4 flex-1 flex flex-col">
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-widest text-training/80 mb-2">Nivel 3</p>
-                      <h3 className="text-2xl font-bold text-white mb-1">Bruno</h3>
-                      <p className="text-sm font-semibold text-white/70">Simulación Desafiante</p>
-                    </div>
-
-                    <p className="text-white/80 text-sm leading-relaxed flex-1">
-                      Preguntas difíciles bajo presión de tiempo. Máxima dificultad para dominar completamente.
-                    </p>
-
-                    <div className="pt-4 space-y-2 border-t border-training/20">
-                      <p className="text-xs text-white/60 font-semibold">Incluye:</p>
-                      <ul className="space-y-1.5 text-xs text-white/70">
-                        <li className="flex items-start gap-2">
-                          <span className="text-training mt-1">→</span>
-                          <span>Tiempo limitado stricto</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-training mt-1">→</span>
-                          <span>Preguntas complejas</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-training mt-1">→</span>
-                          <span>Feedback competitivo</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <button className="mt-4 w-full py-2 px-4 rounded-lg bg-training/20 hover:bg-training/30 border border-training/40 text-white font-semibold transition-all duration-200 text-sm">
-                      Comenzar con Bruno
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* David - Conversacional */}
-              <div className="group relative overflow-hidden rounded-2xl border border-training/40 bg-gradient-to-br from-training/25 to-training/10 hover:border-training/70 transition-all duration-300 hover:shadow-xl hover:shadow-training/40 cursor-pointer">
-                <div className="flex flex-col h-full">
-                  {/* Image Container */}
-                  <div className="relative h-64 bg-training/20 overflow-hidden flex-shrink-0">
-                    <img
-                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/David-zAa0Fmmd6xRxwxgJH2bSbv0ROzS9XQ.jpg"
-                      alt="David - Simulación Conversacional"
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 space-y-4 flex-1 flex flex-col">
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-widest text-training/80 mb-2">Nivel 4</p>
-                      <h3 className="text-2xl font-bold text-white mb-1">David</h3>
-                      <p className="text-sm font-semibold text-white/70">Simulación Conversacional</p>
-                    </div>
-
-                    <p className="text-white/80 text-sm leading-relaxed flex-1">
-                      Simula una conversación natural, flexible y realista. Práctica de interacción auténtica.
-                    </p>
-
-                    <div className="pt-4 space-y-2 border-t border-training/20">
-                      <p className="text-xs text-white/60 font-semibold">Incluye:</p>
-                      <ul className="space-y-1.5 text-xs text-white/70">
-                        <li className="flex items-start gap-2">
-                          <span className="text-training mt-1">→</span>
-                          <span>Diálogo natural y fluido</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-training mt-1">→</span>
-                          <span>Adaptación en tiempo real</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                          <span className="text-training mt-1">→</span>
-                          <span>Experiencia de conversación auténtica</span>
-                        </li>
-                      </ul>
-                    </div>
-
-                    <button className="mt-4 w-full py-2 px-4 rounded-lg bg-training/20 hover:bg-training/30 border border-training/40 text-white font-semibold transition-all duration-200 text-sm">
-                      Comenzar con David
-                    </button>
-                  </div>
-                </div>
-              </div>
+              {instructors.map((instructor) => (
+                <InstructorCard key={instructor.id} instructor={instructor} />
+              ))}
             </div>
           </div>
 
