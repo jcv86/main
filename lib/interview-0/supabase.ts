@@ -1,4 +1,4 @@
-interface Interview0Status {
+export interface Interview0Status {
   environment_check?: { passed: boolean; score: number }
   presence_check?: { passed: boolean; score: number }
   audio_check?: { passed: boolean; score: number }
