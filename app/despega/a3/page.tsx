@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, Zap, TrendingUp, Award, Rocket, Loader2 } from 'lucide-react'
+import { ArrowRight, Zap, Award, Rocket, Loader2, Coins } from 'lucide-react'
 import { mockDashboardData, DashboardState } from './data/mock-dashboard'
 import { A3GeneralProgress } from '@/components/a3-general-progress'
 import { ProgressBar } from '@/components/a3/progress-bar'
@@ -50,6 +50,8 @@ export default function A3EntrenamientoIntensivo() {
             updated.progressPct = progress.progressPct
             updated.totalXp = progress.totalXp
             updated.maxXp = progress.maxXp
+            updated.totalDtc = progress.totalDtc ?? 0
+            updated.maxDtc = progress.maxDtc ?? 100
             updated.nextMilestone = progress.nextMilestone
             updated.nextReward = progress.nextReward
             updated.completedModules = progress.completedModules
@@ -177,9 +179,9 @@ export default function A3EntrenamientoIntensivo() {
 
           {/* Epic Stats */}
           {[
-            { icon: Zap, label: 'XP Ganados', value: `${dashboardData.totalXp}`, max: `/${dashboardData.maxXp}`, color: 'from-yellow-500/50 to-training/50' },
-            { icon: Award, label: 'Completados', value: `${dashboardData.completedModules}`, max: `/${dashboardData.totalModules}`, color: 'from-green-500/50 to-training/50' },
-            { icon: TrendingUp, label: 'Progreso', value: `${dashboardData.progressPct}`, max: '%', color: 'from-blue-500/50 to-training/50' }
+            { icon: Zap, label: 'XP Ganados', value: `${dashboardData.totalXp}`, max: `/${dashboardData.maxXp}`, color: 'from-cyan-500/50 to-training/50' },
+            { icon: Coins, label: 'DTC Ganados', value: `${dashboardData.totalDtc}`, max: `/${dashboardData.maxDtc}`, color: 'from-yellow-500/50 to-training/50' },
+            { icon: Award, label: 'Módulos', value: `${dashboardData.completedModules}`, max: `/${dashboardData.totalModules}`, color: 'from-green-500/50 to-training/50' },
           ].map((stat, i) => {
             const Icon = stat.icon
             return (
@@ -257,6 +259,7 @@ export default function A3EntrenamientoIntensivo() {
             moduleStates={dashboardData.moduleStates || {}}
             completedModuleIds={dashboardData.completedModuleIds || []}
             totalXp={dashboardData.totalXp}
+            totalDtc={dashboardData.totalDtc}
           />
         </div>
 

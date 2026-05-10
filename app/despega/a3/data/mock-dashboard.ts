@@ -43,6 +43,8 @@ export interface DashboardState {
   progressPct: number
   totalXp: number
   maxXp: number
+  totalDtc: number
+  maxDtc: number
   nextMilestone: string
   nextReward: string
   completedModules: number
@@ -54,16 +56,18 @@ export interface DashboardState {
   completedModuleIds?: string[]
 }
 
-// Mock data - simulating a user with some progress
+// Mock data - default zeroed state; real values come from /api/a3/user-progress
 export const mockDashboardData: DashboardState = {
   currentLevel: 'Auditoría Inicial',
-  progressPct: 12,
-  totalXp: 120,
+  progressPct: 0,
+  totalXp: 0,
   maxXp: 1000,
-  nextMilestone: 'Completar Entrevista 0',
-  nextReward: 'Desbloqueas Método STAR + CV Inteligente + Análisis de Vacante',
-  completedModules: 1,
-  totalModules: 9,
+  totalDtc: 0,
+  maxDtc: 100,
+  nextMilestone: 'Completar Auditoría Inicial',
+  nextReward: 'Desbloqueas Herramientas de Preparación (4 herramientas)',
+  completedModules: 0,
+  totalModules: 10,
   
   skills: [
     {
@@ -298,20 +302,21 @@ export const mockDashboardData: DashboardState = {
     }
   ],
 
-  // Module states for comprehensive progress bar
+  // Default state - audit not yet completed. Real state comes from API.
+  // Uses canonical IDs from /lib/pillar3-config.ts
   moduleStates: {
-    'auditoria-inicial': 'completed',
+    'auditoria-inicial': 'in_progress',
     'metodo-star': 'locked',
     'cv-inteligente': 'locked',
     'analisis-vacante': 'locked',
-    'analisis-multicanal': 'locked',
-    'entrevista-guiada': 'locked',
-    'entrevista-estructurada': 'locked',
-    'entrevista-desafiante': 'locked',
-    'entrevista-conversacional': 'locked',
-    'simulacion-completa': 'locked',
+    'analisis-multimodal': 'locked',
+    'entrenamiento-guiado': 'locked',
+    'entrenamiento-estructurado': 'locked',
+    'entrenamiento-desafiante': 'locked',
+    'entrenamiento-conversacional': 'locked',
+    'simulacion-real': 'locked',
   },
 
-  // Completed module IDs for tracking XP
-  completedModuleIds: ['auditoria-inicial']
+  // No modules completed by default
+  completedModuleIds: []
 }

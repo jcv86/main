@@ -29,10 +29,8 @@ export default function Interview0Page() {
   }
 
   if (stage === 'results') {
-    // Calculate XP and DTC rewards for audit completion
-    const xpAwarded = Math.round((score / 100) * 250)
-    const dtcAwarded = Math.round(xpAwarded * 0.1)
-    
+    // XP/DTC are awarded by the canonical config inside the training-completion API
+    // (40 XP / 4 DTC for 'auditoria-inicial' on first completion)
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
         <div className="max-w-2xl w-full">
@@ -44,8 +42,8 @@ export default function Interview0Page() {
               timeSpent: 300,
               level: 'basico',
               trainingType: 'auditoria-inicial',
-              moduleXpEarned: xpAwarded,
-              moduleXpTotal: 250
+              moduleXpEarned: 40,
+              moduleXpTotal: 40,
             }}
             onContinue={() => {
               setStage('intro')

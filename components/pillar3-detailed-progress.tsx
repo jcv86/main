@@ -1,101 +1,100 @@
 'use client'
 
 import { useState } from 'react'
-import { ChevronDown, ChevronUp, Lock, CheckCircle2, Circle } from 'lucide-react'
+import { ChevronDown, ChevronUp, Lock, CheckCircle2, Circle, Coins, Zap } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
-import { PILLAR3_POINTS_CONFIG } from '@/lib/pillar3-points-system'
+import {
+  PILLAR3_LEVELS,
+  PILLAR3_LEVEL_ORDER,
+  PILLAR3_MODULES,
+  TOTAL_PILLAR3_XP,
+  TOTAL_PILLAR3_DTC,
+  getLevelXp,
+  getLevelDtc,
+  resolveCanonicalId,
+  type Pillar3LevelId,
+  type Pillar3ModuleId,
+} from '@/lib/pillar3-config'
 
-interface ModuleState {
-  [key: string]: 'locked' | 'available' | 'in_progress' | 'completed'
-}
+type ModuleStatus = 'locked' | 'available' | 'in_progress' | 'completed'
 
 interface Pillar3DetailedProgressProps {
-  moduleStates: ModuleState
+  moduleStates: Record<string, ModuleStatus> | undefined
   completedModuleIds: string[]
   totalXp?: number
-}
-
-interface LevelConfig {
-  id: string
-  name: string
-  description: string
-  modules: Array<{ id: string; name: string; points: number }>
-  order: number
+  totalDtc?: number
 }
 
 export function Pillar3DetailedProgress({
   moduleStates,
   completedModuleIds,
-  totalXp = 0,
+  totalXp,
+  totalDtc,
 }: Pillar3DetailedProgressProps) {
-  const [expandedLevels, setExpandedLevels] = useState<Set<number>>(new Set([1]))
+  const [expandedLevels, setExpandedLevels] = useState<Set<Pillar3LevelId>>(new Set([1]))
 
-  // Define the 4 levels with their modules
-  const levels: LevelConfig[] = [
-    {
-      id: 'level1',
-      name: 'Auditoría Inicial',
-      description: 'Evaluación base de tu presentación profesional',
-      modules: [
-        { id: 'auditoria-inicial', name: 'Guía del Coach - Auditoría Inicial', points: 40 },
-      ],
-      order: 1,
-    },
-    {
-      id: 'level2',
-      name: 'Herramientas de Preparación',
-      description: 'Domina técnicas esenciales de entrevista',
-      modules: [
-        { id: 'metodo-star', name: 'Método STAR', points: 120 },
-        { id: 'cv-inteligente', name: 'CV Inteligente', points: 120 },
-        { id: 'analisis-vacante', name: 'Análisis de Vacante', points: 120 },
-        { id: 'analisis-multicanal', name: 'Análisis Multimodal', points: 120 },
-      ],
-      order: 2,
-    },
-    {
-      id: 'level3',
-      name: 'Entrenamientos Progresivos',
-      description: 'Practica en contextos cada vez más desafiantes',
-      modules: [
-        { id: 'entrevista-guiada', name: 'Entrevista Guiada', points: 120 },
-        { id: 'entrevista-estructurada', name: 'Entrevista Estructurada', points: 120 },
-        { id: 'entrevista-desafiante', name: 'Entrevista Desafiante', points: 120 },
-        { id: 'entrevista-conversacional', name: 'Entrevista Conversacional', points: 120 },
-      ],
-      order: 3,
-    },
-    {
-      id: 'level4',
-      name: 'Simulación Real',
-      description: 'Simulación completa bajo presión real',
-      modules: [
-        { id: 'simulacion-completa', name: 'Simulación Completa', points: 0 },
-      ],
-      order: 4,
-    },
-  ]
+  // Resolve all completed IDs to canonical for consistent comparison
+  const completedCanonical = new Set(
+    completedModuleIds
+      .map((id) => resolveCanonicalId(id))
+      .filter((id): id is Pillar3ModuleId => id !== null)
+  )
 
-  // Calculate XP for each level
-  const calculateLevelProgress = (levelModules: LevelConfig['modules']) => {
-    const completed = levelModules.filter((mod) =>
-      completedModuleIds.includes(mod.id)
-    ).length
-    const totalPoints = levelModules.reduce((sum, mod) => sum + mod.points, 0)
-    const earnedPoints = levelModules.reduce((sum, mod) => {
-      if (completedModuleIds.includes(mod.id)) {
-        return sum + mod.points
-      }
-      return sum
-    }, 0)
-    const percentage = totalPoints > 0 ? (earnedPoints / totalPoints) * 100 : 0
+  const safeModuleStates = moduleStates ?? {}
 
-    return { completed, totalPoints, earnedPoints, percentage }
+  const getModuleStatus = (moduleId: Pillar3ModuleId): ModuleStatus => {
+    if (completedCanonical.has(moduleId)) return 'completed'
+    return (safeModuleStates[moduleId] as ModuleStatus) ?? 'locked'
   }
 
-  // Get module status icon
-  const getStatusIcon = (status: string) => {
+  // Aggregate progress per level
+  const calculateLevelProgress = (levelId: Pillar3LevelId) => {
+    const moduleIds = PILLAR3_LEVELS[levelId].moduleIds
+    const completed = moduleIds.filter((id) => completedCanonical.has(id)).length
+    const totalXp = getLevelXp(levelId)
+    const totalDtc = getLevelDtc(levelId)
+    const earnedXp = moduleIds.reduce(
+      (sum, id) => sum + (completedCanonical.has(id) ? PILLAR3_MODULES[id].xp : 0),
+      0
+    )
+    const earnedDtc = moduleIds.reduce(
+      (sum, id) => sum + (completedCanonical.has(id) ? PILLAR3_MODULES[id].dtc : 0),
+      0
+    )
+    const percentage = totalXp > 0 ? (earnedXp / totalXp) * 100 : 0
+    return { completed, totalXp, totalDtc, earnedXp, earnedDtc, percentage, total: moduleIds.length }
+  }
+
+  // Determine level status from its modules
+  const getLevelStatus = (levelId: Pillar3LevelId): ModuleStatus => {
+    const moduleIds = PILLAR3_LEVELS[levelId].moduleIds
+    const allLocked = moduleIds.every((id) => getModuleStatus(id) === 'locked')
+    const allCompleted = moduleIds.every((id) => completedCanonical.has(id))
+    const someCompleted = moduleIds.some((id) => completedCanonical.has(id))
+
+    if (allLocked) return 'locked'
+    if (allCompleted) return 'completed'
+    if (someCompleted) return 'in_progress'
+    return 'available'
+  }
+
+  // Compute global totals (use props if provided, else derive from canonical config)
+  const overallEarnedXp =
+    totalXp ??
+    PILLAR3_LEVEL_ORDER.reduce((sum, lid) => sum + calculateLevelProgress(lid).earnedXp, 0)
+  const overallEarnedDtc =
+    totalDtc ??
+    PILLAR3_LEVEL_ORDER.reduce((sum, lid) => sum + calculateLevelProgress(lid).earnedDtc, 0)
+
+  const overallXpPct = (overallEarnedXp / TOTAL_PILLAR3_XP) * 100
+  const overallDtcPct = (overallEarnedDtc / TOTAL_PILLAR3_DTC) * 100
+  const completedLevels = PILLAR3_LEVEL_ORDER.filter(
+    (lid) => getLevelStatus(lid) === 'completed'
+  ).length
+
+  // Status icon for module rows
+  const getStatusIcon = (status: ModuleStatus) => {
     switch (status) {
       case 'completed':
         return <CheckCircle2 className="w-5 h-5 text-green-400" />
@@ -108,103 +107,110 @@ export function Pillar3DetailedProgress({
     }
   }
 
-  // Get level status color
-  const getLevelColorClass = (levelStatus: string) => {
-    switch (levelStatus) {
+  const getLevelColorClass = (status: ModuleStatus) => {
+    switch (status) {
       case 'completed':
-        return 'bg-green-500/20 border-green-500/40'
+        return 'bg-green-500/10 border-green-500/40'
       case 'locked':
         return 'bg-white/5 border-white/10'
       case 'in_progress':
         return 'bg-cyan-500/10 border-cyan-500/30'
       default:
-        return 'bg-white/5 border-white/10'
+        return 'bg-purple-500/10 border-purple-500/30'
     }
   }
 
-  // Determine level status
-  const getLevelStatus = (level: LevelConfig) => {
-    const allModulesLocked = level.modules.every(
-      (mod) => moduleStates[mod.id] === 'locked'
-    )
-    const allModulesCompleted = level.modules.every(
-      (mod) => completedModuleIds.includes(mod.id)
-    )
-    const someCompleted = level.modules.some((mod) =>
-      completedModuleIds.includes(mod.id)
-    )
-
-    if (allModulesLocked) return 'locked'
-    if (allModulesCompleted) return 'completed'
-    if (someCompleted) return 'in_progress'
-    return 'available'
-  }
-
-  // Calculate overall progress
-  const overallEarnedXp = levels.reduce((sum, level) => {
-    const progress = calculateLevelProgress(level.modules)
-    return sum + progress.earnedPoints
-  }, 0)
-  const overallPercentage = (overallEarnedXp / 1000) * 100
-  const completedLevels = levels.filter((l) => getLevelStatus(l) === 'completed')
-    .length
-
   return (
     <div className="space-y-6">
-      {/* Overall Progress Summary */}
+      {/* Overall Progress Summary - shows BOTH XP and DTC */}
       <Card className="border-muted/30 bg-gradient-to-r from-purple-500/10 to-pink-500/10">
         <CardContent className="pt-6 pb-6">
-          <div className="space-y-4">
+          <div className="space-y-5">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-white">Tu Progreso en Pillar 3</h3>
-              <div className="text-right">
-                <div className="text-sm font-bold text-white">
-                  {overallEarnedXp} / 1000 XP
+              <div>
+                <h3 className="text-lg font-semibold text-white">Tu Progreso en Pillar 3</h3>
+                <p className="text-xs text-white/60 mt-1">
+                  {completedLevels} / 4 niveles completados
+                </p>
+              </div>
+              <div className="text-right space-y-1">
+                <div className="flex items-center justify-end gap-2">
+                  <Zap className="w-4 h-4 text-cyan-400" />
+                  <span className="text-sm font-bold text-white">
+                    {overallEarnedXp} / {TOTAL_PILLAR3_XP} XP
+                  </span>
                 </div>
-                <div className="text-xs text-white/60">
-                  {completedLevels} / 4 secciones
+                <div className="flex items-center justify-end gap-2">
+                  <Coins className="w-4 h-4 text-yellow-400" />
+                  <span className="text-sm font-bold text-white">
+                    {overallEarnedDtc} / {TOTAL_PILLAR3_DTC} DTC
+                  </span>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <Progress
-                value={overallPercentage}
-                className="h-2"
-                style={{ accentColor: 'rgb(168, 85, 247)' }}
-              />
-              <div className="flex justify-between text-xs text-white/60">
-                <span>{Math.round(overallPercentage)}%</span>
-                <span>Hacia listo para entrevista real</span>
+            {/* XP Progress Bar */}
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs">
+                <span className="text-cyan-400 font-medium">Experiencia (XP)</span>
+                <span className="text-white/60">{Math.round(overallXpPct)}%</span>
+              </div>
+              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${overallXpPct}%`,
+                    background: 'linear-gradient(90deg, rgb(34,211,238) 0%, rgb(168,85,247) 100%)',
+                  }}
+                />
               </div>
             </div>
+
+            {/* DTC Progress Bar */}
+            <div className="space-y-1.5">
+              <div className="flex justify-between text-xs">
+                <span className="text-yellow-400 font-medium">Tokens (DTC)</span>
+                <span className="text-white/60">{Math.round(overallDtcPct)}%</span>
+              </div>
+              <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${overallDtcPct}%`,
+                    background: 'linear-gradient(90deg, rgb(250,204,21) 0%, rgb(245,158,11) 100%)',
+                  }}
+                />
+              </div>
+            </div>
+
+            <p className="text-xs text-white/50 text-center pt-1">
+              Hacia &quot;Listo para Entrevista Real&quot;
+            </p>
           </div>
         </CardContent>
       </Card>
 
-      {/* Individual Level Progress */}
+      {/* Per-Level Progress */}
       <div className="space-y-3">
-        {levels.map((level) => {
-          const levelStatus = getLevelStatus(level)
-          const isExpanded = expandedLevels.has(level.order)
-          const progress = calculateLevelProgress(level.modules)
+        {PILLAR3_LEVEL_ORDER.map((levelId) => {
+          const level = PILLAR3_LEVELS[levelId]
+          const levelStatus = getLevelStatus(levelId)
+          const isExpanded = expandedLevels.has(levelId)
+          const progress = calculateLevelProgress(levelId)
           const isLocked = levelStatus === 'locked'
 
           return (
             <Card
-              key={level.id}
+              key={levelId}
               className={`border transition overflow-hidden ${getLevelColorClass(levelStatus)}`}
             >
               {/* Level Header */}
               <button
                 onClick={() => {
-                  const newExpanded = new Set(expandedLevels)
-                  if (isExpanded) {
-                    newExpanded.delete(level.order)
-                  } else {
-                    newExpanded.add(level.order)
-                  }
-                  setExpandedLevels(newExpanded)
+                  const next = new Set(expandedLevels)
+                  if (isExpanded) next.delete(levelId)
+                  else next.add(levelId)
+                  setExpandedLevels(next)
                 }}
                 disabled={isLocked}
                 className={`w-full p-4 flex items-center justify-between transition ${
@@ -218,7 +224,9 @@ export function Pillar3DetailedProgress({
                         ? 'bg-green-500/30'
                         : levelStatus === 'locked'
                           ? 'bg-white/10'
-                          : 'bg-cyan-500/20'
+                          : levelStatus === 'in_progress'
+                            ? 'bg-cyan-500/20'
+                            : 'bg-purple-500/20'
                     }`}
                   >
                     {levelStatus === 'completed' ? (
@@ -226,18 +234,18 @@ export function Pillar3DetailedProgress({
                     ) : levelStatus === 'locked' ? (
                       <Lock className="w-5 h-5 text-white/30" />
                     ) : (
-                      <span className={levelStatus === 'in_progress' ? 'text-cyan-400' : 'text-white/60'}>
-                        {level.order}
+                      <span
+                        className={
+                          levelStatus === 'in_progress' ? 'text-cyan-400' : 'text-purple-400'
+                        }
+                      >
+                        {levelId}
                       </span>
                     )}
                   </div>
 
                   <div>
-                    <h4
-                      className={`font-semibold ${
-                        isLocked ? 'text-white/40' : 'text-white'
-                      }`}
-                    >
+                    <h4 className={`font-semibold ${isLocked ? 'text-white/40' : 'text-white'}`}>
                       {level.name}
                     </h4>
                     <p className={`text-sm ${isLocked ? 'text-white/30' : 'text-white/60'}`}>
@@ -248,14 +256,28 @@ export function Pillar3DetailedProgress({
 
                 <div className="flex items-center gap-4 ml-4">
                   <div className="text-right">
-                    <div
-                      className={`text-sm font-semibold ${
-                        isLocked ? 'text-white/30' : 'text-cyan-400'
-                      }`}
-                    >
-                      {progress.earnedPoints}/{progress.totalPoints}
+                    <div className="flex items-center justify-end gap-1.5">
+                      <Zap className={`w-3.5 h-3.5 ${isLocked ? 'text-white/30' : 'text-cyan-400'}`} />
+                      <span
+                        className={`text-sm font-semibold ${
+                          isLocked ? 'text-white/30' : 'text-cyan-400'
+                        }`}
+                      >
+                        {progress.earnedXp}/{progress.totalXp}
+                      </span>
                     </div>
-                    <div className="text-xs text-white/50">XP</div>
+                    <div className="flex items-center justify-end gap-1.5 mt-0.5">
+                      <Coins
+                        className={`w-3.5 h-3.5 ${isLocked ? 'text-white/30' : 'text-yellow-400'}`}
+                      />
+                      <span
+                        className={`text-xs font-semibold ${
+                          isLocked ? 'text-white/30' : 'text-yellow-400'
+                        }`}
+                      >
+                        {progress.earnedDtc}/{progress.totalDtc}
+                      </span>
+                    </div>
                   </div>
 
                   {!isLocked && (
@@ -270,16 +292,17 @@ export function Pillar3DetailedProgress({
                 </div>
               </button>
 
-              {/* Level Modules (Expanded) */}
+              {/* Expanded Module List */}
               {isExpanded && !isLocked && (
-                <CardContent className="pt-4 pb-4 border-t border-white/10 bg-white/2">
+                <CardContent className="pt-4 pb-4 border-t border-white/10">
                   <div className="space-y-3">
-                    {level.modules.map((mod) => {
-                      const modStatus = moduleStates[mod.id] || 'locked'
-                      const isCompleted = completedModuleIds.includes(mod.id)
+                    {level.moduleIds.map((moduleId) => {
+                      const module = PILLAR3_MODULES[moduleId]
+                      const modStatus = getModuleStatus(moduleId)
+                      const isCompleted = modStatus === 'completed'
 
                       return (
-                        <div key={mod.id} className="space-y-2">
+                        <div key={moduleId} className="space-y-2">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center gap-3 flex-1">
                               {getStatusIcon(modStatus)}
@@ -289,30 +312,55 @@ export function Pillar3DetailedProgress({
                                     isCompleted ? 'text-green-400' : 'text-white/80'
                                   }`}
                                 >
-                                  {mod.name}
+                                  {module.name}
+                                </p>
+                                <p className="text-xs text-white/50 mt-0.5">
+                                  {module.description}
                                 </p>
                               </div>
                             </div>
-                            <div className="text-right text-xs">
-                              <span
-                                className={`font-semibold ${
-                                  isCompleted ? 'text-green-400' : 'text-white/60'
-                                }`}
-                              >
-                                {isCompleted ? mod.points : 0}/{mod.points}
-                              </span>
-                              <span className="text-white/40 ml-1">XP</span>
+                            <div className="text-right text-xs space-y-0.5 ml-4">
+                              <div className="flex items-center justify-end gap-1">
+                                <Zap
+                                  className={`w-3 h-3 ${
+                                    isCompleted ? 'text-green-400' : 'text-cyan-400/70'
+                                  }`}
+                                />
+                                <span
+                                  className={`font-semibold ${
+                                    isCompleted ? 'text-green-400' : 'text-white/70'
+                                  }`}
+                                >
+                                  {isCompleted ? module.xp : 0}/{module.xp} XP
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-end gap-1">
+                                <Coins
+                                  className={`w-3 h-3 ${
+                                    isCompleted ? 'text-green-400' : 'text-yellow-400/70'
+                                  }`}
+                                />
+                                <span
+                                  className={`font-semibold ${
+                                    isCompleted ? 'text-green-400' : 'text-white/70'
+                                  }`}
+                                >
+                                  {isCompleted ? module.dtc : 0}/{module.dtc} DTC
+                                </span>
+                              </div>
                             </div>
                           </div>
 
                           {/* Module progress bar */}
-                          <Progress
-                            value={isCompleted ? 100 : 0}
-                            className="h-1.5"
-                            style={{
-                              accentColor: isCompleted ? 'rgb(34, 197, 94)' : 'rgb(34, 211, 238)',
-                            }}
-                          />
+                          <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+                            <div
+                              className="h-full rounded-full transition-all"
+                              style={{
+                                width: `${isCompleted ? 100 : 0}%`,
+                                background: isCompleted ? 'rgb(34, 197, 94)' : 'rgb(34, 211, 238)',
+                              }}
+                            />
+                          </div>
                         </div>
                       )
                     })}
@@ -324,7 +372,7 @@ export function Pillar3DetailedProgress({
         })}
       </div>
 
-      {/* Completion Info */}
+      {/* Completion Banner */}
       {completedLevels === 4 && (
         <Card className="border-green-500/40 bg-green-500/10">
           <CardContent className="pt-4 pb-4">
