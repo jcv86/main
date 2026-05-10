@@ -107,8 +107,8 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
   
   return (
     <Card className={`border border-white/10 bg-gradient-to-br ${getStatusColor(module.status)} hover:border-white/20 transition overflow-hidden relative`}>
-      {/* Decorative icon background */}
-      <div className="absolute top-4 right-4 opacity-50 pointer-events-none">
+      {/* Decorative icon background - informational only */}
+      <div className="absolute top-4 right-4 opacity-40">
         {getModuleIcon(module.id)}
       </div>
       
