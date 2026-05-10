@@ -26,12 +26,14 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
-    console.log('[v0] API interview-0/save: Received data for user', user.id.substring(0, 8), {
+    console.log('[v0] API interview-0/save: Received request body:', {
       hasEnvironment: !!body.environment_check,
       hasPresence: !!body.presence_check,
       hasAudio: !!body.audio_check,
       hasPreparation: !!body.preparation_check,
-      status: body.interview_0_status
+      status: body.interview_0_status,
+      bodyKeys: Object.keys(body),
+      fullBody: JSON.stringify(body)
     })
     
     const { error, data } = await supabase
@@ -61,9 +63,18 @@ export async function POST(request: NextRequest) {
       console.error('[v0] API interview-0/save: Database error', {
         code: error.code,
         message: error.message,
-        details: error.details
+        details: error.details,
+        hint: error.hint
       })
-      throw error
+      // Return the actual database error for debugging
+      return NextResponse.json(
+        { 
+          error: error.message || 'Database error',
+          code: error.code,
+          details: error.details
+        },
+        { status: 500 }
+      )
     }
     
     console.log('[v0] API interview-0/save: Saved successfully for user', user.id.substring(0, 8))
