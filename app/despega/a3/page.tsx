@@ -107,7 +107,7 @@ export default function A3EntrenamientoIntensivo() {
       } catch (error) {
         console.error('[v0] A3 page: API fetch failed', error)
         // Build default modules with Level 1 available, rest locked
-        const defaultModuleStates: Record<string, string> = {
+        const defaultModuleStates: { [key: string]: 'available' | 'in_progress' | 'completed' | 'locked' } = {
           'auditoria-inicial': 'available',
           'metodo-star': 'locked',
           'cv-inteligente': 'locked',
