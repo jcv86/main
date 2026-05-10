@@ -20,6 +20,7 @@ export default function LandingPageOptimized() {
   }, [])
 
   try {
+    return (
     <div className="min-h-screen bg-background">
       {/* NAVBAR */}
       <nav className="border-b border-white/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40">
@@ -603,7 +604,7 @@ export default function LandingPageOptimized() {
         </div>
       </section>
     </div>
-  )
+    )
   } catch (error) {
     console.error('[v0] Error rendering LandingPageOptimized:', error)
     return (
