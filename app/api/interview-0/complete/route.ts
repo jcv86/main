@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
 
     const { finalScore } = await request.json()
 
-    const { error } = await supabase
+    const { error, data } = await supabase
       .from('a3_entrevista_0')
       .update({
         interview_0_completed: true,
@@ -36,10 +36,27 @@ export async function POST(request: NextRequest) {
         updated_at: new Date().toISOString()
       })
       .eq('user_id', user.id)
+      .select()
 
-    if (error) throw error
+    if (error) {
+      console.error('[v0] API interview-0/complete: Database error', {
+        code: error.code,
+        message: error.message,
+        details: error.details,
+        hint: error.hint
+      })
+      return NextResponse.json(
+        { 
+          error: error.message || 'Database error',
+          code: error.code,
+          details: error.details
+        },
+        { status: 500 }
+      )
+    }
 
-    return NextResponse.json({ success: true }, { status: 200 })
+    console.log('[v0] API interview-0/complete: Successfully completed for user', user.id.substring(0, 8))
+    return NextResponse.json({ success: true, data }, { status: 200 })
   } catch (error) {
     console.error('[v0] API interview-0/complete failed:', error)
     return NextResponse.json(
