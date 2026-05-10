@@ -129,7 +129,7 @@ export default function A3IntroPage() {
           <div className="space-y-8">
             <h2 className="text-3xl font-bold text-white mb-6">Elige tu Modalidad de Entrenamiento</h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Sofia - Guiada */}
               <div className="group relative overflow-hidden rounded-2xl border border-training/40 bg-gradient-to-br from-training/25 to-training/10 hover:border-training/70 transition-all duration-300 hover:shadow-xl hover:shadow-training/40 cursor-pointer">
                 <div className="flex flex-col h-full">
@@ -181,7 +181,7 @@ export default function A3IntroPage() {
               </div>
 
               {/* Alexandra - Estructurada */}
-              <div className="group relative overflow-hidden rounded-2xl border border-training/40 bg-gradient-to-br from-training/25 to-training/10 hover:border-training/70 transition-all duration-300 hover:shadow-xl hover:shadow-training/40 cursor-pointer md:scale-105">
+              <div className="group relative overflow-hidden rounded-2xl border border-training/40 bg-gradient-to-br from-training/25 to-training/10 hover:border-training/70 transition-all duration-300 hover:shadow-xl hover:shadow-training/40 cursor-pointer">
                 <div className="flex flex-col h-full">
                   {/* Image Container */}
                   <div className="relative h-64 bg-training/20 overflow-hidden flex-shrink-0">
@@ -278,6 +278,56 @@ export default function A3IntroPage() {
 
                     <button className="mt-4 w-full py-2 px-4 rounded-lg bg-training/20 hover:bg-training/30 border border-training/40 text-white font-semibold transition-all duration-200 text-sm">
                       Comenzar con Bruno
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* David - Conversacional */}
+              <div className="group relative overflow-hidden rounded-2xl border border-training/40 bg-gradient-to-br from-training/25 to-training/10 hover:border-training/70 transition-all duration-300 hover:shadow-xl hover:shadow-training/40 cursor-pointer">
+                <div className="flex flex-col h-full">
+                  {/* Image Container */}
+                  <div className="relative h-64 bg-training/20 overflow-hidden flex-shrink-0">
+                    <img
+                      src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/David-zAa0Fmmd6xRxwxgJH2bSbv0ROzS9XQ.jpg"
+                      alt="David - Simulación Conversacional"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 space-y-4 flex-1 flex flex-col">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-widest text-training/80 mb-2">Nivel 4</p>
+                      <h3 className="text-2xl font-bold text-white mb-1">David</h3>
+                      <p className="text-sm font-semibold text-white/70">Simulación Conversacional</p>
+                    </div>
+
+                    <p className="text-white/80 text-sm leading-relaxed flex-1">
+                      Simula una conversación natural, flexible y realista. Práctica de interacción auténtica.
+                    </p>
+
+                    <div className="pt-4 space-y-2 border-t border-training/20">
+                      <p className="text-xs text-white/60 font-semibold">Incluye:</p>
+                      <ul className="space-y-1.5 text-xs text-white/70">
+                        <li className="flex items-start gap-2">
+                          <span className="text-training mt-1">→</span>
+                          <span>Diálogo natural y fluido</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-training mt-1">→</span>
+                          <span>Adaptación en tiempo real</span>
+                        </li>
+                        <li className="flex items-start gap-2">
+                          <span className="text-training mt-1">→</span>
+                          <span>Experiencia de conversación auténtica</span>
+                        </li>
+                      </ul>
+                    </div>
+
+                    <button className="mt-4 w-full py-2 px-4 rounded-lg bg-training/20 hover:bg-training/30 border border-training/40 text-white font-semibold transition-all duration-200 text-sm">
+                      Comenzar con David
                     </button>
                   </div>
                 </div>
