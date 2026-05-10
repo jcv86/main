@@ -41,66 +41,83 @@ export async function GET() {
     }
 
     // Calculate progress based on completions
-    const completedModules = completions?.length || 0
-    const totalModules = 9 // Total modules in the journey
+    const completedModuleIds = completions?.map(c => c.training_type) || []
+    
+    // Check which modules are completed by level/section
+    const level1Complete = completedModuleIds.some(id => 
+      id.toLowerCase().includes('auditoria') || id.toLowerCase().includes('entrevista-0') || id.toLowerCase().includes('entrevista 0')
+    )
+    
+    const level2Modules = completedModuleIds.filter(id =>
+      id.toLowerCase().includes('star') || id.toLowerCase().includes('cv-inteligente') || 
+      id.toLowerCase().includes('analisis-vacante') || id.toLowerCase().includes('analisis-multicanal')
+    )
+    const level2Complete = level2Modules.length === 4
+    
+    const level3Modules = completedModuleIds.filter(id =>
+      id.toLowerCase().includes('entrevista-guiada') || id.toLowerCase().includes('entrevista-estructurada') ||
+      id.toLowerCase().includes('entrevista-desafiante') || id.toLowerCase().includes('entrevista-conversacional')
+    )
+    const level3Complete = level3Modules.length === 4
+    
+    const totalXp = 1000
     const maxXp = 1000
     const progressPct = Math.min(Math.round((totalXp / maxXp) * 100), 100)
 
-    console.log('[v0] User progress calculation:', { user_id: user.id, totalXp, completions_count: completions?.length, progressPct })
+    console.log('[v0] User progress calculation:', { user_id: user.id, level1Complete, level2Complete, level3Complete, progressPct })
 
-    // Check which modules are completed
-    const completedModuleIds = completions?.map(c => c.training_type) || []
-
-    // Determine module statuses based on completions
-    const auditoriaCompleted = completedModuleIds.some(id => 
-      id.toLowerCase().includes('auditoria') || id.toLowerCase().includes('entrevista 0') || id.toLowerCase().includes('preparación inicial')
-    )
-
-    // Build module states
+    // Build module states based on level completion
     const moduleStates = {
-      'auditoria-inicial': auditoriaCompleted ? 'completed' : 'in_progress',
-      'metodo-star': auditoriaCompleted ? 'available' : 'locked',
-      'cv-inteligente': auditoriaCompleted ? 'available' : 'locked',
-      'analisis-vacante': auditoriaCompleted ? 'available' : 'locked',
-      'analisis-multicanal': auditoriaCompleted ? 'available' : 'locked',
-      // Level 3 modules unlock after 2 preparation tools
-      'entrevista-guiada': completedModules >= 3 ? 'available' : 'locked',
-      'entrevista-estructurada': completedModules >= 3 ? 'available' : 'locked',
-      'entrevista-desafiante': completedModules >= 3 ? 'available' : 'locked',
-      'entrevista-conversacional': completedModules >= 3 ? 'available' : 'locked',
-      // Level 4 unlocks after 2 training interviews
-      'simulacion-completa': completedModules >= 5 ? 'available' : 'locked',
+      // Level 1: Audit (always available, becomes completed when done)
+      'auditoria-inicial': level1Complete ? 'completed' : 'in_progress',
+      
+      // Level 2: Preparation tools (unlock after Level 1 complete, all 4 must complete)
+      'metodo-star': level1Complete ? (level2Modules.includes('metodo-star') ? 'completed' : 'available') : 'locked',
+      'cv-inteligente': level1Complete ? (level2Modules.includes('cv-inteligente') ? 'completed' : 'available') : 'locked',
+      'analisis-vacante': level1Complete ? (level2Modules.includes('analisis-vacante') ? 'completed' : 'available') : 'locked',
+      'analisis-multicanal': level1Complete ? (level2Modules.includes('analisis-multicanal') ? 'completed' : 'available') : 'locked',
+      
+      // Level 3: Training interviews (unlock after Level 2 complete, all 4 must complete)
+      'entrevista-guiada': level2Complete ? (level3Modules.includes('entrevista-guiada') ? 'completed' : 'available') : 'locked',
+      'entrevista-estructurada': level2Complete ? (level3Modules.includes('entrevista-estructurada') ? 'completed' : 'available') : 'locked',
+      'entrevista-desafiante': level2Complete ? (level3Modules.includes('entrevista-desafiante') ? 'completed' : 'available') : 'locked',
+      'entrevista-conversacional': level2Complete ? (level3Modules.includes('entrevista-conversacional') ? 'completed' : 'available') : 'locked',
+      
+      // Level 4: Real simulation (unlock after Level 3 complete)
+      'simulacion-completa': level3Complete ? 'available' : 'locked',
     }
 
     // Calculate skill values based on completions
     const skills = {
-      presencia: auditoriaCompleted ? 60 : 35,
-      claridad: completedModules >= 2 ? 40 : 10,
-      estructura: completedModuleIds.some(id => id.includes('star')) ? 50 : 0,
-      preparacion: completedModuleIds.some(id => id.includes('cv') || id.includes('vacante')) ? 60 : 25,
-      'manejo-presion': completedModuleIds.some(id => id.includes('desafiante')) ? 50 : 0,
+      presencia: level1Complete ? 60 : 35,
+      claridad: level2Modules.length > 0 ? 40 : 10,
+      estructura: level2Modules.includes('metodo-star') ? 50 : 0,
+      preparacion: level2Modules.length > 1 ? 60 : 25,
+      'manejo-presion': level3Modules.includes('entrevista-desafiante') ? 50 : 0,
     }
 
-    // Determine current level text
+    // Determine current level and next milestone
     let currentLevel = 'Auditoría Inicial'
-    let nextMilestone = 'Completar Entrevista 0'
-    let nextReward = 'Desbloqueas Método STAR + CV Inteligente + Análisis de Vacante'
+    let nextMilestone = 'Completar Auditoría Inicial'
+    let nextReward = 'Desbloqueas Herramientas de Preparación (4 herramientas)'
 
-    if (auditoriaCompleted) {
+    if (level1Complete && !level2Complete) {
       currentLevel = 'Herramientas de Preparación'
-      nextMilestone = 'Completar 2 herramientas de preparación'
-      nextReward = 'Desbloqueas Entrenamientos de Entrevista'
+      nextMilestone = `Completar 4 herramientas (${level2Modules.length}/4)`
+      nextReward = 'Desbloqueas Entrenamientos Progresivos'
     }
-    if (completedModules >= 3) {
+    if (level2Complete && !level3Complete) {
       currentLevel = 'Entrenamientos Progresivos'
-      nextMilestone = 'Completar 2 entrenamientos'
+      nextMilestone = `Completar 4 entrenamientos (${level3Modules.length}/4)`
       nextReward = 'Desbloqueas Simulación Real'
     }
-    if (completedModules >= 5) {
+    if (level3Complete) {
       currentLevel = 'Simulación Real'
       nextMilestone = 'Completar Simulación Completa'
       nextReward = 'Badge: Listo para Entrevista Real'
     }
+
+    const completedModules = (level1Complete ? 1 : 0) + level2Modules.length + level3Modules.length
 
     return NextResponse.json({
       success: true,
@@ -112,7 +129,7 @@ export async function GET() {
         nextMilestone,
         nextReward,
         completedModules,
-        totalModules,
+        totalModules: 9,
         moduleStates,
         skills,
         completedModuleIds,
