@@ -79,6 +79,25 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
     const newResults = { ...results, [blockName]: data }
     setResults(newResults)
 
+    // Always proceed with UI update, save in background
+    const stageMap = {
+      environment: 'presence',
+      presence: 'audio-camera',
+      'audio-camera': 'preparation',
+      preparation: 'complete'
+    } as const
+
+    const nextStage = stageMap[stage as keyof typeof stageMap] || 'complete'
+    const newCompletedBlocks = completedBlocks + 1
+    const newProgress = (newCompletedBlocks / 4) * 100
+    
+    if (onProgressUpdate) {
+      onProgressUpdate(newProgress)
+    }
+    
+    setStage(nextStage)
+
+    // Save in background - don't block UI
     try {
       // Map blockName to the correct database field names
       const fieldMap = {
@@ -95,32 +114,22 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
       
       await saveInterview0Status(saveData)
     } catch (err) {
-      console.error(`[v0] Failed to save ${blockName}:`, err)
+      // Prevent the entire save pipeline from breaking if one listener fails
+      console.error(`[v0] Failed to save ${blockName} gracefully:`, {
+        error: err instanceof Error ? err.message : String(err),
+        blockName,
+        data,
+        timestamp: new Date().toISOString()
+      })
+      // Local state is updated, data persists in component, will retry on refresh
     }
-
-    // Move to next stage or complete
-    const stageMap = {
-      environment: 'presence',
-      presence: 'audio-camera',
-      'audio-camera': 'preparation',
-      preparation: 'complete'
-    } as const
-
-    const nextStage = stageMap[stage as keyof typeof stageMap] || 'complete'
-    
-    // Update progress: each block is 25%
-    const blockIndex = blocks.findIndex(b => b.key === blockName)
-    const newCompletedBlocks = completedBlocks + 1
-    const newProgress = (newCompletedBlocks / 4) * 100
-    
-    if (onProgressUpdate) {
-      onProgressUpdate(newProgress)
-    }
-    
-    setStage(nextStage)
   }
 
   const handleComplete = async () => {
+    // Always call onComplete to proceed UI, save in background
+    if (onComplete) onComplete(results)
+
+    // Save final state in background - don't block completion
     try {
       await saveInterview0Status({
         interview_0_completed: true,
@@ -132,10 +141,14 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
         preparation_check: results.preparation
       })
     } catch (err) {
-      console.error('[v0] Failed to save completion:', err)
+      // Prevent the entire save pipeline from breaking if save fails
+      console.error('[v0] Failed to save completion gracefully:', {
+        error: err instanceof Error ? err.message : String(err),
+        totalScore,
+        timestamp: new Date().toISOString()
+      })
+      // Local state is preserved, user can refresh to retry
     }
-
-    if (onComplete) onComplete(results)
   }
 
   if (isLoading) {

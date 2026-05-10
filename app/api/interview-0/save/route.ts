@@ -7,6 +7,7 @@ export async function POST(request: NextRequest) {
     
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
+      console.warn('[v0] API interview-0/save: No user authenticated')
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
@@ -14,8 +15,15 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json()
+    console.log('[v0] API interview-0/save: Received data for user', user.id.substring(0, 8), {
+      hasEnvironment: !!body.environment_check,
+      hasPresence: !!body.presence_check,
+      hasAudio: !!body.audio_check,
+      hasPreparation: !!body.preparation_check,
+      status: body.interview_0_status
+    })
     
-    const { error } = await supabase
+    const { error, data } = await supabase
       .from('a3_entrevista_0')
       .upsert({
         user_id: user.id,
@@ -30,12 +38,24 @@ export async function POST(request: NextRequest) {
       }, {
         onConflict: 'user_id'
       })
+      .select()
 
-    if (error) throw error
+    if (error) {
+      console.error('[v0] API interview-0/save: Database error', {
+        code: error.code,
+        message: error.message,
+        details: error.details
+      })
+      throw error
+    }
     
-    return NextResponse.json({ success: true }, { status: 200 })
+    console.log('[v0] API interview-0/save: Saved successfully for user', user.id.substring(0, 8))
+    return NextResponse.json({ success: true, data }, { status: 200 })
   } catch (error) {
-    console.error('[v0] API interview-0/save failed:', error)
+    console.error('[v0] API interview-0/save failed:', {
+      error: error instanceof Error ? error.message : String(error),
+      timestamp: new Date().toISOString()
+    })
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to save' },
       { status: 500 }

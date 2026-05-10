@@ -18,14 +18,21 @@ export async function saveInterview0Status(data: Interview0Status) {
     })
 
     if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.error || 'Failed to save')
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+      console.error('[v0] Save failed with status', response.status, errorData)
+      throw new Error(errorData.error || `HTTP ${response.status}`)
     }
 
-    console.log('[v0] Interview 0 status saved')
-    return await response.json()
+    const result = await response.json()
+    console.log('[v0] Interview 0 status saved successfully:', { timestamp: new Date().toISOString() })
+    return result
   } catch (err) {
-    console.error('[v0] Failed to save interview 0 status:', err)
+    console.error('[v0] Failed to save interview 0 status:', {
+      error: err instanceof Error ? err.message : String(err),
+      data,
+      timestamp: new Date().toISOString(),
+    })
+    // Fail gracefully but notify caller
     throw err
   }
 }
@@ -61,14 +68,20 @@ export async function completeInterview0(finalScore: number) {
     })
 
     if (!response.ok) {
-      const error = await response.json()
-      throw new Error(error.error || 'Failed to complete')
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+      console.error('[v0] Complete failed with status', response.status, errorData)
+      throw new Error(errorData.error || `HTTP ${response.status}`)
     }
 
-    console.log('[v0] Interview 0 completed')
-    return await response.json()
+    const result = await response.json()
+    console.log('[v0] Interview 0 completed successfully:', { finalScore, timestamp: new Date().toISOString() })
+    return result
   } catch (err) {
-    console.error('[v0] Failed to complete interview 0:', err)
+    console.error('[v0] Failed to complete interview 0:', {
+      error: err instanceof Error ? err.message : String(err),
+      finalScore,
+      timestamp: new Date().toISOString(),
+    })
     throw err
   }
 }
