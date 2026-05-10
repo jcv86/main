@@ -59,10 +59,35 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
     if (onStart) {
       onStart()
     } else {
-      // Default navigation - route to the module
+      // Default navigation - route based on module ID
       if (module.id) {
-        console.log('[v0] Navigating to module:', module.id)
-        router.push(`/despega/a3/modulo/${module.id}`)
+        let navigationPath = ''
+        
+        // Map module IDs to their specific routes
+        if (module.id.includes('auditoria')) {
+          // Audit modules stay on dashboard - just log for now
+          console.log('[v0] Audit module started:', module.id)
+          return
+        } else if (module.id.includes('metodo-star') || module.id.includes('cv-inteligente') || module.id.includes('analisis')) {
+          // Preparation tools stay on dashboard
+          console.log('[v0] Preparation tool started:', module.id)
+          return
+        } else if (module.id.includes('entrevista-guiada')) {
+          navigationPath = '/despega/a3/entrenamiento-guiado'
+        } else if (module.id.includes('entrevista-estructurada')) {
+          navigationPath = '/despega/a3/entrenamiento-estructurado'
+        } else if (module.id.includes('entrevista-desafiante')) {
+          navigationPath = '/despega/a3/entrenamiento-desafiante'
+        } else if (module.id.includes('entrevista-conversacional')) {
+          navigationPath = '/despega/a3'
+        } else if (module.id.includes('simulacion')) {
+          navigationPath = '/despega/a3'
+        }
+        
+        if (navigationPath) {
+          console.log('[v0] Navigating to:', navigationPath, 'from module:', module.id)
+          router.push(navigationPath)
+        }
       } else {
         console.log('[v0] No module ID provided')
       }
