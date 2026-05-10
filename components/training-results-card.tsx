@@ -70,6 +70,28 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
             isFirstCompletion: data.isFirstCompletion ?? true,
             message: data.message || ''
           })
+          
+          // Claim the XP and DTC rewards to update user profile
+          if (data.isFirstCompletion && (data.xpEarned || data.pointsEarned)) {
+            console.log('[v0] Claiming rewards:', { xp: data.xpEarned, dtc: data.pointsEarned })
+            const claimResponse = await fetch('/api/gamification/claim-reward', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                routeId: result.trainingType,
+                xpAmount: data.xpEarned || 0,
+                dtcAmount: data.pointsEarned || 0,
+              })
+            })
+            
+            if (claimResponse.ok) {
+              const claimData = await claimResponse.json()
+              console.log('[v0] Rewards claimed successfully:', claimData)
+            } else {
+              console.error('[v0] Failed to claim rewards:', await claimResponse.text())
+            }
+          }
+          
           // Show XP animation only for first completion
           if (data.isFirstCompletion) {
             setShowXPAnimation(true)
