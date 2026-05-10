@@ -32,8 +32,7 @@ export async function GET(request: Request) {
 
     if (!user) {
       console.warn('[v0] API user-progress: Session exists but no user', {
-        timestamp: new Date().toISOString(),
-        sessionId: session.id?.substring(0, 8)
+        timestamp: new Date().toISOString()
       })
       return NextResponse.json(
         { error: 'Unauthorized' },
