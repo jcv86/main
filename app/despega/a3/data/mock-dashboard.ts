@@ -297,14 +297,13 @@ export const mockDashboardData: DashboardState = {
     }
   ],
 
-  // Default state - audit not yet completed. Real state comes from API.
-  // Uses canonical IDs from /lib/pillar3-config.ts
+  // Audit completed - Level 2 should now be available
   moduleStates: {
-    'auditoria-inicial': 'in_progress',
-    'metodo-star': 'locked',
-    'cv-inteligente': 'locked',
-    'analisis-vacante': 'locked',
-    'analisis-multimodal': 'locked',
+    'auditoria-inicial': 'completed',
+    'metodo-star': 'available',
+    'cv-inteligente': 'available',
+    'analisis-vacante': 'available',
+    'analisis-multicanal': 'available',
     'entrenamiento-guiado': 'locked',
     'entrenamiento-estructurado': 'locked',
     'entrenamiento-desafiante': 'locked',
@@ -312,6 +311,6 @@ export const mockDashboardData: DashboardState = {
     'simulacion-real': 'locked',
   },
 
-  // No modules completed by default
-  completedModuleIds: []
+  // Audit completed - this triggers Level 2 unlock via buildModuleStates()
+  completedModuleIds: ['auditoria-inicial']
 }
