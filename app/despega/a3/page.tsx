@@ -35,7 +35,7 @@ export default function A3EntrenamientoIntensivo() {
     return completed
   }
 
-  // Fetch real user progress on mount
+  // Fetch real user progress on mount and on route change
   useEffect(() => {
     const fetchProgress = async () => {
       try {
@@ -94,7 +94,19 @@ export default function A3EntrenamientoIntensivo() {
       }
     }
 
+    // Initial fetch on mount
     fetchProgress()
+
+    // Refetch when page becomes visible (user returns from subpage)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        console.log('[v0] Page visible, refreshing progress...')
+        fetchProgress()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
   }, [])
 
   if (isLoading) {
