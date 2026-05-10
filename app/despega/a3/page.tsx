@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -14,6 +15,9 @@ import { BadgesGrid } from '@/components/a3/badges-grid'
 import { Pillar3DetailedProgress } from '@/components/pillar3-detailed-progress'
 
 export default function A3EntrenamientoIntensivo() {
+  const searchParams = useSearchParams()
+  const refreshParam = searchParams?.get('refresh')
+  
   const [dashboardData, setDashboardData] = useState<DashboardState>(mockDashboardData)
   const [hoveredStat, setHoveredStat] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -107,7 +111,7 @@ export default function A3EntrenamientoIntensivo() {
 
     document.addEventListener('visibilitychange', handleVisibilityChange)
     return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
-  }, [])
+  }, [refreshParam])
 
   if (isLoading) {
     return (

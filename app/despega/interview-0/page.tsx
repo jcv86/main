@@ -51,8 +51,10 @@ export default function Interview0Page() {
               setStage('intro')
               setScore(0)
               setAuditProgress(0)
-              // Navigate to A3 dashboard where Pillar 3 is now unlocked
-              router.push('/despega/a3')
+              // Wait for completion to be saved, then redirect and hard-refresh dashboard
+              setTimeout(() => {
+                router.push('/despega/a3?refresh=' + Date.now())
+              }, 500)
             }}
           />
         </div>
