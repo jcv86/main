@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Module, Milestone } from '@/app/despega/a3/data/mock-dashboard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { ChevronDown, ChevronUp, Lock, Play, CheckCircle2, Clock } from 'lucide-react'
+import { ChevronDown, ChevronUp, Lock, Play, CheckCircle2, Clock, BookOpen, Brain, Target, Lightbulb, Zap, Trophy } from 'lucide-react'
 
 interface ModuleCardProps {
   module: Module
@@ -15,6 +15,23 @@ interface ModuleCardProps {
 export function ModuleCard({ module, onStart }: ModuleCardProps) {
   const [expanded, setExpanded] = useState(false)
   const router = useRouter()
+  
+  // Get decorative icon based on module ID
+  const getModuleIcon = (moduleId: string) => {
+    const iconMap: Record<string, React.ReactNode> = {
+      'auditoria-inicial': <CheckCircle2 className="w-24 h-24 text-white/10" />,
+      'metodo-star': <Target className="w-24 h-24 text-white/10" />,
+      'cv-inteligente': <BookOpen className="w-24 h-24 text-white/10" />,
+      'analisis-vacante': <Brain className="w-24 h-24 text-white/10" />,
+      'analisis-multicanal': <Lightbulb className="w-24 h-24 text-white/10" />,
+      'entrevista-guiada': <Play className="w-24 h-24 text-white/10" />,
+      'entrevista-estructurada': <Target className="w-24 h-24 text-white/10" />,
+      'entrevista-desafiante': <Zap className="w-24 h-24 text-white/10" />,
+      'entrevista-conversacional': <Trophy className="w-24 h-24 text-white/10" />,
+      'simulacion-completa': <Trophy className="w-24 h-24 text-white/10" />,
+    }
+    return iconMap[moduleId] || <BookOpen className="w-24 h-24 text-white/10" />
+  }
   
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -89,9 +106,14 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
   const hasMilestones = totalMilestones > 0
   
   return (
-    <Card className={`border border-white/10 bg-gradient-to-br ${getStatusColor(module.status)} hover:border-white/20 transition overflow-hidden`}>
+    <Card className={`border border-white/10 bg-gradient-to-br ${getStatusColor(module.status)} hover:border-white/20 transition overflow-hidden relative`}>
+      {/* Decorative icon background */}
+      <div className="absolute top-4 right-4 opacity-50 pointer-events-none">
+        {getModuleIcon(module.id)}
+      </div>
+      
       <CardHeader className="pb-3">
-        <div className="space-y-3">
+        <div className="space-y-3 pr-12">
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
               <CardTitle className="text-lg text-white mb-1">{module.title}</CardTitle>
