@@ -202,7 +202,8 @@ export default function GuidedInterviewPage() {
           currentStep={1}
           totalSteps={QUESTIONS_TO_USE.length + 1}
           currentLabel="Preparación"
-          isCompleted={false}  // Not completed until practice finishes
+          completedSections={0}
+          totalSections={4}
         />
         <div className="max-w-5xl mx-auto space-y-6 px-4 py-8">
           <Link href="/despega/a3">
