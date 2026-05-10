@@ -1,19 +1,83 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, Zap, TrendingUp, Award, Rocket } from 'lucide-react'
-import { mockDashboardData } from './data/mock-dashboard'
+import { ArrowRight, Zap, TrendingUp, Award, Rocket, Loader2 } from 'lucide-react'
+import { mockDashboardData, DashboardState } from './data/mock-dashboard'
 import { ProgressBar } from '@/components/a3/progress-bar'
 import { SkillsGrid } from '@/components/a3/skills-grid'
 import { LevelsAccordion } from '@/components/a3/levels-accordion'
 import { BadgesGrid } from '@/components/a3/badges-grid'
 
 export default function A3EntrenamientoIntensivo() {
-  const [dashboardData] = useState(mockDashboardData)
+  const [dashboardData, setDashboardData] = useState<DashboardState>(mockDashboardData)
   const [hoveredStat, setHoveredStat] = useState<number | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Fetch real user progress on mount
+  useEffect(() => {
+    const fetchProgress = async () => {
+      try {
+        const response = await fetch('/api/a3/user-progress')
+        if (response.ok) {
+          const { progress } = await response.json()
+          
+          // Update dashboard data with real progress
+          setDashboardData(prev => {
+            const updated = { ...prev }
+            updated.currentLevel = progress.currentLevel
+            updated.progressPct = progress.progressPct
+            updated.totalXp = progress.totalXp
+            updated.maxXp = progress.maxXp
+            updated.nextMilestone = progress.nextMilestone
+            updated.nextReward = progress.nextReward
+            updated.completedModules = progress.completedModules
+            
+            // Update module statuses based on real completion data
+            updated.modules = prev.modules.map(module => {
+              const status = progress.moduleStates[module.id]
+              if (status) {
+                return {
+                  ...module,
+                  status: status as 'available' | 'in_progress' | 'completed' | 'locked',
+                  xp: status === 'completed' ? module.maxXp : module.xp,
+                  progress: status === 'completed' ? 100 : status === 'in_progress' ? 60 : 0,
+                }
+              }
+              return module
+            })
+
+            // Update skills with real values
+            updated.skills = prev.skills.map(skill => ({
+              ...skill,
+              value: progress.skills[skill.id] || skill.value
+            }))
+
+            return updated
+          })
+        }
+      } catch {
+        // Use mock data if API fails
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchProgress()
+  }, [])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 text-training animate-spin" />
+          <p className="text-white/70">Cargando tu progreso...</p>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-background overflow-hidden">

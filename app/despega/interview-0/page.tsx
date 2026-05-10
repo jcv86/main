@@ -15,13 +15,11 @@ export default function Interview0Page() {
   const [score, setScore] = useState(0)
   const [isHydrated, setIsHydrated] = useState(false)
 
-  const handleAuditComplete = (result: any) => {
-    console.log('[v0] Audit completed:', result)
+  const handleAuditComplete = () => {
     setStage('simulator')
   }
 
   const handleSimulatorComplete = (result: any) => {
-    console.log('[v0] Interview 0 fully completed:', result)
     setScore(result.score || 85)
     setStage('farewell')
   }
@@ -73,11 +71,12 @@ export default function Interview0Page() {
           totalQuestions: 5,
           timeSpent: 600,
           level: 'basico',
-          trainingType: 'Preparación Inicial'
+          trainingType: 'auditoria-inicial'
         }}
         onContinue={() => {
           setStage('intro')
           setScore(0)
+          // Navigate to A3 dashboard where user can see unlocked modules
           router.push('/despega/a3')
         }}
       />
