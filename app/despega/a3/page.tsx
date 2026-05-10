@@ -252,7 +252,6 @@ export default function A3EntrenamientoIntensivo() {
             moduleStates={dashboardData.moduleStates || {}}
             completedModuleIds={dashboardData.completedModuleIds || []}
             totalXp={dashboardData.totalXp}
-            totalDtc={dashboardData.totalDtc}
           />
         </div>
 
