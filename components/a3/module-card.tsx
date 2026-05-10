@@ -58,39 +58,35 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
   const handleStartModule = () => {
     if (onStart) {
       onStart()
+      return
+    }
+
+    if (!module.id) {
+      console.log('[v0] No module ID provided')
+      return
+    }
+
+    // Map each module ID to its dedicated existing route
+    const moduleRouteMap: Record<string, string> = {
+      'auditoria-inicial': '/despega/interview-0',
+      'metodo-star': '/despega/a3/cv-ats',
+      'cv-inteligente': '/despega/cv-builder',
+      'analisis-vacante': '/despega/a3/ajuste-por-vacante',
+      'analisis-multicanal': '/despega/a3/analisis-multimodal',
+      'entrevista-guiada': '/despega/a3/entrenamiento-guiado',
+      'entrevista-estructurada': '/despega/a3/entrenamiento-estructurado',
+      'entrevista-desafiante': '/despega/a3/entrenamiento-desafiante',
+      'entrevista-conversacional': '/despega/a3/conversational-interview',
+      'simulacion-completa': '/despega/a3/simulations',
+    }
+
+    const navigationPath = moduleRouteMap[module.id]
+
+    if (navigationPath) {
+      console.log('[v0] Navigating to:', navigationPath, 'from module:', module.id)
+      router.push(navigationPath)
     } else {
-      // Default navigation - route based on module ID
-      if (module.id) {
-        let navigationPath = ''
-        
-        // Map module IDs to their specific routes
-        if (module.id.includes('auditoria')) {
-          // Audit modules stay on dashboard - just log for now
-          console.log('[v0] Audit module started:', module.id)
-          return
-        } else if (module.id.includes('metodo-star') || module.id.includes('cv-inteligente') || module.id.includes('analisis')) {
-          // Preparation tools stay on dashboard
-          console.log('[v0] Preparation tool started:', module.id)
-          return
-        } else if (module.id.includes('entrevista-guiada')) {
-          navigationPath = '/despega/a3/entrenamiento-guiado'
-        } else if (module.id.includes('entrevista-estructurada')) {
-          navigationPath = '/despega/a3/entrenamiento-estructurado'
-        } else if (module.id.includes('entrevista-desafiante')) {
-          navigationPath = '/despega/a3/entrenamiento-desafiante'
-        } else if (module.id.includes('entrevista-conversacional')) {
-          navigationPath = '/despega/a3'
-        } else if (module.id.includes('simulacion')) {
-          navigationPath = '/despega/a3'
-        }
-        
-        if (navigationPath) {
-          console.log('[v0] Navigating to:', navigationPath, 'from module:', module.id)
-          router.push(navigationPath)
-        }
-      } else {
-        console.log('[v0] No module ID provided')
-      }
+      console.log('[v0] No route mapped for module:', module.id)
     }
   }
   
