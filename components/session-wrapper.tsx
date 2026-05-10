@@ -58,10 +58,14 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
 
     getInitialSession()
 
-    // Listen for auth changes
+    // Listen for auth changes - only update if session actually changed
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (_event, newSession) => {
+      (event, newSession) => {
         if (isMounted) {
+          // Only log significant auth events, not every state check
+          if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
+            console.log('[v0] Auth event:', event, 'User:', newSession?.user?.email)
+          }
           setSession(newSession)
           setIsLoading(false)
         }
