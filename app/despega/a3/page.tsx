@@ -68,6 +68,10 @@ export default function A3EntrenamientoIntensivo() {
               return module
             })
 
+            // Update module states and completed IDs for detailed progress component
+            updated.moduleStates = progress.moduleStates
+            updated.completedModuleIds = progress.completedModuleIds
+
             // Calculate completed sections for the general progress bar
             const sections = calculateCompletedSections(updated.modules)
             setCompletedSections(sections)
