@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Module, Milestone } from '@/app/despega/a3/data/mock-dashboard'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -13,6 +14,7 @@ interface ModuleCardProps {
 
 export function ModuleCard({ module, onStart }: ModuleCardProps) {
   const [expanded, setExpanded] = useState(false)
+  const router = useRouter()
   
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -50,6 +52,17 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
         return { label: 'Comenzar', disabled: false }
       default:
         return { label: 'Bloqueado', disabled: true }
+    }
+  }
+
+  const handleStartModule = () => {
+    if (onStart) {
+      onStart()
+    } else {
+      // Default navigation - route to the module
+      if (module.id && !module.id.includes('auditoría')) {
+        router.push(`/despega/a3/modulo/${module.id}`)
+      }
     }
   }
   
@@ -130,7 +143,7 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
         
         {/* Action button */}
         <Button
-          onClick={onStart}
+          onClick={handleStartModule}
           disabled={buttonState.disabled}
           className={`w-full transition ${
             buttonState.disabled
