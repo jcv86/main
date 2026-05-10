@@ -18,7 +18,7 @@ interface AuditResult {
   preparation: { passed: boolean; score: number }
 }
 
-export function Interview0PreAudit({ onComplete }: { onComplete?: (result: AuditResult) => void }) {
+export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplete?: (result: AuditResult) => void; onProgressUpdate?: (progress: number) => void }) {
   const [stage, setStage] = useState<'intro' | 'environment' | 'presence' | 'audio-camera' | 'preparation' | 'complete'>('intro')
   const [results, setResults] = useState<AuditResult>({
     environment: { passed: false, score: 0 },
@@ -63,9 +63,17 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
   }
 
   const status = getStatus()
-  const progressStages = ['environment', 'presence', 'audio-camera', 'preparation']
-  const currentStageIndex = progressStages.indexOf(stage as string)
-  const progress = currentStageIndex === -1 ? 0 : ((currentStageIndex + 1) / progressStages.length) * 100
+  
+  // Count completed blocks for granular progress
+  const blocks = [
+    { key: 'environment' as const, name: 'Auditoría de Entorno', passed: results.environment.passed },
+    { key: 'presence' as const, name: 'Validación de Presencia', passed: results.presence.passed },
+    { key: 'audioCamera' as const, name: 'Audio & Cámara', passed: results.audioCamera.passed },
+    { key: 'preparation' as const, name: 'Preparación Base', passed: results.preparation.passed }
+  ]
+  
+  const completedBlocks = blocks.filter(b => b.passed).length
+  const progress = (completedBlocks / 4) * 100
 
   const handleBlockComplete = async (blockName: keyof AuditResult, data: { passed: boolean; score: number }) => {
     const newResults = { ...results, [blockName]: data }
@@ -88,7 +96,18 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
       preparation: 'complete'
     } as const
 
-    setStage(stageMap[stage as keyof typeof stageMap] || 'complete')
+    const nextStage = stageMap[stage as keyof typeof stageMap] || 'complete'
+    
+    // Update progress: each block is 25%
+    const blockIndex = blocks.findIndex(b => b.key === blockName)
+    const newCompletedBlocks = completedBlocks + 1
+    const newProgress = (newCompletedBlocks / 4) * 100
+    
+    if (onProgressUpdate) {
+      onProgressUpdate(newProgress)
+    }
+    
+    setStage(nextStage)
   }
 
   const handleComplete = async () => {
@@ -153,9 +172,8 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
   }
 
   if (stage === 'complete') {
-    // Calculate XP and DTC points based on audit score
-    const xpAwarded = Math.round((totalScore / 100) * 250) // Max 250 XP for audit
-    const dtcAwarded = Math.round(xpAwarded * 0.1) // 10% of XP
+    // Rewards display - XP/DTC are awarded by the API in TrainingResultsCard
+    // No duplicate calculation here
     
     return (
       <div className="max-w-3xl mx-auto space-y-6">
@@ -202,37 +220,17 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
           </CardContent>
         </Card>
 
-        {/* Rewards display */}
+        {/* Results summary  */}
         <Card className="border-muted/30 bg-gradient-to-br from-purple-500/10 to-pink-500/10">
           <CardContent className="pt-8 pb-8">
             <div className="text-center space-y-6">
               <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-white">¡Auditoría Completada!</h2>
-                <p className="text-white/70">Has ganado experiencia y puntos por completar tu auditoría inicial</p>
-              </div>
-
-              {/* XP Reward */}
-              <div className="flex items-center justify-center gap-8">
-                <div className="text-center space-y-2">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500/40 to-purple-600/20 flex items-center justify-center">
-                    <div className="text-4xl font-bold text-purple-300">+{xpAwarded}</div>
-                  </div>
-                  <p className="text-sm font-semibold text-white/70">Experiencia</p>
-                </div>
-
-                <div className="w-px h-16 bg-white/10" />
-
-                {/* DTC Reward */}
-                <div className="text-center space-y-2">
-                  <div className="w-24 h-24 rounded-full bg-gradient-to-br from-pink-500/40 to-pink-600/20 flex items-center justify-center">
-                    <div className="text-4xl font-bold text-pink-300">+{dtcAwarded}</div>
-                  </div>
-                  <p className="text-sm font-semibold text-white/70">DTC</p>
-                </div>
+                <p className="text-white/70">Completaste todos los checks. Verás los premios en el siguiente paso.</p>
               </div>
 
               <div className="space-y-2 text-sm text-white/60 bg-white/5 rounded-lg p-4">
-                <p>✓ Auditoría inicial completada</p>
+                <p>✓ {completedBlocks} / 4 secciones completadas</p>
                 <p>✓ Se desbloquean entrenamientos en Pillar 3</p>
                 <p>✓ Acceso a herramientas de preparación</p>
               </div>
@@ -242,7 +240,7 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
                 className="w-full text-white h-12"
                 style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '20px' }}
               >
-                Ir al Dashboard
+                Continuar a Resultados
                 <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -258,7 +256,7 @@ export function Interview0PreAudit({ onComplete }: { onComplete?: (result: Audit
       <div className="space-y-2">
         <div className="flex justify-between text-sm">
           <span className="text-white/70">Progreso</span>
-          <span className="text-white/70">{Math.round(progress)}%</span>
+          <span className="text-white/70">{completedBlocks}/{blocks.length} secciones completadas</span>
         </div>
         <Progress value={progress} className="h-2" />
       </div>

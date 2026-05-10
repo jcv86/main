@@ -13,10 +13,12 @@ export default function Interview0Page() {
   const [stage, setStage] = useState<'intro' | 'audit' | 'farewell' | 'results'>('intro')
   const [score, setScore] = useState(0)
   const [isHydrated, setIsHydrated] = useState(false)
+  const [auditProgress, setAuditProgress] = useState(0) // Track granular audit progress (0-100 in 25% increments)
 
   const handleAuditComplete = (result: any) => {
     // Store audit score and go to results/rewards screen
     setScore(result.score || 75)
+    setAuditProgress(100) // Mark audit as 100% complete
     setStage('results')
   }
 
@@ -48,6 +50,7 @@ export default function Interview0Page() {
             onContinue={() => {
               setStage('intro')
               setScore(0)
+              setAuditProgress(0)
               // Navigate to A3 dashboard where Pillar 3 is now unlocked
               router.push('/despega/a3')
             }}
@@ -58,10 +61,11 @@ export default function Interview0Page() {
   }
 
   // Calculate general progress based on stage
+  // intro=0%, audit progresses from 0-100 based on blocks completed
   const getGeneralProgress = () => {
     switch (stage) {
       case 'intro': return { step: 1, total: 2, percent: 0, label: 'Introducción' }
-      case 'audit': return { step: 2, total: 2, percent: 50, label: 'Auditoría' }
+      case 'audit': return { step: 2, total: 2, percent: auditProgress, label: 'Auditoría' }
       default: return { step: 1, total: 2, percent: 0, label: 'Introducción' }
     }
   }
@@ -159,7 +163,10 @@ export default function Interview0Page() {
             )}
 
             {stage === 'audit' && (
-              <Interview0PreAudit onComplete={handleAuditComplete} />
+              <Interview0PreAudit 
+                onComplete={handleAuditComplete}
+                onProgressUpdate={(progress) => setAuditProgress(progress)}
+              />
             )}
           </div>
         </div>
