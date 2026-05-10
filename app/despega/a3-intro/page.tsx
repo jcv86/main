@@ -49,19 +49,9 @@ export default function A3IntroPage() {
         }
       }
       
-      // Fetch user progress from API
-      try {
-        const response = await fetch('/api/a3-training-progress')
-        if (response.ok) {
-          const { unlockedLevel } = await response.json()
-          setUnlockedLevels(unlockedLevel)
-          console.log('[v0] Unlocked level:', unlockedLevel)
-        } else {
-          console.log('[v0] Could not fetch training progress, using default (level 1)')
-        }
-      } catch (err) {
-        console.log('[v0] Error fetching training progress:', err)
-      }
+      // For now, all users start with level 1 unlocked
+      // TODO: Implement backend tracking of completed levels
+      setUnlockedLevels(1)
       
       const { error: updateError } = await supabase
         .from('despega_user_profiles')
