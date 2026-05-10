@@ -165,7 +165,6 @@ export default function A3EntrenamientoIntensivo() {
               </Button>
             </Link>
             <Badge className="bg-training/30 text-training border border-training/50 shadow-lg shadow-training/20 animate-pulse">
-              <Rocket className="w-3 h-3 mr-2" />
               Pilar 3: Entrenamiento Intensivo
             </Badge>
           </div>
