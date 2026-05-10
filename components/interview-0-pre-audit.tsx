@@ -9,7 +9,7 @@ import { EnvironmentCheck } from './interview-0-blocks/environment-check'
 import { PresenceCheck } from './interview-0-blocks/presence-check'
 import { AudioCameraCheck } from './interview-0-blocks/audio-camera-check'
 import { PreparationCheck } from './interview-0-blocks/preparation-check'
-import { saveInterview0Status, getInterview0Status } from '@/lib/interview-0/supabase'
+import { saveInterview0Status, getInterview0Status, type Interview0Status } from '@/lib/interview-0/supabase'
 
 interface AuditResult {
   environment: { passed: boolean; score: number }
