@@ -60,7 +60,6 @@ export async function GET() {
     )
     const level3Complete = level3Modules.length === 4
     
-    const totalXp = 1000
     const maxXp = 1000
     const progressPct = Math.min(Math.round((totalXp / maxXp) * 100), 100)
 
