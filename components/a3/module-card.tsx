@@ -60,8 +60,11 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
       onStart()
     } else {
       // Default navigation - route to the module
-      if (module.id && !module.id.includes('auditoría')) {
+      if (module.id) {
+        console.log('[v0] Navigating to module:', module.id)
         router.push(`/despega/a3/modulo/${module.id}`)
+      } else {
+        console.log('[v0] No module ID provided')
       }
     }
   }
