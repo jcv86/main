@@ -80,6 +80,10 @@ export const metadata: Metadata = {
 }
 
 export default function Home() {
+  if (typeof window !== 'undefined') {
+    console.log('[v0] Home page rendering on client')
+  }
+  
   return (
     <main className="min-h-screen">
       <LandingPageOptimized />
