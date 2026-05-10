@@ -44,12 +44,8 @@ export default function Interview0Page() {
               timeSpent: 300,
               level: 'basico',
               trainingType: 'auditoria-inicial',
-              xpEarned: xpAwarded,
-              pointsEarned: dtcAwarded,
-              rewards: [
-                { type: 'xp', amount: xpAwarded, label: 'Experiencia' },
-                { type: 'dtc', amount: dtcAwarded, label: 'DTC' }
-              ]
+              moduleXpEarned: xpAwarded,
+              moduleXpTotal: 250
             }}
             onContinue={() => {
               setStage('intro')
