@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { Module } from '@/app/despega/a3/data/mock-dashboard'
 import { ModuleCard } from './module-card'
-import { ChevronDown, ChevronUp, Lock, CheckCircle2 } from 'lucide-react'
+import { ChevronDown, ChevronUp, Lock, CheckCircle2, Unlock } from 'lucide-react'
 
 interface LevelsAccordionProps {
   modules: Module[]
@@ -18,6 +18,7 @@ interface LevelGroup {
 
 export function LevelsAccordion({ modules }: LevelsAccordionProps) {
   const [expandedLevel, setExpandedLevel] = useState<number | null>(1)
+  const [unlockedLevels, setUnlockedLevels] = useState<Set<number>>(new Set())
   
   // Determine unlock conditions
   const getUnlockInfo = (level: number, allLevels: LevelGroup[]) => {
@@ -28,10 +29,18 @@ export function LevelsAccordion({ modules }: LevelsAccordionProps) {
       previousLevel.modules.length > 0 && 
       previousLevel.modules.every(m => m.status === 'completed')
     
+    const isManuallyUnlocked = unlockedLevels.has(level)
+    
     return {
-      isLocked: !isPreviousComplete,
-      reason: `Se desbloquea tras completar: ${allLevels[level - 2]?.title}`
+      isLocked: !isPreviousComplete && !isManuallyUnlocked,
+      reason: `Se desbloquea tras completar: ${allLevels[level - 2]?.title}`,
+      isPreviousComplete,
+      canUnlock: isPreviousComplete && !isManuallyUnlocked
     }
+  }
+  
+  const handleUnlockLevel = (levelNumber: number) => {
+    setUnlockedLevels(prev => new Set([...prev, levelNumber]))
   }
   
   // Group modules by level
@@ -139,6 +148,19 @@ export function LevelsAccordion({ modules }: LevelsAccordionProps) {
                 {levelGroup.modules.map((module) => (
                   <ModuleCard key={module.id} module={module} />
                 ))}
+                
+                {/* Unlock next level button - appears when current level is complete */}
+                {isLevelComplete && levelGroup.level < 4 && (
+                  <div className="mt-6 pt-4 border-t border-white/10">
+                    <button
+                      onClick={() => handleUnlockLevel(levelGroup.level + 1)}
+                      className="w-full px-4 py-3 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white font-semibold rounded-lg flex items-center justify-center gap-2 transition"
+                    >
+                      <Unlock className="w-5 h-5" />
+                      Desbloquear: {levels[levelGroup.level]?.title || 'Siguiente Nivel'}
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
