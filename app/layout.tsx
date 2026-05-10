@@ -1,29 +1,40 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Montserrat, Lora } from "next/font/google"
 import "./globals.css"
 import { Providers } from "./providers"
 import { Toaster } from "@/components/ui/toaster"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { validateEnvironment } from "@/lib/env-validation"
-import LLMOOptimizedFooter from "@/components/llmo-optimized-footer"
+import LLMOOptimizedFooter from "@/components/footer"
 
-// Validate environment on startup
-if (typeof window === "undefined") {
+// Validate environment on startup (skip for test routes)
+if (typeof window === "undefined" && !process.env.SKIP_ENV_VALIDATION) {
   validateEnvironment()
 }
 
-const inter = Inter({ subsets: ["latin"] })
+// DTC Brand Typography
+const montserrat = Montserrat({ 
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  weight: ["400", "500", "600", "700"],
+})
+
+const lora = Lora({ 
+  subsets: ["latin"],
+  variable: "--font-lora",
+  weight: ["400", "500", "600", "700"],
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://despegatucarrera.cl"),
   title: {
-    default: "Despega Tu Carrera - Plataforma de Desarrollo Profesional con IA | Tests Psicométricos y Coaching",
+    default: "Despega Tu Carrera - El Ritual, Exploración, Entrenamiento y La Realidad | Transformación Profesional con IA",
     template: "%s | Despega Tu Carrera",
   },
   description:
-    "Plataforma líder en Chile para desarrollo profesional. Descubre tu potencial con evaluaciones psicométricas, accede a 120+ libros profesionales y recibe coaching personalizado con IA. Aprende de expertos en liderazgo, productividad e inteligencia emocional.",
+    "Las 4 fases de tu transformación profesional: El Ritual (autoconocimiento), Exploración (diseña tu ruta 90 días), Entrenamiento (simulación intensiva con video), y La Realidad (ejecución con coach IA 24/7). Entrenamientos con feedback en tiempo real, análisis multimodal con video y contexto laboral estratégico.",
   keywords: [
     "desarrollo profesional Chile",
     "evaluaciones psicométricas",
@@ -61,7 +72,7 @@ export const metadata: Metadata = {
     siteName: "Despega Tu Carrera",
     title: "Despega Tu Carrera - Desarrollo Profesional con IA y Tests Psicométricos",
     description:
-      "Transforma tu carrera con evaluaciones psicométricas científicas, 120+ libros profesionales y coaching personalizado con inteligencia artificial. La plataforma #1 en Chile para desarrollo profesional.",
+      "Transforma tu carrera con evaluaciones científicas, contenido especializado y coaching personalizado con inteligencia artificial.",
     images: [
       {
         url: "/og-image.png",
@@ -74,7 +85,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Despega Tu Carrera - Desarrollo Profesional con IA",
-    description: "Tests psicométricos, 120+ libros profesionales y coaching con IA. Impulsa tu carrera hoy.",
+    description: "Tests psicométricos, contenido especializado y coaching con IA. Impulsa tu carrera hoy.",
     images: ["/twitter-image.png"],
     creator: "@despegatucarrera",
   },
@@ -119,11 +130,25 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#7c3aed" />
+        <meta name="theme-color" content="#000000" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                const theme = localStorage.getItem('theme-preference') || 'dark';
+                if (theme === 'dark') {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+              })();
+            `,
+          }}
+        />
       </head>
-      <body className={inter.className} suppressHydrationWarning>
+      <body className={`${montserrat.className} ${lora.variable}`} suppressHydrationWarning>
         <Providers>
           {children}
           <LLMOOptimizedFooter />

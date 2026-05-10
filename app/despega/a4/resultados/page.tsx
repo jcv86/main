@@ -20,39 +20,39 @@ interface A4Insights {
 const insightCards = [
   {
     key: 'posicionamientoEstrategico',
-    icon: '🎯',
+    icon: '',
     title: 'Posicionamiento Estratégico',
-    color: 'from-emerald-500 to-teal-500'
+    color: 'from-green/50'
   },
   {
     key: 'inteligenciaMercado',
-    icon: '📊',
+    icon: '',
     title: 'Inteligencia de Mercado',
-    color: 'from-blue-500 to-cyan-500'
+    color: 'from-blue'
   },
   {
     key: 'nivelGamificacion',
     icon: '🏆',
     title: 'Nivel de Gamificación',
-    color: 'from-purple-500 to-pink-500'
+    color: 'from-purple/50500'
   },
   {
     key: 'proximasFocalizaciones',
     icon: '🔍',
     title: 'Próximas Focalizaciones',
-    color: 'from-amber-500 to-orange-500'
+    color: 'from-yellow/50/50'
   },
   {
     key: 'oportunidadesCaptura',
     icon: '💎',
     title: 'Oportunidades de Captura',
-    color: 'from-rose-500 to-red-500'
+    color: 'from-red/50500'
   },
   {
     key: 'visionLargo',
-    icon: '🚀',
+    icon: '',
     title: 'Visión a Largo Plazo',
-    color: 'from-indigo-500 to-violet-500'
+    color: 'from-blue/50'
   }
 ]
 
@@ -108,23 +108,23 @@ export default function A4ResultadosPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-blue" />
       </div>
     )
   }
 
   if (error) {
     return (
-      <ASection title="A4: Radar" subtitle="Resultados Estratégicos" icon="📡" colorClass="from-indigo-500 to-violet-500">
+      <ASection title="Resultados: Tu Inteligencia Estratégica" subtitle="Análisis y Recomendaciones" icon="" colorClass="from-blue/50">
         <ASectionPart title="Error" icon={<Target />}>
           <div className="space-y-4">
-            <div className="p-6 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-900/50 rounded-lg">
-              <p className="text-red-700 dark:text-red-300 font-semibold text-lg">{error}</p>
+            <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
+              <p className="text-red dark:text-red/30 font-semibold text-lg">{error}</p>
             </div>
             <Button 
               onClick={() => router.push('/despega/a4')} 
-              className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-semibold py-6 text-lg"
+              className="w-full bg-background"
             >
               <ArrowRight className="w-5 h-5 mr-2" />
               Volver a A4
@@ -136,12 +136,12 @@ export default function A4ResultadosPage() {
   }
 
   return (
-    <ASection title="A4: Radar" subtitle="Resultados Estratégicos" icon="📡" colorClass="from-indigo-500 to-violet-500">
+    <ASection title="A4: Radar" subtitle="Resultados Estratégicos" icon="" colorClass="from-blue/50">
       <ASectionPart title="Análisis Estratégico Completo" icon={<Zap />}>
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {insightCards.map((card) => (
-              <Card key={card.key} className={`bg-gradient-to-br ${card.color} border-0 text-white`}>
+              <Card key={card.key} className={`bg-background`}>
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
@@ -162,7 +162,7 @@ export default function A4ResultadosPage() {
           <div className="mt-8 flex gap-4 justify-center">
             <Button 
               onClick={() => router.push('/despega/a4')}
-              className="bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-semibold py-6 px-8"
+              className="bg-background"
             >
               <Target className="w-5 h-5 mr-2" />
               Continuar en A4

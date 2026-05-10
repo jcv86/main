@@ -43,17 +43,17 @@ export default function A3AnalyticsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
-          <div className="w-12 h-12 rounded-full border-4 border-purple-200 border-t-purple-600 animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600 dark:text-slate-400">Cargando analytics...</p>
+          <div className="w-12 h-12 rounded-full border-4 border-purple/30 border-t-purple-600 animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground dark:text-muted-foreground">Cargando analytics...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-5xl mx-auto space-y-6">
         {/* Header */}
         <Link href="/despega/a3">
@@ -64,16 +64,16 @@ export default function A3AnalyticsPage() {
         </Link>
 
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
             Mi Progreso en A3
           </h1>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-muted-foreground dark:text-muted-foreground">
             Análisis detallado de tu desempeño, fortalezas y áreas de mejora
           </p>
         </div>
 
         {/* Overall Score */}
-        <Card className="bg-gradient-to-br from-purple-600 to-blue-600 text-white border-0">
+        <Card className="bg-background">
           <CardContent className="pt-8 pb-6">
             <div className="flex items-center justify-between">
               <div>
@@ -94,7 +94,7 @@ export default function A3AnalyticsPage() {
               label: 'Entrenamientos',
               value: userData?.simulationAttempts,
               total: 10,
-              color: 'text-blue-600'
+              color: 'text-training'
             },
             {
               icon: Target,
@@ -102,21 +102,21 @@ export default function A3AnalyticsPage() {
               value: userData?.trainingCompletion,
               total: 100,
               suffix: '%',
-              color: 'text-purple-600'
+              color: 'text-training'
             },
             {
               icon: TrendingUp,
               label: 'Mejora',
               value: '+12%',
               subtitle: 'última semana',
-              color: 'text-green-600'
+              color: 'text-training'
             },
             {
               icon: BarChart3,
               label: 'Consistencia',
               value: '85%',
               subtitle: 'en respuestas',
-              color: 'text-amber-600'
+              color: 'text-training'
             }
           ].map((metric, idx) => {
             const Icon = metric.icon
@@ -126,12 +126,12 @@ export default function A3AnalyticsPage() {
                   <div className="flex items-start justify-between mb-4">
                     <Icon className={`w-6 h-6 ${metric.color}`} />
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">{metric.label}</p>
-                  <p className="text-2xl font-bold text-slate-900 dark:text-white">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">{metric.label}</p>
+                  <p className="text-2xl font-bold text-muted/90 dark:text-white">
                     {metric.value}{metric.suffix}
                   </p>
                   {metric.subtitle && (
-                    <p className="text-xs text-slate-500 mt-1">{metric.subtitle}</p>
+                    <p className="text-xs text-muted-foreground mt-1">{metric.subtitle}</p>
                   )}
                   {metric.total && (
                     <Progress value={(metric.value / metric.total) * 100} className="mt-2 h-1" />
@@ -148,16 +148,16 @@ export default function A3AnalyticsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="w-5 h-5 text-green-600" />
+                <TrendingUp className="w-5 h-5 text-green" />
                 Tus Fortalezas
               </CardTitle>
               <CardDescription>Lo que haces muy bien en entrevistas</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               {userData?.strengths.map((strength: string, idx: number) => (
-                <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-green-50 dark:bg-green-900/20">
-                  <span className="text-green-600 dark:text-green-400 font-bold">+</span>
-                  <span className="text-slate-700 dark:text-slate-300">{strength}</span>
+                <div key={idx} className="flex items-center gap-3 p-3 rounded-[28px] bg-green/5 dark:bg-green/20">
+                  <span className="text-green dark:text-green/40 font-bold">+</span>
+                  <span className="text-muted-foreground dark:text-white/85">{strength}</span>
                 </div>
               ))}
             </CardContent>
@@ -167,16 +167,16 @@ export default function A3AnalyticsPage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-orange-600" />
+                <Target className="w-5 h-5 text-orange" />
                 Áreas de Mejora
               </CardTitle>
               <CardDescription>En qué debes enfocarte</CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
               {userData?.improvements.map((improvement: string, idx: number) => (
-                <div key={idx} className="flex items-center gap-3 p-3 rounded-lg bg-orange-50 dark:bg-orange-900/20">
-                  <span className="text-orange-600 dark:text-orange-400 font-bold">→</span>
-                  <span className="text-slate-700 dark:text-slate-300">{improvement}</span>
+                <div key={idx} className="flex items-center gap-3 p-3 rounded-[28px] bg-orange/5 dark:bg-orange/20">
+                  <span className="text-orange dark:text-orange/40 font-bold">→</span>
+                  <span className="text-muted-foreground dark:text-white/85">{improvement}</span>
                 </div>
               ))}
             </CardContent>
@@ -198,12 +198,12 @@ export default function A3AnalyticsPage() {
               ].map((entry, idx) => (
                 <div key={idx} className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-slate-700 dark:text-slate-300">{entry.date}</span>
+                    <span className="text-sm font-medium text-muted-foreground dark:text-white/85">{entry.date}</span>
                     <Badge variant="secondary">{entry.level}</Badge>
                   </div>
                   <div className="flex items-center gap-3">
                     <Progress value={entry.score} className="flex-1 h-2" />
-                    <span className="font-bold text-slate-900 dark:text-white w-10 text-right">{entry.score}%</span>
+                    <span className="font-bold text-muted/90 dark:text-white w-10 text-right">{entry.score}%</span>
                   </div>
                 </div>
               ))}
@@ -212,38 +212,34 @@ export default function A3AnalyticsPage() {
         </Card>
 
         {/* Recommendations */}
-        <Card className="bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800">
+        <Card className="bg-training/5 dark:bg-training/20 border-training/30 dark:border-training/10">
           <CardHeader>
-            <CardTitle className="text-lg">Recomendaciones del Coach IA</CardTitle>
+            <CardTitle className="text-training">Insights y Recomendaciones</CardTitle>
           </CardHeader>
-          <CardContent className="text-slate-700 dark:text-slate-300 space-y-3">
-            <p>
-              Basado en tu análisis: Tu comunicación es excepcional, pero necesitas ser más específico con números.
-            </p>
-            <ol className="list-decimal list-inside space-y-2 text-sm">
-              <li>Practica la lección "Acción y Resultados" en Guided Training</li>
-                <li>Intenta 3 más entrenamientos con enfoque en cuantificación</li>
-              <li>Revisa tus grabaciones para identificar dónde falta claridad</li>
-              <li>Ajusta tu CV para destacar logros mensurables</li>
-            </ol>
+          <CardContent className="space-y-3">
+            {userData?.insights?.map((insight: string, idx: number) => (
+              <div key={idx} className="flex gap-2 text-sm text-muted-foreground dark:text-white/85">
+                <span className="text-training font-bold">•</span>
+                <span>{insight}</span>
+              </div>
+            ))}
           </CardContent>
         </Card>
 
-        {/* Next Steps */}
-        <div className="flex gap-4 flex-wrap">
-          <Link href="/despega/a3/simulaciones-guiado" className="flex-1">
-            <Button className="w-full bg-blue-600 hover:bg-blue-700">
-              <Zap className="w-4 h-4 mr-2" />
-              Siguiente Simulación
-            </Button>
-          </Link>
-          <Link href="/despega/a3/entrenamiento-guiado" className="flex-1">
-            <Button variant="outline" className="w-full">
-              <Target className="w-4 h-4 mr-2" />
-              Continuar Entrenamiento
-            </Button>
-          </Link>
-        </div>
+        {/* Call to Action */}
+        <Card className="bg-gradient-to-r from-training/10 to-training/5 border-training/30">
+          <CardContent className="pt-6">
+            <div className="flex justify-between items-center">
+              <div>
+                <p className="font-semibold text-white">Próximo desafío disponible</p>
+                <p className="text-sm text-white/70 mt-1">Avanza al siguiente nivel y desbloquea nuevas habilidades</p>
+              </div>
+              <Button className="bg-training hover:bg-training/90 text-white">
+                Ver Desafíos
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   )

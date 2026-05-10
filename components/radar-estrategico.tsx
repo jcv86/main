@@ -44,7 +44,7 @@ export function RadarEstrategico() {
     return (
       <Card className="border-0 bg-card/70 backdrop-blur-sm">
         <CardContent className="py-12 flex justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple"></div>
         </CardContent>
       </Card>
     )
@@ -54,11 +54,11 @@ export function RadarEstrategico() {
     <div className="space-y-4">
       {/* Tesis del Día */}
       {tesis && (
-        <Card className="border-0 bg-gradient-to-br from-primary/5 to-primary/10 backdrop-blur-sm">
+        <Card className="border-0 bg-background">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-primary/10 rounded-lg">
-                <RadarIcon className="w-6 h-6 text-primary" />
+              <div className="p-3 bg-purple/10 rounded-lg">
+                <RadarIcon className="w-6 h-6 text-purple" />
               </div>
               <div>
                 <CardTitle className="text-xl">Tesis del Día</CardTitle>
@@ -78,36 +78,36 @@ export function RadarEstrategico() {
 
             {/* 7 Layers */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div className="p-3 bg-background/50 rounded-lg border border-border/50">
+              <div className="p-3 bg-background/50 rounded-[28px] border border-border/50">
                 <h4 className="text-xs font-medium text-muted-foreground mb-1">Delta Estratégico</h4>
                 <p className="text-sm">{tesis.delta_estrategico || "Análisis disponible"}</p>
               </div>
 
-              <div className="p-3 bg-background/50 rounded-lg border border-border/50">
+              <div className="p-3 bg-background/50 rounded-[28px] border border-border/50">
                 <h4 className="text-xs font-medium text-muted-foreground mb-1">Nivel de Energía</h4>
                 <Badge variant="outline" className="text-xs">
                   {tesis.nivel_energía || "Neutral"}
                 </Badge>
               </div>
 
-              <div className="p-3 bg-background/50 rounded-lg border border-border/50">
+              <div className="p-3 bg-background/50 rounded-[28px] border border-border/50">
                 <h4 className="text-xs font-medium text-muted-foreground mb-1">¿Qué Descuenta Mercado?</h4>
                 <p className="text-sm">{tesis.que_descuenta_mercado || "Análisis disponible"}</p>
               </div>
 
-              <div className="p-3 bg-background/50 rounded-lg border border-border/50">
+              <div className="p-3 bg-background/50 rounded-[28px] border border-border/50">
                 <h4 className="text-xs font-medium text-muted-foreground mb-1">Tension Narrativa</h4>
                 <p className="text-sm">{tesis.tension_narrativa || "Análisis disponible"}</p>
               </div>
 
-              <div className="p-3 bg-background/50 rounded-lg border border-border/50">
+              <div className="p-3 bg-background/50 rounded-[28px] border border-border/50">
                 <h4 className="text-xs font-medium text-muted-foreground mb-1">Ritmo Narrativo</h4>
                 <Badge variant="outline" className="text-xs">
                   {tesis.ritmo_narrativo || "Variable"}
                 </Badge>
               </div>
 
-              <div className="p-3 bg-background/50 rounded-lg border border-border/50">
+              <div className="p-3 bg-background/50 rounded-[28px] border border-border/50">
                 <h4 className="text-xs font-medium text-muted-foreground mb-1">Impacto a Plazo</h4>
                 <Badge variant="outline" className="text-xs">
                   {tesis.impacto_plazo || "Pendiente"}
@@ -115,12 +115,12 @@ export function RadarEstrategico() {
               </div>
             </div>
 
-            <div className="p-3 bg-blue-500/5 border border-blue-500/20 rounded-lg">
-              <h4 className="text-xs font-medium text-blue-700 dark:text-blue-400 mb-1">Consensus Score</h4>
+            <div className="p-3 bg-blue/50/5 border border-blue/50/20 rounded-lg">
+              <h4 className="text-xs font-medium text-blue dark:text-blue/40 mb-1">Consensus Score</h4>
               <div className="flex items-center gap-2">
-                <div className="flex-1 bg-blue-100 dark:bg-blue-900/30 rounded-full h-2">
+                <div className="flex-1 bg-blue/10 dark:bg-blue/30 rounded-full h-2">
                   <div
-                    className="bg-blue-600 h-2 rounded-full"
+                    className="bg-blue h-2 rounded-full"
                     style={{ width: `${(tesis.consensus_score || 0) * 100}%` }}
                   ></div>
                 </div>
@@ -173,8 +173,8 @@ export function RadarEstrategico() {
         <Card className="border-0 bg-card/70 backdrop-blur-sm">
           <CardHeader>
             <div className="flex items-center gap-3">
-              <div className="p-3 bg-blue-500/10 rounded-lg">
-                <TrendingUp className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <div className="p-3 bg-blue/50/10 rounded-lg">
+                <TrendingUp className="w-6 h-6 text-blue dark:text-blue/40" />
               </div>
               <CardTitle>Noticias del Análisis</CardTitle>
             </div>
@@ -185,7 +185,7 @@ export function RadarEstrategico() {
                 <div className="flex items-start justify-between gap-2 mb-2">
                   <h4 className="font-medium text-sm line-clamp-2">{noticia.titulo}</h4>
                   <Badge variant="secondary" className="text-xs flex-shrink-0">
-                    {noticia.capa_1_tesis ? "✓" : "−"}
+                    {noticia.capa_1_tesis ? "" : "−"}
                   </Badge>
                 </div>
                 <p className="text-xs text-muted-foreground line-clamp-2">{noticia.descripcion}</p>

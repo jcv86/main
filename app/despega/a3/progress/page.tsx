@@ -41,15 +41,15 @@ export default function ProgressPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 rounded-full border-4 border-purple-200 border-t-purple-600 animate-spin mx-auto mb-4"></div>
-          <p className="text-slate-600 dark:text-slate-400">Cargando progreso...</p>
+          <div className="w-12 h-12 rounded-full border-4 border-training/30 border-t-training animate-spin mx-auto mb-4"></div>
+          <p className="text-muted-foreground dark:text-muted-foreground">Cargando progreso...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto space-y-8">
         {/* Header */}
         <Link href="/despega/a3">
@@ -60,36 +60,50 @@ export default function ProgressPage() {
         </Link>
 
         <div className="space-y-4">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 className="text-3xl font-bold text-muted/90 dark:text-muted/5">
             Tu Progreso en A3
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Visualiza tu evolución y mejora en el tiempo.
           </p>
         </div>
 
         {/* Main Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-white dark:bg-slate-800">
+          <Card className="bg-white dark:bg-card border-2 border-training/40">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Sesiones Completadas</p>
-                  <div className="text-3xl font-bold text-purple-600">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Sesiones Completadas</p>
+                  <div className="text-3xl font-bold text-training">
                     {a3Progress?.sessions_completed || 0}
                   </div>
                 </div>
-                <TrendingUp className="w-8 h-8 text-purple-300" />
+                <TrendingUp className="w-8 h-8 text-purple/30" />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-white dark:bg-slate-800">
+          <Card className="bg-white dark:bg-card">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Score de Empleabilidad</p>
-                  <div className="text-3xl font-bold text-indigo-600">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Puntos Acumulados</p>
+                  <div className="text-3xl font-bold text-green-500">
+                    {a3Progress?.total_points || 0}
+                  </div>
+                </div>
+                <Award className="w-8 h-8 text-green-500/30" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-white dark:bg-card">
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Score de Empleabilidad</p>
+                  <div className="text-3xl font-bold text-blue">
                     {a3Progress?.employability_score || 0}/100
                   </div>
                 </div>
@@ -98,30 +112,16 @@ export default function ProgressPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white dark:bg-slate-800">
+          <Card className="bg-white dark:bg-card">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Horas Entrenadas</p>
-                  <div className="text-3xl font-bold text-blue-600">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Horas Entrenadas</p>
+                  <div className="text-3xl font-bold text-blue">
                     {a3Progress?.hours_trained || 0}h
                   </div>
                 </div>
-                <Zap className="w-8 h-8 text-blue-300" />
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-white dark:bg-slate-800">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mb-1">Entrevistas Dominadas</p>
-                  <div className="text-3xl font-bold text-green-600">
-                    {a3Progress?.interviews_mastered || 0}
-                  </div>
-                </div>
-                <Award className="w-8 h-8 text-green-300" />
+                <Zap className="w-8 h-8 text-blue/30" />
               </div>
             </CardContent>
           </Card>
@@ -135,19 +135,19 @@ export default function ProgressPage() {
           </CardHeader>
           <CardContent className="space-y-6">
             {[
-              { skill: 'Comunicación Clara', progress: 75, color: 'bg-blue-500' },
-              { skill: 'Pensamiento Estratégico', progress: 60, color: 'bg-purple-500' },
-              { skill: 'Manejo de Presión', progress: 55, color: 'bg-orange-500' },
-              { skill: 'Storytelling', progress: 70, color: 'bg-indigo-500' },
-              { skill: 'Confianza en Video', progress: 65, color: 'bg-green-500' },
-              { skill: 'Coherencia Emocional', progress: 50, color: 'bg-pink-500' },
+              { skill: 'Comunicación Clara', progress: 75, color: 'bg-blue/50' },
+              { skill: 'Pensamiento Estratégico', progress: 60, color: 'bg-purple/50' },
+              { skill: 'Manejo de Presión', progress: 55, color: 'bg-orange/50' },
+              { skill: 'Storytelling', progress: 70, color: 'bg-blue/50' },
+              { skill: 'Confianza en Video', progress: 65, color: 'bg-green/50' },
+              { skill: 'Coherencia Emocional', progress: 50, color: 'bg-red/50' },
             ].map((item) => (
               <div key={item.skill} className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="font-semibold text-slate-900 dark:text-slate-50">{item.skill}</span>
-                  <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">{item.progress}%</span>
+                  <span className="font-semibold text-muted/90 dark:text-muted/5">{item.skill}</span>
+                  <span className="text-sm font-semibold text-muted-foreground dark:text-muted-foreground">{item.progress}%</span>
                 </div>
-                <div className="w-full bg-slate-200 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+                <div className="w-full bg-muted/20 dark:bg-muted/70 h-2 rounded-full overflow-hidden">
                   <div
                     className={`h-full ${item.color} transition-all duration-300`}
                     style={{ width: `${item.progress}%` }}
@@ -167,14 +167,14 @@ export default function ProgressPage() {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {[
-                { badge: '🎯 Primer Paso', desc: 'Completa tu diagnosis' },
-                { badge: '✨ Consistencia', desc: '5 entrenamientos completados' },
-                { badge: '🚀 Progresista', desc: 'Alcanza nivel Intermedio' },
+                { badge: ' Primer Paso', desc: 'Completa tu diagnosis' },
+                { badge: ' Consistencia', desc: '5 entrenamientos completados' },
+                { badge: ' Progresista', desc: 'Alcanza nivel Intermedio' },
               ].map((item) => (
-                <Card key={item.badge} className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20 border-amber-200 dark:border-amber-800">
+                <Card key={item.badge} className="bg-background">
                   <CardContent className="pt-6 text-center">
                     <div className="text-3xl mb-2">{item.badge}</div>
-                    <p className="text-sm text-slate-700 dark:text-slate-300">{item.desc}</p>
+                    <p className="text-sm text-muted-foreground dark:text-white/85">{item.desc}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -183,17 +183,17 @@ export default function ProgressPage() {
         </Card>
 
         {/* Tips */}
-        <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border-0">
+        <Card className="bg-background">
           <CardContent className="pt-6 flex gap-3">
-            <div className="w-5 h-5 flex-shrink-0 text-purple-600 text-lg">💡</div>
+            <div className="w-5 h-5 flex-shrink-0 text-purple text-lg"></div>
             <div>
-              <div className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Cómo acelerar tu progreso</div>
-              <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">
-                <li>✓ Realiza al menos 1 simulación diaria</li>
-                <li>✓ Revisa el feedback del coach en detalle</li>
-                <li>✓ Practica específicamente los gaps identificados</li>
-                <li>✓ Comparte entrenamientos con mentores o amigos para feedback externo</li>
-                <li>✓ Documenta lo que aprendes después de cada sesión</li>
+              <div className="font-semibold text-purple dark:text-purple/10 mb-2">Cómo acelerar tu progreso</div>
+              <ul className="text-sm text-purple dark:text-purple/30 space-y-1">
+                <li> Realiza al menos 1 simulación diaria</li>
+                <li> Revisa el feedback del coach en detalle</li>
+                <li> Practica específicamente los gaps identificados</li>
+                <li> Comparte entrenamientos con mentores o amigos para feedback externo</li>
+                <li> Documenta lo que aprendes después de cada sesión</li>
               </ul>
             </div>
           </CardContent>

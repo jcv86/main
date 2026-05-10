@@ -27,28 +27,28 @@ export default function A2CaminoPage() {
     {
       id: "profesional",
       name: "Camino Profesional",
-      icon: "💼",
+      icon: "",
       description: "Domina tu carrera, liderazgo y ejecución",
       examples: ["Carrera", "Liderazgo", "Productividad", "Estrategia"],
     },
     {
       id: "hibrido",
       name: "Camino Híbrido",
-      icon: "⚡",
+      icon: "",
       description: "Lo mejor de ambos mundos integrado",
       examples: ["Personal + Profesional", "Integración", "Momentum", "Transformación"],
     },
   ]
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto py-12 space-y-8">
         {/* Header */}
         <div className="text-center space-y-2">
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
             Elige Tu Camino
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             ¿En qué aspectos quieres enfocarte en estos 90 días?
           </p>
         </div>
@@ -59,17 +59,17 @@ export default function A2CaminoPage() {
             <div
               key={camino.id}
               onClick={() => setSelectedCamino(camino.id)}
-              className={`cursor-pointer transition-all ${
+              className={`cursor-pointer transition-all ${`}
                 selectedCamino === camino.id
                   ? "ring-2 ring-slate-900 dark:ring-slate-50"
-                  : ""
+                  : ""`}
               }`}
             >
               <Card
-                className={`h-full hover:shadow-lg transition-shadow ${
+                className={`h-full hover:shadow-lg transition-shadow ${`}
                   selectedCamino === camino.id
-                    ? "bg-slate-100 dark:bg-slate-800"
-                    : ""
+                    ? "bg-muted/10 dark:bg-card"
+                    : ""`}
                 }`}
               >
                 <CardHeader>
@@ -81,15 +81,15 @@ export default function A2CaminoPage() {
                   <div className="space-y-2">
                     {camino.examples.map((example) => (
                       <div key={example} className="flex items-center gap-2">
-                        <div className="w-2 h-2 rounded-full bg-slate-400"></div>
-                        <span className="text-sm text-slate-600 dark:text-slate-400">
+                        <div className="w-2 h-2 rounded-[20px] bg-muted/40"></div>
+                        <span className="text-sm text-muted-foreground dark:text-muted-foreground">
                           {example}
                         </span>
                       </div>
                     ))}
                   </div>
                   {selectedCamino === camino.id && (
-                    <div className="mt-4 p-2 bg-slate-900 dark:bg-slate-100 rounded text-white dark:text-slate-900 text-sm font-medium text-center">
+                    <div className="mt-4 p-2 bg-muted/90 dark:bg-muted/10 rounded text-white dark:text-muted/90 text-sm font-medium text-center">
                       Seleccionado
                     </div>
                   )}

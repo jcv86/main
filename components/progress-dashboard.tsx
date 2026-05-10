@@ -32,7 +32,7 @@ export function ProgressDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardContent className="pt-6 text-center">
-            <Flame className="w-8 h-8 mx-auto mb-2 text-orange-500" />
+            <Flame className="w-8 h-8 mx-auto mb-2 text-orange" />
             <p className="text-sm text-muted-foreground">Racha Actual</p>
             <p className="text-3xl font-bold">{stats.streak}</p>
             <p className="text-xs text-muted-foreground mt-1">días seguidos</p>
@@ -41,7 +41,7 @@ export function ProgressDashboard() {
 
         <Card>
           <CardContent className="pt-6 text-center">
-            <Zap className="w-8 h-8 mx-auto mb-2 text-yellow-500" />
+            <Zap className="w-8 h-8 mx-auto mb-2 text-orange" />
             <p className="text-sm text-muted-foreground">Puntos Totales</p>
             <p className="text-3xl font-bold">{stats.points}</p>
             <p className="text-xs text-muted-foreground mt-1">experiencia</p>
@@ -50,7 +50,7 @@ export function ProgressDashboard() {
 
         <Card>
           <CardContent className="pt-6 text-center">
-            <BookMarked className="w-8 h-8 mx-auto mb-2 text-blue-500" />
+            <BookMarked className="w-8 h-8 mx-auto mb-2 text-blue/50" />
             <p className="text-sm text-muted-foreground">Libros Completados</p>
             <p className="text-3xl font-bold">{stats.booksCompleted}</p>
             <p className="text-xs text-muted-foreground mt-1">de 64</p>
@@ -59,7 +59,7 @@ export function ProgressDashboard() {
 
         <Card>
           <CardContent className="pt-6 text-center">
-            <Trophy className="w-8 h-8 mx-auto mb-2 text-yellow-600" />
+            <Trophy className="w-8 h-8 mx-auto mb-2 text-yellow" />
             <p className="text-sm text-muted-foreground">Tu Posición</p>
             <p className="text-3xl font-bold">#{stats.ranking}</p>
             <p className="text-xs text-muted-foreground mt-1">en leaderboard</p>
@@ -102,7 +102,7 @@ export function ProgressDashboard() {
               <div key={idx} className="p-4 border rounded-lg text-center space-y-2">
                 <p className="font-semibold">{achievement.name}</p>
                 <p className="text-sm text-muted-foreground">{achievement.description}</p>
-                <Badge className="mx-auto block w-fit">✓ Desbloqueado</Badge>
+                <Badge className="mx-auto block w-fit"> Desbloqueado</Badge>
               </div>
             ))}
           </div>

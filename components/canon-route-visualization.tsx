@@ -22,8 +22,8 @@ interface CanonRouteVisualizationProps {
 
 const intensidadColors = {
   suave: { bg: "bg-accent/10 dark:bg-accent/5", border: "border-accent/30 dark:border-accent/40", badge: "bg-accent/20 dark:bg-accent/10 text-foreground" },
-  moderada: { bg: "bg-primary/10 dark:bg-primary/5", border: "border-primary/30 dark:border-primary/40", badge: "bg-primary/20 dark:bg-primary/10 text-foreground" },
-  alta: { bg: "bg-orange-100/50 dark:bg-orange-950/30", border: "border-orange-300/50 dark:border-orange-700/50", badge: "bg-orange-200/70 dark:bg-orange-900/50 text-orange-900 dark:text-orange-100" }
+  moderada: { bg: "bg-purple/10 dark:bg-purple/5", border: "border-purple/30 dark:border-purple/40", badge: "bg-purple/20 dark:bg-purple/10 text-foreground" },
+  alta: { bg: "bg-orange/10/50 dark:bg-orange/30", border: "border-orange/30/50 dark:border-orange/50", badge: "bg-orange/20/70 dark:bg-orange/50 text-orange dark:text-orange/10" }
 }
 
 function MilestoneCard({ milestone, index }: { milestone: MilestoneCard; index: number }) {
@@ -47,7 +47,7 @@ function MilestoneCard({ milestone, index }: { milestone: MilestoneCard; index: 
                 {milestone.days === 90 && "Integración completa"}
               </CardDescription>
             </div>
-            <div className="p-2 rounded-lg bg-muted">
+            <div className="p-2 rounded-[28px] bg-muted">
               <IconComponent className="w-5 h-5 text-foreground" />
             </div>
           </div>
@@ -85,8 +85,8 @@ function MilestoneCard({ milestone, index }: { milestone: MilestoneCard; index: 
           </div>
 
           {/* Métricas */}
-          <div className="pt-2 border-t border-slate-200 dark:border-slate-700">
-            <h4 className="font-semibold text-slate-900 dark:text-slate-50 mb-2 text-xs">Métricas de Éxito</h4>
+          <div className="pt-2 border-t border-muted/20 dark:border-muted/70">
+            <h4 className="font-semibold text-muted/90 dark:text-muted/5 mb-2 text-xs">Métricas de Éxito</h4>
             <div className="flex flex-wrap gap-2">
               {milestone.metricas.slice(0, 2).map((metrica, idx) => (
                 <Badge
@@ -104,7 +104,7 @@ function MilestoneCard({ milestone, index }: { milestone: MilestoneCard; index: 
 
       {/* Connector */}
       {index < 2 && (
-        <div className="hidden lg:block absolute -right-8 top-1/2 w-8 h-0.5 bg-gradient-to-r from-slate-300 to-slate-200 dark:from-slate-700 dark:to-slate-800 transform -translate-y-1/2" />
+        <div className="hidden lg:block absolute -right-8 top-1/2 w-8 h-0.5 bg-background" />
       )}
     </div>
   )
@@ -121,14 +121,14 @@ export function CanonRouteVisualization({
     <div className="w-full space-y-8">
       {/* Master Insight */}
       {masterInsight && (
-        <Card className="border-2 border-gradient-to-r from-purple-300 to-pink-300 dark:from-purple-700 dark:to-pink-700 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20">
+        <Card className="border-2 border-gradient-to-r300300700700 bg-background">
           <CardHeader>
-            <CardTitle className="text-2xl text-purple-900 dark:text-purple-100">
+            <CardTitle className="text-2xl text-purple dark:text-purple/10">
               Tu Insight Maestro
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-purple-800 dark:text-purple-200 font-semibold leading-relaxed">
+            <p className="text-lg text-purple dark:text-purple/30 font-semibold leading-relaxed">
               "{masterInsight}"
             </p>
           </CardContent>
@@ -137,7 +137,7 @@ export function CanonRouteVisualization({
 
       {/* Milestone Timeline */}
       <div>
-        <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-6">
+        <h3 className="text-2xl font-bold text-muted/90 dark:text-muted/5 mb-6">
           Tu Ruta de 90 Días
         </h3>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 relative">
@@ -149,17 +149,17 @@ export function CanonRouteVisualization({
 
       {/* Recomendaciones */}
       {recomendacionesPersonalizadas && recomendacionesPersonalizadas.length > 0 && (
-        <Card className="bg-blue-50 dark:bg-blue-950/10 border-blue-200 dark:border-blue-800">
+        <Card className="bg-blue/5 dark:bg-blue/10 border-blue/20 dark:border-blue">
           <CardHeader>
-            <CardTitle className="text-blue-900 dark:text-blue-100">
+            <CardTitle className="text-blue dark:text-blue/10">
               Recomendaciones Personalizadas
             </CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-3">
               {recomendacionesPersonalizadas.map((rec, idx) => (
-                <li key={idx} className="flex gap-3 text-blue-800 dark:text-blue-200">
-                  <div className="w-1.5 h-1.5 rounded-full bg-blue-500 dark:bg-blue-400 flex-shrink-0 mt-2" />
+                <li key={idx} className="flex gap-3 text-blue dark:text-blue-300">
+                  <div className="w-1.5 h-1.5 rounded-[20px] bg-blue/50 dark:bg-blue/40 flex-shrink-0 mt-2" />
                   <span className="text-sm">{rec}</span>
                 </li>
               ))}

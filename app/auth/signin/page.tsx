@@ -2,16 +2,18 @@
 
 import { createClient } from '@/lib/supabase/client'
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Chrome, Linkedin, AlertCircle, Loader2, Sparkles } from 'lucide-react'
 
 export default function SignInPage() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const [error, setError] = useState('')
   const [isLoadingGoogle, setIsLoadingGoogle] = useState(false)
   const [isLoadingLinkedIn, setIsLoadingLinkedIn] = useState(false)
+  const [isLoadingDemo, setIsLoadingDemo] = useState(false)
 
   // Check for OAuth errors in URL
   useEffect(() => {
@@ -43,7 +45,7 @@ export default function SignInPage() {
           redirectTo: `${redirectTo}?next=${encodeURIComponent(next)}`,
           queryParams: {
             access_type: 'offline',
-            prompt: 'consent',
+            prompt: 'login',
           },
         },
       })
@@ -90,47 +92,75 @@ export default function SignInPage() {
     }
   }
 
-  const isLoading = isLoadingGoogle || isLoadingLinkedIn
+  const quickLogin = async (testEmail: string) => {
+    setError('')
+    setIsLoadingDemo(true)
+
+    try {
+      // For demo access, create a demo session and set cookie
+      const demoUser = {
+        id: `demo-${testEmail.split('@')[0]}`,
+        email: testEmail,
+        aud: 'authenticated',
+        role: 'authenticated',
+      }
+
+      // Store demo user in cookie (server-side readable for middleware)
+      document.cookie = `demo_user=${JSON.stringify(demoUser)}; path=/; max-age=86400`
+      
+      // Also store in localStorage for client-side
+      localStorage.setItem('demo_user', JSON.stringify(demoUser))
+      
+      router.push('/dashboard')
+      router.refresh()
+    } catch (err) {
+      console.error('[v0] Quick login error:', err)
+      setError('Error al iniciar sesión. Por favor intenta nuevamente.')
+      setIsLoadingDemo(false)
+    }
+  }
+
+  const isLoading = isLoadingGoogle || isLoadingLinkedIn || isLoadingDemo
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-900 px-4 py-8">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
       {/* Background decorative elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-200 dark:bg-purple-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-200 dark:bg-blue-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse animation-delay-2000" />
-        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan-200 dark:bg-cyan-900/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30" />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple/20 dark:bg-purple/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue/20 dark:bg-blue/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse animation-delay-2000" />
+        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan/20 dark:bg-cyan/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30" />
       </div>
 
       <div className="relative w-full max-w-md space-y-6">
         {/* Header section */}
         <div className="text-center space-y-3 mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg">
+            <div className="p-2 rounded-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}>
               <Sparkles className="w-6 h-6 text-white" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 bg-clip-text text-transparent dark:from-purple-400 dark:via-blue-400 dark:to-cyan-400">
+          <h1 className="text-4xl" style={{ color: 'rgba(80, 160, 170, 0.8)', fontWeight: '500' }}>
             Despega Tu Carrera
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-300">
+          <p className="text-lg text-muted-foreground dark:text-white/85">
             Tu transformación profesional comienza hoy
           </p>
-          <p className="text-sm text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground max-w-sm mx-auto">
             Descubre quién eres, explora tu potencial, entrénate para triunfar
           </p>
         </div>
 
         {/* Main Card */}
-        <Card className="border-2 border-purple-200/50 dark:border-purple-900/50 shadow-xl backdrop-blur-sm bg-white/80 dark:bg-slate-950/80">
+        <Card className="border-2 shadow-xl backdrop-blur-sm dark:bg-background/80" style={{ borderColor: 'rgba(80, 160, 170, 0.6)', backgroundColor: 'rgba(0, 0, 0, 0)' }}>
           <CardContent className="pt-8 pb-8 space-y-5">
             {/* OAuth Error Alert */}
             {error && (
-              <div className="p-4 bg-red-50 dark:bg-red-900/20 border-l-4 border-red-500 rounded-r-lg">
+              <div className="p-4 bg-red/5 dark:bg-red/20 border-l-4 border-red/50 rounded-r-lg">
                 <div className="flex gap-3">
-                  <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-red dark:text-red/40 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-red-900 dark:text-red-200">Error de autenticacion</p>
-                    <p className="text-sm text-red-800 dark:text-red-300 mt-1">{error}</p>
+                    <p className="font-semibold text-red dark:text-red/20">Error de autenticacion</p>
+                    <p className="text-sm text-red dark:text-red/30 mt-1">{error}</p>
                   </div>
                 </div>
               </div>
@@ -140,7 +170,7 @@ export default function SignInPage() {
             <Button
               onClick={handleGoogleSignIn}
               disabled={isLoading}
-              className="w-full h-12 text-base gap-2 bg-white hover:bg-gray-50 border-2 border-gray-200 text-slate-900 hover:border-blue-300 hover:shadow-md transition-all duration-200 dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-slate-700 dark:text-white dark:hover:border-blue-500"
+              className="w-full h-12 text-base gap-2 bg-white hover:bg-muted/5 border-2 border-muted/20 text-muted/90 hover:border-blue/30 hover:shadow-md transition-all duration-200 dark:bg-background dark:hover:bg-muted/80 dark:border-card dark:text-white dark:hover:border-blue/50"
             >
               {isLoadingGoogle ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -154,7 +184,8 @@ export default function SignInPage() {
             <Button
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
-              className="w-full h-12 text-base gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white shadow-md hover:shadow-lg transition-all duration-200 dark:from-blue-700 dark:to-blue-800 dark:hover:from-blue-800 dark:hover:to-blue-900"
+              className="w-full h-12 text-base gap-2 text-white shadow-md hover:shadow-lg transition-all duration-200"
+              style={{ backgroundColor: 'rgba(14, 118, 168, 0.6)' }}
             >
               {isLoadingLinkedIn ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -167,37 +198,93 @@ export default function SignInPage() {
             {/* Divider */}
             <div className="relative my-2">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-slate-200 dark:border-slate-700" />
+                <div className="w-full border-t border-muted/20 dark:border-card" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="px-2 bg-white dark:bg-slate-950 text-slate-500 dark:text-slate-400">o</span>
+                <span className="px-2 bg-white dark:bg-background text-muted-foreground dark:text-muted-foreground">o accede como demo</span>
               </div>
             </div>
 
+            {/* Demo Login Buttons */}
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => quickLogin("travis@nuanu.com")}
+                disabled={isLoading}
+                className="text-xs h-10"
+              >
+                {isLoadingDemo ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  "Travis (Dev)"
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => quickLogin("demo@despegaturcarrera.com")}
+                disabled={isLoading}
+                className="text-xs h-10"
+              >
+                {isLoadingDemo ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  "Ana (Marketing)"
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => quickLogin("test@dtc.com")}
+                disabled={isLoading}
+                className="text-xs h-10"
+              >
+                {isLoadingDemo ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  "Carlos (PM)"
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => quickLogin("admin@dtc.com")}
+                disabled={isLoading}
+                className="text-xs h-10"
+              >
+                {isLoadingDemo ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  "María (Admin)"
+                )}
+              </Button>
+            </div>
+
             {/* Trust indicators */}
-            <div className="grid grid-cols-3 gap-3 py-2">
+            <div className="grid grid-cols-3 gap-3 py-2 border-t border-muted/10 pt-4" style={{ borderColor: 'rgb(80, 160, 170, 0.6)' }}>
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-700 dark:text-purple-400">6</div>
-                <p className="text-xs text-slate-700 dark:text-slate-400 font-medium">Tests</p>
+                <div className="text-2xl font-bold" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>6</div>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium">Tests</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-700 dark:text-blue-400">120+</div>
-                <p className="text-xs text-slate-700 dark:text-slate-400 font-medium">Recursos</p>
+                <div className="text-2xl font-bold" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>120+</div>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium">Recursos</p>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-cyan-700 dark:text-cyan-400">24/7</div>
-                <p className="text-xs text-slate-700 dark:text-slate-400 font-medium">Coach IA</p>
+                <div className="text-2xl font-bold" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>24/7</div>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium">Coach IA</p>
               </div>
             </div>
 
             {/* Terms */}
-            <p className="text-xs text-center text-slate-500 dark:text-slate-400 leading-relaxed pt-2">
+            <p className="text-xs text-center text-muted-foreground dark:text-muted-foreground leading-relaxed pt-2">
               Al ingresar, aceptas nuestros{' '}
-              <a href="/terms" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+              <a href="/terms" className="hover:underline font-medium" style={{ color: 'rgba(80, 160, 170)' }}>
                 términos de servicio
               </a>
               {' '}y{' '}
-              <a href="/privacy" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">
+              <a href="/privacy" className="hover:underline font-medium" style={{ color: 'rgba(80, 160, 170)' }}>
                 política de privacidad
               </a>
             </p>
@@ -205,7 +292,7 @@ export default function SignInPage() {
         </Card>
 
         {/* Footer note */}
-        <p className="text-center text-xs text-slate-500 dark:text-slate-400">
+        <p className="text-center text-xs text-muted-foreground dark:text-muted-foreground">
           ¿Es tu primera vez? Crearemos tu cuenta automáticamente
         </p>
       </div>

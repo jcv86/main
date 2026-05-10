@@ -150,7 +150,7 @@ Aquí traducimos lo que está pasando en el mercado chileno a tu carrera persona
     <Card className="w-full h-full max-h-[600px] flex flex-col">
       <CardHeader className="border-b">
         <CardTitle className="flex items-center gap-2">
-          <Avatar className="h-8 w-8 bg-green-100">
+          <Avatar className="h-8 w-8 bg-green/10">
             <AvatarFallback>A4</AvatarFallback>
           </Avatar>
           Coach de Contexto - A4 Base
@@ -165,7 +165,7 @@ Aquí traducimos lo que está pasando en el mercado chileno a tu carrera persona
               className={`flex gap-3 ${message.sender === "user" ? "justify-end" : "justify-start"}`}
             >
               {message.sender === "coach" && (
-                <Avatar className="h-8 w-8 mt-1 bg-green-100">
+                <Avatar className="h-8 w-8 mt-1 bg-green/10">
                   <AvatarFallback>A4</AvatarFallback>
                 </Avatar>
               )}
@@ -173,8 +173,8 @@ Aquí traducimos lo que está pasando en el mercado chileno a tu carrera persona
               <div
                 className={`max-w-xs rounded-lg px-4 py-2 ${
                   message.sender === "user"
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-100 text-gray-900"
+                    ? "bg-blue/50 text-white"
+                    : "bg-muted/10 text-foreground"
                 }`}
               >
                 <p className="text-sm">{message.content}</p>
@@ -189,11 +189,11 @@ Aquí traducimos lo que está pasando en el mercado chileno a tu carrera persona
 
           {isLoading && (
             <div className="flex gap-3">
-              <Avatar className="h-8 w-8 bg-green-100">
+              <Avatar className="h-8 w-8 bg-green/10">
                 <AvatarFallback>A4</AvatarFallback>
               </Avatar>
-              <div className="bg-gray-100 rounded-lg px-4 py-2">
-                <Loader className="w-4 h-4 animate-spin text-gray-600" />
+              <div className="bg-muted/10 rounded-lg px-4 py-2">
+                <Loader className="w-4 h-4 animate-spin text-muted-foreground" />
               </div>
             </div>
           )}

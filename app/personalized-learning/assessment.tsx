@@ -127,11 +127,11 @@ export function AssessmentQuiz() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="text-center space-y-2">
-            <p className="text-sm text-gray-600">Nivel Detectado</p>
+            <p className="text-sm text-muted-foreground">Nivel Detectado</p>
             <p className="text-3xl font-bold capitalize">
               {userLevel === 'beginner' && '🌱 Principiante'}
               {userLevel === 'intermediate' && '📈 Intermedio'}
-              {userLevel === 'advanced' && '🚀 Avanzado'}
+              {userLevel === 'advanced' && ' Avanzado'}
             </p>
           </div>
           <Button onClick={() => window.location.href = '/biblioteca'} className="w-full">

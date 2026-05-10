@@ -1,34 +1,49 @@
-const path = require('path');
+// This file was auto-created and injected by v0.
+// DO NOT MODIFY THIS FILE DIRECTLY.
+// EDIT THE USER CONFIG IN ./next.user-config.js INSTEAD.
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  reactStrictMode: true,
-  webpack: (config, { dev, isServer }) => {
-    // Configure webpack cache with absolute path
-    if (!dev && !isServer) {
-      config.cache = {
-        type: 'filesystem',
-        cacheDirectory: path.join(process.cwd(), '.next/cache/webpack'),
-        buildDependencies: {
-          config: [__filename],
-        },
-        // Add fallback to disable caching on errors
-        maxAge: 1000 * 60 * 60 * 24, // 24 hours
-      };
-    } else {
-      // Development: Use in-memory cache
-      config.cache = {
-        type: 'memory',
-      };
-    }
+const userConfigImport = require('./next.user-config.js')
+const path = require('path')
 
-    return config;
+const __v0_turbopack_root = undefined ?? __dirname
+
+const userConfig = typeof userConfigImport === 'function'
+  ? userConfigImport('phase-development-server', { defaultConfig: {} })
+  : userConfigImport
+
+const config = {
+  ...userConfig,
+  devIndicators: false,
+  images: {
+    ...userConfig.images,
+    unoptimized: process.env.NODE_ENV === 'development',
   },
-  // Ensure proper build output
-  outputFileTracingIncludes: {},
+  logging: {
+    ...userConfig.logging,
+    fetches: { fullUrl: true, hmrRefreshes: true },
+    browserToTerminal: true,
+  },
+  turbopack: {
+    ...userConfig.turbopack,
+    root: __v0_turbopack_root,
+  },
   experimental: {
-    esmExternals: true,
+    ...userConfig.experimental,
+    transitionIndicator: true,
+    turbopackFileSystemCacheForDev: process.env.TURBOPACK_PERSISTENT_CACHE !== 'false' && process.env.TURBOPACK_PERSISTENT_CACHE !== '0',
+    serverActions: {
+      ...userConfig.experimental?.serverActions,
+      allowedOrigins: [
+        ...(userConfig.experimental?.serverActions?.allowedOrigins || []),
+        '*.vusercontent.net',
+      ],
+    },
   },
-};
+  allowedDevOrigins: [
+    ...(userConfig.allowedDevOrigins || []),
+    '*.vusercontent.net',
+    '*.dev-vm.vusercontent.net',
+  ],
+}
 
-module.exports = nextConfig;
+module.exports = config

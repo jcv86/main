@@ -1,0 +1,3 @@
+-- LinkedIn profile seeding is skipped
+-- Users can connect their LinkedIn profile through the OAuth flow
+-- This script remains for future use if needed

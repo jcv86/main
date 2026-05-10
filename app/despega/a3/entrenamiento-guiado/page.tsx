@@ -1,226 +1,68 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
-import { ArrowLeft, BookOpen, Play, Lock, CheckCircle2, Brain, Target } from 'lucide-react'
+import { ArrowLeft, BookOpen, Play, Lock, CheckCircle2, Brain, Target, Video, Lightbulb, Loader2 } from 'lucide-react'
+import { InteractiveTrainingSession } from '@/components/interactive-training-session'
+import { SofiaWelcome } from '@/components/sofia-welcome'
 
 const TRAINING_MODULES = [
   {
-    id: 1,
-    name: 'STAR Method Mastery',
-    description: 'Aprende y domina la metodología STAR (Situación, Tarea, Acción, Resultado)',
+    id: 'intro-to-star',
+    name: 'Intro a STAR',
+    description: 'Aprende la estructura STAR para respuestas de entrevista efectivas',
+    icon: Brain,
+    difficulty: 'Básico',
+    status: 'available',
+    progress: 0,
     duration: '45 min',
     lessons: [
-      {
-        title: 'Intro a STAR',
-        description: 'Por qué STAR es efectivo en entrevistas',
-        completed: true
-      },
-      {
-        title: 'Situación y Tarea',
-        description: 'Cómo plantear el contexto correctamente',
-        completed: true
-      },
-      {
-        title: 'Acción y Resultado',
-        description: 'Dónde está el impacto real',
-        completed: false
-      },
-      {
-        title: 'Práctica: Tu Primer STAR',
-        description: 'Construyamos juntos tu historia STAR',
-        completed: false
-      }
+      { title: 'Lección 1: Intro a STAR', description: 'Por qué STAR es efectivo', completed: false },
+      { title: 'Lección 2: Situación y Tarea', description: 'Cómo plantear el contexto', completed: false },
+      { title: 'Lección 3: Acción y Resultado', description: 'Dónde está el impacto real', completed: false },
+      { title: 'Lección 4: Dominando STAR', description: 'Poniéndolo todo junto', completed: false },
     ],
-    progress: 50,
-    difficulty: 'Básico',
-    icon: Target,
-    status: 'in-progress'
   },
-  {
-    id: 2,
-    name: 'Behavioral Questions Deep Dive',
-    description: 'Estrategias para responder preguntas de comportamiento complejo',
-    duration: '60 min',
-    lessons: [
-      { title: 'Tipos de preguntas', description: 'Categorización y patrones', completed: false },
-      { title: 'Conflictos y desacuerdos', description: 'Cómo hablar de conflictos', completed: false },
-      { title: 'Fracasos y lecciones', description: 'Transformar fracasos en aprendizajes', completed: false },
-      { title: 'Toma de decisiones', description: 'Demostrar pensamiento crítico', completed: false }
-    ],
-    progress: 0,
-    difficulty: 'Intermedio',
-    icon: Brain,
-    status: 'locked',
-    requiresCompletion: 'STAR Method Mastery'
-  },
-  {
-    id: 3,
-    name: 'Technical Communication',
-    description: 'Explica conceptos técnicos a non-technical stakeholders',
-    duration: '50 min',
-    lessons: [
-      { title: 'Simplificación', description: 'Explicar lo complejo de forma simple', completed: false },
-      { title: 'Storytelling técnico', description: 'Narrativas que enganchan', completed: false },
-      { title: 'Manejo de preguntas', description: 'Respuestas cuando no sabes', completed: false }
-    ],
-    progress: 0,
-    difficulty: 'Avanzado',
-    icon: BookOpen,
-    status: 'locked',
-    requiresCompletion: 'Behavioral Questions Deep Dive'
-  }
 ]
 
 export default function GuidedTrainingPage() {
-  const [selectedModule, setSelectedModule] = useState<any>(null)
-  const [currentLesson, setCurrentLesson] = useState(0)
+  const router = useRouter()
+  const [showWelcome, setShowWelcome] = useState(false)
+  const [welcomeModule, setWelcomeModule] = useState<any>(null)
 
   const handleStartModule = (module: any) => {
     if (module.status !== 'locked') {
-      setSelectedModule(module)
-      setCurrentLesson(0)
+      setWelcomeModule(module)
+      setShowWelcome(true)
     }
   }
 
-  if (selectedModule) {
-    const lesson = selectedModule.lessons[currentLesson]
-    const Icon = selectedModule.icon
+  const handleContinueFromWelcome = () => {
+    if (welcomeModule) {
+      router.push(`/despega/a3/entrenamiento-guiado/${welcomeModule.id}/1`)
+      setShowWelcome(false)
+    }
+  }
 
+  if (showWelcome && welcomeModule) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
-        <div className="max-w-3xl mx-auto space-y-6">
-          {/* Header */}
-          <Button
-            variant="outline"
-            onClick={() => setSelectedModule(null)}
-            className="mb-4"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Volver a Módulos
-          </Button>
-
-          {/* Module Info */}
-          <div className="space-y-2">
-            <div className="flex items-center gap-3">
-              <Icon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
-              <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
-                {selectedModule.name}
-              </h1>
-            </div>
-            <Progress value={selectedModule.progress} className="h-2" />
-            <p className="text-sm text-slate-600 dark:text-slate-400">
-              Lección {currentLesson + 1} de {selectedModule.lessons.length}
-            </p>
-          </div>
-
-          {/* Lesson Content */}
-          <Card className="p-8 space-y-6">
-            <div>
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
-                {lesson.title}
-              </h2>
-              <p className="text-slate-600 dark:text-slate-400">{lesson.description}</p>
-            </div>
-
-            {/* Coach Content Area */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-lg p-8 min-h-64 space-y-4">
-              <div className="space-y-4 text-slate-700 dark:text-slate-300">
-                <p className="font-bold text-lg text-slate-900 dark:text-white">
-                  Tu Coach IA explica:
-                </p>
-                
-                {selectedModule.id === 1 && currentLesson === 2 && (
-                  <div className="space-y-3">
-                    <p>
-                      La Acción es donde demuestras TU impacto personal. No lo que el equipo hizo, sino específicamente qué HICISTE TÚ.
-                    </p>
-                    <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-blue-600">
-                      <p className="font-semibold mb-2">Ejemplo BUENO:</p>
-                      <p className="text-sm">
-                        "YO rediseñé la arquitectura, implementé testing automático, y mentoricé a 3 developers junior"
-                      </p>
-                    </div>
-                    <div className="bg-white dark:bg-slate-900 p-4 rounded border-l-4 border-red-600">
-                      <p className="font-semibold mb-2 text-red-600">Ejemplo MALO:</p>
-                      <p className="text-sm">
-                        "El equipo trabajó duro y mejoramos el sistema"
-                      </p>
-                    </div>
-                    <p className="text-sm text-slate-600 dark:text-slate-400 italic">
-                      Usa "yo", "decidí", "implementé", "resolví" - verbos de acción clara.
-                    </p>
-                  </div>
-                )}
-
-                {currentLesson === 0 && (
-                  <div className="space-y-3">
-                    <p>
-                      STAR es una estructura que tu entrevistador reconoce y aprecia porque:
-                    </p>
-                    <ul className="list-disc list-inside space-y-2 text-sm">
-                      <li><strong>Situación:</strong> El contexto que valida por qué actuaste</li>
-                      <li><strong>Tarea:</strong> Tu responsabilidad específica</li>
-                      <li><strong>Acción:</strong> LO QUE HICISTE (aquí es tu turno)</li>
-                      <li><strong>Resultado:</strong> El impacto medible que dejó</li>
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Practice Section */}
-            <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-6">
-              <p className="font-bold text-amber-900 dark:text-amber-200 mb-3">
-                Practica conmigo:
-              </p>
-              <p className="text-sm text-amber-800 dark:text-amber-300">
-                {currentLesson === 0 && 'Piensa en un proyecto importante que lideraste. Déjame guiarte a través de STAR.'}
-                {currentLesson === 2 && 'Ahora, construyamos la sección "Acción" de tu historia. ¿Qué fue lo específico que HICISTE tú?'}
-              </p>
-            </div>
-
-            {/* Navigation */}
-            <div className="flex gap-4 justify-between pt-4 border-t border-slate-200 dark:border-slate-700">
-              <Button
-                onClick={() => setCurrentLesson(Math.max(0, currentLesson - 1))}
-                disabled={currentLesson === 0}
-                variant="outline"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Anterior
-              </Button>
-
-              <div className="flex gap-2">
-                {currentLesson < selectedModule.lessons.length - 1 ? (
-                  <Button
-                    onClick={() => setCurrentLesson(currentLesson + 1)}
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    Siguiente
-                    <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
-                  </Button>
-                ) : (
-                  <Button className="bg-green-600 hover:bg-green-700">
-                    <CheckCircle2 className="w-4 h-4 mr-2" />
-                    Completar Módulo
-                  </Button>
-                )}
-              </div>
-            </div>
-          </Card>
-        </div>
-      </div>
+      <SofiaWelcome 
+        moduleId={welcomeModule.id}
+        moduleName={welcomeModule.name}
+        moduleLessonCount={welcomeModule.lessons.length}
+        onContinue={handleContinueFromWelcome}
+      />
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
-      <div className="max-w-5xl mx-auto space-y-6">
+    <div className="min-h-screen bg-background">
+      <div className="max-w-5xl mx-auto space-y-6 px-4 py-8">
         {/* Header */}
         <Link href="/despega/a3">
           <Button variant="outline" className="mb-4">
@@ -230,10 +72,10 @@ export default function GuidedTrainingPage() {
         </Link>
 
         <div className="space-y-2">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
             Entrenamiento Guiado
           </h1>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-muted-foreground dark:text-muted-foreground">
             Aprende junto a tu Coach IA. Módulos progresivos que te llevan de lo básico a dominar entrevistas complejas.
           </p>
         </div>
@@ -247,14 +89,12 @@ export default function GuidedTrainingPage() {
             return (
               <Card
                 key={module.id}
-                className={`cursor-pointer transition-all hover:shadow-lg ${
-                  isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:border-blue-400'
-                }`}
+                className={`cursor-pointer transition-all hover:shadow-lg ${isLocked ? 'opacity-60 cursor-not-allowed' : 'hover:border-training'}`}
               >
                 <CardHeader>
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <Icon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                      <Icon className="w-8 h-8 text-training" />
                       <div>
                         <CardTitle className="text-xl">{module.name}</CardTitle>
                         <CardDescription>{module.description}</CardDescription>
@@ -263,14 +103,14 @@ export default function GuidedTrainingPage() {
                     <div className="flex gap-2">
                       <Badge variant="secondary">{module.difficulty}</Badge>
                       {module.status === 'in-progress' && (
-                        <Badge className="bg-blue-600">En Progreso</Badge>
+                        <Badge className="bg-training">En Progreso</Badge>
                       )}
-                      {isLocked && <Lock className="w-5 h-5 text-slate-400" />}
+                      {isLocked && <Lock className="w-5 h-5 text-training" />}
                     </div>
                   </div>
 
                   <Progress value={module.progress} className="h-2 mb-2" />
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-muted-foreground">
                     {module.progress}% completo • {module.duration}
                   </p>
                 </CardHeader>
@@ -279,20 +119,17 @@ export default function GuidedTrainingPage() {
                   {/* Lessons */}
                   <div className="space-y-2">
                     {module.lessons.map((lesson, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center gap-3 p-2 rounded hover:bg-slate-100 dark:hover:bg-slate-800/50"
-                      >
+                      <div key={idx} className="flex items-center gap-3 p-2 rounded">
                         {lesson.completed ? (
-                          <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                          <CheckCircle2 className="w-5 h-5 text-training" />
                         ) : (
-                          <div className="w-5 h-5 border-2 border-slate-300 rounded-full flex-shrink-0" />
+                          <div className="w-5 h-5 border-2 border-muted/30 rounded-full" />
                         )}
                         <div className="flex-1">
-                          <p className="text-sm font-medium text-slate-900 dark:text-white">
+                          <p className="text-sm font-medium text-white">
                             {lesson.title}
                           </p>
-                          <p className="text-xs text-slate-500">{lesson.description}</p>
+                          <p className="text-xs text-white/75">{lesson.description}</p>
                         </div>
                       </div>
                     ))}
@@ -302,16 +139,12 @@ export default function GuidedTrainingPage() {
                   <Button
                     onClick={() => handleStartModule(module)}
                     disabled={isLocked}
-                    className={`w-full ${
-                      isLocked
-                        ? 'bg-slate-300 dark:bg-slate-700 cursor-not-allowed'
-                        : 'bg-blue-600 hover:bg-blue-700'
-                    }`}
+                    className="w-full text-white bg-training hover:bg-training/90"
                   >
                     {isLocked ? (
                       <>
                         <Lock className="w-4 h-4 mr-2" />
-                        Requiere: {module.requiresCompletion}
+                        Bloqueado
                       </>
                     ) : (
                       <>

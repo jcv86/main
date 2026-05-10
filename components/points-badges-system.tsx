@@ -20,25 +20,25 @@ const BADGE_DEFINITIONS: Record<string, { name: string; icon: string; color: str
   "first-article": {
     name: "Lector Principiante",
     icon: "📖",
-    color: "bg-blue-500/10",
+    color: "bg-blue/50/10",
     requirement: "Lee tu primer artículo",
   },
   "5-articles": {
     name: "Lector Ávido",
-    icon: "📚",
-    color: "bg-green-500/10",
+    icon: "",
+    color: "bg-green/50/10",
     requirement: "Lee 5 artículos",
   },
   "test-master": {
     name: "Maestro de Tests",
-    icon: "🧠",
-    color: "bg-purple-500/10",
+    icon: "",
+    color: "bg-purple/50/10",
     requirement: "Completa 5 tests",
   },
   "100-points": {
     name: "Coleccionista de Puntos",
     icon: "💎",
-    color: "bg-yellow-500/10",
+    color: "bg-orange/10",
     requirement: "Acumula 100 puntos",
   },
   "social-butterfly": {
@@ -98,7 +98,7 @@ export function PointsBadgesSystem() {
   return (
     <div className="space-y-4">
       {/* Ranking Card */}
-      <Card className="border-0 bg-gradient-to-r from-yellow-500/10 to-orange-500/5 backdrop-blur-sm">
+      <Card className="border-0 bg-background">
         <CardContent className="pt-6">
           <div className="grid grid-cols-3 gap-4">
             <div className="text-center">
@@ -108,7 +108,7 @@ export function PointsBadgesSystem() {
             </div>
             <div className="text-center border-l border-r">
               <p className="text-xs text-muted-foreground mb-1">Puntos Totales</p>
-              <div className="text-3xl font-bold text-primary">{userPoints}</div>
+              <div className="text-3xl font-bold text-purple">{userPoints}</div>
               <p className="text-xs text-muted-foreground mt-1">Activos</p>
             </div>
             <div className="text-center">
@@ -198,7 +198,7 @@ export function PointsBadgesSystem() {
                   <div
                     key={entry.rank}
                     className={`flex items-center justify-between p-3 rounded-lg ${
-                      entry.isCurrent ? "bg-primary/10 border border-primary/20" : "bg-muted/50"
+                      entry.isCurrent ? "bg-purple/10 border border-purple/20" : "bg-muted/50"
                     }`}
                   >
                     <div className="flex items-center gap-3">

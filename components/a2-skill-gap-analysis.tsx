@@ -226,7 +226,7 @@ export function SkillGapAnalysis({ a1Results, userProgress, onSelectSkill }: Ski
                         {categoryLabels[skill.category as keyof typeof categoryLabels]}
                       </Badge>
                       {skill.gap >= 3 && (
-                        <Badge className="bg-red-100 text-red-800 flex items-center gap-1">
+                        <Badge className="bg-red/10 text-red flex items-center gap-1">
                           <AlertCircle className="w-3 h-3" />
                           Crítico
                         </Badge>
@@ -256,7 +256,7 @@ export function SkillGapAnalysis({ a1Results, userProgress, onSelectSkill }: Ski
                   </div>
 
                   <div className="text-right flex-shrink-0">
-                    <div className="text-2xl font-bold text-orange-600 mb-2">{skill.gap}</div>
+                    <div className="text-2xl font-bold text-orange mb-2">{skill.gap}</div>
                     <p className="text-xs text-muted-foreground mb-3">niveles</p>
                     <div className="flex items-center text-sm text-muted-foreground">
                       <TrendingUp className="w-4 h-4 mr-1" />

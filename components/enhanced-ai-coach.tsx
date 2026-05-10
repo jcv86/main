@@ -161,8 +161,8 @@ Puedo ayudarte con:
     return `¡Hola! Soy tu **AI Coach Personal** con acceso completo al **cerebro de la plataforma**.
 
 Tengo conocimiento especializado sobre:
-🧠 **Tests Psicométricos** (DISC, Big Five, MBTI, RIASEC, Habilidades Blandas)
-🎯 **Desarrollo de Carrera** y transiciones profesionales
+ **Tests Psicométricos** (DISC, Big Five, MBTI, RIASEC, Habilidades Blandas)
+ **Desarrollo de Carrera** y transiciones profesionales
 📈 **Estrategias de Mejora** por competencias específicas
 🔍 **Interpretación Avanzada** de combinaciones de resultados
 
@@ -371,21 +371,21 @@ ${
       case "online":
         return (
           <Badge variant="outline" className="text-xs">
-            <CheckCircle className="h-3 w-3 mr-1 text-green-600" />
+            <CheckCircle className="h-3 w-3 mr-1 text-green" />
             Cerebro Activo
           </Badge>
         )
       case "fallback":
         return (
           <Badge variant="outline" className="text-xs">
-            <AlertCircle className="h-3 w-3 mr-1 text-yellow-600" />
+            <AlertCircle className="h-3 w-3 mr-1 text-yellow" />
             Modo Básico
           </Badge>
         )
       case "offline":
         return (
           <Badge variant="outline" className="text-xs">
-            <AlertCircle className="h-3 w-3 mr-1 text-red-600" />
+            <AlertCircle className="h-3 w-3 mr-1 text-red" />
             Sin Conexión
           </Badge>
         )
@@ -397,7 +397,7 @@ ${
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg">
+            <div className="p-2 bg-background">
               <Brain className="h-5 w-5 text-white" />
             </div>
             <div>
@@ -440,17 +440,17 @@ ${
                   >
                     {message.role === "assistant" && (
                       <Avatar className="h-8 w-8">
-                        <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white text-xs">
+                        <AvatarFallback className="bg-background">
                           AI
                         </AvatarFallback>
                       </Avatar>
                     )}
 
                     <div
-                      className={`max-w-[85%] ${
+                      className={`max-w-[85%] ${`}
                         message.role === "user"
-                          ? "bg-blue-600 text-white rounded-lg rounded-br-sm"
-                          : "bg-gray-50 rounded-lg rounded-bl-sm border"
+                          ? "bg-blue text-white rounded-lg rounded-br-sm"
+                          : "bg-muted/5 rounded-lg rounded-bl-sm border"`}
                       } p-3`}
                     >
                       <div className="flex items-start justify-between gap-2 mb-1">
@@ -505,8 +505,8 @@ ${
 
                       {/* Knowledge Sources */}
                       {message.knowledgeUsed && message.knowledgeUsed.length > 0 && (
-                        <div className="mt-2 pt-2 border-t border-gray-200">
-                          <div className="text-xs text-gray-500 mb-1">Fuentes consultadas:</div>
+                        <div className="mt-2 pt-2 border-t border-muted/20">
+                          <div className="text-xs text-muted-foreground mb-1">Fuentes consultadas:</div>
                           <div className="flex flex-wrap gap-1">
                             {message.knowledgeUsed.map((source, idx) => (
                               <Badge key={idx} variant="outline" className="text-xs">
@@ -543,12 +543,12 @@ ${
                           {[...Array(5)].map((_, i) => (
                             <Star
                               key={i}
-                              className={`h-3 w-3 ${
-                                i < message.rating! ? "text-yellow-400 fill-current" : "text-gray-300"
+                              className={`h-3 w-3 ${`}
+                                i < message.rating! ? "text-yellow/40 fill-current" : "text-white/85"`}
                               }`}
                             />
                           ))}
-                          <span className="text-xs text-gray-500 ml-1">Calificado</span>
+                          <span className="text-xs text-muted-foreground ml-1">Calificado</span>
                         </div>
                       )}
                     </div>
@@ -556,7 +556,7 @@ ${
                     {message.role === "user" && (
                       <Avatar className="h-8 w-8">
                         <AvatarImage src={userProfile?.avatar_url || "/placeholder.svg"} />
-                        <AvatarFallback className="bg-blue-600 text-white text-xs">
+                        <AvatarFallback className="bg-blue text-white text-xs">
                           {userProfile?.full_name?.charAt(0) || "U"}
                         </AvatarFallback>
                       </Avatar>
@@ -567,24 +567,24 @@ ${
                 {isTyping && (
                   <div className="flex gap-3 justify-start">
                     <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-gradient-to-r from-purple-500 to-blue-500 text-white text-xs">
+                      <AvatarFallback className="bg-background">
                         AI
                       </AvatarFallback>
                     </Avatar>
-                    <div className="bg-gray-50 rounded-lg rounded-bl-sm p-3 border">
+                    <div className="bg-muted/5 rounded-lg rounded-bl-sm p-3 border">
                       <div className="flex items-center gap-1">
                         <div className="flex gap-1">
-                          <div className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"></div>
+                          <div className="w-2 h-2 bg-purple/40 rounded-full animate-bounce"></div>
                           <div
-                            className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"
+                            className="w-2 h-2 bg-purple/40 rounded-full animate-bounce"
                             style={{ animationDelay: "0.1s" }}
                           ></div>
                           <div
-                            className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"
+                            className="w-2 h-2 bg-purple/40 rounded-full animate-bounce"
                             style={{ animationDelay: "0.2s" }}
                           ></div>
                         </div>
-                        <span className="text-xs text-gray-500 ml-2">Consultando cerebro de la plataforma...</span>
+                        <span className="text-xs text-muted-foreground ml-2">Consultando cerebro de la plataforma...</span>
                       </div>
                     </div>
                   </div>
@@ -623,7 +623,7 @@ ${
                 </Button>
               </div>
 
-              <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
+              <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
                 <div className="flex items-center gap-2">
                   <Brain className="h-3 w-3" />
                   <span>
@@ -651,17 +651,17 @@ ${
               <h3 className="font-semibold text-sm">Historial de Conversaciones</h3>
               {conversationHistory.length > 0 ? (
                 conversationHistory.map((interaction, idx) => (
-                  <div key={idx} className="border rounded-lg p-3 space-y-2">
+                  <div key={idx} className="border rounded-[28px] p-3 space-y-2">
                     <div className="flex items-center justify-between">
                       <Badge variant="outline" className="text-xs">
                         {interaction.confidence_score}% confianza
                       </Badge>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-muted-foreground">
                         {new Date(interaction.created_at).toLocaleDateString()}
                       </span>
                     </div>
                     <div className="text-sm font-medium">{interaction.query}</div>
-                    <div className="text-xs text-gray-600 line-clamp-2">{interaction.response}</div>
+                    <div className="text-xs text-muted-foreground line-clamp-2">{interaction.response}</div>
                     {interaction.knowledge_used && interaction.knowledge_used.length > 0 && (
                       <div className="flex flex-wrap gap-1">
                         {interaction.knowledge_used.slice(0, 2).map((source: string, sourceIdx: number) => (
@@ -674,7 +674,7 @@ ${
                   </div>
                 ))
               ) : (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-muted-foreground">
                   <History className="h-12 w-12 mx-auto mb-2 opacity-50" />
                   <p className="text-sm">No hay conversaciones previas</p>
                 </div>
@@ -689,27 +689,27 @@ ${
               <h3 className="font-semibold text-sm">Insights Guardados</h3>
               {savedInteractions.length > 0 ? (
                 savedInteractions.map((interaction, idx) => (
-                  <div key={idx} className="border rounded-lg p-3 space-y-2 bg-blue-50">
+                  <div key={idx} className="border rounded-[28px] p-3 space-y-2 bg-blue/5">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <Bookmark className="h-3 w-3 text-blue-600" />
+                        <Bookmark className="h-3 w-3 text-blue" />
                         <Badge variant="outline" className="text-xs">
                           {interaction.confidence_score}% confianza
                         </Badge>
                       </div>
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-muted-foreground">
                         {new Date(interaction.created_at).toLocaleDateString()}
                       </span>
                     </div>
                     <div className="text-sm font-medium">{interaction.query}</div>
-                    <div className="text-xs text-gray-700">{interaction.response}</div>
+                    <div className="text-xs text-muted">{interaction.response}</div>
                     {interaction.user_rating && (
                       <div className="flex items-center gap-1">
                         {[...Array(5)].map((_, i) => (
                           <Star
                             key={i}
-                            className={`h-3 w-3 ${
-                              i < interaction.user_rating ? "text-yellow-400 fill-current" : "text-gray-300"
+                            className={`h-3 w-3 ${`}
+                              i < interaction.user_rating ? "text-yellow/40 fill-current" : "text-white/85"`}
                             }`}
                           />
                         ))}
@@ -718,7 +718,7 @@ ${
                   </div>
                 ))
               ) : (
-                <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-muted-foreground">
                   <Bookmark className="h-12 w-12 mx-auto mb-2 opacity-50" />
                   <p className="text-sm">No tienes insights guardados</p>
                   <p className="text-xs mt-1">Guarda respuestas útiles usando el menú de opciones</p>

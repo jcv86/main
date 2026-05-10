@@ -62,18 +62,18 @@ export default async function RecommendedBooksPage() {
   const { data: recommendations } = await query.limit(50)
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-background">
       <div className="container max-w-6xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 rounded-full mb-4">
-            <p className="text-sm font-semibold text-blue-700 dark:text-blue-300">Personalizadas para ti</p>
+          <div className="inline-block px-4 py-2 bg-background">
+            <p className="text-sm font-semibold text-blue dark:text-blue-200">Personalizadas para ti</p>
           </div>
           <div className="flex items-center gap-2 mb-4">
-            <Star className="h-8 w-8 fill-yellow-500 text-yellow-500" />
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-cyan-400">Libros Recomendados</h1>
+            <Star className="h-8 w-8 fill-yellow-500 text-orange" />
+            <h1 className="text-5xl font-bold bg-blue bg-clip-text text-transparent/40/40">Libros Recomendados</h1>
           </div>
-          <p className="text-lg text-slate-700 dark:text-slate-300 font-medium">
+          <p className="text-lg text-muted-foreground dark:text-white/85 font-medium">
             Basado en tu nivel <span className="font-semibold capitalize">{profile.current_level}</span> y tus intereses en {profile.preferred_categories?.join(", ") || "varias categorías"}
           </p>
         </div>
@@ -97,7 +97,7 @@ export default async function RecommendedBooksPage() {
                         {(100 - index * 3)}% match
                       </Badge>
                     </div>
-                    <CardTitle className="line-clamp-2 group-hover:text-primary transition-colors">
+                    <CardTitle className="line-clamp-2 group-hover:text-purple transition-colors">
                       {book.title}
                     </CardTitle>
                   </CardHeader>

@@ -20,6 +20,13 @@ export default function DashboardPage() {
       try {
         console.log('[v0] Loading user data from dashboard endpoint')
         
+        // Ensure demo user is in cookie for server-side access
+        const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
+        if (demoUserStr) {
+          document.cookie = `demo_user=${demoUserStr}; path=/; max-age=86400`
+          console.log('[v0] Demo user synced to cookie')
+        }
+        
         // Call the dashboard data endpoint
         const response = await fetch('/rest/dashboard-data')
         
@@ -50,10 +57,10 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <p className="mt-4 text-slate-600 dark:text-slate-400">Cargando tu transformación...</p>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-yellow"></div>
+          <p className="text-muted-foreground">Cargando tu transformación...</p>
         </div>
       </div>
     )
@@ -61,13 +68,13 @@ export default function DashboardPage() {
 
   if (!userData) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center p-4">
-        <Card className="p-8 max-w-md text-center space-y-4">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">No hay datos</h2>
-          <p className="text-slate-600 dark:text-slate-400">
+      <div className="min-h-screen bg-black flex items-center justify-center p-4">
+        <Card className="p-8 max-w-md text-center space-y-4 bg-transparent border-muted/80">
+          <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'Lora, serif' }}>No hay datos</h2>
+          <p className="text-muted-foreground">
             Por favor, completa el onboarding primero
           </p>
-          <Button onClick={() => router.push('/despega/onboarding')} className="w-full">
+          <Button onClick={() => router.push('/despega/onboarding')} className="w-full bg-yellow text-black hover:bg-yellow/90">
             Ir al Onboarding
           </Button>
         </Card>
@@ -76,7 +83,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background">
+    <main className="min-h-screen bg-black">
       <div className="max-w-7xl mx-auto px-4 py-12 space-y-12">
         {/* Hero Section */}
         <DashboardHero 
@@ -88,7 +95,7 @@ export default function DashboardPage() {
 
         {/* Metrics */}
         <div>
-          <h2 className="text-2xl font-bold text-foreground mb-6">
+          <h2 className="text-3xl font-bold text-white mb-6" style={{ fontFamily: 'Lora, serif' }}>
             Tu Progreso
           </h2>
           <DashboardMetrics 
@@ -104,21 +111,21 @@ export default function DashboardPage() {
 
         {/* Misión Section */}
         {userData.a2_mission ? (
-          <Card className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-950/30 dark:to-cyan-950/30 border-2 border-blue-200 dark:border-blue-800 p-8">
+          <Card className="bg-background">
             <div className="space-y-4">
               <div className="space-y-2">
-                <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
+                <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5">
                   Tu Misión de 90 Días
                 </h2>
-                <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400">
+                <h3 className="text-xl font-semibold text-blue dark:text-blue/40">
                   {userData.a2_mission.titulo}
                 </h3>
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-muted-foreground dark:text-white/85">
                   {userData.a2_mission.objetivo}
                 </p>
               </div>
               <div className="flex gap-4">
-                <Button className="bg-blue-600 hover:bg-blue-700">
+                <Button className="bg-blue/80 hover:bg-blue/70">
                   Ver Detalles de Misión
                 </Button>
                 <Button variant="outline">
@@ -128,15 +135,15 @@ export default function DashboardPage() {
             </div>
           </Card>
         ) : (
-          <Card className="bg-gradient-to-r from-slate-100 to-slate-50 dark:from-slate-800 dark:to-slate-900 border-2 border-slate-300 dark:border-slate-700 p-8">
+          <Card className="bg-background">
             <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50">
+              <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5">
                 Elige Tu Camino de Transformación
               </h2>
-              <p className="text-slate-700 dark:text-slate-300">
+              <p className="text-muted-foreground dark:text-white/85">
                 Comienza eligiendo entre tu transformación personal o profesional
               </p>
-              <Button className="bg-blue-600 hover:bg-blue-700" size="lg">
+              <Button className="bg-blue/80 hover:bg-blue/70" size="lg">
                 Comenzar Mi Misión
               </Button>
             </div>
@@ -158,7 +165,7 @@ export default function DashboardPage() {
               nextStep="-"
               href="/despega/onboarding/result"
               icon={<Zap className="w-6 h-6" />}
-              color="red"
+              color="teal"
             />
             <PillarCard
               pillar="A2"
@@ -197,19 +204,19 @@ export default function DashboardPage() {
         </div>
 
         {/* Coach Section */}
-        <Card className="bg-gradient-to-r from-amber-50 to-orange-50 dark:from-amber-950/30 dark:to-orange-950/30 border-2 border-amber-200 dark:border-amber-800 p-8">
+        <Card className="bg-background">
           <div className="flex items-start gap-6">
             <div className="text-5xl">🤖</div>
             <div className="flex-1 space-y-4">
               <div>
-                <h3 className="text-xl font-bold text-slate-900 dark:text-slate-50 mb-2">
+                <h3 className="text-xl font-bold text-muted/90 dark:text-muted/5 mb-2">
                   Tu Coach IA: Sofía
                 </h3>
-                <p className="text-slate-700 dark:text-slate-300">
+                <p className="text-muted-foreground dark:text-white/85">
                   "¡Hola María! Veo que eres AZUL, lo que significa que te guía la empatía y las relaciones. Tu transformación comenzará fortaleciendo estas cualidades naturales tuyas."
                 </p>
               </div>
-              <Button className="bg-amber-600 hover:bg-amber-700">
+              <Button className="bg-yellow hover:bg-amber-700">
                 <MessageCircle className="w-4 h-4 mr-2" />
                 Hablar con Sofía
               </Button>
@@ -219,7 +226,7 @@ export default function DashboardPage() {
 
         {/* Quick Actions */}
         <div className="space-y-4">
-          <h2 className="text-xl font-bold text-slate-900 dark:text-slate-50">
+          <h2 className="text-xl font-bold text-muted/90 dark:text-muted/5">
             Acciones Rápidas
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

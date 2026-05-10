@@ -31,7 +31,7 @@ export function AdminAnalytics() {
           <CardContent className="pt-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-primary" />
+                <Users className="w-4 h-4 text-purple" />
                 <p className="text-xs text-muted-foreground">Usuarios Activos</p>
               </div>
               <p className="text-3xl font-bold">1,234</p>
@@ -44,7 +44,7 @@ export function AdminAnalytics() {
           <CardContent className="pt-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <BookOpen className="w-4 h-4 text-primary" />
+                <BookOpen className="w-4 h-4 text-purple" />
                 <p className="text-xs text-muted-foreground">Artículos Leídos</p>
               </div>
               <p className="text-3xl font-bold">5,847</p>
@@ -57,7 +57,7 @@ export function AdminAnalytics() {
           <CardContent className="pt-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4 text-primary" />
+                <CheckCircle className="w-4 h-4 text-purple" />
                 <p className="text-xs text-muted-foreground">Pruebas Completadas</p>
               </div>
               <p className="text-3xl font-bold">892</p>
@@ -70,7 +70,7 @@ export function AdminAnalytics() {
           <CardContent className="pt-6">
             <div className="space-y-2">
               <div className="flex items-center gap-2">
-                <TrendingUp className="w-4 h-4 text-primary" />
+                <TrendingUp className="w-4 h-4 text-purple" />
                 <p className="text-xs text-muted-foreground">Puntos Distribuidos</p>
               </div>
               <p className="text-3xl font-bold">12,450</p>
@@ -143,12 +143,12 @@ export function AdminAnalytics() {
         </CardHeader>
         <CardContent className="space-y-3">
           {[
-            { badge: "Lector Ávido", users: 342, icon: "📚" },
+            { badge: "Lector Ávido", users: 342, icon: "" },
             { badge: "Estudiante", users: 298, icon: "✅" },
             { badge: "Consistencia", users: 156, icon: "🔥" },
-            { badge: "Perfeccionista", users: 89, icon: "⭐" },
+            { badge: "Perfeccionista", users: 89, icon: "" },
           ].map((item) => (
-            <div key={item.badge} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg border border-border/50">
+            <div key={item.badge} className="flex items-center justify-between p-3 bg-muted/50 rounded-[28px] border border-border/50">
               <div className="flex items-center gap-2">
                 <span className="text-2xl">{item.icon}</span>
                 <p className="font-medium text-sm">{item.badge}</p>

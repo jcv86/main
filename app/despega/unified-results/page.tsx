@@ -68,33 +68,33 @@ export default function UnifiedTestDashboard() {
 
   const getColorClasses = (color: string) => {
     const colors: Record<string, string> = {
-      blue: "bg-blue-50 border-blue-200 dark:bg-blue-950/20 dark:border-blue-800",
-      purple: "bg-purple-50 border-purple-200 dark:bg-purple-950/20 dark:border-purple-800",
-      indigo: "bg-indigo-50 border-indigo-200 dark:bg-indigo-950/20 dark:border-indigo-800",
-      red: "bg-red-50 border-red-200 dark:bg-red-950/20 dark:border-red-800",
-      teal: "bg-teal-50 border-teal-200 dark:bg-teal-950/20 dark:border-teal-800",
+      blue: "bg-blue/5 border-blue/30 dark:bg-blue/20 dark:border-blue/10",
+      purple: "bg-purple/5 border-purple/30 dark:bg-purple/20 dark:border-purple",
+      indigo: "bg-blue/5 border-blue/30 dark:bg-indigo-950/20 dark:border-blue",
+      red: "bg-red/5 border-red/20 dark:bg-red/20 dark:border-red",
+      teal: "bg-teal-50 border-blue/20 dark:bg-teal-950/20 dark:border-teal-800",
     }
     return colors[color] || colors.blue
   }
 
   const getTextColorClasses = (color: string) => {
     const colors: Record<string, string> = {
-      blue: "text-blue-600 dark:text-blue-400",
-      purple: "text-purple-600 dark:text-purple-400",
-      indigo: "text-indigo-600 dark:text-indigo-400",
-      red: "text-red-600 dark:text-red-400",
-      teal: "text-teal-600 dark:text-teal-400",
+      blue: "text-blue dark:text-blue/40",
+      purple: "text-purple dark:text-purple/40",
+      indigo: "text-blue dark:text-indigo-400",
+      red: "text-red dark:text-red/40",
+      teal: "text-blue dark:text-teal-400",
     }
     return colors[color] || colors.blue
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4">
+    <div className="min-h-screen bg-background p-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-2">Tus Resultados de Tests</h1>
-          <p className="text-slate-600 dark:text-slate-400">
+          <p className="text-muted-foreground dark:text-muted-foreground">
             Panel unificado de todos tus evaluaciones científicas
           </p>
         </div>
@@ -128,7 +128,7 @@ export default function UnifiedTestDashboard() {
                               <h3 className={`font-bold ${getTextColorClasses(test.color)}`}>
                                 {test.name}
                               </h3>
-                              <p className="text-xs text-slate-600 dark:text-slate-400">
+                              <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                                 {test.description}
                               </p>
                             </div>
@@ -157,25 +157,25 @@ export default function UnifiedTestDashboard() {
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-4 gap-4">
-                  <div className="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Tests Completados</p>
+                  <div className="p-4 bg-muted/10 dark:bg-card rounded-lg">
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Tests Completados</p>
                     <p className="text-2xl font-bold">5 de 5</p>
                     <Progress value={100} className="mt-2" />
                   </div>
-                  <div className="p-4 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                    <p className="text-sm text-blue-600">Dimensiones Exploradas</p>
+                  <div className="p-4 bg-blue/10 dark:bg-blue/30 rounded-lg">
+                    <p className="text-sm text-blue">Dimensiones Exploradas</p>
                     <p className="text-2xl font-bold">27+</p>
-                    <p className="text-xs text-blue-600 mt-1">facetas de personalidad</p>
+                    <p className="text-xs text-blue mt-1">facetas de personalidad</p>
                   </div>
-                  <div className="p-4 bg-purple-100 dark:bg-purple-900/30 rounded-lg">
-                    <p className="text-sm text-purple-600">Tipo de Perfil</p>
+                  <div className="p-4 bg-purple/10 dark:bg-purple/30 rounded-lg">
+                    <p className="text-sm text-purple">Tipo de Perfil</p>
                     <p className="text-lg font-bold">Único</p>
-                    <p className="text-xs text-purple-600 mt-1">combinación especial</p>
+                    <p className="text-xs text-purple mt-1">combinación especial</p>
                   </div>
                   <div className="p-4 bg-teal-100 dark:bg-teal-900/30 rounded-lg">
-                    <p className="text-sm text-teal-600">Orientación Vocacional</p>
+                    <p className="text-sm text-blue">Orientación Vocacional</p>
                     <p className="text-lg font-bold">Identificada</p>
-                    <p className="text-xs text-teal-600 mt-1">3 tipos principales</p>
+                    <p className="text-xs text-blue mt-1">3 tipos principales</p>
                   </div>
                 </div>
               </CardContent>
@@ -187,18 +187,18 @@ export default function UnifiedTestDashboard() {
                 <CardTitle>Próximos Pasos</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex gap-3 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                  <Zap className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <div className="flex gap-3 p-3 bg-blue/5 dark:bg-blue/20 rounded-[28px] border border-blue/30 dark:border-blue/10">
+                  <Zap className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-blue-900 dark:text-blue-100">Ir a A2: Tu Plan</p>
-                    <p className="text-sm text-blue-700 dark:text-blue-300">Usa tus resultados para crear un plan personalizado</p>
+                    <p className="font-semibold text-blue dark:text-white">Ir a A2: Tu Plan</p>
+                    <p className="text-sm text-blue dark:text-blue-200">Usa tus resultados para crear un plan personalizado</p>
                   </div>
                 </div>
-                <div className="flex gap-3 p-3 bg-purple-50 dark:bg-purple-950/20 rounded-lg border border-purple-200 dark:border-purple-800">
-                  <Share2 className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                <div className="flex gap-3 p-3 bg-purple/5 dark:bg-purple/20 rounded-[28px] border border-purple/30 dark:border-purple">
+                  <Share2 className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-purple-900 dark:text-purple-100">Compartir Resultados</p>
-                    <p className="text-sm text-purple-700 dark:text-purple-300">Exporta tu perfil completo en PDF</p>
+                    <p className="font-semibold text-purple dark:text-white">Compartir Resultados</p>
+                    <p className="text-sm text-purple dark:text-purple/20">Exporta tu perfil completo en PDF</p>
                   </div>
                 </div>
               </CardContent>
@@ -219,8 +219,8 @@ export default function UnifiedTestDashboard() {
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
-                    <p className="text-sm text-slate-600 dark:text-slate-400 mb-2">Cargando resultado...</p>
+                  <div className="p-4 bg-muted/10 dark:bg-card rounded-lg">
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-2">Cargando resultado...</p>
                     <Progress value={33} />
                   </div>
                   <Button className="w-full">
@@ -233,12 +233,12 @@ export default function UnifiedTestDashboard() {
         </Tabs>
 
         {/* Footer CTA */}
-        <div className="mt-8 p-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg text-white">
+        <div className="mt-8 p-6 bg-background">
           <h2 className="text-2xl font-bold mb-2">Siguiente Fase: A2 - Tu Plan</h2>
           <p className="mb-4 opacity-90">
             Usa todos tus resultados para crear un plan personalizado de 90 días con sprints semanales
           </p>
-          <Button className="bg-white text-blue-600 hover:bg-white/90">
+          <Button className="bg-white text-blue hover:bg-white/90">
             Ir a A2: Tu Plan Personalizado
           </Button>
         </div>

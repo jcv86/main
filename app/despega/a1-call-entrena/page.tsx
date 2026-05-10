@@ -36,7 +36,7 @@ const CALL_ENTRENA_QUESTIONS: CallEntrenaQuestion[] = [
   }
 ]
 
-export default function A1CallEntrenaPage() {
+export default function CallEntrenaCoachingPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { user, loading: authLoading } = useAuthRedirect()
@@ -86,8 +86,8 @@ export default function A1CallEntrenaPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <Loader2 className="h-8 w-8 animate-spin text-cyan-600" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-blue" />
       </div>
     )
   }
@@ -95,34 +95,34 @@ export default function A1CallEntrenaPage() {
   if (callComplete) {
     return (
       <ASection 
-        title="A1: Origen" 
+        title="Entrenamiento: Conversación de Coaching" 
         subtitle="Call Entrena Completado" 
-        icon="📞" 
-        colorClass="from-cyan-500 to-teal-500"
+        icon="" 
+        colorClass="from-blue"
       >
         <ASectionPart title="¡Excelente!" icon={<CheckCircle2 />}>
-          <div className="bg-gradient-to-br from-cyan-900/30 to-teal-900/20 border border-cyan-500/30 rounded-lg p-8 text-center mb-8">
+          <div className="bg-background">
             <div className="mb-4">
-              <div className="text-5xl font-black text-transparent bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text mb-2">
+              <div className="text-5xl font-black text-transparent bg-background">
                 {profileNames[profile]}
               </div>
-              <p className="text-lg text-slate-300">Completaste tu Call Entrena</p>
-              <p className="text-sm text-slate-400 mt-2">Una sesión de entrenamiento para practicar respuestas en entrevistas</p>
+              <p className="text-lg text-white/85">Completaste tu Call Entrena</p>
+              <p className="text-base text-white/90 mt-2">Una sesión de entrenamiento para practicar respuestas en entrevistas</p>
             </div>
 
-            <div className="bg-slate-800/50 rounded-lg p-6 mb-6 text-left">
+            <div className="bg-muted/80/50 rounded-[28px] p-6 mb-6 text-left">
               <h3 className="font-semibold text-white mb-4">Tus Respuestas:</h3>
               <div className="space-y-3">
                 {responses.map((response, idx) => (
-                  <div key={idx} className="border border-slate-600 rounded p-3">
-                    <p className="text-xs text-slate-400 mb-1">Pregunta {idx + 1}:</p>
-                    <p className="text-slate-200">{response}</p>
+                  <div key={idx} className="border border-muted/60 rounded p-3">
+                    <p className="text-xs text-muted-foreground mb-1">Pregunta {idx + 1}:</p>
+                    <p className="text-white/80">{response}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <p className="text-slate-400 mb-6">
+            <p className="text-white/90 mb-6">
               Tu Call Entrena fue adaptado para tu perfil {profileNames[profile]}. Repítelo cuantas veces quieras para mejorar tus respuestas.
             </p>
           </div>
@@ -130,7 +130,7 @@ export default function A1CallEntrenaPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Button 
               onClick={handleRestart}
-              className="w-full bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white"
+              className="w-full bg-blue/80 hover:bg-blue/70 text-white"
             >
               <Phone className="w-4 h-4 mr-2" />
               Repetir Call Entrena
@@ -144,7 +144,7 @@ export default function A1CallEntrenaPage() {
             </Button>
             <Button 
               onClick={() => router.push('/despega')}
-              className="w-full bg-purple-600 hover:bg-purple-700"
+              className="w-full bg-purple/80 hover:bg-purple/70"
             >
               Dashboard
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -160,54 +160,54 @@ export default function A1CallEntrenaPage() {
 
   return (
     <ASection 
-      title="A1: Origen" 
-      subtitle="Call Entrena - Entrenamiento de Entrevista" 
-      icon="📞" 
-      colorClass="from-cyan-500 to-teal-500"
+      title="Entrenamiento: Conversación de Coaching" 
+      subtitle="Entrenamiento de Entrevista" 
+      icon="" 
+      colorClass="from-blue"
     >
       <ASectionPart title={`Pregunta ${currentQuestion + 1} de ${CALL_ENTRENA_QUESTIONS.length}`} icon={<Phone />}>
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            <p className="text-sm text-slate-400">Tu Perfil: <span className="font-semibold text-cyan-300">{profileNames[profile]}</span></p>
-            <p className="text-sm text-slate-400">{Math.round(progress)}%</p>
+            <p className="text-base text-white/90">Tu Perfil: <span className="font-semibold text-white">{profileNames[profile]}</span></p>
+            <p className="text-base text-white/90">{Math.round(progress)}%</p>
           </div>
-          <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+          <div className="h-2 bg-muted/70 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-cyan-500 to-teal-500 transition-all duration-500" 
+              className="h-full bg-blue transition-all duration-500" 
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
-        <Card className="bg-slate-800/40 border-slate-700 mb-8">
+        <Card className="bg-muted/80/40 border-muted/70 mb-8">
           <CardHeader>
             <CardTitle className="text-lg">{question.question}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-slate-400 italic mb-4">Contexto: {question.scenario}</p>
-            <p className="text-xs text-slate-500">Responde cómo lo haría alguien con tu perfil {profileNames[profile]}.</p>
+            <p className="text-base text-white/90 italic mb-4">Contexto: {question.scenario}</p>
+            <p className="text-base text-white/85">Responde cómo lo haría alguien con tu perfil {profileNames[profile]}.</p>
           </CardContent>
         </Card>
 
         <div className="grid grid-cols-1 gap-3 mb-8">
           {[
             {
-              label: '💪 Respuesta Fuerte',
+              label: 'Respuesta Fuerte',
               description: 'Enfocada en resultados y acción',
               value: 'strong'
             },
             {
-              label: '🤝 Respuesta Equilibrada',
+              label: 'Respuesta Equilibrada',
               description: 'Considera personas y proceso',
               value: 'balanced'
             },
             {
-              label: '🧠 Respuesta Analítica',
+              label: 'Respuesta Analítica',
               description: 'Detallada y fundamentada',
               value: 'analytical'
             },
             {
-              label: '⏰ Respuesta Pragmática',
+              label: 'Respuesta Pragmática',
               description: 'Realista y orientada al tiempo',
               value: 'pragmatic'
             }
@@ -216,13 +216,13 @@ export default function A1CallEntrenaPage() {
               key={option.value}
               onClick={() => handleAnswer(option.label)}
               variant="outline"
-              className="h-auto py-4 px-4 flex items-start gap-3 justify-start border-slate-600 hover:border-cyan-500 hover:bg-cyan-950/20"
+              className="h-auto py-4 px-4 flex items-start gap-3 justify-start border-muted/60 hover:border-blue hover:bg-cyan-950/20"
             >
               <div className="text-left flex-1">
-                <p className="font-semibold text-white text-sm">{option.label}</p>
-                <p className="text-xs text-slate-400">{option.description}</p>
+                <p className="font-semibold text-white text-base">{option.label}</p>
+                <p className="text-sm text-white/75">{option.description}</p>
               </div>
-              <ArrowRight className="w-4 h-4 text-slate-400" />
+              <ArrowRight className="w-4 h-4 text-white/70" />
             </Button>
           ))}
         </div>
@@ -230,7 +230,7 @@ export default function A1CallEntrenaPage() {
         <Button 
           onClick={() => router.push('/despega/a1-report')}
           variant="outline"
-          className="w-full border-slate-600"
+          className="w-full border-muted/60"
         >
           Salir del Call Entrena
         </Button>

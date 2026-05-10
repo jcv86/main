@@ -25,6 +25,13 @@ export async function middleware(request: NextRequest) {
     return response
   }
 
+  // Check for demo user in cookie (set by demo login)
+  const demoUser = request.cookies.get('demo_user')?.value
+  if (demoUser) {
+    // Allow demo users to bypass auth validation
+    return NextResponse.next()
+  }
+
   // Use Supabase session management for all other routes
   return await updateSession(request)
 }

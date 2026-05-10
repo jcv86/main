@@ -28,11 +28,11 @@ export function FloatingCoachWidget() {
             setIsMinimized(false)
             setHasUnread(false)
           }}
-          className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-full bg-gradient-to-br from-purple-600 to-blue-600 shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center group hover:scale-110"
+          className="fixed bottom-6 right-6 z-50 h-14 w-14 rounded-[20px] bg-background"
           aria-label="Abrir chat con coach IA"
         >
           {hasUnread && (
-            <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-500 rounded-full border-2 border-white animate-pulse" />
+            <span className="absolute -top-1 -right-1 h-4 w-4 bg-red/50 rounded-full border-2 border-white animate-pulse" />
           )}
           <MessageCircle className="h-6 w-6 text-white" />
         </button>
@@ -42,9 +42,9 @@ export function FloatingCoachWidget() {
       {isOpen && !isMinimized && (
         <div className="fixed bottom-6 right-6 z-50 w-96 h-[600px] bg-background border rounded-lg shadow-2xl flex flex-col overflow-hidden">
           {/* Header */}
-          <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20">
+          <div className="flex items-center justify-between p-4 border-b bg-background">
             <div className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-purple-600" />
+              <Sparkles className="h-5 w-5 text-purple" />
               <h3 className="font-semibold text-sm">
                 {selectedCategory ? "Chat con Coach" : "Elige tu Coach"}
               </h3>

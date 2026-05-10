@@ -39,21 +39,40 @@ const getResourceIcon = (tipo: string) => {
 
 const getResourceColor = (tipo: string) => {
   const colors: Record<string, string> = {
-    articulo: "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
-    video: "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300",
-    podcast: "bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300",
-    libro: "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
+    articulo: "bg-blue/10 text-blue dark:bg-blue/40 dark:text-blue-200",
+    video: "bg-red/10 text-red dark:bg-red/40 dark:text-red/30",
+    podcast: "bg-purple/10 text-purple dark:bg-purple/40 dark:text-purple/20",
+    libro: "bg-green/10 text-green dark:bg-green/40 dark:text-green/30",
   }
-  return colors[tipo] || "bg-gray-100"
+  return colors[tipo] || "bg-muted/10"
 }
 
 const getNivelColor = (nivel: string) => {
   const colors: Record<string, string> = {
-    "basico": "bg-green-50 text-green-700 border-green-200",
-    "intermedio": "bg-blue-50 text-blue-700 border-blue-200",
-    "avanzado": "bg-purple-50 text-purple-700 border-purple-200",
+    "basico": "bg-green/5 text-green border-green/20",
+    "intermedio": "bg-blue/5 text-blue border-blue/20",
+    "avanzado": "bg-purple/5 text-purple border-purple/20",
   }
-  return colors[nivel] || "bg-gray-50"
+  return colors[nivel] || "bg-muted/5"
+}
+
+const getNivelLabel = (nivel: string) => {
+  const labels: Record<string, string> = {
+    "basico": "Básico",
+    "intermedio": "Intermedio",
+    "avanzado": "Avanzado",
+  }
+  return labels[nivel] || nivel
+}
+
+const getTipoLabel = (tipo: string) => {
+  const labels: Record<string, string> = {
+    "articulo": "Artículo",
+    "video": "Vídeo",
+    "podcast": "Podcast",
+    "libro": "Libro",
+  }
+  return labels[tipo] || tipo
 }
 
 export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource }: A4ResourceLibraryProps) {
@@ -93,7 +112,7 @@ export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource 
     <div className="w-full space-y-6">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <Bookmark className="w-8 h-8 text-green-600" />
+        <Bookmark className="w-8 h-8 text-green" />
         <div>
           <h2 className="text-2xl font-bold">Biblioteca Curada</h2>
           <p className="text-sm text-muted-foreground">
@@ -136,7 +155,7 @@ export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource 
                   className="gap-1"
                 >
                   {getResourceIcon(type)}
-                  {type}
+                  {getTipoLabel(type)}
                 </Button>
               ))}
             </div>
@@ -184,7 +203,7 @@ export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource 
                   size="sm"
                   onClick={() => setSelectedLevel(level)}
                 >
-                  {level}
+                  {getNivelLabel(level)}
                 </Button>
               ))}
             </div>
@@ -214,7 +233,7 @@ export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource 
               <div className="flex items-start justify-between gap-2 mb-2">
                 <Badge className={getResourceColor(resource.tipo)}>
                   {getResourceIcon(resource.tipo)}
-                  <span className="ml-1">{resource.tipo}</span>
+                  <span className="ml-1">{getTipoLabel(resource.tipo)}</span>
                 </Badge>
                 <Button
                   variant="ghost"
@@ -235,7 +254,7 @@ export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource 
               {/* Metadata */}
               <div className="flex flex-wrap gap-2 mt-3">
                 <Badge variant="outline" className={getNivelColor(resource.nivel)}>
-                  {resource.nivel}
+                  {getNivelLabel(resource.nivel)}
                 </Badge>
                 {resource.autor && (
                   <Badge variant="outline" className="text-xs">
@@ -254,7 +273,7 @@ export function A4ResourceLibrary({ resources, onSaveResource, onRemoveResource 
                 {[...Array(5)].map((_, i) => (
                   <Star
                     key={i}
-                    className={`w-4 h-4 ${i < Math.round(resource.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`}
+                    className={`w-4 h-4 ${i < Math.round(resource.rating) ? 'fill-yellow-400 text-yellow/40' : 'text-white/85'}`}
                   />
                 ))}
                 <span className="text-sm text-muted-foreground ml-1">{resource.rating}/5</span>

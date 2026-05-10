@@ -63,71 +63,71 @@ export function RadarEstrategico() {
   if (loading) return <div className="min-h-screen animate-pulse" />
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-slate-50 p-6 space-y-8">
+    <div className="min-h-screen bg-background">
       {/* Tesis del Día - Main Strategic Statement */}
       {tesisDia && (
         <div className="space-y-6">
           <div className="flex items-center gap-3">
-            <Radar className="w-8 h-8 text-blue-400" />
+            <Radar className="w-8 h-8 text-blue/40" />
             <h1 className="text-4xl font-bold text-balance">Lectura Estratégica del Día</h1>
           </div>
 
-          <Card className="bg-slate-800 border-blue-500/30">
+          <Card className="bg-transparent border-blue/50/30">
             <CardHeader>
               <CardTitle className="text-2xl">{tesisDia.tesis_estrategica}</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Capa 1: Tesis */}
               <div className="space-y-2">
-                <h3 className="text-sm font-semibold text-blue-300 uppercase tracking-wider">
+                <h3 className="text-sm font-semibold text-blue/30 uppercase tracking-wider">
                   Tesis Estratégica
                 </h3>
-                <p className="text-lg leading-relaxed text-slate-200">{tesisDia.tesis_estrategica}</p>
+                <p className="text-lg leading-relaxed text-white/80">{tesisDia.tesis_estrategica}</p>
               </div>
 
               {/* Capa 2: Delta */}
-              <div className="space-y-2 border-t border-slate-700 pt-4">
+              <div className="space-y-2 border-t border-muted/70 pt-4">
                 <h3 className="text-sm font-semibold text-amber-300 uppercase tracking-wider">
                   Delta vs Ayer
                 </h3>
-                <p className="text-base text-slate-300">{tesisDia.delta_estrategico}</p>
+                <p className="text-base text-white/85">{tesisDia.delta_estrategico}</p>
               </div>
 
               {/* Metadata Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-slate-700 pt-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border-t border-muted/70 pt-4">
                 <div>
-                  <p className="text-xs text-slate-400 uppercase">Nivel de Energía</p>
+                  <p className="text-xs text-muted-foreground uppercase">Nivel de Energía</p>
                   <Badge
                     variant="outline"
-                    className={`mt-2 ${
+                    className={`mt-2 ${`}
                       tesisDia.nivel_energía === 'Alta'
-                        ? 'bg-red-500/20 text-red-300 border-red-500/50'
+                        ? 'bg-red/50/20 text-red/30 border-red/50/50'
                         : tesisDia.nivel_energía === 'Confirmación'
-                          ? 'bg-blue-500/20 text-blue-300 border-blue-500/50'
-                          : 'bg-slate-500/20 text-slate-300 border-slate-500/50'
+                          ? 'bg-blue/50/20 text-blue/30 border-blue/50/50'
+                          : 'bg-muted/50/20 text-white/85 border-muted/50/50'`}
                     }`}
                   >
                     {tesisDia.nivel_energía}
                   </Badge>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 uppercase">Ritmo Narrativo</p>
-                  <Badge variant="outline" className="mt-2 bg-purple-500/20 text-purple-300 border-purple-500/50">
+                  <p className="text-xs text-muted-foreground uppercase">Ritmo Narrativo</p>
+                  <Badge variant="outline" className="mt-2 bg-purple/50/20 text-purple/30 border-purple/50/50">
                     {tesisDia.ritmo_narrativo}
                   </Badge>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 uppercase">Impacto</p>
-                  <Badge variant="outline" className="mt-2 bg-green-500/20 text-green-300 border-green-500/50">
+                  <p className="text-xs text-muted-foreground uppercase">Impacto</p>
+                  <Badge variant="outline" className="mt-2 bg-green/50/20 text-green/30 border-green/50">
                     {tesisDia.impacto_plazo} Plazo
                   </Badge>
                 </div>
                 <div>
-                  <p className="text-xs text-slate-400 uppercase">Consenso</p>
+                  <p className="text-xs text-muted-foreground uppercase">Consenso</p>
                   <div className="mt-2 flex items-center gap-2">
-                    <div className="w-full h-2 bg-slate-700 rounded-full overflow-hidden">
+                    <div className="w-full h-2 bg-muted/70 rounded-full overflow-hidden">
                       <div
-                        className="h-full bg-gradient-to-r from-blue-500 to-cyan-400"
+                        className="h-full bg-background"
                         style={{ width: `${tesisDia.consensus_score * 100}%` }}
                       />
                     </div>
@@ -137,20 +137,20 @@ export function RadarEstrategico() {
               </div>
 
               {/* Capa 4: Qué descuenta el mercado */}
-              <div className="space-y-2 border-t border-slate-700 pt-4">
-                <h3 className="text-sm font-semibold text-cyan-300 uppercase tracking-wider">
+              <div className="space-y-2 border-t border-muted/70 pt-4">
+                <h3 className="text-sm font-semibold text-cyan/30 uppercase tracking-wider">
                   Qué Descuenta el Mercado
                 </h3>
-                <p className="text-base text-slate-300">{tesisDia.que_descuento_mercado}</p>
+                <p className="text-base text-white/85">{tesisDia.que_descuento_mercado}</p>
               </div>
 
               {/* Capa 5: Tensión narrativa */}
               {tesisDia.tension_narrativa && (
-                <div className="space-y-2 border-t border-slate-700 pt-4">
-                  <h3 className="text-sm font-semibold text-orange-300 uppercase tracking-wider">
+                <div className="space-y-2 border-t border-muted/70 pt-4">
+                  <h3 className="text-sm font-semibold text-orange/30 uppercase tracking-wider">
                     Tensión Narrativa
                   </h3>
-                  <p className="text-base text-slate-300">{tesisDia.tension_narrativa}</p>
+                  <p className="text-base text-white/85">{tesisDia.tension_narrativa}</p>
                 </div>
               )}
             </CardContent>
@@ -163,7 +163,7 @@ export function RadarEstrategico() {
         <h2 className="text-3xl font-bold">Señales del Radar</h2>
 
         <Tabs defaultValue="todas" className="space-y-4">
-          <TabsList className="bg-slate-800 border border-slate-700">
+          <TabsList className="bg-transparent border border-muted/70">
             <TabsTrigger value="todas">Todas ({noticias.length})</TabsTrigger>
             <TabsTrigger value="alta">Alta Energía</TabsTrigger>
             <TabsTrigger value="acelerando">Acelerando</TabsTrigger>
@@ -212,7 +212,7 @@ export function RadarEstrategico() {
 
           {/* Tab: Weak Signals */}
           <TabsContent value="weak-signals" className="space-y-4">
-            <div className="text-slate-300 p-4 border border-dashed border-slate-600 rounded-lg">
+            <div className="text-white/85 p-4 border border-dashed border-muted/60 rounded-lg">
               Weak signals están siendo procesadas...
             </div>
           </TabsContent>
@@ -235,41 +235,41 @@ interface RadarNoticiaCardProps {
 
 function RadarNoticiaCard({ noticia, isSelected, onSelect }: RadarNoticiaCardProps) {
   const getNivelColor = (nivel: string) => {
-    if (nivel === 'Alta') return 'bg-red-500/20 text-red-300 border-red-500/50'
-    if (nivel === 'Confirmación') return 'bg-blue-500/20 text-blue-300 border-blue-500/50'
-    return 'bg-slate-500/20 text-slate-300 border-slate-500/50'
+    if (nivel === 'Alta') return 'bg-red/50/20 text-red/30 border-red/50/50'
+    if (nivel === 'Confirmación') return 'bg-blue/50/20 text-blue/30 border-blue/50/50'
+    return 'bg-muted/50/20 text-white/85 border-muted/50/50'
   }
 
   return (
     <Card
       onClick={() => onSelect(noticia)}
-      className={`bg-slate-800 border-slate-700 cursor-pointer transition-all hover:border-blue-500/50 ${
-        isSelected ? 'ring-2 ring-blue-500' : ''
+      className={`bg-transparent border-muted/70 cursor-pointer transition-all hover:border-blue/50/50 ${`}
+        isSelected ? 'ring-2 ring-blue-500' : ''`}
       }`}
     >
       <CardContent className="pt-6">
         <div className="space-y-3">
           <div className="flex items-start justify-between gap-4">
-            <h3 className="text-lg font-semibold text-slate-100">{noticia.titulo}</h3>
+            <h3 className="text-lg font-semibold text-muted/10">{noticia.titulo}</h3>
             <Badge variant="outline" className="shrink-0">
               {noticia.fuente}
             </Badge>
           </div>
 
-          <p className="text-sm text-slate-400">{noticia.descripcion}</p>
+          <p className="text-sm text-muted-foreground">{noticia.descripcion}</p>
 
           {/* Mini 7-Capas */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             <Badge variant="outline" className={getNivelColor(noticia.capa_3_nivel_energia)}>
               {noticia.capa_3_nivel_energia}
             </Badge>
-            <Badge variant="outline" className="bg-purple-500/20 text-purple-300 border-purple-500/50">
+            <Badge variant="outline" className="bg-purple/50/20 text-purple/30 border-purple/50/50">
               {noticia.capa_6_ritmo_narrativo.slice(0, 10)}
             </Badge>
-            <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500/50">
+            <Badge variant="outline" className="bg-green/50/20 text-green/30 border-green/50">
               {noticia.capa_7_impacto_plazo}
             </Badge>
-            <Badge variant="outline" className="bg-cyan-500/20 text-cyan-300 border-cyan-500/50">
+            <Badge variant="outline" className="bg-cyan/50/20 text-cyan/30 border-cyan/50/50">
               Ver más →
             </Badge>
           </div>
@@ -287,7 +287,7 @@ interface RadarNoticiaDetailProps {
 function RadarNoticiaDetail({ noticia, onClose }: RadarNoticiaDetailProps) {
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-end">
-      <div className="w-full bg-slate-900 rounded-t-xl p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+      <div className="w-full bg-muted/90 rounded-t-xl p-6 space-y-6 max-h-[80vh] overflow-y-auto">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold">{noticia.titulo}</h2>
           <Button variant="ghost" onClick={onClose}>
@@ -299,42 +299,42 @@ function RadarNoticiaDetail({ noticia, onClose }: RadarNoticiaDetailProps) {
         <div className="space-y-6">
           {/* Capa 1 */}
           <div className="space-y-2">
-            <h4 className="text-sm font-semibold text-blue-300 uppercase">1. Tesis</h4>
-            <p className="text-base text-slate-300">{noticia.capa_1_tesis}</p>
+            <h4 className="text-sm font-semibold text-blue/30 uppercase">1. Tesis</h4>
+            <p className="text-base text-white/85">{noticia.capa_1_tesis}</p>
           </div>
 
           {/* Capa 2 */}
           <div className="space-y-2">
             <h4 className="text-sm font-semibold text-amber-300 uppercase">2. Delta vs Ayer</h4>
-            <p className="text-base text-slate-300">{noticia.capa_2_delta}</p>
+            <p className="text-base text-white/85">{noticia.capa_2_delta}</p>
           </div>
 
           {/* Capa 3-7 */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-slate-400 uppercase">3. Nivel de Energía</p>
-              <p className="mt-2 text-base font-semibold text-slate-200">{noticia.capa_3_nivel_energia}</p>
+              <p className="text-xs text-muted-foreground uppercase">3. Nivel de Energía</p>
+              <p className="mt-2 text-base font-semibold text-white/80">{noticia.capa_3_nivel_energia}</p>
             </div>
             <div>
-              <p className="text-xs text-slate-400 uppercase">6. Ritmo Narrativo</p>
-              <p className="mt-2 text-base font-semibold text-slate-200">{noticia.capa_6_ritmo_narrativo}</p>
+              <p className="text-xs text-muted-foreground uppercase">6. Ritmo Narrativo</p>
+              <p className="mt-2 text-base font-semibold text-white/80">{noticia.capa_6_ritmo_narrativo}</p>
             </div>
             <div>
-              <p className="text-xs text-slate-400 uppercase">7. Impacto Plazo</p>
-              <p className="mt-2 text-base font-semibold text-slate-200">{noticia.capa_7_impacto_plazo}</p>
+              <p className="text-xs text-muted-foreground uppercase">7. Impacto Plazo</p>
+              <p className="mt-2 text-base font-semibold text-white/80">{noticia.capa_7_impacto_plazo}</p>
             </div>
           </div>
 
           {/* Capa 4 */}
           <div className="space-y-2">
-            <h4 className="text-sm font-semibold text-cyan-300 uppercase">4. Qué Descuenta el Mercado</h4>
-            <p className="text-base text-slate-300">{noticia.capa_4_descuento_mercado}</p>
+            <h4 className="text-sm font-semibold text-cyan/30 uppercase">4. Qué Descuenta el Mercado</h4>
+            <p className="text-base text-white/85">{noticia.capa_4_descuento_mercado}</p>
           </div>
 
           {/* Capa 5 */}
           <div className="space-y-2">
-            <h4 className="text-sm font-semibold text-orange-300 uppercase">5. Consenso y Tensión</h4>
-            <p className="text-base text-slate-300">{noticia.capa_5_consensus}</p>
+            <h4 className="text-sm font-semibold text-orange/30 uppercase">5. Consenso y Tensión</h4>
+            <p className="text-base text-white/85">{noticia.capa_5_consensus}</p>
           </div>
 
           {noticia.url && (

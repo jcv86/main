@@ -67,12 +67,12 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
 
   const getTypeConfig = (tipo: string) => {
     const configs: Record<string, { icon: string; color: string; label: string }> = {
-      decision: { icon: "🤔", color: "bg-blue-100", label: "Toma de Decisión" },
-      comunicacion: { icon: "💬", color: "bg-green-100", label: "Comunicación" },
-      negociacion: { icon: "🤝", color: "bg-orange-100", label: "Negociación" },
-      liderazgo: { icon: "👥", color: "bg-purple-100", label: "Liderazgo" },
-      crisis: { icon: "🚨", color: "bg-red-100", label: "Gestión de Crisis" },
-      planificacion: { icon: "📋", color: "bg-indigo-100", label: "Planificación" },
+      decision: { icon: "🤔", color: "bg-blue/10", label: "Toma de Decisión" },
+      comunicacion: { icon: "💬", color: "bg-green/10", label: "Comunicación" },
+      negociacion: { icon: "", color: "bg-orange/10", label: "Negociación" },
+      liderazgo: { icon: "👥", color: "bg-purple/10", label: "Liderazgo" },
+      crisis: { icon: "🚨", color: "bg-red/10", label: "Gestión de Crisis" },
+      planificacion: { icon: "📋", color: "bg-blue/10", label: "Planificación" },
     }
     return configs[tipo] || configs.decision
   }
@@ -107,7 +107,7 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
             <Card className="bg-muted">
               <CardContent className="pt-4">
                 <div className="text-sm text-muted-foreground">Puntos disponibles</div>
-                <div className="text-lg font-bold text-primary">+{scenario.puntos}</div>
+                <div className="text-lg font-bold text-purple">+{scenario.puntos}</div>
               </CardContent>
             </Card>
           </div>
@@ -118,7 +118,7 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
             <div className="space-y-2">
               {scenario.metricas_exito.map((metrica, idx) => (
                 <div key={idx} className="flex items-start gap-2">
-                  <div className="w-2 h-2 rounded-full bg-primary mt-2 flex-shrink-0" />
+                  <div className="w-2 h-2 rounded-[20px] bg-purple mt-2 flex-shrink-0" />
                   <div>
                     <div className="font-medium text-sm">{metrica.label}</div>
                     <div className="text-xs text-muted-foreground">{metrica.description}</div>
@@ -155,10 +155,10 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
         </CardHeader>
 
         <CardContent className="space-y-6">
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-blue/5 border border-blue/20 rounded-[28px] p-4">
             <div className="flex gap-3">
-              <AlertCircle className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-              <div className="text-sm text-blue-900">{scenario.contexto}</div>
+              <AlertCircle className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
+              <div className="text-sm text-blue">{scenario.contexto}</div>
             </div>
           </div>
 
@@ -216,30 +216,30 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
           <div className="space-y-3">
             <div className="flex justify-between">
               <span className="font-medium">Tu Desempeño</span>
-              <span className="text-2xl font-bold text-primary">{userScore}%</span>
+              <span className="text-2xl font-bold text-purple">{userScore}%</span>
             </div>
             <Progress value={userScore} className="h-3" />
           </div>
 
           {/* Your Decision */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="bg-blue/5 border border-blue/20 rounded-[28px] p-4">
             <div className="text-sm font-medium mb-2">Tu decisión</div>
             <div className="font-medium">{selectedDecision.text}</div>
           </div>
 
           {/* Outcome */}
-          <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+          <div className="bg-green/5 border border-green/20 rounded-[28px] p-4">
             <div className="text-sm font-medium mb-2">Lo que sucedió</div>
-            <div className="text-sm text-green-900">{selectedDecision.outcome}</div>
+            <div className="text-sm text-green">{selectedDecision.outcome}</div>
           </div>
 
           {/* Coaching Insights */}
-          <div className="bg-purple-50 border border-purple-200 rounded-lg p-4">
+          <div className="bg-purple/5 border border-purple/20 rounded-[28px] p-4">
             <div className="flex gap-2">
-              <TrendingUp className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+              <TrendingUp className="w-5 h-5 text-purple flex-shrink-0 mt-0.5" />
               <div>
                 <div className="text-sm font-medium mb-1">Insights del Coach</div>
-                <div className="text-sm text-purple-900">{selectedDecision.reasoning}</div>
+                <div className="text-sm text-purple">{selectedDecision.reasoning}</div>
               </div>
             </div>
           </div>

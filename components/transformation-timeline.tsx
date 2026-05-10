@@ -34,11 +34,11 @@ const phases: TimelinePhase[] = [
 
 export function TransformationTimeline({ progressPercent = 0 }: { progressPercent?: number }) {
   return (
-    <Card className="border-0 bg-gradient-to-r from-primary/10 to-primary/5 backdrop-blur-sm">
+    <Card className="border-0 bg-background">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle>Tu Transformación de 90 Días</CardTitle>
-          <span className="text-2xl font-bold text-primary">{progressPercent}%</span>
+          <span className="text-2xl font-bold text-purple">{progressPercent}%</span>
         </div>
         <Progress value={progressPercent} className="mt-4 h-2" />
       </CardHeader>
@@ -48,7 +48,7 @@ export function TransformationTimeline({ progressPercent = 0 }: { progressPercen
             <div key={idx} className="flex gap-4">
               <div className="flex flex-col items-center">
                 {phase.completed ? (
-                  <CheckCircle2 className="w-6 h-6 text-primary" />
+                  <CheckCircle2 className="w-6 h-6 text-purple" />
                 ) : (
                   <Circle className="w-6 h-6 text-muted-foreground" />
                 )}

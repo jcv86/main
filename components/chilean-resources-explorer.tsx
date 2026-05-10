@@ -89,7 +89,7 @@ export function ChileanResourcesExplorer() {
       <div className="space-y-4">
         <div className="flex gap-2">
           <div className="flex-1 relative">
-            <Search className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+            <Search className="absolute left-3 top-3 w-4 h-4 text-muted-foreground" />
             <Input
               placeholder="Buscar recursos..."
               value={searchTerm}
@@ -132,20 +132,20 @@ export function ChileanResourcesExplorer() {
                     <CardTitle className="text-lg">{resource.name}</CardTitle>
                     <CardDescription>{resource.category}</CardDescription>
                   </div>
-                  <div className="text-sm font-semibold text-blue-600">
+                  <div className="text-sm font-semibold text-blue">
                     {(resource.relevance_score * 100).toFixed(0)}%
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="text-sm text-gray-600 dark:text-gray-400">{resource.description}</p>
-                <div className="text-xs text-gray-500">Por: {resource.owner}</div>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">{resource.description}</p>
+                <div className="text-xs text-muted-foreground">Por: {resource.owner}</div>
                 {resource.tags && resource.tags.length > 0 && (
                   <div className="flex gap-1 flex-wrap">
                     {resource.tags.slice(0, 3).map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs rounded"
+                        className="px-2 py-1 bg-blue/10 dark:bg-blue text-blue dark:text-blue-300 text-xs rounded"
                       >
                         {tag}
                       </span>
@@ -163,7 +163,7 @@ export function ChileanResourcesExplorer() {
       )}
 
       {!loading && filteredResources.length === 0 && (
-        <div className="text-center py-8 text-gray-500">No se encontraron recursos que coincidan con tu búsqueda.</div>
+        <div className="text-center py-8 text-muted-foreground">No se encontraron recursos que coincidan con tu búsqueda.</div>
       )}
     </div>
   )

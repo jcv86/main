@@ -1,5 +1,6 @@
 import { CoachProviderWrapper } from '@/components/coach-provider-wrapper'
-import { DespeganNavbar } from '@/components/despega-navbar'
+import { DespegaNavbar } from '@/components/despega-navbar'
+import { PremiumGamificationWidget } from '@/components/premium-gamification-widget'
 
 export default function DespegaLayout({
   children,
@@ -9,10 +10,11 @@ export default function DespegaLayout({
   return (
     <CoachProviderWrapper>
       <div className="min-h-screen flex flex-col">
-        <DespeganNavbar />
-        <main className="flex-1">
+        <DespegaNavbar />
+        <main className="flex-1 pt-4">
           {children}
         </main>
+        <PremiumGamificationWidget />
       </div>
     </CoachProviderWrapper>
   )

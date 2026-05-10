@@ -30,15 +30,29 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
   const supabase = createClient()
 
   useEffect(() => {
+    // Skip if supabase client is not available
+    if (!supabase) {
+      console.log('[v0] Supabase client not available')
+      setIsLoading(false)
+      return
+    }
+
+    // Flag to track if this component is mounted
+    let isMounted = true
+    let unsubscribe: (() => void) | null = null
+
     // Get initial session
     const getInitialSession = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession()
-        setSession(session)
+        if (isMounted) {
+          setSession(session)
+        }
       } catch (error) {
-        console.error('Error getting session:', error)
+        console.error('[v0] Error getting session:', error)
+        if (isMounted) setSession(null)
       } finally {
-        setIsLoading(false)
+        if (isMounted) setIsLoading(false)
       }
     }
 
@@ -46,16 +60,23 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
 
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        setSession(session)
-        setIsLoading(false)
+      (_event, newSession) => {
+        if (isMounted) {
+          setSession(newSession)
+          setIsLoading(false)
+        }
       }
     )
+    unsubscribe = subscription?.unsubscribe || null
 
+    // Cleanup function
     return () => {
-      subscription.unsubscribe()
+      isMounted = false
+      if (unsubscribe) {
+        unsubscribe()
+      }
     }
-  }, [supabase.auth])
+  }, [supabase])
 
   // Transform Supabase session to our User interface
   const user: User | null = session?.user
@@ -68,7 +89,9 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
     : null
 
   const signOut = async () => {
-    await supabase.auth.signOut()
+    if (supabase) {
+      await supabase.auth.signOut()
+    }
     setSession(null)
   }
 

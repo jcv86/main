@@ -9,55 +9,55 @@ export default function DemoDISCButton() {
   const router = useRouter()
 
   return (
-    <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+    <Card className="bg-background">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-blue-800">
+        <CardTitle className="flex items-center gap-2 text-blue">
           <BarChart3 className="h-6 w-6" />
           Dashboard Moderno con Gráficos
         </CardTitle>
-        <CardDescription className="text-blue-700">
+        <CardDescription className="text-blue">
           Explora nuestros gráficos de radar interactivos, análisis con IA y visualizaciones avanzadas
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="flex items-center gap-3 p-3 bg-white/50 rounded-lg">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <BarChart3 className="h-5 w-5 text-blue-600" />
+            <div className="w-10 h-10 bg-blue/10 rounded-full flex items-center justify-center">
+              <BarChart3 className="h-5 w-5 text-blue" />
             </div>
             <div>
               <p className="font-medium text-sm">Gráficos Interactivos</p>
-              <p className="text-xs text-gray-600">Radar, barras y circulares</p>
+              <p className="text-xs text-muted-foreground">Radar, barras y circulares</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 p-3 bg-white/50 rounded-lg">
-            <div className="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-              <Brain className="h-5 w-5 text-purple-600" />
+            <div className="w-10 h-10 bg-purple/10 rounded-full flex items-center justify-center">
+              <Brain className="h-5 w-5 text-purple" />
             </div>
             <div>
               <p className="font-medium text-sm">Análisis con IA</p>
-              <p className="text-xs text-gray-600">Insights personalizados</p>
+              <p className="text-xs text-muted-foreground">Insights personalizados</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 p-3 bg-white/50 rounded-lg">
-            <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-              <Target className="h-5 w-5 text-green-600" />
+            <div className="w-10 h-10 bg-green/10 rounded-full flex items-center justify-center">
+              <Target className="h-5 w-5 text-green" />
             </div>
             <div>
               <p className="font-medium text-sm">Perfil Completo</p>
-              <p className="text-xs text-gray-600">DISC detallado</p>
+              <p className="text-xs text-muted-foreground">DISC detallado</p>
             </div>
           </div>
 
           <div className="flex items-center gap-3 p-3 bg-white/50 rounded-lg">
-            <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
-              <Play className="h-5 w-5 text-orange-600" />
+            <div className="w-10 h-10 bg-orange/10 rounded-full flex items-center justify-center">
+              <Play className="h-5 w-5 text-orange" />
             </div>
             <div>
               <p className="font-medium text-sm">Demo Interactivo</p>
-              <p className="text-xs text-gray-600">Prueba inmediata</p>
+              <p className="text-xs text-muted-foreground">Prueba inmediata</p>
             </div>
           </div>
         </div>

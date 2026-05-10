@@ -23,7 +23,7 @@ export function AdminUsersOverview() {
             { email: "lector@example.com", points: 580, badges: 7, lastActive: "Hace 1 hora" },
             { email: "aprendiz@example.com", points: 210, badges: 2, lastActive: "Ayer" },
           ].map((user) => (
-            <div key={user.email} className="p-3 bg-muted/50 rounded-lg border border-border/50 flex items-center justify-between">
+            <div key={user.email} className="p-3 bg-muted/50 rounded-[28px] border border-border/50 flex items-center justify-between">
               <div className="flex-1">
                 <p className="font-medium text-sm">{user.email}</p>
                 <p className="text-xs text-muted-foreground">
@@ -60,7 +60,7 @@ export function AdminTesisManager() {
           { date: "Hoy", tesis: "IA consolidará adopción con diferenciador en datos propios", consensus: 0.75 },
           { date: "Ayer", tesis: "Sustentabilidad pasa de ESG a estrategia competitiva", consensus: 0.68 },
         ].map((item, idx) => (
-          <div key={idx} className="p-4 bg-muted/50 rounded-lg border border-border/50 space-y-2">
+          <div key={idx} className="p-4 bg-muted/50 rounded-[28px] border border-border/50 space-y-2">
             <div className="flex items-center justify-between">
               <Badge variant="outline" className="text-xs">{item.date}</Badge>
               <div className="flex gap-1">
@@ -102,7 +102,7 @@ export function AdminNoticiasManager() {
             { title: "IA revoluciona automatización", category: "IA", linked: true },
             { title: "Startups de sustentabilidad en auge", category: "ESG", linked: false },
           ].map((news, idx) => (
-            <div key={idx} className="p-3 bg-muted/50 rounded-lg border border-border/50 flex items-center justify-between">
+            <div key={idx} className="p-3 bg-muted/50 rounded-[28px] border border-border/50 flex items-center justify-between">
               <div className="flex-1">
                 <p className="font-medium text-sm">{news.title}</p>
                 <p className="text-xs text-muted-foreground">{news.category} • {news.linked ? "Ligado a Tesis" : "No ligado"}</p>
@@ -135,7 +135,7 @@ export function AdminTestsManager() {
           { title: "Estrategia Digital", difficulty: "Intermedio", completions: 145, avgScore: 72 },
           { title: "Introducción a IA", difficulty: "Básico", completions: 298, avgScore: 85 },
         ].map((test, idx) => (
-          <div key={idx} className="p-3 bg-muted/50 rounded-lg border border-border/50">
+          <div key={idx} className="p-3 bg-muted/50 rounded-[28px] border border-border/50">
             <div className="flex items-center justify-between mb-2">
               <div>
                 <p className="font-medium text-sm">{test.title}</p>
@@ -173,14 +173,14 @@ export function AdminBibliotecaManager() {
           { title: "IA Generativa: Guía Práctica", type: "Artículo", verified: true, score: 0.88 },
           { title: "Sustentabilidad 2024", type: "Reporte", verified: false, score: 0.72 },
         ].map((resource, idx) => (
-          <div key={idx} className="p-3 bg-muted/50 rounded-lg border border-border/50 flex items-center justify-between">
+          <div key={idx} className="p-3 bg-muted/50 rounded-[28px] border border-border/50 flex items-center justify-between">
             <div className="flex-1">
               <p className="font-medium text-sm">{resource.title}</p>
               <p className="text-xs text-muted-foreground">{resource.type} • Score: {(resource.score * 100).toFixed(0)}%</p>
             </div>
             <div className="flex items-center gap-2">
               {resource.verified ? (
-                <Badge variant="secondary" className="text-xs">✓ Verificado</Badge>
+                <Badge variant="secondary" className="text-xs"> Verificado</Badge>
               ) : (
                 <Badge variant="outline" className="text-xs">Pendiente</Badge>
               )}

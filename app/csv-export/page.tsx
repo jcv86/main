@@ -105,33 +105,33 @@ export default function CSVExportPage() {
   const bookCount = csvData.split("\n").length - 1
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-muted/5 p-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">📚 CSV Export - Biblioteca Completa</h1>
-          <p className="text-xl text-gray-600">{bookCount} libros de desarrollo profesional listos para descargar</p>
+          <h1 className="text-4xl font-bold text-foreground mb-4"> CSV Export - Biblioteca Completa</h1>
+          <p className="text-xl text-muted-foreground">{bookCount} libros de desarrollo profesional listos para descargar</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-3 mb-8">
-          <Card className="bg-blue-50 border-blue-200">
+          <Card className="bg-blue/5 border-blue/20">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-blue-700">
+              <CardTitle className="flex items-center gap-2 text-blue">
                 <Download className="h-5 w-5" />
                 Descargar CSV
               </CardTitle>
               <CardDescription>Archivo completo con todos los datos</CardDescription>
             </CardHeader>
             <CardContent>
-              <Button onClick={downloadCSV} className="w-full bg-blue-600 hover:bg-blue-700" size="lg">
+              <Button onClick={downloadCSV} className="w-full bg-blue hover:bg-blue" size="lg">
                 <Download className="mr-2 h-4 w-4" />
                 Descargar CSV ({bookCount} libros)
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="bg-green-50 border-green-200">
+          <Card className="bg-green/5 border-green/20">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-green-700">
+              <CardTitle className="flex items-center gap-2 text-green">
                 <Copy className="h-5 w-5" />
                 Copiar Datos
               </CardTitle>
@@ -141,7 +141,7 @@ export default function CSVExportPage() {
               <Button
                 onClick={copyToClipboard}
                 variant="outline"
-                className="w-full border-green-300 text-green-700 hover:bg-green-100 bg-transparent"
+                className="w-full border-green/30 text-green hover:bg-green/10 bg-transparent"
                 size="lg"
               >
                 <Copy className="mr-2 h-4 w-4" />
@@ -150,9 +150,9 @@ export default function CSVExportPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-purple-50 border-purple-200">
+          <Card className="bg-purple/5 border-purple/20">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-purple-700">
+              <CardTitle className="flex items-center gap-2 text-purple">
                 <Eye className="h-5 w-5" />
                 Estadísticas
               </CardTitle>
@@ -185,12 +185,12 @@ export default function CSVExportPage() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-gray-900 text-green-400 p-6 rounded-lg overflow-x-auto max-h-96 overflow-y-auto">
+            <div className="bg-muted/90 text-green/40 p-6 rounded-lg overflow-x-auto max-h-96 overflow-y-auto">
               <pre className="text-xs font-mono whitespace-pre-wrap">{csvData}</pre>
             </div>
-            <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-              <h4 className="font-semibold text-blue-800 mb-2">Estructura del CSV:</h4>
-              <ul className="text-sm text-blue-700 space-y-1">
+            <div className="mt-4 p-4 bg-blue/5 rounded-lg">
+              <h4 className="font-semibold text-blue mb-2">Estructura del CSV:</h4>
+              <ul className="text-sm text-blue space-y-1">
                 <li>
                   <strong>id:</strong> Identificador único del libro
                 </li>

@@ -72,19 +72,19 @@ export function ChileEnNumeros({
   isLoading = false
 }: ChileEnNumerosProps) {
   const getArrow = (change: number) => {
-    if (change > 0) return <ArrowUp className="w-4 h-4 text-green-500" />
-    if (change < 0) return <ArrowDown className="w-4 h-4 text-red-500" />
-    return <Minus className="w-4 h-4 text-slate-400" />
+    if (change > 0) return <ArrowUp className="w-4 h-4 text-green/50" />
+    if (change < 0) return <ArrowDown className="w-4 h-4 text-red" />
+    return <Minus className="w-4 h-4 text-muted-foreground" />
   }
 
   const getImportanceColor = (importance: string) => {
     switch (importance) {
       case "Crítico":
-        return "bg-red-500/10 text-red-700 dark:text-red-400"
+        return "bg-red/50/10 text-red dark:text-red/40"
       case "Alto":
         return "bg-amber-500/10 text-amber-700 dark:text-amber-400"
       default:
-        return "bg-slate-500/10 text-slate-700 dark:text-slate-400"
+        return "bg-muted/50/10 text-muted-foreground dark:text-muted-foreground"
     }
   }
 
@@ -109,7 +109,7 @@ export function ChileEnNumeros({
             indicators.map((indicator, idx) => (
               <div
                 key={idx}
-                className="p-4 rounded-lg border border-border/50 hover:border-border transition-colors group"
+                className="p-4 rounded-[28px] border border-border/50 hover:border-border transition-colors group"
               >
                 {/* Header */}
                 <div className="flex items-start justify-between mb-3">
@@ -124,7 +124,9 @@ export function ChileEnNumeros({
                   </div>
                   <div className="flex items-center gap-1">
                     {getArrow(indicator.change)}
-                    <span className={`text-xs font-medium ${indicator.change > 0 ? 'text-green-600' : indicator.change < 0 ? 'text-red-600' : 'text-slate-600'}`}>
+                    <span className={`text-xs font-medium ${
+                      indicator.change > 0 ? 'text-green' : indicator.change < 0 ? 'text-red' : 'text-muted-foreground'
+                    }`}>
                       {indicator.change > 0 ? '+' : ''}{indicator.change}
                     </span>
                   </div>

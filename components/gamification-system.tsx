@@ -148,7 +148,7 @@ export default function GamificationSystem() {
     <div className="space-y-6 p-6">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-4">🏆 Sistema de Logros</h1>
-        <p className="text-xl text-gray-600">Desbloquea logros y completa desafíos mientras lees</p>
+        <p className="text-xl text-muted-foreground">Desbloquea logros y completa desafíos mientras lees</p>
       </div>
 
       {/* User Level Card */}
@@ -157,11 +157,11 @@ export default function GamificationSystem() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-2xl">{userLevel.title}</CardTitle>
-              <p className="text-blue-100">Nivel {userLevel.level}</p>
+              <p className="text-blue/10">Nivel {userLevel.level}</p>
             </div>
             <div className="text-right">
               <div className="text-3xl font-bold">{userLevel.xp} XP</div>
-              <p className="text-blue-100">{userLevel.xp_to_next} XP para siguiente nivel</p>
+              <p className="text-blue/10">{userLevel.xp_to_next} XP para siguiente nivel</p>
             </div>
           </div>
         </CardHeader>
@@ -188,7 +188,7 @@ export default function GamificationSystem() {
             <div className="text-center">
               <Trophy className="h-8 w-8 mx-auto mb-2 text-foreground" />
               <div className="text-2xl font-bold">{achievements.length}</div>
-              <p className="text-sm text-gray-600">Logros Desbloqueados</p>
+              <p className="text-sm text-muted-foreground">Logros Desbloqueados</p>
             </div>
           </CardContent>
         </Card>
@@ -198,7 +198,7 @@ export default function GamificationSystem() {
             <div className="text-center">
               <Flame className="h-8 w-8 mx-auto mb-2 text-foreground" />
               <div className="text-2xl font-bold">{streak}</div>
-              <p className="text-sm text-gray-600">Días de Racha</p>
+              <p className="text-sm text-muted-foreground">Días de Racha</p>
             </div>
           </CardContent>
         </Card>
@@ -208,7 +208,7 @@ export default function GamificationSystem() {
             <div className="text-center">
               <Star className="h-8 w-8 mx-auto mb-2 text-foreground" />
               <div className="text-2xl font-bold">{userLevel.level}</div>
-              <p className="text-sm text-gray-600">Nivel Actual</p>
+              <p className="text-sm text-muted-foreground">Nivel Actual</p>
             </div>
           </CardContent>
         </Card>
@@ -218,7 +218,7 @@ export default function GamificationSystem() {
             <div className="text-center">
               <TrendingUp className="h-8 w-8 mx-auto mb-2 text-foreground" />
               <div className="text-2xl font-bold">{userLevel.xp}</div>
-              <p className="text-sm text-gray-600">Puntos de Experiencia</p>
+              <p className="text-sm text-muted-foreground">Puntos de Experiencia</p>
             </div>
           </CardContent>
         </Card>
@@ -245,11 +245,11 @@ export default function GamificationSystem() {
                 {challenges
                   .filter((c) => c.type === "daily")
                   .map((challenge) => (
-                    <div key={challenge.id} className="border rounded-lg p-4">
+                    <div key={challenge.id} className="border rounded-[28px] p-4">
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <h4 className="font-semibold">{challenge.name}</h4>
-                          <p className="text-sm text-gray-600">{challenge.description}</p>
+                          <p className="text-sm text-muted-foreground">{challenge.description}</p>
                         </div>
                         <Badge variant={challenge.completed ? "default" : "outline"}>{challenge.reward_xp} XP</Badge>
                       </div>
@@ -284,11 +284,11 @@ export default function GamificationSystem() {
                 {challenges
                   .filter((c) => c.type === "weekly")
                   .map((challenge) => (
-                    <div key={challenge.id} className="border rounded-lg p-4">
+                    <div key={challenge.id} className="border rounded-[28px] p-4">
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <h4 className="font-semibold">{challenge.name}</h4>
-                          <p className="text-sm text-gray-600">{challenge.description}</p>
+                          <p className="text-sm text-muted-foreground">{challenge.description}</p>
                         </div>
                         <Badge variant={challenge.completed ? "default" : "outline"}>{challenge.reward_xp} XP</Badge>
                       </div>
@@ -323,11 +323,11 @@ export default function GamificationSystem() {
                 {challenges
                   .filter((c) => c.type === "monthly")
                   .map((challenge) => (
-                    <div key={challenge.id} className="border rounded-lg p-4">
+                    <div key={challenge.id} className="border rounded-[28px] p-4">
                       <div className="flex items-start justify-between mb-2">
                         <div>
                           <h4 className="font-semibold">{challenge.name}</h4>
-                          <p className="text-sm text-gray-600">{challenge.description}</p>
+                          <p className="text-sm text-muted-foreground">{challenge.description}</p>
                         </div>
                         <Badge variant={challenge.completed ? "default" : "outline"}>{challenge.reward_xp} XP</Badge>
                       </div>
@@ -355,48 +355,48 @@ export default function GamificationSystem() {
         <TabsContent value="achievements" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {achievements.map((achievement) => (
-              <Card key={achievement.id} className="border-2 border-yellow-200 bg-secondary">
+              <Card key={achievement.id} className="border-2 border-yellow/20 bg-secondary">
                 <CardContent className="pt-6">
                   <div className="text-center">
-                    <div className="w-16 h-16 mx-auto mb-4 bg-yellow-100 rounded-full flex items-center justify-center text-foreground">
+                    <div className="w-16 h-16 mx-auto mb-4 bg-yellow/10 rounded-full flex items-center justify-center text-foreground">
                       {getAchievementIcon(achievement.achievement_type)}
                     </div>
                     <h3 className="font-bold text-lg mb-2">{achievement.achievement_name}</h3>
-                    <p className="text-sm text-gray-600 mb-3">{achievement.description}</p>
-                    <Badge variant="default" className="bg-yellow-600 text-white">
+                    <p className="text-sm text-muted-foreground mb-3">{achievement.description}</p>
+                    <Badge variant="default" className="bg-yellow text-white">
                       Desbloqueado
                     </Badge>
-                    <p className="text-xs text-gray-500 mt-2">{new Date(achievement.earned_at).toLocaleDateString()}</p>
+                    <p className="text-xs text-muted-foreground mt-2">{new Date(achievement.earned_at).toLocaleDateString()}</p>
                   </div>
                 </CardContent>
               </Card>
             ))}
 
             {/* Locked Achievements */}
-            <Card className="border-2 border-gray-200 bg-secondary opacity-60">
+            <Card className="border-2 border-muted/20 bg-secondary opacity-60">
               <CardContent className="pt-6">
                 <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center text-gray-400">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-muted/20 rounded-full flex items-center justify-center text-muted-foreground">
                     <Trophy className="h-6 w-6 text-foreground" />
                   </div>
                   <h3 className="font-bold text-lg mb-2">Maestro de Categorías</h3>
-                  <p className="text-sm text-gray-600 mb-3">Lee al menos 3 libros de 5 categorías diferentes</p>
-                  <Badge variant="outline" className="text-gray-400">
+                  <p className="text-sm text-muted-foreground mb-3">Lee al menos 3 libros de 5 categorías diferentes</p>
+                  <Badge variant="outline" className="text-muted-foreground">
                     Bloqueado
                   </Badge>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-2 border-gray-200 bg-secondary opacity-60">
+            <Card className="border-2 border-muted/20 bg-secondary opacity-60">
               <CardContent className="pt-6">
                 <div className="text-center">
-                  <div className="w-16 h-16 mx-auto mb-4 bg-gray-200 rounded-full flex items-center justify-center text-gray-400">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-muted/20 rounded-full flex items-center justify-center text-muted-foreground">
                     <Flame className="h-6 w-6 text-foreground" />
                   </div>
                   <h3 className="font-bold text-lg mb-2">Racha Legendaria</h3>
-                  <p className="text-sm text-gray-600 mb-3">Mantén una racha de lectura de 30 días</p>
-                  <Badge variant="outline" className="text-gray-400">
+                  <p className="text-sm text-muted-foreground mb-3">Mantén una racha de lectura de 30 días</p>
+                  <Badge variant="outline" className="text-muted-foreground">
                     Bloqueado
                   </Badge>
                 </div>
@@ -415,14 +415,14 @@ export default function GamificationSystem() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center justify-between p-4 bg-yellow-50 rounded-lg border-2 border-yellow-200">
+                <div className="flex items-center justify-between p-4 bg-yellow/5 rounded-[28px] border-2 border-yellow/20">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center text-white font-bold">
+                    <div className="w-8 h-8 bg-orange rounded-full flex items-center justify-center text-white font-bold">
                       1
                     </div>
                     <div>
                       <p className="font-semibold">Demo User</p>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-muted-foreground">
                         Nivel {userLevel.level} • {userLevel.xp} XP
                       </p>
                     </div>
@@ -430,27 +430,27 @@ export default function GamificationSystem() {
                   <Crown className="h-6 w-6 text-foreground" />
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-muted/5 rounded-lg">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center text-white font-bold">
+                    <div className="w-8 h-8 bg-muted/40 rounded-full flex items-center justify-center text-white font-bold">
                       2
                     </div>
                     <div>
                       <p className="font-semibold">Travis</p>
-                      <p className="text-sm text-gray-600">Nivel 3 • 250 XP</p>
+                      <p className="text-sm text-muted-foreground">Nivel 3 • 250 XP</p>
                     </div>
                   </div>
                   <Medal className="h-6 w-6 text-foreground" />
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between p-4 bg-muted/5 rounded-lg">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 bg-orange-400 rounded-full flex items-center justify-center text-white font-bold">
+                    <div className="w-8 h-8 bg-orange/40 rounded-full flex items-center justify-center text-white font-bold">
                       3
                     </div>
                     <div>
                       <p className="font-semibold">Demo Despega</p>
-                      <p className="text-sm text-gray-600">Nivel 2 • 180 XP</p>
+                      <p className="text-sm text-muted-foreground">Nivel 2 • 180 XP</p>
                     </div>
                   </div>
                   <Award className="h-6 w-6 text-foreground" />

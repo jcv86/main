@@ -86,8 +86,8 @@ export default function A1SimulationPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <Loader2 className="h-8 w-8 animate-spin text-cyan-600" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-blue" />
       </div>
     )
   }
@@ -95,33 +95,33 @@ export default function A1SimulationPage() {
   if (simulationComplete) {
     return (
       <ASection 
-        title="A1: Origen" 
+        title="Tu Perfil: Patrones en Acción" 
         subtitle="Simulación Completada" 
-        icon="🎭" 
-        colorClass="from-cyan-500 to-teal-500"
+        icon="" 
+        colorClass="from-blue"
       >
         <ASectionPart title="¡Excelente!" icon={<CheckCircle2 />}>
-          <div className="bg-gradient-to-br from-cyan-900/30 to-teal-900/20 border border-cyan-500/30 rounded-lg p-8 text-center mb-8">
+          <div className="bg-background">
             <div className="mb-4">
-              <div className="text-5xl font-black text-transparent bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text mb-2">
+              <div className="text-5xl font-black text-transparent bg-background">
                 {profileNames[profile]}
               </div>
-              <p className="text-lg text-slate-300">Completaste la simulación de entrevista</p>
+              <p className="text-lg text-white/85">Completaste la simulación de entrevista</p>
             </div>
 
-            <div className="bg-slate-800/50 rounded-lg p-6 mb-6 text-left">
+            <div className="bg-muted/80/50 rounded-[28px] p-6 mb-6 text-left">
               <h3 className="font-semibold text-white mb-4">Tus Respuestas:</h3>
               <div className="space-y-3">
                 {responses.map((response, idx) => (
-                  <div key={idx} className="border border-slate-600 rounded p-3">
-                    <p className="text-xs text-slate-400 mb-1">Pregunta {idx + 1}:</p>
-                    <p className="text-slate-200">{response}</p>
+                  <div key={idx} className="border border-muted/60 rounded p-3">
+                    <p className="text-xs text-muted-foreground mb-1">Pregunta {idx + 1}:</p>
+                    <p className="text-white/80">{response}</p>
                   </div>
                 ))}
               </div>
             </div>
 
-            <p className="text-slate-400 mb-6">
+            <p className="text-muted-foreground mb-6">
               Esta simulación te ayuda a practicar respuestas según tu perfil {profileNames[profile]}. Repítela cuantas veces quieras para mejorar.
             </p>
           </div>
@@ -129,7 +129,7 @@ export default function A1SimulationPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Button 
               onClick={handleRestart}
-              className="w-full bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white"
+              className="w-full bg-blue hover:from-blue hover:to-blue text-white"
             >
               <Zap className="w-4 h-4 mr-2" />
               Repetir Simulación
@@ -143,7 +143,7 @@ export default function A1SimulationPage() {
             </Button>
             <Button 
               onClick={() => router.push('/despega')}
-              className="w-full bg-purple-600 hover:bg-purple-700"
+              className="w-full bg-purple/80 hover:bg-purple/70"
             >
               Dashboard
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -159,54 +159,54 @@ export default function A1SimulationPage() {
 
   return (
     <ASection 
-      title="A1: Origen" 
+      title="Tu Perfil: Patrones en Acción" 
       subtitle="Simulación de Entrevista" 
-      icon="🎭" 
-      colorClass="from-cyan-500 to-teal-500"
+      icon="" 
+      colorClass="from-blue"
     >
       <ASectionPart title={`Pregunta ${currentQuestion + 1} de ${SIMULATION_QUESTIONS.length}`} icon={<Zap />}>
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
-            <p className="text-sm text-slate-400">Perfil: <span className="font-semibold text-cyan-300">{profileNames[profile]}</span></p>
-            <p className="text-sm text-slate-400">{Math.round(progress)}%</p>
+            <p className="text-sm text-muted-foreground">Perfil: <span className="font-semibold text-white">{profileNames[profile]}</span></p>
+            <p className="text-sm text-muted-foreground">{Math.round(progress)}%</p>
           </div>
-          <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+          <div className="h-2 bg-muted/70 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-cyan-500 to-teal-500 transition-all duration-500" 
+              className="h-full bg-blue transition-all duration-500" 
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
-        <Card className="bg-slate-800/40 border-slate-700 mb-8">
+        <Card className="bg-muted/80/40 border-muted/70 mb-8">
           <CardHeader>
             <CardTitle className="text-lg">{question.question}</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-slate-400 italic mb-4">Contexto: {question.scenario}</p>
-            <p className="text-xs text-slate-500">Responde cómo lo haría alguien con tu perfil {profileNames[profile]}.</p>
+            <p className="text-sm text-muted-foreground italic mb-4">Contexto: {question.scenario}</p>
+            <p className="text-xs text-muted-foreground">Responde cómo lo haría alguien con tu perfil {profileNames[profile]}.</p>
           </CardContent>
         </Card>
 
         <div className="grid grid-cols-1 gap-3 mb-8">
           {[
             {
-              label: '💪 Respuesta Fuerte',
+              label: ' Respuesta Fuerte',
               description: 'Enfocada en resultados y acción',
               value: 'strong'
             },
             {
-              label: '🤝 Respuesta Equilibrada',
+              label: ' Respuesta Equilibrada',
               description: 'Considera personas y proceso',
               value: 'balanced'
             },
             {
-              label: '🧠 Respuesta Analítica',
+              label: ' Respuesta Analítica',
               description: 'Detallada y fundamentada',
               value: 'analytical'
             },
             {
-              label: '⏰ Respuesta Pragmática',
+              label: ' Respuesta Pragmática',
               description: 'Realista y orientada al tiempo',
               value: 'pragmatic'
             }
@@ -215,13 +215,13 @@ export default function A1SimulationPage() {
               key={option.value}
               onClick={() => handleAnswer(option.label)}
               variant="outline"
-              className="h-auto py-4 px-4 flex items-start gap-3 justify-start border-slate-600 hover:border-cyan-500 hover:bg-cyan-950/20"
+              className="h-auto py-4 px-4 flex items-start gap-3 justify-start border-muted/60 hover:border-blue hover:bg-cyan-950/20"
             >
               <div className="text-left flex-1">
                 <p className="font-semibold text-white text-sm">{option.label}</p>
-                <p className="text-xs text-slate-400">{option.description}</p>
+                <p className="text-xs text-muted-foreground">{option.description}</p>
               </div>
-              <ArrowRight className="w-4 h-4 text-slate-400" />
+              <ArrowRight className="w-4 h-4 text-muted-foreground" />
             </Button>
           ))}
         </div>
@@ -229,7 +229,7 @@ export default function A1SimulationPage() {
         <Button 
           onClick={() => router.push('/despega/a1-report')}
           variant="outline"
-          className="w-full border-slate-600"
+          className="w-full border-muted/60"
         >
           Salir de la Simulación
         </Button>

@@ -37,17 +37,17 @@ export default function DataRetentionPage() {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "essential":
-        return "bg-blue-500"
+        return "bg-blue/50"
       case "operational":
-        return "bg-green-500"
+        return "bg-green/50"
       case "analytics":
-        return "bg-purple-500"
+        return "bg-purple/50"
       case "temporary":
-        return "bg-yellow-500"
+        return "bg-orange"
       case "cache":
-        return "bg-gray-500"
+        return "bg-muted/50"
       default:
-        return "bg-gray-400"
+        return "bg-muted/40"
     }
   }
 
@@ -66,7 +66,7 @@ export default function DataRetentionPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
           <p className="text-muted-foreground">Cargando políticas de retención...</p>
         </div>
       </div>
@@ -115,7 +115,7 @@ export default function DataRetentionPage() {
                     </div>
                     <div>
                       <p className="text-muted-foreground">Auto-limpieza</p>
-                      <p className="font-medium">{policy.auto_cleanup_enabled ? "✓ Activa" : "✗ Inactiva"}</p>
+                      <p className="font-medium">{policy.auto_cleanup_enabled ? " Activa" : "✗ Inactiva"}</p>
                     </div>
                     <div>
                       <p className="text-muted-foreground">Total Eliminado</p>
@@ -179,7 +179,7 @@ export default function DataRetentionPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Eliminado</CardTitle>
-                <Trash2 className="h-4 w-4 text-red-500" />
+                <Trash2 className="h-4 w-4 text-red" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{totalDeleted.toLocaleString()}</div>
@@ -189,7 +189,7 @@ export default function DataRetentionPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Archivado</CardTitle>
-                <Archive className="h-4 w-4 text-blue-500" />
+                <Archive className="h-4 w-4 text-blue/50" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{totalArchived.toLocaleString()}</div>

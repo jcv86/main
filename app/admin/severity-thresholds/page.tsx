@@ -107,15 +107,15 @@ export default function SeverityThresholdsPage() {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case "performance":
-        return "bg-blue-500/10 text-blue-500"
+        return "bg-blue/50/10 text-blue/50"
       case "system":
-        return "bg-purple-500/10 text-purple-500"
+        return "bg-purple/50/10 text-purple/50"
       case "engagement":
-        return "bg-green-500/10 text-green-500"
+        return "bg-green/50/10 text-green"
       case "quality":
-        return "bg-orange-500/10 text-orange-500"
+        return "bg-orange/50/10 text-orange"
       default:
-        return "bg-gray-500/10 text-gray-500"
+        return "bg-muted/50/10 text-muted-foreground"
     }
   }
 
@@ -123,7 +123,7 @@ export default function SeverityThresholdsPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
           <p className="text-muted-foreground">Cargando umbrales...</p>
         </div>
       </div>
@@ -144,7 +144,7 @@ export default function SeverityThresholdsPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Alertas Activas</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-orange-500" />
+              <AlertTriangle className="h-4 w-4 text-orange" />
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{summary.active}</div>
@@ -155,10 +155,10 @@ export default function SeverityThresholdsPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Críticas</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-red-500" />
+              <AlertTriangle className="h-4 w-4 text-red" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-red-500">{summary.critical}</div>
+              <div className="text-2xl font-bold text-red">{summary.critical}</div>
               <p className="text-xs text-muted-foreground">Requieren atención inmediata</p>
             </CardContent>
           </Card>
@@ -166,10 +166,10 @@ export default function SeverityThresholdsPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Advertencias</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-yellow-500" />
+              <AlertTriangle className="h-4 w-4 text-orange" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-yellow-500">{summary.warning}</div>
+              <div className="text-2xl font-bold text-orange">{summary.warning}</div>
               <p className="text-xs text-muted-foreground">Monitorear de cerca</p>
             </CardContent>
           </Card>
@@ -252,7 +252,7 @@ export default function SeverityThresholdsPage() {
                               type="checkbox"
                               checked={editValues.is_active}
                               onChange={(e) => setEditValues({ ...editValues, is_active: e.target.checked })}
-                              className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                              className="h-4 w-4 rounded border-muted/30 text-purple focus:ring-purple"
                             />
                           </div>
                           <Button onClick={() => handleSave(threshold.id)} size="sm">
@@ -266,12 +266,12 @@ export default function SeverityThresholdsPage() {
                         <div className="flex items-center gap-4">
                           <div className="text-right">
                             <div className="text-sm">
-                              <span className="text-yellow-500 font-medium">
+                              <span className="text-orange font-medium">
                                 {threshold.warning_threshold}
                                 {threshold.unit}
                               </span>
                               {" / "}
-                              <span className="text-red-500 font-medium">
+                              <span className="text-red font-medium">
                                 {threshold.critical_threshold}
                                 {threshold.unit}
                               </span>
@@ -297,7 +297,7 @@ export default function SeverityThresholdsPage() {
           {alerts.length === 0 ? (
             <Card>
               <CardContent className="flex flex-col items-center justify-center py-12">
-                <CheckCircle className="h-12 w-12 text-green-500 mb-4" />
+                <CheckCircle className="h-12 w-12 text-green mb-4" />
                 <h3 className="text-lg font-medium mb-2">No hay alertas activas</h3>
                 <p className="text-sm text-muted-foreground">Todas las métricas están dentro de los umbrales</p>
               </CardContent>
@@ -305,11 +305,11 @@ export default function SeverityThresholdsPage() {
           ) : (
             <div className="space-y-3">
               {alerts.map((alert) => (
-                <Card key={alert.id} className={alert.severity === "critical" ? "border-red-500" : "border-yellow-500"}>
+                <Card key={alert.id} className={alert.severity === "critical" ? "border-red/50" : "border-orange"}>
                   <CardContent className="flex items-center justify-between p-4">
                     <div className="flex items-center gap-4">
                       <AlertTriangle
-                        className={`h-5 w-5 ${alert.severity === "critical" ? "text-red-500" : "text-yellow-500"}`}
+                        className={`h-5 w-5 ${alert.severity === "critical" ? "text-red" : "text-orange"}`}
                       />
                       <div>
                         <div className="flex items-center gap-2 mb-1">

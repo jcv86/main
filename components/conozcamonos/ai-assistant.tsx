@@ -8,6 +8,7 @@ interface AIAssistantProps {
   onUseSuggestion?: (suggestion: string) => void
   buttonLabel?: string
   title?: string
+  pillarColor?: string
 }
 
 export function AIAssistant({ 
@@ -15,7 +16,8 @@ export function AIAssistant({
   currentResponse, 
   onUseSuggestion,
   buttonLabel = 'Asistencia Tu Coach',
-  title = 'Tu Coach IA'
+  title = 'Tu Coach IA',
+  pillarColor = 'rgba(80, 160, 170, 0.6)'
 }: AIAssistantProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [suggestion, setSuggestion] = useState<string | null>(null)
@@ -59,7 +61,13 @@ export function AIAssistant({
         onClick={() => setIsOpen(true)}
         variant="outline"
         size="sm"
-        className="gap-2 text-blue-600 border-blue-200 hover:border-blue-300 hover:bg-blue-50 dark:text-blue-400 dark:border-blue-800 dark:hover:bg-blue-950"
+        className="gap-2"
+        style={{
+          backgroundColor: pillarColor,
+          color: 'rgba(255, 255, 255, 0.92)',
+          border: 'none',
+          borderRadius: '20px'
+        }}
       >
         <Lightbulb className="w-4 h-4" />
         {buttonLabel}
@@ -68,13 +76,20 @@ export function AIAssistant({
   }
 
   return (
-    <div className="space-y-3 p-4 bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg">
+    <div 
+      className="space-y-3 p-4"
+      style={{
+        backgroundColor: `${pillarColor.replace('0.6', '0.2')}`,
+        border: `1px solid ${pillarColor}`,
+        borderRadius: '2px'
+      }}
+    >
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-2">
-          <Lightbulb className="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5 flex-shrink-0" />
+          <Lightbulb className="w-5 h-5 mt-0.5 flex-shrink-0" style={{ color: 'rgba(255, 255, 255, 0.40)' }} />
           <div>
-            <p className="font-semibold text-blue-900 dark:text-blue-100">{title}</p>
-            <p className="text-sm text-blue-800 dark:text-blue-200 mt-0.5">
+            <p className="font-semibold" style={{ color: 'rgba(255, 255, 255, 0.50)' }}>{title}</p>
+            <p className="text-xs mt-0.5" style={{ color: 'rgba(200, 200, 200)' }}>
               {suggestion ? 'Aquí está mi sugerencia:' : 'Obtén ayuda para responder esta pregunta'}
             </p>
           </div>
@@ -85,21 +100,26 @@ export function AIAssistant({
             setSuggestion(null)
             setError('')
           }}
-          className="text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300"
+          className="p-1 rounded"
+          style={{
+            backgroundColor: 'rgba(0, 0, 0, 0.60)',
+            color: '#ffffff',
+            border: '1px solid #ffffff'
+          }}
         >
           <X className="w-4 h-4" />
         </button>
       </div>
 
       {error && (
-        <div className="flex gap-2 p-2 bg-red-100 dark:bg-red-950 text-red-800 dark:text-red-200 rounded text-sm">
+        <div className="flex gap-2 p-2 bg-red/10 dark:bg-red text-red dark:text-red/20 rounded text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
           <p>{error}</p>
         </div>
       )}
 
       {loading && (
-        <div className="flex gap-2 items-center text-blue-700 dark:text-blue-300">
+        <div className="flex gap-2 items-center text-blue dark:text-blue-200">
           <Loader2 className="w-4 h-4 animate-spin" />
           <p className="text-sm">Generando sugerencia...</p>
         </div>
@@ -107,8 +127,14 @@ export function AIAssistant({
 
       {suggestion && (
         <div className="space-y-3">
-          <div className="p-3 bg-white dark:bg-slate-900 rounded border border-blue-100 dark:border-blue-800">
-            <p className="text-sm text-slate-700 dark:text-slate-300 whitespace-pre-wrap">
+          <div 
+            className="p-3 rounded"
+            style={{
+              backgroundColor: 'rgba(80, 160, 170, 0)',
+              border: 'none'
+            }}
+          >
+            <p className="text-sm text-muted-foreground dark:text-white/85 whitespace-pre-wrap">
               {suggestion}
             </p>
           </div>
@@ -118,7 +144,10 @@ export function AIAssistant({
               onClick={handleGetSuggestion}
               variant="outline"
               size="sm"
-              className="flex-1 text-blue-600 border-blue-200"
+              className="flex-1"
+              style={{
+                borderRadius: '20px'
+              }}
             >
               Otra sugerencia
             </Button>
@@ -129,7 +158,11 @@ export function AIAssistant({
                   setIsOpen(false)
                 }}
                 size="sm"
-                className="flex-1 bg-blue-600 hover:bg-blue-700"
+                className="flex-1 text-white"
+                style={{
+                  backgroundColor: `${pillarColor.replace('0.6', '0.4')}`,
+                  borderRadius: '20px'
+                }}
               >
                 Usar como base
               </Button>
@@ -141,7 +174,11 @@ export function AIAssistant({
       {!suggestion && !loading && !error && (
         <Button
           onClick={handleGetSuggestion}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+          className="w-full text-white"
+          style={{
+            backgroundColor: `${pillarColor.replace('0.6', '0.4')}`,
+            borderRadius: '20px'
+          }}
         >
           Obtener Sugerencia
         </Button>

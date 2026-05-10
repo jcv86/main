@@ -37,12 +37,12 @@ interface A1MissionExecutorProps {
 
 const getTipoConfig = (tipo: string) => {
   const configs: Record<string, { icon: string; color: string; label: string }> = {
-    lectura: { icon: "📖", color: "bg-blue-50 border-blue-200", label: "Lectura" },
-    reflexion: { icon: "🤔", color: "bg-purple-50 border-purple-200", label: "Reflexión" },
-    accion: { icon: "⚡", color: "bg-green-50 border-green-200", label: "Acción" },
-    quiz: { icon: "❓", color: "bg-orange-50 border-orange-200", label: "Quiz" },
+    lectura: { icon: "📖", color: "bg-blue/5 border-blue/20", label: "Lectura" },
+    reflexion: { icon: "🤔", color: "bg-purple/5 border-purple/20", label: "Reflexión" },
+    accion: { icon: "⚡", color: "bg-green/5 border-green/20", label: "Acción" },
+    quiz: { icon: "❓", color: "bg-orange/5 border-orange/20", label: "Quiz" },
     habito: { icon: "🔄", color: "bg-indigo-50 border-indigo-200", label: "Hábito" },
-    proyecto: { icon: "🎯", color: "bg-pink-50 border-pink-200", label: "Proyecto" },
+    proyecto: { icon: "", color: "bg-pink-50 border-pink-200", label: "Proyecto" },
   }
   return configs[tipo] || configs.accion
 }
@@ -100,11 +100,11 @@ export function A1MissionExecutor({
           <Progress value={(completedCount / misiones.length) * 100} className="h-3" />
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <div className="text-2xl font-bold text-primary">{completedCount}</div>
+              <div className="text-2xl font-bold text-purple">{completedCount}</div>
               <div className="text-sm text-muted-foreground">Misiones completadas</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-green-600">{completedPoints}</div>
+              <div className="text-2xl font-bold text-green">{completedPoints}</div>
               <div className="text-sm text-muted-foreground">Puntos acumulados</div>
             </div>
           </div>
@@ -122,8 +122,8 @@ export function A1MissionExecutor({
             return (
               <Card
                 key={mision.id}
-                className={`cursor-pointer transition-all hover:shadow-md ${
-                  isCompleted ? "opacity-60 bg-muted" : tipoConfig.color
+                className={`cursor-pointer transition-all hover:shadow-md ${`}
+                  isCompleted ? "opacity-60 bg-muted" : tipoConfig.color`}
                 } border`}
               >
                 <CardContent className="py-4">
@@ -134,7 +134,7 @@ export function A1MissionExecutor({
                         <div>
                           <div className="font-medium flex items-center gap-2">
                             {mision.titulo}
-                            {isCompleted && <CheckCircle2 className="w-4 h-4 text-green-600" />}
+                            {isCompleted && <CheckCircle2 className="w-4 h-4 text-green" />}
                           </div>
                           <div className="text-sm text-muted-foreground">{mision.descripcion}</div>
                         </div>
@@ -193,7 +193,7 @@ export function A1MissionExecutor({
                                   </div>
                                   <div>
                                     <div className="text-sm text-muted-foreground">Puntos</div>
-                                    <div className="font-medium text-primary">+{mision.puntos}</div>
+                                    <div className="font-medium text-purple">+{mision.puntos}</div>
                                   </div>
                                 </div>
                               </CardContent>
@@ -251,7 +251,7 @@ export function A1MissionExecutor({
                         </DialogContent>
                       </Dialog>
                     ) : (
-                      <Badge className="bg-green-100 text-green-800 flex-shrink-0">
+                      <Badge className="bg-green/10 text-green flex-shrink-0">
                         <CheckCircle2 className="w-3 h-3 mr-1" />
                         Completada
                       </Badge>
@@ -265,12 +265,12 @@ export function A1MissionExecutor({
       </div>
 
       {/* Coaching Tip */}
-      <Card className="bg-blue-50 border-blue-200">
+      <Card className="bg-blue/5 border-blue/20">
         <CardContent className="pt-6 flex gap-4">
-          <Sparkles className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+          <Sparkles className="w-5 h-5 text-blue flex-shrink-0 mt-0.5" />
           <div>
-            <div className="font-medium text-blue-900 mb-1">Consejo del Coach</div>
-            <div className="text-sm text-blue-800">
+            <div className="font-medium text-blue mb-1">Consejo del Coach</div>
+            <div className="text-sm text-blue">
               La consistencia es clave. Completa al menos 1 misión diaria para mantener el momentum y ver resultados en 30 días.
             </div>
           </div>

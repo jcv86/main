@@ -48,24 +48,24 @@ export function PanoramadelDia({
   const getIcon = (type: string) => {
     switch (type) {
       case "change":
-        return <TrendingUp className="w-5 h-5 text-blue-500" />
+        return <TrendingUp className="w-5 h-5 text-blue/50" />
       case "warning":
         return <AlertCircle className="w-5 h-5 text-amber-500" />
       case "opportunity":
-        return <CheckCircle2 className="w-5 h-5 text-green-500" />
+        return <CheckCircle2 className="w-5 h-5 text-green/50" />
       default:
-        return <TrendingDown className="w-5 h-5 text-slate-500" />
+        return <TrendingDown className="w-5 h-5 text-muted-foreground" />
     }
   }
 
   const getColorClasses = (importance: string) => {
     switch (importance) {
       case "high":
-        return "border-l-4 border-l-red-500 bg-red-500/5"
+        return "border-l-4 border-l-red-500 bg-red/50/5"
       case "medium":
         return "border-l-4 border-l-amber-500 bg-amber-500/5"
       default:
-        return "border-l-4 border-l-slate-300 bg-slate-500/5"
+        return "border-l-4 border-l-slate-300 bg-muted/50/5"
     }
   }
 
@@ -92,7 +92,7 @@ export function PanoramadelDia({
             items.map((item, idx) => (
               <div
                 key={idx}
-                className={`p-4 rounded-lg transition-colors ${getColorClasses(item.importance)}`}
+                className={`p-4 rounded-[28px] transition-colors ${getColorClasses(item.importance)}`}
               >
                 <div className="flex items-start gap-3">
                   {getIcon(item.type)}

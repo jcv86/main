@@ -1,6 +1,6 @@
 'use client'
 
-import { DespeganNavbar } from '@/components/despega-navbar'
+import { DespegaNavbar } from '@/components/despega-navbar'
 
 export default function AdminLayout({
   children,
@@ -9,7 +9,7 @@ export default function AdminLayout({
 }) {
   return (
     <div className="min-h-screen flex flex-col">
-      <DespeganNavbar />
+      <DespegaNavbar />
       <main className="flex-1">
         {children}
       </main>

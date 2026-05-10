@@ -105,11 +105,11 @@ export default function BooksExportPage() {
   const bookCount = csvData.split("\n").length - 1 // Subtract 1 for header
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Exportar Biblioteca Completa</h1>
-          <p className="text-xl text-gray-600">
+          <h1 className="text-4xl font-bold text-foreground mb-4">Exportar Biblioteca Completa</h1>
+          <p className="text-xl text-muted-foreground">
             Descarga todos los {bookCount} libros de desarrollo profesional en formato CSV
           </p>
         </div>
@@ -157,7 +157,7 @@ export default function BooksExportPage() {
             <CardDescription>Primeras líneas del archivo CSV ({bookCount} libros total)</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="bg-gray-50 p-4 rounded-lg overflow-x-auto">
+            <div className="bg-muted/5 p-4 rounded-lg overflow-x-auto">
               <pre className="text-sm text-gray-800 whitespace-pre-wrap">
                 {csvData.split("\n").slice(0, 10).join("\n")}
                 {bookCount > 9 && "\n... y " + (bookCount - 9) + " libros más"}
@@ -171,19 +171,19 @@ export default function BooksExportPage() {
             <h3 className="text-lg font-semibold mb-4">Información del Dataset</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
               <div>
-                <div className="font-medium text-blue-600">Total Libros</div>
+                <div className="font-medium text-blue">Total Libros</div>
                 <div className="text-2xl font-bold">{bookCount}</div>
               </div>
               <div>
-                <div className="font-medium text-green-600">Categorías</div>
+                <div className="font-medium text-green">Categorías</div>
                 <div className="text-2xl font-bold">15+</div>
               </div>
               <div>
-                <div className="font-medium text-purple-600">Idioma</div>
+                <div className="font-medium text-purple">Idioma</div>
                 <div className="text-2xl font-bold">ES</div>
               </div>
               <div>
-                <div className="font-medium text-orange-600">Formato</div>
+                <div className="font-medium text-orange">Formato</div>
                 <div className="text-2xl font-bold">CSV</div>
               </div>
             </div>

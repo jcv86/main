@@ -26,26 +26,26 @@ export function DashboardHero({
 }: DashboardHeroProps) {
   const profileDescriptions: { [key: string]: { color: string; bg: string; description: string; name: string } } = {
     D: { 
-      color: 'text-red-600 dark:text-red-400', 
-      bg: 'bg-red-50 dark:bg-red-950/10', 
+      color: 'text-red dark:text-red/40', 
+      bg: 'bg-red/5 dark:bg-red/10', 
       description: 'Impulsor - Directo, decidido y orientado a resultados',
       name: 'Impulsor'
     },
     I: { 
-      color: 'text-yellow-600 dark:text-yellow-400', 
-      bg: 'bg-yellow-50 dark:bg-yellow-950/10', 
+      color: 'text-yellow dark:text-yellow/40', 
+      bg: 'bg-yellow/5 dark:bg-yellow/10', 
       description: 'Catalizador - Inspirador, influyente y orientado a personas',
       name: 'Catalizador'
     },
     S: { 
-      color: 'text-green-600 dark:text-green-400', 
-      bg: 'bg-green-50 dark:bg-green-950/10', 
+      color: 'text-green dark:text-green/40', 
+      bg: 'bg-green/5 dark:bg-green/10', 
       description: 'Estabilizador - Estable, de apoyo y orientado al equipo',
       name: 'Estabilizador'
     },
     C: { 
-      color: 'text-blue-600 dark:text-blue-400', 
-      bg: 'bg-blue-50 dark:bg-blue-950/10', 
+      color: 'text-blue dark:text-blue/40', 
+      bg: 'bg-blue/5 dark:bg-blue/10', 
       description: 'Arquitecto - Cuidadoso, cauteloso y orientado a la calidad',
       name: 'Arquitecto'
     },
@@ -58,10 +58,10 @@ export function DashboardHero({
       {/* Header con Perfil */}
       <div className="space-y-4">
         <div className="space-y-2">
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
             Hola, <span className={profile.color}>{userName}</span>
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Tu Transformación de 90 Días Comienza Hoy
           </p>
         </div>
@@ -73,7 +73,7 @@ export function DashboardHero({
               <h2 className={`text-2xl font-bold ${profile.color}`}>
                 {profile.name}
               </h2>
-              <p className="text-slate-700 dark:text-slate-300 font-medium">
+              <p className="text-muted-foreground dark:text-white/85 font-medium">
                 {profile.description}
               </p>
             </div>
@@ -83,14 +83,15 @@ export function DashboardHero({
               {Object.entries(discProfile).map(([key, value]) => (
                 <div key={key} className="flex flex-col items-center gap-1">
                   <div className={`w-12 h-12 rounded-full flex items-center justify-center font-bold text-white ${
-                    key === 'D' ? 'bg-red-500' :
-                    key === 'I' ? 'bg-blue-500' :
-                    key === 'S' ? 'bg-green-500' :
-                    'bg-purple-500'
+                    key === 'D' ? 'bg-red' :
+                    key === 'I' ? 'bg-blue' :
+                    key === 'S' ? 'bg-green' :
+                    'bg-purple'
                   }`}>
-                    {value}%
+                    {key}
                   </div>
-                  <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">{key}</span>
+                  <span className="text-xs font-semibold">{value}%</span>
+                  <span className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground">{key}</span>
                 </div>
               ))}
             </div>
@@ -100,14 +101,14 @@ export function DashboardHero({
         {/* Progress Bar */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">Progreso de 90 Días</span>
-            <span className={`text-sm font-bold ${progressPercent === 0 ? 'text-blue-600' : 'text-green-600'}`}>
+            <span className="text-sm font-semibold text-muted-foreground dark:text-muted-foreground">Progreso de 90 Días</span>
+            <span className={`text-sm font-bold ${progressPercent === 0 ? 'text-blue' : 'text-green'}`}>
               {progressPercent}%
             </span>
           </div>
-          <div className="w-full h-3 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+          <div className="w-full h-3 bg-muted/20 dark:bg-muted/70 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-gradient-to-r from-blue-500 to-cyan-500 transition-all duration-500"
+              className="h-full bg-background"
               style={{ width: `${Math.max(progressPercent, 3)}%` }}
             />
           </div>

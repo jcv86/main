@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -30,16 +30,38 @@ interface GamifiedTest {
 }
 
 interface A4GamifiedTestsProps {
-  tests: GamifiedTest[]
+  tests?: GamifiedTest[]
   onCompleteTest?: (testId: string, score: number) => void
 }
 
-export function A4GamifiedTests({ tests, onCompleteTest }: A4GamifiedTestsProps) {
+export function A4GamifiedTests({ tests: initialTests, onCompleteTest }: A4GamifiedTestsProps) {
+  const [tests, setTests] = useState<GamifiedTest[]>(initialTests || [])
+  const [loading, setLoading] = useState(!initialTests)
   const [selectedTest, setSelectedTest] = useState<GamifiedTest | null>(null)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [userAnswers, setUserAnswers] = useState<(number | null)[]>([])
   const [showResults, setShowResults] = useState(false)
   const [score, setScore] = useState(0)
+
+  useEffect(() => {
+    if (!initialTests) {
+      fetchTests()
+    }
+  }, [initialTests])
+
+  const fetchTests = async () => {
+    try {
+      const response = await fetch('/api/despega/a4-tests')
+      if (!response.ok) throw new Error('Failed to fetch tests')
+      const data = await response.json()
+      setTests(data.data || [])
+    } catch (error) {
+      console.error('[v0] Error fetching tests:', error)
+      setTests([])
+    } finally {
+      setLoading(false)
+    }
+  }
 
   const startTest = (test: GamifiedTest) => {
     setSelectedTest(test)
@@ -87,21 +109,53 @@ export function A4GamifiedTests({ tests, onCompleteTest }: A4GamifiedTestsProps)
   }
 
   const getNivelColor = (nivel: string) => {
-    const colors: Record<string, string> = {
-      "basico": "bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300",
-      "intermedio": "bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300",
-      "avanzado": "bg-purple-100 text-purple-800 dark:bg-purple-900/40 dark:text-purple-300",
+    // Return inline styles for difficulty level badges
+    if (nivel === "basico") {
+      return "" // Will use inline style
+    } else if (nivel === "intermedio") {
+      return "" // Will use inline style
+    } else if (nivel === "avanzado") {
+      return "" // Will use inline style
     }
-    return colors[nivel] || "bg-gray-100"
+    return "bg-muted/10"
+  }
+
+  const getNivelStyle = (nivel: string) => {
+    const styles: Record<string, React.CSSProperties> = {
+      "basico": { backgroundColor: "rgba(225, 120, 130, 0.4)", color: "#78c657" },
+      "intermedio": { backgroundColor: "rgba(225, 120, 130, 0.4)", color: "rgba(255, 255, 255, 0.6)" },
+      "avanzado": { backgroundColor: "rgba(225, 120, 130, 0.4)", color: "#e08b93" },
+    }
+    return styles[nivel] || {}
   }
 
   if (!selectedTest) {
+    if (loading) {
+      return (
+        <div className="w-full space-y-6">
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">Cargando tests...</p>
+          </div>
+        </div>
+      )
+    }
+
+    if (tests.length === 0) {
+      return (
+        <div className="w-full space-y-6">
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">No hay tests disponibles</p>
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div className="w-full space-y-6">
         <div className="flex items-center gap-3 mb-6">
-          <Trophy className="w-8 h-8 text-yellow-600" />
+          <Trophy className="w-8 h-8 text-yellow" />
           <div>
-            <h2 className="text-2xl font-bold">Tests Gamificados</h2>
+            <h2 className="text-2xl font-normal">Tests Gamificados</h2>
             <p className="text-sm text-muted-foreground">
               Completa tests de contexto profesional y gana puntos + badges
             </p>
@@ -117,19 +171,19 @@ export function A4GamifiedTests({ tests, onCompleteTest }: A4GamifiedTestsProps)
                     <CardTitle className="text-lg">{test.titulo}</CardTitle>
                     <CardDescription>{test.descripcion}</CardDescription>
                   </div>
-                  <Badge className={getNivelColor(test.nivel)}>
+                  <Badge style={getNivelStyle(test.nivel)}>
                     {test.nivel}
                   </Badge>
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-yellow-600" />
+                  <Zap className="w-4 h-4 text-yellow" />
                   <span className="text-sm font-semibold">{test.puntos} puntos</span>
                 </div>
                 {test.badge && (
                   <div className="flex items-center gap-2">
-                    <Trophy className="w-4 h-4 text-purple-600" />
+                    <Trophy className="w-4 h-4 text-purple" />
                     <span className="text-sm">Badge: {test.badge}</span>
                   </div>
                 )}
@@ -137,7 +191,7 @@ export function A4GamifiedTests({ tests, onCompleteTest }: A4GamifiedTestsProps)
                   {test.preguntas.length} preguntas
                   {test.tiempo_limite_minutos && ` • ${test.tiempo_limite_minutos} min`}
                 </div>
-                <Button className="w-full">Comenzar Test</Button>
+                <Button className="w-full border-none" style={{ backgroundColor: "rgba(225, 120, 130, 0.6)", borderRadius: "20px" }}>Comenzar Test</Button>
               </CardContent>
             </Card>
           ))}
@@ -161,7 +215,7 @@ export function A4GamifiedTests({ tests, onCompleteTest }: A4GamifiedTestsProps)
                 Pregunta {currentQuestion + 1} de {selectedTest.preguntas.length}
               </CardDescription>
             </div>
-            <Badge className={getNivelColor(selectedTest.nivel)}>
+            <Badge style={getNivelStyle(selectedTest.nivel)}>
               {selectedTest.nivel}
             </Badge>
           </div>
@@ -222,30 +276,30 @@ export function A4GamifiedTests({ tests, onCompleteTest }: A4GamifiedTestsProps)
       ) : (
         <>
           {/* Results */}
-          <Card className={score >= 70 ? "border-green-200 bg-green-50 dark:bg-green-900/20" : "border-orange-200 bg-orange-50 dark:bg-orange-900/20"}>
+          <Card className={score >= 70 ? "border-green/20 bg-green/5 dark:bg-green/20" : "border-orange/20 bg-orange/5 dark:bg-orange/20"}>
             <CardContent className="pt-6 text-center space-y-4">
               {score >= 70 ? (
                 <>
-                  <CheckCircle2 className="w-12 h-12 text-green-600 mx-auto" />
+                  <CheckCircle2 className="w-12 h-12 text-green mx-auto" />
                   <div>
-                    <h3 className="text-xl font-bold text-green-900 dark:text-green-100">¡Excelente!</h3>
-                    <p className="text-sm text-green-800 dark:text-green-200">Has pasado el test</p>
+                    <h3 className="text-xl font-bold text-green dark:text-green/10">¡Excelente!</h3>
+                    <p className="text-sm text-green dark:text-green/20">Has pasado el test</p>
                   </div>
-                  <div className="text-3xl font-bold text-green-900 dark:text-green-100">{score}%</div>
-                  <p className="text-sm text-green-800 dark:text-green-200">
+                  <div className="text-3xl font-bold text-green dark:text-green/10">{score}%</div>
+                  <p className="text-sm text-green dark:text-green/20">
                     +{selectedTest.puntos} puntos ganados
                     {selectedTest.badge && ` • Badge desbloqueado: ${selectedTest.badge}`}
                   </p>
                 </>
               ) : (
                 <>
-                  <AlertCircle className="w-12 h-12 text-orange-600 mx-auto" />
+                  <AlertCircle className="w-12 h-12 text-orange mx-auto" />
                   <div>
-                    <h3 className="text-xl font-bold text-orange-900 dark:text-orange-100">Necesitas mejorar</h3>
-                    <p className="text-sm text-orange-800 dark:text-orange-200">Intenta nuevamente más adelante</p>
+                    <h3 className="text-xl font-bold text-orange dark:text-orange/10">Necesitas mejorar</h3>
+                    <p className="text-sm text-orange dark:text-orange/20">Intenta nuevamente más adelante</p>
                   </div>
-                  <div className="text-3xl font-bold text-orange-900 dark:text-orange-100">{score}%</div>
-                  <p className="text-sm text-orange-800 dark:text-orange-200">
+                  <div className="text-3xl font-bold text-orange dark:text-orange/10">{score}%</div>
+                  <p className="text-sm text-orange dark:text-orange/20">
                     Necesitas al menos 70% para pasar
                   </p>
                 </>
@@ -256,10 +310,10 @@ export function A4GamifiedTests({ tests, onCompleteTest }: A4GamifiedTestsProps)
                 {selectedTest.preguntas.map((q, index) => (
                   <div
                     key={index}
-                    className={`p-3 rounded-lg border-l-4 ${
+                    className={`p-3 rounded-[28px] border-l-4 ${
                       userAnswers[index] === q.respuesta_correcta
-                        ? "border-l-green-600 bg-green-50 dark:bg-green-900/20"
-                        : "border-l-orange-600 bg-orange-50 dark:bg-orange-900/20"
+                        ? "border-l-green-600 bg-green/5 dark:bg-green/20"
+                        : "border-l-orange-600 bg-orange/5 dark:bg-orange/20"
                     }`}
                   >
                     <div className="text-sm font-semibold mb-1">{q.pregunta}</div>

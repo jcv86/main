@@ -187,10 +187,10 @@ export function MiniPrueba() {
 
   if (loading) {
     return (
-      <Card className="bg-gradient-to-br from-primary/5 via-transparent to-accent/5 border-0">
+      <Card className="bg-background">
         <CardContent className="pt-12 pb-12 flex items-center justify-center">
           <div className="text-center">
-            <Loader2 className="w-8 h-8 animate-spin text-primary mx-auto mb-2" />
+            <Loader2 className="w-8 h-8 animate-spin text-purple mx-auto mb-2" />
             <p className="text-sm text-muted-foreground">Cargando mini prueba...</p>
           </div>
         </CardContent>
@@ -206,11 +206,11 @@ export function MiniPrueba() {
 
     return (
       <div className="space-y-6">
-        <Card className="border-0 bg-gradient-to-br from-primary/10 via-accent/5 to-primary/5">
+        <Card className="border-0 bg-background">
           <CardContent className="pt-12 pb-12 text-center">
             <div className="flex justify-center mb-6">
               <div className="relative">
-                <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center">
+                <div className="w-24 h-24 rounded-[20px] bg-background">
                   {isPerfect ? (
                     <Trophy className="w-12 h-12 text-white" />
                   ) : isGood ? (
@@ -229,22 +229,22 @@ export function MiniPrueba() {
 
             <div className="mb-6">
               {isPerfect && (
-                <p className="text-lg font-semibold text-primary">
+                <p className="text-lg font-semibold text-purple">
                   ¡Excelente! Eres un experto en economía
                 </p>
               )}
               {!isPerfect && isGood && (
-                <p className="text-lg font-semibold text-primary">
+                <p className="text-lg font-semibold text-purple">
                   ¡Muy bien! Tienes sólida comprensión económica
                 </p>
               )}
               {!isPerfect && !isGood && isOkay && (
-                <p className="text-lg font-semibold text-primary">
+                <p className="text-lg font-semibold text-purple">
                   Buen inicio. Considera estudiar más para mejorar
                 </p>
               )}
               {!isOkay && (
-                <p className="text-lg font-semibold text-primary">
+                <p className="text-lg font-semibold text-purple">
                   Keep learning. La economía es compleja, ¡practica más!
                 </p>
               )}
@@ -271,12 +271,12 @@ export function MiniPrueba() {
               return (
                 <div
                   key={q.id}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-card/70 backdrop-blur-sm"
+                  className="flex items-center gap-3 p-3 rounded-[28px] bg-card/70 backdrop-blur-sm"
                 >
                   {isCorrect ? (
-                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-green/50 flex-shrink-0" />
                   ) : (
-                    <XCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                    <XCircle className="w-5 h-5 text-red flex-shrink-0" />
                   )}
                   <div className="flex-1 text-sm">
                     <p className="font-medium line-clamp-1">{q.question}</p>
@@ -288,8 +288,8 @@ export function MiniPrueba() {
                     variant="outline"
                     className={
                       isCorrect
-                        ? "bg-green-500/10 text-green-700 dark:text-green-400"
-                        : "bg-red-500/10 text-red-700 dark:text-red-400"
+                        ? "bg-green/50/10 text-green dark:text-green/40"
+                        : "bg-red/50/10 text-red dark:text-red/40"
                     }
                   >
                     {isCorrect ? "Correcta" : "Incorrecta"}
@@ -319,7 +319,7 @@ export function MiniPrueba() {
             </p>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-bold text-primary">
+            <div className="text-2xl font-bold text-purple">
               {score} / {questions.length}
             </div>
             <p className="text-xs text-muted-foreground">Correctas</p>
@@ -340,10 +340,10 @@ export function MiniPrueba() {
             <Badge
               className={
                 currentQuestion.difficulty === "fácil"
-                  ? "bg-green-500/10 text-green-700 dark:text-green-400"
+                  ? "bg-green/50/10 text-green dark:text-green/40"
                   : currentQuestion.difficulty === "medio"
                     ? "bg-amber-500/10 text-amber-700 dark:text-amber-400"
-                    : "bg-red-500/10 text-red-700 dark:text-red-400"
+                    : "bg-red/50/10 text-red dark:text-red/40"
               }
               variant="outline"
             >
@@ -357,13 +357,13 @@ export function MiniPrueba() {
               key={idx}
               onClick={() => handleAnswer(idx)}
               disabled={isAnswered}
-              className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
+              className={`w-full text-left p-4 rounded-[28px] border-2 transition-all ${
                 !isAnswered
-                  ? "border-border hover:border-primary/50 hover:bg-primary/5 cursor-pointer"
+                  ? "border-border hover:border-purple/50 hover:bg-purple/5 cursor-pointer"
                   : idx === currentQuestion.correctAnswer
-                    ? "border-green-500 bg-green-500/10"
+                    ? "border-green bg-green/50/10"
                     : idx === userAnswer && !isCorrect
-                      ? "border-red-500 bg-red-500/10"
+                      ? "border-red/50 bg-red/50/10"
                       : "border-border opacity-50"
               }`}
             >
@@ -371,14 +371,14 @@ export function MiniPrueba() {
                 <div
                   className={`w-6 h-6 rounded-full border-2 flex items-center justify-center text-sm font-medium ${
                     isAnswered && idx === currentQuestion.correctAnswer
-                      ? "bg-green-500 border-green-500 text-white"
+                      ? "bg-green/50 border-green text-white"
                       : isAnswered && idx === userAnswer && !isCorrect
-                        ? "bg-red-500 border-red-500 text-white"
+                        ? "bg-red/50 border-red/50 text-white"
                         : "border-current"
                   }`}
                 >
                   {idx === currentQuestion.correctAnswer && isAnswered ? (
-                    "✓"
+                    ""
                   ) : idx === userAnswer && !isCorrect && isAnswered ? (
                     "✗"
                   ) : (
@@ -397,12 +397,12 @@ export function MiniPrueba() {
         <Alert
           className={`border-0 ${
             isCorrect
-              ? "bg-green-500/10"
-              : "bg-red-500/10"
+              ? "bg-green/50/10"
+              : "bg-red/50/10"
           }`}
         >
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription className={isCorrect ? "text-green-700 dark:text-green-400" : "text-red-700 dark:text-red-400"}>
+          <AlertDescription className={isCorrect ? "text-green dark:text-green/40" : "text-red dark:text-red/40"}>
             <p className="font-semibold mb-2">
               {isCorrect ? "¡Correcto!" : "Respuesta incorrecta"}
             </p>

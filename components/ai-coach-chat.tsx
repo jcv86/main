@@ -218,7 +218,7 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
           <div className="flex items-center gap-2">
             {currentCoach && (
               <Badge variant="outline" className="text-xs">
-                {currentCoach === "sofia" ? "🌟 Sofia" : "🎯 Dani"}
+                {currentCoach === "sofia" ? " Sofia" : " Dani"}
               </Badge>
             )}
             <Badge variant="secondary" className="text-xs">
@@ -240,12 +240,12 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
               <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                 <div
                   className={`max-w-[80%] rounded-lg px-3 py-2 ${
-                    message.role === "user" ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-900"
+                    message.role === "user" ? "bg-blue/50 text-white" : "bg-muted/10 text-foreground"
                   }`}
                 >
                   {message.role === "assistant" && message.coachName && (
-                    <p className="text-xs font-semibold mb-1 text-blue-600">
-                      {message.coachName === "Sofia" ? "🌟 Sofia" : "🎯 Dani"}
+                    <p className="text-xs font-semibold mb-1 text-blue">
+                      {message.coachName === "Sofia" ? " Sofia" : " Dani"}
                     </p>
                   )}
                   <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -255,15 +255,15 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
             ))}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-gray-100 rounded-lg px-3 py-2">
+                <div className="bg-muted/10 rounded-lg px-3 py-2">
                   <div className="flex items-center space-x-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-muted/40 rounded-full animate-bounce"></div>
                     <div
-                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-muted/40 rounded-full animate-bounce"
                       style={{ animationDelay: "0.1s" }}
                     ></div>
                     <div
-                      className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                      className="w-2 h-2 bg-muted/40 rounded-full animate-bounce"
                       style={{ animationDelay: "0.2s" }}
                     ></div>
                   </div>
@@ -275,15 +275,15 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
 
         {/* Rating Section */}
         {messages.length > 2 && conversationId && (
-          <div className="px-4 py-2 border-t bg-gray-50">
+          <div className="px-4 py-2 border-t bg-muted/5">
             <div className="flex items-center justify-between text-sm">
-              <span className="text-gray-600">¿Qué te pareció esta conversación?</span>
+              <span className="text-muted-foreground">¿Qué te pareció esta conversación?</span>
               <div className="flex items-center gap-1">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
                     onClick={() => rateConversation(star)}
-                    className={`p-1 ${rating && rating >= star ? "text-yellow-400" : "text-gray-300"}`}
+                    className={rating && rating >= star ? "p-1 text-yellow/40" : "p-1 text-white/85"}
                   >
                     <Star className="h-4 w-4 fill-current" />
                   </button>
@@ -320,9 +320,9 @@ export function AiCoachChat({ context, userId = "demo-user" }: AiCoachChatProps)
             </Button>
           </div>
           <div className="flex items-center justify-between mt-2">
-            <p className="text-xs text-gray-500">Presiona Enter para enviar, Shift+Enter para nueva línea</p>
+            <p className="text-xs text-muted-foreground">Presiona Enter para enviar, Shift+Enter para nueva línea</p>
             {speechSupported && (
-              <p className="text-xs text-gray-500 flex items-center gap-1">
+              <p className="text-xs text-muted-foreground flex items-center gap-1">
                 <Mic className="h-3 w-3" />
                 {isListening ? "Escuchando..." : "Click para hablar"}
               </p>

@@ -38,21 +38,21 @@ interface A2RecommendationProps {
 const getPilarIcon = (pilar: string) => {
   const icons: Record<string, string> = {
     "energia": "⚡",
-    "enfoque": "🎯",
-    "relaciones": "🤝",
+    "enfoque": "",
+    "relaciones": "",
     "plan_ejecutivo": "📋",
   }
-  return icons[pilar] || "🎯"
+  return icons[pilar] || ""
 }
 
 const getPilarColor = (pilar: string) => {
   const colors: Record<string, string> = {
-    "energia": "bg-yellow-100 text-yellow-900",
-    "enfoque": "bg-green-100 text-green-900",
-    "relaciones": "bg-pink-100 text-pink-900",
-    "plan_ejecutivo": "bg-purple-100 text-purple-900",
+    "energia": "bg-yellow/10 text-yellow",
+    "enfoque": "bg-green/10 text-green",
+    "relaciones": "bg-red/10 text-pink-900",
+    "plan_ejecutivo": "bg-purple/10 text-purple",
   }
-  return colors[pilar] || "bg-gray-100"
+  return colors[pilar] || "bg-muted/10"
 }
 
 const getPriorityLabel = (score: number) => {
@@ -91,7 +91,7 @@ export function A2RecommendationBridge({
         </div>
 
         {/* A1 Results Summary */}
-        <Card className="bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+        <Card className="bg-background">
           <CardContent className="pt-6">
             <div className="space-y-4">
               <div className="text-sm font-medium text-muted-foreground">Tu Diagnóstico A1</div>
@@ -123,7 +123,7 @@ export function A2RecommendationBridge({
 
               <div className="pt-4 border-t text-sm text-muted-foreground">
                 <div className="flex items-start gap-2">
-                  <Zap className="w-4 h-4 mt-0.5 flex-shrink-0 text-orange-600" />
+                  <Zap className="w-4 h-4 mt-0.5 flex-shrink-0 text-orange" />
                   <div>
                     <strong>{weakestPillar.label}</strong> necesita atención inmediata. Te recomendamos comenzar por ahí.
                   </div>
@@ -150,8 +150,8 @@ export function A2RecommendationBridge({
               return (
                 <Card
                   key={rec.path.id}
-                  className={`cursor-pointer transition-all hover:shadow-lg ${
-                    isPrimary ? "border-2 border-primary bg-primary/5" : ""
+                  className={`cursor-pointer transition-all hover:shadow-lg ${`}
+                    isPrimary ? "border-2 border-purple bg-purple/5" : ""`}
                   }`}
                   onClick={() => onPathSelect?.(rec.path.id)}
                 >
@@ -236,12 +236,12 @@ export function A2RecommendationBridge({
       </div>
 
       {/* Tips */}
-      <Card className="bg-green-50 border-green-200">
+      <Card className="bg-green/5 border-green/20">
         <CardContent className="pt-6 flex gap-3">
-          <TrendingUp className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+          <TrendingUp className="w-5 h-5 text-green flex-shrink-0 mt-0.5" />
           <div>
-            <div className="font-medium text-green-900 mb-1">Consejos para Máximo Aprendizaje</div>
-            <div className="text-sm text-green-800 space-y-1">
+            <div className="font-medium text-green mb-1">Consejos para Máximo Aprendizaje</div>
+            <div className="text-sm text-green space-y-1">
               <div>• Comienza con tu área más débil para máximo impacto</div>
               <div>• Completa todas las lecciones de cada ruta</div>
               <div>• Las A2 rutas preparan para los escenarios A3</div>

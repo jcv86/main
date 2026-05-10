@@ -1,15 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { advancedBrain } from "@/lib/advanced-brain-engine"
-import { createClient } from "@/lib/supabase"
-import {
-  generateQueryHash,
-  getCachedResponse,
-  cacheResponse,
-  trackAPIUsage,
-  trackAnalyticsEvent,
-} from "@/lib/performance-optimizer"
 
 export const maxDuration = 30
+export const dynamic = "force-dynamic"
 
 export async function POST(request: NextRequest) {
   const startTime = Date.now()
@@ -17,6 +9,31 @@ export async function POST(request: NextRequest) {
 
   try {
     const { message, userId = "demo-user", conversationId, context } = await request.json()
+
+    // Check for Supabase credentials before importing
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.log('[v0] Supabase not configured, using fallback mode')
+      return NextResponse.json({
+        response: "Supabase no está configurado en este entorno",
+        conversationId: conversationId || "demo",
+        metadata: {
+          cacheHit: false,
+          responseTimeMs: Date.now() - startTime,
+          mode: 'fallback'
+        }
+      })
+    }
+
+    // Lazy load dependencies after config check
+    const { advancedBrain } = await import("@/lib/advanced-brain-engine")
+    const { createClient } = await import("@/lib/supabase/server")
+    const {
+      generateQueryHash,
+      getCachedResponse,
+      cacheResponse,
+      trackAPIUsage,
+      trackAnalyticsEvent,
+    } = await import("@/lib/performance-optimizer")
 
     const supabase = await createClient()
 
@@ -192,12 +209,17 @@ export async function POST(request: NextRequest) {
 
     const responseTimeMs = Date.now() - startTime
 
-    // Track error
-    await trackAnalyticsEvent("brain_query_error", {
-      category: "error",
-      error_message: error instanceof Error ? error.message : "Unknown error",
-      response_time_ms: responseTimeMs,
-    })
+    // Track error - use lazy imports to avoid build issues
+    try {
+      const { trackAnalyticsEvent } = await import("@/lib/performance-optimizer")
+      await trackAnalyticsEvent("brain_query_error", {
+        category: "error",
+        error_message: error instanceof Error ? error.message : "Unknown error",
+        response_time_ms: responseTimeMs,
+      })
+    } catch (trackingError) {
+      console.error("Error tracking analytics:", trackingError)
+    }
 
     return NextResponse.json(
       {
@@ -213,6 +235,10 @@ export async function POST(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   try {
     const { conversationId, userId, rating, feedback } = await request.json()
+
+    // Lazy load dependencies
+    const { advancedBrain } = await import("@/lib/advanced-brain-engine")
+    const { trackAnalyticsEvent } = await import("@/lib/performance-optimizer")
 
     await advancedBrain.learnFromFeedback(userId, conversationId, rating, feedback)
 

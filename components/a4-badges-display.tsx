@@ -29,21 +29,21 @@ interface A4BadgesDisplayProps {
 }
 
 const RARITY_COLORS = {
-  common: 'bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300 border-gray-300',
-  uncommon: 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300 border-green-300',
-  rare: 'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300 border-blue-300',
-  legendary: 'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300 border-purple-300',
+  common: 'bg-muted/10 text-gray-800 dark:bg-transparent/30 dark:text-white/85 border-muted/30',
+  uncommon: 'bg-green/10 text-green dark:bg-green/30 dark:text-green/30 border-green/30',
+  rare: 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-200 border-blue/30',
+  legendary: 'bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple/20 border-purple/30',
 }
 
 const BADGE_ICONS: Record<string, string> = {
   'Explorador': '🔍',
-  'Lector Voraz': '📚',
-  'Participante': '🎯',
+  'Lector Voraz': '',
+  'Participante': '',
   'Experto': '🏆',
   'Estratega': '♟️',
-  'Conexiones': '🤝',
+  'Conexiones': '',
   'Consistente': '🔥',
-  'Innovador': '💡',
+  'Innovador': '',
   'Maestría': '👑',
 }
 
@@ -53,21 +53,21 @@ export function A4BadgesDisplay({ data }: A4BadgesDisplayProps) {
   return (
     <div className="space-y-6">
       {/* Points and Level Section */}
-      <Card className="border-0 bg-gradient-to-br from-primary/10 to-primary/5">
+      <Card className="border-0 bg-background">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
-            <Zap className="w-5 h-5 text-primary" />
+            <Zap className="w-5 h-5 text-purple" />
             Puntos y Nivel
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary">{data.currentPoints}</div>
+              <div className="text-3xl font-bold text-purple">{data.currentPoints}</div>
               <p className="text-xs text-muted-foreground mt-1">Total</p>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600">{data.pointsThisWeek}</div>
+              <div className="text-3xl font-bold text-blue">{data.pointsThisWeek}</div>
               <p className="text-xs text-muted-foreground mt-1">Esta semana</p>
             </div>
             <div className="text-center">
@@ -76,7 +76,7 @@ export function A4BadgesDisplay({ data }: A4BadgesDisplayProps) {
             </div>
           </div>
 
-          <div className="bg-white/50 dark:bg-black/20 p-4 rounded-lg space-y-2">
+          <div className="bg-white/50 dark:bg-black/20 p-4 rounded-[28px] space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold">Nivel {data.level}</span>
               <span className="text-xs text-muted-foreground">
@@ -87,7 +87,7 @@ export function A4BadgesDisplay({ data }: A4BadgesDisplayProps) {
           </div>
 
           {data.streakDays > 0 && (
-            <div className="flex items-center gap-2 bg-amber-50/50 dark:bg-amber-950/20 p-3 rounded-lg border border-amber-200 dark:border-amber-800">
+            <div className="flex items-center gap-2 bg-amber-50/50 dark:bg-amber-950/20 p-3 rounded-[28px] border border-amber-200 dark:border-amber-800">
               <Flame className="w-4 h-4 text-amber-600 dark:text-amber-400" />
               <div>
                 <p className="text-sm font-semibold text-amber-900 dark:text-amber-100">
@@ -116,11 +116,11 @@ export function A4BadgesDisplay({ data }: A4BadgesDisplayProps) {
               {data.badges.map(badge => (
                 <div
                   key={badge.id}
-                  className={`p-4 rounded-lg border-2 text-center transition-all hover:shadow-lg ${
+                  className={`p-4 rounded-[28px] border-2 text-center transition-all hover:shadow-lg ${
                     RARITY_COLORS[badge.rarity]
                   }`}
                 >
-                  <div className="text-3xl mb-2">{BADGE_ICONS[badge.name] || '⭐'}</div>
+                  <div className="text-3xl mb-2">{BADGE_ICONS[badge.name] || ''}</div>
                   <p className="font-semibold text-sm mb-1">{badge.name}</p>
                   <p className="text-xs opacity-75">{badge.description}</p>
                   <p className="text-xs opacity-50 mt-2">

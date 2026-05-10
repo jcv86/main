@@ -83,7 +83,7 @@ export default function DSARManagementPage() {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
           <p className="text-muted-foreground">Cargando solicitudes DSAR...</p>
         </div>
       </div>
@@ -113,10 +113,10 @@ export default function DSARManagementPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Pendientes</CardTitle>
-              <FileText className="h-4 w-4 text-yellow-500" />
+              <FileText className="h-4 w-4 text-orange" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-yellow-500">{summary.pending}</div>
+              <div className="text-2xl font-bold text-orange">{summary.pending}</div>
               <p className="text-xs text-muted-foreground">Requieren verificación</p>
             </CardContent>
           </Card>
@@ -124,10 +124,10 @@ export default function DSARManagementPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">En Proceso</CardTitle>
-              <Download className="h-4 w-4 text-blue-500" />
+              <Download className="h-4 w-4 text-blue/50" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-blue-500">{summary.processing}</div>
+              <div className="text-2xl font-bold text-blue/50">{summary.processing}</div>
               <p className="text-xs text-muted-foreground">Siendo procesadas</p>
             </CardContent>
           </Card>
@@ -135,10 +135,10 @@ export default function DSARManagementPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Completadas</CardTitle>
-              <Shield className="h-4 w-4 text-green-500" />
+              <Shield className="h-4 w-4 text-green" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-green-500">{summary.completed}</div>
+              <div className="text-2xl font-bold text-green">{summary.completed}</div>
               <p className="text-xs text-muted-foreground">Finalizadas</p>
             </CardContent>
           </Card>

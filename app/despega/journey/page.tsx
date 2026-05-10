@@ -57,8 +57,8 @@ export default function JourneyPage() {
             description: 'Descubre quién eres realmente',
             status: 'completed',
             progress: 100,
-            color: 'text-blue-600 dark:text-blue-400',
-            bgColor: 'from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900',
+            color: 'text-blue dark:text-blue/40',
+            bgColor: 'from-blue/5/10950900',
             icon: <CheckCircle2 className="w-6 h-6" />,
             href: '/despega/a1-cerebral',
             weeks: 'Semana 1',
@@ -69,8 +69,8 @@ export default function JourneyPage() {
             description: 'Define tu transformación en 90 días',
             status: 'in-progress',
             progress: 40,
-            color: 'text-green-600 dark:text-green-400',
-            bgColor: 'from-green-50 to-green-100 dark:from-green-950 dark:to-green-900',
+            color: 'text-green dark:text-green/40',
+            bgColor: 'from-green/5100950900',
             icon: <Circle className="w-6 h-6" />,
             href: '/despega/a2/dashboard',
             weeks: 'Semanas 2-5',
@@ -81,8 +81,8 @@ export default function JourneyPage() {
             description: 'Entiende tu contexto y oportunidades',
             status: 'in-progress',
             progress: 30,
-            color: 'text-cyan-600 dark:text-cyan-400',
-            bgColor: 'from-cyan-50 to-cyan-100 dark:from-cyan-950 dark:to-cyan-900',
+            color: 'text-blue dark:text-cyan/40',
+            bgColor: 'from-blue/5/10',
             icon: <Circle className="w-6 h-6" />,
             href: '/despega/a4-base',
             weeks: 'Semanas 2-5',
@@ -93,8 +93,8 @@ export default function JourneyPage() {
             description: 'Entrena y practica tu transformación',
             status: 'upcoming',
             progress: 0,
-            color: 'text-orange-600 dark:text-orange-400',
-            bgColor: 'from-orange-50 to-orange-100 dark:from-orange-950 dark:to-orange-900',
+            color: 'text-orange dark:text-orange/40',
+            bgColor: 'from-orange/5100950',
             icon: <Lock className="w-6 h-6" />,
             href: '/despega/a3',
             weeks: 'Semanas 6-13',
@@ -128,29 +128,29 @@ export default function JourneyPage() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="text-slate-600 dark:text-slate-400">Cargando tu jornada...</div>
+        <div className="text-muted-foreground dark:text-muted-foreground">Cargando tu jornada...</div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto">
         {/* HERO SECTION */}
         <div className="mb-12">
           <h1 className="text-4xl font-bold mb-2">Tu Jornada de Transformación</h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400 mb-6">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground mb-6">
             Hola {userName}, aquí ves el progreso de tu transformación profesional en 90 días
           </p>
 
           {/* OVERALL PROGRESS */}
-          <div className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-indigo-950 dark:to-purple-950 rounded-lg p-6 border border-indigo-200 dark:border-indigo-800">
+          <div className="bg-background">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h3 className="text-sm font-semibold text-indigo-900 dark:text-indigo-100">Progreso General</h3>
+                <h3 className="text-sm font-semibold text-indigo-900 dark:text-white">Progreso General</h3>
                 <p className="text-xs text-indigo-700 dark:text-indigo-300">A través de todas las fases</p>
               </div>
-              <Badge className="bg-indigo-600 text-white text-lg px-4 py-2">{overallProgress}%</Badge>
+              <Badge className="bg-blue text-white text-lg px-4 py-2">{overallProgress}%</Badge>
             </div>
             <Progress value={overallProgress} className="h-2" />
             <div className="flex justify-between text-xs text-indigo-700 dark:text-indigo-300 mt-3">
@@ -166,7 +166,7 @@ export default function JourneyPage() {
           {phases.map((phase, idx) => (
             <div key={phase.phase}>
               <Link href={phase.href} className="block h-full">
-                <Card className={`bg-gradient-to-br ${phase.bgColor} border-2 border-transparent hover:border-slate-300 dark:hover:border-slate-700 transition-all cursor-pointer h-full flex flex-col`}>
+                <Card className={`bg-background`}>
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
@@ -178,7 +178,7 @@ export default function JourneyPage() {
                         </div>
                         <CardTitle className="text-xl">{phase.name}</CardTitle>
                         <CardDescription className="text-sm mt-1">{phase.description}</CardDescription>
-                        <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">{phase.weeks}</p>
+                        <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-2">{phase.weeks}</p>
                       </div>
                       <div className={phase.color}>{phase.icon}</div>
                     </div>
@@ -195,7 +195,7 @@ export default function JourneyPage() {
                       </div>
 
                       {phase.status === 'upcoming' && (
-                        <p className="text-xs text-slate-600 dark:text-slate-400 italic">
+                        <p className="text-xs text-muted-foreground dark:text-muted-foreground italic">
                           Disponible cuando completes A2 y A4
                         </p>
                       )}
@@ -222,34 +222,34 @@ export default function JourneyPage() {
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-lg bg-blue-100 dark:bg-blue-900 flex items-center justify-center font-bold text-blue-700 dark:text-blue-300">A1</div>
-                <div className="flex-1 h-1 bg-gradient-to-r from-blue-300 to-slate-300 dark:from-blue-700 dark:to-slate-700"></div>
+                <div className="w-20 h-20 rounded-[28px] bg-blue/10 dark:bg-blue flex items-center justify-center font-bold text-blue dark:text-blue-200">A1</div>
+                <div className="flex-1 h-1 bg-background"></div>
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-lg bg-slate-300 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-300">↓</div>
+                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-muted/70 flex items-center justify-center font-bold text-muted-foreground dark:text-white/85">↓</div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-4 mb-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-lg bg-green-100 dark:bg-green-900 flex items-center justify-center font-bold text-green-700 dark:text-green-300">A2</div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Tu Plan Personalizado</p>
+                  <div className="w-20 h-20 rounded-[28px] bg-green/10 dark:bg-green flex items-center justify-center font-bold text-green dark:text-green/30">A2</div>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Tu Plan Personalizado</p>
                 </div>
                 <div className="flex items-center gap-4">
-                  <div className="w-20 h-20 rounded-lg bg-cyan-100 dark:bg-cyan-900 flex items-center justify-center font-bold text-cyan-700 dark:text-cyan-300">A4</div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Contexto del Mercado</p>
+                  <div className="w-20 h-20 rounded-[28px] bg-cyan/10 dark:bg-cyan flex items-center justify-center font-bold text-cyan dark:text-white">A4</div>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Contexto del Mercado</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-lg bg-slate-300 dark:bg-slate-700 flex items-center justify-center font-bold text-slate-700 dark:text-slate-300">↓</div>
+                <div className="w-20 h-20 rounded-[28px] bg-muted/30 dark:bg-muted/70 flex items-center justify-center font-bold text-muted-foreground dark:text-white/85">↓</div>
               </div>
 
               <div className="flex items-center gap-4">
-                <div className="w-20 h-20 rounded-lg bg-orange-100 dark:bg-orange-900 flex items-center justify-center font-bold text-orange-700 dark:text-orange-300">A3</div>
+                <div className="w-20 h-20 rounded-[28px] bg-orange/10 dark:bg-orange flex items-center justify-center font-bold text-orange dark:text-orange/30">A3</div>
                 <div className="flex-1">
                   <p className="text-sm font-semibold">Entrenamientos Inteligentes</p>
-                  <p className="text-xs text-slate-600 dark:text-slate-400">Usando tu plan + contexto de mercado</p>
+                  <p className="text-xs text-muted-foreground dark:text-muted-foreground">Usando tu plan + contexto de mercado</p>
                 </div>
               </div>
             </div>
@@ -257,23 +257,23 @@ export default function JourneyPage() {
         </Card>
 
         {/* NEXT STEPS */}
-        <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-950 dark:to-indigo-950 rounded-lg p-8 border border-blue-200 dark:border-blue-800">
+        <div className="mt-12 bg-background">
           <h3 className="text-lg font-semibold mb-4">Próximos Pasos</h3>
           <ul className="space-y-3 text-sm">
             <li className="flex gap-3">
-              <CheckCircle2 className="w-5 h-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
+              <CheckCircle2 className="w-5 h-5 text-green dark:text-green/40 flex-shrink-0 mt-0.5" />
               <span>Ya completaste A1 y descubriste tu perfil</span>
             </li>
             <li className="flex gap-3">
-              <Circle className="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5" />
+              <Circle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
               <span>Ahora trabaja en A2 para definir tu plan de 90 días</span>
             </li>
             <li className="flex gap-3">
-              <Circle className="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5" />
+              <Circle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
               <span>Usa A4 para entender el contexto del mercado</span>
             </li>
             <li className="flex gap-3">
-              <Circle className="w-5 h-5 text-slate-400 flex-shrink-0 mt-0.5" />
+              <Circle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" />
               <span>Practica en A3 con entrenamientos personalizados</span>
             </li>
           </ul>

@@ -31,10 +31,10 @@ export default function ApiConfigPage() {
             </AlertDescription>
           </Alert>
         ) : (
-          <Alert className="border-green-500 bg-green-50">
-            <CheckCircle2 className="h-4 w-4 text-green-600" />
-            <AlertTitle className="text-green-800">Sistema Configurado Correctamente</AlertTitle>
-            <AlertDescription className="text-green-700">
+          <Alert className="border-green bg-green/5">
+            <CheckCircle2 className="h-4 w-4 text-green" />
+            <AlertTitle className="text-green">Sistema Configurado Correctamente</AlertTitle>
+            <AlertDescription className="text-green">
               Todas las variables de entorno necesarias están configuradas y listas para usar.
             </AlertDescription>
           </Alert>
@@ -68,7 +68,7 @@ export default function ApiConfigPage() {
             </div>
 
             {isOpenAIConfigured && (
-              <div className="p-3 bg-gray-50 rounded-md space-y-2">
+              <div className="p-3 bg-muted/5 rounded-md space-y-2">
                 <p className="text-xs font-mono text-muted-foreground">
                   sk-proj-{openaiKey?.substring(8, 12)}...{openaiKey?.substring(openaiKey.length - 4)}
                 </p>
@@ -87,8 +87,8 @@ export default function ApiConfigPage() {
               <Alert>
                 <AlertDescription className="text-sm">
                   <strong>Para configurar:</strong> Agrega{" "}
-                  <code className="bg-gray-100 px-2 py-1 rounded">OPENAI_API_KEY=tu-clave-aqui</code> a tu archivo{" "}
-                  <code className="bg-gray-100 px-2 py-1 rounded">.env.local</code>
+                  <code className="bg-muted/10 px-2 py-1 rounded">OPENAI_API_KEY=tu-clave-aqui</code> a tu archivo{" "}
+                  <code className="bg-muted/10 px-2 py-1 rounded">.env.local</code>
                 </AlertDescription>
               </Alert>
             )}
@@ -141,7 +141,7 @@ export default function ApiConfigPage() {
             </div>
 
             {isSupabaseConfigured && (
-              <div className="p-3 bg-gray-50 rounded-md">
+              <div className="p-3 bg-muted/5 rounded-md">
                 <p className="text-xs font-mono text-muted-foreground break-all">{supabaseUrl}</p>
               </div>
             )}
@@ -192,7 +192,7 @@ export default function ApiConfigPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-blue/20 bg-blue/5">
           <CardHeader>
             <CardTitle className="text-base">Próximos Pasos</CardTitle>
           </CardHeader>
@@ -204,7 +204,7 @@ export default function ApiConfigPage() {
                   Obtén una clave de API de OpenAI en{" "}
                   <a
                     href="https://platform.openai.com/api-keys"
-                    className="text-blue-600 underline"
+                    className="text-blue underline"
                     target="_blank"
                     rel="noreferrer noopener"
                   >
@@ -222,18 +222,18 @@ export default function ApiConfigPage() {
             {isOpenAIConfigured && isSupabaseConfigured && (
               <>
                 <div className="flex gap-2">
-                  <span>✓</span>
+                  <span></span>
                   <p>
                     Ejecuta el script 249 para habilitar soporte de vectores:{" "}
-                    <code className="bg-blue-100 px-2 py-1 rounded">scripts/249-add-embeddings-support.sql</code>
+                    <code className="bg-blue/10 px-2 py-1 rounded">scripts/249-add-embeddings-support.sql</code>
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <span>✓</span>
+                  <span></span>
                   <p>Genera embeddings para tu contenido en /admin/embeddings</p>
                 </div>
                 <div className="flex gap-2">
-                  <span>✓</span>
+                  <span></span>
                   <p>Prueba la búsqueda semántica en /test-semantic-search</p>
                 </div>
               </>

@@ -44,7 +44,7 @@ const COLOR_MAPPING = {
   'bg-slate-800': 'bg-card',
   'bg-slate-900': 'bg-background',
   'text-slate-300': 'text-foreground',
-  'text-slate-400': 'text-muted-foreground',
+  'text-slate-200': 'text-muted-foreground',
   'border-slate-700': 'border',
 };
 

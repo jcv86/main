@@ -32,6 +32,17 @@ export default function Conozcamonos1Page() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        // Check for demo user first
+        const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
+        const demoUser = demoUserStr ? JSON.parse(demoUserStr) : null
+        
+        if (demoUser) {
+          console.log('[v0] Demo user detected in conozcamonos-1:', demoUser.email)
+          setAuthChecked(true)
+          return
+        }
+
+        // Check Supabase auth for real users
         const { data: { user }, error } = await supabase.auth.getUser()
         console.log('[v0] conozcamonos-1 auth check - user:', user?.email, 'error:', error?.message)
         
@@ -199,20 +210,36 @@ export default function Conozcamonos1Page() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12 max-w-2xl">
         <div className="mb-8">
-          <div className="inline-block px-4 py-2 bg-gradient-to-r from-purple-100 to-blue-100 dark:from-purple-900/30 dark:to-blue-900/30 rounded-full mb-4">
-            <p className="text-sm font-semibold text-purple-700 dark:text-purple-300">El Ritual: Paso 1 - Conocámonos</p>
+          <div 
+            className="inline-flex items-center gap-2 px-4 py-3 mb-4"
+            style={{ 
+              backgroundColor: 'rgba(80, 160, 170, 0.2)',
+              borderRadius: '20px'
+            }}
+          >
+            <span style={{ color: 'rgb(80, 160, 170)' }}>●</span>
+            <p className="text-base" style={{ color: 'rgb(80, 160, 170)', fontWeight: 400 }}>El Ritual: Quién Eres Ahora</p>
           </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent dark:from-purple-400 dark:to-blue-400 mb-2">
+          <h1 
+            className="text-5xl md:text-6xl text-white mb-4 leading-tight"
+            style={{ fontWeight: 300 }}
+          >
             Antes de Empezar, Cuéntame Tu Historia
           </h1>
-          <p className="text-lg text-slate-700 dark:text-slate-300 font-medium">Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
+          <p className="text-xl font-medium leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
         </div>
 
-        <div className="bg-white dark:bg-slate-900 border-2 border-purple-200 dark:border-purple-900/50 rounded-2xl p-8 mb-8 shadow-lg">
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">{question.question}</h2>
+        <div 
+          className="bg-white dark:bg-background p-8 mb-8 shadow-lg"
+          style={{ 
+            border: '2px solid rgba(80, 160, 170, 0.4)',
+            borderRadius: '2px'
+          }}
+        >
+          <h2 className="text-2xl text-muted/90 dark:text-white mb-6" style={{ fontWeight: 500 }}>{question.question}</h2>
 
           {question.type === 'select' && (
             <div className="space-y-3">
@@ -225,18 +252,19 @@ export default function Conozcamonos1Page() {
                   <div key={option} className="space-y-2">
                     <button
                       onClick={() => handleAnswer(option)}
-                      className={`w-full text-left p-4 rounded-lg border-2 transition-all ${
-                        isSelected
-                          ? 'border-primary bg-primary/10'
-                          : 'border-border hover:border-border/80'
-                      }`}
+                      className="w-full text-left p-4 border-2 transition-all"
+                      style={{
+                        borderRadius: '28px',
+                        borderColor: isSelected ? 'rgba(80, 160, 170, 0.6)' : 'var(--border)',
+                        backgroundColor: isSelected ? 'rgba(80, 160, 170, 0.1)' : 'transparent'
+                      }}
                     >
                       {option}
                     </button>
                     
                     {/* Show text input for "Otro" option */}
                     {option === 'Otro' && isSelected && (
-                      <div className="space-y-3 p-3 bg-slate-50 dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-700">
+                      <div className="space-y-3 p-3 bg-muted/5 dark:bg-background rounded-[28px] border border-muted/20 dark:border-card">
                         <textarea
                           value={customResponses[question.id] || ''}
                           onChange={(e) => handleCustomText(e.target.value)}
@@ -253,7 +281,7 @@ export default function Conozcamonos1Page() {
                             }}
                             isDisabled={loading || validating}
                           />
-                          <span className="text-xs text-slate-500 dark:text-slate-400">
+                          <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                             O habla para dictar
                           </span>
                         </div>
@@ -282,7 +310,8 @@ export default function Conozcamonos1Page() {
                 <textarea
                   value={responses[question.id] || ''}
                   onChange={(e) => handleAnswer(e.target.value)}
-                  className="flex-1 p-4 bg-background border border-border rounded-lg text-foreground"
+                  className="flex-1 p-4 bg-background border border-border text-foreground"
+                  style={{ borderRadius: '2px' }}
                   rows={4}
                   placeholder="Escribe tu respuesta aquí o usa el micrófono..."
                 />
@@ -294,7 +323,7 @@ export default function Conozcamonos1Page() {
                   }}
                   isDisabled={loading || validating}
                 />
-                <span className="text-xs text-slate-500 dark:text-slate-400">
+                <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                   O habla para dictar tu respuesta
                 </span>
               </div>
@@ -311,15 +340,23 @@ export default function Conozcamonos1Page() {
           )}
 
           {error && (
-            <div className="mt-4 p-3 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg">
-              <p className="text-sm text-red-900 dark:text-red-100">{error}</p>
+            <div className="mt-4 p-4 bg-red/15 dark:bg-red/20 border border-red/40 dark:border-red/50 rounded-lg">
+              <p className="text-sm font-semibold text-red dark:text-red">{error}</p>
             </div>
           )}
         </div>
 
         <div className="flex gap-4">
-          <Button onClick={handleBack} variant="outline" disabled={currentQuestion === 0} className="flex-1">Atrás</Button>
-          <Button onClick={handleNext} disabled={!isAnswered() || loading || validating} className="flex-1">
+          <Button onClick={handleBack} variant="outline" disabled={currentQuestion === 0} className="flex-1" style={{ borderRadius: '20px' }}>Atrás</Button>
+          <Button 
+            onClick={handleNext} 
+            disabled={!isAnswered() || loading || validating} 
+            className="flex-1"
+            style={{
+              backgroundColor: 'rgba(80, 160, 170, 0.6)',
+              borderRadius: '20px'
+            }}
+          >
             {validating ? 'Validando...' : loading ? 'Guardando...' : isLastQuestion ? 'Continuar' : 'Siguiente'}
           </Button>
         </div>

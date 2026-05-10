@@ -22,17 +22,17 @@ interface NoticiasBaseProps {
 }
 
 const categoryColors = {
-  economía: "bg-blue-500/10 text-blue-700 dark:text-blue-400",
-  empleo: "bg-green-500/10 text-green-700 dark:text-green-400",
+  economía: "bg-blue/50/10 text-blue dark:text-blue/40",
+  empleo: "bg-green/50/10 text-green dark:text-green/40",
   regulatorio: "bg-amber-500/10 text-amber-700 dark:text-amber-400",
-  tecnología: "bg-purple-500/10 text-purple-700 dark:text-purple-400",
+  tecnología: "bg-purple/50/10 text-purple dark:text-purple/40",
   cultura: "bg-pink-500/10 text-pink-700 dark:text-pink-400",
 }
 
 const impactBadges = {
-  alta: "bg-red-500/10 text-red-700",
+  alta: "bg-red/50/10 text-red",
   media: "bg-amber-500/10 text-amber-700",
-  baja: "bg-green-500/10 text-green-700",
+  baja: "bg-green/50/10 text-green",
 }
 
 export function NoticiasBase({ 
@@ -91,11 +91,11 @@ export function NoticiasBase({
                 href={`/despega/a4/noticia/${noticia.id}`}
                 className="group"
               >
-                <div className="p-4 rounded-lg border border-border/50 hover:border-border bg-background/30 group-hover:bg-background/60 transition-colors cursor-pointer">
+                <div className="p-4 rounded-[28px] border border-border/50 hover:border-border bg-background/30 group-hover:bg-background/60 transition-colors cursor-pointer">
                   {/* Header */}
                   <div className="flex items-start justify-between gap-4 mb-3">
                     <div className="flex-1">
-                      <h3 className="font-semibold text-base mb-2 group-hover:text-primary transition-colors">
+                      <h3 className="font-semibold text-base mb-2 group-hover:text-purple transition-colors">
                         {noticia.title}
                       </h3>
                       <div className="flex items-center gap-2 flex-wrap">
@@ -125,7 +125,7 @@ export function NoticiasBase({
 
                   {/* Relevance & Actions */}
                   <div className="flex items-center justify-between">
-                    <p className="text-xs font-medium text-primary/70">
+                    <p className="text-xs font-medium text-purple/70">
                       📌 {noticia.relevance}
                     </p>
                     <div className="flex items-center gap-2">
@@ -134,18 +134,18 @@ export function NoticiasBase({
                           e.preventDefault()
                           e.stopPropagation()
                         }}
-                        className="p-1.5 hover:bg-primary/10 rounded transition-colors"
+                        className="p-1.5 hover:bg-purple/10 rounded transition-colors"
                       >
-                        <BookmarkPlus className="w-4 h-4 text-muted-foreground hover:text-primary" />
+                        <BookmarkPlus className="w-4 h-4 text-muted-foreground hover:text-purple" />
                       </button>
                       <button 
                         onClick={(e) => {
                           e.preventDefault()
                           e.stopPropagation()
                         }}
-                        className="p-1.5 hover:bg-primary/10 rounded transition-colors"
+                        className="p-1.5 hover:bg-purple/10 rounded transition-colors"
                       >
-                        <Share2 className="w-4 h-4 text-muted-foreground hover:text-primary" />
+                        <Share2 className="w-4 h-4 text-muted-foreground hover:text-purple" />
                       </button>
                     </div>
                   </div>

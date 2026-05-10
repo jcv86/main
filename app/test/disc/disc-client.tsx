@@ -241,10 +241,10 @@ export default function DISCTestClient() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading Despega Cerebral assessment...</p>
+          <p className="text-muted-foreground">Loading Despega Cerebral assessment...</p>
         </div>
       </div>
     )
@@ -252,9 +252,9 @@ export default function DISCTestClient() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600">Redirecting...</p>
+          <p className="text-muted-foreground">Redirecting...</p>
         </div>
       </div>
     )
@@ -269,11 +269,11 @@ export default function DISCTestClient() {
 
   if (isCompleted) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center p-4">
         <Card className="w-full max-w-2xl">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-              <CheckCircle className="h-8 w-8 text-green-600" />
+            <div className="mx-auto mb-4 w-16 h-16 bg-green/10 rounded-full flex items-center justify-center">
+              <CheckCircle className="h-8 w-8 text-green" />
             </div>
             <CardTitle className="text-2xl">¡Test Despega Cerebral Completado!</CardTitle>
             <CardDescription>Has respondido todas las preguntas. Ahora procesaremos tus resultados.</CardDescription>
@@ -289,7 +289,7 @@ export default function DISCTestClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <Button variant="outline" onClick={() => router.push("/test")}>
@@ -298,14 +298,14 @@ export default function DISCTestClient() {
           </Button>
           <div className="flex items-center space-x-2">
             {touchSupport && (
-              <Badge variant="outline" className="text-blue-600 border-blue-300">
+              <Badge variant="outline" className="text-blue border-blue/30">
                 <Hand className="h-4 w-4 mr-1" />
                 Gesture Enabled
               </Badge>
             )}
             <div className="flex items-center space-x-2">
-              <Clock className="h-4 w-4 text-gray-500" />
-              <span className="text-sm text-gray-600">{Math.round((Date.now() - startTime) / 60000)} min</span>
+              <Clock className="h-4 w-4 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">{Math.round((Date.now() - startTime) / 60000)} min</span>
             </div>
           </div>
         </div>
@@ -325,12 +325,12 @@ export default function DISCTestClient() {
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-2xl font-bold">Despega Cerebral</h2>
-            <span className="text-sm font-medium text-gray-600">
+            <span className="text-sm font-medium text-muted-foreground">
               {currentQuestion + 1} of {discQuestions.length}
             </span>
           </div>
           <Progress value={progress} className="h-2" />
-          <p className="text-xs text-gray-500 mt-1">{Math.round((Date.now() - startTime) / 60000)} minutes elapsed</p>
+          <p className="text-xs text-muted-foreground mt-1">{Math.round((Date.now() - startTime) / 60000)} minutes elapsed</p>
         </div>
 
         <Card className="transition-all duration-300" style={{ transform: `scale(${Math.min(zoomLevel, 1.1)})` }}>
@@ -353,7 +353,7 @@ export default function DISCTestClient() {
                   {(question as any).options.map((option: string, index: number) => (
                     <div
                       key={index}
-                      className="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50 border border-gray-200 cursor-pointer transition-colors"
+                      className="flex items-center space-x-2 p-3 rounded-lg hover:bg-muted/5 border border-muted/20 cursor-pointer transition-colors"
                       onClick={() => handleAnswer(option)}
                     >
                       <RadioGroupItem value={option} id={`option-${index}`} />
@@ -374,8 +374,8 @@ export default function DISCTestClient() {
                   onChange={(e) => handleAnswer(e.target.value)}
                   className="min-h-[120px]"
                 />
-                <div className="flex items-center text-xs text-gray-500">
-                  <Brain className="h-3 w-3 mr-1 text-blue-600" />
+                <div className="flex items-center text-xs text-muted-foreground">
+                  <Brain className="h-3 w-3 mr-1 text-blue" />
                   This response will be analyzed for personalized insights
                 </div>
               </div>
@@ -405,7 +405,7 @@ export default function DISCTestClient() {
         </Card>
 
         {gestureLog.length > 0 && (
-          <Card className="mt-6 border-purple-200 bg-purple-50">
+          <Card className="mt-6 border-purple/20 bg-purple/5">
             <CardHeader className="pb-3">
               <CardTitle className="text-base flex items-center gap-2">
                 <Hand className="h-4 w-4" />
@@ -415,7 +415,7 @@ export default function DISCTestClient() {
             <CardContent>
               <div className="space-y-1 max-h-24 overflow-y-auto">
                 {gestureLog.map((log, index) => (
-                  <div key={index} className="text-xs text-purple-700 bg-white p-2 rounded border">
+                  <div key={index} className="text-xs text-purple bg-white p-2 rounded border">
                     {log}
                   </div>
                 ))}
@@ -427,10 +427,10 @@ export default function DISCTestClient() {
         <Card className="mt-6">
           <CardContent className="pt-6">
             <div className="flex items-start space-x-3">
-              <Brain className="h-5 w-5 text-blue-600 mt-0.5" />
+              <Brain className="h-5 w-5 text-blue mt-0.5" />
               <div>
                 <h3 className="font-semibold text-sm">About the Despega Cerebral Assessment</h3>
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   The Despega Cerebral assessment evaluates four behavioral dimensions: Dominance (D), Influence (I),
                   Steadiness (S), and Compliance (C). Your responses will help identify your natural behavioral style
                   and communication preferences in professional settings.

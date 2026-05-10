@@ -1,13 +1,13 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { useContextValidation } from "@/lib/hooks/use-context-validation"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { AlertTriangle, Pause, RefreshCw, ChevronRight } from "lucide-react"
-import { useChat } from "ai/react"
 
 interface A3ChatCoachProps {
   scenarioId: string
@@ -17,29 +17,18 @@ interface A3ChatCoachProps {
 type SimulationStage = "initial" | "exploring" | "pause" | "micro_experiment" | "closing"
 
 export function A3ChatCoach({ scenarioId, onComplete }: A3ChatCoachProps) {
+  const { validateContextRelevance, validationError, clearError } = useContextValidation()
   const [simulationStage, setSimulationStage] = useState<SimulationStage>("initial")
   const [responseHistory, setResponseHistory] = useState<string[]>([])
   const [isPaused, setIsPaused] = useState(false)
   const [pauseExplanation, setPauseExplanation] = useState<string | null>(null)
   const [microExperimentActive, setMicroExperimentActive] = useState(false)
   const [microExperimentPrompt, setMicroExperimentPrompt] = useState<string | null>(null)
+  const [messages, setMessages] = useState<Array<{ role: string; content: string }>>([])
+  const [userInput, setUserInput] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
-
-  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages } = useChat({
-    api: "/api/despega/a3-coach",
-    onFinish: (message) => {
-      // Update simulation stage based on message metadata
-      if (message.content.includes("pausa explicativa")) {
-        setSimulationStage("pause")
-        setIsPaused(true)
-      } else if (message.content.includes("micro-experimento")) {
-        setSimulationStage("micro_experiment")
-        setMicroExperimentActive(true)
-      } else if (message.content.includes("resumen") || message.content.includes("cierre")) {
-        setSimulationStage("closing")
-      }
-    },
-  })
 
   useEffect(() => {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -47,36 +36,113 @@ export function A3ChatCoach({ scenarioId, onComplete }: A3ChatCoachProps) {
 
   const handleScenarioStart = () => {
     setSimulationStage("exploring")
-    setMessages([
-      {
-        id: "1",
-        role: "assistant",
-        content: `Hola, bienvenido a esta simulación. Vamos a explorar un escenario juntos sin presión. Tu rol es experimentar y observar cómo respondes en distintas situaciones.
+    const initialMessage = {
+      role: "assistant",
+      content: `Hola, bienvenido a esta simulación. Vamos a explorar un escenario juntos sin presión. Tu rol es experimentar y observar cómo respondes en distintas situaciones.
 
-¿Estás listo para comenzar? Cuéntame qué es lo primero que haría en esta situación.`,
-      },
-    ])
+¿Estás listo para comenzar? Cuéntame qué es lo primero que haría en esta situación.`
+    }
+    setMessages([initialMessage])
   }
 
   const handleUserResponse = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!input.trim()) return
+    if (!userInput.trim()) return
 
-    setResponseHistory([...responseHistory, input])
+    try {
+      setIsLoading(true)
+      clearError()
 
-    handleSubmit(e, {
-      headers: {
-        "Content-Type": "application/json",
-        // Pass context to API
-        "X-Simulation-Stage": simulationStage,
-        "X-Scenario-Id": scenarioId,
-      },
-      data: {
-        context: { scenarioId, stage: simulationStage },
-        simulationStage,
-        previousResponses: responseHistory,
-      },
-    })
+      // Validate that response is contextually relevant to the simulation scenario
+      const scenarioContext = `Simulación: ${scenarioId}. Stage: ${simulationStage}. El usuario debe proporcionar respuestas relevantes al escenario de simulación.`
+      const validation = await validateContextRelevance(
+        scenarioContext,
+        userInput,
+        'a3-chat-coach'
+      )
+
+      if (!validation.isRelevant) {
+        setError(validation.reason || 'Tu respuesta no está relacionada con la simulación. Por favor, responde sobre el escenario propuesto.')
+        setIsLoading(false)
+        return
+      }
+
+      const newResponses = [...responseHistory, userInput]
+      setResponseHistory(newResponses)
+
+      // Add user message to chat
+      setMessages(prev => [...prev, { role: "user", content: userInput }])
+      setUserInput("")
+
+      // Call OpenAI directly
+      const response = await fetch("/api/a3-coach", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: [
+            ...messages,
+            { role: "user", content: userInput }
+          ],
+          context: { scenarioId, stage: simulationStage },
+          simulationStage,
+          previousResponses: newResponses
+        })
+      })
+
+      if (!response.ok) throw new Error("API error")
+
+      // Parse streaming response
+      const reader = response.body?.getReader()
+      const decoder = new TextDecoder()
+      let fullResponse = ""
+
+      if (reader) {
+        while (true) {
+          const { done, value } = await reader.read()
+          if (done) break
+
+          const chunk = decoder.decode(value)
+          const lines = chunk.split("\n")
+
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              try {
+                const data = JSON.parse(line.slice(6))
+                if (data.choices?.[0]?.delta?.content) {
+                  fullResponse += data.choices[0].delta.content
+                  setMessages(prev => {
+                    const updated = [...prev]
+                    if (updated[updated.length - 1]?.role === "assistant") {
+                      updated[updated.length - 1].content = fullResponse
+                    } else {
+                      updated.push({ role: "assistant", content: fullResponse })
+                    }
+                    return updated
+                  })
+                }
+              } catch (e) {
+                // Skip invalid JSON
+              }
+            }
+          }
+        }
+      }
+
+      // Update simulation stage based on response
+      if (fullResponse.includes("pausa explicativa")) {
+        setSimulationStage("pause")
+        setIsPaused(true)
+      } else if (fullResponse.includes("micro-experimento")) {
+        setSimulationStage("micro_experiment")
+        setMicroExperimentActive(true)
+      } else if (fullResponse.includes("resumen") || fullResponse.includes("cierre")) {
+        setSimulationStage("closing")
+      }
+    } catch (error) {
+      console.error("[v0] Chat coach error:", error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleRetryWithVariation = async () => {
@@ -90,7 +156,6 @@ export function A3ChatCoach({ scenarioId, onComplete }: A3ChatCoachProps) {
     setMessages([
       ...newMessages,
       {
-        id: `micro-${Date.now()}`,
         role: "assistant",
         content: `Excelente. Ahora vamos a probar una variación pequeña. 
 
@@ -107,7 +172,6 @@ export function A3ChatCoach({ scenarioId, onComplete }: A3ChatCoachProps) {
     setMessages([
       ...messages,
       {
-        id: `close-${Date.now()}`,
         role: "assistant",
         content: `Excelente trabajo. Veamos qué aprendimos:
 
@@ -167,23 +231,23 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
             <h3 className="font-semibold">Cómo funciona:</h3>
             <ul className="space-y-2 text-sm">
               <li className="flex gap-2">
-                <span className="text-primary">✓</span>
+                <span className="text-purple"></span>
                 <span>Propongo un escenario realista</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-primary">✓</span>
+                <span className="text-purple"></span>
                 <span>Explores diferentes respuestas</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-primary">✓</span>
+                <span className="text-purple"></span>
                 <span>Pausamos para explicar patrones interesantes</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-primary">✓</span>
+                <span className="text-purple"></span>
                 <span>Probamos variaciones (micro-experimentos)</span>
               </li>
               <li className="flex gap-2">
-                <span className="text-primary">✓</span>
+                <span className="text-purple"></span>
                 <span>Resumimos lo aprendido sin evaluación</span>
               </li>
             </ul>
@@ -230,15 +294,15 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
       <CardContent className="space-y-6">
         {/* Messages */}
         <div className="space-y-4 max-h-96 overflow-y-auto">
-          {messages.map((message) => (
+          {messages.map((message, idx) => (
             <div
-              key={message.id}
+              key={idx}
               className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
                 className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
                   message.role === "user"
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-purple text-purple-foreground"
                     : "bg-muted text-foreground"
                 }`}
               >
@@ -251,9 +315,16 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
 
         {/* User Input */}
         <form onSubmit={handleUserResponse} className="space-y-3">
+          {error && (
+            <Alert variant="destructive" className="border-red/30 bg-red/5 dark:bg-red/20">
+              <AlertTriangle className="h-4 w-4 text-red" />
+              <AlertDescription className="text-red dark:text-red/20 ml-2">{error}</AlertDescription>
+            </Alert>
+          )}
+
           <Input
-            value={input}
-            onChange={handleInputChange}
+            value={userInput}
+            onChange={(e) => setUserInput(e.target.value)}
             placeholder="Escribe tu respuesta..."
             disabled={isLoading}
             className="w-full"
@@ -262,7 +333,7 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
           <div className="flex gap-2">
             <Button
               type="submit"
-              disabled={isLoading || !input.trim()}
+              disabled={isLoading || !userInput.trim()}
               className="flex-1"
             >
               {isLoading ? "Pensando..." : "Enviar"}
@@ -293,9 +364,9 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
         </form>
 
         {isPaused && (
-          <Alert className="bg-blue-50 border-blue-200">
-            <AlertTriangle className="h-4 w-4 text-blue-600" />
-            <AlertDescription className="text-blue-900">
+          <Alert className="bg-blue/5 border-blue/20">
+            <AlertTriangle className="h-4 w-4 text-blue" />
+            <AlertDescription className="text-blue">
               Estamos en pausa para observar el patrón. Cuando estés listo, continúa escribiendo tu respuesta.
             </AlertDescription>
           </Alert>

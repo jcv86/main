@@ -24,6 +24,15 @@ export default function Conozcamonos2Page() {
   const totalQuestions = CONOZCAMONOS_2_QUESTIONS.length
   const completedCount = Object.keys(responses).length
   const progress = (completedCount / totalQuestions) * 100
+  
+  // Debug: Check which questions in current step are missing
+  const missingQuestions = stepQuestions.filter(q => !responses[q.id])
+  const allStepAnswered = stepQuestions.every(q => responses[q.id])
+  
+  // Log for debugging
+  if (missingQuestions.length > 0 && currentStep === 'paso1') {
+    console.log('[v0] Missing answers in paso1:', missingQuestions.map(q => q.id))
+  }
 
   const handleAnswer = (questionId: number, value: string | string[]) => {
     setResponses(prev => ({
@@ -34,31 +43,55 @@ export default function Conozcamonos2Page() {
   }
 
   const validateTextResponse = async (questionId: number, question: string, response: string) => {
-    if (!response.trim()) return
+    const trimmed = response.trim()
+    console.log('[v0] Validation triggered:', { questionId, response: trimmed.substring(0, 50), length: trimmed.length })
+    
+    // Client-side validation first
+    if (!trimmed) {
+      console.log('[v0] Empty response')
+      setError('Por favor, responde esta pregunta')
+      return
+    }
 
+    // Check minimum length (at least 10 characters, 2+ words)
+    const wordCount = trimmed.split(/\s+/).length
+    const charCount = trimmed.length
+    console.log('[v0] Length check:', { charCount, wordCount })
+    
+    if (charCount < 10 || wordCount < 2) {
+      console.log('[v0] Too short')
+      setError(`Muy corto. ${charCount} caracteres (mín. 10), ${wordCount} palabras (mín. 2)`)
+      return
+    }
+
+    // ALWAYS call server for IA validation - no early exit
     setValidatingIds(prev => new Set(prev).add(questionId))
     
     try {
+      console.log('[v0] Calling validation API for question:', questionId)
       const validationResponse = await fetch('/api/conozcamonos/validate-response', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           questionId,
           question,
-          response,
+          response: trimmed,
           questionType: 'text'
         })
       })
 
       const validation = await validationResponse.json()
+      console.log('[v0] Validation response:', validation)
       
       if (!validation.valid) {
-        setError(validation.suggestions || 'Respuesta muy corta. Desarrolla más.')
+        setError('❌ ' + (validation.suggestions || 'Respuesta rechazada. Por favor, intenta nuevamente.'))
       } else {
         setError('')
+        console.log('[v0] Validation passed!')
       }
     } catch (err) {
       console.error('[v0] Validation error:', err)
+      setError('Error validando respuesta')
     } finally {
       setValidatingIds(prev => {
         const updated = new Set(prev)
@@ -68,16 +101,21 @@ export default function Conozcamonos2Page() {
     }
   }
 
-  const allStepAnswered = stepQuestions.every(q => responses[q.id])
-
   const handleNext = () => {
     if (!allStepAnswered) {
       setError('Por favor responde todas las preguntas de este paso')
       return
     }
 
+    // Prevent next if there's an active error
+    if (error) {
+      setError(' Corrige los errores de validación antes de continuar')
+      return
+    }
+
     if (currentStep === 'paso1') {
       setCurrentStep('paso2')
+      setError('') // Clear error when moving to next step
     } else {
       submitResponses()
     }
@@ -95,6 +133,20 @@ export default function Conozcamonos2Page() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user?.id) {
         router.push('/auth/signin')
+        return
+      }
+
+      // VALIDATE: A1 must be completed before C2
+      const { data: a1Data, error: a1Error } = await supabase
+        .from('a1_cerebral_assessment')
+        .select('disc_profile')
+        .eq('user_id', user.id)
+        .limit(1)
+        .single()
+
+      if (!a1Data?.disc_profile) {
+        setError('Debes completar A1: Despega Cerebral antes de continuar.')
+        setLoading(false)
         return
       }
 
@@ -129,8 +181,8 @@ export default function Conozcamonos2Page() {
 
       console.log('[v0] [CANONICAL] User profile updated with C2 and A2 route flags')
 
-      // Redirect to A2 dashboard
-      router.push('/despega/a2/dashboard')
+      // Redirect to A2 routes page to generate 90-day personalized route
+      router.push('/despega/a2-routes')
     } catch (err) {
       console.error('[v0] Error saving Conozcamonos 2:', err)
       setError('Error al guardar tus respuestas. Intenta de nuevo.')
@@ -140,40 +192,52 @@ export default function Conozcamonos2Page() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-cyan-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 p-4 py-8">
+    <div className="min-h-screen bg-background/90/80 p-4 py-8">
       <div className="max-w-3xl mx-auto">
         {/* Header with brandbook styling */}
         <div className="text-center mb-8">
-          <div className="inline-block px-4 py-2 bg-gradient-to-r from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30 rounded-full mb-4">
-            <p className="text-sm font-semibold text-blue-700 dark:text-blue-300">Conozcámonos 2: Tu Ruta</p>
+          <div className="inline-block px-4 py-2 bg-background">
+            <p className="text-sm font-semibold" style={{ color: 'rgb(90, 90, 150)' }}>Conozcámonos 2: Tu Ruta</p>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-cyan-400 dark:to-teal-400 mb-2">
+          <h1 className="text-5xl md:text-6xl text-white mb-4" style={{ fontWeight: 200 }}>
             Diseña Tu Ruta de 90 Días
           </h1>
-          <p className="text-slate-700 dark:text-slate-300 mb-4">
+          <p className="mb-6" style={{ fontSize: '24px', color: 'rgba(255, 255, 255, 0.6)' }}>
             {currentStep === 'paso1'
-              ? 'Paso 1: Define tu objetivo específico y estrategia'
-              : 'Paso 2: Personaliza tu plan de acción'}
+              ? 'Paso 1: Define tu objetivo y contexto profesional'
+              : 'Paso 2: Personaliza los detalles de tu desarrollo'}
           </p>
-          <Progress value={progress} className="h-2 bg-slate-200 dark:bg-slate-700" />
-          <p className="text-sm text-slate-600 dark:text-slate-400 mt-3 font-medium">
-            Progreso: {completedCount} de {totalQuestions} preguntas
+          <Progress value={progress} className="h-3" indicatorColor="rgb(90, 90, 150)" />
+          <p className="mt-3" style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.6)', fontWeight: 300 }}>
+            Progreso: {completedCount} de {totalQuestions} preguntas completadas
           </p>
         </div>
 
         {/* Questions */}
         <div className="space-y-6 mb-8">
-          {stepQuestions.map((question) => (
-            <Card key={question.id} className="p-6">
-              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4">
+          {stepQuestions.map((question) => {
+            const isAnswered = !!responses[question.id]
+            return (
+            <Card 
+              key={question.id} 
+              className={`p-6 transition-all ${
+                isAnswered 
+                  ? 'border-blue/30' 
+                  : 'border-muted/20 dark:border-card'
+              }`}
+            >
+              <div className="flex items-start gap-3 mb-4">
+              <h3 className="text-lg text-white flex-1" style={{ fontWeight: 500 }}>
                 {question.question}
               </h3>
+              {isAnswered && <span className="text-blue text-xl font-bold"></span>}
+              </div>
 
               {question.type === 'select' && (
                 <select
                   value={responses[question.id] as string || ''}
                   onChange={(e) => handleAnswer(question.id, e.target.value)}
-                  className="w-full p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+                  className="w-full p-3 border border-muted/30 dark:border-muted/60 rounded-[28px] bg-white dark:bg-card text-muted/90 dark:text-white"
                 >
                   <option value="">-- Selecciona una opción --</option>
                   {question.options?.map((opt) => (
@@ -184,26 +248,53 @@ export default function Conozcamonos2Page() {
                 </select>
               )}
 
-              {question.type === 'text' && (
+                  {question.type === 'text' && (
                 <div className="space-y-3">
                   <div className="flex gap-2">
                     <textarea
                       value={responses[question.id] as string || ''}
                       onChange={(e) => handleAnswer(question.id, e.target.value)}
+                      onBlur={(e) => validateTextResponse(question.id, question.question, e.target.value)}
                       placeholder={question.placeholder}
                       maxLength={question.maxLength}
-                      className="flex-1 p-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-purple-600"
+                      className={`flex-1 p-3 border bg-white dark:bg-card text-muted/90 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-blue disabled:opacity-50 transition-colors ${
+                        error && !validatingIds.has(question.id) 
+                          ? 'border-red/50 dark:border-red/50 bg-red/5 dark:bg-red/20' 
+                          : 'border-muted/30 dark:border-muted/60'
+                      }`}
+                      style={{ borderRadius: '2px' }}
                       rows={3}
+                      disabled={validatingIds.has(question.id)}
                     />
                   </div>
+                  
+                  {/* Validation status */}
+                  {validatingIds.has(question.id) && (
+                    <p className="text-sm text-white font-semibold flex items-center gap-2">
+                      <span className="animate-spin text-lg">⏳</span> Validando tu respuesta...
+                    </p>
+                  )}
+                  
+                  {error && !validatingIds.has(question.id) && (
+                    <div className="text-sm text-white bg-red/40 p-4 rounded-lg border-2 border-red/60 font-semibold">
+                      {error}
+                    </div>
+                  )}
+                  
+                  {/* Character count */}
+                  <div className="text-xs text-muted-foreground dark:text-muted-foreground">
+                    {(responses[question.id] as string || '').length} / {question.maxLength} caracteres
+                  </div>
+                  
                   <div className="flex gap-2 items-center">
                     <VoiceInput
                       onTranscript={(text) => {
                         handleAnswer(question.id, (responses[question.id] as string || '') + (responses[question.id] ? ' ' : '') + text)
                       }}
                       isDisabled={loading || validatingIds.has(question.id)}
+                      pillarColor="rgba(90, 90, 150, 0.6)"
                     />
-                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                    <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                       O habla para dictar tu respuesta
                     </span>
                   </div>
@@ -213,6 +304,7 @@ export default function Conozcamonos2Page() {
                     onUseSuggestion={(suggestion) => {
                       handleAnswer(question.id, suggestion)
                     }}
+                    pillarColor="rgba(90, 90, 150, 0.6)"
                   />
                 </div>
               )}
@@ -231,42 +323,73 @@ export default function Conozcamonos2Page() {
                           handleAnswer(question.id, updated)
                         }}
                       />
-                      <span className="text-slate-700 dark:text-slate-300">{opt}</span>
+                      <span className="text-muted-foreground dark:text-white/85">{opt}</span>
                     </label>
                   ))}
                 </div>
               )}
             </Card>
-          ))}
+            )
+          })}
         </div>
 
         {error && (
-          <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg p-4 mb-6">
-            <p className="text-red-700 dark:text-red-200">{error}</p>
+          <div className="bg-red/30 border-2 border-red/60 rounded-lg p-8 mb-6 shadow-lg">
+            <div className="flex items-start gap-4">
+              <span className="text-4xl flex-shrink-0"></span>
+              <div className="flex-1">
+                <h3 className="font-bold text-white text-xl mb-2">Validación Requerida</h3>
+                <p className="text-white font-semibold text-lg mb-3">{error}</p>
+                <p className="text-white/90 font-semibold">Corrige este campo antes de continuar</p>
+              </div>
+            </div>
           </div>
         )}
 
         {/* Navigation */}
-        <div className="flex gap-4 justify-between">
-          <Button
-            onClick={handleBack}
-            variant="outline"
-            disabled={currentStep === 'paso1' || loading}
-          >
-            Atrás
-          </Button>
+        <div className="flex gap-4 justify-between items-center mt-8 pt-6 border-t border-muted/20 dark:border-card">
+          {!allStepAnswered && (
+            <div className="flex-1 text-sm text-muted-foreground dark:text-muted-foreground">
+              <p>Responde todas las preguntas para continuar</p>
+            </div>
+          )}
+          
+          {allStepAnswered && (
+            <div className="flex-1" />
+          )}
 
-          <Button
-            onClick={handleNext}
-            disabled={!allStepAnswered || loading}
-            className="bg-purple-600 hover:bg-purple-700"
-          >
-            {loading
-              ? 'Procesando...'
-              : currentStep === 'paso1'
-              ? 'Siguiente'
-              : 'Generar Mi Ruta'}
-          </Button>
+          <div className="flex gap-3">
+            <Button
+              onClick={handleBack}
+              disabled={currentStep === 'paso1' || loading}
+              className="bg-muted/70 hover:bg-muted/60 text-white font-semibold px-6 py-3 transition-colors"
+            >
+              ← Atrás
+            </Button>
+
+            <Button
+              onClick={handleNext}
+              disabled={!allStepAnswered || loading || !!error}
+              className="text-white font-semibold px-8 py-3 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              style={{
+                backgroundColor: 'rgba(90, 90, 150, 0.6)',
+                borderRadius: '20px'
+              }}
+              title={
+                error 
+                  ? 'Error de validación: ' + error
+                  : !allStepAnswered 
+                  ? 'Por favor responde todas las preguntas'
+                  : ''
+              }
+            >
+              {loading
+                ? 'Procesando...'
+                : currentStep === 'paso1'
+                ? 'Siguiente →'
+                : 'Generar Mi Ruta →'}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

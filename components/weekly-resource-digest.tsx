@@ -71,7 +71,7 @@ export function WeeklyResourceDigest() {
   )
 
   return (
-    <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-slate-900 dark:to-slate-800 border-blue-200 dark:border-slate-700">
+    <Card className="bg-background">
       <CardHeader>
         <CardTitle>Tu Resumen de Recursos de la Semana</CardTitle>
         <CardDescription>7 recursos públicos chilenos seleccionados para ti</CardDescription>
@@ -79,9 +79,9 @@ export function WeeklyResourceDigest() {
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {Object.entries(categoryCounts).map(([category, count]) => (
-            <div key={category} className="text-center p-3 bg-white dark:bg-slate-800 rounded-lg">
-              <div className="text-2xl font-bold text-blue-600">{count}</div>
-              <div className="text-xs text-gray-600 dark:text-gray-400">{category}</div>
+            <div key={category} className="text-center p-3 bg-transparent rounded-lg">
+              <div className="text-2xl font-bold text-blue">{count}</div>
+              <div className="text-xs text-muted-foreground dark:text-muted-foreground">{category}</div>
             </div>
           ))}
         </div>
@@ -90,11 +90,11 @@ export function WeeklyResourceDigest() {
           {resources.slice(0, 5).map((resource) => (
             <div
               key={resource.id}
-              className="flex items-center justify-between p-3 bg-white dark:bg-slate-800 rounded-lg"
+              className="flex items-center justify-between p-3 bg-transparent rounded-lg"
             >
               <div className="flex-1">
                 <p className="font-medium text-sm">{resource.name}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">{resource.category}</p>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground">{resource.category}</p>
               </div>
               <Button variant="ghost" size="sm" onClick={() => window.open(resource.url, "_blank")} className="ml-2">
                 <ExternalLink className="w-4 h-4" />

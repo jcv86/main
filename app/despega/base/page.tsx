@@ -16,36 +16,36 @@ const CATEGORIAS_BASE = [
     name: "Noticias del Día",
     description: "Mantente informado de lo relevante",
     icon: Newspaper,
-    color: "bg-red-500",
-    lightColor: "bg-red-100",
-    textColor: "text-red-800",
+    color: "bg-red/50",
+    lightColor: "bg-red/10",
+    textColor: "text-red",
   },
   {
     id: "cultura",
     name: "Cultura General",
     description: "Conocimiento que marca la diferencia",
     icon: Globe,
-    color: "bg-blue-500",
-    lightColor: "bg-blue-100",
-    textColor: "text-blue-800",
+    color: "bg-blue/50",
+    lightColor: "bg-blue/10",
+    textColor: "text-blue",
   },
   {
     id: "lecturas",
     name: "Lecturas Recomendadas",
     description: "Libros y artículos clave",
     icon: BookOpen,
-    color: "bg-green-500",
-    lightColor: "bg-green-100",
-    textColor: "text-green-800",
+    color: "bg-green/50",
+    lightColor: "bg-green/10",
+    textColor: "text-green",
   },
   {
     id: "tendencias",
     name: "Tendencias",
     description: "Lo que viene en tu industria",
     icon: TrendingUp,
-    color: "bg-purple-500",
-    lightColor: "bg-purple-100",
-    textColor: "text-purple-800",
+    color: "bg-purple/50",
+    lightColor: "bg-purple/10",
+    textColor: "text-purple",
   },
 ]
 
@@ -109,29 +109,29 @@ export default function BasePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
         
         {/* JOURNEY PROGRESS - BIG VISUAL */}
-        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-800 dark:to-purple-800 rounded-xl p-8 text-white shadow-xl">
+        <div className="bg-background">
           <h1 className="text-3xl font-bold mb-2">Tu Viaje DespegarTuCarrera</h1>
-          <p className="text-indigo-100 mb-6">90 días de transformación profesional. Aquí está dónde estás:</p>
+          <p className="text-white mb-6">90 días de transformación profesional. Aquí está dónde estás:</p>
           
           {/* Journey Map */}
           <div className="space-y-4">
             <div className="flex items-center gap-4">
               {/* A1 */}
               <Link href="/despega/a1-cerebral" className="flex-1">
-                <div className="bg-white/20 backdrop-blur hover:bg-white/30 transition-all p-4 rounded-lg cursor-pointer border border-white/30 text-center">
-                  <div className="text-2xl mb-2">🧠</div>
+                <div className="bg-white/20 backdrop-blur hover:bg-white/30 transition-all p-4 rounded-[28px] cursor-pointer border border-white/30 text-center">
+                  <div className="text-2xl mb-2"></div>
                   <h3 className="font-bold text-sm">A1: Autoconocimiento</h3>
-                  <p className="text-xs text-indigo-100 mt-1">Descubre tu perfil DISC</p>
+                  <p className="text-xs text-white mt-1">Descubre tu perfil DISC</p>
                   <Badge className="mt-2 bg-white text-indigo-700 text-xs">Completado</Badge>
                 </div>
               </Link>
@@ -141,11 +141,11 @@ export default function BasePage() {
               
               {/* A2 */}
               <Link href="/despega/a2/dashboard" className="flex-1">
-                <div className="bg-white/20 backdrop-blur hover:bg-white/30 transition-all p-4 rounded-lg cursor-pointer border-2 border-white/70 text-center ring-2 ring-white/50">
+                <div className="bg-white/20 backdrop-blur hover:bg-white/30 transition-all p-4 rounded-[28px] cursor-pointer border-2 border-white/70 text-center ring-2 ring-white/50">
                   <div className="text-2xl mb-2">🏗️</div>
                   <h3 className="font-bold text-sm">A2: Exploración</h3>
-                  <p className="text-xs text-indigo-100 mt-1">Construye tu plan de 90 días</p>
-                  <Badge className="mt-2 bg-yellow-400 text-yellow-900 text-xs">En Progreso</Badge>
+                  <p className="text-xs text-white mt-1">Construye tu plan de 90 días</p>
+                  <Badge className="mt-2 bg-yellow/40 text-yellow text-xs">En Progreso</Badge>
                 </div>
               </Link>
               
@@ -154,8 +154,8 @@ export default function BasePage() {
               
               {/* A3 */}
               <Link href="/despega/a3" className="flex-1">
-                <div className="bg-white/10 backdrop-blur hover:bg-white/20 transition-all p-4 rounded-lg cursor-pointer border border-white/20 text-center opacity-70">
-                  <div className="text-2xl mb-2">🎯</div>
+                <div className="bg-white/10 backdrop-blur hover:bg-white/20 transition-all p-4 rounded-[28px] cursor-pointer border border-white/20 text-center opacity-70">
+                  <div className="text-2xl mb-2"></div>
                   <h3 className="font-bold text-sm">A3: Aterrizaje</h3>
                   <p className="text-xs text-indigo-200 mt-1">Entrena con simulaciones</p>
                   <Badge variant="outline" className="mt-2 text-xs bg-white/10">Próximo</Badge>
@@ -167,7 +167,7 @@ export default function BasePage() {
               
               {/* A4 */}
               <Link href="/despega/a4-base" className="flex-1">
-                <div className="bg-white/10 backdrop-blur hover:bg-white/20 transition-all p-4 rounded-lg cursor-pointer border border-white/20 text-center opacity-70">
+                <div className="bg-white/10 backdrop-blur hover:bg-white/20 transition-all p-4 rounded-[28px] cursor-pointer border border-white/20 text-center opacity-70">
                   <div className="text-2xl mb-2">🌍</div>
                   <h3 className="font-bold text-sm">A4: La Realidad</h3>
                   <p className="text-xs text-indigo-200 mt-1">Contexto estratégico</p>
@@ -184,24 +184,24 @@ export default function BasePage() {
               <span className="text-sm font-bold">50%</span>
             </div>
             <Progress value={50} className="h-2 bg-white/30" />
-            <p className="text-xs text-indigo-100 mt-2">Completaste A1. Actualmente en A2. Te faltan A3 y A4.</p>
+            <p className="text-xs text-white mt-2">Completaste A1. Actualmente en A2. Te faltan A3 y A4.</p>
           </div>
         </div>
 
         {/* NEXT STEPS - PROMINENT */}
-        <Card className="border-2 border-green-500 bg-green-50 dark:bg-green-950/30 shadow-lg">
+        <Card className="border-2 border-green bg-green/5 dark:bg-green/30 shadow-lg">
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
-              <span className="text-2xl">🎯</span> Tu Próximo Paso
+              <span className="text-2xl"></span> Tu Próximo Paso
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-slate-700 dark:text-slate-300 mb-4">
+            <p className="text-sm text-muted-foreground dark:text-white/85 mb-4">
               Estás en <strong>Sprint 1: Fundamentos</strong> (días 1-30). Continúa con tus acciones diarias y aprenderás los pilares básicos de tu transformación.
             </p>
             <div className="flex gap-3">
               <Link href="/despega/a2/dashboard" className="flex-1">
-                <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold" size="lg">
+                <Button className="w-full bg-green/80 hover:bg-green/70 text-white font-semibold" size="lg">
                   Continuar en A2 Sprint 1
                 </Button>
               </Link>
@@ -218,26 +218,26 @@ export default function BasePage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
-              <div className="text-3xl font-bold text-indigo-600">1/4</div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">Fases Completadas</p>
+              <div className="text-3xl font-bold text-blue">1/4</div>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-2">Fases Completadas</p>
             </CardContent>
           </Card>
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
-              <div className="text-3xl font-bold text-yellow-600">5/30</div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">Días Sprint 1</p>
+              <div className="text-3xl font-bold text-yellow">5/30</div>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-2">Días Sprint 1</p>
             </CardContent>
           </Card>
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
-              <div className="text-3xl font-bold text-purple-600">12</div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">Acciones Totales</p>
+              <div className="text-3xl font-bold text-purple">12</div>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-2">Acciones Totales</p>
             </CardContent>
           </Card>
           <Card className="shadow-md">
             <CardContent className="pt-6 text-center">
-              <div className="text-3xl font-bold text-green-600">7/7</div>
-              <p className="text-xs text-slate-600 dark:text-slate-400 mt-2">Racha Días</p>
+              <div className="text-3xl font-bold text-green">7/7</div>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-2">Racha Días</p>
             </CardContent>
           </Card>
         </div>
@@ -245,7 +245,7 @@ export default function BasePage() {
         {/* Section Title */}
         <div className="space-y-2">
           <h2 className="text-2xl font-bold">Centro de Recursos</h2>
-          <p className="text-slate-600 dark:text-slate-400">Acceso rápido a noticias, cultura y recursos para tu transformación</p>
+          <p className="text-muted-foreground dark:text-muted-foreground">Acceso rápido a noticias, cultura y recursos para tu transformación</p>
         </div>
 
         {/* Categorías */}
@@ -278,7 +278,7 @@ export default function BasePage() {
                 return (
                   <div 
                     key={noticia.id}
-                    className={`p-4 border rounded-lg ${leida ? "bg-green-50 border-green-200" : ""}`}
+                    className={`p-4 border rounded-lg ${leida ? "bg-green/5 border-green/20" : ""}`}
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="flex-1">
@@ -292,9 +292,9 @@ export default function BasePage() {
                         <p className="text-sm text-muted-foreground mt-1">{noticia.resumen}</p>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-sm font-medium text-primary">+{noticia.puntos} pts</span>
+                        <span className="text-sm font-medium text-purple">+{noticia.puntos} pts</span>
                         {leida ? (
-                          <Badge className="bg-green-500">Leído</Badge>
+                          <Badge className="bg-green/50">Leído</Badge>
                         ) : (
                           <Button size="sm" onClick={() => handleLeerNoticia(noticia.id)}>
                             Leer

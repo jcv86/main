@@ -258,27 +258,27 @@ export function GestureEnhancedTestInterface({
   return (
     <div
       ref={containerRef}
-      className="min-h-screen bg-gray-50 p-4"
+      className="min-h-screen bg-muted/5 p-4"
       style={{ fontSize: `${textSize}rem`, touchAction: "none" }}
     >
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Header with Gesture Controls */}
-        <Card className="border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50">
+        <Card className="border-purple/20 bg-background">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <Hand className="h-6 w-6 text-purple-600" />
+                <div className="p-2 bg-purple/10 rounded-lg">
+                  <Hand className="h-6 w-6 text-purple" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl text-purple-900">{testTitle}</CardTitle>
-                  <p className="text-purple-700 text-sm">
+                  <CardTitle className="text-xl text-purple">{testTitle}</CardTitle>
+                  <p className="text-purple text-sm">
                     {touchSupport ? "Touch gestures enabled" : "Mouse/keyboard navigation"}
                   </p>
                 </div>
               </div>
               <div className="flex gap-2">
-                <Badge variant="outline" className="text-purple-700 border-purple-300">
+                <Badge variant="outline" className="text-purple border-purple/30">
                   Question {currentQuestionIndex + 1} of {questions.length}
                 </Badge>
               </div>
@@ -315,7 +315,7 @@ export function GestureEnhancedTestInterface({
 
             {/* Gesture Instructions */}
             {touchSupport && (
-              <div className="p-3 bg-white rounded-lg border text-sm">
+              <div className="p-3 bg-white rounded-[28px] border text-sm">
                 <h4 className="font-medium mb-2 flex items-center gap-2">
                   <Touch className="h-4 w-4" />
                   Touch Gestures Available:
@@ -344,9 +344,9 @@ export function GestureEnhancedTestInterface({
         </Card>
 
         {/* Question Card */}
-        <Card className="border-blue-200">
+        <Card className="border-blue/20">
           <CardHeader>
-            <CardTitle className="text-lg text-blue-900">{currentQuestion.text}</CardTitle>
+            <CardTitle className="text-lg text-blue">{currentQuestion.text}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Answer Options */}
@@ -355,17 +355,17 @@ export function GestureEnhancedTestInterface({
                 <button
                   key={option.id}
                   onClick={() => handleAnswerSelection(option.id)}
-                  className={`w-full p-4 text-left rounded-lg border-2 transition-all touch-manipulation ${
+                  className={`w-full p-4 text-left rounded-[28px] border-2 transition-all touch-manipulation ${
                     answers[currentQuestion.id] === option.id
-                      ? "border-blue-500 bg-blue-50 text-blue-900"
-                      : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
+                      ? "border-blue/50 bg-blue/5 text-blue"
+                      : "border-muted/20 bg-white hover:border-muted/30 hover:bg-muted/5"
                   }`}
-                  style={{ minHeight: "60px" }} // Touch-friendly size
+                  style={{ minHeight: "60px" }}
                 >
                   <div className="flex items-center gap-3">
                     <div
                       className={`w-4 h-4 rounded-full border-2 ${
-                        answers[currentQuestion.id] === option.id ? "border-blue-500 bg-blue-500" : "border-gray-300"
+                        answers[currentQuestion.id] === option.id ? "border-blue/50 bg-blue/50" : "border-muted/30"
                       }`}
                     >
                       {answers[currentQuestion.id] === option.id && (
@@ -396,7 +396,7 @@ export function GestureEnhancedTestInterface({
                   onClick={onComplete}
                   disabled={!canProceed}
                   size="lg"
-                  className="bg-green-600 hover:bg-green-700 touch-manipulation"
+                  className="bg-green/80 hover:bg-green/70 touch-manipulation"
                 >
                   Complete Test
                 </Button>
@@ -412,7 +412,7 @@ export function GestureEnhancedTestInterface({
 
         {/* Gesture Activity Log */}
         {touchSupport && gestureLog.length > 0 && (
-          <Card className="border-gray-200">
+          <Card className="border-muted/20">
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 <Hand className="h-4 w-4" />
@@ -420,19 +420,19 @@ export function GestureEnhancedTestInterface({
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-32 overflow-y-auto bg-gray-900 rounded-lg p-3 font-mono text-sm">
+              <div className="h-32 overflow-y-auto bg-muted/90 rounded-[28px] p-3 font-mono text-sm">
                 <div className="space-y-1">
                   {gestureLog.map((log, index) => (
                     <div
                       key={index}
-                      className={`${
+                      className={`${`}
                         log.includes("detected")
-                          ? "text-green-400"
+                          ? "text-green/40"
                           : log.includes("zoom")
-                            ? "text-blue-400"
+                            ? "text-blue/40"
                             : log.includes("swipe")
-                              ? "text-yellow-400"
-                              : "text-gray-300"
+                              ? "text-yellow/40"
+                              : "text-white/85"`}
                       }`}
                     >
                       {log}

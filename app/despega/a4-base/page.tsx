@@ -124,7 +124,7 @@ export default function A4Page() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple" />
       </div>
     )
   }
@@ -134,17 +134,17 @@ export default function A4Page() {
       <div className="container mx-auto px-4 py-8 max-w-5xl space-y-8">
         
         {/* WELCOME HERO - A4 VERSION */}
-        <div className="bg-gradient-to-r from-cyan-600 to-blue-600 dark:from-cyan-800 dark:to-blue-800 rounded-lg p-8 text-white shadow-lg">
+        <div className="bg-blue800 rounded-[28px] p-8 text-white shadow-lg">
           <div className="max-w-3xl">
-            <p className="text-cyan-100 text-sm font-semibold uppercase tracking-wider mb-2">Fase A4: La Realidad y Contexto Estratégico</p>
+            <p className="text-white text-sm font-semibold uppercase tracking-wider mb-2">Fase A4: La Realidad y Contexto Estratégico</p>
             <h1 className="text-4xl font-bold mb-3">Entiende el mundo en el que compites</h1>
-            <p className="text-lg text-cyan-50 mb-4">
+            <p className="text-lg text-cyan/5 mb-4">
               A4 es tu conexión con la realidad: datos económicos, tendencias del mercado, oportunidades ocultas y contexto cultural. 
               No estás transformándote en el vacío. Estás transformándote para un mercado específico, con desafíos específicos, 
               en un momento específico. A4 te da esa inteligencia.
             </p>
             <div className="flex gap-3">
-              <Button className="bg-white text-cyan-700 hover:bg-cyan-50 font-semibold" size="lg">
+              <Button className="bg-white text-cyan hover:bg-blue/5 font-semibold" size="lg">
                 Explorar Radar Estratégico
               </Button>
               <Button variant="outline" className="border-white text-white hover:bg-white/10" size="lg">
@@ -155,38 +155,38 @@ export default function A4Page() {
         </div>
 
         {/* QUICK START GUIDE - A4 VERSION */}
-        <Card className="border-2 border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-950/20">
+        <Card className="border-2 border-blue/30 dark:border-blue/10 bg-blue/5 dark:bg-blue/20">
           <CardHeader>
             <CardTitle className="text-xl">Primeros Pasos</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">1</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-[20px] bg-blue text-white flex items-center justify-center font-bold">1</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Revisa tu Radar Estratégico</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Detecta señales estructurales, tácticas y contextuales en tu industria. El Radar te muestra qué está pasando antes de que sea obvio.</p>
+                  <h4 className="font-semibold text-muted/90 dark:text-muted/5">Revisa tu Radar Estratégico</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Detecta señales estructurales, tácticas y contextuales en tu industria. El Radar te muestra qué está pasando antes de que sea obvio.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">2</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-[20px] bg-blue text-white flex items-center justify-center font-bold">2</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Lee Noticias Personalizadas</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Accede a noticias filtradas por tu perfil. No es ruido. Es context específico para tu transformación.</p>
+                  <h4 className="font-semibold text-muted/90 dark:text-muted/5">Lee Noticias Personalizadas</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Accede a noticias filtradas por tu perfil. No es ruido. Es context específico para tu transformación.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">3</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-[20px] bg-blue text-white flex items-center justify-center font-bold">3</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Estudia Módulos de Contexto</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Entiende la cultura corporativa, dinámicas de industria, y como posicionarte estratégicamente.</p>
+                  <h4 className="font-semibold text-muted/90 dark:text-muted/5">Estudia Módulos de Contexto</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Entiende la cultura corporativa, dinámicas de industria, y como posicionarte estratégicamente.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex-shrink-0 w-8 h-8 rounded-full bg-cyan-600 text-white flex items-center justify-center font-bold">4</div>
+                <div className="flex-shrink-0 w-8 h-8 rounded-[20px] bg-blue text-white flex items-center justify-center font-bold">4</div>
                 <div>
-                  <h4 className="font-semibold text-slate-900 dark:text-slate-50">Guarda Recursos y Crea tu Biblioteca</h4>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Construye tu base de conocimiento. A4 es para referencia continua durante tu transformación.</p>
+                  <h4 className="font-semibold text-muted/90 dark:text-muted/5">Guarda Recursos y Crea tu Biblioteca</h4>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Construye tu base de conocimiento. A4 es para referencia continua durante tu transformación.</p>
                 </div>
               </div>
             </div>
@@ -196,7 +196,7 @@ export default function A4Page() {
         {/* Original Header - Simplified */}
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-sm font-bold text-white">
+            <div className="w-12 h-12 rounded-[28px] bg-background">
               A4
             </div>
             <div>
@@ -211,7 +211,7 @@ export default function A4Page() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <Newspaper className="w-8 h-8 mx-auto text-blue-600 mb-2" />
+                <Newspaper className="w-8 h-8 mx-auto text-blue mb-2" />
                 <div className="text-2xl font-bold">{newsItems.length}</div>
                 <div className="text-sm text-muted-foreground">Noticias activas</div>
               </div>
@@ -220,7 +220,7 @@ export default function A4Page() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <BookOpen className="w-8 h-8 mx-auto text-purple-600 mb-2" />
+                <BookOpen className="w-8 h-8 mx-auto text-purple mb-2" />
                 <div className="text-2xl font-bold">{modules.length}</div>
                 <div className="text-sm text-muted-foreground">Módulos de contexto</div>
               </div>
@@ -229,7 +229,7 @@ export default function A4Page() {
           <Card>
             <CardContent className="pt-6">
               <div className="text-center">
-                <Bookmark className="w-8 h-8 mx-auto text-green-600 mb-2" />
+                <Bookmark className="w-8 h-8 mx-auto text-green mb-2" />
                 <div className="text-2xl font-bold">{savedResources.size}</div>
                 <div className="text-sm text-muted-foreground">Guardados</div>
               </div>
@@ -271,57 +271,57 @@ export default function A4Page() {
         <TabsContent value="dashboard" className="space-y-6">
           {/* Advanced Stats Grid */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
+            <Card className="bg-background">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">Puntos Acumulados</p>
                     <div className="text-3xl font-bold">{userStats.pointsEarned}</div>
                   </div>
-                  <Zap className="w-8 h-8 text-blue-600" />
+                  <Zap className="w-8 h-8 text-blue" />
                 </div>
               </CardContent>
             </Card>
             
-            <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
+            <Card className="bg-background">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">Tests Completados</p>
                     <div className="text-3xl font-bold">{userStats.testsCompleted}</div>
                   </div>
-                  <Trophy className="w-8 h-8 text-purple-600" />
+                  <Trophy className="w-8 h-8 text-purple" />
                 </div>
               </CardContent>
             </Card>
             
-            <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
+            <Card className="bg-background">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">Recursos Usados</p>
                     <div className="text-3xl font-bold">{userStats.resourcesUsed}</div>
                   </div>
-                  <BookOpen className="w-8 h-8 text-green-600" />
+                  <BookOpen className="w-8 h-8 text-green" />
                 </div>
               </CardContent>
             </Card>
             
-            <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20">
+            <Card className="bg-background">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">Racha Actual</p>
                     <div className="text-3xl font-bold">{userStats.streak} días</div>
                   </div>
-                  <TrendingUp className="w-8 h-8 text-orange-600" />
+                  <TrendingUp className="w-8 h-8 text-orange" />
                 </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Welcome Card */}
-          <Card className="border-2 border-cyan-200 bg-gradient-to-r from-cyan-50 via-blue-50 to-purple-50 dark:from-cyan-900/30 dark:via-blue-900/30 dark:to-purple-900/30">
+          <Card className="border-2 border-blue/30 bg-background">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <span className="text-2xl">🌍</span>
@@ -422,17 +422,17 @@ export default function A4Page() {
       </Tabs>
 
         {/* Tips */}
-        <Card className="mt-8 bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/20 dark:to-blue-900/20 border-cyan-200 dark:border-cyan-800">
+        <Card className="mt-8 bg-background">
           <CardContent className="pt-6 flex gap-3">
-            <div className="w-5 h-5 flex-shrink-0 text-cyan-600 text-lg">💡</div>
+            <div className="w-5 h-5 flex-shrink-0 text-blue text-lg"></div>
             <div>
-              <div className="font-semibold text-cyan-900 dark:text-cyan-100 mb-2">A4 - El Contexto Real: Tu Nueva Identidad en Acción</div>
-              <ul className="text-sm text-cyan-800 dark:text-cyan-200 space-y-1">
-                <li>✓ <strong>Dashboard:</strong> Tu progreso, puntos y logros en tiempo real</li>
-                <li>✓ <strong>Noticias:</strong> Contexto del mercado donde vivirá tu nueva identidad</li>
-                <li>✓ <strong>Módulos:</strong> Aprende habilidades específicas para tu transformación</li>
-                <li>✓ <strong>Biblioteca:</strong> Recursos curados y verificados para tu aprendizaje</li>
-                <li>✓ <strong>Coach IA (Sidebar):</strong> Sofia y Dani siempre disponibles para guiarte</li>
+              <div className="font-semibold text-cyan dark:text-white mb-2">A4 - El Contexto Real: Tu Nueva Identidad en Acción</div>
+              <ul className="text-sm text-cyan dark:text-cyan/20 space-y-1">
+                <li> <strong>Dashboard:</strong> Tu progreso, puntos y logros en tiempo real</li>
+                <li> <strong>Noticias:</strong> Contexto del mercado donde vivirá tu nueva identidad</li>
+                <li> <strong>Módulos:</strong> Aprende habilidades específicas para tu transformación</li>
+                <li> <strong>Biblioteca:</strong> Recursos curados y verificados para tu aprendizaje</li>
+                <li> <strong>Coach IA (Sidebar):</strong> Sofia y Dani siempre disponibles para guiarte</li>
               </ul>
             </div>
           </CardContent>

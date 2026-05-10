@@ -105,9 +105,22 @@ export async function POST(request: NextRequest) {
       // Continue without queue - analysis can be triggered manually
     }
 
+    // Trigger analysis immediately (non-blocking via fetch)
+    try {
+      // Start analysis in background without waiting
+      fetch('http://localhost:3000/api/multimodal/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionId }),
+        // Fire and forget - don't await
+      }).catch(err => console.error('[v0] Background analysis start error:', err))
+    } catch (bgError) {
+      console.warn('[v0] Could not start background analysis:', bgError)
+    }
+
     return NextResponse.json({
       sessionId,
-      jobId: jobId || 'manual',
+      jobId: jobId || 'analyzing',
       status: 'processing',
       message: 'Video uploaded successfully. Analysis in progress.'
     })

@@ -1,11 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
+import { createClient } from "@/lib/supabase/server"
 import { WhatsAppService } from "@/lib/whatsapp-service"
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient()
     const { activityId, userEmail, reminderTime } = await request.json()
 
     if (!activityId || !userEmail) {

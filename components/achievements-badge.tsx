@@ -20,7 +20,7 @@ const achievements: Achievement[] = [
     name: 'Primer Paso',
     description: 'Completa tu primer test DISC',
     icon: Target,
-    color: 'from-blue-500 to-blue-600',
+    color: 'from-blue-500600',
     unlocked: true,
     points: 10,
   },
@@ -29,7 +29,7 @@ const achievements: Achievement[] = [
     name: 'Primera Semana',
     description: 'Mantén una racha de 7 días',
     icon: Zap,
-    color: 'from-amber-500 to-amber-600',
+    color: 'from-amber-500600',
     unlocked: false,
     points: 25,
   },
@@ -38,7 +38,7 @@ const achievements: Achievement[] = [
     name: 'Maestro de Entrenamientos',
     description: 'Completa 10 entrenamientos',
     icon: Trophy,
-    color: 'from-purple-500 to-purple-600',
+    color: 'from-purple-500',
     unlocked: false,
     points: 50,
   },
@@ -47,7 +47,7 @@ const achievements: Achievement[] = [
     name: 'Buscador de Conocimiento',
     description: 'Lee 50 artículos de noticias',
     icon: Star,
-    color: 'from-emerald-500 to-emerald-600',
+    color: 'from-emerald-500600',
     unlocked: false,
     points: 40,
   },
@@ -56,7 +56,7 @@ const achievements: Achievement[] = [
     name: 'Transformación Completada',
     description: 'Finaliza tu viaje de 90 días',
     icon: Award,
-    color: 'from-rose-500 to-rose-600',
+    color: 'from-rose-500600',
     unlocked: false,
     points: 100,
   },
@@ -87,9 +87,9 @@ export function AchievementsBadge() {
               return (
                 <div
                   key={achievement.id}
-                  className={`p-4 rounded-lg text-center transition-all ${
+                  className={`p-4 rounded-[28px] text-center transition-all ${
                     achievement.unlocked
-                      ? `bg-gradient-to-br ${achievement.color} text-white`
+                      ? 'bg-background'
                       : 'bg-muted text-muted-foreground opacity-50'
                   }`}
                 >

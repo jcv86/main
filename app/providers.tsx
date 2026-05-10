@@ -12,7 +12,7 @@ interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   return (
-    <ThemeProvider attribute="class" defaultTheme="system" enableSystem storageKey="theme-preference">
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem storageKey="theme-preference">
       <SessionWrapper>
         <CoachStrategicProvider>
           {children}

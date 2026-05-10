@@ -136,11 +136,11 @@ export default function EmbeddingsAdminPage() {
               </div>
               <div className="flex justify-between text-sm">
                 <span>Con embeddings:</span>
-                <span className="font-bold text-green-600">{stats?.books.withEmbeddings}</span>
+                <span className="font-bold text-green">{stats?.books.withEmbeddings}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Faltantes:</span>
-                <span className="font-bold text-orange-600">{stats?.books.missing}</span>
+                <span className="font-bold text-orange">{stats?.books.missing}</span>
               </div>
               <Progress value={stats?.books.percentage || 0} className="mt-2" />
               <p className="text-xs text-center text-muted-foreground">
@@ -165,11 +165,11 @@ export default function EmbeddingsAdminPage() {
               </div>
               <div className="flex justify-between text-sm">
                 <span>Con embeddings:</span>
-                <span className="font-bold text-green-600">{stats?.webResources.withEmbeddings}</span>
+                <span className="font-bold text-green">{stats?.webResources.withEmbeddings}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Faltantes:</span>
-                <span className="font-bold text-orange-600">{stats?.webResources.missing}</span>
+                <span className="font-bold text-orange">{stats?.webResources.missing}</span>
               </div>
               <Progress value={stats?.webResources.percentage || 0} className="mt-2" />
               <p className="text-xs text-center text-muted-foreground">
@@ -194,11 +194,11 @@ export default function EmbeddingsAdminPage() {
               </div>
               <div className="flex justify-between text-sm">
                 <span>Con embeddings:</span>
-                <span className="font-bold text-green-600">{stats?.overall.withEmbeddings}</span>
+                <span className="font-bold text-green">{stats?.overall.withEmbeddings}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span>Faltantes:</span>
-                <span className="font-bold text-orange-600">{stats?.overall.missing}</span>
+                <span className="font-bold text-orange">{stats?.overall.missing}</span>
               </div>
               <Progress value={stats?.overall.percentage || 0} className="mt-2" />
               <p className="text-xs text-center text-muted-foreground">
@@ -290,7 +290,7 @@ export default function EmbeddingsAdminPage() {
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <Badge variant={result.sourceType === "book" ? "default" : "secondary"}>
-                            {result.sourceType === "book" ? "📚 Libro" : "🌐 Web"}
+                            {result.sourceType === "book" ? " Libro" : " Web"}
                           </Badge>
                           <Badge variant="outline">{result.category}</Badge>
                         </div>
@@ -298,7 +298,7 @@ export default function EmbeddingsAdminPage() {
                         <p className="text-sm text-muted-foreground">{result.author}</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-sm font-semibold text-green-600">
+                        <p className="text-sm font-semibold text-green">
                           {(result.similarityScore * 100).toFixed(1)}%
                         </p>
                         <p className="text-xs text-muted-foreground">similitud</p>

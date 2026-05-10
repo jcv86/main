@@ -76,13 +76,13 @@ export default function EntrenamientoEntrevistasClient() {
   const getColorDificultad = (dificultad: string) => {
     switch (dificultad) {
       case "fácil":
-        return "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200"
+        return "bg-green/10 dark:bg-green text-green dark:text-green/20"
       case "media":
-        return "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200"
+        return "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow-300"
       case "difícil":
-        return "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200"
+        return "bg-red/10 dark:bg-red text-red dark:text-red/20"
       default:
-        return "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200"
+        return "bg-muted/10 dark:bg-gray-800 text-gray-800 dark:text-white/80"
     }
   }
 
@@ -91,15 +91,15 @@ export default function EntrenamientoEntrevistasClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-foreground flex items-center gap-3">
-            <Play className="h-8 w-8 text-orange-600 dark:text-orange-400" />
+            <Play className="h-8 w-8 text-orange dark:text-orange/40" />
             Entrenamiento de Entrevistas
           </h1>
-          <p className="text-slate-600 dark:text-slate-400 mt-2">
+          <p className="text-muted-foreground dark:text-muted-foreground mt-2">
             Practica entrevistas, conversaciones y presentaciones con feedback IA
           </p>
         </div>
@@ -107,11 +107,11 @@ export default function EntrenamientoEntrevistasClient() {
         {/* Filtros */}
         <div className="mb-6 flex gap-4">
           <div>
-            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Tipo</label>
+            <label className="text-sm font-medium text-muted-foreground dark:text-white/85">Tipo</label>
             <select
               value={filtroTipo}
               onChange={(e) => setFiltroTipo(e.target.value)}
-              className="mt-1 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+              className="mt-1 px-3 py-2 border border-muted/30 dark:border-muted/60 rounded-lg bg-white dark:bg-card text-muted/90 dark:text-white"
             >
               <option value="todas">Todas</option>
               <option value="entrevista">Entrevistas</option>
@@ -121,11 +121,11 @@ export default function EntrenamientoEntrevistasClient() {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-slate-700 dark:text-slate-300">Dificultad</label>
+            <label className="text-sm font-medium text-muted-foreground dark:text-white/85">Dificultad</label>
             <select
               value={filtroDificultad}
               onChange={(e) => setFiltroDificultad(e.target.value)}
-              className="mt-1 px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
+              className="mt-1 px-3 py-2 border border-muted/30 dark:border-muted/60 rounded-lg bg-white dark:bg-card text-muted/90 dark:text-white"
             >
               <option value="todas">Todas</option>
               <option value="fácil">Fácil</option>
@@ -145,7 +145,7 @@ export default function EntrenamientoEntrevistasClient() {
                     {getIconoTipo(entrenamiento.tipo)}
                     <CardTitle className="text-lg">{entrenamiento.nombre}</CardTitle>
                   </div>
-                  {entrenamiento.completada && <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />}
+                  {entrenamiento.completada && <CheckCircle2 className="h-5 w-5 text-green dark:text-green/40" />}
                 </div>
                 <Badge className={getColorDificultad(entrenamiento.dificultad)}>{entrenamiento.dificultad}</Badge>
               </CardHeader>
@@ -153,7 +153,7 @@ export default function EntrenamientoEntrevistasClient() {
               <CardContent className="space-y-4">
                 <CardDescription>{entrenamiento.descripcion}</CardDescription>
 
-                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground">
                   <TrendingUp className="h-4 w-4" />
                   Duración estimada: {entrenamiento.duracion} min
                 </div>
@@ -182,7 +182,7 @@ export default function EntrenamientoEntrevistasClient() {
 
         {entrenamientosFiltrados.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-slate-500 dark:text-slate-400">
+            <p className="text-muted-foreground dark:text-muted-foreground">
               No hay entrenamientos disponibles con los filtros seleccionados
             </p>
           </div>

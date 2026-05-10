@@ -126,7 +126,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
     return (
       <Card>
         <CardContent className="p-4">
-          <div className="text-center text-gray-500">Detecting device...</div>
+          <div className="text-center text-muted-foreground">Detecting device...</div>
         </CardContent>
       </Card>
     )
@@ -146,18 +146,18 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
   const getDeviceColor = () => {
     switch (deviceInfo.type) {
       case "mobile":
-        return "bg-blue-100 text-blue-700 border-blue-200"
+        return "bg-blue/10 text-blue border-blue/20"
       case "tablet":
-        return "bg-purple-100 text-purple-700 border-purple-200"
+        return "bg-purple/10 text-purple border-purple/20"
       default:
-        return "bg-green-100 text-green-700 border-green-200"
+        return "bg-green/10 text-green border-green/20"
     }
   }
 
   const getPlatformIcon = () => {
     switch (deviceInfo.platform) {
       case "iOS":
-        return "📱"
+        return ""
       case "Android":
         return "🤖"
       case "Windows":
@@ -167,12 +167,12 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
       case "Linux":
         return "🐧"
       default:
-        return "💻"
+        return ""
     }
   }
 
   return (
-    <Card className="border-gray-200">
+    <Card className="border-muted/20">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
           {getDeviceIcon()}
@@ -195,13 +195,13 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
         <div className="grid grid-cols-2 gap-4 text-sm">
           <div>
             <span className="font-medium">Resolution</span>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               {deviceInfo.width} × {deviceInfo.height}
             </p>
           </div>
           <div>
             <span className="font-medium">Orientation</span>
-            <p className="text-gray-600 capitalize">{deviceInfo.orientation}</p>
+            <p className="text-muted-foreground capitalize">{deviceInfo.orientation}</p>
           </div>
         </div>
 
@@ -215,11 +215,11 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="font-medium">Max Touch Points</span>
-            <span className="text-gray-600 font-mono">{deviceInfo.maxTouchPoints}</span>
+            <span className="text-muted-foreground font-mono">{deviceInfo.maxTouchPoints}</span>
           </div>
           <div className="flex items-center justify-between text-sm">
             <span className="font-medium">Pixel Ratio</span>
-            <span className="text-gray-600 font-mono">{deviceInfo.pixelRatio}x</span>
+            <span className="text-muted-foreground font-mono">{deviceInfo.pixelRatio}x</span>
           </div>
         </div>
 
@@ -240,7 +240,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
                 <Signal className="h-4 w-4" />
                 Connection Type
               </span>
-              <span className="text-gray-600 uppercase font-mono">{deviceInfo.connection}</span>
+              <span className="text-muted-foreground uppercase font-mono">{deviceInfo.connection}</span>
             </div>
           )}
           {deviceInfo.battery !== undefined && (
@@ -250,15 +250,15 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
                 Battery Level
               </span>
               <div className="flex items-center gap-1">
-                <span className="text-gray-600 font-mono">{deviceInfo.battery}%</span>
-                <div className="w-8 h-2 bg-gray-200 rounded-full overflow-hidden">
+                <span className="text-muted-foreground font-mono">{deviceInfo.battery}%</span>
+                <div className="w-8 h-2 bg-muted/20 rounded-full overflow-hidden">
                   <div
-                    className={`h-full transition-all ${
+                    className={`h-full transition-all ${`}
                       deviceInfo.battery > 50
-                        ? "bg-green-500"
+                        ? "bg-green/50"
                         : deviceInfo.battery > 20
-                          ? "bg-yellow-500"
-                          : "bg-red-500"
+                          ? "bg-orange"
+                          : "bg-red/50"`}
                     }`}
                     style={{ width: `${deviceInfo.battery}%` }}
                   />
@@ -271,16 +271,16 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
         {/* Platform Details */}
         <div className="text-xs">
           <span className="font-medium">Platform:</span>
-          <p className="text-gray-600 mt-1">{deviceInfo.platform}</p>
+          <p className="text-muted-foreground mt-1">{deviceInfo.platform}</p>
         </div>
 
         {/* Gesture Testing Recommendations */}
-        <div className="p-3 bg-gray-50 rounded-lg">
+        <div className="p-3 bg-muted/5 rounded-lg">
           <h4 className="text-sm font-medium mb-2 flex items-center gap-1">
             <Zap className="h-4 w-4" />
             Gesture Testing Recommendations
           </h4>
-          <div className="space-y-1 text-xs text-gray-600">
+          <div className="space-y-1 text-xs text-muted-foreground">
             {deviceInfo.type === "mobile" && deviceInfo.touchSupport && (
               <>
                 <p>• ✅ Perfect for comprehensive gesture testing</p>
@@ -299,7 +299,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
             )}
             {deviceInfo.type === "desktop" && !deviceInfo.touchSupport && (
               <>
-                <p>• ⚠️ Limited gesture testing capability</p>
+                <p>•  Limited gesture testing capability</p>
                 <p>• Mouse events will simulate touch</p>
                 <p>• Pinch gestures not available</p>
                 <p>• Use developer tools for mobile simulation</p>
@@ -318,21 +318,21 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
 
         {/* Performance Indicators */}
         <div className="grid grid-cols-3 gap-2 text-xs">
-          <div className="text-center p-2 bg-blue-50 rounded">
-            <div className="font-semibold text-blue-900">Touch Latency</div>
-            <div className="text-blue-700">
+          <div className="text-center p-2 bg-blue/5 rounded">
+            <div className="font-semibold text-blue">Touch Latency</div>
+            <div className="text-blue">
               {deviceInfo.touchSupport ? (deviceInfo.type === "mobile" ? "~10ms" : "~15ms") : "N/A"}
             </div>
           </div>
-          <div className="text-center p-2 bg-green-50 rounded">
-            <div className="font-semibold text-green-900">Gesture Accuracy</div>
-            <div className="text-green-700">
+          <div className="text-center p-2 bg-green/5 rounded">
+            <div className="font-semibold text-green">Gesture Accuracy</div>
+            <div className="text-green">
               {deviceInfo.touchSupport ? (deviceInfo.maxTouchPoints >= 5 ? "High" : "Medium") : "Low"}
             </div>
           </div>
-          <div className="text-center p-2 bg-purple-50 rounded">
-            <div className="font-semibold text-purple-900">Multi-Touch</div>
-            <div className="text-purple-700">
+          <div className="text-center p-2 bg-purple/5 rounded">
+            <div className="font-semibold text-purple">Multi-Touch</div>
+            <div className="text-purple">
               {deviceInfo.maxTouchPoints >= 2 ? `${deviceInfo.maxTouchPoints} points` : "Single"}
             </div>
           </div>

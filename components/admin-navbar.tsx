@@ -28,21 +28,21 @@ export function AdminNavbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/dashboard" className="flex items-center gap-2">
-            <div className="text-2xl font-bold text-blue-600">DESPEGA</div>
-            <span className="text-sm text-slate-600 dark:text-slate-400">Tu Carrera</span>
+            <div className="text-2xl font-bold text-blue">DESPEGA</div>
+            <span className="text-sm text-muted-foreground dark:text-muted-foreground">Tu Carrera</span>
           </Link>
 
           {/* Navigation */}
           <div className="hidden md:flex items-center gap-6">
-            <Link href="/dashboard/tests" className="text-sm font-medium hover:text-primary">
+            <Link href="/dashboard/tests" className="text-sm font-medium hover:text-purple">
               <BarChart3 className="w-4 h-4 inline mr-2" />
               Tests
             </Link>
-            <Link href="/dashboard/biblioteca" className="text-sm font-medium hover:text-primary">
+            <Link href="/dashboard/biblioteca" className="text-sm font-medium hover:text-purple">
               <BookOpen className="w-4 h-4 inline mr-2" />
               Biblioteca
             </Link>
-            <Link href="/dashboard/coaching" className="text-sm font-medium hover:text-primary">
+            <Link href="/dashboard/coaching" className="text-sm font-medium hover:text-purple">
               <Brain className="w-4 h-4 inline mr-2" />
               Coaching
             </Link>

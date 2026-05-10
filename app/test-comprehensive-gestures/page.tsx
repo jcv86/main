@@ -324,13 +324,13 @@ export default function ComprehensiveGestureTestPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case "completed":
-        return <CheckCircle className="h-5 w-5 text-green-500" />
+        return <CheckCircle className="h-5 w-5 text-green" />
       case "failed":
-        return <XCircle className="h-5 w-5 text-red-500" />
+        return <XCircle className="h-5 w-5 text-red" />
       case "running":
-        return <Clock className="h-5 w-5 text-blue-500 animate-spin" />
+        return <Clock className="h-5 w-5 text-blue/50 animate-spin" />
       default:
-        return <Clock className="h-5 w-5 text-gray-400" />
+        return <Clock className="h-5 w-5 text-muted-foreground" />
     }
   }
 
@@ -594,10 +594,10 @@ export default function ComprehensiveGestureTestPage() {
                             <Badge
                               key={gesture}
                               variant={result.success ? "default" : "destructive"}
-                              className={`text-xs ${
+                              className={`text-xs ${`}
                                 result.success
-                                  ? "bg-green-100 text-green-800 hover:bg-green-100"
-                                  : "bg-red-100 text-red-800 hover:bg-red-100"
+                                  ? "bg-green/10 text-green hover:bg-green/10"
+                                  : "bg-red/10 text-red hover:bg-red/10"`}
                               }`}
                             >
                               {gesture}: {result.responseTime}ms
@@ -664,9 +664,9 @@ export default function ComprehensiveGestureTestPage() {
                               <div key={gesture} className="flex items-center justify-between p-2 bg-muted/50 rounded">
                                 <div className="flex items-center gap-2">
                                   {result.success ? (
-                                    <CheckCircle className="h-4 w-4 text-green-500" />
+                                    <CheckCircle className="h-4 w-4 text-green" />
                                   ) : (
-                                    <XCircle className="h-4 w-4 text-red-500" />
+                                    <XCircle className="h-4 w-4 text-red" />
                                   )}
                                   <span className="font-medium text-foreground capitalize">
                                     {gesture.replace("-", " ")}
@@ -716,11 +716,11 @@ export default function ComprehensiveGestureTestPage() {
           <CardContent>
             <div className="space-y-3">
               {stats.successRate < 85 && (
-                <div className="flex items-start gap-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                  <AlertCircle className="h-5 w-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-yellow/5 border border-yellow/20 rounded-lg">
+                  <AlertCircle className="h-5 w-5 text-yellow flex-shrink-0 mt-0.5" />
                   <div>
-                    <div className="font-medium text-yellow-800">Tasa de Éxito Baja</div>
-                    <div className="text-sm text-yellow-700">
+                    <div className="font-medium text-yellow">Tasa de Éxito Baja</div>
+                    <div className="text-sm text-yellow">
                       Considera optimizar la detección de gestos o ajustar la sensibilidad táctil.
                     </div>
                   </div>
@@ -728,11 +728,11 @@ export default function ComprehensiveGestureTestPage() {
               )}
 
               {stats.avgResponseTime > 150 && (
-                <div className="flex items-start gap-3 p-3 bg-orange-50 border border-orange-200 rounded-lg">
-                  <Clock className="h-5 w-5 text-orange-600 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-orange/5 border border-orange/20 rounded-lg">
+                  <Clock className="h-5 w-5 text-orange flex-shrink-0 mt-0.5" />
                   <div>
-                    <div className="font-medium text-orange-800">Tiempo de Respuesta Alto</div>
-                    <div className="text-sm text-orange-700">
+                    <div className="font-medium text-orange">Tiempo de Respuesta Alto</div>
+                    <div className="text-sm text-orange">
                       Los gestos tardan más de 150ms en responder. Considera optimizar el rendimiento.
                     </div>
                   </div>
@@ -740,11 +740,11 @@ export default function ComprehensiveGestureTestPage() {
               )}
 
               {!deviceInfo?.touchSupport && (
-                <div className="flex items-start gap-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <Smartphone className="h-5 w-5 text-blue-600 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-blue/5 border border-blue/20 rounded-lg">
+                  <Smartphone className="h-5 w-5 text-blue flex-shrink-0 mt-0.5" />
                   <div>
-                    <div className="font-medium text-blue-800">Sin Soporte Táctil</div>
-                    <div className="text-sm text-blue-700">
+                    <div className="font-medium text-blue">Sin Soporte Táctil</div>
+                    <div className="text-sm text-blue">
                       Este dispositivo no soporta gestos táctiles. Se usarán controles alternativos.
                     </div>
                   </div>
@@ -752,11 +752,11 @@ export default function ComprehensiveGestureTestPage() {
               )}
 
               {stats.successRate >= 90 && stats.avgResponseTime < 100 && (
-                <div className="flex items-start gap-3 p-3 bg-green-50 border border-green-200 rounded-lg">
-                  <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0 mt-0.5" />
+                <div className="flex items-start gap-3 p-3 bg-green/5 border border-green/20 rounded-lg">
+                  <CheckCircle className="h-5 w-5 text-green flex-shrink-0 mt-0.5" />
                   <div>
-                    <div className="font-medium text-green-800">Rendimiento Excelente</div>
-                    <div className="text-sm text-green-700">
+                    <div className="font-medium text-green">Rendimiento Excelente</div>
+                    <div className="text-sm text-green">
                       Todos los tests de personalidad tienen soporte completo de gestos móviles.
                     </div>
                   </div>

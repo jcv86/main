@@ -185,9 +185,9 @@ export function SmartRecommendations({
   }
 
   const difficultyColors = {
-    fundamental: 'bg-green-100 text-green-800',
-    intermedio: 'bg-yellow-100 text-yellow-800',
-    avanzado: 'bg-red-100 text-red-800'
+    fundamental: 'bg-green/10 text-green',
+    intermedio: 'bg-yellow/10 text-yellow',
+    avanzado: 'bg-red/10 text-red'
   }
 
   return (
@@ -203,12 +203,12 @@ export function SmartRecommendations({
 
         {/* Main Recommendation Card */}
         {recommendations.length > 0 && (
-          <Card className="mb-4 border-2 border-primary">
+          <Card className="mb-4 border-2 border-purple">
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 mb-2">
-                    <div className="p-2 bg-primary/10 rounded-lg">
+                    <div className="p-2 bg-purple/10 rounded-lg">
                       {typeIcons[recommendations[activeStep].type]}
                     </div>
                     <Badge variant="outline">
@@ -222,7 +222,7 @@ export function SmartRecommendations({
                   <p className="text-muted-foreground mt-2">{recommendations[activeStep].description}</p>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <div className="text-3xl font-bold text-primary">{recommendations[activeStep].priority}/5</div>
+                  <div className="text-3xl font-bold text-purple">{recommendations[activeStep].priority}/5</div>
                   <p className="text-xs text-muted-foreground">prioridad</p>
                 </div>
               </div>
@@ -240,16 +240,16 @@ export function SmartRecommendations({
                 <div>
                   <p className="text-sm text-muted-foreground">Impacto</p>
                   <div className="flex gap-1">
-                    {[1, 2, 3, 4, 5].map(i => (
-                      <div
-                        key={i}
-                        className={`h-2 w-2 rounded-full ${
-                          i <= recommendations[activeStep].priority
-                            ? 'bg-primary'
-                            : 'bg-muted'
-                        }`}
-                      />
-                    ))}
+                  {[1, 2, 3, 4, 5].map(i => (
+                    <div
+                      key={i}
+                      className={`h-2 w-2 rounded-full ${
+                        i <= recommendations[activeStep].priority
+                          ? 'bg-purple'
+                          : 'bg-muted'
+                      }`}
+                    />
+                  ))}
                   </div>
                 </div>
               </div>
@@ -260,7 +260,7 @@ export function SmartRecommendations({
                 <ol className="space-y-2">
                   {recommendations[activeStep].nextSteps.map((step, idx) => (
                     <li key={idx} className="flex gap-3 text-sm">
-                      <span className="font-semibold text-primary flex-shrink-0">{idx + 1}.</span>
+                      <span className="font-semibold text-purple flex-shrink-0">{idx + 1}.</span>
                       <span>{step}</span>
                     </li>
                   ))}
@@ -291,7 +291,7 @@ export function SmartRecommendations({
                   key={idx}
                   onClick={() => setActiveStep(idx)}
                   className={`flex-1 h-2 rounded-full transition-colors ${
-                    idx === activeStep ? 'bg-primary' : 'bg-muted'
+                    idx === activeStep ? 'bg-purple' : 'bg-muted'
                   }`}
                   aria-label={`Go to recommendation ${idx + 1}`}
                 />
@@ -317,7 +317,7 @@ export function SmartRecommendations({
               <Card
                 key={rec.id}
                 className={`cursor-pointer transition-all ${
-                  idx === activeStep ? 'border-primary bg-primary/5' : ''
+                  idx === activeStep ? 'border-purple bg-purple/5' : ''
                 }`}
                 onClick={() => setActiveStep(idx)}
               >

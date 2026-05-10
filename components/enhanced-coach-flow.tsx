@@ -325,18 +325,18 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                 onClick={() => handleStageChange(stage.id)}
                 className={`flex flex-col items-center gap-1 p-2 rounded-lg transition-colors ${
                   currentStage === stage.id
-                    ? "bg-primary/10 text-primary"
+                    ? "bg-purple/10 text-purple"
                     : stage.completed
-                      ? "text-green-600"
+                      ? "text-green"
                       : "text-muted-foreground hover:bg-muted"
                 }`}
               >
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center ${
                     stage.completed
-                      ? "bg-green-100 text-green-600"
+                      ? "bg-green/10 text-green"
                       : currentStage === stage.id
-                        ? "bg-primary text-primary-foreground"
+                        ? "bg-purple text-purple-foreground"
                         : "bg-muted"
                   }`}
                 >
@@ -377,7 +377,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
               <div className="flex items-center justify-between">
                 <div>
                   <CardTitle className="flex items-center gap-2 text-lg">
-                    <Sparkles className="h-5 w-5 text-purple-600" />
+                    <Sparkles className="h-5 w-5 text-purple" />
                     Coach IA - Etapa: {stages.find((s) => s.id === currentStage)?.title}
                   </CardTitle>
                   <CardDescription>{stages.find((s) => s.id === currentStage)?.description}</CardDescription>
@@ -399,8 +399,8 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                       className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                     >
                       <div
-                        className={`max-w-[85%] rounded-lg p-3 ${
-                          message.sender === "user" ? "bg-primary text-primary-foreground" : "bg-muted"
+                        className={`max-w-[85%] rounded-[28px] p-3 ${
+                          message.sender === "user" ? "bg-purple text-purple-foreground" : "bg-muted"
                         }`}
                       >
                         <div className="flex items-start gap-2">
@@ -409,8 +409,8 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                               <AvatarFallback
                                 className={
                                   message.coach === "sofia"
-                                    ? "bg-pink-100 text-pink-700 text-xs"
-                                    : "bg-blue-100 text-blue-700 text-xs"
+                                    ? "bg-red/10 text-pink-700 text-xs"
+                                    : "bg-blue/10 text-blue text-xs"
                                 }
                               >
                                 {message.coach === "sofia" ? "S" : "D"}
@@ -421,7 +421,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                             <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
                             <p
                               className={`text-[10px] mt-1 ${
-                                message.sender === "user" ? "text-primary-foreground/70" : "text-muted-foreground"
+                                message.sender === "user" ? "text-purple-foreground/70" : "text-muted-foreground"
                               }`}
                             >
                               {message.timestamp.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
@@ -433,7 +433,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                   ))}
                   {isLoading && (
                     <div className="flex justify-start">
-                      <div className="bg-muted rounded-lg p-3">
+                      <div className="bg-muted rounded-[28px] p-3">
                         <div className="flex items-center gap-2">
                           <div className="flex gap-1">
                             <div className="w-2 h-2 bg-muted-foreground/50 rounded-full animate-bounce" />
@@ -471,7 +471,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                           onClick={() => setInputMessage(question)}
                           className="text-left justify-start h-auto py-2 px-3"
                         >
-                          <Lightbulb className="h-3 w-3 mr-2 flex-shrink-0 text-yellow-500" />
+                          <Lightbulb className="h-3 w-3 mr-2 flex-shrink-0 text-orange" />
                           <span className="text-xs truncate">{question}</span>
                         </Button>
                       ))}
@@ -516,7 +516,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Heart className="h-5 w-5 text-red-500" />
+                <Heart className="h-5 w-5 text-red" />
                 Situaciones Identificadas
               </CardTitle>
               <CardDescription>Situaciones reales donde aplicarás lo aprendido</CardDescription>
@@ -559,7 +559,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Target className="h-5 w-5 text-green-500" />
+                <Target className="h-5 w-5 text-green/50" />
                 Metas Definidas
               </CardTitle>
               <CardDescription>Objetivos concretos basados en tus resultados</CardDescription>
@@ -569,7 +569,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                 <div className="space-y-3">
                   {userGoals.map((goal, index) => (
                     <div key={index} className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                      <Target className="h-4 w-4 text-green-500 mt-0.5" />
+                      <Target className="h-4 w-4 text-green/50 mt-0.5" />
                       <div className="flex-1">
                         <p className="text-sm font-medium">{goal}</p>
                         <div className="flex items-center gap-2 mt-2">
@@ -610,7 +610,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <BookOpen className="h-5 w-5 text-blue-500" />
+                <BookOpen className="h-5 w-5 text-blue/50" />
                 Recursos Recomendados
               </CardTitle>
               <CardDescription>Material personalizado para tu desarrollo</CardDescription>
@@ -620,7 +620,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                 <div className="space-y-3">
                   {recommendedResources.map((resource, index) => (
                     <div key={index} className="flex items-start gap-3 p-3 bg-muted rounded-lg">
-                      <BookOpen className="h-4 w-4 text-blue-500 mt-0.5" />
+                      <BookOpen className="h-4 w-4 text-blue/50 mt-0.5" />
                       <p className="text-sm">{resource}</p>
                     </div>
                   ))}
@@ -651,15 +651,15 @@ Vamos a seguir un proceso estructurado de 6 etapas:
 
       {/* Resumen del seguimiento */}
       {completedStages.length >= 5 && (
-        <Card className="border-green-200 bg-green-50">
+        <Card className="border-green/20 bg-green/5">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                <CheckCircle2 className="h-5 w-5 text-green-600" />
+              <div className="w-10 h-10 rounded-[20px] bg-green/10 flex items-center justify-center">
+                <CheckCircle2 className="h-5 w-5 text-green" />
               </div>
               <div>
-                <p className="font-medium text-green-800">¡Excelente progreso!</p>
-                <p className="text-sm text-green-600">
+                <p className="font-medium text-green">¡Excelente progreso!</p>
+                <p className="text-sm text-green">
                   Has completado {completedStages.length} de 6 etapas del coaching estructurado
                 </p>
               </div>
@@ -670,5 +670,3 @@ Vamos a seguir un proceso estructurado de 6 etapas:
     </div>
   )
 }
-
-export default EnhancedCoachFlow

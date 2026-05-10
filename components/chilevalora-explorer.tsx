@@ -302,9 +302,9 @@ interface ProfileCardProps {
 
 function ProfileCard({ profile, isFavorite, onFavorite, onSelect }: ProfileCardProps) {
   const demandColor = {
-    alto: 'bg-red-100 text-red-800',
-    medio: 'bg-yellow-100 text-yellow-800',
-    bajo: 'bg-green-100 text-green-800',
+    alto: 'bg-red/10 text-red',
+    medio: 'bg-yellow/10 text-yellow',
+    bajo: 'bg-green/10 text-green',
   }
 
   return (
@@ -323,7 +323,7 @@ function ProfileCard({ profile, isFavorite, onFavorite, onSelect }: ProfileCardP
             className="p-2 hover:bg-accent rounded-lg"
           >
             <Heart
-              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`}
+              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red' : 'text-muted-foreground'}`}
             />
           </button>
         </div>
@@ -372,9 +372,9 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
           <div>
             <h3 className="font-semibold text-lg">{match.profile.nombre}</h3>
             <div className="flex items-center gap-2 mt-2">
-              <div className="w-full bg-gray-200 rounded-full h-2">
+              <div className="w-full bg-muted/20 rounded-full h-2">
                 <div
-                  className="bg-green-500 h-2 rounded-full"
+                  className="bg-green/50 h-2 rounded-full"
                   style={{ width: `${match.matchPercentage}%` }}
                 />
               </div>
@@ -388,7 +388,7 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
             }}
           >
             <Heart
-              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-400'}`}
+              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red' : 'text-muted-foreground'}`}
             />
           </button>
         </div>
@@ -402,13 +402,13 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
                 key={idx}
                 className={`p-2 rounded text-center ${
                   gap.estado === 'acquired'
-                    ? 'bg-green-100 text-green-800'
-                    : 'bg-yellow-100 text-yellow-800'
+                    ? 'bg-green/10 text-green'
+                    : 'bg-yellow/10 text-yellow'
                 }`}
               >
                 {gap.competencia}
                 <div className="text-xs mt-1">
-                  {gap.estado === 'acquired' ? '✓' : '○'}
+                  {gap.estado === 'acquired' ? '' : '○'}
                 </div>
               </div>
             ))}
@@ -417,9 +417,9 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
 
         {/* Missing Competencies Alert */}
         {match.gapAnalysis.some(g => g.estado === 'missing') && (
-          <div className="flex gap-2 items-start mt-4 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-            <AlertCircle className="h-4 w-4 text-yellow-600 mt-0.5 flex-shrink-0" />
-            <p className="text-xs text-yellow-800">
+          <div className="flex gap-2 items-start mt-4 p-3 bg-yellow/5 rounded-[28px] border border-yellow/20">
+            <AlertCircle className="h-4 w-4 text-yellow mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-yellow">
               {match.gapAnalysis.filter(g => g.estado === 'missing').length} competencias
               por desarrollar
             </p>

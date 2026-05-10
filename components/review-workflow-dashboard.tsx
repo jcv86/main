@@ -126,7 +126,7 @@ export default function ReviewWorkflowDashboard() {
       case "multiple_issues":
         return "🚨"
       default:
-        return "⚠️"
+        return ""
     }
   }
 
@@ -166,7 +166,7 @@ export default function ReviewWorkflowDashboard() {
 
       {/* Notificaciones */}
       {notifications.length > 0 && (
-        <Card className="border-orange-200 bg-orange-50">
+        <Card className="border-orange/20 bg-orange/5">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Bell className="h-5 w-5" />
@@ -177,7 +177,7 @@ export default function ReviewWorkflowDashboard() {
             <div className="space-y-2">
               {notifications.slice(0, 3).map((notif) => (
                 <div key={notif.id} className="flex items-start gap-2 text-sm">
-                  <AlertTriangle className="h-4 w-4 mt-0.5 text-orange-600" />
+                  <AlertTriangle className="h-4 w-4 mt-0.5 text-orange" />
                   <div>
                     <p className="font-medium">{notif.title}</p>
                     <p className="text-muted-foreground">{notif.message}</p>
@@ -231,17 +231,17 @@ export default function ReviewWorkflowDashboard() {
                     <div>
                       <p className="text-sm text-muted-foreground">Satisfacción</p>
                       <p className="text-2xl font-bold">{task.avg_satisfaction.toFixed(1)}★</p>
-                      {task.avg_satisfaction < 4.3 && <p className="text-xs text-red-600">Bajo umbral (4.3★)</p>}
+                      {task.avg_satisfaction < 4.3 && <p className="text-xs text-red">Bajo umbral (4.3★)</p>}
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Engagement</p>
                       <p className="text-2xl font-bold">{task.avg_engagement.toFixed(1)} msgs</p>
-                      {task.avg_engagement < 2.5 && <p className="text-xs text-red-600">Bajo umbral (2.5)</p>}
+                      {task.avg_engagement < 2.5 && <p className="text-xs text-red">Bajo umbral (2.5)</p>}
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Acción</p>
                       <p className="text-2xl font-bold">{task.action_completion_rate.toFixed(0)}%</p>
-                      {task.action_completion_rate < 60 && <p className="text-xs text-red-600">Bajo umbral (60%)</p>}
+                      {task.action_completion_rate < 60 && <p className="text-xs text-red">Bajo umbral (60%)</p>}
                     </div>
                   </div>
 

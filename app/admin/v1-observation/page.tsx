@@ -50,7 +50,7 @@ export default function V1ObservationDashboard() {
     <div className="p-8 space-y-8">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold">V1 Observation Dashboard - Fase 1</h1>
-        <p className="text-slate-600">Observando dónde cae gente, qué confunde, dónde falla la retención</p>
+        <p className="text-muted-foreground">Observando dónde cae gente, qué confunde, dónde falla la retención</p>
         <div className="flex gap-2 mt-4">
           {[7, 14, 30].map(days => (
             <button
@@ -58,8 +58,8 @@ export default function V1ObservationDashboard() {
               onClick={() => setTimeRange(days)}
               className={`px-4 py-2 rounded ${
                 timeRange === days
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-slate-200 text-slate-700 hover:bg-slate-300'
+                  ? 'bg-blue/50 text-white'
+                  : 'bg-muted/20 text-muted-foreground hover:bg-muted/30'
               }`}
             >
               {days} días
@@ -78,40 +78,40 @@ export default function V1ObservationDashboard() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="w-20 font-semibold">C1:</span>
-              <div className="flex-1 h-8 bg-blue-100 rounded" style={{ width: '100%' }}>
-                <div className="h-full bg-blue-500 rounded flex items-center justify-end pr-4 text-white font-bold">
+              <div className="flex-1 h-8 bg-blue/10 rounded" style={{ width: '100%' }}>
+                <div className="h-full bg-blue/50 rounded flex items-center justify-end pr-4 text-white font-bold">
                   {metrics.byStage.c1}
                 </div>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <span className="w-20 font-semibold">A1:</span>
-              <div className="flex-1 h-8 bg-blue-100 rounded" style={{ width: metrics.conversionC1toA1 as any }}>
-                <div className="h-full bg-blue-500 rounded flex items-center justify-end pr-4 text-white font-bold">
+              <div className="flex-1 h-8 bg-blue/10 rounded" style={{ width: metrics.conversionC1toA1 as any }}>
+                <div className="h-full bg-blue/50 rounded flex items-center justify-end pr-4 text-white font-bold">
                   {metrics.byStage.a1}
                 </div>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <span className="w-20 font-semibold">A2:</span>
-              <div className="flex-1 h-8 bg-blue-100 rounded" style={{ width: metrics.conversionA1toA2 as any }}>
-                <div className="h-full bg-blue-500 rounded flex items-center justify-end pr-4 text-white font-bold">
+              <div className="flex-1 h-8 bg-blue/10 rounded" style={{ width: metrics.conversionA1toA2 as any }}>
+                <div className="h-full bg-blue/50 rounded flex items-center justify-end pr-4 text-white font-bold">
                   {metrics.byStage.a2}
                 </div>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <span className="w-20 font-semibold">A3:</span>
-              <div className="flex-1 h-8 bg-blue-100 rounded" style={{ width: `${(metrics.byStage.a3 / metrics.byStage.c1) * 100}%` }}>
-                <div className="h-full bg-blue-500 rounded flex items-center justify-end pr-4 text-white font-bold">
+              <div className="flex-1 h-8 bg-blue/10 rounded" style={{ width: `${(metrics.byStage.a3 / metrics.byStage.c1) * 100}%` }}>
+                <div className="h-full bg-blue/50 rounded flex items-center justify-end pr-4 text-white font-bold">
                   {metrics.byStage.a3}
                 </div>
               </div>
             </div>
             <div className="flex items-center justify-between">
               <span className="w-20 font-semibold">A4:</span>
-              <div className="flex-1 h-8 bg-blue-100 rounded" style={{ width: `${(metrics.byStage.a4 / metrics.byStage.c1) * 100}%` }}>
-                <div className="h-full bg-blue-500 rounded flex items-center justify-end pr-4 text-white font-bold">
+              <div className="flex-1 h-8 bg-blue/10 rounded" style={{ width: `${(metrics.byStage.a4 / metrics.byStage.c1) * 100}%` }}>
+                <div className="h-full bg-blue/50 rounded flex items-center justify-end pr-4 text-white font-bold">
                   {metrics.byStage.a4}
                 </div>
               </div>
@@ -129,9 +129,9 @@ export default function V1ObservationDashboard() {
         <CardContent>
           <div className="space-y-3">
             {Object.entries(metrics.dropOffPoints).map(([point, rate]) => (
-              <div key={point} className="flex items-center justify-between p-3 bg-slate-50 rounded">
+              <div key={point} className="flex items-center justify-between p-3 bg-muted/5 rounded">
                 <span className="font-medium">{point}</span>
-                <span className={`font-bold ${parseFloat(rate as string) < 30 ? 'text-red-600' : 'text-green-600'}`}>
+                <span className={`font-bold ${parseFloat(rate as string) < 30 ? 'text-red' : 'text-green'}`}>
                   {rate}
                 </span>
               </div>
@@ -165,45 +165,45 @@ export default function V1ObservationDashboard() {
           <CardDescription>Métricas clave de observación</CardDescription>
         </CardHeader>
         <CardContent className="grid grid-cols-3 gap-4">
-          <div className="p-4 bg-blue-50 rounded text-center">
-            <div className="text-3xl font-bold text-blue-600">{metrics.uniqueSessions}</div>
-            <div className="text-sm text-slate-600">Sesiones únicas</div>
+          <div className="p-4 bg-blue/5 rounded text-center">
+            <div className="text-3xl font-bold text-blue">{metrics.uniqueSessions}</div>
+            <div className="text-sm text-muted-foreground">Sesiones únicas</div>
           </div>
-          <div className="p-4 bg-red-50 rounded text-center">
-            <div className="text-3xl font-bold text-red-600">{metrics.totalErrors}</div>
-            <div className="text-sm text-slate-600">Errores detectados</div>
+          <div className="p-4 bg-red/5 rounded text-center">
+            <div className="text-3xl font-bold text-red">{metrics.totalErrors}</div>
+            <div className="text-sm text-muted-foreground">Errores detectados</div>
           </div>
-          <div className="p-4 bg-amber-50 rounded text-center">
-            <div className="text-3xl font-bold text-amber-600">{(metrics.conversionC1toA1 as number * 100).toFixed(1)}%</div>
-            <div className="text-sm text-slate-600">Conv. C1→A1</div>
+          <div className="p-4 bg-yellow/5 rounded text-center">
+            <div className="text-3xl font-bold text-yellow">{(metrics.conversionC1toA1 as number * 100).toFixed(1)}%</div>
+            <div className="text-sm text-muted-foreground">Conv. C1→A1</div>
           </div>
         </CardContent>
       </Card>
 
       {/* Critical Observations */}
-      <Card className="border-2 border-red-200">
+      <Card className="border-2 border-red/20">
         <CardHeader>
-          <CardTitle className="text-red-700">Observaciones Críticas</CardTitle>
+          <CardTitle className="text-red">Observaciones Críticas</CardTitle>
           <CardDescription>Patrones que indican problemas</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
           {metrics.totalErrors > 0 && (
-            <div className="p-3 bg-red-50 text-red-700 rounded">
-              ⚠️ {metrics.totalErrors} errores detectados - Revisar logs
+            <div className="p-3 bg-red/5 text-red rounded">
+               {metrics.totalErrors} errores detectados - Revisar logs
             </div>
           )}
           {(metrics.conversionC1toA1 as number) < 0.5 && (
-            <div className="p-3 bg-red-50 text-red-700 rounded">
-              ⚠️ Baja conversión C1→A1 ({(metrics.conversionC1toA1 as number * 100).toFixed(1)}%) - Confusión en resultado de A1
+            <div className="p-3 bg-red/5 text-red rounded">
+               Baja conversión C1→A1 ({(metrics.conversionC1toA1 as number * 100).toFixed(1)}%) - Confusión en resultado de A1
             </div>
           )}
           {(metrics.conversionA1toA2 as number) < 0.3 && (
-            <div className="p-3 bg-red-50 text-red-700 rounded">
-              ⚠️ Muy baja conversión A1→A2 ({(metrics.conversionA1toA2 as number * 100).toFixed(1)}%) - Bridge CTA no funciona
+            <div className="p-3 bg-red/5 text-red rounded">
+               Muy baja conversión A1→A2 ({(metrics.conversionA1toA2 as number * 100).toFixed(1)}%) - Bridge CTA no funciona
             </div>
           )}
           {metrics.byStage.a3 === 0 && (
-            <div className="p-3 bg-yellow-50 text-yellow-700 rounded">
+            <div className="p-3 bg-yellow/5 text-yellow rounded">
               ℹ️ Nadie ha llegado a A3 aún - Esperar más datos o revisar A2
             </div>
           )}

@@ -16,7 +16,7 @@ const ProtectedAdminRoute = dynamic(() => import('@/components/admin/protected-a
 export default function AdminDashboardPage() {
   return (
     <ProtectedAdminRoute>
-      <main className="min-h-screen bg-gradient-to-br from-background to-muted/20">
+      <main className="min-h-screen bg-background">
         <div className="container max-w-7xl py-8 px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="mb-8 space-y-2">
@@ -30,13 +30,13 @@ export default function AdminDashboardPage() {
           <Tabs defaultValue="analytics" className="w-full">
             <TabsList className="grid w-full grid-cols-2 lg:grid-cols-6 mb-8 bg-background/50 backdrop-blur-sm border border-border">
               <TabsTrigger value="analytics" className="text-xs sm:text-sm">
-                📊 Analíticas
+                 Analíticas
               </TabsTrigger>
               <TabsTrigger value="users" className="text-xs sm:text-sm">
                 👥 Usuarios
               </TabsTrigger>
               <TabsTrigger value="tesis" className="text-xs sm:text-sm">
-                📡 Tesis
+                 Tesis
               </TabsTrigger>
               <TabsTrigger value="noticias" className="text-xs sm:text-sm">
                 📰 Noticias
@@ -45,7 +45,7 @@ export default function AdminDashboardPage() {
                 ✅ Pruebas
               </TabsTrigger>
               <TabsTrigger value="biblioteca" className="text-xs sm:text-sm">
-                📚 Biblioteca
+                 Biblioteca
               </TabsTrigger>
             </TabsList>
 

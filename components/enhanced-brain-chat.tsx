@@ -212,7 +212,7 @@ export function EnhancedBrainChat() {
       <Card className="flex-1 flex flex-col">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
+            <div className="p-2 bg-background">
               <Brain className="h-5 w-5 text-white" />
             </div>
             Cerebro de la Plataforma
@@ -227,7 +227,7 @@ export function EnhancedBrainChat() {
           <ScrollArea className="flex-1 p-6" ref={scrollRef}>
             {showSuggestions && messages.length === 0 ? (
               <div className="space-y-4">
-                <Alert className="bg-gradient-to-br from-purple-50 to-blue-50 border-purple-200">
+                <Alert className="bg-background">
                   <Brain className="h-4 w-4" />
                   <AlertDescription>
                     <p className="font-semibold mb-2">¡Hola! Soy tu Coach IA con acceso a:</p>
@@ -256,7 +256,7 @@ export function EnhancedBrainChat() {
                         onClick={() => handleSuggestionClick(suggestion.text)}
                       >
                         <div className="flex items-start gap-3 w-full">
-                          <div className="p-2 bg-purple-100 rounded-lg">{suggestion.icon}</div>
+                          <div className="p-2 bg-purple/10 rounded-lg">{suggestion.icon}</div>
                           <div className="text-left flex-1">
                             <p className="font-medium text-sm">{suggestion.text}</p>
                             <Badge variant="secondary" className="text-xs mt-1">
@@ -274,9 +274,9 @@ export function EnhancedBrainChat() {
                 {messages.map((message) => (
                   <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div
-                      className={`max-w-[80%] rounded-lg p-4 ${
+                      className={`max-w-[80%] rounded-[28px] p-4 ${
                         message.role === "user"
-                          ? "bg-gradient-to-br from-purple-500 to-blue-600 text-white"
+                          ? "bg-background"
                           : "bg-accent"
                       }`}
                     >
@@ -321,7 +321,7 @@ export function EnhancedBrainChat() {
 
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-accent rounded-lg p-4">
+                    <div className="bg-accent rounded-[28px] p-4">
                       <div className="flex items-center gap-2">
                         <Loader2 className="h-4 w-4 animate-spin" />
                         <span className="text-sm">Buscando en la base de conocimiento...</span>

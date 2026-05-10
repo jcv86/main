@@ -85,9 +85,9 @@ export default function RankingsPage() {
   }, [supabase])
 
   const getRankIcon = (position: number) => {
-    if (position === 1) return <Trophy className="w-5 h-5 text-yellow-500" />
-    if (position === 2) return <Medal className="w-5 h-5 text-gray-400" />
-    if (position === 3) return <Award className="w-5 h-5 text-amber-600" />
+    if (position === 1) return <Trophy className="w-5 h-5 text-orange" />
+    if (position === 2) return <Medal className="w-5 h-5 text-muted-foreground" />
+    if (position === 3) return <Award className="w-5 h-5 text-yellow" />
     return <span className="w-5 h-5 flex items-center justify-center text-sm font-medium text-muted-foreground">#{position}</span>
   }
 
@@ -111,43 +111,43 @@ export default function RankingsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-950 to-slate-950 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500" />
+      <div className="min-h-screen bg-background">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple/50" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-950 via-slate-950 to-slate-900">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8 max-w-4xl">
         {/* Header */}
         <div className="mb-8">
-          <Link href="/despega" className="inline-flex items-center text-sm text-purple-400 hover:text-purple-300 mb-4 font-medium">
+          <Link href="/despega" className="inline-flex items-center text-sm text-purple/40 hover:text-white mb-4 font-medium">
             <ArrowLeft className="w-4 h-4 mr-1" />
             Volver al Dashboard
           </Link>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-yellow-500 to-purple-600 flex items-center justify-center text-2xl">
+            <div className="w-12 h-12 rounded-[28px] bg-background">
               🏆
             </div>
             <div>
               <h1 className="text-4xl font-bold text-white">Rankings Despega</h1>
-              <p className="text-slate-300 font-medium">Compite y mejora junto a la comunidad</p>
+              <p className="text-white/85 font-medium">Compite y mejora junto a la comunidad</p>
             </div>
           </div>
         </div>
 
         {/* Your Position Card */}
-        <Card className="mb-8 bg-gradient-to-r from-purple-500/10 to-slate-500/10 border-2 border-purple-500/30 dark:border-purple-400/30">
+        <Card className="mb-8 bg-background">
           <CardContent className="pt-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-slate-300 font-medium">Tu posición actual</p>
+                <p className="text-sm text-white/85 font-medium">Tu posición actual</p>
                 <p className="text-4xl font-bold text-white">#{getCurrentUserRank(RANKING_TABS.find(t => t.id === activeTab)?.scoreKey || "score_general")}</p>
               </div>
               <div className="text-right">
-                <p className="text-sm text-slate-300 font-medium">Puntos</p>
-                <p className="text-4xl font-bold text-transparent bg-gradient-to-r from-purple-400 to-cyan-400 bg-clip-text">
+                <p className="text-sm text-white/85 font-medium">Puntos</p>
+                <p className="text-4xl font-bold text-transparent bg-background">
                   {getCurrentUserScore(RANKING_TABS.find(t => t.id === activeTab)?.scoreKey || "score_general")}
                 </p>
               </div>
@@ -190,7 +190,7 @@ export default function RankingsPage() {
                           key={entry.user_id}
                           className={`flex items-center gap-4 p-3 rounded-lg transition-colors ${
                             isCurrentUser 
-                              ? "bg-primary/10 border border-primary/20" 
+                              ? "bg-purple/10 border border-purple/20" 
                               : position <= 3 
                                 ? "bg-muted/50" 
                                 : "hover:bg-muted/30"
@@ -206,7 +206,7 @@ export default function RankingsPage() {
                             </AvatarFallback>
                           </Avatar>
                           <div className="flex-1 min-w-0">
-                            <p className={`font-medium truncate ${isCurrentUser ? "text-primary" : ""}`}>
+                            <p className={`font-medium truncate ${isCurrentUser ? "text-purple" : ""}`}>
                               {entry.profiles?.full_name || "Usuario Anónimo"}
                               {isCurrentUser && <Badge variant="outline" className="ml-2 text-xs">Tú</Badge>}
                             </p>

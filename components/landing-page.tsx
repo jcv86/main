@@ -8,26 +8,26 @@ import Image from "next/image"
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+      <section className="relative overflow-hidden bg-background">
         <div className="absolute inset-0 bg-black/20"></div>
         <div className="relative container mx-auto px-4 py-24">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
               Transforma tu Carrera con
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300">
+              <span className="block text-transparent bg-clip-text bg-background">
                 Inteligencia Artificial
               </span>
             </h1>
-            <p className="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto">
+            <p className="text-xl md:text-2xl mb-8 text-blue/10 max-w-3xl mx-auto">
               Descubre tu potencial profesional con evaluaciones psicométricas avanzadas, coaching personalizado con IA
               y una biblioteca de desarrollo profesional.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="bg-white text-blue-600 hover:bg-blue-50 text-lg px-8 py-4"
+                className="bg-white text-blue hover:bg-blue/5 text-lg px-8 py-4"
                 onClick={() => (window.location.href = "/auth")}
               >
                 Comenzar Gratis
@@ -36,7 +36,7 @@ export default function LandingPage() {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-white text-white hover:bg-white hover:text-blue-600 text-lg px-8 py-4 bg-transparent"
+                className="border-white text-white hover:bg-white hover:text-blue text-lg px-8 py-4 bg-transparent"
                 onClick={() => (window.location.href = "/demo")}
               >
                 Ver Demo
@@ -50,10 +50,10 @@ export default function LandingPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-bold text-foreground mb-4">
               Todo lo que Necesitas para Crecer Profesionalmente
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
               Una plataforma integral que combina ciencia, tecnología y experiencia para acelerar tu desarrollo
               profesional.
             </p>
@@ -62,8 +62,8 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-3 gap-8">
             <Card className="text-center hover:shadow-lg transition-shadow">
               <CardHeader>
-                <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-                  <Brain className="h-8 w-8 text-blue-600" />
+                <div className="mx-auto w-16 h-16 bg-blue/10 rounded-full flex items-center justify-center mb-4">
+                  <Brain className="h-8 w-8 text-blue" />
                 </div>
                 <CardTitle className="text-2xl">Evaluaciones Psicométricas</CardTitle>
               </CardHeader>
@@ -77,8 +77,8 @@ export default function LandingPage() {
 
             <Card className="text-center hover:shadow-lg transition-shadow">
               <CardHeader>
-                <div className="mx-auto w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mb-4">
-                  <Target className="h-8 w-8 text-purple-600" />
+                <div className="mx-auto w-16 h-16 bg-purple/10 rounded-full flex items-center justify-center mb-4">
+                  <Target className="h-8 w-8 text-purple" />
                 </div>
                 <CardTitle className="text-2xl">Coach IA Personalizado</CardTitle>
               </CardHeader>
@@ -92,8 +92,8 @@ export default function LandingPage() {
 
             <Card className="text-center hover:shadow-lg transition-shadow">
               <CardHeader>
-                <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4">
-                  <BookOpen className="h-8 w-8 text-green-600" />
+                <div className="mx-auto w-16 h-16 bg-green/10 rounded-full flex items-center justify-center mb-4">
+                  <BookOpen className="h-8 w-8 text-green" />
                 </div>
                 <CardTitle className="text-2xl">Biblioteca Digital</CardTitle>
               </CardHeader>
@@ -108,11 +108,11 @@ export default function LandingPage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-muted/5">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Historias de Éxito</h2>
-            <p className="text-xl text-gray-600">
+            <h2 className="text-4xl font-bold text-foreground mb-4">Historias de Éxito</h2>
+            <p className="text-xl text-muted-foreground">
               Profesionales que han transformado sus carreras con nuestra plataforma
             </p>
           </div>
@@ -131,7 +131,7 @@ export default function LandingPage() {
                 <CardDescription>Gerente de Marketing, Tech Startup</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 italic">
+                <p className="text-muted-foreground italic">
                   "Las evaluaciones me ayudaron a entender mis fortalezas en liderazgo. En 6 meses logré una promoción
                   que llevaba años buscando."
                 </p>
@@ -154,7 +154,7 @@ export default function LandingPage() {
                 <CardDescription>Desarrollador Senior, Fintech</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 italic">
+                <p className="text-muted-foreground italic">
                   "El coach IA me guió para hacer la transición a Product Manager. Ahora lidero un equipo de 12 personas
                   en una empresa internacional."
                 </p>
@@ -177,7 +177,7 @@ export default function LandingPage() {
                 <CardDescription>Consultora Independiente</CardDescription>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-600 italic">
+                <p className="text-muted-foreground italic">
                   "La biblioteca digital me dio las herramientas para lanzar mi consultora. Hoy facturo 3x más que en mi
                   trabajo anterior."
                 </p>
@@ -195,31 +195,31 @@ export default function LandingPage() {
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Sobre Nosotros</h2>
-              <p className="text-xl text-gray-600">
+              <h2 className="text-4xl font-bold text-foreground mb-4">Sobre Nosotros</h2>
+              <p className="text-xl text-muted-foreground">
                 Somos expertos en desarrollo profesional con base en Santiago de Chile
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Nuestra Misión</h3>
-                <p className="text-gray-600 mb-6 text-lg">
+                <h3 className="text-2xl font-bold text-foreground mb-6">Nuestra Misión</h3>
+                <p className="text-muted-foreground mb-6 text-lg">
                   Democratizar el acceso al desarrollo profesional de calidad mundial, combinando la sabiduría de la
                   psicología organizacional con el poder de la inteligencia artificial.
                 </p>
-                <p className="text-gray-600 mb-6 text-lg">
+                <p className="text-muted-foreground mb-6 text-lg">
                   Desde Santiago de Chile, servimos a profesionales de toda Latinoamérica que buscan acelerar su
                   crecimiento profesional con herramientas científicamente validadas.
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-600">10,000+</div>
-                    <div className="text-gray-600">Profesionales Evaluados</div>
+                    <div className="text-3xl font-bold text-blue">10,000+</div>
+                    <div className="text-muted-foreground">Profesionales Evaluados</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-3xl font-bold text-purple-600">95%</div>
-                    <div className="text-gray-600">Satisfacción del Cliente</div>
+                    <div className="text-3xl font-bold text-purple">95%</div>
+                    <div className="text-muted-foreground">Satisfacción del Cliente</div>
                   </div>
                 </div>
               </div>
@@ -227,12 +227,12 @@ export default function LandingPage() {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center">
-                      <Award className="h-6 w-6 text-yellow-500 mr-2" />
+                      <Award className="h-6 w-6 text-orange mr-2" />
                       Certificaciones Internacionales
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-600">
+                    <p className="text-muted-foreground">
                       Nuestros tests están validados por organizaciones internacionales de psicología organizacional.
                     </p>
                   </CardContent>
@@ -240,12 +240,12 @@ export default function LandingPage() {
                 <Card>
                   <CardHeader>
                     <CardTitle className="flex items-center">
-                      <TrendingUp className="h-6 w-6 text-green-500 mr-2" />
+                      <TrendingUp className="h-6 w-6 text-green/50 mr-2" />
                       Resultados Comprobados
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-600">
+                    <p className="text-muted-foreground">
                       85% de nuestros usuarios reporta mejoras significativas en su carrera dentro de los primeros 6
                       meses.
                     </p>
@@ -258,12 +258,12 @@ export default function LandingPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-muted/5">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Preguntas Frecuentes</h2>
-              <p className="text-xl text-gray-600">Resolvemos las dudas más comunes sobre nuestra plataforma</p>
+              <h2 className="text-4xl font-bold text-foreground mb-4">Preguntas Frecuentes</h2>
+              <p className="text-xl text-muted-foreground">Resolvemos las dudas más comunes sobre nuestra plataforma</p>
             </div>
 
             <div className="space-y-6">
@@ -272,7 +272,7 @@ export default function LandingPage() {
                   <CardTitle>¿Qué incluye la evaluación completa?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">
+                  <p className="text-muted-foreground">
                     Incluye 6 tests psicométricos (DISC, Big Five, MBTI, RIASEC, Inteligencia Emocional y Habilidades
                     Blandas), análisis detallado con IA, plan de desarrollo personalizado y acceso completo a la
                     biblioteca digital.
@@ -285,7 +285,7 @@ export default function LandingPage() {
                   <CardTitle>¿Cómo funciona el Coach IA?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">
+                  <p className="text-muted-foreground">
                     Nuestro Coach IA analiza tus resultados psicométricos, objetivos profesionales y contexto laboral
                     para brindarte consejos personalizados 24/7. Utiliza modelos de lenguaje avanzados entrenados
                     específicamente en desarrollo profesional.
@@ -298,7 +298,7 @@ export default function LandingPage() {
                   <CardTitle>¿Los tests son científicamente válidos?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">
+                  <p className="text-muted-foreground">
                     Sí, todos nuestros tests están basados en modelos psicológicos reconocidos internacionalmente y han
                     sido validados en poblaciones latinoamericanas. Cumplimos con estándares internacionales de
                     evaluación psicométrica.
@@ -311,7 +311,7 @@ export default function LandingPage() {
                   <CardTitle>¿Qué tipo de libros incluye la biblioteca?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">
+                  <p className="text-muted-foreground">
                     Más de 70 libros cuidadosamente seleccionados sobre liderazgo, comunicación, productividad,
                     inteligencia emocional, negociación, estrategia empresarial y desarrollo personal. Todos con
                     resúmenes y ejercicios prácticos.
@@ -324,7 +324,7 @@ export default function LandingPage() {
                   <CardTitle>¿Ofrecen soporte técnico?</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-600">
+                  <p className="text-muted-foreground">
                     Sí, ofrecemos soporte técnico por email y chat en vivo de lunes a viernes de 9:00 a 18:00 (hora de
                     Chile). También tenemos una base de conocimientos completa y tutoriales en video.
                   </p>
@@ -336,33 +336,33 @@ export default function LandingPage() {
       </section>
 
       {/* Company Culture & Careers Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+      <section className="py-20 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-4xl font-bold mb-6">Únete a Nuestro Equipo en Santiago</h2>
-            <p className="text-xl mb-8 text-blue-100">
+            <p className="text-xl mb-8 text-blue/10">
               Estamos construyendo el futuro del desarrollo profesional. Buscamos talento excepcional para unirse a
               nuestra misión.
             </p>
 
             <div className="grid md:grid-cols-3 gap-8 mb-12">
               <div className="text-center">
-                <div className="text-4xl font-bold text-yellow-300 mb-2">25+</div>
-                <div className="text-blue-100">Miembros del Equipo</div>
+                <div className="text-4xl font-bold text-yellow/30 mb-2">25+</div>
+                <div className="text-blue/10">Miembros del Equipo</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-yellow-300 mb-2">95%</div>
-                <div className="text-blue-100">Retención de Talento</div>
+                <div className="text-4xl font-bold text-yellow/30 mb-2">95%</div>
+                <div className="text-blue/10">Retención de Talento</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl font-bold text-yellow-300 mb-2">4.8/5</div>
-                <div className="text-blue-100">Satisfacción Laboral</div>
+                <div className="text-4xl font-bold text-yellow/30 mb-2">4.8/5</div>
+                <div className="text-blue/10">Satisfacción Laboral</div>
               </div>
             </div>
 
             <Button
               size="lg"
-              className="bg-white text-blue-600 hover:bg-blue-50 text-lg px-8 py-4"
+              className="bg-white text-blue hover:bg-blue/5 text-lg px-8 py-4"
               onClick={() => (window.location.href = "/careers")}
             >
               Ver Oportunidades de Trabajo
@@ -376,15 +376,15 @@ export default function LandingPage() {
       <section className="py-20 bg-white">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">¿Listo para Transformar tu Carrera?</h2>
-            <p className="text-xl text-gray-600 mb-8">
+            <h2 className="text-4xl font-bold text-foreground mb-6">¿Listo para Transformar tu Carrera?</h2>
+            <p className="text-xl text-muted-foreground mb-8">
               Únete a miles de profesionales que ya están acelerando su crecimiento con nuestra plataforma de desarrollo
               profesional.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-lg px-8 py-4"
+                className="bg-background"
                 onClick={() => (window.location.href = "/auth")}
               >
                 Comenzar Evaluación Gratuita

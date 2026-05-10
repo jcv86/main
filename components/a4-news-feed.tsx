@@ -26,28 +26,28 @@ interface A4NewsFeedProps {
 
 const getCategoryColor = (category: string) => {
   const colors: Record<string, { badge: string; bg: string }> = {
-    "Mercado Laboral": { badge: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300", bg: "bg-blue-50/50" },
-    "Industrias": { badge: "bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300", bg: "bg-purple-50/50" },
-    "Economía": { badge: "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300", bg: "bg-green-50/50" },
-    "Tendencias": { badge: "bg-orange-100 text-orange-800 dark:bg-orange-900/30 dark:text-orange-300", bg: "bg-orange-50/50" },
-    "Tech": { badge: "bg-cyan-100 text-cyan-800 dark:bg-cyan-900/30 dark:text-cyan-300", bg: "bg-cyan-50/50" },
-    "Finanzas": { badge: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300", bg: "bg-yellow-50/50" },
+    "Mercado Laboral": { badge: "bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-200", bg: "bg-blue/5/50" },
+    "Industrias": { badge: "bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple/20", bg: "bg-purple/5/50" },
+    "Economía": { badge: "bg-green/10 text-green dark:bg-green/30 dark:text-green/30", bg: "bg-green/5/50" },
+    "Tendencias": { badge: "bg-orange/10 text-orange dark:bg-orange/30 dark:text-orange/30", bg: "bg-orange/5/50" },
+    "Tech": { badge: "bg-cyan/10 text-cyan dark:bg-cyan/30 dark:text-cyan/30", bg: "bg-cyan/5/50" },
+    "Finanzas": { badge: "bg-yellow/10 text-yellow dark:bg-yellow/30 dark:text-yellow/20", bg: "bg-yellow/5/50" },
   }
-  return colors[category] || { badge: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300", bg: "bg-gray-50/50" }
+  return colors[category] || { badge: "bg-muted/10 text-gray-800 dark:bg-transparent/30 dark:text-white/85", bg: "bg-muted/5/50" }
 }
 
 const getRelevanceIcon = (score: number) => {
   if (score >= 80) return "🔥"
   if (score >= 60) return "📈"
   if (score >= 40) return "📰"
-  return "💡"
+  return ""
 }
 
 const getRelevanceBadge = (score: number) => {
-  if (score >= 80) return { color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300", label: "Crítico" }
+  if (score >= 80) return { color: "bg-red/10 text-red dark:bg-red/30 dark:text-red/30", label: "Crítico" }
   if (score >= 60) return { color: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300", label: "Alto" }
-  if (score >= 40) return { color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300", label: "Medio" }
-  return { color: "bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-300", label: "Bajo" }
+  if (score >= 40) return { color: "bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-200", label: "Medio" }
+  return { color: "bg-muted/10 text-gray-800 dark:bg-transparent/30 dark:text-white/85", label: "Bajo" }
 }
 
 export function A4NewsFeed({ items }: A4NewsFeedProps) {
@@ -116,7 +116,7 @@ export function A4NewsFeed({ items }: A4NewsFeedProps) {
       {/* Header */}
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-xl">
+          <div className="w-10 h-10 rounded-[28px] bg-blue/10 dark:bg-blue/30 flex items-center justify-center text-xl">
             {getRelevanceIcon(75)}
           </div>
           <div>
@@ -195,7 +195,7 @@ export function A4NewsFeed({ items }: A4NewsFeedProps) {
                         {/* Top Row: Title and Relevance */}
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex-1">
-                            <div className="font-semibold group-hover:text-primary transition text-base">
+                            <div className="font-semibold group-hover:text-purple transition text-base">
                               {item.title}
                             </div>
                             <div className="text-sm text-muted-foreground mt-1.5 line-clamp-2">
@@ -242,10 +242,10 @@ export function A4NewsFeed({ items }: A4NewsFeedProps) {
                           }}
                         >
                           <Bookmark
-                            className={`w-4 h-4 ${
+                            className={`w-4 h-4 ${`}
                               savedItems.has(item.id)
-                                ? "fill-primary text-primary"
-                                : "text-muted-foreground"
+                                ? "fill-primary text-purple"
+                                : "text-muted-foreground"`}
                             }`}
                           />
                         </Button>
@@ -255,7 +255,7 @@ export function A4NewsFeed({ items }: A4NewsFeedProps) {
                         <Button 
                           variant="ghost" 
                           size="sm" 
-                          className="h-8 w-8 p-0 text-primary" 
+                          className="h-8 w-8 p-0 text-purple" 
                           onClick={(e) => {
                             e.stopPropagation()
                             handleNewsClick(item.id)
@@ -283,21 +283,21 @@ export function A4NewsFeed({ items }: A4NewsFeedProps) {
 
       {/* Footer Stats */}
       <div className="grid grid-cols-3 gap-4 py-4">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100/50 dark:from-blue-950/20 dark:to-blue-900/10 border-0">
+        <Card className="bg-background">
           <CardContent className="pt-4 text-center">
-            <div className="text-2xl font-bold text-blue-600">{items.length}</div>
+            <div className="text-2xl font-bold text-blue">{items.length}</div>
             <p className="text-xs text-muted-foreground mt-1">Noticias disponibles</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-amber-50 to-amber-100/50 dark:from-amber-950/20 dark:to-amber-900/10 border-0">
+        <Card className="bg-background">
           <CardContent className="pt-4 text-center">
             <div className="text-2xl font-bold text-amber-600">{savedItems.size}</div>
             <p className="text-xs text-muted-foreground mt-1">Guardadas</p>
           </CardContent>
         </Card>
-        <Card className="bg-gradient-to-br from-green-50 to-green-100/50 dark:from-green-950/20 dark:to-green-900/10 border-0">
+        <Card className="bg-background">
           <CardContent className="pt-4 text-center">
-            <div className="text-2xl font-bold text-green-600">{categories.length}</div>
+            <div className="text-2xl font-bold text-green">{categories.length}</div>
             <p className="text-xs text-muted-foreground mt-1">Categorías</p>
           </CardContent>
         </Card>

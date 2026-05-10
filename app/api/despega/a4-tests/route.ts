@@ -7,7 +7,17 @@ export async function GET(req: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser()
 
     if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+      console.log('[v0] User not authenticated, returning public tests')
+      // If not authenticated, return public tests without user data
+      const { data: tests, error } = await supabase
+        .from("a4_gamified_tests")
+        .select("*")
+        .eq("is_active", true)
+        .order("created_at", { ascending: false })
+
+      if (error) throw error
+
+      return NextResponse.json({ data: tests || [] })
     }
 
     const { searchParams } = new URL(req.url)
@@ -44,10 +54,11 @@ export async function GET(req: NextRequest) {
       userScore: completed?.find(c => c.test_id === test.id)?.score
     }))
 
-    return NextResponse.json({ tests: enrichedTests })
+    console.log('[v0] Tests fetched successfully:', enrichedTests.length)
+    return NextResponse.json({ data: enrichedTests })
   } catch (error) {
     console.error("[v0] A4 tests API error:", error)
-    return NextResponse.json({ error: "Failed to fetch tests" }, { status: 500 })
+    return NextResponse.json({ error: "Failed to fetch tests", data: [] }, { status: 500 })
   }
 }
 

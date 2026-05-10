@@ -131,8 +131,8 @@ export function CoachingFeedbackDialog({
                   className="transition-transform hover:scale-110"
                 >
                   <Star
-                    className={`h-8 w-8 ${
-                      star <= (hoveredRating || rating) ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
+                    className={`h-8 w-8 ${`}
+                      star <= (hoveredRating || rating) ? "fill-yellow-400 text-yellow/40" : "text-white/85"`}
                     }`}
                   />
                 </button>
@@ -162,7 +162,7 @@ export function CoachingFeedbackDialog({
 
           {/* Action Completion */}
           {suggestedAction && (
-            <div className="space-y-3 rounded-lg border p-4">
+            <div className="space-y-3 rounded-[28px] border p-4">
               <div className="flex items-start gap-3">
                 <input
                   type="checkbox"
@@ -194,8 +194,8 @@ export function CoachingFeedbackDialog({
           {/* Engagement Info */}
           <div className="text-xs text-muted-foreground bg-muted/50 p-3 rounded-lg">
             <p>
-              📊 Mensajes en esta sesión: <strong>{messageCount}</strong>
-              {messageCount >= 2 && " ✓ Meta alcanzada"}
+               Mensajes en esta sesión: <strong>{messageCount}</strong>
+              {messageCount >= 2 && "  Meta alcanzada"}
             </p>
           </div>
         </div>

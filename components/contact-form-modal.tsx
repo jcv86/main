@@ -63,14 +63,14 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
       <DialogContent className="sm:max-w-[500px] bg-white border-0 shadow-2xl">
         <DialogHeader className="space-y-3">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg flex items-center justify-center">
+            <div className="w-12 h-12 bg-background">
               <Mail className="w-6 h-6 text-white" />
             </div>
             <div>
-              <DialogTitle className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
+              <DialogTitle className="text-2xl font-bold bg-background">
                 Contáctanos
               </DialogTitle>
-              <DialogDescription className="text-sm text-gray-600 mt-1">
+              <DialogDescription className="text-sm text-muted-foreground mt-1">
                 Cuéntanos sobre tu consulta y nos pondremos en contacto pronto
               </DialogDescription>
             </div>
@@ -80,7 +80,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
         <form onSubmit={handleSubmit} className="space-y-5 py-4">
           {/* Name Field */}
           <div className="space-y-2">
-            <Label htmlFor="name" className="text-sm font-semibold text-gray-700">
+            <Label htmlFor="name" className="text-sm font-semibold text-muted">
               Nombre *
             </Label>
             <Input
@@ -89,14 +89,14 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               required
-              className="border-gray-200 focus:border-purple-500 focus:ring-purple-500 placeholder:text-gray-400"
+              className="border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted-foreground"
               disabled={loading}
             />
           </div>
 
           {/* Email Field */}
           <div className="space-y-2">
-            <Label htmlFor="email" className="text-sm font-semibold text-gray-700">
+            <Label htmlFor="email" className="text-sm font-semibold text-muted">
               Email *
             </Label>
             <Input
@@ -106,16 +106,16 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               value={formData.email}
               onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               required
-              className="border-gray-200 focus:border-purple-500 focus:ring-purple-500 placeholder:text-gray-400"
+              className="border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted-foreground"
               disabled={loading}
             />
           </div>
 
           {/* WhatsApp Field */}
           <div className="space-y-2">
-            <Label htmlFor="whatsapp" className="text-sm font-semibold text-gray-700">
+            <Label htmlFor="whatsapp" className="text-sm font-semibold text-muted">
               WhatsApp{" "}
-              <span className="text-xs font-normal text-gray-500">(Opcional)</span>
+              <span className="text-xs font-normal text-muted-foreground">(Opcional)</span>
             </Label>
             <Input
               id="whatsapp"
@@ -123,14 +123,14 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               type="tel"
               value={formData.whatsapp}
               onChange={(e) => setFormData({ ...formData, whatsapp: e.target.value })}
-              className="border-gray-200 focus:border-purple-500 focus:ring-purple-500 placeholder:text-gray-400"
+              className="border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted-foreground"
               disabled={loading}
             />
           </div>
 
           {/* Message Field */}
           <div className="space-y-2">
-            <Label htmlFor="message" className="text-sm font-semibold text-gray-700">
+            <Label htmlFor="message" className="text-sm font-semibold text-muted">
               Tu Consulta *
             </Label>
             <Textarea
@@ -139,19 +139,19 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
               value={formData.message}
               onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               required
-              className="min-h-[140px] border-gray-200 focus:border-purple-500 focus:ring-purple-500 placeholder:text-gray-400 resize-none"
+              className="min-h-[140px] border-muted/20 focus:border-purple/50 focus:ring-purple-500 placeholder:text-muted-foreground resize-none"
               disabled={loading}
             />
-            <p className="text-xs text-gray-500">Mínimo 10 caracteres</p>
+            <p className="text-xs text-muted-foreground">Mínimo 10 caracteres</p>
           </div>
 
           {/* Status Messages */}
           {status === "success" && (
-            <div className="bg-green-50 border border-green-200 rounded-lg p-4 flex items-start gap-3">
-              <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+            <div className="bg-green/5 border border-green/20 rounded-[28px] p-4 flex items-start gap-3">
+              <CheckCircle2 className="w-5 h-5 text-green flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-green-900">Mensaje enviado</p>
-                <p className="text-xs text-green-700 mt-1">
+                <p className="text-sm font-semibold text-green">Mensaje enviado</p>
+                <p className="text-xs text-green mt-1">
                   Gracias por tu consulta. Nos pondremos en contacto pronto.
                 </p>
               </div>
@@ -159,11 +159,11 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
           )}
 
           {status === "error" && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div className="bg-red/5 border border-red/20 rounded-[28px] p-4 flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-red-900">Error</p>
-                <p className="text-xs text-red-700 mt-1">{errorMessage}</p>
+                <p className="text-sm font-semibold text-red">Error</p>
+                <p className="text-xs text-red mt-1">{errorMessage}</p>
               </div>
             </div>
           )}
@@ -172,7 +172,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
           <Button
             type="submit"
             disabled={loading || status === "success"}
-            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="w-full bg-background"
           >
             {loading ? (
               <>
@@ -190,9 +190,9 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
           </Button>
 
           {/* Footer Note */}
-          <p className="text-xs text-gray-500 text-center">
+          <p className="text-xs text-muted-foreground text-center">
             Nos comprometemos a responder dentro de 24 horas.{" "}
-            <a href="/privacy" className="text-purple-600 hover:text-purple-700 font-medium">
+            <a href="/privacy" className="text-purple hover:text-purple font-medium">
               Revisa nuestra política de privacidad
             </a>
           </p>

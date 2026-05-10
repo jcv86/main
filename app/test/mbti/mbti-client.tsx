@@ -139,12 +139,12 @@ export default function MBTITestClient() {
   const progress = ((currentQuestion + 1) / mbtiQuestions.length) * 100
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 p-4">
+    <div className="min-h-screen bg-background/90/80 p-4">
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <div className="flex items-center justify-between mb-4">
             <Badge variant="outline">{currentQuestion + 1} de {mbtiQuestions.length}</Badge>
-            <Brain className="w-5 h-5 text-purple-600" />
+            <Brain className="w-5 h-5 text-purple" />
           </div>
           <Progress value={progress} className="mb-4" />
           <CardTitle className="text-xl">{question.question}</CardTitle>
@@ -154,7 +154,7 @@ export default function MBTITestClient() {
           <RadioGroup value={answers[currentQuestion] || ""} onValueChange={handleAnswer}>
             <div className="space-y-3">
               {question.options?.map((option, idx) => (
-                <Label key={idx} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800">
+                <Label key={idx} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-transparent dark:hover:bg-muted/80">
                   <RadioGroupItem value={idx.toString()} />
                   <span>{option}</span>
                 </Label>
@@ -172,7 +172,7 @@ export default function MBTITestClient() {
                 Siguiente <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             ) : (
-              <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-green-600 hover:bg-green-700">
+              <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-green hover:bg-green">
                 {isSubmitting ? "Procesando..." : "Completar Test"}
               </Button>
             )}

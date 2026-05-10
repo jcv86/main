@@ -7,8 +7,12 @@ import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Loader2, ArrowRight, CheckCircle2, Zap, Target, Phone, Sparkles } from 'lucide-react'
+import { PhaseTransitionHandler } from '@/components/phase-transition-handler'
+import { EnhancedInsightsGrid } from '@/components/a1-enhanced-insights-grid'
+import { A1WowReport } from '@/components/a1-wow-report'
 import { ASection, ASectionPart } from '@/components/a-section-layout'
 import { DESPEGA_PROFILES } from '@/lib/despega-profiles'
+import { StepHeader } from '@/components/step-header'
 
 interface CerebroProfile {
   D: number
@@ -22,10 +26,14 @@ interface CerebroProfile {
 }
 
 interface AIInsights {
-  fortalezas: string
+  fortalezasPrincipales: string
   areasDesarrollo: string
-  entrevistas: string
-  equipoTrabajo: string
+  estiloEntrevista: string
+  dinamicaEquipo: string
+  carreraAlign: string
+  comunicacionEfectiva: string
+  gestionConflicto: string
+  proxiPaso: string
 }
 
 interface TestDataRecord {
@@ -61,18 +69,59 @@ export default function A1ReportPage() {
   const loadAIInsights = async () => {
     try {
       setInsightsLoading(true)
-      const response = await fetch('/api/a1-insights', {
+      
+      // Fetch C1 context if available
+      let c1Context = {}
+      try {
+        const { data: c1Data } = await supabase
+          .from('conozcamonos_1_responses')
+          .select('responses')
+          .eq('user_id', user?.id)
+          .single()
+        
+        if (c1Data?.responses) {
+          const resp = c1Data.responses
+          c1Context = {
+            currentSituation: resp.currentSituation || resp.situacion,
+            challenges: resp.challenges || resp.desafios,
+            goals: resp.goals || resp.objetivos
+          }
+        }
+      } catch (err) {
+        console.warn('[v0] Could not load C1 context:', err)
+        // Continue without C1 context
+      }
+      
+      // Fetch enhanced insights from the new endpoint
+      const response = await fetch('/api/despega/a1-enhanced-insights', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           profile,
-          userName: user?.user_metadata?.full_name || user?.email?.split('@')[0]
+          userName: user?.user_metadata?.full_name || user?.email?.split('@')[0],
+          c1Context
         })
       })
 
       if (!response.ok) throw new Error('Failed to generate insights')
       const data = await response.json()
       setInsights(data.insights)
+      
+      // Save insights to database for persistence
+      try {
+        await fetch('/api/despega/save-a1-insights', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: user?.id,
+            discProfile: profile,
+            insights: data.insights
+          })
+        })
+      } catch (err) {
+        console.warn('[v0] Failed to save insights to database:', err)
+        // Don't fail if persistence fails - insights are still shown
+      }
     } catch (err) {
       console.error('[v0] Error loading AI insights:', err)
       // Silently fail - insights are optional
@@ -162,26 +211,27 @@ export default function A1ReportPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-purple" />
       </div>
     )
   }
 
   if (error) {
     return (
-      <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple-500 to-blue-500">
+      <ASection title="Tu Perfil Cerebral" subtitle="Descubre Tu Tipo de Personalidad" icon="" colorClass="from-purple/50">
         <ASectionPart title="Completar Evaluación" icon={<Zap />}>
           <div className="space-y-4">
-            <div className="p-6 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-900/50 rounded-lg">
-              <p className="text-red-700 dark:text-red-300 font-semibold text-lg">{error}</p>
-              <p className="text-red-600 dark:text-red-400 text-sm mt-2">
+            <div className="p-6 border-2 rounded-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderStyle: 'none', borderRadius: '2px' }}>
+              <p className="text-white font-semibold text-lg">{error}</p>
+              <p className="text-white/85 text-base mt-3 leading-relaxed">
                 Por favor completa la evaluación de Perfil Cerebral para ver tus resultados. El proceso toma aproximadamente 10-15 minutos.
               </p>
             </div>
             <Button 
               onClick={() => router.push('/despega/a1-cerebral')} 
-              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-6 text-lg"
+              className="w-full text-white font-semibold py-6 text-lg"
+              style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)', borderRadius: '20px' }}
             >
               <Target className="w-5 h-5 mr-2" />
               Comenzar Evaluación de Perfil Cerebral
@@ -190,6 +240,7 @@ export default function A1ReportPage() {
               onClick={() => router.push('/despega')} 
               variant="outline"
               className="w-full"
+              style={{ backgroundColor: 'rgba(80, 160, 170, 0.4)', borderRadius: '20px' }}
             >
               <ArrowRight className="w-5 h-5 mr-2" />
               Volver al Dashboard
@@ -198,68 +249,24 @@ export default function A1ReportPage() {
       </ASectionPart>
 
       {/* AI-Generated Insights Section */}
-      <ASectionPart title="Insights Generados con IA" icon={<Sparkles />}>
+      <ASectionPart title=" Tu Análisis Personalizado" icon={<Sparkles />}>
         {insightsLoading ? (
-          <div className="flex items-center justify-center py-8">
-            <Loader2 className="h-6 w-6 animate-spin text-purple-600 mr-2" />
-            <p className="text-slate-400">Generando insights personalizados...</p>
+          <div className="flex flex-col items-center justify-center py-16">
+            <Loader2 className="h-8 w-8 animate-spin text-purple mb-4" />
+            <p className="text-white text-lg font-semibold">Analizando tu perfil con IA...</p>
+            <p className="text-white/75 text-sm mt-2">Esto toma unos segundos</p>
           </div>
         ) : insights ? (
           <div className="space-y-6">
-            {/* Fortalezas */}
-            <div className="bg-gradient-to-br from-emerald-900/30 to-teal-900/20 border-2 border-emerald-600/30 rounded-xl p-6 hover:border-emerald-500/50 transition-colors">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-emerald-600 rounded-lg flex-shrink-0">
-                  <Zap className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-white text-lg mb-2">Tus Fortalezas Profesionales</h4>
-                  <p className="text-slate-300 leading-relaxed">{insights.fortalezas}</p>
-                </div>
-              </div>
+            <div className="bg-background">
+              <p className="text-white/85 text-center text-lg">
+                Basado en tu perfil y contexto personal, aquí está tu análisis completo:
+              </p>
             </div>
-
-            {/* Áreas de Desarrollo */}
-            <div className="bg-gradient-to-br from-blue-900/30 to-cyan-900/20 border-2 border-blue-600/30 rounded-xl p-6 hover:border-blue-500/50 transition-colors">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-blue-600 rounded-lg flex-shrink-0">
-                  <Target className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-white text-lg mb-2">Áreas de Desarrollo</h4>
-                  <p className="text-slate-300 leading-relaxed">{insights.areasDesarrollo}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Recomendaciones para Entrevistas */}
-            <div className="bg-gradient-to-br from-purple-900/30 to-pink-900/20 border-2 border-purple-600/30 rounded-xl p-6 hover:border-purple-500/50 transition-colors">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-purple-600 rounded-lg flex-shrink-0">
-                  <Phone className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-white text-lg mb-2">Consejos para Entrevistas</h4>
-                  <p className="text-slate-300 leading-relaxed">{insights.entrevistas}</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Trabajo en Equipo */}
-            <div className="bg-gradient-to-br from-amber-900/30 to-orange-900/20 border-2 border-amber-600/30 rounded-xl p-6 hover:border-amber-500/50 transition-colors">
-              <div className="flex items-start gap-4">
-                <div className="p-3 bg-amber-600 rounded-lg flex-shrink-0">
-                  <Zap className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-white text-lg mb-2">Trabajo en Equipo</h4>
-                  <p className="text-slate-300 leading-relaxed">{insights.equipoTrabajo}</p>
-                </div>
-              </div>
-            </div>
+            <EnhancedInsightsGrid insights={insights} />
           </div>
         ) : (
-          <p className="text-slate-400">Los insights no pudieron ser generados en este momento.</p>
+          <p className="text-white/75 text-center py-8">Los insights no pudieron ser generados en este momento. Intenta de nuevo más tarde.</p>
         )}
       </ASectionPart>
       </ASection>
@@ -274,97 +281,166 @@ export default function A1ReportPage() {
   const secondaryLabel = discToDespega[profile.secondary as keyof typeof discToDespega]
 
   return (
-    <ASection title="A1: Origen" subtitle="Tu Perfil Cerebral" icon="🎯" colorClass="from-purple-500 to-blue-500">
-      <ASectionPart title="Tu Perfil Cerebral" icon={<Target />}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-          {/* Primary Profile Card */}
-          <div className="bg-gradient-to-br from-purple-600 via-purple-500 to-purple-400 rounded-xl p-6 shadow-lg border-2 border-purple-300">
-            <p className="text-purple-100 text-sm mb-2 font-semibold">Tu Tipo Dominante</p>
-            <div className="text-4xl font-black text-white mb-3">{primaryLabel}</div>
-            <p className="font-semibold text-purple-50 mb-4 text-sm">{despegaLabels[primaryLabel as keyof typeof despegaLabels]}</p>
-            <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/30 mb-2">
-              <div className="h-full bg-gradient-to-r from-yellow-300 to-white" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
-            </div>
-            <p className="text-xs text-purple-100 font-bold">{Math.max(0, Math.round(profile.primaryScore))}%</p>
-          </div>
-
-          {/* Secondary Profile Card */}
-          <div className="bg-gradient-to-br from-blue-600 via-blue-500 to-blue-400 rounded-xl p-6 shadow-lg border-2 border-blue-300">
-            <p className="text-blue-100 text-sm mb-2 font-semibold">Tu Tipo Secundario</p>
-            <div className="text-4xl font-black text-white mb-3">{secondaryLabel}</div>
-            <p className="font-semibold text-blue-50 mb-4 text-sm">{despegaLabels[secondaryLabel as keyof typeof despegaLabels]}</p>
-            <div className="h-3 bg-white/20 rounded-full overflow-hidden border border-white/30 mb-2">
-              <div className="h-full bg-gradient-to-r from-cyan-300 to-white" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
-            </div>
-            <p className="text-xs text-blue-100 font-bold">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
-          </div>
-        </div>
-
-        {/* All 4 Profiles Breakdown */}
-        <div className="bg-gradient-to-br from-slate-800 to-slate-700 rounded-xl p-6 mb-8 border-2 border-purple-500/30 shadow-lg">
-          <h3 className="font-bold text-2xl text-white mb-6">Tu Perfil Cerebral Completo</h3>
-          <div className="space-y-4">
-            {[
-              { label: 'Impulsor', score: profile.D, color: 'from-red-500 to-orange-500', icon: '⚡' },
-              { label: 'Catalizador', score: profile.I, color: 'from-yellow-500 to-orange-400', icon: '🔥' },
-              { label: 'Estabilizador', score: profile.S, color: 'from-green-500 to-teal-500', icon: '🛡️' },
-              { label: 'Arquitecto', score: profile.C, color: 'from-blue-500 to-purple-500', icon: '🏗️' }
-            ].map((dim, idx) => (
-              <div key={idx} className="flex items-center gap-4 p-3 bg-slate-700/50 rounded-lg border border-slate-600 hover:border-slate-500 transition-colors">
-                <span className="text-2xl">{dim.icon}</span>
-                <p className="font-bold text-white w-32">{dim.label}</p>
-                <div className="flex-1 h-4 bg-slate-600 rounded-full overflow-hidden border border-slate-500">
-                  <div className={`h-full bg-gradient-to-r ${dim.color} shadow-lg`} style={{ width: `${Math.max(0, dim.score)}%` }} />
+    <ASection title="Tu Perfil Cerebral" subtitle="Descubre Tu Tipo de Personalidad" icon="" colorClass="from-purple/50">
+      <ASectionPart title="Tu Perfil Cerebral Completo" icon={<Target />}>
+        <div className="space-y-8">
+          {/* Primary and Secondary Profile Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Primary Profile Card */}
+            <div className="bg-gradient-to-br from-purple/20 to-purple/5 border-2 border-purple/40 rounded-2xl p-8">
+              <p className="text-purple font-bold text-sm uppercase tracking-wide mb-3">Tu Tipo Principal</p>
+              <h2 className="text-5xl font-black text-white mb-2">{primaryLabel.split(' - ')[0]}</h2>
+              <p className="text-white/75 text-base mb-6 leading-relaxed">{primaryLabel.split(' - ')[1]}</p>
+              <div className="flex items-center gap-4">
+                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden border border-white/30">
+                  <div className="h-full bg-purple" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
                 </div>
-                <div className="flex items-center gap-2">
-                  <p className="w-16 text-right font-bold text-lg text-white">{Math.max(0, Math.round(dim.score))}%</p>
-                </div>
+                <p className="text-2xl font-bold text-white w-16 text-right">{Math.max(0, Math.round(profile.primaryScore))}%</p>
               </div>
-            ))}
+            </div>
+
+            {/* Secondary Profile Card */}
+            <div className="bg-gradient-to-br from-blue/20 to-blue/5 border-2 border-blue/40 rounded-2xl p-8">
+              <p className="text-blue font-bold text-sm uppercase tracking-wide mb-3">Tu Tipo Secundario</p>
+              <h2 className="text-5xl font-black text-white mb-2">{secondaryLabel.split(' - ')[0]}</h2>
+              <p className="text-white/75 text-base mb-6 leading-relaxed">{secondaryLabel.split(' - ')[1]}</p>
+              <div className="flex items-center gap-4">
+                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden border border-white/30">
+                  <div className="h-full bg-blue" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
+                </div>
+                <p className="text-2xl font-bold text-white w-16 text-right">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
+              </div>
+            </div>
+          </div>
+
+          {/* All 4 Profiles Breakdown */}
+          <div className="bg-card border border-border rounded-2xl p-8">
+            <h3 className="font-bold text-2xl text-white mb-8">Desglose Completo de Dimensiones</h3>
+            <div className="space-y-5">
+              {[
+                { label: 'Impulsor', score: profile.D, color: 'from-red-500', icon: '', description: 'Orientado a resultados' },
+                { label: 'Catalizador', score: profile.I, color: 'from-yellow-500', icon: '🔥', description: 'Influyente y comunicativo' },
+                { label: 'Estabilizador', score: profile.S, color: 'from-green', icon: '🛡️', description: 'Constante y confiable' },
+                { label: 'Arquitecto', score: profile.C, color: 'from-blue', icon: '🏗️', description: 'Analítico y preciso' }
+              ].map((dim, idx) => (
+                <div key={idx} className="flex items-center gap-4 p-4 bg-background/50 hover:bg-background transition-all rounded-xl border border-white/10 hover:border-white/20">
+                  <span className="text-3xl">{dim.icon}</span>
+                  <div className="flex-1">
+                    <div className="flex items-baseline gap-2">
+                      <p className="font-bold text-white text-lg">{dim.label}</p>
+                      <p className="text-white/60 text-sm">{dim.description}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 w-40">
+                    <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden border border-white/30">
+                      <div className={`h-full bg-gradient-to-r ${dim.color}`} style={{ width: `${(dim.score / 10) * 100}%` }} />
+                    </div>
+                    <p className="text-lg font-bold text-white w-10 text-right">{Math.max(0, Math.round(dim.score))}%</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </ASectionPart>
 
+      {/* AI-Generated Insights Section */}
+      <ASectionPart title=" Tu Análisis Personalizado" icon={<Sparkles />}>
+        {insightsLoading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="h-10 w-10 animate-spin text-purple mb-4" />
+            <p className="text-white text-lg font-semibold">Generando tu análisis con IA...</p>
+            <p className="text-white/75 text-sm mt-2">Analizando tu perfil personalizado</p>
+          </div>
+        ) : insights ? (
+          <div className="space-y-8">
+            {/* Executive Summary */}
+            <div className="bg-gradient-to-r from-purple/15 to-blue/15 border-l-4 border-purple rounded-xl p-8">
+              <h3 className="text-3xl font-bold text-white mb-4">
+                Tu Perfil: {primaryLabel.split(' - ')[0]} + {secondaryLabel.split(' - ')[0]}
+              </h3>
+              <p className="text-white/85 text-lg leading-relaxed">
+                Eres una persona con características únicas. Tu combinación te hace especial en cómo tomas decisiones, te relacionas con otros, y enfrentas desafíos. 
+                Los siguientes insights te mostrarán exactamente qué te hace diferente y cómo aprovecharlo en tu carrera.
+              </p>
+            </div>
+
+            {/* AI-Generated Insights Grid */}
+            <EnhancedInsightsGrid insights={insights} />
+
+            {/* Phase Transition Handler */}
+            <PhaseTransitionHandler
+              currentPhase="a1"
+              isComplete={true}
+              nextPhaseLabel="Siguiente Fase: Diseña Tu Ruta"
+              nextPhaseUrl="/despega/conozcamonos-2"
+            />
+          </div>
+        ) : (
+          <div className="bg-red/20 border-2 border-red/50 rounded-xl p-8 text-center">
+            <p className="text-red font-semibold text-lg">No se pudieron generar los insights</p>
+            <p className="text-red/80 text-base mt-2">Por favor intenta de nuevo. Si el problema persiste, contacta con soporte.</p>
+          </div>
+        )}
+      </ASectionPart>
+
+      {/* Wow Report - Action Map */}
+      <ASectionPart title=" Tu Mapa de Acción" icon={<Sparkles />}>
+        <div className="mb-8">
+          <p className="text-white/85 text-center text-lg leading-relaxed">
+            Ahora que entiendes tu perfil cerebral, aquí está tu mapa de acción personalizado. Estas son las 5 herramientas clave que te hacen imprescindible.
+          </p>
+        </div>
+        {profile && insights ? (
+          <A1WowReport 
+            profile={profile} 
+            insights={insights}
+            userName={user?.user_metadata?.full_name || user?.email?.split('@')[0]}
+          />
+        ) : null}
+      </ASectionPart>
+
+      {/* Next Steps */}
       <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="bg-slate-800/40 border-slate-700">
+          <Card className="bg-gradient-to-br from-purple/20 to-purple/5 border-2 border-purple/40 hover:border-purple/60 transition-all">
             <CardHeader>
-              <CardTitle className="text-lg">Entender Tus Patrones</CardTitle>
+              <CardTitle className="text-xl text-white">🔍 Patrones Profundos</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-400 mb-4">Descubre cómo tu perfil te ayuda en entrevistas y equipos.</p>
-              <Button onClick={() => router.push('/despega/a1-patterns')} variant="outline" className="border-slate-600" size="sm">
-                Ver Detalles
+              <p className="text-base text-white/85 mb-6 leading-relaxed">Descubre cómo tu perfil te ayuda en entrevistas, equipos y liderazgo.</p>
+              <Button onClick={() => router.push('/despega/a1-patterns')} variant="outline" className="border-purple/40 w-full" size="sm">
+                Explorar Patrones
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="bg-gradient-to-br from-cyan-900/40 to-teal-900/20 border-cyan-600/30 border-2">
+          <Card className="bg-gradient-to-br from-blue/20 to-blue/5 border-2 border-blue/40 hover:border-blue/60 transition-all">
             <CardHeader>
-              <CardTitle className="text-lg text-cyan-300">📞 Call Entrena</CardTitle>
+              <CardTitle className="text-xl text-white"> Entrena de Entrevistas</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-300 mb-4">Practica entrevistas con un entrenamiento personalizado para tu perfil {primaryLabel}.</p>
+              <p className="text-base text-white/85 mb-6 leading-relaxed">Practica entrevistas personalizadas según tu tipo de personalidad.</p>
               <Button 
                 onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile.primary}`)} 
-                className="w-full bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white" 
+                className="w-full bg-blue/80 hover:bg-blue/70/90 text-white font-semibold" 
                 size="sm"
               >
-                <Phone className="w-3 h-3 mr-1" />
-                Comenzar Call Entrena
+                <Phone className="w-4 h-4 mr-2" />
+                Comenzar
               </Button>
             </CardContent>
           </Card>
 
-          <Card className="bg-slate-800/40 border-slate-700">
+          <Card className="bg-gradient-to-br from-green/20 to-green/5 border-2 border-green/40 hover:border-green/60 transition-all">
             <CardHeader>
-              <CardTitle className="text-lg">Avanzar a A2</CardTitle>
+              <CardTitle className="text-xl text-white"> Crea Tu Ruta</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-slate-400 mb-4">Crea tu plan de 90 días.</p>
-              <Button onClick={() => router.push('/despega/a2-routes')} className="w-full bg-purple-600 hover:bg-purple-700" size="sm">
-                Ir a A2: Ruta
-                <ArrowRight className="w-3 h-3 ml-1" />
+              <p className="text-base text-white/85 mb-6 leading-relaxed">Diseña tu plan de 90 días personalizado para alcanzar tus objetivos.</p>
+              <Button onClick={() => router.push('/despega/conozcamonos-2')} className="w-full bg-green/80 hover:bg-green/70/90 text-white font-semibold" size="sm">
+                Siguiente Fase
+                <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </CardContent>
           </Card>

@@ -78,7 +78,7 @@ export default function AutomationDashboard() {
               <CardHeader>
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={`p-2 rounded-lg bg-${job.color}-100 dark:bg-${job.color}-900/20`}>
+                    <div className={`p-2 rounded-[28px] bg-${job.color}-100 dark:bg-${job.color}-900/20`}>
                       <Icon className={`h-5 w-5 text-${job.color}-600 dark:text-${job.color}-400`} />
                     </div>
                     <div>
@@ -120,8 +120,8 @@ export default function AutomationDashboard() {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-start gap-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <AlertCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+          <div className="flex items-start gap-3 p-4 bg-blue/5 dark:bg-blue/20 rounded-lg">
+            <AlertCircle className="h-5 w-5 text-blue dark:text-blue/40 mt-0.5" />
             <div className="space-y-1">
               <p className="text-sm font-medium">Variable de entorno requerida</p>
               <p className="text-sm text-muted-foreground">
@@ -132,8 +132,8 @@ export default function AutomationDashboard() {
             </div>
           </div>
 
-          <div className="flex items-start gap-3 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-            <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400 mt-0.5" />
+          <div className="flex items-start gap-3 p-4 bg-green/5 dark:bg-green/20 rounded-lg">
+            <CheckCircle className="h-5 w-5 text-green dark:text-green/40 mt-0.5" />
             <div className="space-y-1">
               <p className="text-sm font-medium">Ejecución manual</p>
               <p className="text-sm text-muted-foreground">

@@ -90,11 +90,11 @@ export default function RecomendacionesPage() {
         id: "energia",
         name: "Energía y Vitalidad",
         description: "Optimiza tu energía física y mental para un rendimiento sostenible",
-        icon: "⚡",
-        color: "from-yellow-500 to-amber-500",
-        borderColor: "border-yellow-200 dark:border-yellow-800",
-        bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
-        textColor: "text-yellow-900 dark:text-yellow-100",
+        icon: "",
+        color: "from-yellow-500500",
+        borderColor: "border-yellow/20 dark:border-yellow",
+        bgColor: "bg-yellow/5 dark:bg-yellow/20",
+        textColor: "text-yellow dark:text-yellow/10",
         duration: "30-90 días",
         skills: ["Gestión de energía", "Sueño reparador", "Nutrición inteligente", "Estrés"],
         matchScore: Math.round((100 - energiaScore) * 0.7 + 30),
@@ -106,11 +106,11 @@ export default function RecomendacionesPage() {
         id: "enfoque",
         name: "Enfoque y Productividad",
         description: "Domina tu atención y logra resultados con precisión",
-        icon: "🎯",
-        color: "from-green-500 to-emerald-500",
-        borderColor: "border-green-200 dark:border-green-800",
-        bgColor: "bg-green-50 dark:bg-green-900/20",
-        textColor: "text-green-900 dark:text-green-100",
+        icon: "",
+        color: "from-green",
+        borderColor: "border-green/20 dark:border-green",
+        bgColor: "bg-green/5 dark:bg-green/20",
+        textColor: "text-green dark:text-green/10",
         duration: "30-60 días",
         skills: ["Deep Work", "Priorización", "Bloques de tiempo", "Gestión de distracciones"],
         matchScore: Math.round((100 - enfoqueScore) * 0.7 + 30),
@@ -122,10 +122,10 @@ export default function RecomendacionesPage() {
         id: "relaciones",
         name: "Relaciones Significativas",
         description: "Construye conexiones profundas y comunicación efectiva",
-        icon: "🤝",
-        color: "from-pink-500 to-rose-500",
-        borderColor: "border-pink-200 dark:border-pink-800",
-        bgColor: "bg-pink-50 dark:bg-pink-900/20",
+        icon: "",
+        color: "from-red/50500",
+        borderColor: "border-red/20 dark:border-pink-800",
+        bgColor: "bg-red/5 dark:bg-red/20",
         textColor: "text-pink-900 dark:text-pink-100",
         duration: "60-90 días",
         skills: ["Comunicación", "Empatía", "Resolución de conflictos", "Liderazgo relacional"],
@@ -139,10 +139,10 @@ export default function RecomendacionesPage() {
         name: "Plan Ejecutivo",
         description: "Ejecuta con precisión y consistencia tu estrategia",
         icon: "📋",
-        color: "from-purple-500 to-indigo-500",
-        borderColor: "border-purple-200 dark:border-purple-800",
-        bgColor: "bg-purple-50 dark:bg-purple-900/20",
-        textColor: "text-purple-900 dark:text-purple-100",
+        color: "from-purple/50/50",
+        borderColor: "border-purple/30 dark:border-purple",
+        bgColor: "bg-purple/5 dark:bg-purple/20",
+        textColor: "text-purple dark:text-purple/10",
         duration: "30-90 días",
         skills: ["Planificación", "Decisiones estratégicas", "Rituales", "Revisión semanal"],
         matchScore: Math.round((100 - planScore) * 0.7 + 30),
@@ -198,27 +198,27 @@ export default function RecomendacionesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-          <p className="mt-4 text-slate-600 dark:text-slate-400">Personalizando tus rutas...</p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green"></div>
+          <p className="mt-4 text-muted-foreground dark:text-muted-foreground">Personalizando tus rutas...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto py-12 space-y-8">
         {/* Header */}
         <div className="text-center space-y-3">
           <Badge variant="outline" className="mx-auto">
             Rutas Personalizadas para Ti
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
             Tus Rutas Recomendadas
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground max-w-2xl mx-auto">
             Basadas en tu patrón A1 y tu objetivo. Selecciona una para comenzar.
           </p>
         </div>
@@ -231,7 +231,7 @@ export default function RecomendacionesPage() {
               className={`cursor-pointer transition-all border-2 overflow-hidden hover:shadow-md ${
                 selectedRoute === route.id
                   ? `${route.borderColor} shadow-lg`
-                  : "border-slate-200 dark:border-slate-700"
+                  : "border-muted/20 dark:border-card"
               }`}
               onClick={() => handleSelectRoute(route.id)}
             >
@@ -243,10 +243,10 @@ export default function RecomendacionesPage() {
                       <div className="flex items-center gap-3">
                         <span className="text-3xl">{route.icon}</span>
                         <div>
-                          <h3 className="font-bold text-lg text-slate-900 dark:text-slate-50">
+                          <h3 className="font-bold text-lg text-muted/90 dark:text-muted/5">
                             {route.name}
                           </h3>
-                          <p className="text-sm text-slate-600 dark:text-slate-400">
+                          <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                             {route.description}
                           </p>
                         </div>
@@ -256,7 +256,7 @@ export default function RecomendacionesPage() {
                       <div className={`text-2xl font-bold ${route.textColor}`}>
                         {route.matchScore}%
                       </div>
-                      <p className="text-xs text-slate-600 dark:text-slate-400">
+                      <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                         Match para ti
                       </p>
                     </div>
@@ -265,10 +265,10 @@ export default function RecomendacionesPage() {
                   {/* Match Score Bar */}
                   <div className="space-y-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                      <span className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground">
                         Alineación con tu perfil
                       </span>
-                      <span className="text-xs text-slate-600 dark:text-slate-400">
+                      <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                         {route.matchScore}%
                       </span>
                     </div>
@@ -285,15 +285,15 @@ export default function RecomendacionesPage() {
                   {/* Details Grid */}
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2">
+                      <p className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
                         Duración
                       </p>
-                      <p className="text-sm text-slate-900 dark:text-slate-50 font-medium">
+                      <p className="text-sm text-muted/90 dark:text-muted/5 font-medium">
                         {route.duration}
                       </p>
                     </div>
                     <div>
-                      <p className="text-xs font-semibold text-slate-600 dark:text-slate-400 mb-2">
+                      <p className="text-xs font-semibold text-muted-foreground dark:text-muted-foreground mb-2">
                         Habilidades a Desarrollar
                       </p>
                       <div className="flex flex-wrap gap-1">
@@ -310,10 +310,10 @@ export default function RecomendacionesPage() {
                   <Button
                     onClick={() => handleSelectRoute(route.id)}
                     disabled={submitting}
-                    className={`w-full ${
+                    className={`w-full ${`}
                       selectedRoute === route.id
-                        ? "bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-800"
-                        : ""
+                        ? "bg-green/80 hover:bg-green/70 dark:bg-green dark:hover:bg-green"
+                        : ""`}
                     }`}
                   >
                     {selectedRoute === route.id ? (
@@ -333,10 +333,10 @@ export default function RecomendacionesPage() {
         </div>
 
         {/* Info Box */}
-        <Card className="border-0 bg-amber-50 dark:bg-amber-900/20 border-l-4 border-l-amber-500">
+        <Card className="border-0 bg-yellow/5 dark:bg-amber-900/20 border-l-4 border-l-amber-500">
           <CardContent className="p-4">
-            <p className="text-sm text-slate-700 dark:text-slate-300">
-              <strong>💡 Consejo:</strong> Todas estas rutas son poderosas. Elige la que resuena más con tu objetivo inmediato. Puedes explorar otras después.
+            <p className="text-sm text-muted-foreground dark:text-white/85">
+              <strong> Consejo:</strong> Todas estas rutas son poderosas. Elige la que resuena más con tu objetivo inmediato. Puedes explorar otras después.
             </p>
           </CardContent>
         </Card>

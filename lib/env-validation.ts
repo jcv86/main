@@ -1,4 +1,7 @@
 export function validateEnvironment() {
+  // Skip validation in development mode for test routes
+  const isDev = process.env.VERCEL_ENV !== "production" && process.env.NODE_ENV !== "production"
+  
   // Only validate required variables
   const requiredVars = [
     "NEXT_PUBLIC_SUPABASE_URL",
@@ -22,6 +25,18 @@ export function validateEnvironment() {
     }
   }
 
+  // Skip throwing error in development - just warn
+  if (missing.length > 0) {
+    if (isProduction) {
+      const message = `Missing required environment variables: ${missing.join(", ")}`
+      console.error(message)
+      throw new Error(message)
+    } else {
+      console.warn(`[DEV] Missing environment variables: ${missing.join(", ")} - This is OK in development`)
+      return
+    }
+  }
+
   // Check optional variables only in production
   const missingOptional: string[] = []
   if (isProduction) {
@@ -30,12 +45,6 @@ export function validateEnvironment() {
         missingOptional.push(variable)
       }
     }
-  }
-
-  if (missing.length > 0) {
-    const message = `Missing required environment variables: ${missing.join(", ")}`
-    console.error(message)
-    throw new Error(message)
   }
 
   if (missingOptional.length > 0) {

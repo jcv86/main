@@ -103,7 +103,7 @@ export function SuggestedQuestions({
     <Card className={`border border-border/50 bg-background/50 backdrop-blur-sm ${className}`}>
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-base">
-          <span className="text-lg">💡</span>
+          <span className="text-lg"></span>
           {title}
         </CardTitle>
         {description && <CardDescription className="text-xs">{description}</CardDescription>}
@@ -114,7 +114,7 @@ export function SuggestedQuestions({
             <Button
               key={q.id}
               variant="outline"
-              className="h-auto justify-start p-3 text-left hover:bg-primary/10 border-border/50 bg-transparent"
+              className="h-auto justify-start p-3 text-left hover:bg-purple/10 border-border/50 bg-transparent"
               onClick={() => onSelectQuestion?.(q)}
             >
               <div className="flex flex-col gap-1">

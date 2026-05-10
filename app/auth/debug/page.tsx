@@ -54,12 +54,12 @@ export default function AuthDebugPage() {
           <CardTitle className="flex items-center gap-2">
             {status === "authenticated" ? (
               <>
-                <CheckCircle className="h-5 w-5 text-green-600" />
+                <CheckCircle className="h-5 w-5 text-green" />
                 Autenticado
               </>
             ) : (
               <>
-                <XCircle className="h-5 w-5 text-red-600" />
+                <XCircle className="h-5 w-5 text-red" />
                 No autenticado
               </>
             )}
@@ -106,12 +106,12 @@ export default function AuthDebugPage() {
                 </>
               ) : profile?.linkedin_context ? (
                 <>
-                  <CheckCircle className="h-5 w-5 text-green-600" />
+                  <CheckCircle className="h-5 w-5 text-green" />
                   Perfil enriquecido
                 </>
               ) : (
                 <>
-                  <XCircle className="h-5 w-5 text-yellow-600" />
+                  <XCircle className="h-5 w-5 text-yellow" />
                   Perfil no enriquecido
                 </>
               )}
@@ -122,7 +122,7 @@ export default function AuthDebugPage() {
             {profile && (
               <div className="space-y-4">
                 {profile.linkedin_context && (
-                  <div className="bg-blue-50 dark:bg-blue-950 p-4 rounded-lg">
+                  <div className="bg-blue/5 dark:bg-blue p-4 rounded-lg">
                     <h3 className="font-semibold mb-2">LinkedIn Data</h3>
                     <ul className="space-y-2 text-sm">
                       <li>
@@ -146,7 +146,7 @@ export default function AuthDebugPage() {
                   </div>
                 )}
 
-                <div className="bg-slate-50 dark:bg-slate-950 p-4 rounded-lg max-h-96 overflow-auto">
+                <div className="bg-muted/5 dark:bg-background p-4 rounded-lg max-h-96 overflow-auto">
                   <h3 className="font-semibold mb-2">Raw Profile Data</h3>
                   <pre className="text-xs">{JSON.stringify(profile, null, 2)}</pre>
                 </div>

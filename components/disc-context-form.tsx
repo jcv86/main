@@ -35,7 +35,7 @@ export function DISCContextForm({ onSubmit, onSkip, attemptNumber }: DISCContext
     <Card className="w-full max-w-3xl mx-auto">
       <CardHeader>
         <div className="flex items-center gap-2 mb-2">
-          <Sparkles className="h-6 w-6 text-blue-600" />
+          <Sparkles className="h-6 w-6 text-blue" />
           <CardTitle>
             {isFirstTime
               ? "¡Bienvenido a tu Informe Despega Cerebral!"
@@ -52,7 +52,7 @@ export function DISCContextForm({ onSubmit, onSkip, attemptNumber }: DISCContext
         {/* Current Situation */}
         <div className="space-y-2">
           <Label htmlFor="situation" className="flex items-center gap-2">
-            <Briefcase className="h-4 w-4 text-gray-500" />
+            <Briefcase className="h-4 w-4 text-muted-foreground" />
             ¿En qué momento profesional te encuentras?
           </Label>
           <Textarea
@@ -68,7 +68,7 @@ export function DISCContextForm({ onSubmit, onSkip, attemptNumber }: DISCContext
         {/* Personal Goals */}
         <div className="space-y-2">
           <Label htmlFor="goals" className="flex items-center gap-2">
-            <Target className="h-4 w-4 text-gray-500" />
+            <Target className="h-4 w-4 text-muted-foreground" />
             ¿Qué te gustaría lograr en los próximos 3 meses?
           </Label>
           <Textarea
@@ -84,7 +84,7 @@ export function DISCContextForm({ onSubmit, onSkip, attemptNumber }: DISCContext
         {/* Career Stage */}
         <div className="space-y-3">
           <Label className="flex items-center gap-2">
-            <TrendingUp className="h-4 w-4 text-gray-500" />
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
             Etapa de carrera
           </Label>
           <RadioGroup
@@ -163,7 +163,7 @@ export function DISCContextForm({ onSubmit, onSkip, attemptNumber }: DISCContext
         </div>
 
         {!isFirstTime && (
-          <p className="text-sm text-gray-500 text-center">
+          <p className="text-sm text-muted-foreground text-center">
             Este es tu intento #{attemptNumber}. El informe mostrará tu evolución y progreso.
           </p>
         )}

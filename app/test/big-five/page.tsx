@@ -229,10 +229,10 @@ export default function BigFiveTest() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading Despega Brújula...</p>
+          <p className="text-muted-foreground">Loading Despega Brújula...</p>
         </div>
       </div>
     )
@@ -240,9 +240,9 @@ export default function BigFiveTest() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600">Redirecting...</p>
+          <p className="text-muted-foreground">Redirecting...</p>
         </div>
       </div>
     )
@@ -314,7 +314,7 @@ export default function BigFiveTest() {
   const canProceed = answers[question.id] !== undefined && answers[question.id] !== ""
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/5">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -332,17 +332,17 @@ export default function BigFiveTest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Despega Brújula</h2>
-                <p className="text-gray-600">
+                <h2 className="text-2xl font-bold text-foreground">Despega Brújula</h2>
+                <p className="text-muted-foreground">
                   Question {currentQuestion + 1} of {bigFiveQuestions.length}
                 </p>
               </div>
               <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Clock className="h-4 w-4 mr-1" />
                   <span>~20 minutes</span>
                 </div>
-                <Badge variant="outline" className="bg-blue-100 text-blue-700">
+                <Badge variant="outline" className="bg-blue/10 text-blue">
                   <Sparkles className="h-3 w-3 mr-1" />
                   With AI Analysis
                 </Badge>
@@ -381,7 +381,7 @@ export default function BigFiveTest() {
                 onValueChange={(value) => handleLikertAnswer(question.id, Number.parseInt(value))}
               >
                 {likertOptions.map((option) => (
-                  <div key={option.value} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
+                  <div key={option.value} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-muted/5">
                     <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} />
                     <Label htmlFor={`option-${option.value}`} className="flex-1 cursor-pointer">
                       {option.label}
@@ -397,10 +397,10 @@ export default function BigFiveTest() {
                   onChange={(e) => handleOpenAnswer(question.id, e.target.value)}
                   className="min-h-[120px] resize-none"
                 />
-                <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <span>{((answers[question.id] as string) || "").length} characters (minimum 50 required)</span>
                   {((answers[question.id] as string) || "").length >= 50 && (
-                    <Badge variant="secondary" className="bg-green-100 text-green-700">
+                    <Badge variant="secondary" className="bg-green/10 text-green">
                       <CheckCircle className="h-3 w-3 mr-1" />
                       Complete
                     </Badge>
@@ -426,7 +426,7 @@ export default function BigFiveTest() {
             <Button
               onClick={submitTest}
               disabled={!canProceed || isSubmitting}
-              className="bg-gray-900 hover:bg-gray-800"
+              className="bg-muted/90 hover:bg-gray-800"
             >
               {isSubmitting ? (
                 <>
@@ -444,7 +444,7 @@ export default function BigFiveTest() {
             <Button
               onClick={() => setCurrentQuestion(Math.min(bigFiveQuestions.length - 1, currentQuestion + 1))}
               disabled={!canProceed}
-              className="bg-gray-900 hover:bg-gray-800"
+              className="bg-muted/90 hover:bg-gray-800"
             >
               Next
               <ArrowRight className="h-4 w-4 ml-2" />
@@ -460,15 +460,15 @@ export default function BigFiveTest() {
                 key={index}
                 className={`w-2 h-2 rounded-full ${
                   index <= currentQuestion
-                    ? "bg-gray-900"
+                    ? "bg-muted/90"
                     : answers[bigFiveQuestions[index].id]
-                      ? "bg-gray-300"
-                      : "bg-gray-200"
+                      ? "bg-muted/30"
+                      : "bg-muted/20"
                 }`}
               />
             ))}
           </div>
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             {Object.keys(answers).length} of {bigFiveQuestions.length} questions answered
           </p>
         </div>

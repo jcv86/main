@@ -275,7 +275,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
       <DialogContent className="max-w-6xl h-[90vh] p-0">
         <DialogHeader className="p-6 pb-4">
           <DialogTitle className="flex items-center gap-2">
-            <Search className="h-5 w-5 text-blue-600" />
+            <Search className="h-5 w-5 text-blue" />
             Búsqueda Avanzada con IA
             <Badge variant="secondary" className="ml-2">
               {searchResults.length} resultados
@@ -286,7 +286,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
         <div className="px-6 pb-4 space-y-4">
           {/* Barra de búsqueda principal */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Buscar con algoritmo inteligente de relevancia..."
               value={searchTerm}
@@ -328,7 +328,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
               <div className="w-24">
                 <Slider value={minRelevance} onValueChange={setMinRelevance} max={100} step={5} className="w-full" />
               </div>
-              <span className="text-xs text-gray-500 w-8">{minRelevance[0]}%</span>
+              <span className="text-xs text-muted-foreground w-8">{minRelevance[0]}%</span>
             </div>
 
             <Button
@@ -344,7 +344,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
 
           {/* Panel de configuración de pesos */}
           {showAdvanced && (
-            <Card className="p-4 bg-gray-50">
+            <Card className="p-4 bg-muted/5">
               <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                 {Object.entries(weights).map(([key, value]) => (
                   <div key={key} className="space-y-2">
@@ -365,7 +365,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
                                     : key}
                         :
                       </label>
-                      <span className="text-xs text-gray-600">{value}%</span>
+                      <span className="text-xs text-muted-foreground">{value}%</span>
                     </div>
                     <Slider
                       value={[value]}
@@ -378,7 +378,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
                 ))}
               </div>
               <div className="flex justify-between items-center mt-4 pt-4 border-t">
-                <div className="text-sm text-gray-600">
+                <div className="text-sm text-muted-foreground">
                   Total: {Object.values(weights).reduce((sum, val) => sum + val, 0)}%
                 </div>
                 <Button variant="outline" size="sm" onClick={resetWeights}>
@@ -390,13 +390,13 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
 
           {/* Estadísticas de búsqueda */}
           {searchTerm && (
-            <div className="text-sm text-gray-600 bg-blue-50 p-3 rounded">
+            <div className="text-sm text-muted-foreground bg-blue/5 p-3 rounded">
               <div className="flex items-center gap-4">
                 <span>🔍 Búsqueda: "{searchTerm}"</span>
-                <span>📊 {searchResults.length} resultados</span>
+                <span> {searchResults.length} resultados</span>
                 {searchResults.length > 0 && (
                   <>
-                    <span>⭐ Relevancia máx: {Math.max(...searchResults.map((r) => r.relevanceScore)).toFixed(2)}</span>
+                    <span> Relevancia máx: {Math.max(...searchResults.map((r) => r.relevanceScore)).toFixed(2)}</span>
                     <span>
                       📈 Promedio:{" "}
                       {(searchResults.reduce((sum, r) => sum + r.relevanceScore, 0) / searchResults.length).toFixed(2)}
@@ -413,14 +413,14 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
           {searchResults.length === 0 ? (
             <Card>
               <CardContent className="p-8 text-center">
-                <Search className="h-12 w-12 mx-auto mb-4 text-gray-400" />
-                <p className="text-gray-600 mb-4">
+                <Search className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <p className="text-muted-foreground mb-4">
                   {searchTerm ? "No se encontraron resultados" : "Ingresa un término de búsqueda"}
                 </p>
                 {searchTerm && (
                   <div className="space-y-2">
-                    <p className="text-sm text-gray-500">Sugerencias:</p>
-                    <ul className="text-sm text-gray-500 space-y-1">
+                    <p className="text-sm text-muted-foreground">Sugerencias:</p>
+                    <ul className="text-sm text-muted-foreground space-y-1">
                       <li>• Intenta con términos más generales</li>
                       <li>• Reduce la relevancia mínima</li>
                       <li>• Cambia la categoría a "Todas"</li>
@@ -446,7 +446,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
                     <div className="flex items-start justify-between">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-xs text-gray-500 font-mono">
+                          <span className="text-xs text-muted-foreground font-mono">
                             #{(index + 1).toString().padStart(2, "0")}
                           </span>
                           <Badge
@@ -465,16 +465,16 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
                             {result.category}
                           </Badge>
                           {result.relevanceScore > 0.8 && (
-                            <Badge variant="default" className="text-xs bg-green-600">
+                            <Badge variant="default" className="text-xs bg-green">
                               <TrendingUp className="h-3 w-3 mr-1" />
                               Top Match
                             </Badge>
                           )}
                         </div>
 
-                        <h3 className="font-semibold text-gray-900 mb-1 line-clamp-1">{result.title}</h3>
+                        <h3 className="font-semibold text-foreground mb-1 line-clamp-1">{result.title}</h3>
 
-                        <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground mb-2">
                           <div className="flex items-center gap-1">
                             <User className="h-3 w-3" />
                             <span className="truncate">{result.author}</span>
@@ -497,27 +497,27 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
                         {searchTerm && (
                           <div className="flex flex-wrap gap-1 mb-2">
                             {result.matchDetails.titleMatch > 0.3 && (
-                              <Badge variant="outline" className="text-xs bg-blue-50">
+                              <Badge variant="outline" className="text-xs bg-blue/5">
                                 📖 Título: {(result.matchDetails.titleMatch * 100).toFixed(0)}%
                               </Badge>
                             )}
                             {result.matchDetails.authorMatch > 0.3 && (
-                              <Badge variant="outline" className="text-xs bg-purple-50">
+                              <Badge variant="outline" className="text-xs bg-purple/5">
                                 ✍️ Autor: {(result.matchDetails.authorMatch * 100).toFixed(0)}%
                               </Badge>
                             )}
                             {result.matchDetails.tagMatch > 0.3 && (
-                              <Badge variant="outline" className="text-xs bg-green-50">
+                              <Badge variant="outline" className="text-xs bg-green/5">
                                 🏷️ Tags: {(result.matchDetails.tagMatch * 100).toFixed(0)}%
                               </Badge>
                             )}
                             {result.matchDetails.contentMatch > 0.3 && (
-                              <Badge variant="outline" className="text-xs bg-yellow-50">
+                              <Badge variant="outline" className="text-xs bg-yellow/5">
                                 📄 Contenido: {(result.matchDetails.contentMatch * 100).toFixed(0)}%
                               </Badge>
                             )}
                             {result.matchDetails.popularityBoost > 0.5 && (
-                              <Badge variant="outline" className="text-xs bg-red-50">
+                              <Badge variant="outline" className="text-xs bg-red/5">
                                 🔥 Popular
                               </Badge>
                             )}
@@ -559,7 +559,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
         </ScrollArea>
 
         {/* Footer con estadísticas */}
-        <div className="px-6 py-3 border-t bg-gray-50 text-xs text-gray-600">
+        <div className="px-6 py-3 border-t bg-muted/5 text-xs text-muted-foreground">
           <div className="flex justify-between items-center">
             <div className="flex gap-4">
               <span>🔍 Algoritmo: Similitud + Pesos + Popularidad</span>
@@ -567,9 +567,9 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
             </div>
             <div className="flex gap-2">
               <span>
-                📊 Pesos: T{weights.title}% A{weights.author}% E{weights.tags}%
+                 Pesos: T{weights.title}% A{weights.author}% E{weights.tags}%
               </span>
-              <span>🎯 Min: {minRelevance[0]}%</span>
+              <span> Min: {minRelevance[0]}%</span>
             </div>
           </div>
         </div>

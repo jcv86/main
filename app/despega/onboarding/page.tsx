@@ -201,51 +201,51 @@ export default function DespegaOnboarding() {
   // STEP 1: Intro - Despega Cerebral
   if (step === "intro") {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 via-slate-50 to-slate-100 dark:from-slate-950 dark:via-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+      <div className="min-h-screen bg-background">
         <div className="max-w-3xl mx-auto py-12 space-y-8">
           {/* Hero Section */}
           <div className="text-center space-y-4">
             <div className="space-y-2">
-              <h1 className="text-5xl md:text-6xl font-bold text-slate-900 dark:text-slate-50 leading-tight">
+              <h1 className="text-5xl md:text-6xl font-light text-foreground dark:text-foreground leading-tight">
                 Despega Cerebral
               </h1>
-              <p className="text-xl text-slate-600 dark:text-slate-400">
+              <p className="text-xl text-muted-foreground dark:text-muted-foreground">
                 Tu punto de partida en DespegaTuCarrera
               </p>
             </div>
           </div>
 
           {/* Main Content */}
-          <Card className="border-0 shadow-lg bg-white dark:bg-slate-900">
+          <Card className="border-0 shadow-lg bg-white dark:bg-background">
             <CardContent className="pt-8 space-y-6">
               <div className="space-y-4">
-                <p className="text-lg text-slate-700 dark:text-slate-300 leading-relaxed">
+                <p className="text-base text-foreground dark:text-foreground leading-relaxed">
                   Antes de hablar de metas, decisiones o próximos pasos, necesitamos entender algo más profundo: <strong>tu patrón natural de acción</strong>.
                 </p>
                 
-                <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                <p className="text-foreground dark:text-foreground leading-relaxed">
                   Todos tenemos una forma particular de movernos frente a desafíos, cambios, presión y oportunidades. No es una etiqueta. No es una caja. <strong>Es un patrón.</strong>
                 </p>
 
-                <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-lg border border-slate-200 dark:border-slate-700 my-4">
-                  <p className="text-slate-700 dark:text-slate-300">
+                <div className="p-4 bg-muted/5 dark:bg-card/50 rounded-[28px] border border-muted/20 dark:border-card my-4">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     En las próximas 28 preguntas explorarás cómo tiendes a actuar cuando nadie te está mirando, cuando decides rápido, cuando dudas o cuando lideras.
                   </p>
                 </div>
 
                 <div className="space-y-2">
-                  <p className="text-slate-600 dark:text-slate-400">
-                    ✓ No hay respuestas correctas o incorrectas.
+                  <p className="text-muted-foreground dark:text-muted-foreground">
+                     No hay respuestas correctas o incorrectas.
                   </p>
-                  <p className="text-slate-600 dark:text-slate-400">
-                    ✓ No hay perfiles mejores que otros.
+                  <p className="text-muted-foreground dark:text-muted-foreground">
+                     No hay perfiles mejores que otros.
                   </p>
-                  <p className="text-slate-600 dark:text-slate-400">
-                    ✓ Existen distintos patrones naturales de acción.
+                  <p className="text-muted-foreground dark:text-muted-foreground">
+                     Existen distintos patrones naturales de acción.
                   </p>
                 </div>
 
-                <p className="text-slate-700 dark:text-slate-300 italic pt-2">
+                <p className="text-sm italic pt-2 text-foreground dark:text-foreground">
                   En unos minutos descubrirás cuál describe mejor tu forma de moverte en el mundo.
                 </p>
               </div>
@@ -254,25 +254,25 @@ export default function DespegaOnboarding() {
 
           {/* Why Start Here Section */}
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900">
+            <Card className="border-0 shadow-lg bg-background">
               <CardContent className="pt-8">
-                <h3 className="text-xl font-bold text-blue-900 dark:text-blue-100 mb-3">¿Qué es Despega Cerebral?</h3>
-                <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+                <h3 className="text-xl font-semibold mb-3 text-cyan dark:text-cyan">¿Qué es Despega Cerebral?</h3>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground leading-relaxed">
                   Es la base de tu recorrido dentro de DespegaTuCarrera. Se inspira en marcos conductuales ampliamente estudiados, pero no busca encasillarte.
                 </p>
-                <p className="text-sm text-blue-800 dark:text-blue-200 leading-relaxed mt-3">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground leading-relaxed mt-3">
                   Su objetivo es identificar tendencias de comportamiento que influyen en cómo tomas decisiones, enfrentas conflictos, lideras o colaboras.
                 </p>
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-950 dark:to-emerald-900">
+            <Card className="border-0 shadow-lg bg-background">
               <CardContent className="pt-8">
-                <h3 className="text-xl font-bold text-emerald-900 dark:text-emerald-100 mb-3">¿Por qué empezar por aquí?</h3>
-                <p className="text-sm text-emerald-800 dark:text-emerald-200 leading-relaxed font-semibold">
+                <h3 className="text-xl font-bold mb-3 text-muted-foreground dark:text-muted-foreground/60">¿Por qué empezar por aquí?</h3>
+                <p className="text-sm leading-relaxed font-semibold text-muted-foreground dark:text-muted-foreground">
                   Porque sin autoconocimiento, cualquier meta es aleatoria.
                 </p>
-                <p className="text-sm text-emerald-800 dark:text-emerald-200 leading-relaxed mt-3">
+                <p className="text-sm leading-relaxed mt-3 text-muted-foreground dark:text-muted-foreground">
                   DespegaTuCarrera no parte por decirte qué hacer. Parte por ayudarte a entender cómo funcionas.
                 </p>
               </CardContent>
@@ -280,37 +280,37 @@ export default function DespegaOnboarding() {
           </div>
 
           {/* Key Instructions */}
-          <Card className="border-0 shadow-lg bg-white dark:bg-slate-900">
+          <Card className="border-0 shadow-lg bg-white dark:bg-background">
             <CardHeader>
               <CardTitle className="text-2xl">Indicaciones antes de comenzar</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex gap-4">
-                <div className="text-2xl min-w-fit">1️⃣</div>
+                <div className="text-2xl min-w-fit text-cyan dark:text-cyan">1</div>
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-slate-100">Responde con honestidad total</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">No pienses en cómo deberías ser, sino en cómo realmente actúas.</p>
+                  <p className="font-semibold text-foreground dark:text-foreground">Responde con honestidad total</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">No pienses en cómo deberías ser, sino en cómo realmente actúas.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="text-2xl min-w-fit">2️⃣</div>
+                <div className="text-2xl min-w-fit text-cyan dark:text-cyan">2</div>
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-slate-100">Tu primer impulso es el más preciso</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">No pienses demasiado en las opciones. Tu instinto es lo más acertado.</p>
+                  <p className="font-semibold text-foreground dark:text-foreground">Tu primer impulso es el más preciso</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">No pienses demasiado en las opciones. Tu instinto es lo más acertado.</p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="text-2xl min-w-fit">3️⃣</div>
+                <div className="text-2xl min-w-fit text-cyan dark:text-cyan">3</div>
                 <div>
-                  <p className="font-semibold text-slate-900 dark:text-slate-100">Este es tu punto de partida</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Primero claridad. Luego dirección.</p>
+                  <p className="font-semibold text-foreground dark:text-foreground">Este es tu punto de partida</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Primero claridad. Luego dirección.</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* Example Question Preview */}
-          <Card className="border-2 border-blue-300 bg-gradient-to-br from-blue-50 to-white dark:from-blue-950/30 dark:to-slate-900">
+          <Card className="bg-background border-2 border-cyan/40">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
                 <span>Así se ve una pregunta</span>
@@ -318,50 +318,50 @@ export default function DespegaOnboarding() {
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex justify-between items-center text-sm">
-                <span className="font-semibold text-slate-700 dark:text-slate-300">Evaluación DISC Despega</span>
-                <span className="text-slate-500 dark:text-slate-400">1/28</span>
+                <span className="font-semibold text-muted-foreground dark:text-muted-foreground">Evaluación Despega Cerebral</span>
+                <span className="text-muted-foreground dark:text-muted-foreground">1/28</span>
               </div>
-              <div className="h-1 bg-blue-200 dark:bg-blue-900 rounded-full overflow-hidden">
-                <div className="h-full bg-blue-600 dark:bg-blue-500 rounded-full" style={{ width: '4%' }}></div>
+              <div className="h-1 rounded-full overflow-hidden bg-slate-600 dark:bg-slate-600">
+                <div className="h-full rounded-full w-1 bg-cyan dark:bg-cyan"></div>
               </div>
               
               <div className="space-y-4">
-                <h4 className="text-center font-semibold text-slate-900 dark:text-slate-100">
+                <h4 className="text-center font-semibold text-foreground dark:text-foreground">
                   Cuando enfrento un desafío importante, tiendo a ser más:
                 </h4>
                 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <p className="text-sm font-semibold text-green-600 dark:text-green-400">MÁS como yo</p>
+                    <p className="text-sm font-semibold text-green dark:text-green/40">MÁS como yo</p>
                     <div className="space-y-2">
-                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-green-500 dark:hover:border-green-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Decidido y directo
                       </button>
-                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-green-500 dark:hover:border-green-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Optimista e inspirador
                       </button>
-                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-green-500 dark:hover:border-green-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Paciente y considerado
                       </button>
-                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-green-500 dark:hover:border-green-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-green dark:hover:border-green/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Analítico y preciso
                       </button>
                     </div>
                   </div>
                   
                   <div className="space-y-2">
-                    <p className="text-sm font-semibold text-red-600 dark:text-red-400">MENOS como yo</p>
+                    <p className="text-sm font-semibold text-red dark:text-red/40">MENOS como yo</p>
                     <div className="space-y-2">
-                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-red-500 dark:hover:border-red-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Decidido y directo
                       </button>
-                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-red-500 dark:hover:border-red-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Optimista e inspirador
                       </button>
-                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-red-500 dark:hover:border-red-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Paciente y considerado
                       </button>
-                      <button className="w-full p-3 border border-slate-200 dark:border-slate-700 rounded-lg hover:border-red-500 dark:hover:border-red-400 transition text-left text-sm text-slate-700 dark:text-slate-300">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Analítico y preciso
                       </button>
                     </div>
@@ -369,7 +369,7 @@ export default function DespegaOnboarding() {
                 </div>
               </div>
               
-              <p className="text-xs text-slate-500 dark:text-slate-400 text-center italic">
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground text-center italic">
                 Selecciona una opción de cada lado para responder
               </p>
             </CardContent>
@@ -381,7 +381,7 @@ export default function DespegaOnboarding() {
               <>
                 <Button 
                   onClick={() => router.push("/despega/a1/resultado")} 
-                  className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg bg-blue-600 hover:bg-blue-700"
+                  className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-[28px] bg-blue/80 hover:bg-blue/70"
                 >
                   Ver mi resultado
                 </Button>
@@ -398,12 +398,12 @@ export default function DespegaOnboarding() {
                 </Button>
               </>
             ) : (
-              <Button onClick={() => setStep("conozcamonos1")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg">
+              <Button onClick={() => setStep("conozcamonos1")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-sm bg-cyan/40 hover:bg-cyan/50 text-foreground dark:text-foreground">
                 Cuando estés listo, comienza
               </Button>
             )}
-            <p className="text-center text-sm text-slate-600 dark:text-slate-400">
-              ⏱️ Tiempo estimado: 3 minutos
+            <p className="text-center text-sm text-muted-foreground dark:text-muted-foreground">
+              Tiempo estimado: 3 minutos
             </p>
           </div>
         </div>
@@ -414,31 +414,31 @@ export default function DespegaOnboarding() {
   // STEP 2: Instrucciones Detalladas
   if (step === "instructions") {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+      <div className="min-h-screen bg-background">
         <div className="max-w-5xl mx-auto space-y-8 pb-8">
           {/* Hero Section */}
           <div className="text-center space-y-3 py-8">
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
+            <h1 className="text-4xl md:text-5xl font-bold text-foreground dark:text-foreground">
               Descubre Tu Perfil Despega Cerebral
             </h1>
-            <p className="text-xl text-slate-600 dark:text-slate-400">
+            <p className="text-xl text-muted-foreground dark:text-muted-foreground">
               Entiende cómo actúas, cómo interactúas, y cómo impulsar tu mejor versión
             </p>
-            <div className="flex justify-center gap-3 text-sm text-slate-600 dark:text-slate-400 pt-2">
+            <div className="flex justify-center gap-3 text-sm text-muted-foreground dark:text-muted-foreground pt-2">
               <span>⏱️ 3 minutos</span>
               <span>•</span>
-              <span>📊 Resultados inmediatos</span>
+              <span> Resultados inmediatos</span>
               <span>��</span>
-              <span>🎯 100% Preciso</span>
+              <span> 100% Preciso</span>
             </div>
 
             {onboardingAlreadyCompleted && (
-              <div className="mt-6 p-4 bg-blue-100 border-l-4 border-blue-500 rounded">
-                <p className="text-blue-800 font-semibold">
-                  ✓ Ya has completado tu Despega Cerebral. Tus resultados están guardados.
+              <div className="mt-6 p-4 bg-blue/10 border-l-4 border-blue/50 rounded">
+                <p className="text-blue font-semibold">
+                   Ya has completado tu Despega Cerebral. Tus resultados están guardados.
                 </p>
-                <p className="text-blue-700 text-sm mt-2">
-                  <Link href="/despega/journey" className="underline hover:text-blue-900 font-semibold">
+                <p className="text-blue text-sm mt-2">
+                  <Link href="/despega/journey" className="underline hover:text-blue font-semibold">
                     Ver mi dashboard →
                   </Link>
                 </p>
@@ -471,34 +471,34 @@ export default function DespegaOnboarding() {
               <CardContent className="p-6">
                 <div className="grid md:grid-cols-4 gap-6">
                   <div className="md:col-span-1">
-                    <div className="text-6xl mb-3">⚡</div>
-                    <h3 className="text-2xl font-bold text-red-600 dark:text-red-400 mb-2">D</h3>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">IMPULSOR</p>
-                    <div className="w-8 h-1 bg-red-500 rounded mt-2"></div>
+                    <div className="text-6xl mb-3"></div>
+                    <h3 className="text-2xl font-bold text-red dark:text-red/40 mb-2">D</h3>
+                    <p className="font-semibold text-muted/90 dark:text-muted/10">IMPULSOR</p>
+                    <div className="w-8 h-1 bg-red/50 rounded mt-2"></div>
                   </div>
                   <div className="md:col-span-3 space-y-3">
                     <div>
-                      <p className="font-semibold text-slate-900 dark:text-slate-100 mb-1">Filosofía: Uso Activo de Fuerza</p>
-                      <p className="text-slate-700 dark:text-slate-300">
+                      <p className="font-semibold text-muted/90 dark:text-muted/10 mb-1">Filosofía: Uso Activo de Fuerza</p>
+                      <p className="text-muted-foreground dark:text-white/85">
                         Los Impulsores superan resistencias mediante acción directa y decisiva. Van hacia adelante con determinación.
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
-                      <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded">
-                        <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Orientados a resultados, decisiones rápidas, lideran con confianza, directos y eficientes</p>
+                      <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
+                        <p className="font-semibold text-red dark:text-red/30 text-sm mb-1">Cómo Actúan</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Orientados a resultados, decisiones rápidas, lideran con confianza, directos y eficientes</p>
                       </div>
-                      <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded">
-                        <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Liderazgo, decisión, competencia, determinación, coraje, eficiencia</p>
+                      <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
+                        <p className="font-semibold text-red dark:text-red/30 text-sm mb-1">Fortalezas</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Liderazgo, decisión, competencia, determinación, coraje, eficiencia</p>
                       </div>
-                      <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded">
-                        <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Motivación</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Resultados, control, desafíos, ambientes dinámicos, autonomía</p>
+                      <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
+                        <p className="font-semibold text-red dark:text-red/30 text-sm mb-1">Motivación</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Resultados, control, desafíos, ambientes dinámicos, autonomía</p>
                       </div>
-                      <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded">
-                        <p className="font-semibold text-red-900 dark:text-red-300 text-sm mb-1">Ambiente Ideal</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Liderazgo, emprendimiento, cambio, competencia, responsabilidad</p>
+                      <div className="p-3 bg-red/5 dark:bg-red/20 rounded">
+                        <p className="font-semibold text-red dark:text-red/30 text-sm mb-1">Ambiente Ideal</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Liderazgo, emprendimiento, cambio, competencia, responsabilidad</p>
                       </div>
                     </div>
                   </div>
@@ -511,34 +511,34 @@ export default function DespegaOnboarding() {
               <CardContent className="p-6">
                 <div className="grid md:grid-cols-4 gap-6">
                   <div className="md:col-span-1">
-                    <div className="text-6xl mb-3">✨</div>
-                    <h3 className="text-2xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">I</h3>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">CATALIZADOR</p>
-                    <div className="w-8 h-1 bg-yellow-500 rounded mt-2"></div>
+                    <div className="text-6xl mb-3"></div>
+                    <h3 className="text-2xl font-bold text-yellow dark:text-yellow/40 mb-2">I</h3>
+                    <p className="font-semibold text-muted/90 dark:text-muted/10">CATALIZADOR</p>
+                    <div className="w-8 h-1 bg-orange rounded mt-2"></div>
                   </div>
                   <div className="md:col-span-3 space-y-3">
                     <div>
-                      <p className="font-semibold text-slate-900 dark:text-slate-100 mb-1">Filosofía: Uso de Encanto</p>
-                      <p className="text-slate-700 dark:text-slate-300">
+                      <p className="font-semibold text-muted/90 dark:text-muted/10 mb-1">Filosofía: Uso de Encanto</p>
+                      <p className="text-muted-foreground dark:text-white/85">
                         Los Catalizadores superan obstáculos mediante carisma, persuasión y conexión genuina con otras personas.
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
-                      <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
-                        <p className="font-semibold text-yellow-900 dark:text-yellow-300 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Entusiastas, carismáticos, conectan fácilmente, optimistas, energéticos</p>
+                      <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
+                        <p className="font-semibold text-yellow dark:text-yellow/20 text-sm mb-1">Cómo Actúan</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Entusiastas, carismáticos, conectan fácilmente, optimistas, energéticos</p>
                       </div>
-                      <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
-                        <p className="font-semibold text-yellow-900 dark:text-yellow-300 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Comunicación, entusiasmo, carisma, persuasión, energía positiva</p>
+                      <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
+                        <p className="font-semibold text-yellow dark:text-yellow/20 text-sm mb-1">Fortalezas</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Comunicación, entusiasmo, carisma, persuasión, energía positiva</p>
                       </div>
-                      <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
-                        <p className="font-semibold text-yellow-900 dark:text-yellow-300 text-sm mb-1">Motivación</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Reconocimiento, interacción social, diversión, visibilidad</p>
+                      <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
+                        <p className="font-semibold text-yellow dark:text-yellow/20 text-sm mb-1">Motivación</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Reconocimiento, interacción social, diversión, visibilidad</p>
                       </div>
-                      <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
-                        <p className="font-semibold text-yellow-900 dark:text-yellow-300 text-sm mb-1">Ambiente Ideal</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Ventas, networking, equipo, creatividad, relaciones públicas</p>
+                      <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded">
+                        <p className="font-semibold text-yellow dark:text-yellow/20 text-sm mb-1">Ambiente Ideal</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Ventas, networking, equipo, creatividad, relaciones públicas</p>
                       </div>
                     </div>
                   </div>
@@ -552,33 +552,33 @@ export default function DespegaOnboarding() {
                 <div className="grid md:grid-cols-4 gap-6">
                   <div className="md:col-span-1">
                     <div className="text-6xl mb-3">🌱</div>
-                    <h3 className="text-2xl font-bold text-green-600 dark:text-green-400 mb-2">S</h3>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">ESTABILIZADOR</p>
-                    <div className="w-8 h-1 bg-green-500 rounded mt-2"></div>
+                    <h3 className="text-2xl font-bold text-green dark:text-green/40 mb-2">S</h3>
+                    <p className="font-semibold text-muted/90 dark:text-muted/10">ESTABILIZADOR</p>
+                    <div className="w-8 h-1 bg-green/50 rounded mt-2"></div>
                   </div>
                   <div className="md:col-span-3 space-y-3">
                     <div>
-                      <p className="font-semibold text-slate-900 dark:text-slate-100 mb-1">Filosofía: Aceptación Voluntaria</p>
-                      <p className="text-slate-700 dark:text-slate-300">
+                      <p className="font-semibold text-muted/90 dark:text-muted/10 mb-1">Filosofía: Aceptación Voluntaria</p>
+                      <p className="text-muted-foreground dark:text-white/85">
                         Los Estabilizadores aceptan voluntariamente los cambios con paciencia, apoyo y consistencia genuina.
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
-                      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded">
-                        <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Confiables, pacientes, colaborativos, apoyan genuinamente, crean armonía</p>
+                      <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
+                        <p className="font-semibold text-green dark:text-green/30 text-sm mb-1">Cómo Actúan</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Confiables, pacientes, colaborativos, apoyan genuinamente, crean armonía</p>
                       </div>
-                      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded">
-                        <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Empatía, paciencia, loyalidad, consistencia, confiabilidad, trabajo en equipo</p>
+                      <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
+                        <p className="font-semibold text-green dark:text-green/30 text-sm mb-1">Fortalezas</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Empatía, paciencia, loyalidad, consistencia, confiabilidad, trabajo en equipo</p>
                       </div>
-                      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded">
-                        <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Motivación</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Estabilidad, equipo, armonía, relaciones significativas, seguridad</p>
+                      <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
+                        <p className="font-semibold text-green dark:text-green/30 text-sm mb-1">Motivación</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Estabilidad, equipo, armonía, relaciones significativas, seguridad</p>
                       </div>
-                      <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded">
-                        <p className="font-semibold text-green-900 dark:text-green-300 text-sm mb-1">Ambiente Ideal</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Apoyo, servicio, coaching, ambientes estables, relaciones duraderas</p>
+                      <div className="p-3 bg-green/5 dark:bg-green/20 rounded">
+                        <p className="font-semibold text-green dark:text-green/30 text-sm mb-1">Ambiente Ideal</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Apoyo, servicio, coaching, ambientes estables, relaciones duraderas</p>
                       </div>
                     </div>
                   </div>
@@ -592,33 +592,33 @@ export default function DespegaOnboarding() {
                 <div className="grid md:grid-cols-4 gap-6">
                   <div className="md:col-span-1">
                     <div className="text-6xl mb-3">🏗️</div>
-                    <h3 className="text-2xl font-bold text-blue-600 dark:text-blue-400 mb-2">C</h3>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">ARQUITECTO</p>
-                    <div className="w-8 h-1 bg-blue-500 rounded mt-2"></div>
+                    <h3 className="text-2xl font-bold text-blue dark:text-blue/40 mb-2">C</h3>
+                    <p className="font-semibold text-muted/90 dark:text-muted/10">ARQUITECTO</p>
+                    <div className="w-8 h-1 bg-blue/50 rounded mt-2"></div>
                   </div>
                   <div className="md:col-span-3 space-y-3">
                     <div>
-                      <p className="font-semibold text-slate-900 dark:text-slate-100 mb-1">Filosofía: Adaptación Cautelosa</p>
-                      <p className="text-slate-700 dark:text-slate-300">
+                      <p className="font-semibold text-muted/90 dark:text-muted/10 mb-1">Filosofía: Adaptación Cautelosa</p>
+                      <p className="text-muted-foreground dark:text-white/85">
                         Los Arquitectos se adaptan cautelosamente, con precisión, análisis profundo y enfoque en excelencia.
                       </p>
                     </div>
                     <div className="grid md:grid-cols-2 gap-3">
-                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
-                        <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Cómo Actúan</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Analíticos, precisos, orientados a calidad, detallistas, orientados a datos</p>
+                      <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded">
+                        <p className="font-semibold text-blue dark:text-blue-200 text-sm mb-1">Cómo Actúan</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Analíticos, precisos, orientados a calidad, detallistas, orientados a datos</p>
                       </div>
-                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
-                        <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Fortalezas</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Precisión, análisis, atención al detalle, planificación, calidad, pensamiento crítico</p>
+                      <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded">
+                        <p className="font-semibold text-blue dark:text-blue-200 text-sm mb-1">Fortalezas</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Precisión, análisis, atención al detalle, planificación, calidad, pensamiento crítico</p>
                       </div>
-                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
-                        <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Motivación</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Precisión, datos, excelencia, estándares altos, competencia técnica</p>
+                      <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded">
+                        <p className="font-semibold text-blue dark:text-blue-200 text-sm mb-1">Motivación</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Precisión, datos, excelencia, estándares altos, competencia técnica</p>
                       </div>
-                      <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded">
-                        <p className="font-semibold text-blue-900 dark:text-blue-300 text-sm mb-1">Ambiente Ideal</p>
-                        <p className="text-sm text-slate-700 dark:text-slate-300">Análisis, investigación, procesos claros, documentación, roles técnicos</p>
+                      <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded">
+                        <p className="font-semibold text-blue dark:text-blue-200 text-sm mb-1">Ambiente Ideal</p>
+                        <p className="text-sm text-muted-foreground dark:text-white/85">Análisis, investigación, procesos claros, documentación, roles técnicos</p>
                       </div>
                     </div>
                   </div>
@@ -628,43 +628,43 @@ export default function DespegaOnboarding() {
           </div>
 
           {/* Key Points */}
-          <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-950 dark:to-indigo-950 border-2 border-purple-300 dark:border-purple-700 shadow-lg">
+          <Card className="bg-background">
             <CardContent className="pt-8">
-              <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-slate-50">Puntos Clave Importantes</h2>
+              <h2 className="text-2xl font-bold mb-6 text-muted/90 dark:text-muted/5">Puntos Clave Importantes</h2>
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <div className="text-2xl min-w-fit">✓</div>
+                    <div className="text-2xl min-w-fit"></div>
                     <div>
-                      <p className="font-semibold text-slate-900 dark:text-slate-100">Sin respuestas correctas</p>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">No hay perfil superior. Todos son igualmente valiosos y necesarios.</p>
+                      <p className="font-semibold text-muted/90 dark:text-muted/10">Sin respuestas correctas</p>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">No hay perfil superior. Todos son igualmente valiosos y necesarios.</p>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <div className="text-2xl min-w-fit">✓</div>
+                    <div className="text-2xl min-w-fit"></div>
                     <div>
-                      <p className="font-semibold text-slate-900 dark:text-slate-100">Honestidad total</p>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">Responde como REALMENTE eres, no como crees que deberías ser.</p>
+                      <p className="font-semibold text-muted/90 dark:text-muted/10">Honestidad total</p>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Responde como REALMENTE eres, no como crees que deberías ser.</p>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <div className="text-2xl min-w-fit">✓</div>
+                    <div className="text-2xl min-w-fit"></div>
                     <div>
-                      <p className="font-semibold text-slate-900 dark:text-slate-100">Primer instinto</p>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">Responde rápidamente. Tu instinto natural es lo más preciso.</p>
+                      <p className="font-semibold text-muted/90 dark:text-muted/10">Primer instinto</p>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Responde rápidamente. Tu instinto natural es lo más preciso.</p>
                     </div>
                   </div>
                 </div>
                 <div className="space-y-3">
                   <div className="flex gap-3">
-                    <div className="text-2xl min-w-fit">✓</div>
+                    <div className="text-2xl min-w-fit"></div>
                     <div>
-                      <p className="font-semibold text-slate-900 dark:text-slate-100">Estilo flexible</p>
-                      <p className="text-sm text-slate-600 dark:text-slate-400">Adaptamos nuestro estilo según el contexto y las personas.</p>
+                      <p className="font-semibold text-muted/90 dark:text-muted/10">Estilo flexible</p>
+                      <p className="text-sm text-muted-foreground dark:text-muted-foreground">Adaptamos nuestro estilo según el contexto y las personas.</p>
                     </div>
                   </div>
                 </div>
@@ -673,36 +673,36 @@ export default function DespegaOnboarding() {
           </Card>
 
           {/* What You'll Get */}
-          <Card className="bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-emerald-950 dark:to-teal-950 border-2 border-emerald-300 dark:border-emerald-700 shadow-lg">
+          <Card className="bg-background">
             <CardContent className="pt-8">
-              <h2 className="text-2xl font-bold mb-6 text-slate-900 dark:text-slate-50">Qué Obtendrás de Este Test</h2>
+              <h2 className="text-2xl font-bold mb-6 text-muted/90 dark:text-muted/5">Qué Obtendrás de Este Test</h2>
               <div className="space-y-4">
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg border-l-4 border-emerald-500">
-                  <div className="text-3xl min-w-fit">📊</div>
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
+                  <div className="text-3xl min-w-fit"></div>
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">Tu Perfil Personalizado</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Descubre tu estilo natural, tus fortalezas y áreas donde puedes crecer</p>
+                    <p className="font-semibold text-muted/90 dark:text-muted/10">Tu Perfil Personalizado</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Descubre tu estilo natural, tus fortalezas y áreas donde puedes crecer</p>
                   </div>
                 </div>
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg border-l-4 border-teal-500">
-                  <div className="text-3xl min-w-fit">🎯</div>
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-teal-500">
+                  <div className="text-3xl min-w-fit"></div>
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">Insights Accionables</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Cómo comunicar mejor, trabajar más efectivamente y liderar según tu estilo</p>
+                    <p className="font-semibold text-muted/90 dark:text-muted/10">Insights Accionables</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Cómo comunicar mejor, trabajar más efectivamente y liderar según tu estilo</p>
                   </div>
                 </div>
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg border-l-4 border-emerald-500">
-                  <div className="text-3xl min-w-fit">📚</div>
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
+                  <div className="text-3xl min-w-fit"></div>
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">Libros Recomendados</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Seleccionamos libros estratégicos adaptados a tu perfil para acelerar tu desarrollo</p>
+                    <p className="font-semibold text-muted/90 dark:text-muted/10">Libros Recomendados</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Seleccionamos libros estratégicos adaptados a tu perfil para acelerar tu desarrollo</p>
                   </div>
                 </div>
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-slate-800/50 rounded-lg border-l-4 border-teal-500">
+                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-teal-500">
                   <div className="text-3xl min-w-fit">���</div>
                   <div>
-                    <p className="font-semibold text-slate-900 dark:text-slate-100">Plan de Acción</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Pasos claros y concretos para tu transición profesional y personal</p>
+                    <p className="font-semibold text-muted/90 dark:text-muted/10">Plan de Acción</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Pasos claros y concretos para tu transición profesional y personal</p>
                   </div>
                 </div>
               </div>
@@ -710,11 +710,11 @@ export default function DespegaOnboarding() {
           </Card>
 
           {/* CTA */}
-          <div className="space-y-4 sticky bottom-0 bg-gradient-to-t from-slate-100 to-transparent dark:from-slate-900 dark:to-transparent pt-8 -mx-4 px-4 pb-4">
-            <Button onClick={() => setStep("test")} className="w-full h-14 text-lg font-semibold shadow-lg hover:shadow-xl transition-all rounded-lg bg-gradient-to-r from-slate-900 to-slate-700 hover:from-slate-800 hover:to-slate-600 dark:from-slate-100 dark:to-slate-300 dark:text-slate-900">
+          <div className="space-y-4 sticky bottom-0 bg-background">
+            <Button onClick={() => setStep("test")} className="w-full h-14 text-lg font-semibold shadow-lg hover:shadow-xl transition-all rounded-[28px] bg-background">
               Entiendo, Comenzar Mi Test
             </Button>
-            <p className="text-center text-sm text-slate-600 dark:text-slate-400">
+            <p className="text-center text-sm text-muted-foreground dark:text-muted-foreground">
               Este test toma ~3 minutos. Responde con honestidad para resultados precisos.
             </p>
           </div>
@@ -809,10 +809,10 @@ export default function DespegaOnboarding() {
     }
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background">
         <Card className="w-full max-w-2xl">
           <CardHeader>
-            <CardTitle>Conozcámonos - Contexto Inicial</CardTitle>
+            <CardTitle style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }}>Conozcámonos - Contexto Inicial</CardTitle>
             <CardDescription>7 preguntas para personalizar tu experiencia</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -852,7 +852,7 @@ export default function DespegaOnboarding() {
                     Siguiente
                   </Button>
                   {c1Responses[currentC1Q.id] && (c1Responses[currentC1Q.id] || "").trim().length < 5 && (
-                    <p className="text-sm text-red-500">La respuesta debe tener al menos 5 caracteres</p>
+                    <p className="text-sm text-red">La respuesta debe tener al menos 5 caracteres</p>
                   )}
                 </div>
               )}
@@ -917,9 +917,9 @@ export default function DespegaOnboarding() {
                   Para cada pregunta, elige cómo eres REALMENTE en la mayoría de las situaciones
                 </CardDescription>
               </div>
-              <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded border border-blue-200 dark:border-blue-800">
+              <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded border border-blue/30 dark:border-blue/10">
                 <p className="text-xs text-foreground">
-                  💡 <strong>Recuerda:</strong> No hay respuestas correctas. Sé honesto contigo mismo para obtener un análisis preciso.
+                   <strong>Recuerda:</strong> No hay respuestas correctas. Sé honesto contigo mismo para obtener un análisis preciso.
                 </p>
               </div>
               <div className="space-y-2">
@@ -937,8 +937,8 @@ export default function DespegaOnboarding() {
             <div className="grid md:grid-cols-2 gap-6">
               {/* MÁS COMO YO */}
               <div className="space-y-3">
-                <h4 className="font-semibold text-green-700 bg-green-50 p-3 rounded">
-                  ✓ MÁS como yo
+                <h4 className="font-semibold text-green bg-green/5 p-3 rounded">
+                   MÁS como yo
                 </h4>
                 <div className="space-y-2">
                   {question?.opciones.map((option) => {
@@ -954,25 +954,25 @@ export default function DespegaOnboarding() {
                             })
                           }
                         }}
-                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                        className={`p-4 rounded-[28px] border-2 cursor-pointer transition-all ${
                           isDisabledInMas
-                            ? "border-gray-200 bg-gray-100 opacity-50 cursor-not-allowed"
+                            ? "border-muted/20 bg-muted/10 opacity-50 cursor-not-allowed"
                             : selectedMas === option.dimension
-                            ? "border-green-500 bg-green-50"
-                            : "border-gray-200 hover:border-green-300"
+                            ? "border-green bg-green/5"
+                            : "border-muted/20 hover:border-green/30"
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                             selectedMas === option.dimension
-                              ? "border-green-500 bg-green-500"
-                              : "border-gray-300"
+                              ? "border-green bg-green/50"
+                              : "border-muted/30"
                           }`}>
                             {selectedMas === option.dimension && (
-                              <span className="text-white text-sm">✓</span>
+                              <span className="text-white text-sm"></span>
                             )}
                           </div>
-                          <span className={`text-sm ${isDisabledInMas ? "text-gray-500" : ""}`}>
+                          <span className={`text-sm ${isDisabledInMas ? "text-muted-foreground" : ""}`}>
                             {option.texto}
                             {isDisabledInMas && " (Ya seleccionado en MENOS como yo)"}
                           </span>
@@ -985,7 +985,7 @@ export default function DespegaOnboarding() {
 
               {/* MENOS COMO YO */}
               <div className="space-y-3">
-                <h4 className="font-semibold text-red-700 bg-red-50 p-3 rounded">
+                <h4 className="font-semibold text-red bg-red/5 p-3 rounded">
                   ✗ MENOS como yo
                 </h4>
                 <div className="space-y-2">
@@ -1002,25 +1002,25 @@ export default function DespegaOnboarding() {
                             })
                           }
                         }}
-                        className={`p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                        className={`p-4 rounded-[28px] border-2 cursor-pointer transition-all ${
                           isDisabledInMenos
-                            ? "border-gray-200 bg-gray-100 opacity-50 cursor-not-allowed"
+                            ? "border-muted/20 bg-muted/10 opacity-50 cursor-not-allowed"
                             : selectedMenos === option.dimension
-                            ? "border-red-500 bg-red-50"
-                            : "border-gray-200 hover:border-red-300"
+                            ? "border-red/50 bg-red/5"
+                            : "border-muted/20 hover:border-red/30"
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${
                             selectedMenos === option.dimension
-                              ? "border-red-500 bg-red-500"
-                              : "border-gray-300"
+                              ? "border-red/50 bg-red/50"
+                              : "border-muted/30"
                           }`}>
                             {selectedMenos === option.dimension && (
                               <span className="text-white text-sm">✗</span>
                             )}
                           </div>
-                          <span className={`text-sm ${isDisabledInMenos ? "text-gray-500" : ""}`}>
+                          <span className={`text-sm ${isDisabledInMenos ? "text-muted-foreground" : ""}`}>
                             {option.texto}
                             {isDisabledInMenos && " (Ya seleccionado en MÁS como yo)"}
                           </span>
@@ -1150,8 +1150,8 @@ export default function DespegaOnboarding() {
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-              <p className="text-sm text-blue-900 dark:text-blue-100">
+            <div className="bg-blue/5 dark:bg-blue border border-blue/30 dark:border-blue/10 rounded-[28px] p-4">
+              <p className="text-sm text-blue dark:text-white">
                 Basados en tu Despega Cerebral, vamos a crear acciones concretas para tu transformación.
               </p>
             </div>
@@ -1209,7 +1209,7 @@ export default function DespegaOnboarding() {
                     placeholder="Escribe aquí..."
                     value={c2Step1Responses[currentC2Q.id] || ""}
                     onChange={(e) => setC2Step1Responses({ ...c2Step1Responses, [currentC2Q.id]: e.target.value })}
-                    className="w-full p-3 border rounded-lg dark:bg-slate-900 dark:border-slate-700"
+                    className="w-full p-3 border rounded-lg dark:bg-background dark:border-card"
                     rows={3}
                     disabled={c2Paso1Loading}
                   />
@@ -1224,7 +1224,7 @@ export default function DespegaOnboarding() {
               )}
 
               {isLastQuestion && isCurrentQuestionAnswered && (
-                <div className="text-xs text-slate-500 text-center pt-2">
+                <div className="text-xs text-muted-foreground text-center pt-2">
                   Haz click en "Terminar y Continuar" para generar tu ruta
                 </div>
               )}
@@ -1326,26 +1326,26 @@ export default function DespegaOnboarding() {
           <Card className="w-full max-w-2xl">
             <CardContent className="pt-12 pb-12 space-y-6 text-center">
               <div className="flex justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-500" />
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green" />
               </div>
               <div className="space-y-2">
-                <h2 className="text-2xl font-bold text-emerald-600">¡Excelente!</h2>
-                <p className="text-slate-600 dark:text-slate-400">
+                <h2 className="text-2xl font-bold text-green">¡Excelente!</h2>
+                <p className="text-muted-foreground dark:text-muted-foreground">
                   Tu ruta personalizada se está generando...
                 </p>
               </div>
-              <div className="bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4 space-y-2">
+              <div className="bg-green/5 dark:bg-emerald-950 border border-green/20 dark:border-emerald-800 rounded-[28px] p-4 space-y-2">
                 <p className="text-sm font-medium text-emerald-900 dark:text-emerald-100">
                   Se está creando tu plan personalizado de 30/60/90 días basado en:
                 </p>
                 <ul className="text-xs text-emerald-800 dark:text-emerald-200 space-y-1 text-left">
-                  <li>✓ Tu Perfil de Liderazgo</li>
-                  <li>✓ Tu contexto personal y profesional</li>
-                  <li>✓ Tu ambiente de ejecución</li>
-                  <li>✓ Tus objetivos 30/60/90</li>
+                  <li> Tu Perfil de Liderazgo</li>
+                  <li> Tu contexto personal y profesional</li>
+                  <li> Tu ambiente de ejecución</li>
+                  <li> Tus objetivos 30/60/90</li>
                 </ul>
               </div>
-              <p className="text-xs text-slate-500">Redirigiendo en un momento...</p>
+              <p className="text-xs text-muted-foreground">Redirigiendo en un momento...</p>
             </CardContent>
           </Card>
         ) : (
@@ -1364,7 +1364,7 @@ export default function DespegaOnboarding() {
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="bg-emerald-50 dark:bg-emerald-950 border border-emerald-200 dark:border-emerald-800 rounded-lg p-4">
+              <div className="bg-green/5 dark:bg-emerald-950 border border-green/20 dark:border-emerald-800 rounded-[28px] p-4">
                 <p className="text-sm text-emerald-900 dark:text-emerald-100">
                   Tu ruta de 30 días está lista. Responde 5 preguntas más para extender a 60 y 90 días.
                 </p>
@@ -1379,7 +1379,7 @@ export default function DespegaOnboarding() {
                       placeholder="Escribe aquí..."
                       value={c2Step2Responses[currentC2Step2Q.id] || ""}
                       onChange={(e) => setC2Step2Responses({ ...c2Step2Responses, [currentC2Step2Q.id]: e.target.value })}
-                      className="w-full p-3 border rounded-lg dark:bg-slate-900 dark:border-slate-700"
+                      className="w-full p-3 border rounded-lg dark:bg-background dark:border-card"
                       rows={3}
                       disabled={c2Paso1Loading}
                     />
@@ -1394,7 +1394,7 @@ export default function DespegaOnboarding() {
                 )}
 
                 {isLastQuestion && isCurrentQuestionAnswered && (
-                  <div className="text-xs text-slate-500 text-center pt-2">
+                  <div className="text-xs text-muted-foreground text-center pt-2">
                     Haz click en "Completar y Generar Ruta" para crear tu plan personalizado
                   </div>
                 )}

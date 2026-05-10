@@ -10,6 +10,7 @@ import { Mic, Video, Clock, AlertTriangle } from "lucide-react"
 interface InterviewSimulationProps {
   level: "basico" | "intermedio" | "avanzado" | "bonus"
   type: "guiada" | "estructurada" | "desafiante" | "presion"
+  interviewerId?: string
   onComplete: (result: any) => void
 }
 
@@ -36,13 +37,14 @@ const INTERVIEW_QUESTIONS = {
   ]
 }
 
-export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimulationProps) {
-  const [stage, setStage] = useState<"intro" | "question" | "recording" | "feedback">("intro")
+export function A3InterviewSimulation({ level, type, interviewerId, onComplete }: InterviewSimulationProps) {
+  const [stage, setStage] = useState<"intro" | "greeting_video" | "question" | "recording" | "feedback">("intro")
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
   const [isRecording, setIsRecording] = useState(false)
   const [recordingTime, setRecordingTime] = useState(0)
   const [feedback, setFeedback] = useState<any>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
+  const greetingVideoRef = useRef<HTMLVideoElement>(null)
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const recordedChunksRef = useRef<Blob[]>([])
 
@@ -59,6 +61,13 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
   }, [isRecording])
 
   const startRecording = async () => {
+    // First, show greeting video if available
+    if (interviewerId) {
+      setStage("greeting_video")
+      return
+    }
+
+    // Otherwise, start recording directly
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       if (videoRef.current) {
@@ -76,6 +85,30 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
       mediaRecorder.start()
       setIsRecording(true)
       setStage("recording")
+    } catch (err) {
+      console.error("Error accessing media:", err)
+    }
+  }
+
+  const startActualRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream
+      }
+
+      const mediaRecorder = new MediaRecorder(stream)
+      mediaRecorderRef.current = mediaRecorder
+      recordedChunksRef.current = []
+
+      mediaRecorder.ondataavailable = (event) => {
+        recordedChunksRef.current.push(event.data)
+      }
+
+      mediaRecorder.start()
+      setIsRecording(true)
+      setRecordingTime(0)
+      setStage("question")
     } catch (err) {
       console.error("Error accessing media:", err)
     }
@@ -159,19 +192,19 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 bg-blue-50 rounded">
-              <div className="text-sm text-gray-600">Tipo</div>
+            <div className="p-4 bg-blue/5 rounded">
+              <div className="text-sm text-muted-foreground">Tipo</div>
               <div className="font-medium">{getTypeLabel()}</div>
             </div>
-            <div className="p-4 bg-green-50 rounded">
-              <div className="text-sm text-gray-600">Nivel</div>
+            <div className="p-4 bg-green/5 rounded">
+              <div className="text-sm text-muted-foreground">Nivel</div>
               <div className="font-medium capitalize">{level}</div>
             </div>
           </div>
 
           <div className="p-4 bg-amber-50 border border-amber-200 rounded">
             <div className="font-medium text-sm mb-2">Instrucciones</div>
-            <ul className="text-sm space-y-1 text-gray-700">
+            <ul className="text-sm space-y-1 text-muted">
               <li>• Recibirás {questions.length} preguntas</li>
               <li>• Tienes 60-90 segundos por respuesta</li>
               <li>• La cámara estará encendida durante toda la entrevista</li>
@@ -196,6 +229,56 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
     )
   }
 
+  if (stage === "greeting_video") {
+    const getGreetingVideoPath = () => {
+      if (!interviewerId) return null
+      return `/videos/avatars/${interviewerId}/greeting.mp4`
+    }
+
+    const videoPath = getGreetingVideoPath()
+
+    return (
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Saludo del Entrevistador</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {videoPath && (
+            <div className="bg-muted/20 rounded-lg overflow-hidden aspect-video flex items-center justify-center">
+              <video
+                ref={greetingVideoRef}
+                src={videoPath}
+                autoPlay
+                playsInline
+                controls
+                className="w-full h-full object-contain"
+                onEnded={() => {
+                  // After video ends, start the actual interview recording
+                  startActualRecording()
+                }}
+              />
+            </div>
+          )}
+
+          <div className="bg-blue/5 p-4 rounded border border-blue/20">
+            <p className="text-sm text-muted">
+              El entrevistador te está dando la bienvenida y explicando la dinámica de la entrevista. 
+              Cuando termine el video, la cámara se activará para tu primera pregunta.
+            </p>
+          </div>
+
+          <Button
+            onClick={() => startActualRecording()}
+            variant="outline"
+            className="w-full"
+          >
+            Saltar al Video y Comenzar
+          </Button>
+        </CardContent>
+      </Card>
+    )
+  }
+
   if (stage === "recording") {
     return (
       <Card className="w-full">
@@ -204,14 +287,14 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
             <div>
               <CardTitle>Pregunta {currentQuestionIdx + 1} de {questions.length}</CardTitle>
             </div>
-            <Badge className="bg-red-600 flex items-center gap-2">
+            <Badge className="bg-red flex items-center gap-2">
               <span className="animate-pulse">●</span>
               {formatTime(recordingTime)}
             </Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="bg-gray-900 rounded-lg overflow-hidden aspect-video">
+          <div className="bg-muted/90 rounded-lg overflow-hidden aspect-video">
             <video
               ref={videoRef}
               autoPlay
@@ -221,8 +304,8 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
             />
           </div>
 
-          <div className="bg-blue-50 p-4 rounded border border-blue-200">
-            <div className="text-sm text-gray-600 mb-2">Pregunta</div>
+          <div className="bg-blue/5 p-4 rounded border border-blue/20">
+            <div className="text-sm text-muted-foreground mb-2">Pregunta</div>
             <div className="text-lg font-medium">{currentQuestion}</div>
           </div>
 
@@ -234,9 +317,9 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
           </div>
 
           {recordingTime > 90 && (
-            <Alert className="bg-orange-50 border-orange-300">
-              <AlertTriangle className="h-4 w-4 text-orange-600" />
-              <AlertDescription className="text-orange-800">
+            <Alert className="bg-orange/5 border-orange/30">
+              <AlertTriangle className="h-4 w-4 text-orange" />
+              <AlertDescription className="text-orange">
                 Estás excediendo el tiempo recomendado (60-90s). Intenta ser más conciso.
               </AlertDescription>
             </Alert>
@@ -254,12 +337,12 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Score Visualization */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg border border-blue-200">
-            <div className="text-sm text-gray-600 mb-2">Desempeño en esta respuesta</div>
+          <div className="bg-background">
+            <div className="text-sm text-muted-foreground mb-2">Desempeño en esta respuesta</div>
             <div className="text-4xl font-bold text-indigo-600 mb-2">
               {feedback.performance_score}%
             </div>
-            <div className="bg-gray-200 rounded-full h-2">
+            <div className="bg-muted/20 rounded-full h-2">
               <div
                 className="bg-indigo-600 h-2 rounded-full"
                 style={{ width: `${feedback.performance_score}%` }}
@@ -269,30 +352,30 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
 
           {/* Metric Breakdown */}
           <div className="grid grid-cols-2 gap-4">
-            <div className="p-3 bg-gray-50 rounded">
-              <div className="text-xs text-gray-600">Confianza Vocal</div>
+            <div className="p-3 bg-muted/5 rounded">
+              <div className="text-xs text-muted-foreground">Confianza Vocal</div>
               <div className="text-xl font-bold">{feedback.vocal_confidence}%</div>
             </div>
-            <div className="p-3 bg-gray-50 rounded">
-              <div className="text-xs text-gray-600">Contacto Visual</div>
+            <div className="p-3 bg-muted/5 rounded">
+              <div className="text-xs text-muted-foreground">Contacto Visual</div>
               <div className="text-xl font-bold">{feedback.eye_contact}%</div>
             </div>
-            <div className="p-3 bg-gray-50 rounded">
-              <div className="text-xs text-gray-600">Claridad</div>
+            <div className="p-3 bg-muted/5 rounded">
+              <div className="text-xs text-muted-foreground">Claridad</div>
               <div className="text-xl font-bold">{feedback.clarity}%</div>
             </div>
-            <div className="p-3 bg-gray-50 rounded">
-              <div className="text-xs text-gray-600">Profundidad</div>
+            <div className="p-3 bg-muted/5 rounded">
+              <div className="text-xs text-muted-foreground">Profundidad</div>
               <div className="text-xl font-bold">{feedback.response_depth}%</div>
             </div>
           </div>
 
           {/* Strengths */}
-          <div className="bg-green-50 p-4 rounded border border-green-200">
-            <div className="font-medium text-sm mb-2">✓ Lo que funcionó</div>
+          <div className="bg-green/5 p-4 rounded border border-green/20">
+            <div className="font-medium text-sm mb-2"> Lo que funcionó</div>
             <ul className="space-y-1">
               {feedback.strengths.map((str: string, idx: number) => (
-                <li key={idx} className="text-sm text-gray-700">• {str}</li>
+                <li key={idx} className="text-sm text-muted">• {str}</li>
               ))}
             </ul>
           </div>
@@ -302,13 +385,13 @@ export function A3InterviewSimulation({ level, type, onComplete }: InterviewSimu
             <div className="font-medium text-sm mb-2">→ Áreas para mejorar</div>
             <ul className="space-y-1">
               {feedback.improvements.map((imp: string, idx: number) => (
-                <li key={idx} className="text-sm text-gray-700">• {imp}</li>
+                <li key={idx} className="text-sm text-muted">• {imp}</li>
               ))}
             </ul>
           </div>
 
           {/* Coach Narrative */}
-          <div className="bg-blue-50 p-4 rounded border border-blue-200 italic">
+          <div className="bg-blue/5 p-4 rounded border border-blue/20 italic">
             "{feedback.coach_feedback}"
           </div>
 

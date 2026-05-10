@@ -99,13 +99,13 @@ export default function EnhancedBookReader({
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "principiante":
-        return "bg-green-100 text-green-800"
+        return "bg-green/10 text-green"
       case "intermedio":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow/10 text-yellow"
       case "avanzado":
-        return "bg-red-100 text-red-800"
+        return "bg-red/10 text-red"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-muted/10 text-gray-800"
     }
   }
 
@@ -121,7 +121,7 @@ export default function EnhancedBookReader({
                 <Badge className={getDifficultyColor(difficulty)}>{difficulty}</Badge>
               </div>
 
-              <div className="flex items-center gap-4 text-gray-600 mb-4">
+              <div className="flex items-center gap-4 text-muted-foreground mb-4">
                 <div className="flex items-center">
                   <User className="h-4 w-4 mr-1" />
                   {author}
@@ -151,7 +151,7 @@ export default function EnhancedBookReader({
                 variant="outline"
                 size="sm"
                 onClick={() => setIsBookmarked(!isBookmarked)}
-                className={isBookmarked ? "text-blue-600" : ""}
+                className={isBookmarked ? "text-blue" : ""}
               >
                 <Bookmark className="h-4 w-4" />
               </Button>
@@ -160,7 +160,7 @@ export default function EnhancedBookReader({
                 variant="outline"
                 size="sm"
                 onClick={() => setIsLiked(!isLiked)}
-                className={isLiked ? "text-red-600" : ""}
+                className={isLiked ? "text-red" : ""}
               >
                 <Heart className="h-4 w-4" />
               </Button>
@@ -181,7 +181,7 @@ export default function EnhancedBookReader({
 
           {/* Progress Bar */}
           <div className="space-y-2">
-            <div className="flex justify-between text-sm text-gray-600">
+            <div className="flex justify-between text-sm text-muted-foreground">
               <span>Progreso de lectura</span>
               <span>{Math.round(readingProgress)}%</span>
             </div>
@@ -197,7 +197,7 @@ export default function EnhancedBookReader({
             <CardContent className="p-8">
               {/* Settings Panel */}
               {showSettings && (
-                <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                <div className="mb-6 p-4 bg-muted/5 rounded-lg">
                   <h3 className="font-semibold mb-3">Configuración de Lectura</h3>
                   <div className="flex items-center gap-4">
                     <label className="text-sm">Tamaño de fuente:</label>
@@ -225,7 +225,7 @@ export default function EnhancedBookReader({
                 </Button>
 
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">
+                  <span className="text-sm text-muted-foreground">
                     Página {currentPage} de {totalPages}
                   </span>
                 </div>
@@ -248,22 +248,22 @@ export default function EnhancedBookReader({
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Progreso</span>
+                <span className="text-sm text-muted-foreground">Progreso</span>
                 <span className="text-sm font-medium">{Math.round(readingProgress)}%</span>
               </div>
 
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Tiempo leyendo</span>
+                <span className="text-sm text-muted-foreground">Tiempo leyendo</span>
                 <span className="text-sm font-medium">{formatTime(readingTime)}</span>
               </div>
 
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Páginas restantes</span>
+                <span className="text-sm text-muted-foreground">Páginas restantes</span>
                 <span className="text-sm font-medium">{totalPages - currentPage}</span>
               </div>
 
               <div className="flex justify-between">
-                <span className="text-sm text-gray-600">Tiempo estimado</span>
+                <span className="text-sm text-muted-foreground">Tiempo estimado</span>
                 <span className="text-sm font-medium">
                   {Math.round((estimatedReadTime * (1 - readingProgress / 100)) / 60)}m
                 </span>

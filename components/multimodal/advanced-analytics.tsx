@@ -22,11 +22,19 @@ export function AdvancedAnalyticsReporting() {
 
   const fetchAnalytics = async () => {
     try {
+      setLoading(true)
       const response = await fetch(`/api/multimodal/advanced-analytics?period=${timeRange}`)
+      if (!response.ok) {
+        console.error('[v0] Advanced analytics API error:', response.status, response.statusText)
+        setAnalytics(null)
+        setLoading(false)
+        return
+      }
       const data = await response.json()
       setAnalytics(data)
     } catch (error) {
       console.error('[v0] Analytics error:', error)
+      setAnalytics(null)
     } finally {
       setLoading(false)
     }
@@ -51,9 +59,19 @@ export function AdvancedAnalyticsReporting() {
 
   if (loading) {
     return (
-      <Card>
+      <Card className="border-2 border-training/40">
         <CardContent className="pt-6 flex justify-center">
-          <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+          <Loader2 className="w-6 h-6 animate-spin text-training" />
+        </CardContent>
+      </Card>
+    )
+  }
+
+  if (!analytics) {
+    return (
+      <Card className="border-2 border-training/40">
+        <CardContent className="pt-6 text-center text-muted-foreground">
+          No hay datos disponibles. Por favor intenta más tarde.
         </CardContent>
       </Card>
     )
@@ -75,7 +93,7 @@ export function AdvancedAnalyticsReporting() {
             <option value="quarter">Último Trimestre</option>
             <option value="all">Todo el Tiempo</option>
           </select>
-          <Button onClick={exportReport} disabled={exporting} className="gap-2">
+          <Button onClick={exportReport} disabled={exporting} className="gap-2 bg-training hover:bg-training/90 text-white">
             <Download className="w-4 h-4" />
             {exporting ? 'Exportando...' : 'Exportar Reporte'}
           </Button>
@@ -83,8 +101,8 @@ export function AdvancedAnalyticsReporting() {
       </div>
 
       <Tabs defaultValue="progress" className="w-full">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="progress">Progreso</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-4 border-2 border-training/40 rounded-lg" style={{ backgroundColor: 'rgba(219, 217, 215, 0.15)' }}>
+          <TabsTrigger value="progress" className="text-opacity-75">Progreso</TabsTrigger>
           <TabsTrigger value="benchmarks">Benchmarks</TabsTrigger>
           <TabsTrigger value="components">Componentes</TabsTrigger>
           <TabsTrigger value="insights">Insights</TabsTrigger>
@@ -93,41 +111,41 @@ export function AdvancedAnalyticsReporting() {
         {/* Progress Tab */}
         <TabsContent value="progress" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card>
+            <Card className="border-2 border-training/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Mejora Detectada</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className={`text-3xl font-bold ${analytics.improvement_trend >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className="text-3xl font-bold text-training">
                   {analytics.improvement_trend >= 0 ? '+' : ''}{analytics.improvement_trend}%
                 </p>
-                <p className="text-xs text-gray-500 mt-1">vs. período anterior</p>
+                <p className="text-xs text-muted-foreground mt-1">vs. período anterior</p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2 border-training/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Consistency Score</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-3xl font-bold text-blue-600">{analytics.consistency_score}%</p>
-                <p className="text-xs text-gray-500 mt-1">Variación mínima en sesiones</p>
+                <p className="text-3xl font-bold text-training">{analytics.consistency_score}%</p>
+                <p className="text-xs text-muted-foreground mt-1">Variación mínima en sesiones</p>
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2 border-training/40">
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium">Strongest Area</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-2xl font-bold">{analytics.strongest_area}</p>
-                <p className="text-xs text-gray-500 mt-1">{analytics.strongest_score}/100</p>
+                <p className="text-xs text-muted-foreground mt-1">{analytics.strongest_score}/100</p>
               </CardContent>
             </Card>
           </div>
 
           {/* Progress Chart */}
-          <Card>
+          <Card className="border-2 border-training/40">
             <CardHeader>
               <CardTitle>Progresión de Puntuaciones</CardTitle>
             </CardHeader>
@@ -161,7 +179,7 @@ export function AdvancedAnalyticsReporting() {
 
         {/* Benchmarks Tab */}
         <TabsContent value="benchmarks" className="space-y-6">
-          <Card>
+          <Card className="border-2 border-training/40">
             <CardHeader>
               <CardTitle>Tu Desempeño vs. Benchmark</CardTitle>
               <CardDescription>Comparación con usuarios similares en Despega</CardDescription>
@@ -173,26 +191,26 @@ export function AdvancedAnalyticsReporting() {
                     <div className="flex justify-between mb-2">
                       <span className="text-sm font-medium">{item.metric}</span>
                       <div className="flex gap-2 text-sm">
-                        <span className="text-blue-600 font-semibold">Tu: {item.your_score}%</span>
-                        <span className="text-gray-500">Benchmark: {item.benchmark}%</span>
+                        <span className="text-training font-semibold">Tu: {item.your_score}%</span>
+                        <span className="text-muted-foreground">Benchmark: {item.benchmark}%</span>
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="flex-1 h-2 bg-muted/20 rounded-full overflow-hidden">
                         <div
-                          className="bg-blue-600 h-full rounded-full"
+                          className="bg-training h-full rounded-full"
                           style={{ width: `${Math.min(item.your_score, 100)}%` }}
                         />
                       </div>
-                      <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden opacity-50">
+                      <div className="flex-1 h-2 bg-muted/20 rounded-full overflow-hidden opacity-50">
                         <div
-                          className="bg-gray-600 h-full rounded-full"
+                          className="bg-muted/60 h-full rounded-full"
                           style={{ width: `${Math.min(item.benchmark, 100)}%` }}
                         />
                       </div>
                     </div>
                     {item.your_score > item.benchmark && (
-                      <Badge className="mt-2 bg-green-100 text-green-800">
+                      <Badge className="mt-2 bg-training/10 text-training">
                         Mejor que el {Math.round(100 - item.percentile)}% de usuarios
                       </Badge>
                     )}
@@ -205,7 +223,7 @@ export function AdvancedAnalyticsReporting() {
 
         {/* Components Tab */}
         <TabsContent value="components" className="space-y-6">
-          <Card>
+          <Card className="border-2 border-training/40">
             <CardHeader>
               <CardTitle>Desglose por Componente</CardTitle>
             </CardHeader>
@@ -240,21 +258,21 @@ export function AdvancedAnalyticsReporting() {
         {/* Insights Tab */}
         <TabsContent value="insights" className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Card>
+            <Card className="border-2 border-training/40">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Award className="w-5 h-5 text-yellow-600" />
+                  <Award className="w-5 h-5 text-training" />
                   Logros Desbloqueados
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
                   {analytics.achievements && analytics.achievements.map((achievement: any) => (
-                    <div key={achievement.id} className="flex items-center gap-3 p-2 bg-yellow-50 rounded-lg">
+                    <div key={achievement.id} className="flex items-center gap-3 p-2 bg-training/5 rounded-lg">
                       <span className="text-2xl">{achievement.icon}</span>
                       <div>
                         <p className="font-medium text-sm">{achievement.title}</p>
-                        <p className="text-xs text-gray-600">{achievement.description}</p>
+                        <p className="text-xs text-muted-foreground">{achievement.description}</p>
                       </div>
                     </div>
                   ))}
@@ -262,10 +280,10 @@ export function AdvancedAnalyticsReporting() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="border-2 border-training/40">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Target className="w-5 h-5 text-blue-600" />
+                  <Target className="w-5 h-5 text-training" />
                   Próximos Objetivos
                 </CardTitle>
               </CardHeader>
@@ -275,11 +293,11 @@ export function AdvancedAnalyticsReporting() {
                     <div key={goal.id}>
                       <div className="flex justify-between mb-1">
                         <p className="text-sm font-medium">{goal.title}</p>
-                        <span className="text-xs text-gray-500">{goal.progress}%</span>
+                        <span className="text-xs text-muted-foreground">{goal.progress}%</span>
                       </div>
-                      <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-2 bg-muted/20 rounded-full overflow-hidden">
                         <div
-                          className="bg-blue-600 h-full rounded-full transition-all"
+                          className="bg-blue h-full rounded-full transition-all"
                           style={{ width: `${goal.progress}%` }}
                         />
                       </div>
@@ -290,15 +308,15 @@ export function AdvancedAnalyticsReporting() {
             </Card>
           </div>
 
-          <Card>
+          <Card className="border-2 border-training/40">
             <CardHeader>
               <CardTitle>AI-Generated Insights</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {analytics.ai_insights && analytics.ai_insights.map((insight: string, idx: number) => (
-                <div key={idx} className="flex gap-3 p-3 bg-blue-50 rounded-lg">
-                  <span className="text-blue-600 font-bold flex-shrink-0">{idx + 1}.</span>
-                  <p className="text-sm text-gray-700">{insight}</p>
+                <div key={idx} className="flex gap-3 p-3 bg-training/5 rounded-lg">
+                  <span className="text-training font-bold flex-shrink-0">{idx + 1}.</span>
+                  <p className="text-sm text-muted">{insight}</p>
                 </div>
               ))}
             </CardContent>

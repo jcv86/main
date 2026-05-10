@@ -37,11 +37,11 @@ interface A4LearningModulesProps {
 
 const getNivelColor = (nivel: string) => {
   const colors: Record<string, string> = {
-    "basico": "bg-green-100 text-green-800",
-    "intermedio": "bg-blue-100 text-blue-800",
-    "avanzado": "bg-purple-100 text-purple-800",
+    "basico": "bg-green/10 text-green",
+    "intermedio": "bg-blue/10 text-blue",
+    "avanzado": "bg-purple/10 text-purple",
   }
-  return colors[nivel] || "bg-gray-100"
+  return colors[nivel] || "bg-muted/10"
 }
 
 export function A4LearningModules({ modules, onCompleteModule }: A4LearningModulesProps) {
@@ -81,8 +81,8 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
       {/* Header */}
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center text-xl">
-            📚
+          <div className="w-10 h-10 rounded-[28px] bg-purple/10 flex items-center justify-center text-xl">
+            
           </div>
           <div>
             <h2 className="text-2xl font-bold">Módulos de Contexto Profesional</h2>
@@ -133,8 +133,8 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
                 }}>
                   <DialogTrigger asChild>
                     <Card
-                      className={`cursor-pointer transition-all hover:shadow-md ${
-                        isCompleted ? "opacity-60 bg-muted" : ""
+                      className={`cursor-pointer transition-all hover:shadow-md ${`}
+                        isCompleted ? "opacity-60 bg-muted" : ""`}
                       }`}
                       onClick={() => setSelectedModule(module)}
                     >
@@ -147,7 +147,7 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
                             </CardDescription>
                           </div>
                           {isCompleted && (
-                            <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                            <CheckCircle2 className="w-5 h-5 text-green flex-shrink-0" />
                           )}
                         </div>
                       </CardHeader>
@@ -161,7 +161,7 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
                             <Clock className="w-3 h-3 mr-1" />
                             {module.duracion_minutos} min
                           </Badge>
-                          <Badge className="bg-primary text-xs">
+                          <Badge className="bg-purple text-xs">
                             <Zap className="w-3 h-3 mr-1" />
                             +{module.puntos} pts
                           </Badge>
@@ -195,7 +195,7 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
 
                       <div className="space-y-6">
                         {/* Main Content */}
-                        <div className="bg-muted p-4 rounded-lg">
+                        <div className="bg-muted p-4 rounded-[28px]">
                           <div className="text-sm whitespace-pre-wrap">
                             {module.contenido_principal}
                           </div>
@@ -206,7 +206,7 @@ export function A4LearningModules({ modules, onCompleteModule }: A4LearningModul
                           <div className="space-y-3">
                             <div className="font-medium">Casos de Estudio</div>
                             {module.casos_estudio.map((caso, idx) => (
-                              <Card key={idx} className="bg-blue-50">
+                              <Card key={idx} className="bg-blue/5">
                                 <CardContent className="pt-4">
                                   <div className="text-sm">{caso}</div>
                                 </CardContent>

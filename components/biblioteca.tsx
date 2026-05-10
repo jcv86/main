@@ -53,7 +53,7 @@ export function Biblioteca() {
   const loadResources = async () => {
     setLoading(true)
     try {
-      const res = await getBibliotecaResources(selectedCategory || undefined, 50)
+      const res = await getBibliotecaResources(selectedCategory || undefined, undefined, 50)
       setResources(res)
     } catch (error) {
       console.error("[v0] Error loading resources:", error)
@@ -78,11 +78,11 @@ export function Biblioteca() {
   return (
     <div className="space-y-4">
       {/* Header */}
-      <Card className="border-0 bg-gradient-to-br from-blue-500/5 to-blue-500/10 backdrop-blur-sm">
+      <Card className="border-0 bg-background">
         <CardHeader>
           <div className="flex items-center gap-3">
-            <div className="p-3 bg-blue-500/10 rounded-lg">
-              <BookOpen className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+            <div className="p-3 bg-blue/50/10 rounded-lg">
+              <BookOpen className="w-6 h-6 text-blue dark:text-blue/40" />
             </div>
             <div>
               <CardTitle>Biblioteca Curada</CardTitle>
@@ -102,9 +102,9 @@ export function Biblioteca() {
               <Filter className="w-4 h-4 text-muted-foreground flex-shrink-0" />
               <button
                 onClick={() => setSelectedCategory("")}
-                className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                className={`px-3 py-1 rounded-[20px] text-sm transition-colors ${
                   selectedCategory === ""
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-purple text-purple-foreground"
                     : "bg-muted hover:bg-muted/80"
                 }`}
               >
@@ -114,9 +114,9 @@ export function Biblioteca() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                  className={`px-3 py-1 rounded-[20px] text-sm transition-colors ${
                     selectedCategory === category
-                      ? "bg-primary text-primary-foreground"
+                      ? "bg-purple text-purple-foreground"
                       : "bg-muted hover:bg-muted/80"
                   }`}
                 >
@@ -133,7 +133,7 @@ export function Biblioteca() {
         {loading && (
           <Card className="col-span-full border-0 bg-card/70 backdrop-blur-sm">
             <CardContent className="py-12 flex justify-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple"></div>
             </CardContent>
           </Card>
         )}

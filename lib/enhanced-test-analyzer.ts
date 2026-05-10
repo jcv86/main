@@ -1,8 +1,8 @@
-import { createClient } from "@/lib/supabase"
-import { cerebroIntelligence } from "@/lib/cerebro-intelligence"
+import { createClient } from "@/lib/supabase/server"
+import { getCerebroIntelligence } from "@/lib/cerebro-intelligence"
 import { z } from "zod"
 
-const OPENAI_API_KEY = process.env.OPENAI_API_KEY
+const getOpenAIKey = () => process.env.OPENAI_API_KEY
 
 export interface TestResult {
   testType: string
@@ -80,7 +80,14 @@ const CrossTestAnalysisSchema = z.object({
 })
 
 export class EnhancedTestAnalyzer {
-  private supabase = createClient()
+  private supabaseInstance: any = null
+
+  private async getSupabase() {
+    if (!this.supabaseInstance) {
+      this.supabaseInstance = await createClient()
+    }
+    return this.supabaseInstance
+  }
 
   /**
    * Analyze multiple test results together for comprehensive insights
@@ -99,8 +106,8 @@ export class EnhancedTestAnalyzer {
       const marketInsights = await this.getChileanMarketInsights()
 
       // 3. Get user context and patterns
-      const userContext = await cerebroIntelligence.getUserContext(userId)
-      const userPatterns = await cerebroIntelligence.getUserPatterns(userId)
+      const userContext = await getCerebroIntelligence().getUserContext(userId)
+      const userPatterns = await getCerebroIntelligence().getUserPatterns(userId)
 
       // 4. Check for known test combination patterns
       const combinationPattern = await this.getTestCombinationPattern(testResults.map((t) => t.testType))
@@ -131,11 +138,12 @@ export class EnhancedTestAnalyzer {
    * Get all test results for a user
    */
   private async getUserTestResults(userId: string): Promise<TestResult[]> {
-    const { data: profile } = await this.supabase.from("user_profiles").select("email").eq("id", userId).single()
+    const supabase = await this.getSupabase()
+    const { data: profile } = await supabase.from("user_profiles").select("email").eq("id", userId).single()
 
     if (!profile?.email) return []
 
-    const { data, error } = await this.supabase
+    const { data, error } = await supabase
       .from("test_results")
       .select("*")
       .eq("user_email", profile.email)
@@ -158,7 +166,8 @@ export class EnhancedTestAnalyzer {
    * Get Chilean market insights
    */
   private async getChileanMarketInsights(): Promise<any[]> {
-    const { data, error } = await this.supabase
+    const supabase = await this.getSupabase()
+    const { data, error } = await supabase
       .from("cerebro_market_insights")
       .select("*")
       .eq("region", "Chile")
@@ -177,9 +186,10 @@ export class EnhancedTestAnalyzer {
    * Get test combination pattern if exists
    */
   private async getTestCombinationPattern(testTypes: string[]): Promise<any | null> {
+    const supabase = await this.getSupabase()
     const combination = testTypes.sort().join("+")
 
-    const { data, error } = await this.supabase
+    const { data, error } = await supabase
       .from("cerebro_test_combinations")
       .select("*")
       .eq("test_combination", combination)
@@ -189,6 +199,9 @@ export class EnhancedTestAnalyzer {
     return data
   }
 
+  /**
+   * Get Chilean market insights
+   */
   /**
    * Generate comprehensive cross-test analysis using AI
    */
@@ -232,7 +245,7 @@ Enfócate en:
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        Authorization: `Bearer ${getOpenAIKey()}`,
       },
       body: JSON.stringify({
         model: "gpt-4o",
@@ -326,14 +339,15 @@ Enfócate en:
    */
   private async storeCrossTestAnalysis(userId: string, testResults: TestResult[], analysis: CrossTestAnalysis) {
     try {
-      const { data: profile } = await this.supabase.from("user_profiles").select("email").eq("id", userId).single()
+      const supabase = await this.getSupabase()
+      const { data: profile } = await supabase.from("user_profiles").select("email").eq("id", userId).single()
 
       if (!profile?.email) {
         console.error("User profile not found")
         return
       }
 
-      await this.supabase.from("cerebro_cross_test_analysis").insert({
+      await supabase.from("cerebro_cross_test_analysis").insert({
         user_email: profile.email,
         test_types: testResults.map((t) => t.testType),
         combined_profile: {
@@ -361,7 +375,7 @@ Enfócate en:
   private async generatePredictiveCareerInsights(userId: string, analysis: CrossTestAnalysis) {
     // Generate insights for top career matches
     for (const match of analysis.careerAlignment.topMatches.slice(0, 3)) {
-      await cerebroIntelligence.generatePredictiveInsight(userId, {
+      await getCerebroIntelligence().generatePredictiveInsight(userId, {
         insightType: "career_opportunity",
         prediction: `${match.career} es una excelente opción de carrera para ti`,
         reasoning: `${match.reasoning}. Fit con mercado chileno: ${match.chileanMarketFit}`,
@@ -372,7 +386,7 @@ Enfócate en:
 
     // Generate insights for skill gaps
     for (const gap of analysis.skillGaps.filter((g) => g.importance === "high").slice(0, 2)) {
-      await cerebroIntelligence.generatePredictiveInsight(userId, {
+      await getCerebroIntelligence().generatePredictiveInsight(userId, {
         insightType: "skill_gap",
         prediction: `Desarrollar ${gap.skill} aumentará significativamente tus oportunidades`,
         reasoning: gap.developmentPath,
@@ -383,7 +397,7 @@ Enfócate en:
 
     // Generate insights for high-priority development areas
     for (const priority of analysis.developmentPriorities.filter((p) => p.priority === "high")) {
-      await cerebroIntelligence.generatePredictiveInsight(userId, {
+      await getCerebroIntelligence().generatePredictiveInsight(userId, {
         insightType: "learning_recommendation",
         prediction: `Enfócate en ${priority.area} en los próximos ${priority.timeframe}`,
         reasoning: `Pasos: ${priority.actionSteps.join(", ")}`,
@@ -397,11 +411,12 @@ Enfócate en:
    * Get latest cross-test analysis for user
    */
   async getLatestCrossTestAnalysis(userId: string): Promise<CrossTestAnalysis | null> {
-    const { data: profile } = await this.supabase.from("user_profiles").select("email").eq("id", userId).single()
+    const supabase = await this.getSupabase()
+    const { data: profile } = await supabase.from("user_profiles").select("email").eq("id", userId).single()
 
     if (!profile?.email) return null
 
-    const { data, error } = await this.supabase
+    const { data, error } = await supabase
       .from("cerebro_cross_test_analysis")
       .select("*")
       .eq("user_email", profile.email)
@@ -425,4 +440,12 @@ Enfócate en:
   }
 }
 
-export const enhancedTestAnalyzer = new EnhancedTestAnalyzer()
+// Lazy singleton to avoid build-time initialization
+let instance: EnhancedTestAnalyzer | null = null
+
+export function getEnhancedTestAnalyzer(): EnhancedTestAnalyzer {
+  if (!instance) {
+    instance = new EnhancedTestAnalyzer()
+  }
+  return instance
+}

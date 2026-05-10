@@ -130,12 +130,12 @@ export default function RIASECTestClient() {
   const progress = ((currentQuestion + 1) / riasecQuestions.length) * 100
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-slate-900 dark:to-slate-800 p-4">
+    <div className="min-h-screen bg-background">
       <Card className="max-w-2xl mx-auto">
         <CardHeader>
           <div className="flex items-center justify-between mb-4">
             <Badge variant="outline">{currentQuestion + 1} de {riasecQuestions.length}</Badge>
-            <Briefcase className="w-5 h-5 text-teal-600" />
+            <Briefcase className="w-5 h-5 text-blue" />
           </div>
           <Progress value={progress} className="mb-4" />
           <CardTitle>{question.question}</CardTitle>
@@ -145,7 +145,7 @@ export default function RIASECTestClient() {
           <RadioGroup value={answers[currentQuestion]?.toString() || ""} onValueChange={(v) => handleAnswer(parseInt(v))}>
             <div className="space-y-2">
               {["Totalmente en desacuerdo", "En desacuerdo", "Neutral", "De acuerdo", "Totalmente de acuerdo"].map((label, idx) => (
-                <Label key={idx} className="flex items-center gap-3 cursor-pointer p-2 rounded hover:bg-slate-100">
+                <Label key={idx} className="flex items-center gap-3 cursor-pointer p-2 rounded hover:bg-transparent">
                   <RadioGroupItem value={(idx + 1).toString()} />
                   <span className="text-sm">{label}</span>
                 </Label>
@@ -163,7 +163,7 @@ export default function RIASECTestClient() {
                 Siguiente <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             ) : (
-              <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-teal-600 hover:bg-teal-700">
+              <Button onClick={handleSubmit} disabled={isSubmitting} className="bg-blue hover:bg-teal-700">
                 {isSubmitting ? "Procesando..." : "Completar Test"}
               </Button>
             )}

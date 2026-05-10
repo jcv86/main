@@ -25,9 +25,9 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
       name: "Energía",
       score: results.score_energia,
       icon: "⚡",
-      color: "bg-blue-500",
-      lightColor: "bg-blue-100",
-      textColor: "text-blue-800",
+      color: "bg-blue/50",
+      lightColor: "bg-blue/10",
+      textColor: "text-blue",
       description: "Gestión de sueño, vitalidad y consistencia",
       recommendations: results.score_energia < 50
         ? ["Establecer hora de dormir fija", "Ejercicio matutino de 15 min", "Hidratación consciente"]
@@ -39,10 +39,10 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
       id: "enfoque",
       name: "Enfoque",
       score: results.score_enfoque,
-      icon: "🎯",
-      color: "bg-green-500",
-      lightColor: "bg-green-100",
-      textColor: "text-green-800",
+      icon: "",
+      color: "bg-green/50",
+      lightColor: "bg-green/10",
+      textColor: "text-green",
       description: "Concentración, productividad y priorización",
       recommendations: results.score_enfoque < 50
         ? ["Técnica Pomodoro básica", "Desactivar notificaciones", "Definir 3 tareas diarias"]
@@ -54,10 +54,10 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
       id: "relaciones",
       name: "Relaciones",
       score: results.score_relaciones,
-      icon: "🤝",
-      color: "bg-orange-500",
-      lightColor: "bg-orange-100",
-      textColor: "text-orange-800",
+      icon: "",
+      color: "bg-orange/50",
+      lightColor: "bg-orange/10",
+      textColor: "text-orange",
       description: "Comunicación, vínculos y networking",
       recommendations: results.score_relaciones < 50
         ? ["Contactar a 1 persona importante semanal", "Practicar escucha activa", "Expresar gratitud regularmente"]
@@ -70,9 +70,9 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
       name: "Plan Ejecutivo",
       score: results.score_plan_ejecutivo,
       icon: "📋",
-      color: "bg-purple-500",
-      lightColor: "bg-purple-100",
-      textColor: "text-purple-800",
+      color: "bg-purple/50",
+      lightColor: "bg-purple/10",
+      textColor: "text-purple",
       description: "Ejecución, prioridades y toma de decisiones",
       recommendations: results.score_plan_ejecutivo < 50
         ? ["Definir metas trimestrales claras", "Crear ritual matutino de 15-30 min", "Revisar y ajustar semanalmente"]
@@ -83,9 +83,9 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
   ]
 
   const getScoreLevel = (score: number) => {
-    if (score >= 80) return { label: "Avanzado", color: "text-green-600" }
-    if (score >= 60) return { label: "Intermedio", color: "text-blue-600" }
-    return { label: "Fundamental", color: "text-orange-600" }
+    if (score >= 80) return { label: "Avanzado", color: "text-green" }
+    if (score >= 60) return { label: "Intermedio", color: "text-blue" }
+    return { label: "Fundamental", color: "text-orange" }
   }
 
   const getPriorityOrder = () => {
@@ -95,7 +95,7 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
   return (
     <div className="w-full space-y-8">
       {/* Overview Card */}
-      <Card className="border-2 border-primary">
+      <Card className="border-2 border-purple">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Target className="w-5 h-5" />
@@ -171,9 +171,9 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
 
                   {/* Status Alert */}
                   {pilar.score < 50 && (
-                    <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 flex gap-2">
-                      <AlertCircle className="w-4 h-4 text-orange-600 flex-shrink-0 mt-0.5" />
-                      <div className="text-sm text-orange-700">
+                    <div className="bg-orange/5 border border-orange/20 rounded-[28px] p-3 flex gap-2">
+                      <AlertCircle className="w-4 h-4 text-orange flex-shrink-0 mt-0.5" />
+                      <div className="text-sm text-orange">
                         Esta área tiene la mayor fricción. Podrías empezar aquí si quieres explorar.
                       </div>
                     </div>
@@ -185,7 +185,7 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
                     <ul className="space-y-2">
                       {pilar.recommendations.map((rec, idx) => (
                         <li key={idx} className="text-sm flex gap-2">
-                          <span className="text-primary">○</span>
+                          <span className="text-purple">○</span>
                           <span>{rec}</span>
                         </li>
                       ))}
@@ -209,7 +209,7 @@ export function PersonalizedActionPlan({ results, onStartPillar }: PersonalizedA
       </div>
 
       {/* Next Steps */}
-      <Card className="bg-blue-50 border-blue-200">
+      <Card className="bg-blue/5 border-blue/20">
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
             <TrendingUp className="w-5 h-5" />

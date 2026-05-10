@@ -1,34 +1,28 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
 import { createClient } from "@/lib/supabase/client"
 import { getNextRequiredPage } from "@/lib/redirect-logic"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import Link from "next/link"
+import { PhaseTransitionHandler } from "@/components/phase-transition-handler"
 import { useRouter } from "next/navigation"
-import { ArrowRight, Activity, BookOpen, Zap, TrendingUp } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { useV1Analytics } from "@/lib/v1-analytics/use-v1-analytics"
 
 export default function A2DashboardPage() {
   const [loading, setLoading] = useState(true)
   const [userProfile, setUserProfile] = useState<any>(null)
   const [mission, setMission] = useState<any>(null)
-  const [stats, setStats] = useState({
-    actionsCompleted: 0,
-    streak: 0,
-    totalActions: 0,
-    successRate: 0,
-    sprintProgress: 0,
-  })
   const router = useRouter()
   const supabase = createClient()
   const { trackEvent } = useV1Analytics()
 
   useEffect(() => {
     trackEvent('a2_dashboard_viewed')
+    
     const loadData = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser()
@@ -40,7 +34,6 @@ export default function A2DashboardPage() {
 
         const nextPage = await getNextRequiredPage(user.id)
         if (nextPage !== '/despega/a2/dashboard' && !nextPage.includes('/a2')) {
-          console.log('[v0] User not ready for A2 dashboard, redirecting to:', nextPage)
           trackEvent('error_occurred', { errorType: 'prerequisite_failed' })
           router.push(nextPage)
           return
@@ -74,7 +67,9 @@ export default function A2DashboardPage() {
             .eq("id", profileData.a2_mission_id)
             .single()
 
-          setMission(missionData)
+          if (missionData) {
+            setMission(missionData)
+          }
         }
       } catch (error) {
         console.error('[v0] Error loading A2 dashboard:', error)
@@ -88,47 +83,47 @@ export default function A2DashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-          <p className="mt-4 text-slate-600 dark:text-slate-400">Cargando tu dashboard...</p>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange"></div>
+          <p className="text-muted-foreground">Cargando tu exploración...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-slate-100 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-black p-4">
       <div className="max-w-6xl mx-auto py-8 space-y-8">
         
         {/* WELCOME SECTION */}
-        <div className="bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 dark:from-blue-600 dark:via-cyan-600 dark:to-teal-600 rounded-lg p-8 text-white shadow-xl">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl font-bold mb-2">Tu Misión de 90 Días</h1>
-            <p className="text-blue-100 text-lg">3 sprints diseñados para transformar tu perfil en plan concreto</p>
+        <div className="bg-background">
+          <div className="max-w-3xl space-y-2">
+            <h1 className="text-4xl font-bold" style={{ fontFamily: 'Lora, serif' }}>Tu Misión de 90 Días</h1>
+            <p className="text-orange/80 text-lg">3 sprints diseñados para transformar tu perfil en plan concreto</p>
           </div>
         </div>
 
         {/* MISSION OVERVIEW */}
         {mission && (
-          <Card className="border-0 shadow-lg">
+          <Card className="bg-transparent border-muted/80 shadow-lg">
             <CardHeader>
-              <CardTitle className="text-2xl">Misión: {mission.mission_title}</CardTitle>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">{mission.mission_description}</p>
+              <CardTitle className="text-2xl text-white" style={{ fontFamily: 'Lora, serif' }}>Misión: {mission.mission_title}</CardTitle>
+              <p className="text-sm text-muted-foreground mt-2">{mission.mission_description}</p>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-3 gap-4">
-                <div className="text-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
-                  <p className="text-3xl font-bold text-blue-600">90</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Días</p>
+                <div className="text-center p-4 bg-muted/80 rounded-surface-lg border border-muted/70">
+                  <p className="text-3xl font-bold text-orange">90</p>
+                  <p className="text-sm text-muted-foreground">Días</p>
                 </div>
-                <div className="text-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
-                  <p className="text-3xl font-bold text-cyan-600">3</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Sprints</p>
+                <div className="text-center p-4 bg-muted/80 rounded-surface-lg border border-muted/70">
+                  <p className="text-3xl font-bold text-orange">3</p>
+                  <p className="text-sm text-muted-foreground">Sprints</p>
                 </div>
-                <div className="text-center p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
-                  <p className="text-3xl font-bold text-teal-600">{stats.sprintProgress}%</p>
-                  <p className="text-sm text-slate-600 dark:text-slate-400">Progreso</p>
+                <div className="text-center p-4 bg-muted/80 rounded-surface-lg border border-muted/70">
+                  <p className="text-3xl font-bold text-orange">0%</p>
+                  <p className="text-sm text-muted-foreground">Progreso</p>
                 </div>
               </div>
             </CardContent>
@@ -137,19 +132,19 @@ export default function A2DashboardPage() {
 
         {/* SPRINTS SECTION */}
         <div>
-          <h2 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-4">Los 3 Sprints</h2>
+          <h2 className="text-2xl font-bold text-white mb-4" style={{ fontFamily: 'Lora, serif' }}>Los 3 Sprints</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {[1, 2, 3].map((sprintNum) => (
               <Link key={sprintNum} href={`/despega/a2/sprint-${sprintNum}`}>
-                <Card className="cursor-pointer hover:shadow-lg transition-shadow border-l-4 border-blue-500">
+                <Card className="cursor-pointer hover:shadow-lg transition-shadow border-l-4 border-orange bg-transparent border-muted/80 hover:border-l-orange hover:bg-muted/80">
                   <CardHeader>
-                    <CardTitle className="text-lg">
+                    <CardTitle className="text-lg text-white">
                       Sprint {sprintNum}: {sprintNum === 1 ? "Fundamentos" : sprintNum === 2 ? "Profundización" : "Consolidación"}
                     </CardTitle>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">Días {(sprintNum - 1) * 30 + 1}-{sprintNum * 30}</p>
+                    <p className="text-sm text-muted-foreground">Días {(sprintNum - 1) * 30 + 1}-{sprintNum * 30}</p>
                   </CardHeader>
                   <CardContent>
-                    <Badge className="bg-blue-600">{sprintNum === 1 ? "En progreso" : sprintNum === 2 ? "Próximo" : "Futuro"}</Badge>
+                    <Badge className="bg-orange text-black">{sprintNum === 1 ? "En progreso" : sprintNum === 2 ? "Próximo" : "Futuro"}</Badge>
                   </CardContent>
                 </Card>
               </Link>
@@ -157,26 +152,134 @@ export default function A2DashboardPage() {
           </div>
         </div>
 
-        {/* CTA TO A3 */}
-        <Card className="border-2 border-primary/30 dark:border-primary/40 bg-gradient-to-r from-primary/5 to-primary/10 dark:from-primary/20 dark:to-primary/10 shadow-lg">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <h3 className="text-2xl font-bold text-slate-900 dark:text-slate-50 mb-2">
-                  ¿Listo para A3: Entrenamientos Especializados?
-                </h3>
-                <p className="text-slate-700 dark:text-slate-300 mb-4">
-                  Accede a entrenamientos especializados, práctica de entrevistas y feedback de IA.
-                </p>
+        {/*  A2 V2: SMART CHECKPOINTS */}
+        <div>
+          <div className="mb-4">
+            <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5 mb-1">Checkpoints del Sprint Actual</h2>
+            <p className="text-muted-foreground dark:text-muted-foreground text-sm">Hitos de verificación que marcan el avance real</p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card className="border-2 border-green/20 dark:border-green">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-[20px] bg-green/50 flex items-center justify-center text-white text-xs font-bold">1</div>
+                  Semana 1: Fundamentos
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" defaultChecked />
+                  <span className="text-sm">Identifica 3 áreas de enfoque claro</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Establece ritual de revisión diaria</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Completa primera acción de Energía</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-yellow/30 dark:border-yellow">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-[20px] bg-yellow/50 flex items-center justify-center text-white text-xs font-bold">2</div>
+                  Semana 2: Profundización
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Verifica patrón de avance/freno</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Ajusta plan si hay desalineación</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Revisa feedback de pares/coach</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-purple/30 dark:border-purple">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-[20px] bg-purple/50 flex items-center justify-center text-white text-xs font-bold">3</div>
+                  Semana 3: Consolidación
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Evidencia de progreso en 3 áreas</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Rituales establecidos y funcionando</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <input type="checkbox" className="w-4 h-4" />
+                  <span className="text-sm">Plan para Sprint 2 definido</span>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-blue/30 dark:border-blue/10">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-base flex items-center gap-2">
+                  <div className="w-6 h-6 rounded-[20px] bg-blue/50 flex items-center justify-center text-white text-xs font-bold"></div>
+                  Revisión del Sprint 1
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">Prepárate para la revisión con tu Coach. Trae datos de tu progreso y aprende qué ajustar.</p>
+                <Button className="w-full mt-2 bg-blue/80 hover:bg-blue/70">Programar Revisión</Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/*  A2 V2: WEEKLY REVIEW RITUAL */}
+        <div>
+          <Card className="border-2 border-blue/30 dark:border-blue bg-blue/5/30 dark:bg-blue/10">
+            <CardHeader>
+              <CardTitle className="text-xl flex items-center gap-2">
+                📋 Tu Ritual Semanal de Revisión
+              </CardTitle>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2 font-normal">Cada domingo, dedica 15 min a revisar la semana</p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-3">
+                <div className="p-3 bg-white dark:bg-background rounded border-l-4 border-indigo-600">
+                  <p className="font-semibold text-sm text-muted/90 dark:text-muted/10">1. Evalúa: ¿Qué hizo clic?</p>
+                  <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">¿Dónde avanzaste? ¿Qué energía sintió más real?</p>
+                </div>
+                <div className="p-3 bg-white dark:bg-background rounded border-l-4 border-indigo-600">
+                  <p className="font-semibold text-sm text-muted/90 dark:text-muted/10">2. Identifica: ¿Qué frenó?</p>
+                  <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">¿Dónde se bloqueó? ¿Qué necesita ajuste?</p>
+                </div>
+                <div className="p-3 bg-white dark:bg-background rounded border-l-4 border-indigo-600">
+                  <p className="font-semibold text-sm text-muted/90 dark:text-muted/10">3. Ajusta: ¿Qué cambia la próxima?</p>
+                  <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">Pequeño cambio para semana 2. Una cosa. Máximo.</p>
+                </div>
               </div>
-              <Link href="/despega/a3" className="flex-shrink-0">
-                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold px-8 py-6 text-base shadow-lg">
-                  Explorar A3 <ArrowRight className="ml-2 w-5 h-5" />
-                </Button>
-              </Link>
-            </div>
-          </CardContent>
-        </Card>
+              <Button className="w-full bg-blue hover:bg-indigo-700">Abrir Revisión Semanal</Button>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Phase Transition to A3 */}
+        <PhaseTransitionHandler
+          currentPhase="a2"
+          isComplete={true}
+          nextPhaseLabel="Entrenamiento: Simulación Intensiva"
+          nextPhaseUrl="/despega/a3"
+        />
 
       </div>
     </div>

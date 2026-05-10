@@ -42,7 +42,7 @@ const tests: TestInfo[] = [
     questions: 15,
     difficulty: "Beginner",
     icon: Target,
-    color: "bg-blue-500",
+    color: "bg-blue/50",
     path: "/test/disc",
   },
   {
@@ -53,7 +53,7 @@ const tests: TestInfo[] = [
     questions: 20,
     difficulty: "Beginner",
     icon: Heart,
-    color: "bg-red-500",
+    color: "bg-red/50",
     path: "/test/emotional-intelligence",
   },
   {
@@ -64,7 +64,7 @@ const tests: TestInfo[] = [
     questions: 25,
     difficulty: "Intermediate",
     icon: Brain,
-    color: "bg-purple-500",
+    color: "bg-purple/50",
     path: "/test/mbti",
     prerequisites: ["disc"],
   },
@@ -76,7 +76,7 @@ const tests: TestInfo[] = [
     questions: 30,
     difficulty: "Intermediate",
     icon: Users,
-    color: "bg-green-500",
+    color: "bg-green/50",
     path: "/test/big-five",
     prerequisites: ["disc", "emotional-intelligence"],
   },
@@ -88,7 +88,7 @@ const tests: TestInfo[] = [
     questions: 36,
     difficulty: "Intermediate",
     icon: Palette,
-    color: "bg-orange-500",
+    color: "bg-orange/50",
     path: "/test/riasec",
     prerequisites: ["mbti"],
   },
@@ -164,12 +164,12 @@ export default function TestNavigationFlow() {
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm font-medium">Completado General</span>
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-muted-foreground">
                 {completedTests.length}/{tests.length} evaluaciones
               </span>
             </div>
             <Progress value={overallProgress} className="h-2" />
-            <div className="flex items-center justify-between text-sm text-gray-600">
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>Inicio</span>
               <span>{overallProgress}% completado</span>
               <span>Completo</span>
@@ -180,9 +180,9 @@ export default function TestNavigationFlow() {
 
       {/* Recommended Next Test */}
       {recommendedTest && (
-        <Card className="border-blue-200 bg-blue-50">
+        <Card className="border-blue/20 bg-blue/5">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-blue-900">
+            <CardTitle className="flex items-center gap-2 text-blue">
               <PlayCircle className="h-5 w-5" />
               Evaluación Recomendada Siguiente
             </CardTitle>
@@ -194,9 +194,9 @@ export default function TestNavigationFlow() {
                   <recommendedTest.icon className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-blue-900">{recommendedTest.name}</h3>
-                  <p className="text-sm text-blue-700">{recommendedTest.description}</p>
-                  <div className="flex items-center gap-4 mt-1 text-xs text-blue-600">
+                  <h3 className="font-semibold text-blue">{recommendedTest.name}</h3>
+                  <p className="text-sm text-blue">{recommendedTest.description}</p>
+                  <div className="flex items-center gap-4 mt-1 text-xs text-blue">
                     <span className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
                       {recommendedTest.duration}
@@ -208,7 +208,7 @@ export default function TestNavigationFlow() {
                   </div>
                 </div>
               </div>
-              <Button onClick={() => startTest(recommendedTest.id)} className="bg-blue-600 hover:bg-blue-700">
+              <Button onClick={() => startTest(recommendedTest.id)} className="bg-blue/80 hover:bg-blue/70">
                 Iniciar Evaluación
                 <ArrowRight className="h-4 w-4 ml-2" />
               </Button>
@@ -227,12 +227,12 @@ export default function TestNavigationFlow() {
           return (
             <Card
               key={test.id}
-              className={`relative ${
+              className={`relative ${`}
                 isCompleted
-                  ? "border-green-200 bg-green-50"
+                  ? "border-green/20 bg-green/5"
                   : isAvailable
-                    ? "border-gray-200 hover:border-gray-300"
-                    : "border-gray-100 bg-gray-50"
+                    ? "border-muted/20 hover:border-muted/30"
+                    : "border-muted/10 bg-muted/5"`}
               }`}
             >
               <CardHeader className="pb-3">
@@ -248,14 +248,14 @@ export default function TestNavigationFlow() {
                       </Badge>
                     </div>
                   </div>
-                  {isCompleted && <CheckCircle className="h-6 w-6 text-green-600" />}
-                  {!isAvailable && <AlertCircle className="h-6 w-6 text-gray-400" />}
+                  {isCompleted && <CheckCircle className="h-6 w-6 text-green" />}
+                  {!isAvailable && <AlertCircle className="h-6 w-6 text-muted-foreground" />}
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-sm text-gray-600">{test.description}</p>
+                <p className="text-sm text-muted-foreground">{test.description}</p>
 
-                <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1">
                       <Clock className="h-3 w-3" />
@@ -276,13 +276,13 @@ export default function TestNavigationFlow() {
                 )}
 
                 {test.prerequisites && !isCompleted && (
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-muted-foreground">
                     <span className="font-medium">Prerrequisitos:</span>{" "}
                     {test.prerequisites.map((prereq) => {
                       const prereqTest = tests.find((t) => t.id === prereq)
                       const isPrereqCompleted = completedTests.includes(prereq)
                       return (
-                        <span key={prereq} className={isPrereqCompleted ? "text-green-600" : "text-red-500"}>
+                        <span key={prereq} className={isPrereqCompleted ? "text-green" : "text-red"}>
                           {prereqTest?.name}
                           {test.prerequisites!.indexOf(prereq) < test.prerequisites!.length - 1 && ", "}
                         </span>
@@ -325,15 +325,15 @@ export default function TestNavigationFlow() {
 
       {/* Completion Summary */}
       {completedTests.length === tests.length && (
-        <Card className="border-green-200 bg-green-50">
+        <Card className="border-green/20 bg-green/5">
           <CardContent className="p-6 text-center">
-            <CheckCircle className="h-12 w-12 text-green-600 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-green-900 mb-2">🎉 Todas las Evaluaciones Completadas!</h3>
-            <p className="text-green-700 mb-4">
+            <CheckCircle className="h-12 w-12 text-green mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-green mb-2">🎉 Todas las Evaluaciones Completadas!</h3>
+            <p className="text-green mb-4">
               Has completado todas las evaluaciones de personalidad y carrera. Visita tu panel de control para ver tu
               perfil completo.
             </p>
-            <Button onClick={() => router.push("/dashboard")} className="bg-green-600 hover:bg-green-700">
+            <Button onClick={() => router.push("/dashboard")} className="bg-green/80 hover:bg-green/70">
               Ver Perfil Completo
             </Button>
           </CardContent>

@@ -9,38 +9,38 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16 max-w-4xl">
         {/* Header */}
         <div className="mb-12">
-          <Link href="/" className="inline-flex items-center gap-2 mb-8 text-purple-400 hover:text-purple-300 transition-colors">
+          <Link href="/" className="inline-flex items-center gap-2 mb-8 text-purple/40 hover:text-purple/30 transition-colors">
             <Brain className="w-5 h-5" />
             <span>Volver al inicio</span>
           </Link>
           <h1 className="text-5xl font-black text-white mb-4">Términos de Servicio</h1>
-          <p className="text-xl text-slate-400">Última actualización: 17 de marzo de 2026</p>
+          <p className="text-xl text-muted-foreground">Última actualización: 5 de abril de 2026</p>
         </div>
 
         {/* Content */}
         <div className="space-y-8">
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">1. Aceptación de Términos</h2>
-            <p className="text-slate-300 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Al acceder y usar Despega Tu Carrera, aceptas estar vinculado por estos términos y condiciones. Si no estás de acuerdo con alguna parte de estos términos, no debes usar nuestros servicios.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">2. Licencia de Uso</h2>
-            <p className="text-slate-300 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Te otorgamos una licencia personal, no exclusiva y no transferible para acceder y usar nuestro sitio y servicios para propósitos legales. No puedes reproducir, distribuir o transmitir el contenido sin nuestro consentimiento previo.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">3. Responsabilidades del Usuario</h2>
-            <div className="bg-gradient-to-r from-purple-600/10 to-blue-600/10 border border-purple-500/20 rounded-lg p-6">
-              <ul className="list-disc list-inside text-slate-300 space-y-2">
+            <div className="bg-background">
+              <ul className="list-disc list-inside text-white/85 space-y-2">
                 <li>Mantener la confidencialidad de tu cuenta</li>
                 <li>Proporcionar información precisa y completa</li>
                 <li>No usar la plataforma para actividades ilegales</li>
@@ -51,37 +51,37 @@ export default function TermsPage() {
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">4. Limitación de Responsabilidad</h2>
-            <p className="text-slate-300 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Despega Tu Carrera se proporciona "tal cual". No garantizamos que los servicios sean ininterrumpidos o libres de errores. No somos responsables por daños indirectos, incidentales o consecuentes.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">5. Modificaciones del Servicio</h2>
-            <p className="text-slate-300 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Nos reservamos el derecho de modificar o suspender el servicio en cualquier momento. Te notificaremos sobre cambios significativos.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">6. Propiedad Intelectual</h2>
-            <p className="text-slate-300 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Todo el contenido de la plataforma, incluyendo tests, análisis y recursos, es propiedad de Despega Tu Carrera o de sus licenciantes. No está permitido reproducir o distribuir sin autorización.
             </p>
           </section>
 
           <section>
             <h2 className="text-2xl font-bold text-white mb-4">7. Terminación de Cuenta</h2>
-            <p className="text-slate-300 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Puedes terminar tu cuenta en cualquier momento. También nos reservamos el derecho de terminar cuentas que violen estos términos.
             </p>
           </section>
 
-          <section className="bg-gradient-to-r from-blue-600/10 to-cyan-600/10 border border-blue-500/20 rounded-lg p-6">
+          <section className="bg-background">
             <h2 className="text-2xl font-bold text-white mb-4">8. Contacto</h2>
-            <p className="text-slate-300 leading-relaxed">
+            <p className="text-white/85 leading-relaxed">
               Para preguntas sobre estos términos, contáctanos en{" "}
-              <a href="mailto:contacto@despegatucarrera.cl" className="text-purple-400 hover:text-purple-300 transition-colors font-semibold">
+              <a href="mailto:contacto@despegatucarrera.cl" className="text-purple/40 hover:text-purple/30 transition-colors font-semibold">
                 contacto@despegatucarrera.cl
               </a>
             </p>

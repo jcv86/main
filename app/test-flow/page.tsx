@@ -246,9 +246,9 @@ export default function TestFlowVerification() {
   }
 
   const getCheckIcon = (passed: boolean, isActive: boolean) => {
-    if (isActive) return <RefreshCw className="h-4 w-4 animate-spin text-blue-500" />
-    if (passed) return <CheckCircle className="h-4 w-4 text-green-500" />
-    return <XCircle className="h-4 w-4 text-gray-300" />
+    if (isActive) return <RefreshCw className="h-4 w-4 animate-spin text-blue/50" />
+    if (passed) return <CheckCircle className="h-4 w-4 text-green" />
+    return <XCircle className="h-4 w-4 text-white/85" />
   }
 
   const getStatusBadge = (status: TestFlowCheck["status"]) => {
@@ -256,9 +256,9 @@ export default function TestFlowVerification() {
       case "pending":
         return <Badge variant="outline">Pending</Badge>
       case "running":
-        return <Badge className="bg-blue-500">Running</Badge>
+        return <Badge className="bg-blue/50">Running</Badge>
       case "passed":
-        return <Badge className="bg-green-500">Passed</Badge>
+        return <Badge className="bg-green/50">Passed</Badge>
       case "failed":
         return <Badge variant="destructive">Failed</Badge>
     }
@@ -268,7 +268,7 @@ export default function TestFlowVerification() {
   const failedTests = checks.filter((check) => check.status === "failed").length
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-muted/5 p-4">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
         <Card>
@@ -281,20 +281,20 @@ export default function TestFlowVerification() {
           <CardContent>
             <div className="flex items-center justify-between mb-4">
               <div className="space-y-2">
-                <p className="text-gray-600">
+                <p className="text-muted-foreground">
                   Automated verification of all personality test navigation flows and completion processes.
                 </p>
                 <div className="flex items-center gap-4 text-sm">
                   <span className="flex items-center gap-1">
-                    <CheckCircle className="h-4 w-4 text-green-500" />
+                    <CheckCircle className="h-4 w-4 text-green" />
                     {passedTests} Passed
                   </span>
                   <span className="flex items-center gap-1">
-                    <XCircle className="h-4 w-4 text-red-500" />
+                    <XCircle className="h-4 w-4 text-red" />
                     {failedTests} Failed
                   </span>
                   <span className="flex items-center gap-1">
-                    <Clock className="h-4 w-4 text-gray-500" />
+                    <Clock className="h-4 w-4 text-muted-foreground" />
                     {checks.length - passedTests - failedTests} Pending
                   </span>
                 </div>
@@ -339,12 +339,12 @@ export default function TestFlowVerification() {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="p-2 bg-gray-100 rounded-lg">
+                    <div className="p-2 bg-muted/10 rounded-lg">
                       <check.icon className="h-5 w-5" />
                     </div>
                     <div>
                       <CardTitle className="text-lg">{check.testName}</CardTitle>
-                      <p className="text-sm text-gray-600">{check.path}</p>
+                      <p className="text-sm text-muted-foreground">{check.path}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -358,13 +358,13 @@ export default function TestFlowVerification() {
               <CardContent>
                 <div className="space-y-3">
                   {/* Navigation Check */}
-                  <div className="flex items-center justify-between p-2 rounded bg-gray-50">
+                  <div className="flex items-center justify-between p-2 rounded bg-muted/5">
                     <span className="text-sm font-medium">Navigation Flow</span>
                     {getCheckIcon(check.checks.navigation, currentTest === check.testId && check.status === "running")}
                   </div>
 
                   {/* Question Flow Check */}
-                  <div className="flex items-center justify-between p-2 rounded bg-gray-50">
+                  <div className="flex items-center justify-between p-2 rounded bg-muted/5">
                     <span className="text-sm font-medium">Question Flow</span>
                     {getCheckIcon(
                       check.checks.questionFlow,
@@ -373,32 +373,32 @@ export default function TestFlowVerification() {
                   </div>
 
                   {/* Validation Check */}
-                  <div className="flex items-center justify-between p-2 rounded bg-gray-50">
+                  <div className="flex items-center justify-between p-2 rounded bg-muted/5">
                     <span className="text-sm font-medium">Answer Validation</span>
                     {getCheckIcon(check.checks.validation, currentTest === check.testId && check.status === "running")}
                   </div>
 
                   {/* Completion Check */}
-                  <div className="flex items-center justify-between p-2 rounded bg-gray-50">
+                  <div className="flex items-center justify-between p-2 rounded bg-muted/5">
                     <span className="text-sm font-medium">Test Completion</span>
                     {getCheckIcon(check.checks.completion, currentTest === check.testId && check.status === "running")}
                   </div>
 
                   {/* Results Check */}
-                  <div className="flex items-center justify-between p-2 rounded bg-gray-50">
+                  <div className="flex items-center justify-between p-2 rounded bg-muted/5">
                     <span className="text-sm font-medium">Results Generation</span>
                     {getCheckIcon(check.checks.results, currentTest === check.testId && check.status === "running")}
                   </div>
 
                   {/* Errors */}
                   {check.errors.length > 0 && (
-                    <div className="mt-3 p-2 bg-red-50 border border-red-200 rounded">
-                      <div className="flex items-center gap-2 text-red-700 text-sm font-medium mb-1">
+                    <div className="mt-3 p-2 bg-red/5 border border-red/20 rounded">
+                      <div className="flex items-center gap-2 text-red text-sm font-medium mb-1">
                         <AlertTriangle className="h-4 w-4" />
                         Errors Found
                       </div>
                       {check.errors.map((error, index) => (
-                        <p key={index} className="text-red-600 text-xs">
+                        <p key={index} className="text-red text-xs">
                           {error}
                         </p>
                       ))}
@@ -433,17 +433,17 @@ export default function TestFlowVerification() {
               <div className="text-center">
                 {failedTests === 0 ? (
                   <div className="space-y-2">
-                    <CheckCircle className="h-12 w-12 text-green-500 mx-auto" />
-                    <h3 className="text-xl font-semibold text-green-900">All Tests Passed! ✅</h3>
-                    <p className="text-green-700">
+                    <CheckCircle className="h-12 w-12 text-green mx-auto" />
+                    <h3 className="text-xl font-semibold text-green">All Tests Passed! ✅</h3>
+                    <p className="text-green">
                       All {passedTests} personality tests have proper navigation flow and completion processes.
                     </p>
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <AlertTriangle className="h-12 w-12 text-red-500 mx-auto" />
-                    <h3 className="text-xl font-semibold text-red-900">Issues Found</h3>
-                    <p className="text-red-700">
+                    <AlertTriangle className="h-12 w-12 text-red mx-auto" />
+                    <h3 className="text-xl font-semibold text-red">Issues Found</h3>
+                    <p className="text-red">
                       {failedTests} test(s) failed verification. Please check the errors above.
                     </p>
                   </div>

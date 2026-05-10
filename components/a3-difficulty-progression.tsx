@@ -90,7 +90,7 @@ export function A3DifficultyProgression({
   return (
     <div className="space-y-6">
       {/* P_Success Probability */}
-      <Card className="border-2 border-blue-200">
+      <Card className="border-2 border-blue/20">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <TrendingUp className="w-5 h-5" />
@@ -104,21 +104,21 @@ export function A3DifficultyProgression({
           <div className="text-center">
             <div className="text-5xl font-bold mb-2">
               <span className={
-                pSuccessPercentage >= 70 ? "text-green-600" :
-                pSuccessPercentage >= 50 ? "text-blue-600" :
+                pSuccessPercentage >= 70 ? "text-green" :
+                pSuccessPercentage >= 50 ? "text-blue" :
                 pSuccessPercentage >= 30 ? "text-amber-600" :
-                "text-red-600"
+                "text-red"
               }>
                 {pSuccessPercentage}%
               </span>
             </div>
-            <div className="bg-gray-200 rounded-full h-2 mb-4">
+            <div className="bg-muted/20 rounded-full h-2 mb-4">
               <div
                 className={`h-2 rounded-full transition-all ${
-                  pSuccessPercentage >= 70 ? "bg-green-600" :
-                  pSuccessPercentage >= 50 ? "bg-blue-600" :
+                  pSuccessPercentage >= 70 ? "bg-green" :
+                  pSuccessPercentage >= 50 ? "bg-blue" :
                   pSuccessPercentage >= 30 ? "bg-amber-600" :
-                  "bg-red-600"
+                  "bg-red"
                 }`}
                 style={{ width: `${pSuccessPercentage}%` }}
               />
@@ -126,10 +126,10 @@ export function A3DifficultyProgression({
           </div>
 
           {highDifficultyWarning && (
-            <Alert className="border-orange-300 bg-orange-50">
-              <AlertTriangle className="h-4 w-4 text-orange-600" />
-              <AlertDescription className="text-orange-800">
-                <div className="font-medium mb-1">⚠️ Desafío Difícil</div>
+            <Alert className="border-orange/30 bg-orange/5">
+              <AlertTriangle className="h-4 w-4 text-orange" />
+              <AlertDescription className="text-orange">
+                <div className="font-medium mb-1"> Desafío Difícil</div>
                 <p className="text-sm">
                   Este desafío es difícil para tu nivel actual (P_success ≤ 15%). Si decides intentarlo, el riesgo vale más la recompensa. 
                   Bonus por dificultad asumida: +50% de puntos.
@@ -138,9 +138,9 @@ export function A3DifficultyProgression({
             </Alert>
           )}
 
-          <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-            <div className="text-sm text-gray-600 mb-2">Factores considerados:</div>
-            <ul className="text-sm text-gray-700 space-y-1">
+          <div className="bg-blue/5 p-4 rounded-[28px] border border-blue/20">
+            <div className="text-sm text-muted-foreground mb-2">Factores considerados:</div>
+            <ul className="text-sm text-muted space-y-1">
               <li>• Historial de completación: 85%</li>
               <li>• Nivel actual: {currentConfig.name}</li>
               <li>• Capacidad efectiva: 72/100</li>
@@ -155,23 +155,23 @@ export function A3DifficultyProgression({
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <CheckCircle2 className="w-5 h-5 text-green-600" />
+            <CheckCircle2 className="w-5 h-5 text-green" />
             Nivel Actual: {currentConfig.name}
           </CardTitle>
           <CardDescription>{currentConfig.description}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
-            <div className="p-3 bg-gray-50 rounded">
-              <div className="text-xs text-gray-600">Presión</div>
+            <div className="p-3 bg-muted/5 rounded">
+              <div className="text-xs text-muted-foreground">Presión</div>
               <div className="text-sm font-medium">{currentConfig.pressure}</div>
             </div>
-            <div className="p-3 bg-gray-50 rounded">
-              <div className="text-xs text-gray-600">Guía</div>
+            <div className="p-3 bg-muted/5 rounded">
+              <div className="text-xs text-muted-foreground">Guía</div>
               <div className="text-sm font-medium">{currentConfig.guidance}</div>
             </div>
-            <div className="p-3 bg-gray-50 rounded">
-              <div className="text-xs text-gray-600">Feedback</div>
+            <div className="p-3 bg-muted/5 rounded">
+              <div className="text-xs text-muted-foreground">Feedback</div>
               <div className="text-sm font-medium">{currentConfig.feedbackFrequency}</div>
             </div>
           </div>
@@ -180,33 +180,33 @@ export function A3DifficultyProgression({
 
       {/* Next Level */}
       {nextConfig && (
-        <Card className="border-2 border-green-200">
+        <Card className="border-2 border-green/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Zap className="w-5 h-5 text-green-600" />
+              <Zap className="w-5 h-5 text-green" />
               Próximo Nivel: {nextConfig.name}
             </CardTitle>
             <CardDescription>{nextConfig.description}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+            <div className="bg-green/5 p-4 rounded-[28px] border border-green/20">
               <div className="font-medium text-sm mb-2">Requisitos para avanzar:</div>
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-muted">
                 {nextConfig.solidExecutions} ejecuciones sólidas sin abandono temprano ni señales fuertes de frustración
               </p>
             </div>
 
             <div className="grid grid-cols-3 gap-4">
-              <div className="p-3 bg-gray-50 rounded">
-                <div className="text-xs text-gray-600">Presión</div>
+              <div className="p-3 bg-muted/5 rounded">
+                <div className="text-xs text-muted-foreground">Presión</div>
                 <div className="text-sm font-medium">{nextConfig.pressure}</div>
               </div>
-              <div className="p-3 bg-gray-50 rounded">
-                <div className="text-xs text-gray-600">Guía</div>
+              <div className="p-3 bg-muted/5 rounded">
+                <div className="text-xs text-muted-foreground">Guía</div>
                 <div className="text-sm font-medium">{nextConfig.guidance}</div>
               </div>
-              <div className="p-3 bg-gray-50 rounded">
-                <div className="text-xs text-gray-600">Feedback</div>
+              <div className="p-3 bg-muted/5 rounded">
+                <div className="text-xs text-muted-foreground">Feedback</div>
                 <div className="text-sm font-medium">{nextConfig.feedbackFrequency}</div>
               </div>
             </div>
@@ -221,24 +221,24 @@ export function A3DifficultyProgression({
       )}
 
       {/* Progression Philosophy */}
-      <Card className="border-l-4 border-purple-500">
+      <Card className="border-l-4 border-purple/50">
         <CardHeader>
           <CardTitle className="text-sm">Regla de Progresión A3</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-gray-700 italic">
+          <p className="text-sm text-muted italic">
             "En A3 no se avanza por insistir. Se avanza por sostener."
           </p>
-          <p className="text-xs text-gray-600 mt-2">
+          <p className="text-xs text-muted-foreground mt-2">
             Cantidad + Calidad + Estabilidad. No es solo completar, es completar consistentemente con desempeño.
           </p>
         </CardContent>
       </Card>
 
       {/* Frustration Protection */}
-      <Alert className="border-red-300 bg-red-50">
-        <AlertTriangle className="h-4 w-4 text-red-600" />
-        <AlertDescription className="text-red-800">
+      <Alert className="border-red/30 bg-red/5">
+        <AlertTriangle className="h-4 w-4 text-red" />
+        <AlertDescription className="text-red">
           <div className="font-medium mb-1">Protección Contra Frustración</div>
           <p className="text-sm">
             Si detectamos desgaste emocional, el sistema sugerirá bajar dificultad o tomar un descanso. 

@@ -14,31 +14,31 @@ export function A4CalibrationDashboard() {
   const getLevelColor = (level: string) => {
     switch (level) {
       case "beginner":
-        return "bg-blue-500"
+        return "bg-blue/50"
       case "intermediate":
-        return "bg-yellow-500"
+        return "bg-orange"
       case "advanced":
-        return "bg-purple-500"
+        return "bg-purple/50"
       case "expert":
-        return "bg-red-500"
+        return "bg-red/50"
       default:
-        return "bg-gray-500"
+        return "bg-muted/50"
     }
   }
 
   return (
     <div className="space-y-6">
       {/* Header with Strategic Score */}
-      <Card className="border-0 bg-gradient-to-r from-slate-900 to-slate-800 text-white">
+      <Card className="border-0 bg-background">
         <CardHeader>
           <div className="flex items-start justify-between">
             <div>
               <CardTitle className="text-2xl">Sistema Calibrado</CardTitle>
-              <p className="text-sm text-slate-400 mt-2">Tu experiencia se adapta dinámicamente a tu nivel estratégico</p>
+              <p className="text-sm text-muted-foreground mt-2">Tu experiencia se adapta dinámicamente a tu nivel estratégico</p>
             </div>
             <div className="text-right">
               <div className="text-4xl font-bold">{strategic.a4_current_score}</div>
-              <div className="text-sm text-slate-400">/100</div>
+              <div className="text-sm text-muted-foreground">/100</div>
             </div>
           </div>
         </CardHeader>
@@ -47,7 +47,7 @@ export function A4CalibrationDashboard() {
             <div>
               <div className="flex justify-between mb-2">
                 <span className="text-sm">Progreso Estratégico</span>
-                <span className="text-xs text-slate-400">{strategic.a4_score_level}</span>
+                <span className="text-xs text-muted-foreground">{strategic.a4_score_level}</span>
               </div>
               <Progress value={strategic.a4_current_score} className="h-2" />
             </div>
@@ -65,7 +65,7 @@ export function A4CalibrationDashboard() {
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Brain className="w-5 h-5 text-blue-500" />
+              <Brain className="w-5 h-5 text-blue/50" />
               <CardTitle className="text-lg">A1: Ritual de Entrada</CardTitle>
             </div>
           </CardHeader>
@@ -86,7 +86,7 @@ export function A4CalibrationDashboard() {
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Target className="w-5 h-5 text-yellow-500" />
+              <Target className="w-5 h-5 text-orange" />
               <CardTitle className="text-lg">A2: Misiones</CardTitle>
             </div>
           </CardHeader>
@@ -98,7 +98,7 @@ export function A4CalibrationDashboard() {
                   <div
                     key={i}
                     className={`h-2 w-6 rounded ${
-                      i < calibration.a2_mission_difficulty ? "bg-yellow-500" : "bg-muted"
+                      i < calibration.a2_mission_difficulty ? "bg-orange" : "bg-muted"
                     }`}
                   />
                 ))}
@@ -116,7 +116,7 @@ export function A4CalibrationDashboard() {
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Zap className="w-5 h-5 text-purple-500" />
+              <Zap className="w-5 h-5 text-purple/50" />
               <CardTitle className="text-lg">A3: Entrenamientos</CardTitle>
             </div>
           </CardHeader>
@@ -137,7 +137,7 @@ export function A4CalibrationDashboard() {
         <Card>
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Activity className="w-5 h-5 text-red-500" />
+              <Activity className="w-5 h-5 text-red" />
               <CardTitle className="text-lg">Coach Estratégico</CardTitle>
             </div>
           </CardHeader>
@@ -170,25 +170,25 @@ export function A4CalibrationDashboard() {
             </p>
             <ul className="space-y-2">
               <li className="flex gap-2">
-                <span className="text-blue-500">•</span>
+                <span className="text-blue/50">•</span>
                 <span>
                   <strong>A1</strong> explica conceptos con nivel {calibration.a1_language_level} (profundidad {calibration.a1_explanation_depth}/10)
                 </span>
               </li>
               <li className="flex gap-2">
-                <span className="text-yellow-500">•</span>
+                <span className="text-orange">•</span>
                 <span>
                   <strong>A2</strong> genera misiones de dificultad {calibration.a2_mission_difficulty}/5
                 </span>
               </li>
               <li className="flex gap-2">
-                <span className="text-purple-500">•</span>
+                <span className="text-purple/50">•</span>
                 <span>
                   <strong>A3</strong> simula con {calibration.a3_ambiguity_level}% de ambigüedad
                 </span>
               </li>
               <li className="flex gap-2">
-                <span className="text-red-500">•</span>
+                <span className="text-red">•</span>
                 <span>
                   <strong>Coach</strong> exige {calibration.coach_demand_level}% ({calibration.coach_directiveness})
                 </span>

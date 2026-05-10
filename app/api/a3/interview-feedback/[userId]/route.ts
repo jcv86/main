@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { logXPActivity } from '@/lib/xp-logger'
 
 interface InterviewResponse {
   questionId: string
@@ -205,7 +206,21 @@ Be specific and constructive. Consider the candidate's DISC profile (${userProfi
         created_at: new Date().toISOString()
       })
 
-    console.log(`[v0] A3 response processed with score: ${overallScore}`)
+    // Log XP activity for A3 interview completion
+    const xpAmount = overallScore >= 85 ? 150 : overallScore >= 70 ? 100 : 50
+    await logXPActivity({
+      section: 'A3',
+      activity_type: 'interview_completed',
+      xp_amount: xpAmount,
+      reference_id: sessionId,
+      metadata: {
+        questionId,
+        score: overallScore,
+        responseId: savedResponse?.[0]?.id,
+      },
+    })
+
+    console.log(`[v0] A3 response processed with score: ${overallScore}, XP logged: ${xpAmount}`)
 
     return NextResponse.json({
       success: true,

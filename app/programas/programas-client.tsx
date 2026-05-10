@@ -27,7 +27,7 @@ const PROGRAMAS = [
     duration: 90,
     description: "Desarrolla tu capacidad de liderazgo con inteligencia emocional y propósito",
     icon: Brain,
-    color: "from-blue-500 to-purple-500",
+    color: "from-blue/50/50",
     level: "Intermedio",
     modules: 12,
     testsRequired: ["DISC", "Inteligencia Emocional"],
@@ -44,7 +44,7 @@ const PROGRAMAS = [
     duration: 60,
     description: "Construye conexiones auténticas en pareja, familia y amistades",
     icon: Heart,
-    color: "from-pink-500 to-red-500",
+    color: "from-red/50500",
     level: "Básico",
     modules: 8,
     testsRequired: ["Inteligencia Emocional"],
@@ -61,7 +61,7 @@ const PROGRAMAS = [
     duration: 90,
     description: "Domina tus emociones y desarrolla resiliencia emocional",
     icon: Target,
-    color: "from-green-500 to-teal-500",
+    color: "from-green/50",
     level: "Básico",
     modules: 12,
     testsRequired: ["Inteligencia Emocional", "Big Five"],
@@ -78,7 +78,7 @@ const PROGRAMAS = [
     duration: 90,
     description: "Descubre tu vocación y diseña una carrera con significado",
     icon: Lightbulb,
-    color: "from-yellow-500 to-orange-500",
+    color: "from-yellow-500/50",
     level: "Intermedio",
     modules: 12,
     testsRequired: ["RIASEC", "MBTI", "Soft Skills"],
@@ -95,7 +95,7 @@ const PROGRAMAS = [
     duration: 60,
     description: "Comunica con claridad, empatía e impacto en cualquier contexto",
     icon: Users,
-    color: "from-indigo-500 to-blue-500",
+    color: "from-blue/50/50",
     level: "Básico",
     modules: 8,
     testsRequired: ["DISC", "Soft Skills"],
@@ -112,7 +112,7 @@ const PROGRAMAS = [
     duration: 90,
     description: "Construye rutinas que cambien tu vida personal y profesional",
     icon: TrendingUp,
-    color: "from-purple-500 to-pink-500",
+    color: "from-purple/50500",
     level: "Básico",
     modules: 12,
     testsRequired: ["Big Five"],
@@ -131,10 +131,10 @@ export default function ProgramasClient() {
   return (
     <div className="space-y-8">
       <div className="text-center space-y-4">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold bg-background">
           Programas Guiados DTC
         </h1>
-        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
           Rutas estructuradas de 60-90 días para transformar áreas clave de tu vida personal y profesional
         </p>
       </div>
@@ -146,12 +146,12 @@ export default function ProgramasClient() {
           return (
             <Card
               key={programa.id}
-              className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-purple-300"
+              className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-purple/30"
               onClick={() => setSelectedProgram(programa)}
             >
               <CardHeader>
                 <div
-                  className={`h-12 w-12 rounded-lg bg-gradient-to-r ${programa.color} flex items-center justify-center mb-4`}
+                  className={`h-12 w-12 rounded-lg bg-background`}
                 >
                   <Icon className="h-6 w-6 text-white" />
                 </div>
@@ -162,7 +162,7 @@ export default function ProgramasClient() {
                 <CardDescription>{programa.description}</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex items-center justify-between text-sm text-gray-600">
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
                     <span>{programa.duration} días</span>
@@ -179,12 +179,12 @@ export default function ProgramasClient() {
       </div>
 
       {/* Selected Program Details */}
-      <Card className="border-2 border-purple-200">
+      <Card className="border-2 border-purple/20">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div
-                className={`h-16 w-16 rounded-lg bg-gradient-to-r ${selectedProgram.color} flex items-center justify-center`}
+                className={`h-16 w-16 rounded-lg bg-background`}
               >
                 {(() => {
                   const Icon = selectedProgram.icon
@@ -201,31 +201,31 @@ export default function ProgramasClient() {
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid md:grid-cols-3 gap-4">
-            <Card className="bg-blue-50">
+            <Card className="bg-blue/5">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <Calendar className="h-5 w-5 text-blue-600" />
+                  <Calendar className="h-5 w-5 text-blue" />
                   <span className="font-semibold">Duración</span>
                 </div>
-                <p className="text-2xl font-bold text-blue-600">{selectedProgram.duration} días</p>
+                <p className="text-2xl font-bold text-blue">{selectedProgram.duration} días</p>
               </CardContent>
             </Card>
-            <Card className="bg-purple-50">
+            <Card className="bg-purple/5">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <BookOpen className="h-5 w-5 text-purple-600" />
+                  <BookOpen className="h-5 w-5 text-purple" />
                   <span className="font-semibold">Módulos</span>
                 </div>
-                <p className="text-2xl font-bold text-purple-600">{selectedProgram.modules}</p>
+                <p className="text-2xl font-bold text-purple">{selectedProgram.modules}</p>
               </CardContent>
             </Card>
-            <Card className="bg-green-50">
+            <Card className="bg-green/5">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <Clock className="h-5 w-5 text-green-600" />
+                  <Clock className="h-5 w-5 text-green" />
                   <span className="font-semibold">Tiempo/día</span>
                 </div>
-                <p className="text-2xl font-bold text-green-600">30-45 min</p>
+                <p className="text-2xl font-bold text-green">30-45 min</p>
               </CardContent>
             </Card>
           </div>
@@ -246,8 +246,8 @@ export default function ProgramasClient() {
             <ul className="space-y-2">
               {selectedProgram.outcomes.map((outcome, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">{outcome}</span>
+                  <CheckCircle2 className="h-5 w-5 text-green mt-0.5 flex-shrink-0" />
+                  <span className="text-muted">{outcome}</span>
                 </li>
               ))}
             </ul>
@@ -263,7 +263,7 @@ export default function ProgramasClient() {
           </Alert>
 
           <div className="flex gap-4">
-            <Button size="lg" className={`bg-gradient-to-r ${selectedProgram.color} flex-1`}>
+            <Button size="lg" className={`bg-background`}>
               <Play className="mr-2 h-4 w-4" />
               Iniciar Programa
             </Button>
@@ -311,13 +311,13 @@ export default function ProgramasClient() {
               },
             ].map(({ step, title, description, icon: Icon }) => (
               <div key={step} className="text-center space-y-3">
-                <div className="h-16 w-16 rounded-full bg-purple-100 flex items-center justify-center mx-auto">
-                  <Icon className="h-8 w-8 text-purple-600" />
+                <div className="h-16 w-16 rounded-full bg-purple/10 flex items-center justify-center mx-auto">
+                  <Icon className="h-8 w-8 text-purple" />
                 </div>
                 <div>
                   <Badge className="mb-2">Paso {step}</Badge>
                   <h4 className="font-semibold">{title}</h4>
-                  <p className="text-sm text-gray-600">{description}</p>
+                  <p className="text-sm text-muted-foreground">{description}</p>
                 </div>
               </div>
             ))}

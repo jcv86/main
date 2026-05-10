@@ -231,10 +231,10 @@ export default function RIASECTest() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando Despega Rumbo...</p>
+          <p className="text-muted-foreground">Cargando Despega Rumbo...</p>
         </div>
       </div>
     )
@@ -242,9 +242,9 @@ export default function RIASECTest() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600">Redirecting...</p>
+          <p className="text-muted-foreground">Redirecting...</p>
         </div>
       </div>
     )
@@ -291,7 +291,7 @@ export default function RIASECTest() {
   const question = riasecQuestions[currentQuestion]
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-muted/5">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -310,12 +310,12 @@ export default function RIASECTest() {
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <h2 className="text-2xl font-bold text-gray-900">Despega Rumbo</h2>
-                <p className="text-gray-600">
+                <h2 className="text-2xl font-bold text-foreground">Despega Rumbo</h2>
+                <p className="text-muted-foreground">
                   Question {currentQuestion + 1} of {riasecQuestions.length}
                 </p>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Clock className="h-4 w-4" />
                 <span>~15 minutes</span>
               </div>
@@ -342,7 +342,7 @@ export default function RIASECTest() {
             >
               <div className="space-y-3">
                 {interestOptions.map((option) => (
-                  <div key={option.value} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-gray-50">
+                  <div key={option.value} className="flex items-center space-x-3 p-3 rounded-lg hover:bg-muted/5">
                     <RadioGroupItem value={option.value.toString()} id={`option-${option.value}`} />
                     <Label htmlFor={`option-${option.value}`} className="flex-1 cursor-pointer">
                       {option.label}
@@ -369,7 +369,7 @@ export default function RIASECTest() {
             <Button
               onClick={submitTest}
               disabled={!currentAnswer || isSubmitting}
-              className="bg-gray-900 hover:bg-gray-800"
+              className="bg-muted/90 hover:bg-gray-800"
             >
               {isSubmitting ? (
                 <>
@@ -387,7 +387,7 @@ export default function RIASECTest() {
             <Button
               onClick={() => setCurrentQuestion(Math.min(riasecQuestions.length - 1, currentQuestion + 1))}
               disabled={!currentAnswer}
-              className="bg-gray-900 hover:bg-gray-800"
+              className="bg-muted/90 hover:bg-gray-800"
             >
               Next
               <ArrowRight className="h-4 w-4 ml-2" />
@@ -403,15 +403,15 @@ export default function RIASECTest() {
                 key={index}
                 className={`w-2 h-2 rounded-full ${
                   index <= currentQuestion
-                    ? "bg-gray-900"
+                    ? "bg-muted/90"
                     : answers[riasecQuestions[index].id]
-                      ? "bg-gray-300"
-                      : "bg-gray-200"
+                      ? "bg-muted/30"
+                      : "bg-muted/20"
                 }`}
               />
             ))}
           </div>
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             {Object.keys(answers).length} of {riasecQuestions.length} questions answered
           </p>
         </div>
@@ -420,29 +420,29 @@ export default function RIASECTest() {
         <Card className="mt-8">
           <CardContent className="pt-6">
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
-              <div className="p-3 bg-blue-50 rounded-lg">
-                <h4 className="font-semibold text-blue-900 mb-1">Realista (R)</h4>
-                <p className="text-blue-700">Hands-on, practical work with tools and machinery</p>
+              <div className="p-3 bg-blue/5 rounded-lg">
+                <h4 className="font-semibold text-blue mb-1">Realista (R)</h4>
+                <p className="text-blue">Hands-on, practical work with tools and machinery</p>
               </div>
-              <div className="p-3 bg-purple-50 rounded-lg">
-                <h4 className="font-semibold text-purple-900 mb-1">Investigativo (I)</h4>
-                <p className="text-purple-700">Research, analysis, and problem-solving activities</p>
+              <div className="p-3 bg-purple/5 rounded-lg">
+                <h4 className="font-semibold text-purple mb-1">Investigativo (I)</h4>
+                <p className="text-purple">Research, analysis, and problem-solving activities</p>
               </div>
-              <div className="p-3 bg-pink-50 rounded-lg">
+              <div className="p-3 bg-red/5 rounded-lg">
                 <h4 className="font-semibold text-pink-900 mb-1">Artístico (A)</h4>
                 <p className="text-pink-700">Creative, expressive, and artistic activities</p>
               </div>
-              <div className="p-3 bg-green-50 rounded-lg">
-                <h4 className="font-semibold text-green-900 mb-1">Social (S)</h4>
-                <p className="text-green-700">Helping, teaching, and serving others</p>
+              <div className="p-3 bg-green/5 rounded-lg">
+                <h4 className="font-semibold text-green mb-1">Social (S)</h4>
+                <p className="text-green">Helping, teaching, and serving others</p>
               </div>
-              <div className="p-3 bg-orange-50 rounded-lg">
-                <h4 className="font-semibold text-orange-900 mb-1">Emprendedor (E)</h4>
-                <p className="text-orange-700">Leading, persuading, and managing others</p>
+              <div className="p-3 bg-orange/5 rounded-lg">
+                <h4 className="font-semibold text-orange mb-1">Emprendedor (E)</h4>
+                <p className="text-orange">Leading, persuading, and managing others</p>
               </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <h4 className="font-semibold text-gray-900 mb-1">Convencional (C)</h4>
-                <p className="text-gray-700">Organizing, data management, and detail work</p>
+              <div className="p-3 bg-muted/5 rounded-lg">
+                <h4 className="font-semibold text-foreground mb-1">Convencional (C)</h4>
+                <p className="text-muted">Organizing, data management, and detail work</p>
               </div>
             </div>
           </CardContent>

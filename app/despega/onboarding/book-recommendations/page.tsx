@@ -117,21 +117,21 @@ export default function BookRecommendationsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-purple-50 to-blue-50 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center">
-          <Sparkles className="h-12 w-12 text-purple-600 mx-auto mb-4 animate-spin" />
-          <p className="text-lg text-gray-600">Personalizando tus recomendaciones...</p>
+          <Sparkles className="h-12 w-12 text-purple mx-auto mb-4 animate-spin" />
+          <p className="text-lg text-muted-foreground">Personalizando tus recomendaciones...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-purple-50 to-blue-50 py-12 px-4">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          <h1 className="text-4xl font-bold text-foreground mb-2">
             Tus Insights Personalizados
           </h1>
         </div>
@@ -178,19 +178,19 @@ export default function BookRecommendationsPage() {
             )}
 
             {/* Development Path Section */}
-            <Card className="bg-gradient-to-br from-indigo-50 to-purple-50 border-0 shadow-lg">
+            <Card className="bg-background">
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg">Tu Ruta de Desarrollo</CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <p className="text-sm text-gray-700">
+                <p className="text-sm text-muted">
                   Basado en tu perfil DISC y 120+ libros de desarrollo profesional.
                 </p>
-                <div className="bg-white p-3 rounded-lg border border-indigo-200">
+                <div className="bg-white p-3 rounded-[28px] border border-blue/30">
                   <p className="text-xs font-semibold text-indigo-700 mb-1">
                     📍 Enfoque Prioritario
                   </p>
-                  <p className="text-xs text-gray-700">
+                  <p className="text-xs text-muted">
                     Inteligencia emocional en tu estilo de liderazgo.
                   </p>
                 </div>
@@ -200,7 +200,7 @@ export default function BookRecommendationsPage() {
 
           {/* Right Column - 2 Books */}
           <div className="lg:col-span-2 space-y-6">
-            <h2 className="text-2xl font-bold text-gray-900">Tus 2 Libros Recomendados</h2>
+            <h2 className="text-2xl font-bold text-foreground">Tus 2 Libros Recomendados</h2>
             
             {books.length > 0 ? (
               <div className="grid gap-6">
@@ -210,7 +210,7 @@ export default function BookRecommendationsPage() {
                     className="overflow-hidden hover:shadow-lg transition-shadow border-0 bg-white flex flex-row h-64"
                   >
                     {/* Book Cover */}
-                    <div className="relative w-40 flex-shrink-0 bg-gradient-to-br from-purple-100 to-blue-100 flex items-center justify-center">
+                    <div className="relative w-40 flex-shrink-0 bg-background">
                       {book.cover_url ? (
                         <Image
                           src={book.cover_url}
@@ -220,9 +220,9 @@ export default function BookRecommendationsPage() {
                           className="object-cover h-full w-full"
                         />
                       ) : (
-                        <BookOpen className="h-16 w-16 text-purple-400" />
+                        <BookOpen className="h-16 w-16 text-purple/40" />
                       )}
-                      <div className="absolute top-3 right-3 bg-purple-600 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
+                      <div className="absolute top-3 right-3 bg-purple text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
                         {index + 1}
                       </div>
                     </div>
@@ -230,29 +230,29 @@ export default function BookRecommendationsPage() {
                     {/* Book Info */}
                     <CardContent className="flex-1 p-6 flex flex-col justify-between">
                       <div>
-                        <h3 className="text-lg font-bold text-gray-900 mb-1 line-clamp-2">
+                        <h3 className="text-lg font-bold text-foreground mb-1 line-clamp-2">
                           {book.title}
                         </h3>
-                        <p className="text-sm text-purple-600 font-semibold mb-3">
+                        <p className="text-sm text-purple font-semibold mb-3">
                           {book.author}
                         </p>
 
-                        <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                        <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
                           {book.description}
                         </p>
 
                         {book.key_takeaways && book.key_takeaways.length > 0 && (
                           <div className="space-y-1">
-                            <p className="text-xs font-semibold text-gray-700 uppercase tracking-wide">
+                            <p className="text-xs font-semibold text-muted uppercase tracking-wide">
                               Puntos Clave
                             </p>
                             <ul className="space-y-1">
                               {book.key_takeaways.slice(0, 2).map((takeaway, i) => (
                                 <li
                                   key={i}
-                                  className="text-xs text-gray-600 flex items-start gap-2"
+                                  className="text-xs text-muted-foreground flex items-start gap-2"
                                 >
-                                  <span className="text-purple-600 mt-0.5">•</span>
+                                  <span className="text-purple mt-0.5">•</span>
                                   <span className="line-clamp-1">{takeaway}</span>
                                 </li>
                               ))}
@@ -261,11 +261,11 @@ export default function BookRecommendationsPage() {
                         )}
                       </div>
 
-                      <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-                        <span className="text-xs text-gray-500">{book.pages} páginas</span>
+                      <div className="flex items-center justify-between pt-4 border-t border-muted/20">
+                        <span className="text-xs text-muted-foreground">{book.pages} páginas</span>
                         <Button
                           size="sm"
-                          className="bg-purple-600 hover:bg-purple-700 text-white"
+                          className="bg-purple/80 hover:bg-purple/70 text-white"
                           onClick={() => router.push(`/biblioteca/${book.id}`)}
                         >
                           Explorar <ArrowRight className="ml-1 h-3 w-3" />
@@ -277,22 +277,22 @@ export default function BookRecommendationsPage() {
               </div>
             ) : (
               <Card className="p-8 border-0 bg-white text-center">
-                <p className="text-gray-500">Cargando recomendaciones...</p>
+                <p className="text-muted-foreground">Cargando recomendaciones...</p>
               </Card>
             )}
           </div>
         </div>
 
         {/* CTA Section */}
-        <div className="text-center space-y-4 pt-8 border-t border-gray-200">
+        <div className="text-center space-y-4 pt-8 border-t border-muted/20">
           <Button
             onClick={() => router.push("/dashboard?refetch=true")}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-base"
+            className="bg-blue/80 hover:bg-blue/70 text-white px-8 py-3 text-base"
             size="lg"
           >
             Ir a mi Dashboard
           </Button>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             Explorar más libros en tu biblioteca en cualquier momento
           </p>
         </div>

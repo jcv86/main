@@ -422,12 +422,12 @@ export default function EmotionalIntelligenceTest() {
 
   if (!mounted || isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <Card className="w-full max-w-md">
           <CardContent className="p-8">
             <div className="text-center">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
-              <p className="text-gray-600">Cargando evaluación...</p>
+              <p className="text-muted-foreground">Cargando evaluación...</p>
             </div>
           </CardContent>
         </Card>
@@ -437,9 +437,9 @@ export default function EmotionalIntelligenceTest() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-muted/5 flex items-center justify-center">
         <div className="text-center">
-          <p className="text-gray-600">Redirigiendo...</p>
+          <p className="text-muted-foreground">Redirigiendo...</p>
         </div>
       </div>
     )
@@ -449,7 +449,7 @@ export default function EmotionalIntelligenceTest() {
   const question = emotionalIntelligenceQuestions[currentQuestion]
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen bg-muted/5 py-8 px-4">
       <div className="max-w-2xl mx-auto">
         <div className="mb-6">
           <Button variant="outline" onClick={() => router.push("/test")} className="mb-4">
@@ -459,8 +459,8 @@ export default function EmotionalIntelligenceTest() {
 
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h1 className="text-2xl font-bold text-gray-900">Despega Empatía</h1>
-              <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
+              <h1 className="text-2xl font-bold text-foreground">Despega Empatía</h1>
+              <div className="flex items-center gap-2 text-sm text-muted-foreground mt-1">
                 <Heart className="h-4 w-4" />
                 <span>Reconocer, comprender y gestionar emociones</span>
               </div>
@@ -472,7 +472,7 @@ export default function EmotionalIntelligenceTest() {
 
           <div className="flex items-center justify-between mb-2">
             <span className="text-sm font-medium">Progreso</span>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Clock className="h-4 w-4" />
               <span>{Math.round((Date.now() - startTime) / 60000)} min</span>
             </div>
@@ -485,7 +485,7 @@ export default function EmotionalIntelligenceTest() {
             <CardTitle className="text-lg">Pregunta {currentQuestion + 1}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <p className="text-gray-700 text-lg leading-relaxed">{question.text}</p>
+            <p className="text-muted text-lg leading-relaxed">{question.text}</p>
 
             <RadioGroup
               value={selectedAnswer?.toString() || ""}
@@ -493,9 +493,9 @@ export default function EmotionalIntelligenceTest() {
               className="space-y-3"
             >
               {question.options.map((option, index) => (
-                <div key={index} className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-gray-50">
+                <div key={index} className="flex items-center space-x-3 p-3 rounded-lg border hover:bg-muted/5">
                   <RadioGroupItem value={option.value.toString()} id={`option-${index}`} />
-                  <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-gray-700">
+                  <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-muted">
                     {option.text}
                   </Label>
                 </div>
@@ -511,7 +511,7 @@ export default function EmotionalIntelligenceTest() {
               <Button
                 onClick={handleNext}
                 disabled={selectedAnswer === null || isSubmitting}
-                className="bg-gray-900 hover:bg-gray-800"
+                className="bg-muted/90 hover:bg-gray-800"
               >
                 {isSubmitting ? (
                   <>
@@ -542,15 +542,15 @@ export default function EmotionalIntelligenceTest() {
                 key={index}
                 className={`w-2 h-2 rounded-full ${
                   index <= currentQuestion
-                    ? "bg-gray-900"
+                    ? "bg-muted/90"
                     : answers[emotionalIntelligenceQuestions[index].id]
-                      ? "bg-gray-300"
-                      : "bg-gray-200"
+                      ? "bg-muted/30"
+                      : "bg-muted/20"
                 }`}
               />
             ))}
           </div>
-          <p className="text-sm text-gray-600 mt-2">
+          <p className="text-sm text-muted-foreground mt-2">
             {Object.keys(answers).length} de {emotionalIntelligenceQuestions.length} preguntas respondidas
           </p>
         </div>

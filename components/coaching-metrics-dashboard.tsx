@@ -82,7 +82,7 @@ export function CoachingMetricsDashboard() {
             <Progress value={engagementPercent} className="mt-2" />
             <div className="flex items-center gap-2 mt-2">
               <Badge variant={aggregates.meetsEngagementTarget ? "default" : "secondary"}>
-                {aggregates.meetsEngagementTarget ? "✓ Meta alcanzada" : "En progreso"}
+                {aggregates.meetsEngagementTarget ? " Meta alcanzada" : "En progreso"}
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground mt-1">Meta: 2+ mensajes por sesión</p>
@@ -100,7 +100,7 @@ export function CoachingMetricsDashboard() {
             <Progress value={satisfactionPercent} className="mt-2" />
             <div className="flex items-center gap-2 mt-2">
               <Badge variant={aggregates.meetsSatisfactionTarget ? "default" : "secondary"}>
-                {aggregates.meetsSatisfactionTarget ? "✓ Meta alcanzada" : "En progreso"}
+                {aggregates.meetsSatisfactionTarget ? " Meta alcanzada" : "En progreso"}
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground mt-1">Meta: 4+ estrellas</p>
@@ -118,7 +118,7 @@ export function CoachingMetricsDashboard() {
             <Progress value={completionPercent} className="mt-2" />
             <div className="flex items-center gap-2 mt-2">
               <Badge variant={aggregates.meetsActionTarget ? "default" : "secondary"}>
-                {aggregates.meetsActionTarget ? "✓ Meta alcanzada" : "En progreso"}
+                {aggregates.meetsActionTarget ? " Meta alcanzada" : "En progreso"}
               </Badge>
             </div>
             <p className="text-xs text-muted-foreground mt-1">
@@ -139,19 +139,19 @@ export function CoachingMetricsDashboard() {
             <div className="flex items-center justify-between">
               <span className="text-sm">Engagement (2+ mensajes)</span>
               <Badge variant={aggregates.meetsEngagementTarget ? "default" : "outline"}>
-                {aggregates.meetsEngagementTarget ? "✓ Cumplido" : "Pendiente"}
+                {aggregates.meetsEngagementTarget ? " Cumplido" : "Pendiente"}
               </Badge>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">Satisfacción (4+ estrellas)</span>
               <Badge variant={aggregates.meetsSatisfactionTarget ? "default" : "outline"}>
-                {aggregates.meetsSatisfactionTarget ? "✓ Cumplido" : "Pendiente"}
+                {aggregates.meetsSatisfactionTarget ? " Cumplido" : "Pendiente"}
               </Badge>
             </div>
             <div className="flex items-center justify-between">
               <span className="text-sm">Tasa de Completación (50%+)</span>
               <Badge variant={aggregates.meetsActionTarget ? "default" : "outline"}>
-                {aggregates.meetsActionTarget ? "✓ Cumplido" : "Pendiente"}
+                {aggregates.meetsActionTarget ? " Cumplido" : "Pendiente"}
               </Badge>
             </div>
           </div>

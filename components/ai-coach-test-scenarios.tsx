@@ -248,7 +248,7 @@ export default function AICoachTestScenarios() {
 
   const generateMockResponse = (scenario: TestScenario): string => {
     const responses = {
-      "test-1": `🎯 **Te recomiendo empezar con el Test DISC:**
+      "test-1": ` **Te recomiendo empezar con el Test DISC:**
 
 **¿Por qué DISC primero?**
 • Es rápido (15 minutos) y fácil de completar
@@ -263,7 +263,7 @@ export default function AICoachTestScenarios() {
 
 ¿Te gustaría que te explique más sobre alguno de estos tests? 🤔`,
 
-      "test-2": `📊 **Test DISC - Todo lo que necesitas saber:**
+      "test-2": ` **Test DISC - Todo lo que necesitas saber:**
 
 **¿Qué mide?**
 • **D**ominancia - Cómo enfrentas problemas y desafíos
@@ -280,9 +280,9 @@ export default function AICoachTestScenarios() {
 **Tiempo:** 15 minutos
 **Dificultad:** Fácil
 
-¿Estás listo para descubrir tu perfil DISC? 🚀`,
+¿Estás listo para descubrir tu perfil DISC? `,
 
-      "book-1": `📚 **Libros Esenciales de Liderazgo:**
+      "book-1": ` **Libros Esenciales de Liderazgo:**
 
 **Para Principiantes:**
 • **"El Líder que no Tenía Cargo"** - Robin Sharma
@@ -302,7 +302,7 @@ export default function AICoachTestScenarios() {
 • **"The 7 Habits of Highly Effective People"** - Stephen Covey
   Principios fundamentales de efectividad
 
-¿Te interesa algún área específica del liderazgo? (equipos, comunicación, estrategia) 🎯`,
+¿Te interesa algún área específica del liderazgo? (equipos, comunicación, estrategia) `,
 
       "skill-1": `🗣️ **Plan de Desarrollo: Habilidades de Comunicación**
 
@@ -327,7 +327,7 @@ export default function AICoachTestScenarios() {
 ✅ Feedback positivo de colegas
 ✅ Reducción de malentendidos
 
-¿Te gustaría un plan más específico para algún aspecto? 🎯`,
+¿Te gustaría un plan más específico para algún aspecto? `,
 
       "career-1": `🔄 **Guía para Cambio de Carrera:**
 
@@ -375,18 +375,18 @@ export default function AICoachTestScenarios() {
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
       case "easy":
-        return "bg-green-100 text-green-800 border-green-200"
+        return "bg-green/10 text-green border-green/20"
       case "medium":
-        return "bg-yellow-100 text-yellow-800 border-yellow-200"
+        return "bg-yellow/10 text-yellow border-yellow/20"
       case "hard":
-        return "bg-red-100 text-red-800 border-red-200"
+        return "bg-red/10 text-red border-red/20"
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200"
+        return "bg-muted/10 text-gray-800 border-muted/20"
     }
   }
 
   const getResultIcon = (success: boolean) => {
-    return success ? <CheckCircle className="h-4 w-4 text-green-600" /> : <Target className="h-4 w-4 text-red-600" />
+    return success ? <CheckCircle className="h-4 w-4 text-green" /> : <Target className="h-4 w-4 text-red" />
   }
 
   const filteredScenarios = testScenarios.filter((scenario) => scenario.category === activeCategory)
@@ -399,10 +399,10 @@ export default function AICoachTestScenarios() {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Brain className="h-6 w-6 text-blue-600" />
+            <Brain className="h-6 w-6 text-blue" />
             AI Coach - Escenarios de Testing
           </CardTitle>
-          <p className="text-gray-600">Prueba diferentes tipos de preguntas para validar las respuestas del AI Coach</p>
+          <p className="text-muted-foreground">Prueba diferentes tipos de preguntas para validar las respuestas del AI Coach</p>
         </CardHeader>
       </Card>
 
@@ -439,11 +439,11 @@ export default function AICoachTestScenarios() {
               <ScrollArea className="h-[500px]">
                 <div className="space-y-4">
                   {filteredScenarios.map((scenario) => (
-                    <div key={scenario.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                    <div key={scenario.id} className="border rounded-[28px] p-4 hover:bg-muted/5 transition-colors">
                       <div className="flex items-start justify-between mb-3">
                         <div className="flex-1">
                           <h4 className="font-medium text-sm mb-2">{scenario.question}</h4>
-                          <p className="text-xs text-gray-600 mb-2">{scenario.expectedResponse}</p>
+                          <p className="text-xs text-muted-foreground mb-2">{scenario.expectedResponse}</p>
                         </div>
                         <Badge className={`text-xs ml-2 ${getDifficultyColor(scenario.difficulty)}`}>
                           {scenario.difficulty}
@@ -502,27 +502,27 @@ export default function AICoachTestScenarios() {
                       return (
                         <div
                           key={`${result.scenarioId}-${result.timestamp.getTime()}`}
-                          className="border rounded-lg p-4"
+                          className="border rounded-[28px] p-4"
                         >
                           <div className="flex items-start justify-between mb-2">
                             <div className="flex items-center gap-2">
                               {getResultIcon(result.success)}
                               <span className="font-medium text-sm">{scenario?.question}</span>
                             </div>
-                            <div className="flex items-center gap-2 text-xs text-gray-500">
+                            <div className="flex items-center gap-2 text-xs text-muted-foreground">
                               <Clock className="h-3 w-3" />
                               {result.responseTime}ms
                             </div>
                           </div>
 
-                          <div className="bg-gray-50 rounded p-3 mb-2">
-                            <p className="text-xs text-gray-700 whitespace-pre-wrap">
+                          <div className="bg-muted/5 rounded p-3 mb-2">
+                            <p className="text-xs text-muted whitespace-pre-wrap">
                               {result.actualResponse.substring(0, 200)}
                               {result.actualResponse.length > 200 && "..."}
                             </p>
                           </div>
 
-                          <div className="flex items-center justify-between text-xs text-gray-500">
+                          <div className="flex items-center justify-between text-xs text-muted-foreground">
                             <span>{result.timestamp.toLocaleTimeString()}</span>
                             <Badge variant={result.success ? "default" : "destructive"} className="text-xs">
                               {result.success ? "Exitoso" : "Error"}
@@ -532,7 +532,7 @@ export default function AICoachTestScenarios() {
                       )
                     })
                   ) : (
-                    <div className="text-center py-8 text-gray-500">
+                    <div className="text-center py-8 text-muted-foreground">
                       <MessageSquare className="h-12 w-12 mx-auto mb-4 opacity-50" />
                       <p className="text-sm">No hay resultados de testing aún</p>
                       <p className="text-xs mt-2">Ejecuta algunos escenarios para ver los resultados</p>
@@ -555,30 +555,30 @@ export default function AICoachTestScenarios() {
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div className="text-center">
-                <div className="text-2xl font-bold text-blue-600">{testResults.length}</div>
-                <div className="text-sm text-gray-600">Tests Ejecutados</div>
+                <div className="text-2xl font-bold text-blue">{testResults.length}</div>
+                <div className="text-sm text-muted-foreground">Tests Ejecutados</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-green-600">{testResults.filter((r) => r.success).length}</div>
-                <div className="text-sm text-gray-600">Exitosos</div>
+                <div className="text-2xl font-bold text-green">{testResults.filter((r) => r.success).length}</div>
+                <div className="text-sm text-muted-foreground">Exitosos</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-orange-600">
+                <div className="text-2xl font-bold text-orange">
                   {testResults.length > 0
                     ? Math.round(testResults.reduce((sum, r) => sum + r.responseTime, 0) / testResults.length)
                     : 0}
                   ms
                 </div>
-                <div className="text-sm text-gray-600">Tiempo Promedio</div>
+                <div className="text-sm text-muted-foreground">Tiempo Promedio</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-purple-600">
+                <div className="text-2xl font-bold text-purple">
                   {testResults.length > 0
                     ? Math.round((testResults.filter((r) => r.success).length / testResults.length) * 100)
                     : 0}
                   %
                 </div>
-                <div className="text-sm text-gray-600">Tasa de Éxito</div>
+                <div className="text-sm text-muted-foreground">Tasa de Éxito</div>
               </div>
             </div>
           </CardContent>

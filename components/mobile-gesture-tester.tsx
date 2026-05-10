@@ -429,7 +429,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
   const runAutomatedTests = async () => {
     setIsRunning(true)
     setProgress(0)
-    addLog("🚀 Starting automated gesture testing...")
+    addLog(" Starting automated gesture testing...")
 
     // Reset all tests
     setGestureTests((prev) =>
@@ -501,17 +501,17 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
 
   // Get status icon
   const getStatusIcon = (status: GestureTest["status"], isActive = false) => {
-    if (isActive) return <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+    if (isActive) return <Loader2 className="h-4 w-4 animate-spin text-blue/50" />
 
     switch (status) {
       case "passed":
-        return <CheckCircle className="h-4 w-4 text-green-500" />
+        return <CheckCircle className="h-4 w-4 text-green/50" />
       case "failed":
-        return <XCircle className="h-4 w-4 text-red-500" />
+        return <XCircle className="h-4 w-4 text-red/50" />
       case "testing":
-        return <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+        return <Loader2 className="h-4 w-4 animate-spin text-blue/50" />
       default:
-        return <Clock className="h-4 w-4 text-gray-300" />
+        return <Clock className="h-4 w-4 text-white/85" />
     }
   }
 
@@ -523,19 +523,19 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
   return (
     <div className="space-y-4">
       {/* Header */}
-      <Card className="border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50">
+      <Card className="border-purple/20 bg-background">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <Hand className="h-6 w-6 text-purple-600" />
+              <div className="p-2 bg-purple/10 rounded-lg">
+                <Hand className="h-6 w-6 text-purple" />
               </div>
               <div>
-                <CardTitle className="text-xl text-purple-900">Mobile Gesture Testing</CardTitle>
-                <p className="text-purple-700 text-sm">Test swipe, pinch, tap, and other touch gestures</p>
+                <CardTitle className="text-xl text-purple">Mobile Gesture Testing</CardTitle>
+                <p className="text-purple text-sm">Test swipe, pinch, tap, and other touch gestures</p>
               </div>
             </div>
-            <Badge variant="outline" className="text-purple-700 border-purple-300">
+            <Badge variant="outline" className="text-purple border-purple/30">
               <Smartphone className="h-4 w-4 mr-1" />
               {touchSupport ? "Touch Enabled" : "No Touch Support"}
             </Badge>
@@ -544,33 +544,33 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
         <CardContent>
           {/* Device Capabilities */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-            <div className="text-center p-3 bg-white rounded-lg border">
-              <div className="flex items-center justify-center gap-2 text-green-600 mb-1">
+            <div className="text-center p-3 bg-white rounded-[28px] border">
+              <div className="flex items-center justify-center gap-2 text-green mb-1">
                 <CheckCircle className="h-5 w-5" />
                 <span className="text-2xl font-bold">{passedTests}</span>
               </div>
-              <p className="text-sm text-gray-600">Passed</p>
+              <p className="text-sm text-muted-foreground">Passed</p>
             </div>
-            <div className="text-center p-3 bg-white rounded-lg border">
-              <div className="flex items-center justify-center gap-2 text-red-600 mb-1">
+            <div className="text-center p-3 bg-white rounded-[28px] border">
+              <div className="flex items-center justify-center gap-2 text-red mb-1">
                 <XCircle className="h-5 w-5" />
                 <span className="text-2xl font-bold">{failedTests}</span>
               </div>
-              <p className="text-sm text-gray-600">Failed</p>
+              <p className="text-sm text-muted-foreground">Failed</p>
             </div>
-            <div className="text-center p-3 bg-white rounded-lg border">
-              <div className="flex items-center justify-center gap-2 text-blue-600 mb-1">
+            <div className="text-center p-3 bg-white rounded-[28px] border">
+              <div className="flex items-center justify-center gap-2 text-blue mb-1">
                 <Loader2 className={`h-5 w-5 ${testingTests > 0 ? "animate-spin" : ""}`} />
                 <span className="text-2xl font-bold">{testingTests}</span>
               </div>
-              <p className="text-sm text-gray-600">Testing</p>
+              <p className="text-sm text-muted-foreground">Testing</p>
             </div>
-            <div className="text-center p-3 bg-white rounded-lg border">
-              <div className="flex items-center justify-center gap-2 text-purple-600 mb-1">
+            <div className="text-center p-3 bg-white rounded-[28px] border">
+              <div className="flex items-center justify-center gap-2 text-purple mb-1">
                 <Touch className="h-5 w-5" />
                 <span className="text-2xl font-bold">{navigator.maxTouchPoints || 0}</span>
               </div>
-              <p className="text-sm text-gray-600">Max Touch Points</p>
+              <p className="text-sm text-muted-foreground">Max Touch Points</p>
             </div>
           </div>
 
@@ -579,7 +579,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
             <Button
               onClick={runAutomatedTests}
               disabled={isRunning || !touchSupport}
-              className="bg-purple-600 hover:bg-purple-700"
+              className="bg-purple/80 hover:bg-purple/70"
             >
               {isRunning ? (
                 <>
@@ -615,7 +615,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Gesture Tests */}
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900">Gesture Tests</h3>
+          <h3 className="text-lg font-semibold text-foreground">Gesture Tests</h3>
           <div className="grid gap-3">
             {gestureTests.map((test) => {
               const IconComponent = test.icon
@@ -626,12 +626,12 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                   key={test.id}
                   className={`transition-all ${
                     test.status === "passed"
-                      ? "border-green-200 bg-green-50"
+                      ? "border-green/20 bg-green/5"
                       : test.status === "failed"
-                        ? "border-red-200 bg-red-50"
+                        ? "border-red/20 bg-red/5"
                         : test.status === "testing"
-                          ? "border-blue-200 bg-blue-50 shadow-lg"
-                          : "border-gray-200"
+                          ? "border-blue/20 bg-blue/5 shadow-lg"
+                          : "border-muted/20"
                   }`}
                 >
                   <CardContent className="p-4">
@@ -640,32 +640,34 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                         <div
                           className={`p-2 rounded-lg ${
                             test.status === "passed"
-                              ? "bg-green-100"
+                              ? "bg-green/10"
                               : test.status === "failed"
-                                ? "bg-red-100"
+                                ? "bg-red/10"
                                 : test.status === "testing"
-                                  ? "bg-blue-100"
-                                  : "bg-gray-100"
+                                  ? "bg-blue/10"
+                                  : "bg-muted/10"
                           }`}
                         >
                           <IconComponent className="h-5 w-5" />
                         </div>
                         <div>
                           <h4 className="font-semibold">{test.name}</h4>
-                          <p className="text-sm text-gray-600">{test.description}</p>
+                          <p className="text-sm text-muted-foreground">{test.description}</p>
                         </div>
                       </div>
                       {getStatusIcon(test.status, isCurrentTest)}
                     </div>
 
                     {test.result && (
-                      <div className="text-sm text-green-700 bg-green-100 p-2 rounded">✅ {test.result}</div>
+                      <div className="text-sm text-green bg-green/10 p-2 rounded">✅ {test.result}</div>
                     )}
 
-                    {test.error && <div className="text-sm text-red-700 bg-red-100 p-2 rounded">❌ {test.error}</div>}
+                    {test.error && (
+                      <div className="text-sm text-red bg-red/10 p-2 rounded">❌ {test.error}</div>
+                    )}
 
                     {test.events.length > 0 && (
-                      <div className="mt-2 text-xs text-gray-600">Events detected: {test.events.length}</div>
+                      <div className="mt-2 text-xs text-muted-foreground">Events detected: {test.events.length}</div>
                     )}
                   </CardContent>
                 </Card>
@@ -676,25 +678,25 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
 
         {/* Interactive Test Area & Log */}
         <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-900">Interactive Test Area</h3>
+          <h3 className="text-lg font-semibold text-foreground">Interactive Test Area</h3>
 
           {/* Test Area */}
-          <Card className="border-dashed border-2 border-purple-300">
+          <Card className="border-dashed border-2 border-purple/30">
             <CardContent className="p-0">
               <div
                 ref={testAreaRef}
-                className="h-64 bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center text-center touch-none select-none"
+                className="h-64 bg-background flex items-center justify-center"
                 style={{ touchAction: "none" }}
               >
-                <div className="space-y-2">
-                  <Hand className="h-12 w-12 text-purple-400 mx-auto" />
-                  <h4 className="text-lg font-semibold text-purple-700">Touch Test Area</h4>
-                  <p className="text-sm text-purple-600 max-w-xs">
+                <div className="space-y-2 text-center">
+                  <Hand className="h-12 w-12 text-purple/40 mx-auto" />
+                  <h4 className="text-lg font-semibold text-purple">Touch Test Area</h4>
+                  <p className="text-sm text-purple max-w-xs">
                     Try different gestures here: tap, double-tap, long press, swipe, pinch, drag
                   </p>
                   {!touchSupport && (
-                    <p className="text-xs text-red-600 bg-red-100 p-2 rounded">
-                      ⚠️ Touch events not supported on this device
+                    <p className="text-xs text-red bg-red/10 p-2 rounded">
+                       Touch events not supported on this device
                     </p>
                   )}
                 </div>
@@ -702,82 +704,27 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
             </CardContent>
           </Card>
 
-          {/* Gesture Log */}
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base flex items-center gap-2">
-                <Touch className="h-4 w-4" />
-                Gesture Detection Log
-              </CardTitle>
+          {/* Activity Log */}
+          <Card className="border-purple/10">
+            <CardHeader>
+              <CardTitle className="text-sm">Activity Log</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="h-48 overflow-y-auto bg-gray-900 rounded-lg p-3 font-mono text-sm">
+              <div className="space-y-2 max-h-48 overflow-y-auto">
                 {gestureLog.length === 0 ? (
-                  <div className="text-gray-400 text-center py-8">Waiting for gesture detection...</div>
+                  <p className="text-xs text-muted-foreground italic">No gestures detected yet...</p>
                 ) : (
-                  <div className="space-y-1">
-                    {gestureLog.map((log, index) => (
-                      <div
-                        key={index}
-                        className={`${
-                          log.includes("✅")
-                            ? "text-green-400"
-                            : log.includes("❌")
-                              ? "text-red-400"
-                              : log.includes("🚀") || log.includes("🏁")
-                                ? "text-blue-400"
-                                : log.includes("Gesture detected")
-                                  ? "text-yellow-400"
-                                  : "text-gray-300"
-                        }`}
-                      >
-                        {log}
-                      </div>
-                    ))}
-                  </div>
+                  gestureLog.map((log, i) => (
+                    <div key={i} className="text-xs text-secondary font-mono">
+                      {log}
+                    </div>
+                  ))
                 )}
               </div>
             </CardContent>
           </Card>
         </div>
       </div>
-
-      {/* Gesture Support Summary */}
-      <Card className="border-purple-200 bg-purple-50">
-        <CardContent className="p-6">
-          <div className="text-center space-y-4">
-            <h3 className="text-xl font-bold text-purple-900">Gesture Support Summary</h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
-              <div className="bg-white p-3 rounded-lg border">
-                <div className="font-semibold text-purple-900">Touch Events</div>
-                <div className={touchSupport ? "text-green-700" : "text-red-700"}>
-                  {touchSupport ? "✅ Supported" : "❌ Not Supported"}
-                </div>
-              </div>
-              <div className="bg-white p-3 rounded-lg border">
-                <div className="font-semibold text-purple-900">Multi-Touch</div>
-                <div className={multiTouchSupport ? "text-green-700" : "text-red-700"}>
-                  {multiTouchSupport ? "✅ Supported" : "❌ Not Supported"}
-                </div>
-              </div>
-              <div className="bg-white p-3 rounded-lg border">
-                <div className="font-semibold text-purple-900">Swipe Gestures</div>
-                <div className="text-green-700">✅ All Directions</div>
-              </div>
-              <div className="bg-white p-3 rounded-lg border">
-                <div className="font-semibold text-purple-900">Pinch Zoom</div>
-                <div className={multiTouchSupport ? "text-green-700" : "text-yellow-700"}>
-                  {multiTouchSupport ? "✅ In/Out" : "⚠️ Limited"}
-                </div>
-              </div>
-              <div className="bg-white p-3 rounded-lg border">
-                <div className="font-semibold text-purple-900">Tap Gestures</div>
-                <div className="text-green-700">✅ Single/Double/Long</div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }

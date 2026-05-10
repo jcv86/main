@@ -1,13 +1,15 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { useContextValidation } from "@/lib/hooks/use-context-validation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Send, Sparkles, Loader } from "lucide-react"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { Send, Sparkles, Loader, AlertTriangle } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
 
 interface Message {
@@ -26,10 +28,12 @@ interface A1CoachProps {
 }
 
 export function A1Coach({ a1Results, pilarActive, missionsCompleted, missionsTotal }: A1CoachProps) {
+  const { validateContextRelevance, validationError, clearError } = useContextValidation()
   const [messages, setMessages] = useState<Message[]>([])
   const [input, setInput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [sessionId, setSessionId] = useState("")
+  const [error, setError] = useState<string | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -67,18 +71,37 @@ He revisado tu diagnóstico A1 y tengo algunas recomendaciones personalizadas pa
   const handleSendMessage = async () => {
     if (!input.trim()) return
 
-    const userMessage: Message = {
-      id: Math.random().toString(),
-      content: input,
-      sender: "user",
-      timestamp: new Date(),
-    }
-
-    setMessages(prev => [...prev, userMessage])
-    setInput("")
-    setIsLoading(true)
-
     try {
+      clearError()
+      
+      // Validate that response is contextually relevant to A1 diagnosis and pilar
+      const pilarName = pilarActive === "energia" ? "Energía" :
+                        pilarActive === "enfoque" ? "Enfoque" :
+                        pilarActive === "relaciones" ? "Relaciones" : "Plan Ejecutivo"
+      const coachContext = `Usuario está trabajando en el pilar de ${pilarName}. Sus resultados A1 indican: ${JSON.stringify(a1Results).substring(0, 200)}. La respuesta debe ser relevante a su diagnóstico y pilar.`
+      
+      const validation = await validateContextRelevance(
+        coachContext,
+        input,
+        'a1-coach-interactive'
+      )
+
+      if (!validation.isRelevant) {
+        setError(validation.reason || 'Tu respuesta no está relacionada con tu diagnóstico A1 o el pilar que estás trabajando. Por favor, profundiza en ello.')
+        return
+      }
+
+      const userMessage: Message = {
+        id: Math.random().toString(),
+        content: input,
+        sender: "user",
+        timestamp: new Date(),
+      }
+
+      setMessages(prev => [...prev, userMessage])
+      setInput("")
+      setIsLoading(true)
+
       // Call AI coach endpoint
       const response = await fetch("/api/ai-coach", {
         method: "POST",
@@ -126,7 +149,7 @@ He revisado tu diagnóstico A1 y tengo algunas recomendaciones personalizadas pa
         <CardTitle className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Avatar>
-              <AvatarFallback className="bg-blue-100 text-blue-800">
+              <AvatarFallback className="bg-blue/10 text-blue">
                 {messages.length > 0 && messages[0].sender === "coach" 
                   ? messages[0].content.includes("Sofia") ? "SF" : "DN"
                   : "🤖"}
@@ -153,15 +176,15 @@ He revisado tu diagnóstico A1 y tengo algunas recomendaciones personalizadas pa
               <div
                 className={`max-w-xs lg:max-w-md rounded-lg px-4 py-2 ${
                   message.sender === "user"
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-purple text-purple-foreground"
                     : "bg-muted text-foreground border"
                 }`}
               >
                 <p className="text-sm">{message.content}</p>
                 {message.type && message.sender === "coach" && (
                   <Badge variant="outline" className="mt-2 text-xs">
-                    {message.type === "insight" && "💡 Insight"}
-                    {message.type === "suggestion" && "✨ Sugerencia"}
+                    {message.type === "insight" && " Insight"}
+                    {message.type === "suggestion" && " Sugerencia"}
                     {message.type === "question" && "❓ Pregunta"}
                   </Badge>
                 )}
@@ -180,6 +203,13 @@ He revisado tu diagnóstico A1 y tengo algunas recomendaciones personalizadas pa
       </ScrollArea>
 
       <div className="border-t p-4 space-y-2">
+        {error && (
+          <Alert variant="destructive" className="border-red/30 bg-red/5 dark:bg-red/20">
+            <AlertTriangle className="h-4 w-4 text-red" />
+            <AlertDescription className="text-red dark:text-red/20 ml-2">{error}</AlertDescription>
+          </Alert>
+        )}
+
         <Textarea
           placeholder="Pregunta sobre tu progreso, desafíos, o cualquier cosa..."
           value={input}

@@ -111,39 +111,39 @@ export function CanonDashboardSection() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="w-8 h-8 animate-spin text-blue-400" />
+        <Loader2 className="w-8 h-8 animate-spin text-blue/40" />
       </div>
     )
   }
 
   if (!missions || missions.length === 0) {
     return (
-      <Card className="bg-gradient-to-br from-slate-800 to-slate-700 border-slate-600">
+      <Card className="bg-background">
         <CardHeader>
           <CardTitle className="text-white text-2xl">Ruta no generada</CardTitle>
-          <CardDescription className="text-slate-300">Completa Conozcámonos 2 para generar tu ruta personalizada</CardDescription>
+          <CardDescription className="text-white/85">Completa Conozcámonos 2 para generar tu ruta personalizada</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-slate-300">
+          <p className="text-white/85">
             Todavía no hemos generado tu ruta de 30/60/90 días. Responde 9 preguntas más sobre tu contexto de ejecución y generaremos acciones personalizadas basadas en el motor CANON.
           </p>
-          <div className="bg-slate-700/50 border border-slate-600 rounded-lg p-4 space-y-3">
-            <p className="text-sm text-slate-300">
-              <span className="font-semibold text-emerald-400">✓ Ya completaste:</span> Test A1 (Perfil DISC)
+          <div className="bg-muted/70/50 border border-muted/60 rounded-[28px] p-4 space-y-3">
+            <p className="text-sm text-white/85">
+              <span className="font-semibold text-emerald-400"> Ya completaste:</span> Test A1 (Perfil DISC)
             </p>
-            <p className="text-sm text-slate-300">
-              <span className="font-semibold text-blue-400">→ Siguiente:</span> Conozcámonos 2 - Paso 1 (Contexto de ejecución)
+            <p className="text-sm text-white/85">
+              <span className="font-semibold text-blue/40">→ Siguiente:</span> Conozcámonos 2 - Paso 1 (Contexto de ejecución)
             </p>
-            <p className="text-sm text-slate-300">
-              <span className="font-semibold text-purple-400">📊 Resultado:</span> Ruta 30/60/90 personalizada con trazabilidad
+            <p className="text-sm text-white/85">
+              <span className="font-semibold text-purple/40"> Resultado:</span> Ruta 30/60/90 personalizada con trazabilidad
             </p>
           </div>
           <Link href="/despega/onboarding" className="block mt-6">
-            <Button className="w-full h-12 text-base font-semibold bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg">
+            <Button className="w-full h-12 text-base font-semibold bg-background">
               Generar mi Ruta Personalizada →
             </Button>
           </Link>
-          <p className="text-xs text-slate-400 text-center">Tiempo estimado: 3 minutos</p>
+          <p className="text-xs text-muted-foreground text-center">Tiempo estimado: 3 minutos</p>
         </CardContent>
       </Card>
     )

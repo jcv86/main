@@ -141,23 +141,23 @@ export default function A2TestPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 dark:text-slate-50 mb-2">
+          <h1 className="text-4xl font-bold text-muted/90 dark:text-muted/5 mb-2">
             CANON A2 - Test Completo
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Prueba el flujo completo: C1 → A1 → C2 con OpenAI integrado
           </p>
         </div>
 
         {/* Control Panel */}
         <Card className="mb-8 border-0 shadow-lg">
-          <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
+          <CardHeader className="bg-blue text-white rounded-t-lg">
             <CardTitle>Panel de Control</CardTitle>
-            <CardDescription className="text-blue-100">
+            <CardDescription className="text-white">
               Haz clic para probar cada fase del flujo CANON
             </CardDescription>
           </CardHeader>
@@ -211,7 +211,7 @@ export default function A2TestPage() {
                 onClick={runFullTest}
                 disabled={isRunning}
                 size="lg"
-                className="h-14 text-lg font-bold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
+                className="h-14 text-lg font-bold bg-blue/80 hover:bg-blue/70/80"
               >
                 {isRunning ? (
                   <>
@@ -249,27 +249,27 @@ export default function A2TestPage() {
                       <div className="flex items-center gap-2">
                         {result.status === "loading" && (
                           <>
-                            <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
+                            <Loader2 className="w-5 h-5 animate-spin text-blue" />
                             <Badge variant="outline">Cargando...</Badge>
                           </>
                         )}
                         {result.status === "success" && (
                           <>
-                            <CheckCircle2 className="w-5 h-5 text-green-600" />
-                            <Badge variant="outline" className="bg-green-50 text-green-700">Éxito</Badge>
+                            <CheckCircle2 className="w-5 h-5 text-green" />
+                            <Badge variant="outline" className="bg-green/5 text-green">Éxito</Badge>
                           </>
                         )}
                         {result.status === "error" && (
                           <>
-                            <AlertCircle className="w-5 h-5 text-red-600" />
-                            <Badge variant="outline" className="bg-red-50 text-red-700">Error</Badge>
+                            <AlertCircle className="w-5 h-5 text-red" />
+                            <Badge variant="outline" className="bg-red/5 text-red">Error</Badge>
                           </>
                         )}
                       </div>
 
                       {/* Result Data */}
                       {result.data && (
-                        <div className="bg-slate-50 dark:bg-slate-900 p-4 rounded-lg overflow-auto max-h-96">
+                        <div className="bg-muted/5 dark:bg-background p-4 rounded-[28px] overflow-auto max-h-96">
                           <pre className="text-sm font-mono whitespace-pre-wrap break-words">
                             {JSON.stringify(result.data, null, 2)}
                           </pre>
@@ -278,7 +278,7 @@ export default function A2TestPage() {
 
                       {/* Error Message */}
                       {result.error && (
-                        <div className="bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-200 p-4 rounded-lg">
+                        <div className="bg-red/5 dark:bg-red border border-red/20 dark:border-red text-red dark:text-red/20 p-4 rounded-[28px]">
                           <p className="font-semibold mb-1">Error:</p>
                           <p className="text-sm">{result.error}</p>
                         </div>

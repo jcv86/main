@@ -10,18 +10,18 @@ export const metadata: Metadata = {
 
 export default function CerebroPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-3 mb-4">
-            <div className="p-3 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl shadow-lg">
+            <div className="p-3 bg-background">
               <Brain className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <h1 className="text-4xl font-bold bg-background">
               Cerebro Inteligente
             </h1>
           </div>
-          <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          <p className="text-muted-foreground dark:text-muted-foreground max-w-2xl mx-auto">
             Conversa con nuestro asistente inteligente. Hace preguntas sobre desarrollo profesional, liderazgo,
             productividad, comunicación, y más. Respuestas basadas en más de 120 libros especializados.
           </p>

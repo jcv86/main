@@ -21,39 +21,39 @@ interface A2Insights {
 const insightCards = [
   {
     key: 'alineacionMision',
-    icon: '🎯',
+    icon: '',
     title: 'Alineación de Misión',
-    color: 'from-emerald-500 to-teal-500'
+    color: 'from-green/50'
   },
   {
     key: 'rutaAprendizaje',
-    icon: '📚',
+    icon: '',
     title: 'Ruta de Aprendizaje',
-    color: 'from-blue-500 to-cyan-500'
+    color: 'from-blue'
   },
   {
     key: 'dinamicasEquipo',
     icon: '👥',
     title: 'Dinámicas de Equipo',
-    color: 'from-purple-500 to-pink-500'
+    color: 'from-purple/50500'
   },
   {
     key: 'areasGrowth',
     icon: '📈',
     title: 'Áreas de Crecimiento',
-    color: 'from-amber-500 to-orange-500'
+    color: 'from-yellow/50/50'
   },
   {
     key: 'hitosExito',
     icon: '🏆',
     title: 'Hitos de Éxito',
-    color: 'from-rose-500 to-red-500'
+    color: 'from-red/50500'
   },
   {
     key: 'riesgosOportunidades',
-    icon: '⚡',
+    icon: '',
     title: 'Riesgos & Oportunidades',
-    color: 'from-indigo-500 to-violet-500'
+    color: 'from-blue/50'
   }
 ]
 
@@ -136,23 +136,23 @@ export default function A2ResultadosPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-950">
-        <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="h-8 w-8 animate-spin text-blue" />
       </div>
     )
   }
 
   if (error) {
     return (
-      <ASection title="A2: Camino" subtitle="Resultados de tu Misión" icon="🗺️" colorClass="from-blue-500 to-cyan-500">
+      <ASection title="Resultados: Tu Plan de Ruta" subtitle="Análisis de Tu Estrategia" icon="" colorClass="from-blue">
         <ASectionPart title="Error" icon={<Target />}>
           <div className="space-y-4">
-            <div className="p-6 bg-red-50 dark:bg-red-900/20 border-2 border-red-200 dark:border-red-900/50 rounded-lg">
-              <p className="text-red-700 dark:text-red-300 font-semibold text-lg">{error}</p>
+            <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
+              <p className="text-red dark:text-red/30 font-semibold text-lg">{error}</p>
             </div>
             <Button 
               onClick={() => router.push('/despega/a2/dashboard')} 
-              className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-6 text-lg"
+              className="w-full bg-blue hover:from-blue hover:to-cyan-700 text-white font-semibold py-6 text-lg"
             >
               <ArrowRight className="w-5 h-5 mr-2" />
               Volver al Dashboard A2
@@ -164,12 +164,12 @@ export default function A2ResultadosPage() {
   }
 
   return (
-    <ASection title="A2: Camino" subtitle="Resultados de tu Misión" icon="🗺️" colorClass="from-blue-500 to-cyan-500">
+    <ASection title="A2: Camino" subtitle="Resultados de tu Misión" icon="" colorClass="from-blue">
       <ASectionPart title="Insights Generados" icon={<Zap />}>
         <div className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {insightCards.map((card) => (
-              <Card key={card.key} className={`bg-gradient-to-br ${card.color} border-0 text-white`}>
+              <Card key={card.key} className={`bg-background`}>
                 <CardHeader>
                   <div className="flex items-start justify-between">
                     <div>
@@ -190,7 +190,7 @@ export default function A2ResultadosPage() {
           <div className="mt-8 flex gap-4 justify-center">
             <Button 
               onClick={() => router.push('/despega/a2/dashboard')}
-              className="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold py-6 px-8"
+              className="bg-blue hover:from-blue hover:to-cyan-700 text-white font-semibold py-6 px-8"
             >
               <Target className="w-5 h-5 mr-2" />
               Continuar con Misión

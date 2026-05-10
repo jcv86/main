@@ -77,39 +77,39 @@ const statusSteps = [
 const getStatusColor = (status: string) => {
   switch (status) {
     case "submitted":
-      return "bg-blue-100 text-blue-800"
+      return "bg-blue/10 text-blue"
     case "under_review":
-      return "bg-yellow-100 text-yellow-800"
+      return "bg-yellow/10 text-yellow"
     case "phone_screening":
     case "interview_scheduled":
     case "technical_interview":
     case "final_interview":
-      return "bg-purple-100 text-purple-800"
+      return "bg-purple/10 text-purple"
     case "reference_check":
     case "offer_pending":
-      return "bg-orange-100 text-orange-800"
+      return "bg-orange/10 text-orange"
     case "offer_extended":
-      return "bg-green-100 text-green-800"
+      return "bg-green/10 text-green"
     case "hired":
-      return "bg-green-200 text-green-900"
+      return "bg-green/20 text-green"
     case "rejected":
-      return "bg-red-100 text-red-800"
+      return "bg-red/10 text-red"
     default:
-      return "bg-gray-100 text-gray-800"
+      return "bg-muted/10 text-gray-800"
   }
 }
 
 const getStatusIcon = (status: string, isActive: boolean, isCompleted: boolean) => {
   if (status === "rejected") {
-    return <AlertCircle className="h-5 w-5 text-red-600" />
+    return <AlertCircle className="h-5 w-5 text-red" />
   }
   if (isCompleted) {
-    return <CheckCircle className="h-5 w-5 text-green-600" />
+    return <CheckCircle className="h-5 w-5 text-green" />
   }
   if (isActive) {
-    return <Clock className="h-5 w-5 text-blue-600" />
+    return <Clock className="h-5 w-5 text-blue" />
   }
-  return <div className="h-5 w-5 rounded-full border-2 border-gray-300" />
+  return <div className="h-5 w-5 rounded-full border-2 border-muted/30" />
 }
 
 const calculateProgress = (currentStatus: string) => {
@@ -260,7 +260,7 @@ export default function ApplicationStatusTracker() {
               <Search className="h-5 w-5" />
               Seguir mi Aplicación
             </CardTitle>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Ingresa tu email y el ID de aplicación que recibiste para ver el estado de tu postulación.
             </p>
           </CardHeader>
@@ -287,7 +287,7 @@ export default function ApplicationStatusTracker() {
                   placeholder="APP-2024-123456"
                   required
                 />
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   Encontrarás este ID en el email de confirmación que recibiste
                 </p>
               </div>
@@ -327,7 +327,7 @@ export default function ApplicationStatusTracker() {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-2xl">Estado de tu Aplicación</CardTitle>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 {applicationData.first_name} {applicationData.last_name} • {applicationData.job_title}
               </p>
             </div>
@@ -335,14 +335,14 @@ export default function ApplicationStatusTracker() {
               <Badge className={getStatusColor(applicationData.status)}>
                 {statusSteps.find((step) => step.key === applicationData.status)?.label || applicationData.status}
               </Badge>
-              <p className="text-sm text-gray-500 mt-1">ID: {applicationData.application_id}</p>
+              <p className="text-sm text-muted-foreground mt-1">ID: {applicationData.application_id}</p>
             </div>
           </div>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
             <div>
-              <div className="flex justify-between text-sm text-gray-600 mb-2">
+              <div className="flex justify-between text-sm text-muted-foreground mb-2">
                 <span>Progreso</span>
                 <span>{Math.round(progress)}%</span>
               </div>
@@ -351,15 +351,15 @@ export default function ApplicationStatusTracker() {
 
             <div className="grid md:grid-cols-3 gap-4 text-sm">
               <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4 text-gray-500" />
+                <Calendar className="h-4 w-4 text-muted-foreground" />
                 <span>Aplicado: {formatDate(applicationData.created_at)}</span>
               </div>
               <div className="flex items-center gap-2">
-                <RefreshCw className="h-4 w-4 text-gray-500" />
+                <RefreshCw className="h-4 w-4 text-muted-foreground" />
                 <span>Actualizado: {formatDate(applicationData.updated_at)}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Briefcase className="h-4 w-4 text-gray-500" />
+                <Briefcase className="h-4 w-4 text-muted-foreground" />
                 <span>{applicationData.job_title}</span>
               </div>
             </div>
@@ -392,8 +392,8 @@ export default function ApplicationStatusTracker() {
                     return (
                       <div
                         key={step.key}
-                        className={`flex items-start gap-4 pb-4 ${
-                          index < statusSteps.length - 1 ? "border-b border-gray-100" : ""
+                        className={`flex items-start gap-4 pb-4 ${`}
+                          index < statusSteps.length - 1 ? "border-b border-muted/10" : ""`}
                         }`}
                       >
                         <div className="flex-shrink-0 mt-1">
@@ -402,12 +402,12 @@ export default function ApplicationStatusTracker() {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <h3
-                              className={`font-medium ${
+                              className={`font-medium ${`}
                                 isActive
-                                  ? "text-blue-600"
+                                  ? "text-blue"
                                   : isCompleted || isRejected
-                                    ? "text-green-600"
-                                    : "text-gray-600"
+                                    ? "text-green"
+                                    : "text-muted-foreground"`}
                               }`}
                             >
                               {step.label}
@@ -418,13 +418,13 @@ export default function ApplicationStatusTracker() {
                               </Badge>
                             )}
                           </div>
-                          <p className="text-sm text-gray-600">{step.description}</p>
+                          <p className="text-sm text-muted-foreground">{step.description}</p>
 
                           {/* Show timestamp for completed steps */}
                           {applicationData.application_status_history
                             .filter((history) => history.status === step.key)
                             .map((history, historyIndex) => (
-                              <p key={historyIndex} className="text-xs text-gray-500 mt-1">
+                              <p key={historyIndex} className="text-xs text-muted-foreground mt-1">
                                 {formatDate(history.created_at)}
                                 {history.notes && history.notes !== `Status changed automatically` && (
                                   <span className="ml-2">• {history.notes}</span>
@@ -454,7 +454,7 @@ export default function ApplicationStatusTracker() {
               <ul className="space-y-2 text-sm">
                 {getNextSteps(applicationData.status).map((step, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <div className="w-1.5 h-1.5 bg-blue-600 rounded-full mt-2 flex-shrink-0" />
+                    <div className="w-1.5 h-1.5 bg-blue rounded-full mt-2 flex-shrink-0" />
                     <span>{step}</span>
                   </li>
                 ))}
@@ -474,7 +474,7 @@ export default function ApplicationStatusTracker() {
               <CardContent>
                 <div className="space-y-4">
                   {applicationData.application_interviews.map((interview, index) => (
-                    <div key={index} className="p-3 bg-gray-50 rounded-lg">
+                    <div key={index} className="p-3 bg-muted/5 rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <h4 className="font-medium text-sm capitalize">{interview.interview_type.replace("_", " ")}</h4>
                         <Badge variant="outline" className="text-xs">
@@ -483,7 +483,7 @@ export default function ApplicationStatusTracker() {
                       </div>
 
                       {interview.scheduled_date && (
-                        <div className="space-y-1 text-sm text-gray-600">
+                        <div className="space-y-1 text-sm text-muted-foreground">
                           <div className="flex items-center gap-2">
                             <Calendar className="h-3 w-3" />
                             <span>{formatDate(interview.scheduled_date)}</span>
@@ -514,7 +514,7 @@ export default function ApplicationStatusTracker() {
                       )}
 
                       {interview.notes && (
-                        <div className="mt-2 p-2 bg-blue-50 rounded text-xs">
+                        <div className="mt-2 p-2 bg-blue/5 rounded text-xs">
                           <MessageSquare className="h-3 w-3 inline mr-1" />
                           {interview.notes}
                         </div>
@@ -533,19 +533,19 @@ export default function ApplicationStatusTracker() {
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <div className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-gray-500" />
+                <Mail className="h-4 w-4 text-muted-foreground" />
                 <span>rrhh@empresa.com</span>
               </div>
               <div className="flex items-center gap-2">
-                <Phone className="h-4 w-4 text-gray-500" />
+                <Phone className="h-4 w-4 text-muted-foreground" />
                 <span>+56 2 2345 6789</span>
               </div>
               <div className="flex items-center gap-2">
-                <MapPin className="h-4 w-4 text-gray-500" />
+                <MapPin className="h-4 w-4 text-muted-foreground" />
                 <span>Santiago, Chile</span>
               </div>
               <Separator className="my-3" />
-              <p className="text-xs text-gray-600">
+              <p className="text-xs text-muted-foreground">
                 Si tienes preguntas sobre tu aplicación, no dudes en contactarnos. Nuestro horario de atención es de
                 lunes a viernes de 9:00 a 18:00.
               </p>

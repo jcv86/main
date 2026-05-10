@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { ArrowRight, ChevronRight, Target, Users, TrendingUp, Zap, Loader2, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { createElement } from 'react'
+import RouteProgressDashboard from '@/components/route-progress-dashboard'
 
 interface Route {
   id: string
@@ -30,10 +31,10 @@ const routeIcons: Record<string, any> = {
 }
 
 const routeColors: Record<string, string> = {
-  'liderazgo': 'from-blue-500 to-blue-600',
-  'comunicacion': 'from-emerald-500 to-emerald-600',
-  'emprendimiento': 'from-amber-500 to-amber-600',
-  'transformacion': 'from-purple-500 to-purple-600',
+  'liderazgo': 'from-blue',
+  'comunicacion': 'from-green',
+  'emprendimiento': 'from-yellow/50600',
+  'transformacion': 'from-purple/50',
 }
 
 export default function A2RoutasPage() {
@@ -141,7 +142,7 @@ export default function A2RoutasPage() {
         beneficios: route.beneficios || [],
         razon_seleccion: route.razon_seleccion,
         icon: routeIcons[route.tipo] || Target,
-        color: routeColors[route.tipo] || 'from-slate-500 to-slate-600'
+        color: routeColors[route.tipo] || 'from-muted/50/60'
       }))
 
       setRoutes(formattedRoutes)
@@ -183,9 +184,9 @@ export default function A2RoutasPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/50 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center">
-          <Loader2 className="h-12 w-12 animate-spin mx-auto text-primary mb-4" />
+          <Loader2 className="h-12 w-12 animate-spin mx-auto text-purple mb-4" />
           <p className="text-lg text-muted-foreground">Generando tus rutas personalizadas...</p>
         </div>
       </div>
@@ -194,10 +195,10 @@ export default function A2RoutasPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-muted/50 flex items-center justify-center p-4">
-        <Card className="max-w-md border-red-200">
+      <div className="min-h-screen bg-background">
+        <Card className="max-w-md border-red/20">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-red-600">
+            <CardTitle className="flex items-center gap-2 text-red">
               <AlertCircle className="w-5 h-5" />
               Error
             </CardTitle>
@@ -214,11 +215,11 @@ export default function A2RoutasPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-muted/50 py-12">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 max-w-5xl">
         {/* Header */}
         <div className="mb-12 text-center">
-          <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+          <h1 className="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-background">
             Tu Ruta Personalizada
           </h1>
           <p className="text-lg text-muted-foreground mb-6">
@@ -238,6 +239,17 @@ export default function A2RoutasPage() {
           )}
         </div>
 
+        {/* Route Progress Dashboard */}
+        <div className="mb-12">
+          <RouteProgressDashboard 
+            routeName="Tu Ruta Personalizada"
+            totalDays={90}
+            completedDays={0}
+            streak={0}
+            badges={[]}
+          />
+        </div>
+
         {/* Routes Grid */}
         {routes.length > 0 ? (
           <div className="grid md:grid-cols-2 gap-6 mb-12">
@@ -246,18 +258,18 @@ export default function A2RoutasPage() {
                 key={route.id} 
                 className={`group border-2 cursor-pointer transition-all duration-300 ${
                   selectedRoute === route.id
-                    ? 'border-primary bg-primary/5 shadow-lg'
-                    : 'border-border hover:border-primary/50 hover:shadow-md'
+                    ? 'border-purple bg-purple/5 shadow-lg'
+                    : 'border-border hover:border-purple/50 hover:shadow-md'
                 }`}
                 onClick={() => selectRoute(route.id)}
               >
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between mb-4">
-                    <div className={`p-3 rounded-lg bg-gradient-to-br ${route.color}`}>
+                    <div className={`p-3 rounded-[28px] bg-background`}>
                       {route.icon && createElement(route.icon, { className: 'w-6 h-6 text-white' })}
                     </div>
                   </div>
-                  <CardTitle className="text-2xl group-hover:text-primary transition-colors">
+                  <CardTitle className="text-2xl group-hover:text-purple transition-colors">
                     {route.nombre}
                   </CardTitle>
                   <CardDescription className="text-base mt-2">
@@ -279,10 +291,10 @@ export default function A2RoutasPage() {
                   </div>
 
                   {/* Why this route */}
-                  <div className="p-3 bg-blue-50 dark:bg-blue-950 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <div className="p-3 bg-blue/5 dark:bg-blue rounded-[28px] border border-blue/30 dark:border-blue/10">
                     <p className="text-sm">
-                      <span className="font-semibold text-blue-900 dark:text-blue-100">Por qué para ti: </span>
-                      <span className="text-blue-800 dark:text-blue-200">{route.razon_seleccion}</span>
+                      <span className="font-semibold text-blue dark:text-blue/10">Por qué para ti: </span>
+                      <span className="text-blue dark:text-blue-300">{route.razon_seleccion}</span>
                     </p>
                   </div>
 
@@ -293,7 +305,7 @@ export default function A2RoutasPage() {
                       <ul className="space-y-2">
                         {route.beneficios.slice(0, 4).map((benefit, idx) => (
                           <li key={idx} className="flex items-start gap-2 text-sm">
-                            <ChevronRight className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                            <ChevronRight className="w-4 h-4 text-purple flex-shrink-0 mt-0.5" />
                             <span>{benefit}</span>
                           </li>
                         ))}
@@ -336,7 +348,7 @@ export default function A2RoutasPage() {
           <p className="text-muted-foreground mb-4">
             Cada ruta está diseñada según tu perfil y tus respuestas específicas
           </p>
-          <Link href="/despega" className="inline-flex items-center text-primary hover:underline">
+          <Link href="/despega" className="inline-flex items-center text-purple hover:underline">
             Volver al Dashboard
             <ArrowRight className="w-4 h-4 ml-2" />
           </Link>

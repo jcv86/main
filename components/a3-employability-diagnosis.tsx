@@ -76,7 +76,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
         <CardContent className="space-y-6">
           <div className="space-y-6">
             {QUESTIONS.map((q) => (
-              <div key={q.id} className="border-l-4 border-blue-500 pl-4">
+              <div key={q.id} className="border-l-4 border-blue/50 pl-4">
                 <div className="font-medium text-sm mb-3">{q.text}</div>
                 <div className="flex gap-2">
                   {[1, 2, 3, 4, 5].map((score) => (
@@ -85,8 +85,8 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
                       onClick={() => handleResponse(q.id, score)}
                       className={`w-10 h-10 rounded-lg font-medium transition-all ${
                         responses[q.id] === score
-                          ? "bg-blue-600 text-white"
-                          : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                          ? "bg-blue text-white"
+                          : "bg-muted/10 text-muted-foreground hover:bg-muted/20"
                       }`}
                     >
                       {score}
@@ -97,7 +97,7 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
             ))}
           </div>
 
-          <div className="text-xs text-gray-500 text-center">
+          <div className="text-xs text-muted-foreground text-center">
             1 = Completamente en desacuerdo | 5 = Completamente de acuerdo
           </div>
 
@@ -118,41 +118,41 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
     <Card className="w-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-green-600" />
+          <CheckCircle2 className="w-5 h-5 text-green" />
           Tu Diagnóstico de Empleabilidad
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         {/* Profile Clarity */}
-        <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+        <div className="bg-blue/5 p-4 rounded-[28px] border border-blue/20">
           <div className="flex items-center justify-between mb-2">
             <div className="font-medium">Claridad de Perfil</div>
             <Badge>{Math.round(diagnosis?.profile_clarity)}%</Badge>
           </div>
           <Progress value={diagnosis?.profile_clarity} className="mb-2" />
-          <p className="text-sm text-gray-700">{diagnosis?.profile_clarity_feedback}</p>
+          <p className="text-sm text-muted">{diagnosis?.profile_clarity_feedback}</p>
         </div>
 
         {/* Prep Level */}
-        <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+        <div className="bg-green/5 p-4 rounded-[28px] border border-green/20">
           <div className="flex items-center justify-between mb-2">
             <div className="font-medium">Nivel de Preparación</div>
-            <Badge className="bg-green-600">{diagnosis?.prep_level?.toUpperCase()}</Badge>
+            <Badge className="bg-green">{diagnosis?.prep_level?.toUpperCase()}</Badge>
           </div>
           <Progress value={diagnosis?.prep_level_score} className="mb-2" />
-          <p className="text-xs text-gray-600">Puntuación: {Math.round(diagnosis?.prep_level_score)}/100</p>
+          <p className="text-xs text-muted-foreground">Puntuación: {Math.round(diagnosis?.prep_level_score)}/100</p>
         </div>
 
         {/* Strengths */}
-        <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+        <div className="bg-amber-50 p-4 rounded-[28px] border border-amber-200">
           <div className="font-medium mb-3 flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-green-600" />
+            <CheckCircle2 className="w-4 h-4 text-green" />
             Fortalezas Identificadas
           </div>
           <ul className="space-y-2">
             {diagnosis?.strengths?.map((strength: string, idx: number) => (
-              <li key={idx} className="text-sm text-gray-700 flex items-start gap-2">
-                <span className="text-green-600 font-bold">✓</span>
+              <li key={idx} className="text-sm text-muted flex items-start gap-2">
+                <span className="text-green font-bold"></span>
                 {strength}
               </li>
             ))}
@@ -160,15 +160,15 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
         </div>
 
         {/* Gaps */}
-        <div className="bg-red-50 p-4 rounded-lg border border-red-200">
+        <div className="bg-red/5 p-4 rounded-[28px] border border-red/20">
           <div className="font-medium mb-3 flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-red-600" />
+            <AlertCircle className="w-4 h-4 text-red" />
             Brechas Principales
           </div>
           <ul className="space-y-2">
             {diagnosis?.gaps?.map((gap: string, idx: number) => (
-              <li key={idx} className="text-sm text-gray-700 flex items-start gap-2">
-                <span className="text-red-600 font-bold">•</span>
+              <li key={idx} className="text-sm text-muted flex items-start gap-2">
+                <span className="text-red font-bold">•</span>
                 {gap}
               </li>
             ))}
@@ -176,12 +176,12 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
         </div>
 
         {/* Focus Areas */}
-        <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+        <div className="bg-purple/5 p-4 rounded-[28px] border border-purple/20">
           <div className="font-medium mb-3">Áreas de Enfoque para tu Entrenamiento</div>
           <ul className="space-y-2">
             {diagnosis?.focus_areas?.map((area: string, idx: number) => (
-              <li key={idx} className="text-sm text-gray-700 flex items-start gap-2">
-                <span className="text-purple-600 font-bold">→</span>
+              <li key={idx} className="text-sm text-muted flex items-start gap-2">
+                <span className="text-purple font-bold">→</span>
                 {area}
               </li>
             ))}

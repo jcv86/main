@@ -172,7 +172,7 @@ export default function DISCResultsPage() {
 
   if (showContextForm && !loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background">
         <DISCContextForm
           onSubmit={handleContextSubmit}
           onSkip={() => setShowContextForm(false)}
@@ -184,10 +184,10 @@ export default function DISCResultsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Cargando resultados...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Cargando resultados...</p>
         </div>
       </div>
     )
@@ -195,7 +195,7 @@ export default function DISCResultsPage() {
 
   if (!discResult) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background">
         <Card className="w-full max-w-md">
           <CardHeader className="text-center">
             <CardTitle>No se encontraron resultados</CardTitle>
@@ -259,9 +259,9 @@ export default function DISCResultsPage() {
 
   const getContentTag = (priority: "now" | "next" | "later") => {
     const tags = {
-      now: { label: "FOCO ACTUAL", color: "bg-red-100 text-red-800 border-red-300" },
+      now: { label: "FOCO ACTUAL", color: "bg-red/10 text-red border-red/30" },
       next: { label: "PRÓXIMA MISIÓN", color: "bg-amber-100 text-amber-800 border-amber-300" },
-      later: { label: "PARA CUANDO QUIERAS", color: "bg-blue-100 text-blue-800 border-blue-300" },
+      later: { label: "PARA CUANDO QUIERAS", color: "bg-blue/10 text-blue border-blue/30" },
     }
     const tag = tags[priority]
     return (
@@ -474,7 +474,7 @@ export default function DISCResultsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4">
+    <div className="min-h-screen bg-background">
       <main className="container mx-auto max-w-6xl">
         <div className="flex items-center justify-between mb-6">
           <Button variant="outline" onClick={() => router.push(isDemoMode ? "/" : "/dashboard")}>
@@ -500,7 +500,7 @@ export default function DISCResultsPage() {
 
         {attemptNumber > 1 && (
           <div className="mb-4 text-center">
-            <Badge variant="outline" className="bg-purple-100 text-purple-800 border-purple-300">
+            <Badge variant="outline" className="bg-purple/10 text-purple border-purple/30">
               Intento #{attemptNumber} - Ver Evolución
             </Badge>
           </div>
@@ -508,8 +508,8 @@ export default function DISCResultsPage() {
 
         <Card className="mb-6">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4 w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-              <Brain className="h-8 w-8 text-blue-600" />
+            <div className="mx-auto mb-4 w-16 h-16 bg-blue/10 rounded-full flex items-center justify-center">
+              <Brain className="h-8 w-8 text-blue" />
             </div>
             <CardTitle className="text-3xl">Resultados de Despega Cerebral</CardTitle>
             <CardDescription>Completado el {new Date(discResult.created_at).toLocaleDateString()}</CardDescription>
@@ -519,16 +519,16 @@ export default function DISCResultsPage() {
               <Badge variant="default" className="text-lg px-4 py-2">
                 Estilo Principal: {styleInfo.title}
               </Badge>
-              <p className="text-gray-600 mt-4 max-w-2xl mx-auto">{styleInfo.description}</p>
+              <p className="text-muted-foreground mt-4 max-w-2xl mx-auto">{styleInfo.description}</p>
             </div>
           </CardContent>
         </Card>
 
         {/* PUENTE DE TRANSICION SECTION */}
-        <Card className="mb-6 border-2 border-purple-300 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950 dark:to-blue-950">
+        <Card className="mb-6 border-2 border-purple/30 bg-background950">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <Sparkles className="h-5 w-5 text-purple-600" />
+              <Sparkles className="h-5 w-5 text-purple" />
               Tu Puente de Transición
             </CardTitle>
             <CardDescription>
@@ -538,15 +538,15 @@ export default function DISCResultsPage() {
           <CardContent className="space-y-6">
             <div className="grid md:grid-cols-3 gap-4">
               {/* Eres Ahora */}
-              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-blue-500">
+              <div className="p-4 bg-white dark:bg-background rounded-lg border-l-4 border-blue/50">
                 <h4 className="font-semibold text-lg mb-2">Eres Ahora</h4>
                 <p className="text-sm text-muted-foreground mb-3">Tu perfil actual</p>
-                <div className="text-2xl font-bold text-blue-600">{styleInfo.title}</div>
+                <div className="text-2xl font-bold text-blue">{styleInfo.title}</div>
                 <p className="text-xs text-muted-foreground mt-2">{styleInfo.description}</p>
               </div>
 
               {/* Puedes Ser */}
-              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-purple-500 flex flex-col justify-between">
+              <div className="p-4 bg-white dark:bg-background rounded-lg border-l-4 border-purple/50 flex flex-col justify-between">
                 <div>
                   <h4 className="font-semibold text-lg mb-2">Puedes Ser</h4>
                   <p className="text-sm text-muted-foreground mb-3">Nuevas dimensiones tuyas</p>
@@ -559,7 +559,7 @@ export default function DISCResultsPage() {
               </div>
 
               {/* Cómo Llegas */}
-              <div className="p-4 bg-white dark:bg-slate-900 rounded-lg border-l-4 border-green-500">
+              <div className="p-4 bg-white dark:bg-background rounded-lg border-l-4 border-green">
                 <h4 className="font-semibold text-lg mb-2">Cómo Llegas</h4>
                 <p className="text-sm text-muted-foreground mb-3">El puente práctico</p>
                 <ul className="text-xs space-y-1">
@@ -571,7 +571,7 @@ export default function DISCResultsPage() {
               </div>
             </div>
 
-            <div className="p-4 bg-purple-100 dark:bg-purple-900/30 rounded-lg border border-purple-300">
+            <div className="p-4 bg-purple/10 dark:bg-purple/30 rounded-lg border border-purple/30">
               <p className="text-sm text-foreground">
                 <strong>Tu Siguiente Paso:</strong> Usa la exploración de desarrollo abajo para descubrir exactamente qué competencias quieres expandir. Luego, tu coach IA te creará un plan personalizado.
               </p>
@@ -640,10 +640,10 @@ export default function DISCResultsPage() {
           </TabsList>
 
           <TabsContent value="overview" className="space-y-6">
-            <Card className="border-2 border-blue-500">
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-purple-50">
+            <Card className="border-2 border-blue/50">
+              <CardHeader className="bg-background">
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Sparkles className="h-6 w-6 text-blue-600" />
+                  <Sparkles className="h-6 w-6 text-blue" />
                   Resumen Ejecutivo Integral DTC
                 </CardTitle>
                 <CardDescription className="text-base">
@@ -683,8 +683,8 @@ export default function DISCResultsPage() {
                 />
 
                 {/* Foto rápida del perfil */}
-                <div className="bg-gradient-to-r from-blue-100 to-purple-100 p-6 rounded-lg">
-                  <h3 className="text-xl font-bold text-blue-900 mb-2">Tu perfil: {discResult.primary_type}</h3>
+                <div className="bg-background">
+                  <h3 className="text-xl font-bold text-blue mb-2">Tu perfil: {discResult.primary_type}</h3>
                   <p className="text-lg text-gray-800 italic">
                     "
                     {discResult.d_score > 70 && discResult.c_score > 70
@@ -703,19 +703,19 @@ export default function DISCResultsPage() {
                 {/* Top 5 ideas sobre tu forma de ser */}
                 <div>
                   <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <Brain className="h-5 w-5 text-purple-600" />
+                    <Brain className="h-5 w-5 text-purple" />
                     Top 5 ideas sobre tu forma de ser
                   </h3>
                   <div className="grid gap-3">
                     <Card>
                       <CardContent className="pt-4">
                         <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-700">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-blue/10 flex items-center justify-center font-bold text-blue">
                             1
                           </div>
                           <div>
                             <strong>Cómo piensas y decides:</strong>
-                            <p className="text-sm text-gray-600 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               {discResult.d_score > 70
                                 ? "Decides rápido, priorizas resultados y prefieres la acción inmediata."
                                 : discResult.c_score > 70
@@ -732,12 +732,12 @@ export default function DISCResultsPage() {
                     <Card>
                       <CardContent className="pt-4">
                         <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center font-bold text-purple-700">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-purple/10 flex items-center justify-center font-bold text-purple">
                             2
                           </div>
                           <div>
                             <strong>Cómo te ves a ti mismo:</strong>
-                            <p className="text-sm text-gray-600 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               {discResult.d_score > 70
                                 ? "Te ves como alguien competente, fuerte y capaz de superar cualquier obstáculo."
                                 : discResult.i_score > 70
@@ -754,12 +754,12 @@ export default function DISCResultsPage() {
                     <Card>
                       <CardContent className="pt-4">
                         <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 flex items-center justify-center font-bold text-green-700">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green/10 flex items-center justify-center font-bold text-green">
                             3
                           </div>
                           <div>
                             <strong>Cómo te perciben otros:</strong>
-                            <p className="text-sm text-gray-600 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               Tu pareja/familia te ve como{" "}
                               {discResult.d_score > 70
                                 ? "intenso pero confiable, aunque a veces demasiado directo."
@@ -785,12 +785,12 @@ export default function DISCResultsPage() {
                     <Card>
                       <CardContent className="pt-4">
                         <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-yellow-100 flex items-center justify-center font-bold text-yellow-700">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-yellow/10 flex items-center justify-center font-bold text-yellow">
                             4
                           </div>
                           <div>
                             <strong>Dónde generas más impacto:</strong>
-                            <p className="text-sm text-gray-600 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               Cuando estás en equilibrio, generas impacto en{" "}
                               {discResult.d_score > 70
                                 ? "resolver problemas complejos y liderar cambios difíciles."
@@ -808,12 +808,12 @@ export default function DISCResultsPage() {
                     <Card>
                       <CardContent className="pt-4">
                         <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-100 flex items-center justify-center font-bold text-red-700">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red/10 flex items-center justify-center font-bold text-red">
                             5
                           </div>
                           <div>
                             <strong>Qué pasa bajo estrés:</strong>
-                            <p className="text-sm text-gray-600 mt-1">
+                            <p className="text-sm text-muted-foreground mt-1">
                               Cuando estás estresado,{" "}
                               {discResult.d_score > 70
                                 ? "puedes volverte autoritario, impaciente y poco receptivo."
@@ -833,14 +833,14 @@ export default function DISCResultsPage() {
                 {/* Mapa de impacto */}
                 <div>
                   <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <Target className="h-5 w-5 text-orange-600" />
+                    <Target className="h-5 w-5 text-orange" />
                     Mapa de Impacto: Cómo tu estilo afecta hoy
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
                     <Card className="border-l-4 border-l-purple-500">
                       <CardContent className="pt-4">
-                        <h4 className="font-semibold text-purple-700 mb-2">Vida Personal</h4>
-                        <p className="text-sm text-gray-600">
+                        <h4 className="font-semibold text-purple mb-2">Vida Personal</h4>
+                        <p className="text-sm text-muted-foreground">
                           {discResult.d_score > 70
                             ? "Tus relaciones personales pueden sentir tu intensidad. Algunos te admiran, otros se sienten abrumados."
                             : discResult.i_score > 70
@@ -854,8 +854,8 @@ export default function DISCResultsPage() {
 
                     <Card className="border-l-4 border-l-blue-500">
                       <CardContent className="pt-4">
-                        <h4 className="font-semibold text-blue-700 mb-2">Trabajo/Estudios</h4>
-                        <p className="text-sm text-gray-600">
+                        <h4 className="font-semibold text-blue mb-2">Trabajo/Estudios</h4>
+                        <p className="text-sm text-muted-foreground">
                           {discResult.d_score > 70
                             ? "Eres el motor de resultados, pero a veces atropellas procesos o personas en el camino."
                             : discResult.i_score > 70
@@ -869,8 +869,8 @@ export default function DISCResultsPage() {
 
                     <Card className="border-l-4 border-l-green-500">
                       <CardContent className="pt-4">
-                        <h4 className="font-semibold text-green-700 mb-2">Proyectos/Decisiones</h4>
-                        <p className="text-sm text-gray-600">
+                        <h4 className="font-semibold text-green mb-2">Proyectos/Decisiones</h4>
+                        <p className="text-sm text-muted-foreground">
                           {discResult.d_score > 70
                             ? "Inicias muchos proyectos con energía, pero necesitas trabajar en la paciencia y el refinamiento."
                             : discResult.i_score > 70
@@ -885,15 +885,15 @@ export default function DISCResultsPage() {
                 </div>
 
                 {/* Tres movimientos clave */}
-                <div className="bg-gradient-to-r from-orange-50 to-red-50 p-6 rounded-lg border-l-4 border-orange-500">
+                <div className="bg-background">
                   <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                    <TrendingUp className="h-5 w-5 text-orange-600" />
+                    <TrendingUp className="h-5 w-5 text-orange" />
                     Tres Movimientos Clave para los próximos 90 días
                   </h3>
                   <div className="grid md:grid-cols-3 gap-4">
                     <div>
-                      <div className="text-sm font-semibold text-orange-700 mb-1">1. Cambio Personal</div>
-                      <p className="text-sm text-gray-700">
+                      <div className="text-sm font-semibold text-orange mb-1">1. Cambio Personal</div>
+                      <p className="text-sm text-muted">
                         {discResult.d_score > 70
                           ? "Practica pausar 5 segundos antes de responder en situaciones tensas."
                           : discResult.i_score > 70
@@ -904,8 +904,8 @@ export default function DISCResultsPage() {
                       </p>
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-orange-700 mb-1">2. Cambio Relacional</div>
-                      <p className="text-sm text-gray-700">
+                      <div className="text-sm font-semibold text-orange mb-1">2. Cambio Relacional</div>
+                      <p className="text-sm text-muted">
                         {discResult.d_score > 70
                           ? "Pregunta 'Qué opinas tú?' antes de dar tu opinión en conversaciones importantes."
                           : discResult.i_score > 70
@@ -916,8 +916,8 @@ export default function DISCResultsPage() {
                       </p>
                     </div>
                     <div>
-                      <div className="text-sm font-semibold text-orange-700 mb-1">3. Cambio Laboral</div>
-                      <p className="text-sm text-gray-700">
+                      <div className="text-sm font-semibold text-orange mb-1">3. Cambio Laboral</div>
+                      <p className="text-sm text-muted">
                         {discResult.d_score > 70
                           ? "Delega 1 tarea importante sin micro-gestionar el proceso."
                           : discResult.i_score > 70
@@ -935,26 +935,26 @@ export default function DISCResultsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Sparkles className="h-5 w-5 text-blue-600" />
+                  <Sparkles className="h-5 w-5 text-blue" />
                   Tu Perfil DISC
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="p-4 bg-red-50 rounded-lg text-center">
-                    <div className="text-3xl font-bold text-red-600">{discResult.d_score}%</div>
+                  <div className="p-4 bg-red/5 rounded-lg text-center">
+                    <div className="text-3xl font-bold text-red">{discResult.d_score}%</div>
                     <div className="font-semibold mt-1">Dominancia</div>
                   </div>
-                  <div className="p-4 bg-yellow-50 rounded-lg text-center">
-                    <div className="text-3xl font-bold text-yellow-600">{discResult.i_score}%</div>
+                  <div className="p-4 bg-yellow/5 rounded-lg text-center">
+                    <div className="text-3xl font-bold text-yellow">{discResult.i_score}%</div>
                     <div className="font-semibold mt-1">Influencia</div>
                   </div>
-                  <div className="p-4 bg-green-50 rounded-lg text-center">
-                    <div className="text-3xl font-bold text-green-600">{discResult.s_score}%</div>
+                  <div className="p-4 bg-green/5 rounded-lg text-center">
+                    <div className="text-3xl font-bold text-green">{discResult.s_score}%</div>
                     <div className="font-semibold mt-1">Estabilidad</div>
                   </div>
-                  <div className="p-4 bg-blue-50 rounded-lg text-center">
-                    <div className="text-3xl font-bold text-blue-600">{discResult.c_score}%</div>
+                  <div className="p-4 bg-blue/5 rounded-lg text-center">
+                    <div className="text-3xl font-bold text-blue">{discResult.c_score}%</div>
                     <div className="font-semibold mt-1">Cumplimiento</div>
                   </div>
                 </div>
@@ -970,7 +970,7 @@ export default function DISCResultsPage() {
                   <ul className="space-y-2">
                     {styleInfo.strengths.map((strength, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                        <CheckCircle2 className="h-5 w-5 text-green mt-0.5 flex-shrink-0" />
                         <span>{strength}</span>
                       </li>
                     ))}
@@ -986,7 +986,7 @@ export default function DISCResultsPage() {
                   <ul className="space-y-2">
                     {styleInfo.challenges.map((challenge, idx) => (
                       <li key={idx} className="flex items-start gap-2">
-                        <Target className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                        <Target className="h-5 w-5 text-orange mt-0.5 flex-shrink-0" />
                         <span>{challenge}</span>
                       </li>
                     ))}
@@ -995,10 +995,10 @@ export default function DISCResultsPage() {
               </Card>
             </div>
 
-            <Card className="mb-8 border-2 border-purple-200 bg-gradient-to-br from-purple-50 to-pink-50">
+            <Card className="mb-8 border-2 border-purple/20 bg-background">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Heart className="w-6 h-6 text-purple-600" />
+                  <Heart className="w-6 h-6 text-purple" />
                   Impacto en tu Vida Personal
                 </CardTitle>
                 <CardDescription>
@@ -1008,11 +1008,11 @@ export default function DISCResultsPage() {
               <CardContent className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
                       <Users className="w-5 h-5" />
                       Relaciones Personales
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       {discResult.primary_type === "Dominance"
                         ? "En tu familia y pareja, tu estilo directo puede ser percibido como autoritario. Practica escucha activa y cede el control en decisiones cotidianas."
                         : discResult.primary_type === "Influence"
@@ -1024,11 +1024,11 @@ export default function DISCResultsPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
                       <Home className="w-5 h-5" />
                       Vida Familiar
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       {discResult.primary_type === "Dominance"
                         ? "Con tu familia, delega responsabilidades y permite que otros lideren. Pregunta '¿Qué opinas?' antes de decidir."
                         : discResult.primary_type === "Influence"
@@ -1040,11 +1040,11 @@ export default function DISCResultsPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
                       <Heart className="w-5 h-5" />
                       Bienestar Emocional
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       {discResult.primary_type === "Dominance"
                         ? "Tu ritmo acelerado puede llevarte al burnout. Programa momentos de descanso no negociables y practica mindfulness."
                         : discResult.primary_type === "Influence"
@@ -1056,11 +1056,11 @@ export default function DISCResultsPage() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple-900">
+                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
                       <Sparkles className="w-5 h-5" />
                       Desarrollo Personal
                     </h3>
-                    <p className="text-gray-700 leading-relaxed">
+                    <p className="text-muted leading-relaxed">
                       {discResult.primary_type === "Dominance"
                         ? "Enfócate en desarrollar paciencia y empatía. Lee sobre inteligencia emocional y practica puterte en los zapatos de otros."
                         : discResult.primary_type === "Influence"
@@ -1072,11 +1072,11 @@ export default function DISCResultsPage() {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg p-6 border-l-4 border-purple-600">
-                  <h3 className="font-semibold text-lg mb-3 text-purple-900">
-                    💡 Recuerda: Tu trabajo es solo una parte de tu vida
+                <div className="bg-white rounded-lg p-6 border-l-4 border-purple">
+                  <h3 className="font-semibold text-lg mb-3 text-purple">
+                     Recuerda: Tu trabajo es solo una parte de tu vida
                   </h3>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-muted leading-relaxed">
                     Este test te ayuda primero a mejorar tus relaciones personales, tu bienestar emocional y tu vida
                     familiar. Las mejoras en el ámbito laboral son una consecuencia natural de tu crecimiento personal
                     integral.
@@ -1092,7 +1092,7 @@ export default function DISCResultsPage() {
                 <CardTitle>Análisis Detallado</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-gray-700">{discResult.analysis}</p>
+                <p className="text-muted">{discResult.analysis}</p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -1101,7 +1101,7 @@ export default function DISCResultsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Lightbulb className="h-5 w-5 text-yellow-600" />
+                  <Lightbulb className="h-5 w-5 text-yellow" />
                   Oportunidades de Desarrollo
                 </CardTitle>
                 <CardDescription>
@@ -1161,63 +1161,63 @@ export default function DISCResultsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-blue-600" />
+                  <BarChart3 className="h-5 w-5 text-blue" />
                   Mini Tablero de Control 90 Días
                 </CardTitle>
                 <CardDescription>Tu progreso de un vistazo - Actualizado en tiempo real</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid md:grid-cols-3 gap-4">
-                  <Card className="bg-blue-50">
+                  <Card className="bg-blue/5">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-sm font-medium text-blue-900">Mes 1: Autoconocimiento</CardTitle>
+                      <CardTitle className="text-sm font-medium text-blue">Mes 1: Autoconocimiento</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-2xl font-bold text-blue-700">{calculateMonthProgress("m1")}%</span>
+                          <span className="text-2xl font-bold text-blue">{calculateMonthProgress("m1")}%</span>
                           <Badge variant={calculateMonthProgress("m1") >= 75 ? "default" : "secondary"}>
                             {calculateMonthProgress("m1") >= 75 ? "En curso" : "Pendiente"}
                           </Badge>
                         </div>
-                        <Progress value={calculateMonthProgress("m1")} className="h-2 bg-blue-100" />
-                        <p className="text-xs text-blue-700 mt-2">Objetivo: Entender tu perfil DISC</p>
+                        <Progress value={calculateMonthProgress("m1")} className="h-2 bg-blue/10" />
+                        <p className="text-xs text-blue mt-2">Objetivo: Entender tu perfil DISC</p>
                       </div>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-green-50">
+                  <Card className="bg-green/5">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-sm font-medium text-green-900">Mes 2: Experimentación</CardTitle>
+                      <CardTitle className="text-sm font-medium text-green">Mes 2: Experimentación</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-2xl font-bold text-green-700">{calculateMonthProgress("m2")}%</span>
+                          <span className="text-2xl font-bold text-green">{calculateMonthProgress("m2")}%</span>
                           <Badge variant={calculateMonthProgress("m2") >= 75 ? "default" : "secondary"}>
                             {calculateMonthProgress("m2") >= 75 ? "En curso" : "Próximo"}
                           </Badge>
                         </div>
-                        <Progress value={calculateMonthProgress("m2")} className="h-2 bg-green-100" />
-                        <p className="text-xs text-green-700 mt-2">Objetivo: Practicar nuevos comportamientos</p>
+                        <Progress value={calculateMonthProgress("m2")} className="h-2 bg-green/10" />
+                        <p className="text-xs text-green mt-2">Objetivo: Practicar nuevos comportamientos</p>
                       </div>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-purple-50">
+                  <Card className="bg-purple/5">
                     <CardHeader className="pb-3">
-                      <CardTitle className="text-sm font-medium text-purple-900">Mes 3: Consolidación</CardTitle>
+                      <CardTitle className="text-sm font-medium text-purple">Mes 3: Consolidación</CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-2xl font-bold text-purple-700">{calculateMonthProgress("m3")}%</span>
+                          <span className="text-2xl font-bold text-purple">{calculateMonthProgress("m3")}%</span>
                           <Badge variant={calculateMonthProgress("m3") >= 75 ? "default" : "secondary"}>
                             {calculateMonthProgress("m3") >= 75 ? "En curso" : "Próximo"}
                           </Badge>
                         </div>
-                        <Progress value={calculateMonthProgress("m3")} className="h-2 bg-purple-100" />
-                        <p className="text-xs text-purple-700 mt-2">Objetivo: Crear hábitos sostenibles</p>
+                        <Progress value={calculateMonthProgress("m3")} className="h-2 bg-purple/10" />
+                        <p className="text-xs text-purple mt-2">Objetivo: Crear hábitos sostenibles</p>
                       </div>
                     </CardContent>
                   </Card>
@@ -1266,17 +1266,17 @@ export default function DISCResultsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-purple-600" />
+                  <Target className="h-5 w-5 text-purple" />
                   Tu Misión DTC de 3 Meses
                 </CardTitle>
                 <CardDescription>El marco integrador que guiará tu desarrollo personal y profesional</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="bg-gradient-to-r from-purple-50 to-blue-50 p-6 rounded-lg border-2 border-purple-200">
-                  <h3 className="text-xl font-bold text-purple-900 mb-3">
+                <div className="bg-background">
+                  <h3 className="text-xl font-bold text-purple mb-3">
                     Desarrollar mi versatilidad conductual consciente
                   </h3>
-                  <p className="text-gray-700 leading-relaxed">
+                  <p className="text-muted leading-relaxed">
                     En los próximos 3 meses, voy a profundizar en mi autoconocimiento DISC para entender cómo mi perfil{" "}
                     <strong>{discResult.primary_type}</strong> me ayuda y me limita en mi vida personal y profesional.
                     Voy a experimentar conscientemente con comportamientos fuera de mi zona de confort, especialmente en
@@ -1294,12 +1294,12 @@ export default function DISCResultsPage() {
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-4">
-                  <Card className="bg-blue-50 border-blue-200">
+                  <Card className="bg-blue/5 border-blue/20">
                     <CardHeader>
-                      <CardTitle className="text-sm text-blue-900">Por qué esta misión</CardTitle>
+                      <CardTitle className="text-sm text-blue">Por qué esta misión</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-muted">
                         Porque mi perfil {discResult.primary_type} es una fortaleza en muchas situaciones, pero puede
                         volverse un patrón automático que me limita. Quiero tener más opciones de respuesta y elegir
                         conscientemente.
@@ -1307,26 +1307,26 @@ export default function DISCResultsPage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-green-50 border-green-200">
+                  <Card className="bg-green/5 border-green/20">
                     <CardHeader>
-                      <CardTitle className="text-sm text-green-900">Cómo sabré que lo logré</CardTitle>
+                      <CardTitle className="text-sm text-green">Cómo sabré que lo logré</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <ul className="text-sm text-gray-700 space-y-1">
-                        <li>✓ Habré completado 3+ tests DTC</li>
-                        <li>✓ Tendré 10+ experimentos documentados</li>
-                        <li>✓ Habré recibido feedback positivo sobre mi versatilidad</li>
-                        <li>✓ Tendré un sistema personal de desarrollo activo</li>
+                      <ul className="text-sm text-muted space-y-1">
+                        <li> Habré completado 3+ tests DTC</li>
+                        <li> Tendré 10+ experimentos documentados</li>
+                        <li> Habré recibido feedback positivo sobre mi versatilidad</li>
+                        <li> Tendré un sistema personal de desarrollo activo</li>
                       </ul>
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-purple-50 border-purple-200">
+                  <Card className="bg-purple/5 border-purple/20">
                     <CardHeader>
-                      <CardTitle className="text-sm text-purple-900">Qué gano con esto</CardTitle>
+                      <CardTitle className="text-sm text-purple">Qué gano con esto</CardTitle>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-muted">
                         Más libertad para ser quien necesito ser en cada momento. Mejores relaciones porque entiendo
                         mejor a los demás. Más efectividad porque puedo adaptar mi estilo al contexto.
                       </p>
@@ -1341,7 +1341,7 @@ export default function DISCResultsPage() {
                   <CardContent className="space-y-3">
                     <div>
                       <h4 className="font-medium text-sm mb-1">En tu vida personal:</h4>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-muted">
                         {discResult.primary_type === "D" &&
                           "Aprenderás a ser más paciente y presente con tu familia y pareja, sin perder tu determinación."}
                         {discResult.primary_type === "I" &&
@@ -1354,7 +1354,7 @@ export default function DISCResultsPage() {
                     </div>
                     <div>
                       <h4 className="font-medium text-sm mb-1">En tu trabajo/estudio:</h4>
-                      <p className="text-sm text-gray-700">
+                      <p className="text-sm text-muted">
                         {discResult.primary_type === "D" &&
                           "Aprenderás a delegar más y confiar en el proceso, siendo más efectivo como líder."}
                         {discResult.primary_type === "I" &&
@@ -1376,7 +1376,7 @@ export default function DISCResultsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Rocket className="h-5 w-5 text-orange-600" />
+                  <Rocket className="h-5 w-5 text-orange" />
                   Semana Despegue: Tus Primeros 7 Días
                 </CardTitle>
                 <CardDescription>
@@ -1384,10 +1384,10 @@ export default function DISCResultsPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Alert className="bg-orange-50 border-orange-200">
-                  <AlertCircle className="h-4 w-4 text-orange-600" />
-                  <AlertTitle className="text-orange-900">Regla de Oro</AlertTitle>
-                  <AlertDescription className="text-orange-800">
+                <Alert className="bg-orange/5 border-orange/20">
+                  <AlertCircle className="h-4 w-4 text-orange" />
+                  <AlertTitle className="text-orange">Regla de Oro</AlertTitle>
+                  <AlertDescription className="text-orange">
                     Esta semana es de observación sin juicio. No intentes cambiar nada todavía, solo nota y registra.
                   </AlertDescription>
                 </Alert>
@@ -1400,7 +1400,7 @@ export default function DISCResultsPage() {
                       time: "15 min",
                       actions: [
                         "Lee completo tu informe DISC (sí, todo)",
-                        "Marca con ⭐ las 5 frases que más te resonaron",
+                        "Marca con  las 5 frases que más te resonaron",
                         "Comparte 1 insight con alguien cercano",
                       ],
                     },
@@ -1469,10 +1469,10 @@ export default function DISCResultsPage() {
                       <CardHeader className="pb-3">
                         <div className="flex items-center justify-between">
                           <div>
-                            <CardTitle className="text-sm font-semibold text-orange-900">{day.day}</CardTitle>
+                            <CardTitle className="text-sm font-semibold text-orange">{day.day}</CardTitle>
                             <CardDescription className="text-xs">{day.title}</CardDescription>
                           </div>
-                          <Badge variant="outline" className="text-orange-700 border-orange-300">
+                          <Badge variant="outline" className="text-orange border-orange/30">
                             {day.time}
                           </Badge>
                         </div>
@@ -1480,8 +1480,8 @@ export default function DISCResultsPage() {
                       <CardContent>
                         <ul className="space-y-1">
                           {day.actions.map((action, aIdx) => (
-                            <li key={aIdx} className="text-sm text-gray-700 flex items-start gap-2">
-                              <span className="text-orange-500 font-bold">•</span>
+                            <li key={aIdx} className="text-sm text-muted flex items-start gap-2">
+                              <span className="text-orange font-bold">•</span>
                               <span>{action}</span>
                             </li>
                           ))}
@@ -1491,10 +1491,10 @@ export default function DISCResultsPage() {
                   ))}
                 </div>
 
-                <Alert className="bg-green-50 border-green-200">
-                  <CheckCircle2 className="h-4 w-4 text-green-600" />
-                  <AlertTitle className="text-green-900">Al final de esta semana</AlertTitle>
-                  <AlertDescription className="text-green-800">
+                <Alert className="bg-green/5 border-green/20">
+                  <CheckCircle2 className="h-4 w-4 text-green" />
+                  <AlertTitle className="text-green">Al final de esta semana</AlertTitle>
+                  <AlertDescription className="text-green">
                     Tendrás: observaciones concretas de tu comportamiento, feedback externo, un mini experimento
                     completado, y tu segundo test DTC hecho. Estarás 10x más consciente de tu estilo DISC.
                   </AlertDescription>
@@ -1507,7 +1507,7 @@ export default function DISCResultsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <BookOpen className="h-5 w-5 text-indigo-600" />
+                  <BookOpen className="h-5 w-5 text-blue" />
                   Biblioteca DTC Recomendada para tu Perfil {discResult.primary_type}
                 </CardTitle>
                 <CardDescription>
@@ -1528,15 +1528,15 @@ export default function DISCResultsPage() {
                     <tbody>
                       {discResult.d_score >= 50 && (
                         <>
-                          <tr className="border-b hover:bg-gray-50">
+                          <tr className="border-b hover:bg-muted/5">
                             <td className="p-3">
-                              <Badge variant="outline" className="bg-red-50">
+                              <Badge variant="outline" className="bg-red/5">
                                 {discResult.d_score > 70 ? "Intensidad en discusiones" : "Asertividad equilibrada"}
                               </Badge>
                             </td>
                             <td className="p-3">
                               <div className="font-medium">Comunicación No Violenta</div>
-                              <div className="text-sm text-gray-500">Marshall Rosenberg</div>
+                              <div className="text-sm text-muted-foreground">Marshall Rosenberg</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.d_score > 70
@@ -1549,15 +1549,15 @@ export default function DISCResultsPage() {
                               </Button>
                             </td>
                           </tr>
-                          <tr className="border-b hover:bg-gray-50">
+                          <tr className="border-b hover:bg-muted/5">
                             <td className="p-3">
-                              <Badge variant="outline" className="bg-orange-50">
+                              <Badge variant="outline" className="bg-orange/5">
                                 Paciencia y escucha
                               </Badge>
                             </td>
                             <td className="p-3">
                               <div className="font-medium">El Arte de Escuchar</div>
-                              <div className="text-sm text-gray-500">Erich Fromm</div>
+                              <div className="text-sm text-muted-foreground">Erich Fromm</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.d_score > 70
@@ -1575,15 +1575,15 @@ export default function DISCResultsPage() {
 
                       {discResult.i_score >= 50 && (
                         <>
-                          <tr className="border-b hover:bg-gray-50">
+                          <tr className="border-b hover:bg-muted/5">
                             <td className="p-3">
-                              <Badge variant="outline" className="bg-yellow-50">
+                              <Badge variant="outline" className="bg-yellow/5">
                                 {discResult.i_score > 70 ? "Seguimiento y profundidad" : "Conexión significativa"}
                               </Badge>
                             </td>
                             <td className="p-3">
                               <div className="font-medium">Esencialismo</div>
-                              <div className="text-sm text-gray-500">Greg McKeown</div>
+                              <div className="text-sm text-muted-foreground">Greg McKeown</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.i_score > 70
@@ -1596,15 +1596,15 @@ export default function DISCResultsPage() {
                               </Button>
                             </td>
                           </tr>
-                          <tr className="border-b hover:bg-gray-50">
+                          <tr className="border-b hover:bg-muted/5">
                             <td className="p-3">
-                              <Badge variant="outline" className="bg-amber-50">
+                              <Badge variant="outline" className="bg-yellow/5">
                                 Organización personal
                               </Badge>
                             </td>
                             <td className="p-3">
                               <div className="font-medium">Getting Things Done</div>
-                              <div className="text-sm text-gray-500">David Allen</div>
+                              <div className="text-sm text-muted-foreground">David Allen</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.i_score > 70
@@ -1622,15 +1622,15 @@ export default function DISCResultsPage() {
 
                       {discResult.s_score >= 50 && (
                         <>
-                          <tr className="border-b hover:bg-gray-50">
+                          <tr className="border-b hover:bg-muted/5">
                             <td className="p-3">
-                              <Badge variant="outline" className="bg-green-50">
+                              <Badge variant="outline" className="bg-green/5">
                                 {discResult.s_score > 70 ? "Límites saludables" : "Estabilidad y apoyo"}
                               </Badge>
                             </td>
                             <td className="p-3">
                               <div className="font-medium">Boundaries (Límites)</div>
-                              <div className="text-sm text-gray-500">Henry Cloud & John Townsend</div>
+                              <div className="text-sm text-muted-foreground">Henry Cloud & John Townsend</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.s_score > 70
@@ -1643,7 +1643,7 @@ export default function DISCResultsPage() {
                               </Button>
                             </td>
                           </tr>
-                          <tr className="border-b hover:bg-gray-50">
+                          <tr className="border-b hover:bg-muted/5">
                             <td className="p-3">
                               <Badge variant="outline" className="bg-teal-50">
                                 Expresión de necesidades
@@ -1651,7 +1651,7 @@ export default function DISCResultsPage() {
                             </td>
                             <td className="p-3">
                               <div className="font-medium">Conversaciones Cruciales</div>
-                              <div className="text-sm text-gray-500">Kerry Patterson et al.</div>
+                              <div className="text-sm text-muted-foreground">Kerry Patterson et al.</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.s_score > 70
@@ -1669,15 +1669,15 @@ export default function DISCResultsPage() {
 
                       {discResult.c_score >= 50 && (
                         <>
-                          <tr className="border-b hover:bg-gray-50">
+                          <tr className="border-b hover:bg-muted/5">
                             <td className="p-3">
-                              <Badge variant="outline" className="bg-blue-50">
+                              <Badge variant="outline" className="bg-blue/5">
                                 {discResult.c_score > 70 ? "Perfeccionismo paralizante" : "Excelencia equilibrada"}
                               </Badge>
                             </td>
                             <td className="p-3">
                               <div className="font-medium">La Trampa de la Perfección</div>
-                              <div className="text-sm text-gray-500">Brené Brown</div>
+                              <div className="text-sm text-muted-foreground">Brené Brown</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.c_score > 70
@@ -1690,15 +1690,15 @@ export default function DISCResultsPage() {
                               </Button>
                             </td>
                           </tr>
-                          <tr className="border-b hover:bg-gray-50">
+                          <tr className="border-b hover:bg-muted/5">
                             <td className="p-3">
-                              <Badge variant="outline" className="bg-indigo-50">
+                              <Badge variant="outline" className="bg-blue/5">
                                 Conexión emocional
                               </Badge>
                             </td>
                             <td className="p-3">
                               <div className="font-medium">Inteligencia Emocional 2.0</div>
-                              <div className="text-sm text-gray-500">Travis Bradberry</div>
+                              <div className="text-sm text-muted-foreground">Travis Bradberry</div>
                             </td>
                             <td className="p-3 text-sm">
                               {discResult.c_score > 70
@@ -1719,15 +1719,15 @@ export default function DISCResultsPage() {
                         discResult.s_score < 50 &&
                         discResult.c_score < 50 && (
                           <>
-                            <tr className="border-b hover:bg-gray-50">
+                            <tr className="border-b hover:bg-muted/5">
                               <td className="p-3">
-                                <Badge variant="outline" className="bg-purple-50">
+                                <Badge variant="outline" className="bg-purple/5">
                                   Autoconocimiento integral
                                 </Badge>
                               </td>
                               <td className="p-3">
                                 <div className="font-medium">Diseña Tu Vida</div>
-                                <div className="text-sm text-gray-500">Bill Burnett & Dave Evans</div>
+                                <div className="text-sm text-muted-foreground">Bill Burnett & Dave Evans</div>
                               </td>
                               <td className="p-3 text-sm">
                                 Tu perfil equilibrado te da flexibilidad. Este libro te ayudará a diseñar una vida que
@@ -1739,15 +1739,15 @@ export default function DISCResultsPage() {
                                 </Button>
                               </td>
                             </tr>
-                            <tr className="border-b hover:bg-gray-50">
+                            <tr className="border-b hover:bg-muted/5">
                               <td className="p-3">
-                                <Badge variant="outline" className="bg-pink-50">
+                                <Badge variant="outline" className="bg-red/5">
                                   Desarrollo integral
                                 </Badge>
                               </td>
                               <td className="p-3">
                                 <div className="font-medium">Los 7 Hábitos de la Gente Altamente Efectiva</div>
-                                <div className="text-sm text-gray-500">Stephen Covey</div>
+                                <div className="text-sm text-muted-foreground">Stephen Covey</div>
                               </td>
                               <td className="p-3 text-sm">
                                 Un clásico para construir efectividad personal y profesional desde lo más profundo.
@@ -1764,12 +1764,12 @@ export default function DISCResultsPage() {
                   </table>
                 </div>
 
-                <div className="mt-6 p-4 bg-gradient-to-r from-indigo-50 to-purple-50 rounded-lg">
+                <div className="mt-6 p-4 bg-background">
                   <h4 className="font-semibold mb-2 flex items-center gap-2">
-                    <BookOpen className="h-5 w-5 text-indigo-600" />
+                    <BookOpen className="h-5 w-5 text-blue" />
                     Accede a la biblioteca completa
                   </h4>
-                  <p className="text-sm text-gray-600 mb-3">
+                  <p className="text-sm text-muted-foreground mb-3">
                     Estos son solo algunos recursos. En la Biblioteca DTC encontrarás +50 libros, podcasts y ejercicios
                     personalizados para tu perfil.
                   </p>
@@ -1790,7 +1790,7 @@ export default function DISCResultsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Link2 className="h-5 w-5 text-purple-600" />
+                  <Link2 className="h-5 w-5 text-purple" />
                   Conexión con Otros Módulos DTC
                 </CardTitle>
                 <CardDescription>Cómo tu perfil DISC se relaciona con los demás tests del ecosistema</CardDescription>
@@ -1800,9 +1800,9 @@ export default function DISCResultsPage() {
                   {moduleConnections.map((conn, idx) => (
                     <Card key={idx} className="border-l-4 border-l-purple-500">
                       <CardContent className="pt-4">
-                        <h4 className="font-semibold text-purple-700">{conn.module}</h4>
-                        <p className="text-sm text-gray-600 mt-1">{conn.relation}</p>
-                        <div className="mt-2 bg-purple-50 p-2 rounded text-sm">
+                        <h4 className="font-semibold text-purple">{conn.module}</h4>
+                        <p className="text-sm text-muted-foreground mt-1">{conn.relation}</p>
+                        <div className="mt-2 bg-purple/5 p-2 rounded text-sm">
                           <strong>Sinergia:</strong> {conn.synergy}
                         </div>
                       </CardContent>
@@ -1810,9 +1810,9 @@ export default function DISCResultsPage() {
                   ))}
                 </div>
 
-                <div className="mt-6 p-4 bg-gradient-to-r from-purple-100 to-blue-100 rounded-lg">
+                <div className="mt-6 p-4 bg-background">
                   <h4 className="font-semibold mb-2">Completa tu Perfil 360°</h4>
-                  <p className="text-sm text-gray-600 mb-3">
+                  <p className="text-sm text-muted-foreground mb-3">
                     Mientras más tests completes, más precisa será tu ruta de desarrollo personalizada.
                   </p>
                   <Button onClick={() => router.push("/test")} size="sm">
@@ -1827,7 +1827,7 @@ export default function DISCResultsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <MessageSquare className="h-5 w-5 text-teal-600" />
+                  <MessageSquare className="h-5 w-5 text-blue" />
                   Preguntas de Reflexión Profunda
                 </CardTitle>
                 <CardDescription>
@@ -1870,7 +1870,7 @@ export default function DISCResultsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-blue-600" />
+                  <Calendar className="h-5 w-5 text-blue" />
                   Plan de Acción de 90 Días
                 </CardTitle>
                 <CardDescription>
@@ -1894,7 +1894,7 @@ export default function DISCResultsPage() {
                         <Progress value={calculateMonthProgress("m1")} className="h-2" />
                         {plan90Days.month1.weeks.map((week, wIdx) => (
                           <div key={wIdx} className="border rounded-lg p-4">
-                            <h4 className="font-medium text-blue-700">
+                            <h4 className="font-medium text-blue">
                               {week.week}: {week.focus}
                             </h4>
                             <ul className="mt-2 space-y-2">
@@ -1913,9 +1913,9 @@ export default function DISCResultsPage() {
                             </ul>
                           </div>
                         ))}
-                        <div className="bg-blue-50 p-3 rounded-lg">
+                        <div className="bg-blue/5 p-3 rounded-lg">
                           <h5 className="font-medium text-sm mb-1">KPIs del Mes:</h5>
-                          <ul className="text-sm text-gray-600">
+                          <ul className="text-sm text-muted-foreground">
                             {plan90Days.month1.kpis.map((kpi, kIdx) => (
                               <li key={kIdx}>• {kpi}</li>
                             ))}
@@ -1940,7 +1940,7 @@ export default function DISCResultsPage() {
                         <Progress value={calculateMonthProgress("m2")} className="h-2" />
                         {plan90Days.month2.weeks.map((week, wIdx) => (
                           <div key={wIdx} className="border rounded-lg p-4">
-                            <h4 className="font-medium text-green-700">
+                            <h4 className="font-medium text-green">
                               {week.week}: {week.focus}
                             </h4>
                             <ul className="mt-2 space-y-2">
@@ -1959,9 +1959,9 @@ export default function DISCResultsPage() {
                             </ul>
                           </div>
                         ))}
-                        <div className="bg-green-50 p-3 rounded-lg">
+                        <div className="bg-green/5 p-3 rounded-lg">
                           <h5 className="font-medium text-sm mb-1">KPIs del Mes:</h5>
-                          <ul className="text-sm text-gray-600">
+                          <ul className="text-sm text-muted-foreground">
                             {plan90Days.month2.kpis.map((kpi, kIdx) => (
                               <li key={kIdx}>• {kpi}</li>
                             ))}
@@ -1986,7 +1986,7 @@ export default function DISCResultsPage() {
                         <Progress value={calculateMonthProgress("m3")} className="h-2" />
                         {plan90Days.month3.weeks.map((week, wIdx) => (
                           <div key={wIdx} className="border rounded-lg p-4">
-                            <h4 className="font-medium text-purple-700">
+                            <h4 className="font-medium text-purple">
                               {week.week}: {week.focus}
                             </h4>
                             <ul className="mt-2 space-y-2">
@@ -2005,9 +2005,9 @@ export default function DISCResultsPage() {
                             </ul>
                           </div>
                         ))}
-                        <div className="bg-purple-50 p-3 rounded-lg">
+                        <div className="bg-purple/5 p-3 rounded-lg">
                           <h5 className="font-medium text-sm mb-1">KPIs del Mes:</h5>
-                          <ul className="text-sm text-gray-600">
+                          <ul className="text-sm text-muted-foreground">
                             {plan90Days.month3.kpis.map((kpi, kIdx) => (
                               <li key={kIdx}>• {kpi}</li>
                             ))}
@@ -2026,7 +2026,7 @@ export default function DISCResultsPage() {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <CheckCircle2 className="h-5 w-5 text-green-600" />
+                  <CheckCircle2 className="h-5 w-5 text-green" />
                   Checklist de Seguimiento 30/60/90 Días
                 </CardTitle>
                 <CardDescription>
@@ -2035,16 +2035,16 @@ export default function DISCResultsPage() {
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-6">
-                  <Card className="bg-blue-50 border-blue-200">
+                  <Card className="bg-blue/5 border-blue/20">
                     <CardHeader>
-                      <CardTitle className="text-base text-blue-900">✓ Día 30: Checkpoint "Autoconocimiento"</CardTitle>
-                      <CardDescription className="text-sm text-blue-700">
+                      <CardTitle className="text-base text-blue"> Día 30: Checkpoint "Autoconocimiento"</CardTitle>
+                      <CardDescription className="text-sm text-blue">
                         Ya debes tener claridad sobre tu perfil y haber empezado a observarte
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-3">
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-blue-900 mb-2">Tests y Evaluaciones:</h4>
+                        <h4 className="text-sm font-semibold text-blue mb-2">Tests y Evaluaciones:</h4>
                         <div className="flex items-start gap-2">
                           <Checkbox id="c30-t1" />
                           <label htmlFor="c30-t1" className="text-sm cursor-pointer">
@@ -2060,7 +2060,7 @@ export default function DISCResultsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-blue-900 mb-2">Observación y Registro:</h4>
+                        <h4 className="text-sm font-semibold text-blue mb-2">Observación y Registro:</h4>
                         <div className="flex items-start gap-2">
                           <Checkbox id="c30-o1" />
                           <label htmlFor="c30-o1" className="text-sm cursor-pointer">
@@ -2076,7 +2076,7 @@ export default function DISCResultsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-blue-900 mb-2">Feedback Externo:</h4>
+                        <h4 className="text-sm font-semibold text-blue mb-2">Feedback Externo:</h4>
                         <div className="flex items-start gap-2">
                           <Checkbox id="c30-f1" />
                           <label htmlFor="c30-f1" className="text-sm cursor-pointer">
@@ -2093,16 +2093,16 @@ export default function DISCResultsPage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-green-50 border-green-200">
+                  <Card className="bg-green/5 border-green/20">
                     <CardHeader>
-                      <CardTitle className="text-base text-green-900">✓ Día 60: Checkpoint "Experimentación"</CardTitle>
-                      <CardDescription className="text-sm text-green-700">
+                      <CardTitle className="text-base text-green"> Día 60: Checkpoint "Experimentación"</CardTitle>
+                      <CardDescription className="text-sm text-green">
                         Ya debes haber salido de tu zona de confort varias veces
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-3">
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-green-900 mb-2">Experimentos Conductuales:</h4>
+                        <h4 className="text-sm font-semibold text-green mb-2">Experimentos Conductuales:</h4>
                         <div className="flex items-start gap-2">
                           <Checkbox id="c60-e1" />
                           <label htmlFor="c60-e1" className="text-sm cursor-pointer">
@@ -2124,7 +2124,7 @@ export default function DISCResultsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-green-900 mb-2">Reflexión y Ajustes:</h4>
+                        <h4 className="text-sm font-semibold text-green mb-2">Reflexión y Ajustes:</h4>
                         <div className="flex items-start gap-2">
                           <Checkbox id="c60-r1" />
                           <label htmlFor="c60-r1" className="text-sm cursor-pointer">
@@ -2140,7 +2140,7 @@ export default function DISCResultsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-green-900 mb-2">Profundización:</h4>
+                        <h4 className="text-sm font-semibold text-green mb-2">Profundización:</h4>
                         <div className="flex items-start gap-2">
                           <Checkbox id="c60-p1" />
                           <label htmlFor="c60-p1" className="text-sm cursor-pointer">
@@ -2157,16 +2157,16 @@ export default function DISCResultsPage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="bg-purple-50 border-purple-200">
+                  <Card className="bg-purple/5 border-purple/20">
                     <CardHeader>
-                      <CardTitle className="text-base text-purple-900">✓ Día 90: Checkpoint "Consolidación"</CardTitle>
-                      <CardDescription className="text-sm text-purple-700">
+                      <CardTitle className="text-base text-purple"> Día 90: Checkpoint "Consolidación"</CardTitle>
+                      <CardDescription className="text-sm text-purple">
                         Ya debes tener un sistema personal de desarrollo continuo activo
                       </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-3">
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-purple-900 mb-2">Sistema y Hábitos:</h4>
+                        <h4 className="text-sm font-semibold text-purple mb-2">Sistema y Hábitos:</h4>
                         <div className="flex items-start gap-2">
                           <Checkbox id="c90-s1" />
                           <label htmlFor="c90-s1" className="text-sm cursor-pointer">
@@ -2188,7 +2188,7 @@ export default function DISCResultsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-purple-900 mb-2">Resultados Tangibles:</h4>
+                        <h4 className="text-sm font-semibold text-purple mb-2">Resultados Tangibles:</h4>
                         <div className="flex items-start gap-2">
                           <Checkbox id="c90-r1" />
                           <label htmlFor="c90-r1" className="text-sm cursor-pointer">
@@ -2212,7 +2212,7 @@ export default function DISCResultsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-purple-900 mb-2">Visión a Futuro:</h4>
+                        <h4 className="text-sm font-semibold text-purple mb-2">Visión a Futuro:</h4>
                         <div className="flex items-start gap-2">
                           <Checkbox id="c90-v1" />
                           <label htmlFor="c90-v1" className="text-sm cursor-pointer">
@@ -2234,7 +2234,7 @@ export default function DISCResultsPage() {
                       </div>
 
                       <div className="space-y-2">
-                        <h4 className="text-sm font-semibold text-purple-900 mb-2">Ecosistema DTC Completo:</h4>
+                        <h4 className="text-sm font-semibold text-purple mb-2">Ecosistema DTC Completo:</h4>
                         <div className="flex items-start gap-2">
                           <Checkbox id="c90-d1" />
                           <label htmlFor="c90-d1" className="text-sm cursor-pointer">
@@ -2252,10 +2252,10 @@ export default function DISCResultsPage() {
                   </Card>
                 </div>
 
-                <Alert className="bg-yellow-50 border-yellow-200">
-                  <AlertCircle className="h-4 w-4 text-yellow-600" />
-                  <AlertTitle className="text-yellow-900">Importante</AlertTitle>
-                  <AlertDescription className="text-yellow-800">
+                <Alert className="bg-yellow/5 border-yellow/20">
+                  <AlertCircle className="h-4 w-4 text-yellow" />
+                  <AlertTitle className="text-yellow">Importante</AlertTitle>
+                  <AlertDescription className="text-yellow">
                     Estos checkpoints son indicadores, no requisitos rígidos. El desarrollo personal no es lineal. Si
                     algún checkpoint no lo cumpliste al 100%, está bien - lo importante es que sigas avanzando a tu
                     ritmo.

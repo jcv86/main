@@ -27,11 +27,11 @@ interface Activity {
 }
 
 const activityTypeColors = {
-  meeting: "bg-blue-500",
-  sport: "bg-green-500",
-  study: "bg-purple-500",
+  meeting: "bg-blue/50",
+  sport: "bg-green/50",
+  study: "bg-purple/50",
   personal: "bg-pink-500",
-  work: "bg-orange-500",
+  work: "bg-orange/50",
 }
 
 const activityTypeLabels = {
@@ -100,7 +100,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
 
   const scheduleReminder = (activity: Activity) => {
     if (!phoneNumber) {
-      alert("⚠️ Configura tu número de teléfono primero en Ajustes")
+      alert(" Configura tu número de teléfono primero en Ajustes")
       return
     }
 
@@ -110,7 +110,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
 
   const sendDailySummary = () => {
     if (!phoneNumber) {
-      alert("⚠️ Configura tu número de teléfono primero en Ajustes")
+      alert(" Configura tu número de teléfono primero en Ajustes")
       return
     }
 
@@ -120,7 +120,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
 
   const sendMotivation = () => {
     if (!phoneNumber) {
-      alert("⚠️ Configura tu número de teléfono primero en Ajustes")
+      alert(" Configura tu número de teléfono primero en Ajustes")
       return
     }
 
@@ -222,7 +222,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple mx-auto mb-4"></div>
           <p className="text-sm text-muted-foreground">Cargando calendario...</p>
         </div>
       </div>
@@ -264,21 +264,21 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
       </div>
 
       {/* WhatsApp Status */}
-      <Card className={`p-4 ${phoneNumber ? "bg-green-50 border-green-200" : "bg-yellow-50 border-yellow-200"}`}>
+      <Card className={`p-4 ${phoneNumber ? "bg-green/5 border-green/20" : "bg-yellow/5 border-yellow/20"}`}>
         <div className="flex items-center gap-3">
-          <MessageCircle className={`w-5 h-5 ${phoneNumber ? "text-green-600" : "text-yellow-600"}`} />
+          <MessageCircle className={`w-5 h-5 ${phoneNumber ? "text-green" : "text-yellow"}`} />
           <div className="flex-1">
             {phoneNumber ? (
               <>
-                <p className="font-medium text-green-900">WhatsApp Web Configurado</p>
-                <p className="text-sm text-green-700">
+                <p className="font-medium text-green">WhatsApp Web Configurado</p>
+                <p className="text-sm text-green">
                   Número: {phoneNumber} • Haz clic en "Recordar" para enviar mensajes por WhatsApp Web
                 </p>
               </>
             ) : (
               <>
-                <p className="font-medium text-yellow-900">Configura tu Número de WhatsApp</p>
-                <p className="text-sm text-yellow-700">
+                <p className="font-medium text-yellow">Configura tu Número de WhatsApp</p>
+                <p className="text-sm text-yellow">
                   Agrega tu número para recibir recordatorios automáticos por WhatsApp Web
                 </p>
               </>
@@ -290,7 +290,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
               Resumen del Día
             </Button>
           ) : (
-            <Button size="sm" onClick={() => setShowWhatsAppDialog(true)} className="bg-yellow-600 hover:bg-yellow-700">
+            <Button size="sm" onClick={() => setShowWhatsAppDialog(true)} className="bg-yellow hover:bg-yellow">
               <Plus className="w-4 h-4 mr-2" />
               Configurar
             </Button>
@@ -302,7 +302,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
         {/* Today's Activities */}
         <Card className="p-6">
           <div className="flex items-center gap-2 mb-4">
-            <Calendar className="w-5 h-5 text-primary" />
+            <Calendar className="w-5 h-5 text-purple" />
             <h3 className="font-semibold">Hoy - {formatDate(selectedDate.toISOString())}</h3>
           </div>
 
@@ -356,7 +356,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
         {/* Upcoming Activities */}
         <Card className="p-6">
           <div className="flex items-center gap-2 mb-4">
-            <Clock className="w-5 h-5 text-primary" />
+            <Clock className="w-5 h-5 text-purple" />
             <h3 className="font-semibold">Próximas Actividades</h3>
           </div>
 

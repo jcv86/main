@@ -173,14 +173,14 @@ export function ConozcamonosDosComponent({
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-background">
       <div className="max-w-3xl mx-auto py-8">
         {/* Header */}
         <div className="mb-8">
-          <h2 className="text-4xl font-bold text-slate-900 dark:text-slate-50 mb-2">
+          <h2 className="text-4xl font-bold text-muted/90 dark:text-muted/5 mb-2">
             Tu Ruta Personalizada
           </h2>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Vamos a crear una ruta 30/60/90 que se adapte a tu realidad.
           </p>
         </div>
@@ -188,10 +188,10 @@ export function ConozcamonosDosComponent({
         {/* Progress */}
         <div className="mb-8">
           <div className="flex justify-between items-center mb-3">
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">
+            <span className="text-sm font-semibold text-muted-foreground dark:text-muted-foreground">
               Pregunta {currentQuestion + 1} de {C2_QUESTIONS.length}
             </span>
-            <span className="text-sm font-semibold text-slate-600 dark:text-slate-400">
+            <span className="text-sm font-semibold text-muted-foreground dark:text-muted-foreground">
               {Math.round(progress)}%
             </span>
           </div>
@@ -199,9 +199,9 @@ export function ConozcamonosDosComponent({
         </div>
 
         {/* Question Card */}
-        <Card className="mb-8 border-0 shadow-lg bg-white dark:bg-slate-900">
+        <Card className="mb-8 border-0 shadow-lg bg-transparent">
           <CardHeader className="pb-4">
-            <CardTitle className="text-2xl text-slate-900 dark:text-slate-50">
+            <CardTitle className="text-2xl text-muted/90 dark:text-muted/5">
               {question.question}
             </CardTitle>
           </CardHeader>
@@ -231,7 +231,7 @@ export function ConozcamonosDosComponent({
                   onValueChange={(val) => handleResponseChange(question.key, val[0])}
                   className="w-full"
                 />
-                <div className="text-center text-3xl font-bold text-slate-900 dark:text-slate-100">
+                <div className="text-center text-3xl font-bold text-muted/90 dark:text-muted/10">
                   {responses[question.key] || question.min}
                 </div>
               </div>
@@ -262,7 +262,7 @@ export function ConozcamonosDosComponent({
                 value={responses[question.key] || ""}
                 onChange={(e) => handleResponseChange(question.key, e.target.value)}
                 placeholder="Escribe tu respuesta..."
-                className="w-full min-h-32 p-4 rounded-lg border border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800 text-slate-900 dark:text-slate-100 resize-none"
+                className="w-full min-h-32 p-4 rounded-[28px] border border-muted/30 dark:border-muted/60 bg-muted/5 dark:bg-transparent text-muted/90 dark:text-muted/10 resize-none"
               />
             )}
           </CardContent>

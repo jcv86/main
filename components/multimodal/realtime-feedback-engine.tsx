@@ -110,7 +110,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
 
       {/* Feedback Title */}
       <div className="flex items-center gap-2">
-        <Zap className="w-5 h-5 text-yellow-600" />
+        <Zap className="w-5 h-5 text-yellow" />
         <h3 className="font-semibold">Feedback en Tiempo Real</h3>
         {isProcessing && (
           <Badge variant="outline" className="ml-auto animate-pulse">
@@ -122,30 +122,30 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
       {/* Feedback Items */}
       <div className="space-y-2 max-h-64 overflow-y-auto">
         {feedbackItems.length === 0 ? (
-          <p className="text-sm text-gray-500 text-center py-4">
+          <p className="text-sm text-muted-foreground text-center py-4">
             Comienza tu grabación para recibir feedback en tiempo real
           </p>
         ) : (
           feedbackItems.map((item, idx) => (
             <div
               key={idx}
-              className={`p-3 rounded-lg border-l-4 ${
+              className={`p-3 rounded-[28px] border-l-4 ${
                 item.severity === 'critical'
-                  ? 'bg-red-50 border-red-500'
+                  ? 'bg-red/5 border-red/50'
                   : item.severity === 'warning'
-                  ? 'bg-yellow-50 border-yellow-500'
-                  : 'bg-blue-50 border-blue-500'
+                  ? 'bg-yellow/5 border-orange'
+                  : 'bg-blue/5 border-blue/50'
               }`}
             >
               <div className="flex items-start gap-2">
                 {item.severity === 'critical' && (
-                  <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="w-4 h-4 text-red flex-shrink-0 mt-0.5" />
                 )}
                 <div className="flex-1">
                   <p className="text-sm font-medium">
                     {getIconForType(item.type)} {item.message}
                   </p>
-                  <p className="text-xs text-gray-600 mt-1">💡 {item.suggestion}</p>
+                  <p className="text-xs text-muted-foreground mt-1"> {item.suggestion}</p>
                 </div>
               </div>
             </div>
@@ -154,7 +154,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
       </div>
 
       {/* Tips */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 text-xs text-blue-700">
+      <div className="bg-blue/5 border border-blue/20 rounded-[28px] p-3 text-xs text-blue">
         <p className="font-medium mb-1">Consejo:</p>
         <p>
           El feedback se actualiza cada 3 segundos. Intenta aplicar las sugerencias en tiempo real para mejorar tu desempeño.
@@ -170,7 +170,7 @@ function getIconForType(type: string): string {
     'posture': '🧍',
     'pace': '🗣️',
     'clarity': '📢',
-    'confidence': '💪',
+    'confidence': '',
     'gestures': '🙌'
   }
   return icons[type] || '📝'

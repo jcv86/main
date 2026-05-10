@@ -14,31 +14,31 @@ import { ArrowRight, CheckCircle } from "lucide-react"
 const ROUTE_INFO = {
   energia: {
     name: "Energía y Vitalidad",
-    icon: "⚡",
-    color: "from-yellow-500 to-amber-500",
-    bgColor: "bg-yellow-50 dark:bg-yellow-900/20",
-    textColor: "text-yellow-900 dark:text-yellow-100",
+    icon: "",
+    color: "from-yellow-500500",
+    bgColor: "bg-yellow/5 dark:bg-yellow/20",
+    textColor: "text-yellow dark:text-yellow/10",
   },
   enfoque: {
     name: "Enfoque y Productividad",
-    icon: "🎯",
-    color: "from-green-500 to-emerald-500",
-    bgColor: "bg-green-50 dark:bg-green-900/20",
-    textColor: "text-green-900 dark:text-green-100",
+    icon: "",
+    color: "from-green",
+    bgColor: "bg-green/5 dark:bg-green/20",
+    textColor: "text-green dark:text-green/10",
   },
   relaciones: {
     name: "Relaciones Significativas",
-    icon: "🤝",
-    color: "from-pink-500 to-rose-500",
-    bgColor: "bg-pink-50 dark:bg-pink-900/20",
+    icon: "",
+    color: "from-red/50500",
+    bgColor: "bg-red/5 dark:bg-red/20",
     textColor: "text-pink-900 dark:text-pink-100",
   },
   plan_ejecutivo: {
     name: "Plan Ejecutivo",
     icon: "📋",
-    color: "from-purple-500 to-indigo-500",
-    bgColor: "bg-purple-50 dark:bg-purple-900/20",
-    textColor: "text-purple-900 dark:text-purple-100",
+    color: "from-purple/50/50",
+    bgColor: "bg-purple/5 dark:bg-purple/20",
+    textColor: "text-purple dark:text-purple/10",
   },
 }
 
@@ -173,10 +173,10 @@ export default function Mision90DiasPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
-          <p className="mt-4 text-slate-600 dark:text-slate-400">Preparando tu misión...</p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-green"></div>
+          <p className="mt-4 text-muted-foreground dark:text-muted-foreground">Preparando tu misión...</p>
         </div>
       </div>
     )
@@ -185,23 +185,23 @@ export default function Mision90DiasPage() {
   const routeInfo = ROUTE_INFO[routeSelected as keyof typeof ROUTE_INFO] || ROUTE_INFO.energia
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 overflow-y-auto">
+    <div className="min-h-screen bg-background">
       <div className="max-w-3xl mx-auto py-12 space-y-8">
         {/* Header */}
         <div className="text-center space-y-3">
           <Badge variant="outline" className="mx-auto">
             Define tu Objetivo
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
             Tu Misión 90 Días
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             Sé específico. La claridad es poder.
           </p>
         </div>
 
         {/* Route Display */}
-        <div className={`p-6 rounded-lg bg-gradient-to-r ${routeInfo.color} text-white`}>
+        <div className={`p-6 rounded-[28px] bg-background`}>
           <div className="flex items-center gap-3">
             <span className="text-4xl">{routeInfo.icon}</span>
             <div>
@@ -217,7 +217,7 @@ export default function Mision90DiasPage() {
           <Card className="border-0 shadow-md">
             <CardHeader>
               <CardTitle className="text-lg">¿Cuál es tu objetivo específico?</CardTitle>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">
                 No "mejorar energía", sino "dormir 8 horas diarias y despertar sin fatiga"
               </p>
             </CardHeader>
@@ -232,9 +232,9 @@ export default function Mision90DiasPage() {
                 className="min-h-24 resize-none"
               />
               {errors.objective && (
-                <p className="text-sm text-red-600 dark:text-red-400">{errors.objective}</p>
+                <p className="text-sm text-red dark:text-red/40">{errors.objective}</p>
               )}
-              <p className="text-xs text-slate-600 dark:text-slate-400">
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                 {objective.length} caracteres | Mínimo: 10 caracteres
               </p>
             </CardContent>
@@ -244,7 +244,7 @@ export default function Mision90DiasPage() {
           <Card className="border-0 shadow-md">
             <CardHeader>
               <CardTitle className="text-lg">¿Cuáles son tus restricciones o contexto?</CardTitle>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">
                 Opcional. Ej: horario de trabajo, limitaciones físicas, etc.
               </p>
             </CardHeader>
@@ -255,7 +255,7 @@ export default function Mision90DiasPage() {
                 onChange={(e) => setConstraints(e.target.value)}
                 className="min-h-20 resize-none"
               />
-              <p className="text-xs text-slate-600 dark:text-slate-400">
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                 Esto nos ayuda a personalizar aún más tu camino
               </p>
             </CardContent>
@@ -265,7 +265,7 @@ export default function Mision90DiasPage() {
           <Card className="border-0 shadow-md">
             <CardHeader>
               <CardTitle className="text-lg">¿Cómo sabrás que tuviste éxito?</CardTitle>
-              <p className="text-sm text-slate-600 dark:text-slate-400 mt-2">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-2">
                 Define métricas claras: números, comportamientos, sentimientos
               </p>
             </CardHeader>
@@ -280,18 +280,18 @@ export default function Mision90DiasPage() {
                 className="min-h-24 resize-none"
               />
               {errors.successMetric && (
-                <p className="text-sm text-red-600 dark:text-red-400">{errors.successMetric}</p>
+                <p className="text-sm text-red dark:text-red/40">{errors.successMetric}</p>
               )}
-              <p className="text-xs text-slate-600 dark:text-slate-400">
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                 {successMetric.length} caracteres | Mínimo: 10 caracteres
               </p>
             </CardContent>
           </Card>
 
           {/* Info Box */}
-          <Card className="border-0 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-l-blue-500">
+          <Card className="border-0 bg-blue/5 dark:bg-blue/20 border-l-4 border-l-blue-500">
             <CardContent className="p-4">
-              <p className="text-sm text-slate-700 dark:text-slate-300">
+              <p className="text-sm text-muted-foreground dark:text-white/85">
                 <strong>📅 Estructura de los 90 días:</strong> Dividiremos esta misión en 3 sprints de 30 días cada uno. Cada semana tendrá un desafío y micro-acciones específicas.
               </p>
             </CardContent>

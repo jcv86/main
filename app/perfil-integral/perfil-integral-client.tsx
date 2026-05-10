@@ -59,7 +59,7 @@ export function PerfilIntegralClient() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
           <p className="text-muted-foreground">Cargando tu perfil integral...</p>
         </div>
       </div>
@@ -101,13 +101,13 @@ export function PerfilIntegralClient() {
       </div>
 
       {testsCompleted === 0 && (
-        <Card className="border-amber-200 bg-amber-50 mb-8">
+        <Card className="border-yellow/20 bg-yellow/5 mb-8">
           <CardContent className="pt-6">
             <div className="flex items-start gap-3">
-              <AlertCircle className="h-5 w-5 text-amber-600 mt-0.5" />
+              <AlertCircle className="h-5 w-5 text-yellow mt-0.5" />
               <div>
                 <p className="font-medium text-amber-900 mb-1">Aún no tienes tests completados</p>
-                <p className="text-sm text-amber-700">
+                <p className="text-sm text-yellow">
                   Completa al menos un test para empezar a construir tu perfil integral. Te recomendamos empezar con
                   DISC o Inteligencia Emocional.
                 </p>
@@ -134,7 +134,7 @@ export function PerfilIntegralClient() {
             <Card className={!discResult ? "opacity-50" : ""}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Zap className="h-8 w-8 text-blue-600" />
+                  <Zap className="h-8 w-8 text-blue" />
                   {discResult && <Badge variant="secondary">Completado</Badge>}
                 </div>
                 <CardTitle>DISC</CardTitle>
@@ -143,7 +143,7 @@ export function PerfilIntegralClient() {
               <CardContent>
                 {discResult ? (
                   <div>
-                    <p className="text-2xl font-bold text-blue-600 mb-2">{discResult.results?.primary_type || "N/A"}</p>
+                    <p className="text-2xl font-bold text-blue mb-2">{discResult.results?.primary_type || "N/A"}</p>
                     <p className="text-sm text-muted-foreground">Perfil dominante que define tu estilo de acción</p>
                   </div>
                 ) : (
@@ -156,7 +156,7 @@ export function PerfilIntegralClient() {
             <Card className={!mbtiResult ? "opacity-50" : ""}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Brain className="h-8 w-8 text-purple-600" />
+                  <Brain className="h-8 w-8 text-purple" />
                   {mbtiResult && <Badge variant="secondary">Completado</Badge>}
                 </div>
                 <CardTitle>MBTI</CardTitle>
@@ -165,7 +165,7 @@ export function PerfilIntegralClient() {
               <CardContent>
                 {mbtiResult ? (
                   <div>
-                    <p className="text-2xl font-bold text-purple-600 mb-2">{mbtiResult.results?.type || "N/A"}</p>
+                    <p className="text-2xl font-bold text-purple mb-2">{mbtiResult.results?.type || "N/A"}</p>
                     <p className="text-sm text-muted-foreground">Tu tipo de personalidad y preferencias cognitivas</p>
                   </div>
                 ) : (
@@ -178,7 +178,7 @@ export function PerfilIntegralClient() {
             <Card className={!bigFiveResult ? "opacity-50" : ""}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <TrendingUp className="h-8 w-8 text-green-600" />
+                  <TrendingUp className="h-8 w-8 text-green" />
                   {bigFiveResult && <Badge variant="secondary">Completado</Badge>}
                 </div>
                 <CardTitle>Big Five</CardTitle>
@@ -200,7 +200,7 @@ export function PerfilIntegralClient() {
             <Card className={!ieResult ? "opacity-50" : ""}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Heart className="h-8 w-8 text-red-600" />
+                  <Heart className="h-8 w-8 text-red" />
                   {ieResult && <Badge variant="secondary">Completado</Badge>}
                 </div>
                 <CardTitle>Inteligencia Emocional</CardTitle>
@@ -209,7 +209,7 @@ export function PerfilIntegralClient() {
               <CardContent>
                 {ieResult ? (
                   <div>
-                    <p className="text-2xl font-bold text-red-600 mb-2">{ieResult.score || "N/A"}%</p>
+                    <p className="text-2xl font-bold text-red mb-2">{ieResult.score || "N/A"}%</p>
                     <p className="text-sm text-muted-foreground">Nivel de inteligencia emocional</p>
                   </div>
                 ) : (
@@ -222,7 +222,7 @@ export function PerfilIntegralClient() {
             <Card className={!riasecResult ? "opacity-50" : ""}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Target className="h-8 w-8 text-orange-600" />
+                  <Target className="h-8 w-8 text-orange" />
                   {riasecResult && <Badge variant="secondary">Completado</Badge>}
                 </div>
                 <CardTitle>RIASEC</CardTitle>
@@ -244,7 +244,7 @@ export function PerfilIntegralClient() {
             <Card className={!softSkillsResult ? "opacity-50" : ""}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Users className="h-8 w-8 text-teal-600" />
+                  <Users className="h-8 w-8 text-blue" />
                   {softSkillsResult && <Badge variant="secondary">Completado</Badge>}
                 </div>
                 <CardTitle>Soft Skills</CardTitle>
@@ -291,7 +291,7 @@ export function PerfilIntegralClient() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Brain className="h-6 w-6 text-purple-600" />
+                <Brain className="h-6 w-6 text-purple" />
                 Cómo Piensas y Procesas Información
               </CardTitle>
               <CardDescription>Tu estilo cognitivo, cómo tomas decisiones y procesas el mundo</CardDescription>
@@ -355,7 +355,7 @@ export function PerfilIntegralClient() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Heart className="h-6 w-6 text-red-600" />
+                <Heart className="h-6 w-6 text-red" />
                 Cómo Sientes y Gestionas tus Emociones
               </CardTitle>
               <CardDescription>Tu relación con tus emociones y tu capacidad de regularlas</CardDescription>
@@ -392,9 +392,9 @@ export function PerfilIntegralClient() {
                     </div>
                   )}
 
-                  <div className="bg-red-50 border border-red-100 rounded-lg p-4">
-                    <p className="text-sm font-medium text-red-900 mb-2">💡 Para tu vida personal</p>
-                    <p className="text-sm text-red-800">
+                  <div className="bg-red/5 border border-red/10 rounded-lg p-4">
+                    <p className="text-sm font-medium text-red mb-2"> Para tu vida personal</p>
+                    <p className="text-sm text-red">
                       Tu nivel de inteligencia emocional impacta directamente en tus relaciones con pareja, familia y
                       amigos. Una alta IE te permite conectar más profundamente, resolver conflictos de forma
                       constructiva y mantener vínculos sanos.
@@ -418,7 +418,7 @@ export function PerfilIntegralClient() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Zap className="h-6 w-6 text-blue-600" />
+                <Zap className="h-6 w-6 text-blue" />
                 Cómo Actúas y Comunicas
               </CardTitle>
               <CardDescription>Tu estilo de comportamiento natural y cómo te expresas</CardDescription>
@@ -467,9 +467,9 @@ export function PerfilIntegralClient() {
                     </div>
                   </div>
 
-                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
-                    <p className="text-sm font-medium text-blue-900 mb-2">💡 En tu vida diaria</p>
-                    <p className="text-sm text-blue-800">
+                  <div className="bg-blue/5 border border-blue/10 rounded-lg p-4">
+                    <p className="text-sm font-medium text-blue mb-2"> En tu vida diaria</p>
+                    <p className="text-sm text-blue">
                       Tu estilo DISC influye en cómo te comunicas con tu familia, manejas el estrés en casa, y organizas
                       tu vida personal. Entenderlo te ayuda a mejorar tus relaciones y bienestar.
                     </p>
@@ -490,7 +490,7 @@ export function PerfilIntegralClient() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Target className="h-6 w-6 text-orange-600" />
+                <Target className="h-6 w-6 text-orange" />
                 Qué te Motiva y Apasiona
               </CardTitle>
               <CardDescription>Tus intereses vocacionales y qué actividades te energizan</CardDescription>
@@ -502,8 +502,8 @@ export function PerfilIntegralClient() {
                     <h3 className="font-semibold text-lg mb-3">Intereses Dominantes</h3>
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                       {riasecResult.results?.topInterests?.map((interest: string, idx: number) => (
-                        <div key={idx} className="bg-orange-50 border border-orange-200 rounded-lg p-3">
-                          <p className="font-medium text-orange-900">{interest}</p>
+                        <div key={idx} className="bg-orange/5 border border-orange/20 rounded-lg p-3">
+                          <p className="font-medium text-orange">{interest}</p>
                         </div>
                       )) || <p className="text-sm text-muted-foreground col-span-3">Perfil de intereses evaluado</p>}
                     </div>
@@ -518,9 +518,9 @@ export function PerfilIntegralClient() {
                     </p>
                   </div>
 
-                  <div className="bg-orange-50 border border-orange-100 rounded-lg p-4">
-                    <p className="text-sm font-medium text-orange-900 mb-2">💡 Más allá del trabajo</p>
-                    <p className="text-sm text-orange-800">
+                  <div className="bg-orange/5 border border-orange/10 rounded-lg p-4">
+                    <p className="text-sm font-medium text-orange mb-2"> Más allá del trabajo</p>
+                    <p className="text-sm text-orange">
                       Estos intereses también pueden guiar tus hobbies, voluntariados y cómo contribuyes a tu comunidad.
                       No se trata solo de trabajo, sino de cómo quieres vivir tu vida.
                     </p>
@@ -541,7 +541,7 @@ export function PerfilIntegralClient() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Users className="h-6 w-6 text-teal-600" />
+                <Users className="h-6 w-6 text-blue" />
                 Cómo te Relacionas con Otros
               </CardTitle>
               <CardDescription>Tus habilidades interpersonales y cómo conectas con las personas</CardDescription>
@@ -569,7 +569,7 @@ export function PerfilIntegralClient() {
                   </div>
 
                   <div className="bg-teal-50 border border-teal-100 rounded-lg p-4">
-                    <p className="text-sm font-medium text-teal-900 mb-2">💡 En tus relaciones personales</p>
+                    <p className="text-sm font-medium text-teal-900 mb-2"> En tus relaciones personales</p>
                     <p className="text-sm text-teal-800">
                       Estas habilidades son fundamentales para tu vida personal: comunicarte efectivamente con tu
                       pareja, resolver conflictos familiares con empatía, colaborar con amigos, y construir relaciones

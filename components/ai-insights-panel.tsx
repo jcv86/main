@@ -137,26 +137,26 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red-100 text-red-800"
+        return "bg-red/10 text-red"
       case "medium":
-        return "bg-yellow-100 text-yellow-800"
+        return "bg-yellow/10 text-yellow"
       case "low":
-        return "bg-green-100 text-green-800"
+        return "bg-green/10 text-green"
       default:
-        return "bg-gray-100 text-gray-800"
+        return "bg-muted/10 text-gray-800"
     }
   }
 
   const getDifficultyIcon = (difficulty: string) => {
     switch (difficulty) {
       case "fácil":
-        return <CheckCircle className="h-4 w-4 text-green-500" />
+        return <CheckCircle className="h-4 w-4 text-green/50" />
       case "moderado":
-        return <AlertCircle className="h-4 w-4 text-yellow-500" />
+        return <AlertCircle className="h-4 w-4 text-orange" />
       case "difícil":
-        return <Target className="h-4 w-4 text-red-500" />
+        return <Target className="h-4 w-4 text-red" />
       default:
-        return <CheckCircle className="h-4 w-4 text-gray-500" />
+        return <CheckCircle className="h-4 w-4 text-muted-foreground" />
     }
   }
 
@@ -164,19 +164,19 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
     switch (source) {
       case "openai":
         return (
-          <Badge variant="outline" className="bg-blue-50 text-blue-700 text-xs">
+          <Badge variant="outline" className="bg-blue/5 text-blue text-xs">
             OpenAI
           </Badge>
         )
       case "cerebro":
         return (
-          <Badge variant="outline" className="bg-purple-50 text-purple-700 text-xs">
+          <Badge variant="outline" className="bg-purple/5 text-purple text-xs">
             Cerebro
           </Badge>
         )
       case "hybrid":
         return (
-          <Badge variant="outline" className="bg-green-50 text-green-700 text-xs">
+          <Badge variant="outline" className="bg-green/5 text-green text-xs">
             Híbrido
           </Badge>
         )
@@ -197,9 +197,9 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
         <CardContent>
           <div className="space-y-4">
             <div className="animate-pulse">
-              <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2 mb-4"></div>
-              <div className="h-20 bg-gray-200 rounded"></div>
+              <div className="h-4 bg-muted/20 rounded w-3/4 mb-2"></div>
+              <div className="h-4 bg-muted/20 rounded w-1/2 mb-4"></div>
+              <div className="h-20 bg-muted/20 rounded"></div>
             </div>
           </div>
         </CardContent>
@@ -235,8 +235,8 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                           {getSourceBadge(insight.source)}
                           <Badge className={getPriorityColor(insight.priority)}>{insight.priority}</Badge>
                           <div className="flex items-center gap-1">
-                            <Star className="h-3 w-3 text-yellow-500" />
-                            <span className="text-xs text-gray-600">{Math.round(insight.confidence * 100)}%</span>
+                            <Star className="h-3 w-3 text-orange" />
+                            <span className="text-xs text-muted-foreground">{Math.round(insight.confidence * 100)}%</span>
                           </div>
                         </div>
                       </div>
@@ -244,18 +244,18 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                         {insight.category}
                       </Badge>
                       {insight.personalizedContext && (
-                        <p className="text-xs text-purple-600 italic mt-1">{insight.personalizedContext}</p>
+                        <p className="text-xs text-purple italic mt-1">{insight.personalizedContext}</p>
                       )}
                     </CardHeader>
                     <CardContent className="pt-0">
-                      <p className="text-sm text-gray-700">{insight.description}</p>
+                      <p className="text-sm text-muted">{insight.description}</p>
                       {insight.actionableSteps && insight.actionableSteps.length > 0 && (
                         <div className="mt-3">
-                          <p className="text-xs font-semibold text-gray-600 mb-1">Pasos Accionables:</p>
+                          <p className="text-xs font-semibold text-muted-foreground mb-1">Pasos Accionables:</p>
                           <ul className="space-y-1">
                             {insight.actionableSteps.map((step: string, i: number) => (
-                              <li key={i} className="text-xs text-gray-600 flex items-start gap-1">
-                                <CheckCircle className="h-3 w-3 text-green-500 mt-0.5 flex-shrink-0" />
+                              <li key={i} className="text-xs text-muted-foreground flex items-start gap-1">
+                                <CheckCircle className="h-3 w-3 text-green/50 mt-0.5 flex-shrink-0" />
                                 {step}
                               </li>
                             ))}
@@ -263,7 +263,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                         </div>
                       )}
                       <Progress value={insight.confidence * 100} className="mt-2 h-2" />
-                      <p className="text-xs text-gray-500 mt-1">Fuente: {insight.reasoningSource}</p>
+                      <p className="text-xs text-muted-foreground mt-1">Fuente: {insight.reasoningSource}</p>
                     </CardContent>
                   </Card>
                 ))}
@@ -279,7 +279,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                     <CardHeader className="pb-2">
                       <div className="flex items-center justify-between">
                         <CardTitle className="text-sm font-medium flex items-center gap-2">
-                          <Lightbulb className="h-4 w-4 text-yellow-500" />
+                          <Lightbulb className="h-4 w-4 text-orange" />
                           {rec.title}
                         </CardTitle>
                         <div className="flex items-center gap-2">
@@ -292,7 +292,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                       </div>
                     </CardHeader>
                     <CardContent className="pt-0">
-                      <p className="text-sm text-gray-700">{rec.description}</p>
+                      <p className="text-sm text-muted">{rec.description}</p>
                       <div className="flex items-center gap-2 mt-2">
                         <Badge variant="secondary" className="text-xs">
                           {rec.difficulty}
@@ -312,13 +312,13 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
                   <>
                     <div>
                       <h3 className="font-medium text-sm mb-3 flex items-center gap-2">
-                        <TrendingUp className="h-4 w-4 text-green-500" />
+                        <TrendingUp className="h-4 w-4 text-green/50" />
                         Corto Plazo (1-3 meses)
                       </h3>
                       <div className="space-y-2">
                         {developmentPlan.shortTerm.map((item, index) => (
                           <div key={index} className="flex items-center gap-2 text-sm">
-                            <CheckCircle className="h-4 w-4 text-green-500" />
+                            <CheckCircle className="h-4 w-4 text-green/50" />
                             <span>{item}</span>
                           </div>
                         ))}
@@ -327,13 +327,13 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
 
                     <div>
                       <h3 className="font-medium text-sm mb-3 flex items-center gap-2">
-                        <Target className="h-4 w-4 text-blue-500" />
+                        <Target className="h-4 w-4 text-blue/50" />
                         Mediano Plazo (3-6 meses)
                       </h3>
                       <div className="space-y-2">
                         {developmentPlan.mediumTerm.map((item, index) => (
                           <div key={index} className="flex items-center gap-2 text-sm">
-                            <AlertCircle className="h-4 w-4 text-blue-500" />
+                            <AlertCircle className="h-4 w-4 text-blue/50" />
                             <span>{item}</span>
                           </div>
                         ))}
@@ -342,13 +342,13 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
 
                     <div>
                       <h3 className="font-medium text-sm mb-3 flex items-center gap-2">
-                        <Star className="h-4 w-4 text-purple-500" />
+                        <Star className="h-4 w-4 text-purple/50" />
                         Largo Plazo (6+ meses)
                       </h3>
                       <div className="space-y-2">
                         {developmentPlan.longTerm.map((item, index) => (
                           <div key={index} className="flex items-center gap-2 text-sm">
-                            <Star className="h-4 w-4 text-purple-500" />
+                            <Star className="h-4 w-4 text-purple/50" />
                             <span>{item}</span>
                           </div>
                         ))}

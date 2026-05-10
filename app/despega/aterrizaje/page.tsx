@@ -15,9 +15,9 @@ const MODULOS_ATERRIZAJE = [
     name: "CV Profesional",
     description: "Crea un currículum que destaque",
     icon: FileText,
-    color: "bg-blue-500",
-    lightColor: "bg-blue-100",
-    textColor: "text-blue-800",
+    color: "bg-blue/50",
+    lightColor: "bg-blue/10",
+    textColor: "text-blue",
     contenido: [
       "Estructura óptima de CV",
       "Palabras clave por industria",
@@ -45,9 +45,9 @@ const MODULOS_ATERRIZAJE = [
     name: "Entrevistas",
     description: "Domina cualquier entrevista",
     icon: Users,
-    color: "bg-green-500",
-    lightColor: "bg-green-100",
-    textColor: "text-green-800",
+    color: "bg-green/50",
+    lightColor: "bg-green/10",
+    textColor: "text-green",
     contenido: [
       "Método STAR",
       "Preguntas difíciles",
@@ -60,7 +60,7 @@ const MODULOS_ATERRIZAJE = [
     name: "Negociación Salarial",
     description: "Obtén lo que mereces",
     icon: DollarSign,
-    color: "bg-emerald-500",
+    color: "bg-green/50",
     lightColor: "bg-emerald-100",
     textColor: "text-emerald-800",
     contenido: [
@@ -101,7 +101,7 @@ export default function AterrizajePage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple" />
       </div>
     )
   }
@@ -116,8 +116,8 @@ export default function AterrizajePage() {
             Volver al Dashboard
           </Link>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-orange-100 flex items-center justify-center text-2xl">
-              🎯
+            <div className="w-12 h-12 rounded-[28px] bg-orange/10 flex items-center justify-center text-2xl">
+              
             </div>
             <div>
               <h1 className="text-2xl font-bold">Aterrizaje</h1>

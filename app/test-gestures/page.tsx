@@ -52,25 +52,25 @@ export default function TestGesturesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
+    <div className="min-h-screen bg-muted/5 p-4">
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
-        <Card className="border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50">
+        <Card className="border-purple/20 bg-background">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-purple-100 rounded-lg">
-                  <TestTube className="h-6 w-6 text-purple-600" />
+                <div className="p-2 bg-purple/10 rounded-lg">
+                  <TestTube className="h-6 w-6 text-purple" />
                 </div>
                 <div>
-                  <CardTitle className="text-xl text-purple-900">Mobile Gesture Testing Suite</CardTitle>
-                  <p className="text-purple-700 text-sm">
+                  <CardTitle className="text-xl text-purple">Mobile Gesture Testing Suite</CardTitle>
+                  <p className="text-purple text-sm">
                     Comprehensive testing for touch gestures, swipes, pinch, and mobile interactions
                   </p>
                 </div>
               </div>
               <div className="flex gap-2">
-                <Badge variant="outline" className="text-purple-700 border-purple-300">
+                <Badge variant="outline" className="text-purple border-purple/30">
                   <Hand className="h-4 w-4 mr-1" />
                   Touch Testing
                 </Badge>
@@ -99,27 +99,27 @@ export default function TestGesturesPage() {
               <CardContent>
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                    <div className="text-center p-3 bg-blue-50 rounded-lg border">
-                      <div className="font-semibold text-blue-900">Swipe Gestures</div>
-                      <div className="text-blue-700">Left, Right, Up, Down</div>
+                    <div className="text-center p-3 bg-blue/5 rounded-lg border">
+                      <div className="font-semibold text-blue">Swipe Gestures</div>
+                      <div className="text-blue">Left, Right, Up, Down</div>
                     </div>
-                    <div className="text-center p-3 bg-green-50 rounded-lg border">
-                      <div className="font-semibold text-green-900">Pinch Zoom</div>
-                      <div className="text-green-700">In & Out Scaling</div>
+                    <div className="text-center p-3 bg-green/5 rounded-lg border">
+                      <div className="font-semibold text-green">Pinch Zoom</div>
+                      <div className="text-green">In & Out Scaling</div>
                     </div>
-                    <div className="text-center p-3 bg-yellow-50 rounded-lg border">
-                      <div className="font-semibold text-yellow-900">Tap Gestures</div>
-                      <div className="text-yellow-700">Single, Double, Long</div>
+                    <div className="text-center p-3 bg-yellow/5 rounded-lg border">
+                      <div className="font-semibold text-yellow">Tap Gestures</div>
+                      <div className="text-yellow">Single, Double, Long</div>
                     </div>
-                    <div className="text-center p-3 bg-purple-50 rounded-lg border">
-                      <div className="font-semibold text-purple-900">Drag & Drop</div>
-                      <div className="text-purple-700">Touch & Move</div>
+                    <div className="text-center p-3 bg-purple/5 rounded-lg border">
+                      <div className="font-semibold text-purple">Drag & Drop</div>
+                      <div className="text-purple">Touch & Move</div>
                     </div>
                   </div>
 
-                  <div className="p-4 bg-gray-50 rounded-lg">
+                  <div className="p-4 bg-muted/5 rounded-lg">
                     <h4 className="font-medium mb-2">What We Test:</h4>
-                    <ul className="text-sm text-gray-600 space-y-1">
+                    <ul className="text-sm text-muted-foreground space-y-1">
                       <li>• Touch event detection and handling</li>
                       <li>• Multi-finger gesture recognition</li>
                       <li>• Gesture accuracy and response times</li>
@@ -138,38 +138,38 @@ export default function TestGesturesPage() {
 
         {/* Results Summary */}
         {gestureResults.length > 0 && (
-          <Card className="border-green-200 bg-green-50">
+          <Card className="border-green/20 bg-green/5">
             <CardHeader>
-              <CardTitle className="text-green-900">Test Results Summary</CardTitle>
+              <CardTitle className="text-green">Test Results Summary</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="text-center p-3 bg-white rounded-lg border">
-                  <div className="text-2xl font-bold text-green-600">
+                  <div className="text-2xl font-bold text-green">
                     {gestureResults.filter((r) => r.status === "passed").length}
                   </div>
-                  <div className="text-sm text-gray-600">Passed</div>
+                  <div className="text-sm text-muted-foreground">Passed</div>
                 </div>
                 <div className="text-center p-3 bg-white rounded-lg border">
-                  <div className="text-2xl font-bold text-red-600">
+                  <div className="text-2xl font-bold text-red">
                     {gestureResults.filter((r) => r.status === "failed").length}
                   </div>
-                  <div className="text-sm text-gray-600">Failed</div>
+                  <div className="text-sm text-muted-foreground">Failed</div>
                 </div>
                 <div className="text-center p-3 bg-white rounded-lg border">
-                  <div className="text-2xl font-bold text-blue-600">
+                  <div className="text-2xl font-bold text-blue">
                     {gestureResults.reduce((acc, r) => acc + r.events.length, 0)}
                   </div>
-                  <div className="text-sm text-gray-600">Events Detected</div>
+                  <div className="text-sm text-muted-foreground">Events Detected</div>
                 </div>
                 <div className="text-center p-3 bg-white rounded-lg border">
-                  <div className="text-2xl font-bold text-purple-600">
+                  <div className="text-2xl font-bold text-purple">
                     {Math.round(
                       (gestureResults.filter((r) => r.status === "passed").length / gestureResults.length) * 100,
                     )}
                     %
                   </div>
-                  <div className="text-sm text-gray-600">Success Rate</div>
+                  <div className="text-sm text-muted-foreground">Success Rate</div>
                 </div>
               </div>
             </CardContent>

@@ -16,12 +16,12 @@ export const metadata: Metadata = {
 
 export default function A4DashboardPage() {
   return (
-    <main className="min-h-screen bg-gradient-to-br from-teal-950 via-slate-950 to-emerald-950">
+    <main className="min-h-screen bg-background">
       <div className="container max-w-6xl py-8 px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8 space-y-2">
           <h1 className="text-5xl font-bold text-balance text-white">Centro de Aprendizaje A4</h1>
-          <p className="text-lg text-slate-300">
+          <p className="text-lg text-white/85">
             Análisis estratégico, noticias curadas, pruebas interactivas y recursos verificados
           </p>
         </div>
@@ -30,7 +30,7 @@ export default function A4DashboardPage() {
         <Tabs defaultValue="radar" className="w-full">
           <TabsList className="grid w-full grid-cols-3 lg:grid-cols-7 mb-8 bg-background/50 backdrop-blur-sm border border-border overflow-x-auto">
             <TabsTrigger value="radar" className="text-xs sm:text-sm">
-              📡 Radar
+               Radar
             </TabsTrigger>
             <TabsTrigger value="noticias" className="text-xs sm:text-sm">
               📰 Noticias
@@ -42,10 +42,10 @@ export default function A4DashboardPage() {
               📖 Casos
             </TabsTrigger>
             <TabsTrigger value="biblioteca" className="text-xs sm:text-sm">
-              📚 Biblioteca
+               Biblioteca
             </TabsTrigger>
             <TabsTrigger value="engagement" className="text-xs sm:text-sm">
-              🎯 Progreso
+               Progreso
             </TabsTrigger>
             <TabsTrigger value="badges" className="text-xs sm:text-sm">
               🏆 Insignias

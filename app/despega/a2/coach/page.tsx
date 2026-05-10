@@ -70,34 +70,34 @@ export default function A2ChatCoachPage() {
 
   if (!mounted || loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-background">
         <div className="text-center space-y-3">
-          <MessageCircle className="w-8 h-8 animate-pulse text-blue-600 mx-auto" />
-          <p className="text-slate-600 dark:text-slate-400">Iniciando tu sesión con el Coach...</p>
+          <MessageCircle className="w-8 h-8 animate-pulse text-blue mx-auto" />
+          <p className="text-muted-foreground dark:text-muted-foreground">Iniciando tu sesión con el Coach...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 sticky top-0 z-50">
+      <div className="border-b border-muted/20 dark:border-muted/80 bg-white dark:bg-background sticky top-0 z-50">
         <div className="max-w-5xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
-            <Link href="/despega/a2/dashboard" className="p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition">
+            <Link href="/despega/a2/dashboard" className="p-2 hover:bg-transparent dark:hover:bg-muted/80 rounded-lg transition">
               <ChevronLeft className="w-5 h-5" />
             </Link>
             <div className="flex-1">
               <div className="flex items-center gap-2">
-                <MessageCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-50">Chat Coach</h1>
+                <MessageCircle className="w-5 h-5 text-blue dark:text-blue/40" />
+                <h1 className="text-2xl font-bold text-muted/90 dark:text-muted/5">Chat Coach</h1>
               </div>
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                 Profundización Cognitiva - Sofía & Dani
               </p>
             </div>
-            <Badge variant="outline" className="bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-200 border-blue-200 dark:border-blue-800">
+            <Badge variant="outline" className="bg-blue/5 dark:bg-blue text-blue dark:text-blue-300 border-blue/30 dark:border-blue/10">
               A2 – Disponible 24/7
             </Badge>
           </div>
@@ -109,7 +109,7 @@ export default function A2ChatCoachPage() {
         
         {/* Info Cards */}
         {!a1Results && (
-          <Card className="border-0 shadow-sm bg-amber-50 dark:bg-amber-950/20 border-l-4 border-l-amber-500">
+          <Card className="border-0 shadow-sm bg-yellow/5 dark:bg-amber-950/20 border-l-4 border-l-amber-500">
             <CardContent className="p-4">
               <p className="text-sm text-amber-800 dark:text-amber-200">
                 <strong>Nota:</strong> Para acceder al Chat Coach, primero necesitas completar tu evaluación A1 (Despega Cerebral).
@@ -131,10 +131,10 @@ export default function A2ChatCoachPage() {
             <div className="grid md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <div className="flex items-start gap-3">
-                  <Lightbulb className="w-5 h-5 text-yellow-500 mt-0.5 flex-shrink-0" />
+                  <Lightbulb className="w-5 h-5 text-orange mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-slate-50">Profundización</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="font-medium text-muted/90 dark:text-muted/5">Profundización</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                       Exploramos cómo tu patrón se manifiesta en diferentes contextos
                     </p>
                   </div>
@@ -143,10 +143,10 @@ export default function A2ChatCoachPage() {
 
               <div className="space-y-2">
                 <div className="flex items-start gap-3">
-                  <BookOpen className="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+                  <BookOpen className="w-5 h-5 text-blue/50 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-slate-50">Sin etiquetas</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="font-medium text-muted/90 dark:text-muted/5">Sin etiquetas</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                       No diagnosticamos, explicamos variaciones y flexibilidad
                     </p>
                   </div>
@@ -155,10 +155,10 @@ export default function A2ChatCoachPage() {
 
               <div className="space-y-2">
                 <div className="flex items-start gap-3">
-                  <MessageCircle className="w-5 h-5 text-purple-500 mt-0.5 flex-shrink-0" />
+                  <MessageCircle className="w-5 h-5 text-purple/50 mt-0.5 flex-shrink-0" />
                   <div>
-                    <p className="font-medium text-slate-900 dark:text-slate-50">Conversacional</p>
-                    <p className="text-sm text-slate-600 dark:text-slate-400">
+                    <p className="font-medium text-muted/90 dark:text-muted/5">Conversacional</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                       Haz preguntas libremente sobre tu patrón y contextos
                     </p>
                   </div>
@@ -172,8 +172,8 @@ export default function A2ChatCoachPage() {
         {a1Results && (
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <MessageCircle className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-slate-50">
+              <MessageCircle className="w-5 h-5 text-blue dark:text-blue/40" />
+              <h2 className="text-lg font-semibold text-muted/90 dark:text-muted/5">
                 Sesión de Profundización
               </h2>
             </div>
@@ -189,12 +189,12 @@ export default function A2ChatCoachPage() {
         )}
 
         {/* Tips Card */}
-        <Card className="border-0 shadow-sm bg-slate-50 dark:bg-slate-800/50">
+        <Card className="border-0 shadow-sm bg-muted/5 dark:bg-card/50">
           <CardHeader>
             <CardTitle className="text-base">Preguntas útiles para explorar</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2 text-sm text-slate-700 dark:text-slate-300">
+            <div className="space-y-2 text-sm text-muted-foreground dark:text-white/85">
               <p>• ¿Cómo varía mi patrón según el contexto laboral o personal?</p>
               <p>• ¿Qué tensiones internas he notado entre lo que siento y lo que hago?</p>
               <p>• ¿En qué situaciones actúo diferente a mi patrón típico?</p>

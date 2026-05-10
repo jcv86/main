@@ -7,29 +7,29 @@ import Link from "next/link"
 
 export default function CareersPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 py-20">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 max-w-2xl">
-        <Card className="border-2 border-blue-200">
+        <Card className="border-2 border-blue/20">
           <CardHeader className="text-center">
-            <div className="mx-auto w-16 h-16 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
-              <Building className="w-8 h-8 text-blue-600" />
+            <div className="mx-auto w-16 h-16 bg-blue/10 rounded-lg flex items-center justify-center mb-4">
+              <Building className="w-8 h-8 text-blue" />
             </div>
             <CardTitle className="text-3xl">Estamos Construyendo</CardTitle>
           </CardHeader>
           <CardContent className="text-center space-y-6">
-            <p className="text-lg text-gray-700">
+            <p className="text-lg text-muted">
               La sección de carreras está en desarrollo. Estamos definiendo nuestro equipo y estructura organizacional de la mano con nuestros usuarios.
             </p>
             
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Si estás interesado en ser parte de Despega Tu Carrera, nos encantaría conectar contigo.
             </p>
 
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <p className="text-sm text-gray-600 mb-3">Envíanos tu interés a:</p>
+            <div className="bg-blue/5 p-4 rounded-lg">
+              <p className="text-sm text-muted-foreground mb-3">Envíanos tu interés a:</p>
               <a 
                 href="mailto:equipo@despegatucarrera.cl"
-                className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold"
+                className="inline-flex items-center gap-2 text-blue hover:text-blue font-semibold"
               >
                 <Mail className="w-4 h-4" />
                 equipo@despegatucarrera.cl

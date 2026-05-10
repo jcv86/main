@@ -126,7 +126,7 @@ export function PromptManagementDashboard() {
     const hasPerformance = perf && perf.total_sessions > 0
 
     return (
-      <Card key={prompt.id} className={prompt.is_control ? "border-blue-500" : ""}>
+      <Card key={prompt.id} className={prompt.is_control ? "border-blue/50" : ""}>
         <CardHeader>
           <div className="flex items-start justify-between">
             <div>
@@ -134,7 +134,7 @@ export function PromptManagementDashboard() {
                 {prompt.version}
                 {prompt.is_control && <Badge variant="outline">Control</Badge>}
                 {prompt.is_active ? (
-                  <Badge className="bg-green-500">Activo</Badge>
+                  <Badge className="bg-green/50">Activo</Badge>
                 ) : (
                   <Badge variant="secondary">Inactivo</Badge>
                 )}
@@ -172,9 +172,9 @@ export function PromptManagementDashboard() {
                 <div className="flex items-center gap-2">
                   <span className="text-2xl font-bold">{perf.avg_satisfaction.toFixed(1)}★</span>
                   {perf.avg_satisfaction >= 4.3 ? (
-                    <TrendingUp className="h-4 w-4 text-green-500" />
+                    <TrendingUp className="h-4 w-4 text-green/50" />
                   ) : (
-                    <TrendingDown className="h-4 w-4 text-red-500" />
+                    <TrendingDown className="h-4 w-4 text-red" />
                   )}
                 </div>
               </div>

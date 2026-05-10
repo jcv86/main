@@ -13,10 +13,10 @@ export default function AuthPage() {
   }, [router])
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-blue-50 dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="flex flex-col items-center gap-4">
-        <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
-        <p className="text-slate-600 dark:text-slate-300">Redirigiendo a inicio de sesión...</p>
+        <Loader2 className="h-8 w-8 animate-spin text-purple" />
+        <p className="text-muted-foreground dark:text-white/85">Redirigiendo a inicio de sesión...</p>
       </div>
     </div>
   )

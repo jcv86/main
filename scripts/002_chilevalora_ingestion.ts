@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
 import * as cheerio from 'cheerio'
-import fetch from 'node-fetch'
 
 const supabase = createClient(
   process.env.SUPABASE_URL!,

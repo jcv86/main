@@ -150,7 +150,7 @@ export default function SocialReadingFeatures() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <Users className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue-600" />
+          <Users className="h-12 w-12 animate-pulse mx-auto mb-4 text-blue" />
           <p>Cargando comunidad...</p>
         </div>
       </div>
@@ -161,7 +161,7 @@ export default function SocialReadingFeatures() {
     <div className="space-y-6 p-6">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-bold mb-4">👥 Comunidad de Lectores</h1>
-        <p className="text-xl text-gray-600">Conecta con otros lectores, únete a clubes y participa en discusiones</p>
+        <p className="text-xl text-muted-foreground">Conecta con otros lectores, únete a clubes y participa en discusiones</p>
       </div>
 
       <Tabs defaultValue="discussions" className="space-y-6">
@@ -228,11 +228,11 @@ export default function SocialReadingFeatures() {
                         <Badge variant="outline" className="text-xs">
                           {discussion.book_title}
                         </Badge>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-muted-foreground">
                           {new Date(discussion.created_at).toLocaleString()}
                         </span>
                       </div>
-                      <p className="text-gray-700 mb-3">{discussion.content}</p>
+                      <p className="text-muted mb-3">{discussion.content}</p>
                       <div className="flex items-center gap-4">
                         <Button variant="ghost" size="sm" onClick={() => likeDiscussion(discussion.id)}>
                           <Heart className="h-4 w-4 mr-1" />
@@ -277,17 +277,17 @@ export default function SocialReadingFeatures() {
                             </>
                           )}
                         </Badge>
-                        <span className="text-sm text-gray-600">{club.member_count} miembros</span>
+                        <span className="text-sm text-muted-foreground">{club.member_count} miembros</span>
                       </div>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 mb-4">{club.description}</p>
+                  <p className="text-sm text-muted-foreground mb-4">{club.description}</p>
                   <div className="space-y-3">
                     <div>
                       <p className="text-sm font-medium">Libro Actual:</p>
-                      <p className="text-sm text-gray-600">{club.current_book}</p>
+                      <p className="text-sm text-muted-foreground">{club.current_book}</p>
                     </div>
                     <Button className="w-full" onClick={() => joinBookClub(club.id)}>
                       <UserPlus className="h-4 w-4 mr-1" />
@@ -299,12 +299,12 @@ export default function SocialReadingFeatures() {
             ))}
 
             {/* Create New Club Card */}
-            <Card className="border-2 border-dashed border-gray-300">
+            <Card className="border-2 border-dashed border-muted/30">
               <CardContent className="pt-6">
                 <div className="text-center">
-                  <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                  <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                   <h3 className="font-semibold mb-2">Crear Nuevo Club</h3>
-                  <p className="text-sm text-gray-600 mb-4">
+                  <p className="text-sm text-muted-foreground mb-4">
                     Inicia tu propio club de lectura y conecta con lectores afines
                   </p>
                   <Dialog>
@@ -358,19 +358,19 @@ export default function SocialReadingFeatures() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-gray-600 mb-4">{group.description}</p>
+                  <p className="text-sm text-muted-foreground mb-4">{group.description}</p>
                   <div className="space-y-3">
                     <div>
                       <p className="text-sm font-medium">Desafío Actual:</p>
-                      <p className="text-sm text-gray-600">{group.current_challenge}</p>
+                      <p className="text-sm text-muted-foreground">{group.current_challenge}</p>
                     </div>
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span>Progreso del Grupo</span>
                         <span>{group.progress}%</span>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div className="bg-blue-600 h-2 rounded-full" style={{ width: `${group.progress}%` }}></div>
+                      <div className="w-full bg-muted/20 rounded-full h-2">
+                        <div className="bg-blue h-2 rounded-full" style={{ width: `${group.progress}%` }}></div>
                       </div>
                     </div>
                     <div>
@@ -385,7 +385,7 @@ export default function SocialReadingFeatures() {
                           </Avatar>
                         ))}
                         {group.members.length > 3 && (
-                          <div className="w-8 h-8 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-xs">
+                          <div className="w-8 h-8 rounded-[20px] bg-muted/20 border-2 border-white flex items-center justify-center text-xs">
                             +{group.members.length - 3}
                           </div>
                         )}
@@ -408,7 +408,7 @@ export default function SocialReadingFeatures() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
+                <div className="flex items-center gap-3 p-3 bg-blue/5 rounded-lg">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src="https://api.dicebear.com/7.x/initials/svg?seed=Travis" />
                     <AvatarFallback>T</AvatarFallback>
@@ -418,12 +418,12 @@ export default function SocialReadingFeatures() {
                       <span className="font-semibold">Travis</span> completó
                       <span className="font-semibold"> "Los 7 Hábitos de la Gente Altamente Efectiva"</span>
                     </p>
-                    <p className="text-xs text-gray-500">Hace 2 horas</p>
+                    <p className="text-xs text-muted-foreground">Hace 2 horas</p>
                   </div>
-                  <ThumbsUp className="h-4 w-4 text-blue-600" />
+                  <ThumbsUp className="h-4 w-4 text-blue" />
                 </div>
 
-                <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
+                <div className="flex items-center gap-3 p-3 bg-green/5 rounded-lg">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src="https://api.dicebear.com/7.x/initials/svg?seed=Demo" />
                     <AvatarFallback>D</AvatarFallback>
@@ -433,12 +433,12 @@ export default function SocialReadingFeatures() {
                       <span className="font-semibold">Demo User</span> se unió al club
                       <span className="font-semibold"> "Líderes del Futuro"</span>
                     </p>
-                    <p className="text-xs text-gray-500">Hace 4 horas</p>
+                    <p className="text-xs text-muted-foreground">Hace 4 horas</p>
                   </div>
-                  <UserPlus className="h-4 w-4 text-green-600" />
+                  <UserPlus className="h-4 w-4 text-green" />
                 </div>
 
-                <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
+                <div className="flex items-center gap-3 p-3 bg-purple/5 rounded-lg">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src="https://api.dicebear.com/7.x/initials/svg?seed=DemoD" />
                     <AvatarFallback>DD</AvatarFallback>
@@ -448,12 +448,12 @@ export default function SocialReadingFeatures() {
                       <span className="font-semibold">Demo Despega</span> escribió una reseña de 5 estrellas para
                       <span className="font-semibold"> "Atomic Habits"</span>
                     </p>
-                    <p className="text-xs text-gray-500">Hace 6 horas</p>
+                    <p className="text-xs text-muted-foreground">Hace 6 horas</p>
                   </div>
-                  <Star className="h-4 w-4 text-purple-600" />
+                  <Star className="h-4 w-4 text-purple" />
                 </div>
 
-                <div className="flex items-center gap-3 p-3 bg-orange-50 rounded-lg">
+                <div className="flex items-center gap-3 p-3 bg-orange/5 rounded-lg">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src="https://api.dicebear.com/7.x/initials/svg?seed=Travis" />
                     <AvatarFallback>T</AvatarFallback>
@@ -463,12 +463,12 @@ export default function SocialReadingFeatures() {
                       <span className="font-semibold">Travis</span> inició una nueva discusión sobre
                       <span className="font-semibold"> "Técnicas de productividad"</span>
                     </p>
-                    <p className="text-xs text-gray-500">Hace 1 día</p>
+                    <p className="text-xs text-muted-foreground">Hace 1 día</p>
                   </div>
-                  <MessageCircle className="h-4 w-4 text-orange-600" />
+                  <MessageCircle className="h-4 w-4 text-orange" />
                 </div>
 
-                <div className="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg">
+                <div className="flex items-center gap-3 p-3 bg-yellow/5 rounded-lg">
                   <Avatar className="w-8 h-8">
                     <AvatarImage src="https://api.dicebear.com/7.x/initials/svg?seed=Demo" />
                     <AvatarFallback>D</AvatarFallback>
@@ -478,9 +478,9 @@ export default function SocialReadingFeatures() {
                       <span className="font-semibold">Demo User</span> alcanzó el logro
                       <span className="font-semibold"> "Lector Dedicado"</span>
                     </p>
-                    <p className="text-xs text-gray-500">Hace 2 días</p>
+                    <p className="text-xs text-muted-foreground">Hace 2 días</p>
                   </div>
-                  <Award className="h-4 w-4 text-yellow-600" />
+                  <Award className="h-4 w-4 text-yellow" />
                 </div>
               </div>
             </CardContent>

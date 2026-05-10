@@ -16,10 +16,10 @@ const RUTAS = [
     id: "energia",
     name: "Ruta Energía",
     description: "Optimiza tu vitalidad física y mental",
-    icon: "⚡",
-    color: "bg-yellow-500",
-    lightColor: "bg-yellow-100",
-    textColor: "text-yellow-800",
+    icon: "",
+    color: "bg-orange",
+    lightColor: "bg-yellow/10",
+    textColor: "text-yellow",
     camino: "persona",
     temas: ["Sueño reparador", "Nutrición energética", "Ejercicio estratégico", "Gestión del estrés"],
     librosRelacionados: ["Atomic Habits", "The Power of Full Engagement", "Why We Sleep"],
@@ -28,10 +28,10 @@ const RUTAS = [
     id: "enfoque",
     name: "Ruta Enfoque",
     description: "Domina tu atención y productividad",
-    icon: "🎯",
-    color: "bg-green-500",
-    lightColor: "bg-green-100",
-    textColor: "text-green-800",
+    icon: "",
+    color: "bg-green/50",
+    lightColor: "bg-green/10",
+    textColor: "text-green",
     camino: "ambos",
     temas: ["Deep Work", "Eliminación de distracciones", "Sistema de prioridades", "Bloques de tiempo"],
     librosRelacionados: ["Deep Work", "Getting Things Done", "Essentialism"],
@@ -40,10 +40,10 @@ const RUTAS = [
     id: "relaciones",
     name: "Ruta Relaciones",
     description: "Construye conexiones significativas",
-    icon: "🤝",
-    color: "bg-pink-500",
-    lightColor: "bg-pink-100",
-    textColor: "text-pink-800",
+    icon: "",
+    color: "bg-red/50",
+    lightColor: "bg-red/10",
+    textColor: "text-red",
     camino: "persona",
     temas: ["Comunicación efectiva", "Networking estratégico", "Resolución de conflictos", "Liderazgo relacional"],
     librosRelacionados: ["How to Win Friends", "Crucial Conversations", "Never Split the Difference"],
@@ -53,9 +53,9 @@ const RUTAS = [
     name: "Ruta Plan Ejecutivo",
     description: "Ejecuta con precisión y consistencia",
     icon: "📋",
-    color: "bg-purple-500",
-    lightColor: "bg-purple-100",
-    textColor: "text-purple-800",
+    color: "bg-purple/50",
+    lightColor: "bg-purple/10",
+    textColor: "text-purple",
     camino: "profesional",
     temas: ["Planificación estratégica", "Toma de decisiones", "Rituales de alto rendimiento", "Revisión semanal"],
     librosRelacionados: ["The 7 Habits", "The Goal", "Thinking Fast and Slow"],
@@ -190,7 +190,7 @@ export default function RutasPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary" />
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple" />
       </div>
     )
   }
@@ -205,7 +205,7 @@ export default function RutasPage() {
             Volver al Dashboard
           </Link>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-green-100 flex items-center justify-center text-2xl">
+            <div className="w-12 h-12 rounded-[28px] bg-green/10 flex items-center justify-center text-2xl">
               🛤️
             </div>
             <div>
@@ -319,7 +319,7 @@ export default function RutasPage() {
                 const tipoIcons: Record<string, string> = {
                   decision: "🤔",
                   comunicacion: "💬",
-                  negociacion: "🤝",
+                  negociacion: "",
                   liderazgo: "👥",
                   crisis: "🚨",
                   planificacion: "📋",
@@ -328,8 +328,8 @@ export default function RutasPage() {
                 return (
                   <Card
                     key={scenario.id}
-                    className={`cursor-pointer transition-all hover:shadow-md ${
-                      isCompleted ? "opacity-60 bg-muted" : ""
+                    className={`cursor-pointer transition-all hover:shadow-md ${`}
+                      isCompleted ? "opacity-60 bg-muted" : ""`}
                     }`}
                   >
                     <CardContent className="py-4">
@@ -349,7 +349,7 @@ export default function RutasPage() {
                             <Badge variant="outline" className="capitalize">
                               {scenario.nivel}
                             </Badge>
-                            <Badge className="bg-primary">
+                            <Badge className="bg-purple">
                               +{scenario.puntos}
                             </Badge>
                           </div>
@@ -361,7 +361,7 @@ export default function RutasPage() {
                               Comenzar
                             </Button>
                           ) : (
-                            <Badge className="bg-green-100 text-green-800">
+                            <Badge className="bg-green/10 text-green">
                               Completado
                             </Badge>
                           )}

@@ -201,7 +201,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Sparkles className="h-5 w-5 text-purple-600" />
+            <Sparkles className="h-5 w-5 text-purple" />
             Coach Personalizado con IA
           </CardTitle>
           <CardDescription>
@@ -216,10 +216,10 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
               {messages.map((message) => (
                 <div key={message.id} className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}>
                   <div
-                    className={`max-w-[80%] rounded-lg p-4 ${
+                    className={`max-w-[80%] rounded-[28px] p-4 ${
                       message.sender === "user"
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-900 border border-gray-200"
+                        ? "bg-blue text-white"
+                        : "bg-muted/10 text-foreground border border-muted/20"
                     }`}
                   >
                     <div className="flex items-start gap-3">
@@ -228,7 +228,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                           <Avatar className="h-8 w-8">
                             <AvatarFallback
                               className={
-                                message.coach === "sofia" ? "bg-pink-100 text-pink-700" : "bg-blue-100 text-blue-700"
+                                message.coach === "sofia" ? "bg-red/10 text-pink-700" : "bg-blue/10 text-blue"
                               }
                             >
                               {message.coach === "sofia" ? "S" : "D"}
@@ -237,7 +237,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                           <Badge
                             variant="secondary"
                             className={`text-[10px] px-1 py-0 ${
-                              message.coach === "sofia" ? "bg-pink-100 text-pink-700" : "bg-blue-100 text-blue-700"
+                              message.coach === "sofia" ? "bg-red/10 text-pink-700" : "bg-blue/10 text-blue"
                             }`}
                           >
                             {message.coach === "sofia" ? "Sofía" : "Dani"}
@@ -246,7 +246,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                       )}
                       <div className="flex-1">
                         <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
-                        <p className={`text-xs mt-2 ${message.sender === "user" ? "text-white/70" : "text-gray-500"}`}>
+                        <p className={`text-xs mt-2 ${message.sender === "user" ? "text-white/70" : "text-muted-foreground"}`}>
                           {message.timestamp.toLocaleTimeString()}
                         </p>
                       </div>
@@ -256,20 +256,20 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
               ))}
               {isLoading && (
                 <div className="flex justify-start">
-                  <div className="bg-gray-100 border border-gray-200 rounded-lg p-4 max-w-[80%]">
+                  <div className="bg-muted/10 border border-muted/20 rounded-[28px] p-4 max-w-[80%]">
                     <div className="flex items-center gap-3">
                       <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-muted/40 rounded-full animate-bounce"></div>
                         <div
-                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                          className="w-2 h-2 bg-muted/40 rounded-full animate-bounce"
                           style={{ animationDelay: "0.1s" }}
                         ></div>
                         <div
-                          className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                          className="w-2 h-2 bg-muted/40 rounded-full animate-bounce"
                           style={{ animationDelay: "0.2s" }}
                         ></div>
                       </div>
-                      <span className="text-sm text-gray-600">Pensando...</span>
+                      <span className="text-sm text-muted-foreground">Pensando...</span>
                     </div>
                   </div>
                 </div>
@@ -280,7 +280,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
 
           {messages.length <= 1 && (
             <div className="mb-4">
-              <p className="text-sm text-gray-600 mb-3">Preguntas sugeridas:</p>
+              <p className="text-sm text-muted-foreground mb-3">Preguntas sugeridas:</p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {quickStartQuestions.map((question, index) => (
                   <Button
@@ -293,7 +293,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                     {conversationCategory === "autoconocimiento" ? (
                       <Lightbulb className="h-3 w-3 mr-2 flex-shrink-0 text-pink-600" />
                     ) : (
-                      <Target className="h-3 w-3 mr-2 flex-shrink-0 text-blue-600" />
+                      <Target className="h-3 w-3 mr-2 flex-shrink-0 text-blue" />
                     )}
                     <span className="text-xs">{question}</span>
                   </Button>
@@ -319,7 +319,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
               <Send className="h-4 w-4" />
             </Button>
           </div>
-          <p className="text-xs text-gray-500 mt-2">Presiona Enter para enviar, Shift+Enter para nueva línea</p>
+          <p className="text-xs text-muted-foreground mt-2">Presiona Enter para enviar, Shift+Enter para nueva línea</p>
         </CardContent>
       </Card>
 

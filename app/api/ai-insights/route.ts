@@ -1,5 +1,5 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@/lib/supabase"
+import { createClient } from "@/lib/supabase/server"
 
 export async function GET(request: NextRequest) {
   try {
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data, error } = await supabase
       .from("ai_insights")
       .insert({
@@ -100,7 +100,7 @@ export async function PUT(request: NextRequest) {
       return NextResponse.json({ error: "Insight ID is required" }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
     const { data, error } = await supabase
       .from("ai_insights")
       .update({
@@ -132,7 +132,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Insight ID is required" }, { status: 400 })
     }
 
-    const supabase = createClient()
+    const supabase = await createClient()
     const { error } = await supabase.from("ai_insights").delete().eq("id", id)
 
     if (error) {

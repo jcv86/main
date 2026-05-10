@@ -41,7 +41,7 @@ export default function EmailLoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background to-muted p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>Despega Tu Carrera</CardTitle>
@@ -63,7 +63,7 @@ export default function EmailLoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            {error && <p className="text-red-500 text-sm">{error}</p>}
+            {error && <p className="text-red text-sm">{error}</p>}
             <Button type="submit" disabled={loading} className="w-full">
               {loading ? 'Cargando...' : 'Ingresar'}
             </Button>

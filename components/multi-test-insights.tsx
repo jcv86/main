@@ -76,8 +76,8 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
     return (
       <Card>
         <CardContent className="p-8 text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Analizando todos tus tests con Cerebro...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Analizando todos tus tests con Cerebro...</p>
         </CardContent>
       </Card>
     )
@@ -87,8 +87,8 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
     return (
       <Card>
         <CardContent className="p-8 text-center">
-          <Brain className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-600 mb-4">Completa más tests para obtener un análisis completo</p>
+          <Brain className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
+          <p className="text-muted-foreground mb-4">Completa más tests para obtener un análisis completo</p>
           <Button onClick={() => (window.location.href = "/test")} variant="outline">
             Ver Tests Disponibles
           </Button>
@@ -100,12 +100,12 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
   return (
     <div className="space-y-6">
       {/* Header Card */}
-      <Card className="bg-gradient-to-r from-purple-50 to-blue-50">
+      <Card className="bg-background">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-2xl flex items-center gap-2">
-                <Brain className="h-6 w-6 text-purple-600" />
+                <Brain className="h-6 w-6 text-purple" />
                 Análisis Multi-Test con Cerebro
               </CardTitle>
               <CardDescription className="mt-2">
@@ -142,26 +142,26 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Users className="h-5 w-5 text-blue-600" />
+                <Users className="h-5 w-5 text-blue" />
                 Tu Perfil Profesional Completo
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-blue-900 mb-2">Resumen</h4>
-                <p className="text-sm text-blue-800">{analysis.professionalProfile?.summary}</p>
+              <div className="bg-blue/5 p-4 rounded-[28px]">
+                <h4 className="font-semibold text-blue mb-2">Resumen</h4>
+                <p className="text-sm text-blue">{analysis.professionalProfile?.summary}</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-green-600" />
+                  <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <TrendingUp className="h-4 w-4 text-green" />
                     Fortalezas Clave
                   </h4>
                   <ul className="space-y-2">
                     {analysis.professionalProfile?.keyStrengths?.map((strength: string, index: number) => (
                       <li key={index} className="flex items-start gap-2 text-sm">
-                        <div className="w-1.5 h-1.5 bg-green-600 rounded-full mt-1.5"></div>
+                        <div className="w-1.5 h-1.5 bg-green rounded-full mt-1.5"></div>
                         {strength}
                       </li>
                     ))}
@@ -169,14 +169,14 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                 </div>
 
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-3 flex items-center gap-2">
-                    <Target className="h-4 w-4 text-orange-600" />
+                  <h4 className="font-semibold text-foreground mb-3 flex items-center gap-2">
+                    <Target className="h-4 w-4 text-orange" />
                     Áreas de Desarrollo
                   </h4>
                   <ul className="space-y-2">
                     {analysis.professionalProfile?.developmentAreas?.map((area: string, index: number) => (
                       <li key={index} className="flex items-start gap-2 text-sm">
-                        <div className="w-1.5 h-1.5 bg-orange-600 rounded-full mt-1.5"></div>
+                        <div className="w-1.5 h-1.5 bg-orange rounded-full mt-1.5"></div>
                         {area}
                       </li>
                     ))}
@@ -185,8 +185,8 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
               </div>
 
               <div>
-                <h4 className="font-semibold text-gray-900 mb-3">Estilo de Trabajo</h4>
-                <p className="text-sm text-gray-700">{analysis.professionalProfile?.workStyle}</p>
+                <h4 className="font-semibold text-foreground mb-3">Estilo de Trabajo</h4>
+                <p className="text-sm text-muted">{analysis.professionalProfile?.workStyle}</p>
               </div>
             </CardContent>
           </Card>
@@ -197,14 +197,14 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Briefcase className="h-5 w-5 text-purple-600" />
+                <Briefcase className="h-5 w-5 text-purple" />
                 Recomendaciones de Carrera Personalizadas
               </CardTitle>
               <CardDescription>Basadas en la combinación de tus resultados</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {testCombinations.map((combo, index) => (
-                <div key={index} className="border rounded-lg p-4 space-y-3">
+                <div key={index} className="border rounded-[28px] p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <h4 className="font-semibold text-lg">{combo.career_path}</h4>
                     <Badge variant={combo.success_probability > 75 ? "default" : "secondary"}>
@@ -214,7 +214,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
 
                   <div className="space-y-2">
                     <div>
-                      <span className="text-sm font-medium text-gray-700">Tests considerados:</span>
+                      <span className="text-sm font-medium text-muted">Tests considerados:</span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {combo.test_combination.map((test, idx) => (
                           <Badge key={idx} variant="outline" className="text-xs">
@@ -225,7 +225,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                     </div>
 
                     <div>
-                      <span className="text-sm font-medium text-gray-700">Habilidades recomendadas:</span>
+                      <span className="text-sm font-medium text-muted">Habilidades recomendadas:</span>
                       <div className="flex flex-wrap gap-1 mt-1">
                         {combo.recommended_skills.map((skill, idx) => (
                           <Badge key={idx} variant="secondary" className="text-xs">
@@ -236,8 +236,8 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                     </div>
 
                     <div className="flex items-center gap-2 text-sm">
-                      <TrendingUp className="h-4 w-4 text-green-600" />
-                      <span className="text-gray-700">Demanda: {combo.market_demand}</span>
+                      <TrendingUp className="h-4 w-4 text-green" />
+                      <span className="text-muted">Demanda: {combo.market_demand}</span>
                     </div>
                   </div>
 
@@ -253,18 +253,18 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-red-600" />
+                <MapPin className="h-5 w-5 text-red" />
                 Insights del Mercado Laboral Chileno
               </CardTitle>
               <CardDescription>Oportunidades específicas para tu perfil en Chile</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               {marketInsights.map((insight, index) => (
-                <div key={index} className="border rounded-lg p-4 space-y-3">
+                <div key={index} className="border rounded-[28px] p-4 space-y-3">
                   <div className="flex items-start justify-between">
                     <div>
                       <h4 className="font-semibold text-lg">{insight.role_title}</h4>
-                      <p className="text-sm text-gray-600">{insight.industry}</p>
+                      <p className="text-sm text-muted-foreground">{insight.industry}</p>
                     </div>
                     <Badge
                       variant={
@@ -276,9 +276,9 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                       }
                       className={
                         insight.demand_level === "Alta"
-                          ? "bg-green-100 text-green-700"
+                          ? "bg-green/10 text-green"
                           : insight.demand_level === "Media"
-                            ? "bg-yellow-100 text-yellow-700"
+                            ? "bg-yellow/10 text-yellow"
                             : ""
                       }
                     >
@@ -288,17 +288,17 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
 
                   <div className="flex items-center gap-4 text-sm">
                     <div className="flex items-center gap-2">
-                      <DollarSign className="h-4 w-4 text-green-600" />
+                      <DollarSign className="h-4 w-4 text-green" />
                       <span className="font-medium">${insight.avg_salary_clp.toLocaleString("es-CL")} CLP/mes</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4 text-blue-600" />
+                      <TrendingUp className="h-4 w-4 text-blue" />
                       <span>{insight.growth_projection}</span>
                     </div>
                   </div>
 
                   <div>
-                    <span className="text-sm font-medium text-gray-700">Habilidades requeridas:</span>
+                    <span className="text-sm font-medium text-muted">Habilidades requeridas:</span>
                     <div className="flex flex-wrap gap-1 mt-1">
                       {insight.required_skills.map((skill, idx) => (
                         <Badge key={idx} variant="outline" className="text-xs">
@@ -318,7 +318,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Sparkles className="h-5 w-5 text-purple-600" />
+                <Sparkles className="h-5 w-5 text-purple" />
                 Insights Generados por Cerebro
               </CardTitle>
               <CardDescription>Análisis inteligente basado en patrones y datos</CardDescription>
@@ -327,14 +327,14 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
               {cerebroInsights.map((insight, index) => (
                 <div
                   key={index}
-                  className={`p-4 rounded-lg border-l-4 ${
+                  className={`p-4 rounded-[28px] border-l-4 ${
                     insight.category === "career"
-                      ? "border-l-blue-500 bg-blue-50"
+                      ? "border-l-blue-500 bg-blue/5"
                       : insight.category === "skills"
-                        ? "border-l-green-500 bg-green-50"
+                        ? "border-l-green-500 bg-green/5"
                         : insight.category === "development"
-                          ? "border-l-orange-500 bg-orange-50"
-                          : "border-l-purple-500 bg-purple-50"
+                          ? "border-l-orange-500 bg-orange/5"
+                          : "border-l-purple-500 bg-purple/5"
                   }`}
                 >
                   <div className="flex items-start justify-between mb-2">
@@ -343,7 +343,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
                     </Badge>
                     <div className="flex items-center gap-1">
                       <Progress value={insight.confidence_score} className="w-16 h-2" />
-                      <span className="text-xs text-gray-600">{insight.confidence_score}%</span>
+                      <span className="text-xs text-muted-foreground">{insight.confidence_score}%</span>
                     </div>
                   </div>
                   <p className="text-sm text-gray-800">{insight.insight_text}</p>

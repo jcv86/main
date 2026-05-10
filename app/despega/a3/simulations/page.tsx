@@ -21,7 +21,7 @@ const ENTRENAMIENTO_TYPES = [
     ],
     duration: '15-20 min',
     difficulty: 'Básico',
-    difficultyColor: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200',
+    difficultyColor: 'bg-green/10 dark:bg-green/30 text-green dark:text-green/20',
     icon: Users,
     action: 'Comenzar'
   },
@@ -57,7 +57,7 @@ const ENTRENAMIENTO_TYPES = [
     ],
     duration: '25-30 min',
     difficulty: 'Avanzado',
-    difficultyColor: 'bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-200',
+    difficultyColor: 'bg-orange/10 dark:bg-orange/30 text-orange dark:text-orange/20',
     icon: Clock,
     action: 'Comenzar'
   },
@@ -75,7 +75,7 @@ const ENTRENAMIENTO_TYPES = [
     ],
     duration: '30-40 min',
     difficulty: 'Maestría',
-    difficultyColor: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-200',
+    difficultyColor: 'bg-red/10 dark:bg-red/30 text-red dark:text-red/20',
     icon: Play,
     action: 'Comenzar'
   }
@@ -83,7 +83,7 @@ const ENTRENAMIENTO_TYPES = [
 
 export default function SimulationsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+    <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <Link href="/despega/a3">
@@ -94,10 +94,10 @@ export default function SimulationsPage() {
         </Link>
 
         <div className="space-y-4">
-          <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-50">
+          <h1 className="text-3xl font-bold text-muted/90 dark:text-muted/5">
             Entrenamiento de Entrevista
           </h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">
+          <p className="text-lg text-muted-foreground dark:text-muted-foreground">
             4 niveles progresivos para entrenar desde lo básico hasta la maestría total.
           </p>
         </div>
@@ -125,29 +125,29 @@ export default function SimulationsPage() {
               <Card key={ent.id} className="border-2 hover:shadow-lg transition flex flex-col">
                 <CardHeader>
                   <div className="flex items-start justify-between mb-2">
-                    <IconComponent className="w-6 h-6 text-slate-400" />
+                    <IconComponent className="w-6 h-6 text-muted-foreground" />
                     <Badge className={ent.difficultyColor}>{ent.difficulty}</Badge>
                   </div>
                   <CardTitle>{ent.name}</CardTitle>
                   <CardDescription className="text-base">{ent.subtitle}</CardDescription>
                 </CardHeader>
                 <CardContent className="flex-1 space-y-4">
-                  <p className="text-sm text-slate-600 dark:text-slate-400">
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">
                     {ent.description}
                   </p>
 
                   <div className="space-y-2">
-                    <div className="text-sm font-semibold text-slate-900 dark:text-slate-50">
+                    <div className="text-sm font-semibold text-muted/90 dark:text-muted/5">
                       Incluye:
                     </div>
-                    <ul className="text-sm space-y-1 text-slate-700 dark:text-slate-300">
+                    <ul className="text-sm space-y-1 text-muted-foreground dark:text-white/85">
                       {ent.features.map((feature, idx) => (
-                        <li key={idx}>✓ {feature}</li>
+                        <li key={idx}> {feature}</li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 pt-2">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground dark:text-muted-foreground pt-2">
                     <Clock className="w-4 h-4" />
                     Duración: {ent.duration}
                   </div>
@@ -164,17 +164,17 @@ export default function SimulationsPage() {
         </div>
 
         {/* Tips Card */}
-        <Card className="bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border-0">
+        <Card className="bg-background">
           <CardContent className="pt-6 flex gap-3">
-            <div className="w-5 h-5 flex-shrink-0 text-purple-600 text-lg">💡</div>
+            <div className="w-5 h-5 flex-shrink-0 text-purple text-lg"></div>
             <div>
-              <div className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Cómo progresar en entrenamiento de entrevistas</div>
-              <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">
-                <li>✓ Domina cada nivel antes de subir (practica hasta sentirte cómodo)</li>
-                <li>✓ Revisa el feedback del coach después de cada entrenamiento</li>
-                <li>✓ Identifica patrones en tus fortalezas y debilidades</li>
-                <li>✓ Practica 3-4 entrenamientos por semana para avance real</li>
-                <li>✓ Repite el mismo entrenamiento si necesitas reforzar un aspecto específico</li>
+              <div className="font-semibold text-purple dark:text-purple/10 mb-2">Cómo progresar en entrenamiento de entrevistas</div>
+              <ul className="text-sm text-purple dark:text-purple/30 space-y-1">
+                <li> Domina cada nivel antes de subir (practica hasta sentirte cómodo)</li>
+                <li> Revisa el feedback del coach después de cada entrenamiento</li>
+                <li> Identifica patrones en tus fortalezas y debilidades</li>
+                <li> Practica 3-4 entrenamientos por semana para avance real</li>
+                <li> Repite el mismo entrenamiento si necesitas reforzar un aspecto específico</li>
               </ul>
             </div>
           </CardContent>

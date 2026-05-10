@@ -28,29 +28,29 @@ export default function MarketInsightsPage() {
         updated_at: new Date().toISOString()
       })
 
-      router.push('/despega/a3-dashboard')
+      router.push('/despega/a3')
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900 p-4 py-12">
+    <div className="min-h-screen bg-background p-4 py-12">
       <div className="max-w-2xl mx-auto">
         <Card className="p-8 text-center">
-          <TrendingUp className="w-16 h-16 mx-auto text-purple-600 mb-4 opacity-50" />
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+          <TrendingUp className="w-16 h-16 mx-auto text-purple mb-4 opacity-50" />
+          <h1 className="text-2xl font-bold text-muted/90 dark:text-white mb-2">
             Market Intelligence
           </h1>
-          <p className="text-slate-600 dark:text-slate-400 mb-6">
+          <p className="text-muted-foreground dark:text-muted-foreground mb-6">
             Análisis del mercado para tu rol objetivo
           </p>
-          <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
-            <p className="text-blue-900 dark:text-blue-200 text-sm">
+          <div className="bg-blue/5 dark:bg-blue border border-blue/30 dark:border-blue/10 rounded-[28px] p-4 mb-6">
+            <p className="text-blue dark:text-blue-300 text-sm">
               Este módulo analiza: salarios promedio, empresas que contratan, tendencias, skills demandadas, y competencia
             </p>
           </div>
-          <Button onClick={handleGenerateInsights} className="bg-purple-600 hover:bg-purple-700">
+          <Button onClick={handleGenerateInsights} className="bg-purple/80 hover:bg-purple/70">
             {loading ? 'Generando...' : 'Marcar como completado'}
           </Button>
         </Card>

@@ -1,9 +1,21 @@
 import { createClient } from "@supabase/supabase-js"
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Lazy initialization to avoid build-time errors
+let supabaseClient: ReturnType<typeof createClient> | null = null
+
+function getSupabaseClient() {
+  if (!supabaseClient) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+
+    if (!url || !key) {
+      throw new Error("Missing Supabase environment variables")
+    }
+
+    supabaseClient = createClient(url, key)
+  }
+  return supabaseClient
+}
 
 /**
  * Enriquece el perfil del usuario con datos de Google
@@ -19,6 +31,8 @@ export async function enrichProfileFromGoogle(
 ) {
   try {
     console.log("[v0] Enriching profile from Google for user:", userId)
+
+    const supabase = getSupabaseClient()
 
     // Obtener o crear perfil enriquecido
     const { data: existingProfile, error: fetchError } = await supabase
@@ -39,8 +53,8 @@ export async function enrichProfileFromGoogle(
 
     if (existingProfile) {
       // Actualizar
-      const { error: updateError } = await supabase
-        .from("user_profiles_enriched")
+      const { error: updateError } = await (supabase
+        .from("user_profiles_enriched") as any)
         .update(profileData)
         .eq("user_id", userId)
 
@@ -50,8 +64,8 @@ export async function enrichProfileFromGoogle(
       }
     } else {
       // Crear
-      const { error: insertError } = await supabase
-        .from("user_profiles_enriched")
+      const { error: insertError } = await (supabase
+        .from("user_profiles_enriched") as any)
         .insert([profileData])
 
       if (insertError) {
@@ -79,6 +93,8 @@ export async function enrichProfileFromLinkedIn(
 ) {
   try {
     console.log("[v0] Enriching profile from LinkedIn for user:", userId)
+
+    const supabase = getSupabaseClient()
 
     // Obtener datos completos de LinkedIn usando Access Token
     const linkedInData = await fetchLinkedInProfile(accessToken)
@@ -127,13 +143,13 @@ export async function enrichProfileFromLinkedIn(
     if (existingProfile) {
       // Mergear con datos existentes (Google, etc)
       const merged = {
-        ...existingProfile,
+        ...(existingProfile as any),
         ...enrichedData,
         updated_at: new Date().toISOString(),
       }
 
-      const { error: updateError } = await supabase
-        .from("user_profiles_enriched")
+      const { error: updateError } = await (supabase
+        .from("user_profiles_enriched") as any)
         .update(merged)
         .eq("user_id", userId)
 
@@ -143,8 +159,8 @@ export async function enrichProfileFromLinkedIn(
       }
     } else {
       // Crear nuevo
-      const { error: insertError } = await supabase
-        .from("user_profiles_enriched")
+      const { error: insertError } = await (supabase
+        .from("user_profiles_enriched") as any)
         .insert([enrichedData])
 
       if (insertError) {
@@ -262,6 +278,8 @@ export async function enrichA1A4FromLinkedInProfile(
   try {
     console.log("[v0] Enriching A1-A4 from LinkedIn profile for user:", userId)
 
+    const supabase = getSupabaseClient()
+
     const contextData = {
       user_id: userId,
       linkedin_context: {
@@ -282,8 +300,8 @@ export async function enrichA1A4FromLinkedInProfile(
     }
 
     // Guardar contexto en tabla coach_context_snapshots
-    const { error } = await supabase
-      .from("coach_context_snapshots")
+    const { error } = await (supabase
+      .from("coach_context_snapshots") as any)
       .update({
         linkedin_context: contextData.linkedin_context,
         updated_at: new Date().toISOString(),

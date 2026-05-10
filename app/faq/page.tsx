@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function FAQPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12 max-w-7xl">
         <Breadcrumbs
           items={[
@@ -20,8 +20,8 @@ export default function FAQPage() {
         />
 
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">Preguntas Frecuentes</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 text-foreground">Preguntas Frecuentes</h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
             Encuentra respuestas rápidas a las preguntas más comunes. Si no encuentras lo que buscas, nuestros coaches
             virtuales Sofia y Dani están disponibles 24/7 para ayudarte.
           </p>

@@ -77,7 +77,7 @@ export function GamifiedTests() {
     return (
       <Card className="border-0 bg-card/70 backdrop-blur-sm">
         <CardContent className="py-12 flex justify-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple"></div>
         </CardContent>
       </Card>
     )
@@ -102,7 +102,7 @@ export function GamifiedTests() {
             {submitted ? (
               <div className="space-y-4">
                 <div className="text-center space-y-2">
-                  <Trophy className="w-12 h-12 mx-auto text-yellow-500" />
+                  <Trophy className="w-12 h-12 mx-auto text-orange" />
                   <div className="text-4xl font-bold">{score}%</div>
                   <p className="text-muted-foreground">
                     {score >= 80 ? "¡Excelente desempeño!" : score >= 60 ? "Buen trabajo" : "Sigue practicando"}
@@ -126,10 +126,10 @@ export function GamifiedTests() {
                           <button
                             key={optionIdx}
                             onClick={() => handleSelectAnswer(question.id, optionIdx)}
-                            className={`w-full p-3 rounded-lg border-2 transition-colors text-left ${
+                            className={`w-full p-3 rounded-[28px] border-2 transition-colors text-left ${
                               answers[question.id] === optionIdx
-                                ? "border-primary bg-primary/10"
-                                : "border-border hover:border-primary"
+                                ? "border-purple bg-purple/10"
+                                : "border-border hover:border-purple"
                             }`}
                           >
                             {option}

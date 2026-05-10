@@ -171,16 +171,16 @@ export default function DocumentsPage() {
   )
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center gap-3 mb-3">
-            <Brain className="w-10 h-10 text-blue-600" />
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <Brain className="w-10 h-10 text-blue" />
+            <h1 className="text-4xl font-bold bg-background">
               Cerebro de Conocimiento
             </h1>
           </div>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          <p className="text-muted-foreground max-w-2xl mx-auto">
             Chatea con nuestra base de conocimiento centralizada: {documents.length} documentos + {books.length} libros
             de la biblioteca
           </p>
@@ -192,7 +192,7 @@ export default function DocumentsPage() {
             <Card className="p-6">
               <div className="mb-4">
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                   <Input
                     placeholder="Buscar en el cerebro..."
                     value={searchTerm}
@@ -218,11 +218,11 @@ export default function DocumentsPage() {
                 <TabsContent value="documents" className="space-y-2 max-h-[600px] overflow-y-auto mt-4">
                   {loading ? (
                     <div className="text-center py-8">
-                      <Loader2 className="w-6 h-6 animate-spin mx-auto text-blue-500" />
-                      <p className="text-sm text-gray-500 mt-2">Cargando documentos...</p>
+                      <Loader2 className="w-6 h-6 animate-spin mx-auto text-blue/50" />
+                      <p className="text-sm text-muted-foreground mt-2">Cargando documentos...</p>
                     </div>
                   ) : filteredDocuments.length === 0 ? (
-                    <div className="text-center py-8 text-gray-500">
+                    <div className="text-center py-8 text-muted-foreground">
                       <FileText className="w-12 h-12 mx-auto opacity-50 mb-2" />
                       <p className="text-sm">No se encontraron documentos</p>
                     </div>
@@ -232,8 +232,8 @@ export default function DocumentsPage() {
                         key={doc.id}
                         className={`p-3 border rounded-lg cursor-pointer transition-all ${
                           isSourceSelected(doc.id, "document")
-                            ? "bg-blue-50 border-blue-300 shadow-sm"
-                            : "hover:bg-gray-50 hover:border-gray-300"
+                            ? "bg-blue/5 border-blue/30 shadow-sm"
+                            : "hover:bg-muted/5 hover:border-muted/30"
                         }`}
                         onClick={() => toggleSourceSelection(doc.id, "document")}
                       >
@@ -253,15 +253,15 @@ export default function DocumentsPage() {
                             {doc.tags && doc.tags.length > 0 && (
                               <div className="flex flex-wrap gap-1 mt-1">
                                 {doc.tags.slice(0, 2).map((tag, i) => (
-                                  <span key={i} className="text-xs text-gray-500">
+                                  <span key={i} className="text-xs text-muted-foreground">
                                     #{tag}
                                   </span>
                                 ))}
                               </div>
                             )}
-                            <p className="text-xs text-gray-400 mt-1">{doc.chunk_count} chunks procesados</p>
+                            <p className="text-xs text-muted-foreground mt-1">{doc.chunk_count} chunks procesados</p>
                           </div>
-                          <FileText className="w-4 h-4 text-blue-600 flex-shrink-0" />
+                          <FileText className="w-4 h-4 text-blue flex-shrink-0" />
                         </div>
                       </div>
                     ))
@@ -272,11 +272,11 @@ export default function DocumentsPage() {
                 <TabsContent value="biblioteca" className="space-y-2 max-h-[600px] overflow-y-auto mt-4">
                   {loading ? (
                     <div className="text-center py-8">
-                      <Loader2 className="w-6 h-6 animate-spin mx-auto text-green-500" />
-                      <p className="text-sm text-gray-500 mt-2">Cargando biblioteca...</p>
+                      <Loader2 className="w-6 h-6 animate-spin mx-auto text-green" />
+                      <p className="text-sm text-muted-foreground mt-2">Cargando biblioteca...</p>
                     </div>
                   ) : filteredBooks.length === 0 ? (
-                    <div className="text-center py-8 text-gray-500">
+                    <div className="text-center py-8 text-muted-foreground">
                       <BookOpen className="w-12 h-12 mx-auto opacity-50 mb-2" />
                       <p className="text-sm">No se encontraron libros</p>
                     </div>
@@ -286,27 +286,27 @@ export default function DocumentsPage() {
                         key={book.id}
                         className={`p-3 border rounded-lg cursor-pointer transition-all ${
                           isSourceSelected(book.id, "book")
-                            ? "bg-green-50 border-green-300 shadow-sm"
-                            : "hover:bg-gray-50 hover:border-gray-300"
+                            ? "bg-green/5 border-green/30 shadow-sm"
+                            : "hover:bg-muted/5 hover:border-muted/30"
                         }`}
                         onClick={() => toggleSourceSelection(book.id, "book")}
                       >
                         <div className="flex items-start justify-between">
                           <div className="flex-1">
                             <p className="font-medium text-sm mb-1">{book.title}</p>
-                            <p className="text-xs text-gray-500 mb-1">{book.author}</p>
+                            <p className="text-xs text-muted-foreground mb-1">{book.author}</p>
                             <div className="flex flex-wrap gap-1">
                               <Badge variant="outline" className="text-xs">
                                 {book.category}
                               </Badge>
                               {book.tags?.slice(0, 2).map((tag, i) => (
-                                <span key={i} className="text-xs text-gray-500">
+                                <span key={i} className="text-xs text-muted-foreground">
                                   #{tag}
                                 </span>
                               ))}
                             </div>
                           </div>
-                          <BookOpen className="w-4 h-4 text-green-600 flex-shrink-0" />
+                          <BookOpen className="w-4 h-4 text-green flex-shrink-0" />
                         </div>
                       </div>
                     ))
@@ -335,7 +335,7 @@ export default function DocumentsPage() {
             <Card className="p-6 h-[700px] flex flex-col">
               <div className="flex items-center justify-between mb-4 pb-4 border-b">
                 <h2 className="text-xl font-bold flex items-center gap-2">
-                  <MessageSquare className="w-5 h-5 text-blue-600" />
+                  <MessageSquare className="w-5 h-5 text-blue" />
                   Chat con el Cerebro
                 </h2>
                 {selectedSources.length > 0 && (
@@ -347,7 +347,7 @@ export default function DocumentsPage() {
               </div>
 
               {selectedSources.length === 0 ? (
-                <div className="flex-1 flex items-center justify-center text-gray-500">
+                <div className="flex-1 flex items-center justify-center text-muted-foreground">
                   <div className="text-center max-w-md">
                     <Brain className="w-16 h-16 mx-auto mb-4 opacity-50" />
                     <p className="font-medium mb-2 text-lg">Selecciona fuentes para comenzar</p>
@@ -362,7 +362,7 @@ export default function DocumentsPage() {
                   {/* Messages */}
                   <div className="flex-1 overflow-y-auto mb-4 space-y-4">
                     {chatMessages.length === 0 ? (
-                      <div className="text-center text-gray-500 py-8">
+                      <div className="text-center text-muted-foreground py-8">
                         <MessageSquare className="w-12 h-12 mx-auto mb-3 opacity-50" />
                         <p className="font-medium mb-1">Haz tu primera pregunta</p>
                         <p className="text-sm">El cerebro analizará las fuentes seleccionadas para responderte</p>
@@ -373,8 +373,8 @@ export default function DocumentsPage() {
                           <div
                             className={`max-w-[80%] p-4 rounded-lg shadow-sm ${
                               msg.role === "user"
-                                ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white"
-                                : "bg-white border border-gray-200 text-gray-900"
+                                ? "bg-background"
+                                : "bg-white border border-muted/20 text-foreground"
                             }`}
                           >
                             <p className="whitespace-pre-wrap text-sm leading-relaxed">{msg.content}</p>
@@ -384,10 +384,10 @@ export default function DocumentsPage() {
                     )}
                     {chatting && (
                       <div className="flex justify-start">
-                        <div className="bg-white border border-gray-200 p-4 rounded-lg shadow-sm">
+                        <div className="bg-white border border-muted/20 p-4 rounded-lg shadow-sm">
                           <div className="flex items-center gap-2">
-                            <Loader2 className="w-4 h-4 animate-spin text-blue-500" />
-                            <span className="text-sm text-gray-600">Analizando fuentes...</span>
+                            <Loader2 className="w-4 h-4 animate-spin text-blue/50" />
+                            <span className="text-sm text-muted-foreground">Analizando fuentes...</span>
                           </div>
                         </div>
                       </div>

@@ -14,29 +14,29 @@ const DISC_DETAILS = {
   D: {
     label: 'Dominador',
     description: 'Orientado a resultados, decididor rápido',
-    color: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300',
+    color: 'bg-red/10 dark:bg-red/30 text-red dark:text-red/30',
     icon: '⚡',
     traits: ['Decisivo', 'Competitivo', 'Enfocado', 'Determinado'],
   },
   I: {
     label: 'Influenciador',
     description: 'Comunicador, orientado a personas',
-    color: 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300',
+    color: 'bg-yellow/10 dark:bg-yellow/30 text-yellow dark:text-yellow/20',
     icon: '🎤',
     traits: ['Entusiasta', 'Comunicativo', 'Sociable', 'Inspirador'],
   },
   S: {
     label: 'Estable',
     description: 'Reflexivo, orientado al equipo',
-    color: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300',
-    icon: '🤝',
+    color: 'bg-green/10 dark:bg-green/30 text-green dark:text-green/30',
+    icon: '',
     traits: ['Leal', 'Paciente', 'Colaborativo', 'Consistente'],
   },
   C: {
     label: 'Concienzudo',
     description: 'Analítico, orientado a la calidad',
-    color: 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300',
-    icon: '🎯',
+    color: 'bg-blue/10 dark:bg-blue/30 text-blue dark:text-blue-200',
+    icon: '',
     traits: ['Preciso', 'Detallista', 'Analítico', 'Riguroso'],
   },
 }
@@ -118,7 +118,7 @@ export function DISCWidget({ profile, userName }: DISCWidgetProps) {
             <ul className="space-y-1 text-xs">
               {recommendations.slice(0, 3).map((rec, idx) => (
                 <li key={idx} className="flex items-start gap-2">
-                  <CheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0 text-primary" />
+                  <CheckCircle className="w-3 h-3 mt-0.5 flex-shrink-0 text-purple" />
                   <span className="text-muted-foreground">{rec}</span>
                 </li>
               ))}

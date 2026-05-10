@@ -168,9 +168,9 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
       case "idle":
         return <Badge variant="outline">Idle</Badge>
       case "running":
-        return <Badge className="bg-blue-500">Running</Badge>
+        return <Badge className="bg-blue/50">Running</Badge>
       case "passed":
-        return <Badge className="bg-green-500">Passed</Badge>
+        return <Badge className="bg-green/50">Passed</Badge>
       case "failed":
         return <Badge variant="destructive">Failed</Badge>
     }
@@ -180,13 +180,13 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
   const getStatusIcon = (status: TestMetrics["status"]) => {
     switch (status) {
       case "running":
-        return <Loader2 className="h-4 w-4 animate-spin text-blue-500" />
+        return <Loader2 className="h-4 w-4 animate-spin text-blue/50" />
       case "passed":
-        return <CheckCircle className="h-4 w-4 text-green-500" />
+        return <CheckCircle className="h-4 w-4 text-green/50" />
       case "failed":
-        return <XCircle className="h-4 w-4 text-red-500" />
+        return <XCircle className="h-4 w-4 text-red" />
       default:
-        return <Clock className="h-4 w-4 text-gray-400" />
+        return <Clock className="h-4 w-4 text-muted-foreground" />
     }
   }
 
@@ -208,15 +208,15 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-6 text-sm">
               <span className="flex items-center gap-2">
-                <CheckCircle className="h-4 w-4 text-green-500" />
+                <CheckCircle className="h-4 w-4 text-green/50" />
                 <span className="font-medium">{passedTests}</span> Passed
               </span>
               <span className="flex items-center gap-2">
-                <XCircle className="h-4 w-4 text-red-500" />
+                <XCircle className="h-4 w-4 text-red" />
                 <span className="font-medium">{failedTests}</span> Failed
               </span>
               <span className="flex items-center gap-2">
-                <Loader2 className="h-4 w-4 text-blue-500" />
+                <Loader2 className="h-4 w-4 text-blue/50" />
                 <span className="font-medium">{runningTests}</span> Running
               </span>
             </div>
@@ -258,11 +258,15 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
         {metrics.map((metric) => (
           <Card
             key={metric.testId}
-            className={`
-            ${metric.status === "passed" ? "border-green-200 bg-green-50" : ""}
-            ${metric.status === "failed" ? "border-red-200 bg-red-50" : ""}
-            ${metric.status === "running" ? "border-blue-200 bg-blue-50" : ""}
-          `}
+            className={`${
+              metric.status === "passed"
+                ? "border-green/20 bg-green/5"
+                : metric.status === "failed"
+                ? "border-red/20 bg-red/5"
+                : metric.status === "running"
+                ? "border-blue/20 bg-blue/5"
+                : ""
+            }`}
           >
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
@@ -270,7 +274,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
                   {getStatusIcon(metric.status)}
                   <div>
                     <CardTitle className="text-sm">{metric.testName}</CardTitle>
-                    <p className="text-xs text-gray-600">{metric.testId}</p>
+                    <p className="text-xs text-muted-foreground">{metric.testId}</p>
                   </div>
                 </div>
                 {getStatusBadge(metric.status)}
@@ -289,17 +293,17 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
               </div>
 
               {/* Duration */}
-              {metric.duration && <div className="text-xs text-gray-600">Duration: {metric.duration}ms</div>}
+              {metric.duration && <div className="text-xs text-muted-foreground">Duration: {metric.duration}ms</div>}
 
               {/* Errors */}
               {metric.errors.length > 0 && (
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1 text-xs text-red-600">
+                  <div className="flex items-center gap-1 text-xs text-red">
                     <AlertTriangle className="h-3 w-3" />
                     Errors ({metric.errors.length})
                   </div>
                   {metric.errors.slice(0, 2).map((error, index) => (
-                    <p key={index} className="text-xs text-red-600 truncate">
+                    <p key={index} className="text-xs text-red truncate">
                       {error}
                     </p>
                   ))}

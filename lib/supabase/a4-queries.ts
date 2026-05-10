@@ -217,16 +217,20 @@ export async function getBibliotecaCategories() {
   return data?.map((cat: any) => cat.name) || []
 }
 
-export async function getBibliotecaResources(category?: string, limit = 20) {
+export async function getBibliotecaResources(category?: string, search?: string, limit = 100) {
   const supabase = createClient()
 
-  let query = supabase.from("a4_biblioteca_resources").select("*")
+  let query = supabase.from("biblioteca").select("*")
 
-  if (category) {
-    query = query.eq("category", category)
+  if (category && category !== 'Todas') {
+    query = query.eq("categoria", category)
   }
 
-  const { data, error } = await query.order("created_at", { ascending: false }).limit(limit)
+  if (search) {
+    query = query.or(`titulo.ilike.%${search}%,autor.ilike.%${search}%,descripcion.ilike.%${search}%`)
+  }
+
+  const { data, error } = await query.order("rating", { ascending: false }).limit(limit)
 
   if (error) {
     console.error("[v0] Error fetching biblioteca resources:", error)

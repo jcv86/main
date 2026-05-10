@@ -12,6 +12,7 @@ import { ArrowLeft, Mic, Volume2, SkipForward, Check, AlertCircle } from 'lucide
 import { Textarea } from '@/components/ui/textarea'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
+import { A3GeneralProgress } from '@/components/a3-general-progress'
 
 const GUIDED_INTERVIEW_QUESTIONS = [
   {
@@ -185,34 +186,34 @@ export default function GuidedInterviewPage() {
 
   if (submitted && score !== null) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
+      <div className="min-h-screen bg-background">
         <div className="max-w-2xl mx-auto space-y-8">
           <div className="text-center space-y-4">
-            <div className="w-24 h-24 mx-auto bg-gradient-to-br from-green-400 to-green-600 rounded-full flex items-center justify-center">
+            <div className="w-24 h-24 mx-auto bg-background">
               <Check className="w-12 h-12 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">Entrevista Completada</h1>
-            <div className="text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-blue-600">
+            <h1 className="text-3xl font-bold text-muted/90 dark:text-white">Entrevista Completada</h1>
+            <div className="text-6xl font-bold text-transparent bg-clip-text bg-background">
               {score}%
             </div>
-            <p className="text-lg text-slate-600 dark:text-slate-400">
+            <p className="text-lg text-muted-foreground dark:text-muted-foreground">
               Excelente progreso. Tu coach IA está analizando tus respuestas...
             </p>
           </div>
 
           <Card className="p-6">
             <h2 className="text-xl font-bold mb-4">Próximos Pasos</h2>
-            <ul className="space-y-3 text-slate-700 dark:text-slate-300">
+            <ul className="space-y-3 text-muted-foreground dark:text-white/85">
               <li className="flex gap-3">
-                <span className="text-green-600 font-bold">1.</span>
+                <span className="text-green font-bold">1.</span>
                 <span>Revisa el feedback detallado de tu entrevista</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-blue-600 font-bold">2.</span>
+                <span className="text-blue font-bold">2.</span>
                 <span>Intenta la próxima dificultad (Entrevista Estructurada)</span>
               </li>
               <li className="flex gap-3">
-                <span className="text-purple-600 font-bold">3.</span>
+                <span className="text-purple font-bold">3.</span>
                 <span>Trabaja los temas donde necesitas mejorar</span>
               </li>
             </ul>
@@ -222,7 +223,7 @@ export default function GuidedInterviewPage() {
             <Link href="/despega/a3/simulations" className="flex-1">
               <Button variant="outline" className="w-full">Volver a Entrenamientos</Button>
             </Link>
-            <Button onClick={() => handleNext()} className="flex-1 bg-blue-600 hover:bg-blue-700">
+            <Button onClick={() => handleNext()} className="flex-1 bg-blue/80 hover:bg-blue/70">
               Ver Análisis Detallado
             </Button>
           </div>
@@ -232,8 +233,16 @@ export default function GuidedInterviewPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-indigo-50 to-blue-50 dark:from-slate-900 dark:via-purple-900/20 dark:to-slate-900 p-6">
-      <div className="max-w-3xl mx-auto space-y-6">
+    <div className="min-h-screen bg-background">
+      {/* General Progress Bar */}
+      <A3GeneralProgress 
+        currentStep={currentQuestionIndex + 1}
+        totalSteps={GUIDED_INTERVIEW_QUESTIONS.length}
+        currentLabel={`Pregunta ${currentQuestionIndex + 1}`}
+        isCompleted={false}  // Not completed until practice finishes
+      />
+      
+      <div className="max-w-3xl mx-auto space-y-6 px-4 py-8">
         {/* Header */}
         <Link href="/despega/a3/simulations">
           <Button variant="outline" className="mb-4">
@@ -245,7 +254,7 @@ export default function GuidedInterviewPage() {
         {/* Progress */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
-            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+            <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
               Entrevista Guiada - Práctica Básica
             </h1>
             <Badge variant="secondary">
@@ -256,15 +265,15 @@ export default function GuidedInterviewPage() {
         </div>
 
         {/* Question Card */}
-        <Card className="p-8 border-2 border-blue-200 dark:border-blue-800">
+        <Card className="p-8 border-2 border-blue/30 dark:border-blue/10">
           <div className="space-y-6">
             {/* Question */}
             <div>
-              <p className="text-2xl font-bold text-slate-900 dark:text-white mb-4">
+              <p className="text-2xl font-bold text-muted/90 dark:text-white mb-4">
                 {currentQuestion.question}
               </p>
-              <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
-                <p className="text-sm text-blue-900 dark:text-blue-200">
+              <div className="bg-blue/5 dark:bg-blue/20 border border-blue/30 dark:border-blue/10 rounded-[28px] p-4">
+                <p className="text-sm text-blue dark:text-blue-300">
                   <strong>Guidance del Coach:</strong> {currentQuestion.guidance}
                 </p>
               </div>
@@ -273,14 +282,14 @@ export default function GuidedInterviewPage() {
             {/* Timer */}
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold">Tiempo disponible:</span>
-              <div className={`text-2xl font-bold ${timeLeft < 30 ? 'text-red-600' : 'text-slate-600 dark:text-slate-400'}`}>
+              <div className={`text-2xl font-bold ${timeLeft < 30 ? 'text-red' : 'text-muted-foreground dark:text-muted-foreground'}`}>
                 {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
               </div>
             </div>
 
             {/* Response Input */}
             <div className="space-y-3">
-              <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">
+              <label className="text-sm font-semibold text-muted-foreground dark:text-white/85">
                 Tu respuesta:
               </label>
               <div className="space-y-2">
@@ -292,11 +301,11 @@ export default function GuidedInterviewPage() {
                   className="min-h-40 resize-none"
                 />
                 <div className="flex justify-between items-center">
-                  <p className="text-xs text-slate-500 dark:text-slate-400">
+                  <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                     Palabras escritas: {(responses[currentQuestion.id] || '').split(/\s+/).filter(w => w).length}
                   </p>
                   {validatingIds.has(currentQuestion.id) && (
-                    <span className="text-xs text-blue-600 dark:text-blue-400 animate-pulse">
+                    <span className="text-xs text-blue dark:text-blue/40 animate-pulse">
                       Coach revisando...
                     </span>
                   )}
@@ -312,7 +321,7 @@ export default function GuidedInterviewPage() {
                   }}
                   isDisabled={loading || validatingIds.has(currentQuestion.id)}
                 />
-                <span className="text-xs text-slate-500 dark:text-slate-400">
+                <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                   O habla para dictar tu respuesta
                 </span>
               </div>
@@ -330,7 +339,7 @@ export default function GuidedInterviewPage() {
             {/* Tags */}
             <div className="flex flex-wrap gap-2">
               {currentQuestion.tags.map((tag) => (
-                <Badge key={tag} variant="secondary" className="bg-slate-200 dark:bg-slate-700">
+                <Badge key={tag} variant="secondary" className="bg-muted/20 dark:bg-muted/70">
                   {tag}
                 </Badge>
               ))}
@@ -362,7 +371,7 @@ export default function GuidedInterviewPage() {
                 </Button>
                 <Button
                   onClick={handleNext}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-blue/80 hover:bg-blue/70"
                 >
                   Siguiente
                   <ArrowLeft className="w-4 h-4 ml-2 rotate-180" />
@@ -372,7 +381,7 @@ export default function GuidedInterviewPage() {
               <Button
                 onClick={handleSubmit}
                 disabled={loading}
-                className="bg-green-600 hover:bg-green-700"
+                className="bg-green/80 hover:bg-green/70"
               >
                 {loading ? 'Guardando...' : 'Completar y Enviar'}
               </Button>
@@ -381,7 +390,7 @@ export default function GuidedInterviewPage() {
         </div>
 
         {/* Tips */}
-        <Card className="bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800">
+        <Card className="bg-yellow/5 dark:bg-amber-900/20 border-yellow/30 dark:border-yellow">
           <CardContent className="pt-6 text-sm text-amber-900 dark:text-amber-200 space-y-2">
             <p className="font-semibold">Consejos de la Entrevista Guiada:</p>
             <ul className="list-disc list-inside space-y-1">

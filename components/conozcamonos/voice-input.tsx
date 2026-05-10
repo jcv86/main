@@ -6,9 +6,10 @@ import { useEffect, useRef } from 'react'
 interface VoiceInputProps {
   onTranscript: (text: string) => void
   isDisabled?: boolean
+  pillarColor?: string
 }
 
-export function VoiceInput({ onTranscript, isDisabled = false }: VoiceInputProps) {
+export function VoiceInput({ onTranscript, isDisabled = false, pillarColor = 'rgba(80, 160, 170, 0.6)' }: VoiceInputProps) {
   const { isListening, isSupported, transcript, isFinal, startListening, stopListening, resetTranscript } = useSpeechRecognition({
     language: 'es-ES',
     continuous: false,
@@ -19,19 +20,22 @@ export function VoiceInput({ onTranscript, isDisabled = false }: VoiceInputProps
   const lastTranscriptRef = useRef<string>('')
 
   useEffect(() => {
-    // Only trigger callback when we have a FINAL result (not intermediate)
+    // Only trigger callback when we have a FINAL result (after 2 seconds of silence)
     if (transcript && isFinal && transcript !== lastTranscriptRef.current) {
+      console.log('[v0] Final transcript received:', transcript)
       lastTranscriptRef.current = transcript
       onTranscript(transcript)
       // Reset for next recording
-      resetTranscript()
-      lastTranscriptRef.current = ''
+      setTimeout(() => {
+        resetTranscript()
+        lastTranscriptRef.current = ''
+      }, 500)
     }
   }, [transcript, isFinal, onTranscript, resetTranscript])
 
   if (!isSupported) {
     return (
-      <div className="text-xs text-slate-500 dark:text-slate-400 flex items-center gap-2">
+      <div className="text-xs text-muted-foreground dark:text-muted-foreground flex items-center gap-2">
         <Volume2 className="w-3 h-3" />
         Micrófono no disponible
       </div>
@@ -45,6 +49,12 @@ export function VoiceInput({ onTranscript, isDisabled = false }: VoiceInputProps
       variant={isListening ? 'destructive' : 'outline'}
       size="sm"
       className="gap-2"
+      style={!isListening ? {
+        backgroundColor: pillarColor,
+        color: 'rgba(255, 255, 255, 0.92)',
+        border: 'none',
+        borderRadius: '20px'
+      } : undefined}
       title={isListening ? 'Detener grabación' : 'Usar micrófono para responder'}
     >
       {isListening ? (

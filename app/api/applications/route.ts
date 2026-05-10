@@ -1,11 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server"
-import { createClient } from "@supabase/supabase-js"
+import { createClient } from "@/lib/supabase/server"
 
-const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!)
 
 // POST - Submit new job application
 export async function POST(request: NextRequest) {
   try {
+    const supabase = await createClient()
     const formData = await request.formData()
 
     const applicationData = {
@@ -89,6 +89,7 @@ export async function POST(request: NextRequest) {
 // GET - Get all applications (admin only)
 export async function GET(request: NextRequest) {
   try {
+    const supabase = await createClient()
     const { searchParams } = new URL(request.url)
     const status = searchParams.get("status")
     const jobId = searchParams.get("jobId")

@@ -94,13 +94,13 @@ export default function ChileanResourcesSidebar({
   return (
     <Card className="p-4">
       <h3 className="font-semibold mb-3 text-lg">Recursos Públicos Chilenos</h3>
-      <p className="text-sm text-gray-600 mb-4">Datos oficiales para tu carrera</p>
+      <p className="text-sm text-muted-foreground mb-4">Datos oficiales para tu carrera</p>
 
       <div className="space-y-3">
         {resources.map((resource) => (
           <div
             key={resource.id}
-            className="p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg border border-blue-200 dark:border-blue-800"
+            className="p-3 bg-background"
           >
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1">
@@ -108,17 +108,17 @@ export default function ChileanResourcesSidebar({
                   href={resource.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline"
+                  className="text-sm font-semibold text-blue dark:text-blue/40 hover:underline"
                 >
                   {resource.title}
                 </a>
-                <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{resource.category}</p>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">{resource.category}</p>
                 {resource.reason && (
-                  <p className="text-xs text-gray-700 dark:text-gray-300 mt-2 italic">"{resource.reason}"</p>
+                  <p className="text-xs text-muted dark:text-white/85 mt-2 italic">"{resource.reason}"</p>
                 )}
               </div>
               {resource.matchScore && (
-                <div className="text-xs font-semibold text-green-600 dark:text-green-400 whitespace-nowrap">
+                <div className="text-xs font-semibold text-green dark:text-green/40 whitespace-nowrap">
                   {Math.round(resource.matchScore * 100)}% match
                 </div>
               )}
