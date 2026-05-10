@@ -112,15 +112,20 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
       }
       saveData[fieldMap[blockName]] = data
       
+      console.log(`[v0] Saving ${blockName} block:`, saveData)
       await saveInterview0Status(saveData)
+      console.log(`[v0] Successfully saved ${blockName} block`)
     } catch (err) {
       // Prevent the entire save pipeline from breaking if one listener fails
-      console.error(`[v0] Failed to save ${blockName} gracefully:`, {
-        error: err instanceof Error ? err.message : String(err),
+      const errorMsg = err instanceof Error ? err.message : String(err)
+      console.error(`[v0] Failed to save ${blockName}:`, {
+        error: errorMsg,
         blockName,
         data,
         timestamp: new Date().toISOString()
       })
+      // Show error but don't block progression
+      alert(`Guardado: ${blockName} completado localmente. Error en sync: ${errorMsg.substring(0, 100)}`)
       // Local state is updated, data persists in component, will retry on refresh
     }
   }
@@ -131,7 +136,7 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
 
     // Save final state in background - don't block completion
     try {
-      await saveInterview0Status({
+      const finalData = {
         interview_0_completed: true,
         interview_0_score: totalScore,
         interview_0_status: 'completed',
@@ -139,14 +144,20 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
         presence_check: results.presence,
         audio_check: results.audioCamera,
         preparation_check: results.preparation
-      })
+      }
+      
+      console.log('[v0] Saving interview-0 completion:', finalData)
+      await saveInterview0Status(finalData)
+      console.log('[v0] Interview-0 completion saved successfully')
     } catch (err) {
       // Prevent the entire save pipeline from breaking if save fails
-      console.error('[v0] Failed to save completion gracefully:', {
-        error: err instanceof Error ? err.message : String(err),
+      const errorMsg = err instanceof Error ? err.message : String(err)
+      console.error('[v0] Failed to save completion:', {
+        error: errorMsg,
         totalScore,
         timestamp: new Date().toISOString()
       })
+      alert(`Entrevista 0 completada. Error en guardado final: ${errorMsg.substring(0, 100)}`)
       // Local state is preserved, user can refresh to retry
     }
   }
