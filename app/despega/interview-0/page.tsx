@@ -62,10 +62,6 @@ export default function Interview0Page() {
       </div>
     )
   }
-        }}
-      />
-    )
-  }
 
   // Calculate general progress based on stage
   const getGeneralProgress = () => {
