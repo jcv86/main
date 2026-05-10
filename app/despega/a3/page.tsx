@@ -43,9 +43,15 @@ export default function A3EntrenamientoIntensivo() {
   useEffect(() => {
     const fetchProgress = async () => {
       try {
+        console.log('[v0] A3 page: Fetching user progress...')
         const response = await fetch('/api/a3/user-progress')
         if (response.ok) {
           const { progress } = await response.json()
+          console.log('[v0] A3 page: API response received', {
+            moduleStates: progress.moduleStates,
+            completedModuleIds: progress.completedModuleIds,
+            totalXp: progress.totalXp,
+          })
           
           // Update dashboard data with real progress
           setDashboardData(prev => {
@@ -64,6 +70,7 @@ export default function A3EntrenamientoIntensivo() {
             updated.modules = prev.modules.map(module => {
               const status = progress.moduleStates[module.id]
               if (status) {
+                console.log(`[v0] Module ${module.id} status: ${module.status} -> ${status}`)
                 return {
                   ...module,
                   status: status as 'available' | 'in_progress' | 'completed' | 'locked',
@@ -90,8 +97,11 @@ export default function A3EntrenamientoIntensivo() {
 
             return updated
           })
+        } else {
+          console.warn('[v0] A3 page: API returned non-OK status', response.status)
         }
-      } catch {
+      } catch (error) {
+        console.warn('[v0] A3 page: API fetch failed, using mock data', error)
         // Use mock data if API fails
       } finally {
         setIsLoading(false)

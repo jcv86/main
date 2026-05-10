@@ -39,13 +39,13 @@ export default function Interview0Page() {
           <TrainingResultsCard
             result={{
               score: score,
-              questionsCompleted: 1,
-              totalQuestions: 1,
+              questionsCompleted: 4,
+              totalQuestions: 4,
               timeSpent: 300,
               level: 'basico',
               trainingType: 'auditoria-inicial',
-              moduleXpEarned: 40,
-              moduleXpTotal: 40,
+              moduleXpEarned: 70,
+              moduleXpTotal: 70,
             }}
             onContinue={() => {
               setStage('intro')
