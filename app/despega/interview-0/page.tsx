@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { ArrowLeft, ChevronRight } from 'lucide-react'
+import { ArrowLeft, ChevronRight, Video, Lightbulb } from 'lucide-react'
 import { Interview0PreAudit } from '@/components/interview-0-pre-audit'
 import { TrainingResultsCard } from '@/components/training-results-card'
 
@@ -42,7 +42,7 @@ export default function Interview0Page() {
               questionsCompleted: 1,
               totalQuestions: 1,
               timeSpent: 300,
-              level: 'audit',
+              level: 'basico',
               trainingType: 'auditoria-inicial',
               xpEarned: xpAwarded,
               pointsEarned: dtcAwarded,
