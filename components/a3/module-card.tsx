@@ -61,10 +61,7 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
       return
     }
 
-    if (!module.id) {
-      console.log('[v0] No module ID provided')
-      return
-    }
+    if (!module.id) return
 
     // Map each module ID to its dedicated existing route
     const moduleRouteMap: Record<string, string> = {
@@ -81,12 +78,8 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
     }
 
     const navigationPath = moduleRouteMap[module.id]
-
     if (navigationPath) {
-      console.log('[v0] Navigating to:', navigationPath, 'from module:', module.id)
       router.push(navigationPath)
-    } else {
-      console.log('[v0] No route mapped for module:', module.id)
     }
   }
   
