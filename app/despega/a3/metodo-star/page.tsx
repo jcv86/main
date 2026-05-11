@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Link from 'next/link'
 import { ArrowLeft, BookOpen, Lightbulb, CheckCircle2, AlertCircle } from 'lucide-react'
+import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
 const STAR_FRAMEWORK = {
   situation: {
@@ -93,10 +94,15 @@ export default function MetodoSTARPage() {
     action: '',
     result: ''
   })
+  const [isCompleted, setIsCompleted] = useState(false)
 
   const calculateCompleteness = () => {
     const filled = Object.values(myResponse).filter(v => v.trim().length > 0).length
     return (filled / 4) * 100
+  }
+
+  if (isCompleted) {
+    return <ModuleCompletionScreen moduleId="metodo-star" moduleName="Método STAR" xpEarned={120} />
   }
 
   return (
@@ -269,6 +275,7 @@ export default function MetodoSTARPage() {
               </Button>
               <Button
                 disabled={calculateCompleteness() < 75}
+                onClick={() => setIsCompleted(true)}
                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
                 Guardar Respuesta
@@ -276,23 +283,6 @@ export default function MetodoSTARPage() {
             </div>
           </TabsContent>
         </Tabs>
-      </div>
-
-      {/* Navigation */}
-      <div className="border-t border-purple-500/20 bg-black/50 mt-12">
-        <div className="max-w-6xl mx-auto px-6 py-6 flex justify-between">
-          <Link href="/despega/a3">
-            <Button variant="outline" className="border-purple-500/30 text-white hover:bg-purple-500/10">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Anterior
-            </Button>
-          </Link>
-          <Link href="/despega/a3#analisis-vacante">
-            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-              Siguiente: Análisis de Vacante
-            </Button>
-          </Link>
-        </div>
       </div>
     </div>
   )
