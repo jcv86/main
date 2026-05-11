@@ -16,32 +16,48 @@ import { PILLAR3_MODULES, PILLAR3_LEVELS } from '@/lib/pillar3-config'
 function buildModulesFromConfig(moduleStates: Record<string, string>): Module[] {
   const modules: Module[] = []
   
-  for (const levelId of [1, 2, 3, 4] as const) {
-    const level = PILLAR3_LEVELS[levelId]
-    for (const moduleId of level.moduleIds) {
-      const config = PILLAR3_MODULES[moduleId]
-      const status = (moduleStates[moduleId] || 'locked') as 'available' | 'in_progress' | 'completed' | 'locked'
-      
-      // Get the name of the previous level for unlock text
-      let unlockText: string | undefined
-      if (levelId > 1) {
-        const prevLevelId = (levelId - 1) as 1 | 2 | 3
-        const prevLevel = PILLAR3_LEVELS[prevLevelId]
-        unlockText = `Se desbloquea tras completar: ${prevLevel.name}`
+  try {
+    for (const levelId of [1, 2, 3, 4] as const) {
+      const level = PILLAR3_LEVELS[levelId]
+      if (!level) {
+        console.warn(`[v0] Level ${levelId} not found in PILLAR3_LEVELS`)
+        continue
       }
       
-      modules.push({
-        id: config.id,
-        level: config.level,
-        title: config.name,
-        description: config.description,
-        status,
-        xp: status === 'completed' ? config.xp : 0,
-        maxXp: config.xp,
-        progress: status === 'completed' ? 100 : status === 'in_progress' ? 50 : 0,
-        unlockText,
-      })
+      for (const moduleId of level.moduleIds) {
+        const config = PILLAR3_MODULES[moduleId]
+        if (!config) {
+          console.warn(`[v0] Module ${moduleId} not found in PILLAR3_MODULES`)
+          continue
+        }
+        
+        const status = (moduleStates[moduleId] || 'locked') as 'available' | 'in_progress' | 'completed' | 'locked'
+        
+        // Get the name of the previous level for unlock text
+        let unlockText: string | undefined
+        if (levelId > 1) {
+          const prevLevelId = (levelId - 1) as 1 | 2 | 3
+          const prevLevel = PILLAR3_LEVELS[prevLevelId]
+          if (prevLevel) {
+            unlockText = `Se desbloquea tras completar: ${prevLevel.name}`
+          }
+        }
+        
+        modules.push({
+          id: config.id,
+          level: config.level,
+          title: config.name,
+          description: config.description,
+          status,
+          xp: status === 'completed' ? config.xp : 0,
+          maxXp: config.xp,
+          progress: status === 'completed' ? 100 : status === 'in_progress' ? 50 : 0,
+          unlockText,
+        })
+      }
     }
+  } catch (error) {
+    console.error('[v0] Error in buildModulesFromConfig:', error)
   }
   
   return modules
