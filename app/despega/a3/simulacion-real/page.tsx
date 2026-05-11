@@ -337,27 +337,40 @@ export default function SimulacionRealPage() {
             </CardContent>
           </Card>
 
-          {/* Actions */}
-          <div className="flex gap-3">
-            <Button
-              onClick={resetSimulation}
-              className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600"
-            >
-              Intentar de Nuevo
-            </Button>
-            <Button
-              variant="outline"
-              className="border-purple-500/30 text-white"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Descargar Reporte
-            </Button>
-            <Link href="/despega/a3" className="flex-1">
-              <Button className="w-full bg-black border border-purple-500/30 text-white hover:bg-purple-500/10">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Volver al Dashboard
+          {/* Actions - Module 10: Special Completion with Full Rewards */}
+          <div className="space-y-4">
+            <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-2 border-yellow-500/50 rounded-lg p-6">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-3xl">🎉</span>
+                <h3 className="text-xl font-bold text-yellow-300">¡TOUR COMPLETADO!</h3>
+              </div>
+              <p className="text-white/80 text-sm">
+                Has completado los 10 módulos del entrenamiento. Se han desbloqueado premios y beneficios especiales.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <Button
+                onClick={() => window.location.href = '/despega/a3'}
+                className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700"
+              >
+                Ver Premios y Recompensas
               </Button>
-            </Link>
+              <Button
+                onClick={resetSimulation}
+                variant="outline"
+                className="border-purple-500/30 text-white hover:bg-purple-500/10"
+              >
+                Intentar de Nuevo
+              </Button>
+              <Button
+                variant="outline"
+                className="border-purple-500/30 text-white"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Descargar Reporte
+              </Button>
+            </div>
           </div>
         </div>
       </div>

@@ -266,10 +266,16 @@ export default function EntrenamientoConversacionalPage() {
 
             <div className="flex gap-3">
               <Button
-                onClick={resetScenario}
+                onClick={() => window.location.href = '/despega/a3'}
                 className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600"
               >
-                Intentar Otro Escenario
+                Ir al Dashboard
+              </Button>
+              <Button
+                onClick={() => window.location.href = '/despega/a3/simulacion-real'}
+                className="flex-1 bg-gradient-to-r from-pink-600 to-purple-600"
+              >
+                Siguiente Práctica
               </Button>
               <Button
                 variant="outline"
