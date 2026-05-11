@@ -14,7 +14,7 @@ import { TrainingResultsCard } from '@/components/training-results-card'
 import { getModulePosition, getTotalModules } from '@/lib/pillar3-points-system'
 
 const LESSONS_DATA: Record<string, Record<string, any>> = {
-  'intro-to-star': {
+  'metodo-star': {
     '1': {
       title: 'Intro a STAR',
       description: 'Por qué STAR es efectivo en entrevistas',
