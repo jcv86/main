@@ -784,32 +784,66 @@ export default function DespegaOnboarding() {
         // Save C1 responses to BD
         try {
           const supabase = createClient()
-          const { data: { user } } = await supabase.auth.getUser()
+          console.log('[v0] Attempting to get authenticated user...')
+          const { data: { user }, error: authError } = await supabase.auth.getUser()
+          
+          if (authError) {
+            console.error('[v0] Auth error:', authError)
+            alert("Error de autenticación: " + authError.message)
+            setC1Submitting(false)
+            return
+          }
+          
           if (!user) {
-            console.error('[v0] No user found')
-            alert("No se encontró usuario autenticado")
-            setC1Submitting(false)
-            return
-          }
+            console.error('[v0] No user found after getUser() call')
+            // Try to get session as fallback
+            const { data: { session } } = await supabase.auth.getSession()
+            if (!session?.user) {
+              alert("Sesión expirada. Por favor, recarga la página e intenta de nuevo.")
+              setC1Submitting(false)
+              return
+            }
+            // Use session user if getUser failed
+            const sessionUser = session.user
+            console.log('[v0] Using session user:', sessionUser.id)
+            
+            // Save with session user
+            const { error } = await supabase
+              .from("canon_conozcamonos_1_responses")
+              .insert({
+                user_id: sessionUser.id,
+                responses: sanitizedResponses,
+                created_at: new Date().toISOString(),
+              })
 
-          const { error } = await supabase
-            .from("canon_conozcamonos_1_responses")
-            .insert({
-              user_id: user.id,
-              responses: sanitizedResponses,
-              created_at: new Date().toISOString(),
-            })
-
-          if (error) {
-            console.error("[v0] Error saving C1 responses:", error)
-            alert("Error guardando respuestas: " + error.message)
-            setC1Submitting(false)
-            return
+            if (error) {
+              console.error("[v0] Error saving C1 responses:", error)
+              alert("Error guardando respuestas: " + error.message)
+              setC1Submitting(false)
+              return
+            }
           } else {
-            console.log("[v0] C1 responses saved successfully (sanitized)")
-            setC1CurrentQuestion(0)
-            setStep("instructions")
+            console.log('[v0] Got user from getUser():', user.id)
+            // Save with getUser result
+            const { error } = await supabase
+              .from("canon_conozcamonos_1_responses")
+              .insert({
+                user_id: user.id,
+                responses: sanitizedResponses,
+                created_at: new Date().toISOString(),
+              })
+
+            if (error) {
+              console.error("[v0] Error saving C1 responses:", error)
+              alert("Error guardando respuestas: " + error.message)
+              setC1Submitting(false)
+              return
+            }
           }
+
+          console.log("[v0] C1 responses saved successfully (sanitized)")
+          setC1CurrentQuestion(0)
+          setStep("instructions")
         } catch (err) {
           console.error("[v0] Error in C1 save:", err)
           alert("Error al guardar: " + (err instanceof Error ? err.message : String(err)))
