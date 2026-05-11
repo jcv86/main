@@ -139,7 +139,21 @@ export async function GET(request: Request) {
     const moduleStates: Record<string, string> = {}
     const rules = await getModuleUnlockRules()
     
+    console.log('[v0] Building module states:', {
+      userXp: totalXp,
+      completedModules,
+      rulesCount: rules.length,
+      isSuperadmin
+    })
+    
     for (const rule of rules) {
+      console.log(`[v0] Checking ${rule.module_id}:`, {
+        prerequisite: rule.prerequisite_module_id,
+        xp_required: rule.xp_required,
+        has_prerequisite: rule.prerequisite_module_id ? completedModules.includes(rule.prerequisite_module_id) : true,
+        has_xp: totalXp >= rule.xp_required
+      })
+      
       if (isSuperadmin) {
         // Superadmin sees all modules as unlocked
         moduleStates[rule.module_id] = 'available'
@@ -153,6 +167,8 @@ export async function GET(request: Request) {
         moduleStates[rule.module_id] = 'available'
       }
     }
+    
+    console.log('[v0] Final module states:', moduleStates)
 
     // Skill values based on completed modules
     const level1Complete = completedModules.includes('auditoria-inicial')
