@@ -8,12 +8,14 @@ export default function DespegaLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen flex flex-col">
-      {/* <DespegaNavbar /> */}
-      <main className="flex-1 pt-4">
-        {children}
-      </main>
-      {/* <PremiumGamificationWidget /> */}
-    </div>
+    <CoachProviderWrapper>
+      <div className="min-h-screen flex flex-col">
+        {/* <DespegaNavbar /> */}
+        <main className="flex-1 pt-4">
+          {children}
+        </main>
+        {/* <PremiumGamificationWidget /> */}
+      </div>
+    </CoachProviderWrapper>
   )
 }
