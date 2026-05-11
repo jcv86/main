@@ -87,6 +87,8 @@ export default function SimulacionRealPage() {
   const [currentStageIndex, setCurrentStageIndex] = useState(0)
   const [stageScores, setStageScores] = useState<Record<string, number>>({})
   const [isCompleted, setIsCompleted] = useState(false)
+  const [elapsedTime, setElapsedTime] = useState(0)
+  const [simulationComplete, setSimulationComplete] = useState(false)
 
   const totalDuration = SIMULATION_STAGES.reduce((sum, stage) => sum + stage.duration, 0)
   const currentStage = SIMULATION_STAGES[currentStageIndex]
