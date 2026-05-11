@@ -29,23 +29,34 @@ export async function getModuleUnlockRules() {
 }
 
 /**
- * Get user's current XP
+ * Get user's current XP - calculated from completed modules
  */
 export async function getUserXP(userId: string): Promise<number> {
   const supabase = await createClient()
   
+  // Query the new a3_completed_modules table
   const { data, error } = await supabase
-    .from('a3_user_progress')
-    .select('total_xp')
+    .from('a3_completed_modules')
+    .select('xp_earned')
     .eq('user_id', userId)
-    .single()
   
   if (error) {
-    // No progress record yet
-    return 0
+    // Fallback to old table for backwards compatibility
+    const { data: oldData, error: oldError } = await supabase
+      .from('a3_user_progress')
+      .select('total_xp')
+      .eq('user_id', userId)
+      .single()
+    
+    if (oldError) {
+      return 0
+    }
+    
+    return oldData?.total_xp || 0
   }
   
-  return data?.total_xp || 0
+  // Sum all XP from completed modules
+  return data.reduce((sum: number, item: any) => sum + (item.xp_earned || 0), 0)
 }
 
 /**
@@ -54,17 +65,28 @@ export async function getUserXP(userId: string): Promise<number> {
 export async function getUserCompletedModules(userId: string): Promise<string[]> {
   const supabase = await createClient()
   
+  // Query the new a3_completed_modules table
   const { data, error } = await supabase
-    .from('a3_user_progress')
-    .select('completed_modules')
+    .from('a3_completed_modules')
+    .select('module_id')
     .eq('user_id', userId)
-    .single()
   
   if (error) {
-    return []
+    // Fallback to old table for backwards compatibility
+    const { data: oldData, error: oldError } = await supabase
+      .from('a3_user_progress')
+      .select('completed_modules')
+      .eq('user_id', userId)
+      .single()
+    
+    if (oldError) {
+      return []
+    }
+    
+    return oldData?.completed_modules || []
   }
   
-  return data?.completed_modules || []
+  return data.map((item: any) => item.module_id) || []
 }
 
 /**

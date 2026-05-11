@@ -1,10 +1,12 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { ChevronRight } from 'lucide-react'
 import { getNextModulePath, isLastModule } from '@/lib/module-navigation'
+import { PILLAR3_MODULES } from '@/lib/pillar3-config'
 
 interface ModuleCompletionScreenProps {
   moduleId: string
@@ -20,12 +22,42 @@ export function ModuleCompletionScreen({
   moduleName,
   score = 100,
   maxScore = 100,
-  xpEarned = 0,
+  xpEarned,
   completionMessage = 'Excelente trabajo. Sigue avanzando en tu aprendizaje',
 }: ModuleCompletionScreenProps) {
   const router = useRouter()
   const nextModulePath = getNextModulePath(moduleId)
   const isLast = isLastModule(moduleId)
+  const [isRecording, setIsRecording] = useState(false)
+
+  // Get XP from module config if not provided
+  const module = PILLAR3_MODULES[moduleId as keyof typeof PILLAR3_MODULES]
+  const displayXp = xpEarned || module?.xp || 0
+
+  // Record module completion when component mounts
+  useEffect(() => {
+    const recordCompletion = async () => {
+      if (isRecording) return
+      
+      try {
+        setIsRecording(true)
+        const response = await fetch('/api/a3/module-complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ moduleId }),
+        })
+
+        const data = await response.json()
+        console.log('[v0] Module completion recorded:', data)
+      } catch (error) {
+        console.error('[v0] Error recording module completion:', error)
+      } finally {
+        setIsRecording(false)
+      }
+    }
+
+    recordCompletion()
+  }, [moduleId, isRecording])
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
@@ -45,10 +77,10 @@ export function ModuleCompletionScreen({
               </div>
             </div>
 
-            {xpEarned > 0 && (
+            {displayXp > 0 && (
               <div className="bg-white/5 rounded-lg p-4">
                 <p className="text-white/60 text-sm">XP Ganado</p>
-                <p className="text-2xl font-bold text-training">{xpEarned} XP</p>
+                <p className="text-2xl font-bold text-training">{displayXp} XP</p>
               </div>
             )}
 
