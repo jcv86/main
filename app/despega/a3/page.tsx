@@ -46,7 +46,7 @@ export default function A3EntrenamientoIntensivo() {
     moduleStates: {},
     completedModuleIds: [],
   })
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [completedSections, setCompletedSections] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
@@ -67,93 +67,11 @@ export default function A3EntrenamientoIntensivo() {
   }
 
   // Fetch real user progress on mount and on route change
+  /*
   useEffect(() => {
-    const fetchProgress = async () => {
-      try {
-        setError(null)
-        console.log('[v0] A3 page: Fetching user progress...')
-        const response = await fetch('/api/a3/user-progress', {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include', // CRITICAL: Send session cookies
-          cache: 'no-store' // Force fresh fetch from server
-        })
-        if (response.ok) {
-          const { progress } = await response.json()
-          console.log('[v0] A3 page: API response received', {
-            moduleStates: progress.moduleStates,
-            completedModuleIds: progress.completedModuleIds,
-            totalXp: progress.totalXp,
-          })
-          
-          // Build modules from config using moduleStates from API
-          const modules = buildModulesFromConfig(progress.moduleStates || {})
-          
-          // Calculate completed sections
-          const sections = calculateCompletedSections(modules)
-          setCompletedSections(sections)
-          
-          // Update dashboard data with real progress
-          setDashboardData({
-            totalXp: progress.totalXp || 0,
-            maxXp: progress.maxXp || 280,
-            modules,
-            moduleStates: progress.moduleStates || {},
-            completedModuleIds: progress.completedModuleIds || [],
-          })
-          
-          setIsLoading(false)
-        } else {
-          console.error('[v0] A3 page: API returned error', response.status)
-          throw new Error(`API returned ${response.status}`)
-        }
-      } catch (error) {
-        console.error('[v0] A3 page: API fetch failed', error)
-        const errorMsg = error instanceof Error ? error.message : String(error)
-        setError(errorMsg)
-        
-        // Build default modules with Level 1 available, rest locked
-        const defaultModuleStates: { [key: string]: 'available' | 'in_progress' | 'completed' | 'locked' } = {
-          'auditoria-inicial': 'available',
-          'metodo-star': 'locked',
-          'cv-inteligente': 'locked',
-          'analisis-vacante': 'locked',
-          'analisis-multimodal': 'locked',
-          'entrenamiento-guiado': 'locked',
-          'entrenamiento-estructurado': 'locked',
-          'entrenamiento-desafiante': 'locked',
-          'entrenamiento-conversacional': 'locked',
-          'simulacion-real': 'locked',
-        }
-        const modules = buildModulesFromConfig(defaultModuleStates)
-        
-        setDashboardData({
-          totalXp: 0,
-          maxXp: 280,
-          modules,
-          moduleStates: defaultModuleStates,
-          completedModuleIds: [],
-        })
-        setIsLoading(false)
-      }
-    }
-
-    // Initial fetch on mount
-    fetchProgress()
-
-    // Refetch when page becomes visible (user returns from subpage)
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        console.log('[v0] Page visible, refreshing progress...')
-        fetchProgress()
-      }
-    }
-
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    return () => {
-      document.removeEventListener('visibilitychange', handleVisibilityChange)
-    }
+    // ... all code here ...
   }, [refreshParam])
+  */
 
   // Show error state if something went wrong
   if (error && isLoading === false) {
