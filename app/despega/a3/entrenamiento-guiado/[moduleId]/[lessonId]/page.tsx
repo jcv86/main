@@ -8,9 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { SofiaInterviewer } from '@/components/sofia-interviewer'
-import { ArrowLeft, Volume2 } from 'lucide-react'
 import { A3GeneralProgress } from '@/components/a3-general-progress'
-import { TrainingResultsCard } from '@/components/training-results-card'
 import { getModulePosition, getTotalModules } from '@/lib/pillar3-points-system'
 
 const LESSONS_DATA: Record<string, Record<string, any>> = {
@@ -285,22 +283,74 @@ export default function LessonPage() {
     const moduleXp = moduleXpMap[moduleId] || 120
     
     return (
-      <TrainingResultsCard
-        result={{
-          score: 95,
-          questionsCompleted: parseInt(lessonId),
-          totalQuestions: 4,
-          timeSpent: 1800, // 30 minutes for full course
-          level: 'basico',
-          trainingType: isLastLesson ? 'Dominio STAR Completo' : 'Método STAR',
-          moduleXpEarned: moduleXp,
-          moduleXpTotal: 120
-        }}
-        onContinue={() => {
-          // Always return to dashboard after results
-          router.push('/despega/a3')
-        }}
-      />
+      <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
+        <div className="max-w-2xl w-full">
+          <Card className="border-purple-500/30 bg-black">
+            <CardContent className="pt-12 pb-12 text-center space-y-6">
+              <div className="space-y-3">
+                <h2 className="text-3xl font-bold text-white">¡Lección Completada!</h2>
+                <p className="text-white/70">Excelente práctica. Sigue avanzando en tu aprendizaje</p>
+              </div>
+
+              <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-lg p-8">
+                <div className="space-y-2">
+                  <p className="text-white/60 text-sm font-medium">PUNTUACIÓN</p>
+                  <p className="text-5xl font-bold text-white">95</p>
+                  <p className="text-white/60 text-sm">/ 100</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 text-sm">
+                <div className="bg-white/5 rounded-lg p-3">
+                  <p className="text-white/60 text-xs mb-1">Lección</p>
+                  <p className="text-white font-semibold">{lessonId} / 4</p>
+                </div>
+                <div className="bg-white/5 rounded-lg p-3">
+                  <p className="text-white/60 text-xs mb-1">Tiempo</p>
+                  <p className="text-white font-semibold">~10m</p>
+                </div>
+                <div className="bg-white/5 rounded-lg p-3">
+                  <p className="text-white/60 text-xs mb-1">XP Ganado</p>
+                  <p className="text-white font-semibold">{isLastLesson ? moduleXp : 0}</p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={() => router.push('/despega/a3')}
+                  variant="outline"
+                  className="flex-1 border-purple-500/30 text-white hover:bg-purple-500/10"
+                >
+                  Ir al Dashboard
+                </Button>
+                <Button
+                  onClick={() => {
+                    if (isLastLesson) {
+                      // After last lesson of module, go to next module
+                      const moduleSequence = ['metodo-star', 'cv-inteligente', 'analisis-vacante', 'analisis-multimodal', 'entrenamiento-guiado', 'entrenamiento-estructurado', 'entrenamiento-desafiante', 'entrenamiento-conversacional', 'simulacion-real']
+                      const currentIndex = moduleSequence.indexOf(moduleId)
+                      const nextModule = moduleSequence[currentIndex + 1]
+                      if (nextModule) {
+                        router.push(`/despega/a3/${nextModule}`)
+                      } else {
+                        // Pillar 3 complete, go to rewards
+                        router.push('/despega/a3')
+                      }
+                    } else {
+                      // Next lesson in same module
+                      router.push(`/despega/a3/entrenamiento-guiado/${moduleId}/${parseInt(lessonId) + 1}`)
+                    }
+                  }}
+                  className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                >
+                  Continuar
+                  <ChevronRight className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     )
   }
 
