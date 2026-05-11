@@ -9,7 +9,7 @@ import { EnvironmentCheck } from './interview-0-blocks/environment-check'
 import { PresenceCheck } from './interview-0-blocks/presence-check'
 import { AudioCameraCheck } from './interview-0-blocks/audio-camera-check'
 import { PreparationCheck } from './interview-0-blocks/preparation-check'
-import { saveInterview0Status, getInterview0Status, type Interview0Status } from '@/lib/interview-0/supabase'
+import { saveInterview0Status, getInterview0Status, completeInterview0, type Interview0Status } from '@/lib/interview-0/supabase'
 
 interface AuditResult {
   environment: { passed: boolean; score: number }
@@ -133,7 +133,7 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
     // Always call onComplete to proceed UI, save in background
     if (onComplete) onComplete(results)
 
-    // Save final state in background - don't block completion
+    // Save final state and award XP in background - don't block completion
     try {
       const finalData: Interview0Status = {
         interview_0_completed: true,
@@ -145,13 +145,22 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
         preparation_check: results.preparation
       }
       
-      const result = await saveInterview0Status(finalData)
-      if (result?.message?.includes('Demo mode')) {
+      // First save the interview results
+      console.log('[v0] Saving interview-0 results with score:', totalScore)
+      const saveResult = await saveInterview0Status(finalData)
+      
+      // Then award XP and mark module complete
+      console.log('[v0] Awarding 70 XP and completing interview-0')
+      const completeResult = await completeInterview0(totalScore)
+      console.log('[v0] XP awarded successfully:', completeResult)
+      
+      if (saveResult?.message?.includes('Demo mode')) {
         // Demo mode - completion not persisted
       }
     } catch (err) {
       // Prevent the entire save pipeline from breaking if save fails
       const errorMsg = err instanceof Error ? err.message : String(err)
+      console.error('[v0] Error in interview completion flow:', errorMsg)
       // Only show error if it's not a demo mode message
       if (!errorMsg.includes('Demo mode')) {
         // Save error occurred
@@ -292,7 +301,11 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
 
             {/* Continue Button */}
             <Button
-              onClick={() => {
+              onClick={async () => {
+                // Save and award XP before navigating
+                await handleComplete()
+                // Small delay to ensure XP is saved
+                await new Promise(resolve => setTimeout(resolve, 1000))
                 // Navigate to A3 page with module 2 anchor
                 window.location.href = '/despega/a3#metodo-star'
               }}
