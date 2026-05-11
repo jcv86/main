@@ -30,11 +30,15 @@ async function auditModuleSystem() {
 
     // 2. Check for duplicate module rules
     console.log('\n2. CHECKING FOR DUPLICATE RULES...')
-    const { data: dupes } = await supabase
-      .rpc('check_duplicate_modules')
-      .catch(() => ({ data: null }))
+    let dupes = null
+    try {
+      const result = await supabase.rpc('check_duplicate_modules')
+      dupes = result.data
+    } catch (e) {
+      // RPC function may not exist, which is fine
+    }
     
-    if (dupes) {
+    if (dupes && dupes.length > 0) {
       console.log('Duplicate modules found:', dupes)
     } else {
       console.log('No direct duplicates detected')
@@ -74,19 +78,19 @@ async function auditModuleSystem() {
 
     // 5. Check for XP discrepancies
     console.log('\n5. CHECKING FOR DATA INTEGRITY ISSUES...')
-    const { data: xpStats } = await supabase
+    const { data: allProgress } = await supabase
       .from('a3_user_progress')
       .select('total_xp')
-      .then(({ data }) => ({
-        data: {
-          count: data?.length,
-          avgXp: data?.reduce((sum, r) => sum + r.total_xp, 0) / (data?.length || 1),
-          minXp: Math.min(...(data?.map(r => r.total_xp) || [0])),
-          maxXp: Math.max(...(data?.map(r => r.total_xp) || [0]))
-        }
-      }))
 
-    console.log(`XP Statistics: Count: ${xpStats.data.count}, Avg: ${xpStats.data.avgXp.toFixed(1)}, Min: ${xpStats.data.minXp}, Max: ${xpStats.data.maxXp}`)
+    if (allProgress && allProgress.length > 0) {
+      const xpValues = allProgress.map(r => r.total_xp)
+      const avgXp = xpValues.reduce((sum, xp) => sum + xp, 0) / xpValues.length
+      const minXp = Math.min(...xpValues)
+      const maxXp = Math.max(...xpValues)
+      console.log(`XP Statistics: Count: ${allProgress.length}, Avg: ${avgXp.toFixed(1)}, Min: ${minXp}, Max: ${maxXp}`)
+    } else {
+      console.log('No progress records to analyze')
+    }
 
     console.log('\n=== AUDIT COMPLETE ===\n')
 
