@@ -22,6 +22,14 @@ function buildModulesFromConfig(moduleStates: Record<string, string>): Module[] 
       const config = PILLAR3_MODULES[moduleId]
       const status = (moduleStates[moduleId] || 'locked') as 'available' | 'in_progress' | 'completed' | 'locked'
       
+      // Get the name of the previous level for unlock text
+      let unlockText: string | undefined
+      if (levelId > 1) {
+        const prevLevelId = (levelId - 1) as 1 | 2 | 3
+        const prevLevel = PILLAR3_LEVELS[prevLevelId]
+        unlockText = `Se desbloquea tras completar: ${prevLevel.name}`
+      }
+      
       modules.push({
         id: config.id,
         level: config.level,
@@ -31,7 +39,7 @@ function buildModulesFromConfig(moduleStates: Record<string, string>): Module[] 
         xp: status === 'completed' ? config.xp : 0,
         maxXp: config.xp,
         progress: status === 'completed' ? 100 : status === 'in_progress' ? 50 : 0,
-        unlockText: levelId > 1 ? `Se desbloquea tras completar: ${PILLAR3_LEVELS[(levelId - 1) as 1 | 2 | 3].name}` : undefined,
+        unlockText,
       })
     }
   }
