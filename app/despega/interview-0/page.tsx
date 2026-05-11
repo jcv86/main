@@ -51,10 +51,11 @@ export default function Interview0Page() {
               setStage('intro')
               setScore(0)
               setAuditProgress(0)
-              // After interview-0 completion, redirect to entrenamiento-guiado landing page
-              // Users will see module overview before choosing lessons
+              // After interview-0 completion, redirect back to A3 dashboard
+              // User will see the completed Auditoría Inicial module and unlocked next modules
+              // XP will be awarded and reflected in the dashboard
               setTimeout(() => {
-                router.push('/despega/a3/entrenamiento-guiado')
+                router.push('/despega/a3')
               }, 500)
             }}
           />
