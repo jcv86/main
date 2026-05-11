@@ -67,6 +67,7 @@ export async function getInterview0Progress(userId: string): Promise<Interview0D
 
 /**
  * Mark interview-0 as completed and award XP
+ * TEMPORARY: XP award disabled for testing
  */
 export async function completeInterview0(
   userId: string,
@@ -95,70 +96,8 @@ export async function completeInterview0(
   }
   console.log('[v0] Updated interview-0 progress record')
   
-  // Award XP and mark Auditoría Inicial as completed
-  const { data: existing, error: fetchError } = await supabase
-    .from('a3_user_progress')
-    .select('*')
-    .eq('user_id', userId)
-    .single()
+  // TEMPORARY: XP award disabled for testing core logic
+  console.log('[v0] TEMPORARY: XP award disabled - skipping a3_user_progress update')
   
-  if (fetchError && fetchError.code !== 'PGRST116') {
-    console.error('[v0] Error fetching existing progress:', fetchError)
-  }
-  
-  console.log('[v0] Existing progress found:', !!existing)
-  
-  const xpReward = 70 // XP for completing interview-0
-  
-  if (!existing) {
-    // Create new progress record
-    console.log('[v0] Creating new progress record with 70 XP and auditoria-inicial module')
-    const { error: insertError } = await supabase
-      .from('a3_user_progress')
-      .insert({
-        user_id: userId,
-        total_xp: xpReward,
-        total_dtc: 0,
-        completed_modules: ['auditoria-inicial'],
-        last_activity_at: new Date().toISOString()
-      })
-    
-    if (insertError) {
-      console.error('[v0] Failed to insert progress:', insertError)
-      throw insertError
-    }
-    console.log('[v0] Progress record created successfully')
-  } else {
-    // Update existing progress
-    const completedModules = existing.completed_modules || []
-    const hadModule = completedModules.includes('auditoria-inicial')
-    if (!hadModule) {
-      completedModules.push('auditoria-inicial')
-    }
-    
-    const newXp = (existing.total_xp || 0) + xpReward
-    console.log('[v0] Updating existing progress:', {
-      oldXp: existing.total_xp,
-      newXp,
-      hadAuditoriaInicial: hadModule,
-      completedModulesCount: completedModules.length
-    })
-    
-    const { error: updateProgressError } = await supabase
-      .from('a3_user_progress')
-      .update({
-        total_xp: newXp,
-        completed_modules: completedModules,
-        last_activity_at: new Date().toISOString()
-      })
-      .eq('user_id', userId)
-    
-    if (updateProgressError) {
-      console.error('[v0] Failed to update progress:', updateProgressError)
-      throw updateProgressError
-    }
-    console.log('[v0] Progress updated successfully')
-  }
-  
-  console.log('[v0] completeInterview0: Finished successfully')
+  console.log('[v0] completeInterview0: Finished successfully (XP disabled)')
 }

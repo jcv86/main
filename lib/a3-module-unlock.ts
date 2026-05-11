@@ -69,66 +69,13 @@ export async function getUserCompletedModules(userId: string): Promise<string[]>
 
 /**
  * Check if a specific module is unlocked for the user
+ * TEMPORARY: All modules unlocked for all users (XP/gamification disabled)
  */
 export async function isModuleUnlocked(
   userId: string,
   moduleId: string
 ): Promise<ModuleUnlockStatus> {
-  // Check if user is superadmin - they unlock everything
-  const superadmin = await isSuperadmin(userId)
-  if (superadmin) {
-    return {
-      moduleId,
-      isUnlocked: true,
-      reason: 'superadmin'
-    }
-  }
-  
-  const rules = await getModuleUnlockRules()
-  const rule = rules.find(r => r.module_id === moduleId)
-  
-  if (!rule) {
-    return {
-      moduleId,
-      isUnlocked: false,
-      reason: 'not_started'
-    }
-  }
-  
-  // First module is always available
-  if (!rule.prerequisite_module_id) {
-    return {
-      moduleId,
-      isUnlocked: true,
-      reason: 'unlocked'
-    }
-  }
-  
-  // Check prerequisite completion
-  const completedModules = await getUserCompletedModules(userId)
-  const hasPrerequisite = completedModules.includes(rule.prerequisite_module_id)
-  
-  if (!hasPrerequisite) {
-    return {
-      moduleId,
-      isUnlocked: false,
-      reason: 'prerequisite_incomplete',
-      prerequisiteModule: rule.prerequisite_module_id
-    }
-  }
-  
-  // Check XP requirement
-  const currentXp = await getUserXP(userId)
-  if (currentXp < rule.xp_required) {
-    return {
-      moduleId,
-      isUnlocked: false,
-      reason: 'insufficient_xp',
-      xpRequired: rule.xp_required,
-      currentXp
-    }
-  }
-  
+  // TEMPORARY DEBUG MODE: Unlock all modules for all users
   return {
     moduleId,
     isUnlocked: true,

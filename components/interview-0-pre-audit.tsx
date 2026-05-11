@@ -282,7 +282,8 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
               </div>
             )}
 
-            {/* XP Gamification */}
+            {/* XP Gamification - TEMPORARILY HIDDEN */}
+            {/* 
             <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/40 rounded-xl p-6">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -300,6 +301,7 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
                 </div>
               </div>
             </div>
+            */}
 
             {/* Continue Button */}
             <Button

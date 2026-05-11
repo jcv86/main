@@ -21,17 +21,18 @@ export async function GET(request: Request) {
     
     if (!session) {
       // Return demo/default data when not authenticated (for preview/demo purposes)
+      // TEMPORARY: All modules unlocked for testing
       const defaultModuleStates = {
         'auditoria-inicial': 'available',
-        'metodo-star': 'locked',
-        'cv-inteligente': 'locked',
-        'analisis-vacante': 'locked',
-        'analisis-multimodal': 'locked',
-        'entrenamiento-guiado': 'locked',
-        'entrenamiento-estructurado': 'locked',
-        'entrenamiento-desafiante': 'locked',
-        'entrenamiento-conversacional': 'locked',
-        'simulacion-real': 'locked',
+        'metodo-star': 'available',
+        'cv-inteligente': 'available',
+        'analisis-vacante': 'available',
+        'analisis-multimodal': 'available',
+        'entrenamiento-guiado': 'available',
+        'entrenamiento-estructurado': 'available',
+        'entrenamiento-desafiante': 'available',
+        'entrenamiento-conversacional': 'available',
+        'simulacion-real': 'available',
       }
       
       return NextResponse.json({
@@ -135,11 +136,11 @@ export async function GET(request: Request) {
     const progressPct = isSuperadmin ? 100 : Math.min(Math.round((totalXp / maxXp) * 100), 100)
     const dtcPct = isSuperadmin ? 100 : Math.min(Math.round((totalDtc / maxDtc) * 100), 100)
 
-    // Build moduleStates
+    // Build moduleStates - TEMPORARY: All modules unlocked for testing
     const moduleStates: Record<string, string> = {}
     const rules = await getModuleUnlockRules()
     
-    console.log('[v0] Building module states:', {
+    console.log('[v0] Building module states (ALL UNLOCKED FOR TESTING):', {
       userXp: totalXp,
       completedModules,
       rulesCount: rules.length,
@@ -147,28 +148,11 @@ export async function GET(request: Request) {
     })
     
     for (const rule of rules) {
-      console.log(`[v0] Checking ${rule.module_id}:`, {
-        prerequisite: rule.prerequisite_module_id,
-        xp_required: rule.xp_required,
-        has_prerequisite: rule.prerequisite_module_id ? completedModules.includes(rule.prerequisite_module_id) : true,
-        has_xp: totalXp >= rule.xp_required
-      })
-      
-      if (isSuperadmin) {
-        // Superadmin sees all modules as unlocked
-        moduleStates[rule.module_id] = 'available'
-      } else if (completedModules.includes(rule.module_id)) {
-        moduleStates[rule.module_id] = 'completed'
-      } else if (rule.prerequisite_module_id && !completedModules.includes(rule.prerequisite_module_id)) {
-        moduleStates[rule.module_id] = 'locked'
-      } else if (totalXp < rule.xp_required) {
-        moduleStates[rule.module_id] = 'locked'
-      } else {
-        moduleStates[rule.module_id] = 'available'
-      }
+      // TEMPORARY: All modules marked as available
+      moduleStates[rule.module_id] = 'available'
     }
     
-    console.log('[v0] Final module states:', moduleStates)
+    console.log('[v0] Final module states (ALL UNLOCKED):', moduleStates)
 
     // Skill values based on completed modules
     const level1Complete = completedModules.includes('auditoria-inicial')
