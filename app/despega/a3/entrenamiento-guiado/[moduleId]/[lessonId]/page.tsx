@@ -62,6 +62,7 @@ export default function LessonPage() {
           const response = await fetch('/api/a3/training-completion', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
             body: JSON.stringify({
               training_id: `guided-training-${moduleId}`,
               module_name: moduleId,
@@ -73,6 +74,12 @@ export default function LessonPage() {
           if (response.ok) {
             const data = await response.json()
             console.log('[v0] Training completion tracked:', data)
+          } else {
+            const errorData = await response.json().catch(() => ({}))
+            console.error('[v0] Training completion failed:', {
+              status: response.status,
+              error: errorData
+            })
           }
         } catch (error) {
           console.error('[v0] Error tracking training completion:', error)
