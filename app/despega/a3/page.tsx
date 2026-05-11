@@ -5,8 +5,8 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, Loader2, Lock, CheckCircle2 } from 'lucide-react'
-import { DashboardState, Module } from './data/mock-dashboard'
+import { ArrowRight, Loader2 } from 'lucide-react'
+// import { DashboardState, Module } from './data/mock-dashboard'
 // Temporarily remove problematic imports to isolate the issue
 // import { A3GeneralProgress } from '@/components/a3-general-progress'
 // import { LevelsAccordion } from '@/components/a3/levels-accordion'
@@ -23,54 +23,15 @@ const PILLAR3_LEVELS: any = {
 const PILLAR3_MODULES: any = {}
 
 // Build modules array from pillar3 config with moduleStates
-function buildModulesFromConfig(moduleStates: Record<string, string>): Module[] {
-  const modules: Module[] = []
+function buildModulesFromConfig(moduleStates: Record<string, string>): any[] {
+  const modules: any[] = []
   
   try {
-    for (const levelId of [1, 2, 3, 4] as const) {
-      const level = PILLAR3_LEVELS[levelId]
-      if (!level) {
-        console.warn(`[v0] Level ${levelId} not found in PILLAR3_LEVELS`)
-        continue
-      }
-      
-      for (const moduleId of level.moduleIds) {
-        const config = PILLAR3_MODULES[moduleId]
-        if (!config) {
-          console.warn(`[v0] Module ${moduleId} not found in PILLAR3_MODULES`)
-          continue
-        }
-        
-        const status = (moduleStates[moduleId] || 'locked') as 'available' | 'in_progress' | 'completed' | 'locked'
-        
-        // Get the name of the previous level for unlock text
-        let unlockText: string | undefined
-        if (levelId > 1) {
-          const prevLevelId = (levelId - 1) as 1 | 2 | 3
-          const prevLevel = PILLAR3_LEVELS[prevLevelId]
-          if (prevLevel) {
-            unlockText = `Se desbloquea tras completar: ${prevLevel.name}`
-          }
-        }
-        
-        modules.push({
-          id: config.id,
-          level: config.level,
-          title: config.name,
-          description: config.description,
-          status,
-          xp: status === 'completed' ? config.xp : 0,
-          maxXp: config.xp,
-          progress: status === 'completed' ? 100 : status === 'in_progress' ? 50 : 0,
-          unlockText,
-        })
-      }
-    }
+    return modules
   } catch (error) {
     console.error('[v0] Error in buildModulesFromConfig:', error)
+    return modules
   }
-  
-  return modules
 }
 
 export default function A3EntrenamientoIntensivo() {
@@ -78,7 +39,7 @@ export default function A3EntrenamientoIntensivo() {
   const searchParams = useSearchParams()
   const refreshParam = searchParams?.get('refresh')
   
-  const [dashboardData, setDashboardData] = useState<DashboardState>({
+  const [dashboardData, setDashboardData] = useState<any>({
     totalXp: 0,
     maxXp: 280,
     modules: [],
@@ -91,14 +52,14 @@ export default function A3EntrenamientoIntensivo() {
 
   // Calculate completed sections (Pillar 3 has 4 sections)
   // A section is complete when all its modules are 100% done
-  const calculateCompletedSections = (modules: Module[]) => {
+  const calculateCompletedSections = (modules: any[]) => {
     // Group modules by section (level)
     const sections = [1, 2, 3, 4] // 4 sections in Pillar 3
     let completed = 0
 
     sections.forEach(sectionNum => {
-      const sectionModules = modules.filter(m => m.level === sectionNum)
-      const allComplete = sectionModules.length > 0 && sectionModules.every(m => m.status === 'completed')
+      const sectionModules = modules.filter((m: any) => m.level === sectionNum)
+      const allComplete = sectionModules.length > 0 && sectionModules.every((m: any) => m.status === 'completed')
       if (allComplete) completed++
     })
 
