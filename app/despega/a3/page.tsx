@@ -83,7 +83,7 @@ export default function A3EntrenamientoIntensivo() {
   
   const [dashboardData, setDashboardData] = useState<any>({
     totalXp: 0,
-    maxXp: 280,
+    maxXp: 1070, // 10 modules: 70 + 4×120 + 4×120 + 40 = 1070 XP total
     modules: [],
     moduleStates: {},
     completedModuleIds: [],
@@ -119,7 +119,7 @@ export default function A3EntrenamientoIntensivo() {
           // Update dashboard data with real progress
           setDashboardData({
             totalXp: progress.totalXp || 0,
-            maxXp: progress.maxXp || 280,
+            maxXp: progress.maxXp || 1070,
             modules,
             moduleStates: progress.moduleStates || {},
             completedModuleIds: progress.completedModuleIds || [],
@@ -152,7 +152,7 @@ export default function A3EntrenamientoIntensivo() {
         
         setDashboardData({
           totalXp: 0,
-          maxXp: 280,
+          maxXp: 1070,
           modules,
           moduleStates: defaultModuleStates,
           completedModuleIds: [],

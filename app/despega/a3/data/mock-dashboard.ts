@@ -33,7 +33,7 @@ export interface DashboardState {
 // Mock data - default state; real values come from /api/a3/user-progress
 export const mockDashboardData: DashboardState = {
   totalXp: 0,
-  maxXp: 280, // 70 per level x 4 levels
+  maxXp: 1070, // 10 modules: 70 + 4×120 + 4×120 + 40 = 1070 XP total
 
   modules: [
     // NIVEL 1: Auditoría Inicial
