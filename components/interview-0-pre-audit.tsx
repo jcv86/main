@@ -158,8 +158,6 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
       }
       // Local state is updated, data persists in component, will retry on refresh
     }
-      // Local state is preserved, user can refresh to retry
-    }
   }
 
   if (isLoading) {
