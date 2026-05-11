@@ -181,40 +181,60 @@ export default function A3EntrenamientoIntensivo() {
           </div>
         </div>
 
-        {/* ========== EPIC LEVELS SECTION ========== */}
+        {/* ========== MODULE OVERVIEW SECTION ========== */}
         <div className="space-y-6">
           <div className="space-y-2">
             <h2 className="text-2xl font-bold text-white">Tu Camino de Aprendizaje</h2>
             <p className="text-white/70">Completa cada nivel para desbloquear el siguiente.</p>
           </div>
           
-          {/* General Progress Bar - Shows Pillar 3 completion based on sections */}
-          {/* <A3GeneralProgress 
-            currentStep={1}
-            totalSteps={4}
-            currentLabel="Pillar 3 - Entrenamiento Intensivo"
-            completedSections={completedSections}
-            totalSections={4}
-            variant="default"
-          />
-          
-          <LevelsAccordion modules={dashboardData.modules} /> */}
-          
-          <p className="text-white/50 text-sm">Components loading...</p>
-        </div>
-
-        {/* ========== DETAILED PILLAR 3 PROGRESS ========== */}
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-white">Estado de Cada Módulo</h2>
-            <p className="text-white/70">Visualiza tu progreso por módulo y desbloquea el siguiente al completar.</p>
-          </div>
-          
-          {/* <Pillar3DetailedProgress
-            moduleStates={dashboardData.moduleStates || {}}
-            completedModuleIds={dashboardData.completedModuleIds || []}
-            totalXp={dashboardData.totalXp}
-          /> */}
+          {/* Modules list will be rendered here */}
+          {dashboardData.modules && dashboardData.modules.length > 0 ? (
+            <div className="space-y-4">
+              {dashboardData.modules.map((module: any) => (
+                <div key={module.id} className="rounded-lg border border-training/30 bg-white/5 p-6 hover:bg-white/10 transition-colors">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-semibold text-white">{module.title}</h3>
+                      <p className="text-white/70 text-sm mt-1">{module.description}</p>
+                      {module.unlockText && (
+                        <p className="text-training/80 text-xs mt-2">{module.unlockText}</p>
+                      )}
+                    </div>
+                    <div className="ml-4 flex flex-col items-end gap-2">
+                      <span className={`text-xs font-medium px-3 py-1 rounded-full ${
+                        module.status === 'completed' ? 'bg-success/20 text-success' :
+                        module.status === 'in_progress' ? 'bg-training/20 text-training' :
+                        module.status === 'available' ? 'bg-blue/20 text-blue' :
+                        'bg-white/10 text-white/50'
+                      }`}>
+                        {module.status === 'completed' ? 'Completado' :
+                         module.status === 'in_progress' ? 'En Progreso' :
+                         module.status === 'available' ? 'Disponible' :
+                         'Bloqueado'}
+                      </span>
+                      <span className="text-xs text-white/60">{module.progress}% completado</span>
+                    </div>
+                  </div>
+                  {module.maxXp && (
+                    <div className="mt-4 flex items-center gap-2">
+                      <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-training transition-all"
+                          style={{ width: `${module.progress}%` }}
+                        />
+                      </div>
+                      <span className="text-xs text-white/60">{module.xp}/{module.maxXp} XP</span>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-8 text-white/50">
+              <p>Cargando módulos...</p>
+            </div>
+          )}
         </div>
 
         {/* ========== SIMPLE NEXT STEP MESSAGE ========== */}
