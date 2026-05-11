@@ -189,32 +189,53 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
 
   if (stage === 'intro') {
     return (
-      <Card className="border-muted/30 max-w-2xl mx-auto">
-        <CardContent className="pt-12 pb-8 text-center space-y-6">
-          <div>
-            <h1 className="text-4xl font-bold text-white mb-2">Entrevista 0: Tu Base Profesional</h1>
-            <p className="text-lg text-white/70">Prepara tu escenario, presencia y pitch inicial</p>
+      <Card className="border-muted/30 max-w-4xl mx-auto">
+        <CardContent className="pt-12 pb-8">
+          <div className="flex gap-8 items-start">
+            {/* Coach Portrait */}
+            <div className="flex-shrink-0 hidden md:block">
+              <div className="relative">
+                <div className="w-48 h-56 rounded-xl overflow-hidden border border-purple-500/30 shadow-lg">
+                  <img 
+                    src="/images/coach-portrait.jpg" 
+                    alt="Coach"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="absolute -bottom-2 -right-2 w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center border-2 border-background">
+                  <span className="text-white text-lg">👨</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 text-center md:text-left space-y-6">
+              <div>
+                <h1 className="text-4xl font-bold text-white mb-2">Entrevista 0: Tu Base Profesional</h1>
+                <p className="text-lg text-white/70">Prepara tu escenario, presencia y pitch inicial</p>
+              </div>
+
+              <p className="text-white/80">
+                Revisaremos tu entorno, presencia, cámara, audio y preparación inicial. Esto identifica qué mejorar antes de practicar entrevistas reales.
+              </p>
+
+              <div className="space-y-2 text-sm text-white/70">
+                <p>✓ Auditoría de entorno (luz, fondo, ruido)</p>
+                <p>✓ Validación de presencia (postura, mirada, energía)</p>
+                <p>✓ Prueba de audio y cámara</p>
+                <p>✓ Preparación de pitch inicial</p>
+              </div>
+
+              <Button
+                onClick={() => setStage('environment')}
+                className="w-full md:w-auto text-white h-12 px-8"
+                style={{ backgroundColor: 'rgb(170, 70, 170, 0.6)', borderRadius: '20px' }}
+              >
+                Comenzar revisión
+                <ChevronRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
           </div>
-
-          <p className="text-white/80 max-w-md mx-auto">
-            Revisaremos tu entorno, presencia, cámara, audio y preparación inicial. Esto identifica qué mejorar antes de practicar entrevistas reales.
-          </p>
-
-          <div className="space-y-2 text-sm text-white/70">
-            <p> Auditoría de entorno (luz, fondo, ruido)</p>
-            <p> Validación de presencia (postura, mirada, energía)</p>
-            <p> Prueba de audio y cámara</p>
-            <p> Preparación de pitch inicial</p>
-          </div>
-
-          <Button
-            onClick={() => setStage('environment')}
-            className="w-full text-white h-12"
-            style={{ backgroundColor: 'rgb(170, 70, 170, 0.6)', borderRadius: '20px' }}
-          >
-            Comenzar revisión
-            <ChevronRight className="w-4 h-4 ml-2" />
-          </Button>
         </CardContent>
       </Card>
     )
