@@ -11,7 +11,16 @@ import { DashboardState, Module } from './data/mock-dashboard'
 // import { A3GeneralProgress } from '@/components/a3-general-progress'
 // import { LevelsAccordion } from '@/components/a3/levels-accordion'
 // import { Pillar3DetailedProgress } from '@/components/pillar3-detailed-progress'
-import { PILLAR3_MODULES, PILLAR3_LEVELS } from '@/lib/pillar3-config'
+// import { PILLAR3_MODULES, PILLAR3_LEVELS } from '@/lib/pillar3-config'
+
+// Dummy config for testing
+const PILLAR3_LEVELS: any = {
+  1: { id: 1, name: 'Level 1', moduleIds: [] },
+  2: { id: 2, name: 'Level 2', moduleIds: [] },
+  3: { id: 3, name: 'Level 3', moduleIds: [] },
+  4: { id: 4, name: 'Level 4', moduleIds: [] },
+}
+const PILLAR3_MODULES: any = {}
 
 // Build modules array from pillar3 config with moduleStates
 function buildModulesFromConfig(moduleStates: Record<string, string>): Module[] {
