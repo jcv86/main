@@ -99,6 +99,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
     xp: 120,
     dtc: 12,
     legacyIds: ['job_analysis', 'vacancy_analysis'],
+  },
   // MODULE 5: Multimodal Analysis (120 XP / 12 DTC)
   'analisis-multimodal': {
     id: 'analisis-multimodal',
@@ -119,6 +120,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
     xp: 120,
     dtc: 12,
     legacyIds: ['guided_training', 'entrevista-guiada'],
+  },
   // MODULE 7: Structured Training (120 XP / 12 DTC)
   'entrenamiento-estructurado': {
     id: 'entrenamiento-estructurado',
@@ -128,6 +130,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
     xp: 120,
     dtc: 12,
     legacyIds: ['structured_training', 'entrevista-estructurada'],
+  },
   // MODULE 8: Challenging Training (120 XP / 12 DTC)
   'entrenamiento-desafiante': {
     id: 'entrenamiento-desafiante',
@@ -137,6 +140,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
     xp: 120,
     dtc: 12,
     legacyIds: ['challenging_training', 'entrevista-desafiante'],
+  },
   // MODULE 9: Conversational Training (120 XP / 12 DTC)
   'entrenamiento-conversacional': {
     id: 'entrenamiento-conversacional',
