@@ -173,18 +173,9 @@ export default function A3EntrenamientoIntensivo() {
       }
     }
 
-    // Also set up a periodic refresh every 5 seconds while page is visible
-    const refreshInterval = setInterval(() => {
-      if (document.visibilityState === 'visible') {
-        console.log('[v0] Periodic refresh check...')
-        fetchProgress()
-      }
-    }, 5000)
-
     document.addEventListener('visibilitychange', handleVisibilityChange)
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
-      clearInterval(refreshInterval)
     }
   }, [refreshParam])
 
