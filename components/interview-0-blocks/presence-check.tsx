@@ -24,11 +24,15 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
         })
         if (videoRef.current) {
           videoRef.current.srcObject = stream
+          videoRef.current.play().catch(err => {
+            // Handle autoplay errors
+          })
           setCameraActive(true)
+          setCameraError(false)
         }
       } catch (err) {
-        console.error('[v0] Camera access denied:', err)
         setCameraError(true)
+        setCameraActive(false)
       }
     }
 
