@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -40,6 +40,7 @@ function buildModulesFromConfig(moduleStates: Record<string, string>): Module[] 
 }
 
 export default function A3EntrenamientoIntensivo() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const refreshParam = searchParams?.get('refresh')
   
@@ -78,6 +79,7 @@ export default function A3EntrenamientoIntensivo() {
           method: 'GET',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include', // CRITICAL: Send session cookies
+          cache: 'no-store' // Force fresh fetch from server
         })
         if (response.ok) {
           const { progress } = await response.json()
@@ -147,8 +149,19 @@ export default function A3EntrenamientoIntensivo() {
       }
     }
 
+    // Also set up a periodic refresh every 5 seconds while page is visible
+    const refreshInterval = setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        console.log('[v0] Periodic refresh check...')
+        fetchProgress()
+      }
+    }, 5000)
+
     document.addEventListener('visibilitychange', handleVisibilityChange)
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+      clearInterval(refreshInterval)
+    }
   }, [refreshParam])
 
   if (isLoading) {
