@@ -133,8 +133,6 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
       const result = await validatePreparationResponses(role, company, achievements)
       setAiValidationResult(result)
 
-      console.log('[v0] AI validation result:', result)
-
       // If AI says it's not valid, block continuation
       if (!result.isValid) {
         return
@@ -146,7 +144,6 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
         score: 100
       })
     } catch (error) {
-      console.error('[v0] AI validation error:', error)
       // On error, allow manual retry
       setAiValidationResult({
         isValid: false,
@@ -183,7 +180,7 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
             onChange={(e) => handleRoleChange(e.target.value)}
             className="bg-muted/20 text-white placeholder-white/40 border-2 focus:ring-0 focus:border-[rgb(170,70,170)]"
             style={{
-              borderColor: validationErrors.role ? 'rgba(239, 68, 68, 0.5)' : 'rgba(170, 70, 170, 0.4)'
+              borderColor: validationErrors.role ? 'rgb(239, 68, 68)' : 'rgb(170, 70, 170)'
             }}
           />
           <p className={`text-xs ${validationErrors.role ? 'text-red-400' : 'text-white/50'}`}>
@@ -203,7 +200,7 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
             onChange={(e) => handleCompanyChange(e.target.value)}
             className="bg-muted/20 text-white placeholder-white/40 border-2 focus:ring-0 focus:border-[rgb(170,70,170)]"
             style={{
-              borderColor: validationErrors.company ? 'rgba(239, 68, 68, 0.5)' : 'rgba(170, 70, 170, 0.4)'
+              borderColor: validationErrors.company ? 'rgb(239, 68, 68)' : 'rgb(170, 70, 170)'
             }}
           />
           <p className={`text-xs ${validationErrors.company ? 'text-red-400' : 'text-white/50'}`}>
@@ -223,7 +220,7 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
             onChange={(e) => handleAchievementsChange(e.target.value)}
             className="bg-muted/20 text-white placeholder-white/40 resize-none min-h-[120px] border-2 focus:ring-0 focus:border-[rgb(170,70,170)]"
             style={{
-              borderColor: validationErrors.achievements ? 'rgba(239, 68, 68, 0.5)' : 'rgba(170, 70, 170, 0.4)'
+              borderColor: validationErrors.achievements ? 'rgb(239, 68, 68)' : 'rgb(170, 70, 170)'
             }}
           />
           <p className={`text-xs ${validationErrors.achievements ? 'text-red-400' : 'text-white/50'}`}>
