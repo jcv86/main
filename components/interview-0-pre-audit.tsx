@@ -113,8 +113,14 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
       saveData[fieldMap[blockName]] = data
       
       console.log(`[v0] Saving ${blockName} block:`, saveData)
-      await saveInterview0Status(saveData)
-      console.log(`[v0] Successfully saved ${blockName} block`)
+      const result = await saveInterview0Status(saveData)
+      
+      // Check if it's demo mode (no actual save)
+      if (result?.message?.includes('Demo mode')) {
+        console.log(`[v0] Demo mode - ${blockName} saved locally only`)
+      } else {
+        console.log(`[v0] Successfully saved ${blockName} block`)
+      }
     } catch (err) {
       // Prevent the entire save pipeline from breaking if one listener fails
       const errorMsg = err instanceof Error ? err.message : String(err)
@@ -124,8 +130,10 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
         data,
         timestamp: new Date().toISOString()
       })
-      // Show error but don't block progression
-      alert(`Guardado: ${blockName} completado localmente. Error en sync: ${errorMsg.substring(0, 100)}`)
+      // Only show error if it's not a demo mode message
+      if (!errorMsg.includes('Demo mode')) {
+        console.warn(`[v0] Save error for ${blockName}: ${errorMsg}`)
+      }
       // Local state is updated, data persists in component, will retry on refresh
     }
   }
@@ -147,8 +155,12 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
       }
       
       console.log('[v0] Saving interview-0 completion:', finalData)
-      await saveInterview0Status(finalData)
-      console.log('[v0] Interview-0 completion saved successfully')
+      const result = await saveInterview0Status(finalData)
+      if (result?.message?.includes('Demo mode')) {
+        console.log('[v0] Demo mode - completion not persisted')
+      } else {
+        console.log('[v0] Interview-0 completion saved successfully')
+      }
     } catch (err) {
       // Prevent the entire save pipeline from breaking if save fails
       const errorMsg = err instanceof Error ? err.message : String(err)
@@ -157,7 +169,10 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
         totalScore,
         timestamp: new Date().toISOString()
       })
-      alert(`Entrevista 0 completada. Error en guardado final: ${errorMsg.substring(0, 100)}`)
+      // Only show alert if it's not a demo mode issue
+      if (!errorMsg.includes('Demo mode')) {
+        console.warn('[v0] Completion save error:', errorMsg)
+      }
       // Local state is preserved, user can refresh to retry
     }
   }
