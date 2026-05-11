@@ -35,9 +35,12 @@ function buildModulesFromConfig(moduleStates: Record<string, string>): any[] {
 }
 
 export default function A3EntrenamientoIntensivo() {
+  console.log('[v0] A3 component rendering...')
   const router = useRouter()
   const searchParams = useSearchParams()
   const refreshParam = searchParams?.get('refresh')
+  
+  console.log('[v0] Hooks called successfully')
   
   const [dashboardData, setDashboardData] = useState<any>({
     totalXp: 0,
@@ -49,6 +52,8 @@ export default function A3EntrenamientoIntensivo() {
   const [isLoading, setIsLoading] = useState(false)
   const [completedSections, setCompletedSections] = useState(0)
   const [error, setError] = useState<string | null>(null)
+
+  console.log('[v0] State initialized')
 
   // Calculate completed sections (Pillar 3 has 4 sections)
   // A section is complete when all its modules are 100% done
