@@ -139,7 +139,7 @@ export default function EntrenamientoEstructuradoPage() {
                   <div className="flex items-start gap-3">
                     <BookOpen className="w-4 h-4 text-blue-400 mt-1 flex-shrink-0" />
                     <div>
-                      <p className="text-sm font-semibold text-blue-300 mb-1">Recuerda usar la técnica STAR</p>
+                      <p className="text-sm font-semibold text-blue-300 mb-1">Recuerda:</p>
                       <p className="text-xs text-blue-200">Situación → Tarea → Acción → Resultado</p>
                     </div>
                   </div>
@@ -323,7 +323,7 @@ export default function EntrenamientoEstructuradoPage() {
           <div className="flex gap-3">
             <AlertCircle className="w-5 h-5 text-blue-400 flex-shrink-0 mt-1" />
             <div>
-              <h3 className="font-semibold text-blue-300 mb-2">Tips para Máximo Aprendizaje</h3>
+              <h3 className="font-semibold text-blue-300 mb-2">Recuerda:</h3>
               <ul className="space-y-1 text-blue-200/70 text-sm">
                 <li>• Graba tus respuestas completas (60-90 segundos cada una)</li>
                 <li>• Usa ejemplos reales de tu experiencia</li>

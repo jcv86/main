@@ -332,7 +332,7 @@ export default function EntrenamientoConversacionalPage() {
                 <p className="text-white/70 text-sm">{scenario.objective}</p>
                 
                 <div>
-                  <p className="text-xs text-white/60 font-semibold mb-2">Tips Iniciales:</p>
+                  <p className="text-xs text-white/60 font-semibold mb-2">Recuerda:</p>
                   <ul className="space-y-1">
                     {scenario.tips.slice(0, 2).map((tip, idx) => (
                       <li key={idx} className="text-xs text-white/50 flex gap-2">

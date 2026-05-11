@@ -407,7 +407,7 @@ export default function LessonPage() {
 
                 {/* Key Points */}
                 <div>
-                  <h3 className="font-semibold text-white mb-3">Puntos clave a recordar:</h3>
+                  <h3 className="font-semibold text-white mb-3">Recuerda:</h3>
                   <ul className="space-y-2">
                     {lessonId === '1' && (
                       <>

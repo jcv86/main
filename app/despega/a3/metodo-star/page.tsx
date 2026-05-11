@@ -156,7 +156,7 @@ export default function MetodoSTARPage() {
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div>
-                      <h4 className="font-semibold text-white/80 mb-2">Tips Clave:</h4>
+                      <h4 className="font-semibold text-white/80 mb-2">Recuerda:</h4>
                       <ul className="space-y-1">
                         {data.tips.map((tip, idx) => (
                           <li key={idx} className="text-sm text-white/60 flex items-start gap-2">
