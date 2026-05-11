@@ -25,6 +25,7 @@ export default function DespegaOnboarding() {
   const supabase = createClient()
   const [step, setStep] = useState<Step>("intro")
   const [loading, setLoading] = useState(true)
+  const [c1Submitting, setC1Submitting] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [c1CurrentQuestion, setC1CurrentQuestion] = useState(0)
   const [c2Paso1Question, setC2Paso1Question] = useState(0)
@@ -738,7 +739,7 @@ export default function DespegaOnboarding() {
     const currentC1Q = c1Questions[c1CurrentQuestion]
     const c1Progress = ((c1CurrentQuestion + 1) / c1Questions.length) * 100
 
-    const handleC1Next = () => {
+    const handleC1Next = async () => {
       // Validar que si es texto, no esté vacío
       if (currentC1Q.type === "text") {
         const response = (c1Responses[currentC1Q.id] || "").trim()
@@ -756,6 +757,8 @@ export default function DespegaOnboarding() {
         setC1CurrentQuestion(c1CurrentQuestion + 1)
       } else {
         // NIVEL 4: Sanitize C1 responses before saving
+        setC1Submitting(true)
+        
         const sanitizeTextInput = (text: string, maxLength: number = 200): string => {
           if (!text) return ''
           // Remove URLs
@@ -779,32 +782,39 @@ export default function DespegaOnboarding() {
         })
 
         // Save C1 responses to BD
-        const saveC1 = async () => {
-          try {
-            const supabase = createClient()
-            const { data: { user } } = await supabase.auth.getUser()
-            if (!user) return
-
-            const { error } = await supabase
-              .from("canon_conozcamonos_1_responses")
-              .insert({
-                user_id: user.id,
-                responses: sanitizedResponses,
-                created_at: new Date().toISOString(),
-              })
-
-            if (error) {
-              console.error("[v0] Error saving C1 responses:", error)
-            } else {
-              console.log("[v0] C1 responses saved successfully (sanitized)")
-              setC1CurrentQuestion(0)
-              setStep("instructions")
-            }
-          } catch (err) {
-            console.error("[v0] Error in C1 save:", err)
+        try {
+          const supabase = createClient()
+          const { data: { user } } = await supabase.auth.getUser()
+          if (!user) {
+            console.error('[v0] No user found')
+            alert("No se encontró usuario autenticado")
+            setC1Submitting(false)
+            return
           }
+
+          const { error } = await supabase
+            .from("canon_conozcamonos_1_responses")
+            .insert({
+              user_id: user.id,
+              responses: sanitizedResponses,
+              created_at: new Date().toISOString(),
+            })
+
+          if (error) {
+            console.error("[v0] Error saving C1 responses:", error)
+            alert("Error guardando respuestas: " + error.message)
+            setC1Submitting(false)
+            return
+          } else {
+            console.log("[v0] C1 responses saved successfully (sanitized)")
+            setC1CurrentQuestion(0)
+            setStep("instructions")
+          }
+        } catch (err) {
+          console.error("[v0] Error in C1 save:", err)
+          alert("Error al guardar: " + (err instanceof Error ? err.message : String(err)))
+          setC1Submitting(false)
         }
-        saveC1()
       }
     }
 
@@ -847,9 +857,9 @@ export default function DespegaOnboarding() {
                   <Button 
                     onClick={handleC1Next}
                     className="w-full h-12 text-base"
-                    disabled={!c1Responses[currentC1Q.id] || (c1Responses[currentC1Q.id] || "").trim().length < 5}
+                    disabled={!c1Responses[currentC1Q.id] || (c1Responses[currentC1Q.id] || "").trim().length < 5 || c1Submitting}
                   >
-                    Siguiente
+                    {c1Submitting ? "Guardando..." : "Siguiente"}
                   </Button>
                   {c1Responses[currentC1Q.id] && (c1Responses[currentC1Q.id] || "").trim().length < 5 && (
                     <p className="text-sm text-red">La respuesta debe tener al menos 5 caracteres</p>
