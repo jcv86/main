@@ -6,7 +6,6 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { ArrowLeft, ChevronRight, Video, Lightbulb } from 'lucide-react'
 import { Interview0PreAudit } from '@/components/interview-0-pre-audit'
-import { TrainingResultsCard } from '@/components/training-results-card'
 
 export default function Interview0Page() {
   const router = useRouter()
@@ -36,29 +35,58 @@ export default function Interview0Page() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4 py-8">
         <div className="max-w-2xl w-full">
-          <TrainingResultsCard
-            result={{
-              score: score,
-              questionsCompleted: 4,
-              totalQuestions: 4,
-              timeSpent: 300,
-              level: 'basico',
-              trainingType: 'auditoria-inicial',
-              moduleXpEarned: 70,
-              moduleXpTotal: 70,
-            }}
-            onContinue={() => {
-              setStage('intro')
-              setScore(0)
-              setAuditProgress(0)
-              // After interview-0 completion, redirect back to A3 dashboard
-              // User will see the completed Auditoría Inicial module and unlocked next modules
-              // XP will be awarded and reflected in the dashboard
-              setTimeout(() => {
-                router.push('/despega/a3')
-              }, 500)
-            }}
-          />
+          <Card className="border-purple-500/30 bg-black">
+            <CardContent className="pt-12 pb-12 text-center space-y-6">
+              <div className="space-y-3">
+                <h2 className="text-3xl font-bold text-white">¡Auditoría Completada!</h2>
+                <p className="text-white/70">Excelente preparación - Estás listo para comenzar entrenamientos</p>
+              </div>
+
+              <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 border border-purple-500/30 rounded-lg p-8">
+                <div className="space-y-2">
+                  <p className="text-white/60 text-sm font-medium">LISTO PARA PRACTICAR</p>
+                  <p className="text-5xl font-bold text-white">{score}</p>
+                  <p className="text-white/60 text-sm">Puntuación General</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 text-sm">
+                <div className="bg-white/5 rounded-lg p-3">
+                  <p className="text-white/60 text-xs mb-1">Environment</p>
+                  <p className="text-white font-semibold">100</p>
+                </div>
+                <div className="bg-white/5 rounded-lg p-3">
+                  <p className="text-white/60 text-xs mb-1">Presence</p>
+                  <p className="text-white font-semibold">100</p>
+                </div>
+                <div className="bg-white/5 rounded-lg p-3">
+                  <p className="text-white/60 text-xs mb-1">Audio Camera</p>
+                  <p className="text-white font-semibold">100</p>
+                </div>
+                <div className="bg-white/5 rounded-lg p-3">
+                  <p className="text-white/60 text-xs mb-1">Preparation</p>
+                  <p className="text-white font-semibold">100</p>
+                </div>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <Button
+                  onClick={() => router.push('/despega/a3')}
+                  variant="outline"
+                  className="flex-1 border-purple-500/30 text-white hover:bg-purple-500/10"
+                >
+                  Ir al Dashboard
+                </Button>
+                <Button
+                  onClick={() => router.push('/despega/a3/metodo-star')}
+                  className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                >
+                  Continuar Práctica
+                  <ChevronRight className="w-4 h-4 ml-2" />
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     )
