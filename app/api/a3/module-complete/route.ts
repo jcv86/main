@@ -1,6 +1,8 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { PILLAR3_MODULES } from '@/lib/pillar3-config'
+import { cookies } from 'next/headers'
+import { jwtDecode } from 'jwt-decode'
 
 /**
  * POST /api/a3/module-complete
@@ -8,17 +10,38 @@ import { PILLAR3_MODULES } from '@/lib/pillar3-config'
  */
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient()
-    
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-    
-    if (!session) {
+    // Get auth token from cookies to extract user ID
+    const cookieStore = await cookies()
+    const authToken =
+      cookieStore.get('sb-auth-token')?.value || 
+      cookieStore.get('sb-token')?.value ||
+      cookieStore.get('sb_access_token')?.value
+
+    if (!authToken) {
+      console.warn('[v0] No auth token found in cookies for module-complete')
       return NextResponse.json(
         { success: false, error: 'Not authenticated' },
         { status: 401 }
       )
     }
 
+    // Extract user ID from JWT token
+    let userId: string
+    try {
+      const decoded: any = jwtDecode(authToken)
+      userId = decoded.sub
+      if (!userId) {
+        throw new Error('No user ID in token')
+      }
+    } catch (decodeError) {
+      console.error('[v0] Error decoding auth token:', decodeError)
+      return NextResponse.json(
+        { success: false, error: 'Invalid authentication token' },
+        { status: 401 }
+      )
+    }
+
+    const supabase = await createClient()
     const { moduleId } = await request.json()
 
     if (!moduleId || !PILLAR3_MODULES[moduleId as keyof typeof PILLAR3_MODULES]) {
@@ -29,7 +52,6 @@ export async function POST(request: Request) {
     }
 
     const module = PILLAR3_MODULES[moduleId as keyof typeof PILLAR3_MODULES]
-    const userId = session.user.id
 
     // Check if already completed
     const { data: existing } = await supabase
@@ -40,6 +62,7 @@ export async function POST(request: Request) {
       .single()
 
     if (existing) {
+      console.log('[v0] Module already completed:', moduleId)
       return NextResponse.json({
         success: true,
         message: 'Module already completed',
@@ -59,12 +82,14 @@ export async function POST(request: Request) {
       })
 
     if (insertError) {
-      console.error('Error recording module completion:', insertError)
+      console.error('[v0] Error recording module completion:', insertError)
       return NextResponse.json(
         { success: false, error: 'Failed to record completion' },
         { status: 500 }
       )
     }
+
+    console.log('[v0] Module completion recorded:', { moduleId, xpEarned: module.xp, userId })
 
     // Get updated total XP
     const totalXp = await getUserTotalXP(supabase, userId)
@@ -76,7 +101,7 @@ export async function POST(request: Request) {
       totalXp,
     })
   } catch (error) {
-    console.error('Error in module-complete:', error)
+    console.error('[v0] Error in module-complete:', error)
     return NextResponse.json(
       { success: false, error: 'Internal server error' },
       { status: 500 }
@@ -91,7 +116,7 @@ async function getUserTotalXP(supabase: any, userId: string): Promise<number> {
     .eq('user_id', userId)
 
   if (error) {
-    console.error('Error fetching user XP:', error)
+    console.error('[v0] Error fetching user XP:', error)
     return 0
   }
 
