@@ -10,6 +10,7 @@ import { Progress } from '@/components/ui/progress'
 import { SofiaInterviewer } from '@/components/sofia-interviewer'
 import { A3GeneralProgress } from '@/components/a3-general-progress'
 import { getModulePosition, getTotalModules } from '@/lib/pillar3-points-system'
+import { ChevronRight } from 'lucide-react'
 
 const LESSONS_DATA: Record<string, Record<string, any>> = {
   'metodo-star': {
