@@ -77,6 +77,7 @@ export default function A3EntrenamientoIntensivo() {
   })
   const [isLoading, setIsLoading] = useState(true)
   const [completedSections, setCompletedSections] = useState(0)
+  const [error, setError] = useState<string | null>(null)
 
   // Calculate completed sections (Pillar 3 has 4 sections)
   // A section is complete when all its modules are 100% done
@@ -98,6 +99,7 @@ export default function A3EntrenamientoIntensivo() {
   useEffect(() => {
     const fetchProgress = async () => {
       try {
+        setError(null)
         console.log('[v0] A3 page: Fetching user progress...')
         const response = await fetch('/api/a3/user-progress', {
           method: 'GET',
@@ -136,6 +138,9 @@ export default function A3EntrenamientoIntensivo() {
         }
       } catch (error) {
         console.error('[v0] A3 page: API fetch failed', error)
+        const errorMsg = error instanceof Error ? error.message : String(error)
+        setError(errorMsg)
+        
         // Build default modules with Level 1 available, rest locked
         const defaultModuleStates: { [key: string]: 'available' | 'in_progress' | 'completed' | 'locked' } = {
           'auditoria-inicial': 'available',
@@ -178,6 +183,21 @@ export default function A3EntrenamientoIntensivo() {
       document.removeEventListener('visibilitychange', handleVisibilityChange)
     }
   }, [refreshParam])
+
+  // Show error state if something went wrong
+  if (error && isLoading === false) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4 p-8 bg-red-500/10 border border-red-500/50 rounded-lg max-w-md">
+          <h2 className="text-xl font-bold text-red-400">Error al cargar</h2>
+          <p className="text-white/70 text-sm">{error}</p>
+          <Button onClick={() => window.location.reload()} className="mt-4">
+            Reintentar
+          </Button>
+        </div>
+      </div>
+    )
+  }
 
   if (isLoading) {
     return (
