@@ -189,7 +189,7 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
             {/* Coach Portrait */}
             <div className="flex-shrink-0 hidden md:block">
               <div className="relative">
-                <div className="w-48 h-56 rounded-xl overflow-hidden border border-purple-500/30 shadow-lg">
+                <div className="w-48 h-56 rounded-xl overflow-hidden shadow-lg">
                   <img 
                     src="/images/coach-portrait.jpg" 
                     alt="Coach"
