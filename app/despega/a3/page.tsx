@@ -93,22 +93,6 @@ export default function A3EntrenamientoIntensivo() {
 
   console.log('[v0] State initialized')
 
-  // Calculate completed sections (Pillar 3 has 4 sections)
-  // A section is complete when all its modules are 100% done
-  const calculateCompletedSections = (modules: any[]) => {
-    // Group modules by section (level)
-    const sections = [1, 2, 3, 4] // 4 sections in Pillar 3
-    let completed = 0
-
-    sections.forEach(sectionNum => {
-      const sectionModules = modules.filter((m: any) => m.level === sectionNum)
-      const allComplete = sectionModules.length > 0 && sectionModules.every((m: any) => m.status === 'completed')
-      if (allComplete) completed++
-    })
-
-    return completed
-  }
-
   // Fetch real user progress on mount and on route change
   useEffect(() => {
     const fetchProgress = async () => {
@@ -131,10 +115,6 @@ export default function A3EntrenamientoIntensivo() {
           
           // Build modules from config using moduleStates from API
           const modules = buildModulesFromConfig(progress.moduleStates || {})
-          
-          // Calculate completed sections
-          const sections = calculateCompletedSections(modules)
-          setCompletedSections(sections)
           
           // Update dashboard data with real progress
           setDashboardData({
