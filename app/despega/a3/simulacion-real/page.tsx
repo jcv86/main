@@ -89,12 +89,12 @@ export default function SimulacionRealPage() {
   const [isCompleted, setIsCompleted] = useState(false)
 
   const totalDuration = SIMULATION_STAGES.reduce((sum, stage) => sum + stage.duration, 0)
-  const currentStage = SIMULATION_STAGES[currentStageIdx]
-  const progress = ((currentStageIdx + 1) / SIMULATION_STAGES.length) * 100
+  const currentStage = SIMULATION_STAGES[currentStageIndex]
+  const progress = ((currentStageIndex + 1) / SIMULATION_STAGES.length) * 100
 
   const startSimulation = () => {
     setSimulationStarted(true)
-    setCurrentStageIdx(0)
+    setCurrentStageIndex(0)
     setElapsedTime(0)
     setSimulationComplete(false)
     setStageScores({})
@@ -105,8 +105,8 @@ export default function SimulacionRealPage() {
     const newScores = { ...stageScores, [currentStage.id]: stageScore }
     setStageScores(newScores)
 
-    if (currentStageIdx < SIMULATION_STAGES.length - 1) {
-      setCurrentStageIdx(currentStageIdx + 1)
+    if (currentStageIndex < SIMULATION_STAGES.length - 1) {
+      setCurrentStageIndex(currentStageIndex + 1)
     } else {
       const overall = Math.round(
         Object.values(newScores).reduce((sum, score) => sum + score, 0) / Object.values(newScores).length
@@ -151,7 +151,7 @@ export default function SimulacionRealPage() {
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <p className="text-white/60 text-xs mb-1">Etapa</p>
-                <p className="font-semibold">{currentStageIdx + 1} de {SIMULATION_STAGES.length}</p>
+                <p className="font-semibold">{currentStageIndex + 1} de {SIMULATION_STAGES.length}</p>
               </div>
               <div>
                 <p className="text-white/60 text-xs mb-1">Tiempo Total</p>
@@ -173,7 +173,7 @@ export default function SimulacionRealPage() {
           <div className="space-y-6">
             <div>
               <Badge className="mb-4 bg-purple-500/20 text-purple-300">
-                Etapa {currentStageIdx + 1}: {currentStage.name}
+                Etapa {currentStageIndex + 1}: {currentStage.name}
               </Badge>
               <h2 className="text-3xl font-bold mb-2">{currentStage.name}</h2>
               <p className="text-white/60">Duración: {currentStage.duration} minutos</p>
@@ -228,7 +228,7 @@ export default function SimulacionRealPage() {
               onClick={completeStage}
               className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
             >
-              {currentStageIdx === SIMULATION_STAGES.length - 1 ? 'Finalizar Simulación' : 'Siguiente Etapa'}
+              {currentStageIndex === SIMULATION_STAGES.length - 1 ? 'Finalizar Simulación' : 'Siguiente Etapa'}
             </Button>
           </div>
         </div>
