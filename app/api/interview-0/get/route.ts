@@ -41,25 +41,3 @@ export async function GET(request: NextRequest) {
     )
   }
 }
-
-    const { data, error } = await supabase
-      .from('a3_entrevista_0')
-      .select('*')
-      .eq('user_id', user.id)
-      .single()
-
-    if (error && error.code !== 'PGRST116') throw error
-    
-    if (!data) {
-      return NextResponse.json(null, { status: 404 })
-    }
-
-    return NextResponse.json(data, { status: 200 })
-  } catch (error) {
-    console.error('[v0] API interview-0/get failed:', error)
-    return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to get' },
-      { status: 500 }
-    )
-  }
-}
