@@ -809,18 +809,18 @@ export default function DespegaOnboarding() {
     }
 
     return (
-      <div className="min-h-screen bg-background">
-        <Card className="w-full max-w-2xl">
+      <div className="min-h-screen bg-background p-4 overflow-y-auto flex items-center justify-center">
+        <Card className="w-full max-w-2xl border-white/10 bg-white/5 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }}>Conozcámonos - Contexto Inicial</CardTitle>
-            <CardDescription>7 preguntas para personalizar tu experiencia</CardDescription>
+            <CardTitle style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }} className="text-2xl">Conozcámonos - Contexto Inicial</CardTitle>
+            <CardDescription className="text-white/70">7 preguntas para personalizar tu experiencia</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <Progress value={c1Progress} className="h-2" />
+          <CardContent className="space-y-8 pb-6">
+            <Progress value={c1Progress} className="h-2 bg-white/10" />
             <div className="space-y-4">
               <p className="text-lg font-semibold">{currentC1Q.q}</p>
               {currentC1Q.type === "select" ? (
-                <div className="grid gap-2">
+                <div className="grid gap-3">
                   {currentC1Q.opts?.map((opt: string) => (
                     <Button 
                       key={opt}
@@ -829,24 +829,24 @@ export default function DespegaOnboarding() {
                         setC1Responses({ ...c1Responses, [currentC1Q.id]: opt })
                         handleC1Next()
                       }}
-                      className="justify-start"
+                      className="justify-start h-12 px-4 text-base border-2 border-white/20 hover:border-training hover:bg-training/10 transition-all"
                     >
                       {opt}
                     </Button>
                   ))}
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <input
                     type="text"
                     placeholder="Tu respuesta..."
                     value={c1Responses[currentC1Q.id] || ""}
                     onChange={(e) => setC1Responses({ ...c1Responses, [currentC1Q.id]: e.target.value })}
-                    className="w-full p-2 border rounded-md"
+                    className="w-full p-3 border-2 border-white/20 rounded-lg bg-white/5 text-white placeholder:text-white/50 focus:border-training focus:outline-none transition-all"
                   />
                   <Button 
                     onClick={handleC1Next}
-                    className="w-full"
+                    className="w-full h-12 text-base"
                     disabled={!c1Responses[currentC1Q.id] || (c1Responses[currentC1Q.id] || "").trim().length < 5}
                   >
                     Siguiente
