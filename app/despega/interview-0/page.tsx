@@ -51,10 +51,10 @@ export default function Interview0Page() {
               setStage('intro')
               setScore(0)
               setAuditProgress(0)
-              // After interview-0 completion, redirect to first Level 2 module (Método STAR)
-              // Wait for completion to be saved, then redirect to the next module
+              // After interview-0 completion, redirect to entrenamiento-guiado landing page
+              // Users will see module overview before choosing lessons
               setTimeout(() => {
-                router.push('/despega/a3/entrenamiento-guiado/metodo-star/1')
+                router.push('/despega/a3/entrenamiento-guiado')
               }, 500)
             }}
           />
