@@ -270,6 +270,38 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
                 <p className="text-white/70 text-sm mt-1">Completa los checks pendientes para una mejor experiencia</p>
               </div>
             )}
+
+            {/* XP Gamification */}
+            <div className="bg-gradient-to-br from-purple-500/20 to-pink-500/20 border border-purple-500/40 rounded-xl p-6">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-full bg-purple-500/30 flex items-center justify-center">
+                    <span className="text-2xl">⭐</span>
+                  </div>
+                  <div>
+                    <p className="text-sm text-white/70">XP Ganados</p>
+                    <p className="text-2xl font-bold text-white">+70 XP</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-white/60">Módulo completado</p>
+                  <p className="text-sm font-semibold text-purple-300">Auditoría Inicial</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Continue Button */}
+            <Button
+              onClick={() => {
+                // Navigate to A3 page with module 2 anchor
+                window.location.href = '/despega/a3#metodo-star'
+              }}
+              className="w-full text-white h-12 text-base font-semibold"
+              style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '8px' }}
+            >
+              Continuar a Resultados
+              <ChevronRight className="w-4 h-4 ml-2" />
+            </Button>
           </CardContent>
         </Card>
       </div>
