@@ -27,6 +27,8 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
     preparation: { passed: false, score: 0 }
   })
   const [isLoading, setIsLoading] = useState(true)
+  const [isSaving, setIsSaving] = useState(false)
+  const [saveError, setSaveError] = useState<string | null>(null)
 
   // Load previous progress
   useEffect(() => {
@@ -302,19 +304,46 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
             {/* Continue Button */}
             <Button
               onClick={async () => {
-                // Save and award XP before navigating
-                await handleComplete()
-                // Small delay to ensure XP is saved
-                await new Promise(resolve => setTimeout(resolve, 1000))
-                // Navigate to A3 page with module 2 anchor
-                window.location.href = '/despega/a3#metodo-star'
+                if (isSaving) return // Prevent double-click
+                
+                setIsSaving(true)
+                setSaveError(null)
+                
+                try {
+                  console.log('[v0] Continue button clicked - starting save and XP award')
+                  
+                  // Save and award XP - wait for completion
+                  await handleComplete()
+                  console.log('[v0] handleComplete finished, result saved and XP awarded')
+                  
+                  // Additional verification delay to ensure database write completes
+                  await new Promise(resolve => setTimeout(resolve, 1500))
+                  console.log('[v0] Verified completion, navigating to A3')
+                  
+                  // Navigate to A3 page ONLY after confirmed success
+                  window.location.href = '/despega/a3#metodo-star'
+                } catch (err) {
+                  const errorMsg = err instanceof Error ? err.message : String(err)
+                  console.error('[v0] Continue button error:', errorMsg)
+                  setSaveError(errorMsg)
+                  setIsSaving(false)
+                }
               }}
-              className="w-full text-white h-12 text-base font-semibold"
-              style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '8px' }}
+              disabled={isSaving}
+              className="w-full text-white h-12 text-base font-semibold disabled:opacity-50"
+              style={{ backgroundColor: isSaving ? 'rgb(100, 50, 100)' : 'rgb(170, 70, 170)', borderRadius: '8px' }}
             >
-              Continuar a Resultados
-              <ChevronRight className="w-4 h-4 ml-2" />
+              {isSaving ? 'Guardando y otorgando XP...' : 'Continuar a Resultados'}
+              {!isSaving && <ChevronRight className="w-4 h-4 ml-2" />}
             </Button>
+            
+            {/* Error message if save failed */}
+            {saveError && (
+              <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 text-center">
+                <p className="text-red-400 text-sm">{saveError}</p>
+                <p className="text-red-300/70 text-xs mt-1">Intenta de nuevo</p>
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>
