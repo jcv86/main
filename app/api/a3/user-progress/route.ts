@@ -19,19 +19,7 @@ export async function GET(request: Request) {
     // Check session first to avoid unnecessary warnings
     const { data: { session }, error: sessionError } = await supabase.auth.getSession()
     
-    console.log('[v0] API user-progress: Session check', {
-      timestamp: new Date().toISOString(),
-      hasSession: !!session,
-      sessionError: sessionError?.message,
-      userId: session?.user?.id?.substring(0, 8)
-    })
-    
     if (!session) {
-      console.warn('[v0] API user-progress: No active session found - providing demo data', {
-        timestamp: new Date().toISOString(),
-        url: request.url,
-        error: sessionError
-      })
       // Return demo/default data when not authenticated (for preview/demo purposes)
       const defaultModuleStates = {
         'auditoria-inicial': 'available',
@@ -83,10 +71,6 @@ export async function GET(request: Request) {
     const { data: { user }, error: userError } = await supabase.auth.getUser()
 
     if (!user) {
-      console.warn('[v0] API user-progress: Session exists but no user - providing demo data', {
-        timestamp: new Date().toISOString(),
-        userError: userError?.message
-      })
       // Return demo data as fallback
       const defaultModuleStates = {
         'auditoria-inicial': 'available',
@@ -135,9 +119,13 @@ export async function GET(request: Request) {
       })
     }
 
-    console.log('[v0] API user-progress: Processing request for user', user.id.substring(0, 8))
-    
-    // Get user role
+    console.log('[v0] User progress:', {
+      user_id: user.id.substring(0, 8),
+      completedModules,
+      totalXp,
+      progressPct,
+      isSuperadmin,
+    })
     const roleData = await getUserRoleData(user.id)
     const isSuperadmin = roleData.role === 'superadmin'
     

@@ -15,7 +15,6 @@ export async function POST(request: NextRequest) {
     const expectedSecret = process.env.ADMIN_SETUP_SECRET
     
     if (!secret || secret !== expectedSecret) {
-      console.warn('[v0] Unauthorized admin setup attempt')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
@@ -23,8 +22,6 @@ export async function POST(request: NextRequest) {
     
     const email = 'travisdev@example.com'
     const password = 'TestPassword123!'
-
-    console.log('[v0] Setting up superadmin user...')
 
     // 1. Get or create the user via admin API
     const { data: userData, error: userError } = await supabase.auth.admin.createUser({
@@ -50,7 +47,6 @@ export async function POST(request: NextRequest) {
         }
         
         userId = existingUser.id
-        console.log('[v0] User already exists:', userId)
       } else {
         throw userError
       }
@@ -63,7 +59,6 @@ export async function POST(request: NextRequest) {
     }
 
     // 2. Set user as superadmin in user_roles_extended
-    console.log('[v0] Setting superadmin role...')
     const { error: roleError } = await supabase
       .from('user_roles_extended')
       .upsert({
@@ -75,12 +70,10 @@ export async function POST(request: NextRequest) {
       })
 
     if (roleError) {
-      console.error('[v0] Failed to set role:', roleError)
       throw roleError
     }
 
     // 3. Create user progress with max XP and all modules completed
-    console.log('[v0] Setting user progress...')
     const { error: progressError } = await supabase
       .from('a3_user_progress')
       .upsert({
@@ -105,11 +98,8 @@ export async function POST(request: NextRequest) {
       })
 
     if (progressError) {
-      console.error('[v0] Failed to set progress:', progressError)
       throw progressError
     }
-
-    console.log('[v0] Superadmin setup complete for user:', userId)
 
     return NextResponse.json({
       success: true,
@@ -125,7 +115,6 @@ export async function POST(request: NextRequest) {
     }, { status: 200 })
 
   } catch (error) {
-    console.error('[v0] Error during admin setup:', error)
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Setup failed' },
       { status: 500 }

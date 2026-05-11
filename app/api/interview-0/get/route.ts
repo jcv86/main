@@ -9,7 +9,6 @@ export async function GET(request: NextRequest) {
     const { data: { session } } = await supabase.auth.getSession()
     
     if (!session) {
-      console.warn('[v0] API interview-0/get: No active session found - returning null for demo mode')
       // Return null for demo mode instead of 401
       return NextResponse.json(null, { status: 404 })
     }
@@ -34,7 +33,6 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(data, { status: 200 })
   } catch (error) {
-    console.error('[v0] API interview-0/get failed:', error)
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Failed to get' },
       { status: 500 }
