@@ -5,7 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, Loader2 } from 'lucide-react'
+import { ArrowRight, Loader2, CheckCircle2 } from 'lucide-react'
 // import { DashboardState, Module } from './data/mock-dashboard'
 // Temporarily remove problematic imports to isolate the issue
 // import { A3GeneralProgress } from '@/components/a3-general-progress'
@@ -344,17 +344,43 @@ export default function A3EntrenamientoIntensivo() {
                         )}
                       </div>
                       <div className="ml-4 flex flex-col items-end gap-2">
-                        <span className={`text-xs font-medium px-3 py-1 rounded-full ${
-                          module.status === 'completed' ? 'bg-success/20 text-success' :
-                          module.status === 'in_progress' ? 'bg-training/20 text-training' :
-                          module.status === 'available' ? 'bg-blue/20 text-blue' :
-                          'bg-white/10 text-white/50'
-                        }`}>
-                          {module.status === 'completed' ? 'Completado' :
-                           module.status === 'in_progress' ? 'En Progreso' :
-                           module.status === 'available' ? 'Disponible' :
-                           'Bloqueado'}
-                        </span>
+                        {module.status === 'completed' ? (
+                          <div className="flex items-center gap-2">
+                            <CheckCircle2 className="w-5 h-5 text-success" />
+                            <Button
+                              onClick={() => {
+                                const routeMap: Record<string, string> = {
+                                  'auditoria-inicial': '/despega/interview-0',
+                                  'metodo-star': '/despega/a3/metodo-star',
+                                  'cv-inteligente': '/despega/a3/cv-inteligente',
+                                  'analisis-vacante': '/despega/a3/analisis-vacante',
+                                  'analisis-multimodal': '/despega/a3/analisis-multimodal',
+                                  'entrenamiento-guiado': '/despega/a3/entrenamiento-guiado',
+                                  'entrenamiento-estructurado': '/despega/a3/entrenamiento-estructurado',
+                                  'entrenamiento-desafiante': '/despega/a3/entrenamiento-desafiante',
+                                  'entrenamiento-conversacional': '/despega/a3/entrenamiento-conversacional',
+                                  'simulacion-real': '/despega/a3/simulacion-real',
+                                }
+                                router.push(routeMap[module.id] || '/despega/a3')
+                              }}
+                              size="sm"
+                              className="bg-success/20 text-success hover:bg-success/30 border border-success/50"
+                              variant="outline"
+                            >
+                              Pasar De Nuevo
+                            </Button>
+                          </div>
+                        ) : (
+                          <span className={`text-xs font-medium px-3 py-1 rounded-full ${
+                            module.status === 'in_progress' ? 'bg-training/20 text-training' :
+                            module.status === 'available' ? 'bg-blue/20 text-blue' :
+                            'bg-white/10 text-white/50'
+                          }`}>
+                            {module.status === 'in_progress' ? 'En Progreso' :
+                             module.status === 'available' ? 'Disponible' :
+                             'Bloqueado'}
+                          </span>
+                        )}
                         <span className="text-xs text-white/60">{module.progress}% completado</span>
                       </div>
                     </div>
