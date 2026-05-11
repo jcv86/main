@@ -239,7 +239,7 @@ export default function EntrenamientoEstructuradoPage() {
                 Ir al Dashboard
               </Button>
               <Button
-                onClick={() => window.location.href = '/despega/a3/entrenamiento-conversacional'}
+                onClick={() => window.location.href = '/despega/a3/entrenamiento-desafiante'}
                 className="w-full bg-gradient-to-r from-pink-600 to-purple-600"
               >
                 Siguiente Práctica
@@ -350,9 +350,9 @@ export default function EntrenamientoEstructuradoPage() {
               Anterior: Análisis de Vacante
             </Button>
           </Link>
-          <Link href="/despega/a3/entrenamiento-conversacional">
+          <Link href="/despega/a3/entrenamiento-desafiante">
             <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-              Siguiente: Entrenamiento Conversacional
+              Siguiente: Entrenamiento Desafiante
             </Button>
           </Link>
         </div>

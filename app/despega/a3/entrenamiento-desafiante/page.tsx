@@ -241,6 +241,38 @@ export default function ChallensingTrainingPage() {
   return (
     <main className="min-h-screen bg-black">
       {showingResults ? (
+        <div className="flex items-center justify-center px-4 min-h-screen">
+          <Card className="bg-black border-green-500/30 w-full max-w-md">
+            <CardContent className="pt-12 text-center pb-12">
+              <div className="mb-6">
+                <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                <h2 className="text-2xl font-bold mb-2">Entrenamiento Completado</h2>
+                <p className="text-white/60">Excelente trabajo en este entrenamiento desafiante</p>
+              </div>
+
+              <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-lg p-6 mb-6">
+                <p className="text-white/60 text-sm mb-2">Puntuación Obtenida</p>
+                <p className="text-5xl font-bold text-green-400">{finalScore}/100</p>
+              </div>
+
+              <div className="space-y-2">
+                <Button
+                  onClick={() => window.location.href = '/despega/a3'}
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
+                >
+                  Ir al Dashboard
+                </Button>
+                <Button
+                  onClick={() => window.location.href = '/despega/a3/entrenamiento-conversacional'}
+                  className="w-full bg-gradient-to-r from-pink-600 to-purple-600"
+                >
+                  Siguiente Práctica
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      ) : showingResults ? (
         <TrainingResultsCard
           result={{
             score: finalScore,

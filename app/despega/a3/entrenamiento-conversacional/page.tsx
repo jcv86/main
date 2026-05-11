@@ -378,10 +378,10 @@ export default function EntrenamientoConversacionalPage() {
       {/* Navigation */}
       <div className="border-t border-purple-500/20 bg-black/50 mt-12">
         <div className="max-w-6xl mx-auto px-6 py-6 flex justify-between">
-          <Link href="/despega/a3/entrenamiento-estructurado">
+          <Link href="/despega/a3/entrenamiento-desafiante">
             <Button variant="outline" className="border-purple-500/30 text-white hover:bg-purple-500/10">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Anterior: Entrenamiento Estructurado
+              Anterior: Entrenamiento Desafiante
             </Button>
           </Link>
           <Link href="/despega/a3/simulacion-real">

@@ -390,9 +390,9 @@ export default function AnalisisVacantePagePage() {
               Anterior: Método STAR
             </Button>
           </Link>
-          <Link href="/despega/a3/entrenamiento-estructurado">
+          <Link href="/despega/a3/entrenamiento-guiado">
             <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-              Siguiente: Entrenamiento Estructurado
+              Siguiente: Entrenamiento Guiado
             </Button>
           </Link>
         </div>
