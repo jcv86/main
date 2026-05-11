@@ -351,7 +351,7 @@ export default function SimulacionRealPage() {
 
             <div className="flex flex-col gap-2">
               <Button
-                onClick={() => window.location.href = '/despega/a3'}
+                onClick={() => window.location.href = '/despega/a3/rewards'}
                 className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700"
               >
                 Ver Premios y Recompensas
