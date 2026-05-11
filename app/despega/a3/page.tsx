@@ -27,10 +27,42 @@ function buildModulesFromConfig(moduleStates: Record<string, string>): any[] {
   const modules: any[] = []
   
   try {
+    // Define all 10 modules with their metadata
+    const allModules = [
+      { id: 'auditoria-inicial', level: 1, title: 'Auditoría Inicial', description: 'Prepárate entrando a ti mismo y cómo te perceibe tu entrevistador', xp: 70, dtc: 4 },
+      { id: 'metodo-star', level: 2, title: 'Método STAR', description: 'Estructura de respuestas que los entrevistadores esperan', xp: 120, dtc: 4 },
+      { id: 'cv-inteligente', level: 2, title: 'CV Inteligente', description: 'Optimiza tu CV para ATS y reclutadores', xp: 120, dtc: 4 },
+      { id: 'analisis-vacante', level: 2, title: 'Análisis de Vacante', description: 'Decodifica lo que busca la empresa', xp: 120, dtc: 4 },
+      { id: 'analisis-multimodal', level: 2, title: 'Análisis Multimodal', description: 'Voz, cuerpo y palabras alineadas', xp: 120, dtc: 4 },
+      { id: 'entrenamiento-guiado', level: 3, title: 'Entrenamiento Guiado', description: 'Práctica con feedback personalizado', xp: 120, dtc: 4 },
+      { id: 'entrenamiento-estructurado', level: 3, title: 'Entrenamiento Estructurado', description: 'Simulaciones estructuradas reales', xp: 120, dtc: 4 },
+      { id: 'entrenamiento-desafiante', level: 3, title: 'Entrenamiento Desafiante', description: 'Desafíos bajo presión máxima', xp: 120, dtc: 4 },
+      { id: 'entrenamiento-conversacional', level: 3, title: 'Entrenamiento Conversacional', description: 'Conexión natural con entrevistador', xp: 120, dtc: 4 },
+      { id: 'simulacion-real', level: 4, title: 'Simulación Real', description: 'Entrevista completa bajo condiciones reales', xp: 40, dtc: 4 },
+    ]
+    
+    // For each module, determine its status based on moduleStates and level completion
+    // Simple implementation: just use the moduleStates passed in
+    for (const moduleMeta of allModules) {
+      const status = (moduleStates[moduleMeta.id] || 'locked') as 'available' | 'in_progress' | 'completed' | 'locked'
+      
+      modules.push({
+        id: moduleMeta.id,
+        level: moduleMeta.level,
+        title: moduleMeta.title,
+        description: moduleMeta.description,
+        status,
+        xp: status === 'completed' ? moduleMeta.xp : 0,
+        maxXp: moduleMeta.xp,
+        progress: status === 'completed' ? 100 : status === 'in_progress' ? 50 : 0,
+        unlockText: moduleMeta.level > 1 ? `Desbloquea al completar Nivel ${moduleMeta.level - 1}` : undefined,
+      })
+    }
+    
     return modules
   } catch (error) {
     console.error('[v0] Error in buildModulesFromConfig:', error)
-    return modules
+    return []
   }
 }
 
@@ -72,11 +104,93 @@ export default function A3EntrenamientoIntensivo() {
   }
 
   // Fetch real user progress on mount and on route change
-  /*
   useEffect(() => {
-    // ... all code here ...
+    const fetchProgress = async () => {
+      try {
+        setError(null)
+        console.log('[v0] A3 page: Fetching user progress...')
+        const response = await fetch('/api/a3/user-progress', {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include', // CRITICAL: Send session cookies
+          cache: 'no-store' // Force fresh fetch from server
+        })
+        if (response.ok) {
+          const { progress } = await response.json()
+          console.log('[v0] A3 page: API response received', {
+            moduleStates: progress.moduleStates,
+            completedModuleIds: progress.completedModuleIds,
+            totalXp: progress.totalXp,
+          })
+          
+          // Build modules from config using moduleStates from API
+          const modules = buildModulesFromConfig(progress.moduleStates || {})
+          
+          // Calculate completed sections
+          const sections = calculateCompletedSections(modules)
+          setCompletedSections(sections)
+          
+          // Update dashboard data with real progress
+          setDashboardData({
+            totalXp: progress.totalXp || 0,
+            maxXp: progress.maxXp || 280,
+            modules,
+            moduleStates: progress.moduleStates || {},
+            completedModuleIds: progress.completedModuleIds || [],
+          })
+          
+          setIsLoading(false)
+        } else {
+          console.error('[v0] A3 page: API returned error', response.status)
+          throw new Error(`API returned ${response.status}`)
+        }
+      } catch (error) {
+        console.error('[v0] A3 page: API fetch failed', error)
+        const errorMsg = error instanceof Error ? error.message : String(error)
+        setError(errorMsg)
+        
+        // Build default modules with Level 1 available, rest locked
+        const defaultModuleStates: { [key: string]: 'available' | 'in_progress' | 'completed' | 'locked' } = {
+          'auditoria-inicial': 'available',
+          'metodo-star': 'locked',
+          'cv-inteligente': 'locked',
+          'analisis-vacante': 'locked',
+          'analisis-multimodal': 'locked',
+          'entrenamiento-guiado': 'locked',
+          'entrenamiento-estructurado': 'locked',
+          'entrenamiento-desafiante': 'locked',
+          'entrenamiento-conversacional': 'locked',
+          'simulacion-real': 'locked',
+        }
+        const modules = buildModulesFromConfig(defaultModuleStates)
+        
+        setDashboardData({
+          totalXp: 0,
+          maxXp: 280,
+          modules,
+          moduleStates: defaultModuleStates,
+          completedModuleIds: [],
+        })
+        setIsLoading(false)
+      }
+    }
+
+    // Initial fetch on mount
+    fetchProgress()
+
+    // Refetch when page becomes visible (user returns from subpage)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        console.log('[v0] Page visible, refreshing progress...')
+        fetchProgress()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
   }, [refreshParam])
-  */
 
   // Show error state if something went wrong
   if (error && isLoading === false) {
