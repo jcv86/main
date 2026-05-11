@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
+import { getUserRoleData } from '@/lib/user-roles'
+import { getUserXP, getUserCompletedModules, getModuleUnlockRules } from '@/lib/a3-module-unlock'
 import {
   PILLAR3_LEVELS,
   TOTAL_PILLAR3_XP,
@@ -73,6 +75,7 @@ export async function GET(request: Request) {
             level3: false,
             level4: false,
           },
+          isSuperadmin: false,
         },
       })
     }
@@ -95,7 +98,7 @@ export async function GET(request: Request) {
         'entrenamiento-estructurado': 'locked',
         'entrenamiento-desafiante': 'locked',
         'entrenamiento-conversacional': 'locked',
-        'simulacion-real': 'locked',
+        'simulacao-real': 'locked',
       }
       
       return NextResponse.json({
@@ -127,103 +130,95 @@ export async function GET(request: Request) {
             level3: false,
             level4: false,
           },
+          isSuperadmin: false,
         },
       })
     }
 
     console.log('[v0] API user-progress: Processing request for user', user.id.substring(0, 8))
-    // Fetch completed training modules for canonical XP/DTC calculation
-    const { data: completions } = await supabase
-      .from('a3_training_module_completions')
-      .select('training_type, xp_amount, is_first_completion')
-      .eq('user_id', user.id)
-
-    const completedRawIds = (completions || [])
-      .filter((c) => c.is_first_completion)
-      .map((c) => c.training_type)
-
-    // Resolve to canonical IDs and calculate level/module completion
-    const { level1, level2, level3, level4, canonicalCompleted } =
-      calculateLevelCompletion(completedRawIds)
-
-    // Calculate XP and DTC earned from canonical config (single source of truth)
-    const { totalXp, totalDtc: totalDtcFromConfig } = calculateEarnedRewards(completedRawIds)
-
-    // Also fetch actual DTC balance for live total
-    const { data: dtcBalance } = await supabase
-      .from('user_dtc_balance')
-      .select('balance, lifetime_earned')
-      .eq('user_id', user.id)
-      .maybeSingle()
-
-    // Use the live DTC balance if it exists, else fall back to config-derived total
-    const totalDtc = dtcBalance?.balance ?? totalDtcFromConfig
-
+    
+    // Get user role
+    const roleData = await getUserRoleData(user.id)
+    const isSuperadmin = roleData.role === 'superadmin'
+    
+    // For superadmin: show all XP as full
+    let totalXp = isSuperadmin ? 999999 : await getUserXP(user.id)
+    let totalDtc = isSuperadmin ? 999999 : 0
+    
+    // Get completed modules
+    const completedModules = await getUserCompletedModules(user.id)
+    
     const maxXp = TOTAL_PILLAR3_XP
     const maxDtc = TOTAL_PILLAR3_DTC
-    const progressPct = Math.min(Math.round((totalXp / maxXp) * 100), 100)
-    const dtcPct = Math.min(Math.round((totalDtc / maxDtc) * 100), 100)
+    const progressPct = isSuperadmin ? 100 : Math.min(Math.round((totalXp / maxXp) * 100), 100)
+    const dtcPct = isSuperadmin ? 100 : Math.min(Math.round((totalDtc / maxDtc) * 100), 100)
 
-    console.log('[v0] User progress (canonical):', {
-      user_id: user.id,
-      completedCanonical: canonicalCompleted,
-      level1Complete: level1,
-      level2Complete: level2,
-      level3Complete: level3,
+    console.log('[v0] User progress:', {
+      user_id: user.id.substring(0, 8),
+      completedModules,
       totalXp,
-      totalDtc,
       progressPct,
+      isSuperadmin,
     })
 
-    // Build moduleStates using the canonical config
-    const moduleStates = buildModuleStates(completedRawIds)
+    // Build moduleStates
+    const moduleStates: Record<string, string> = {}
+    const rules = await getModuleUnlockRules()
+    
+    for (const rule of rules) {
+      if (isSuperadmin) {
+        // Superadmin sees all modules as unlocked
+        moduleStates[rule.module_id] = 'available'
+      } else if (completedModules.includes(rule.module_id)) {
+        moduleStates[rule.module_id] = 'completed'
+      } else if (rule.prerequisite_module_id && !completedModules.includes(rule.prerequisite_module_id)) {
+        moduleStates[rule.module_id] = 'locked'
+      } else if (totalXp < rule.xp_required) {
+        moduleStates[rule.module_id] = 'locked'
+      } else {
+        moduleStates[rule.module_id] = 'available'
+      }
+    }
 
-    // Skill values derived from canonical level completion
-    const level2CompletedCount = PILLAR3_LEVELS[2].moduleIds.filter((id) =>
-      canonicalCompleted.includes(id)
-    ).length
-    const level3CompletedCount = PILLAR3_LEVELS[3].moduleIds.filter((id) =>
-      canonicalCompleted.includes(id)
-    ).length
+    // Skill values based on completed modules
+    const level1Complete = completedModules.includes('auditoria-inicial')
+    const level2Count = [
+      'metodo-star',
+      'cv-inteligente',
+      'analisis-vacante',
+      'analisis-multimodal'
+    ].filter(m => completedModules.includes(m)).length
 
     const skills = {
-      presencia: level1 ? 60 : 35,
-      claridad: level2CompletedCount > 0 ? 40 + level2CompletedCount * 10 : 10,
-      estructura: canonicalCompleted.includes('metodo-star') ? 60 : 0,
-      preparacion: level2CompletedCount > 1 ? 60 + level2CompletedCount * 5 : 25,
-      'manejo-presion': canonicalCompleted.includes('entrenamiento-desafiante') ? 70 : 0,
+      presencia: level1Complete ? 60 : 35,
+      claridad: level2Count > 0 ? 40 + level2Count * 10 : 10,
+      estructura: completedModules.includes('metodo-star') ? 60 : 0,
+      preparacion: level2Count > 1 ? 60 + level2Count * 5 : 25,
+      'manejo-presion': completedModules.includes('entrenamiento-desafiante') ? 70 : 0,
     }
 
     // Determine current level / next milestone
-    let currentLevel = PILLAR3_LEVELS[1].name
-    let nextMilestone = `Completar ${PILLAR3_LEVELS[1].name}`
-    let nextReward = `Desbloqueas ${PILLAR3_LEVELS[2].name} (4 herramientas)`
+    let currentLevel = 'Nivel 1 - Auditoría Inicial'
+    let nextMilestone = 'Completar Auditoría Inicial'
+    let nextReward = 'Desbloqueas 4 herramientas'
 
-    if (level1 && !level2) {
-      currentLevel = PILLAR3_LEVELS[2].name
-      nextMilestone = `Completar 4 herramientas (${level2CompletedCount}/4)`
-      nextReward = `Desbloqueas ${PILLAR3_LEVELS[3].name}`
+    if (level1Complete) {
+      currentLevel = 'Nivel 2 - Herramientas'
+      nextMilestone = `${level2Count}/4 herramientas completadas`
+      nextReward = 'Desbloquea Entrenamientos'
     }
-    if (level2 && !level3) {
-      currentLevel = PILLAR3_LEVELS[3].name
-      nextMilestone = `Completar 4 entrenamientos (${level3CompletedCount}/4)`
-      nextReward = `Desbloqueas ${PILLAR3_LEVELS[4].name}`
+
+    if (level2Count === 4) {
+      currentLevel = 'Nivel 3 - Entrenamientos'
+      nextMilestone = 'Completar entrenamientos'
+      nextReward = 'Desbloquea Simulación Real'
     }
-    if (level3 && !level4) {
-      currentLevel = PILLAR3_LEVELS[4].name
-      nextMilestone = `Completar Simulación Real`
-      nextReward = 'Badge: Listo para Entrevista Real'
-    }
-    if (level4) {
+
+    if (completedModules.includes('simulacion-real')) {
       currentLevel = 'Pillar 3 Completado'
       nextMilestone = 'Has completado todos los niveles'
       nextReward = 'Listo para entrevistas reales'
     }
-
-    const completedModules = canonicalCompleted.length
-
-    // Convert legacy IDs to canonical for the frontend
-    const completedModuleIds = canonicalCompleted
 
     return NextResponse.json({
       success: true,
@@ -237,17 +232,18 @@ export async function GET(request: Request) {
         maxDtc,
         nextMilestone,
         nextReward,
-        completedModules,
-        totalModules: 10,
+        completedModules: completedModules.length,
+        totalModules: rules.length,
         moduleStates,
         skills,
-        completedModuleIds,
+        completedModuleIds: completedModules,
         levelCompletion: {
-          level1,
-          level2,
-          level3,
-          level4,
+          level1: level1Complete,
+          level2: level2Count === 4,
+          level3: completedModules.includes('simulacion-real'),
+          level4: false,
         },
+        isSuperadmin,
       },
     })
   } catch (error) {
