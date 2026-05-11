@@ -6,10 +6,12 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Link from 'next/link'
 import { ArrowLeft, Download, Copy, Eye, Edit2 } from 'lucide-react'
+import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
 export default function CVATSPage() {
   const [view, setView] = useState('preview')
   const [format, setFormat] = useState('ats')
+  const [isCompleted, setIsCompleted] = useState(false)
 
   // Sample CV data - en producción vendría de la base de datos
   const cvData = {
@@ -502,6 +504,10 @@ export default function CVATSPage() {
       </div>
     </div>
   )
+
+  if (isCompleted) {
+    return <ModuleCompletionScreen moduleId="cv-inteligente" moduleName="CV Inteligente" xpEarned={120} />
+  }
 
   return (
     <div className="min-h-screen bg-background">
