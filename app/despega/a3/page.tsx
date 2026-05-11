@@ -305,44 +305,72 @@ export default function A3EntrenamientoIntensivo() {
           {/* Modules list will be rendered here */}
           {dashboardData.modules && dashboardData.modules.length > 0 ? (
             <div className="space-y-4">
-              {dashboardData.modules.map((module: any) => (
-                <div key={module.id} className="rounded-lg border border-training/30 bg-white/5 p-6 hover:bg-white/10 transition-colors">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-white">{module.title}</h3>
-                      <p className="text-white/70 text-sm mt-1">{module.description}</p>
-                      {module.unlockText && (
-                        <p className="text-training/80 text-xs mt-2">{module.unlockText}</p>
-                      )}
-                    </div>
-                    <div className="ml-4 flex flex-col items-end gap-2">
-                      <span className={`text-xs font-medium px-3 py-1 rounded-full ${
-                        module.status === 'completed' ? 'bg-success/20 text-success' :
-                        module.status === 'in_progress' ? 'bg-training/20 text-training' :
-                        module.status === 'available' ? 'bg-blue/20 text-blue' :
-                        'bg-white/10 text-white/50'
-                      }`}>
-                        {module.status === 'completed' ? 'Completado' :
-                         module.status === 'in_progress' ? 'En Progreso' :
-                         module.status === 'available' ? 'Disponible' :
-                         'Bloqueado'}
-                      </span>
-                      <span className="text-xs text-white/60">{module.progress}% completado</span>
-                    </div>
-                  </div>
-                  {module.maxXp && (
-                    <div className="mt-4 flex items-center gap-2">
-                      <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-training transition-all"
-                          style={{ width: `${module.progress}%` }}
-                        />
+              {dashboardData.modules.map((module: any) => {
+                // Determine navigation path based on module ID
+                const getModulePath = () => {
+                  if (module.id === 'auditoria-inicial') {
+                    return '/despega/interview-0'
+                  } else {
+                    return `/despega/a3/entrenamiento-guiado/${module.id}`
+                  }
+                }
+                
+                // Determine if module is clickable (available or in_progress or completed)
+                const isClickable = module.status !== 'locked'
+                const modulePath = getModulePath()
+                
+                return (
+                  <div 
+                    key={module.id}
+                    onClick={() => {
+                      if (isClickable) {
+                        console.log('[v0] Navigating to module:', module.id, 'path:', modulePath)
+                        router.push(modulePath)
+                      }
+                    }}
+                    className={`rounded-lg border border-training/30 bg-white/5 p-6 transition-all ${
+                      isClickable 
+                        ? 'hover:bg-white/10 hover:border-training/50 cursor-pointer hover:shadow-lg hover:shadow-training/10' 
+                        : 'opacity-60 cursor-not-allowed'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-white">{module.title}</h3>
+                        <p className="text-white/70 text-sm mt-1">{module.description}</p>
+                        {module.unlockText && (
+                          <p className="text-training/80 text-xs mt-2">{module.unlockText}</p>
+                        )}
                       </div>
-                      <span className="text-xs text-white/60">{module.xp}/{module.maxXp} XP</span>
+                      <div className="ml-4 flex flex-col items-end gap-2">
+                        <span className={`text-xs font-medium px-3 py-1 rounded-full ${
+                          module.status === 'completed' ? 'bg-success/20 text-success' :
+                          module.status === 'in_progress' ? 'bg-training/20 text-training' :
+                          module.status === 'available' ? 'bg-blue/20 text-blue' :
+                          'bg-white/10 text-white/50'
+                        }`}>
+                          {module.status === 'completed' ? 'Completado' :
+                           module.status === 'in_progress' ? 'En Progreso' :
+                           module.status === 'available' ? 'Disponible' :
+                           'Bloqueado'}
+                        </span>
+                        <span className="text-xs text-white/60">{module.progress}% completado</span>
+                      </div>
                     </div>
-                  )}
-                </div>
-              ))}
+                    {module.maxXp && (
+                      <div className="mt-4 flex items-center gap-2">
+                        <div className="flex-1 h-2 bg-white/10 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-training transition-all"
+                            style={{ width: `${module.progress}%` }}
+                          />
+                        </div>
+                        <span className="text-xs text-white/60">{module.xp}/{module.maxXp} XP</span>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
             </div>
           ) : (
             <div className="text-center py-8 text-white/50">
