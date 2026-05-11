@@ -276,35 +276,53 @@ export function calculateLevelCompletion(completedIds: string[]) {
 /**
  * Build the moduleStates map used by the dashboard UI.
  * Returns 'completed' | 'available' | 'in_progress' | 'locked' for every module.
+ * 
+ * Unlock Logic: Sequential progression (1→2→3→...→10)
+ * - Module 1 (Auditoría Inicial) is always available first
+ * - Module N is available after Module N-1 is completed
  */
 export function buildModuleStates(
   completedIds: string[]
 ): Record<Pillar3ModuleId, 'completed' | 'available' | 'in_progress' | 'locked'> {
-  const { level1, level2, level3, canonicalCompleted } = calculateLevelCompletion(completedIds)
-  const completedSet = new Set(canonicalCompleted)
+  const canonicalCompleted = new Set(
+    completedIds
+      .map((id) => resolveCanonicalId(id))
+      .filter((id): id is Pillar3ModuleId => id !== null)
+  )
 
   const states = {} as Record<
     Pillar3ModuleId,
     'completed' | 'available' | 'in_progress' | 'locked'
   >
 
-  for (const moduleId of Object.keys(PILLAR3_MODULES) as Pillar3ModuleId[]) {
-    const module = PILLAR3_MODULES[moduleId]
+  // Define sequential module order (1-10)
+  const moduleOrder: Pillar3ModuleId[] = [
+    'auditoria-inicial',        // 1
+    'metodo-star',              // 2
+    'cv-inteligente',           // 3
+    'analisis-vacante',         // 4
+    'analisis-multimodal',      // 5
+    'entrenamiento-guiado',     // 6
+    'entrenamiento-estructurado', // 7
+    'entrenamiento-desafiante', // 8
+    'entrenamiento-conversacional', // 9
+    'simulacion-real',          // 10
+  ]
 
-    if (completedSet.has(moduleId)) {
+  for (let i = 0; i < moduleOrder.length; i++) {
+    const moduleId = moduleOrder[i]
+
+    if (canonicalCompleted.has(moduleId)) {
       states[moduleId] = 'completed'
-      continue
-    }
-
-    // Determine availability by level
-    if (module.level === 1) {
-      states[moduleId] = 'in_progress'
-    } else if (module.level === 2) {
-      states[moduleId] = level1 ? 'available' : 'locked'
-    } else if (module.level === 3) {
-      states[moduleId] = level2 ? 'available' : 'locked'
-    } else if (module.level === 4) {
-      states[moduleId] = level3 ? 'available' : 'locked'
+    } else if (i === 0) {
+      // First module is always available
+      states[moduleId] = 'available'
+    } else if (canonicalCompleted.has(moduleOrder[i - 1])) {
+      // Previous module is completed → this module is available
+      states[moduleId] = 'available'
+    } else {
+      // Previous module not completed → this module is locked
+      states[moduleId] = 'locked'
     }
   }
 

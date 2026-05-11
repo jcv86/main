@@ -41,10 +41,17 @@ function buildModulesFromConfig(moduleStates: Record<string, string>): any[] {
       { id: 'simulacion-real', level: 4, title: 'Simulación Real', description: 'Entrevista completa bajo condiciones reales', xp: 40, dtc: 4 },
     ]
     
-    // For each module, determine its status based on moduleStates and level completion
-    // Simple implementation: just use the moduleStates passed in
-    for (const moduleMeta of allModules) {
+    // For each module, determine its status based on moduleStates and sequential unlock
+    // Sequential: module N requires module N-1 completion
+    for (let i = 0; i < allModules.length; i++) {
+      const moduleMeta = allModules[i]
       const status = (moduleStates[moduleMeta.id] || 'locked') as 'available' | 'in_progress' | 'completed' | 'locked'
+      
+      // Generate prerequisite text based on sequential unlock logic
+      let unlockText: string | undefined = undefined
+      if (status === 'locked' && i > 0) {
+        unlockText = `Desbloquea al completar: ${allModules[i - 1].title}`
+      }
       
       modules.push({
         id: moduleMeta.id,
@@ -55,7 +62,7 @@ function buildModulesFromConfig(moduleStates: Record<string, string>): any[] {
         xp: status === 'completed' ? moduleMeta.xp : 0,
         maxXp: moduleMeta.xp,
         progress: status === 'completed' ? 100 : status === 'in_progress' ? 50 : 0,
-        unlockText: moduleMeta.level > 1 ? `Desbloquea al completar Nivel ${moduleMeta.level - 1}` : undefined,
+        unlockText,
       })
     }
     
@@ -82,7 +89,6 @@ export default function A3EntrenamientoIntensivo() {
     completedModuleIds: [],
   })
   const [isLoading, setIsLoading] = useState(false)
-  const [completedSections, setCompletedSections] = useState(0)
   const [error, setError] = useState<string | null>(null)
 
   console.log('[v0] State initialized')
@@ -251,7 +257,7 @@ export default function A3EntrenamientoIntensivo() {
             <h1 className="text-7xl md:text-8xl font-black bg-gradient-to-r from-training via-training/80 to-training/60 bg-clip-text text-transparent drop-shadow-2xl">
               Domina Entrevistas
             </h1>
-            <h2 className="text-4xl md:text-5xl font-bold text-white/90">en 4 Niveles Épicos</h2>
+            <h2 className="text-4xl md:text-5xl font-bold text-white/90">en 10 Módulos de Aprendizaje</h2>
             
             <p className="text-lg md:text-xl text-white/80 max-w-3xl leading-relaxed font-light">
               Desde tu primera <span className="text-training font-semibold">auditoría</span> hasta una <span className="text-training font-semibold">simulación real</span>. 
@@ -275,13 +281,13 @@ export default function A3EntrenamientoIntensivo() {
             <p className="text-sm text-white/60 uppercase font-bold mb-3">Progreso General</p>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <p className="text-white font-semibold">{completedSections} / 4 Niveles Completados</p>
-                <span className="text-training font-bold">{Math.round((completedSections / 4) * 100)}%</span>
+                <p className="text-white font-semibold">{dashboardData.modules?.filter((m: any) => m.status === 'completed').length || 0} / 10 Módulos Completados</p>
+                <span className="text-training font-bold">{Math.round(((dashboardData.modules?.filter((m: any) => m.status === 'completed').length || 0) / 10) * 100)}%</span>
               </div>
               <div className="h-2 bg-white/10 rounded-full overflow-hidden">
                 <div 
                   className="h-full bg-gradient-to-r from-training to-training/60 transition-all duration-500"
-                  style={{ width: `${(completedSections / 4) * 100}%` }}
+                  style={{ width: `${((dashboardData.modules?.filter((m: any) => m.status === 'completed').length || 0) / 10) * 100}%` }}
                 />
               </div>
             </div>
@@ -299,7 +305,7 @@ export default function A3EntrenamientoIntensivo() {
         <div className="space-y-6">
           <div className="space-y-2">
             <h2 className="text-2xl font-bold text-white">Tu Camino de Aprendizaje</h2>
-            <p className="text-white/70">Completa cada nivel para desbloquear el siguiente.</p>
+            <p className="text-white/70">Completa cada módulo para desbloquear el siguiente.</p>
           </div>
           
           {/* Modules list will be rendered here */}
@@ -410,20 +416,23 @@ export default function A3EntrenamientoIntensivo() {
         <div className="rounded-lg border border-training/30 bg-white/5 p-8">
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-white">Tu Próximo Paso</h3>
-            {completedSections === 0 && (
-              <p className="text-white/80">Comienza con la <strong>Auditoría Inicial</strong>. Este es el primer paso para prepararte correctamente.</p>
-            )}
-            {completedSections === 1 && (
-              <p className="text-white/80">Felicidades. Ahora puedes acceder a las <strong>Herramientas de Preparación</strong> para mejorar tu CV y respuestas.</p>
-            )}
-            {completedSections === 2 && (
-              <p className="text-white/80">Excelente progreso. Continúa con los <strong>Entrenamientos Progresivos</strong> para ganar experiencia.</p>
-            )}
-            {completedSections === 3 && (
-              <p className="text-white/80">Casi listo. Completa la <strong>Simulación Real</strong> para verificar que estás preparado.</p>
-            )}
-            {completedSections >= 4 && (
-              <p className="text-white/80">¡Completaste todos los niveles! Has ganado <strong>{dashboardData.totalXp} XP</strong> en total.</p>
+            {dashboardData.modules && dashboardData.modules.length > 0 ? (
+              (() => {
+                const completedCount = dashboardData.modules.filter((m: any) => m.status === 'completed').length
+                const nextModule = dashboardData.modules.find((m: any) => m.status === 'available' || m.status === 'in_progress')
+                
+                if (completedCount === 0) {
+                  return <p className="text-white/80">Comienza con la <strong>Auditoría Inicial</strong>. Este es el primer paso para prepararte correctamente.</p>
+                } else if (completedCount === 10) {
+                  return <p className="text-white/80">¡Felicitaciones! Has completado los 10 módulos. Has ganado <strong>{dashboardData.totalXp} XP</strong> en total y desbloqueado premios exclusivos.</p>
+                } else if (nextModule) {
+                  return <p className="text-white/80">Excelente progreso ({completedCount}/10). Continúa con <strong>{nextModule.name}</strong> para seguir avanzando en tu camino.</p>
+                } else {
+                  return <p className="text-white/80">Vas muy bien. Sigue completando módulos para mejorar tus habilidades.</p>
+                }
+              })()
+            ) : (
+              <p className="text-white/80">Cargando tu progreso...</p>
             )}
           </div>
         </div>
