@@ -10,7 +10,7 @@ export default function DespegaLayout({
   return (
     <CoachProviderWrapper>
       <div className="min-h-screen flex flex-col">
-        {/* <DespegaNavbar /> */}
+        <DespegaNavbar />
         <main className="flex-1 pt-4">
           {children}
         </main>
