@@ -119,13 +119,7 @@ export async function GET(request: Request) {
       })
     }
 
-    console.log('[v0] User progress:', {
-      user_id: user.id.substring(0, 8),
-      completedModules,
-      totalXp,
-      progressPct,
-      isSuperadmin,
-    })
+    // Get user role
     const roleData = await getUserRoleData(user.id)
     const isSuperadmin = roleData.role === 'superadmin'
     
@@ -140,14 +134,6 @@ export async function GET(request: Request) {
     const maxDtc = TOTAL_PILLAR3_DTC
     const progressPct = isSuperadmin ? 100 : Math.min(Math.round((totalXp / maxXp) * 100), 100)
     const dtcPct = isSuperadmin ? 100 : Math.min(Math.round((totalDtc / maxDtc) * 100), 100)
-
-    console.log('[v0] User progress:', {
-      user_id: user.id.substring(0, 8),
-      completedModules,
-      totalXp,
-      progressPct,
-      isSuperadmin,
-    })
 
     // Build moduleStates
     const moduleStates: Record<string, string> = {}
