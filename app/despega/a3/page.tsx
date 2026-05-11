@@ -7,9 +7,10 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { ArrowRight, Loader2, Lock, CheckCircle2 } from 'lucide-react'
 import { DashboardState, Module } from './data/mock-dashboard'
-import { A3GeneralProgress } from '@/components/a3-general-progress'
-import { LevelsAccordion } from '@/components/a3/levels-accordion'
-import { Pillar3DetailedProgress } from '@/components/pillar3-detailed-progress'
+// Temporarily remove problematic imports to isolate the issue
+// import { A3GeneralProgress } from '@/components/a3-general-progress'
+// import { LevelsAccordion } from '@/components/a3/levels-accordion'
+// import { Pillar3DetailedProgress } from '@/components/pillar3-detailed-progress'
 import { PILLAR3_MODULES, PILLAR3_LEVELS } from '@/lib/pillar3-config'
 
 // Build modules array from pillar3 config with moduleStates
@@ -295,7 +296,7 @@ export default function A3EntrenamientoIntensivo() {
           </div>
           
           {/* General Progress Bar - Shows Pillar 3 completion based on sections */}
-          <A3GeneralProgress 
+          {/* <A3GeneralProgress 
             currentStep={1}
             totalSteps={4}
             currentLabel="Pillar 3 - Entrenamiento Intensivo"
@@ -304,7 +305,9 @@ export default function A3EntrenamientoIntensivo() {
             variant="default"
           />
           
-          <LevelsAccordion modules={dashboardData.modules} />
+          <LevelsAccordion modules={dashboardData.modules} /> */}
+          
+          <p className="text-white/50 text-sm">Components loading...</p>
         </div>
 
         {/* ========== DETAILED PILLAR 3 PROGRESS ========== */}
@@ -314,11 +317,11 @@ export default function A3EntrenamientoIntensivo() {
             <p className="text-white/70">Visualiza tu progreso por módulo y desbloquea el siguiente al completar.</p>
           </div>
           
-          <Pillar3DetailedProgress
+          {/* <Pillar3DetailedProgress
             moduleStates={dashboardData.moduleStates || {}}
             completedModuleIds={dashboardData.completedModuleIds || []}
             totalXp={dashboardData.totalXp}
-          />
+          /> */}
         </div>
 
         {/* ========== SIMPLE NEXT STEP MESSAGE ========== */}
