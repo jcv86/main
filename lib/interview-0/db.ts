@@ -123,6 +123,4 @@ export async function completeInterview0(
       })
       .eq('user_id', userId)
   }
-  
-  console.log('[v0] Interview-0 completed: awarded 70 XP, unlocked next modules')
 }

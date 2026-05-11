@@ -22,7 +22,6 @@ export async function getModuleUnlockRules() {
     .order('sequence_order', { ascending: true })
   
   if (error) {
-    console.error('[v0] Failed to fetch unlock rules:', error)
     return []
   }
   
