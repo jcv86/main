@@ -35,6 +35,160 @@ const LESSONS_DATA: Record<string, Record<string, any>> = {
       description: 'Poniéndolo todo junto',
       content: 'Ahora que entiendes cada componente de STAR, es momento de integrarlos en una narrativa cohesiva y convincente.'
     }
+  },
+  'cv-inteligente': {
+    '1': {
+      title: 'Estructura CV',
+      description: 'Cómo organizar tu CV profesionalmente',
+      content: 'Un CV bien estructurado captura la atención del reclutador en los primeros 6 segundos. Aprende a organizar tu información de forma estratégica.'
+    },
+    '2': {
+      title: 'Palabras Clave',
+      description: 'Palabras clave que resonarán con reclutadores',
+      content: 'Los reclutadores buscan palabras clave específicas. Aprende a incorporarlas de forma natural sin sonar artificial.'
+    },
+    '3': {
+      title: 'Resultados Cuantificados',
+      description: 'Cómo mostrar impacto con números',
+      content: 'Los números capturan atención. Aprende a cuantificar tus logros de forma creíble y persuasiva.'
+    },
+    '4': {
+      title: 'CV Perfecto',
+      description: 'Puliendo tu CV final',
+      content: 'Revisa cada sección para asegurar que tu CV brille y comunique exactamente quién eres profesionalmente.'
+    }
+  },
+  'analisis-vacante': {
+    '1': {
+      title: 'Decodificar la Oferta',
+      description: 'Cómo leer entre líneas de una oferta',
+      content: 'Cada oferta contiene pistas sobre qué busca realmente la empresa. Aprende a detectarlas.'
+    },
+    '2': {
+      title: 'Requisitos vs Deseos',
+      description: 'Diferenciar lo esencial de lo opcional',
+      content: 'No todos los requisitos son del mismo peso. Aprende a priorizar según la realidad del mercado.'
+    },
+    '3': {
+      title: 'Tu Propuesta de Valor',
+      description: 'Alineando tu perfil con la vacante',
+      content: 'Ahora que entiendes la vacante, posiciónate como la solución ideal para ese problema.'
+    },
+    '4': {
+      title: 'Dominando el Análisis',
+      description: 'Análisis completo en 15 minutos',
+      content: 'Practica el análisis rápido de vacantes para estar listo ante cualquier oportunidad.'
+    }
+  },
+  'analisis-multimodal': {
+    '1': {
+      title: 'Voz y Tono',
+      description: 'Cómo suena tu voz profesional',
+      content: 'Tu voz comunica tanto como tus palabras. Aprende a proyectar confianza y autoridad.'
+    },
+    '2': {
+      title: 'Lenguaje Corporal',
+      description: 'El poder del cuerpo en una entrevista',
+      content: 'El 55% de la comunicación es no verbal. Domina tu lenguaje corporal.'
+    },
+    '3': {
+      title: 'Congruencia Multimodal',
+      description: 'Alineando voz, cuerpo y palabras',
+      content: 'El poder surge cuando todo está alineado. Aprende a ser congruente en todos los canales.'
+    },
+    '4': {
+      title: 'Presencia Completa',
+      description: 'Dominando tu presencia integral',
+      content: 'Combina todo lo aprendido para una presencia profesional irresistible.'
+    }
+  },
+  'entrenamiento-guiado': {
+    '1': {
+      title: 'Entrevista Básica',
+      description: 'Tus primeras prácticas guiadas',
+      content: 'Comienza con preguntas simples acompañado paso a paso.'
+    },
+    '2': {
+      title: 'Profundizando',
+      description: 'Preguntas más profundas con feedback',
+      content: 'Aumentamos la complejidad pero mantenemos la guía.'
+    },
+    '3': {
+      title: 'Mini-Simulación',
+      description: 'Una simulación completa con pasos',
+      content: 'Practica una entrevista completa con orientación.'
+    },
+    '4': {
+      title: 'Independencia',
+      description: 'Práctica con mínima intervención',
+      content: 'Demuestra que estás listo para el siguiente nivel.'
+    }
+  },
+  'entrenamiento-estructurado': {
+    '1': {
+      title: 'Estructura Formal',
+      description: 'Entrevistas con marcos profesionales',
+      content: 'Aprende los marcos formales que usan las grandes empresas.'
+    },
+    '2': {
+      title: 'Profundidad Técnica',
+      description: 'Preguntas con profundidad técnica',
+      content: 'Domina respuestas técnicas y estructuradas.'
+    },
+    '3': {
+      title: 'Simulación Completa',
+      description: 'Una entrevista completa estructurada',
+      content: 'Vive una entrevista profesional real con estructura formal.'
+    },
+    '4': {
+      title: 'Dominio',
+      description: 'Mastery de entrevistas estructuradas',
+      content: 'Demuestra completo dominio de este formato.'
+    }
+  },
+  'entrenamiento-desafiante': {
+    '1': {
+      title: 'Bajo Presión',
+      description: 'Preguntas difíciles sin guía',
+      content: 'Ahora sin estructura. Solo tú y preguntas desafiantes.'
+    },
+    '2': {
+      title: 'Razonamiento Rápido',
+      description: 'Pensar y responder en tiempo real',
+      content: 'Practica responder en el momento sin tiempo de preparación.'
+    },
+    '3': {
+      title: 'Crisis Management',
+      description: 'Manejando preguntas inesperadas',
+      content: 'Recuperate de preguntas que no esperabas.'
+    },
+    '4': {
+      title: 'Batalla Real',
+      description: 'Simulación completa desafiante',
+      content: 'La prueba final de tu preparación bajo presión máxima.'
+    }
+  },
+  'entrenamiento-conversacional': {
+    '1': {
+      title: 'Naturalidad',
+      description: 'Conversaciones relajadas y naturales',
+      content: 'No todo es formal. Aprende a conectar humanamente.'
+    },
+    '2': {
+      title: 'Rapport',
+      description: 'Construyendo conexión con el entrevistador',
+      content: 'La gente contrata gente que les cae bien. Aprende a construir rapport.'
+    },
+    '3': {
+      title: 'Flexibility',
+      description: 'Adaptándote al estilo del entrevistador',
+      content: 'Cada entrevistador es diferente. Aprende a adaptarte.'
+    },
+    '4': {
+      title: 'Conversación Maestra',
+      description: 'Una conversación natural y profunda',
+      content: 'Domina el arte de una conversación de alto nivel.'
+    }
   }
 }
 
@@ -114,16 +268,18 @@ export default function LessonPage() {
     // Only show results if completing the last lesson (lesson 4)
     const isLastLesson = parseInt(lessonId) === 4
     
-    // Map modules to XP amounts (120 XP per module)
+    // Map modules to XP amounts (120 XP per module for Levels 2-3, 70 for Level 1, 40 for Level 4)
     const moduleXpMap: Record<string, number> = {
-      'intro-to-star': 120,
+      'metodo-star': 120,
       'cv-inteligente': 120,
-      'job-analysis': 120,
-      'multimodal-analysis': 120,
-      'training-guided': 120,
-      'training-structured': 120,
-      'training-challenging': 120,
-      'training-conversational': 120,
+      'analisis-vacante': 120,
+      'analisis-multimodal': 120,
+      'entrenamiento-guiado': 120,
+      'entrenamiento-estructurado': 120,
+      'entrenamiento-desafiante': 120,
+      'entrenamiento-conversacional': 120,
+      'simulacion-real': 40,
+      'auditoria-inicial': 70,
     }
     
     const moduleXp = moduleXpMap[moduleId] || 120
