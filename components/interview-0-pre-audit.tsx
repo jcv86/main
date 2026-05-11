@@ -274,33 +274,6 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
             )}
           </CardContent>
         </Card>
-
-        {/* Results summary  */}
-        <Card className="border-muted/30 bg-gradient-to-br from-purple-500/10 to-pink-500/10">
-          <CardContent className="pt-8 pb-8">
-            <div className="text-center space-y-6">
-              <div className="space-y-2">
-                <h2 className="text-2xl font-bold text-white">¡Auditoría Completada!</h2>
-                <p className="text-white/70">Completaste todos los checks. Verás los premios en el siguiente paso.</p>
-              </div>
-
-              <div className="space-y-2 text-sm text-white/60 bg-white/5 rounded-lg p-4">
-                <p>✓ {completedBlocks} / 4 secciones completadas</p>
-                <p>✓ Se desbloquean entrenamientos en Pillar 3</p>
-                <p>✓ Acceso a herramientas de preparación: Método STAR, CV Inteligente, Análisis de Vacante, Análisis Multicanal</p>
-              </div>
-
-              <Button
-                onClick={handleComplete}
-                className="w-full text-white h-12"
-                style={{ backgroundColor: 'rgb(170, 70, 170)', borderRadius: '20px' }}
-              >
-                Continuar a Resultados
-                <ChevronRight className="w-4 h-4 ml-2" />
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
       </div>
     )
   }
