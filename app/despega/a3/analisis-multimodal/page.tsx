@@ -8,11 +8,13 @@ import { AnalysisResults } from '@/components/multimodal/analysis-results'
 import { MultimodalAnalyticsDashboard } from '@/components/multimodal/analytics-dashboard'
 import { AdvancedAnalyticsReporting } from '@/components/multimodal/advanced-analytics'
 import { AlertCircle, Check, Zap } from 'lucide-react'
+import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
 export default function MultimodalAnalysisPage() {
   const [activeSession, setActiveSession] = useState<string | null>(null)
   const [error, setError] = useState('')
   const [entrenamillentoType, setEntrenamillentoType] = useState('entrevista-basica')
+  const [isCompleted, setIsCompleted] = useState(false)
 
   const entrenamillentoTypes = [
     { id: 'entrevista-basica', label: 'Básica', desc: 'Presentación' },
@@ -20,6 +22,10 @@ export default function MultimodalAnalysisPage() {
     { id: 'entrevista-tecnica', label: 'Técnica', desc: 'Problem-solving' },
     { id: 'presentacion-ejecutiva', label: 'Ejecutiva', desc: 'Pitch' }
   ]
+
+  if (isCompleted) {
+    return <ModuleCompletionScreen moduleId="analisis-multimodal" moduleName="Análisis Multimodal" xpEarned={120} />
+  }
 
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-8">

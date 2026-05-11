@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { ArrowLeft, MessageCircle, Send, RotateCcw, TrendingUp, Lightbulb } from 'lucide-react'
+import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
 interface ConversationTurn {
   role: 'interviewer' | 'candidate'
@@ -97,6 +98,7 @@ export default function EntrenamientoConversacionalPage() {
   const [conversation, setConversation] = useState<ConversationTurn[]>([])
   const [userInput, setUserInput] = useState('')
   const [showFeedback, setShowFeedback] = useState(false)
+  const [isCompleted, setIsCompleted] = useState(false)
   const [conversationScore, setConversationScore] = useState(0)
 
   const startScenario = (scenario: typeof CONVERSATION_SCENARIOS[0]) => {
@@ -146,6 +148,10 @@ export default function EntrenamientoConversacionalPage() {
     setConversation([])
     setUserInput('')
     setShowFeedback(false)
+  }
+
+  if (isCompleted) {
+    return <ModuleCompletionScreen moduleId="entrenamiento-conversacional" moduleName="Entrenamiento Conversacional" xpEarned={120} />
   }
 
   if (selectedScenario && !showFeedback) {

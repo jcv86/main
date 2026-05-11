@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { TrainingResultsCard } from '@/components/training-results-card'
 import {
   ArrowLeft,
   Crown,
@@ -19,6 +18,7 @@ import {
   CheckCircle2,
   TrendingUp
 } from 'lucide-react'
+import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
 const CHALLENGING_QUESTIONS = [
   {
@@ -79,6 +79,7 @@ export default function ChallensingTrainingPage() {
   const [showingFarewell, setShowingFarewell] = useState(false)
   const [showingResults, setShowingResults] = useState(false)
   const [finalScore, setFinalScore] = useState(0)
+  const [isCompleted, setIsCompleted] = useState(false)
   
   // Recording state
   const [isRecording, setIsRecording] = useState(false)
@@ -273,17 +274,7 @@ export default function ChallensingTrainingPage() {
           </Card>
         </div>
       ) : showingResults ? (
-        <TrainingResultsCard
-          result={{
-            score: finalScore,
-            questionsCompleted: completedQuestions.length,
-            totalQuestions: 10,
-            timeSpent: 1800,
-            level: 'avanzado',
-            trainingType: 'Entrenamiento Desafiante'
-          }}
-          onContinue={() => router.push('/despega/a3')}
-        />
+        <ModuleCompletionScreen moduleId="entrenamiento-desafiante" moduleName="Entrenamiento Desafiante" xpEarned={120} />
       ) : showingFarewell ? (
         <div className="flex items-center justify-center px-4 min-h-screen">
           <div className="max-w-md w-full space-y-6">

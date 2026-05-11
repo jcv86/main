@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { ArrowLeft, Upload, FileText, Search, CheckCircle2, AlertCircle, TrendingUp, Download } from 'lucide-react'
+import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
 const SAMPLE_JOB_DESCRIPTION = `Senior Software Engineer - Full Stack
 Ubicación: Madrid, España
@@ -84,9 +85,14 @@ const JOB_ANALYSIS = {
 export default function AnalisisVacantePagePage() {
   const [jobDescription, setJobDescription] = useState(SAMPLE_JOB_DESCRIPTION)
   const [analysisTab, setAnalysisTab] = useState<'overview' | 'skills' | 'gaps' | 'prep'>('overview')
+  const [isCompleted, setIsCompleted] = useState(false)
 
   const matchScoreColor = JOB_ANALYSIS.matchScore >= 80 ? 'text-green-400' : JOB_ANALYSIS.matchScore >= 60 ? 'text-yellow-400' : 'text-red-400'
   const matchBgColor = JOB_ANALYSIS.matchScore >= 80 ? 'bg-green-500/10' : JOB_ANALYSIS.matchScore >= 60 ? 'bg-yellow-500/10' : 'bg-red-500/10'
+
+  if (isCompleted) {
+    return <ModuleCompletionScreen moduleId="analisis-vacante" moduleName="Análisis de Vacante" xpEarned={120} />
+  }
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -379,23 +385,6 @@ export default function AnalisisVacantePagePage() {
             </Card>
           </div>
         )}
-      </div>
-
-      {/* Navigation */}
-      <div className="border-t border-purple-500/20 bg-black/50 mt-12">
-        <div className="max-w-6xl mx-auto px-6 py-6 flex justify-between">
-          <Link href="/despega/a3/metodo-star">
-            <Button variant="outline" className="border-purple-500/30 text-white hover:bg-purple-500/10">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Anterior: Método STAR
-            </Button>
-          </Link>
-          <Link href="/despega/a3/entrenamiento-guiado">
-            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
-              Siguiente: Entrenamiento Guiado
-            </Button>
-          </Link>
-        </div>
       </div>
     </div>
   )

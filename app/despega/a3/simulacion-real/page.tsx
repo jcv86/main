@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 import { ArrowLeft, Play, Clock, BarChart3, CheckCircle2, AlertCircle, Medal, Download } from 'lucide-react'
+import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
 interface SimulationStage {
   id: string
@@ -83,11 +84,9 @@ const EVALUATION_CRITERIA = [
 
 export default function SimulacionRealPage() {
   const [simulationStarted, setSimulationStarted] = useState(false)
-  const [currentStageIdx, setCurrentStageIdx] = useState(0)
-  const [elapsedTime, setElapsedTime] = useState(0)
-  const [simulationComplete, setSimulationComplete] = useState(false)
-  const [finalScore, setFinalScore] = useState(0)
+  const [currentStageIndex, setCurrentStageIndex] = useState(0)
   const [stageScores, setStageScores] = useState<Record<string, number>>({})
+  const [isCompleted, setIsCompleted] = useState(false)
 
   const totalDuration = SIMULATION_STAGES.reduce((sum, stage) => sum + stage.duration, 0)
   const currentStage = SIMULATION_STAGES[currentStageIdx]
@@ -127,7 +126,12 @@ export default function SimulacionRealPage() {
   }
 
   if (simulationStarted && !simulationComplete) {
-    return (
+  if (isCompleted) {
+    // Module 10 is the last module - only show dashboard button (no "Continuar Práctica")
+    return <ModuleCompletionScreen moduleId="simulacion-real" moduleName="Simulación Real" xpEarned={40} />
+  }
+
+  return (
       <div className="min-h-screen bg-black text-white flex flex-col">
         {/* Header */}
         <div className="border-b border-purple-500/20 bg-black/50 p-4">

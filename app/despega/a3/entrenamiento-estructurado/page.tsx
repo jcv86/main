@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { ArrowLeft, BookOpen, CheckCircle2, AlertCircle, Volume2, Mic, RotateCcw, TrendingUp } from 'lucide-react'
+import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
 const STRUCTURED_LESSONS = [
   {
@@ -68,6 +69,7 @@ const STRUCTURED_LESSONS = [
 export default function EntrenamientoEstructuradoPage() {
   const [selectedLesson, setSelectedLesson] = useState<typeof STRUCTURED_LESSONS[0] | null>(null)
   const [currentQuestionIdx, setCurrentQuestionIdx] = useState(0)
+  const [isCompleted, setIsCompleted] = useState(false)
   const [isRecording, setIsRecording] = useState(false)
   const [responses, setResponses] = useState<Record<number, string[]>>({})
   const [showScore, setShowScore] = useState(false)
@@ -91,6 +93,10 @@ export default function EntrenamientoEstructuradoPage() {
     setCurrentQuestionIdx(0)
     setShowScore(false)
     setResponses({})
+  }
+
+  if (isCompleted) {
+    return <ModuleCompletionScreen moduleId="entrenamiento-estructurado" moduleName="Entrenamiento Estructurado" xpEarned={120} />
   }
 
   if (selectedLesson && !showScore) {
