@@ -311,7 +311,8 @@ export default function A3EntrenamientoIntensivo() {
                   if (module.id === 'auditoria-inicial') {
                     return '/despega/interview-0'
                   } else {
-                    return `/despega/a3/entrenamiento-guiado/${module.id}`
+                    // Route to the first lesson (lesson 1) of the training module
+                    return `/despega/a3/entrenamiento-guiado/${module.id}/1`
                   }
                 }
                 
