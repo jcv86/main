@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       if (userError.message?.includes('already exists')) {
         // User exists, get their ID
         const { data: users } = await supabase.auth.admin.listUsers()
-        const existingUser = users?.find(u => u.email === email)
+        const existingUser = users && Array.isArray(users) ? users.find(u => u.email === email) : undefined
         
         if (!existingUser) {
           return NextResponse.json({ error: 'User exists but cannot be found' }, { status: 500 })
