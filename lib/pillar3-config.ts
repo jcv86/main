@@ -45,11 +45,21 @@ export interface Pillar3LevelConfig {
 
 /**
  * All Pillar 3 modules with canonical IDs and exact XP/DTC values.
- * Sum of XP across all modules = 1000
- * Sum of DTC across all modules = 100
+ * Each module is counted individually (not combined):
+ * - Module 1 (Auditoría Inicial): 70 XP
+ * - Module 2 (Método STAR): 120 XP
+ * - Module 3 (CV Inteligente): 120 XP
+ * - Module 4 (Análisis de Vacante): 120 XP
+ * - Module 5 (Análisis Multimodal): 120 XP
+ * - Module 6 (Entrenamiento Guiado): 120 XP
+ * - Module 7 (Entrenamiento Estructurado): 120 XP
+ * - Module 8 (Entrenamiento Desafiante): 120 XP
+ * - Module 9 (Entrenamiento Conversacional): 120 XP
+ * - Module 10 (Simulación Real): 40 XP
+ * Total: 1070 XP / 100 DTC
  */
 export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
-  // LEVEL 1: Audit (1 module, 70 XP / 4 DTC)
+  // MODULE 1: Audit (70 XP / 4 DTC)
   'auditoria-inicial': {
     id: 'auditoria-inicial',
     name: 'Auditoría Inicial',
@@ -60,7 +70,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
     legacyIds: ['audit_initial', 'entrevista-0', 'entrevista 0', 'preparacion-inicial'],
   },
 
-  // LEVEL 2: Preparation Tools (4 modules, 480 XP / 48 DTC total - 120 XP / 12 DTC each)
+  // MODULE 2: STAR Method (120 XP / 12 DTC)
   'metodo-star': {
     id: 'metodo-star',
     name: 'Método STAR',
@@ -70,6 +80,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
     dtc: 12,
     legacyIds: ['star_method', 'star'],
   },
+  // MODULE 3: Intelligent CV (120 XP / 12 DTC)
   'cv-inteligente': {
     id: 'cv-inteligente',
     name: 'CV Inteligente',
@@ -79,6 +90,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
     dtc: 12,
     legacyIds: ['cv_intelligent', 'cv'],
   },
+  // MODULE 4: Vacancy Analysis (120 XP / 12 DTC)
   'analisis-vacante': {
     id: 'analisis-vacante',
     name: 'Análisis de Vacante',
@@ -87,7 +99,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
     xp: 120,
     dtc: 12,
     legacyIds: ['job_analysis', 'vacancy_analysis'],
-  },
+  // MODULE 5: Multimodal Analysis (120 XP / 12 DTC)
   'analisis-multimodal': {
     id: 'analisis-multimodal',
     name: 'Análisis Multimodal',
@@ -98,7 +110,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
     legacyIds: ['multimodal_analysis', 'analisis-multicanal'],
   },
 
-  // LEVEL 3: Training Interviews (4 modules, 480 XP / 48 DTC total - 120 XP / 12 DTC each)
+  // MODULE 6: Guided Training (120 XP / 12 DTC)
   'entrenamiento-guiado': {
     id: 'entrenamiento-guiado',
     name: 'Entrenamiento Guiado',
@@ -107,7 +119,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
     xp: 120,
     dtc: 12,
     legacyIds: ['guided_training', 'entrevista-guiada'],
-  },
+  // MODULE 7: Structured Training (120 XP / 12 DTC)
   'entrenamiento-estructurado': {
     id: 'entrenamiento-estructurado',
     name: 'Entrenamiento Estructurado',
@@ -116,7 +128,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
     xp: 120,
     dtc: 12,
     legacyIds: ['structured_training', 'entrevista-estructurada'],
-  },
+  // MODULE 8: Challenging Training (120 XP / 12 DTC)
   'entrenamiento-desafiante': {
     id: 'entrenamiento-desafiante',
     name: 'Entrenamiento Desafiante',
@@ -125,7 +137,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
     xp: 120,
     dtc: 12,
     legacyIds: ['challenging_training', 'entrevista-desafiante'],
-  },
+  // MODULE 9: Conversational Training (120 XP / 12 DTC)
   'entrenamiento-conversacional': {
     id: 'entrenamiento-conversacional',
     name: 'Entrenamiento Conversacional',
@@ -136,7 +148,7 @@ export const PILLAR3_MODULES: Record<Pillar3ModuleId, Pillar3ModuleConfig> = {
     legacyIds: ['conversational_training', 'entrevista-conversacional'],
   },
 
-  // LEVEL 4: Real Simulation (1 module, 40 XP / 4 DTC)
+  // MODULE 10: Real Simulation (40 XP / 4 DTC)
   'simulacion-real': {
     id: 'simulacion-real',
     name: 'Simulación Real',
