@@ -25,7 +25,7 @@ export default function PillarsHubPage() {
   const { user, loading: authLoading } = useAuthRedirect()
   const router = useRouter()
   const [progress, setProgress] = useState<UserProgress>({
-    completedSteps: [],
+    completedSteps: [] as SequenceStepId[],
     totalXp: 0,
   })
   const [loading, setLoading] = useState(true)
