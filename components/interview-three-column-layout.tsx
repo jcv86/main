@@ -21,11 +21,11 @@ interface InterviewThreeColumnProps {
 }
 
 const QUALITY_LEVELS = [
-  { level: 1, label: 'Rough', color: 'bg-red-500/20 border-red-500/30 text-red-400' },
-  { level: 2, label: 'Okay', color: 'bg-orange-500/20 border-orange-500/30 text-orange-400' },
-  { level: 3, label: 'Good', color: 'bg-yellow-500/20 border-yellow-500/30 text-yellow-400' },
-  { level: 4, label: 'Strong', color: 'bg-blue-500/20 border-blue-500/30 text-blue-400' },
-  { level: 5, label: 'Great', color: 'bg-green-500/20 border-green-500/30 text-green-400' }
+  { level: 1, label: 'Áspero', color: 'bg-red-500/20 border-red-500/30 text-red-400' },
+  { level: 2, label: 'Aceptable', color: 'bg-orange-500/20 border-orange-500/30 text-orange-400' },
+  { level: 3, label: 'Bueno', color: 'bg-yellow-500/20 border-yellow-500/30 text-yellow-400' },
+  { level: 4, label: 'Sólido', color: 'bg-blue-500/20 border-blue-500/30 text-blue-400' },
+  { level: 5, label: 'Excelente', color: 'bg-green-500/20 border-green-500/30 text-green-400' }
 ]
 
 export function InterviewThreeColumnLayout({

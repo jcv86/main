@@ -16,18 +16,18 @@ const INTERVIEW_SECTIONS = [
   {
     id: 'opening',
     title: 'Apertura y Rapport',
-    description: 'The interview begins with warm-up questions',
+    description: 'La entrevista comienza con preguntas de calentamiento',
     questions: [
       {
         id: 'intro',
-        question: 'Hello! Thank you for joining us today. How are you doing?',
-        tip: 'Be warm and professional. This sets the tone for the interview.',
+        question: '¡Hola! Gracias por venir hoy. ¿Cómo estás?',
+        tip: 'Sé cálido y profesional. Esto establece el tono de la entrevista.',
         type: 'warmup'
       },
       {
         id: 'tell-me',
-        question: 'Great! Let\'s start. Can you tell me a little about yourself?',
-        tip: 'Use your 30-second introduction from Espejo de Carrera. Focus on professional summary.',
+        question: '¡Perfecto! Comencemos. ¿Puedes contarme un poco sobre ti?',
+        tip: 'Usa tu introducción de 30 segundos del Espejo de Carrera. Enfócate en el resumen profesional.',
         type: 'standard',
         timeTarget: 60
       }
@@ -35,20 +35,20 @@ const INTERVIEW_SECTIONS = [
   },
   {
     id: 'background',
-    title: 'Background & Experience',
-    description: 'Questions about your professional journey',
+    title: 'Antecedentes y Experiencia',
+    description: 'Preguntas sobre tu trayectoria profesional',
     questions: [
       {
         id: 'cv-walk',
-        question: 'Walk me through your CV. What has been your career path so far?',
-        tip: 'Chronological but brief. Highlight relevant transitions and growth.',
+        question: 'Cuéntame tu CV. ¿Cuál ha sido tu trayectoria profesional hasta ahora?',
+        tip: 'Cronológico pero breve. Destaca transiciones relevantes y crecimiento.',
         type: 'standard',
         timeTarget: 90
       },
       {
         id: 'current-role',
-        question: 'What are your main responsibilities in your current (or most recent) role?',
-        tip: 'Focus on achievements, not just tasks. Use your Laboratorio de Minería de Valor stories.',
+        question: '¿Cuáles son tus principales responsabilidades en tu rol actual (o más reciente)?',
+        tip: 'Enfócate en logros, no solo tareas. Usa tus historias del Laboratorio de Minería de Valor.',
         type: 'standard',
         timeTarget: 60
       }
@@ -57,19 +57,19 @@ const INTERVIEW_SECTIONS = [
   {
     id: 'motivation',
     title: 'Motivación e Idoneidad',
-    description: 'Understanding why you want this opportunity',
+    description: 'Entender por qué quieres esta oportunidad',
     questions: [
       {
         id: 'why-role',
-        question: 'Why are you interested in this position?',
-        tip: 'Connect your goals to the role. Show you\'ve researched. Be genuine.',
+        question: '¿Por qué te interesa este puesto?',
+        tip: 'Conecta tus objetivos con el rol. Demuestra que investigaste. Sé genuino.',
         type: 'standard',
         timeTarget: 60
       },
       {
         id: 'why-leave',
-        question: 'What made you start looking for a new opportunity?',
-        tip: 'Stay positive. Focus on growth and new challenges, not problems.',
+        question: '¿Qué te motivó a buscar una nueva oportunidad?',
+        tip: 'Mantén una actitud positiva. Enfócate en crecimiento y nuevos desafíos, no en problemas.',
         type: 'standard',
         timeTarget: 45
       }
@@ -78,26 +78,26 @@ const INTERVIEW_SECTIONS = [
   {
     id: 'behavioral',
     title: 'Preguntas Conductuales',
-    description: 'Stories that demonstrate your abilities',
+    description: 'Historias que demuestran tus habilidades',
     questions: [
       {
         id: 'achievement',
-        question: 'Tell me about an achievement you\'re particularly proud of.',
-        tip: 'Use STAR/CAR structure. Include specific metrics if possible.',
+        question: 'Cuéntame sobre un logro del que estés particularmente orgulloso.',
+        tip: 'Usa estructura STAR/CAR. Incluye métricas específicas si es posible.',
         type: 'behavioral',
         timeTarget: 90
       },
       {
         id: 'challenge',
-        question: 'Describe a challenging situation at work and how you handled it.',
-        tip: 'Show problem-solving. Focus on YOUR actions and the outcome.',
+        question: 'Describe una situación desafiante en el trabajo y cómo la manejaste.',
+        tip: 'Muestra resolución de problemas. Enfócate en TUS acciones y en el resultado.',
         type: 'behavioral',
         timeTarget: 90
       },
       {
         id: 'teamwork',
-        question: 'Give me an example of how you\'ve worked effectively in a team.',
-        tip: 'Balance showing your contribution while respecting the team.',
+        question: 'Dame un ejemplo de cómo has trabajado efectivamente en un equipo.',
+        tip: 'Equilibra mostrar tu contribución mientras respetas el equipo.',
         type: 'behavioral',
         timeTarget: 75
       }
@@ -106,12 +106,12 @@ const INTERVIEW_SECTIONS = [
   {
     id: 'difficult',
     title: 'Pregunta Difícil',
-    description: 'One challenging question to test your preparation',
+    description: 'Una pregunta desafiante para probar tu preparación',
     questions: [
       {
         id: 'weakness',
-        question: 'What would you say is your biggest area for improvement?',
-        tip: 'Be honest but strategic. Show self-awareness and active improvement.',
+        question: '¿Cuál dirías que es tu área de mayor mejora?',
+        tip: 'Sé honesto pero estratégico. Muestra autoconocimiento y mejora activa.',
         type: 'difficult',
         timeTarget: 60
       }
@@ -120,11 +120,11 @@ const INTERVIEW_SECTIONS = [
   {
     id: 'closing',
     title: 'Cierre',
-    description: 'Your chance to ask questions and make final impression',
+    description: 'Tu oportunidad de hacer preguntas y dejar una última impresión',
     questions: [
       {
         id: 'your-questions',
-        question: 'Do you have any questions for me about the role or the company?',
+        question: '¿Tienes alguna pregunta para mí sobre el puesto o la empresa?',
         tip: 'Siempre ten 2-3 preguntas reflexivas preparadas. Nunca digas "no tengo preguntas".',
         type: 'closing',
         timeTarget: 60
@@ -133,13 +133,13 @@ const INTERVIEW_SECTIONS = [
   }
 ]
 
-// Performance rating criteria
+// Criterios de evaluación de desempeño
 const EVALUATION_CRITERIA = [
   { id: 'clarity', name: 'Claridad de Respuesta', description: '¿Fueron tus respuestas claras y fáciles de seguir?' },
-  { id: 'structure', name: 'Structure', description: 'Did you use frameworks (STAR/CAR) effectively?' },
-  { id: 'relevance', name: 'Relevance', description: 'Did your answers connect to the role?' },
-  { id: 'confidence', name: 'Confidence', description: 'Did you project confidence without arrogance?' },
-  { id: 'authenticity', name: 'Authenticity', description: 'Were your answers genuine and believable?' }
+  { id: 'structure', name: 'Estructura', description: '¿Usaste marcos de trabajo (STAR/CAR) efectivamente?' },
+  { id: 'relevance', name: 'Relevancia', description: '¿Conectaron tus respuestas con el puesto?' },
+  { id: 'confidence', name: 'Confianza', description: '¿Proyectaste confianza sin arrogancia?' },
+  { id: 'authenticity', name: 'Autenticidad', description: '¿Fueron tus respuestas genuinas y creíbles?' }
 ]
 
 export default function BasicInterviewMissionModule() {

@@ -21,66 +21,66 @@ const INTERVIEW_SCRIPT = [
   {
     id: 'greeting',
     stage: 'Apertura',
-    question: 'Hi! Thank you for joining. How are you today?',
-    guidance: 'Keep it brief and professional. A simple "I\'m doing well, thank you for having me" works perfectly.',
+    question: '¡Hola! Gracias por venir. ¿Cómo estás hoy?',
+    guidance: 'Mantén una respuesta breve y profesional. "Estoy bien, gracias por recibirme" funciona perfectamente.',
     timeLimit: 15,
-    evaluates: ['Professionalism', 'First impression']
+    evaluates: ['Profesionalismo', 'Primera impresión']
   },
   {
     id: 'intro',
-    stage: 'Introduction',
-    question: 'Great! Let\'s start. Tell me about yourself.',
-    guidance: 'Use your prepared 30-second self-introduction. Professional identity → Key skills → Career goal.',
+    stage: 'Introducción',
+    question: '¡Perfecto! Comencemos. Cuéntame sobre ti.',
+    guidance: 'Usa tu introducción preparada de 30 segundos. Identidad profesional → Habilidades clave → Objetivo de carrera.',
     timeLimit: 45,
-    evaluates: ['Structure', 'Relevance', 'Confidence']
+    evaluates: ['Estructura', 'Relevancia', 'Confianza']
   },
   {
     id: 'cv',
-    stage: 'CV Review',
-    question: 'I see you worked at [Anterior Company]. What was your main responsibility there?',
-    guidance: 'Focus on your most relevant experience. Use specific examples and mention results if possible.',
+    stage: 'Revisión de CV',
+    question: 'Veo que trabajaste en [Empresa Anterior]. ¿Cuál era tu principal responsabilidad?',
+    guidance: 'Enfócate en tu experiencia más relevante. Usa ejemplos específicos y menciona resultados si es posible.',
     timeLimit: 60,
-    evaluates: ['Experience clarity', 'Specificity', 'Achievement focus']
+    evaluates: ['Claridad de experiencia', 'Especificidad', 'Enfoque en logros']
   },
   {
     id: 'motivation',
-    stage: 'Motivation',
-    question: 'Why are you interested in this role / company?',
-    guidance: 'Show you researched the company. Connect their mission to your career goals.',
+    stage: 'Motivación',
+    question: '¿Por qué te interesa este puesto / empresa?',
+    guidance: 'Demuestra que investigaste la empresa. Conecta su misión con tus objetivos de carrera.',
     timeLimit: 45,
-    evaluates: ['Research', 'Genuine interest', 'Career alignment']
+    evaluates: ['Investigación', 'Interés genuino', 'Alineación de carrera']
   },
   {
     id: 'strengths',
     stage: 'Fortalezas',
-    question: 'What would you say are your greatest strengths?',
-    guidance: 'Pick 1-2 strengths relevant to the role. Support with a brief example.',
+    question: '¿Cuáles dirías que son tus mayores fortalezas?',
+    guidance: 'Elige 1-2 fortalezas relevantes para el puesto. Apoya con un breve ejemplo.',
     timeLimit: 45,
-    evaluates: ['Self-awareness', 'Role relevance', 'Evidence']
+    evaluates: ['Autoconocimiento', 'Relevancia del puesto', 'Evidencia']
   },
   {
     id: 'behavioral',
-    stage: 'Behavioral',
-    question: 'Tell me about a time you worked on a challenging project or solved a problem.',
-    guidance: 'Use STAR format. Focus on YOUR actions and the measurable result.',
+    stage: 'Conductual',
+    question: 'Cuéntame sobre un momento en que trabajaste en un proyecto desafiante o resolviste un problema.',
+    guidance: 'Usa el formato STAR. Enfócate en TUS acciones y en el resultado medible.',
     timeLimit: 90,
-    evaluates: ['STAR structure', 'Personal contribution', 'Results']
+    evaluates: ['Estructura STAR', 'Contribución personal', 'Resultados']
   },
   {
     id: 'candidate-question',
-    stage: 'Your Turn',
-    question: 'Do you have any questions for me about the role or company?',
-    guidance: 'Ask 1-2 thoughtful questions. About the team, growth, or day-to-day responsibilities.',
+    stage: 'Tu Turno',
+    question: '¿Tienes alguna pregunta sobre el puesto o la empresa?',
+    guidance: 'Haz 1-2 preguntas reflexivas. Sobre el equipo, crecimiento, o responsabilidades diarias.',
     timeLimit: 60,
-    evaluates: ['Preparation', 'Genuine curiosity', 'Professionalism']
+    evaluates: ['Preparación', 'Curiosidad genuina', 'Profesionalismo']
   },
   {
     id: 'closing',
     stage: 'Cierre',
-    question: 'Thank you for your time. We\'ll be in touch with next steps.',
-    guidance: 'Thank them genuinely. Express continued interest. End confidently.',
+    question: 'Gracias por tu tiempo. Nos pondremos en contacto con los próximos pasos.',
+    guidance: 'Agradéceles genuinamente. Expresa interés continuo. Termina con confianza.',
     timeLimit: 15,
-    evaluates: ['Professionalism', 'Enthusiasm', 'Closing strength']
+    evaluates: ['Profesionalismo', 'Entusiasmo', 'Fortaleza del cierre']
   }
 ]
 
@@ -92,13 +92,13 @@ const PRE_CHECKLIST = [
   { id: 'ready', text: 'Estoy listo para practicar como si fuera real' }
 ]
 
-// Good questions to ask
+// Preguntas buenas para hacer
 const GOOD_PREGUNTAS_TO_ASK = [
-  'What does a typical day look like in this role?',
-  'How would you describe the team I would be working with?',
-  'What are the main goals for this position in the first 90 days?',
-  'What opportunities for growth exist in this role?',
-  'How would you describe the company culture?'
+  '¿Cómo es un día típico en este puesto?',
+  '¿Cómo describirías el equipo con el que trabajaría?',
+  '¿Cuáles son los principales objetivos para esta posición en los primeros 90 días?',
+  '¿Qué oportunidades de crecimiento existen en este rol?',
+  '¿Cómo describirías la cultura de la empresa?'
 ]
 
 export default function FirstRecruiterSimulationModule() {

@@ -484,6 +484,61 @@ export default function A3BasicLevelTrainingPath() {
           </div>
         </Card>
 
+        {/* ========== ADVANCED LEVEL PROMOTION ========== */}
+        {progressPercentage === 100 && completedModules === 10 && (
+          <Card 
+            className="bg-gradient-to-r from-[rgba(170,70,170,0.2)] to-[rgba(170,70,170,0.1)] border-2 overflow-hidden"
+            style={{ borderColor: 'rgba(170, 70, 170, 0.6)' }}
+          >
+            <div className="p-6 space-y-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-white mb-2">¡Felicidades! 🎉</h3>
+                  <p className="text-white/80 mb-4">Has completado exitosamente el Nivel Básico de A3. Dominas los fundamentos de las entrevistas.</p>
+                  
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-semibold text-white">Próximo Paso: Nivel Avanzado</h4>
+                    <p className="text-sm text-white/70">
+                      El Nivel Avanzado incluye los mismos 10 módulos pero con casos más complejos, preguntas profundas y estrategias avanzadas de entrevista. Perfecciona tus habilidades y prepárate para las entrevistas más desafiantes.
+                    </p>
+                    
+                    <div className="grid grid-cols-2 gap-2 pt-2">
+                      <div className="text-xs bg-white/5 rounded p-2 border border-white/10">
+                        <p className="font-semibold text-white">⬆️ Mayor Dificultad</p>
+                        <p className="text-white/60">Casos empresariales reales</p>
+                      </div>
+                      <div className="text-xs bg-white/5 rounded p-2 border border-white/10">
+                        <p className="font-semibold text-white">🎓 Aprendizaje Profundo</p>
+                        <p className="text-white/60">Técnicas avanzadas</p>
+                      </div>
+                      <div className="text-xs bg-white/5 rounded p-2 border border-white/10">
+                        <p className="font-semibold text-white">🏆 Más XP</p>
+                        <p className="text-white/60">1,700+ puntos</p>
+                      </div>
+                      <div className="text-xs bg-white/5 rounded p-2 border border-white/10">
+                        <p className="font-semibold text-white">📊 Sofia V2</p>
+                        <p className="text-white/60">Entrevistadora mejorada</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="text-4xl">⭐</div>
+              </div>
+
+              <Button 
+                className="w-full bg-gradient-to-r from-[rgb(170,70,170)] to-[rgba(170,70,170,0.8)] hover:from-[rgba(170,70,170,0.9)] hover:to-[rgb(170,70,170)] text-white font-bold py-6 rounded-full text-lg"
+                onClick={() => {
+                  // TODO: Navigate to advanced level
+                  console.log('[v0] Advanced level coming soon')
+                }}
+              >
+                Comenzar Nivel Avanzado →
+              </Button>
+            </div>
+          </Card>
+        )}
+
         {/* ========== MODULE CARDS ========== */}
         <div className="space-y-4">
           {BASIC_LEVEL_MODULES.map((module) => {

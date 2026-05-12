@@ -15,67 +15,67 @@ import {
 
 const MODULE_XP = 130
 
-// Practice questions with Retroalimentación del coach de IA patterns
+// Sesiones de práctica con patrones de Retroalimentación del coach de IA
 const PRACTICE_SESSIONS = [
   {
     id: 'intro',
-    question: 'Tell me about yourself',
+    question: 'Cuéntame sobre ti',
     coachPrompt: 'Déjame escuchar tu autopresentación. Recuerda: identidad profesional, habilidades clave y por qué estás aquí.',
     feedbackCriteria: [
-      { id: 'structure', label: 'Limpiar structure', description: 'Follows intro formula' },
-      { id: 'relevance', label: 'Role relevance', description: 'Connected to target position' },
-      { id: 'length', label: 'Appropriate length', description: '30-45 seconds (~75-100 words)' },
-      { id: 'specificity', label: 'Specific details', description: 'Not generic statements' }
+      { id: 'structure', label: 'Estructura clara', description: 'Sigue la fórmula de introducción' },
+      { id: 'relevance', label: 'Relevancia del puesto', description: 'Conectado con la posición objetivo' },
+      { id: 'length', label: 'Duración apropiada', description: '30-45 segundos (~75-100 palabras)' },
+      { id: 'specificity', label: 'Detalles específicos', description: 'No afirmaciones genéricas' }
     ],
     commonIssues: [
-      'Too personal (started with name, age, or hobbies)',
-      'Too long (over 60 seconds)',
-      'Too vague (no specific skills mentioned)',
-      'Missing career goal or motivation'
+      'Demasiado personal (comenzó con nombre, edad o pasatiempos)',
+      'Demasiado largo (más de 60 segundos)',
+      'Demasiado vago (sin habilidades específicas mencionadas)',
+      'Falta objetivo de carrera o motivación'
     ],
     improvementTips: [
-      'Comenzar with your professional title',
-      'Include 2-3 specific skills relevant to the role',
-      'End with why this opportunity excites you'
+      'Comenzar con tu título profesional',
+      'Incluir 2-3 habilidades específicas relevantes al puesto',
+      'Terminar con por qué esta oportunidad te emociona'
     ]
   },
   {
     id: 'motivation',
-    question: 'Why do you want to work here?',
-    coachPrompt: 'Show me you have researched this company. What specifically attracts you?',
+    question: '¿Por qué quieres trabajar aquí?',
+    coachPrompt: 'Muéstrame que has investigado esta empresa. ¿Qué específicamente te atrae?',
     feedbackCriteria: [
-      { id: 'research', label: 'Company knowledge', description: 'Shows specific research' },
-      { id: 'connection', label: 'Personal connection', description: 'Links to your goals' },
-      { id: 'authentic', label: 'Authentic interest', description: 'Not generic flattery' },
-      { id: 'forward', label: 'Forward-looking', description: 'What you will contribute' }
+      { id: 'research', label: 'Conocimiento de empresa', description: 'Muestra investigación específica' },
+      { id: 'connection', label: 'Conexión personal', description: 'Se vincula con tus objetivos' },
+      { id: 'authentic', label: 'Interés auténtico', description: 'No es adulación genérica' },
+      { id: 'forward', label: 'Visión futura', description: 'Qué contribuirás' }
     ],
     commonIssues: [
-      'Generic praise ("great company", "good culture")',
-      'Focused only on what you will gain',
-      'No specific mention of company products/values',
-      'Could apply to any company'
+      'Elogios genéricos ("gran empresa", "buena cultura")',
+      'Enfocado solo en lo que ganarás',
+      'Sin menciones específicas de productos/valores de la empresa',
+      'Podría aplicarse a cualquier empresa'
     ],
     improvementTips: [
-      'Mention something specific about the company',
-      'Connect company mission to your personal goals',
-      'Show what you will bring, not just what you will take'
+      'Menciona algo específico sobre la empresa',
+      'Conecta la misión de la empresa con tus objetivos personales',
+      'Muestra qué traerás, no solo qué tomarás'
     ]
   },
   {
     id: 'challenge',
-    question: 'Tell me about a challenging situation you overcame',
-    coachPrompt: 'Use STAR format. Be specific about YOUR actions and the measurable result.',
+    question: 'Cuéntame sobre una situación desafiante que superaste',
+    coachPrompt: 'Usa el formato STAR. Sé específico sobre TUS acciones y el resultado medible.',
     feedbackCriteria: [
-      { id: 'situation', label: 'Limpiar situation', description: 'Context is understandable' },
-      { id: 'actions', label: 'Your actions', description: 'Focus on what YOU did' },
-      { id: 'result', label: 'Measurable result', description: 'Includes numbers or impact' },
-      { id: 'learning', label: 'Shows learning', description: 'What you gained from it' }
+      { id: 'situation', label: 'Situación clara', description: 'El contexto es comprensible' },
+      { id: 'actions', label: 'Tus acciones', description: 'Enfoque en lo que HICISTE' },
+      { id: 'result', label: 'Resultado medible', description: 'Incluye números o impacto' },
+      { id: 'learning', label: 'Muestra aprendizaje', description: 'Qué ganaste de ello' }
     ],
     commonIssues: [
-      'Focused on team, not your contribution',
-      'Vague result ("it went well")',
-      'Story too long or complicated',
-      'Missing the challenge - only shared success'
+      'Enfocado en el equipo, no tu contribución',
+      'Resultado vago ("salió bien")',
+      'Historia demasiado larga o complicada',
+      'Falta el desafío - solo compartió éxito'
     ],
     improvementTips: [
       'Comenzar with the challenge/problem clearly',
