@@ -330,13 +330,13 @@ export default function A3BasicLevelTrainingPath() {
   const getStatusBadge = (status: ModuleStatus) => {
     switch (status) {
       case 'completed':
-        return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.3)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.5)' }} className="border">Completed</Badge>
+        return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.3)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.5)' }} className="border">Completado</Badge>
       case 'in_progress':
-        return <Badge style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }} className="border">In Progreso</Badge>
+        return <Badge style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }} className="border">En Progreso</Badge>
       case 'available':
-        return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)', color: 'rgb(170, 70, 170)', borderColor: 'rgba(170, 70, 170, 0.4)' }} className="border">Available</Badge>
+        return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)', color: 'rgb(170, 70, 170)', borderColor: 'rgba(170, 70, 170, 0.4)' }} className="border">Disponible</Badge>
       case 'locked':
-        return <Badge className="bg-white/10 text-white/50 border-white/20 border">Locked</Badge>
+        return <Badge className="bg-white/10 text-white/50 border-white/20 border">Bloqueado</Badge>
     }
   }
 
@@ -382,7 +382,7 @@ export default function A3BasicLevelTrainingPath() {
           <Link href="/despega">
             <Button variant="ghost" size="sm" className="text-white/60 hover:text-white">
               <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
-              Back
+              Atrás
             </Button>
           </Link>
 
@@ -391,13 +391,13 @@ export default function A3BasicLevelTrainingPath() {
               A3 — Ruta de Entrenamiento Nivel Básico
             </h1>
             <p className="text-lg text-white/70 max-w-3xl">
-              Un viaje guiado de 10 módulos to build clarity, confidence, structure, and interview preparación paso a paso.
+              Un viaje guiado de 10 módulos para construir claridad, confianza, estructura y preparación de entrevista paso a paso.
             </p>
             <p className="text-white/60 leading-relaxed max-w-3xl">
-              El Nivel Básico está diseñado para usuarios que necesitan más estructura before facing real interviews. 
-              This path begins with deep learning and professional clarity, then moves into CV building, 
-              job decoding, answer preparation, coach practice, communication drills, recruiter simulations, 
-              difficult-question training, and a final realistic interview mission.
+              El Nivel Básico está diseñado para usuarios que necesitan más estructura antes de enfrentar entrevistas reales. 
+              Este camino comienza con aprendizaje profundo y claridad profesional, luego se mueve hacia construcción de CV, 
+              decodificación de ofertas, preparación de respuestas, práctica con coach, ejercicios de comunicación, simulaciones con reclutadores, 
+              entrenamiento de preguntas difíciles y una misión de entrevista realista final.
             </p>
           </div>
 
@@ -422,7 +422,7 @@ export default function A3BasicLevelTrainingPath() {
               Ruta Total: {TOTAL_XP.toLocaleString()} XP
             </Badge>
             <Badge className="bg-white/10 text-white/70 border-white/20 border px-3 py-1">
-              Ruta Seleccionada: {selectedPath} Days
+              Ruta Seleccionada: {selectedPath} Días
             </Badge>
           </div>
         </div>
@@ -436,7 +436,7 @@ export default function A3BasicLevelTrainingPath() {
           
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-white/70">{progressPercentage}% complete</span>
+              <span className="text-white/70">{progressPercentage}% completado</span>
               <span className="font-medium" style={{ color: PILLAR3_PRIMARY }}>{earnedXp.toLocaleString()} / {TOTAL_XP.toLocaleString()} XP</span>
             </div>
             {/* Custom progress bar with pillar 3 color */}
@@ -627,7 +627,7 @@ export default function A3BasicLevelTrainingPath() {
                             {progress.status === 'completed' ? (
                               <>
                                 <RotateCcw className="w-4 h-4 mr-2" />
-                                Review Module
+                                Revisar Módulo
                               </>
                             ) : (
                               <>
@@ -693,7 +693,7 @@ export default function A3BasicLevelTrainingPath() {
           className="bg-white/5 border p-6"
           style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
         >
-          <h2 className="text-lg font-semibold text-white mb-4">How Progreso Works</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">Cómo Funciona el Progreso</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <div 
