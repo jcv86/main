@@ -6,31 +6,167 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
-import { ArrowRight, ArrowLeft, CheckCircle2, Trophy, Clock, AlertCircle, Star } from 'lucide-react'
+import { Textarea } from '@/components/ui/textarea'
+import { ArrowRight, ArrowLeft, CheckCircle2, Trophy, Clock, Star, Play, Mic, User, MessageSquare, Award, Sparkles } from 'lucide-react'
 
 const MODULE_XP = 220
-const INTERVIEW_STAGES = [
-  { name: 'Setup', progress: 5 },
-  { name: 'Opening complete', progress: 20 },
-  { name: 'CV section complete', progress: 35 },
-  { name: 'Role-fit section complete', progress: 50 },
-  { name: 'Behavioral section complete', progress: 65 },
-  { name: 'Difficult question complete', progress: 80 },
-  { name: 'Interview completed', progress: 90 },
-  { name: 'Report reviewed', progress: 100 }
+
+// Full interview simulation questions
+const INTERVIEW_SECTIONS = [
+  {
+    id: 'opening',
+    title: 'Opening & Rapport',
+    description: 'The interview begins with warm-up questions',
+    questions: [
+      {
+        id: 'intro',
+        question: 'Hello! Thank you for joining us today. How are you doing?',
+        tip: 'Be warm and professional. This sets the tone for the interview.',
+        type: 'warmup'
+      },
+      {
+        id: 'tell-me',
+        question: 'Great! Let\'s start. Can you tell me a little about yourself?',
+        tip: 'Use your 30-second introduction from Career Mirror. Focus on professional summary.',
+        type: 'standard',
+        timeTarget: 60
+      }
+    ]
+  },
+  {
+    id: 'background',
+    title: 'Background & Experience',
+    description: 'Questions about your professional journey',
+    questions: [
+      {
+        id: 'cv-walk',
+        question: 'Walk me through your CV. What has been your career path so far?',
+        tip: 'Chronological but brief. Highlight relevant transitions and growth.',
+        type: 'standard',
+        timeTarget: 90
+      },
+      {
+        id: 'current-role',
+        question: 'What are your main responsibilities in your current (or most recent) role?',
+        tip: 'Focus on achievements, not just tasks. Use your Value Mining Lab stories.',
+        type: 'standard',
+        timeTarget: 60
+      }
+    ]
+  },
+  {
+    id: 'motivation',
+    title: 'Motivation & Fit',
+    description: 'Understanding why you want this opportunity',
+    questions: [
+      {
+        id: 'why-role',
+        question: 'Why are you interested in this position?',
+        tip: 'Connect your goals to the role. Show you\'ve researched. Be genuine.',
+        type: 'standard',
+        timeTarget: 60
+      },
+      {
+        id: 'why-leave',
+        question: 'What made you start looking for a new opportunity?',
+        tip: 'Stay positive. Focus on growth and new challenges, not problems.',
+        type: 'standard',
+        timeTarget: 45
+      }
+    ]
+  },
+  {
+    id: 'behavioral',
+    title: 'Behavioral Questions',
+    description: 'Stories that demonstrate your abilities',
+    questions: [
+      {
+        id: 'achievement',
+        question: 'Tell me about an achievement you\'re particularly proud of.',
+        tip: 'Use STAR/CAR structure. Include specific metrics if possible.',
+        type: 'behavioral',
+        timeTarget: 90
+      },
+      {
+        id: 'challenge',
+        question: 'Describe a challenging situation at work and how you handled it.',
+        tip: 'Show problem-solving. Focus on YOUR actions and the outcome.',
+        type: 'behavioral',
+        timeTarget: 90
+      },
+      {
+        id: 'teamwork',
+        question: 'Give me an example of how you\'ve worked effectively in a team.',
+        tip: 'Balance showing your contribution while respecting the team.',
+        type: 'behavioral',
+        timeTarget: 75
+      }
+    ]
+  },
+  {
+    id: 'difficult',
+    title: 'Difficult Question',
+    description: 'One challenging question to test your preparation',
+    questions: [
+      {
+        id: 'weakness',
+        question: 'What would you say is your biggest area for improvement?',
+        tip: 'Be honest but strategic. Show self-awareness and active improvement.',
+        type: 'difficult',
+        timeTarget: 60
+      }
+    ]
+  },
+  {
+    id: 'closing',
+    title: 'Closing',
+    description: 'Your chance to ask questions and make final impression',
+    questions: [
+      {
+        id: 'your-questions',
+        question: 'Do you have any questions for me about the role or the company?',
+        tip: 'Always have 2-3 thoughtful questions prepared. Never say "no questions."',
+        type: 'closing',
+        timeTarget: 60
+      }
+    ]
+  }
+]
+
+// Performance rating criteria
+const EVALUATION_CRITERIA = [
+  { id: 'clarity', name: 'Answer Clarity', description: 'Were your answers clear and easy to follow?' },
+  { id: 'structure', name: 'Structure', description: 'Did you use frameworks (STAR/CAR) effectively?' },
+  { id: 'relevance', name: 'Relevance', description: 'Did your answers connect to the role?' },
+  { id: 'confidence', name: 'Confidence', description: 'Did you project confidence without arrogance?' },
+  { id: 'authenticity', name: 'Authenticity', description: 'Were your answers genuine and believable?' }
 ]
 
 export default function BasicInterviewMissionModule() {
   const router = useRouter()
-  const [currentStage, setCurrentStage] = useState(0)
   const [missionStarted, setMissionStarted] = useState(false)
+  const [currentSectionIndex, setCurrentSectionIndex] = useState(0)
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
+  const [answers, setAnswers] = useState<{[key: string]: string}>({})
+  const [selfRatings, setSelfRatings] = useState<{[key: string]: number}>({})
+  const [interviewComplete, setInterviewComplete] = useState(false)
+  const [showReport, setShowReport] = useState(false)
 
-  const progress = INTERVIEW_STAGES[currentStage]?.progress || 0
+  const currentSection = INTERVIEW_SECTIONS[currentSectionIndex]
+  const currentQuestion = currentSection?.questions[currentQuestionIndex]
+  const totalQuestions = INTERVIEW_SECTIONS.reduce((sum, s) => sum + s.questions.length, 0)
+  const answeredQuestions = Object.keys(answers).length
 
-  const advanceStage = () => {
-    if (currentStage < INTERVIEW_STAGES.length - 1) {
-      setCurrentStage(currentStage + 1)
+  const progress = interviewComplete ? 100 : Math.round((answeredQuestions / totalQuestions) * 80)
+
+  const handleNextQuestion = () => {
+    if (currentQuestionIndex < currentSection.questions.length - 1) {
+      setCurrentQuestionIndex(currentQuestionIndex + 1)
+    } else if (currentSectionIndex < INTERVIEW_SECTIONS.length - 1) {
+      setCurrentSectionIndex(currentSectionIndex + 1)
+      setCurrentQuestionIndex(0)
+    } else {
+      setInterviewComplete(true)
     }
   }
 
@@ -53,9 +189,15 @@ export default function BasicInterviewMissionModule() {
     }
   }
 
+  const calculateOverallScore = () => {
+    const ratings = Object.values(selfRatings)
+    if (ratings.length === 0) return 0
+    return Math.round(ratings.reduce((a, b) => a + b, 0) / ratings.length * 20)
+  }
+
   return (
     <div className="min-h-screen bg-background">
-      <div className="container max-w-4xl mx-auto px-4 py-12 space-y-8">
+      <div className="container max-w-4xl mx-auto px-4 py-8 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <Link href="/despega/a3">
@@ -65,166 +207,343 @@ export default function BasicInterviewMissionModule() {
             </Button>
           </Link>
           <div className="flex items-center gap-2">
-            <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)] border-purple-500/30">
+            <Badge className="bg-gradient-to-r from-[rgba(170,70,170,0.3)] to-[rgba(80,160,170,0.3)] text-white border-0">
               Final Mission
             </Badge>
             <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] border-[rgba(170,70,170,0.3)]">
-              Module 10 • {MODULE_XP} XP
+              {MODULE_XP} XP
             </Badge>
           </div>
         </div>
 
         {/* Title */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-[rgba(170,70,170,0.2)] flex items-center justify-center">
-              <Trophy className="w-6 h-6 text-[rgb(200,130,200)]" />
-            </div>
-            <div>
-              <h1 className="text-3xl font-bold text-white">Basic Interview Mission</h1>
-              <p className="text-white/60">Final full realistic interview • Required simulation</p>
-            </div>
+        <div className="flex items-start gap-4">
+          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-[rgba(170,70,170,0.3)] to-[rgba(80,160,170,0.3)] flex items-center justify-center">
+            <Trophy className="w-7 h-7 text-[rgb(200,130,200)]" />
           </div>
-          <p className="text-white/70 max-w-2xl">
-            Complete a full beginner-friendly realistic interview and receive your Basic Level readiness report.
-          </p>
+          <div>
+            <h1 className="text-2xl font-bold text-white">Basic Interview Mission</h1>
+            <p className="text-white/60">Complete full interview simulation • Final challenge</p>
+          </div>
         </div>
-
-        {/* Mission Details */}
-        <Card className="rounded-[2px] bg-purple-500/10 border-purple-500/30 p-4">
-          <div className="grid md:grid-cols-4 gap-4 text-center">
-            <div>
-              <p className="text-white/40 text-xs uppercase">Interviewer</p>
-              <p className="text-white font-medium">Recruiter / HR</p>
-            </div>
-            <div>
-              <p className="text-white/40 text-xs uppercase">Difficulty</p>
-              <p className="text-white font-medium">Simple to Middle</p>
-            </div>
-            <div>
-              <p className="text-white/40 text-xs uppercase">Format</p>
-              <p className="text-white font-medium">Full Interview</p>
-            </div>
-            <div>
-              <p className="text-white/40 text-xs uppercase">Duration</p>
-              <p className="text-white font-medium flex items-center justify-center gap-1">
-                <Clock className="w-4 h-4" /> 15-25 min
-              </p>
-            </div>
-          </div>
-        </Card>
-
-        {/* Interview Structure */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
-          <p className="text-white/50 text-xs uppercase mb-3">Full Interview Structure</p>
-          <div className="grid md:grid-cols-2 gap-2">
-            {[
-              'Welcome',
-              'Tell me about yourself',
-              'Walk me through your CV',
-              'Why are you interested in this role?',
-              'What experience connects with this position?',
-              'What are your strengths?',
-              'Tell me about a challenge you solved',
-              'What is one area you are improving?',
-              'One difficult question',
-              'Candidate asks a question',
-              'Closing',
-              'Final evaluation'
-            ].map((item, index) => (
-              <div key={index} className="flex items-center gap-2 text-sm text-white/70">
-                <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-xs">
-                  {index + 1}
-                </span>
-                {item}
-              </div>
-            ))}
-          </div>
-        </Card>
 
         {/* Progress */}
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Mission Progress</span>
-            <span className="text-[rgb(200,130,200)]">{progress}%</span>
+            <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
-          <Progress value={progress} className="h-2 bg-white/10" />
-          <p className="text-xs text-white/50 mt-2">
-            Current stage: {INTERVIEW_STAGES[currentStage]?.name || 'Not started'}
-          </p>
+          <div className="h-2 bg-white/10 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-gradient-to-r from-[rgb(170,70,170)] to-[rgb(80,160,170)] transition-all duration-500"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
         </Card>
 
-        {/* Mission Area */}
-        {!missionStarted ? (
-          <Card className="rounded-[2px] bg-purple-500/10 border-purple-500/30 p-8 text-center space-y-4">
-            <AlertCircle className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
-            <h3 className="text-xl font-bold text-white">Final Mission</h3>
-            <p className="text-white/70 max-w-md mx-auto">
-              This is the final Basic Level mission. You will complete a full beginner-friendly interview. 
-              This module proves whether you are ready for basic recruiter or HR interviews.
-            </p>
-            <div className="flex items-center justify-center gap-2 text-[rgb(80,160,170)] text-sm">
-              <Star className="w-4 h-4" />
-              <span>Worth {MODULE_XP} XP - the most of any module!</span>
-            </div>
+        {/* Pre-Mission State */}
+        {!missionStarted && !interviewComplete && (
+          <div className="space-y-6">
+            {/* Mission Briefing */}
+            <Card className="rounded-[2px] bg-gradient-to-br from-[rgba(170,70,170,0.15)] to-[rgba(80,160,170,0.15)] border-[rgba(170,70,170,0.3)] p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-[rgba(170,70,170,0.2)] flex items-center justify-center">
+                  <Star className="w-6 h-6 text-[rgb(200,130,200)]" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-white mb-2">Mission Briefing</h3>
+                  <p className="text-white/70 text-sm">
+                    This is your final challenge in the Basic Level Training Path. You will complete a 
+                    full simulated interview with a virtual recruiter. Use everything you&apos;ve learned 
+                    in the previous 9 modules.
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Interview Details */}
+            <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+                <div>
+                  <User className="w-5 h-5 text-[rgb(80,160,170)] mx-auto mb-1" />
+                  <p className="text-xs text-white/40">Interviewer</p>
+                  <p className="text-sm font-medium">HR Recruiter</p>
+                </div>
+                <div>
+                  <MessageSquare className="w-5 h-5 text-[rgb(80,160,170)] mx-auto mb-1" />
+                  <p className="text-xs text-white/40">Questions</p>
+                  <p className="text-sm font-medium">{totalQuestions} Total</p>
+                </div>
+                <div>
+                  <Clock className="w-5 h-5 text-[rgb(80,160,170)] mx-auto mb-1" />
+                  <p className="text-xs text-white/40">Duration</p>
+                  <p className="text-sm font-medium">15-25 min</p>
+                </div>
+                <div>
+                  <Award className="w-5 h-5 text-[rgb(80,160,170)] mx-auto mb-1" />
+                  <p className="text-xs text-white/40">Reward</p>
+                  <p className="text-sm font-medium">{MODULE_XP} XP</p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Interview Structure Preview */}
+            <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+              <h4 className="font-semibold mb-3">Interview Structure</h4>
+              <div className="space-y-2">
+                {INTERVIEW_SECTIONS.map((section, i) => (
+                  <div key={section.id} className="flex items-center gap-3 text-sm">
+                    <div className="w-6 h-6 rounded-full bg-[rgba(170,70,170,0.2)] flex items-center justify-center text-xs text-[rgb(200,130,200)]">
+                      {i + 1}
+                    </div>
+                    <span className="text-white/80">{section.title}</span>
+                    <span className="text-white/40 text-xs">({section.questions.length} questions)</span>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            {/* Tips */}
+            <Card className="rounded-[2px] bg-[rgba(80,160,170,0.1)] border-[rgba(80,160,170,0.3)] p-4">
+              <h4 className="font-semibold text-[rgb(80,160,170)] mb-2">Tips for Success</h4>
+              <ul className="space-y-1 text-sm text-white/70">
+                <li>• Take your time to think before answering</li>
+                <li>• Use the STAR/CAR frameworks from Answer Architecture</li>
+                <li>• Draw from your Value Mining Lab achievements</li>
+                <li>• Remember your safe answer strategies for difficult questions</li>
+                <li>• Be authentic and professional throughout</li>
+              </ul>
+            </Card>
+
             <Button 
-              onClick={() => {
-                setMissionStarted(true)
-                setCurrentStage(0)
-              }}
-              className="bg-purple-500 hover:bg-purple-600"
+              onClick={() => setMissionStarted(true)}
+              className="rounded-[20px] w-full bg-gradient-to-r from-[rgb(170,70,170)] to-[rgb(80,160,170)] hover:opacity-90"
             >
-              Start Final Mission
-              <ArrowRight className="w-4 h-4 ml-2" />
+              <Play className="w-4 h-4 mr-2" /> Start Interview Simulation
             </Button>
-          </Card>
-        ) : currentStage < INTERVIEW_STAGES.length - 1 ? (
-          <Card className="rounded-[2px] bg-white/5 border-white/10 p-8 text-center space-y-4">
-            <Trophy className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
-            <h3 className="text-xl font-bold text-white">
-              Stage: {INTERVIEW_STAGES[currentStage]?.name}
-            </h3>
-            <p className="text-white/70">
-              Continue through the mission stages.
-            </p>
+          </div>
+        )}
+
+        {/* Active Interview */}
+        {missionStarted && !interviewComplete && currentQuestion && (
+          <div className="space-y-6">
+            {/* Section Header */}
+            <Card className="rounded-[2px] bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)] p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-[rgb(200,130,200)] uppercase">Section {currentSectionIndex + 1} of {INTERVIEW_SECTIONS.length}</p>
+                  <h3 className="font-semibold">{currentSection.title}</h3>
+                  <p className="text-sm text-white/60">{currentSection.description}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-white/40">Question</p>
+                  <p className="text-lg font-semibold text-[rgb(170,70,170)]">
+                    {currentQuestionIndex + 1}/{currentSection.questions.length}
+                  </p>
+                </div>
+              </div>
+            </Card>
+
+            {/* Question Card */}
+            <Card className="rounded-[2px] bg-white/5 border-white/20 p-6">
+              <div className="flex items-start gap-4 mb-4">
+                <div className="w-10 h-10 rounded-full bg-[rgba(80,160,170,0.2)] flex items-center justify-center flex-shrink-0">
+                  <User className="w-5 h-5 text-[rgb(80,160,170)]" />
+                </div>
+                <div>
+                  <p className="text-xs text-white/40 mb-1">Interviewer asks:</p>
+                  <p className="text-lg text-white">&quot;{currentQuestion.question}&quot;</p>
+                </div>
+              </div>
+
+              {currentQuestion.tip && (
+                <div className="bg-[rgba(80,160,170,0.1)] p-3 rounded mb-4">
+                  <p className="text-xs text-[rgb(80,160,170)]">
+                    <Sparkles className="w-3 h-3 inline mr-1" />
+                    Tip: {currentQuestion.tip}
+                  </p>
+                </div>
+              )}
+
+              {currentQuestion.timeTarget && (
+                <div className="flex items-center gap-2 text-xs text-white/50 mb-4">
+                  <Clock className="w-4 h-4" />
+                  Target answer length: ~{currentQuestion.timeTarget} seconds
+                </div>
+              )}
+
+              <div className="space-y-2">
+                <div className="flex items-center gap-2">
+                  <Mic className="w-4 h-4 text-[rgb(170,70,170)]" />
+                  <label className="text-sm font-medium">Your Answer:</label>
+                </div>
+                <Textarea
+                  placeholder="Type your answer as if speaking to the interviewer..."
+                  value={answers[currentQuestion.id] || ''}
+                  onChange={(e) => setAnswers({...answers, [currentQuestion.id]: e.target.value})}
+                  className="bg-white/5 border-white/20 min-h-[150px] text-white"
+                />
+                <p className="text-xs text-white/40">
+                  {(answers[currentQuestion.id]?.length || 0)} characters
+                </p>
+              </div>
+            </Card>
+
+            {/* Navigation */}
+            <div className="flex gap-3">
+              {(currentSectionIndex > 0 || currentQuestionIndex > 0) && (
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    if (currentQuestionIndex > 0) {
+                      setCurrentQuestionIndex(currentQuestionIndex - 1)
+                    } else if (currentSectionIndex > 0) {
+                      setCurrentSectionIndex(currentSectionIndex - 1)
+                      setCurrentQuestionIndex(INTERVIEW_SECTIONS[currentSectionIndex - 1].questions.length - 1)
+                    }
+                  }}
+                  className="border-white/20"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" /> Previous
+                </Button>
+              )}
+              <Button
+                onClick={handleNextQuestion}
+                disabled={!answers[currentQuestion.id] || answers[currentQuestion.id].length < 20}
+                className="rounded-[20px] flex-1 bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
+              >
+                {currentSectionIndex === INTERVIEW_SECTIONS.length - 1 && 
+                 currentQuestionIndex === currentSection.questions.length - 1 
+                  ? 'Complete Interview' 
+                  : 'Next Question'
+                }
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          </div>
+        )}
+
+        {/* Interview Complete - Self Evaluation */}
+        {interviewComplete && !showReport && (
+          <div className="space-y-6">
+            <Card className="rounded-[2px] bg-gradient-to-br from-[rgba(170,70,170,0.2)] to-[rgba(80,160,170,0.2)] border-[rgba(170,70,170,0.4)] p-6 text-center">
+              <CheckCircle2 className="w-16 h-16 text-[rgb(200,130,200)] mx-auto mb-4" />
+              <h3 className="text-xl font-bold mb-2">Interview Complete!</h3>
+              <p className="text-white/70">
+                Great job completing the full interview simulation. Now rate your own performance 
+                to generate your readiness report.
+              </p>
+            </Card>
+
+            <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+              <h4 className="font-semibold mb-4">Self-Evaluation</h4>
+              <p className="text-sm text-white/60 mb-4">
+                Rate yourself honestly on each criterion (1 = needs work, 5 = excellent)
+              </p>
+
+              <div className="space-y-4">
+                {EVALUATION_CRITERIA.map((criterion) => (
+                  <div key={criterion.id} className="space-y-2">
+                    <div className="flex justify-between">
+                      <span className="font-medium">{criterion.name}</span>
+                      <span className="text-[rgb(170,70,170)]">{selfRatings[criterion.id] || '-'}/5</span>
+                    </div>
+                    <p className="text-xs text-white/50">{criterion.description}</p>
+                    <div className="flex gap-2">
+                      {[1, 2, 3, 4, 5].map((rating) => (
+                        <button
+                          key={rating}
+                          onClick={() => setSelfRatings({...selfRatings, [criterion.id]: rating})}
+                          className={`w-10 h-10 rounded transition-all ${
+                            selfRatings[criterion.id] === rating
+                              ? 'bg-[rgb(170,70,170)] text-white'
+                              : 'bg-white/10 hover:bg-white/20'
+                          }`}
+                        >
+                          {rating}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+
+            <Button
+              onClick={() => setShowReport(true)}
+              disabled={Object.keys(selfRatings).length < EVALUATION_CRITERIA.length}
+              className="rounded-[20px] w-full bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
+            >
+              Generate Readiness Report <ArrowRight className="w-4 h-4 ml-2" />
+            </Button>
+          </div>
+        )}
+
+        {/* Final Report */}
+        {showReport && (
+          <div className="space-y-6">
+            <Card className="rounded-[2px] bg-gradient-to-br from-[rgba(170,70,170,0.2)] to-[rgba(80,160,170,0.2)] border-[rgba(170,70,170,0.4)] p-8 text-center">
+              <div className="relative inline-block mb-4">
+                <Trophy className="w-20 h-20 text-[rgb(200,130,200)]" />
+                <div className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-[rgb(170,70,170)] flex items-center justify-center">
+                  <CheckCircle2 className="w-6 h-6 text-white" />
+                </div>
+              </div>
+              
+              <h2 className="text-2xl font-bold mb-2">Basic Level Complete!</h2>
+              <p className="text-white/70 mb-6">
+                Congratulations! You&apos;ve completed the entire A3 Basic Level Training Path.
+              </p>
+
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-4 mb-6">
+                <div className="bg-white/10 rounded-lg p-4">
+                  <p className="text-3xl font-bold text-[rgb(170,70,170)]">1,340</p>
+                  <p className="text-xs text-white/50">Total XP Earned</p>
+                </div>
+                <div className="bg-white/10 rounded-lg p-4">
+                  <p className="text-3xl font-bold text-[rgb(200,130,200)]">10/10</p>
+                  <p className="text-xs text-white/50">Modules Complete</p>
+                </div>
+                <div className="bg-white/10 rounded-lg p-4">
+                  <p className="text-3xl font-bold text-[rgb(80,160,170)]">{calculateOverallScore()}%</p>
+                  <p className="text-xs text-white/50">Self-Assessment</p>
+                </div>
+              </div>
+
+              {/* Readiness Statement */}
+              <Card className="rounded-[2px] bg-white/10 border-white/20 p-4 mb-6 text-left">
+                <h4 className="font-semibold text-[rgb(200,130,200)] mb-2">Your Readiness Level</h4>
+                <p className="text-sm text-white/80">
+                  {calculateOverallScore() >= 80 
+                    ? 'You are well-prepared for basic recruiter and HR interviews. You have strong foundations in self-presentation, structured answers, and handling difficult questions.'
+                    : calculateOverallScore() >= 60
+                    ? 'You have good foundations for basic interviews. Consider reviewing modules where you scored lower and practice more before real interviews.'
+                    : 'You have completed the training but may benefit from additional practice. Focus on the areas you rated lowest and consider repeating some modules.'
+                  }
+                </p>
+              </Card>
+
+              {/* What's Next */}
+              <Card className="rounded-[2px] bg-[rgba(80,160,170,0.1)] border-[rgba(80,160,170,0.3)] p-4 text-left">
+                <h4 className="font-semibold text-[rgb(80,160,170)] mb-2">What&apos;s Next?</h4>
+                <ul className="text-sm text-white/70 space-y-1">
+                  <li>• Apply to entry-level positions with confidence</li>
+                  <li>• Practice with real interviews (each one makes you better)</li>
+                  <li>• When ready, unlock Intermediate Level (A3-Intermediate) for technical interviews</li>
+                  <li>• Keep your Career Mirror and Answer Bank updated</li>
+                </ul>
+              </Card>
+            </Card>
+
             <Button 
-              onClick={advanceStage}
-              className="bg-purple-500 hover:bg-purple-600"
+              onClick={handleComplete}
+              className="rounded-[20px] w-full bg-gradient-to-r from-[rgb(170,70,170)] to-[rgb(80,160,170)] hover:opacity-90 text-lg py-6"
             >
-              Continue to Next Stage
-              <ArrowRight className="w-4 h-4 ml-2" />
+              <Award className="w-5 h-5 mr-2" />
+              Complete Basic Level & Earn {MODULE_XP} XP
             </Button>
-          </Card>
-        ) : (
-          <Card className="rounded-[2px] bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border-purple-500/30 p-8 text-center space-y-4">
-            <div className="relative">
-              <Trophy className="w-16 h-16 text-[rgb(80,160,170)] mx-auto" />
-              <CheckCircle2 className="w-8 h-8 text-[rgb(200,130,200)] absolute -bottom-1 -right-1 left-1/2 ml-4" />
-            </div>
-            <h3 className="text-2xl font-bold text-white">Basic Level Complete!</h3>
-            <p className="text-white/70 max-w-md mx-auto">
-              Congratulations! You&apos;ve completed the entire A3 Basic Level Training Path 
-              and earned a total of 1,340 XP. You are now ready for real recruiter and HR interviews.
-            </p>
-            <div className="flex flex-wrap justify-center gap-4 py-4">
-              <div className="bg-white/10 rounded-lg px-4 py-2">
-                <p className="text-2xl font-bold text-[rgb(170,70,170)]">1,340</p>
-                <p className="text-xs text-white/50">Total XP Earned</p>
-              </div>
-              <div className="bg-white/10 rounded-lg px-4 py-2">
-                <p className="text-2xl font-bold text-[rgb(200,130,200)]">10/10</p>
-                <p className="text-xs text-white/50">Modules Completed</p>
-              </div>
-              <div className="bg-white/10 rounded-lg px-4 py-2">
-                <p className="text-2xl font-bold text-[rgb(200,130,200)]">Basic</p>
-                <p className="text-xs text-white/50">Level Certified</p>
-              </div>
-            </div>
-            <Button onClick={handleComplete} className="rounded-[20px] bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90">
-              Complete Basic Level
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </Card>
+          </div>
         )}
       </div>
     </div>
