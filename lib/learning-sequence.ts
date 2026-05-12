@@ -81,7 +81,7 @@ export const LEARNING_SEQUENCE: SequenceStep[] = [
     type: 'diagnostic',
     name: 'Conozcámonos 1',
     description: 'Diagnóstico inicial - ¿Cómo responde a situaciones?',
-    path: '/despega/conozcamonos/1',
+    path: '/despega/conozcamonos-1',
     xp: 0, // Diagnostic doesn't award XP
     order: 1,
   },
@@ -90,7 +90,7 @@ export const LEARNING_SEQUENCE: SequenceStep[] = [
     type: 'main_pillar',
     name: 'El Ritual',
     description: 'Aprende y practica el método STAR',
-    path: '/despega/el-ritual',
+    path: '/despega/a1',
     xp: 150, // Total XP for completing this pillar
     order: 2,
     requiresCompletion: 'c1',
@@ -98,6 +98,70 @@ export const LEARNING_SEQUENCE: SequenceStep[] = [
 
   // PILLAR 2: Exploración
   {
+    id: 'c2',
+    type: 'diagnostic',
+    name: 'Conozcámonos 2',
+    description: 'Evaluación - ¿Qué mercado es para ti?',
+    path: '/despega/conozcamonos-2',
+    xp: 0,
+    order: 3,
+    requiresCompletion: 'a1',
+  },
+  {
+    id: 'a2',
+    type: 'main_pillar',
+    name: 'Exploración',
+    description: 'Descubre oportunidades en el mercado',
+    path: '/despega/a2',
+    xp: 150,
+    order: 4,
+    requiresCompletion: 'c2',
+  },
+
+  // PILLAR 3: Entrenamiento
+  {
+    id: 'c3',
+    type: 'diagnostic',
+    name: 'Conozcámonos 3',
+    description: 'Test - ¿Cuál es tu nivel actual?',
+    path: '/despega/conozcamonos-3',
+    xp: 0,
+    order: 5,
+    requiresCompletion: 'a2',
+  },
+  {
+    id: 'a3',
+    type: 'main_pillar',
+    name: 'Entrenamiento',
+    description: 'Practica bajo presión y mejora continuamente',
+    path: '/despega/a3',
+    xp: 150,
+    order: 6,
+    requiresCompletion: 'c3',
+  },
+
+  // PILLAR 4: La Realidad
+  {
+    id: 'c4',
+    type: 'diagnostic',
+    name: 'Conozcámonos 4',
+    description: 'Evaluación Final - ¿Estás listo?',
+    path: '/despega/conozcamonos-4',
+    xp: 0,
+    order: 7,
+    requiresCompletion: 'a3',
+  },
+  {
+    id: 'a4',
+    type: 'main_pillar',
+    name: 'La Realidad',
+    description: 'Enfrenta entrevistas reales y aprende',
+    path: '/despega/a4',
+    xp: 200,
+    order: 8,
+    requiresCompletion: 'c4',
+  },
+]
     id: 'c2',
     type: 'diagnostic',
     name: 'Conozcámonos 2',

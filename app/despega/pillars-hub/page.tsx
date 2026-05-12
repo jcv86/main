@@ -153,7 +153,14 @@ export default function PillarsHubPage() {
                   <Button
                     onClick={() => {
                       if (isDiagnosticCompleted) {
-                        router.push(pillar.color) // Navigate to main pillar
+                        // Navigate directly to main pillar
+                        const pillarPaths: Record<string, string> = {
+                          a1: '/despega/a1',
+                          a2: '/despega/a2',
+                          a3: '/despega/a3',
+                          a4: '/despega/a4',
+                        }
+                        router.push(pillarPaths[pillar.id] || diagnostic.path)
                       } else {
                         router.push(diagnostic.path) // Start with diagnostic
                       }
