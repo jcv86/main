@@ -57,7 +57,7 @@ export default function DespegaOnboarding() {
   // Check if user already completed onboarding
   useEffect(() => {
     const checkStatus = async () => {
-      if (authLoading) return // Wait for auth to load
+      if (!mounted || authLoading) return // Wait for mounting and auth to complete
 
       try {
         if (!user) {
@@ -117,7 +117,7 @@ export default function DespegaOnboarding() {
     }
 
     checkStatus()
-  }, [user, authLoading, router, supabase])
+  }, [user, authLoading, mounted, router, supabase])
 
   const question = DISC_TEST_QUESTIONS[currentQuestion]
   const progress = ((currentQuestion + 1) / DISC_TEST_QUESTIONS.length) * 100
