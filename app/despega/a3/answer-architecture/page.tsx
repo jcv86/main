@@ -18,7 +18,7 @@ const MODULE_XP = 120
 const ANSWER_TYPES = [
   {
     id: 'self-intro',
-    title: 'Build 30-second Self-Introduction',
+    title: 'Construir Autopresentación de 30 segundos',
     subtitle: '"Tell me about yourself"',
     formula: 'I am a [title] with [X years] experience in [field]. My strongest areas are [2-3 skills]. I am looking for [goal] because [motivation].',
     timeTarget: '30 seconds (~75 words)',
@@ -217,7 +217,7 @@ export default function AnswerArchitectureModule() {
             </div>
             <div>
               <h1 className="text-3xl font-bold text-white">Arquitectura de Respuestas</h1>
-              <p className="text-white/60">Answer builder • Optional voice practice</p>
+              <p className="text-white/60">Constructor de respuestas • Práctica de voz opcional</p>
             </div>
           </div>
           <p className="text-white/70 max-w-2xl">
@@ -229,7 +229,7 @@ export default function AnswerArchitectureModule() {
         {/* Key Formulas */}
         <div className="grid md:grid-cols-2 gap-4">
           <Card className="rounded-[2px] bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)] p-4">
-            <p className="text-[rgb(200,130,200)] text-xs uppercase font-medium mb-2">Self-Introduction Formula</p>
+            <p className="text-[rgb(200,130,200)] text-xs uppercase font-medium mb-2">Fórmula de Autopresentación</p>
             <p className="text-white/80 text-sm italic">
               &quot;I am a [title] with [X years] in [field]. My strongest areas are [skills]. I am looking for [goal] because [motivation].&quot;
             </p>
@@ -354,7 +354,7 @@ export default function AnswerArchitectureModule() {
                 {answerType.id === 'timing' ? (
                   <div className="space-y-4">
                     <p className="text-white/70 text-sm">
-                      Take one of your previous answers and practice delivering it at different lengths:
+                      Toma una de tus respuestas anteriores y practica entregarla en diferentes longitudes:
                     </p>
                     {answerType.variations?.map((variation) => (
                       <div key={variation.seconds} className="space-y-2">

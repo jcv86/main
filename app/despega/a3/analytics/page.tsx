@@ -144,7 +144,7 @@ export default function A3AnalyticsPage() {
 
         {/* Fortalezas & Mejoras */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Strengths */}
+          {/* Fortalezas */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">

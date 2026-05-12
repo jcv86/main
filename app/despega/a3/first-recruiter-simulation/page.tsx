@@ -18,7 +18,7 @@ const MODULE_XP = 160
 const INTERVIEW_SCRIPT = [
   {
     id: 'greeting',
-    stage: 'Abriring',
+    stage: 'Apertura',
     question: 'Hi! Thank you for joining. How are you today?',
     guidance: 'Keep it brief and professional. A simple "I\'m doing well, thank you for having me" works perfectly.',
     timeLimit: 15,
@@ -50,7 +50,7 @@ const INTERVIEW_SCRIPT = [
   },
   {
     id: 'strengths',
-    stage: 'Strengths',
+    stage: 'Fortalezas',
     question: 'What would you say are your greatest strengths?',
     guidance: 'Pick 1-2 strengths relevant to the role. Support with a brief example.',
     timeLimit: 45,
@@ -74,7 +74,7 @@ const INTERVIEW_SCRIPT = [
   },
   {
     id: 'closing',
-    stage: 'Closing',
+    stage: 'Cierre',
     question: 'Thank you for your time. We\'ll be in touch with next steps.',
     guidance: 'Thank them genuinely. Express continued interest. End confidently.',
     timeLimit: 15,
@@ -84,14 +84,14 @@ const INTERVIEW_SCRIPT = [
 
 // Pre-simulation checklist
 const PRE_CHECKLIST = [
-  { id: 'quiet', text: 'I am in a quiet environment' },
-  { id: 'camera', text: 'My camera/microphone is working' },
-  { id: 'notes', text: 'I have my prepared answers nearby (optional)' },
-  { id: 'ready', text: 'I am ready to practice as if it were real' }
+  { id: 'quiet', text: 'Estoy en un ambiente tranquilo' },
+  { id: 'camera', text: 'Mi cámara/micrófono funciona' },
+  { id: 'notes', text: 'Tengo mis respuestas preparadas cerca (opcional)' },
+  { id: 'ready', text: 'Estoy listo para practicar como si fuera real' }
 ]
 
 // Good questions to ask
-const GOOD_QUESTIONS_TO_ASK = [
+const GOOD_PREGUNTAS_TO_ASK = [
   'What does a typical day look like in this role?',
   'How would you describe the team I would be working with?',
   'What are the main goals for this position in the first 90 days?',
@@ -226,7 +226,7 @@ export default function FirstRecruiterSimulationModule() {
             <div>
               <p className="text-white/40 text-xs uppercase">Interviewer Style</p>
               <p className="text-white font-medium flex items-center justify-center gap-1">
-                <User className="w-4 h-4" /> Recruiter / HR
+                <User className="w-4 h-4" /> Reclutador / RRHH
               </p>
             </div>
             <div>
@@ -249,12 +249,12 @@ export default function FirstRecruiterSimulationModule() {
         {/* Progreso */}
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-white/70">Interview Progreso</span>
+            <span className="text-white/70">Progreso de la Entrevista</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
           <Progress value={progress} className="h-2 bg-white/10" />
           <p className="text-xs text-white/50 mt-2">
-            {currentStage < 0 ? 'Pre-interview setup' : 
+            {currentStage < 0 ? 'Configuración previa a la entrevista' : 
              currentStage < INTERVIEW_SCRIPT.length ? `Question ${currentStage + 1} of ${INTERVIEW_SCRIPT.length}: ${currentQuestion?.stage}` :
              'Interview complete'}
           </p>
@@ -265,9 +265,9 @@ export default function FirstRecruiterSimulationModule() {
           <Card className="rounded-[2px] bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)] p-6 space-y-6">
             <div className="text-center">
               <AlertCircle className="w-12 h-12 text-[rgb(170,70,170)] mx-auto mb-3" />
-              <h3 className="text-xl font-bold text-white">Pre-Interview Checklist</h3>
+              <h3 className="text-xl font-bold text-white">Lista de Verificación Previa a la Entrevista</h3>
               <p className="text-white/60 text-sm mt-1">
-                Check these items before starting your simulation
+                Verifica estos elementos antes de comenzar tu simulación
               </p>
             </div>
             
@@ -358,7 +358,7 @@ export default function FirstRecruiterSimulationModule() {
                   <div className="mt-3 pt-3 border-t border-[rgba(80,160,170,0.3)]">
                     <p className="text-white/70 text-xs uppercase mb-2">Good questions to ask:</p>
                     <ul className="space-y-1">
-                      {GOOD_QUESTIONS_TO_ASK.map((q, i) => (
+                      {GOOD_PREGUNTAS_TO_ASK.map((q, i) => (
                         <li key={i} className="text-white/60 text-sm flex items-start gap-2">
                           <ChevronRight className="w-4 h-4 text-[rgb(80,160,170)] mt-0.5 flex-shrink-0" />
                           {q}

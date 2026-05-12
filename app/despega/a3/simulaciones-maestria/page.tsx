@@ -14,7 +14,7 @@ import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
 import { A3GeneralProgress } from '@/components/a3-general-progress'
 
-const GUIDED_INTERVIEW_QUESTIONS = [
+const GUIDED_INTERVIEW_PREGUNTAS = [
   {
     id: 1,
     type: 'intro',
@@ -83,8 +83,8 @@ export default function GuidedInterviewPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  const currentQuestion = GUIDED_INTERVIEW_QUESTIONS[currentQuestionIndex]
-  const progress = ((currentQuestionIndex + 1) / GUIDED_INTERVIEW_QUESTIONS.length) * 100
+  const currentQuestion = GUIDED_INTERVIEW_PREGUNTAS[currentQuestionIndex]
+  const progress = ((currentQuestionIndex + 1) / GUIDED_INTERVIEW_PREGUNTAS.length) * 100
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -135,7 +135,7 @@ export default function GuidedInterviewPage() {
   }
 
   const handleSiguiente = () => {
-    if (currentQuestionIndex < GUIDED_INTERVIEW_QUESTIONS.length - 1) {
+    if (currentQuestionIndex < GUIDED_INTERVIEW_PREGUNTAS.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
   }
@@ -162,7 +162,7 @@ export default function GuidedInterviewPage() {
           user_id: user.id,
           simulation_type: 'guided',
           responses: responses,
-          total_questions: GUIDED_INTERVIEW_QUESTIONS.length,
+          total_questions: GUIDED_INTERVIEW_PREGUNTAS.length,
           completed_at: new Date().toISOString()
         })
 
@@ -171,7 +171,7 @@ export default function GuidedInterviewPage() {
       // Calculate score (simple heuristic based on response length and completeness)
       const totalLength = Object.values(responses).reduce((acc, r) => acc + r.length, 0)
       const avgLength = totalLength / Object.keys(responses).length
-      const completeness = (Object.keys(responses).length / GUIDED_INTERVIEW_QUESTIONS.length) * 100
+      const completeness = (Object.keys(responses).length / GUIDED_INTERVIEW_PREGUNTAS.length) * 100
       const calculatedScore = Math.round((avgLength / 200) * 50 + (completeness / 100) * 50)
 
       setScore(Math.min(calculatedScore, 100))
@@ -237,7 +237,7 @@ export default function GuidedInterviewPage() {
       {/* General Progreso Bar */}
       <A3GeneralProgress 
         currentStep={currentQuestionIndex + 1}
-        totalSteps={GUIDED_INTERVIEW_QUESTIONS.length}
+        totalSteps={GUIDED_INTERVIEW_PREGUNTAS.length}
         currentLabel={`Pregunta ${currentQuestionIndex + 1}`}
         completedSections={0}
         totalSections={4}
@@ -259,7 +259,7 @@ export default function GuidedInterviewPage() {
               Entrevista Guiada - Práctica Básica
             </h1>
             <Badge variant="secondary">
-              Pregunta {currentQuestionIndex + 1}/{GUIDED_INTERVIEW_QUESTIONS.length}
+              Pregunta {currentQuestionIndex + 1}/{GUIDED_INTERVIEW_PREGUNTAS.length}
             </Badge>
           </div>
           <Progress value={progress} className="h-2" />
@@ -360,11 +360,11 @@ export default function GuidedInterviewPage() {
           </Button>
 
           <div className="flex gap-2">
-            {currentQuestionIndex < GUIDED_INTERVIEW_QUESTIONS.length - 1 ? (
+            {currentQuestionIndex < GUIDED_INTERVIEW_PREGUNTAS.length - 1 ? (
               <>
                 <Button
                   onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 2)}
-                  disabled={currentQuestionIndex + 2 >= GUIDED_INTERVIEW_QUESTIONS.length}
+                  disabled={currentQuestionIndex + 2 >= GUIDED_INTERVIEW_PREGUNTAS.length}
                   variant="outline"
                 >
                   <SkipForward className="w-4 h-4 mr-2" />

@@ -378,11 +378,11 @@ export default function CoachPracticeRoomModule() {
                       Coach Feedback
                     </p>
                     
-                    {/* Strengths */}
+                    {/* Fortalezas */}
                     {feedback[session.id].strengths.length > 0 && (
                       <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
                         <p className="text-green-400 text-xs uppercase font-medium mb-2 flex items-center gap-1">
-                          <ThumbsUp className="w-3 h-3" /> Strengths
+                          <ThumbsUp className="w-3 h-3" /> Fortalezas
                         </p>
                         <ul className="space-y-1">
                           {feedback[session.id].strengths.map((s, i) => (

@@ -20,7 +20,7 @@ import {
 } from 'lucide-react'
 import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
-const CHALLENGING_QUESTIONS = [
+const CHALLENGING_PREGUNTAS = [
   {
     id: 1,
     number: 1,
@@ -100,7 +100,7 @@ export default function ChallensingTrainingPage() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
 
-  const question = CHALLENGING_QUESTIONS[currentQuestion]
+  const question = CHALLENGING_PREGUNTAS[currentQuestion]
   const averageScore = scores && Object.values(scores).length > 0
     ? Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / Object.values(scores).length)
     : 0
@@ -228,7 +228,7 @@ export default function ChallensingTrainingPage() {
     setHasResponse(false)
     setRecordingTime(0)
     
-    if (currentQuestion < CHALLENGING_QUESTIONS.length - 1) {
+    if (currentQuestion < CHALLENGING_PREGUNTAS.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
     }
   }
@@ -319,7 +319,7 @@ export default function ChallensingTrainingPage() {
             </Link>
             <div className="flex gap-4 items-center">
               <Badge style={{ backgroundColor: 'rgb(170, 70, 170, 0.6)', color: '#ffffff', border: 'none' }}>DESAFÍO MÁXIMO</Badge>
-              <Badge style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff', border: 'none' }}>{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
+              <Badge style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff', border: 'none' }}>{completedQuestions.length}/{CHALLENGING_PREGUNTAS.length} Completadas</Badge>
             </div>
           </div>
         </div>
@@ -354,7 +354,7 @@ export default function ChallensingTrainingPage() {
                 <div className="space-y-2">
                     <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h3 className="text-sm font-bold text-muted-foreground mb-2">Pregunta {currentQuestion + 1} de {CHALLENGING_QUESTIONS.length}</h3>
+                      <h3 className="text-sm font-bold text-muted-foreground mb-2">Pregunta {currentQuestion + 1} de {CHALLENGING_PREGUNTAS.length}</h3>
                       <p className="text-lg text-white font-semibold">{question.question}</p>
                     </div>
                     <Badge style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)', color: '#ffffff', border: 'none' }}>{question.difficulty}</Badge>
@@ -452,7 +452,7 @@ export default function ChallensingTrainingPage() {
                       <p className="text-sm text-white/85">{evaluation.scoreExplanation}</p>
                     </div>
 
-                    {/* Strengths */}
+                    {/* Fortalezas */}
                     <div className="space-y-2">
                       <p className="text-sm font-semibold text-green/40 flex items-center gap-2">
                         <CheckCircle2 className="w-4 h-4" />
@@ -491,7 +491,7 @@ export default function ChallensingTrainingPage() {
                     </div>
 
                     {/* Siguiente Question Button */}
-                    {currentQuestion < CHALLENGING_QUESTIONS.length - 1 ? (
+                    {currentQuestion < CHALLENGING_PREGUNTAS.length - 1 ? (
                       <Button
                         onClick={moveToSiguienteQuestion}
                         className="w-full gap-2"
@@ -544,7 +544,7 @@ export default function ChallensingTrainingPage() {
               {/* Questions List */}
               <div className="flex-1 overflow-y-auto p-4 space-y-2">
                 <p className="text-xs font-bold text-white/70 uppercase tracking-widest mb-3">Preguntas</p>
-                {CHALLENGING_QUESTIONS.map((q, idx) => (
+                {CHALLENGING_PREGUNTAS.map((q, idx) => (
                   <button
                     key={q.id}
                     onClick={() => {

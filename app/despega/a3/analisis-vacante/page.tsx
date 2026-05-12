@@ -21,7 +21,7 @@ Responsabilidades:
 - Colaborar con product managers y diseñadores en la definición de requisitos
 - Participar en decisiones de arquitectura y mejora de procesos
 - Resolver problemas complejos de rendimiento y escalabilidad
-- Contribuir a la documentación técnica y best practices del equipo
+- Contribuir a la documentación técnica y mejores prácticas del equipo
 
 Requisitos Obligatorios:
 - 5+ años de experiencia en desarrollo de software

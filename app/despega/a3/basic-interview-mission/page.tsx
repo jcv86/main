@@ -15,7 +15,7 @@ const MODULE_XP = 220
 const INTERVIEW_SECTIONS = [
   {
     id: 'opening',
-    title: 'Abriring & Rapport',
+    title: 'Apertura y Rapport',
     description: 'The interview begins with warm-up questions',
     questions: [
       {
@@ -56,7 +56,7 @@ const INTERVIEW_SECTIONS = [
   },
   {
     id: 'motivation',
-    title: 'Motivation & Fit',
+    title: 'Motivación e Idoneidad',
     description: 'Understanding why you want this opportunity',
     questions: [
       {
@@ -119,13 +119,13 @@ const INTERVIEW_SECTIONS = [
   },
   {
     id: 'closing',
-    title: 'Closing',
+    title: 'Cierre',
     description: 'Your chance to ask questions and make final impression',
     questions: [
       {
         id: 'your-questions',
         question: 'Do you have any questions for me about the role or the company?',
-        tip: 'Always have 2-3 thoughtful questions prepared. Never say "no questions."',
+        tip: ''Siempre ten 2-3 preguntas reflexivas preparadas. Nunca digas "no tengo preguntas".'',
         type: 'closing',
         timeTarget: 60
       }
@@ -230,7 +230,7 @@ export default function BasicInterviewMissionModule() {
         {/* Progreso */}
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-white/70">Mission Progreso</span>
+            <span className="text-white/70">Progreso de la Misión</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
           <div className="h-2 bg-white/10 rounded-full overflow-hidden">
@@ -516,10 +516,10 @@ export default function BasicInterviewMissionModule() {
                 <h4 className="font-semibold text-[rgb(200,130,200)] mb-2">Your Readiness Level</h4>
                 <p className="text-sm text-white/80">
                   {calculateOverallScore() >= 80 
-                    ? 'You are well-prepared for basic recruiter and HR interviews. You have strong foundations in self-presentation, structured answers, and handling difficult questions.'
+                    ? 'Estás bien preparado para entrevistas básicas con reclutadores y RRHH. Tienes fundamentos sólidos en autopresentación, respuestas estructuradas y manejo de preguntas difíciles.'
                     : calculateOverallScore() >= 60
-                    ? 'You have good foundations for basic interviews. Consider reviewing modules where you scored lower and practice more before real interviews.'
-                    : 'You have completed the training but may benefit from additional practice. Focus on the areas you rated lowest and consider repeating some modules.'
+                    ? 'Tienes buenos fundamentos para entrevistas básicas. Considera revisar módulos donde obtuviste puntuaciones más bajas y practica más antes de entrevistas reales.'
+                    : 'Has completado el entrenamiento pero podrías beneficiarte de práctica adicional. Enfócate en las áreas que calificaste más bajo y considera repetir algunos módulos.'
                   }
                 </p>
               </Card>

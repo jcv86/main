@@ -66,7 +66,7 @@ const DIAGNOSIS_LEVELS = {
   basic: {
     name: 'Basic Level',
     color: PILLAR3_PRIMARY,
-    description: 'You have solid potential but need structured practice before facing real interviews.',
+    description: 'Tienes potencial sólido pero necesitas práctica estructurada antes de enfrentar entrevistas reales.',
     characteristics: [
       'May struggle to articulate achievements clearly',
       'Tends to give general answers instead of specific examples',
@@ -169,7 +169,7 @@ export default function CareerMirrorModule() {
   const [diagnosisReviewed, setDiagnosisReviewed] = useState(false)
   
   // Activity 2: Confirmar Precisión del Diagnóstico
-  const [selectedStrengths, setSelectedStrengths] = useState<string[]>([])
+  const [selectedFortalezas, setSelectedFortalezas] = useState<string[]>([])
   const [selectedBlockers, setSelectedBlockers] = useState<string[]>([])
   const [diagnosisAccurate, setDiagnosisAccurate] = useState<boolean | null>(null)
   
@@ -203,7 +203,7 @@ export default function CareerMirrorModule() {
   const canCompleteStep = (step: number): boolean => {
     switch (step) {
       case 0: return diagnosisReviewed
-      case 1: return selectedStrengths.length >= 2 && selectedBlockers.length >= 1 && diagnosisAccurate !== null
+      case 1: return selectedFortalezas.length >= 2 && selectedBlockers.length >= 1 && diagnosisAccurate !== null
       case 2: return careerDirection !== null && targetRole.trim() !== ''
       case 3: return professionalTitle.trim() !== '' && keySkills.trim() !== '' && careerGoal.trim() !== ''
       case 4: return true
@@ -223,7 +223,7 @@ export default function CareerMirrorModule() {
   }
 
   const toggleStrength = (id: string) => {
-    setSelectedStrengths(prev => 
+    setSelectedFortalezas(prev => 
       prev.includes(id) ? prev.filter(s => s !== id) : [...prev, id]
     )
   }
@@ -240,7 +240,7 @@ export default function CareerMirrorModule() {
       const careerMirrorData = {
         diagnosis: {
           level: 'basic',
-          strengths: selectedStrengths,
+          strengths: selectedFortalezas,
           blockers: selectedBlockers,
           confirmed: diagnosisAccurate
         },
@@ -371,7 +371,7 @@ export default function CareerMirrorModule() {
         return (
           <div className="space-y-6 mt-4">
             <Card className="rounded-[2px] bg-white/5 border border-white/10 p-6">
-              <h4 className="font-bold text-white mb-4">Select Your Top Strengths</h4>
+              <h4 className="font-bold text-white mb-4">Select Your Top Fortalezas</h4>
               <p className="text-white/60 text-sm mb-4">Choose at least 2 strengths that best describe you</p>
               <div className="grid grid-cols-2 gap-3">
                 {STRENGTH_OPTIONS.map(strength => (
@@ -380,10 +380,10 @@ export default function CareerMirrorModule() {
                     onClick={() => toggleStrength(strength.id)}
                     className="p-3 rounded-[2px] text-left transition-all border"
                     style={{
-                      backgroundColor: selectedStrengths.includes(strength.id) 
+                      backgroundColor: selectedFortalezas.includes(strength.id) 
                         ? 'rgba(170, 70, 170, 0.2)' 
                         : 'rgba(255, 255, 255, 0.03)',
-                      borderColor: selectedStrengths.includes(strength.id)
+                      borderColor: selectedFortalezas.includes(strength.id)
                         ? PILLAR3_PRIMARY
                         : 'rgba(255, 255, 255, 0.1)'
                     }}
@@ -673,9 +673,9 @@ export default function CareerMirrorModule() {
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="text-white/50 text-xs uppercase tracking-wider mb-2">Strengths</p>
+                    <p className="text-white/50 text-xs uppercase tracking-wider mb-2">Fortalezas</p>
                     <div className="flex flex-wrap gap-1">
-                      {selectedStrengths.map(id => (
+                      {selectedFortalezas.map(id => (
                         <Badge 
                           key={id}
                           className="text-xs"

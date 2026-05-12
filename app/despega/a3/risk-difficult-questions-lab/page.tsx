@@ -88,7 +88,7 @@ const RED_FLAGS = [
 ]
 
 // Ejercicio de presión questions
-const PRESSURE_DRILL_QUESTIONS = [
+const PRESSURE_DRILL_PREGUNTAS = [
   {
     question: 'Why should we hire you over other candidates?',
     tips: ['Focus on unique value', 'Connect to their needs', 'Be confident not arrogant'],
@@ -508,19 +508,19 @@ export default function RiskDifficultQuestionsLabModule() {
                           <div className="space-y-4">
                             <div className="flex items-center justify-between">
                               <span className="text-sm text-white/60">
-                                Question {currentDrillQuestion + 1} of {PRESSURE_DRILL_QUESTIONS.length}
+                                Question {currentDrillQuestion + 1} of {PRESSURE_DRILL_PREGUNTAS.length}
                               </span>
                               <Badge className="bg-[rgba(80,160,170,0.2)] text-[rgb(80,160,170)]">
-                                Target: {PRESSURE_DRILL_QUESTIONS[currentDrillQuestion].timeLimit}s
+                                Target: {PRESSURE_DRILL_PREGUNTAS[currentDrillQuestion].timeLimit}s
                               </Badge>
                             </div>
 
                             <Card className="rounded-[2px] bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)] p-4">
                               <h4 className="text-lg font-semibold mb-3">
-                                {PRESSURE_DRILL_QUESTIONS[currentDrillQuestion].question}
+                                {PRESSURE_DRILL_PREGUNTAS[currentDrillQuestion].question}
                               </h4>
                               <div className="flex flex-wrap gap-2 mb-3">
-                                {PRESSURE_DRILL_QUESTIONS[currentDrillQuestion].tips.map((tip, i) => (
+                                {PRESSURE_DRILL_PREGUNTAS[currentDrillQuestion].tips.map((tip, i) => (
                                   <span key={i} className="text-xs bg-white/10 px-2 py-1 rounded">
                                     {tip}
                                   </span>
@@ -544,7 +544,7 @@ export default function RiskDifficultQuestionsLabModule() {
                                   <ArrowLeft className="w-4 h-4 mr-2" /> Anterior
                                 </Button>
                               )}
-                              {currentDrillQuestion < PRESSURE_DRILL_QUESTIONS.length - 1 ? (
+                              {currentDrillQuestion < PRESSURE_DRILL_PREGUNTAS.length - 1 ? (
                                 <Button
                                   onClick={() => setCurrentDrillQuestion(currentDrillQuestion + 1)}
                                   className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] flex-1"
