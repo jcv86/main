@@ -30,9 +30,9 @@ export function ModuleCompletionScreen({
   const isLast = isLastModule(moduleId)
   const [isRecording, setIsRecording] = useState(false)
 
-  // Get XP from module config if not provided
-  const module = PILLAR3_MODULES[moduleId as keyof typeof PILLAR3_MODULES]
-  const displayXp = xpEarned || module?.xp || 0
+  console.log('[v0] ModuleCompletionScreen - moduleId:', moduleId)
+  console.log('[v0] ModuleCompletionScreen - nextModulePath:', nextModulePath)
+  console.log('[v0] ModuleCompletionScreen - isLast:', isLast)
 
   // Record module completion when component mounts
   useEffect(() => {
@@ -94,7 +94,10 @@ export function ModuleCompletionScreen({
               </Button>
               {!isLast && nextModulePath && (
                 <Button
-                  onClick={() => router.push(nextModulePath)}
+                  onClick={() => {
+                    console.log('[v0] Navigating to:', nextModulePath)
+                    router.push(nextModulePath)
+                  }}
                   className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
                 >
                   Continuar Práctica
