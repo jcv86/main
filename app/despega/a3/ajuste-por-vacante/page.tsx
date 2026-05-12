@@ -82,7 +82,7 @@ export default function JobMatchingPage() {
             <Button
               onClick={handleAnalyzeJD}
               disabled={loading || !jobDescription.trim()}
-              className="w-full bg-training hover:bg-training/90 h-12 text-white"
+              className="w-full rounded-[20px] bg-training hover:bg-training/90 h-12 text-white"
             >
               {loading ? 'Analizando...' : 'Analizar Vacante'}
               <Zap className="w-4 h-4 ml-2" />
@@ -126,7 +126,7 @@ export default function JobMatchingPage() {
                       <p className="text-sm font-semibold mb-2">Tus habilidades que piden:</p>
                       <div className="flex flex-wrap gap-2">
                         {analysis.topMatches.map((skill: string) => (
-                          <Badge key={skill} className="bg-training hover:bg-training/90 text-white">
+                          <Badge key={skill} className="rounded-[20px] bg-training hover:bg-training/90 text-white">
                             <CheckCircle2 className="w-3 h-3 mr-1" />
                             {skill}
                           </Badge>
@@ -169,7 +169,7 @@ export default function JobMatchingPage() {
                   </CardContent>
                 </Card>
 
-                <Button className="w-full bg-training hover:bg-training/90 text-white">
+                <Button className="w-full rounded-[20px] bg-training hover:bg-training/90 text-white">
                   Generar CV Personalizado para esta Vacante
                 </Button>
               </TabsContent>
@@ -208,7 +208,7 @@ export default function JobMatchingPage() {
                     <p className="text-white/85">
                       Práctica una entrevista simulada con preguntas específicas de esta vacante
                     </p>
-                    <Button className="bg-training hover:bg-training/90 text-white" style={{ borderRadius: '20px' }}>
+                    <Button className="rounded-[20px] bg-training hover:bg-training/90 text-white" style={{ borderRadius: '20px' }}>
                       Iniciar Simulación
                     </Button>
                   </div>

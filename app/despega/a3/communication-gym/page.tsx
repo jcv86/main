@@ -93,7 +93,7 @@ export default function CommunicationGymModule() {
         </div>
 
         {/* Learning Points */}
-        <Card className="bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)] p-4">
+        <Card className="rounded-[20px] bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)] p-4">
           <div className="flex items-start gap-3">
             <Lightbulb className="w-5 h-5 text-[rgb(170,70,170)] mt-0.5" />
             <div>
@@ -177,7 +177,7 @@ export default function CommunicationGymModule() {
                       )}
                       <Button 
                         onClick={() => completeStep(index)}
-                        className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
+                        className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
                       >
                         Complete Activity
                         <ArrowRight className="w-4 h-4 ml-2" />
@@ -198,7 +198,7 @@ export default function CommunicationGymModule() {
             <p className="text-white/70">
               You&apos;ve earned {MODULE_XP} XP and unlocked First Recruiter Simulation.
             </p>
-            <Button onClick={handleComplete} className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
+            <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
               Continue to Next Module
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

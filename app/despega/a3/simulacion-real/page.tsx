@@ -217,7 +217,7 @@ export default function SimulacionRealPage() {
               <CardContent className="pt-6">
                 <textarea
                   placeholder="Escribe o práctica tu respuesta aquí..."
-                  className="w-full bg-black border border-purple-500/30 rounded-lg p-4 text-white placeholder-white/30 focus:border-purple-500 focus:outline-none min-h-32"
+                  className="w-full rounded-[20px] bg-black border border-purple-500/30 rounded-lg p-4 text-white placeholder-white/30 focus:border-purple-500 focus:outline-none min-h-32"
                 />
               </CardContent>
             </Card>
@@ -229,7 +229,7 @@ export default function SimulacionRealPage() {
           <div className="max-w-6xl mx-auto flex gap-3 justify-end">
             <Button
               onClick={completeStage}
-              className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
+              className="rounded-[20px] bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700"
             >
               {currentStageIndex === SIMULATION_STAGES.length - 1 ? 'Finalizar Simulación' : 'Siguiente Etapa'}
             </Button>
@@ -346,7 +346,7 @@ export default function SimulacionRealPage() {
 
           {/* Actions - Module 10: Special Completion with Full Rewards */}
           <div className="space-y-4">
-            <div className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-2 border-yellow-500/50 rounded-lg p-6">
+            <div className="rounded-[20px] bg-gradient-to-r from-yellow-500/20 to-orange-500/20 border-2 border-yellow-500/50 rounded-lg p-6">
               <div className="flex items-center gap-3 mb-3">
                 <span className="text-3xl">🎉</span>
                 <h3 className="text-xl font-bold text-yellow-300">¡TOUR COMPLETADO!</h3>
@@ -359,7 +359,7 @@ export default function SimulacionRealPage() {
             <div className="flex flex-col gap-2">
               <Button
                 onClick={() => window.location.href = '/despega/a3/rewards'}
-                className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700"
+                className="w-full rounded-[20px] bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700"
               >
                 Ver Premios y Recompensas
               </Button>
@@ -483,7 +483,7 @@ export default function SimulacionRealPage() {
             </Button>
           </Link>
           <Link href="/despega/a3">
-            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+            <Button className="rounded-[20px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
               Terminar & Volver al Dashboard
             </Button>
           </Link>

@@ -182,7 +182,7 @@ export default function CareerMirrorModule() {
                             I usually help with ___. I want to grow toward ___.&quot;
                           </p>
                           <textarea 
-                            className="w-full bg-white/5 rounded-lg p-3 text-white placeholder:text-white/30 min-h-24 border"
+                            className="w-full rounded-[20px] bg-white/5 rounded-lg p-3 text-white placeholder:text-white/30 min-h-24 border"
                             style={{ borderColor: 'rgba(170, 70, 170, 0.3)' }}
                             placeholder="I am a..."
                             value={professionalIdentity}

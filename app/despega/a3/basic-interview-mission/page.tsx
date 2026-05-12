@@ -220,7 +220,7 @@ export default function BasicInterviewMissionModule() {
                 <p className="text-xs text-white/50">Level Certified</p>
               </div>
             </div>
-            <Button onClick={handleComplete} className="bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90">
+            <Button onClick={handleComplete} className="rounded-[20px] bg-gradient-to-r from-purple-500 to-cyan-500 hover:opacity-90">
               Complete Basic Level
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

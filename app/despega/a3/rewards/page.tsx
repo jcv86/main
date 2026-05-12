@@ -270,7 +270,7 @@ export default function RewardsPage() {
           </p>
           <div className="flex gap-3 justify-center flex-wrap">
             <Link href="/despega/a3">
-              <Button className="bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700">
+              <Button className="rounded-[20px] bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700">
                 Explorar Pista Avanzada
               </Button>
             </Link>

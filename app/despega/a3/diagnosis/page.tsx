@@ -36,7 +36,7 @@ export default function DiagnosisPage() {
         <A3EmployabilityDiagnosis onComplete={handleDiagnosisComplete} />
 
         {/* Info Card */}
-        <Card className="bg-training/5 dark:bg-training/20 border-training/30 dark:border-training/10">
+        <Card className="rounded-[20px] bg-training/5 dark:bg-training/20 border-training/30 dark:border-training/10">
           <CardHeader>
             <CardTitle className="text-base text-training">¿Por qué esta diagnosis?</CardTitle>
           </CardHeader>

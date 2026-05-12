@@ -96,7 +96,7 @@ export default function AnswerArchitectureModule() {
               &quot;I am a ___ with experience in ___. My strongest areas are ___. Now I am looking for ___ because ____.&quot;
             </p>
           </Card>
-          <Card className="bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)] p-4">
+          <Card className="rounded-[20px] bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)] p-4">
             <p className="text-[rgb(170,70,170)] text-xs uppercase mb-2">Basic STAR Formula</p>
             <p className="text-white/80 text-sm italic">
               &quot;The situation was ___. My responsibility was ___. I acted by ___. The result was ___.&quot;
@@ -158,7 +158,7 @@ export default function AnswerArchitectureModule() {
                     <div className="mt-4">
                       {index === 0 && (
                         <textarea 
-                          className="w-full bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-24"
+                          className="w-full rounded-[20px] bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-24"
                           placeholder="Write your 30-second self-introduction..."
                           value={selfIntro}
                           onChange={(e) => setSelfIntro(e.target.value)}
@@ -187,7 +187,7 @@ export default function AnswerArchitectureModule() {
             <p className="text-white/70">
               You&apos;ve earned {MODULE_XP} XP and unlocked Coach Practice Room.
             </p>
-            <Button onClick={handleComplete} className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
+            <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
               Continue to Next Module
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

@@ -230,7 +230,7 @@ export default function RiskDifficultQuestionsLabModule() {
                       )}
                       <Button 
                         onClick={() => completeStep(index)}
-                        className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
+                        className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
                       >
                         Complete Activity
                         <ArrowRight className="w-4 h-4 ml-2" />
@@ -251,7 +251,7 @@ export default function RiskDifficultQuestionsLabModule() {
             <p className="text-white/70">
               You&apos;ve earned {MODULE_XP} XP and unlocked Basic Interview Mission.
             </p>
-            <Button onClick={handleComplete} className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
+            <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
               Continue to Final Mission
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

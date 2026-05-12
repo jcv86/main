@@ -147,7 +147,7 @@ export default function ProgressPage() {
                   <span className="font-semibold text-muted/90 dark:text-muted/5">{item.skill}</span>
                   <span className="text-sm font-semibold text-muted-foreground dark:text-muted-foreground">{item.progress}%</span>
                 </div>
-                <div className="w-full bg-muted/20 dark:bg-muted/70 h-2 rounded-full overflow-hidden">
+                <div className="w-full rounded-[20px] bg-muted/20 dark:bg-muted/70 h-2 rounded-full overflow-hidden">
                   <div
                     className={`h-full ${item.color} transition-all duration-300`}
                     style={{ width: `${item.progress}%` }}

@@ -54,7 +54,7 @@ export default function GamificationPage() {
             <p className="text-muted-foreground mt-2">Track your progress and unlock achievements</p>
           </div>
           <Link href="/despega/a3/dtc-shop">
-            <Button className="bg-training hover:bg-training/90 text-white">Get Premium Tips</Button>
+            <Button className="rounded-[20px] bg-training hover:bg-training/90 text-white">Get Premium Tips</Button>
           </Link>
         </div>
 

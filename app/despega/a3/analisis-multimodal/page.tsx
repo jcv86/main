@@ -30,7 +30,7 @@ export default function MultimodalAnalysisPage() {
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-8">
       {/* Header - Enhanced with pillar color (orange) */}
-      <div className="bg-gradient-to-r from-training/10 to-training/5 border border-training/20 rounded-lg p-6 space-y-3">
+      <div className="rounded-[20px] bg-gradient-to-r from-training/10 to-training/5 border border-training/20 rounded-lg p-6 space-y-3">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-lg bg-training/20 border border-training/30 flex items-center justify-center">
             <Zap className="w-6 h-6 text-training" />

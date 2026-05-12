@@ -149,7 +149,7 @@ export default function JobDecoderModule() {
                     <div className="mt-4">
                       {index === 0 && (
                         <textarea 
-                          className="w-full bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-32"
+                          className="w-full rounded-[20px] bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-32"
                           placeholder="Paste the job description here..."
                           value={vacancy}
                           onChange={(e) => setVacancy(e.target.value)}
@@ -178,7 +178,7 @@ export default function JobDecoderModule() {
             <p className="text-white/70">
               You&apos;ve earned {MODULE_XP} XP and unlocked Answer Architecture.
             </p>
-            <Button onClick={handleComplete} className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
+            <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
               Continue to Next Module
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

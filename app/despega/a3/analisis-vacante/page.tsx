@@ -124,7 +124,7 @@ export default function AnalisisVacantePagePage() {
             value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
             placeholder="Pega aquí la descripción completa del puesto..."
-            className="w-full bg-black border border-purple-500/30 rounded-lg p-4 text-white placeholder-white/30 focus:border-purple-500 focus:outline-none min-h-40 font-mono text-sm"
+            className="w-full rounded-[20px] bg-black border border-purple-500/30 rounded-lg p-4 text-white placeholder-white/30 focus:border-purple-500 focus:outline-none min-h-40 font-mono text-sm"
           />
           <p className="text-xs text-white/40 mt-2">Nota: Esta es una demostración con análisis pre-generado</p>
         </div>

@@ -261,7 +261,7 @@ export default function GuidedInterviewPage() {
                     </ul>
                   </div>
 
-                  <div className="bg-training/10 dark:bg-training/20 rounded-[20px] p-4 border border-training/30">
+                  <div className="rounded-[20px] bg-training/10 dark:bg-training/20 rounded-[20px] p-4 border border-training/30">
                     <p className="text-sm text-white/80">
                       <strong className="text-training">Nota:</strong> Sofia te guiará en cada pregunta con consejos del coach para mejorar tu respuesta.
                     </p>
@@ -269,7 +269,7 @@ export default function GuidedInterviewPage() {
 
                   <Button 
                     onClick={() => setStarted(true)}
-                    className="w-full bg-training hover:bg-training/90 text-white h-12"
+                    className="w-full rounded-[20px] bg-training hover:bg-training/90 text-white h-12"
                   >
                     Comenzar Entrevista
                   </Button>

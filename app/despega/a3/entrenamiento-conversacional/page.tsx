@@ -204,14 +204,14 @@ export default function EntrenamientoConversacionalPage() {
                   }
                 }}
                 placeholder="Escribe tu respuesta aquí (Ctrl+Enter para enviar)..."
-                className="w-full bg-black border border-purple-500/30 rounded-lg p-4 text-white placeholder-white/30 focus:border-purple-500 focus:outline-none min-h-24"
+                className="w-full rounded-[20px] bg-black border border-purple-500/30 rounded-lg p-4 text-white placeholder-white/30 focus:border-purple-500 focus:outline-none min-h-24"
               />
               
               <div className="flex gap-3">
                 <Button
                   onClick={submitResponse}
                   disabled={!userInput.trim()}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 flex-1"
+                  className="rounded-[20px] bg-gradient-to-r from-purple-600 to-pink-600 flex-1"
                 >
                   <Send className="w-4 h-4 mr-2" />
                   Enviar Respuesta
@@ -355,7 +355,7 @@ export default function EntrenamientoConversacionalPage() {
                   </ul>
                 </div>
 
-                <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 mt-4">
+                <Button className="w-full rounded-[20px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 mt-4">
                   Iniciar Conversación
                 </Button>
               </CardContent>
@@ -391,7 +391,7 @@ export default function EntrenamientoConversacionalPage() {
             </Button>
           </Link>
           <Link href="/despega/a3/simulacion-real">
-            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+            <Button className="rounded-[20px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
               Siguiente: Simulación Real
             </Button>
           </Link>

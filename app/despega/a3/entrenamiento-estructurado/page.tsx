@@ -194,14 +194,14 @@ export default function EntrenamientoEstructuradoPage() {
             {currentQuestionIdx < selectedLesson.questions.length - 1 ? (
               <Button
                 onClick={() => setCurrentQuestionIdx(currentQuestionIdx + 1)}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 flex-1"
+                className="rounded-[20px] bg-gradient-to-r from-purple-600 to-pink-600 flex-1"
               >
                 Siguiente Pregunta
               </Button>
             ) : (
               <Button
                 onClick={completeLesson}
-                className="bg-gradient-to-r from-green-600 to-emerald-600 flex-1"
+                className="rounded-[20px] bg-gradient-to-r from-green-600 to-emerald-600 flex-1"
               >
                 Finalizar Lección
               </Button>
@@ -240,13 +240,13 @@ export default function EntrenamientoEstructuradoPage() {
             <div className="space-y-2">
               <Button
                 onClick={() => window.location.href = '/despega/a3'}
-                className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
+                className="w-full rounded-[20px] bg-gradient-to-r from-purple-600 to-pink-600"
               >
                 Ir al Dashboard
               </Button>
               <Button
                 onClick={() => window.location.href = '/despega/a3/entrenamiento-desafiante'}
-                className="w-full bg-gradient-to-r from-pink-600 to-purple-600"
+                className="w-full rounded-[20px] bg-gradient-to-r from-pink-600 to-purple-600"
               >
                 Siguiente Práctica
               </Button>
@@ -322,7 +322,7 @@ export default function EntrenamientoEstructuradoPage() {
                   <CheckCircle2 className="w-4 h-4 text-purple-400" />
                   {lesson.questions.length} preguntas
                 </div>
-                <Button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 mt-4">
+                <Button className="w-full rounded-[20px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 mt-4">
                   Iniciar Lección
                 </Button>
               </CardContent>
@@ -357,7 +357,7 @@ export default function EntrenamientoEstructuradoPage() {
             </Button>
           </Link>
           <Link href="/despega/a3/entrenamiento-desafiante">
-            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+            <Button className="rounded-[20px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
               Siguiente: Entrenamiento Desafiante
             </Button>
           </Link>

@@ -136,7 +136,7 @@ export default function MetodoSTARPage() {
 
           {/* Learn Tab */}
           <TabsContent value="learn" className="space-y-6">
-            <div className="bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-lg p-6 mb-8">
+            <div className="rounded-[20px] bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20 rounded-lg p-6 mb-8">
               <div className="flex items-start gap-3">
                 <Lightbulb className="w-5 h-5 text-purple-400 mt-1 flex-shrink-0" />
                 <div>
@@ -223,7 +223,7 @@ export default function MetodoSTARPage() {
 
           {/* Practice Tab */}
           <TabsContent value="practice" className="space-y-6">
-            <div className="bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-lg p-6 mb-8">
+            <div className="rounded-[20px] bg-gradient-to-r from-blue-500/10 to-cyan-500/10 border border-blue-500/20 rounded-lg p-6 mb-8">
               <h3 className="font-semibold mb-2">Construye Tu Respuesta STAR</h3>
               <p className="text-white/70 text-sm">
                 Usa el framework STAR para estructurar una respuesta sobre un logro o desafío importante en tu carrera.
@@ -243,7 +243,7 @@ export default function MetodoSTARPage() {
                     value={myResponse[key as keyof typeof myResponse]}
                     onChange={(e) => setMyResponse({ ...myResponse, [key]: e.target.value })}
                     placeholder={data.example}
-                    className="w-full bg-black border border-purple-500/30 rounded-lg p-4 text-white placeholder-white/30 focus:border-purple-500 focus:outline-none min-h-32"
+                    className="w-full rounded-[20px] bg-black border border-purple-500/30 rounded-lg p-4 text-white placeholder-white/30 focus:border-purple-500 focus:outline-none min-h-32"
                   />
                   <p className="text-xs text-white/40 mt-1">Recomendado: {key === 'situation' ? '30-60' : '60-90'} palabras</p>
                 </div>
@@ -256,9 +256,9 @@ export default function MetodoSTARPage() {
                 <p className="font-semibold">Progreso de Respuesta</p>
                 <Badge className="bg-purple-500/20 text-purple-300">{Math.round(calculateCompleteness())}%</Badge>
               </div>
-              <div className="w-full bg-black border border-purple-500/20 rounded-full h-2">
+              <div className="w-full rounded-[20px] bg-black border border-purple-500/20 rounded-full h-2">
                 <div
-                  className="bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all"
+                  className="rounded-[20px] bg-gradient-to-r from-purple-500 to-pink-500 h-2 rounded-full transition-all"
                   style={{ width: `${calculateCompleteness()}%` }}
                 />
               </div>
@@ -276,7 +276,7 @@ export default function MetodoSTARPage() {
               <Button
                 disabled={calculateCompleteness() < 75}
                 onClick={() => setIsCompleted(true)}
-                className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                className="rounded-[20px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
                 Guardar Respuesta
               </Button>

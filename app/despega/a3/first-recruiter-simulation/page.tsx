@@ -164,7 +164,7 @@ export default function FirstRecruiterSimulationModule() {
 
         {/* Simulation Area */}
         {!simulationStarted ? (
-          <Card className="bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)] p-8 text-center space-y-4">
+          <Card className="rounded-[20px] bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)] p-8 text-center space-y-4">
             <AlertCircle className="w-12 h-12 text-[rgb(170,70,170)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Ready to Begin?</h3>
             <p className="text-white/70 max-w-md mx-auto">
@@ -176,7 +176,7 @@ export default function FirstRecruiterSimulationModule() {
                 setSimulationStarted(true)
                 setCurrentStage(0)
               }}
-              className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
+              className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
             >
               Start Simulation
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -193,7 +193,7 @@ export default function FirstRecruiterSimulationModule() {
             </p>
             <Button 
               onClick={advanceStage}
-              className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
+              className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
             >
               Continue to Next Stage
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -206,7 +206,7 @@ export default function FirstRecruiterSimulationModule() {
             <p className="text-white/70">
               You&apos;ve earned {MODULE_XP} XP and unlocked Risk & Difficult Questions Lab.
             </p>
-            <Button onClick={handleComplete} className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
+            <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
               Continue to Next Module
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

@@ -123,7 +123,7 @@ export default function A3ResultadosPage() {
             </div>
             <Button 
               onClick={() => router.push('/despega/a3')} 
-              className="w-full bg-background"
+              className="w-full rounded-[20px] bg-background"
             >
               <ArrowRight className="w-5 h-5 mr-2" />
               Volver a A3

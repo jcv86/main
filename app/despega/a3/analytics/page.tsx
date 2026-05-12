@@ -212,7 +212,7 @@ export default function A3AnalyticsPage() {
         </Card>
 
         {/* Recommendations */}
-        <Card className="bg-training/5 dark:bg-training/20 border-training/30 dark:border-training/10">
+        <Card className="rounded-[20px] bg-training/5 dark:bg-training/20 border-training/30 dark:border-training/10">
           <CardHeader>
             <CardTitle className="text-training">Insights y Recomendaciones</CardTitle>
           </CardHeader>
@@ -227,14 +227,14 @@ export default function A3AnalyticsPage() {
         </Card>
 
         {/* Call to Action */}
-        <Card className="bg-gradient-to-r from-training/10 to-training/5 border-training/30">
+        <Card className="rounded-[20px] bg-gradient-to-r from-training/10 to-training/5 border-training/30">
           <CardContent className="pt-6">
             <div className="flex justify-between items-center">
               <div>
                 <p className="font-semibold text-white">Próximo desafío disponible</p>
                 <p className="text-sm text-white/70 mt-1">Avanza al siguiente nivel y desbloquea nuevas habilidades</p>
               </div>
-              <Button className="bg-training hover:bg-training/90 text-white">
+              <Button className="rounded-[20px] bg-training hover:bg-training/90 text-white">
                 Ver Desafíos
               </Button>
             </div>

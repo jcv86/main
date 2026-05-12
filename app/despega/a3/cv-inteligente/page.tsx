@@ -285,7 +285,7 @@ export default function CVATSPage() {
   const renderLinkedInFormat = () => (
     <div className="bg-white dark:bg-background p-8 text-muted/90 dark:text-white space-y-6">
       {/* LinkedIn Header */}
-      <div className="bg-training text-white p-8 rounded-[28px] -mx-8 -mt-8 mb-4">
+      <div className="rounded-[20px] bg-training text-white p-8 rounded-[28px] -mx-8 -mt-8 mb-4">
         <h1 className="text-3xl font-bold">{cvData.personalInfo.name}</h1>
         <p className="text-lg mt-1">{cvData.personalInfo.title}</p>
         <p className="text-training/10 mt-2">{cvData.personalInfo.location}</p>
@@ -486,7 +486,7 @@ export default function CVATSPage() {
         <h2 className="text-xl font-bold text-training mb-3">Technical Skills</h2>
         <div className="flex flex-wrap gap-2">
           {cvData.skills.map((skill) => (
-            <span key={skill} className="bg-training/20 text-training px-3 py-1 rounded-[20px] text-sm">
+            <span key={skill} className="rounded-[20px] bg-training/20 text-training px-3 py-1 rounded-[20px] text-sm">
               {skill}
             </span>
           ))}

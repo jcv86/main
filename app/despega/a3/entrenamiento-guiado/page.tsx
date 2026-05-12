@@ -103,7 +103,7 @@ export default function GuidedTrainingPage() {
                     <div className="flex gap-2">
                       <Badge variant="secondary">{module.difficulty}</Badge>
                       {module.status === 'in-progress' && (
-                        <Badge className="bg-training">En Progreso</Badge>
+                        <Badge className="rounded-[20px] bg-training">En Progreso</Badge>
                       )}
                       {isLocked && <Lock className="w-5 h-5 text-training" />}
                     </div>

@@ -172,7 +172,7 @@ export default function CVBuilderStudioModule() {
                       )}
                       {index === 1 && (
                         <textarea 
-                          className="w-full bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-32"
+                          className="w-full rounded-[20px] bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-32"
                           placeholder="Write your professional summary here..."
                           value={summary}
                           onChange={(e) => setSummary(e.target.value)}
@@ -201,7 +201,7 @@ export default function CVBuilderStudioModule() {
             <p className="text-white/70">
               You&apos;ve earned {MODULE_XP} XP and unlocked Job Decoder.
             </p>
-            <Button onClick={handleComplete} className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
+            <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
               Continue to Next Module
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

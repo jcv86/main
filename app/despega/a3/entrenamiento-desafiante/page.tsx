@@ -259,13 +259,13 @@ export default function ChallensingTrainingPage() {
               <div className="space-y-2">
                 <Button
                   onClick={() => window.location.href = '/despega/a3'}
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600"
+                  className="w-full rounded-[20px] bg-gradient-to-r from-purple-600 to-pink-600"
                 >
                   Ir al Dashboard
                 </Button>
                 <Button
                   onClick={() => window.location.href = '/despega/a3/entrenamiento-conversacional'}
-                  className="w-full bg-gradient-to-r from-pink-600 to-purple-600"
+                  className="w-full rounded-[20px] bg-gradient-to-r from-pink-600 to-purple-600"
                 >
                   Siguiente Práctica
                 </Button>
