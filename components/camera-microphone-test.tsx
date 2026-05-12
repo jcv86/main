@@ -24,6 +24,21 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
   const analyserRef = useRef<AnalyserNode | null>(null)
   const animationRef = useRef<number | null>(null)
   const [audioLevel, setAudioLevel] = useState(0)
+  const [isPreviewEnvironment, setIsPreviewEnvironment] = useState(false)
+  const [permissionDeniedCount, setPermissionDeniedCount] = useState(0)
+
+  // Check if we're in a restricted environment (iframe, v0 preview, etc.)
+  useEffect(() => {
+    const checkEnvironment = () => {
+      const inIframe = window.self !== window.top
+      const isLocalhost = window.location.hostname === 'localhost'
+      const isV0Preview = window.location.hostname.includes('v0.dev') || 
+                          window.location.hostname.includes('vercel') ||
+                          document.referrer.includes('v0.dev')
+      setIsPreviewEnvironment(inIframe || isV0Preview)
+    }
+    checkEnvironment()
+  }, [])
 
   // Cleanup function for stopping all streams
   const stopAllStreams = () => {
@@ -82,11 +97,16 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
       }
     } catch (error) {
       setCameraState('error')
+      setPermissionDeniedCount(prev => prev + 1)
       if (error instanceof DOMException) {
         if (error.name === 'NotAllowedError') {
           setCameraError('Permiso denegado. Por favor, permite el acceso a la cámara.')
         } else if (error.name === 'NotFoundError') {
           setCameraError('No se encontró cámara. Por favor, conecta una cámara.')
+        } else if (error.name === 'NotReadableError') {
+          setCameraError('La cámara está siendo usada por otra aplicación.')
+        } else if (error.name === 'SecurityError') {
+          setCameraError('Acceso bloqueado por la configuración de seguridad del navegador.')
         } else {
           setCameraError(`Error de cámara: ${error.message}`)
         }
@@ -136,11 +156,16 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
       monitorAudio()
     } catch (error) {
       setMicrophoneState('error')
+      setPermissionDeniedCount(prev => prev + 1)
       if (error instanceof DOMException) {
         if (error.name === 'NotAllowedError') {
           setMicError('Permiso denegado. Por favor, permite el acceso al micrófono.')
         } else if (error.name === 'NotFoundError') {
           setMicError('No se encontró micrófono. Por favor, conecta un micrófono.')
+        } else if (error.name === 'NotReadableError') {
+          setMicError('El micrófono está siendo usado por otra aplicación.')
+        } else if (error.name === 'SecurityError') {
+          setMicError('Acceso bloqueado por la configuración de seguridad del navegador.')
         } else {
           setMicError(`Error de micrófono: ${error.message}`)
         }
@@ -172,6 +197,16 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
 
     analyserRef.current = null
     onClose()
+  }
+
+  // Handle skip for demo/preview environments
+  const handleSkipForDemo = () => {
+    stopMonitoring()
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach(track => track.stop())
+      mediaStreamRef.current = null
+    }
+    onTestComplete(true) // Allow proceeding in demo mode
   }
 
   // Handle test completion
@@ -410,7 +445,18 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
           </div>
         </div>
 
-        <div className="flex gap-3 justify-end pt-4 border-t border-white/10">
+        {/* Skip option for preview/demo environments */}
+        {(isPreviewEnvironment || permissionDeniedCount >= 2) && (cameraState === 'error' || microphoneState === 'error') && (
+          <Alert className="bg-yellow-500/10 border-yellow-500/30">
+            <Info className="h-4 w-4 text-yellow-400" />
+            <AlertDescription className="text-white/80 text-sm">
+              <strong>Entorno de Vista Previa Detectado:</strong> Los permisos de cámara/micrófono pueden estar restringidos en este entorno. 
+              Puedes continuar en modo demo para explorar la interfaz, o abrir la aplicación en una nueva pestaña para acceso completo.
+            </AlertDescription>
+          </Alert>
+        )}
+
+        <div className="flex flex-wrap gap-3 justify-between pt-4 border-t border-white/10">
           <Button
             variant="outline"
             onClick={handleClose}
@@ -418,20 +464,35 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
           >
             Cancelar
           </Button>
-          {cameraState !== 'ready' || microphoneState !== 'listening' ? (
-            <div className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-yellow-400" />
-              <span className="text-sm text-white/60">Completa ambas pruebas</span>
-            </div>
-          ) : null}
-          <Button
-            onClick={handleComplete}
-            disabled={cameraState !== 'ready' || microphoneState !== 'listening'}
-            className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            <Check className="w-4 h-4 mr-2" />
-            {cameraState === 'ready' && microphoneState === 'listening' ? 'Continuar a Sofia' : 'Continuar'}
-          </Button>
+          
+          <div className="flex gap-3 items-center">
+            {/* Skip for Demo button - shown when in preview or after failed attempts */}
+            {(isPreviewEnvironment || permissionDeniedCount >= 2) && (cameraState === 'error' || microphoneState === 'error') && (
+              <Button
+                onClick={handleSkipForDemo}
+                variant="outline"
+                className="border-yellow-500/50 text-yellow-400 hover:bg-yellow-500/10"
+              >
+                Continuar en Modo Demo
+              </Button>
+            )}
+            
+            {cameraState !== 'ready' || microphoneState !== 'listening' ? (
+              <div className="flex items-center gap-2">
+                <AlertCircle className="w-4 h-4 text-yellow-400" />
+                <span className="text-sm text-white/60 hidden sm:inline">Completa ambas pruebas</span>
+              </div>
+            ) : null}
+            
+            <Button
+              onClick={handleComplete}
+              disabled={cameraState !== 'ready' || microphoneState !== 'listening'}
+              className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Check className="w-4 h-4 mr-2" />
+              {cameraState === 'ready' && microphoneState === 'listening' ? 'Continuar a Sofia' : 'Continuar'}
+            </Button>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
