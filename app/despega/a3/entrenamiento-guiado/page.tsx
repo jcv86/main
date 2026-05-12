@@ -55,7 +55,7 @@ export default function GuidedTrainingPage() {
         moduleId={welcomeModule.id}
         moduleName={welcomeModule.name}
         moduleLessonCount={welcomeModule.lessons.length}
-        onPlay={handlePlayFromWelcome}
+        onContinue={handlePlayFromWelcome}
       />
     )
   }
