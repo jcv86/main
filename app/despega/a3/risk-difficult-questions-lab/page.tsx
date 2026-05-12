@@ -89,10 +89,10 @@ export default function RiskDifficultQuestionsLabModule() {
             </Button>
           </Link>
           <div className="flex items-center gap-2">
-            <Badge className="bg-amber-500/20 text-amber-400 border-amber-500/30">
+            <Badge className="bg-[rgba(80,160,170,0.2)] text-[rgb(80,160,170)] border-[rgba(80,160,170,0.4)]">
               Mini Pressure Drill
             </Badge>
-            <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+            <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] border-[rgba(170,70,170,0.3)]">
               Module 9 • {MODULE_XP} XP
             </Badge>
           </div>
@@ -101,8 +101,8 @@ export default function RiskDifficultQuestionsLabModule() {
         {/* Title */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center">
-              <AlertTriangle className="w-6 h-6 text-amber-400" />
+            <div className="w-12 h-12 rounded-lg bg-[rgba(80,160,170,0.2)] flex items-center justify-center">
+              <AlertTriangle className="w-6 h-6 text-[rgb(80,160,170)]" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-white">Risk & Difficult Questions Lab</h1>
@@ -115,9 +115,9 @@ export default function RiskDifficultQuestionsLabModule() {
         </div>
 
         {/* Learning Points */}
-        <Card className="bg-amber-500/10 border-amber-500/30 p-4">
+        <Card className="bg-[rgba(80,160,170,0.15)] border-[rgba(80,160,170,0.4)] p-4">
           <div className="flex items-start gap-3">
-            <Lightbulb className="w-5 h-5 text-amber-400 mt-0.5" />
+            <Lightbulb className="w-5 h-5 text-[rgb(80,160,170)] mt-0.5" />
             <div>
               <p className="font-medium text-white">Key Learning</p>
               <p className="text-white/70 text-sm mt-1">
@@ -133,13 +133,13 @@ export default function RiskDifficultQuestionsLabModule() {
         <Card className="bg-white/5 border-white/10 p-4">
           <p className="text-white/50 text-xs uppercase mb-2">Safe Answer Formula</p>
           <div className="flex flex-wrap items-center gap-2 text-sm">
-            <span className="bg-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded">Acknowledge</span>
+            <span className="bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)] px-3 py-1.5 rounded">Acknowledge</span>
             <ArrowRight className="w-4 h-4 text-white/40" />
-            <span className="bg-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded">Explain briefly</span>
+            <span className="bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)] px-3 py-1.5 rounded">Explain briefly</span>
             <ArrowRight className="w-4 h-4 text-white/40" />
-            <span className="bg-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded">Show learning</span>
+            <span className="bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)] px-3 py-1.5 rounded">Show learning</span>
             <ArrowRight className="w-4 h-4 text-white/40" />
-            <span className="bg-emerald-500/20 text-emerald-400 px-3 py-1.5 rounded">Redirect to value</span>
+            <span className="bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)] px-3 py-1.5 rounded">Redirect to value</span>
           </div>
         </Card>
 
@@ -158,10 +158,10 @@ export default function RiskDifficultQuestionsLabModule() {
               <li>&quot;I never make mistakes.&quot;</li>
             </ul>
           </Card>
-          <Card className="bg-emerald-500/10 border-emerald-500/30 p-4">
+          <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-4">
             <div className="flex items-center gap-2 mb-3">
-              <CheckCircle className="w-5 h-5 text-emerald-400" />
-              <p className="text-emerald-400 font-medium">Use</p>
+              <CheckCircle className="w-5 h-5 text-[rgb(200,130,200)]" />
+              <p className="text-[rgb(200,130,200)] font-medium">Use</p>
             </div>
             <ul className="space-y-1 text-sm text-white/70">
               <li>&quot;What I learned was...&quot;</li>
@@ -177,7 +177,7 @@ export default function RiskDifficultQuestionsLabModule() {
         <Card className="bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progress</span>
-            <span className="text-cyan-400">{progress}%</span>
+            <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
           <Progress value={progress} className="h-2 bg-white/10" />
         </Card>
@@ -189,16 +189,16 @@ export default function RiskDifficultQuestionsLabModule() {
               key={index}
               className={`p-6 transition-all ${
                 completedSteps.includes(index) 
-                  ? 'bg-emerald-500/10 border-emerald-500/30' 
+                  ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
                   : currentStep === index 
-                    ? 'bg-cyan-500/10 border-cyan-500/30'
+                    ? 'bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)]'
                     : 'bg-white/5 border-white/10'
               }`}
             >
               <div className="flex items-start gap-4">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                   completedSteps.includes(index)
-                    ? 'bg-emerald-500/20 text-emerald-400'
+                    ? 'bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)]'
                     : 'bg-white/10 text-white/50'
                 }`}>
                   {completedSteps.includes(index) ? (
@@ -219,7 +219,7 @@ export default function RiskDifficultQuestionsLabModule() {
                               onClick={() => toggleRisk(risk)}
                               className={`px-3 py-1.5 rounded text-sm transition-all ${
                                 selectedRisks.includes(risk)
-                                  ? 'bg-amber-500/30 text-amber-400 border border-amber-500/50'
+                                  ? 'bg-amber-500/30 text-[rgb(80,160,170)] border border-amber-500/50'
                                   : 'bg-white/10 text-white/70 hover:bg-white/20'
                               }`}
                             >
@@ -230,7 +230,7 @@ export default function RiskDifficultQuestionsLabModule() {
                       )}
                       <Button 
                         onClick={() => completeStep(index)}
-                        className="bg-cyan-500 hover:bg-cyan-600"
+                        className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
                       >
                         Complete Activity
                         <ArrowRight className="w-4 h-4 ml-2" />
@@ -245,13 +245,13 @@ export default function RiskDifficultQuestionsLabModule() {
 
         {/* Complete Module */}
         {completedSteps.length === REQUIRED_ACTIVITIES.length && (
-          <Card className="bg-emerald-500/10 border-emerald-500/30 p-6 text-center space-y-4">
-            <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
+          <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
+            <CheckCircle2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Risk Lab Complete!</h3>
             <p className="text-white/70">
               You&apos;ve earned {MODULE_XP} XP and unlocked Basic Interview Mission.
             </p>
-            <Button onClick={handleComplete} className="bg-emerald-500 hover:bg-emerald-600">
+            <Button onClick={handleComplete} className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
               Continue to Final Mission
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

@@ -66,7 +66,7 @@ export default function CoachPracticeRoomModule() {
               Back to A3
             </Button>
           </Link>
-          <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+          <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] border-[rgba(170,70,170,0.3)]">
             Module 6 • {MODULE_XP} XP
           </Badge>
         </div>
@@ -120,7 +120,7 @@ export default function CoachPracticeRoomModule() {
         <Card className="bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progress</span>
-            <span className="text-cyan-400">{progress}%</span>
+            <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
           <Progress value={progress} className="h-2 bg-white/10" />
         </Card>
@@ -132,16 +132,16 @@ export default function CoachPracticeRoomModule() {
               key={index}
               className={`p-6 transition-all ${
                 completedSteps.includes(index) 
-                  ? 'bg-emerald-500/10 border-emerald-500/30' 
+                  ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
                   : currentStep === index 
-                    ? 'bg-cyan-500/10 border-cyan-500/30'
+                    ? 'bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)]'
                     : 'bg-white/5 border-white/10'
               }`}
             >
               <div className="flex items-start gap-4">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                   completedSteps.includes(index)
-                    ? 'bg-emerald-500/20 text-emerald-400'
+                    ? 'bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)]'
                     : 'bg-white/10 text-white/50'
                 }`}>
                   {completedSteps.includes(index) ? (
@@ -156,7 +156,7 @@ export default function CoachPracticeRoomModule() {
                     <div className="mt-4">
                       <Button 
                         onClick={() => completeStep(index)}
-                        className="bg-cyan-500 hover:bg-cyan-600"
+                        className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
                       >
                         Complete Activity
                         <ArrowRight className="w-4 h-4 ml-2" />
@@ -171,13 +171,13 @@ export default function CoachPracticeRoomModule() {
 
         {/* Complete Module */}
         {completedSteps.length === REQUIRED_ACTIVITIES.length && (
-          <Card className="bg-emerald-500/10 border-emerald-500/30 p-6 text-center space-y-4">
-            <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
+          <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
+            <CheckCircle2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Coach Practice Complete!</h3>
             <p className="text-white/70">
               You&apos;ve earned {MODULE_XP} XP and unlocked Communication Gym.
             </p>
-            <Button onClick={handleComplete} className="bg-emerald-500 hover:bg-emerald-600">
+            <Button onClick={handleComplete} className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
               Continue to Next Module
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

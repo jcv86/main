@@ -31,6 +31,14 @@ import {
 // Total XP: 1,340 XP across 10 modules
 // ============================================
 
+// PILLAR 3 COLORS
+// Primary: rgb(170, 70, 170) - magenta/purple
+// Accent: rgb(80, 160, 170) - teal
+// Neutrals: black, white, gray shades only
+
+const PILLAR3_PRIMARY = 'rgb(170, 70, 170)'
+const PILLAR3_ACCENT = 'rgb(80, 160, 170)'
+
 interface Module {
   id: string
   number: number
@@ -299,7 +307,7 @@ export default function A3BasicLevelTrainingPath() {
           setModuleProgress(defaultProgress)
         }
       } catch (error) {
-        console.error('[v0] Error fetching progress:', error)
+        console.error('Error fetching progress:', error)
         // Default state
         const defaultProgress: Record<string, ModuleProgress> = {}
         BASIC_LEVEL_MODULES.forEach((module, index) => {
@@ -322,29 +330,34 @@ export default function A3BasicLevelTrainingPath() {
   const getStatusBadge = (status: ModuleStatus) => {
     switch (status) {
       case 'completed':
-        return <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30">Completed</Badge>
+        return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.3)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.5)' }} className="border">Completed</Badge>
       case 'in_progress':
-        return <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">In Progress</Badge>
+        return <Badge style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }} className="border">In Progress</Badge>
       case 'available':
-        return <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">Available</Badge>
+        return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)', color: 'rgb(170, 70, 170)', borderColor: 'rgba(170, 70, 170, 0.4)' }} className="border">Available</Badge>
       case 'locked':
-        return <Badge className="bg-white/10 text-white/50 border-white/20">Locked</Badge>
+        return <Badge className="bg-white/10 text-white/50 border-white/20 border">Locked</Badge>
     }
   }
 
-  const getTagColor = (tag: string) => {
-    if (tag.includes('No Interview') || tag.includes('Optional')) return 'bg-emerald-500/20 text-emerald-400'
-    if (tag.includes('Required') || tag.includes('Live')) return 'bg-amber-500/20 text-amber-400'
-    if (tag.includes('Voice') || tag.includes('Video')) return 'bg-cyan-500/20 text-cyan-400'
-    if (tag.includes('Final')) return 'bg-purple-500/20 text-purple-400'
-    return 'bg-white/10 text-white/70'
+  const getTagStyle = (tag: string) => {
+    if (tag.includes('No Interview') || tag.includes('Optional')) {
+      return { backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)' }
+    }
+    if (tag.includes('Required') || tag.includes('Live') || tag.includes('Voice') || tag.includes('Video')) {
+      return { backgroundColor: 'rgba(170, 70, 170, 0.2)', color: 'rgb(200, 130, 200)' }
+    }
+    if (tag.includes('Final')) {
+      return { backgroundColor: 'rgba(170, 70, 170, 0.3)', color: 'rgb(170, 70, 170)' }
+    }
+    return { backgroundColor: 'rgba(255, 255, 255, 0.1)', color: 'rgba(255, 255, 255, 0.7)' }
   }
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+          <Loader2 className="w-8 h-8 animate-spin" style={{ color: PILLAR3_PRIMARY }} />
           <p className="text-white/70">Loading your progress...</p>
         </div>
       </div>
@@ -353,9 +366,14 @@ export default function A3BasicLevelTrainingPath() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Subtle background */}
+      {/* Subtle background with pillar 3 color */}
       <div className="fixed inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-cyan-950/20 via-background to-background" />
+        <div 
+          className="absolute inset-0" 
+          style={{ 
+            background: `linear-gradient(to bottom, rgba(170, 70, 170, 0.08) 0%, transparent 30%, transparent 100%)` 
+          }} 
+        />
       </div>
 
       <div className="container max-w-5xl mx-auto px-4 py-12 space-y-12">
@@ -383,50 +401,83 @@ export default function A3BasicLevelTrainingPath() {
             </p>
           </div>
 
-          {/* Status Badges */}
+          {/* Status Badges - using pillar 3 colors */}
           <div className="flex flex-wrap gap-3">
-            <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 px-3 py-1">
+            <Badge 
+              style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }} 
+              className="border px-3 py-1"
+            >
               Level: Basic
             </Badge>
-            <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30 px-3 py-1">
+            <Badge 
+              style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.4)' }} 
+              className="border px-3 py-1"
+            >
               Training Mode: Educational + Guided + Simulated
             </Badge>
-            <Badge className="bg-emerald-500/20 text-emerald-400 border-emerald-500/30 px-3 py-1">
+            <Badge 
+              style={{ backgroundColor: 'rgba(170, 70, 170, 0.3)', color: 'rgb(170, 70, 170)', borderColor: 'rgba(170, 70, 170, 0.5)' }} 
+              className="border px-3 py-1"
+            >
               Total Path: {TOTAL_XP.toLocaleString()} XP
             </Badge>
-            <Badge className="bg-white/10 text-white/70 border-white/20 px-3 py-1">
+            <Badge className="bg-white/10 text-white/70 border-white/20 border px-3 py-1">
               Selected Path: {selectedPath} Days
             </Badge>
           </div>
         </div>
 
         {/* ========== MAIN PROGRESS BAR ========== */}
-        <Card className="bg-white/5 border-white/10 p-6 space-y-4">
+        <Card 
+          className="bg-white/5 border p-6 space-y-4"
+          style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+        >
           <h2 className="text-lg font-semibold text-white">Your Basic Level Progress</h2>
           
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
               <span className="text-white/70">{progressPercentage}% complete</span>
-              <span className="text-cyan-400 font-medium">{earnedXp.toLocaleString()} / {TOTAL_XP.toLocaleString()} XP</span>
+              <span className="font-medium" style={{ color: PILLAR3_PRIMARY }}>{earnedXp.toLocaleString()} / {TOTAL_XP.toLocaleString()} XP</span>
             </div>
-            <Progress value={progressPercentage} className="h-3 bg-white/10" />
+            {/* Custom progress bar with pillar 3 color */}
+            <div className="h-3 bg-white/10 rounded-full overflow-hidden">
+              <div 
+                className="h-full rounded-full transition-all duration-500"
+                style={{ 
+                  width: `${progressPercentage}%`,
+                  background: `linear-gradient(90deg, ${PILLAR3_PRIMARY}, rgba(170, 70, 170, 0.7))`
+                }}
+              />
+            </div>
           </div>
 
           {/* Summary Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
-            <div className="bg-white/5 rounded-lg p-4 border border-white/10">
-              <p className="text-2xl font-bold text-cyan-400">{earnedXp}</p>
+            <div 
+              className="bg-white/5 rounded-lg p-4 border"
+              style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+            >
+              <p className="text-2xl font-bold" style={{ color: PILLAR3_PRIMARY }}>{earnedXp}</p>
               <p className="text-xs text-white/50">XP Earned from {TOTAL_XP}</p>
             </div>
-            <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+            <div 
+              className="bg-white/5 rounded-lg p-4 border"
+              style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+            >
               <p className="text-2xl font-bold text-white">{completedModules} / 10</p>
               <p className="text-xs text-white/50">Modules completed</p>
             </div>
-            <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+            <div 
+              className="bg-white/5 rounded-lg p-4 border"
+              style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+            >
               <p className="text-lg font-bold text-white truncate">{currentModule?.title || 'Career Mirror'}</p>
               <p className="text-xs text-white/50">Current Focus</p>
             </div>
-            <div className="bg-white/5 rounded-lg p-4 border border-white/10">
+            <div 
+              className="bg-white/5 rounded-lg p-4 border"
+              style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+            >
               <p className="text-lg font-bold text-white/70 truncate">{nextModule?.title || 'Complete!'}</p>
               <p className="text-xs text-white/50">Next Unlock</p>
             </div>
@@ -444,9 +495,22 @@ export default function A3BasicLevelTrainingPath() {
             return (
               <Card 
                 key={module.id}
-                className={`bg-white/5 border-white/10 overflow-hidden transition-all ${
-                  isLocked ? 'opacity-60' : 'hover:border-cyan-500/30'
+                className={`bg-white/5 overflow-hidden transition-all border ${
+                  isLocked ? 'opacity-60 border-white/10' : ''
                 }`}
+                style={{ 
+                  borderColor: isLocked ? undefined : 'rgba(170, 70, 170, 0.2)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isLocked) {
+                    e.currentTarget.style.borderColor = 'rgba(170, 70, 170, 0.5)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isLocked) {
+                    e.currentTarget.style.borderColor = 'rgba(170, 70, 170, 0.2)'
+                  }
+                }}
               >
                 <div 
                   className={`p-6 ${!isLocked ? 'cursor-pointer' : ''}`}
@@ -454,127 +518,126 @@ export default function A3BasicLevelTrainingPath() {
                 >
                   <div className="flex items-start gap-4">
                     {/* Module Number & Icon */}
-                    <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${
-                      progress.status === 'completed' ? 'bg-emerald-500/20 text-emerald-400' :
-                      progress.status === 'in_progress' ? 'bg-cyan-500/20 text-cyan-400' :
-                      progress.status === 'available' ? 'bg-purple-500/20 text-purple-400' :
-                      'bg-white/10 text-white/40'
-                    }`}>
+                    <div 
+                      className="w-12 h-12 rounded-lg flex items-center justify-center"
+                      style={{
+                        backgroundColor: progress.status === 'completed' 
+                          ? 'rgba(170, 70, 170, 0.3)' 
+                          : progress.status === 'available' || progress.status === 'in_progress'
+                            ? 'rgba(170, 70, 170, 0.2)'
+                            : 'rgba(255, 255, 255, 0.1)',
+                        color: progress.status === 'completed' || progress.status === 'available' || progress.status === 'in_progress'
+                          ? 'rgb(200, 130, 200)'
+                          : 'rgba(255, 255, 255, 0.4)'
+                      }}
+                    >
                       {progress.status === 'completed' ? (
                         <CheckCircle2 className="w-6 h-6" />
-                      ) : isLocked ? (
+                      ) : progress.status === 'locked' ? (
                         <Lock className="w-5 h-5" />
                       ) : (
                         module.icon
                       )}
                     </div>
 
-                    {/* Content */}
+                    {/* Module Content */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className="text-white/40 text-sm">Module {module.number}</span>
-                            {getStatusBadge(progress.status)}
-                          </div>
-                          <h3 className="text-lg font-semibold text-white">{module.title}</h3>
-                          <p className="text-white/60 text-sm mt-1">{module.shortDescription}</p>
-                        </div>
-                        <div className="text-right shrink-0">
-                          <p className="text-cyan-400 font-bold">{module.xp} XP</p>
-                          <p className="text-xs text-white/40">{module.format}</p>
-                        </div>
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <span className="text-sm text-white/50">Module {module.number}</span>
+                        {getStatusBadge(progress.status)}
                       </div>
-
+                      
+                      <h3 className="text-xl font-semibold text-white mt-1">{module.title}</h3>
+                      <p className="text-white/60 text-sm mt-1 line-clamp-2">{module.shortDescription}</p>
+                      
                       {/* Tags */}
                       <div className="flex flex-wrap gap-2 mt-3">
-                        {module.tags.map((tag) => (
-                          <span key={tag} className={`text-xs px-2 py-1 rounded-full ${getTagColor(tag)}`}>
+                        {module.tags.map(tag => (
+                          <span 
+                            key={tag} 
+                            className="text-xs px-2 py-1 rounded"
+                            style={getTagStyle(tag)}
+                          >
                             {tag}
                           </span>
                         ))}
                       </div>
 
-                      {/* Progress bar for in-progress modules */}
-                      {progress.status === 'in_progress' && (
-                        <div className="mt-4 space-y-1">
-                          <div className="flex justify-between text-xs">
-                            <span className="text-white/50">{progress.progress}% complete</span>
-                            <span className="text-white/50">{progress.completedActivities}/{module.requiredActivities.length} activities</span>
-                          </div>
-                          <Progress value={progress.progress} className="h-1.5 bg-white/10" />
-                        </div>
-                      )}
-
-                      {/* Locked message */}
+                      {/* Unlock Message */}
                       {isLocked && prevModule && (
-                        <p className="text-amber-400/70 text-xs mt-3">
+                        <p className="text-sm mt-3" style={{ color: 'rgba(170, 70, 170, 0.7)' }}>
                           Complete {prevModule.title} to unlock this step.
                         </p>
                       )}
                     </div>
+
+                    {/* XP Badge */}
+                    <div className="text-right">
+                      <p className="text-lg font-bold" style={{ color: PILLAR3_PRIMARY }}>{module.xp} XP</p>
+                      <p className="text-xs text-white/50">{module.format}</p>
+                    </div>
                   </div>
 
-                  {/* Expanded content */}
+                  {/* Expanded Content */}
                   {isExpanded && !isLocked && (
-                    <div className="mt-6 pt-6 border-t border-white/10 space-y-4">
-                      <div className="grid md:grid-cols-2 gap-4 text-sm">
+                    <div className="mt-6 pt-6 border-t" style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}>
+                      <div className="grid md:grid-cols-2 gap-6">
                         <div>
-                          <p className="text-white/40 text-xs uppercase mb-1">Input Mode</p>
-                          <p className="text-white/70">{module.inputMode}</p>
+                          <h4 className="text-sm font-medium text-white/70 mb-2">Required Activities</h4>
+                          <ul className="space-y-2">
+                            {module.requiredActivities.map((activity, idx) => (
+                              <li key={idx} className="flex items-center gap-2 text-sm text-white/60">
+                                <div 
+                                  className="w-5 h-5 rounded-full flex items-center justify-center text-xs"
+                                  style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)', color: PILLAR3_PRIMARY }}
+                                >
+                                  {idx + 1}
+                                </div>
+                                {activity}
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                         <div>
-                          <p className="text-white/40 text-xs uppercase mb-1">Interview Requirement</p>
-                          <p className="text-white/70">{module.interviewRequirement}</p>
-                        </div>
-                        <div>
-                          <p className="text-white/40 text-xs uppercase mb-1">Main Output</p>
-                          <p className="text-white/70">{module.mainOutput}</p>
+                          <h4 className="text-sm font-medium text-white/70 mb-2">Output</h4>
+                          <p className="text-sm text-white/60">{module.mainOutput}</p>
+                          
+                          <h4 className="text-sm font-medium text-white/70 mt-4 mb-2">Input Mode</h4>
+                          <p className="text-sm text-white/60">{module.inputMode}</p>
+                          
+                          <h4 className="text-sm font-medium text-white/70 mt-4 mb-2">Interview Requirement</h4>
+                          <p className="text-sm text-white/60">{module.interviewRequirement}</p>
                         </div>
                       </div>
 
-                      <div>
-                        <p className="text-white/40 text-xs uppercase mb-2">Required Activities</p>
-                        <ul className="space-y-1">
-                          {module.requiredActivities.map((activity, i) => (
-                            <li key={i} className="text-white/60 text-sm flex items-center gap-2">
-                              <span className="w-5 h-5 rounded-full bg-white/10 flex items-center justify-center text-xs text-white/40">
-                                {i + 1}
-                              </span>
-                              {activity}
-                            </li>
-                          ))}
-                        </ul>
+                      <div className="flex gap-3 mt-6">
+                        <Link href={module.route} className="flex-1">
+                          <Button 
+                            className="w-full text-white"
+                            style={{ 
+                              backgroundColor: PILLAR3_PRIMARY,
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = 'rgba(170, 70, 170, 0.8)'
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = PILLAR3_PRIMARY
+                            }}
+                          >
+                            {progress.status === 'completed' ? (
+                              <>
+                                <RotateCcw className="w-4 h-4 mr-2" />
+                                Review Module
+                              </>
+                            ) : (
+                              <>
+                                <Play className="w-4 h-4 mr-2" />
+                                {module.cta}
+                              </>
+                            )}
+                          </Button>
+                        </Link>
                       </div>
-
-                      <Button 
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          router.push(module.route)
-                        }}
-                        className={`w-full ${
-                          progress.status === 'completed' 
-                            ? 'bg-emerald-500/20 text-emerald-400 hover:bg-emerald-500/30 border border-emerald-500/30'
-                            : 'bg-cyan-500 hover:bg-cyan-600 text-white'
-                        }`}
-                      >
-                        {progress.status === 'completed' ? (
-                          <>
-                            <RotateCcw className="w-4 h-4 mr-2" />
-                            Review Results
-                          </>
-                        ) : progress.status === 'in_progress' ? (
-                          <>
-                            <Play className="w-4 h-4 mr-2" />
-                            Continue
-                          </>
-                        ) : (
-                          <>
-                            <Play className="w-4 h-4 mr-2" />
-                            {module.cta}
-                          </>
-                        )}
-                      </Button>
                     </div>
                   )}
                 </div>
@@ -584,73 +647,86 @@ export default function A3BasicLevelTrainingPath() {
         </div>
 
         {/* ========== SUMMARY TABLE ========== */}
-        <Card className="bg-white/5 border-white/10 p-6 overflow-x-auto">
-          <h3 className="text-lg font-semibold text-white mb-4">Module Summary</h3>
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-white/40 border-b border-white/10">
-                <th className="text-left py-2 px-2">#</th>
-                <th className="text-left py-2 px-2">Module</th>
-                <th className="text-left py-2 px-2">Format</th>
-                <th className="text-left py-2 px-2">Requirement</th>
-                <th className="text-right py-2 px-2">XP</th>
-                <th className="text-left py-2 px-2">Main Output</th>
-              </tr>
-            </thead>
-            <tbody>
-              {BASIC_LEVEL_MODULES.map((module) => (
-                <tr key={module.id} className="border-b border-white/5 text-white/70">
-                  <td className="py-2 px-2 text-white/40">{module.number}</td>
-                  <td className="py-2 px-2 text-white">{module.title}</td>
-                  <td className="py-2 px-2">{module.format.split(' ')[0]}</td>
-                  <td className="py-2 px-2">{module.interviewRequirement.split('.')[0]}</td>
-                  <td className="py-2 px-2 text-right text-cyan-400">{module.xp}</td>
-                  <td className="py-2 px-2">{module.mainOutput}</td>
+        <Card 
+          className="bg-white/5 border p-6"
+          style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+        >
+          <h2 className="text-lg font-semibold text-white mb-4">Module Summary</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b" style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}>
+                  <th className="text-left py-2 text-white/50 font-medium">#</th>
+                  <th className="text-left py-2 text-white/50 font-medium">Module</th>
+                  <th className="text-left py-2 text-white/50 font-medium">Format</th>
+                  <th className="text-left py-2 text-white/50 font-medium">XP</th>
+                  <th className="text-left py-2 text-white/50 font-medium">Status</th>
                 </tr>
-              ))}
-              <tr className="text-white font-semibold">
-                <td colSpan={4} className="py-2 px-2 text-right">Total</td>
-                <td className="py-2 px-2 text-right text-cyan-400">{TOTAL_XP}</td>
-                <td></td>
-              </tr>
-            </tbody>
-          </table>
-        </Card>
-
-        {/* ========== HOW PROGRESS WORKS ========== */}
-        <Card className="bg-white/5 border-white/10 p-6 space-y-4">
-          <h3 className="text-lg font-semibold text-white">How Progress Works</h3>
-          <div className="text-white/70 space-y-3 text-sm leading-relaxed">
-            <p>
-              Your A3 progress is based on XP earned across the 10 Basic Level modules. Each module has its own 
-              internal progress bar. When you complete all required activities inside a module, you earn that 
-              module&apos;s XP and unlock the next step.
-            </p>
-            <p>
-              XP measures progress and completed work. Scores measure quality. For example, you can earn XP by 
-              completing the CV Builder Studio, while your CV Readability Score shows how strong the result is.
-            </p>
-            <p>
-              The path starts with learning and building. Later modules introduce voice/video drills, recruiter 
-              simulations, difficult-question pressure, and a final realistic interview mission. This way, you 
-              are not pushed into pressure too early. You build readiness step by step.
-            </p>
+              </thead>
+              <tbody>
+                {BASIC_LEVEL_MODULES.map(module => {
+                  const progress = moduleProgress[module.id]
+                  return (
+                    <tr key={module.id} className="border-b" style={{ borderColor: 'rgba(170, 70, 170, 0.1)' }}>
+                      <td className="py-3 text-white/50">{module.number}</td>
+                      <td className="py-3 text-white">{module.title}</td>
+                      <td className="py-3 text-white/60">{module.format}</td>
+                      <td className="py-3" style={{ color: PILLAR3_PRIMARY }}>{module.xp} XP</td>
+                      <td className="py-3">{getStatusBadge(progress?.status || 'locked')}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+              <tfoot>
+                <tr className="border-t" style={{ borderColor: 'rgba(170, 70, 170, 0.3)' }}>
+                  <td colSpan={3} className="py-3 font-semibold text-white">Total</td>
+                  <td className="py-3 font-bold" style={{ color: PILLAR3_PRIMARY }}>{TOTAL_XP} XP</td>
+                  <td className="py-3 text-white/60">{completedModules}/10 completed</td>
+                </tr>
+              </tfoot>
+            </table>
           </div>
         </Card>
 
-        {/* ========== FINAL COPY ========== */}
-        <div className="text-center py-8 space-y-4">
-          <p className="text-white/60 max-w-2xl mx-auto leading-relaxed">
-            A3 Basic Level is designed to educate before it evaluates. You first learn how to understand your 
-            professional profile, discover your value, build a clear CV, decode job offers, and structure strong 
-            answers. Only after that does DTC introduce guided practice, communication drills, recruiter simulations, 
-            difficult-question training, and a final realistic interview mission.
-          </p>
-          <p className="text-white/40 text-sm">
-            The goal is not to pressure you from the beginning. The goal is to build clarity, confidence, structure, 
-            and readiness step by step.
-          </p>
-        </div>
+        {/* ========== HOW PROGRESS WORKS ========== */}
+        <Card 
+          className="bg-white/5 border p-6"
+          style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+        >
+          <h2 className="text-lg font-semibold text-white mb-4">How Progress Works</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <div 
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)' }}
+              >
+                <span style={{ color: PILLAR3_PRIMARY }}>1</span>
+              </div>
+              <h3 className="font-medium text-white">Complete modules in order</h3>
+              <p className="text-sm text-white/60">Each module unlocks the next. Complete all required activities to earn XP.</p>
+            </div>
+            <div className="space-y-2">
+              <div 
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)' }}
+              >
+                <span style={{ color: PILLAR3_PRIMARY }}>2</span>
+              </div>
+              <h3 className="font-medium text-white">Build your interview toolkit</h3>
+              <p className="text-sm text-white/60">Each module produces outputs you&apos;ll use in later modules and real interviews.</p>
+            </div>
+            <div className="space-y-2">
+              <div 
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)' }}
+              >
+                <span style={{ color: PILLAR3_PRIMARY }}>3</span>
+              </div>
+              <h3 className="font-medium text-white">Reach 1,340 XP</h3>
+              <p className="text-sm text-white/60">Complete all 10 modules to finish Basic Level and unlock Intermediate training.</p>
+            </div>
+          </div>
+        </Card>
       </div>
     </div>
   )

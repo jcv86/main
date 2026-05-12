@@ -70,7 +70,7 @@ export default function ValueMiningLabModule() {
               Back to A3
             </Button>
           </Link>
-          <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+          <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] border-[rgba(170,70,170,0.3)]">
             Module 2 • {MODULE_XP} XP
           </Badge>
         </div>
@@ -78,8 +78,8 @@ export default function ValueMiningLabModule() {
         {/* Title */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-amber-500/20 flex items-center justify-center">
-              <Gem className="w-6 h-6 text-amber-400" />
+            <div className="w-12 h-12 rounded-lg bg-[rgba(80,160,170,0.2)] flex items-center justify-center">
+              <Gem className="w-6 h-6 text-[rgb(80,160,170)]" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-white">Value Mining Lab</h1>
@@ -92,9 +92,9 @@ export default function ValueMiningLabModule() {
         </div>
 
         {/* Learning Point */}
-        <Card className="bg-amber-500/10 border-amber-500/30 p-4">
+        <Card className="bg-[rgba(80,160,170,0.15)] border-[rgba(80,160,170,0.4)] p-4">
           <div className="flex items-start gap-3">
-            <Lightbulb className="w-5 h-5 text-amber-400 mt-0.5" />
+            <Lightbulb className="w-5 h-5 text-[rgb(80,160,170)] mt-0.5" />
             <div>
               <p className="font-medium text-white">Key Learning</p>
               <p className="text-white/70 text-sm mt-1">
@@ -109,7 +109,7 @@ export default function ValueMiningLabModule() {
         <Card className="bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progress</span>
-            <span className="text-cyan-400">{progress}%</span>
+            <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
           <Progress value={progress} className="h-2 bg-white/10" />
         </Card>
@@ -122,8 +122,8 @@ export default function ValueMiningLabModule() {
               <p className="text-red-400 text-xs uppercase mb-1">Weak</p>
               <p className="text-white/70 text-sm">I answered emails.</p>
             </div>
-            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3">
-              <p className="text-emerald-400 text-xs uppercase mb-1">Better</p>
+            <div className="bg-[rgba(170,70,170,0.15)] border border-[rgba(170,70,170,0.4)] rounded-lg p-3">
+              <p className="text-[rgb(200,130,200)] text-xs uppercase mb-1">Better</p>
               <p className="text-white/70 text-sm">
                 I helped maintain communication with clients and reduced delays by responding to operational requests quickly.
               </p>
@@ -138,16 +138,16 @@ export default function ValueMiningLabModule() {
               key={index}
               className={`p-6 transition-all ${
                 completedSteps.includes(index) 
-                  ? 'bg-emerald-500/10 border-emerald-500/30' 
+                  ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
                   : currentStep === index 
-                    ? 'bg-cyan-500/10 border-cyan-500/30'
+                    ? 'bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)]'
                     : 'bg-white/5 border-white/10'
               }`}
             >
               <div className="flex items-start gap-4">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                   completedSteps.includes(index)
-                    ? 'bg-emerald-500/20 text-emerald-400'
+                    ? 'bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)]'
                     : 'bg-white/10 text-white/50'
                 }`}>
                   {completedSteps.includes(index) ? (
@@ -179,7 +179,7 @@ export default function ValueMiningLabModule() {
                       )}
                       <Button 
                         onClick={() => completeStep(index)}
-                        className="mt-4 bg-cyan-500 hover:bg-cyan-600"
+                        className="mt-4 bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
                       >
                         Complete Activity
                         <ArrowRight className="w-4 h-4 ml-2" />
@@ -194,13 +194,13 @@ export default function ValueMiningLabModule() {
 
         {/* Complete Module */}
         {completedSteps.length === REQUIRED_ACTIVITIES.length && (
-          <Card className="bg-emerald-500/10 border-emerald-500/30 p-6 text-center space-y-4">
-            <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
+          <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
+            <CheckCircle2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Module Complete!</h3>
             <p className="text-white/70">
               You&apos;ve earned {MODULE_XP} XP and unlocked CV Builder Studio.
             </p>
-            <Button onClick={handleComplete} className="bg-emerald-500 hover:bg-emerald-600">
+            <Button onClick={handleComplete} className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
               Continue to Next Module
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

@@ -66,7 +66,7 @@ export default function CVBuilderStudioModule() {
               Back to A3
             </Button>
           </Link>
-          <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+          <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] border-[rgba(170,70,170,0.3)]">
             Module 3 • {MODULE_XP} XP
           </Badge>
         </div>
@@ -111,8 +111,8 @@ export default function CVBuilderStudioModule() {
                 Responsible, proactive person looking for an opportunity to grow.
               </p>
             </div>
-            <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3">
-              <p className="text-emerald-400 text-xs uppercase mb-1">Better</p>
+            <div className="bg-[rgba(170,70,170,0.15)] border border-[rgba(170,70,170,0.4)] rounded-lg p-3">
+              <p className="text-[rgb(200,130,200)] text-xs uppercase mb-1">Better</p>
               <p className="text-white/70 text-sm">
                 Administrative and operations professional with experience supporting internal processes, 
                 coordinating documentation, and maintaining organized communication between teams and clients.
@@ -125,7 +125,7 @@ export default function CVBuilderStudioModule() {
         <Card className="bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progress</span>
-            <span className="text-cyan-400">{progress}%</span>
+            <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
           <Progress value={progress} className="h-2 bg-white/10" />
         </Card>
@@ -137,16 +137,16 @@ export default function CVBuilderStudioModule() {
               key={index}
               className={`p-6 transition-all ${
                 completedSteps.includes(index) 
-                  ? 'bg-emerald-500/10 border-emerald-500/30' 
+                  ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
                   : currentStep === index 
-                    ? 'bg-cyan-500/10 border-cyan-500/30'
+                    ? 'bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)]'
                     : 'bg-white/5 border-white/10'
               }`}
             >
               <div className="flex items-start gap-4">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
                   completedSteps.includes(index)
-                    ? 'bg-emerald-500/20 text-emerald-400'
+                    ? 'bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)]'
                     : 'bg-white/10 text-white/50'
                 }`}>
                   {completedSteps.includes(index) ? (
@@ -180,7 +180,7 @@ export default function CVBuilderStudioModule() {
                       )}
                       <Button 
                         onClick={() => completeStep(index)}
-                        className="mt-4 bg-cyan-500 hover:bg-cyan-600"
+                        className="mt-4 bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
                       >
                         Complete Activity
                         <ArrowRight className="w-4 h-4 ml-2" />
@@ -195,13 +195,13 @@ export default function CVBuilderStudioModule() {
 
         {/* Complete Module */}
         {completedSteps.length === REQUIRED_ACTIVITIES.length && (
-          <Card className="bg-emerald-500/10 border-emerald-500/30 p-6 text-center space-y-4">
-            <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
+          <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
+            <CheckCircle2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">CV Builder Complete!</h3>
             <p className="text-white/70">
               You&apos;ve earned {MODULE_XP} XP and unlocked Job Decoder.
             </p>
-            <Button onClick={handleComplete} className="bg-emerald-500 hover:bg-emerald-600">
+            <Button onClick={handleComplete} className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
               Continue to Next Module
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>

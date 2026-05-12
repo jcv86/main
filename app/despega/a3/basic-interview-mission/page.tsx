@@ -65,10 +65,10 @@ export default function BasicInterviewMissionModule() {
             </Button>
           </Link>
           <div className="flex items-center gap-2">
-            <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
+            <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)] border-purple-500/30">
               Final Mission
             </Badge>
-            <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+            <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] border-[rgba(170,70,170,0.3)]">
               Module 10 • {MODULE_XP} XP
             </Badge>
           </div>
@@ -77,8 +77,8 @@ export default function BasicInterviewMissionModule() {
         {/* Title */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-purple-500/20 flex items-center justify-center">
-              <Trophy className="w-6 h-6 text-purple-400" />
+            <div className="w-12 h-12 rounded-lg bg-[rgba(170,70,170,0.2)] flex items-center justify-center">
+              <Trophy className="w-6 h-6 text-[rgb(200,130,200)]" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-white">Basic Interview Mission</h1>
@@ -146,7 +146,7 @@ export default function BasicInterviewMissionModule() {
         <Card className="bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Mission Progress</span>
-            <span className="text-purple-400">{progress}%</span>
+            <span className="text-[rgb(200,130,200)]">{progress}%</span>
           </div>
           <Progress value={progress} className="h-2 bg-white/10" />
           <p className="text-xs text-white/50 mt-2">
@@ -157,13 +157,13 @@ export default function BasicInterviewMissionModule() {
         {/* Mission Area */}
         {!missionStarted ? (
           <Card className="bg-purple-500/10 border-purple-500/30 p-8 text-center space-y-4">
-            <AlertCircle className="w-12 h-12 text-purple-400 mx-auto" />
+            <AlertCircle className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Final Mission</h3>
             <p className="text-white/70 max-w-md mx-auto">
               This is the final Basic Level mission. You will complete a full beginner-friendly interview. 
               This module proves whether you are ready for basic recruiter or HR interviews.
             </p>
-            <div className="flex items-center justify-center gap-2 text-amber-400 text-sm">
+            <div className="flex items-center justify-center gap-2 text-[rgb(80,160,170)] text-sm">
               <Star className="w-4 h-4" />
               <span>Worth {MODULE_XP} XP - the most of any module!</span>
             </div>
@@ -180,7 +180,7 @@ export default function BasicInterviewMissionModule() {
           </Card>
         ) : currentStage < INTERVIEW_STAGES.length - 1 ? (
           <Card className="bg-white/5 border-white/10 p-8 text-center space-y-4">
-            <Trophy className="w-12 h-12 text-purple-400 mx-auto" />
+            <Trophy className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">
               Stage: {INTERVIEW_STAGES[currentStage]?.name}
             </h3>
@@ -198,8 +198,8 @@ export default function BasicInterviewMissionModule() {
         ) : (
           <Card className="bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border-purple-500/30 p-8 text-center space-y-4">
             <div className="relative">
-              <Trophy className="w-16 h-16 text-amber-400 mx-auto" />
-              <CheckCircle2 className="w-8 h-8 text-emerald-400 absolute -bottom-1 -right-1 left-1/2 ml-4" />
+              <Trophy className="w-16 h-16 text-[rgb(80,160,170)] mx-auto" />
+              <CheckCircle2 className="w-8 h-8 text-[rgb(200,130,200)] absolute -bottom-1 -right-1 left-1/2 ml-4" />
             </div>
             <h3 className="text-2xl font-bold text-white">Basic Level Complete!</h3>
             <p className="text-white/70 max-w-md mx-auto">
@@ -208,15 +208,15 @@ export default function BasicInterviewMissionModule() {
             </p>
             <div className="flex flex-wrap justify-center gap-4 py-4">
               <div className="bg-white/10 rounded-lg px-4 py-2">
-                <p className="text-2xl font-bold text-cyan-400">1,340</p>
+                <p className="text-2xl font-bold text-[rgb(170,70,170)]">1,340</p>
                 <p className="text-xs text-white/50">Total XP Earned</p>
               </div>
               <div className="bg-white/10 rounded-lg px-4 py-2">
-                <p className="text-2xl font-bold text-emerald-400">10/10</p>
+                <p className="text-2xl font-bold text-[rgb(200,130,200)]">10/10</p>
                 <p className="text-xs text-white/50">Modules Completed</p>
               </div>
               <div className="bg-white/10 rounded-lg px-4 py-2">
-                <p className="text-2xl font-bold text-purple-400">Basic</p>
+                <p className="text-2xl font-bold text-[rgb(200,130,200)]">Basic</p>
                 <p className="text-xs text-white/50">Level Certified</p>
               </div>
             </div>

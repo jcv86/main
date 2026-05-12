@@ -65,7 +65,7 @@ export default function FirstRecruiterSimulationModule() {
             <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
               Required Simulation
             </Badge>
-            <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30">
+            <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] border-[rgba(170,70,170,0.3)]">
               Module 8 • {MODULE_XP} XP
             </Badge>
           </div>
@@ -154,7 +154,7 @@ export default function FirstRecruiterSimulationModule() {
         <Card className="bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Simulation Progress</span>
-            <span className="text-cyan-400">{progress}%</span>
+            <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
           <Progress value={progress} className="h-2 bg-white/10" />
           <p className="text-xs text-white/50 mt-2">
@@ -164,8 +164,8 @@ export default function FirstRecruiterSimulationModule() {
 
         {/* Simulation Area */}
         {!simulationStarted ? (
-          <Card className="bg-cyan-500/10 border-cyan-500/30 p-8 text-center space-y-4">
-            <AlertCircle className="w-12 h-12 text-cyan-400 mx-auto" />
+          <Card className="bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)] p-8 text-center space-y-4">
+            <AlertCircle className="w-12 h-12 text-[rgb(170,70,170)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Ready to Begin?</h3>
             <p className="text-white/70 max-w-md mx-auto">
               This is your first real interview checkpoint. The simulation should be short, simple, 
@@ -176,7 +176,7 @@ export default function FirstRecruiterSimulationModule() {
                 setSimulationStarted(true)
                 setCurrentStage(0)
               }}
-              className="bg-cyan-500 hover:bg-cyan-600"
+              className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
             >
               Start Simulation
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -184,7 +184,7 @@ export default function FirstRecruiterSimulationModule() {
           </Card>
         ) : currentStage < INTERVIEW_STAGES.length - 1 ? (
           <Card className="bg-white/5 border-white/10 p-8 text-center space-y-4">
-            <Video className="w-12 h-12 text-cyan-400 mx-auto" />
+            <Video className="w-12 h-12 text-[rgb(170,70,170)] mx-auto" />
             <h3 className="text-xl font-bold text-white">
               Stage: {INTERVIEW_STAGES[currentStage]?.name}
             </h3>
@@ -193,20 +193,20 @@ export default function FirstRecruiterSimulationModule() {
             </p>
             <Button 
               onClick={advanceStage}
-              className="bg-cyan-500 hover:bg-cyan-600"
+              className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
             >
               Continue to Next Stage
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>
         ) : (
-          <Card className="bg-emerald-500/10 border-emerald-500/30 p-6 text-center space-y-4">
-            <CheckCircle2 className="w-12 h-12 text-emerald-400 mx-auto" />
+          <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
+            <CheckCircle2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">First Simulation Complete!</h3>
             <p className="text-white/70">
               You&apos;ve earned {MODULE_XP} XP and unlocked Risk & Difficult Questions Lab.
             </p>
-            <Button onClick={handleComplete} className="bg-emerald-500 hover:bg-emerald-600">
+            <Button onClick={handleComplete} className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
               Continue to Next Module
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
