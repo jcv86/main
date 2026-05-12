@@ -139,6 +139,7 @@ export default function ValueMiningLabCoach() {
           isOpen={showCameraTest}
           onClose={() => setShowCameraTest(false)}
           onTestComplete={handleCameraTestComplete}
+          interviewType="Coach"
         />
       </>
     )
@@ -172,15 +173,21 @@ export default function ValueMiningLabCoach() {
         <div className="grid grid-cols-3 gap-4 h-[calc(100vh-120px)]">
           {/* Left Column - Coach Video */}
           <div className="bg-white/5 border border-white/10 rounded-lg overflow-hidden flex flex-col">
-            <div className="flex-1 bg-black/50 flex items-center justify-center">
+            <div className="flex-1 bg-black flex items-center justify-center relative">
               <video
+                key="coach-video"
                 autoPlay
                 loop
                 muted
                 playsInline
                 className="w-full h-full object-cover"
+                style={{
+                  display: 'block',
+                  backgroundColor: '#000'
+                }}
               >
                 <source src="/videos/coach-placeholder.mov" type="video/quicktime" />
+                <source src="/videos/coach-placeholder.mov" type="video/mp4" />
                 Tu navegador no soporta video
               </video>
             </div>

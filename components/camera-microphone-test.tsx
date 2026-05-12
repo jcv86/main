@@ -10,9 +10,10 @@ interface CameraMicrophoneTestProps {
   isOpen: boolean
   onClose: () => void
   onTestComplete: (passed: boolean) => void
+  interviewType?: 'Sofia' | 'Coach'
 }
 
-export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: CameraMicrophoneTestProps) {
+export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete, interviewType = 'Sofia' }: CameraMicrophoneTestProps) {
   const [cameraStatus, setCameraStatus] = useState<'checking' | 'ready' | 'error'>('checking')
   const [micStatus, setMicStatus] = useState<'checking' | 'ready' | 'error'>('checking')
   const [isValidating, setIsValidating] = useState(false)
@@ -103,7 +104,7 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
             Verificación de Cámara y Micrófono
           </DialogTitle>
           <DialogDescription className="text-white/70 text-sm">
-            <strong>IMPORTANTE:</strong> La cámara y micrófono son obligatorios para la entrevista con Sofia. Ambos dispositivos deben estar funcionando correctamente.
+            <strong>IMPORTANTE:</strong> La cámara y micrófono son obligatorios para {interviewType === 'Coach' ? 'esta sesión de coaching' : 'la entrevista con Sofia'}. Ambos dispositivos deben estar funcionando correctamente.
           </DialogDescription>
         </DialogHeader>
 
@@ -112,7 +113,7 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
           <Alert className="bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]">
             <Info className="h-4 w-4 text-[rgb(170,70,170)]" />
             <AlertDescription className="text-white/80">
-              La cámara y el micrófono son <strong>OBLIGATORIOS</strong> para esta entrevista con Sofia.
+                  La cámara y el micrófono son <strong>OBLIGATORIOS</strong> para {interviewType === 'Coach' ? 'esta sesión de coaching' : 'la entrevista con Sofia'}.
             </AlertDescription>
           </Alert>
 
@@ -238,8 +239,8 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
             >
               {isValidating ? (
                 <>
-                  <Loader className="w-4 h-4 mr-2 animate-spin" />
-                  Validando...
+                  <Check className="w-4 h-4 mr-2" />
+                  {interviewType === 'Coach' ? 'Continuar a Coaching' : 'Continuar a Sofia'}
                 </>
               ) : (
                 <>
