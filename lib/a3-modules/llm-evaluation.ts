@@ -1,18 +1,12 @@
-// LLM-based evaluation service for modules using Claude API via Vercel AI Gateway
-import { generateObject } from 'ai';
-import { z } from 'zod';
+// LLM-based evaluation service for modules using OpenAI API directly
+import { OpenAI } from 'openai';
 import type {
   EvaluationResponse,
   RubricScoring,
 } from './types';
 
-// Zod schema for LLM response validation
-const EvaluationSchema = z.object({
-  totalScore: z.number().min(0).max(100),
-  criteriaScores: z.record(z.string(), z.number()),
-  feedback: z.string(),
-  strengths: z.array(z.string()),
-  improvements: z.array(z.string()),
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 export interface EvaluationRequest {
@@ -29,7 +23,7 @@ export interface EvaluationRequest {
 }
 
 /**
- * Evaluates user response using Claude API with structured output
+ * Evaluates user response using OpenAI API with structured JSON output
  * Supports text, transcriptions, and interview feedback
  */
 export async function evaluateResponseWithLLM(
@@ -45,20 +39,37 @@ export async function evaluateResponseWithLLM(
   const prompt = buildEvaluationPrompt(rubric, response, context);
 
   try {
-    const result = await generateObject({
-      model: 'anthropic/claude-3-5-sonnet-20241022',
-      schema: EvaluationSchema,
-      prompt,
-      system: `You are an expert evaluator for professional development modules. 
+    const result = await client.chat.completions.create({
+      model: 'gpt-4o-mini',
+      messages: [
+        {
+          role: 'system',
+          content: `You are an expert evaluator for professional development modules. 
 Your task is to evaluate user responses based on provided rubrics with specific criteria and weights.
 Provide detailed feedback, identify strengths, and suggest improvements.
-Be fair but rigorous in your assessment.`,
+Be fair but rigorous in your assessment.
+Always respond with valid JSON only, no markdown or extra text.`,
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      temperature: 0.7,
+      response_format: { type: 'json_object' },
     });
 
+    const content = result.choices[0]?.message?.content;
+    if (!content) {
+      throw new Error('No response from OpenAI');
+    }
+
+    const parsed = JSON.parse(content);
+    
     // Validate and normalize scores
-    return normalizeEvaluationResponse(result.object, rubric);
+    return normalizeEvaluationResponse(parsed, rubric);
   } catch (error) {
-    console.error('[LLM Evaluation Error]', error);
+    console.error('[v0] LLM Evaluation Error:', error);
     throw new Error(`Failed to evaluate response: ${error instanceof Error ? error.message : 'Unknown error'}`);
   }
 }
@@ -87,7 +98,17 @@ function buildEvaluationPrompt(
   prompt += `Response:\n"${response.content}"\n\n`;
   prompt += `Evaluation Criteria (Total: ${rubric.totalPoints} points):\n${criteriaList}\n\n`;
   prompt += `${rubric.instructions}\n\n`;
-  prompt += `Provide your evaluation in the exact JSON format requested.`;
+  prompt += `Respond with this exact JSON format:
+{
+  "totalScore": <number 0-100>,
+  "criteriaScores": {
+    "<criterion name>": <number>,
+    ...
+  },
+  "feedback": "<detailed feedback>",
+  "strengths": ["<strength1>", "<strength2>"],
+  "improvements": ["<improvement1>", "<improvement2>"]
+}`;
 
   return prompt;
 }
@@ -96,30 +117,32 @@ function buildEvaluationPrompt(
  * Normalizes LLM response to ensure scores are within bounds
  */
 function normalizeEvaluationResponse(
-  response: z.infer<typeof EvaluationSchema>,
+  response: any,
   rubric: RubricScoring
 ): EvaluationResponse {
   // Ensure total score doesn't exceed 100
-  const totalScore = Math.min(100, Math.max(0, response.totalScore));
+  const totalScore = Math.min(100, Math.max(0, response.totalScore || 0));
 
   // Normalize criteria scores to respect rubric max points
   const normalizedCriteriaScores: Record<string, number> = {};
-  for (const [criteriaName, score] of Object.entries(response.criteriaScores)) {
-    const rubricCriteria = rubric.criteria.find((c) => c.name === criteriaName);
-    if (rubricCriteria) {
-      normalizedCriteriaScores[criteriaName] = Math.min(
-        rubricCriteria.maxPoints,
-        Math.max(0, score)
-      );
+  if (response.criteriaScores) {
+    for (const [criteriaName, score] of Object.entries(response.criteriaScores)) {
+      const rubricCriteria = rubric.criteria.find((c) => c.name === criteriaName);
+      if (rubricCriteria) {
+        normalizedCriteriaScores[criteriaName] = Math.min(
+          rubricCriteria.maxPoints,
+          Math.max(0, Number(score) || 0)
+        );
+      }
     }
   }
 
   return {
     totalScore,
     criteriaScores: normalizedCriteriaScores,
-    feedback: response.feedback,
-    strengths: response.strengths.slice(0, 5), // Limit to 5 strengths
-    improvements: response.improvements.slice(0, 5), // Limit to 5 improvements
+    feedback: response.feedback || 'Evaluation complete.',
+    strengths: (response.strengths || []).slice(0, 5),
+    improvements: (response.improvements || []).slice(0, 5),
   };
 }
 
