@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { useAuthRedirect } from "@/hooks/use-auth-redirect"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -22,6 +23,7 @@ type QuestionResponse = {
 
 export default function DespegaOnboarding() {
   const router = useRouter()
+  const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
   const [step, setStep] = useState<Step>("intro")
   const [loading, setLoading] = useState(true)
@@ -43,10 +45,13 @@ export default function DespegaOnboarding() {
   // Check if user already completed onboarding
   useEffect(() => {
     const checkStatus = async () => {
+      if (authLoading) return // Wait for auth to load
+
       try {
-        const supabase = createClient()
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) return
+        if (!user) {
+          setLoading(false)
+          return
+        }
 
         // Check if C2-Paso2 is completed (user fully onboarded)
         const { data: c2Data } = await supabase
@@ -66,6 +71,7 @@ export default function DespegaOnboarding() {
         // Look for existing test results (A1 completed but not C2)
         const { data: results } = await supabase
           .from("a1_tests_results")
+          .select("*")
           .eq("user_id", user.id)
           .eq("test_name", "Despega Cerebral")
           .limit(1)
@@ -99,7 +105,7 @@ export default function DespegaOnboarding() {
     }
 
     checkStatus()
-  }, [router])
+  }, [user, authLoading, router, supabase])
 
   const question = DISC_TEST_QUESTIONS[currentQuestion]
   const progress = ((currentQuestion + 1) / DISC_TEST_QUESTIONS.length) * 100
@@ -154,9 +160,6 @@ export default function DespegaOnboarding() {
     setResults(finalResults)
 
     try {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      
       // Mark cerebral test as completed in a1_progress
       if (user) {
         const { error } = await supabase
@@ -783,67 +786,32 @@ export default function DespegaOnboarding() {
 
         // Save C1 responses to BD
         try {
-          const supabase = createClient()
-          console.log('[v0] Attempting to get authenticated user...')
-          const { data: { user }, error: authError } = await supabase.auth.getUser()
+          console.log('[v0] Attempting to save C1 responses for user:', user?.id)
           
-          if (authError) {
-            console.error('[v0] Auth error:', authError)
-            alert("Error de autenticación: " + authError.message)
+          if (!user) {
+            alert("Sesión expirada. Por favor, recarga la página e intenta de nuevo.")
             setC1Submitting(false)
             return
           }
-          
-          if (!user) {
-            console.error('[v0] No user found after getUser() call')
-            // Try to get session as fallback
-            const { data: { session } } = await supabase.auth.getSession()
-            if (!session?.user) {
-              alert("Sesión expirada. Por favor, recarga la página e intenta de nuevo.")
-              setC1Submitting(false)
-              return
-            }
-            // Use session user if getUser failed
-            const sessionUser = session.user
-            console.log('[v0] Using session user:', sessionUser.id)
-            
-            // Save with session user
-            const { error } = await supabase
-              .from("canon_conozcamonos_1_responses")
-              .insert({
-                user_id: sessionUser.id,
-                responses: sanitizedResponses,
-                created_at: new Date().toISOString(),
-              })
 
-            if (error) {
-              console.error("[v0] Error saving C1 responses:", error)
-              alert("Error guardando respuestas: " + error.message)
-              setC1Submitting(false)
-              return
-            }
-          } else {
-            console.log('[v0] Got user from getUser():', user.id)
-            // Save with getUser result
-            const { error } = await supabase
-              .from("canon_conozcamonos_1_responses")
-              .insert({
-                user_id: user.id,
-                responses: sanitizedResponses,
-                created_at: new Date().toISOString(),
-              })
+          // Save with authenticated user
+          const { error } = await supabase
+            .from("canon_conozcamonos_1_responses")
+            .insert({
+              user_id: user.id,
+              responses: sanitizedResponses,
+              created_at: new Date().toISOString(),
+            })
 
-            if (error) {
-              console.error("[v0] Error saving C1 responses:", error)
-              alert("Error guardando respuestas: " + error.message)
-              setC1Submitting(false)
-              return
-            }
+          if (error) {
+            console.error("[v0] Error saving C1 responses:", error)
+            alert("Error guardando respuestas: " + error.message)
+            setC1Submitting(false)
+            return
           }
 
-          console.log("[v0] C1 responses saved successfully (sanitized)")
-          setC1CurrentQuestion(0)
-          setStep("instructions")
+          console.log('[v0] C1 responses saved successfully')
+          setStep("camino")
         } catch (err) {
           console.error("[v0] Error in C1 save:", err)
           alert("Error al guardar: " + (err instanceof Error ? err.message : String(err)))
@@ -1141,8 +1109,6 @@ export default function DespegaOnboarding() {
         setC2Paso1Loading(true)
         console.log("[v0] Saving C2-Paso1 responses:", c2Step1Responses)
         try {
-          const supabase = createClient()
-          const { data: { user } } = await supabase.auth.getUser()
           if (!user) {
             console.error("[v0] No user found")
             setC2Paso1Loading(false)
@@ -1302,7 +1268,6 @@ export default function DespegaOnboarding() {
         setC2Paso1Loading(true)
         console.log("[v0] Saving C2-Paso2 responses:", c2Step2Responses)
         try {
-          const { data: { user } } = await supabase.auth.getUser()
           if (!user) {
             console.error("[v0] No user found")
             setC2Paso1Loading(false)
