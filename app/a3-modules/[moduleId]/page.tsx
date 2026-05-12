@@ -100,6 +100,7 @@ export default function ModulePage() {
     <div className="container mx-auto py-8">
       <ModuleFrame
         module={module}
+        userId={user?.id || ''}
         onComplete={handleModuleComplete}
         onProgress={handleProgress}
       />

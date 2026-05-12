@@ -5,7 +5,6 @@ import React, { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { useSession } from 'next-auth/react';
 import type { Module, Section, LectureContent, TestContent, InterviewContent, TaskContent } from '@/lib/a3-modules/types';
 import { LectureSection } from './sections/lecture-section';
 import { TestSection } from './sections/test-section';
@@ -14,12 +13,12 @@ import { TaskSection } from './sections/task-section';
 
 interface ModuleFrameProps {
   module: Module;
+  userId: string;
   onComplete?: (score: number) => void;
   onProgress?: (sectionId: string, score: number) => void;
 }
 
-export function ModuleFrame({ module, onComplete, onProgress }: ModuleFrameProps) {
-  const { data: session } = useSession();
+export function ModuleFrame({ module, userId, onComplete, onProgress }: ModuleFrameProps) {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
   const [sectionScores, setSectionScores] = useState<Record<string, number>>({});
   const [isCompleted, setIsCompleted] = useState(false);
@@ -111,7 +110,7 @@ export function ModuleFrame({ module, onComplete, onProgress }: ModuleFrameProps
         <SectionRenderer
           section={currentSection}
           moduleId={module.id}
-          userId={session?.user?.id || ''}
+          userId={userId}
           onComplete={handleSectionComplete}
         />
       </div>
