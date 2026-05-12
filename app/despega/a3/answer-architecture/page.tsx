@@ -417,7 +417,7 @@ export default function AnswerArchitectureModule() {
                   disabled={!isAnswerValid(answerType.id)}
                   className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
                 >
-                  {index === ANSWER_TYPES.length - 1 ? 'Complete All Answers' : 'Save & Continue'}
+                  {index === ANSWER_TYPES.length - 1 ? 'Complete All Answers' : 'Guardar & Continuar'}
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </div>
@@ -442,7 +442,7 @@ export default function AnswerArchitectureModule() {
               </ul>
             </div>
             <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-              Continue to Sala de Práctica del Coach
+              Continuar to Sala de Práctica del Coach
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>

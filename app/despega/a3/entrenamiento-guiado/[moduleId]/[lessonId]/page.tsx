@@ -338,7 +338,7 @@ export default function LessonPage() {
                         router.push('/despega/a3')
                       }
                     } else {
-                      // Next lesson in same module
+                      // Siguiente lesson in same module
                       router.push(`/despega/a3/entrenamiento-guiado/${moduleId}/${parseInt(lessonId) + 1}`)
                     }
                   }}

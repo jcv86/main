@@ -15,7 +15,7 @@ import {
   Lightbulb,
   AlertTriangle,
   Eye,
-  Save,
+  Guardar,
   ChevronDown,
   ChevronUp,
   Sparkles
@@ -37,7 +37,7 @@ const ACTIVITIES = [
   },
   {
     id: 'confirm-accuracy',
-    title: 'Confirm Diagnosis Accuracy',
+    title: 'Confirmar Diagnosis Accuracy',
     description: 'Validate or adjust your diagnosis based on your self-assessment.',
     icon: CheckCircle2,
   },
@@ -55,9 +55,9 @@ const ACTIVITIES = [
   },
   {
     id: 'career-mirror-card',
-    title: 'Save Your Espejo de Carrera Card',
+    title: 'Guardar Your Espejo de Carrera Card',
     description: 'Generate your personalized career snapshot to use throughout the training.',
-    icon: Save,
+    icon: Guardar,
   },
 ]
 
@@ -106,7 +106,7 @@ const CAREER_DIRECTIONS = [
   { 
     id: 'same-role-same-industry',
     title: 'Same Role, Same Industry',
-    description: 'Continue in your current role within your industry',
+    description: 'Continuar in your current role within your industry',
     example: 'Marketing Manager in Tech → Marketing Manager in Tech'
   },
   { 
@@ -168,7 +168,7 @@ export default function CareerMirrorModule() {
   // Activity 1: Diagnosis Review
   const [diagnosisReviewed, setDiagnosisReviewed] = useState(false)
   
-  // Activity 2: Confirm Accuracy
+  // Activity 2: Confirmar Accuracy
   const [selectedStrengths, setSelectedStrengths] = useState<string[]>([])
   const [selectedBlockers, setSelectedBlockers] = useState<string[]>([])
   const [diagnosisAccurate, setDiagnosisAccurate] = useState<boolean | null>(null)
@@ -185,7 +185,7 @@ export default function CareerMirrorModule() {
   const [careerGoal, setCareerGoal] = useState('')
   
   // Activity 5: Espejo de Carrera Card
-  const [cardSaved, setCardSaved] = useState(false)
+  const [cardGuardard, setCardGuardard] = useState(false)
 
   const progress = Math.round((completedSteps.length / ACTIVITIES.length) * 100)
 
@@ -236,7 +236,7 @@ export default function CareerMirrorModule() {
 
   const handleComplete = async () => {
     try {
-      // Save career mirror data
+      // Guardar career mirror data
       const careerMirrorData = {
         diagnosis: {
           level: 'basic',
@@ -367,7 +367,7 @@ export default function CareerMirrorModule() {
           </div>
         )
 
-      case 1: // Confirm Accuracy
+      case 1: // Confirmar Accuracy
         return (
           <div className="space-y-6 mt-4">
             <Card className="rounded-[2px] bg-white/5 border border-white/10 p-6">
@@ -755,8 +755,8 @@ export default function CareerMirrorModule() {
                 <input 
                   type="checkbox" 
                   id="card-saved"
-                  checked={cardSaved}
-                  onChange={(e) => setCardSaved(e.target.checked)}
+                  checked={cardGuardard}
+                  onChange={(e) => setCardGuardard(e.target.checked)}
                   className="w-5 h-5 rounded"
                   style={{ accentColor: PILLAR3_PRIMARY }}
                 />

@@ -37,18 +37,18 @@ const COMMUNICATION_DRILLS = [
   },
   {
     id: 'pause-drill',
-    title: 'Complete Pause Drill',
+    title: 'Completar Ejercicio de Pausa',
     type: 'exercise',
-    instruction: 'Read the prompt, then pause for 2-3 seconds before answering. The pause shows confidence and allows you to think.',
+    instruction: 'Lee el mensaje, luego haz una pausa de 2-3 segundos antes de responder. La pausa muestra confianza y te permite pensar.',
     prompts: [
-      { question: 'What is your greatest strength?', pauseSeconds: 3 },
-      { question: 'Tell me about a challenge you overcame.', pauseSeconds: 3 },
-      { question: 'Why should we hire you?', pauseSeconds: 3 }
+      { question: '¿Cuál es tu mayor fortaleza?', pauseSeconds: 3 },
+      { question: 'Cuéntame sobre un desafío que superaste.', pauseSeconds: 3 },
+      { question: '¿Por qué deberíamos contratarte?', pauseSeconds: 3 }
     ],
     tips: [
-      'A pause is NOT awkward - it shows thoughtfulness',
-      'Use the pause to structure your answer mentally',
-      'Comenzar with the main point after the pause'
+      'Una pausa NO es incómoda - muestra reflexión',
+      'Usa la pausa para estructurar tu respuesta mentalmente',
+      'Comienza con el punto principal después de la pausa'
     ]
   },
   {
@@ -76,7 +76,7 @@ const COMMUNICATION_DRILLS = [
     instruction: 'Review your recordings and rate yourself on these delivery aspects.',
     aspects: [
       { id: 'pace', label: 'Speaking Pace', description: 'Not too fast, not too slow', options: ['Too fast', 'Just right', 'Too slow'] },
-      { id: 'volume', label: 'Volume & Clarity', description: 'Easy to hear and understand', options: ['Too quiet', 'Clear', 'Too loud'] },
+      { id: 'volume', label: 'Volume & Clarity', description: 'Easy to hear and understand', options: ['Too quiet', 'Limpiar', 'Too loud'] },
       { id: 'filler', label: 'Filler Words', description: 'Um, uh, like, you know', options: ['Many fillers', 'Some fillers', 'Few/none'] },
       { id: 'confidence', label: 'Confidence', description: 'Voice sounds assured', options: ['Uncertain', 'Moderate', 'Confident'] },
       { id: 'ending', label: 'Answer Ending', description: 'Finishes strongly', options: ['Trails off', 'Adequate', 'Strong close'] }
@@ -109,11 +109,11 @@ const COMMUNICATION_DRILLS = [
 
 // Speaking patterns for reference
 const SPEAKING_PATTERNS = [
-  { step: 1, label: 'Listen', description: 'Fully hear the question' },
+  { step: 1, label: 'Escuchar', description: 'Fully hear the question' },
   { step: 2, label: 'Pause', description: '2-3 seconds to think' },
   { step: 3, label: 'Main idea', description: 'Lead with your point' },
   { step: 4, label: 'Example', description: 'Support with evidence' },
-  { step: 5, label: 'Close', description: 'End clearly and confidently' }
+  { step: 5, label: 'Cerrar', description: 'End clearly and confidently' }
 ]
 
 export default function CommunicationGymModule() {
@@ -333,7 +333,7 @@ export default function CommunicationGymModule() {
                   <h3 className="font-semibold text-white">{drill.title}</h3>
                   <p className="text-white/50 text-sm">
                     {drill.type === 'recording' && `${drill.timeLimit}s recording`}
-                    {drill.type === 'exercise' && 'Pause practice'}
+                    {drill.type === 'exercise' && 'Práctica de pausa'}
                     {drill.type === 'assessment' && 'Autoevaluación'}
                   </p>
                 </div>
@@ -529,7 +529,7 @@ export default function CommunicationGymModule() {
                   disabled={!canCompleteDrill(drill)}
                   className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
                 >
-                  Complete Drill
+                  Completar Ejercicio
                   <ArrowRight className="w-4 h-4 ml-2" />
                 </Button>
               </div>
@@ -555,7 +555,7 @@ export default function CommunicationGymModule() {
               </div>
             </div>
             <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-              Continue to Primera Simulación con Reclutador
+              Continuar to Primera Simulación con Reclutador
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>

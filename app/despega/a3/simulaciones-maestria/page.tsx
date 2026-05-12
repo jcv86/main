@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
-import { ArrowLeft, Mic, Volume2, SkipForward, Check, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Mic, Volume2, SaltarForward, Check, AlertCircle } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
@@ -155,7 +155,7 @@ export default function GuidedInterviewPage() {
         return
       }
 
-      // Save responses to database
+      // Guardar responses to database
       const { error } = await supabase
         .from('user_a3_guided_interview')
         .insert({
@@ -367,7 +367,7 @@ export default function GuidedInterviewPage() {
                   disabled={currentQuestionIndex + 2 >= GUIDED_INTERVIEW_QUESTIONS.length}
                   variant="outline"
                 >
-                  <SkipForward className="w-4 h-4 mr-2" />
+                  <SaltarForward className="w-4 h-4 mr-2" />
                   Saltar
                 </Button>
                 <Button

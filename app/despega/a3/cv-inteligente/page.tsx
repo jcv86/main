@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Link from 'next/link'
-import { ArrowLeft, Download, Copy, Eye, Edit2 } from 'lucide-react'
+import { ArrowLeft, Download, Copy, Eye, Editar2 } from 'lucide-react'
 import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
 export default function CVATSPage() {
@@ -581,8 +581,8 @@ export default function CVATSPage() {
               Vista Previa
             </TabsTrigger>
             <TabsTrigger value="edit">
-              <Edit2 className="w-4 h-4 mr-2" />
-              Editar
+              <Editar2 className="w-4 h-4 mr-2" />
+              Editarar
             </TabsTrigger>
           </TabsList>
 

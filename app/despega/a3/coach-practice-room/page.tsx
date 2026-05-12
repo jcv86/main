@@ -10,7 +10,7 @@ import { Progress } from '@/components/ui/progress'
 import { 
   ArrowRight, ArrowLeft, CheckCircle2, Users, Lightbulb, RefreshCw,
   ChevronDown, ChevronUp, MessageCircle, ThumbsUp, AlertCircle, 
-  Sparkles, Eye, RotateCcw, Save
+  Sparkles, Eye, RotateCcw, Guardar
 } from 'lucide-react'
 
 const MODULE_XP = 130
@@ -22,7 +22,7 @@ const PRACTICE_SESSIONS = [
     question: 'Tell me about yourself',
     coachPrompt: 'Let me hear your self-introduction. Remember: professional identity, key skills, and why you are here.',
     feedbackCriteria: [
-      { id: 'structure', label: 'Clear structure', description: 'Follows intro formula' },
+      { id: 'structure', label: 'Limpiar structure', description: 'Follows intro formula' },
       { id: 'relevance', label: 'Role relevance', description: 'Connected to target position' },
       { id: 'length', label: 'Appropriate length', description: '30-45 seconds (~75-100 words)' },
       { id: 'specificity', label: 'Specific details', description: 'Not generic statements' }
@@ -66,7 +66,7 @@ const PRACTICE_SESSIONS = [
     question: 'Tell me about a challenging situation you overcame',
     coachPrompt: 'Use STAR format. Be specific about YOUR actions and the measurable result.',
     feedbackCriteria: [
-      { id: 'situation', label: 'Clear situation', description: 'Context is understandable' },
+      { id: 'situation', label: 'Limpiar situation', description: 'Context is understandable' },
       { id: 'actions', label: 'Your actions', description: 'Focus on what YOU did' },
       { id: 'result', label: 'Measurable result', description: 'Includes numbers or impact' },
       { id: 'learning', label: 'Shows learning', description: 'What you gained from it' }
@@ -463,8 +463,8 @@ export default function CoachPracticeRoomModule() {
                       onClick={() => completeSession(index)}
                       className="rounded-[20px] bg-green-600 hover:bg-green-700 ml-auto"
                     >
-                      <Save className="w-4 h-4 mr-2" />
-                      Save & Continue
+                      <Guardar className="w-4 h-4 mr-2" />
+                      Guardar & Continuar
                     </Button>
                   )}
                 </div>
@@ -493,7 +493,7 @@ export default function CoachPracticeRoomModule() {
               </div>
             </div>
             <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-              Continue to Gimnasio de Comunicación
+              Continuar to Gimnasio de Comunicación
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>

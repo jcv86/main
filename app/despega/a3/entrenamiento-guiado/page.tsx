@@ -42,7 +42,7 @@ export default function GuidedTrainingPage() {
     }
   }
 
-  const handleContinueFromWelcome = () => {
+  const handleContinuarFromWelcome = () => {
     if (welcomeModule) {
       router.push(`/despega/a3/entrenamiento-guiado/${welcomeModule.id}/1`)
       setShowWelcome(false)
@@ -55,7 +55,7 @@ export default function GuidedTrainingPage() {
         moduleId={welcomeModule.id}
         moduleName={welcomeModule.name}
         moduleLessonCount={welcomeModule.lessons.length}
-        onContinue={handleContinueFromWelcome}
+        onContinuar={handleContinuarFromWelcome}
       />
     )
   }

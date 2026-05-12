@@ -316,7 +316,7 @@ export default function RiskDifficultQuestionsLabModule() {
                             onClick={() => completeStep(0)}
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] w-full"
                           >
-                            Continue <ArrowRight className="w-4 h-4 ml-2" />
+                            Continuar <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         )}
                       </div>
@@ -383,7 +383,7 @@ export default function RiskDifficultQuestionsLabModule() {
                             onClick={() => completeStep(1)}
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] w-full"
                           >
-                            Continue <ArrowRight className="w-4 h-4 ml-2" />
+                            Continuar <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         )}
                       </div>
@@ -429,7 +429,7 @@ export default function RiskDifficultQuestionsLabModule() {
                             onClick={() => completeStep(2)}
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] w-full"
                           >
-                            Continue <ArrowRight className="w-4 h-4 ml-2" />
+                            Continuar <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         )}
                       </div>
@@ -480,7 +480,7 @@ export default function RiskDifficultQuestionsLabModule() {
                             onClick={() => completeStep(3)}
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] w-full"
                           >
-                            Continue to Pressure Drill <ArrowRight className="w-4 h-4 ml-2" />
+                            Continuar to Pressure Drill <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         )}
                       </div>
@@ -558,7 +558,7 @@ export default function RiskDifficultQuestionsLabModule() {
                                     onClick={() => completeStep(4)}
                                     className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] flex-1"
                                   >
-                                    Complete Drill <CheckCircle className="w-4 h-4 ml-2" />
+                                    Completar Ejercicio <CheckCircle className="w-4 h-4 ml-2" />
                                   </Button>
                                 )
                               )}
