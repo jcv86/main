@@ -15,7 +15,7 @@ const MODULE_XP = 180
 const RISK_CATEGORIES = [
   {
     id: 'gaps',
-    title: 'Employment Gaps',
+    title: 'Vacíos de Empleo',
     icon: '📅',
     description: 'Periods without formal employment',
     examples: ['Career break', 'Health issues', 'Family care', 'Travel/sabbatical', 'Job search period'],
@@ -25,7 +25,7 @@ const RISK_CATEGORIES = [
   },
   {
     id: 'changes',
-    title: 'Frequent Job Changes',
+    title: 'Cambios Frecuentes de Trabajo',
     icon: '🔄',
     description: 'Multiple positions in short time',
     examples: ['Company closures', 'Contract roles', 'Seeking growth', 'Relocation', 'Industry changes'],
@@ -45,7 +45,7 @@ const RISK_CATEGORIES = [
   },
   {
     id: 'termination',
-    title: 'Being Fired/Let Go',
+    title: 'Ser Despedido/Dejado Ir',
     icon: '⚠️',
     description: 'Involuntary job loss',
     examples: ['Layoffs', 'Performance issues', 'Company restructuring', 'Culture mismatch', 'Project cancellation'],
@@ -55,7 +55,7 @@ const RISK_CATEGORIES = [
   },
   {
     id: 'weakness',
-    title: 'Personal Weaknesses',
+    title: 'Debilidades Personales',
     icon: '🎯',
     description: 'Self-identified limitations',
     examples: ['Public speaking', 'Delegation', 'Perfectionism', 'Technical skills', 'Time management'],
@@ -65,7 +65,7 @@ const RISK_CATEGORIES = [
   },
   {
     id: 'conflict',
-    title: 'Workplace Conflicts',
+    title: 'Conflictos Laborales',
     icon: '⚡',
     description: 'Disagreements with colleagues/bosses',
     examples: ['Different opinions', 'Communication issues', 'Project disputes', 'Style clashes', 'Resource competition'],

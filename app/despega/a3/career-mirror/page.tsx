@@ -31,32 +31,32 @@ const MODULE_XP = 80
 const ACTIVITIES = [
   {
     id: 'review-diagnosis',
-    title: 'Review Your Basic Level Diagnosis',
+    title: 'Revisar tu Diagnóstico del Nivel Básico',
     description: 'Understand what your diagnostic results reveal about your interview readiness.',
     icon: Eye,
   },
   {
     id: 'confirm-accuracy',
-    title: 'Confirmar Diagnosis Accuracy',
-    description: 'Validate or adjust your diagnosis based on your self-assessment.',
+    title: 'Confirmar Precisión del Diagnóstico',
+    description: 'Valida o ajusta tu diagnóstico basado en tu autoevaluación.',
     icon: CheckCircle2,
   },
   {
     id: 'career-direction',
-    title: 'Select Your Main Career Direction',
+    title: 'Seleccionar tu Dirección Principal de Carrera',
     description: 'Choose the professional path that aligns with your goals and experience.',
     icon: Target,
   },
   {
     id: 'professional-identity',
-    title: 'Define Your Current Professional Identity',
+    title: 'Definir tu Identidad Profesional Actual',
     description: 'Craft a clear statement of who you are professionally.',
     icon: User,
   },
   {
     id: 'career-mirror-card',
-    title: 'Save Your Espejo de Carrera Card',
-    description: 'Generate your personalized career snapshot to use throughout the training.',
+    title: 'Guardar Tu Tarjeta de Espejo de Carrera',
+    description: 'Genera tu instantánea de carrera personalizada para usar en todo el entrenamiento.',
     icon: Save,
   },
 ]
@@ -168,7 +168,7 @@ export default function CareerMirrorModule() {
   // Activity 1: Diagnosis Review
   const [diagnosisReviewed, setDiagnosisReviewed] = useState(false)
   
-  // Activity 2: Confirmar Accuracy
+  // Activity 2: Confirmar Precisión del Diagnóstico
   const [selectedStrengths, setSelectedStrengths] = useState<string[]>([])
   const [selectedBlockers, setSelectedBlockers] = useState<string[]>([])
   const [diagnosisAccurate, setDiagnosisAccurate] = useState<boolean | null>(null)
@@ -367,7 +367,7 @@ export default function CareerMirrorModule() {
           </div>
         )
 
-      case 1: // Confirmar Accuracy
+      case 1: // Confirmar Precisión del Diagnóstico
         return (
           <div className="space-y-6 mt-4">
             <Card className="rounded-[2px] bg-white/5 border border-white/10 p-6">
@@ -727,7 +727,7 @@ export default function CareerMirrorModule() {
                   >
                     1
                   </div>
-                  <p className="text-white/80">Your Espejo de Carrera Card will be saved and referenced throughout your training</p>
+                  <p className="text-white/80">Tu Tarjeta de Espejo de Carrera será guardada y referenciada en todo tu entrenamiento</p>
                 </li>
                 <li className="flex items-start gap-3">
                   <div 

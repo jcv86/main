@@ -34,7 +34,7 @@ const ANSWER_TYPES = [
   },
   {
     id: 'motivation',
-    title: 'Build Motivation Answer',
+    title: 'Construir Respuesta de Motivación',
     subtitle: '"Why do you want to work here?"',
     formula: 'I am excited about [company/role] because [specific reason 1]. I noticed [something specific about company]. This connects to my goal of [career goal].',
     timeTarget: '45 seconds (~100 words)',
@@ -50,7 +50,7 @@ const ANSWER_TYPES = [
   },
   {
     id: 'strengths',
-    title: 'Build Strengths Answer',
+    title: 'Construir Respuesta de Fortalezas',
     subtitle: '"What are your greatest strengths?"',
     formula: 'My greatest strength is [strength]. For example, [specific situation where you demonstrated it]. This resulted in [measurable outcome].',
     timeTarget: '45 seconds (~100 words)',
@@ -66,7 +66,7 @@ const ANSWER_TYPES = [
   },
   {
     id: 'challenge',
-    title: 'Build Challenge Answer (STAR)',
+    title: 'Construir Respuesta de Desafío (STAR)',
     subtitle: '"Tell me about a difficult situation"',
     formula: 'Situation: [context]. Task: [your responsibility]. Action: [what you did]. Result: [outcome with numbers if possible].',
     timeTarget: '60 seconds (~150 words)',
@@ -82,7 +82,7 @@ const ANSWER_TYPES = [
   },
   {
     id: 'hire',
-    title: 'Build "Why Should We Hire You?"',
+    title: 'Construir "¿Por Qué Deberíamos Contratarte?"',
     subtitle: 'Your closing argument',
     formula: 'You should hire me because I bring [unique combination]. I have already [relevant achievement]. I can [specific value for this role].',
     timeTarget: '30-45 seconds (~90 words)',
@@ -98,7 +98,7 @@ const ANSWER_TYPES = [
   },
   {
     id: 'timing',
-    title: 'Practice Answer Timing',
+    title: 'Practicar Tiempos de Respuesta',
     subtitle: 'Master the 30-45-60 second formats',
     formula: 'Same core message at different depths: headline → details → full story',
     timeTarget: 'Variable',

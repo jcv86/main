@@ -19,7 +19,7 @@ const MODULE_XP = 120
 const CV_SECTIONS = [
   {
     id: 'contact',
-    title: 'Contact Information',
+    title: 'Información de Contacto',
     icon: User,
     description: 'Make it easy for recruiters to reach you',
     fields: [
@@ -38,7 +38,7 @@ const CV_SECTIONS = [
   },
   {
     id: 'summary',
-    title: 'Professional Summary',
+    title: 'Resumen Profesional',
     icon: FileText,
     description: 'Your 3-second pitch to grab attention',
     tips: [
@@ -55,7 +55,7 @@ const CV_SECTIONS = [
   },
   {
     id: 'experience',
-    title: 'Work Experience',
+    title: 'Experiencia Laboral',
     icon: Briefcase,
     description: 'Transformar tareas into achievements',
     tips: [

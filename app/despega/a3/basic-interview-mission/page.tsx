@@ -77,7 +77,7 @@ const INTERVIEW_SECTIONS = [
   },
   {
     id: 'behavioral',
-    title: 'Behavioral Questions',
+    title: 'Preguntas Conductuales',
     description: 'Stories that demonstrate your abilities',
     questions: [
       {
@@ -105,7 +105,7 @@ const INTERVIEW_SECTIONS = [
   },
   {
     id: 'difficult',
-    title: 'Difficult Question',
+    title: 'Pregunta Difícil',
     description: 'One challenging question to test your preparation',
     questions: [
       {
@@ -135,7 +135,7 @@ const INTERVIEW_SECTIONS = [
 
 // Performance rating criteria
 const EVALUATION_CRITERIA = [
-  { id: 'clarity', name: 'Answer Clarity', description: 'Were your answers clear and easy to follow?' },
+  { id: 'clarity', name: 'Claridad de Respuesta', description: '¿Fueron tus respuestas claras y fáciles de seguir?' },
   { id: 'structure', name: 'Structure', description: 'Did you use frameworks (STAR/CAR) effectively?' },
   { id: 'relevance', name: 'Relevance', description: 'Did your answers connect to the role?' },
   { id: 'confidence', name: 'Confidence', description: 'Did you project confidence without arrogance?' },

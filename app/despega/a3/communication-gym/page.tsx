@@ -53,7 +53,7 @@ const COMMUNICATION_DRILLS = [
   },
   {
     id: 'motivation-45',
-    title: 'Record 45-second Motivation Answer',
+    title: 'Grabar Respuesta de Motivación de 45 segundos',
     type: 'recording',
     timeLimit: 45,
     instruction: 'Answer "Why do you want to work here?" in 45 seconds. Be specific about the company.',
@@ -71,13 +71,13 @@ const COMMUNICATION_DRILLS = [
   },
   {
     id: 'delivery-feedback',
-    title: 'Self-Assess Delivery Quality',
+    title: 'Autoevaluar Calidad de Entrega',
     type: 'assessment',
     instruction: 'Review your recordings and rate yourself on these delivery aspects.',
     aspects: [
-      { id: 'pace', label: 'Speaking Pace', description: 'Not too fast, not too slow', options: ['Too fast', 'Just right', 'Too slow'] },
+      { id: 'pace', label: 'Speaking Pace', description: 'Ni demasiado rápido, ni demasiado lento', options: ['Demasiado rápido', 'Justo bien', 'Demasiado lento'] },
       { id: 'volume', label: 'Volume & Clarity', description: 'Easy to hear and understand', options: ['Too quiet', 'Limpiar', 'Too loud'] },
-      { id: 'filler', label: 'Filler Words', description: 'Um, uh, like, you know', options: ['Many fillers', 'Some fillers', 'Few/none'] },
+      { id: 'filler', label: 'Filler Words', description: 'Um, uh, como, ya sabes', options: ['Muchos rellenos', 'Algunos rellenos', 'Pocos/ninguno'] },
       { id: 'confidence', label: 'Confidence', description: 'Voice sounds assured', options: ['Uncertain', 'Moderate', 'Confident'] },
       { id: 'ending', label: 'Answer Ending', description: 'Finishes strongly', options: ['Trails off', 'Adequate', 'Strong close'] }
     ],
@@ -499,7 +499,7 @@ export default function CommunicationGymModule() {
                         <p className="text-[rgb(170,70,170)] font-medium mb-2">Your Focus Areas:</p>
                         <ul className="space-y-1">
                           {Object.entries(assessments)
-                            .filter(([, value]) => value.includes('Too') || value === 'Many fillers' || value === 'Uncertain' || value === 'Trails off')
+                            .filter(([, value]) => value.includes('Too') || value === 'Muchos rellenos' || value === 'Uncertain' || value === 'Trails off')
                             .map(([key, value]) => (
                               <li key={key} className="text-white/70 text-sm flex items-center gap-2">
                                 <AlertCircle className="w-4 h-4 text-yellow-400" />

@@ -153,27 +153,27 @@ export default function ValueMiningLabModule() {
 
   const ACTIVITIES = [
     {
-      title: 'Write 5 Tasks from Your Experience',
+      title: 'Escribir 5 Tareas de tu Experiencia',
       description: 'List everyday tasks you performed in previous jobs. Don\'t worry if they seem basic - we\'ll transform them.',
       icon: Target
     },
     {
-      title: 'Discover Hidden Value',
+      title: 'Descubrir Valor Oculto',
       description: 'Identify what type of value each task created. Every task has impact, even if it\'s not obvious.',
       icon: Gem
     },
     {
-      title: 'Transform Tasks into Value Statements',
+      title: 'Transformar Tareas en Declaraciones de Valor',
       description: 'Use proven formulas to rewrite your tasks as compelling achievement statements.',
       icon: Sparkles
     },
     {
-      title: 'Build 3 Achievement Stories',
+      title: 'Construir 3 Historias de Logros',
       description: 'Create structured achievement stories using the CAR or PAR method.',
       icon: Award
     },
     {
-      title: 'Select Your Strongest Story',
+      title: 'Seleccionar tu Historia Más Fuerte',
       description: 'Choose the achievement that best represents your value for future interviews.',
       icon: Star
     }
