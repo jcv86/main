@@ -6,9 +6,10 @@ import type { PillarId } from '@/lib/pillar-structure'
 
 export async function GET(
   request: Request,
-  { params }: { params: { userId: string } }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
   try {
+    const { userId: paramUserId } = await params
     const cookieStore = await cookies()
     const authToken =
       cookieStore.get('sb-auth-token')?.value ||
