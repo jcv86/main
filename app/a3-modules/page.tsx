@@ -175,16 +175,23 @@ export default function A3ModulesHub() {
                               {module.description}
                             </CardDescription>
                           </div>
-                          {isCompleted && (
-                            <Badge variant="default" className="bg-green-600">
-                              ✓
-                            </Badge>
-                          )}
-                          {isLocked && (
-                            <Badge variant="outline">
-                              <Lock className="w-3 h-3" />
-                            </Badge>
-                          )}
+                          <div className="ml-4 flex flex-col gap-2">
+                            {isCompleted && (
+                              <Badge variant="default" className="bg-green-600">
+                                ✓
+                              </Badge>
+                            )}
+                            {isAvailable && (
+                              <span className="text-xs font-medium px-3 py-1 rounded-full bg-purple-600/60 text-white/60">
+                                Disponible
+                              </span>
+                            )}
+                            {isLocked && (
+                              <Badge variant="outline">
+                                <Lock className="w-3 h-3" />
+                              </Badge>
+                            )}
+                          </div>
                         </div>
                       </CardHeader>
 
