@@ -30,10 +30,6 @@ export function ModuleCompletionScreen({
   const isLast = isLastModule(moduleId)
   const [isRecording, setIsRecording] = useState(false)
 
-  console.log('[v0] ModuleCompletionScreen - moduleId:', moduleId)
-  console.log('[v0] ModuleCompletionScreen - nextModulePath:', nextModulePath)
-  console.log('[v0] ModuleCompletionScreen - isLast:', isLast)
-
   // Record module completion when component mounts
   useEffect(() => {
     const recordCompletion = async () => {
@@ -48,7 +44,6 @@ export function ModuleCompletionScreen({
         })
 
         const data = await response.json()
-        console.log('[v0] Module completion recorded:', data)
       } catch (error) {
         console.error('[v0] Error recording module completion:', error)
       } finally {
@@ -94,10 +89,7 @@ export function ModuleCompletionScreen({
               </Button>
               {!isLast && nextModulePath && (
                 <Button
-                  onClick={() => {
-                    console.log('[v0] Navigating to:', nextModulePath)
-                    router.push(nextModulePath)
-                  }}
+                  onClick={() => router.push(nextModulePath)}
                   className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
                 >
                   Continuar Práctica

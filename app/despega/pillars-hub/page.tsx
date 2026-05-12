@@ -46,7 +46,6 @@ export default function PillarsHubPage() {
             completedSteps,
             totalXp: data.totalXP || 0,
           })
-          console.log('[v0] Progress loaded:', { completedSteps, totalXp: data.totalXP })
         }
       } catch (error) {
         console.error('[v0] Error fetching progress:', error)
@@ -107,15 +106,6 @@ export default function PillarsHubPage() {
           const isDiagnosticUnlocked = isStepUnlocked(diagnostic.id, progress.completedSteps)
           const isDiagnosticCompleted = progress.completedSteps.includes(diagnostic.id)
           const isLocked = !isDiagnosticUnlocked
-
-          console.log(`[v0] Pillar ${pillar.id}:`, {
-            isCompleted,
-            isLocked,
-            isDiagnosticUnlocked,
-            isDiagnosticCompleted,
-            diagnosticId: diagnostic.id,
-            completedSteps: progress.completedSteps,
-          })
 
           return (
             <Card
