@@ -120,7 +120,7 @@ export default function FirstRecruiterSimulationModule() {
       setShowCameraTest(true)
     } else {
       setPreChecklist(prev => 
-        prev.includes(id) ? prev.filter(i => i !== id) : [...prev, i]
+        prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
       )
     }
   }
