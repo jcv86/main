@@ -1,24 +1,29 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { Progress } from '@/components/ui/progress'
+import { 
+  ArrowRight, 
+  ArrowLeft, 
+  CheckCircle2, 
+  Gem, 
+  Lightbulb,
+  ChevronDown,
+  ChevronUp,
+  Sparkles,
+  Target,
+  TrendingUp,
+  Award,
+  Star,
+  AlertCircle
+} from 'lucide-react'
 
-export default function ValueMiningLabRedirect() {
-  const router = useRouter()
-
-  useEffect(() => {
-    // Redirect to choice page
-    router.replace('/despega/a3/value-mining-lab-choice')
-  }, [router])
-
-  return (
-    <div className="min-h-screen bg-black/95 flex items-center justify-center">
-      <div className="text-center">
-        <p className="text-white/60">Cargando...</p>
-      </div>
-    </div>
-  )
-}
+const MODULE_XP = 100
 
 // Value Mining methodology
 const VALUE_CATEGORIES = [
