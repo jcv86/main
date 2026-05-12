@@ -125,7 +125,7 @@ const INTERVIEW_SECTIONS = [
       {
         id: 'your-questions',
         question: 'Do you have any questions for me about the role or the company?',
-        tip: ''Siempre ten 2-3 preguntas reflexivas preparadas. Nunca digas "no tengo preguntas".'',
+        tip: 'Siempre ten 2-3 preguntas reflexivas preparadas. Nunca digas "no tengo preguntas".',
         type: 'closing',
         timeTarget: 60
       }
