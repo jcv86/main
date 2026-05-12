@@ -3,7 +3,8 @@
 import { useState, useRef, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
-import { Video, Mic, Volume2, Check, AlertCircle, Loader } from 'lucide-react'
+import { Video, Mic, Volume2, Check, AlertCircle, Loader, Info } from 'lucide-react'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 
 interface CameraMicrophoneTestProps {
   isOpen: boolean
@@ -147,13 +148,36 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-2xl bg-background border-white/20">
         <DialogHeader>
-          <DialogTitle className="text-white">Prueba de Cámara y Micrófono</DialogTitle>
-          <DialogDescription className="text-white/70">
-            Verifica que tu cámara y micrófono funcionen correctamente antes de comenzar la entrevista
+          <DialogTitle className="text-white text-lg">Verificación de Cámara y Micrófono</DialogTitle>
+          <DialogDescription className="text-white/70 text-sm">
+            <strong>IMPORTANTE:</strong> La cámara y micrófono son obligatorios para la entrevista con Sofia. Ambos dispositivos deben estar funcionando correctamente.
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6 py-6">
+          {/* Permission Required Alert */}
+          <Alert className="bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]">
+            <Info className="h-4 w-4 text-[rgb(170,70,170)]" />
+            <AlertDescription className="text-white/80">
+              La cámara y el micrófono son <strong>OBLIGATORIOS</strong> para esta entrevista con Sofia. Necesitamos acceso completo a ambos dispositivos.
+            </AlertDescription>
+          </Alert>
+
+          {/* Permission Instructions */}
+          <div className="bg-white/5 border border-white/10 rounded-lg p-4 space-y-3">
+            <div className="flex items-start gap-2">
+              <Info className="w-4 h-4 text-[rgb(80,160,170)] mt-1 flex-shrink-0" />
+              <div className="text-sm text-white/70 space-y-2">
+                <p className="font-medium text-white">Cómo permitir acceso:</p>
+                <ol className="list-decimal list-inside space-y-1 text-xs">
+                  <li>Verás un popup del navegador pidiendo permisos</li>
+                  <li>Haz clic en "Permitir" para cámara</li>
+                  <li>Haz clic en "Permitir" para micrófono</li>
+                  <li>Si no ves el popup, revisa la barra del navegador arriba</li>
+                </ol>
+              </div>
+            </div>
+          </div>
           {/* Camera Test */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -176,9 +200,14 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
             </div>
 
             {cameraError && (
-              <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg p-3">
-                {cameraError}
-              </p>
+              <div className="space-y-2">
+                <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg p-3">
+                  <strong>Error de Cámara:</strong> {cameraError}
+                </p>
+                <p className="text-xs text-white/60 bg-white/5 rounded p-2">
+                  💡 Si dice "Permiso denegado": Revisa en la barra de direcciones (arriba) si hay un ícono de cámara. Haz clic y permite el acceso.
+                </p>
+              </div>
             )}
 
             <div className="relative bg-black rounded-lg overflow-hidden aspect-video border-2 border-[rgba(170,70,170,0.3)]">
@@ -233,9 +262,14 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
             </div>
 
             {micError && (
-              <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg p-3">
-                {micError}
-              </p>
+              <div className="space-y-2">
+                <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg p-3">
+                  <strong>Error de Micrófono:</strong> {micError}
+                </p>
+                <p className="text-xs text-white/60 bg-white/5 rounded p-2">
+                  💡 Si dice "Permiso denegado": Revisa en la barra de direcciones si hay un ícono de micrófono. Haz clic y permite el acceso.
+                </p>
+              </div>
             )}
 
             {/* Audio Level Meter */}
@@ -268,35 +302,40 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
           </div>
 
           {/* Status Summary */}
-          <div className="bg-white/5 border border-white/10 rounded-lg p-4 space-y-2">
-            <div className="flex items-center justify-between">
+          <div className="bg-[rgba(170,70,170,0.1)] border border-[rgba(170,70,170,0.3)] rounded-lg p-4 space-y-3">
+            <p className="text-sm font-medium text-white mb-3">Estado de Dispositivos (Ambos OBLIGATORIOS):</p>
+            <div className="flex items-center justify-between py-2 px-3 bg-white/5 rounded">
               <span className="text-white/70">Cámara</span>
               {cameraState === 'ready' ? (
-                <span className="text-green-400 flex items-center gap-1">
+                <span className="text-green-400 flex items-center gap-1 font-medium">
                   <Check className="w-4 h-4" /> Lista
                 </span>
               ) : cameraState === 'error' ? (
-                <span className="text-red-400">No Disponible</span>
+                <span className="text-red-400 flex items-center gap-1">
+                  <AlertCircle className="w-4 h-4" /> Error - Revisa permisos
+                </span>
               ) : (
-                <span className="text-white/50">No Probada</span>
+                <span className="text-yellow-400">⏳ Esperando...</span>
               )}
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between py-2 px-3 bg-white/5 rounded">
               <span className="text-white/70">Micrófono</span>
               {microphoneState === 'listening' ? (
-                <span className="text-green-400 flex items-center gap-1">
+                <span className="text-green-400 flex items-center gap-1 font-medium">
                   <Check className="w-4 h-4" /> Funcionando
                 </span>
               ) : microphoneState === 'error' ? (
-                <span className="text-red-400">No Disponible</span>
+                <span className="text-red-400 flex items-center gap-1">
+                  <AlertCircle className="w-4 h-4" /> Error - Revisa permisos
+                </span>
               ) : (
-                <span className="text-white/50">No Probado</span>
+                <span className="text-yellow-400">⏳ Esperando...</span>
               )}
             </div>
           </div>
         </div>
 
-        <div className="flex gap-3 justify-end">
+        <div className="flex gap-3 justify-end pt-4 border-t border-white/10">
           <Button
             variant="outline"
             onClick={handleClose}
@@ -304,13 +343,19 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
           >
             Cancelar
           </Button>
+          {cameraState !== 'ready' || microphoneState !== 'listening' ? (
+            <div className="flex items-center gap-2">
+              <AlertCircle className="w-4 h-4 text-yellow-400" />
+              <span className="text-sm text-white/60">Completa ambas pruebas</span>
+            </div>
+          ) : null}
           <Button
             onClick={handleComplete}
-            disabled={cameraState !== 'ready'}
-            className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
+            disabled={cameraState !== 'ready' || microphoneState !== 'listening'}
+            className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Check className="w-4 h-4 mr-2" />
-            Continuar
+            {cameraState === 'ready' && microphoneState === 'listening' ? 'Continuar a Sofia' : 'Continuar'}
           </Button>
         </div>
       </DialogContent>
