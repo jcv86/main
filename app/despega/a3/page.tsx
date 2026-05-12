@@ -61,15 +61,15 @@ const BASIC_LEVEL_MODULES: Module[] = [
     id: 'career-mirror',
     number: 1,
     title: 'Espejo de Carrera',
-    shortDescription: 'Understand your professional profile, your Basic Level diagnosis, your strengths, blockers, and how interviewers may perceive you.',
+    shortDescription: 'Comprende tu perfil profesional, tu diagnóstico del Nivel Básico, tus fortalezas, bloqueadores, y cómo los entrevistadores pueden percibirte.',
     format: 'Módulo de autodescubrimiento',
-    inputMode: 'Interactive cards, short reflections, confirmations',
+    inputMode: 'Tarjetas interactivas, reflexiones breves, confirmaciones',
     interviewRequirement: 'Sin entrevista requerida',
     xp: 80,
-    mainOutput: 'Espejo de Carrera Card',
+    mainOutput: 'Tarjeta de Espejo de Carrera',
     cta: 'Comenzar Espejo de Carrera',
-    tags: ['No Interview', 'Self-Discovery', 'Profile Clarity'],
-    requiredActivities: ['Revisar diagnóstico', 'Confirmar precisión del diagnóstico', 'Seleccionar dirección principal de carrera', 'Definir identidad profesional actual', 'Save Espejo de Carrera Card'],
+    tags: ['Sin Entrevista', 'Autodescubrimiento', 'Claridad de Perfil'],
+    requiredActivities: ['Revisar diagnóstico', 'Confirmar precisión del diagnóstico', 'Seleccionar dirección principal de carrera', 'Definir identidad profesional actual', 'Guardar Tarjeta de Espejo de Carrera'],
     icon: <User className="w-5 h-5" />,
     route: '/despega/a3/career-mirror'
   },
@@ -77,15 +77,15 @@ const BASIC_LEVEL_MODULES: Module[] = [
     id: 'value-mining-lab',
     number: 2,
     title: 'Laboratorio de Minería de Valor',
-    shortDescription: 'Discover the real value hidden inside your previous work experience and turn tasks into achievements.',
-    format: 'Achievement discovery lab',
-    inputMode: 'Text input by default. Optional guided coach mode.',
-    interviewRequirement: 'Sin entrevista requerida. Optional coach support available.',
+    shortDescription: 'Descubre el valor real oculto en tu experiencia laboral anterior y convierte tareas en logros.',
+    format: 'Laboratorio de descubrimiento de logros',
+    inputMode: 'Entrada de texto por defecto. Modo coach guiado opcional.',
+    interviewRequirement: 'Sin entrevista requerida. Soporte de coach opcional disponible.',
     xp: 100,
-    mainOutput: 'Basic Achievement Bank',
-    cta: 'Abrir Value Lab',
-    tags: ['Text Builder', 'Optional Coach', 'Achievement Lab'],
-    requiredActivities: ['Escribir 5 tareas from previous experience', 'Transformar tareas into value statements', 'Complete responsibility transformation', 'Create 3 achievement examples', 'Select 1 strong story for future interview answers'],
+    mainOutput: 'Banco de Logros Básico',
+    cta: 'Abrir Laboratorio de Valor',
+    tags: ['Constructor de Texto', 'Coach Opcional', 'Laboratorio de Logros'],
+    requiredActivities: ['Escribir 5 tareas de experiencia anterior', 'Transformar tareas en declaraciones de valor', 'Completar transformación de responsabilidades', 'Crear 3 ejemplos de logros', 'Seleccionar 1 historia fuerte para respuestas futuras de entrevista'],
     icon: <Gem className="w-5 h-5" />,
     route: '/despega/a3/value-mining-lab'
   },
@@ -93,15 +93,15 @@ const BASIC_LEVEL_MODULES: Module[] = [
     id: 'cv-builder-studio',
     number: 3,
     title: 'Estudio Constructor de CV',
-    shortDescription: 'Create or improve a clear, recruiter-friendly CV using the value discovered in previous modules.',
-    format: 'Document-building and professional writing module',
-    inputMode: 'CV upload, manual text input, guided builder',
+    shortDescription: 'Crea o mejora un CV claro y atractivo para reclutadores usando el valor descubierto en módulos anteriores.',
+    format: 'Módulo de creación de documentos y escritura profesional',
+    inputMode: 'Carga de CV, entrada de texto manual, constructor guiado',
     interviewRequirement: 'Sin entrevista requerida',
     xp: 120,
-    mainOutput: 'Basic CV Draft',
-    cta: 'Build My CV',
-    tags: ['CV Builder', 'No Interview', 'Document Studio'],
-    requiredActivities: ['Upload or create CV base', 'Build professional summary', 'Improve at least 3 experience bullet points', 'Organize skills section', 'Complete missing information checklist'],
+    mainOutput: 'Borrador de CV Básico',
+    cta: 'Construir Mi CV',
+    tags: ['Constructor de CV', 'Sin Entrevista', 'Estudio de Documentos'],
+    requiredActivities: ['Cargar o crear base de CV', 'Construir resumen profesional', 'Mejorar al menos 3 puntos de experiencia', 'Organizar sección de habilidades', 'Completar lista de verificación de información faltante'],
     icon: <FileText className="w-5 h-5" />,
     route: '/despega/a3/cv-builder-studio'
   },
@@ -109,15 +109,15 @@ const BASIC_LEVEL_MODULES: Module[] = [
     id: 'job-decoder',
     number: 4,
     title: 'Decodificador de Ofertas',
-    shortDescription: 'Learn how to read a vacancy, understand what the company really needs, and identify your fit and gaps.',
-    format: 'Vacancy and role analysis module',
-    inputMode: 'Paste vacancy, upload job description, or choose target role',
+    shortDescription: 'Analiza ofertas de trabajo reales para identificar requisitos clave, brechas de habilidades y estrategia de aplicación personalizada.',
+    format: 'Herramienta de análisis de ofertas de trabajo',
+    inputMode: 'Pegado de ofertas de trabajo, análisis guiado, mapeo de habilidades',
     interviewRequirement: 'Sin entrevista requerida',
     xp: 100,
-    mainOutput: 'Decodificador de Ofertas Map',
-    cta: 'Decode a Job',
-    tags: ['Job Analysis', 'No Interview', 'Role Match'],
-    requiredActivities: ['Paste vacancy or select target role', 'Identify 5 key requirements', 'Separate must-have and nice-to-have requirements', 'Create match map', 'Generate likely interview questions'],
+    mainOutput: 'Mapa de Correspondencia de Oferta',
+    cta: 'Decodificar Oferta de Trabajo',
+    tags: ['Análisis de Ofertas', 'Sin Entrevista', 'Correspondencia de Rol'],
+    requiredActivities: ['Pegar descripción de trabajo', 'Identificar requisitos clave', 'Categorizar obligatorios vs. opcionales', 'Mapear experiencia actual', 'Crear estrategia de aplicación personalizada'],
     icon: <Search className="w-5 h-5" />,
     route: '/despega/a3/job-decoder'
   },
@@ -125,15 +125,15 @@ const BASIC_LEVEL_MODULES: Module[] = [
     id: 'answer-architecture',
     number: 5,
     title: 'Arquitectura de Respuestas',
-    shortDescription: 'Build clear interview answers before live practice using simple structures and role-focused examples.',
-    format: 'Interview answer-building module',
-    inputMode: 'Text answer builder',
-    interviewRequirement: 'Sin entrevista requerida. Optional voice practice available.',
+    shortDescription: 'Domina marcos de respuesta probados (STAR, CAR) para construir respuestas de entrevista convincentes y estructuradas.',
+    format: 'Módulo de arquitectura de respuestas',
+    inputMode: 'Aprendizaje guiado, construcción de plantillas, práctica',
+    interviewRequirement: 'Sin entrevista requerida',
     xp: 120,
-    mainOutput: 'Basic Answer Bank',
-    cta: 'Construir Mis Respuestas',
-    tags: ['Answer Builder', 'Optional Voice', 'STAR Method'],
-    requiredActivities: ['Build 30-second self-introduction', 'Build motivation answer', 'Build strengths answer', 'Build challenge answer using STAR', 'Build "Why should we hire you?" answer', 'Shorten one answer into 30, 45, and 60 seconds'],
+    mainOutput: 'Banco de Respuestas de Entrevista',
+    cta: 'Aprender Arquitectura de Respuestas',
+    tags: ['Constructor de Respuestas', 'Voz Opcional', 'Método STAR'],
+    requiredActivities: ['Dominar marcos STAR/CAR/PAR', 'Aprender 6 tipos de preguntas comunes', 'Practicar autopresentación de 30 segundos', 'Construir respuesta de motivación', 'Crear respuestas de fortaleza y desafío'],
     icon: <MessageSquare className="w-5 h-5" />,
     route: '/despega/a3/answer-architecture'
   },
@@ -141,47 +141,47 @@ const BASIC_LEVEL_MODULES: Module[] = [
     id: 'coach-practice-room',
     number: 6,
     title: 'Sala de Práctica del Coach',
-    shortDescription: 'Practice your answers safely with feedback before entering real simulations.',
-    format: 'Guided practice module',
-    inputMode: 'Text practice or live coach mode',
-    interviewRequirement: 'Live coach is optional',
+    shortDescription: 'Practica preguntas de entrevista comunes con retroalimentación inmediata del coach de IA y métricas de mejora.',
+    format: 'Simulación interactiva con coach de IA',
+    inputMode: 'Práctica de preguntas rápidas, grabación de voz, escritura de respuestas',
+    interviewRequirement: 'Sin entrevista requerida',
     xp: 130,
-    mainOutput: 'Practice Improvement Report',
-    cta: 'Enter Practice Room',
-    tags: ['Optional Coach', 'Safe Practice', 'Feedback Loop'],
-    requiredActivities: ['Practice first answer', 'Receive feedback', 'Improve answer', 'Practice second answer', 'Practice third answer', 'Save best answer versions'],
-    icon: <Users className="w-5 h-5" />,
+    mainOutput: 'Informe de Métricas de Práctica',
+    cta: 'Entrar a Sala de Práctica',
+    tags: ['Práctica Interactiva', 'Retroalimentación del Coach', 'Método STAR'],
+    requiredActivities: ['Completar preguntas rápidas', 'Practicar recorrido de CV', 'Responder preguntas conductuales', 'Recibir retroalimentación del coach', 'Monitorear métricas de mejora'],
+    icon: <Mic className="w-5 h-5" />,
     route: '/despega/a3/coach-practice-room'
   },
   {
     id: 'communication-gym',
     number: 7,
     title: 'Gimnasio de Comunicación',
-    shortDescription: 'Train voice, rhythm, clarity, pauses, tone, answer length, and confidence through recorded drills.',
-    format: 'Voice, rhythm, and delivery training',
-    inputMode: 'Recorded voice/video drills',
-    interviewRequirement: 'No full interview required. Voice or video drills are required.',
-    xp: 140,
-    mainOutput: 'Communication Basics Score',
-    cta: 'Comenzar Gimnasio de Comunicación',
-    tags: ['Voice/Video Required', 'Communication Drill', 'Delivery Training'],
-    requiredActivities: ['Record 30-second self-introduction', 'Complete pause drill', 'Record 45-second motivation answer', 'Receive delivery feedback', 'Repeat one answer after feedback'],
-    icon: <Mic className="w-5 h-5" />,
+    shortDescription: 'Desarrolla habilidades de comunicación profesional: vocabulario, lenguaje corporal, escucha activa y generación de confianza.',
+    format: 'Módulo de desarrollo de habilidades de comunicación',
+    inputMode: 'Grabación de voz, autoevaluación, práctica guiada',
+    interviewRequirement: 'Sin entrevista requerida',
+    xp: 150,
+    mainOutput: 'Perfil de Estilo de Comunicación',
+    cta: 'Desarrollar Habilidades de Comunicación',
+    tags: ['Comunicación Profesional', 'Práctica de Voz', 'Desarrollo de Habilidades'],
+    requiredActivities: ['Evaluar estilo de comunicación actual', 'Aprender vocabulario profesional', 'Practicar señales de lenguaje corporal', 'Dominar técnicas de escucha activa', 'Construir habilidades de generación de confianza'],
+    icon: <Users className="w-5 h-5" />,
     route: '/despega/a3/communication-gym'
   },
   {
     id: 'first-recruiter-simulation',
     number: 8,
     title: 'Primera Simulación con Reclutador',
-    shortDescription: 'Complete your first short recruiter-style simulation and receive a clear readiness report.',
-    format: 'Short realistic interview simulation',
-    inputMode: 'Live voice/video simulation',
-    interviewRequirement: 'Required live simulation',
-    xp: 160,
-    mainOutput: 'Recruiter Screen Report',
-    cta: 'Comenzar First Simulation',
-    tags: ['Required Simulation', 'Recruiter Screen', 'Live Interview'],
-    requiredActivities: ['Comenzar simulation', 'Complete recruiter greeting', 'Answer core questions', 'Ask candidate question', 'Complete closing', 'Review report'],
+    shortDescription: 'Simula tu primera interacción con un reclutador de recursos humanos para practicar el diálogo inicial y generación de confianza.',
+    format: 'Simulación de reclutador virtual',
+    inputMode: 'Conversación guiada, práctica de preguntas de filtrado, manejo de salario',
+    interviewRequirement: 'Sin entrevista requerida',
+    xp: 130,
+    mainOutput: 'Informe de Retroalimentación del Reclutador',
+    cta: 'Comenzar Simulación con Reclutador',
+    tags: ['Simulación Interactiva', 'Práctica de Diálogo', 'Entrevista Simulada'],
+    requiredActivities: ['Lista de verificación previa a la entrevista', 'Sección de apertura', 'Responder preguntas de filtrado', 'Navegar discusión de salario', 'Recibir informe de retroalimentación'],
     icon: <Video className="w-5 h-5" />,
     route: '/despega/a3/first-recruiter-simulation'
   },
@@ -189,15 +189,15 @@ const BASIC_LEVEL_MODULES: Module[] = [
     id: 'risk-difficult-questions-lab',
     number: 9,
     title: 'Laboratorio de Preguntas Difíciles y de Riesgo',
-    shortDescription: 'Prepare uncomfortable questions calmly, build safer answers, and complete a short pressure drill.',
-    format: 'Risk preparation and controlled pressure module',
-    inputMode: 'Text preparation + required live mini drill',
-    interviewRequirement: 'Required mini live drill',
-    xp: 170,
-    mainOutput: 'Difficult Questions Pack',
-    cta: 'Prepare Difficult Questions',
-    tags: ['Mini Pressure Drill', 'Risk Lab', 'Voice/Video Required'],
-    requiredActivities: ['Select personal risks', 'Build 5 safe answers', 'Remove red-flag phrases', 'Complete 3-question mini pressure drill', 'Review difficult questions report'],
+    shortDescription: 'Identifica y maneja preguntas difíciles o de riesgo con fórmulas de respuesta segura y práctica bajo presión.',
+    format: 'Laboratorio de preguntas de riesgo',
+    inputMode: 'Análisis de riesgo, construcción de respuestas seguras, simulación de presión',
+    interviewRequirement: 'Sin entrevista requerida',
+    xp: 180,
+    mainOutput: 'Guía de Preguntas de Riesgo Preparadas',
+    cta: 'Preparar Respuestas de Riesgo',
+    tags: ['Gestión de Riesgo', 'Preguntas Difíciles', 'Práctica Bajo Presión'],
+    requiredActivities: ['Identificar áreas de riesgo personal', 'Aprender fórmulas de respuesta segura', 'Identificar frases de alerta roja a evitar', 'Construir respuestas seguras preparadas', 'Completar simulación de presión de 3 preguntas'],
     icon: <AlertTriangle className="w-5 h-5" />,
     route: '/despega/a3/risk-difficult-questions-lab'
   },
@@ -205,15 +205,15 @@ const BASIC_LEVEL_MODULES: Module[] = [
     id: 'basic-interview-mission',
     number: 10,
     title: 'Misión de Entrevista Básica',
-    shortDescription: 'Complete a full beginner-friendly realistic interview and receive your Basic Level readiness report.',
-    format: 'Final full realistic interview',
-    inputMode: 'Live voice/video simulation',
-    interviewRequirement: 'Required full live simulation',
+    shortDescription: 'Misión final de certificación: realiza una entrevista simulada completa que valida el dominio de todas las habilidades del Nivel Básico.',
+    format: 'Misión de certificación de entrevista completa',
+    inputMode: 'Simulación de entrevista completa de 10+ preguntas',
+    interviewRequirement: 'Entrevista simulada requerida',
     xp: 220,
-    mainOutput: 'Basic Interview Readiness Report',
-    cta: 'Comenzar Final Mission',
-    tags: ['Final Mission', 'Required Simulation', 'Full Interview'],
-    requiredActivities: ['Comenzar final mission', 'Complete opening questions', 'Complete CV and role-fit questions', 'Complete behavioral questions', 'Complete difficult question', 'Ask candidate question', 'Finish interview', 'Review final report'],
+    mainOutput: 'Certificación del Nivel Básico',
+    cta: 'Comenzar Misión de Entrevista Básica',
+    tags: ['Certificación', 'Entrevista Completa', 'Validación de Habilidades'],
+    requiredActivities: ['Briefing de misión', 'Apertura', 'Preguntas de historial de antecedentes', 'Preguntas de motivación', 'Preguntas conductuales', 'Preguntas de riesgo', 'Cierre', 'Autoevaluación en 5 criterios', 'Generar informe de preparación', 'Completar certificación del Nivel Básico'],
     icon: <Trophy className="w-5 h-5" />,
     route: '/despega/a3/basic-interview-mission'
   }
@@ -341,7 +341,7 @@ export default function A3BasicLevelTrainingPath() {
   }
 
   const getTagStyle = (tag: string) => {
-    if (tag.includes('No Interview') || tag.includes('Optional')) {
+    if (tag.includes('Sin Entrevista') || tag.includes('Optional')) {
       return { backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)' }
     }
     if (tag.includes('Required') || tag.includes('Live') || tag.includes('Voice') || tag.includes('Video')) {
@@ -391,10 +391,10 @@ export default function A3BasicLevelTrainingPath() {
               A3 — Ruta de Entrenamiento Nivel Básico
             </h1>
             <p className="text-lg text-white/70 max-w-3xl">
-              Un viaje guiado de 10 módulos to build clarity, confidence, structure, and interview readiness step by step.
+              Un viaje guiado de 10 módulos to build clarity, confidence, structure, and interview preparación paso a paso.
             </p>
             <p className="text-white/60 leading-relaxed max-w-3xl">
-              Basic Level is designed for users who need more structure before facing real interviews. 
+              El Nivel Básico está diseñado para usuarios que necesitan más estructura before facing real interviews. 
               This path begins with deep learning and professional clarity, then moves into CV building, 
               job decoding, answer preparation, coach practice, communication drills, recruiter simulations, 
               difficult-question training, and a final realistic interview mission.
@@ -407,22 +407,22 @@ export default function A3BasicLevelTrainingPath() {
               style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }} 
               className="border px-3 py-1"
             >
-              Level: Basic
+              Nivel: Básico
             </Badge>
             <Badge 
               style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.4)' }} 
               className="border px-3 py-1"
             >
-              Training Mode: Educational + Guided + Simulated
+              Modo de Entrenamiento: Educativo + Guiado + Simulado
             </Badge>
             <Badge 
               style={{ backgroundColor: 'rgba(170, 70, 170, 0.3)', color: 'rgb(170, 70, 170)', borderColor: 'rgba(170, 70, 170, 0.5)' }} 
               className="border px-3 py-1"
             >
-              Total Path: {TOTAL_XP.toLocaleString()} XP
+              Ruta Total: {TOTAL_XP.toLocaleString()} XP
             </Badge>
             <Badge className="bg-white/10 text-white/70 border-white/20 border px-3 py-1">
-              Selected Path: {selectedPath} Days
+              Ruta Seleccionada: {selectedPath} Days
             </Badge>
           </div>
         </div>

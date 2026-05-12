@@ -220,7 +220,7 @@ export default function LessonPage() {
               training_id: `guided-training-${moduleId}`,
               module_name: moduleId,
               tiempo_dedicado_minutos: 45,
-              competencias_desarrolladas: ['STAR Method', 'Interview Skills', 'Story Telling']
+              competencias_desarrolladas: ['Método STAR', 'Habilidades de Entrevista', 'Narrativa de Historias']
             })
           })
           
