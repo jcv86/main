@@ -35,12 +35,12 @@ export async function GET() {
   try {
     const supabase = createAdminClient()
     
-    // Also check demo_user cookie for demo mode
+    // Get user ID from demo_user cookie
     const cookieStore = await cookies()
     const demoUserCookie = cookieStore.get('demo_user')
-    let userId = user?.id
+    let userId: string | null = null
     
-    if (!userId && demoUserCookie) {
+    if (demoUserCookie) {
       try {
         const demoUser = JSON.parse(demoUserCookie.value)
         userId = demoUser.id
