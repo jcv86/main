@@ -72,10 +72,10 @@ export function ModuleCompletionScreen({
               </div>
             </div>
 
-            {displayXp > 0 && (
+            {xpEarned && xpEarned > 0 && (
               <div className="bg-white/5 rounded-lg p-4">
                 <p className="text-white/60 text-sm">XP Ganado</p>
-                <p className="text-2xl font-bold text-training">{displayXp} XP</p>
+                <p className="text-2xl font-bold text-training">{xpEarned} XP</p>
               </div>
             )}
 
