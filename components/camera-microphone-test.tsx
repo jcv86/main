@@ -25,14 +25,42 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
   const animationRef = useRef<number | null>(null)
   const [audioLevel, setAudioLevel] = useState(0)
 
+  // Cleanup function for stopping all streams
+  const stopAllStreams = () => {
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach(track => track.stop())
+      mediaStreamRef.current = null
+    }
+    
+    if (animationRef.current) {
+      cancelAnimationFrame(animationRef.current)
+    }
+    
+    if (audioContextRef.current) {
+      audioContextRef.current.close()
+      audioContextRef.current = null
+    }
+  }
+
+  // Cleanup on unmount or dialog close
+  useEffect(() => {
+    if (!isOpen) {
+      stopAllStreams()
+      setCameraState('idle')
+      setMicrophoneState('idle')
+    }
+  }, [isOpen])
+
   // Test Camera
   const testCamera = async () => {
     setCameraState('testing')
     setCameraError('')
     
     try {
-      // First check if we already have permission
-      const permission = await navigator.permissions.query({ name: 'camera' as any })
+      // Stop previous stream if any
+      if (mediaStreamRef.current) {
+        mediaStreamRef.current.getTracks().forEach(track => track.stop())
+      }
       
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
@@ -44,6 +72,12 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
       if (videoRef.current) {
         videoRef.current.srcObject = stream
         mediaStreamRef.current = stream
+        
+        // Ensure video plays after stream is attached
+        videoRef.current.play().catch(err => {
+          console.error('[v0] Error playing video:', err)
+        })
+        
         setCameraState('ready')
       }
     } catch (error) {
@@ -230,15 +264,21 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
                 playsInline
                 muted
                 className="w-full h-full object-cover"
+                style={{ display: 'block', backgroundColor: '#000' }}
               />
               {cameraState === 'idle' && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/80">
-                  <p className="text-white/60 text-center">Haz clic en "Iniciar Cámara" para comenzar</p>
+                  <p className="text-white/60 text-center">Haz clic en "Solicitar Acceso a Cámara" para comenzar</p>
                 </div>
               )}
               {cameraState === 'testing' && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/80">
                   <Loader className="w-8 h-8 text-[rgb(170,70,170)] animate-spin" />
+                </div>
+              )}
+              {cameraState === 'error' && !cameraError && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/80">
+                  <p className="text-red-400 text-center">No se pudo acceder a la cámara</p>
                 </div>
               )}
             </div>
