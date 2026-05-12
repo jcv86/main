@@ -38,14 +38,21 @@ export default function AnswerArchitectureModule() {
 
   const handleComplete = async () => {
     try {
-      await fetch('/api/a3/complete-module', {
+      const response = await fetch('/api/a3/save-module-progress', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ moduleId: 'answer-architecture', xp: MODULE_XP })
+        body: JSON.stringify({ 
+          moduleId: 'answer-architecture', 
+          status: 'completed',
+          xpEarned: MODULE_XP,
+          completedActivities: REQUIRED_ACTIVITIES.length
+        })
       })
+      if (!response.ok) throw new Error('Failed to save progress')
       router.push('/despega/a3?completed=answer-architecture')
     } catch (error) {
       console.error('Error completing module:', error)
+      router.push('/despega/a3?completed=answer-architecture')
     }
   }
 
