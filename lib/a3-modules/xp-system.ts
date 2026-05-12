@@ -285,7 +285,7 @@ export async function getUserPillar3Stats(userId: string) {
     const [
       { data: xpData },
       { data: progressData },
-      { data: completedData },
+      { count: completedCount },
     ] = await Promise.all([
       supabase
         .from('user_dtc_balance')
@@ -305,7 +305,7 @@ export async function getUserPillar3Stats(userId: string) {
 
     const currentXP = xpData?.balance || 0;
     const completedModules = progressData?.completed_modules || [];
-    const modulesCompleted = completedData?.count || 0;
+    const modulesCompleted = completedCount || 0;
 
     return {
       currentXP,
