@@ -130,7 +130,7 @@ export default function SimulacionRealPage() {
 
   if (simulationComenzared && !simulationComplete) {
   if (isCompleted) {
-    // Module 10 is the last module - only show dashboard button (no "Continuar Práctica")
+    // Module 10 is the last module - only show dashboard button (no "Play Práctica")
     return <ModuleCompletionScreen moduleId="simulacion-real" moduleName="Simulación Real" xpEarned={40} />
   }
 

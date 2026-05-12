@@ -316,7 +316,7 @@ export default function RiskDifficultQuestionsLabModule() {
                             onClick={() => completeStep(0)}
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] w-full"
                           >
-                            Continuar <ArrowRight className="w-4 h-4 ml-2" />
+                            Play <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         )}
                       </div>
@@ -383,7 +383,7 @@ export default function RiskDifficultQuestionsLabModule() {
                             onClick={() => completeStep(1)}
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] w-full"
                           >
-                            Continuar <ArrowRight className="w-4 h-4 ml-2" />
+                            Play <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         )}
                       </div>
@@ -429,7 +429,7 @@ export default function RiskDifficultQuestionsLabModule() {
                             onClick={() => completeStep(2)}
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] w-full"
                           >
-                            Continuar <ArrowRight className="w-4 h-4 ml-2" />
+                            Play <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         )}
                       </div>
@@ -480,7 +480,7 @@ export default function RiskDifficultQuestionsLabModule() {
                             onClick={() => completeStep(3)}
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] w-full"
                           >
-                            Continuar to Pressure Drill <ArrowRight className="w-4 h-4 ml-2" />
+                            Play to Pressure Drill <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         )}
                       </div>

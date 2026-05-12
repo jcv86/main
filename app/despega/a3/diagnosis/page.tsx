@@ -9,7 +9,7 @@ import { ArrowLeft } from 'lucide-react'
 export default function DiagnosisPage() {
   const handleDiagnosisComplete = (diagnosis: any) => {
     console.log('[v0] Diagnosis completed:', diagnosis)
-    // Guardar diagnosis and redirect
+    // Save diagnosis and redirect
   }
 
   return (

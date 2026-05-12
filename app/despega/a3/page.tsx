@@ -69,7 +69,7 @@ const BASIC_LEVEL_MODULES: Module[] = [
     mainOutput: 'Tarjeta de Espejo de Carrera',
     cta: 'Comenzar Espejo de Carrera',
     tags: ['Sin Entrevista', 'Autodescubrimiento', 'Claridad de Perfil'],
-    requiredActivities: ['Revisar diagnóstico', 'Confirmarar precisión del diagnóstico', 'Seleccionar dirección principal de carrera', 'Definir identidad profesional actual', 'Guardar Tarjeta de Espejo de Carrera'],
+    requiredActivities: ['Revisar diagnóstico', 'Confirmarar precisión del diagnóstico', 'Seleccionar dirección principal de carrera', 'Definir identidad profesional actual', 'Save Tarjeta de Espejo de Carrera'],
     icon: <User className="w-5 h-5" />,
     route: '/despega/a3/career-mirror'
   },

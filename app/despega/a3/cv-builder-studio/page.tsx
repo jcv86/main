@@ -115,7 +115,7 @@ const ATS_CHECKLIST = [
   { id: 'sections', text: 'Use clear section headings (Experience, Education, Skills)', critical: true },
   { id: 'bullets', text: 'Use standard bullet points (•)', critical: false },
   { id: 'dates', text: 'Format dates consistently (MM/YYYY or Month YYYY)', critical: false },
-  { id: 'file', text: 'Guardar as PDF with text (not image)', critical: true },
+  { id: 'file', text: 'Save as PDF with text (not image)', critical: true },
   { id: 'length', text: 'Keep to 1-2 pages maximum', critical: false },
   { id: 'contact', text: 'Contact info at the top, not in headers/footers', critical: true },
   { id: 'acronyms', text: 'Spell out acronyms at least once', critical: false }
@@ -344,7 +344,7 @@ export default function CVBuilderStudioModule() {
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-bold text-gray-900">CV Preview</h3>
               <Button variant="outline" size="sm" onClick={() => setShowPreview(false)}>
-                Cerrar
+                X
               </Button>
             </div>
             <div className="bg-white text-gray-900 p-6 border rounded-lg space-y-4">
@@ -824,7 +824,7 @@ export default function CVBuilderStudioModule() {
                 Preview CV
               </Button>
               <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-                Continuar to Decodificador de Ofertas
+                Play to Decodificador de Ofertas
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>

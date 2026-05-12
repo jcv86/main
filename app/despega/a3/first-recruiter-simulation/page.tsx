@@ -468,7 +468,7 @@ export default function FirstRecruiterSimulationModule() {
             </div>
             
             <Button onClick={handleComplete} className="w-full rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-              Continuar to Laboratorio de Preguntas Difíciles y de Riesgo
+              Play to Laboratorio de Preguntas Difíciles y de Riesgo
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>

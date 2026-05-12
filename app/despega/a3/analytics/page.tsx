@@ -31,7 +31,7 @@ export default function A3AnalyticsPage() {
         averageResponseTime: 2.3,
         trainingCompletion: 45,
         strengths: ['Comunicación', 'Método STAR', 'Manejo de presión'],
-        improvements: ['Detalles técnicos', 'Ejemplos cuantificables', 'Cerrar con poder']
+        improvements: ['Detalles técnicos', 'Ejemplos cuantificables', 'X con poder']
       }
       setUserData(mockData)
     } catch (error) {

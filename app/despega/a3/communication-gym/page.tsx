@@ -113,7 +113,7 @@ const SPEAKING_PATTERNS = [
   { step: 2, label: 'Pause', description: '2-3 seconds to think' },
   { step: 3, label: 'Main idea', description: 'Lead with your point' },
   { step: 4, label: 'Example', description: 'Support with evidence' },
-  { step: 5, label: 'Cerrar', description: 'End clearly and confidently' }
+  { step: 5, label: 'X', description: 'End clearly and confidently' }
 ]
 
 export default function CommunicationGymModule() {
@@ -555,7 +555,7 @@ export default function CommunicationGymModule() {
               </div>
             </div>
             <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-              Continuar to Primera Simulación con Reclutador
+              Play to Primera Simulación con Reclutador
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>

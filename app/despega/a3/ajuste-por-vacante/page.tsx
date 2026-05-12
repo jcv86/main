@@ -190,7 +190,7 @@ export default function JobMatchingPage() {
                           <p className="text-sm text-white/85">{response}</p>
                         </div>
                         <Button variant="outline" size="sm" className="border-training/40 text-training hover:bg-training/10">
-                          Editarar Respuesta
+                          Editar Respuesta
                         </Button>
                       </div>
                     ))}

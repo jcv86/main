@@ -49,7 +49,7 @@ export default function ConversationalInterviewPage() {
           level: selectedLevel || 'intermedio',
           trainingType: 'Entrevista Conversacional'
         }}
-        onContinuar={() => {
+        onPlay={() => {
           setSelectedLevel(null)
           setSelectedRole(null)
           setSelectedIndustry(null)

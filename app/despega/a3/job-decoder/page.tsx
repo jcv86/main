@@ -446,7 +446,7 @@ export default function JobDecoderModule() {
                 disabled={!isRequirementsComplete()}
                 className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
               >
-                Continuar to Categorization
+                Play to Categorization
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -552,7 +552,7 @@ export default function JobDecoderModule() {
                 disabled={!isCategorizedComplete()}
                 className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
               >
-                Continuar to Match Map
+                Play to Match Map
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -635,7 +635,7 @@ export default function JobDecoderModule() {
                 disabled={!isMatchMapComplete()}
                 className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
               >
-                Continuar to Questions
+                Play to Questions
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>
@@ -748,7 +748,7 @@ export default function JobDecoderModule() {
               </ul>
             </div>
             <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-              Continuar to Arquitectura de Respuestas
+              Play to Arquitectura de Respuestas
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>

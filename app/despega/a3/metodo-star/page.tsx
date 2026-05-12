@@ -278,7 +278,7 @@ export default function MetodoSTARPage() {
                 onClick={() => setIsCompleted(true)}
                 className="rounded-[20px] bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
               >
-                Guardar Respuesta
+                Save Respuesta
               </Button>
             </div>
           </TabsContent>

@@ -15,7 +15,7 @@ import {
   Lightbulb,
   AlertTriangle,
   Eye,
-  Guardar,
+  Save,
   ChevronDown,
   ChevronUp,
   Sparkles
@@ -55,9 +55,9 @@ const ACTIVITIES = [
   },
   {
     id: 'career-mirror-card',
-    title: 'Guardar Your Espejo de Carrera Card',
+    title: 'Save Your Espejo de Carrera Card',
     description: 'Generate your personalized career snapshot to use throughout the training.',
-    icon: Guardar,
+    icon: Save,
   },
 ]
 
@@ -106,7 +106,7 @@ const CAREER_DIRECTIONS = [
   { 
     id: 'same-role-same-industry',
     title: 'Same Role, Same Industry',
-    description: 'Continuar in your current role within your industry',
+    description: 'Play in your current role within your industry',
     example: 'Marketing Manager in Tech → Marketing Manager in Tech'
   },
   { 
@@ -185,7 +185,7 @@ export default function CareerMirrorModule() {
   const [careerGoal, setCareerGoal] = useState('')
   
   // Activity 5: Espejo de Carrera Card
-  const [cardGuardard, setCardGuardard] = useState(false)
+  const [cardSaved, setCardSaved] = useState(false)
 
   const progress = Math.round((completedSteps.length / ACTIVITIES.length) * 100)
 
@@ -236,7 +236,7 @@ export default function CareerMirrorModule() {
 
   const handleComplete = async () => {
     try {
-      // Guardar career mirror data
+      // Save career mirror data
       const careerMirrorData = {
         diagnosis: {
           level: 'basic',
@@ -755,8 +755,8 @@ export default function CareerMirrorModule() {
                 <input 
                   type="checkbox" 
                   id="card-saved"
-                  checked={cardGuardard}
-                  onChange={(e) => setCardGuardard(e.target.checked)}
+                  checked={cardSaved}
+                  onChange={(e) => setCardSaved(e.target.checked)}
                   className="w-5 h-5 rounded"
                   style={{ accentColor: PILLAR3_PRIMARY }}
                 />
@@ -959,7 +959,7 @@ export default function CareerMirrorModule() {
               className="rounded-[20px] text-white"
               style={{ backgroundColor: PILLAR3_PRIMARY }}
             >
-              Completar Módulo y Continuar
+              Completar Módulo y Play
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>

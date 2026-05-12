@@ -456,7 +456,7 @@ export default function ValueMiningLabModule() {
                             disabled={!canCompleteActivity(0)}
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
                           >
-                            Continuar
+                            Play
                             <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         </div>
@@ -523,7 +523,7 @@ export default function ValueMiningLabModule() {
                             disabled={!canCompleteActivity(1)}
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
                           >
-                            Continuar
+                            Play
                             <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         </div>
@@ -585,7 +585,7 @@ export default function ValueMiningLabModule() {
                             disabled={!canCompleteActivity(2)}
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
                           >
-                            Continuar
+                            Play
                             <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         </div>
@@ -687,7 +687,7 @@ export default function ValueMiningLabModule() {
                             disabled={!canCompleteActivity(3)}
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
                           >
-                            Continuar
+                            Play
                             <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         </div>
@@ -791,7 +791,7 @@ export default function ValueMiningLabModule() {
               onClick={handleComplete} 
               className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] px-8 py-3 text-lg"
             >
-              Continuar to Estudio Constructor de CV
+              Play to Estudio Constructor de CV
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Card>

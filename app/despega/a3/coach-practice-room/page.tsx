@@ -10,7 +10,7 @@ import { Progress } from '@/components/ui/progress'
 import { 
   ArrowRight, ArrowLeft, CheckCircle2, Users, Lightbulb, RefreshCw,
   ChevronDown, ChevronUp, MessageCircle, ThumbsUp, AlertCircle, 
-  Sparkles, Eye, RotateCcw, Guardar
+  Sparkles, Eye, RotateCcw, Save
 } from 'lucide-react'
 
 const MODULE_XP = 130
@@ -463,8 +463,8 @@ export default function CoachPracticeRoomModule() {
                       onClick={() => completeSession(index)}
                       className="rounded-[20px] bg-green-600 hover:bg-green-700 ml-auto"
                     >
-                      <Guardar className="w-4 h-4 mr-2" />
-                      Guardar & Continuar
+                      <Save className="w-4 h-4 mr-2" />
+                      Save & Play
                     </Button>
                   )}
                 </div>
@@ -493,7 +493,7 @@ export default function CoachPracticeRoomModule() {
               </div>
             </div>
             <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-              Continuar to Gimnasio de Comunicación
+              Play to Gimnasio de Comunicación
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>
