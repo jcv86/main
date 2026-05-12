@@ -27,6 +27,18 @@ export default function DespegaOnboarding() {
   const supabase = createClient()
   const [step, setStep] = useState<Step>("intro")
   const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
+
+  // Log whenever step changes
+  useEffect(() => {
+    console.log("[v0] Step changed to:", step)
+  }, [step])
+
+  // Ensure component is mounted before rendering to avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
   const [c1Submitting, setC1Submitting] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [c1CurrentQuestion, setC1CurrentQuestion] = useState(0)
@@ -203,6 +215,10 @@ export default function DespegaOnboarding() {
   }
 
   // STEP 1: Intro - Despega Cerebral
+  if (!mounted) {
+    return <div className="min-h-screen bg-background" />
+  }
+
   if (step === "intro") {
     return (
       <div className="min-h-screen bg-background">
@@ -402,7 +418,13 @@ export default function DespegaOnboarding() {
                 </Button>
               </>
             ) : (
-              <Button onClick={() => setStep("conozcamonos1")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-sm bg-cyan/40 hover:bg-cyan/50 text-foreground dark:text-foreground">
+              <Button 
+                onClick={() => {
+                  console.log("[v0] Button clicked, setting step to conozcamonos1")
+                  setStep("conozcamonos1")
+                }} 
+                className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-sm bg-cyan/40 hover:bg-cyan/50 text-foreground dark:text-foreground"
+              >
                 Cuando estés listo, comienza
               </Button>
             )}
