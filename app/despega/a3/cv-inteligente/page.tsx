@@ -35,7 +35,7 @@ export default function CVATSPage() {
       {
         id: 2,
         position: 'Senior Software Engineer',
-        company: 'StartupXYZ',
+        company: 'ComenzarupXYZ',
         duration: '2019 - 2022',
         description: 'Desarrollo full-stack, escalado de aplicación de 100k a 10M usuarios, implementación de CI/CD pipeline',
         skills: ['React', 'Node.js', 'PostgreSQL', 'Docker']

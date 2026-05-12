@@ -55,7 +55,7 @@ const ACTIVITIES = [
   },
   {
     id: 'career-mirror-card',
-    title: 'Save Your Career Mirror Card',
+    title: 'Save Your Espejo de Carrera Card',
     description: 'Generate your personalized career snapshot to use throughout the training.',
     icon: Save,
   },
@@ -74,7 +74,7 @@ const DIAGNOSIS_LEVELS = {
       'Needs to develop confidence in explaining career transitions',
       'Would improve with mock interview experience'
     ],
-    recommendation: 'Complete the full A3 Basic Training Path to build a strong foundation.',
+    recommendation: 'Complete the full A3 Basic Ruta de Entrenamiento to build a strong foundation.',
   }
 }
 
@@ -184,7 +184,7 @@ export default function CareerMirrorModule() {
   const [keySkills, setKeySkills] = useState('')
   const [careerGoal, setCareerGoal] = useState('')
   
-  // Activity 5: Career Mirror Card
+  // Activity 5: Espejo de Carrera Card
   const [cardSaved, setCardSaved] = useState(false)
 
   const progress = Math.round((completedSteps.length / ACTIVITIES.length) * 100)
@@ -514,7 +514,7 @@ export default function CareerMirrorModule() {
                     type="text"
                     value={targetIndustry}
                     onChange={(e) => setTargetIndustry(e.target.value)}
-                    placeholder="e.g., Technology, Healthcare, Finance, Startups"
+                    placeholder="e.g., Technology, Healthcare, Finance, Comenzarups"
                     className="w-full rounded-[2px] bg-white/5 border p-3 text-white placeholder:text-white/30"
                     style={{ borderColor: 'rgba(170, 70, 170, 0.3)' }}
                   />
@@ -612,7 +612,7 @@ export default function CareerMirrorModule() {
           </div>
         )
 
-      case 4: // Career Mirror Card
+      case 4: // Espejo de Carrera Card
         return (
           <div className="space-y-6 mt-4">
             <Card 
@@ -637,7 +637,7 @@ export default function CareerMirrorModule() {
                   <User className="w-8 h-8" style={{ color: 'rgb(200, 130, 200)' }} />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-white">Career Mirror Card</h3>
+                  <h3 className="text-xl font-bold text-white">Espejo de Carrera Card</h3>
                   <p className="text-white/60">Your professional snapshot</p>
                 </div>
               </div>
@@ -727,7 +727,7 @@ export default function CareerMirrorModule() {
                   >
                     1
                   </div>
-                  <p className="text-white/80">Your Career Mirror Card will be saved and referenced throughout your training</p>
+                  <p className="text-white/80">Your Espejo de Carrera Card will be saved and referenced throughout your training</p>
                 </li>
                 <li className="flex items-start gap-3">
                   <div 
@@ -736,7 +736,7 @@ export default function CareerMirrorModule() {
                   >
                     2
                   </div>
-                  <p className="text-white/80">Next module (Value Mining Lab) will help you discover achievements that match your strengths</p>
+                  <p className="text-white/80">Siguiente module (Laboratorio de Minería de Valor) will help you discover achievements that match your strengths</p>
                 </li>
                 <li className="flex items-start gap-3">
                   <div 
@@ -761,7 +761,7 @@ export default function CareerMirrorModule() {
                   style={{ accentColor: PILLAR3_PRIMARY }}
                 />
                 <label htmlFor="card-saved" className="text-white/80">
-                  I confirm my Career Mirror Card is accurate and ready to save
+                  I confirm my Espejo de Carrera Card is accurate and ready to save
                 </label>
               </div>
             )}
@@ -812,8 +812,8 @@ export default function CareerMirrorModule() {
               <User className="w-6 h-6" style={{ color: 'rgb(200, 130, 200)' }} />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">Career Mirror</h1>
-              <p className="text-white/60">Self-discovery module • No interview required</p>
+              <h1 className="text-3xl font-bold text-white">Espejo de Carrera</h1>
+              <p className="text-white/60">Módulo de autodescubrimiento • Sin entrevista requerida</p>
             </div>
           </div>
           <p className="text-white/70 max-w-2xl">
@@ -822,13 +822,13 @@ export default function CareerMirrorModule() {
           </p>
         </div>
 
-        {/* Progress */}
+        {/* Progreso */}
         <Card 
           className="rounded-[2px] bg-white/5 p-4 border"
           style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
         >
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-white/70">Progress</span>
+            <span className="text-white/70">Progreso</span>
             <span style={{ color: PILLAR3_PRIMARY }}>{progress}%</span>
           </div>
           <div className="h-2 bg-white/10 rounded-full overflow-hidden">
@@ -929,7 +929,7 @@ export default function CareerMirrorModule() {
                           cursor: canCompleteStep(index) ? 'pointer' : 'not-allowed'
                         }}
                       >
-                        Complete Activity
+                        Completar Actividad
                         <ArrowRight className="w-4 h-4 ml-2" />
                       </Button>
                     )}
@@ -952,14 +952,14 @@ export default function CareerMirrorModule() {
             <CheckCircle2 className="w-12 h-12 mx-auto" style={{ color: PILLAR3_PRIMARY }} />
             <h3 className="text-xl font-bold text-white">All Activities Completed!</h3>
             <p className="text-white/70">
-              You&apos;ve earned {MODULE_XP} XP and unlocked Value Mining Lab.
+              You&apos;ve earned {MODULE_XP} XP and unlocked Laboratorio de Minería de Valor.
             </p>
             <Button 
               onClick={handleComplete} 
               className="rounded-[20px] text-white"
               style={{ backgroundColor: PILLAR3_PRIMARY }}
             >
-              Complete Module & Continue
+              Completar Módulo y Continuar
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>

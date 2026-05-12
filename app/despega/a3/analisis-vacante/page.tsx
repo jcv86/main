@@ -67,7 +67,7 @@ const JOB_ANALYSIS = {
     { skill: 'Trabajo en equipo', importance: 'Media' }
   ],
   experienceRequired: '5+ años',
-  industryPreference: 'Tech/Startups',
+  industryPreference: 'Tech/Comenzarups',
   matchScore: 78,
   gaps: [
     { gap: 'AWS - No mencionaste experiencia', priority: 'Media', action: 'Menciona proyectos personales o cursos completados' },

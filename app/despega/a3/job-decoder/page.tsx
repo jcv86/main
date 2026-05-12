@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Progreso } from '@/components/ui/progress'
 import { 
   ArrowRight, ArrowLeft, CheckCircle2, Search, Lightbulb, 
   ChevronDown, ChevronUp, Target, AlertTriangle, HelpCircle,
@@ -18,7 +18,7 @@ const MODULE_XP = 100
 // Sample job posting for practice
 const SAMPLE_JOB_POSTING = {
   title: 'Operations Coordinator',
-  company: 'TechStart Inc.',
+  company: 'TechComenzar Inc.',
   description: `We are looking for a detail-oriented Operations Coordinator to join our growing team.
 
 Responsibilities:
@@ -138,7 +138,7 @@ export default function JobDecoderModule() {
   })
 
   const REQUIRED_ACTIVITIES = [
-    'Paste job posting or use sample',
+    'Pegar oferta de trabajo or use sample',
     'Identify 5+ key requirements',
     'Categorize: Must-have vs Nice-to-have',
     'Create your match map',
@@ -246,8 +246,8 @@ export default function JobDecoderModule() {
               <Search className="w-6 h-6 text-[rgb(170,70,170)]" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">Job Decoder</h1>
-              <p className="text-white/60">Vacancy analysis module • No interview required</p>
+              <h1 className="text-3xl font-bold text-white">Decodificador de Ofertas</h1>
+              <p className="text-white/60">Vacancy analysis module • Sin entrevista requerida</p>
             </div>
           </div>
           <p className="text-white/70 max-w-2xl">
@@ -284,13 +284,13 @@ export default function JobDecoderModule() {
           ))}
         </div>
 
-        {/* Progress */}
+        {/* Progreso */}
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-white/70">Progress</span>
+            <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
-          <Progress value={progress} className="h-2 bg-white/10" />
+          <Progreso value={progress} className="h-2 bg-white/10" />
           <p className="text-white/50 text-sm mt-2">{completedSteps.length} of {REQUIRED_ACTIVITIES.length} activities completed</p>
         </Card>
 
@@ -673,7 +673,7 @@ export default function JobDecoderModule() {
               <div className="bg-[rgba(80,160,170,0.1)] border border-[rgba(80,160,170,0.3)] rounded-lg p-3">
                 <p className="text-[rgb(80,160,170)] text-sm">
                   <strong>Pro tip:</strong> Every requirement in a job posting is a potential interview question. 
-                  Select the questions you want to prepare for in Answer Architecture.
+                  Select the questions you want to prepare for in Arquitectura de Respuestas.
                 </p>
               </div>
               
@@ -734,13 +734,13 @@ export default function JobDecoderModule() {
         {completedSteps.length === REQUIRED_ACTIVITIES.length && (
           <Card className="rounded-[2px] bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
             <Target className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
-            <h3 className="text-xl font-bold text-white">Job Decoder Complete!</h3>
+            <h3 className="text-xl font-bold text-white">Decodificador de Ofertas Complete!</h3>
             <p className="text-white/70">
               You&apos;ve decoded the job posting and identified {jobData.selectedQuestions.length} likely interview questions. 
               Earned {MODULE_XP} XP!
             </p>
             <div className="bg-white/5 rounded-lg p-4 text-left">
-              <p className="text-white/70 text-sm mb-2">Questions you&apos;ll prepare in Answer Architecture:</p>
+              <p className="text-white/70 text-sm mb-2">Questions you&apos;ll prepare in Arquitectura de Respuestas:</p>
               <ul className="space-y-1">
                 {jobData.selectedQuestions.slice(0, 3).map((q, i) => (
                   <li key={i} className="text-[rgb(80,160,170)] text-sm">• {q}</li>
@@ -748,7 +748,7 @@ export default function JobDecoderModule() {
               </ul>
             </div>
             <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-              Continue to Answer Architecture
+              Continue to Arquitectura de Respuestas
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>

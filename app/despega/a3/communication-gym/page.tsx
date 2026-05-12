@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Progreso } from '@/components/ui/progress'
 import { 
   ArrowRight, ArrowLeft, CheckCircle2, Mic, Lightbulb, Video,
   ChevronDown, ChevronUp, Play, Pause, Volume2, Timer, 
@@ -24,7 +24,7 @@ const COMMUNICATION_DRILLS = [
     timeLimit: 30,
     instruction: 'Introduce yourself professionally in exactly 30 seconds. Practice until you hit the time naturally.',
     criteria: [
-      'Starts with professional identity',
+      'Comenzars with professional identity',
       'Mentions 2-3 relevant skills',
       'Ends with career goal',
       'Stays within 30 seconds'
@@ -48,7 +48,7 @@ const COMMUNICATION_DRILLS = [
     tips: [
       'A pause is NOT awkward - it shows thoughtfulness',
       'Use the pause to structure your answer mentally',
-      'Start with the main point after the pause'
+      'Comenzar with the main point after the pause'
     ]
   },
   {
@@ -102,7 +102,7 @@ const COMMUNICATION_DRILLS = [
     tips: [
       'Focus on ONE improvement at a time',
       'It is normal to need 3-5 attempts',
-      'Progress > perfection'
+      'Progreso > perfection'
     ]
   }
 ]
@@ -212,7 +212,7 @@ export default function CommunicationGymModule() {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
-    return `${mins}:${secs.toString().padStart(2, '0')}`
+    return `${mins}:${secs.toString().padComenzar(2, '0')}`
   }
 
   const canCompleteDrill = (drill: typeof COMMUNICATION_DRILLS[0]) => {
@@ -251,7 +251,7 @@ export default function CommunicationGymModule() {
               <Volume2 className="w-6 h-6 text-[rgb(170,70,170)]" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">Communication Gym</h1>
+              <h1 className="text-3xl font-bold text-white">Gimnasio de Comunicación</h1>
               <p className="text-white/60">Voice training • Delivery drills • Confidence building</p>
             </div>
           </div>
@@ -297,13 +297,13 @@ export default function CommunicationGymModule() {
           </div>
         </Card>
 
-        {/* Progress */}
+        {/* Progreso */}
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-white/70">Progress</span>
+            <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
-          <Progress value={progress} className="h-2 bg-white/10" />
+          <Progreso value={progress} className="h-2 bg-white/10" />
           <p className="text-white/50 text-sm mt-2">{completedSteps.length} of {COMMUNICATION_DRILLS.length} drills completed</p>
         </Card>
 
@@ -334,7 +334,7 @@ export default function CommunicationGymModule() {
                   <p className="text-white/50 text-sm">
                     {drill.type === 'recording' && `${drill.timeLimit}s recording`}
                     {drill.type === 'exercise' && 'Pause practice'}
-                    {drill.type === 'assessment' && 'Self-evaluation'}
+                    {drill.type === 'assessment' && 'Autoevaluación'}
                   </p>
                 </div>
               </div>
@@ -408,7 +408,7 @@ export default function CommunicationGymModule() {
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
                           >
                             <Play className="w-4 h-4 mr-2" />
-                            {recordings[drill.id] ? 'Record Again' : 'Start Recording'}
+                            {recordings[drill.id] ? 'Record Again' : 'Comenzar Recording'}
                           </Button>
                         </div>
                       )}
@@ -452,7 +452,7 @@ export default function CommunicationGymModule() {
                                 className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
                               >
                                 <Timer className="w-4 h-4 mr-2" />
-                                Start Pause Drill
+                                Comenzar Pause Drill
                               </Button>
                             )}
                           </div>
@@ -541,7 +541,7 @@ export default function CommunicationGymModule() {
         {completedSteps.length === COMMUNICATION_DRILLS.length && (
           <Card className="rounded-[2px] bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
             <Volume2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
-            <h3 className="text-xl font-bold text-white">Communication Gym Complete!</h3>
+            <h3 className="text-xl font-bold text-white">Gimnasio de Comunicación Complete!</h3>
             <p className="text-white/70">
               You&apos;ve trained your voice and delivery skills. Earned {MODULE_XP} XP!
             </p>
@@ -555,7 +555,7 @@ export default function CommunicationGymModule() {
               </div>
             </div>
             <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-              Continue to First Recruiter Simulation
+              Continue to Primera Simulación con Reclutador
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>

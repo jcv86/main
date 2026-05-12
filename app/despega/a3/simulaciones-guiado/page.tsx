@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Progreso } from '@/components/ui/progress'
 import Link from 'next/link'
 import { ArrowLeft, Mic, Volume2, SkipForward, Check, AlertCircle, Trophy, Zap } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
@@ -14,7 +14,7 @@ import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
 import { ChallengeInvitation } from '@/components/a3-challenge-invitation'
 import { SofiaInterviewer } from '@/components/sofia-interviewer'
-import { A3GeneralProgress } from '@/components/a3-general-progress'
+import { A3GeneralProgreso } from '@/components/a3-general-progress'
 
 const GUIDED_INTERVIEW_QUESTIONS = [
   {
@@ -82,7 +82,7 @@ export default function GuidedInterviewPage() {
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore] = useState<number | null>(null)
   const [validatingIds, setValidatingIds] = useState<Set<number>>(new Set())
-  const [started, setStarted] = useState(false)
+  const [started, setComenzared] = useState(false)
   const [showingFarewell, setShowingFarewell] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -144,13 +144,13 @@ export default function GuidedInterviewPage() {
     }
   }
 
-  const handleNext = () => {
+  const handleSiguiente = () => {
     if (currentQuestionIndex < QUESTIONS_TO_USE.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
   }
 
-  const handlePrevious = () => {
+  const handleAnterior = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1)
     }
@@ -197,8 +197,8 @@ export default function GuidedInterviewPage() {
   if (!started) {
     return (
       <div className="min-h-screen bg-background">
-        {/* General Progress Bar */}
-        <A3GeneralProgress 
+        {/* General Progreso Bar */}
+        <A3GeneralProgreso 
           currentStep={1}
           totalSteps={QUESTIONS_TO_USE.length + 1}
           currentLabel="Preparación"
@@ -268,7 +268,7 @@ export default function GuidedInterviewPage() {
                   </div>
 
                   <Button 
-                    onClick={() => setStarted(true)}
+                    onClick={() => setComenzared(true)}
                     className="w-full rounded-[20px] bg-training hover:bg-training/90 text-white h-12"
                   >
                     Comenzar Entrevista
@@ -354,7 +354,7 @@ export default function GuidedInterviewPage() {
             <Link href="/despega/a3/simulations" className="flex-1">
               <Button variant="outline" className="w-full">Volver a Entrenamientos</Button>
             </Link>
-            <Button onClick={() => handleNext()} className="flex-1 bg-training/80 hover:bg-training/70">
+            <Button onClick={() => handleSiguiente()} className="flex-1 bg-training/80 hover:bg-training/70">
               Ver Análisis Detallado
             </Button>
           </div>

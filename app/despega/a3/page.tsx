@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
-import { Progress } from '@/components/ui/progress'
+import { Progreso } from '@/components/ui/progress'
 import { 
   ArrowRight, 
   Loader2, 
@@ -28,7 +28,7 @@ import {
 
 // ============================================
 // A3 BASIC LEVEL TRAINING PATH
-// Total XP: 1,340 XP across 10 modules
+// XP Total: 1,340 XP across 10 modules
 // ============================================
 
 // PILLAR 3 COLORS
@@ -60,43 +60,43 @@ const BASIC_LEVEL_MODULES: Module[] = [
   {
     id: 'career-mirror',
     number: 1,
-    title: 'Career Mirror',
+    title: 'Espejo de Carrera',
     shortDescription: 'Understand your professional profile, your Basic Level diagnosis, your strengths, blockers, and how interviewers may perceive you.',
-    format: 'Self-discovery module',
+    format: 'Módulo de autodescubrimiento',
     inputMode: 'Interactive cards, short reflections, confirmations',
-    interviewRequirement: 'No interview required',
+    interviewRequirement: 'Sin entrevista requerida',
     xp: 80,
-    mainOutput: 'Career Mirror Card',
-    cta: 'Start Career Mirror',
+    mainOutput: 'Espejo de Carrera Card',
+    cta: 'Comenzar Espejo de Carrera',
     tags: ['No Interview', 'Self-Discovery', 'Profile Clarity'],
-    requiredActivities: ['Review diagnosis', 'Confirm diagnosis accuracy', 'Select main career direction', 'Define current professional identity', 'Save Career Mirror Card'],
+    requiredActivities: ['Revisar diagnóstico', 'Confirmar precisión del diagnóstico', 'Seleccionar dirección principal de carrera', 'Definir identidad profesional actual', 'Save Espejo de Carrera Card'],
     icon: <User className="w-5 h-5" />,
     route: '/despega/a3/career-mirror'
   },
   {
     id: 'value-mining-lab',
     number: 2,
-    title: 'Value Mining Lab',
+    title: 'Laboratorio de Minería de Valor',
     shortDescription: 'Discover the real value hidden inside your previous work experience and turn tasks into achievements.',
     format: 'Achievement discovery lab',
     inputMode: 'Text input by default. Optional guided coach mode.',
-    interviewRequirement: 'No interview required. Optional coach support available.',
+    interviewRequirement: 'Sin entrevista requerida. Optional coach support available.',
     xp: 100,
     mainOutput: 'Basic Achievement Bank',
-    cta: 'Open Value Lab',
+    cta: 'Abrir Value Lab',
     tags: ['Text Builder', 'Optional Coach', 'Achievement Lab'],
-    requiredActivities: ['Write 5 tasks from previous experience', 'Transform tasks into value statements', 'Complete responsibility transformation', 'Create 3 achievement examples', 'Select 1 strong story for future interview answers'],
+    requiredActivities: ['Escribir 5 tareas from previous experience', 'Transformar tareas into value statements', 'Complete responsibility transformation', 'Create 3 achievement examples', 'Select 1 strong story for future interview answers'],
     icon: <Gem className="w-5 h-5" />,
     route: '/despega/a3/value-mining-lab'
   },
   {
     id: 'cv-builder-studio',
     number: 3,
-    title: 'CV Builder Studio',
+    title: 'Estudio Constructor de CV',
     shortDescription: 'Create or improve a clear, recruiter-friendly CV using the value discovered in previous modules.',
     format: 'Document-building and professional writing module',
     inputMode: 'CV upload, manual text input, guided builder',
-    interviewRequirement: 'No interview required',
+    interviewRequirement: 'Sin entrevista requerida',
     xp: 120,
     mainOutput: 'Basic CV Draft',
     cta: 'Build My CV',
@@ -108,13 +108,13 @@ const BASIC_LEVEL_MODULES: Module[] = [
   {
     id: 'job-decoder',
     number: 4,
-    title: 'Job Decoder',
+    title: 'Decodificador de Ofertas',
     shortDescription: 'Learn how to read a vacancy, understand what the company really needs, and identify your fit and gaps.',
     format: 'Vacancy and role analysis module',
     inputMode: 'Paste vacancy, upload job description, or choose target role',
-    interviewRequirement: 'No interview required',
+    interviewRequirement: 'Sin entrevista requerida',
     xp: 100,
-    mainOutput: 'Job Decoder Map',
+    mainOutput: 'Decodificador de Ofertas Map',
     cta: 'Decode a Job',
     tags: ['Job Analysis', 'No Interview', 'Role Match'],
     requiredActivities: ['Paste vacancy or select target role', 'Identify 5 key requirements', 'Separate must-have and nice-to-have requirements', 'Create match map', 'Generate likely interview questions'],
@@ -124,14 +124,14 @@ const BASIC_LEVEL_MODULES: Module[] = [
   {
     id: 'answer-architecture',
     number: 5,
-    title: 'Answer Architecture',
+    title: 'Arquitectura de Respuestas',
     shortDescription: 'Build clear interview answers before live practice using simple structures and role-focused examples.',
     format: 'Interview answer-building module',
     inputMode: 'Text answer builder',
-    interviewRequirement: 'No interview required. Optional voice practice available.',
+    interviewRequirement: 'Sin entrevista requerida. Optional voice practice available.',
     xp: 120,
     mainOutput: 'Basic Answer Bank',
-    cta: 'Build My Answers',
+    cta: 'Construir Mis Respuestas',
     tags: ['Answer Builder', 'Optional Voice', 'STAR Method'],
     requiredActivities: ['Build 30-second self-introduction', 'Build motivation answer', 'Build strengths answer', 'Build challenge answer using STAR', 'Build "Why should we hire you?" answer', 'Shorten one answer into 30, 45, and 60 seconds'],
     icon: <MessageSquare className="w-5 h-5" />,
@@ -140,7 +140,7 @@ const BASIC_LEVEL_MODULES: Module[] = [
   {
     id: 'coach-practice-room',
     number: 6,
-    title: 'Coach Practice Room',
+    title: 'Sala de Práctica del Coach',
     shortDescription: 'Practice your answers safely with feedback before entering real simulations.',
     format: 'Guided practice module',
     inputMode: 'Text practice or live coach mode',
@@ -156,14 +156,14 @@ const BASIC_LEVEL_MODULES: Module[] = [
   {
     id: 'communication-gym',
     number: 7,
-    title: 'Communication Gym',
+    title: 'Gimnasio de Comunicación',
     shortDescription: 'Train voice, rhythm, clarity, pauses, tone, answer length, and confidence through recorded drills.',
     format: 'Voice, rhythm, and delivery training',
     inputMode: 'Recorded voice/video drills',
     interviewRequirement: 'No full interview required. Voice or video drills are required.',
     xp: 140,
     mainOutput: 'Communication Basics Score',
-    cta: 'Start Communication Gym',
+    cta: 'Comenzar Gimnasio de Comunicación',
     tags: ['Voice/Video Required', 'Communication Drill', 'Delivery Training'],
     requiredActivities: ['Record 30-second self-introduction', 'Complete pause drill', 'Record 45-second motivation answer', 'Receive delivery feedback', 'Repeat one answer after feedback'],
     icon: <Mic className="w-5 h-5" />,
@@ -172,23 +172,23 @@ const BASIC_LEVEL_MODULES: Module[] = [
   {
     id: 'first-recruiter-simulation',
     number: 8,
-    title: 'First Recruiter Simulation',
+    title: 'Primera Simulación con Reclutador',
     shortDescription: 'Complete your first short recruiter-style simulation and receive a clear readiness report.',
     format: 'Short realistic interview simulation',
     inputMode: 'Live voice/video simulation',
     interviewRequirement: 'Required live simulation',
     xp: 160,
     mainOutput: 'Recruiter Screen Report',
-    cta: 'Start First Simulation',
+    cta: 'Comenzar First Simulation',
     tags: ['Required Simulation', 'Recruiter Screen', 'Live Interview'],
-    requiredActivities: ['Start simulation', 'Complete recruiter greeting', 'Answer core questions', 'Ask candidate question', 'Complete closing', 'Review report'],
+    requiredActivities: ['Comenzar simulation', 'Complete recruiter greeting', 'Answer core questions', 'Ask candidate question', 'Complete closing', 'Review report'],
     icon: <Video className="w-5 h-5" />,
     route: '/despega/a3/first-recruiter-simulation'
   },
   {
     id: 'risk-difficult-questions-lab',
     number: 9,
-    title: 'Risk & Difficult Questions Lab',
+    title: 'Laboratorio de Preguntas Difíciles y de Riesgo',
     shortDescription: 'Prepare uncomfortable questions calmly, build safer answers, and complete a short pressure drill.',
     format: 'Risk preparation and controlled pressure module',
     inputMode: 'Text preparation + required live mini drill',
@@ -204,16 +204,16 @@ const BASIC_LEVEL_MODULES: Module[] = [
   {
     id: 'basic-interview-mission',
     number: 10,
-    title: 'Basic Interview Mission',
+    title: 'Misión de Entrevista Básica',
     shortDescription: 'Complete a full beginner-friendly realistic interview and receive your Basic Level readiness report.',
     format: 'Final full realistic interview',
     inputMode: 'Live voice/video simulation',
     interviewRequirement: 'Required full live simulation',
     xp: 220,
     mainOutput: 'Basic Interview Readiness Report',
-    cta: 'Start Final Mission',
+    cta: 'Comenzar Final Mission',
     tags: ['Final Mission', 'Required Simulation', 'Full Interview'],
-    requiredActivities: ['Start final mission', 'Complete opening questions', 'Complete CV and role-fit questions', 'Complete behavioral questions', 'Complete difficult question', 'Ask candidate question', 'Finish interview', 'Review final report'],
+    requiredActivities: ['Comenzar final mission', 'Complete opening questions', 'Complete CV and role-fit questions', 'Complete behavioral questions', 'Complete difficult question', 'Ask candidate question', 'Finish interview', 'Review final report'],
     icon: <Trophy className="w-5 h-5" />,
     route: '/despega/a3/basic-interview-mission'
   }
@@ -223,7 +223,7 @@ const TOTAL_XP = 1340
 
 type ModuleStatus = 'locked' | 'available' | 'in_progress' | 'completed'
 
-interface ModuleProgress {
+interface ModuleProgreso {
   status: ModuleStatus
   progress: number // 0-100
   earnedXp: number
@@ -233,18 +233,18 @@ interface ModuleProgress {
 export default function A3BasicLevelTrainingPath() {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
-  const [moduleProgress, setModuleProgress] = useState<Record<string, ModuleProgress>>({})
+  const [moduleProgreso, setModuleProgreso] = useState<Record<string, ModuleProgreso>>({})
   const [selectedPath, setSelectedPath] = useState<'30' | '60' | '90'>('30')
   const [expandedModule, setExpandedModule] = useState<string | null>(null)
 
   // Calculate totals
-  const earnedXp = Object.values(moduleProgress).reduce((sum, p) => sum + p.earnedXp, 0)
-  const completedModules = Object.values(moduleProgress).filter(p => p.status === 'completed').length
+  const earnedXp = Object.values(moduleProgreso).reduce((sum, p) => sum + p.earnedXp, 0)
+  const completedModules = Object.values(moduleProgreso).filter(p => p.status === 'completed').length
   const progressPercentage = Math.round((earnedXp / TOTAL_XP) * 100)
   
   // Find current and next module
   const currentModule = BASIC_LEVEL_MODULES.find(m => {
-    const progress = moduleProgress[m.id]
+    const progress = moduleProgreso[m.id]
     return progress?.status === 'in_progress' || progress?.status === 'available'
   })
   const nextModule = currentModule 
@@ -252,7 +252,7 @@ export default function A3BasicLevelTrainingPath() {
     : BASIC_LEVEL_MODULES[0]
 
   useEffect(() => {
-    const fetchProgress = async () => {
+    const fetchProgreso = async () => {
       try {
         const response = await fetch('/api/a3/user-progress', {
           credentials: 'include',
@@ -263,7 +263,7 @@ export default function A3BasicLevelTrainingPath() {
           const { progress } = await response.json()
           
           // Map API response to our module structure
-          const progressMap: Record<string, ModuleProgress> = {}
+          const progressMap: Record<string, ModuleProgreso> = {}
           
           BASIC_LEVEL_MODULES.forEach((module, index) => {
             const apiStatus = progress?.moduleStates?.[module.id]
@@ -292,39 +292,39 @@ export default function A3BasicLevelTrainingPath() {
             }
           })
           
-          setModuleProgress(progressMap)
+          setModuleProgreso(progressMap)
         } else {
           // Default: first module available, rest locked
-          const defaultProgress: Record<string, ModuleProgress> = {}
+          const defaultProgreso: Record<string, ModuleProgreso> = {}
           BASIC_LEVEL_MODULES.forEach((module, index) => {
-            defaultProgress[module.id] = {
+            defaultProgreso[module.id] = {
               status: index === 0 ? 'available' : 'locked',
               progress: 0,
               earnedXp: 0,
               completedActivities: 0
             }
           })
-          setModuleProgress(defaultProgress)
+          setModuleProgreso(defaultProgreso)
         }
       } catch (error) {
         console.error('Error fetching progress:', error)
         // Default state
-        const defaultProgress: Record<string, ModuleProgress> = {}
+        const defaultProgreso: Record<string, ModuleProgreso> = {}
         BASIC_LEVEL_MODULES.forEach((module, index) => {
-          defaultProgress[module.id] = {
+          defaultProgreso[module.id] = {
             status: index === 0 ? 'available' : 'locked',
             progress: 0,
             earnedXp: 0,
             completedActivities: 0
           }
         })
-        setModuleProgress(defaultProgress)
+        setModuleProgreso(defaultProgreso)
       } finally {
         setIsLoading(false)
       }
     }
     
-    fetchProgress()
+    fetchProgreso()
   }, [])
 
   const getStatusBadge = (status: ModuleStatus) => {
@@ -332,7 +332,7 @@ export default function A3BasicLevelTrainingPath() {
       case 'completed':
         return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.3)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.5)' }} className="border">Completed</Badge>
       case 'in_progress':
-        return <Badge style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }} className="border">In Progress</Badge>
+        return <Badge style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }} className="border">In Progreso</Badge>
       case 'available':
         return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)', color: 'rgb(170, 70, 170)', borderColor: 'rgba(170, 70, 170, 0.4)' }} className="border">Available</Badge>
       case 'locked':
@@ -388,10 +388,10 @@ export default function A3BasicLevelTrainingPath() {
 
           <div className="space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold text-white">
-              A3 — Basic Level Training Path
+              A3 — Ruta de Entrenamiento Nivel Básico
             </h1>
             <p className="text-lg text-white/70 max-w-3xl">
-              A guided 10-module journey to build clarity, confidence, structure, and interview readiness step by step.
+              Un viaje guiado de 10 módulos to build clarity, confidence, structure, and interview readiness step by step.
             </p>
             <p className="text-white/60 leading-relaxed max-w-3xl">
               Basic Level is designed for users who need more structure before facing real interviews. 
@@ -432,7 +432,7 @@ export default function A3BasicLevelTrainingPath() {
           className="bg-white/5 border p-6 space-y-4"
           style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
         >
-          <h2 className="text-lg font-semibold text-white">Your Basic Level Progress</h2>
+          <h2 className="text-lg font-semibold text-white">Tu Progreso del Nivel Básico</h2>
           
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
@@ -458,28 +458,28 @@ export default function A3BasicLevelTrainingPath() {
               style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
             >
               <p className="text-2xl font-bold" style={{ color: PILLAR3_PRIMARY }}>{earnedXp}</p>
-              <p className="text-xs text-white/50">XP Earned from {TOTAL_XP}</p>
+              <p className="text-xs text-white/50">XP Ganados from {TOTAL_XP}</p>
             </div>
             <div 
               className="bg-white/5 rounded-lg p-4 border"
               style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
             >
               <p className="text-2xl font-bold text-white">{completedModules} / 10</p>
-              <p className="text-xs text-white/50">Modules completed</p>
+              <p className="text-xs text-white/50">Módulos completados</p>
             </div>
             <div 
               className="bg-white/5 rounded-lg p-4 border"
               style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
             >
-              <p className="text-lg font-bold text-white truncate">{currentModule?.title || 'Career Mirror'}</p>
-              <p className="text-xs text-white/50">Current Focus</p>
+              <p className="text-lg font-bold text-white truncate">{currentModule?.title || 'Espejo de Carrera'}</p>
+              <p className="text-xs text-white/50">Enfoque Actual</p>
             </div>
             <div 
               className="bg-white/5 rounded-lg p-4 border"
               style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
             >
               <p className="text-lg font-bold text-white/70 truncate">{nextModule?.title || 'Complete!'}</p>
-              <p className="text-xs text-white/50">Next Unlock</p>
+              <p className="text-xs text-white/50">Siguiente Desbloqueo</p>
             </div>
           </div>
         </Card>
@@ -487,7 +487,7 @@ export default function A3BasicLevelTrainingPath() {
         {/* ========== MODULE CARDS ========== */}
         <div className="space-y-4">
           {BASIC_LEVEL_MODULES.map((module) => {
-            const progress = moduleProgress[module.id] || { status: 'locked', progress: 0, earnedXp: 0, completedActivities: 0 }
+            const progress = moduleProgreso[module.id] || { status: 'locked', progress: 0, earnedXp: 0, completedActivities: 0 }
             const isLocked = progress.status === 'locked'
             const isExpanded = expandedModule === module.id
             const prevModule = module.number > 1 ? BASIC_LEVEL_MODULES[module.number - 2] : null
@@ -583,7 +583,7 @@ export default function A3BasicLevelTrainingPath() {
                     <div className="mt-6 pt-6 border-t" style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}>
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
-                          <h4 className="text-sm font-medium text-white/70 mb-2">Required Activities</h4>
+                          <h4 className="text-sm font-medium text-white/70 mb-2">Actividades Requeridas</h4>
                           <ul className="space-y-2">
                             {module.requiredActivities.map((activity, idx) => (
                               <li key={idx} className="flex items-center gap-2 text-sm text-white/60">
@@ -665,7 +665,7 @@ export default function A3BasicLevelTrainingPath() {
               </thead>
               <tbody>
                 {BASIC_LEVEL_MODULES.map(module => {
-                  const progress = moduleProgress[module.id]
+                  const progress = moduleProgreso[module.id]
                   return (
                     <tr key={module.id} className="border-b" style={{ borderColor: 'rgba(170, 70, 170, 0.1)' }}>
                       <td className="py-3 text-white/50">{module.number}</td>
@@ -693,7 +693,7 @@ export default function A3BasicLevelTrainingPath() {
           className="bg-white/5 border p-6"
           style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
         >
-          <h2 className="text-lg font-semibold text-white mb-4">How Progress Works</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">How Progreso Works</h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="space-y-2">
               <div 

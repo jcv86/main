@@ -75,10 +75,10 @@ export default function GamificationPage() {
           <Card className="rounded-[2px] border-2 border-training/40">
             <CardContent className="p-8 text-center">
               <p className="text-muted-foreground">
-                Start your first interview to unlock achievements and begin climbing the ranks!
+                Comenzar your first interview to unlock achievements and begin climbing the ranks!
               </p>
               <Link href="/despega/a3/simulaciones-estructurada">
-                <Button className="mt-4">Start Interview</Button>
+                <Button className="mt-4">Comenzar Interview</Button>
               </Link>
             </CardContent>
           </Card>
@@ -126,7 +126,7 @@ export default function GamificationPage() {
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <div>
-                <strong>Bronze:</strong> Starting level
+                <strong>Bronze:</strong> Comenzaring level
               </div>
               <div>
                 <strong>Diamond:</strong> Unlock all premium features

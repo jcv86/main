@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Progreso } from '@/components/ui/progress'
 import { 
   ArrowRight, ArrowLeft, CheckCircle2, Users, Lightbulb, RefreshCw,
   ChevronDown, ChevronUp, MessageCircle, ThumbsUp, AlertCircle, 
@@ -15,7 +15,7 @@ import {
 
 const MODULE_XP = 130
 
-// Practice questions with AI coach feedback patterns
+// Practice questions with Retroalimentación del coach de IA patterns
 const PRACTICE_SESSIONS = [
   {
     id: 'intro',
@@ -34,7 +34,7 @@ const PRACTICE_SESSIONS = [
       'Missing career goal or motivation'
     ],
     improvementTips: [
-      'Start with your professional title',
+      'Comenzar with your professional title',
       'Include 2-3 specific skills relevant to the role',
       'End with why this opportunity excites you'
     ]
@@ -78,7 +78,7 @@ const PRACTICE_SESSIONS = [
       'Missing the challenge - only shared success'
     ],
     improvementTips: [
-      'Start with the challenge/problem clearly',
+      'Comenzar with the challenge/problem clearly',
       'Use "I" not "we" for your actions',
       'Include a specific number or metric in the result'
     ]
@@ -228,7 +228,7 @@ export default function CoachPracticeRoomModule() {
               <Users className="w-6 h-6 text-[rgb(170,70,170)]" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">Coach Practice Room</h1>
+              <h1 className="text-3xl font-bold text-white">Sala de Práctica del Coach</h1>
               <p className="text-white/60">Practice with feedback • Improve through iteration</p>
             </div>
           </div>
@@ -266,13 +266,13 @@ export default function CoachPracticeRoomModule() {
           </div>
         </Card>
 
-        {/* Progress */}
+        {/* Progreso */}
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-white/70">Progress</span>
+            <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
-          <Progress value={progress} className="h-2 bg-white/10" />
+          <Progreso value={progress} className="h-2 bg-white/10" />
           <p className="text-white/50 text-sm mt-2">{completedSteps.length} of {PRACTICE_SESSIONS.length} practice sessions completed</p>
         </Card>
 
@@ -445,7 +445,7 @@ export default function CoachPracticeRoomModule() {
                         className="border-[rgba(170,70,170,0.3)] text-[rgb(170,70,170)]"
                       >
                         <RotateCcw className="w-4 h-4 mr-2" />
-                        Start Over
+                        Comenzar Over
                       </Button>
                       <Button 
                         onClick={() => submitAnswer(session.id, answers[session.id]?.improved || answers[session.id]?.original || '', true)}
@@ -493,7 +493,7 @@ export default function CoachPracticeRoomModule() {
               </div>
             </div>
             <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-              Continue to Communication Gym
+              Continue to Gimnasio de Comunicación
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>

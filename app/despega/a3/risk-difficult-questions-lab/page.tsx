@@ -60,7 +60,7 @@ const RISK_CATEGORIES = [
     description: 'Self-identified limitations',
     examples: ['Public speaking', 'Delegation', 'Perfectionism', 'Technical skills', 'Time management'],
     dangerAnswer: '"I\'m a perfectionist" (fake weakness) or "I have no weaknesses"',
-    safeFormula: 'Real weakness → Impact awareness → Active improvement → Progress made',
+    safeFormula: 'Real weakness → Impact awareness → Active improvement → Progreso made',
     safeExample: '"I used to struggle with delegation—I\'d try to do everything myself. I realized this limited my team\'s growth. I now use a task matrix to decide what to delegate and have regular check-ins instead of micromanaging. My team\'s output has improved."'
   },
   {
@@ -75,7 +75,7 @@ const RISK_CATEGORIES = [
   }
 ]
 
-// Red flag phrases to avoid
+// Frases de alerta roja to avoid
 const RED_FLAGS = [
   { bad: '"That wasn\'t my fault"', why: 'Sounds defensive, avoids accountability' },
   { bad: '"My boss was terrible"', why: 'Never criticize past employers' },
@@ -87,7 +87,7 @@ const RED_FLAGS = [
   { bad: '"I just need a job"', why: 'Shows desperation, not genuine interest' }
 ]
 
-// Pressure drill questions
+// Ejercicio de presión questions
 const PRESSURE_DRILL_QUESTIONS = [
   {
     question: 'Why should we hire you over other candidates?',
@@ -127,7 +127,7 @@ export default function RiskDifficultQuestionsLabModule() {
   const [safeAnswers, setSafeAnswers] = useState<{[key: string]: string}>({})
   const [drillAnswers, setDrillAnswers] = useState<{[key: number]: string}>({})
   const [currentDrillQuestion, setCurrentDrillQuestion] = useState(0)
-  const [drillStarted, setDrillStarted] = useState(false)
+  const [drillComenzared, setDrillComenzared] = useState(false)
 
   const progress = Math.round((completedSteps.length / ACTIVITIES.length) * 100)
 
@@ -194,7 +194,7 @@ export default function RiskDifficultQuestionsLabModule() {
             <Shield className="w-6 h-6 text-[rgb(170,70,170)]" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white">Risk & Difficult Questions Lab</h1>
+            <h1 className="text-2xl font-bold text-white">Laboratorio de Preguntas Difíciles y de Riesgo</h1>
             <p className="text-white/60">Strategic preparation • Mini pressure drill included</p>
           </div>
         </div>
@@ -219,10 +219,10 @@ export default function RiskDifficultQuestionsLabModule() {
           </div>
         </Card>
 
-        {/* Progress */}
+        {/* Progreso */}
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-white/70">Progress</span>
+            <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
           <div className="h-2 bg-white/10 rounded-full overflow-hidden">
@@ -468,7 +468,7 @@ export default function RiskDifficultQuestionsLabModule() {
                         })}
 
                         {selectedRisks.length === 0 && (
-                          <p className="text-white/50 text-sm">Complete Activity 1 to select your risk areas first.</p>
+                          <p className="text-white/50 text-sm">Completar Actividad 1 to select your risk areas first.</p>
                         )}
 
                         <p className="text-sm text-white/50">
@@ -489,7 +489,7 @@ export default function RiskDifficultQuestionsLabModule() {
                     {/* Activity 4: Mini Pressure Drill */}
                     {index === 4 && (
                       <div className="space-y-4">
-                        {!drillStarted ? (
+                        {!drillComenzared ? (
                           <Card className="rounded-[2px] bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)] p-6 text-center">
                             <Mic className="w-12 h-12 text-[rgb(170,70,170)] mx-auto mb-4" />
                             <h4 className="text-lg font-semibold mb-2">Mini Pressure Drill</h4>
@@ -498,10 +498,10 @@ export default function RiskDifficultQuestionsLabModule() {
                               Write your answers quickly—don&apos;t overthink!
                             </p>
                             <Button
-                              onClick={() => setDrillStarted(true)}
+                              onClick={() => setDrillComenzared(true)}
                               className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
                             >
-                              Start Drill <ArrowRight className="w-4 h-4 ml-2" />
+                              Comenzar Drill <ArrowRight className="w-4 h-4 ml-2" />
                             </Button>
                           </Card>
                         ) : (
@@ -541,7 +541,7 @@ export default function RiskDifficultQuestionsLabModule() {
                                   onClick={() => setCurrentDrillQuestion(currentDrillQuestion - 1)}
                                   className="border-white/20"
                                 >
-                                  <ArrowLeft className="w-4 h-4 mr-2" /> Previous
+                                  <ArrowLeft className="w-4 h-4 mr-2" /> Anterior
                                 </Button>
                               )}
                               {currentDrillQuestion < PRESSURE_DRILL_QUESTIONS.length - 1 ? (
@@ -550,7 +550,7 @@ export default function RiskDifficultQuestionsLabModule() {
                                   className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] flex-1"
                                   disabled={!drillAnswers[currentDrillQuestion] || drillAnswers[currentDrillQuestion].length < 30}
                                 >
-                                  Next Question <ArrowRight className="w-4 h-4 ml-2" />
+                                  Siguiente Question <ArrowRight className="w-4 h-4 ml-2" />
                                 </Button>
                               ) : (
                                 canComplete(4) && !isCompleted && (
@@ -581,7 +581,7 @@ export default function RiskDifficultQuestionsLabModule() {
             <h3 className="text-xl font-bold text-white">Risk Lab Complete!</h3>
             <p className="text-white/70">
               You&apos;ve mastered handling difficult questions. Time for your final challenge: 
-              the Basic Interview Mission!
+              the Misión de Entrevista Básica!
             </p>
             <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
               Complete & Earn {MODULE_XP} XP <ArrowRight className="w-4 h-4 ml-2" />

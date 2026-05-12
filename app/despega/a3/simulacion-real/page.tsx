@@ -4,7 +4,7 @@ import { useState } from 'react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Progreso } from '@/components/ui/progress'
 import Link from 'next/link'
 import { ArrowLeft, Play, Clock, BarChart3, CheckCircle2, AlertCircle, Medal, Download } from 'lucide-react'
 import { ModuleCompletionScreen } from '@/components/module-completion-screen'
@@ -83,7 +83,7 @@ const EVALUATION_CRITERIA = [
 ]
 
 export default function SimulacionRealPage() {
-  const [simulationStarted, setSimulationStarted] = useState(false)
+  const [simulationComenzared, setSimulationComenzared] = useState(false)
   const [currentStageIndex, setCurrentStageIndex] = useState(0)
   const [stageScores, setStageScores] = useState<Record<string, number>>({})
   const [isCompleted, setIsCompleted] = useState(false)
@@ -96,7 +96,7 @@ export default function SimulacionRealPage() {
   const progress = ((currentStageIndex + 1) / SIMULATION_STAGES.length) * 100
 
   const startSimulation = () => {
-    setSimulationStarted(true)
+    setSimulationComenzared(true)
     setCurrentStageIndex(0)
     setElapsedTime(0)
     setSimulationComplete(false)
@@ -120,7 +120,7 @@ export default function SimulacionRealPage() {
   }
 
   const resetSimulation = () => {
-    setSimulationStarted(false)
+    setSimulationComenzared(false)
     setCurrentStageIndex(0)
     setElapsedTime(0)
     setSimulationComplete(false)
@@ -128,7 +128,7 @@ export default function SimulacionRealPage() {
     setStageScores({})
   }
 
-  if (simulationStarted && !simulationComplete) {
+  if (simulationComenzared && !simulationComplete) {
   if (isCompleted) {
     // Module 10 is the last module - only show dashboard button (no "Continuar Práctica")
     return <ModuleCompletionScreen moduleId="simulacion-real" moduleName="Simulación Real" xpEarned={40} />
@@ -165,7 +165,7 @@ export default function SimulacionRealPage() {
               </div>
               <div>
                 <p className="text-white/60 text-xs mb-1">Progreso</p>
-                <Progress value={progress} className="h-2 bg-black/50" />
+                <Progreso value={progress} className="h-2 bg-black/50" />
               </div>
             </div>
           </div>
@@ -269,7 +269,7 @@ export default function SimulacionRealPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <Progress value={finalScore} className="h-3 bg-black/50" />
+              <Progreso value={finalScore} className="h-3 bg-black/50" />
               <p className="text-white/70 text-sm mt-3">
                 {finalScore >= 85 ? '🎉 Excelente desempeño. Listo para entrevista real.' : 
                  finalScore >= 75 ? '✓ Buen desempeño. Sigue practicando.' : 
@@ -291,7 +291,7 @@ export default function SimulacionRealPage() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <Progress value={stage.score} className="h-2 bg-black/50" />
+                    <Progreso value={stage.score} className="h-2 bg-black/50" />
                     <p className="text-xs text-white/50 mt-2">Ponderación: {stage.weight}%</p>
                   </CardContent>
                 </Card>
@@ -463,7 +463,7 @@ export default function SimulacionRealPage() {
           </CardContent>
         </Card>
 
-        {/* Start Button */}
+        {/* Comenzar Button */}
         <Button
           onClick={startSimulation}
           className="w-full h-14 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-lg font-semibold"

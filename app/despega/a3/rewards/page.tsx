@@ -145,7 +145,7 @@ export default function RewardsPage() {
             <CardContent className="pt-6">
               <div className="text-center">
                 <Trophy className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
-                <p className="text-white/60 text-sm">Total XP Ganado</p>
+                <p className="text-white/60 text-sm">XP Total Ganado</p>
                 <p className="text-3xl font-bold text-yellow-400">+290 XP</p>
               </div>
             </CardContent>

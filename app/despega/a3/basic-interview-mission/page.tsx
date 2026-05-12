@@ -11,11 +11,11 @@ import { ArrowRight, ArrowLeft, CheckCircle2, Trophy, Clock, Star, Play, Mic, Us
 
 const MODULE_XP = 220
 
-// Full interview simulation questions
+// Simulación de entrevista completa questions
 const INTERVIEW_SECTIONS = [
   {
     id: 'opening',
-    title: 'Opening & Rapport',
+    title: 'Abriring & Rapport',
     description: 'The interview begins with warm-up questions',
     questions: [
       {
@@ -27,7 +27,7 @@ const INTERVIEW_SECTIONS = [
       {
         id: 'tell-me',
         question: 'Great! Let\'s start. Can you tell me a little about yourself?',
-        tip: 'Use your 30-second introduction from Career Mirror. Focus on professional summary.',
+        tip: 'Use your 30-second introduction from Espejo de Carrera. Focus on professional summary.',
         type: 'standard',
         timeTarget: 60
       }
@@ -48,7 +48,7 @@ const INTERVIEW_SECTIONS = [
       {
         id: 'current-role',
         question: 'What are your main responsibilities in your current (or most recent) role?',
-        tip: 'Focus on achievements, not just tasks. Use your Value Mining Lab stories.',
+        tip: 'Focus on achievements, not just tasks. Use your Laboratorio de Minería de Valor stories.',
         type: 'standard',
         timeTarget: 60
       }
@@ -144,7 +144,7 @@ const EVALUATION_CRITERIA = [
 
 export default function BasicInterviewMissionModule() {
   const router = useRouter()
-  const [missionStarted, setMissionStarted] = useState(false)
+  const [missionComenzared, setMissionComenzared] = useState(false)
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0)
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0)
   const [answers, setAnswers] = useState<{[key: string]: string}>({})
@@ -159,7 +159,7 @@ export default function BasicInterviewMissionModule() {
 
   const progress = interviewComplete ? 100 : Math.round((answeredQuestions / totalQuestions) * 80)
 
-  const handleNextQuestion = () => {
+  const handleSiguienteQuestion = () => {
     if (currentQuestionIndex < currentSection.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
     } else if (currentSectionIndex < INTERVIEW_SECTIONS.length - 1) {
@@ -222,15 +222,15 @@ export default function BasicInterviewMissionModule() {
             <Trophy className="w-7 h-7 text-[rgb(200,130,200)]" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-white">Basic Interview Mission</h1>
+            <h1 className="text-2xl font-bold text-white">Misión de Entrevista Básica</h1>
             <p className="text-white/60">Complete full interview simulation • Final challenge</p>
           </div>
         </div>
 
-        {/* Progress */}
+        {/* Progreso */}
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-white/70">Mission Progress</span>
+            <span className="text-white/70">Mission Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
           <div className="h-2 bg-white/10 rounded-full overflow-hidden">
@@ -242,7 +242,7 @@ export default function BasicInterviewMissionModule() {
         </Card>
 
         {/* Pre-Mission State */}
-        {!missionStarted && !interviewComplete && (
+        {!missionComenzared && !interviewComplete && (
           <div className="space-y-6">
             {/* Mission Briefing */}
             <Card className="rounded-[2px] bg-gradient-to-br from-[rgba(170,70,170,0.15)] to-[rgba(80,160,170,0.15)] border-[rgba(170,70,170,0.3)] p-6">
@@ -253,7 +253,7 @@ export default function BasicInterviewMissionModule() {
                 <div>
                   <h3 className="text-lg font-semibold text-white mb-2">Mission Briefing</h3>
                   <p className="text-white/70 text-sm">
-                    This is your final challenge in the Basic Level Training Path. You will complete a 
+                    This is your final challenge in the Basic Level Ruta de Entrenamiento. You will complete a 
                     full simulated interview with a virtual recruiter. Use everything you&apos;ve learned 
                     in the previous 9 modules.
                   </p>
@@ -308,24 +308,24 @@ export default function BasicInterviewMissionModule() {
               <h4 className="font-semibold text-[rgb(80,160,170)] mb-2">Tips for Success</h4>
               <ul className="space-y-1 text-sm text-white/70">
                 <li>• Take your time to think before answering</li>
-                <li>• Use the STAR/CAR frameworks from Answer Architecture</li>
-                <li>• Draw from your Value Mining Lab achievements</li>
+                <li>• Use the STAR/Marco CARs from Arquitectura de Respuestas</li>
+                <li>• Draw from your Laboratorio de Minería de Valor achievements</li>
                 <li>• Remember your safe answer strategies for difficult questions</li>
                 <li>• Be authentic and professional throughout</li>
               </ul>
             </Card>
 
             <Button 
-              onClick={() => setMissionStarted(true)}
+              onClick={() => setMissionComenzared(true)}
               className="rounded-[20px] w-full bg-gradient-to-r from-[rgb(170,70,170)] to-[rgb(80,160,170)] hover:opacity-90"
             >
-              <Play className="w-4 h-4 mr-2" /> Start Interview Simulation
+              <Play className="w-4 h-4 mr-2" /> Comenzar Interview Simulation
             </Button>
           </div>
         )}
 
         {/* Active Interview */}
-        {missionStarted && !interviewComplete && currentQuestion && (
+        {missionComenzared && !interviewComplete && currentQuestion && (
           <div className="space-y-6">
             {/* Section Header */}
             <Card className="rounded-[2px] bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)] p-4">
@@ -404,18 +404,18 @@ export default function BasicInterviewMissionModule() {
                   }}
                   className="border-white/20"
                 >
-                  <ArrowLeft className="w-4 h-4 mr-2" /> Previous
+                  <ArrowLeft className="w-4 h-4 mr-2" /> Anterior
                 </Button>
               )}
               <Button
-                onClick={handleNextQuestion}
+                onClick={handleSiguienteQuestion}
                 disabled={!answers[currentQuestion.id] || answers[currentQuestion.id].length < 20}
                 className="rounded-[20px] flex-1 bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
               >
                 {currentSectionIndex === INTERVIEW_SECTIONS.length - 1 && 
                  currentQuestionIndex === currentSection.questions.length - 1 
                   ? 'Complete Interview' 
-                  : 'Next Question'
+                  : 'Siguiente Question'
                 }
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
@@ -492,14 +492,14 @@ export default function BasicInterviewMissionModule() {
               
               <h2 className="text-2xl font-bold mb-2">Basic Level Complete!</h2>
               <p className="text-white/70 mb-6">
-                Congratulations! You&apos;ve completed the entire A3 Basic Level Training Path.
+                Congratulations! You&apos;ve completed the entire A3 Basic Level Ruta de Entrenamiento.
               </p>
 
               {/* Stats */}
               <div className="grid grid-cols-3 gap-4 mb-6">
                 <div className="bg-white/10 rounded-lg p-4">
                   <p className="text-3xl font-bold text-[rgb(170,70,170)]">1,340</p>
-                  <p className="text-xs text-white/50">Total XP Earned</p>
+                  <p className="text-xs text-white/50">XP Total Ganados</p>
                 </div>
                 <div className="bg-white/10 rounded-lg p-4">
                   <p className="text-3xl font-bold text-[rgb(200,130,200)]">10/10</p>
@@ -524,14 +524,14 @@ export default function BasicInterviewMissionModule() {
                 </p>
               </Card>
 
-              {/* What's Next */}
+              {/* What's Siguiente */}
               <Card className="rounded-[2px] bg-[rgba(80,160,170,0.1)] border-[rgba(80,160,170,0.3)] p-4 text-left">
-                <h4 className="font-semibold text-[rgb(80,160,170)] mb-2">What&apos;s Next?</h4>
+                <h4 className="font-semibold text-[rgb(80,160,170)] mb-2">What&apos;s Siguiente?</h4>
                 <ul className="text-sm text-white/70 space-y-1">
                   <li>• Apply to entry-level positions with confidence</li>
                   <li>• Practice with real interviews (each one makes you better)</li>
                   <li>• When ready, unlock Intermediate Level (A3-Intermediate) for technical interviews</li>
-                  <li>• Keep your Career Mirror and Answer Bank updated</li>
+                  <li>• Keep your Espejo de Carrera and Answer Bank updated</li>
                 </ul>
               </Card>
             </Card>

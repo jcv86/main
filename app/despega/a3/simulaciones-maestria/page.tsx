@@ -6,13 +6,13 @@ import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Progreso } from '@/components/ui/progress'
 import Link from 'next/link'
 import { ArrowLeft, Mic, Volume2, SkipForward, Check, AlertCircle } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
-import { A3GeneralProgress } from '@/components/a3-general-progress'
+import { A3GeneralProgreso } from '@/components/a3-general-progress'
 
 const GUIDED_INTERVIEW_QUESTIONS = [
   {
@@ -134,13 +134,13 @@ export default function GuidedInterviewPage() {
     }
   }
 
-  const handleNext = () => {
+  const handleSiguiente = () => {
     if (currentQuestionIndex < GUIDED_INTERVIEW_QUESTIONS.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
   }
 
-  const handlePrevious = () => {
+  const handleAnterior = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1)
     }
@@ -223,7 +223,7 @@ export default function GuidedInterviewPage() {
             <Link href="/despega/a3/simulations" className="flex-1">
               <Button variant="outline" className="w-full">Volver a Entrenamientos</Button>
             </Link>
-            <Button onClick={() => handleNext()} className="flex-1 bg-blue/80 hover:bg-blue/70">
+            <Button onClick={() => handleSiguiente()} className="flex-1 bg-blue/80 hover:bg-blue/70">
               Ver Análisis Detallado
             </Button>
           </div>
@@ -234,8 +234,8 @@ export default function GuidedInterviewPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* General Progress Bar */}
-      <A3GeneralProgress 
+      {/* General Progreso Bar */}
+      <A3GeneralProgreso 
         currentStep={currentQuestionIndex + 1}
         totalSteps={GUIDED_INTERVIEW_QUESTIONS.length}
         currentLabel={`Pregunta ${currentQuestionIndex + 1}`}
@@ -252,7 +252,7 @@ export default function GuidedInterviewPage() {
           </Button>
         </Link>
 
-        {/* Progress */}
+        {/* Progreso */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
@@ -262,7 +262,7 @@ export default function GuidedInterviewPage() {
               Pregunta {currentQuestionIndex + 1}/{GUIDED_INTERVIEW_QUESTIONS.length}
             </Badge>
           </div>
-          <Progress value={progress} className="h-2" />
+          <Progreso value={progress} className="h-2" />
         </div>
 
         {/* Question Card */}
@@ -284,7 +284,7 @@ export default function GuidedInterviewPage() {
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold">Tiempo disponible:</span>
               <div className={`text-2xl font-bold ${timeLeft < 30 ? 'text-red' : 'text-muted-foreground dark:text-muted-foreground'}`}>
-                {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
+                {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padComenzar(2, '0')}
               </div>
             </div>
 
@@ -351,7 +351,7 @@ export default function GuidedInterviewPage() {
         {/* Navigation */}
         <div className="flex gap-4 justify-between">
           <Button
-            onClick={handlePrevious}
+            onClick={handleAnterior}
             disabled={currentQuestionIndex === 0}
             variant="outline"
           >
@@ -371,7 +371,7 @@ export default function GuidedInterviewPage() {
                   Saltar
                 </Button>
                 <Button
-                  onClick={handleNext}
+                  onClick={handleSiguiente}
                   className="bg-blue/80 hover:bg-blue/70"
                 >
                   Siguiente

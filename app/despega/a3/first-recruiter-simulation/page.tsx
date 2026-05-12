@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Progreso } from '@/components/ui/progress'
 import { 
   ArrowRight, ArrowLeft, CheckCircle2, Video, Clock, AlertCircle,
   Lightbulb, User, MessageSquare, Mic, ChevronRight, Star, Award
@@ -18,7 +18,7 @@ const MODULE_XP = 160
 const INTERVIEW_SCRIPT = [
   {
     id: 'greeting',
-    stage: 'Opening',
+    stage: 'Abriring',
     question: 'Hi! Thank you for joining. How are you today?',
     guidance: 'Keep it brief and professional. A simple "I\'m doing well, thank you for having me" works perfectly.',
     timeLimit: 15,
@@ -35,7 +35,7 @@ const INTERVIEW_SCRIPT = [
   {
     id: 'cv',
     stage: 'CV Review',
-    question: 'I see you worked at [Previous Company]. What was your main responsibility there?',
+    question: 'I see you worked at [Anterior Company]. What was your main responsibility there?',
     guidance: 'Focus on your most relevant experience. Use specific examples and mention results if possible.',
     timeLimit: 60,
     evaluates: ['Experience clarity', 'Specificity', 'Achievement focus']
@@ -102,7 +102,7 @@ const GOOD_QUESTIONS_TO_ASK = [
 export default function FirstRecruiterSimulationModule() {
   const router = useRouter()
   const [currentStage, setCurrentStage] = useState(-1) // -1 = pre-interview
-  const [simulationStarted, setSimulationStarted] = useState(false)
+  const [simulationComenzared, setSimulationComenzared] = useState(false)
   const [preChecklist, setPreChecklist] = useState<string[]>([])
   const [responses, setResponses] = useState<Record<string, string>>({})
   const [showingGuidance, setShowingGuidance] = useState<string | null>(null)
@@ -118,7 +118,7 @@ export default function FirstRecruiterSimulationModule() {
   }
 
   const startSimulation = () => {
-    setSimulationStarted(true)
+    setSimulationComenzared(true)
     setCurrentStage(0)
   }
 
@@ -195,7 +195,7 @@ export default function FirstRecruiterSimulationModule() {
               <Video className="w-6 h-6 text-red-400" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">First Recruiter Simulation</h1>
+              <h1 className="text-3xl font-bold text-white">Primera Simulación con Reclutador</h1>
               <p className="text-white/60">Your first real practice interview • 8-12 minutes</p>
             </div>
           </div>
@@ -246,13 +246,13 @@ export default function FirstRecruiterSimulationModule() {
           </div>
         </Card>
 
-        {/* Progress */}
+        {/* Progreso */}
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-white/70">Interview Progress</span>
+            <span className="text-white/70">Interview Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
-          <Progress value={progress} className="h-2 bg-white/10" />
+          <Progreso value={progress} className="h-2 bg-white/10" />
           <p className="text-xs text-white/50 mt-2">
             {currentStage < 0 ? 'Pre-interview setup' : 
              currentStage < INTERVIEW_SCRIPT.length ? `Question ${currentStage + 1} of ${INTERVIEW_SCRIPT.length}: ${currentQuestion?.stage}` :
@@ -261,7 +261,7 @@ export default function FirstRecruiterSimulationModule() {
         </Card>
 
         {/* Pre-interview Setup */}
-        {!simulationStarted && (
+        {!simulationComenzared && (
           <Card className="rounded-[2px] bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)] p-6 space-y-6">
             <div className="text-center">
               <AlertCircle className="w-12 h-12 text-[rgb(170,70,170)] mx-auto mb-3" />
@@ -309,14 +309,14 @@ export default function FirstRecruiterSimulationModule() {
               disabled={preChecklist.length < 2}
               className="w-full rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
             >
-              Start Interview Simulation
+              Comenzar Interview Simulation
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>
         )}
 
         {/* Active Interview */}
-        {simulationStarted && currentQuestion && !showResults && (
+        {simulationComenzared && currentQuestion && !showResults && (
           <Card className="rounded-[2px] bg-white/5 border-white/10 p-6 space-y-6">
             {/* Stage indicator */}
             <div className="flex items-center justify-between">
@@ -410,13 +410,13 @@ export default function FirstRecruiterSimulationModule() {
               </div>
             </div>
             
-            {/* Next button */}
+            {/* Siguiente button */}
             <Button 
               onClick={nextQuestion}
               disabled={!responses[currentQuestion.id] || !selfRatings[currentQuestion.id]}
               className="w-full rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
             >
-              {currentStage < INTERVIEW_SCRIPT.length - 1 ? 'Next Question' : 'Complete Interview'}
+              {currentStage < INTERVIEW_SCRIPT.length - 1 ? 'Siguiente Question' : 'Complete Interview'}
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>
@@ -468,7 +468,7 @@ export default function FirstRecruiterSimulationModule() {
             </div>
             
             <Button onClick={handleComplete} className="w-full rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-              Continue to Risk & Difficult Questions Lab
+              Continue to Laboratorio de Preguntas Difíciles y de Riesgo
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>

@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Progreso } from '@/components/ui/progress'
 import Link from 'next/link'
 import { ArrowLeft, TrendingUp, Target, Zap, Award, BarChart3 } from 'lucide-react'
 
@@ -134,7 +134,7 @@ export default function A3AnalyticsPage() {
                     <p className="text-xs text-muted-foreground mt-1">{metric.subtitle}</p>
                   )}
                   {metric.total && (
-                    <Progress value={(metric.value / metric.total) * 100} className="mt-2 h-1" />
+                    <Progreso value={(metric.value / metric.total) * 100} className="mt-2 h-1" />
                   )}
                 </CardContent>
               </Card>
@@ -202,7 +202,7 @@ export default function A3AnalyticsPage() {
                     <Badge variant="secondary">{entry.level}</Badge>
                   </div>
                   <div className="flex items-center gap-3">
-                    <Progress value={entry.score} className="flex-1 h-2" />
+                    <Progreso value={entry.score} className="flex-1 h-2" />
                     <span className="font-bold text-muted/90 dark:text-white w-10 text-right">{entry.score}%</span>
                   </div>
                 </div>

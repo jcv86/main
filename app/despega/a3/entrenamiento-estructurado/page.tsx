@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
-import { ArrowLeft, BookOpen, CheckCircle2, AlertCircle, Volume2, Mic, RotateCcw, TrendingUp } from 'lucide-react'
+import { ArrowLeft, BookAbrir, CheckCircle2, AlertCircle, Volume2, Mic, RotateCcw, TrendingUp } from 'lucide-react'
 import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
 const STRUCTURED_LESSONS = [
@@ -143,7 +143,7 @@ export default function EntrenamientoEstructuradoPage() {
                 
                 <div className="bg-blue-500/10 border border-blue-500/20 rounded p-4 mb-4">
                   <div className="flex items-start gap-3">
-                    <BookOpen className="w-4 h-4 text-blue-400 mt-1 flex-shrink-0" />
+                    <BookAbrir className="w-4 h-4 text-blue-400 mt-1 flex-shrink-0" />
                     <div>
                       <p className="text-sm font-semibold text-blue-300 mb-1">Recuerda:</p>
                       <p className="text-xs text-blue-200">Situación → Tarea → Acción → Resultado</p>
@@ -167,7 +167,7 @@ export default function EntrenamientoEstructuradoPage() {
               </CardContent>
             </Card>
 
-            {/* Progress Feedback */}
+            {/* Progreso Feedback */}
             <div className="space-y-3">
               <div className="p-3 bg-purple-500/10 border border-purple-500/20 rounded text-sm">
                 <p className="text-purple-300 font-semibold mb-1">Criterios de Evaluación:</p>
@@ -274,7 +274,7 @@ export default function EntrenamientoEstructuradoPage() {
           </Link>
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center border border-purple-500/30">
-              <BookOpen className="w-6 h-6 text-purple-400" />
+              <BookAbrir className="w-6 h-6 text-purple-400" />
             </div>
             <div>
               <h1 className="text-3xl font-bold">Entrenamiento Estructurado</h1>

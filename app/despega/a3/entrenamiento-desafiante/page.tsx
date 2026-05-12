@@ -222,7 +222,7 @@ export default function ChallensingTrainingPage() {
     }
   }
 
-  const moveToNextQuestion = () => {
+  const moveToSiguienteQuestion = () => {
     setEvaluation(null)
     setTextResponse('')
     setHasResponse(false)
@@ -236,7 +236,7 @@ export default function ChallensingTrainingPage() {
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
-    return `${mins}:${secs.toString().padStart(2, '0')}`
+    return `${mins}:${secs.toString().padComenzar(2, '0')}`
   }
 
   return (
@@ -490,10 +490,10 @@ export default function ChallensingTrainingPage() {
                       <p className="text-sm text-white/85">{evaluation.feedback}</p>
                     </div>
 
-                    {/* Next Question Button */}
+                    {/* Siguiente Question Button */}
                     {currentQuestion < CHALLENGING_QUESTIONS.length - 1 ? (
                       <Button
-                        onClick={moveToNextQuestion}
+                        onClick={moveToSiguienteQuestion}
                         className="w-full gap-2"
                         style={{ backgroundColor: 'rgb(170, 70, 170, 0.8)', color: '#ffffff' }}
                       >

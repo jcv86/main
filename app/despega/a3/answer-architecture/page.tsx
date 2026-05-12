@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Progreso } from '@/components/ui/progress'
 import { 
   ArrowRight, ArrowLeft, CheckCircle2, MessageSquare, Lightbulb, 
   ChevronDown, ChevronUp, Clock, Target, Sparkles, Timer
@@ -23,7 +23,7 @@ const ANSWER_TYPES = [
     formula: 'I am a [title] with [X years] experience in [field]. My strongest areas are [2-3 skills]. I am looking for [goal] because [motivation].',
     timeTarget: '30 seconds (~75 words)',
     tips: [
-      'Start with your professional identity, not personal details',
+      'Comenzar with your professional identity, not personal details',
       'Include only relevant experience for this role',
       'End with why you are interested in this opportunity',
       'Practice until you can say it naturally'
@@ -45,7 +45,7 @@ const ANSWER_TYPES = [
       'Show genuine enthusiasm without being generic'
     ],
     badExample: 'I want to work here because it is a good company and I need a job. I think I can grow here and learn new things.',
-    goodExample: 'I am excited about TechStart because you are solving real problems in fintech accessibility. I noticed your recent expansion into Latin America aligns perfectly with my experience in regional operations. This connects to my goal of leading operations at a company making financial services more inclusive.',
+    goodExample: 'I am excited about TechComenzar because you are solving real problems in fintech accessibility. I noticed your recent expansion into Latin America aligns perfectly with my experience in regional operations. This connects to my goal of leading operations at a company making financial services more inclusive.',
     wordCount: { min: 60, max: 120 }
   },
   {
@@ -216,7 +216,7 @@ export default function AnswerArchitectureModule() {
               <MessageSquare className="w-6 h-6 text-[rgb(170,70,170)]" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">Answer Architecture</h1>
+              <h1 className="text-3xl font-bold text-white">Arquitectura de Respuestas</h1>
               <p className="text-white/60">Answer builder • Optional voice practice</p>
             </div>
           </div>
@@ -258,13 +258,13 @@ export default function AnswerArchitectureModule() {
           </div>
         </Card>
 
-        {/* Progress */}
+        {/* Progreso */}
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-white/70">Progress</span>
+            <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
-          <Progress value={progress} className="h-2 bg-white/10" />
+          <Progreso value={progress} className="h-2 bg-white/10" />
           <p className="text-white/50 text-sm mt-2">{completedSteps.length} of {ANSWER_TYPES.length} answers built</p>
         </Card>
 
@@ -372,7 +372,7 @@ export default function AnswerArchitectureModule() {
                             className="border-[rgba(170,70,170,0.3)] text-[rgb(170,70,170)]"
                           >
                             <Timer className="w-4 h-4 mr-1" />
-                            Start Timer
+                            Comenzar Timer
                           </Button>
                         </div>
                         <p className="text-white/50 text-xs">{variation.focus}</p>
@@ -429,20 +429,20 @@ export default function AnswerArchitectureModule() {
         {completedSteps.length === ANSWER_TYPES.length && (
           <Card className="rounded-[2px] bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
             <Target className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
-            <h3 className="text-xl font-bold text-white">Answer Architecture Complete!</h3>
+            <h3 className="text-xl font-bold text-white">Arquitectura de Respuestas Complete!</h3>
             <p className="text-white/70">
               You&apos;ve built {ANSWER_TYPES.length} structured interview answers. Earned {MODULE_XP} XP!
             </p>
             <div className="bg-white/5 rounded-lg p-4 text-left">
               <p className="text-white/70 text-sm mb-2">Your answer bank is ready for:</p>
               <ul className="space-y-1">
-                <li className="text-[rgb(80,160,170)] text-sm">• Coach Practice Room - practice with feedback</li>
-                <li className="text-[rgb(80,160,170)] text-sm">• Communication Gym - refine delivery</li>
-                <li className="text-[rgb(80,160,170)] text-sm">• First Recruiter Simulation - put it all together</li>
+                <li className="text-[rgb(80,160,170)] text-sm">• Sala de Práctica del Coach - practice with feedback</li>
+                <li className="text-[rgb(80,160,170)] text-sm">• Gimnasio de Comunicación - refine delivery</li>
+                <li className="text-[rgb(80,160,170)] text-sm">• Primera Simulación con Reclutador - put it all together</li>
               </ul>
             </div>
             <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-              Continue to Coach Practice Room
+              Continue to Sala de Práctica del Coach
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>

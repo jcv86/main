@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Progreso } from '@/components/ui/progress'
 import { 
   ArrowRight, ArrowLeft, CheckCircle2, FileText, Lightbulb, 
   ChevronDown, ChevronUp, User, Briefcase, GraduationCap, 
@@ -57,12 +57,12 @@ const CV_SECTIONS = [
     id: 'experience',
     title: 'Work Experience',
     icon: Briefcase,
-    description: 'Transform tasks into achievements',
+    description: 'Transformar tareas into achievements',
     tips: [
-      'Start each bullet with an action verb (Led, Managed, Created, Improved)',
+      'Comenzar each bullet with an action verb (Led, Managed, Created, Improved)',
       'Include numbers and metrics whenever possible',
       'Focus on results, not just responsibilities',
-      'Use the achievements from Value Mining Lab',
+      'Use the achievements from Laboratorio de Minería de Valor',
       'Most recent experience first (reverse chronological)'
     ],
     bulletFormulas: [
@@ -121,10 +121,10 @@ const ATS_CHECKLIST = [
   { id: 'acronyms', text: 'Spell out acronyms at least once', critical: false }
 ]
 
-// Professional summary templates by role type
+// Resumen profesional templates by role type
 const SUMMARY_TEMPLATES = [
   {
-    type: 'Career Starter',
+    type: 'Career Comenzarer',
     template: 'Recent [Degree] graduate with strong foundation in [field]. Completed internship/projects in [area] developing skills in [skills]. Eager to contribute to [target area] in a growing organization.'
   },
   {
@@ -303,12 +303,12 @@ export default function CVBuilderStudioModule() {
               <FileText className="w-6 h-6 text-[rgb(170,70,170)]" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">CV Builder Studio</h1>
-              <p className="text-white/60">Document-building module • No interview required</p>
+              <h1 className="text-3xl font-bold text-white">Estudio Constructor de CV</h1>
+              <p className="text-white/60">Document-building module • Sin entrevista requerida</p>
             </div>
           </div>
           <p className="text-white/70 max-w-2xl">
-            Build a clear, recruiter-friendly CV that showcases the value you discovered in Value Mining Lab. 
+            Build a clear, recruiter-friendly CV that showcases the value you discovered in Laboratorio de Minería de Valor. 
             Learn ATS optimization to ensure your CV passes automated screening systems.
           </p>
         </div>
@@ -328,13 +328,13 @@ export default function CVBuilderStudioModule() {
           </div>
         </Card>
 
-        {/* Progress */}
+        {/* Progreso */}
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-white/70">Progress</span>
+            <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
-          <Progress value={progress} className="h-2 bg-white/10" />
+          <Progreso value={progress} className="h-2 bg-white/10" />
           <p className="text-white/50 text-sm mt-2">{completedSteps.length} of {REQUIRED_ACTIVITIES.length} activities completed</p>
         </Card>
 
@@ -578,7 +578,7 @@ export default function CVBuilderStudioModule() {
               </div>
               <div className="text-left">
                 <h3 className="font-semibold text-white">Build Experience Section</h3>
-                <p className="text-white/50 text-sm">Transform tasks into achievements with 3+ bullet points</p>
+                <p className="text-white/50 text-sm">Transformar tareas into achievements with 3+ bullet points</p>
               </div>
             </div>
             {expandedSection === 'experience' ? <ChevronUp className="w-5 h-5 text-white/50" /> : <ChevronDown className="w-5 h-5 text-white/50" />}
@@ -646,7 +646,7 @@ export default function CVBuilderStudioModule() {
                         type="text"
                         value={bullet}
                         onChange={(e) => updateBullet(0, i, e.target.value)}
-                        placeholder={`Achievement ${i + 1}: Start with action verb (Led, Managed, Created...)`}
+                        placeholder={`Achievement ${i + 1}: Comenzar with action verb (Led, Managed, Created...)`}
                         className="w-full bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30"
                       />
                     ))}
@@ -814,7 +814,7 @@ export default function CVBuilderStudioModule() {
         {completedSteps.length === REQUIRED_ACTIVITIES.length && (
           <Card className="rounded-[2px] bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
             <CheckCircle2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
-            <h3 className="text-xl font-bold text-white">CV Builder Studio Complete!</h3>
+            <h3 className="text-xl font-bold text-white">Estudio Constructor de CV Complete!</h3>
             <p className="text-white/70">
               You&apos;ve built a professional, ATS-optimized CV structure. Earned {MODULE_XP} XP!
             </p>
@@ -824,7 +824,7 @@ export default function CVBuilderStudioModule() {
                 Preview CV
               </Button>
               <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-                Continue to Job Decoder
+                Continue to Decodificador de Ofertas
                 <ArrowRight className="w-4 h-4 ml-2" />
               </Button>
             </div>

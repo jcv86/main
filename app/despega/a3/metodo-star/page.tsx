@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import Link from 'next/link'
-import { ArrowLeft, BookOpen, Lightbulb, CheckCircle2, AlertCircle } from 'lucide-react'
+import { ArrowLeft, BookAbrir, Lightbulb, CheckCircle2, AlertCircle } from 'lucide-react'
 import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
 const STAR_FRAMEWORK = {
@@ -116,7 +116,7 @@ export default function MetodoSTARPage() {
           </Link>
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center border border-purple-500/30">
-              <BookOpen className="w-6 h-6 text-purple-400" />
+              <BookAbrir className="w-6 h-6 text-purple-400" />
             </div>
             <div>
               <h1 className="text-3xl font-bold">Método STAR</h1>
@@ -250,7 +250,7 @@ export default function MetodoSTARPage() {
               ))}
             </div>
 
-            {/* Progress */}
+            {/* Progreso */}
             <div className="mt-8 pt-6 border-t border-purple-500/20">
               <div className="flex items-center justify-between mb-3">
                 <p className="font-semibold">Progreso de Respuesta</p>

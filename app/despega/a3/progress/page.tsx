@@ -5,20 +5,20 @@ import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Progreso } from '@/components/ui/progress'
 import Link from 'next/link'
 import { ArrowLeft, TrendingUp, Award, Target, Zap } from 'lucide-react'
 
-export default function ProgressPage() {
+export default function ProgresoPage() {
   const [loading, setLoading] = useState(true)
-  const [a3Progress, setA3Progress] = useState<any>(null)
+  const [a3Progreso, setA3Progreso] = useState<any>(null)
   const supabase = createClient()
 
   useEffect(() => {
-    loadProgress()
+    loadProgreso()
   }, [])
 
-  const loadProgress = async () => {
+  const loadProgreso = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
@@ -29,7 +29,7 @@ export default function ProgressPage() {
         .eq('user_id', user.id)
         .single()
 
-      setA3Progress(data)
+      setA3Progreso(data)
     } catch (error) {
       console.log('[v0] Error loading progress:', error)
     } finally {
@@ -76,7 +76,7 @@ export default function ProgressPage() {
                 <div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Sesiones Completadas</p>
                   <div className="text-3xl font-bold text-training">
-                    {a3Progress?.sessions_completed || 0}
+                    {a3Progreso?.sessions_completed || 0}
                   </div>
                 </div>
                 <TrendingUp className="w-8 h-8 text-purple/30" />
@@ -90,7 +90,7 @@ export default function ProgressPage() {
                 <div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Puntos Acumulados</p>
                   <div className="text-3xl font-bold text-green-500">
-                    {a3Progress?.total_points || 0}
+                    {a3Progreso?.total_points || 0}
                   </div>
                 </div>
                 <Award className="w-8 h-8 text-green-500/30" />
@@ -104,7 +104,7 @@ export default function ProgressPage() {
                 <div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Score de Empleabilidad</p>
                   <div className="text-3xl font-bold text-blue">
-                    {a3Progress?.employability_score || 0}/100
+                    {a3Progreso?.employability_score || 0}/100
                   </div>
                 </div>
                 <Target className="w-8 h-8 text-indigo-300" />
@@ -118,7 +118,7 @@ export default function ProgressPage() {
                 <div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Horas Entrenadas</p>
                   <div className="text-3xl font-bold text-blue">
-                    {a3Progress?.hours_trained || 0}h
+                    {a3Progreso?.hours_trained || 0}h
                   </div>
                 </div>
                 <Zap className="w-8 h-8 text-blue/30" />
@@ -127,7 +127,7 @@ export default function ProgressPage() {
           </Card>
         </div>
 
-        {/* Skills Progress */}
+        {/* Skills Progreso */}
         <Card className="rounded-[2px] border-0 shadow-md">
           <CardHeader>
             <CardTitle>Habilidades Desarrolladas</CardTitle>

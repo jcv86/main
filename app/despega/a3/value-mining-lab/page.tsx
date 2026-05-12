@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
+import { Progreso } from '@/components/ui/progress'
 import { 
   ArrowRight, 
   ArrowLeft, 
@@ -272,7 +272,7 @@ export default function ValueMiningLabModule() {
               <Gem className="w-7 h-7 text-[rgb(170,70,170)]" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">Value Mining Lab</h1>
+              <h1 className="text-3xl font-bold text-white">Laboratorio de Minería de Valor</h1>
               <p className="text-white/60">Achievement discovery lab • Optional AI coach available</p>
             </div>
           </div>
@@ -299,13 +299,13 @@ export default function ValueMiningLabModule() {
           </div>
         </Card>
 
-        {/* Progress */}
+        {/* Progreso */}
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
-            <span className="text-white/70">Progress</span>
+            <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
-          <Progress value={progress} className="h-2 bg-white/10" />
+          <Progreso value={progress} className="h-2 bg-white/10" />
           <p className="text-white/50 text-xs mt-2">{completedSteps.length} of {ACTIVITIES.length} activities completed</p>
         </Card>
 
@@ -403,7 +403,7 @@ export default function ValueMiningLabModule() {
                         <div className="bg-white/5 rounded-[2px] p-4">
                           <p className="text-white/70 text-sm mb-3">
                             Think about your previous jobs, internships, or even volunteer work. 
-                            What did you do on a daily or weekly basis? Start with simple tasks.
+                            What did you do on a daily or weekly basis? Comenzar with simple tasks.
                           </p>
                           <div className="flex flex-wrap gap-2">
                             {SAMPLE_TASKS.map((sample, i) => (
@@ -758,7 +758,7 @@ export default function ValueMiningLabModule() {
                             disabled={!canCompleteActivity(4)}
                             className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
                           >
-                            Complete Activity
+                            Completar Actividad
                             <ArrowRight className="w-4 h-4 ml-2" />
                           </Button>
                         </div>
@@ -791,7 +791,7 @@ export default function ValueMiningLabModule() {
               onClick={handleComplete} 
               className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] px-8 py-3 text-lg"
             >
-              Continue to CV Builder Studio
+              Continue to Estudio Constructor de CV
               <ArrowRight className="w-5 h-5 ml-2" />
             </Button>
           </Card>
