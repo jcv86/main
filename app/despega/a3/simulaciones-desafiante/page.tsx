@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Progreso } from '@/components/ui/progress'
+import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 import { ArrowLeft, Mic, Volume2, SkipForward, Check, AlertCircle, Trophy, Zap } from 'lucide-react'
 import { Textarea } from '@/components/ui/textarea'
@@ -14,7 +14,7 @@ import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
 import { ChallengeInvitation } from '@/components/a3-challenge-invitation'
 import { SofiaInterviewer } from '@/components/sofia-interviewer'
-import { A3GeneralProgreso } from '@/components/a3-general-progress'
+import { A3GeneralProgress } from '@/components/a3-general-progress'
 
 const GUIDED_INTERVIEW_QUESTIONS = [
   {
@@ -191,7 +191,7 @@ export default function GuidedInterviewPage() {
     return (
       <div className="min-h-screen bg-background">
         {/* General Progreso Bar */}
-        <A3GeneralProgreso 
+        <A3GeneralProgress 
           currentStep={1}
           totalSteps={GUIDED_INTERVIEW_QUESTIONS.length + 1}
           currentLabel="Preparación"

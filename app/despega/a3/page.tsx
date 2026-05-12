@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
-import { Progreso } from '@/components/ui/progress'
+import { Progress } from '@/components/ui/progress'
 import { 
   ArrowRight, 
   Loader2, 

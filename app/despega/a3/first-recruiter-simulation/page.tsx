@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Progreso } from '@/components/ui/progress'
+import { Progress } from '@/components/ui/progress'
 import { 
   ArrowRight, ArrowLeft, CheckCircle2, Video, Clock, AlertCircle,
   Lightbulb, User, MessageSquare, Mic, ChevronRight, Star, Award
@@ -252,7 +252,7 @@ export default function FirstRecruiterSimulationModule() {
             <span className="text-white/70">Interview Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
-          <Progreso value={progress} className="h-2 bg-white/10" />
+          <Progress value={progress} className="h-2 bg-white/10" />
           <p className="text-xs text-white/50 mt-2">
             {currentStage < 0 ? 'Pre-interview setup' : 
              currentStage < INTERVIEW_SCRIPT.length ? `Question ${currentStage + 1} of ${INTERVIEW_SCRIPT.length}: ${currentQuestion?.stage}` :

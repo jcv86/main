@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Progreso } from '@/components/ui/progress'
+import { Progress } from '@/components/ui/progress'
 import { 
   ArrowRight, ArrowLeft, CheckCircle2, Users, Lightbulb, RefreshCw,
   ChevronDown, ChevronUp, MessageCircle, ThumbsUp, AlertCircle, 
@@ -272,7 +272,7 @@ export default function CoachPracticeRoomModule() {
             <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
-          <Progreso value={progress} className="h-2 bg-white/10" />
+          <Progress value={progress} className="h-2 bg-white/10" />
           <p className="text-white/50 text-sm mt-2">{completedSteps.length} of {PRACTICE_SESSIONS.length} practice sessions completed</p>
         </Card>
 

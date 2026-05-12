@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ConversationalInterviewSimulator } from '@/components/conversational-interview-simulator'
 import { ChallengeInvitation } from '@/components/a3-challenge-invitation'
-import { A3GeneralProgreso } from '@/components/a3-general-progress'
+import { A3GeneralProgress } from '@/components/a3-general-progress'
 
 export default function StructuredSimulationPage() {
   const [isComplete, setIsComplete] = useState(false)
@@ -57,7 +57,7 @@ export default function StructuredSimulationPage() {
     <main className="min-h-screen bg-black">
       <div className="flex flex-col h-screen">
         {/* General Progreso Bar */}
-        <A3GeneralProgreso 
+        <A3GeneralProgress 
           currentStep={1}
           totalSteps={3}
           currentLabel="Simulación Estructurada"

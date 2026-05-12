@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Progreso } from '@/components/ui/progress'
+import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 import { ArrowLeft, TrendingUp, Award, Target, Zap } from 'lucide-react'
 

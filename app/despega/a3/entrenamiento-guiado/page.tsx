@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Progreso } from '@/components/ui/progress'
+import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 import { ArrowLeft, BookAbrir, Play, Lock, CheckCircle2, Brain, Target, Video, Lightbulb, Loader2 } from 'lucide-react'
 import { InteractiveTrainingSession } from '@/components/interactive-training-session'
@@ -109,7 +109,7 @@ export default function GuidedTrainingPage() {
                     </div>
                   </div>
 
-                  <Progreso value={module.progress} className="h-2 mb-2" />
+                  <Progress value={module.progress} className="h-2 mb-2" />
                   <p className="text-xs text-muted-foreground">
                     {module.progress}% completo • {module.duration}
                   </p>
