@@ -11,6 +11,7 @@ import {
   ArrowRight, ArrowLeft, CheckCircle2, Video, Clock, AlertCircle,
   Lightbulb, User, MessageSquare, Mic, ChevronRight, Star, Award
 } from 'lucide-react'
+import { InterviewThreeColumnLayout } from '@/components/interview-three-column-layout'
 
 const MODULE_XP = 160
 
@@ -315,58 +316,21 @@ export default function FirstRecruiterSimulationModule() {
           </Card>
         )}
 
-        {/* Active Interview */}
+        {/* Active Interview - 3 Column Layout */}
         {simulationComenzared && currentQuestion && !showResults && (
-          <Card className="rounded-[2px] bg-white/5 border-white/10 p-6 space-y-6">
-            {/* Stage indicator */}
-            <div className="flex items-center justify-between">
-              <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)]">
-                {currentQuestion.stage}
-              </Badge>
-              <div className="flex items-center gap-2 text-white/50 text-sm">
-                <Clock className="w-4 h-4" />
-                Target: {currentQuestion.timeLimit}s
-              </div>
-            </div>
-            
-            {/* Interviewer question */}
-            <div className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-full bg-[rgba(170,70,170,0.2)] flex items-center justify-center flex-shrink-0">
-                <User className="w-5 h-5 text-[rgb(170,70,170)]" />
-              </div>
-              <div className="flex-1">
-                <p className="text-[rgb(170,70,170)] text-xs uppercase mb-1">Interviewer</p>
-                <p className="text-white text-lg">&quot;{currentQuestion.question}&quot;</p>
-              </div>
-            </div>
-            
-            {/* Guidance toggle */}
-            <button
-              onClick={() => setShowingGuidance(showingGuidance === currentQuestion.id ? null : currentQuestion.id)}
-              className="text-[rgb(80,160,170)] text-sm flex items-center gap-1 hover:underline"
-            >
-              <Lightbulb className="w-4 h-4" />
-              {showingGuidance === currentQuestion.id ? 'Hide guidance' : 'Show guidance'}
-            </button>
-            
-            {showingGuidance === currentQuestion.id && (
-              <div className="bg-[rgba(80,160,170,0.1)] border border-[rgba(80,160,170,0.3)] rounded-lg p-4">
-                <p className="text-[rgb(80,160,170)] text-sm mb-2"><strong>Guidance:</strong> {currentQuestion.guidance}</p>
-                <p className="text-white/50 text-xs">Evaluates: {currentQuestion.evaluates.join(', ')}</p>
-                
-                {currentQuestion.id === 'candidate-question' && (
-                  <div className="mt-3 pt-3 border-t border-[rgba(80,160,170,0.3)]">
-                    <p className="text-white/70 text-xs uppercase mb-2">Good questions to ask:</p>
-                    <ul className="space-y-1">
-                      {GOOD_PREGUNTAS_TO_ASK.map((q, i) => (
-                        <li key={i} className="text-white/60 text-sm flex items-start gap-2">
-                          <ChevronRight className="w-4 h-4 text-[rgb(80,160,170)] mt-0.5 flex-shrink-0" />
-                          {q}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+          <InterviewThreeColumnLayout
+            question={currentQuestion.question}
+            stageName={currentQuestion.stage}
+            targetTime={currentQuestion.timeLimit}
+            onAnswer={(text) => submitResponse(currentQuestion.id, text)}
+            onQualityRating={(rating) => rateResponse(currentQuestion.id, rating)}
+            onNext={nextQuestion}
+            currentIndex={currentStage}
+            totalQuestions={INTERVIEW_SCRIPT.length}
+            showGuidance={showingGuidance === currentQuestion.id}
+            guidanceText={currentQuestion.guidance}
+          />
+        )}
               </div>
             )}
             
