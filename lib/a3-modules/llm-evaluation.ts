@@ -1,5 +1,4 @@
-// LLM-based evaluation service for modules using Claude API
-import { anthropic } from '@ai-sdk/anthropic';
+// LLM-based evaluation service for modules using Claude API via Vercel AI Gateway
 import { generateObject } from 'ai';
 import { z } from 'zod';
 import type {
@@ -47,7 +46,7 @@ export async function evaluateResponseWithLLM(
 
   try {
     const result = await generateObject({
-      model: anthropic('claude-3-5-sonnet-20241022'),
+      model: 'anthropic/claude-3-5-sonnet-20241022',
       schema: EvaluationSchema,
       prompt,
       system: `You are an expert evaluator for professional development modules. 
