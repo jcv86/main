@@ -1,37 +1,191 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
-import { ArrowRight, ArrowLeft, CheckCircle2, Mic, Lightbulb, Video } from 'lucide-react'
+import { 
+  ArrowRight, ArrowLeft, CheckCircle2, Mic, Lightbulb, Video,
+  ChevronDown, ChevronUp, Play, Pause, Volume2, Timer, 
+  RotateCcw, Zap, Target, AlertCircle
+} from 'lucide-react'
 
 const MODULE_XP = 140
-const REQUIRED_ACTIVITIES = [
-  'Record 30-second self-introduction',
-  'Complete pause drill',
-  'Record 45-second motivation answer',
-  'Receive delivery feedback',
-  'Repeat one answer after feedback'
+
+// Communication drills with specific exercises
+const COMMUNICATION_DRILLS = [
+  {
+    id: 'intro-30',
+    title: 'Record 30-second Self-Introduction',
+    type: 'recording',
+    timeLimit: 30,
+    instruction: 'Introduce yourself professionally in exactly 30 seconds. Practice until you hit the time naturally.',
+    criteria: [
+      'Starts with professional identity',
+      'Mentions 2-3 relevant skills',
+      'Ends with career goal',
+      'Stays within 30 seconds'
+    ],
+    tips: [
+      'Practice until 30 seconds feels natural',
+      'Speak at a moderate pace - not rushed',
+      'End confidently, not trailing off'
+    ]
+  },
+  {
+    id: 'pause-drill',
+    title: 'Complete Pause Drill',
+    type: 'exercise',
+    instruction: 'Read the prompt, then pause for 2-3 seconds before answering. The pause shows confidence and allows you to think.',
+    prompts: [
+      { question: 'What is your greatest strength?', pauseSeconds: 3 },
+      { question: 'Tell me about a challenge you overcame.', pauseSeconds: 3 },
+      { question: 'Why should we hire you?', pauseSeconds: 3 }
+    ],
+    tips: [
+      'A pause is NOT awkward - it shows thoughtfulness',
+      'Use the pause to structure your answer mentally',
+      'Start with the main point after the pause'
+    ]
+  },
+  {
+    id: 'motivation-45',
+    title: 'Record 45-second Motivation Answer',
+    type: 'recording',
+    timeLimit: 45,
+    instruction: 'Answer "Why do you want to work here?" in 45 seconds. Be specific about the company.',
+    criteria: [
+      'Mentions something specific about company',
+      'Connects to personal career goals',
+      'Shows genuine enthusiasm',
+      'Stays within 45 seconds'
+    ],
+    tips: [
+      'Research the company before recording',
+      'Avoid generic phrases ("great culture")',
+      'Show what you will contribute'
+    ]
+  },
+  {
+    id: 'delivery-feedback',
+    title: 'Self-Assess Delivery Quality',
+    type: 'assessment',
+    instruction: 'Review your recordings and rate yourself on these delivery aspects.',
+    aspects: [
+      { id: 'pace', label: 'Speaking Pace', description: 'Not too fast, not too slow', options: ['Too fast', 'Just right', 'Too slow'] },
+      { id: 'volume', label: 'Volume & Clarity', description: 'Easy to hear and understand', options: ['Too quiet', 'Clear', 'Too loud'] },
+      { id: 'filler', label: 'Filler Words', description: 'Um, uh, like, you know', options: ['Many fillers', 'Some fillers', 'Few/none'] },
+      { id: 'confidence', label: 'Confidence', description: 'Voice sounds assured', options: ['Uncertain', 'Moderate', 'Confident'] },
+      { id: 'ending', label: 'Answer Ending', description: 'Finishes strongly', options: ['Trails off', 'Adequate', 'Strong close'] }
+    ],
+    tips: [
+      'Be honest - this is for your improvement',
+      'Focus on 1-2 areas to improve next',
+      'Small changes make big differences'
+    ]
+  },
+  {
+    id: 'improvement-round',
+    title: 'Re-record with Improvements',
+    type: 'recording',
+    timeLimit: 45,
+    instruction: 'Based on your self-assessment, record an improved version focusing on your weakest area.',
+    criteria: [
+      'Applied feedback from assessment',
+      'Noticeably improved from first attempt',
+      'More confident delivery',
+      'Natural pacing with pauses'
+    ],
+    tips: [
+      'Focus on ONE improvement at a time',
+      'It is normal to need 3-5 attempts',
+      'Progress > perfection'
+    ]
+  }
+]
+
+// Speaking patterns for reference
+const SPEAKING_PATTERNS = [
+  { step: 1, label: 'Listen', description: 'Fully hear the question' },
+  { step: 2, label: 'Pause', description: '2-3 seconds to think' },
+  { step: 3, label: 'Main idea', description: 'Lead with your point' },
+  { step: 4, label: 'Example', description: 'Support with evidence' },
+  { step: 5, label: 'Close', description: 'End clearly and confidently' }
 ]
 
 export default function CommunicationGymModule() {
   const router = useRouter()
   const [currentStep, setCurrentStep] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
+  const [expandedSection, setExpandedSection] = useState<string | null>('intro-30')
+  
+  // Recording state
   const [isRecording, setIsRecording] = useState(false)
+  const [recordingTime, setRecordingTime] = useState(0)
+  const [recordings, setRecordings] = useState<Record<string, number>>({})
+  
+  // Pause drill state
+  const [pauseStep, setPauseStep] = useState(0)
+  const [isPausing, setIsPausing] = useState(false)
+  const [pauseTimer, setPauseTimer] = useState(0)
+  
+  // Assessment state
+  const [assessments, setAssessments] = useState<Record<string, string>>({})
+  
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
 
-  const progress = Math.round((completedSteps.length / REQUIRED_ACTIVITIES.length) * 100)
+  const progress = Math.round((completedSteps.length / COMMUNICATION_DRILLS.length) * 100)
 
-  const completeStep = (step: number) => {
-    if (!completedSteps.includes(step)) {
-      setCompletedSteps([...completedSteps, step])
+  useEffect(() => {
+    if (isRecording) {
+      timerRef.current = setInterval(() => {
+        setRecordingTime(prev => prev + 1)
+      }, 1000)
+    } else {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+      }
     }
-    if (step < REQUIRED_ACTIVITIES.length - 1) {
-      setCurrentStep(step + 1)
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current)
+    }
+  }, [isRecording])
+
+  const startRecording = (drillId: string) => {
+    setIsRecording(true)
+    setRecordingTime(0)
+  }
+
+  const stopRecording = (drillId: string) => {
+    setIsRecording(false)
+    setRecordings(prev => ({ ...prev, [drillId]: recordingTime }))
+  }
+
+  const startPauseDrill = () => {
+    setIsPausing(true)
+    setPauseTimer(3)
+    const interval = setInterval(() => {
+      setPauseTimer(prev => {
+        if (prev <= 1) {
+          clearInterval(interval)
+          setIsPausing(false)
+          return 0
+        }
+        return prev - 1
+      })
+    }, 1000)
+  }
+
+  const completeDrill = (index: number) => {
+    if (!completedSteps.includes(index)) {
+      setCompletedSteps([...completedSteps, index])
+    }
+    if (index < COMMUNICATION_DRILLS.length - 1) {
+      setCurrentStep(index + 1)
+      setExpandedSection(COMMUNICATION_DRILLS[index + 1].id)
     }
   }
 
@@ -44,7 +198,7 @@ export default function CommunicationGymModule() {
           moduleId: 'communication-gym', 
           status: 'completed',
           xpEarned: MODULE_XP,
-          completedActivities: REQUIRED_ACTIVITIES.length
+          completedActivities: COMMUNICATION_DRILLS.length
         })
       })
       if (!response.ok) throw new Error('Failed to save progress')
@@ -53,6 +207,19 @@ export default function CommunicationGymModule() {
       console.error('Error completing module:', error)
       router.push('/despega/a3?completed=communication-gym')
     }
+  }
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60)
+    const secs = seconds % 60
+    return `${mins}:${secs.toString().padStart(2, '0')}`
+  }
+
+  const canCompleteDrill = (drill: typeof COMMUNICATION_DRILLS[0]) => {
+    if (drill.type === 'recording') return recordings[drill.id] && recordings[drill.id] > 10
+    if (drill.type === 'exercise') return pauseStep >= 3
+    if (drill.type === 'assessment') return Object.keys(assessments).length >= 5
+    return true
   }
 
   return (
@@ -68,7 +235,8 @@ export default function CommunicationGymModule() {
           </Link>
           <div className="flex items-center gap-2">
             <Badge className="bg-[rgba(80,160,170,0.2)] text-[rgb(80,160,170)] border-[rgba(80,160,170,0.4)]">
-              Voice/Video Required
+              <Mic className="w-3 h-3 mr-1" />
+              Voice Drills
             </Badge>
             <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] border-[rgba(170,70,170,0.3)]">
               Module 7 • {MODULE_XP} XP
@@ -80,45 +248,52 @@ export default function CommunicationGymModule() {
         <div className="space-y-4">
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-lg bg-[rgba(170,70,170,0.2)] flex items-center justify-center">
-              <Mic className="w-6 h-6 text-[rgb(170,70,170)]" />
+              <Volume2 className="w-6 h-6 text-[rgb(170,70,170)]" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-white">Communication Gym</h1>
-              <p className="text-white/60">Voice and delivery training • Voice/video drills required</p>
+              <p className="text-white/60">Voice training • Delivery drills • Confidence building</p>
             </div>
           </div>
           <p className="text-white/70 max-w-2xl">
-            Train voice, rhythm, clarity, pauses, tone, answer length, and confidence through recorded drills.
+            Train your voice, pacing, pauses, and delivery. A good answer loses impact with poor delivery.
+            These drills build the muscle memory for confident speaking.
           </p>
         </div>
 
-        {/* Learning Points */}
-        <Card className="rounded-[2px] bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)] p-4">
+        {/* Key Learning */}
+        <Card className="rounded-[2px] bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)] p-4">
           <div className="flex items-start gap-3">
             <Lightbulb className="w-5 h-5 text-[rgb(170,70,170)] mt-0.5" />
             <div>
               <p className="font-medium text-white">Key Learning</p>
               <p className="text-white/70 text-sm mt-1">
-                Speaking clearly is a skill. A good answer can lose power if it is too fast, too slow, too long, 
-                too quiet, too nervous, too flat, or too informal. Pauses create control.
+                Speaking clearly is a <span className="text-[rgb(170,70,170)]">skill that improves with practice</span>. 
+                A great answer can lose power if delivered too fast, too quiet, or without confidence. 
+                <span className="text-[rgb(170,70,170)]"> Strategic pauses create control and presence.</span>
               </p>
             </div>
           </div>
         </Card>
 
-        {/* Better Speaking Pattern */}
+        {/* Speaking Pattern */}
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
-          <p className="text-white/50 text-xs uppercase mb-3">Better Speaking Pattern</p>
-          <div className="flex flex-wrap items-center gap-2 text-sm">
-            <span className="bg-white/10 px-3 py-1.5 rounded text-white/80">1. Listen</span>
-            <ArrowRight className="w-4 h-4 text-white/40" />
-            <span className="bg-white/10 px-3 py-1.5 rounded text-white/80">2. Pause</span>
-            <ArrowRight className="w-4 h-4 text-white/40" />
-            <span className="bg-white/10 px-3 py-1.5 rounded text-white/80">3. Main idea</span>
-            <ArrowRight className="w-4 h-4 text-white/40" />
-            <span className="bg-white/10 px-3 py-1.5 rounded text-white/80">4. Example</span>
-            <ArrowRight className="w-4 h-4 text-white/40" />
-            <span className="bg-white/10 px-3 py-1.5 rounded text-white/80">5. Close clearly</span>
+          <p className="text-white/50 text-xs uppercase mb-4">Better Speaking Pattern</p>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {SPEAKING_PATTERNS.map((pattern, i) => (
+              <div key={pattern.step} className="flex items-center gap-2">
+                <div className="text-center">
+                  <div className="w-10 h-10 rounded-full bg-[rgba(170,70,170,0.2)] flex items-center justify-center mx-auto mb-1">
+                    <span className="text-[rgb(170,70,170)] font-bold">{pattern.step}</span>
+                  </div>
+                  <p className="text-white text-xs font-medium">{pattern.label}</p>
+                  <p className="text-white/40 text-xs">{pattern.description}</p>
+                </div>
+                {i < SPEAKING_PATTERNS.length - 1 && (
+                  <ArrowRight className="w-4 h-4 text-white/20 mx-1" />
+                )}
+              </div>
+            ))}
           </div>
         </Card>
 
@@ -129,77 +304,258 @@ export default function CommunicationGymModule() {
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
           <Progress value={progress} className="h-2 bg-white/10" />
+          <p className="text-white/50 text-sm mt-2">{completedSteps.length} of {COMMUNICATION_DRILLS.length} drills completed</p>
         </Card>
 
-        {/* Activities */}
-        <div className="space-y-4">
-          {REQUIRED_ACTIVITIES.map((activity, index) => (
-            <Card 
-              key={index}
-              className={`p-6 transition-all ${
-                completedSteps.includes(index) 
-                  ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
-                  : currentStep === index 
-                    ? 'bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)]'
-                    : 'bg-white/5 border-white/10'
-              }`}
+        {/* Drills */}
+        {COMMUNICATION_DRILLS.map((drill, index) => (
+          <Card 
+            key={drill.id}
+            className={`rounded-[2px] p-6 transition-all ${
+              completedSteps.includes(index) 
+                ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
+                : currentStep === index 
+                  ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
+                  : 'bg-white/5 border-white/10'
+            }`}
+          >
+            <button 
+              onClick={() => setExpandedSection(expandedSection === drill.id ? null : drill.id)}
+              className="w-full flex items-center justify-between"
             >
-              <div className="flex items-start gap-4">
+              <div className="flex items-center gap-4">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                  completedSteps.includes(index)
-                    ? 'bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)]'
-                    : 'bg-white/10 text-white/50'
+                  completedSteps.includes(index) ? 'bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)]' : 'bg-white/10 text-white/50'
                 }`}>
-                  {completedSteps.includes(index) ? (
-                    <CheckCircle2 className="w-5 h-5" />
-                  ) : (
-                    <span>{index + 1}</span>
-                  )}
+                  {completedSteps.includes(index) ? <CheckCircle2 className="w-5 h-5" /> : <span>{index + 1}</span>}
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-white">{activity}</h3>
-                  {currentStep === index && !completedSteps.includes(index) && (
-                    <div className="mt-4 space-y-4">
-                      {(index === 0 || index === 2 || index === 4) && (
-                        <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">
-                          <Video className="w-12 h-12 text-white/40 mx-auto mb-3" />
-                          <p className="text-white/60 text-sm mb-4">
-                            Click to start recording your answer
+                <div className="text-left">
+                  <h3 className="font-semibold text-white">{drill.title}</h3>
+                  <p className="text-white/50 text-sm">
+                    {drill.type === 'recording' && `${drill.timeLimit}s recording`}
+                    {drill.type === 'exercise' && 'Pause practice'}
+                    {drill.type === 'assessment' && 'Self-evaluation'}
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                {drill.type === 'recording' && recordings[drill.id] && (
+                  <Badge className="bg-green-500/20 text-green-400">
+                    Recorded: {formatTime(recordings[drill.id])}
+                  </Badge>
+                )}
+                {expandedSection === drill.id ? <ChevronUp className="w-5 h-5 text-white/50" /> : <ChevronDown className="w-5 h-5 text-white/50" />}
+              </div>
+            </button>
+            
+            {expandedSection === drill.id && (
+              <div className="mt-6 space-y-4">
+                {/* Instruction */}
+                <div className="bg-[rgba(80,160,170,0.1)] border border-[rgba(80,160,170,0.3)] rounded-lg p-3">
+                  <p className="text-white/80 text-sm">{drill.instruction}</p>
+                </div>
+                
+                {/* Recording drill */}
+                {drill.type === 'recording' && (
+                  <>
+                    {/* Criteria */}
+                    <div className="grid md:grid-cols-2 gap-2">
+                      {drill.criteria?.map((criterion, i) => (
+                        <div key={i} className="flex items-center gap-2 bg-white/5 rounded-lg p-2">
+                          <Target className="w-4 h-4 text-[rgb(170,70,170)]" />
+                          <span className="text-white/70 text-sm">{criterion}</span>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Recording interface */}
+                    <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">
+                      {isRecording ? (
+                        <div className="space-y-4">
+                          <div className="w-20 h-20 rounded-full bg-red-500/20 flex items-center justify-center mx-auto animate-pulse">
+                            <Mic className="w-10 h-10 text-red-400" />
+                          </div>
+                          <p className="text-white text-2xl font-mono">{formatTime(recordingTime)}</p>
+                          <p className="text-white/50 text-sm">
+                            {drill.timeLimit && recordingTime > drill.timeLimit && (
+                              <span className="text-yellow-400">Over time limit!</span>
+                            )}
                           </p>
                           <Button 
-                            onClick={() => setIsRecording(!isRecording)}
-                            className={isRecording ? 'bg-red-500 hover:bg-red-600' : 'bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]'}
+                            onClick={() => stopRecording(drill.id)}
+                            className="bg-red-500 hover:bg-red-600"
                           >
-                            {isRecording ? 'Stop Recording' : 'Start Recording'}
-                            <Mic className="w-4 h-4 ml-2" />
+                            <Pause className="w-4 h-4 mr-2" />
+                            Stop Recording
+                          </Button>
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          <div className="w-20 h-20 rounded-full bg-[rgba(170,70,170,0.2)] flex items-center justify-center mx-auto">
+                            <Video className="w-10 h-10 text-[rgb(170,70,170)]" />
+                          </div>
+                          {recordings[drill.id] ? (
+                            <p className="text-green-400 text-sm">
+                              Last recording: {formatTime(recordings[drill.id])}
+                            </p>
+                          ) : (
+                            <p className="text-white/50 text-sm">
+                              Target: {drill.timeLimit} seconds
+                            </p>
+                          )}
+                          <Button 
+                            onClick={() => startRecording(drill.id)}
+                            className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
+                          >
+                            <Play className="w-4 h-4 mr-2" />
+                            {recordings[drill.id] ? 'Record Again' : 'Start Recording'}
                           </Button>
                         </div>
                       )}
-                      <Button 
-                        onClick={() => completeStep(index)}
-                        className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
-                      >
-                        Complete Activity
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
                     </div>
-                  )}
+                  </>
+                )}
+                
+                {/* Pause drill exercise */}
+                {drill.type === 'exercise' && (
+                  <div className="space-y-4">
+                    {drill.prompts?.map((prompt, i) => (
+                      <div 
+                        key={i}
+                        className={`p-4 rounded-lg transition-all ${
+                          pauseStep > i ? 'bg-green-500/10 border border-green-500/30' :
+                          pauseStep === i ? 'bg-[rgba(170,70,170,0.1)] border border-[rgba(170,70,170,0.3)]' :
+                          'bg-white/5 border border-white/10'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="text-white font-medium">Question {i + 1}</p>
+                          {pauseStep > i && <CheckCircle2 className="w-5 h-5 text-green-400" />}
+                        </div>
+                        <p className="text-white/70 italic mb-3">&quot;{prompt.question}&quot;</p>
+                        
+                        {pauseStep === i && (
+                          <div className="space-y-3">
+                            {isPausing ? (
+                              <div className="text-center py-4">
+                                <div className="w-16 h-16 rounded-full bg-[rgba(170,70,170,0.2)] flex items-center justify-center mx-auto mb-2">
+                                  <span className="text-[rgb(170,70,170)] text-2xl font-bold">{pauseTimer}</span>
+                                </div>
+                                <p className="text-[rgb(170,70,170)] text-sm">Pause and think...</p>
+                              </div>
+                            ) : (
+                              <Button 
+                                onClick={() => {
+                                  startPauseDrill()
+                                  setTimeout(() => setPauseStep(i + 1), 3500)
+                                }}
+                                className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
+                              >
+                                <Timer className="w-4 h-4 mr-2" />
+                                Start Pause Drill
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Self-assessment */}
+                {drill.type === 'assessment' && (
+                  <div className="space-y-4">
+                    {drill.aspects?.map((aspect) => (
+                      <div key={aspect.id} className="bg-white/5 border border-white/10 rounded-lg p-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <div>
+                            <p className="text-white font-medium">{aspect.label}</p>
+                            <p className="text-white/50 text-xs">{aspect.description}</p>
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          {aspect.options.map((option, i) => (
+                            <button
+                              key={option}
+                              onClick={() => setAssessments(prev => ({ ...prev, [aspect.id]: option }))}
+                              className={`flex-1 px-3 py-2 rounded-lg text-sm transition-all ${
+                                assessments[aspect.id] === option
+                                  ? i === 0 ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                                    i === 1 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
+                                    'bg-green-500/20 text-green-400 border border-green-500/30'
+                                  : 'bg-white/5 text-white/60 hover:bg-white/10'
+                              }`}
+                            >
+                              {option}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                    
+                    {/* Assessment summary */}
+                    {Object.keys(assessments).length >= 5 && (
+                      <div className="bg-[rgba(170,70,170,0.1)] border border-[rgba(170,70,170,0.3)] rounded-lg p-4">
+                        <p className="text-[rgb(170,70,170)] font-medium mb-2">Your Focus Areas:</p>
+                        <ul className="space-y-1">
+                          {Object.entries(assessments)
+                            .filter(([, value]) => value.includes('Too') || value === 'Many fillers' || value === 'Uncertain' || value === 'Trails off')
+                            .map(([key, value]) => (
+                              <li key={key} className="text-white/70 text-sm flex items-center gap-2">
+                                <AlertCircle className="w-4 h-4 text-yellow-400" />
+                                {key}: {value}
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+                
+                {/* Tips */}
+                <div className="space-y-2">
+                  <p className="text-white/50 text-xs uppercase">Tips</p>
+                  {drill.tips?.map((tip, i) => (
+                    <div key={i} className="flex items-start gap-2">
+                      <Zap className="w-4 h-4 text-[rgb(80,160,170)] mt-0.5" />
+                      <p className="text-white/60 text-sm">{tip}</p>
+                    </div>
+                  ))}
                 </div>
+                
+                {/* Complete button */}
+                <Button 
+                  onClick={() => completeDrill(index)}
+                  disabled={!canCompleteDrill(drill)}
+                  className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
+                >
+                  Complete Drill
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
               </div>
-            </Card>
-          ))}
-        </div>
+            )}
+          </Card>
+        ))}
 
         {/* Complete Module */}
-        {completedSteps.length === REQUIRED_ACTIVITIES.length && (
+        {completedSteps.length === COMMUNICATION_DRILLS.length && (
           <Card className="rounded-[2px] bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
-            <CheckCircle2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
+            <Volume2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Communication Gym Complete!</h3>
             <p className="text-white/70">
-              You&apos;ve earned {MODULE_XP} XP and unlocked First Recruiter Simulation.
+              You&apos;ve trained your voice and delivery skills. Earned {MODULE_XP} XP!
             </p>
+            <div className="bg-white/5 rounded-lg p-4 text-left">
+              <p className="text-white/70 text-sm mb-2">Skills practiced:</p>
+              <div className="flex flex-wrap gap-2">
+                <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)]">Timed speaking</Badge>
+                <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)]">Strategic pauses</Badge>
+                <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)]">Self-assessment</Badge>
+                <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)]">Delivery improvement</Badge>
+              </div>
+            </div>
             <Button onClick={handleComplete} className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]">
-              Continue to Next Module
+              Continue to First Recruiter Simulation
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Card>
