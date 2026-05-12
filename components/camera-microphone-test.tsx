@@ -31,6 +31,9 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
     setCameraError('')
     
     try {
+      // First check if we already have permission
+      const permission = await navigator.permissions.query({ name: 'camera' as any })
+      
       const stream = await navigator.mediaDevices.getUserMedia({
         video: {
           width: { ideal: 1280 },
@@ -200,13 +203,23 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
             </div>
 
             {cameraError && (
-              <div className="space-y-2">
-                <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg p-3">
-                  <strong>Error de Cámara:</strong> {cameraError}
-                </p>
-                <p className="text-xs text-white/60 bg-white/5 rounded p-2">
-                  💡 Si dice "Permiso denegado": Revisa en la barra de direcciones (arriba) si hay un ícono de cámara. Haz clic y permite el acceso.
-                </p>
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg p-3">
+                    <strong>Error de Cámara:</strong> {cameraError}
+                  </p>
+                  <p className="text-xs text-white/60 bg-white/5 rounded p-2">
+                    💡 Si dice "Permiso denegado": Revisa en la barra de direcciones (arriba) si hay un ícono de cámara. Haz clic y permite el acceso. Luego haz clic en "Reintentar".
+                  </p>
+                </div>
+                <Button
+                  onClick={testCamera}
+                  disabled={cameraState === 'testing'}
+                  className="w-full bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 border border-yellow-500/50"
+                >
+                  <AlertCircle className="w-4 h-4 mr-2" />
+                  Reintentar - Solicitar Permisos
+                </Button>
               </div>
             )}
 
@@ -232,11 +245,17 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
 
             <Button
               onClick={testCamera}
-              disabled={cameraState === 'testing' || cameraState === 'ready'}
-              className="w-full bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.3)] border border-[rgba(170,70,170,0.5)]"
+              disabled={cameraState === 'testing'}
+              className={`w-full ${
+                cameraState === 'ready'
+                  ? 'bg-green-500/20 text-green-400 border border-green-500/50'
+                  : cameraState === 'error'
+                  ? 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 border border-yellow-500/50'
+                  : 'bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.3)] border border-[rgba(170,70,170,0.5)]'
+              }`}
             >
               <Video className="w-4 h-4 mr-2" />
-              {cameraState === 'ready' ? 'Cámara Funcionando' : cameraState === 'testing' ? 'Inicializando...' : 'Iniciar Cámara'}
+              {cameraState === 'ready' ? '✓ Cámara Funcionando' : cameraState === 'testing' ? 'Inicializando...' : cameraState === 'error' ? 'Reintentar Cámara' : 'Solicitar Acceso a Cámara'}
             </Button>
           </div>
 
@@ -262,13 +281,23 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
             </div>
 
             {micError && (
-              <div className="space-y-2">
-                <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg p-3">
-                  <strong>Error de Micrófono:</strong> {micError}
-                </p>
-                <p className="text-xs text-white/60 bg-white/5 rounded p-2">
-                  💡 Si dice "Permiso denegado": Revisa en la barra de direcciones si hay un ícono de micrófono. Haz clic y permite el acceso.
-                </p>
+              <div className="space-y-3">
+                <div className="space-y-2">
+                  <p className="text-sm text-red-400 bg-red-400/10 border border-red-400/20 rounded-lg p-3">
+                    <strong>Error de Micrófono:</strong> {micError}
+                  </p>
+                  <p className="text-xs text-white/60 bg-white/5 rounded p-2">
+                    💡 Si dice "Permiso denegado": Revisa en la barra de direcciones si hay un ícono de micrófono. Haz clic y permite el acceso. Luego haz clic en "Reintentar".
+                  </p>
+                </div>
+                <Button
+                  onClick={testMicrophone}
+                  disabled={microphoneState === 'testing'}
+                  className="w-full bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 border border-yellow-500/50"
+                >
+                  <AlertCircle className="w-4 h-4 mr-2" />
+                  Reintentar - Solicitar Permisos
+                </Button>
               </div>
             )}
 
@@ -293,11 +322,17 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete }: Camera
 
             <Button
               onClick={testMicrophone}
-              disabled={microphoneState === 'testing' || microphoneState === 'listening'}
-              className="w-full bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.3)] border border-[rgba(170,70,170,0.5)]"
+              disabled={microphoneState === 'testing'}
+              className={`w-full ${
+                microphoneState === 'listening'
+                  ? 'bg-green-500/20 text-green-400 border border-green-500/50'
+                  : microphoneState === 'error'
+                  ? 'bg-yellow-500/20 text-yellow-400 hover:bg-yellow-500/30 border border-yellow-500/50'
+                  : 'bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.3)] border border-[rgba(170,70,170,0.5)]'
+              }`}
             >
               <Mic className="w-4 h-4 mr-2" />
-              {microphoneState === 'listening' ? 'Micrófono Funcionando' : microphoneState === 'testing' ? 'Inicializando...' : 'Iniciar Micrófono'}
+              {microphoneState === 'listening' ? '✓ Micrófono Funcionando' : microphoneState === 'testing' ? 'Inicializando...' : microphoneState === 'error' ? 'Reintentar Micrófono' : 'Solicitar Acceso a Micrófono'}
             </Button>
           </div>
 
