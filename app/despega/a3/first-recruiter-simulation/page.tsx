@@ -331,60 +331,6 @@ export default function FirstRecruiterSimulationModule() {
             guidanceText={currentQuestion.guidance}
           />
         )}
-              </div>
-            )}
-            
-            {/* Response area */}
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label className="text-white/70 text-sm flex items-center gap-2">
-                  <MessageSquare className="w-4 h-4" />
-                  Your Response
-                </label>
-                <Button variant="outline" size="sm" className="border-[rgba(170,70,170,0.3)] text-[rgb(170,70,170)]">
-                  <Mic className="w-4 h-4 mr-1" />
-                  Practice Aloud
-                </Button>
-              </div>
-              <textarea
-                value={responses[currentQuestion.id] || ''}
-                onChange={(e) => submitResponse(currentQuestion.id, e.target.value)}
-                placeholder="Type your answer here (or practice aloud and summarize)..."
-                className="w-full bg-white/5 border border-white/20 rounded-lg p-4 text-white placeholder:text-white/30 min-h-24"
-              />
-            </div>
-            
-            {/* Self-rating */}
-            <div className="bg-white/5 rounded-lg p-4">
-              <p className="text-white/70 text-sm mb-3">How did that answer feel?</p>
-              <div className="flex gap-2">
-                {[1, 2, 3, 4, 5].map((rating) => (
-                  <button
-                    key={rating}
-                    onClick={() => rateResponse(currentQuestion.id, rating)}
-                    className={`flex-1 py-2 rounded-lg text-sm transition-all ${
-                      selfRatings[currentQuestion.id] === rating
-                        ? 'bg-[rgba(170,70,170,0.3)] text-[rgb(170,70,170)] border border-[rgba(170,70,170,0.5)]'
-                        : 'bg-white/5 text-white/50 hover:bg-white/10'
-                    }`}
-                  >
-                    {rating === 1 ? 'Rough' : rating === 2 ? 'Okay' : rating === 3 ? 'Good' : rating === 4 ? 'Strong' : 'Great'}
-                  </button>
-                ))}
-              </div>
-            </div>
-            
-            {/* Siguiente button */}
-            <Button 
-              onClick={nextQuestion}
-              disabled={!responses[currentQuestion.id] || !selfRatings[currentQuestion.id]}
-              className="w-full rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] disabled:opacity-50"
-            >
-              {currentStage < INTERVIEW_SCRIPT.length - 1 ? 'Siguiente Question' : 'Complete Interview'}
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </Card>
-        )}
 
         {/* Results */}
         {showResults && (
