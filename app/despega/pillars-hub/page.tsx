@@ -37,7 +37,16 @@ export default function PillarsHubPage() {
         const response = await fetch(`/api/user/pillar-progress/${user.id}`)
         if (response.ok) {
           const data = await response.json()
-          setProgress(data)
+          // Convert the API response to completedSteps format
+          const completedSteps = [
+            ...(data.completedPillars || []),
+            ...(data.completedActivities || []),
+          ]
+          setProgress({
+            completedSteps,
+            totalXp: data.totalXP || 0,
+          })
+          console.log('[v0] Progress loaded:', { completedSteps, totalXp: data.totalXP })
         }
       } catch (error) {
         console.error('[v0] Error fetching progress:', error)
@@ -97,6 +106,13 @@ export default function PillarsHubPage() {
           const isLocked = !isStepUnlocked(pillar.id, progress.completedSteps)
           const diagnostic = getDiagnosticForPillar(pillar.id)
           const isDiagnosticCompleted = progress.completedSteps.includes(diagnostic.id)
+
+          console.log(`[v0] Pillar ${pillar.id}:`, {
+            isCompleted,
+            isLocked,
+            isDiagnosticCompleted,
+            completedSteps: progress.completedSteps,
+          })
 
           return (
             <Card
