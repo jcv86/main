@@ -1,7 +1,6 @@
 "use client"
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react"
-import { createClient } from "@/lib/supabase/client"
 
 interface StrategicSignal {
   type: "structural" | "tactical" | "contextual"
@@ -48,18 +47,12 @@ export function CoachStrategicProvider({ children }: CoachStrategicProviderProps
   useEffect(() => {
     const loadStrategicContext = async () => {
       try {
-        const supabase = createClient()
-        
-        // Get current user
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user?.id) return
-
-        // Fetch A4 strategic score
-        const scoreRes = await fetch("/rest/a4-strategic-score")
+        // Fetch A4 strategic score (endpoint handles user auth server-side)
+        const scoreRes = await fetch("/api/a4-strategic-score")
         const scoreData = scoreRes.ok ? await scoreRes.json() : null
 
         // Fetch economic data
-        const econRes = await fetch("/rest/banco-central-data")
+        const econRes = await fetch("/api/banco-central-data")
         const econData = econRes.ok ? await econRes.json() : null
 
         setContext({
