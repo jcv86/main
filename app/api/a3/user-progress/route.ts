@@ -1,227 +1,141 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
-import { getUserRoleData } from '@/lib/user-roles'
-import { getUserXP, getUserCompletedModules, getModuleUnlockRules } from '@/lib/a3-module-unlock'
-import {
-  PILLAR3_LEVELS,
-  TOTAL_PILLAR3_XP,
-  TOTAL_PILLAR3_DTC,
-  buildModuleStates,
-  calculateLevelCompletion,
-  calculateEarnedRewards,
-  resolveCanonicalId,
-} from '@/lib/pillar3-config'
+import { cookies } from 'next/headers'
 
-export async function GET(request: Request) {
+// New A3 module structure
+const MODULE_ORDER = [
+  'career-mirror',
+  'value-mining-lab',
+  'cv-builder-studio',
+  'job-decoder',
+  'answer-architecture',
+  'coach-practice-room',
+  'communication-gym',
+  'first-recruiter-simulation',
+  'risk-difficult-questions-lab',
+  'basic-interview-mission',
+]
+
+const MODULE_XP: Record<string, number> = {
+  'career-mirror': 80,
+  'value-mining-lab': 100,
+  'cv-builder-studio': 120,
+  'job-decoder': 100,
+  'answer-architecture': 120,
+  'coach-practice-room': 130,
+  'communication-gym': 140,
+  'first-recruiter-simulation': 160,
+  'risk-difficult-questions-lab': 170,
+  'basic-interview-mission': 220,
+}
+
+const TOTAL_XP = 1340
+
+export async function GET() {
   try {
     const supabase = await createClient()
     
-    // Check session first to avoid unnecessary warnings
-    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+    // Get user from session
+    const { data: { user } } = await supabase.auth.getUser()
     
-    if (!session) {
-      // Return demo/default data when not authenticated (for preview/demo purposes)
-      // TEMPORARY: All modules unlocked for testing
-      const defaultModuleStates = {
-        'auditoria-inicial': 'available',
-        'metodo-star': 'available',
-        'cv-inteligente': 'available',
-        'analisis-vacante': 'available',
-        'analisis-multimodal': 'available',
-        'entrenamiento-guiado': 'available',
-        'entrenamiento-estructurado': 'available',
-        'entrenamiento-desafiante': 'available',
-        'entrenamiento-conversacional': 'available',
-        'simulacion-real': 'available',
+    // Also check demo_user cookie for demo mode
+    const cookieStore = await cookies()
+    const demoUserCookie = cookieStore.get('demo_user')
+    let userId = user?.id
+    
+    if (!userId && demoUserCookie) {
+      try {
+        const demoUser = JSON.parse(demoUserCookie.value)
+        userId = demoUser.id
+      } catch {
+        // Invalid cookie
       }
-      
-      return NextResponse.json({
-        success: true,
-        progress: {
-          currentLevel: 'Nivel 1 - Auditoría Inicial',
-          progressPct: 0,
-          dtcPct: 0,
-          totalXp: 0,
-          maxXp: 1070,
-          totalDtc: 0,
-          maxDtc: 280,
-          nextMilestone: 'Completar Auditoría Inicial',
-          nextReward: 'Desbloqueas Nivel 2 (4 herramientas)',
-          completedModules: 0,
-          totalModules: 10,
-          moduleStates: defaultModuleStates,
-          skills: {
-            presencia: 35,
-            claridad: 10,
-            estructura: 0,
-            preparacion: 25,
-            'manejo-presion': 0,
-          },
-          completedModuleIds: [],
-          levelCompletion: {
-            level1: false,
-            level2: false,
-            level3: false,
-            level4: false,
-          },
-          isSuperadmin: false,
-        },
-      })
     }
 
-    const { data: { user }, error: userError } = await supabase.auth.getUser()
-
-    if (!user) {
-      // Return demo data as fallback
-      const defaultModuleStates = {
-        'auditoria-inicial': 'available',
-        'metodo-star': 'locked',
-        'cv-inteligente': 'locked',
-        'analisis-vacante': 'locked',
-        'analisis-multimodal': 'locked',
-        'entrenamiento-guiado': 'locked',
-        'entrenamiento-estructurado': 'locked',
-        'entrenamiento-desafiante': 'locked',
-        'entrenamiento-conversacional': 'locked',
-        'simulacao-real': 'locked',
-      }
-      
-      return NextResponse.json({
-        success: true,
-        progress: {
-          currentLevel: 'Nivel 1 - Auditoría Inicial',
-          progressPct: 0,
-          dtcPct: 0,
-          totalXp: 0,
-          maxXp: 1070,
-          totalDtc: 0,
-          maxDtc: 280,
-          nextMilestone: 'Completar Auditoría Inicial',
-          nextReward: 'Desbloqueas Nivel 2 (4 herramientas)',
-          completedModules: 0,
-          totalModules: 10,
-          moduleStates: defaultModuleStates,
-          skills: {
-            presencia: 35,
-            claridad: 10,
-            estructura: 0,
-            preparacion: 25,
-            'manejo-presion': 0,
-          },
-          completedModuleIds: [],
-          levelCompletion: {
-            level1: false,
-            level2: false,
-            level3: false,
-            level4: false,
-          },
-          isSuperadmin: false,
-        },
-      })
-    }
-
-    // Get user role
-    const roleData = await getUserRoleData(user.id)
-    const isSuperadmin = roleData.role === 'superadmin'
-    
-    // For superadmin: show all XP as full
-    let totalXp = isSuperadmin ? 999999 : await getUserXP(user.id)
-    let totalDtc = isSuperadmin ? 999999 : 0
-    
-    // Get completed modules
-    const completedModules = await getUserCompletedModules(user.id)
-    
-    const maxXp = TOTAL_PILLAR3_XP
-    const maxDtc = TOTAL_PILLAR3_DTC
-    const progressPct = isSuperadmin ? 100 : Math.min(Math.round((totalXp / maxXp) * 100), 100)
-    const dtcPct = isSuperadmin ? 100 : Math.min(Math.round((totalDtc / maxDtc) * 100), 100)
-
-    // Build moduleStates - TEMPORARY: All modules unlocked for testing
-    const moduleStates: Record<string, string> = {}
-    const rules = await getModuleUnlockRules()
-    
-    console.log('[v0] Building module states (ALL UNLOCKED FOR TESTING):', {
-      userXp: totalXp,
-      completedModules,
-      rulesCount: rules.length,
-      isSuperadmin
+    // Default module states - first module available, rest locked
+    const defaultModuleStates: Record<string, string> = {}
+    MODULE_ORDER.forEach((id, index) => {
+      defaultModuleStates[id] = index === 0 ? 'available' : 'locked'
     })
-    
-    for (const rule of rules) {
-      // TEMPORARY: All modules marked as available
-      moduleStates[rule.module_id] = 'available'
-    }
-    
-    console.log('[v0] Final module states (ALL UNLOCKED):', moduleStates)
 
-    // Skill values based on completed modules
-    const level1Complete = completedModules.includes('auditoria-inicial')
-    const level2Count = [
-      'metodo-star',
-      'cv-inteligente',
-      'analisis-vacante',
-      'analisis-multimodal'
-    ].filter(m => completedModules.includes(m)).length
-
-    const skills = {
-      presencia: level1Complete ? 60 : 35,
-      claridad: level2Count > 0 ? 40 + level2Count * 10 : 10,
-      estructura: completedModules.includes('metodo-star') ? 60 : 0,
-      preparacion: level2Count > 1 ? 60 + level2Count * 5 : 25,
-      'manejo-presion': completedModules.includes('entrenamiento-desafiante') ? 70 : 0,
+    if (!userId) {
+      // Return default state for unauthenticated users
+      return NextResponse.json({
+        success: true,
+        progress: {
+          totalXp: 0,
+          maxXp: TOTAL_XP,
+          progressPct: 0,
+          completedModules: 0,
+          totalModules: 10,
+          moduleStates: defaultModuleStates,
+          completedModuleIds: [],
+        },
+      })
     }
 
-    // Determine current level / next milestone
-    let currentLevel = 'Nivel 1 - Auditoría Inicial'
-    let nextMilestone = 'Completar Auditoría Inicial'
-    let nextReward = 'Desbloqueas 4 herramientas'
+    // Fetch user progress from database
+    const { data: progressData, error: progressError } = await supabase
+      .from('a3_user_progress')
+      .select('*')
+      .eq('user_id', userId)
+      .single()
 
-    if (level1Complete) {
-      currentLevel = 'Nivel 2 - Herramientas'
-      nextMilestone = `${level2Count}/4 herramientas completadas`
-      nextReward = 'Desbloquea Entrenamientos'
+    if (progressError && progressError.code !== 'PGRST116') {
+      console.error('[v0] Error fetching a3_user_progress:', progressError)
     }
 
-    if (level2Count === 4) {
-      currentLevel = 'Nivel 3 - Entrenamientos'
-      nextMilestone = 'Completar entrenamientos'
-      nextReward = 'Desbloquea Simulación Real'
+    if (progressData) {
+      // User has progress data
+      const moduleStates = progressData.module_states || defaultModuleStates
+      const completedModuleIds = progressData.completed_module_ids || []
+      const totalXp = progressData.total_xp || 0
+
+      // Ensure all modules have a state
+      MODULE_ORDER.forEach((id, index) => {
+        if (!moduleStates[id]) {
+          // Determine state based on previous module
+          if (index === 0) {
+            moduleStates[id] = 'available'
+          } else {
+            const prevId = MODULE_ORDER[index - 1]
+            moduleStates[id] = completedModuleIds.includes(prevId) ? 'available' : 'locked'
+          }
+        }
+      })
+
+      return NextResponse.json({
+        success: true,
+        progress: {
+          totalXp,
+          maxXp: TOTAL_XP,
+          progressPct: Math.round((totalXp / TOTAL_XP) * 100),
+          completedModules: completedModuleIds.length,
+          totalModules: 10,
+          moduleStates,
+          completedModuleIds,
+        },
+      })
     }
 
-    if (completedModules.includes('simulacion-real')) {
-      currentLevel = 'Pillar 3 Completado'
-      nextMilestone = 'Has completado todos los niveles'
-      nextReward = 'Listo para entrevistas reales'
-    }
-
+    // No progress data - return defaults
     return NextResponse.json({
       success: true,
       progress: {
-        currentLevel,
-        progressPct,
-        dtcPct,
-        totalXp,
-        maxXp,
-        totalDtc,
-        maxDtc,
-        nextMilestone,
-        nextReward,
-        completedModules: completedModules.length,
-        totalModules: rules.length,
-        moduleStates,
-        skills,
-        completedModuleIds: completedModules,
-        levelCompletion: {
-          level1: level1Complete,
-          level2: level2Count === 4,
-          level3: completedModules.includes('simulacion-real'),
-          level4: false,
-        },
-        isSuperadmin,
+        totalXp: 0,
+        maxXp: TOTAL_XP,
+        progressPct: 0,
+        completedModules: 0,
+        totalModules: 10,
+        moduleStates: defaultModuleStates,
+        completedModuleIds: [],
       },
     })
   } catch (error) {
-    console.error('[v0] Error fetching user progress:', error)
-    return NextResponse.json({ error: 'Failed to fetch progress' }, { status: 500 })
+    console.error('[v0] Error in user-progress:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

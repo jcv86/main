@@ -37,14 +37,26 @@ export default function CareerMirrorModule() {
 
   const handleComplete = async () => {
     try {
-      await fetch('/api/a3/complete-module', {
+      const response = await fetch('/api/a3/save-module-progress', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ moduleId: 'career-mirror', xp: MODULE_XP })
+        body: JSON.stringify({ 
+          moduleId: 'career-mirror', 
+          status: 'completed',
+          xpEarned: MODULE_XP,
+          completedActivities: REQUIRED_ACTIVITIES.length
+        })
       })
+      
+      if (!response.ok) {
+        throw new Error('Failed to save progress')
+      }
+      
       router.push('/despega/a3?completed=career-mirror')
     } catch (error) {
       console.error('Error completing module:', error)
+      // Navigate anyway for better UX
+      router.push('/despega/a3?completed=career-mirror')
     }
   }
 
