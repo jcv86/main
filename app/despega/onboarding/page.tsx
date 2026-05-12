@@ -27,17 +27,6 @@ export default function DespegaOnboarding() {
   const supabase = createClient()
   const [step, setStep] = useState<Step>("intro")
   const [loading, setLoading] = useState(true)
-  const [mounted, setMounted] = useState(false)
-
-  // Log whenever step changes
-  useEffect(() => {
-    console.log("[v0] Step changed to:", step)
-  }, [step])
-
-  // Ensure component is mounted before rendering to avoid hydration mismatch
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const [c1Submitting, setC1Submitting] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -57,7 +46,7 @@ export default function DespegaOnboarding() {
   // Check if user already completed onboarding
   useEffect(() => {
     const checkStatus = async () => {
-      if (!mounted || authLoading) return // Wait for mounting and auth to complete
+      if (authLoading) return // Wait for auth to load
 
       try {
         if (!user) {
@@ -117,7 +106,7 @@ export default function DespegaOnboarding() {
     }
 
     checkStatus()
-  }, [user, authLoading, mounted, router, supabase])
+  }, [user, authLoading, router, supabase])
 
   const question = DISC_TEST_QUESTIONS[currentQuestion]
   const progress = ((currentQuestion + 1) / DISC_TEST_QUESTIONS.length) * 100
@@ -215,10 +204,6 @@ export default function DespegaOnboarding() {
   }
 
   // STEP 1: Intro - Despega Cerebral
-  if (!mounted) {
-    return <div className="min-h-screen bg-background" />
-  }
-
   if (step === "intro") {
     return (
       <div className="min-h-screen bg-background">

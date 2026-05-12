@@ -133,22 +133,8 @@ export default function RootLayout({
         <meta name="theme-color" content="#000000" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                const theme = localStorage.getItem('theme-preference') || 'dark';
-                if (theme === 'dark') {
-                  document.documentElement.classList.add('dark');
-                } else {
-                  document.documentElement.classList.remove('dark');
-                }
-              })();
-            `,
-          }}
-        />
       </head>
-      <body className={`${montserrat.className} ${lora.variable}`} suppressHydrationWarning>
+      <body className={`${montserrat.className} ${lora.variable}`}>
         <Providers>
           {children}
           <LLMOOptimizedFooter />
