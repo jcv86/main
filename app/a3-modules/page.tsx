@@ -2,7 +2,7 @@
 
 // A3 Modules Hub - Dashboard showing all 10 modules with XP system
 import React, { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
+import { useAuthRedirect } from '@/hooks/use-auth-redirect';
 import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -13,7 +13,7 @@ import { ALL_MODULES, isModuleUnlocked } from '@/lib/a3-modules/module-config';
 import { getUserPillar3Stats } from '@/lib/a3-modules/xp-system';
 
 export default function A3ModulesHub() {
-  const { data: session } = useSession();
+  const { user, loading: authLoading } = useAuthRedirect();
   const [stats, setStats] = useState({
     currentXP: 0,
     lifetimeXP: 0,
@@ -26,9 +26,9 @@ export default function A3ModulesHub() {
 
   useEffect(() => {
     const loadStats = async () => {
-      if (session?.user?.id) {
+      if (!authLoading && user?.id) {
         try {
-          const userStats = await getUserPillar3Stats(session.user.id);
+          const userStats = await getUserPillar3Stats(user.id);
           setStats(userStats);
         } catch (error) {
           console.error('[Load Stats Error]', error);
@@ -38,7 +38,7 @@ export default function A3ModulesHub() {
     };
 
     loadStats();
-  }, [session?.user?.id]);
+  }, [user?.id, authLoading]);
 
   const modules = Object.values(ALL_MODULES);
   const groupedModules = {

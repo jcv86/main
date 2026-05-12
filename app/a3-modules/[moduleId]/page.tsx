@@ -3,7 +3,7 @@
 // Module Player Page - Main entry point for taking a module
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useAuthRedirect } from '@/hooks/use-auth-redirect';
 import { ModuleFrame } from '@/components/a3-modules/module-frame';
 import { getModuleById } from '@/lib/a3-modules/module-config';
 import { completeModule, getUserModuleProgress, updateModuleProgress } from '@/lib/a3-modules/xp-system';
@@ -13,7 +13,7 @@ import type { Module } from '@/lib/a3-modules/types';
 
 export default function ModulePage() {
   const params = useParams();
-  const { data: session } = useSession();
+  const { user, loading: authLoading } = useAuthRedirect();
   const moduleId = params?.moduleId as string;
 
   const [module, setModule] = useState<Module | null>(null);
@@ -21,31 +21,29 @@ export default function ModulePage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!moduleId) return;
+    if (!moduleId || authLoading || !user?.id) return;
 
     const mod = getModuleById(moduleId);
     if (mod) {
       setModule(mod);
       // Initialize progress if not started
-      if (session?.user?.id) {
-        updateModuleProgress(session.user.id, moduleId, 'in_progress').catch(
-          (err) => console.error('Error updating progress:', err)
-        );
-      }
+      updateModuleProgress(user.id, moduleId, 'in_progress').catch(
+        (err) => console.error('Error updating progress:', err)
+      );
     } else {
       setError('Módulo no encontrado');
     }
 
     setLoading(false);
-  }, [moduleId, session?.user?.id]);
+  }, [moduleId, user?.id, authLoading]);
 
   const handleModuleComplete = async (finalScore: number) => {
-    if (!session?.user?.id || !module) return;
+    if (!user?.id || !module) return;
 
     try {
       // Mark as completed in database
       await completeModule(
-        session.user.id,
+        user.id,
         module.id,
         finalScore,
         module.xp
@@ -59,12 +57,12 @@ export default function ModulePage() {
   };
 
   const handleProgress = async (sectionId: string, score: number) => {
-    if (!session?.user?.id || !module) return;
+    if (!user?.id || !module) return;
 
     try {
       // Update section progress
       await updateModuleProgress(
-        session.user.id,
+        user.id,
         module.id,
         'in_progress',
         sectionId
