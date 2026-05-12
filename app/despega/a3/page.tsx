@@ -161,7 +161,7 @@ const BASIC_LEVEL_MODULES: Module[] = [
     format: 'Módulo de desarrollo de habilidades de comunicación',
     inputMode: 'Grabación de voz, autoevaluación, práctica guiada',
     interviewRequirement: 'Sin entrevista requerida',
-    xp: 150,
+    xp: 140,
     mainOutput: 'Perfil de Estilo de Comunicación',
     cta: 'Desarrollar Habilidades de Comunicación',
     tags: ['Comunicación Profesional', 'Práctica de Voz', 'Desarrollo de Habilidades'],
@@ -177,8 +177,7 @@ const BASIC_LEVEL_MODULES: Module[] = [
     format: 'Simulación de reclutador virtual',
     inputMode: 'Conversación guiada, práctica de preguntas de filtrado, manejo de salario',
     interviewRequirement: 'Sin entrevista requerida',
-    xp: 130,
-    mainOutput: 'Informe de Retroalimentación del Reclutador',
+    xp: 160,
     cta: 'Comenzar Simulación con Reclutador',
     tags: ['Simulación Interactiva', 'Práctica de Diálogo', 'Entrevista Simulada'],
     requiredActivities: ['Lista de verificación previa a la entrevista', 'Sección de apertura', 'Responder preguntas de filtrado', 'Navegar discusión de salario', 'Recibir informe de retroalimentación'],
@@ -193,8 +192,7 @@ const BASIC_LEVEL_MODULES: Module[] = [
     format: 'Laboratorio de preguntas de riesgo',
     inputMode: 'Análisis de riesgo, construcción de respuestas seguras, simulación de presión',
     interviewRequirement: 'Sin entrevista requerida',
-    xp: 180,
-    mainOutput: 'Guía de Preguntas de Riesgo Preparadas',
+    xp: 170,
     cta: 'Preparar Respuestas de Riesgo',
     tags: ['Gestión de Riesgo', 'Preguntas Difíciles', 'Práctica Bajo Presión'],
     requiredActivities: ['Identificar áreas de riesgo personal', 'Aprender fórmulas de respuesta segura', 'Identificar frases de alerta roja a evitar', 'Construir respuestas seguras preparadas', 'Completar simulación de presión de 3 preguntas'],
@@ -219,7 +217,7 @@ const BASIC_LEVEL_MODULES: Module[] = [
   }
 ]
 
-const TOTAL_XP = 1340
+const TOTAL_XP = BASIC_LEVEL_MODULES.reduce((sum, module) => sum + module.xp, 0)
 
 type ModuleStatus = 'locked' | 'available' | 'in_progress' | 'completed'
 
