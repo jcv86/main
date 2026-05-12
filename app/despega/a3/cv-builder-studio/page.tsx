@@ -93,10 +93,10 @@ const CV_SECTIONS = [
     icon: Award,
     description: 'Keywords recruiters are searching for',
     categories: [
-      { name: 'Technical Skills', examples: ['Excel Advanced', 'SQL', 'Python', 'Salesforce', 'SAP', 'Google Analytics'] },
-      { name: 'Tools & Software', examples: ['Microsoft Office Suite', 'Slack', 'Trello', 'Jira', 'Figma', 'Notion'] },
-      { name: 'Methodologies', examples: ['Agile/Scrum', 'Lean Six Sigma', 'Design Thinking', 'OKRs'] },
-      { name: 'Soft Skills', examples: ['Team Leadership', 'Cross-functional Collaboration', 'Stakeholder Management'] }
+      { name: 'Technical Skills', key: 'technical', examples: ['Excel Advanced', 'SQL', 'Python', 'Salesforce', 'SAP', 'Google Analytics'] },
+      { name: 'Tools & Software', key: 'tools', examples: ['Microsoft Office Suite', 'Slack', 'Trello', 'Jira', 'Figma', 'Notion'] },
+      { name: 'Methodologies', key: 'methodologies', examples: ['Agile/Scrum', 'Lean Six Sigma', 'Design Thinking', 'OKRs'] },
+      { name: 'Soft Skills', key: 'soft', examples: ['Team Leadership', 'Cross-functional Collaboration', 'Stakeholder Management'] }
     ],
     tips: [
       'Mirror keywords from job descriptions',
@@ -701,12 +701,12 @@ export default function CVBuilderStudioModule() {
                   <p className="text-white text-sm font-medium">{category.name}</p>
                   <div className="flex flex-wrap gap-2">
                     {category.examples.map((skill) => {
-                      const categoryKey = category.name.toLowerCase().replace(/[^a-z]/g, '') as keyof typeof cvData.skills
-                      const isSelected = (cvData.skills[categoryKey] as string[] || []).includes(skill)
+                      const categoryKey = category.key as keyof typeof cvData.skills
+                      const isSelected = (cvData.skills[categoryKey] || []).includes(skill)
                       return (
                         <button
                           key={skill}
-                          onClick={() => toggleSkill(categoryKey === 'technicalskills' ? 'technical' : categoryKey === 'toolssoftware' ? 'tools' : categoryKey, skill)}
+                          onClick={() => toggleSkill(categoryKey, skill)}
                           className={`px-3 py-1 rounded-full text-sm transition-all ${
                             isSelected
                               ? 'bg-[rgb(170,70,170)] text-white'
