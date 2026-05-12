@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
@@ -33,10 +33,7 @@ const TOTAL_XP = 1340
 
 export async function GET() {
   try {
-    const supabase = await createClient()
-    
-    // Get user from session
-    const { data: { user } } = await supabase.auth.getUser()
+    const supabase = createAdminClient()
     
     // Also check demo_user cookie for demo mode
     const cookieStore = await cookies()

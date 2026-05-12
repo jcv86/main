@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 
@@ -31,14 +31,11 @@ const MODULE_ORDER = [
 ]
 
 export async function POST(request: Request) {
-  console.log('[v0] save-module-progress API called')
   try {
     const body = await request.json()
-    console.log('[v0] Request body:', body)
     const { moduleId, status, xpEarned, completedActivities } = body
 
     if (!moduleId || !status) {
-      console.log('[v0] Missing required fields')
       return NextResponse.json(
         { error: 'Missing required fields: moduleId and status' },
         { status: 400 }
@@ -47,16 +44,13 @@ export async function POST(request: Request) {
 
     // Validate moduleId
     if (!MODULE_XP[moduleId]) {
-      console.log('[v0] Invalid moduleId:', moduleId)
       return NextResponse.json(
         { error: 'Invalid moduleId' },
         { status: 400 }
       )
     }
 
-    console.log('[v0] Creating Supabase client...')
-    const supabase = await createClient()
-    console.log('[v0] Supabase client created')
+    const supabase = createAdminClient()
     
     // Get user from session
     const { data: { user }, error: userError } = await supabase.auth.getUser()
@@ -196,10 +190,9 @@ export async function POST(request: Request) {
       })
     }
   } catch (error) {
-    console.error('[v0] Error in save-module-progress:', error)
-    console.error('[v0] Error details:', JSON.stringify(error, Object.getOwnPropertyNames(error)))
+    console.error('Error in save-module-progress:', error)
     return NextResponse.json(
-      { error: 'Internal server error', details: String(error) },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

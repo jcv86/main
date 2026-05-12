@@ -163,19 +163,6 @@ export default function CareerMirrorModule() {
           ))}
         </div>
 
-        {/* Quick Complete for Testing */}
-        {completedSteps.length < REQUIRED_ACTIVITIES.length && (
-          <Card className="bg-yellow-500/10 border-yellow-500/30 p-4">
-            <Button 
-              onClick={() => setCompletedSteps([0, 1, 2, 3, 4])}
-              variant="outline"
-              className="border-yellow-500/50 text-yellow-400"
-            >
-              [Dev] Quick Complete All Activities
-            </Button>
-          </Card>
-        )}
-
         {/* Complete Module */}
         {completedSteps.length === REQUIRED_ACTIVITIES.length && (
           <Card className="bg-emerald-500/10 border-emerald-500/30 p-6 text-center space-y-4">
