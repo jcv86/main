@@ -8,6 +8,7 @@ import {
   getMainPillarProgress,
   isStepUnlocked,
   getDiagnosticForPillar,
+  type SequenceStepId,
 } from '@/lib/learning-sequence'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -16,7 +17,7 @@ import { Badge } from '@/components/ui/badge'
 import { ChevronRight, Lock, CheckCircle, Play } from 'lucide-react'
 
 interface UserProgress {
-  completedSteps: string[]
+  completedSteps: SequenceStepId[]
   totalXp: number
 }
 
@@ -38,10 +39,12 @@ export default function PillarsHubPage() {
         if (response.ok) {
           const data = await response.json()
           // Convert the API response to completedSteps format
-          const completedSteps = [
+          const completedSteps: SequenceStepId[] = [
             ...(data.completedPillars || []),
             ...(data.completedActivities || []),
-          ]
+          ].filter((step): step is SequenceStepId => 
+            ['a1', 'a2', 'a3', 'a4', 'c1', 'c2', 'c3', 'c4'].includes(step)
+          )
           setProgress({
             completedSteps,
             totalXp: data.totalXP || 0,
