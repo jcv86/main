@@ -103,14 +103,17 @@ export default function PillarsHubPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {MAIN_PILLARS.map((pillar) => {
           const isCompleted = progress.completedSteps.includes(pillar.id)
-          const isLocked = !isStepUnlocked(pillar.id, progress.completedSteps)
           const diagnostic = getDiagnosticForPillar(pillar.id)
+          const isDiagnosticUnlocked = isStepUnlocked(diagnostic.id, progress.completedSteps)
           const isDiagnosticCompleted = progress.completedSteps.includes(diagnostic.id)
+          const isLocked = !isDiagnosticUnlocked
 
           console.log(`[v0] Pillar ${pillar.id}:`, {
             isCompleted,
             isLocked,
+            isDiagnosticUnlocked,
             isDiagnosticCompleted,
+            diagnosticId: diagnostic.id,
             completedSteps: progress.completedSteps,
           })
 
