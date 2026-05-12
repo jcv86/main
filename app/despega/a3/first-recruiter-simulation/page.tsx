@@ -12,6 +12,7 @@ import {
   Lightbulb, User, MessageSquare, Mic, ChevronRight, Star, Award
 } from 'lucide-react'
 import { InterviewThreeColumnLayout } from '@/components/interview-three-column-layout'
+import { CameraMicrophoneTest } from '@/components/camera-microphone-test'
 
 const MODULE_XP = 160
 
@@ -109,13 +110,27 @@ export default function FirstRecruiterSimulationModule() {
   const [showingGuidance, setShowingGuidance] = useState<string | null>(null)
   const [selfRatings, setSelfRatings] = useState<Record<string, number>>({})
   const [showResults, setShowResults] = useState(false)
+  const [showCameraTest, setShowCameraTest] = useState(false)
 
   const progress = currentStage < 0 ? 0 : Math.round(((currentStage + 1) / INTERVIEW_SCRIPT.length) * 100)
 
   const togglePreChecklist = (id: string) => {
-    setPreChecklist(prev => 
-      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-    )
+    if (id === 'camera' && !preChecklist.includes(id)) {
+      // Open camera test modal when camera checkbox is clicked
+      setShowCameraTest(true)
+    } else {
+      setPreChecklist(prev => 
+        prev.includes(id) ? prev.filter(i => i !== id) : [...prev, i]
+      )
+    }
+  }
+
+  const handleCameraTestComplete = (passed: boolean) => {
+    setShowCameraTest(false)
+    if (passed) {
+      // Add camera to checklist if test passed
+      setPreChecklist(prev => [...prev, 'camera'])
+    }
   }
 
   const startSimulation = () => {
@@ -383,6 +398,13 @@ export default function FirstRecruiterSimulationModule() {
             </Button>
           </Card>
         )}
+
+        {/* Camera/Microphone Test Modal */}
+        <CameraMicrophoneTest
+          isOpen={showCameraTest}
+          onClose={() => setShowCameraTest(false)}
+          onTestComplete={handleCameraTestComplete}
+        />
       </div>
     </div>
   )
