@@ -187,7 +187,7 @@ export default function MetodoSTARPage() {
                 <CheckCircle2 className="w-5 h-5 text-green-500" />
                 Ejemplo de Respuesta Excelente
               </h3>
-              <Card className="bg-black border-green-500/30">
+              <Card className="rounded-[2px] bg-black border-green-500/30">
                 <CardContent className="pt-6 space-y-4">
                   {Object.entries(SAMPLE_GOOD_RESPONSE).map(([key, value]) => (
                     <div key={key}>

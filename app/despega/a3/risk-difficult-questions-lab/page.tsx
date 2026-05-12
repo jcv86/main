@@ -115,7 +115,7 @@ export default function RiskDifficultQuestionsLabModule() {
         </div>
 
         {/* Learning Points */}
-        <Card className="bg-[rgba(80,160,170,0.15)] border-[rgba(80,160,170,0.4)] p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.15)] border-[rgba(80,160,170,0.4)] p-4">
           <div className="flex items-start gap-3">
             <Lightbulb className="w-5 h-5 text-[rgb(80,160,170)] mt-0.5" />
             <div>
@@ -130,7 +130,7 @@ export default function RiskDifficultQuestionsLabModule() {
         </Card>
 
         {/* Safe Answer Formula */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <p className="text-white/50 text-xs uppercase mb-2">Safe Answer Formula</p>
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <span className="bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)] px-3 py-1.5 rounded">Acknowledge</span>
@@ -145,7 +145,7 @@ export default function RiskDifficultQuestionsLabModule() {
 
         {/* Avoid vs Use */}
         <div className="grid md:grid-cols-2 gap-4">
-          <Card className="bg-red-500/10 border-red-500/30 p-4">
+          <Card className="rounded-[2px] bg-red-500/10 border-red-500/30 p-4">
             <div className="flex items-center gap-2 mb-3">
               <XCircle className="w-5 h-5 text-red-400" />
               <p className="text-red-400 font-medium">Avoid</p>
@@ -158,7 +158,7 @@ export default function RiskDifficultQuestionsLabModule() {
               <li>&quot;I never make mistakes.&quot;</li>
             </ul>
           </Card>
-          <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-4">
+          <Card className="rounded-[2px] bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-4">
             <div className="flex items-center gap-2 mb-3">
               <CheckCircle className="w-5 h-5 text-[rgb(200,130,200)]" />
               <p className="text-[rgb(200,130,200)] font-medium">Use</p>
@@ -174,7 +174,7 @@ export default function RiskDifficultQuestionsLabModule() {
         </div>
 
         {/* Progress */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progress</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -245,7 +245,7 @@ export default function RiskDifficultQuestionsLabModule() {
 
         {/* Complete Module */}
         {completedSteps.length === REQUIRED_ACTIVITIES.length && (
-          <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
+          <Card className="rounded-[2px] bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
             <CheckCircle2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Risk Lab Complete!</h3>
             <p className="text-white/70">

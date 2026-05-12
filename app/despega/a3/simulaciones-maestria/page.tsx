@@ -201,7 +201,7 @@ export default function GuidedInterviewPage() {
             </p>
           </div>
 
-          <Card className="p-6">
+          <Card className="rounded-[2px] p-6">
             <h2 className="text-xl font-bold mb-4">Próximos Pasos</h2>
             <ul className="space-y-3 text-muted-foreground dark:text-white/85">
               <li className="flex gap-3">
@@ -266,7 +266,7 @@ export default function GuidedInterviewPage() {
         </div>
 
         {/* Question Card */}
-        <Card className="p-8 border-2 border-blue/30 dark:border-blue/10">
+        <Card className="rounded-[2px] p-8 border-2 border-blue/30 dark:border-blue/10">
           <div className="space-y-6">
             {/* Question */}
             <div>
@@ -391,7 +391,7 @@ export default function GuidedInterviewPage() {
         </div>
 
         {/* Tips */}
-        <Card className="bg-yellow/5 dark:bg-amber-900/20 border-yellow/30 dark:border-yellow">
+        <Card className="rounded-[2px] bg-yellow/5 dark:bg-amber-900/20 border-yellow/30 dark:border-yellow">
           <CardContent className="pt-6 text-sm text-amber-900 dark:text-amber-200 space-y-2">
             <p className="font-semibold">Consejos de la Entrevista Guiada:</p>
             <ul className="list-disc list-inside space-y-1">

@@ -88,7 +88,7 @@ export default function FirstRecruiterSimulationModule() {
         </div>
 
         {/* Simulation Details */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="grid md:grid-cols-4 gap-4 text-center">
             <div>
               <p className="text-white/40 text-xs uppercase">Interviewer</p>
@@ -112,7 +112,7 @@ export default function FirstRecruiterSimulationModule() {
         </Card>
 
         {/* Interview Structure */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <p className="text-white/50 text-xs uppercase mb-3">Interview Structure</p>
           <ol className="space-y-2 text-sm text-white/70">
             <li className="flex items-center gap-2">
@@ -151,7 +151,7 @@ export default function FirstRecruiterSimulationModule() {
         </Card>
 
         {/* Progress */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Simulation Progress</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -164,7 +164,7 @@ export default function FirstRecruiterSimulationModule() {
 
         {/* Simulation Area */}
         {!simulationStarted ? (
-          <Card className="rounded-[20px] bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)] p-8 text-center space-y-4">
+          <Card className="rounded-[2px] bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)] p-8 text-center space-y-4">
             <AlertCircle className="w-12 h-12 text-[rgb(170,70,170)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Ready to Begin?</h3>
             <p className="text-white/70 max-w-md mx-auto">
@@ -183,7 +183,7 @@ export default function FirstRecruiterSimulationModule() {
             </Button>
           </Card>
         ) : currentStage < INTERVIEW_STAGES.length - 1 ? (
-          <Card className="bg-white/5 border-white/10 p-8 text-center space-y-4">
+          <Card className="rounded-[2px] bg-white/5 border-white/10 p-8 text-center space-y-4">
             <Video className="w-12 h-12 text-[rgb(170,70,170)] mx-auto" />
             <h3 className="text-xl font-bold text-white">
               Stage: {INTERVIEW_STAGES[currentStage]?.name}
@@ -200,7 +200,7 @@ export default function FirstRecruiterSimulationModule() {
             </Button>
           </Card>
         ) : (
-          <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
+          <Card className="rounded-[2px] bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
             <CheckCircle2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">First Simulation Complete!</h3>
             <p className="text-white/70">

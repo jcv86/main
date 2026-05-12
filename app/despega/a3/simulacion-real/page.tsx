@@ -194,7 +194,7 @@ export default function SimulacionRealPage() {
               </div>
             </div>
 
-            <Card className="bg-black border-blue-500/30">
+            <Card className="rounded-[2px] bg-black border-blue-500/30">
               <CardHeader>
                 <CardTitle className="text-blue-300">Instrucciones</CardTitle>
               </CardHeader>
@@ -213,7 +213,7 @@ export default function SimulacionRealPage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-black border-purple-500/30">
+            <Card className="rounded-[2px] bg-black border-purple-500/30">
               <CardContent className="pt-6">
                 <textarea
                   placeholder="Escribe o práctica tu respuesta aquí..."
@@ -261,7 +261,7 @@ export default function SimulacionRealPage() {
         {/* Main Content */}
         <div className="max-w-6xl mx-auto px-6 py-8 space-y-8">
           {/* Overall Score */}
-          <Card className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/30">
+          <Card className="rounded-[2px] bg-gradient-to-br from-green-500/10 to-emerald-500/10 border-green-500/30">
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
                 <span>Puntuación General</span>
@@ -300,7 +300,7 @@ export default function SimulacionRealPage() {
           </div>
 
           {/* Evaluation Criteria */}
-          <Card className="bg-black border-purple-500/30">
+          <Card className="rounded-[2px] bg-black border-purple-500/30">
             <CardHeader>
               <CardTitle>Criterios de Evaluación Utilizados</CardTitle>
             </CardHeader>
@@ -315,7 +315,7 @@ export default function SimulacionRealPage() {
           </Card>
 
           {/* Recommendations */}
-          <Card className="bg-blue-500/10 border-blue-500/30">
+          <Card className="rounded-[2px] bg-blue-500/10 border-blue-500/30">
             <CardHeader>
               <CardTitle className="text-blue-300">Próximos Pasos</CardTitle>
             </CardHeader>
@@ -409,21 +409,21 @@ export default function SimulacionRealPage() {
       <div className="max-w-6xl mx-auto px-6 py-8">
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {/* Info Cards */}
-          <Card className="bg-black border-purple-500/30">
+          <Card className="rounded-[2px] bg-black border-purple-500/30">
             <CardContent className="pt-6">
               <p className="text-white/60 text-sm mb-2">Duración Total</p>
               <p className="text-3xl font-bold">{totalDuration} min</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-black border-purple-500/30">
+          <Card className="rounded-[2px] bg-black border-purple-500/30">
             <CardContent className="pt-6">
               <p className="text-white/60 text-sm mb-2">Etapas</p>
               <p className="text-3xl font-bold">{SIMULATION_STAGES.length}</p>
             </CardContent>
           </Card>
 
-          <Card className="bg-black border-purple-500/30">
+          <Card className="rounded-[2px] bg-black border-purple-500/30">
             <CardContent className="pt-6">
               <p className="text-white/60 text-sm mb-2">Preguntas Totales</p>
               <p className="text-3xl font-bold">{SIMULATION_STAGES.reduce((sum, s) => sum + s.questions.length, 0)}</p>
@@ -450,7 +450,7 @@ export default function SimulacionRealPage() {
         </div>
 
         {/* Tips */}
-        <Card className="bg-blue-500/10 border-blue-500/20 mb-8">
+        <Card className="rounded-[2px] bg-blue-500/10 border-blue-500/20 mb-8">
           <CardHeader>
             <CardTitle className="text-blue-300">Tips para la Simulación</CardTitle>
           </CardHeader>

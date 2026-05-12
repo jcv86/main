@@ -587,7 +587,7 @@ export default function CVATSPage() {
           </TabsList>
 
           <TabsContent value="preview" className="space-y-4">
-            <Card className="overflow-hidden border-2 border-training/40">
+            <Card className="rounded-[2px] overflow-hidden border-2 border-training/40">
               <div className="bg-muted/10 dark:bg-card p-6 rounded-[28px]">
                 {format === 'ats' && renderATSFormat()}
                 {format === 'standard' && renderStandardFormat()}
@@ -616,7 +616,7 @@ export default function CVATSPage() {
           </TabsContent>
 
           <TabsContent value="edit">
-            <Card className="p-6">
+            <Card className="rounded-[2px] p-6">
               <div className="space-y-4 text-muted-foreground dark:text-muted-foreground">
                 <p>Edición avanzada del CV próximamente.</p>
                 <p>Por ahora, tu CV se genera automáticamente desde:</p>
@@ -633,7 +633,7 @@ export default function CVATSPage() {
 
         {/* Info Card - Dynamic based on format */}
         {format === 'ats' && (
-          <Card className="bg-blue/5 dark:bg-blue/20 border-blue/30 dark:border-blue/10">
+          <Card className="rounded-[2px] bg-blue/5 dark:bg-blue/20 border-blue/30 dark:border-blue/10">
             <CardHeader>
               <CardTitle className="text-base">📋 Formato ATS (Optimizado)</CardTitle>
             </CardHeader>
@@ -650,7 +650,7 @@ export default function CVATSPage() {
         )}
 
         {format === 'standard' && (
-          <Card className="bg-green/5 dark:bg-green/20 border-green/20 dark:border-green">
+          <Card className="rounded-[2px] bg-green/5 dark:bg-green/20 border-green/20 dark:border-green">
             <CardHeader>
               <CardTitle className="text-base"> Formato Estándar</CardTitle>
             </CardHeader>
@@ -667,7 +667,7 @@ export default function CVATSPage() {
         )}
 
         {format === 'creative' && (
-          <Card className="bg-purple/5 dark:bg-purple/20 border-purple/30 dark:border-purple">
+          <Card className="rounded-[2px] bg-purple/5 dark:bg-purple/20 border-purple/30 dark:border-purple">
             <CardHeader>
               <CardTitle className="text-base"> Formato Creativo</CardTitle>
             </CardHeader>
@@ -684,7 +684,7 @@ export default function CVATSPage() {
         )}
 
         {format === 'modern' && (
-          <Card className="bg-yellow/5 dark:bg-amber-900/20 border-yellow/30 dark:border-yellow">
+          <Card className="rounded-[2px] bg-yellow/5 dark:bg-amber-900/20 border-yellow/30 dark:border-yellow">
             <CardHeader>
               <CardTitle className="text-base"> Formato Moderno</CardTitle>
             </CardHeader>
@@ -701,7 +701,7 @@ export default function CVATSPage() {
         )}
 
         {format === 'linkedin' && (
-          <Card className="bg-sky-50 dark:bg-sky-900/20 border-sky-200 dark:border-sky-800">
+          <Card className="rounded-[2px] bg-sky-50 dark:bg-sky-900/20 border-sky-200 dark:border-sky-800">
             <CardHeader>
               <CardTitle className="text-base"> Formato LinkedIn</CardTitle>
             </CardHeader>
@@ -718,7 +718,7 @@ export default function CVATSPage() {
         )}
 
         {format === 'executive' && (
-          <Card className="bg-muted/10 dark:bg-card border-muted/30 dark:border-card">
+          <Card className="rounded-[2px] bg-muted/10 dark:bg-card border-muted/30 dark:border-card">
             <CardHeader>
               <CardTitle className="text-base">👔 Formato Ejecutivo</CardTitle>
             </CardHeader>

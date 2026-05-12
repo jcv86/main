@@ -73,7 +73,7 @@ export default function A3AnalyticsPage() {
         </div>
 
         {/* Overall Score */}
-        <Card className="bg-background">
+        <Card className="rounded-[2px] bg-background">
           <CardContent className="pt-8 pb-6">
             <div className="flex items-center justify-between">
               <div>
@@ -212,7 +212,7 @@ export default function A3AnalyticsPage() {
         </Card>
 
         {/* Recommendations */}
-        <Card className="rounded-[20px] bg-training/5 dark:bg-training/20 border-training/30 dark:border-training/10">
+        <Card className="rounded-[2px] bg-training/5 dark:bg-training/20 border-training/30 dark:border-training/10">
           <CardHeader>
             <CardTitle className="text-training">Insights y Recomendaciones</CardTitle>
           </CardHeader>
@@ -227,7 +227,7 @@ export default function A3AnalyticsPage() {
         </Card>
 
         {/* Call to Action */}
-        <Card className="rounded-[20px] bg-gradient-to-r from-training/10 to-training/5 border-training/30">
+        <Card className="rounded-[2px] bg-gradient-to-r from-training/10 to-training/5 border-training/30">
           <CardContent className="pt-6">
             <div className="flex justify-between items-center">
               <div>

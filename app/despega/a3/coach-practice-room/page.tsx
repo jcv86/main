@@ -88,7 +88,7 @@ export default function CoachPracticeRoomModule() {
         </div>
 
         {/* Learning Points */}
-        <Card className="bg-indigo-500/10 border-indigo-500/30 p-4">
+        <Card className="rounded-[2px] bg-indigo-500/10 border-indigo-500/30 p-4">
           <div className="flex items-start gap-3">
             <Lightbulb className="w-5 h-5 text-indigo-400 mt-0.5" />
             <div>
@@ -102,7 +102,7 @@ export default function CoachPracticeRoomModule() {
         </Card>
 
         {/* Practice Flow */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <p className="text-white/50 text-xs uppercase mb-3">Text Practice Mode Flow</p>
           <div className="flex items-center gap-2 text-sm text-white/70">
             <span className="bg-white/10 px-2 py-1 rounded">Coach asks</span>
@@ -117,7 +117,7 @@ export default function CoachPracticeRoomModule() {
         </Card>
 
         {/* Progress */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progress</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -171,7 +171,7 @@ export default function CoachPracticeRoomModule() {
 
         {/* Complete Module */}
         {completedSteps.length === REQUIRED_ACTIVITIES.length && (
-          <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
+          <Card className="rounded-[2px] bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
             <CheckCircle2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Coach Practice Complete!</h3>
             <p className="text-white/70">

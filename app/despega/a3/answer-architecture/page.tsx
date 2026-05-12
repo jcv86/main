@@ -75,7 +75,7 @@ export default function AnswerArchitectureModule() {
         {/* Title */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-[rgba(170,70,170,0.2)] flex items-center justify-center">
+            <div className="w-12 h-12 rounded-[2px] bg-[rgba(170,70,170,0.2)] flex items-center justify-center">
               <MessageSquare className="w-6 h-6 text-[rgb(200,130,200)]" />
             </div>
             <div>
@@ -88,15 +88,15 @@ export default function AnswerArchitectureModule() {
           </p>
         </div>
 
-        {/* Formulas */}
+        {/* Formulas - Info cards with rounded-[2px] */}
         <div className="grid md:grid-cols-2 gap-4">
-          <Card className="bg-purple-500/10 border-purple-500/30 p-4">
+          <Card className="rounded-[2px] bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)] p-4">
             <p className="text-[rgb(200,130,200)] text-xs uppercase mb-2">Self-Introduction Formula</p>
             <p className="text-white/80 text-sm italic">
               &quot;I am a ___ with experience in ___. My strongest areas are ___. Now I am looking for ___ because ____.&quot;
             </p>
           </Card>
-          <Card className="rounded-[20px] bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)] p-4">
+          <Card className="rounded-[2px] bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)] p-4">
             <p className="text-[rgb(170,70,170)] text-xs uppercase mb-2">Basic STAR Formula</p>
             <p className="text-white/80 text-sm italic">
               &quot;The situation was ___. My responsibility was ___. I acted by ___. The result was ___.&quot;
@@ -104,8 +104,8 @@ export default function AnswerArchitectureModule() {
           </Card>
         </div>
 
-        {/* Learning Points */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        {/* Learning Points - Info card with rounded-[2px] */}
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex items-start gap-3">
             <Lightbulb className="w-5 h-5 text-[rgb(80,160,170)] mt-0.5" />
             <div>
@@ -118,8 +118,8 @@ export default function AnswerArchitectureModule() {
           </div>
         </Card>
 
-        {/* Progress */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        {/* Progress - Info card with rounded-[2px] */}
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progress</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -127,12 +127,12 @@ export default function AnswerArchitectureModule() {
           <Progress value={progress} className="h-2 bg-white/10" />
         </Card>
 
-        {/* Activities */}
+        {/* Activities - Cards with rounded-[2px] */}
         <div className="space-y-4">
           {REQUIRED_ACTIVITIES.map((activity, index) => (
             <Card 
               key={index}
-              className={`p-6 transition-all ${
+              className={`rounded-[2px] p-6 transition-all ${
                 completedSteps.includes(index) 
                   ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
                   : currentStep === index 
@@ -158,7 +158,7 @@ export default function AnswerArchitectureModule() {
                     <div className="mt-4">
                       {index === 0 && (
                         <textarea 
-                          className="w-full rounded-[20px] bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-24"
+                          className="w-full bg-white/5 border border-white/20 rounded-[2px] p-3 text-white placeholder:text-white/30 min-h-24"
                           placeholder="Write your 30-second self-introduction..."
                           value={selfIntro}
                           onChange={(e) => setSelfIntro(e.target.value)}
@@ -166,7 +166,7 @@ export default function AnswerArchitectureModule() {
                       )}
                       <Button 
                         onClick={() => completeStep(index)}
-                        className="mt-4 bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
+                        className="mt-4 rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)]"
                       >
                         Complete Activity
                         <ArrowRight className="w-4 h-4 ml-2" />
@@ -181,7 +181,7 @@ export default function AnswerArchitectureModule() {
 
         {/* Complete Module */}
         {completedSteps.length === REQUIRED_ACTIVITIES.length && (
-          <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
+          <Card className="rounded-[2px] bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
             <CheckCircle2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Answer Architecture Complete!</h3>
             <p className="text-white/70">

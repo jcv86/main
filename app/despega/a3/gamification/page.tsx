@@ -72,7 +72,7 @@ export default function GamificationPage() {
             totalTipsEarned={profileData.total_tips_earned_free + profileData.total_tips_earned_premium || 0}
           />
         ) : (
-          <Card className="border-2 border-training/40">
+          <Card className="rounded-[2px] border-2 border-training/40">
             <CardContent className="p-8 text-center">
               <p className="text-muted-foreground">
                 Start your first interview to unlock achievements and begin climbing the ranks!

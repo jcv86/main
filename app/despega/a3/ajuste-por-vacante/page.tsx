@@ -63,7 +63,7 @@ export default function JobMatchingPage() {
         </div>
 
         {!analysis ? (
-          <Card className="border-2 border-training/40 p-8 space-y-6">
+          <Card className="rounded-[2px] border-2 border-training/40 p-8 space-y-6">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-white/85">
                 Descripción de Trabajo (Job Description)
@@ -91,7 +91,7 @@ export default function JobMatchingPage() {
         ) : (
           <div className="space-y-6">
             {/* Match Score */}
-            <Card className="border-2 border-training/40 bg-background">
+            <Card className="rounded-[2px] border-2 border-training/40 bg-background">
               <CardContent className="pt-6">
                 <div className="flex items-center justify-between">
                   <div>
@@ -117,7 +117,7 @@ export default function JobMatchingPage() {
               </TabsList>
 
               <TabsContent value="match" className="space-y-4">
-                <Card className="border-2 border-training/40">
+                <Card className="rounded-[2px] border-2 border-training/40">
                   <CardHeader>
                     <CardTitle className="text-training">Habilidades Coincidentes</CardTitle>
                   </CardHeader>
@@ -150,7 +150,7 @@ export default function JobMatchingPage() {
               </TabsContent>
 
               <TabsContent value="resume" className="space-y-4">
-                <Card className="border-2 border-training/40">
+                <Card className="rounded-[2px] border-2 border-training/40">
                   <CardHeader>
                     <CardTitle className="text-training">Ajustes Recomendados en tu CV</CardTitle>
                     <CardDescription>
@@ -175,7 +175,7 @@ export default function JobMatchingPage() {
               </TabsContent>
 
               <TabsContent value="responses" className="space-y-4">
-                <Card className="border-2 border-training/40">
+                <Card className="rounded-[2px] border-2 border-training/40">
                   <CardHeader>
                     <CardTitle className="text-training">Respuestas Optimizadas</CardTitle>
                     <CardDescription>
@@ -199,7 +199,7 @@ export default function JobMatchingPage() {
               </TabsContent>
 
               <TabsContent value="simulation" className="space-y-4">
-                <Card className="border-2 border-training/40 p-6">
+                <Card className="rounded-[2px] border-2 border-training/40 p-6">
                   <div className="text-center space-y-4">
                     <Zap className="w-12 h-12 text-training mx-auto" />
                     <h3 className="text-lg font-bold text-white">

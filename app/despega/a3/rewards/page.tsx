@@ -141,7 +141,7 @@ export default function RewardsPage() {
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Summary Stats */}
         <div className="grid md:grid-cols-4 gap-4 mb-12">
-          <Card className="bg-black border-yellow-500/30">
+          <Card className="rounded-[2px] bg-black border-yellow-500/30">
             <CardContent className="pt-6">
               <div className="text-center">
                 <Trophy className="w-8 h-8 text-yellow-400 mx-auto mb-2" />
@@ -151,7 +151,7 @@ export default function RewardsPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-black border-purple-500/30">
+          <Card className="rounded-[2px] bg-black border-purple-500/30">
             <CardContent className="pt-6">
               <div className="text-center">
                 <Medal className="w-8 h-8 text-purple-400 mx-auto mb-2" />
@@ -161,7 +161,7 @@ export default function RewardsPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-black border-blue-500/30">
+          <Card className="rounded-[2px] bg-black border-blue-500/30">
             <CardContent className="pt-6">
               <div className="text-center">
                 <Gift className="w-8 h-8 text-blue-400 mx-auto mb-2" />
@@ -171,7 +171,7 @@ export default function RewardsPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-black border-green-500/30">
+          <Card className="rounded-[2px] bg-black border-green-500/30">
             <CardContent className="pt-6">
               <div className="text-center">
                 <Zap className="w-8 h-8 text-green-400 mx-auto mb-2" />

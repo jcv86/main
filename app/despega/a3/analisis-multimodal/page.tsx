@@ -48,7 +48,7 @@ export default function MultimodalAnalysisPage() {
 
       {/* Error Alert - Training/Orange color */}
       {error && (
-        <Card className="border-training/40 bg-training/10">
+        <Card className="rounded-[2px] border-training/40 bg-training/10">
           <CardContent className="pt-4 flex gap-3">
             <AlertCircle className="w-5 h-5 text-training flex-shrink-0 mt-0.5" />
             <div className="flex-1">

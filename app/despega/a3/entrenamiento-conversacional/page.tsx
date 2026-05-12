@@ -236,7 +236,7 @@ export default function EntrenamientoConversacionalPage() {
   if (showFeedback) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
-        <Card className="bg-black border-purple-500/30 w-full max-w-2xl">
+        <Card className="rounded-[2px] bg-black border-purple-500/30 w-full max-w-2xl">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-purple-400" />
@@ -263,7 +263,7 @@ export default function EntrenamientoConversacionalPage() {
 
             <div>
               <h3 className="font-semibold text-white mb-3">Respuesta Modelo:</h3>
-              <Card className="bg-green-500/10 border-green-500/20">
+              <Card className="rounded-[2px] bg-green-500/10 border-green-500/20">
                 <CardContent className="pt-4">
                   <p className="text-white/70 text-sm italic">{selectedScenario?.goodResponse}</p>
                 </CardContent>

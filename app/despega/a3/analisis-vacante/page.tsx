@@ -139,7 +139,7 @@ export default function AnalisisVacantePagePage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-black border-purple-500/30">
+          <Card className="rounded-[2px] bg-black border-purple-500/30">
             <CardContent className="pt-6">
               <p className="text-white/60 text-sm mb-2">Años Requeridos</p>
               <p className="text-2xl font-bold">{JOB_ANALYSIS.experienceRequired}</p>
@@ -147,7 +147,7 @@ export default function AnalisisVacantePagePage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-black border-purple-500/30">
+          <Card className="rounded-[2px] bg-black border-purple-500/30">
             <CardContent className="pt-6">
               <p className="text-white/60 text-sm mb-2">Factores de Éxito</p>
               <div className="flex gap-1 mt-2">
@@ -182,7 +182,7 @@ export default function AnalisisVacantePagePage() {
         {/* Overview Tab */}
         {analysisTab === 'overview' && (
           <div className="space-y-6">
-            <Card className="bg-black border-purple-500/30">
+            <Card className="rounded-[2px] bg-black border-purple-500/30">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <CheckCircle2 className="w-5 h-5 text-green-400" />
@@ -199,7 +199,7 @@ export default function AnalisisVacantePagePage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-black border-purple-500/30">
+            <Card className="rounded-[2px] bg-black border-purple-500/30">
               <CardHeader>
                 <CardTitle>Requerimientos Clave</CardTitle>
               </CardHeader>
@@ -224,7 +224,7 @@ export default function AnalisisVacantePagePage() {
         {/* Skills Tab */}
         {analysisTab === 'skills' && (
           <div className="space-y-6">
-            <Card className="bg-black border-purple-500/30">
+            <Card className="rounded-[2px] bg-black border-purple-500/30">
               <CardHeader>
                 <CardTitle className="text-lg">Habilidades Técnicas</CardTitle>
               </CardHeader>
@@ -252,7 +252,7 @@ export default function AnalisisVacantePagePage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-black border-purple-500/30">
+            <Card className="rounded-[2px] bg-black border-purple-500/30">
               <CardHeader>
                 <CardTitle className="text-lg">Habilidades Blandas</CardTitle>
               </CardHeader>
@@ -273,7 +273,7 @@ export default function AnalisisVacantePagePage() {
         {/* Gaps Tab */}
         {analysisTab === 'gaps' && (
           <div className="space-y-6">
-            <Card className="bg-red-500/5 border-red-500/30">
+            <Card className="rounded-[2px] bg-red-500/5 border-red-500/30">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-red-300">
                   <AlertCircle className="w-5 h-5" />
@@ -298,7 +298,7 @@ export default function AnalisisVacantePagePage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-black border-purple-500/30">
+            <Card className="rounded-[2px] bg-black border-purple-500/30">
               <CardHeader>
                 <CardTitle>Plan de Acción</CardTitle>
               </CardHeader>
@@ -332,7 +332,7 @@ export default function AnalisisVacantePagePage() {
         {/* Prep Tab */}
         {analysisTab === 'prep' && (
           <div className="space-y-6">
-            <Card className="bg-black border-purple-500/30">
+            <Card className="rounded-[2px] bg-black border-purple-500/30">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-purple-400" />
@@ -355,7 +355,7 @@ export default function AnalisisVacantePagePage() {
               </CardContent>
             </Card>
 
-            <Card className="bg-blue-500/5 border-blue-500/30">
+            <Card className="rounded-[2px] bg-blue-500/5 border-blue-500/30">
               <CardHeader>
                 <CardTitle className="text-blue-300">Próximos Pasos</CardTitle>
               </CardHeader>

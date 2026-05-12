@@ -65,7 +65,7 @@ export default function ConversationalInterviewPage() {
     return (
       <main className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="max-w-md w-full space-y-6">
-          <Card className="border-training/40 overflow-hidden">
+          <Card className="rounded-[2px] border-training/40 overflow-hidden">
             <div className="relative aspect-[3/4] w-full bg-black">
               <video
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-JJXsroDrldJQrOQgg1lHrJzODwH1Uf.mov"
@@ -79,7 +79,7 @@ export default function ConversationalInterviewPage() {
             </div>
           </Card>
 
-          <Card className="border-training/30 bg-training/5">
+          <Card className="rounded-[2px] border-training/30 bg-training/5">
             <CardContent className="pt-6">
               <p className="text-white/85 text-center">
                 Sofia se está despidiendo...
@@ -95,7 +95,7 @@ export default function ConversationalInterviewPage() {
     return (
       <main className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="max-w-md w-full space-y-6">
-          <Card className="border-training/40 overflow-hidden">
+          <Card className="rounded-[2px] border-training/40 overflow-hidden">
             <div className="relative aspect-[3/4] w-full bg-black">
               <video
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-JJXsroDrldJQrOQgg1lHrJzODwH1Uf.mov"
@@ -115,7 +115,7 @@ export default function ConversationalInterviewPage() {
             </div>
           </Card>
 
-          <Card className="border-training/30 bg-training/5">
+          <Card className="rounded-[2px] border-training/30 bg-training/5">
             <CardContent className="pt-6">
               <p className="text-white/85 text-center">
                 Sofia se está despidiendo...

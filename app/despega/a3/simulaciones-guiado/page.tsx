@@ -234,7 +234,7 @@ export default function GuidedInterviewPage() {
                 </p>
               </div>
 
-              <Card className="border-training/40">
+              <Card className="rounded-[2px] border-training/40">
                 <CardContent className="pt-6 space-y-4">
                   <div className="space-y-3">
                     <h3 className="font-bold text-white flex items-center gap-2">
@@ -286,7 +286,7 @@ export default function GuidedInterviewPage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="max-w-md w-full space-y-6">
-          <Card className="border-training/40 overflow-hidden">
+          <Card className="rounded-[2px] border-training/40 overflow-hidden">
             <div className="relative aspect-[3/4] w-full bg-black">
               <video
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-jqewmHgGSy0aNTnSXKpYDRGBDYj1rT.mov"
@@ -303,7 +303,7 @@ export default function GuidedInterviewPage() {
             </div>
           </Card>
 
-          <Card className="border-training/30 bg-training/5">
+          <Card className="rounded-[2px] border-training/30 bg-training/5">
             <CardContent className="pt-6">
               <p className="text-white/85 text-center">
                 Sofia se está despidiendo...
@@ -332,7 +332,7 @@ export default function GuidedInterviewPage() {
             </p>
           </div>
 
-          <Card className="p-6">
+          <Card className="rounded-[2px] p-6">
             <h2 className="text-xl font-bold mb-4">Próximos Pasos</h2>
             <ul className="space-y-3 text-muted-foreground dark:text-white/85">
               <li className="flex gap-3">

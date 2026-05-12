@@ -91,7 +91,7 @@ export default function BasicInterviewMissionModule() {
         </div>
 
         {/* Mission Details */}
-        <Card className="bg-purple-500/10 border-purple-500/30 p-4">
+        <Card className="rounded-[2px] bg-purple-500/10 border-purple-500/30 p-4">
           <div className="grid md:grid-cols-4 gap-4 text-center">
             <div>
               <p className="text-white/40 text-xs uppercase">Interviewer</p>
@@ -115,7 +115,7 @@ export default function BasicInterviewMissionModule() {
         </Card>
 
         {/* Interview Structure */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <p className="text-white/50 text-xs uppercase mb-3">Full Interview Structure</p>
           <div className="grid md:grid-cols-2 gap-2">
             {[
@@ -143,7 +143,7 @@ export default function BasicInterviewMissionModule() {
         </Card>
 
         {/* Progress */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Mission Progress</span>
             <span className="text-[rgb(200,130,200)]">{progress}%</span>
@@ -156,7 +156,7 @@ export default function BasicInterviewMissionModule() {
 
         {/* Mission Area */}
         {!missionStarted ? (
-          <Card className="bg-purple-500/10 border-purple-500/30 p-8 text-center space-y-4">
+          <Card className="rounded-[2px] bg-purple-500/10 border-purple-500/30 p-8 text-center space-y-4">
             <AlertCircle className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Final Mission</h3>
             <p className="text-white/70 max-w-md mx-auto">
@@ -179,7 +179,7 @@ export default function BasicInterviewMissionModule() {
             </Button>
           </Card>
         ) : currentStage < INTERVIEW_STAGES.length - 1 ? (
-          <Card className="bg-white/5 border-white/10 p-8 text-center space-y-4">
+          <Card className="rounded-[2px] bg-white/5 border-white/10 p-8 text-center space-y-4">
             <Trophy className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">
               Stage: {INTERVIEW_STAGES[currentStage]?.name}
@@ -196,7 +196,7 @@ export default function BasicInterviewMissionModule() {
             </Button>
           </Card>
         ) : (
-          <Card className="bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border-purple-500/30 p-8 text-center space-y-4">
+          <Card className="rounded-[2px] bg-gradient-to-br from-purple-500/20 to-cyan-500/20 border-purple-500/30 p-8 text-center space-y-4">
             <div className="relative">
               <Trophy className="w-16 h-16 text-[rgb(80,160,170)] mx-auto" />
               <CheckCircle2 className="w-8 h-8 text-[rgb(200,130,200)] absolute -bottom-1 -right-1 left-1/2 ml-4" />

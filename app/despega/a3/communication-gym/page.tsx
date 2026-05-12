@@ -93,7 +93,7 @@ export default function CommunicationGymModule() {
         </div>
 
         {/* Learning Points */}
-        <Card className="rounded-[20px] bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)] p-4">
+        <Card className="rounded-[2px] bg-[rgb(170,70,170)]/10 border-[rgba(170,70,170,0.3)] p-4">
           <div className="flex items-start gap-3">
             <Lightbulb className="w-5 h-5 text-[rgb(170,70,170)] mt-0.5" />
             <div>
@@ -107,7 +107,7 @@ export default function CommunicationGymModule() {
         </Card>
 
         {/* Better Speaking Pattern */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <p className="text-white/50 text-xs uppercase mb-3">Better Speaking Pattern</p>
           <div className="flex flex-wrap items-center gap-2 text-sm">
             <span className="bg-white/10 px-3 py-1.5 rounded text-white/80">1. Listen</span>
@@ -123,7 +123,7 @@ export default function CommunicationGymModule() {
         </Card>
 
         {/* Progress */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progress</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -192,7 +192,7 @@ export default function CommunicationGymModule() {
 
         {/* Complete Module */}
         {completedSteps.length === REQUIRED_ACTIVITIES.length && (
-          <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
+          <Card className="rounded-[2px] bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
             <CheckCircle2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Communication Gym Complete!</h3>
             <p className="text-white/70">

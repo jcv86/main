@@ -88,7 +88,7 @@ export default function JobDecoderModule() {
         </div>
 
         {/* Learning Points */}
-        <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-4">
+        <Card className="rounded-[2px] bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-4">
           <div className="flex items-start gap-3">
             <Lightbulb className="w-5 h-5 text-[rgb(200,130,200)] mt-0.5" />
             <div>
@@ -102,7 +102,7 @@ export default function JobDecoderModule() {
         </Card>
 
         {/* Formula */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <p className="text-white/50 text-xs uppercase mb-2">Formula</p>
           <p className="text-white/80 italic">
             &quot;This role needs ___. I can show this through ___. I need to prepare better for ____.&quot;
@@ -110,7 +110,7 @@ export default function JobDecoderModule() {
         </Card>
 
         {/* Progress */}
-        <Card className="bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progress</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -149,7 +149,7 @@ export default function JobDecoderModule() {
                     <div className="mt-4">
                       {index === 0 && (
                         <textarea 
-                          className="w-full rounded-[20px] bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-32"
+                          className="w-full bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-32"
                           placeholder="Paste the job description here..."
                           value={vacancy}
                           onChange={(e) => setVacancy(e.target.value)}
@@ -172,7 +172,7 @@ export default function JobDecoderModule() {
 
         {/* Complete Module */}
         {completedSteps.length === REQUIRED_ACTIVITIES.length && (
-          <Card className="bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
+          <Card className="rounded-[2px] bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)] p-6 text-center space-y-4">
             <CheckCircle2 className="w-12 h-12 text-[rgb(200,130,200)] mx-auto" />
             <h3 className="text-xl font-bold text-white">Job Decoder Complete!</h3>
             <p className="text-white/70">

@@ -70,7 +70,7 @@ export default function ProgressPage() {
 
         {/* Main Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-white dark:bg-card border-2 border-training/40">
+          <Card className="rounded-[2px] bg-white dark:bg-card border-2 border-training/40">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -84,7 +84,7 @@ export default function ProgressPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white dark:bg-card">
+          <Card className="rounded-[2px] bg-white dark:bg-card">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -98,7 +98,7 @@ export default function ProgressPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white dark:bg-card">
+          <Card className="rounded-[2px] bg-white dark:bg-card">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -112,7 +112,7 @@ export default function ProgressPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white dark:bg-card">
+          <Card className="rounded-[2px] bg-white dark:bg-card">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -128,7 +128,7 @@ export default function ProgressPage() {
         </div>
 
         {/* Skills Progress */}
-        <Card className="border-0 shadow-md">
+        <Card className="rounded-[2px] border-0 shadow-md">
           <CardHeader>
             <CardTitle>Habilidades Desarrolladas</CardTitle>
             <CardDescription>Tu progreso en cada competencia clave</CardDescription>
@@ -159,7 +159,7 @@ export default function ProgressPage() {
         </Card>
 
         {/* Achievements */}
-        <Card className="border-0 shadow-md">
+        <Card className="rounded-[2px] border-0 shadow-md">
           <CardHeader>
             <CardTitle>Logros Desbloqueados</CardTitle>
             <CardDescription>Badges y certificados conseguidos</CardDescription>
@@ -183,7 +183,7 @@ export default function ProgressPage() {
         </Card>
 
         {/* Tips */}
-        <Card className="bg-background">
+        <Card className="rounded-[2px] bg-background">
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-purple text-lg"></div>
             <div>

@@ -137,7 +137,7 @@ export default function EntrenamientoEstructuradoPage() {
               </div>
             </div>
 
-            <Card className="bg-black border-purple-500/30 mb-6">
+            <Card className="rounded-[2px] bg-black border-purple-500/30 mb-6">
               <CardContent className="pt-6">
                 <p className="text-lg mb-4">{selectedLesson.questions[currentQuestionIdx]}</p>
                 
@@ -215,7 +215,7 @@ export default function EntrenamientoEstructuradoPage() {
   if (showScore) {
     return (
       <div className="min-h-screen bg-black text-white flex items-center justify-center px-6">
-        <Card className="bg-black border-green-500/30 w-full max-w-md">
+        <Card className="rounded-[2px] bg-black border-green-500/30 w-full max-w-md">
           <CardContent className="pt-12 text-center pb-12">
             <div className="mb-6">
               <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />

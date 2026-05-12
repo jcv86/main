@@ -243,7 +243,7 @@ export default function ChallensingTrainingPage() {
     <main className="min-h-screen bg-black">
       {showingResults ? (
         <div className="flex items-center justify-center px-4 min-h-screen">
-          <Card className="bg-black border-green-500/30 w-full max-w-md">
+          <Card className="rounded-[2px] bg-black border-green-500/30 w-full max-w-md">
             <CardContent className="pt-12 text-center pb-12">
               <div className="mb-6">
                 <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
@@ -278,7 +278,7 @@ export default function ChallensingTrainingPage() {
       ) : showingFarewell ? (
         <div className="flex items-center justify-center px-4 min-h-screen">
           <div className="max-w-md w-full space-y-6">
-            <Card className="border-training/40 overflow-hidden">
+            <Card className="rounded-[2px] border-training/40 overflow-hidden">
               <div className="relative aspect-[3/4] w-full bg-black">
                 <video
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-JJXsroDrldJQrOQgg1lHrJzODwH1Uf.mov"
@@ -298,7 +298,7 @@ export default function ChallensingTrainingPage() {
               </div>
             </Card>
 
-            <Card className="border-training/30 bg-training/5">
+            <Card className="rounded-[2px] border-training/30 bg-training/5">
               <CardContent className="pt-6">
                 <p className="text-white/85 text-center">
                   Sofia se está despidiendo...

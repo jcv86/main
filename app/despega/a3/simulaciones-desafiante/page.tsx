@@ -227,7 +227,7 @@ export default function GuidedInterviewPage() {
                 </p>
               </div>
 
-              <Card className="border-training/40">
+              <Card className="rounded-[2px] border-training/40">
                 <CardContent className="pt-6 space-y-4">
                   <div className="space-y-3">
                     <h3 className="font-bold text-white flex items-center gap-2">
