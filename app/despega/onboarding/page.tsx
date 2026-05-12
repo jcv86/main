@@ -419,10 +419,7 @@ export default function DespegaOnboarding() {
               </>
             ) : (
               <Button 
-                onClick={() => {
-                  console.log("[v0] Button clicked, setting step to conozcamonos1")
-                  setStep("conozcamonos1")
-                }} 
+                onClick={() => setStep("conozcamonos1")} 
                 className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-sm bg-cyan/40 hover:bg-cyan/50 text-foreground dark:text-foreground"
               >
                 Cuando estés listo, comienza
