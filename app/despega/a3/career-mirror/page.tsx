@@ -32,7 +32,7 @@ const ACTIVITIES = [
   {
     id: 'review-diagnosis',
     title: 'Revisar tu Diagnóstico del Nivel Básico',
-    description: 'Understand what your diagnostic results reveal about your interview readiness.',
+    description: 'Comprende qué revelan tus resultados de diagnóstico sobre tu preparación para la entrevista.',
     icon: Eye,
   },
   {
@@ -44,7 +44,7 @@ const ACTIVITIES = [
   {
     id: 'career-direction',
     title: 'Seleccionar tu Dirección Principal de Carrera',
-    description: 'Choose the professional path that aligns with your goals and experience.',
+    description: 'Elige el camino profesional que se alinea con tus objetivos y experiencia.',
     icon: Target,
   },
   {
@@ -333,7 +333,7 @@ export default function CareerMirrorModule() {
             <Card className="rounded-[2px] bg-white/5 border border-white/10 p-6">
               <h4 className="font-bold text-white mb-4 flex items-center gap-2">
                 <Eye className="w-5 h-5" style={{ color: PILLAR3_PRIMARY }} />
-                How Interviewers May Perceive You
+                Cómo Podrían Percibirte los Entrevistadores
               </h4>
               <div className="grid gap-4">
                 {INTERVIEWER_PERCEPTIONS.map((perception, i) => (

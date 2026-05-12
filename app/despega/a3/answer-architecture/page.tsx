@@ -20,7 +20,7 @@ const ANSWER_TYPES = [
     id: 'self-intro',
     title: 'Construir Autopresentación de 30 segundos',
     subtitle: '"Tell me about yourself"',
-    formula: 'I am a [title] with [X years] experience in [field]. My strongest areas are [2-3 skills]. I am looking for [goal] because [motivation].',
+    formula: 'Soy un [título] con [X años] de experiencia en [campo]. Mis áreas más fuertes son [2-3 habilidades]. Estoy buscando [objetivo] porque [motivación].',
     timeTarget: '30 seconds (~75 words)',
     tips: [
       'Comenzar with your professional identity, not personal details',

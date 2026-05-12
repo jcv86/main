@@ -20,7 +20,7 @@ const PRACTICE_SESSIONS = [
   {
     id: 'intro',
     question: 'Tell me about yourself',
-    coachPrompt: 'Let me hear your self-introduction. Remember: professional identity, key skills, and why you are here.',
+    coachPrompt: 'Déjame escuchar tu autopresentación. Recuerda: identidad profesional, habilidades clave y por qué estás aquí.',
     feedbackCriteria: [
       { id: 'structure', label: 'Limpiar structure', description: 'Follows intro formula' },
       { id: 'relevance', label: 'Role relevance', description: 'Connected to target position' },

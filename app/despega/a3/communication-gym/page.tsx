@@ -19,7 +19,7 @@ const MODULE_XP = 140
 const COMMUNICATION_DRILLS = [
   {
     id: 'intro-30',
-    title: 'Record 30-second Self-Introduction',
+    title: 'Grabar Autopresentación de 30 segundos',
     type: 'recording',
     timeLimit: 30,
     instruction: 'Introduce yourself professionally in exactly 30 seconds. Practice until you hit the time naturally.',

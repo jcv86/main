@@ -661,8 +661,8 @@ export default function JobDecoderModule() {
                 {completedSteps.includes(4) ? <CheckCircle2 className="w-5 h-5" /> : <span>5</span>}
               </div>
               <div className="text-left">
-                <h3 className="font-semibold text-white">Predict Interview Questions</h3>
-                <p className="text-white/50 text-sm">Select 3+ likely questions to prepare for</p>
+                <h3 className="font-semibold text-white">Predecir Preguntas de Entrevista</h3>
+                <p className="text-white/50 text-sm">Selecciona 3+ preguntas probables para prepararte</p>
               </div>
             </div>
             {expandedSection === 'questions' ? <ChevronUp className="w-5 h-5 text-white/50" /> : <ChevronDown className="w-5 h-5 text-white/50" />}
