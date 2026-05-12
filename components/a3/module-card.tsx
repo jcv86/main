@@ -53,7 +53,7 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
       case 'in_progress':
         return <span className="text-xs font-semibold text-training bg-training/20 px-2 py-1 rounded">En progreso</span>
       case 'available':
-        return <span className="text-xs font-semibold text-blue-400 bg-blue-500/20 px-2 py-1 rounded">Disponible</span>
+        return <span className="text-xs font-semibold text-white/60 bg-purple-600/60 px-2 py-1 rounded">Disponible</span>
       default:
         return <span className="text-xs font-semibold text-gray-400 bg-gray-500/20 px-2 py-1 rounded">Bloqueado</span>
     }

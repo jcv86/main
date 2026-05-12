@@ -359,7 +359,7 @@ export default function A3EntrenamientoIntensivo() {
                         ) : (
                           <span className={`text-xs font-medium px-3 py-1 rounded-full ${
                             module.status === 'in_progress' ? 'bg-training/20 text-training' :
-                            module.status === 'available' ? 'bg-blue/20 text-blue' :
+                            module.status === 'available' ? 'bg-purple-600/60 text-white/60' :
                             'bg-white/10 text-white/50'
                           }`}>
                             {module.status === 'in_progress' ? 'En Progreso' :
