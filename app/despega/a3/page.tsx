@@ -328,9 +328,8 @@ export default function A3BasicLevelTrainingPath() {
   }, [])
 
   const getStatusBadge = (status: ModuleStatus) => {
-    switch (status) {
-      case 'completed':
-        return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.3)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.5)' }} className="border">Completado</Badge>
+    if (status === 'completed') {
+      return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.3)' }} className="border">Completado</Badge>
       case 'in_progress':
         return <Badge style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }} className="border">En Progreso</Badge>
       case 'available':
@@ -388,7 +387,7 @@ export default function A3BasicLevelTrainingPath() {
 
           <div className="space-y-4">
             <h1 className="text-4xl md:text-5xl font-bold text-white">
-              A3 — Ruta de Entrenamiento Nivel Básico
+              Ruta de Entrenamiento Nivel Básico
             </h1>
             <p className="text-lg text-white/70 max-w-3xl">
               Un viaje guiado de 10 módulos para construir claridad, confianza, estructura y preparación de entrevista paso a paso.
@@ -404,24 +403,24 @@ export default function A3BasicLevelTrainingPath() {
           {/* Status Badges - using pillar 3 colors */}
           <div className="flex flex-wrap gap-3">
             <Badge 
-              style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }} 
+              style={{ backgroundColor: 'rgba(80, 160, 170, 0)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }} 
               className="border px-3 py-1"
             >
               Nivel: Básico
             </Badge>
             <Badge 
-              style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.4)' }} 
+              style={{ backgroundColor: 'rgba(170, 70, 170, 0)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.4)' }} 
               className="border px-3 py-1"
             >
               Modo de Entrenamiento: Educativo + Guiado + Simulado
             </Badge>
             <Badge 
-              style={{ backgroundColor: 'rgba(170, 70, 170, 0.3)', color: 'rgb(170, 70, 170)', borderColor: 'rgba(170, 70, 170, 0.5)' }} 
+              style={{ backgroundColor: 'rgba(170, 70, 170, 0)', color: 'rgb(170, 70, 170)', borderColor: 'rgba(170, 70, 170, 0.5)' }} 
               className="border px-3 py-1"
             >
               Ruta Total: {TOTAL_XP.toLocaleString()} XP
             </Badge>
-            <Badge className="bg-white/10 text-white/70 border-white/20 border px-3 py-1">
+            <Badge className="border-transparent px-3 py-1" style={{ backgroundColor: 'rgba(128, 0, 255, 0)', color: 'rgba(170, 70, 170, 0.8)', borderColor: 'rgba(170, 70, 170, 0.3)' }}>
               Ruta Seleccionada: {selectedPath} Días
             </Badge>
           </div>
@@ -527,7 +526,7 @@ export default function A3BasicLevelTrainingPath() {
               </div>
 
               <Button 
-                className="w-full bg-gradient-to-r from-[rgb(170,70,170)] to-[rgba(170,70,170,0.8)] hover:from-[rgba(170,70,170,0.9)] hover:to-[rgb(170,70,170)] text-white font-bold py-6 rounded-full text-lg"
+                className="w-full bg-gradient-to-r from-[rgba(170,70,170,0.6)] to-[rgba(170,70,170,0.4)] hover:from-[rgba(170,70,170,0.7)] hover:to-[rgba(170,70,170,0.5)] text-white font-bold py-6 rounded-full text-lg"
                 onClick={() => {
                   // TODO: Navigate to advanced level
                   console.log('[v0] Advanced level coming soon')
