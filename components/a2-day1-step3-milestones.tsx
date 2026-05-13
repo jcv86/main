@@ -59,7 +59,6 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
           label="¿Qué deberías lograr para el Día 10?"
           placeholder="Resultado específico y medible para el primer checkpoint..."
           icon={<Flag className="w-4 h-4 text-purple-400" />}
-          coachContext="day 10 milestone career goal"
           minRows={2}
         />
         {errors.day10 && <p className="text-red-400 text-sm">{errors.day10}</p>}
@@ -73,7 +72,6 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
           label="¿Qué deberías lograr para el Día 20?"
           placeholder="Progreso hacia tu meta principal..."
           icon={<Flag className="w-4 h-4 text-cyan-400" />}
-          coachContext="day 20 milestone career goal"
           minRows={2}
         />
         {errors.day20 && <p className="text-red-400 text-sm">{errors.day20}</p>}
@@ -87,7 +85,6 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
           label="¿Qué deberías lograr para el Día 30?"
           placeholder="Tu meta final de los 30 días..."
           icon={<Flag className="w-4 h-4 text-emerald-400" />}
-          coachContext="day 30 milestone career goal"
           minRows={2}
         />
         {errors.day30 && <p className="text-red-400 text-sm">{errors.day30}</p>}

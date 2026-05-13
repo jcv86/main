@@ -50,7 +50,6 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
         label="Aplicaciones a Empleos"
         placeholder="ej., Aplicar a 5 posiciones por semana, actualizar CV para cada rol, preparar carta de presentación personalizada..."
         icon={<Briefcase className="w-4 h-4 text-red-400" />}
-        coachContext="job application strategy actions"
         minRows={3}
       />
 
@@ -61,7 +60,6 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
         label="Networking y Conexiones"
         placeholder="ej., Conectar con 3 profesionales por semana en LinkedIn, asistir a 1 evento de networking mensual..."
         icon={<Users className="w-4 h-4 text-purple-400" />}
-        coachContext="networking and outreach strategy"
         minRows={3}
       />
 
@@ -72,7 +70,6 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
         label="Aprendizaje y Desarrollo"
         placeholder="ej., Completar curso de habilidades técnicas, leer 1 libro de desarrollo profesional, practicar entrevistas..."
         icon={<BookOpen className="w-4 h-4 text-blue-400" />}
-        coachContext="learning and skill development plan"
         minRows={3}
       />
 
@@ -83,7 +80,6 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
         label="Crecimiento Personal"
         placeholder="ej., Mantener rutina de ejercicio, practicar meditación, establecer límites saludables trabajo-vida..."
         icon={<Heart className="w-4 h-4 text-emerald-400" />}
-        coachContext="personal growth and wellbeing actions"
         minRows={3}
       />
 
