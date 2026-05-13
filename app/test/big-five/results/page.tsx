@@ -105,7 +105,9 @@ export default function BigFiveResults() {
 
   const { toast } = useToast()
   const router = useRouter()
-  const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!)
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null
   const { user } = useUser() // Use user hook
 
   useEffect(() => {
@@ -1014,7 +1016,7 @@ export default function BigFiveResults() {
                       <h4 className="font-semibold mb-3">Acciones Concretas:</h4>
                       <ul className="space-y-2">
                         <li className="flex gap-3">
-                          <span className="text-purple font-bold">→</span>
+                          <span className="text-purple font-bold">��</span>
                           <div>
                             <strong>Mapeo de Energía Social:</strong> Durante una semana, registra qué interacciones te
                             energizan vs. te agotan.
