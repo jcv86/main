@@ -387,7 +387,8 @@ export default function A2RoutesPage() {
                 <p className="text-red text-lg mb-6">{error || 'No se encontró ruta personalizada'}</p>
                 <Button 
                   onClick={() => loadAndGenerateRoute()}
-                  className="bg-blue/80 hover:bg-blue/70 text-white"
+                  className="text-white"
+                  style={{ backgroundColor: 'rgba(225, 120, 130, 0.4)' }}
                 >
                   Reintentar
                   <ArrowRight className="w-4 h-4 ml-2" />
@@ -414,8 +415,8 @@ export default function A2RoutesPage() {
         {/* Tu Progreso y Logros - Section at the START */}
         <div className="space-y-6 pt-8" style={{ borderTop: `1px solid rgba(90, 90, 150, 0.1)` }}>
           <div className="flex items-center justify-between flex-wrap gap-3">
-            <h2 className="text-3xl font-bold text-white flex items-center gap-2">
-              <Trophy className="w-8 h-8" style={{ color: 'rgb(90, 90, 150)' }} />
+            <h2 className="text-3xl font-medium flex items-center gap-2" style={{ color: 'rgba(90, 90, 150, 0.8)' }}>
+              <Trophy className="w-8 h-8" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />
               Tu Progreso en la Ruta de 90 Días
             </h2>
             <Button
@@ -540,14 +541,19 @@ export default function A2RoutesPage() {
               const prevMonthLabel = days === 60 ? 'Mes 1' : days === 90 ? 'Mes 2' : null
 
               return (
-                <div key={days} className={`border rounded-lg overflow-hidden transition-opacity ${monthLocked ? 'border-muted/20 opacity-60' : 'border-muted/50'}`}>
+                <div key={days} className={`border rounded-lg overflow-hidden transition-opacity ${monthLocked ? 'opacity-60' : ''}`} style={{ borderColor: 'rgba(90, 90, 150, 0.8)' }}>
                   <button
                     onClick={() => !monthLocked && setExpandedMilestone(isExpanded ? null : days)}
                     className={`w-full flex items-center justify-between p-4 transition-colors text-left ${monthLocked ? 'bg-muted/10 cursor-not-allowed' : 'bg-muted/20 hover:bg-muted/30 cursor-pointer'}`}
                     disabled={monthLocked}
                   >
                     <div className="flex items-center gap-3">
-                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${monthLocked ? 'bg-muted/20 border border-muted/30 text-muted/50' : 'bg-blue/20 border border-blue/40 text-blue'}`}>
+                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold`} style={{ 
+                        backgroundColor: monthLocked ? 'rgba(90, 90, 150, 0.2)' : 'rgba(90, 90, 150, 0.6)',
+                        borderColor: monthLocked ? 'rgba(90, 90, 150, 0.3)' : 'rgba(90, 90, 150, 0.8)',
+                        borderWidth: '1px',
+                        color: monthLocked ? 'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.6)'
+                      }}>
                         {monthLocked ? <Lock className="w-4 h-4" /> : phaseNum}
                       </div>
                       <div>
@@ -594,20 +600,20 @@ export default function A2RoutesPage() {
         </Card>
 
         {/* Resources Library Section */}
-        <div className="pt-8 border-t border-white/10">
+        <div className="pt-8" style={{ borderTop: `1px solid rgba(225, 120, 130, 0.4)` }}>
           <ResourceLibrary />
         </div>
 
         {/* Tu Siguiente Paso - At the VERY END */}
-        <div className="pt-8 border-t border-white/10">
-          <Card className="bg-blue/10 border-2 border-blue/40">
+        <div className="pt-8" style={{ borderTop: `1px solid rgba(225, 120, 130, 0.4)` }}>
+          <Card style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.2)', borderWidth: '1px' }}>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-white text-2xl">
-                <CheckCircle2 className="w-6 h-6 text-white" />
+              <CardTitle className="flex items-center gap-2 text-2xl" style={{ color: 'rgba(225, 120, 130, 0.6)' }}>
+                <CheckCircle2 className="w-6 h-6" style={{ color: 'rgb(225, 120, 130)' }} />
                 Tu Siguiente Paso
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent className="space-y-6" style={{ borderTop: `1px solid rgba(225, 120, 130, 0.4)` }}>
               <div className="space-y-3">
                 <p className="text-white/90 text-lg">
                   <strong>1. Completa tu ruta de 90 días:</strong>
@@ -625,13 +631,14 @@ export default function A2RoutesPage() {
                 </p>
                 <Button
                   onClick={() => router.push('/despega/a3')}
-                  className="w-full bg-blue hover:bg-blue/80 text-white py-6 text-base font-semibold"
+                  className="w-full text-white py-6 text-base font-semibold"
+                  style={{ backgroundColor: 'rgba(90, 90, 150, 0.4)', borderRadius: '20px' }}
                 >
                   Comenzar Entrenamiento Intensivo
                   <ArrowRight className="w-5 h-5 ml-2" />
                 </Button>
               </div>
-              <div className="p-4 bg-background/80 border border-white/10 rounded-lg">
+              <div className="p-4 rounded-lg" style={{ backgroundColor: 'rgba(30, 32, 42, 0.8)', borderColor: 'rgba(90, 90, 150, 0.2)', borderWidth: '1px' }}>
                 <p className="text-white/80 text-sm">
                   El plan es flexible. Si necesitas cambios o tienes preguntas, habla con el coach en cualquier momento.
                 </p>
