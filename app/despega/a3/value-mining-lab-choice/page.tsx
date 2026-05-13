@@ -82,7 +82,7 @@ export default function ValueMiningLabChoice() {
               </ul>
 
               <Button 
-                className="w-full bg-gradient-to-r from-[rgba(170,70,170,0.4)] to-[rgba(170,70,170,0.2)] hover:from-[rgba(170,70,170,0.5)] hover:to-[rgba(170,70,170,0.3)] text-white font-semibold h-12 rounded-full"
+                className="w-full bg-gradient-to-r from-[rgba(170,70,170,0.7)] to-[rgba(170,70,170,0.3)] hover:from-[rgba(170,70,170,0.8)] hover:to-[rgba(170,70,170,0.4)] text-white font-semibold h-12 rounded-full"
                 onClick={(e) => {
                   e.stopPropagation()
                   router.push('/despega/a3/value-mining-lab-text')
@@ -132,7 +132,7 @@ export default function ValueMiningLabChoice() {
               </ul>
 
               <Button 
-                className="w-full bg-gradient-to-r from-[rgba(170,70,170,0.4)] to-[rgba(170,70,170,0.2)] hover:from-[rgba(170,70,170,0.5)] hover:to-[rgba(170,70,170,0.3)] text-white font-semibold h-12 rounded-full"
+                className="w-full bg-gradient-to-r from-[rgba(170,70,170,0.7)] to-[rgba(170,70,170,0.3)] hover:from-[rgba(170,70,170,0.8)] hover:to-[rgba(170,70,170,0.4)] text-white font-semibold h-12 rounded-full"
                 onClick={(e) => {
                   e.stopPropagation()
                   router.push('/despega/a3/value-mining-lab-coach')
