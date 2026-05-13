@@ -28,10 +28,10 @@ export function A2Day1Modal({ isOpen, onClose, onComplete }: A2Day1ModalProps) {
     day30: '',
   })
   const [actionPlanData, setActionPlanData] = useState({
-    applications: [],
-    networking: [],
-    learning: [],
-    personal: [],
+    applications: '',
+    networking: '',
+    learning: '',
+    personal: '',
   })
 
   // Step 1: Vision -> Step 2: Milestones
