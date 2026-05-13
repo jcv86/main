@@ -24,11 +24,10 @@ import {
   Video,
   AlertTriangle,
   Trophy,
-  MapPin,
-  Navigation
+  MapPin
 } from 'lucide-react'
 import { A2TodaysRoute } from '@/components/a2-todays-route'
-import { A2RouteProgress } from '@/components/a2-route-progress'
+import { A2ProgressSidebar } from '@/components/a2-progress-sidebar'
 
 // ============================================
 // A3 BASIC LEVEL TRAINING PATH
@@ -450,10 +449,10 @@ export default function A3BasicLevelTrainingPath() {
         {/* ========== A2 INTEGRATION: ROUTE PROGRESS ========== */}
         <div className="space-y-4">
           <div className="flex items-center gap-2 mb-4">
-            <Navigation className="w-5 h-5" style={{ color: 'rgb(170,70,170)' }} />
-            <h2 className="text-2xl font-bold text-white">Tu Progreso de Ruta (A2 vs A3)</h2>
+            <MapPin className="w-5 h-5" style={{ color: 'rgb(170,70,170)' }} />
+            <h2 className="text-2xl font-bold text-white">Tu Progreso A2 (90 Días)</h2>
           </div>
-          <A2RouteProgress dayNumber={currentDay} />
+          <A2ProgressSidebar />
         </div>
 
         {/* ========== MAIN PROGRESS BAR ========== */}
