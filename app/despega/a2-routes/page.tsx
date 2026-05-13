@@ -441,7 +441,7 @@ export default function A2RoutesPage() {
           >
             <div className="flex items-center gap-3">
               <MapPin className="w-5 h-5" style={{ color: 'rgb(90, 90, 150)' }} />
-              <span className="font-semibold text-white text-lg">Tu Ruta 7/30/90</span>
+              <span className="font-semibold text-white text-lg">Tu Ruta 30-60-90</span>
               {!showRuta && (
                 <span className="text-xs text-white/40 font-normal">Haz clic para ver las 3 fases</span>
               )}
@@ -452,33 +452,27 @@ export default function A2RoutesPage() {
           {showRuta && (
             <div className="p-5 space-y-4" style={{ borderTop: `1px solid rgba(90, 90, 150, 0.2)` }}>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* 7 Days */}
-                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
-                  <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'rgb(90, 90, 150)' }}>SEMANA 1</p>
-                  <h3 className="text-xl font-black text-white mb-2">7 Días</h3>
-                  <p className="text-white/75 text-sm leading-relaxed mb-3">Prepárate para tu primera conversación de LinkedIn. Optimiza perfil, prepara pitch elevator de 30 segundos.</p>
-                  <p className="text-xs font-semibold" style={{ color: 'rgb(90, 90, 150)' }}>Conversacion: LinkedIn</p>
-                </div>
-
                 {/* 30 Days */}
                 <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
-                  <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'rgb(90, 90, 150)' }}>MES 1</p>
+                  <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'rgb(90, 90, 150)' }}>FASE 1</p>
                   <h3 className="text-xl font-black text-white mb-2">30 Días</h3>
-                  <p className="text-white/75 text-sm leading-relaxed mb-3">Domina entrevista técnica o conductual. Practica respuestas STAR, manejo de objeciones, cierre de oportunidades.</p>
-                  <p className="text-xs font-semibold" style={{ color: 'rgb(90, 90, 150)' }}>Conversacion: Entrevista</p>
+                  <p className="text-white/75 text-sm leading-relaxed">Fundamentos y primeros pasos. Establece rituales, identifica oportunidades clave, inicia acciones inmediatas.</p>
+                </div>
+
+                {/* 60 Days */}
+                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
+                  <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'rgb(90, 90, 150)' }}>FASE 2</p>
+                  <h3 className="text-xl font-black text-white mb-2">60 Días</h3>
+                  <p className="text-white/75 text-sm leading-relaxed">Aceleración y profundización. Valida lo aprendido, expande esfuerzos, prepárate para la siguiente etapa.</p>
                 </div>
 
                 {/* 90 Days */}
                 <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
-                  <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'rgb(90, 90, 150)' }}>TRIMESTRE</p>
+                  <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'rgb(90, 90, 150)' }}>FASE 3</p>
                   <h3 className="text-xl font-black text-white mb-2">90 Días</h3>
-                  <p className="text-white/75 text-sm leading-relaxed mb-3">Negocia tu propuesta. Habla de sueldo, beneficios, rol, vision de carrera con seguridad y profesionalismo.</p>
-                  <p className="text-xs font-semibold" style={{ color: 'rgb(90, 90, 150)' }}>Conversacion: Career</p>
+                  <p className="text-white/75 text-sm leading-relaxed">Consolidación y dominio. Integra hábitos, cosecha resultados, diseña próximos 90 días.</p>
                 </div>
               </div>
-              <p className="text-white/60 text-sm text-center pt-2" style={{ borderTop: `1px solid rgba(90, 90, 150, 0.1)` }}>
-                Cada fase te transforma en una pieza imprescindible para tus potenciales empleadores. No es solo conseguir un trabajo, es posicionar tu carrera para los proximos 10 anos.
-              </p>
             </div>
           )}
         </div>
