@@ -47,10 +47,10 @@ export default function ValueMiningLabChoice() {
         {/* Mode selection cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {/* Without Coach option */}
-          <Card className="bg-white/5 border-white/10 hover:bg-white/8 transition-colors cursor-pointer group"
+          <Card className="bg-white/5 border-white/10 hover:bg-white/8 transition-colors cursor-pointer group flex flex-col"
             onClick={() => router.push('/despega/a3/value-mining-lab-text')}
           >
-            <div className="p-8 space-y-6">
+            <div className="p-8 space-y-6 flex flex-col h-full">
               <div className="flex items-center justify-between">
                 <div className="w-16 h-16 rounded-full bg-blue-500/20 border-2 border-blue-500/30 flex items-center justify-center group-hover:bg-blue-500/30 transition-colors">
                   <BookOpen className="w-8 h-8 text-blue-400" />
@@ -66,7 +66,7 @@ export default function ValueMiningLabChoice() {
                 </p>
               </div>
 
-              <ul className="space-y-3">
+              <ul className="space-y-3 flex-grow">
                 <li className="flex items-start gap-3">
                   <Zap className="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5" />
                   <span className="text-white/80">Completa 5 actividades requeridas</span>
@@ -82,7 +82,7 @@ export default function ValueMiningLabChoice() {
               </ul>
 
               <Button 
-                className="w-full bg-transparent border-2 border-[rgb(170,70,170)] text-[rgb(170,70,170)] font-semibold h-12 rounded-full hover:bg-[rgb(170,70,170)]/10 transition-colors"
+                className="w-full bg-gradient-to-r from-[rgb(170,70,170)] to-[rgba(170,70,170,0.8)] hover:from-[rgba(170,70,170,0.9)] hover:to-[rgb(170,70,170)] text-white font-semibold h-12 rounded-full"
                 onClick={(e) => {
                   e.stopPropagation()
                   router.push('/despega/a3/value-mining-lab-text')
@@ -94,10 +94,10 @@ export default function ValueMiningLabChoice() {
           </Card>
 
           {/* With Coach option */}
-          <Card className="bg-gradient-to-br from-[rgba(170,70,170,0.15)] to-[rgba(170,70,170,0.05)] border-2 border-[rgba(170,70,170,0.4)] hover:border-[rgba(170,70,170,0.6)] transition-colors cursor-pointer group"
+          <Card className="bg-gradient-to-br from-[rgba(170,70,170,0.15)] to-[rgba(170,70,170,0.05)] border-2 border-[rgba(170,70,170,0.4)] hover:border-[rgba(170,70,170,0.6)] transition-colors cursor-pointer group flex flex-col"
             onClick={() => router.push('/despega/a3/value-mining-lab-coach')}
           >
-            <div className="p-8 space-y-6">
+            <div className="p-8 space-y-6 flex flex-col h-full">
               <div className="flex items-center justify-between">
                 <div className="w-16 h-16 rounded-full bg-[rgb(170,70,170)]/20 border-2 border-[rgb(170,70,170)]/30 flex items-center justify-center group-hover:bg-[rgb(170,70,170)]/30 transition-colors">
                   <Users className="w-8 h-8 text-[rgb(170,70,170)]" />
@@ -116,7 +116,7 @@ export default function ValueMiningLabChoice() {
                 </p>
               </div>
 
-              <ul className="space-y-3">
+              <ul className="space-y-3 flex-grow">
                 <li className="flex items-start gap-3">
                   <User className="w-5 h-5 text-[rgb(170,70,170)] flex-shrink-0 mt-0.5" />
                   <span className="text-white/80">Coach de IA en la pantalla con retroalimentación</span>
