@@ -2,13 +2,31 @@
 
 import { useState, useCallback, useRef } from 'react'
 
-interface SpeechRecognitionEvent extends Event {
-  results: SpeechRecognitionResultList
-  isFinal: boolean
+interface SpeechRecognitionResultList {
+  readonly length: number
+  item(index: number): SpeechRecognitionResult
+  [index: number]: SpeechRecognitionResult
+}
+
+interface SpeechRecognitionResult {
+  readonly length: number
+  item(index: number): SpeechRecognitionAlternative
+  [index: number]: SpeechRecognitionAlternative
+  readonly isFinal: boolean
+}
+
+interface SpeechRecognitionAlternative {
+  readonly transcript: string
+  readonly confidence: number
+}
+
+interface SpeechRecognitionResultEvent extends Event {
+  readonly resultIndex: number
+  readonly results: SpeechRecognitionResultList
 }
 
 interface SpeechRecognitionErrorEvent extends Event {
-  error: string
+  readonly error: string
 }
 
 declare global {
@@ -42,7 +60,7 @@ export function useSpeechRecognition() {
       setError(null)
     }
 
-    recognitionRef.current.onresult = (event: SpeechRecognitionEvent) => {
+    recognitionRef.current.onresult = (event: SpeechRecognitionResultEvent) => {
       let interimTranscript = ''
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
