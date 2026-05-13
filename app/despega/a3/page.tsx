@@ -328,8 +328,9 @@ export default function A3BasicLevelTrainingPath() {
   }, [])
 
   const getStatusBadge = (status: ModuleStatus) => {
-    if (status === 'completed') {
-      return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.3)' }} className="border">Completado</Badge>
+    switch (status) {
+      case 'completed':
+        return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.3)' }} className="border">Completado</Badge>
       case 'in_progress':
         return <Badge style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }} className="border">En Progreso</Badge>
       case 'available':
