@@ -2,6 +2,7 @@ import { generateObject } from 'ai'
 import { anthropic } from '@ai-sdk/anthropic'
 import { z } from 'zod'
 import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 const AnalysisSchema = z.object({
@@ -23,7 +24,7 @@ export async function POST(request: Request) {
     const demoUserCookie = cookieStore.get('demo_user')
     
     if (!demoUserCookie) {
-      return Response.json(
+      return NextResponse.json(
         { error: 'Not authenticated' },
         { status: 401 }
       )
@@ -107,7 +108,7 @@ Provide scores that total insights into actionability and feasibility. Be constr
       }
     }
 
-    return Response.json({
+    return NextResponse.json({
       success: true,
       analysis: {
         totalScore,
@@ -125,7 +126,7 @@ Provide scores that total insights into actionability and feasibility. Be constr
     })
   } catch (error) {
     console.error('[v0] Analysis error:', error)
-    return Response.json(
+    return NextResponse.json(
       { error: 'Failed to analyze submission' },
       { status: 500 }
     )

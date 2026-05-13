@@ -1,5 +1,6 @@
 import { put } from '@vercel/blob'
 import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function POST(request: Request) {
@@ -8,7 +9,7 @@ export async function POST(request: Request) {
     const demoUserCookie = cookieStore.get('demo_user')
     
     if (!demoUserCookie) {
-      return Response.json(
+      return NextResponse.json(
         { error: 'Not authenticated' },
         { status: 401 }
       )
@@ -23,7 +24,7 @@ export async function POST(request: Request) {
     const fileName = formData.get('fileName') as string
 
     if (!file) {
-      return Response.json(
+      return NextResponse.json(
         { error: 'No file provided' },
         { status: 400 }
       )
@@ -65,7 +66,7 @@ export async function POST(request: Request) {
       }
     }
 
-    return Response.json({
+    return NextResponse.json({
       success: true,
       blob: {
         url: blob.url,
@@ -75,7 +76,7 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     console.error('[v0] Upload error:', error)
-    return Response.json(
+    return NextResponse.json(
       { error: 'Failed to upload file' },
       { status: 500 }
     )

@@ -2,6 +2,7 @@ import { generateObject } from 'ai'
 import { anthropic } from '@ai-sdk/anthropic'
 import { z } from 'zod'
 import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
 
 const EnhancedVisionSchema = z.object({
   role: z.string().describe('Enhanced professional role/title'),
@@ -16,7 +17,7 @@ export async function POST(request: Request) {
     const { role, environment, desiredOutcome } = body
 
     if (!role || !environment || !desiredOutcome) {
-      return Response.json(
+      return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       )
@@ -27,7 +28,7 @@ export async function POST(request: Request) {
     const demoUserCookie = cookieStore.get('demo_user')
     
     if (!demoUserCookie) {
-      return Response.json(
+      return NextResponse.json(
         { error: 'Not authenticated' },
         { status: 401 }
       )
@@ -50,7 +51,7 @@ Keep the core intent but improve clarity, specificity, and achievability.`,
       temperature: 0.7,
     })
 
-    return Response.json({
+    return NextResponse.json({
       success: true,
       enhanced: {
         role: object.role,
@@ -61,7 +62,7 @@ Keep the core intent but improve clarity, specificity, and achievability.`,
     })
   } catch (error) {
     console.error('[v0] Coach enhance error:', error)
-    return Response.json(
+    return NextResponse.json(
       { error: 'Failed to enhance vision' },
       { status: 500 }
     )
