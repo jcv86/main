@@ -74,8 +74,6 @@ export default function EntrenamientoEstructuradoPage() {
   const [responses, setResponses] = useState<Record<number, string[]>>({})
   const [showScore, setShowScore] = useState(false)
   const [lessonScore, setLessonScore] = useState(0)
-  const [coachTip, setCoachTip] = useState<string>('')
-  const [showCoachTip, setShowCoachTip] = useState(false)
 
   const startLesson = (lesson: typeof STRUCTURED_LESSONS[0]) => {
     setSelectedLesson(lesson)
@@ -95,18 +93,11 @@ export default function EntrenamientoEstructuradoPage() {
     setCurrentQuestionIdx(0)
     setShowScore(false)
     setResponses({})
-    setShowCoachTip(false)
-  }
-
-  const handleCoachTip = (tip: string) => {
-    setCoachTip(tip)
-    setShowCoachTip(true)
   }
 
   const nextQuestion = () => {
     if (selectedLesson && currentQuestionIdx < selectedLesson.questions.length - 1) {
       setCurrentQuestionIdx(currentQuestionIdx + 1)
-      setShowCoachTip(false)
     } else {
       completeLesson()
     }
@@ -115,7 +106,6 @@ export default function EntrenamientoEstructuradoPage() {
   const previousQuestion = () => {
     if (currentQuestionIdx > 0) {
       setCurrentQuestionIdx(currentQuestionIdx - 1)
-      setShowCoachTip(false)
     }
   }
 
@@ -178,20 +168,20 @@ export default function EntrenamientoEstructuradoPage() {
 
                 {/* Answer Input Component */}
                 <AnswerInputWithCoach
-                  question={selectedLesson.questions[currentQuestionIdx]}
-                  referenceLabel="Contexto/Empresa"
-                  answerPlaceholder="Describe tu respuesta en detalle..."
-                  answer={responses[selectedLesson.id]?.[currentQuestionIdx] || ''}
-                  onAnswerChange={(ans) => {
+                  placeholder="Describe tu respuesta en detalle..."
+                  questionText={selectedLesson.questions[currentQuestionIdx]}
+                  onSubmit={(answer) => {
                     setResponses({
                       ...responses,
                       [selectedLesson.id]: [
                         ...(responses[selectedLesson.id] || []),
-                        ans
+                        answer
                       ].slice(-selectedLesson.questions.length)
                     })
                   }}
-                  onCoachTip={handleCoachTip}
+                  isLoading={false}
+                  showCoachTips={true}
+                  coachContext={`Module: ${selectedLesson.title}, Competencies: ${selectedLesson.competencies.join(', ')}`}
                 />
 
                 {/* Evaluation Criteria */}
