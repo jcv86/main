@@ -62,6 +62,11 @@ export function A2Day1Step2Coach({ visionData, onNext, onBack }: Step2CoachProps
     setEnhanced(null)
   }
 
+  const handleSkip = () => {
+    // Continue with original vision (no enhancement)
+    onNext(visionData)
+  }
+
   return (
     <div className="space-y-6">
       <div>
@@ -112,6 +117,14 @@ export function A2Day1Step2Coach({ visionData, onNext, onBack }: Step2CoachProps
                 Get AI Coach Enhancement
               </>
             )}
+          </Button>
+
+          <Button
+            onClick={handleSkip}
+            variant="outline"
+            className="w-full border-slate-600 text-white/70 hover:text-white"
+          >
+            Continue Without Enhancement
           </Button>
         </div>
       ) : (
