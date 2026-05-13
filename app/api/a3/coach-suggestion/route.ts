@@ -44,18 +44,24 @@ Focus on clarity, impact, and relevance to the role.`
     const suggestion = completion.choices[0]?.message?.content || 'No suggestion available'
 
     // Log coaching interaction for analytics
-    const { data: { user } } = await supabase.auth.getUser()
-    if (user) {
-      await supabase
-        .from('coaching_interactions')
-        .insert({
-          user_id: user.id,
-          question,
-          user_answer: answer,
-          coach_suggestion: suggestion,
-          created_at: new Date().toISOString()
-        })
-        .catch(err => console.error('[v0] Error logging coaching interaction:', err))
+    try {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { error } = await supabase
+          .from('coaching_interactions')
+          .insert({
+            user_id: user.id,
+            question,
+            user_answer: answer,
+            coach_suggestion: suggestion,
+            created_at: new Date().toISOString()
+          })
+        if (error) {
+          console.error('[v0] Error logging coaching interaction:', error)
+        }
+      }
+    } catch (logError) {
+      console.error('[v0] Error in coaching interaction logging:', logError)
     }
 
     return NextResponse.json({ suggestion })
