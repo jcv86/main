@@ -29,9 +29,9 @@ export default function ValueMiningLabChoice() {
             <ArrowLeft className="w-4 h-4" />
             Volver a módulos
           </Link>
-          <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] border-[rgba(170,70,170,0.3)]">
+          <span className="text-[rgba(170,70,170,0.8)] text-sm font-semibold">
             Módulo 2 • 100 XP
-          </Badge>
+          </span>
         </div>
 
         {/* Module intro */}
@@ -39,7 +39,7 @@ export default function ValueMiningLabChoice() {
           <h1 className="text-4xl font-normal text-white mb-4">
             Laboratorio de Minería de Valor
           </h1>
-          <p className="text-white/80 text-lg max-w-2xl">
+          <p className="text-white/60 text-lg max-w-2xl">
             Descubre el valor real oculto en tu experiencia laboral anterior y convierte tareas en logros que impresionarán en cualquier entrevista.
           </p>
         </div>
@@ -61,7 +61,7 @@ export default function ValueMiningLabChoice() {
                 <h2 className="text-2xl font-bold text-white">
                   Modo Texto
                 </h2>
-                <p className="text-white/70">
+                <p className="text-white/60">
                   Trabaja a tu propio ritmo sin presión de tiempo
                 </p>
               </div>
@@ -111,7 +111,7 @@ export default function ValueMiningLabChoice() {
                 <h2 className="text-2xl font-bold text-white">
                   Modo Coach
                 </h2>
-                <p className="text-white/70">
+                <p className="text-white/60">
                   Recibe retroalimentación en tiempo real con un coach de IA
                 </p>
               </div>
