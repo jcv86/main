@@ -224,7 +224,7 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete, intervie
             <Button
               variant="outline"
               onClick={onClose}
-              className="flex-1 border-2 border-[rgb(80,160,170)] text-[rgb(80,160,170)] hover:text-[rgb(80,160,170)] rounded-full h-12 font-semibold"
+              className="flex-1 border-2 border-[rgb(80,160,170)] text-[rgb(80,160,170)] hover:bg-[rgba(80,160,170,0.1)] hover:text-[rgb(80,160,170)] hover:border-[rgb(80,160,170)] rounded-full h-12 font-semibold"
             >
               Cancelar
             </Button>
