@@ -1,5 +1,4 @@
 import { generateText } from 'ai'
-import { anthropic } from '@ai-sdk/anthropic'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -40,7 +39,7 @@ ${actionPlan ? JSON.stringify(actionPlan, null, 2) : 'Not specified'}
 
     // Use AI to analyze and score - use generateText with JSON parsing
     const { text } = await generateText({
-      model: anthropic('claude-3-5-sonnet-20241022'),
+      model: 'anthropic/claude-3-5-sonnet-20241022',
       prompt: `You are an expert career coach evaluating a professional development plan. 
 
 Analyze this 90-day job search plan and provide scores and feedback in JSON format:

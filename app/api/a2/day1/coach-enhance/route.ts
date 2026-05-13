@@ -1,5 +1,4 @@
 import { generateText } from 'ai'
-import { anthropic } from '@ai-sdk/anthropic'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
@@ -28,7 +27,7 @@ export async function POST(request: Request) {
 
     // Use AI to enhance the vision with generateText and JSON parsing
     const { text } = await generateText({
-      model: anthropic('claude-3-5-sonnet-20241022'),
+      model: 'anthropic/claude-3-5-sonnet-20241022',
       prompt: `You are a career coach helping someone define their professional vision. 
       
 The user has provided these initial thoughts:
