@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { CameraMicrophoneTest } from '@/components/camera-microphone-test'
-import { ChevronRight, Send, Mic, MessageSquare, CheckCircle2 } from 'lucide-react'
+import { ChevronRight, Send, Mic, MessageSquare, CheckCircle2, FileText } from 'lucide-react'
 
 const COACH_QUESTIONS = [
   {
@@ -239,25 +239,33 @@ export default function ValueMiningLabCoach() {
             </div>
 
             {/* Response Input Section */}
-            <div className="bg-white/5 border border-white/10 rounded-lg p-3 space-y-2 min-h-24">
-              <p className="text-xs text-white/60 uppercase">Tu Respuesta</p>
+            <div className="bg-white/5 border border-white/10 rounded-lg overflow-hidden">
+              <p className="text-xs text-white/60 uppercase px-3 pt-3 pb-2">Tu Respuesta</p>
               
-              {/* Response Mode Toggle */}
-              <div className="flex gap-2">
+              {/* Response Mode Toggle - Tab Style */}
+              <div className="flex border-t border-white/10">
                 <Button
                   onClick={() => setResponseMode('text')}
-                  variant={responseMode === 'text' ? 'default' : 'outline'}
+                  variant="ghost"
                   size="sm"
-                  className={`flex-1 text-xs ${responseMode === 'text' ? 'bg-[rgb(170,70,170)]' : 'border-white/20'}`}
+                  className={`flex-1 rounded-none text-xs font-medium border-b-2 transition-all ${
+                    responseMode === 'text' 
+                      ? 'bg-[rgb(170,70,170)]/20 border-b-[rgb(170,70,170)] text-white' 
+                      : 'border-b-transparent text-white/60 hover:text-white'
+                  }`}
                 >
-                  <MessageSquare className="w-3 h-3 mr-1" />
+                  <FileText className="w-3 h-3 mr-1" />
                   Texto
                 </Button>
                 <Button
                   onClick={() => setResponseMode('audio')}
-                  variant={responseMode === 'audio' ? 'default' : 'outline'}
+                  variant="ghost"
                   size="sm"
-                  className={`flex-1 text-xs ${responseMode === 'audio' ? 'bg-[rgb(170,70,170)]' : 'border-white/20'}`}
+                  className={`flex-1 rounded-none text-xs font-medium border-b-2 transition-all ${
+                    responseMode === 'audio' 
+                      ? 'bg-[rgb(170,70,170)]/20 border-b-[rgb(170,70,170)] text-white' 
+                      : 'border-b-transparent text-white/60 hover:text-white'
+                  }`}
                 >
                   <Mic className="w-3 h-3 mr-1" />
                   Voz
@@ -270,46 +278,42 @@ export default function ValueMiningLabCoach() {
                   value={userResponse}
                   onChange={(e) => setUserResponse(e.target.value)}
                   placeholder="Tu respuesta aparecerá aquí o escribe manualmente..."
-                  className="w-full bg-transparent text-white/90 text-sm placeholder:text-white/30 resize-none h-12 outline-none"
+                  className="w-full bg-transparent text-white/90 text-sm placeholder:text-white/30 resize-none h-24 outline-none px-3 py-3"
                 />
               )}
 
               {/* Audio Recording Mode */}
               {responseMode === 'audio' && (
-                <div className="space-y-2">
+                <div className="px-3 py-4 space-y-3">
                   {isRecording ? (
-                    <div className="flex items-center justify-center gap-2 py-1">
+                    <div className="flex items-center justify-center gap-2 py-2">
                       <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                      <span className="text-xs text-red-400">Grabando...</span>
+                      <span className="text-xs text-red-400 font-medium">Grabando...</span>
                     </div>
                   ) : hasAudioRecording ? (
-                    <div className="flex items-center justify-center gap-2 py-1">
-                      <CheckCircle2 className="w-3 h-3 text-green-400" />
-                      <span className="text-xs text-green-400">Grabación completada</span>
+                    <div className="flex items-center justify-center gap-2 py-2">
+                      <CheckCircle2 className="w-4 h-4 text-green-400" />
+                      <span className="text-xs text-green-400 font-medium">Grabación completada</span>
                     </div>
                   ) : (
-                    <p className="text-xs text-white/50 text-center py-1">Presiona para grabar</p>
+                    <p className="text-xs text-white/50 text-center py-2">Presiona para grabar tu respuesta</p>
                   )}
+
+                  {/* Record Button */}
+                  <Button
+                    onClick={isRecording ? stopAudioRecording : startAudioRecording}
+                    size="sm"
+                    className={`w-full text-xs font-medium ${
+                      isRecording 
+                        ? 'bg-red-600 hover:bg-red-700 text-white' 
+                        : 'bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white'
+                    }`}
+                  >
+                    <Mic className="w-3 h-3 mr-2" />
+                    {isRecording ? 'Detener Grabación' : 'Grabar Respuesta'}
+                  </Button>
                 </div>
               )}
-            </div>
-
-            {/* Control Buttons */}
-            <div className="flex gap-2">
-              {responseMode === 'audio' ? (
-                <Button
-                  onClick={isRecording ? stopAudioRecording : startAudioRecording}
-                  size="sm"
-                  className={`flex-1 text-xs ${
-                    isRecording 
-                      ? 'bg-red-600 hover:bg-red-700' 
-                      : 'bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)]'
-                  }`}
-                >
-                  <Mic className="w-3 h-3 mr-1" />
-                  {isRecording ? 'Detener' : 'Grabar'}
-                </Button>
-              ) : null}
             </div>
           </div>
 
