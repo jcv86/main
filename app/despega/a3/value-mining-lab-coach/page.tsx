@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { CameraMicrophoneTest } from '@/components/camera-microphone-test'
-import { ChevronRight, Send, Mic, MessageSquare, CheckCircle2 } from 'lucide-react'
+import { ChevronRight, Send, Mic, MicOff, CheckCircle2, Volume2 } from 'lucide-react'
+import { useSpeechRecognition } from '@/lib/hooks/use-speech-recognition'
 
 const COACH_QUESTIONS = [
   {
@@ -42,8 +43,6 @@ const VALUE_CATEGORIES = [
 export default function ValueMiningLabCoach() {
   const router = useRouter()
   const videoRef = useRef<HTMLVideoElement>(null)
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
-  const audioChunksRef = useRef<Blob[]>([])
   
   const [userResponse, setUserResponse] = useState('')
   const [isReadyToContinue, setIsReadyToContinue] = useState(false)
@@ -51,8 +50,29 @@ export default function ValueMiningLabCoach() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [sessionActive, setSessionActive] = useState(false)
   const [progress, setProgress] = useState(0)
-  const [isRecording, setIsRecording] = useState(false)
-  const [hasAudioRecording, setHasAudioRecording] = useState(false)
+  
+  // Speech recognition hook
+  const { isListening, isSupported, transcript, isFinal, startListening, stopListening, resetTranscript } = useSpeechRecognition({
+    language: 'es-ES',
+    continuous: false,
+    interimResults: false,
+    silenceTimeout: 2000
+  })
+
+  const lastTranscriptRef = useRef<string>('')
+
+  // Handle transcribed text from speech recognition
+  useEffect(() => {
+    if (transcript && isFinal && transcript !== lastTranscriptRef.current) {
+      console.log('[v0] Final transcript received:', transcript)
+      lastTranscriptRef.current = transcript
+      setUserResponse(transcript)
+      // Reset for next recording
+      setTimeout(() => {
+        resetTranscript()
+      }, 500)
+    }
+  }, [transcript, isFinal, resetTranscript])
 
   const handleCameraTestComplete = (passed: boolean) => {
     if (passed) {
@@ -63,54 +83,22 @@ export default function ValueMiningLabCoach() {
     }
   }
 
-  const startAudioRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      const mediaRecorder = new MediaRecorder(stream)
-      mediaRecorderRef.current = mediaRecorder
-      audioChunksRef.current = []
-
-      mediaRecorder.ondataavailable = (event) => {
-        audioChunksRef.current.push(event.data)
-      }
-
-      mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' })
-        console.log('[v0] Audio recording complete:', audioBlob.size, 'bytes')
-        setHasAudioRecording(true)
-        stream.getTracks().forEach(track => track.stop())
-      }
-
-      mediaRecorder.start()
-      setIsRecording(true)
-    } catch (err) {
-      console.error('[v0] Error starting audio recording:', err)
-    }
-  }
-
-  const stopAudioRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop()
-      setIsRecording(false)
-    }
-  }
-
   const handleSubmitResponse = () => {
-    if (!userResponse.trim() && !hasAudioRecording) {
+    if (!userResponse.trim()) {
       console.log('[v0] No response to submit')
       return
     }
 
     // Simulate coach feedback
-    console.log('[v0] Response submitted:', hasAudioRecording ? 'Audio' : userResponse)
+    console.log('[v0] Response submitted:', userResponse)
     
     // Move to next question
     if (currentQuestion < COACH_QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
       setProgress(((currentQuestion + 1) / COACH_QUESTIONS.length) * 100)
       setUserResponse('')
-      setHasAudioRecording(false)
-      setIsRecording(false)
+      lastTranscriptRef.current = ''
+      resetTranscript()
     } else {
       // Session complete
       setSessionActive(false)
@@ -255,30 +243,45 @@ export default function ValueMiningLabCoach() {
               />
 
               {/* Audio Recording Section - Shown below textarea */}
-              {isRecording && (
+              {isListening && (
                 <div className="px-3 pb-2 flex items-center gap-2">
                   <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                   <span className="text-xs text-red-400 font-medium">Grabando...</span>
                 </div>
               )}
 
-              {hasAudioRecording && !isRecording && (
-                <div className="px-3 pb-2 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-green-400" />
-                  <span className="text-xs text-green-400 font-medium">Grabación completada</span>
+              {!isSupported && (
+                <div className="px-3 pb-2 flex items-center gap-2 text-yellow-600 dark:text-yellow-400">
+                  <Volume2 className="w-4 h-4" />
+                  <span className="text-xs">Micrófono no disponible</span>
                 </div>
               )}
 
               {/* Usar micrófono Button */}
-              <Button
-                onClick={isRecording ? stopAudioRecording : startAudioRecording}
-                variant="ghost"
-                size="sm"
-                className="m-3 text-xs font-medium bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white border-0"
-              >
-                <Mic className="w-3 h-3 mr-2" />
-                {isRecording ? 'Detener Grabación' : 'Usar micrófono'}
-              </Button>
+              {isSupported && (
+                <Button
+                  onClick={isListening ? stopListening : startListening}
+                  variant="ghost"
+                  size="sm"
+                  className={`m-3 text-xs font-medium border-0 ${
+                    isListening 
+                      ? 'bg-red-600 hover:bg-red-700 text-white' 
+                      : 'bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white'
+                  }`}
+                >
+                  {isListening ? (
+                    <>
+                      <MicOff className="w-3 h-3 mr-2 animate-pulse" />
+                      Grabando...
+                    </>
+                  ) : (
+                    <>
+                      <Mic className="w-3 h-3 mr-2" />
+                      Usar micrófono
+                    </>
+                  )}
+                </Button>
+              )}
             </div>
           </div>
 
@@ -317,7 +320,7 @@ export default function ValueMiningLabCoach() {
         <div className="flex justify-end gap-2">
           <Button
             onClick={handleSubmitResponse}
-            disabled={!userResponse.trim() && !hasAudioRecording}
+            disabled={!userResponse.trim()}
             className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white gap-2 px-8 disabled:opacity-50"
           >
             Enviar Respuesta
@@ -325,7 +328,7 @@ export default function ValueMiningLabCoach() {
           </Button>
           <Button
             onClick={currentQuestion < COACH_QUESTIONS.length - 1 ? handleSubmitResponse : () => router.push('/despega/a3')}
-            disabled={!userResponse.trim() && !hasAudioRecording}
+            disabled={!userResponse.trim()}
             className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white gap-2 px-8 disabled:opacity-50"
           >
             {currentQuestion < COACH_QUESTIONS.length - 1 ? 'Siguiente Pregunta' : 'Finalizar'}
