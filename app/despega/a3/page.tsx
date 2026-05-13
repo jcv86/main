@@ -472,29 +472,29 @@ export default function A3BasicLevelTrainingPath() {
           {/* Summary Cards */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
             <div 
-              className="bg-white/5 rounded-lg p-4 border"
-              style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+              className="rounded-[28px] border text-card-foreground shadow-sm p-4"
+              style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.3)' }}
             >
-              <p className="text-2xl font-bold" style={{ color: PILLAR3_PRIMARY }}>{earnedXp}</p>
+              <p className="text-2xl font-bold mb-1" style={{ color: 'rgb(90, 90, 150)' }}>{earnedXp}</p>
               <p className="text-xs text-white/50">XP Ganados from {TOTAL_XP}</p>
             </div>
             <div 
-              className="bg-white/5 rounded-lg p-4 border"
-              style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+              className="rounded-[28px] border text-card-foreground shadow-sm p-4"
+              style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.3)' }}
             >
-              <p className="text-2xl font-bold text-white">{completedModules} / 10</p>
+              <p className="text-2xl font-bold mb-1" style={{ color: 'rgb(90, 90, 150)' }}>{completedModules} / 10</p>
               <p className="text-xs text-white/50">Módulos completados</p>
             </div>
             <div 
-              className="bg-white/5 rounded-lg p-4 border"
-              style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+              className="rounded-[28px] border text-card-foreground shadow-sm p-4"
+              style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.3)' }}
             >
               <p className="text-lg font-bold text-white truncate">{currentModule?.title || 'Espejo de Carrera'}</p>
               <p className="text-xs text-white/50">Enfoque Actual</p>
             </div>
             <div 
-              className="bg-white/5 rounded-lg p-4 border"
-              style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+              className="rounded-[28px] border text-card-foreground shadow-sm p-4"
+              style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.3)' }}
             >
               <p className="text-lg font-bold text-white/70 truncate">{nextModule?.title || 'Complete!'}</p>
               <p className="text-xs text-white/50">Siguiente Desbloqueo</p>
