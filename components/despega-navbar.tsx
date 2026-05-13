@@ -207,11 +207,35 @@ export function DespegaNavbar() {
                   <button
                     onClick={() => setOpenDropdown(isOpen ? null : stage.name)}
                     className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-150 hover:bg-white/5"
-                    style={{ color: phaseColors[stage.phase] }}
+                    style={{ 
+                      color: isActivePhase || hasActiveRoute ? phaseColors[stage.phase] : 'white',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActivePhase && !hasActiveRoute) {
+                        e.currentTarget.style.color = phaseColors[stage.phase]
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActivePhase && !hasActiveRoute) {
+                        e.currentTarget.style.color = 'white'
+                      }
+                    }}
                   >
-                    <stage.icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: phaseColors[stage.phase] }} />
+                    <stage.icon 
+                      className="w-3.5 h-3.5 flex-shrink-0" 
+                      style={{ 
+                        color: isActivePhase || hasActiveRoute ? phaseColors[stage.phase] : 'white',
+                        transition: 'color 0.15s'
+                      }} 
+                    />
                     <span>{stage.name}</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} style={{ color: phaseColors[stage.phase] }} />
+                    <ChevronDown 
+                      className={`w-3.5 h-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} 
+                      style={{ 
+                        color: isActivePhase || hasActiveRoute ? phaseColors[stage.phase] : 'white',
+                        transition: 'color 0.15s'
+                      }} 
+                    />
                   </button>
 
                   {/* Dropdown — solid bg, left-border accent, no heavy colored header */}
