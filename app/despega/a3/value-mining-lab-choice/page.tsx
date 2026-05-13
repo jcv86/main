@@ -36,7 +36,7 @@ export default function ValueMiningLabChoice() {
 
         {/* Module intro */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold text-white mb-4">
+          <h1 className="text-4xl font-normal text-white mb-4">
             Laboratorio de Minería de Valor
           </h1>
           <p className="text-white/80 text-lg max-w-2xl">
@@ -82,7 +82,7 @@ export default function ValueMiningLabChoice() {
               </ul>
 
               <Button 
-                className="w-full bg-gradient-to-r from-[rgb(170,70,170)] to-[rgba(170,70,170,0.8)] hover:from-[rgba(170,70,170,0.9)] hover:to-[rgb(170,70,170)] text-white font-semibold h-12 rounded-full"
+                className="w-full bg-gradient-to-r from-[rgba(170,70,170,0.4)] to-[rgba(170,70,170,0.2)] hover:from-[rgba(170,70,170,0.5)] hover:to-[rgba(170,70,170,0.3)] text-white font-semibold h-12 rounded-full"
                 onClick={(e) => {
                   e.stopPropagation()
                   router.push('/despega/a3/value-mining-lab-text')
@@ -102,7 +102,7 @@ export default function ValueMiningLabChoice() {
                 <div className="w-16 h-16 rounded-full bg-[rgb(170,70,170)]/20 border-2 border-[rgb(170,70,170)]/30 flex items-center justify-center group-hover:bg-[rgb(170,70,170)]/30 transition-colors">
                   <Users className="w-8 h-8 text-[rgb(170,70,170)]" />
                 </div>
-                <Badge className="bg-[rgb(170,70,170)]/20 text-[rgb(170,70,170)] border-[rgb(170,70,170)]/30">
+                <Badge className="bg-[rgb(170,70,170)]/40 text-white/60 border-[rgb(170,70,170)]/30">
                   Interactivo
                 </Badge>
               </div>
@@ -132,7 +132,7 @@ export default function ValueMiningLabChoice() {
               </ul>
 
               <Button 
-                className="w-full bg-gradient-to-r from-[rgb(170,70,170)] to-[rgba(170,70,170,0.8)] hover:from-[rgba(170,70,170,0.9)] hover:to-[rgb(170,70,170)] text-white font-semibold h-12 rounded-full"
+                className="w-full bg-gradient-to-r from-[rgba(170,70,170,0.4)] to-[rgba(170,70,170,0.2)] hover:from-[rgba(170,70,170,0.5)] hover:to-[rgba(170,70,170,0.3)] text-white font-semibold h-12 rounded-full"
                 onClick={(e) => {
                   e.stopPropagation()
                   router.push('/despega/a3/value-mining-lab-coach')
@@ -146,7 +146,7 @@ export default function ValueMiningLabChoice() {
 
         {/* Info section */}
         <Card className="bg-white/5 border-white/10 p-8">
-          <h3 className="text-xl font-bold text-white mb-4">¿Cuál debo elegir?</h3>
+          <h3 className="text-xl font-light text-white mb-4">¿Cuál debo elegir?</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>
               <p className="font-semibold text-white mb-2">Elige Modo Texto si:</p>
