@@ -36,8 +36,6 @@ export default function A2RoutesPage() {
   const [isSyncing, setIsSyncing] = useState(false)
   const [isExporting, setIsExporting] = useState(false)
   const [isResetting, setIsResetting] = useState(false)
-  const [showRuta, setShowRuta] = useState(true)
-  const [showComoFunciona, setShowComoFunciona] = useState(true)
   const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
 
@@ -411,109 +409,6 @@ export default function A2RoutesPage() {
             Tu Ruta: De Aquí a Imprescindible
           </h1>
           <p className="text-xl" style={{ color: 'rgba(255, 255, 255, 0.52)' }}>Tu plan personalizado de 90 días mapeado a conversaciones reales</p>
-        </div>
-
-        {/* Success Banner - First element */}
-        <div className="rounded-sm p-10 mb-12 bg-white/10 border-0" style={{ borderColor: 'rgba(90, 90, 150, 0.3)', backgroundColor: 'rgba(90, 90, 150, 0.15)' }}>
-          <div className="flex items-start gap-4">
-            <div className="flex items-center justify-center w-16 h-16 rounded-[28px] flex-shrink-0" style={{ backgroundColor: 'rgba(90, 90, 150, 0.6)' }}>
-              <CheckCircle2 className="w-8 h-8" style={{ color: 'rgb(90, 90, 150)' }} />
-            </div>
-            <div className="flex-1">
-              <h4 className="font-bold text-lg mb-1" style={{ color: 'rgb(90, 90, 150)' }}>Ruta Generada!</h4>
-              <p className="text-sm text-white/85 mb-3">Tu plan de 90 días personalizado está listo y se adapta a tu ritmo</p>
-              <div className="flex items-center gap-2 text-xs text-white/70">
-                <Calendar className="w-4 h-4" />
-                <span>Próximo hito: Completa la Fase 1 en los próximos 30 días</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Intro Section - Collapsible */}
-        <div className="border rounded-xl overflow-hidden" style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}>
-          <button
-            onClick={() => setShowRuta(!showRuta)}
-            className="w-full flex items-center justify-between px-5 py-4 transition-colors text-left group"
-            style={{ backgroundColor: 'rgba(90, 90, 150, 0.05)', borderBottom: `1px solid rgba(90, 90, 150, 0.2)` }}
-          >
-            <div className="flex items-center gap-3">
-              <MapPin className="w-5 h-5" style={{ color: 'rgb(90, 90, 150)' }} />
-              <span className="font-semibold text-white text-lg">Tu Ruta 30-60-90</span>
-              {!showRuta && (
-                <span className="text-xs text-white/40 font-normal">Haz clic para ver las 3 fases</span>
-              )}
-            </div>
-            <ArrowRight className="w-4 h-4 transition-transform duration-200" style={{ color: 'rgba(90, 90, 150, 0.6)', transform: showRuta ? 'rotate(90deg)' : 'rotate(0)' }} />
-          </button>
-
-          {showRuta && (
-            <div className="p-5 space-y-4" style={{ borderTop: `1px solid rgba(90, 90, 150, 0.2)` }}>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {/* 30 Days */}
-                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
-                  <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'rgb(90, 90, 150)' }}>FASE 1</p>
-                  <h3 className="text-xl font-black text-white mb-2">30 Días</h3>
-                  <p className="text-white/75 text-sm leading-relaxed">Fundamentos y primeros pasos. Establece rituales, identifica oportunidades clave, inicia acciones inmediatas.</p>
-                </div>
-
-                {/* 60 Days */}
-                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
-                  <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'rgb(90, 90, 150)' }}>FASE 2</p>
-                  <h3 className="text-xl font-black text-white mb-2">60 Días</h3>
-                  <p className="text-white/75 text-sm leading-relaxed">Aceleración y profundización. Valida lo aprendido, expande esfuerzos, prepárate para la siguiente etapa.</p>
-                </div>
-
-                {/* 90 Days */}
-                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
-                  <p className="text-xs font-bold uppercase tracking-widest mb-1" style={{ color: 'rgb(90, 90, 150)' }}>FASE 3</p>
-                  <h3 className="text-xl font-black text-white mb-2">90 Días</h3>
-                  <p className="text-white/75 text-sm leading-relaxed">Consolidación y dominio. Integra hábitos, cosecha resultados, diseña próximos 90 días.</p>
-                </div>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* What is this phase - Collapsible */}
-        <div className="border rounded-xl overflow-hidden" style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}>
-          <button
-            onClick={() => setShowComoFunciona(!showComoFunciona)}
-            className="w-full flex items-center justify-between px-5 py-4 transition-colors text-left"
-            style={{ backgroundColor: 'rgba(90, 90, 150, 0.05)', borderBottom: `1px solid rgba(90, 90, 150, 0.2)` }}
-          >
-            <div className="flex items-center gap-3">
-              <Zap className="w-5 h-5" style={{ color: 'rgb(90, 90, 150)' }} />
-              <span className="font-semibold text-white text-lg">Como Funciona Tu Ruta</span>
-              {!showComoFunciona && (
-                <span className="text-xs text-white/40 font-normal">Haz clic para ver los detalles</span>
-              )}
-            </div>
-            <ArrowRight className="w-4 h-4 transition-transform duration-200" style={{ color: 'rgba(90, 90, 150, 0.6)', transform: showComoFunciona ? 'rotate(90deg)' : 'rotate(0)' }} />
-          </button>
-
-          {showComoFunciona && (
-            <div className="p-5" style={{ borderTop: `1px solid rgba(90, 90, 150, 0.2)` }}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
-                  <h3 className="font-bold text-white mb-1">Acciones Concretas</h3>
-                  <p className="text-white/70 text-sm">Cada tarea esta mapeada a una conversacion real: LinkedIn networking, entrevistas o negociacion de cargo.</p>
-                </div>
-                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
-                  <h3 className="font-bold text-white mb-1">Progresion Estructurada</h3>
-                  <p className="text-white/70 text-sm">3 fases claramente definidas: Fundamentos, Aceleracion, Dominio. Cada una te acerca a ser imprescindible.</p>
-                </div>
-                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
-                  <h3 className="font-bold text-white mb-1">Personalizacion</h3>
-                  <p className="text-white/70 text-sm">Tu ruta es unica segun tu perfil cerebral, objetivos y nivel actual. No hay dos rutas iguales.</p>
-                </div>
-                <div className="rounded-r-xl p-4" style={{ borderLeft: `4px solid rgb(90, 90, 150)`, backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
-                  <h3 className="font-bold text-white mb-1">Trackeo Real</h3>
-                  <p className="text-white/70 text-sm">Marca tareas como completadas y ve tu progreso en tiempo real. Gana badges y hitos conforme avanzas.</p>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
         {/* Tu Progreso y Logros - Section at the START */}
