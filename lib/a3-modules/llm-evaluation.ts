@@ -5,9 +5,9 @@ import type {
   RubricScoring,
 } from './types';
 
-const client = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Initialize OpenAI only if API key is available
+const openaiApiKey = process.env.OPENAI_API_KEY
+const client = openaiApiKey ? new OpenAI({ apiKey: openaiApiKey }) : null
 
 export interface EvaluationRequest {
   rubric: RubricScoring;
@@ -34,6 +34,11 @@ export async function evaluateResponseWithLLM(
     response,
     context,
   } = request;
+
+  // Check if OpenAI is configured
+  if (!client) {
+    throw new Error('OpenAI API not configured. Please set OPENAI_API_KEY environment variable.');
+  }
 
   // Build evaluation prompt
   const prompt = buildEvaluationPrompt(rubric, response, context);

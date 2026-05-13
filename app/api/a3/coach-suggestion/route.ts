@@ -2,14 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 import OpenAI from 'openai'
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+// Initialize Supabase only if environment variables are available
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+const supabase = supabaseUrl && supabaseServiceKey 
+  ? createClient(supabaseUrl, supabaseServiceKey)
+  : null
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY
-})
+// Initialize OpenAI only if API key is available
+const openaiApiKey = process.env.OPENAI_API_KEY
+const openai = openaiApiKey ? new OpenAI({ apiKey: openaiApiKey }) : null
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,6 +21,14 @@ export async function POST(request: NextRequest) {
     const authHeader = request.headers.get('authorization')
     if (!authHeader) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    // Check if OpenAI is configured
+    if (!openai) {
+      return NextResponse.json(
+        { error: 'AI coaching not available - OpenAI API key not configured' },
+        { status: 503 }
+      )
     }
 
     // Call OpenAI to generate coaching suggestion
@@ -43,25 +53,27 @@ Focus on clarity, impact, and relevance to the role.`
 
     const suggestion = completion.choices[0]?.message?.content || 'No suggestion available'
 
-    // Log coaching interaction for analytics
-    try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        const { error } = await supabase
-          .from('coaching_interactions')
-          .insert({
-            user_id: user.id,
-            question,
-            user_answer: answer,
-            coach_suggestion: suggestion,
-            created_at: new Date().toISOString()
-          })
-        if (error) {
-          console.error('[v0] Error logging coaching interaction:', error)
+    // Log coaching interaction for analytics (optional if Supabase is available)
+    if (supabase) {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (user) {
+          const { error } = await supabase
+            .from('coaching_interactions')
+            .insert({
+              user_id: user.id,
+              question,
+              user_answer: answer,
+              coach_suggestion: suggestion,
+              created_at: new Date().toISOString()
+            })
+          if (error) {
+            console.error('[v0] Error logging coaching interaction:', error)
+          }
         }
+      } catch (logError) {
+        console.error('[v0] Error in coaching interaction logging:', logError)
       }
-    } catch (logError) {
-      console.error('[v0] Error in coaching interaction logging:', logError)
     }
 
     return NextResponse.json({ suggestion })

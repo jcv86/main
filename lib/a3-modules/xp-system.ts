@@ -1,10 +1,12 @@
 // XP system and progress tracking
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Initialize Supabase only if environment variables are available
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+const supabase = supabaseUrl && supabaseServiceKey
+  ? createClient(supabaseUrl, supabaseServiceKey)
+  : null
 
 export interface XPTransaction {
   userId: string;
@@ -23,6 +25,11 @@ export async function awardModuleXP(
   xpAmount: number
 ): Promise<{ success: boolean; totalXP: number }> {
   try {
+    if (!supabase) {
+      console.warn('[XP Award] Supabase not configured, skipping XP transaction');
+      return { success: true, totalXP: xpAmount };
+    }
+
     // Record XP transaction
     const { error: transactionError } = await supabase
       .from('dtc_transactions')
@@ -107,6 +114,11 @@ export async function completeModule(
   xpReward: number
 ): Promise<void> {
   try {
+    if (!supabase) {
+      console.warn('[Module Completion] Supabase not configured, skipping completion tracking');
+      return;
+    }
+
     // Record module completion
     const { error: completionError } = await supabase
       .from('a3_completed_modules')
@@ -160,6 +172,15 @@ export async function completeModule(
  */
 export async function getUserXPStatus(userId: string) {
   try {
+    if (!supabase) {
+      return {
+        currentXP: 0,
+        lifetimeEarned: 0,
+        level: 1,
+        nextLevelXP: 500,
+      };
+    }
+
     const { data, error } = await supabase
       .from('user_dtc_balance')
       .select('balance, lifetime_earned')
@@ -196,6 +217,14 @@ export async function getUserModuleProgress(
   moduleId: string
 ) {
   try {
+    if (!supabase) {
+      return {
+        status: 'not_started',
+        score: 0,
+        attempts: 0,
+      };
+    }
+
     const { data, error } = await supabase
       .from('a3_module_progress')
       .select('*')
@@ -240,6 +269,11 @@ export async function updateModuleProgress(
   sectionScores?: Record<string, number>
 ): Promise<void> {
   try {
+    if (!supabase) {
+      console.warn('[Update Module Progress] Supabase not configured, skipping progress update');
+      return;
+    }
+
     const { data: existing } = await supabase
       .from('a3_module_progress')
       .select('*')
@@ -282,6 +316,17 @@ export async function updateModuleProgress(
  */
 export async function getUserPillar3Stats(userId: string) {
   try {
+    if (!supabase) {
+      return {
+        currentXP: 0,
+        lifetimeXP: 0,
+        modulesCompleted: 0,
+        totalModules: 10,
+        completionPercentage: 0,
+        completedModuleIds: [],
+      };
+    }
+
     const [
       { data: xpData },
       { data: progressData },
