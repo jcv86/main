@@ -50,6 +50,8 @@ export default function ValueMiningLabCoach() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [sessionActive, setSessionActive] = useState(false)
   const [progress, setProgress] = useState(0)
+  const [isFirstCompletion, setIsFirstCompletion] = useState(false)
+  const [xpEarned, setXpEarned] = useState(0)
   
   // Speech recognition hook
   const { isListening, isSupported, transcript, isFinal, startListening, stopListening, resetTranscript } = useSpeechRecognition({
@@ -83,7 +85,7 @@ export default function ValueMiningLabCoach() {
     }
   }
 
-  const handleSubmitResponse = () => {
+  const handleSubmitResponse = async () => {
     if (!userResponse.trim()) {
       console.log('[v0] No response to submit')
       return
@@ -100,9 +102,40 @@ export default function ValueMiningLabCoach() {
       lastTranscriptRef.current = ''
       resetTranscript()
     } else {
-      // Session complete
+      // Session complete - record completion
+      await recordModuleCompletion()
       setSessionActive(false)
       setProgress(100)
+    }
+  }
+
+  const recordModuleCompletion = async () => {
+    try {
+      const response = await fetch('/api/a3/module-completion', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          moduleId: 'value-mining-lab-coach',
+          moduleName: 'Minería de Valor - Coach',
+          trainingType: 'coach'
+        })
+      })
+
+      if (!response.ok) {
+        console.error('[v0] Failed to record completion:', response.statusText)
+        return
+      }
+
+      const data = await response.json()
+      console.log('[v0] Completion recorded:', data)
+      
+      // Set XP and first completion status from response
+      setIsFirstCompletion(data.isFirstCompletion || false)
+      setXpEarned(data.xpAwarded || 0)
+    } catch (error) {
+      console.error('[v0] Error recording completion:', error)
     }
   }
 
@@ -151,10 +184,14 @@ export default function ValueMiningLabCoach() {
         <div className="text-center space-y-6 max-w-2xl">
           <h2 className="text-3xl font-normal text-white">Sesión Completada</h2>
           <p className="text-white/60 text-lg">Excelente trabajo en la Minería de Valor</p>
-          <p className="text-white/40">Ganaste 100 XP</p>
+          {isFirstCompletion && xpEarned > 0 ? (
+            <p className="text-white/40">Ganaste {xpEarned} XP</p>
+          ) : (
+            <p className="text-white/40">Sesión completada nuevamente. XP no se suma en repeticiones.</p>
+          )}
           <Button 
             onClick={() => router.push('/despega/a3')}
-            className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white"
+            className="bg-gradient-to-r from-[rgba(170,70,170,0.7)] to-[rgba(170,70,170,0.3)] hover:from-[rgba(170,70,170,0.8)] hover:to-[rgba(170,70,170,0.4)] text-white"
           >
             <ChevronRight className="w-4 h-4 mr-2" />
             Volver a A3
