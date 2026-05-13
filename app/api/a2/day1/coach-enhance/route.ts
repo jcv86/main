@@ -1,4 +1,3 @@
-import { generateText } from 'ai'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
@@ -14,7 +13,6 @@ export async function POST(request: Request) {
       )
     }
 
-    // Get user from demo auth
     const cookieStore = await cookies()
     const demoUserCookie = cookieStore.get('demo_user')
     
@@ -25,53 +23,18 @@ export async function POST(request: Request) {
       )
     }
 
-    // Use AI to enhance the vision with generateText and JSON parsing
-    const { text } = await generateText({
-      model: 'anthropic/claude-3-5-sonnet-20241022',
-      prompt: `You are a career coach helping someone define their professional vision. 
-      
-The user has provided these initial thoughts:
-- Professional role/title: ${role}
-- Ideal environment: ${environment}
-- Desired outcome in 30 days: ${desiredOutcome}
-
-Please enhance and refine these statements to be more specific, actionable, and inspiring. 
-Make them more concrete and aligned with career development best practices.
-Keep the core intent but improve clarity, specificity, and achievability.
-
-Respond ONLY with valid JSON in this exact format (no other text):
-{
-  "role": "<enhanced role/title>",
-  "environment": "<enhanced environment description>",
-  "desiredOutcome": "<enhanced desired outcome>",
-  "reasoning": "<brief reasoning for enhancements>"
-}`,
-      temperature: 0.7,
-    })
-
-    // Parse JSON response
-    let object
-    try {
-      object = JSON.parse(text)
-    } catch (parseError) {
-      console.error('[v0] Failed to parse enhancement response:', text)
-      // Return original values if parsing fails
-      object = {
-        role,
-        environment,
-        desiredOutcome,
-        reasoning: 'Enhancement service temporarily unavailable',
-      }
+    // Placeholder coach enhancement with mock data
+    const enhanced = {
+      role: `Senior ${role}`,
+      environment: `${environment} with focus on professional growth`,
+      desiredOutcome: `Secure ${role} role with competitive offer by Day 30`,
+      reasoning: 'Enhanced for clarity and specificity'
     }
 
     return NextResponse.json({
       success: true,
-      enhanced: {
-        role: object.role,
-        environment: object.environment,
-        desiredOutcome: object.desiredOutcome,
-        reasoning: object.reasoning,
-      },
+      enhanced,
+      message: 'Placeholder enhancement - AI integration coming soon'
     })
   } catch (error) {
     console.error('[v0] Coach enhance error:', error)
