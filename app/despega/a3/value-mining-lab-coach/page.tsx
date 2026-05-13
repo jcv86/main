@@ -260,9 +260,9 @@ export default function ValueMiningLabCoach() {
                 className="w-full h-full object-cover"
               />
               {isListening && (
-                <div className="absolute top-3 right-3 flex items-center gap-2 bg-red-500/20 px-3 py-1 rounded-full border border-red-500/30">
-                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                  <span className="text-xs text-red-400">Grabando</span>
+                <div className="absolute top-3 right-3 flex items-center gap-2 bg-[rgba(170,70,170,0.2)] px-3 py-1 rounded-full border border-[rgba(170,70,170,0.3)]">
+                  <div className="w-2 h-2 bg-[rgb(170,70,170)] rounded-full animate-pulse"></div>
+                  <span className="text-xs text-[rgb(170,70,170)]/70">Grabando</span>
                 </div>
               )}
             </div>
@@ -282,8 +282,8 @@ export default function ValueMiningLabCoach() {
               {/* Audio Recording Section - Shown below textarea */}
               {isListening && (
                 <div className="px-3 pb-2 flex items-center gap-2">
-                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                  <span className="text-xs text-red-400 font-medium">Grabando...</span>
+                  <div className="w-2 h-2 bg-[rgb(170,70,170)] rounded-full animate-pulse"></div>
+                  <span className="text-xs text-[rgb(170,70,170)]/70 font-medium">Grabando...</span>
                 </div>
               )}
 
@@ -300,9 +300,9 @@ export default function ValueMiningLabCoach() {
                   onClick={isListening ? stopListening : startListening}
                   variant="ghost"
                   size="sm"
-                  className={`m-3 text-xs font-medium border-0 rounded-full ${
+                  className={`m-3 text-xs font-medium border-0 rounded-full transition-all ${
                     isListening 
-                      ? 'bg-red-600 hover:bg-red-700 text-white' 
+                      ? 'bg-[rgba(170,70,170,0.2)] hover:bg-[rgba(170,70,170,0.3)] text-[rgb(170,70,170)]' 
                       : 'bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white'
                   }`}
                 >
