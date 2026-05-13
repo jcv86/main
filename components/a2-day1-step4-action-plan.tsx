@@ -2,167 +2,105 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import { CheckSquare, Plus, Trash2 } from 'lucide-react'
-
-interface ActionItem {
-  category: string
-  description: string
-}
+import { Briefcase, Users, BookOpen, Heart } from 'lucide-react'
+import { A2EnhancedInput } from '@/components/a2-enhanced-input'
 
 interface Step4ActionPlanProps {
   onNext: (data: {
-    applications: ActionItem[]
-    networking: ActionItem[]
-    learning: ActionItem[]
-    personal: ActionItem[]
+    applications: string
+    networking: string
+    learning: string
+    personal: string
   }) => void
   onBack: () => void
   initialData?: {
-    applications: ActionItem[]
-    networking: ActionItem[]
-    learning: ActionItem[]
-    personal: ActionItem[]
+    applications: string
+    networking: string
+    learning: string
+    personal: string
   }
 }
 
 export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4ActionPlanProps) {
-  const [applications, setApplications] = useState<ActionItem[]>(initialData?.applications || [{ category: 'applications', description: '' }])
-  const [networking, setNetworking] = useState<ActionItem[]>(initialData?.networking || [{ category: 'networking', description: '' }])
-  const [learning, setLearning] = useState<ActionItem[]>(initialData?.learning || [{ category: 'learning', description: '' }])
-  const [personal, setPersonal] = useState<ActionItem[]>(initialData?.personal || [{ category: 'personal', description: '' }])
-
-  const handleAddItem = (category: string) => {
-    switch (category) {
-      case 'applications':
-        setApplications([...applications, { category, description: '' }])
-        break
-      case 'networking':
-        setNetworking([...networking, { category, description: '' }])
-        break
-      case 'learning':
-        setLearning([...learning, { category, description: '' }])
-        break
-      case 'personal':
-        setPersonal([...personal, { category, description: '' }])
-        break
-    }
-  }
-
-  const handleRemoveItem = (category: string, index: number) => {
-    switch (category) {
-      case 'applications':
-        setApplications(applications.filter((_, i) => i !== index))
-        break
-      case 'networking':
-        setNetworking(networking.filter((_, i) => i !== index))
-        break
-      case 'learning':
-        setLearning(learning.filter((_, i) => i !== index))
-        break
-      case 'personal':
-        setPersonal(personal.filter((_, i) => i !== index))
-        break
-    }
-  }
-
-  const handleUpdateDescription = (category: string, index: number, description: string) => {
-    switch (category) {
-      case 'applications':
-        applications[index].description = description
-        setApplications([...applications])
-        break
-      case 'networking':
-        networking[index].description = description
-        setNetworking([...networking])
-        break
-      case 'learning':
-        learning[index].description = description
-        setLearning([...learning])
-        break
-      case 'personal':
-        personal[index].description = description
-        setPersonal([...personal])
-        break
-    }
-  }
+  const [applications, setApplications] = useState(initialData?.applications || '')
+  const [networking, setNetworking] = useState(initialData?.networking || '')
+  const [learning, setLearning] = useState(initialData?.learning || '')
+  const [personal, setPersonal] = useState(initialData?.personal || '')
 
   const handleNext = () => {
     onNext({
-      applications: applications.filter(a => a.description.trim()),
-      networking: networking.filter(a => a.description.trim()),
-      learning: learning.filter(a => a.description.trim()),
-      personal: personal.filter(a => a.description.trim()),
+      applications: applications.trim(),
+      networking: networking.trim(),
+      learning: learning.trim(),
+      personal: personal.trim(),
     })
   }
 
-  const renderCategory = (title: string, icon: React.ReactNode, items: ActionItem[], categoryKey: string, color: string) => (
-    <div className="space-y-3">
-      <h3 className="flex items-center gap-2 font-semibold text-white">
-        {icon}
-        {title}
-      </h3>
-      <div className="space-y-2">
-        {items.map((item, idx) => (
-          <div key={idx} className="flex gap-2 items-start">
-            <Textarea
-              placeholder="Describe this action item"
-              value={item.description}
-              onChange={(e) => handleUpdateDescription(categoryKey, idx, e.target.value)}
-              rows={2}
-              className="flex-1 bg-slate-900/50 border-slate-700 text-white"
-            />
-            <Button
-              onClick={() => handleRemoveItem(categoryKey, idx)}
-              variant="ghost"
-              size="sm"
-              className="text-red-400 hover:text-red-300 hover:bg-red-900/20"
-            >
-              <Trash2 className="w-4 h-4" />
-            </Button>
-          </div>
-        ))}
-      </div>
-      <Button
-        onClick={() => handleAddItem(categoryKey)}
-        variant="outline"
-        size="sm"
-        className="w-full text-white/60 hover:text-white"
-      >
-        <Plus className="w-4 h-4 mr-2" />
-        Add {title} Action
-      </Button>
-    </div>
-  )
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-white mb-2">Create Your Action Plan</h2>
-        <p className="text-white/60">Break down your goals into specific actions across 4 key areas.</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Crea Tu Plan de Acción</h2>
+        <p className="text-white/60">Divide tus metas en acciones específicas en 4 áreas clave.</p>
       </div>
 
-      <div className="space-y-6">
-        {renderCategory('Job Applications', <CheckSquare className="w-4 h-4 text-red-400" />, applications, 'applications', 'red')}
-        {renderCategory('Networking & Outreach', <CheckSquare className="w-4 h-4 text-purple-400" />, networking, 'networking', 'purple')}
-        {renderCategory('Learning & Development', <CheckSquare className="w-4 h-4 text-blue-400" />, learning, 'learning', 'blue')}
-        {renderCategory('Personal Growth', <CheckSquare className="w-4 h-4 text-emerald-400" />, personal, 'personal', 'emerald')}
-      </div>
+      {/* Job Applications */}
+      <A2EnhancedInput
+        value={applications}
+        onChange={setApplications}
+        label="Aplicaciones a Empleos"
+        placeholder="ej., Aplicar a 5 posiciones por semana, actualizar CV para cada rol, preparar carta de presentación personalizada..."
+        icon={<Briefcase className="w-4 h-4 text-red-400" />}
+        coachContext="job application strategy actions"
+        minRows={3}
+      />
 
-      <div className="flex gap-3">
+      {/* Networking */}
+      <A2EnhancedInput
+        value={networking}
+        onChange={setNetworking}
+        label="Networking y Conexiones"
+        placeholder="ej., Conectar con 3 profesionales por semana en LinkedIn, asistir a 1 evento de networking mensual..."
+        icon={<Users className="w-4 h-4 text-purple-400" />}
+        coachContext="networking and outreach strategy"
+        minRows={3}
+      />
+
+      {/* Learning */}
+      <A2EnhancedInput
+        value={learning}
+        onChange={setLearning}
+        label="Aprendizaje y Desarrollo"
+        placeholder="ej., Completar curso de habilidades técnicas, leer 1 libro de desarrollo profesional, practicar entrevistas..."
+        icon={<BookOpen className="w-4 h-4 text-blue-400" />}
+        coachContext="learning and skill development plan"
+        minRows={3}
+      />
+
+      {/* Personal Growth */}
+      <A2EnhancedInput
+        value={personal}
+        onChange={setPersonal}
+        label="Crecimiento Personal"
+        placeholder="ej., Mantener rutina de ejercicio, practicar meditación, establecer límites saludables trabajo-vida..."
+        icon={<Heart className="w-4 h-4 text-emerald-400" />}
+        coachContext="personal growth and wellbeing actions"
+        minRows={3}
+      />
+
+      {/* Navigation */}
+      <div className="flex gap-4 pt-4">
         <Button
           onClick={onBack}
           variant="outline"
-          className="flex-1"
+          className="flex-1 border-slate-600 text-white hover:bg-slate-800 py-6 rounded-full"
         >
-          Back
+          Atrás
         </Button>
         <Button
           onClick={handleNext}
-          className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+          className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-6 rounded-full"
         >
-          Continue to Submission
+          Siguiente
         </Button>
       </div>
     </div>

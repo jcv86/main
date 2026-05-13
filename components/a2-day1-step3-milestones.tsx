@@ -2,9 +2,8 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
 import { Flag } from 'lucide-react'
+import { A2EnhancedInput } from '@/components/a2-enhanced-input'
 
 interface Step3MilestonesProps {
   onNext: (data: {
@@ -28,9 +27,9 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
 
   const validate = () => {
     const newErrors: Record<string, string> = {}
-    if (!day10.trim()) newErrors.day10 = 'Day 10 milestone is required'
-    if (!day20.trim()) newErrors.day20 = 'Day 20 milestone is required'
-    if (!day30.trim()) newErrors.day30 = 'Day 30 milestone is required'
+    if (!day10.trim()) newErrors.day10 = 'El hito del Día 10 es requerido'
+    if (!day20.trim()) newErrors.day20 = 'El hito del Día 20 es requerido'
+    if (!day30.trim()) newErrors.day30 = 'El hito del Día 30 es requerido'
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -46,73 +45,68 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-white mb-2">Define Your Milestones</h2>
-        <p className="text-white/60">Break down your 30-day goal into clear milestones.</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Define Tus Hitos</h2>
+        <p className="text-white/60">Divide tu meta de 30 días en hitos claros y alcanzables.</p>
       </div>
 
       {/* Day 10 Milestone */}
       <div className="space-y-2">
-        <Label className="flex items-center gap-2 text-white">
-          <Flag className="w-4 h-4 text-purple-400" />
-          What should you achieve by Day 10?
-        </Label>
-        <Textarea
-          placeholder="Specific, measurable outcome for the first checkpoint"
+        <A2EnhancedInput
           value={day10}
-          onChange={(e) => setDay10(e.target.value)}
-          rows={3}
-          className="bg-slate-900/50 border-slate-700 text-white"
+          onChange={setDay10}
+          label="¿Qué deberías lograr para el Día 10?"
+          placeholder="Resultado específico y medible para el primer checkpoint..."
+          icon={<Flag className="w-4 h-4 text-purple-400" />}
+          coachContext="day 10 milestone career goal"
+          minRows={2}
         />
         {errors.day10 && <p className="text-red-400 text-sm">{errors.day10}</p>}
       </div>
 
       {/* Day 20 Milestone */}
       <div className="space-y-2">
-        <Label className="flex items-center gap-2 text-white">
-          <Flag className="w-4 h-4 text-cyan-400" />
-          What should you achieve by Day 20?
-        </Label>
-        <Textarea
-          placeholder="Progress towards your main goal"
+        <A2EnhancedInput
           value={day20}
-          onChange={(e) => setDay20(e.target.value)}
-          rows={3}
-          className="bg-slate-900/50 border-slate-700 text-white"
+          onChange={setDay20}
+          label="¿Qué deberías lograr para el Día 20?"
+          placeholder="Progreso hacia tu meta principal..."
+          icon={<Flag className="w-4 h-4 text-cyan-400" />}
+          coachContext="day 20 milestone career goal"
+          minRows={2}
         />
         {errors.day20 && <p className="text-red-400 text-sm">{errors.day20}</p>}
       </div>
 
       {/* Day 30 Milestone */}
       <div className="space-y-2">
-        <Label className="flex items-center gap-2 text-white">
-          <Flag className="w-4 h-4 text-emerald-400" />
-          What should you achieve by Day 30?
-        </Label>
-        <Textarea
-          placeholder="Your ultimate 30-day goal"
+        <A2EnhancedInput
           value={day30}
-          onChange={(e) => setDay30(e.target.value)}
-          rows={3}
-          className="bg-slate-900/50 border-slate-700 text-white"
+          onChange={setDay30}
+          label="¿Qué deberías lograr para el Día 30?"
+          placeholder="Tu meta final de los 30 días..."
+          icon={<Flag className="w-4 h-4 text-emerald-400" />}
+          coachContext="day 30 milestone career goal"
+          minRows={2}
         />
         {errors.day30 && <p className="text-red-400 text-sm">{errors.day30}</p>}
       </div>
 
-      <div className="flex gap-3">
+      {/* Navigation */}
+      <div className="flex gap-4 pt-4">
         <Button
           onClick={onBack}
           variant="outline"
-          className="flex-1"
+          className="flex-1 border-slate-600 text-white hover:bg-slate-800 py-6 rounded-full"
         >
-          Back
+          Atrás
         </Button>
         <Button
           onClick={handleNext}
-          className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+          className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-6 rounded-full"
         >
-          Continue to Action Plan
+          Siguiente
         </Button>
       </div>
     </div>

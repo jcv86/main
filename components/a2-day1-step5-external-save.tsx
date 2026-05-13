@@ -21,10 +21,10 @@ export function A2Day1Step5ExternalSave({ onNext, onBack }: Step5ExternalSavePro
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-white mb-2">Save Externally</h2>
-        <p className="text-white/60">Back up your work to Notion or download it for your records.</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Guardar Externamente</h2>
+        <p className="text-white/60">Respalda tu trabajo en Notion o descárgalo para tus registros.</p>
       </div>
 
       {/* Notion Option */}
@@ -72,19 +72,20 @@ export function A2Day1Step5ExternalSave({ onNext, onBack }: Step5ExternalSavePro
         </Button>
       </div>
 
-      <div className="flex gap-3">
+      {/* Navigation */}
+      <div className="flex gap-4 pt-4">
         <Button
           onClick={onBack}
           variant="outline"
-          className="flex-1"
+          className="flex-1 border-slate-600 text-white hover:bg-slate-800 py-6 rounded-full"
         >
-          Back
+          Atrás
         </Button>
         <Button
           onClick={onNext}
-          className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+          className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-6 rounded-full"
         >
-          Continue to Upload
+          Siguiente
         </Button>
       </div>
     </div>

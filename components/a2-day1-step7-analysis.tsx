@@ -199,22 +199,22 @@ export function A2Day1Step7Analysis({
       )}
 
       {/* Actions */}
-      <div className="flex gap-3">
+      <div className="flex gap-4 pt-4">
         {!isPassed && (
           <Button
             onClick={onRevise}
             variant="outline"
-            className="flex-1"
+            className="flex-1 border-slate-600 text-white hover:bg-slate-800 py-6 rounded-full"
           >
             <RotateCcw className="w-4 h-4 mr-2" />
-            Revise & Resubmit
+            Revisar y Reenviar
           </Button>
         )}
         <Button
           onClick={onComplete}
-          className={`flex-1 ${isPassed ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-cyan-600 hover:bg-cyan-700'}`}
+          className={`flex-1 py-6 rounded-full ${isPassed ? 'bg-emerald-600 hover:bg-emerald-700' : 'bg-teal-600 hover:bg-teal-700'}`}
         >
-          {isPassed ? 'Unlock Day 2' : 'Close'}
+          {isPassed ? 'Desbloquear Día 2' : 'Cerrar'}
         </Button>
       </div>
     </div>

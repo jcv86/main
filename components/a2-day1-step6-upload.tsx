@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Upload, FileText, Loader2, Check } from 'lucide-react'
 
 interface Step6UploadProps {
-  onNext: (uploadedFile: { name: string; url: string }) => void
+  onNext: () => void
   onBack: () => void
 }
 
@@ -56,10 +56,10 @@ export function A2Day1Step6Upload({ onNext, onBack }: Step6UploadProps) {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-white mb-2">Upload Your Work</h2>
-        <p className="text-white/60">Upload your Day 1 plan document (PDF, Word, or Google Docs export) for AI analysis and scoring.</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Sube Tu Trabajo</h2>
+        <p className="text-white/60">Sube tu documento del plan del Día 1 (PDF, Word o exportación de Google Docs) para análisis y puntuación con IA.</p>
       </div>
 
       {!uploaded ? (
@@ -123,20 +123,21 @@ export function A2Day1Step6Upload({ onNext, onBack }: Step6UploadProps) {
         </div>
       )}
 
-      <div className="flex gap-3">
+      {/* Navigation */}
+      <div className="flex gap-4 pt-4">
         <Button
           onClick={onBack}
           variant="outline"
-          className="flex-1"
+          className="flex-1 border-slate-600 text-white hover:bg-slate-800 py-6 rounded-full"
         >
-          Back
+          Atrás
         </Button>
         <Button
-          onClick={() => uploaded && onNext(uploaded)}
+          onClick={() => uploaded && onNext()}
           disabled={!uploaded}
-          className="flex-1 bg-cyan-600 hover:bg-cyan-700"
+          className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-6 rounded-full"
         >
-          Continue to Analysis
+          Siguiente
         </Button>
       </div>
     </div>
