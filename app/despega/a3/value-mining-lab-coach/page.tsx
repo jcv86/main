@@ -334,6 +334,5 @@ export default function ValueMiningLabCoach() {
           </Button>
         </div>
       </div>
-    </div>
   )
 }
