@@ -79,17 +79,18 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
           onChange={setDesiredOutcome}
           label="¿Qué deseas lograr en los próximos 30 días?"
           placeholder="Sé específico sobre el resultado que quieres lograr para el Día 30"
-          icon={<Target className="w-4 h-4 text-green-400" />}
+          icon={<Target className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
           minRows={2}
         />
-        {errors.desiredOutcome && <p className="text-red-400 text-sm">{errors.desiredOutcome}</p>}
+        {errors.desiredOutcome && <p className="text-sm" style={{ color: 'rgb(80, 160, 170)' }}>{errors.desiredOutcome}</p>}
       </div>
 
       {/* Navigation */}
       <div className="flex gap-4 pt-4">
         <Button
           onClick={handleNext}
-          className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-6 rounded-full"
+          className="flex-1 text-white py-6 rounded-full"
+          style={{ backgroundColor: 'rgb(80, 160, 170)' }}
         >
           Siguiente
         </Button>

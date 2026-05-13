@@ -59,7 +59,7 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
         onChange={setNetworking}
         label="Networking y Conexiones"
         placeholder="ej., Conectar con 3 profesionales por semana en LinkedIn, asistir a 1 evento de networking mensual..."
-        icon={<Users className="w-4 h-4 text-purple-400" />}
+        icon={<Users className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
         minRows={3}
       />
 
@@ -69,7 +69,7 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
         onChange={setLearning}
         label="Aprendizaje y Desarrollo"
         placeholder="ej., Completar curso de habilidades técnicas, leer 1 libro de desarrollo profesional, practicar entrevistas..."
-        icon={<BookOpen className="w-4 h-4 text-blue-400" />}
+        icon={<BookOpen className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
         minRows={3}
       />
 
@@ -79,7 +79,7 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
         onChange={setPersonal}
         label="Crecimiento Personal"
         placeholder="ej., Mantener rutina de ejercicio, practicar meditación, establecer límites saludables trabajo-vida..."
-        icon={<Heart className="w-4 h-4 text-emerald-400" />}
+        icon={<Heart className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
         minRows={3}
       />
 
@@ -88,13 +88,15 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
         <Button
           onClick={onBack}
           variant="outline"
-          className="flex-1 border-slate-600 text-white hover:bg-slate-800 py-6 rounded-full"
+          className="flex-1 text-white hover:bg-slate-800 py-6 rounded-full"
+          style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}
         >
           Atrás
         </Button>
         <Button
           onClick={handleNext}
-          className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-6 rounded-full"
+          className="flex-1 text-white py-6 rounded-full"
+          style={{ backgroundColor: 'rgb(80, 160, 170)' }}
         >
           Siguiente
         </Button>

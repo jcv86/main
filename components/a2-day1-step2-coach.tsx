@@ -104,7 +104,8 @@ export function A2Day1Step2Coach({ visionData, onNext, onBack }: Step2CoachProps
           <Button
             onClick={handleEnhance}
             disabled={loading}
-            className="w-full bg-cyan-600 hover:bg-cyan-700 text-white"
+            className="w-full text-white"
+            style={{ backgroundColor: 'rgb(80, 160, 170)' }}
           >
             {loading ? (
               <>
@@ -122,7 +123,8 @@ export function A2Day1Step2Coach({ visionData, onNext, onBack }: Step2CoachProps
           <Button
             onClick={handleSkip}
             variant="outline"
-            className="w-full border-slate-600 text-white/70 hover:text-white"
+            className="w-full text-white/70 hover:text-white"
+            style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}
           >
             Continue Without Enhancement
           </Button>
@@ -130,19 +132,19 @@ export function A2Day1Step2Coach({ visionData, onNext, onBack }: Step2CoachProps
       ) : (
         <div className="space-y-6">
           {/* Enhanced Vision */}
-          <div className="bg-cyan-900/20 border border-cyan-500/30 rounded-lg p-4 space-y-4">
-            <p className="text-sm font-semibold text-cyan-400">AI COACH ENHANCED VERSION:</p>
+          <div className="rounded-lg p-4 space-y-4" style={{ backgroundColor: 'rgba(90, 90, 150, 0.15)', borderColor: 'rgba(90, 90, 150, 0.4)', borderWidth: '1px' }}>
+            <p className="text-sm font-semibold" style={{ color: 'rgb(90, 90, 150)' }}>AI COACH ENHANCED VERSION:</p>
             <div className="space-y-3 text-white/80">
               <div>
-                <p className="text-xs text-cyan-400 mb-1">Role:</p>
+                <p className="text-xs mb-1" style={{ color: 'rgb(90, 90, 150)' }}>Role:</p>
                 <p>{enhanced.role}</p>
               </div>
               <div>
-                <p className="text-xs text-cyan-400 mb-1">Environment:</p>
+                <p className="text-xs mb-1" style={{ color: 'rgb(90, 90, 150)' }}>Environment:</p>
                 <p>{enhanced.environment}</p>
               </div>
               <div>
-                <p className="text-xs text-cyan-400 mb-1">Desired Outcome:</p>
+                <p className="text-xs mb-1" style={{ color: 'rgb(90, 90, 150)' }}>Desired Outcome:</p>
                 <p>{enhanced.desiredOutcome}</p>
               </div>
             </div>
@@ -159,7 +161,8 @@ export function A2Day1Step2Coach({ visionData, onNext, onBack }: Step2CoachProps
             </Button>
             <Button
               onClick={handleAccept}
-              className="flex-1 bg-emerald-600 hover:bg-emerald-700"
+              className="flex-1 text-white"
+              style={{ backgroundColor: 'rgb(80, 160, 170)' }}
             >
               Accept Enhancement
             </Button>

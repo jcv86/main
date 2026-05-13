@@ -58,10 +58,10 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
           onChange={setDay10}
           label="¿Qué deberías lograr para el Día 10?"
           placeholder="Resultado específico y medible para el primer checkpoint..."
-          icon={<Flag className="w-4 h-4 text-purple-400" />}
+          icon={<Flag className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
           minRows={2}
         />
-        {errors.day10 && <p className="text-red-400 text-sm">{errors.day10}</p>}
+        {errors.day10 && <p className="text-sm" style={{ color: 'rgb(80, 160, 170)' }}>{errors.day10}</p>}
       </div>
 
       {/* Day 20 Milestone */}
@@ -71,10 +71,10 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
           onChange={setDay20}
           label="¿Qué deberías lograr para el Día 20?"
           placeholder="Progreso hacia tu meta principal..."
-          icon={<Flag className="w-4 h-4 text-cyan-400" />}
+          icon={<Flag className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
           minRows={2}
         />
-        {errors.day20 && <p className="text-red-400 text-sm">{errors.day20}</p>}
+        {errors.day20 && <p className="text-sm" style={{ color: 'rgb(80, 160, 170)' }}>{errors.day20}</p>}
       </div>
 
       {/* Day 30 Milestone */}
@@ -84,10 +84,10 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
           onChange={setDay30}
           label="¿Qué deberías lograr para el Día 30?"
           placeholder="Tu meta final de los 30 días..."
-          icon={<Flag className="w-4 h-4 text-emerald-400" />}
+          icon={<Flag className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
           minRows={2}
         />
-        {errors.day30 && <p className="text-red-400 text-sm">{errors.day30}</p>}
+        {errors.day30 && <p className="text-sm" style={{ color: 'rgb(80, 160, 170)' }}>{errors.day30}</p>}
       </div>
 
       {/* Navigation */}
@@ -95,13 +95,15 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
         <Button
           onClick={onBack}
           variant="outline"
-          className="flex-1 border-slate-600 text-white hover:bg-slate-800 py-6 rounded-full"
+          className="flex-1 text-white hover:bg-slate-800 py-6 rounded-full"
+          style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}
         >
           Atrás
         </Button>
         <Button
           onClick={handleNext}
-          className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-6 rounded-full"
+          className="flex-1 text-white py-6 rounded-full"
+          style={{ backgroundColor: 'rgb(80, 160, 170)' }}
         >
           Siguiente
         </Button>

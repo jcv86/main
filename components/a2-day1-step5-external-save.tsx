@@ -32,7 +32,7 @@ export function A2Day1Step5ExternalSave({ onNext, onBack }: Step5ExternalSavePro
         <div className="flex items-start justify-between">
           <div>
             <h3 className="font-semibold text-white flex items-center gap-2">
-              <LinkIcon className="w-4 h-4 text-purple-400" />
+              <LinkIcon className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />
               Save to Notion
             </h3>
             <p className="text-sm text-white/60 mt-1">Link your Notion template to automatically sync your progress</p>
@@ -55,7 +55,7 @@ export function A2Day1Step5ExternalSave({ onNext, onBack }: Step5ExternalSavePro
         <div className="flex items-start justify-between">
           <div>
             <h3 className="font-semibold text-white flex items-center gap-2">
-              <Download className="w-4 h-4 text-cyan-400" />
+              <Download className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />
               Download Your Plan
             </h3>
             <p className="text-sm text-white/60 mt-1">Save a copy of your plan as a PDF document</p>
@@ -77,13 +77,15 @@ export function A2Day1Step5ExternalSave({ onNext, onBack }: Step5ExternalSavePro
         <Button
           onClick={onBack}
           variant="outline"
-          className="flex-1 border-slate-600 text-white hover:bg-slate-800 py-6 rounded-full"
+          className="flex-1 text-white hover:bg-slate-800 py-6 rounded-full"
+          style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}
         >
           Atrás
         </Button>
         <Button
           onClick={onNext}
-          className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-6 rounded-full"
+          className="flex-1 text-white py-6 rounded-full"
+          style={{ backgroundColor: 'rgb(80, 160, 170)' }}
         >
           Siguiente
         </Button>

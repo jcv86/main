@@ -73,8 +73,8 @@ export function A2Day1Step6Upload({ onNext, onBack }: Step6UploadProps) {
               className="hidden"
               disabled={loading}
             />
-            <Upload className="w-8 h-8 text-white/40 group-hover:text-cyan-400 mx-auto mb-2 transition" />
-            <p className="text-white font-medium group-hover:text-cyan-400 transition">
+            <Upload className="w-8 h-8 text-white/40 mx-auto mb-2 transition" style={{ color: 'rgb(90, 90, 150)' }} />
+            <p className="text-white font-medium transition" style={{ color: 'rgb(90, 90, 150)' }}>
               {file ? file.name : 'Click to upload or drag and drop'}
             </p>
             <p className="text-sm text-white/60 mt-1">PDF, Word, or text documents</p>
@@ -89,7 +89,8 @@ export function A2Day1Step6Upload({ onNext, onBack }: Step6UploadProps) {
           <Button
             onClick={handleUpload}
             disabled={!file || loading}
-            className="w-full bg-cyan-600 hover:bg-cyan-700"
+            className="w-full text-white"
+            style={{ backgroundColor: 'rgb(80, 160, 170)' }}
           >
             {loading ? (
               <>
@@ -107,11 +108,11 @@ export function A2Day1Step6Upload({ onNext, onBack }: Step6UploadProps) {
       ) : (
         <div className="space-y-4">
           {/* Upload Success */}
-          <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-4">
+          <div className="rounded-lg p-4" style={{ backgroundColor: 'rgba(90, 90, 150, 0.15)', borderColor: 'rgba(90, 90, 150, 0.4)', borderWidth: '1px' }}>
             <div className="flex items-start gap-3">
-              <Check className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+              <Check className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'rgb(80, 160, 170)' }} />
               <div>
-                <p className="font-semibold text-emerald-400">Upload Successful</p>
+                <p className="font-semibold" style={{ color: 'rgb(80, 160, 170)' }}>Upload Successful</p>
                 <p className="text-sm text-white/70 mt-1">{uploaded.name}</p>
               </div>
             </div>
@@ -128,14 +129,16 @@ export function A2Day1Step6Upload({ onNext, onBack }: Step6UploadProps) {
         <Button
           onClick={onBack}
           variant="outline"
-          className="flex-1 border-slate-600 text-white hover:bg-slate-800 py-6 rounded-full"
+          className="flex-1 text-white hover:bg-slate-800 py-6 rounded-full"
+          style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}
         >
           Atrás
         </Button>
         <Button
           onClick={() => uploaded && onNext()}
           disabled={!uploaded}
-          className="flex-1 bg-teal-600 hover:bg-teal-700 text-white py-6 rounded-full"
+          className="flex-1 text-white py-6 rounded-full"
+          style={{ backgroundColor: 'rgb(80, 160, 170)' }}
         >
           Siguiente
         </Button>

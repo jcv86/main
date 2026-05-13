@@ -27,7 +27,7 @@ const taskTypeIcons = {
   learning: { icon: <BookOpen className="w-6 h-6" />, label: 'Aprender', color: 'text-blue/40' },
   practice: { icon: <Wrench className="w-6 h-6" />, label: 'Practicar', color: 'text-yellow-400' },
   networking: { icon: <Users className="w-6 h-6" />, label: 'Conectar', color: 'text-pink-400' },
-  planning: { icon: <ClipboardList className="w-6 h-6" />, label: 'Planificar', color: 'text-purple/40' },
+  planning: { icon: <ClipboardList className="w-6 h-6" />, label: 'Planificar', style: { color: 'rgb(90, 90, 150)' } },
   milestone: { icon: <Trophy className="w-6 h-6" />, label: 'Hito', color: 'text-emerald-400' },
 }
 
@@ -108,13 +108,13 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
                   }`}>
                     Día {task.day}: {task.title}
                   </h4>
-                  <Badge className="bg-purple/30 text-white/90 text-xs whitespace-nowrap">
+                  <Badge className="text-xs whitespace-nowrap" style={{ backgroundColor: 'rgba(90, 90, 150, 0.3)', color: 'rgb(90, 90, 150)' }}>
                     {typeInfo.label}
                   </Badge>
                 </div>
 
                 {/* Time estimate */}
-                <span className="text-xs bg-purple/30 text-white/90 px-2 py-1 rounded whitespace-nowrap flex items-center gap-1">
+                <span className="text-xs px-2 py-1 rounded whitespace-nowrap flex items-center gap-1" style={{ backgroundColor: 'rgba(90, 90, 150, 0.3)', color: 'rgb(90, 90, 150)' }}>
                   <Clock className="w-3 h-3" />
                   {hours > 0 ? `${hours}h${minutes > 0 ? ` ${minutes}m` : ''}` : `${minutes}m`}
                 </span>
