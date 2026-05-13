@@ -76,15 +76,32 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
     router.push(`/despega/a2/dia-${task.day}`)
   }
 
+  // Active (current) day styling - most saturated and bright
+  const activeStyle = {
+    backgroundColor: 'rgba(90, 90, 150, 0.25)',
+    border: `2px solid rgba(90, 90, 150, 0.8)`,
+  }
+
+  // Completed day styling - medium highlight
+  const completedStyle = {
+    backgroundColor: 'rgba(90, 90, 150, 0.15)',
+    border: `1.5px solid rgba(90, 90, 150, 0.6)`,
+  }
+
+  // Non-completed, non-active day styling
+  const defaultStyle = {
+    backgroundColor: 'rgba(30, 32, 42, 0.8)',
+    border: `1px solid rgba(90, 90, 150, 0.3)`,
+  }
+
+  const cardStyle = completed ? completedStyle : defaultStyle
+
   return (
     <>
-      <div className={`transition-all duration-200 ${completed ? 'opacity-60' : ''}`}>
+      <div className={`transition-all duration-200`}>
         <div 
           className="rounded-[28px] p-4 hover:border-opacity-100 transition group cursor-pointer"
-          style={{
-            backgroundColor: completed ? 'rgba(90, 90, 150, 0.08)' : 'rgba(30, 32, 42, 0.8)',
-            border: `1px solid ${completed ? 'rgba(80, 160, 170, 0.4)' : 'rgba(90, 90, 150, 0.3)'}`
-          }}
+          style={cardStyle}
           onClick={handleCardClick}
         >
           <div className="flex items-start gap-3">
@@ -94,7 +111,7 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
               className="flex-shrink-0 mt-1 hover:scale-110 transition-transform"
             >
               {completed ? (
-                <CheckCircle2 className="w-6 h-6" style={{ color: 'rgb(80, 160, 170)' }} />
+                <CheckCircle2 className="w-6 h-6" style={{ color: 'rgba(80, 160, 170, 0.8)' }} />
               ) : (
                 <Circle className="w-6 h-6 group-hover:text-white/80" style={{ color: 'rgba(90, 90, 150, 0.4)' }} />
               )}
@@ -104,23 +121,23 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <h4 className={`font-semibold text-sm transition-all`} style={{ color: completed ? 'rgba(255, 255, 255, 0.5)' : 'rgb(255, 255, 255)', textDecoration: completed ? 'line-through' : 'none' }}>
+                  <h4 className={`font-semibold text-sm transition-all`} style={{ color: completed ? 'rgba(255, 255, 255, 0.8)' : 'rgb(255, 255, 255)', textDecoration: 'none' }}>
                     Día {task.day}: {task.title}
                   </h4>
-                  <Badge className="text-xs whitespace-nowrap" style={{ backgroundColor: 'rgba(90, 90, 150, 0.3)', color: 'rgb(90, 90, 150)' }}>
+                  <Badge className="text-xs whitespace-nowrap" style={{ backgroundColor: completed ? 'rgba(90, 90, 150, 0.5)' : 'rgba(90, 90, 150, 0.3)', color: completed ? 'rgba(255, 255, 255, 0.9)' : 'rgb(90, 90, 150)' }}>
                     {typeInfo.label}
                   </Badge>
                 </div>
 
                 {/* Time estimate */}
-                <span className="text-xs px-2 py-1 rounded whitespace-nowrap flex items-center gap-1" style={{ backgroundColor: 'rgba(90, 90, 150, 0.3)', color: 'rgb(90, 90, 150)' }}>
+                <span className="text-xs px-2 py-1 rounded whitespace-nowrap flex items-center gap-1" style={{ backgroundColor: completed ? 'rgba(90, 90, 150, 0.5)' : 'rgba(90, 90, 150, 0.3)', color: completed ? 'rgba(255, 255, 255, 0.9)' : 'rgb(90, 90, 150)' }}>
                   <Clock className="w-3 h-3" />
                   {hours > 0 ? `${hours}h${minutes > 0 ? ` ${minutes}m` : ''}` : `${minutes}m`}
                 </span>
               </div>
 
               {/* Description */}
-              <p className={`text-sm mt-2 transition-all`} style={{ color: completed ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.65)' }}>
+              <p className={`text-sm mt-2 transition-all`} style={{ color: completed ? 'rgba(255, 255, 255, 0.75)' : 'rgba(255, 255, 255, 0.65)' }}>
                 {task.description}
               </p>
 
@@ -132,13 +149,11 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
                       key={idx}
                       variant="outline"
                       size="sm"
-                      className={`text-xs h-7 px-2 ${
-                        completed ? 'opacity-50 cursor-default' : ''
-                      }`}
+                      className={`text-xs h-7 px-2`}
                       style={{
-                        borderColor: 'rgba(90, 90, 150, 0.3)',
-                        color: 'rgb(90, 90, 150)',
-                        backgroundColor: 'transparent'
+                        borderColor: completed ? 'rgba(90, 90, 150, 0.6)' : 'rgba(90, 90, 150, 0.3)',
+                        color: completed ? 'rgba(255, 255, 255, 0.9)' : 'rgb(90, 90, 150)',
+                        backgroundColor: completed ? 'rgba(90, 90, 150, 0.2)' : 'transparent'
                       }}
                       disabled={completed}
                     >
