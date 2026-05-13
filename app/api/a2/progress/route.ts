@@ -20,6 +20,16 @@ export async function GET(request: NextRequest) {
           completed_tasks: 0,
           total_tasks: 90,
           status: 'not_started',
+          month_progress: [
+            { month: 1, percentage: 0, completed: false },
+            { month: 2, percentage: 0, completed: false },
+            { month: 3, percentage: 0, completed: false },
+          ],
+          milestones: [
+            { month: 1, title: '30 días - Primer milestone', status: 'pending' },
+            { month: 2, title: '60 días - Segundo milestone', status: 'pending' },
+            { month: 3, title: '90 días - Completado', status: 'pending' },
+          ],
         },
         { status: 200 }
       )
@@ -42,6 +52,16 @@ export async function GET(request: NextRequest) {
           completed_tasks: 0,
           total_tasks: 90,
           status: 'not_started',
+          month_progress: [
+            { month: 1, percentage: 0, completed: false },
+            { month: 2, percentage: 0, completed: false },
+            { month: 3, percentage: 0, completed: false },
+          ],
+          milestones: [
+            { month: 1, title: '30 días - Primer milestone', status: 'pending' },
+            { month: 2, title: '60 días - Segundo milestone', status: 'pending' },
+            { month: 3, title: '90 días - Completado', status: 'pending' },
+          ],
         },
         { status: 200 }
       )
@@ -102,6 +122,15 @@ export async function GET(request: NextRequest) {
       progressPercentage < 100 ? 'near_completion' :
       'completed'
 
+    // Calculate month percentages
+    const total30Days = (route.route_30days || []).length || 30
+    const total60Days = (route.route_60days || []).length || 30
+    const total90Days = (route.route_90days || []).length || 30
+
+    const month1Percentage = Math.round((completed30days / total30Days) * 100)
+    const month2Percentage = Math.round((completed60days / total60Days) * 100)
+    const month3Percentage = Math.round((completed90days / total90Days) * 100)
+
     return NextResponse.json(
       {
         current_month: currentMonth,
@@ -109,6 +138,16 @@ export async function GET(request: NextRequest) {
         completed_tasks: totalCompleted,
         total_tasks: totalTasks,
         status,
+        month_progress: [
+          { month: 1, percentage: month1Percentage, completed: completed30days === total30Days },
+          { month: 2, percentage: month2Percentage, completed: completed60days === total60Days },
+          { month: 3, percentage: month3Percentage, completed: completed90days === total90Days },
+        ],
+        milestones: [
+          { month: 1, title: '30 días - Primer milestone', status: completed30days === total30Days ? 'completed' : completed30days > 0 ? 'in_progress' : 'pending' },
+          { month: 2, title: '60 días - Segundo milestone', status: completed60days === total60Days ? 'completed' : completed60days > 0 ? 'in_progress' : 'pending' },
+          { month: 3, title: '90 días - Completado', status: completed90days === total90Days ? 'completed' : completed90days > 0 ? 'in_progress' : 'pending' },
+        ],
       },
       { status: 200 }
     )
@@ -123,6 +162,55 @@ export async function GET(request: NextRequest) {
         status: 'error',
       },
       { status: 200 }
+    )
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const { dayNumber } = body
+
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Not authenticated' },
+        { status: 401 }
+      )
+    }
+
+    const userId = user.id
+
+    // Mark day as completed
+    const { error: insertError } = await supabase
+      .from('task_completions')
+      .insert({
+        user_id: userId,
+        phase_days: dayNumber <= 30 ? 30 : dayNumber <= 60 ? 60 : 90,
+        task_day: dayNumber,
+        task_title: `Day ${dayNumber}`,
+        completed_at: new Date().toISOString(),
+      })
+
+    if (insertError && insertError.code !== '23505') { // 23505 is unique constraint violation
+      console.error('[v0] Error marking day complete:', insertError)
+      return NextResponse.json(
+        { error: 'Failed to update progress' },
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: `Day ${dayNumber} marked as completed`,
+    })
+  } catch (error) {
+    console.error('[v0] Progress update error:', error)
+    return NextResponse.json(
+      { error: 'Failed to update progress' },
+      { status: 500 }
     )
   }
 }

@@ -67,18 +67,18 @@ export function A2ProgressSidebar() {
   const monthProgress = progress.month_progress || [
     {
       month: 1,
-      percentage: Math.min(progress.progress_percentage, 33),
-      completed: progress.current_month > 1
+      percentage: Math.min(Math.max(progress.progress_percentage, 0), 33),
+      completed: progress.current_month > 1 || progress.progress_percentage >= 33
     },
     {
       month: 2,
       percentage: progress.current_month === 2 ? Math.max(0, Math.min(progress.progress_percentage - 33, 34)) : progress.current_month > 2 ? 100 : 0,
-      completed: progress.current_month > 2
+      completed: progress.current_month > 2 || (progress.current_month === 2 && progress.progress_percentage >= 66)
     },
     {
       month: 3,
       percentage: progress.current_month === 3 ? Math.max(0, progress.progress_percentage - 67) : progress.current_month > 3 ? 100 : 0,
-      completed: progress.current_month > 3
+      completed: progress.current_month > 3 || progress.progress_percentage === 100
     }
   ]
 

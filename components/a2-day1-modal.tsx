@@ -34,6 +34,24 @@ export function A2Day1Modal({ isOpen, onClose, onComplete }: A2Day1ModalProps) {
     personal: '',
   })
 
+  // Update progress when Day 1 is completed
+  const updateProgress = async (dayNumber: number) => {
+    try {
+      const response = await fetch('/api/a2/progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dayNumber }),
+      })
+      if (response.ok) {
+        console.log('[v0] Day 1 progress updated')
+        // Trigger parent refresh of progress
+        if (onComplete) onComplete()
+      }
+    } catch (error) {
+      console.error('[v0] Failed to update progress:', error)
+    }
+  }
+
   // Step 1: Vision -> Step 2: Milestones
   const handleStep1Next = (data: typeof visionData) => {
     setVisionData(data)
@@ -62,8 +80,9 @@ export function A2Day1Modal({ isOpen, onClose, onComplete }: A2Day1ModalProps) {
     setCurrentStep(6)
   }
 
-  const handleStep6Complete = () => {
-    onComplete?.()
+  const handleStep6Complete = async () => {
+    // Mark Day 1 as completed and update progress
+    await updateProgress(1)
     onClose()
   }
 
