@@ -117,7 +117,6 @@ export default function ValueMiningLabCoach() {
       setProgress(100)
     }
   }
-  }
 
   useEffect(() => {
     if (!isReadyToContinue || !videoRef.current) return
@@ -334,5 +333,6 @@ export default function ValueMiningLabCoach() {
           </Button>
         </div>
       </div>
+    </div>
   )
 }
