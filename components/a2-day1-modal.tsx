@@ -105,24 +105,27 @@ export function A2Day1Modal({ isOpen, onClose, onComplete }: A2Day1ModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-slate-950 border-slate-800">
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-slate-950 border border-a2-border rounded-[28px]" style={{ backgroundColor: 'rgba(15, 17, 23, 0.95)', borderColor: 'rgba(90, 90, 150, 0.4)' }}>
         <DialogHeader className="flex items-center justify-between pr-8">
           <div className="flex-1">
             <DialogTitle className="text-xl font-bold text-white">
               {stepTitles[currentStep - 1]}
             </DialogTitle>
-            <p className="text-xs text-white/50 mt-1">Paso {currentStep} de 6</p>
+            <p className="text-xs text-a2-text-secondary mt-1">Paso {currentStep} de 6</p>
           </div>
         </DialogHeader>
 
         {/* Progress indicator */}
-        <div className="px-6 py-2 flex gap-1 bg-slate-900/50 rounded-full">
+        <div className="px-6 py-2 flex gap-1 rounded-full" style={{ backgroundColor: 'rgba(90, 90, 150, 0.15)' }}>
           {[1, 2, 3, 4, 5, 6].map((step) => (
             <div
               key={step}
               className={`flex-1 h-1 rounded-full transition ${
-                step <= currentStep ? 'bg-cyan-500' : 'bg-slate-700'
+                step <= currentStep ? 'bg-a2-primary' : 'bg-a2-border'
               }`}
+              style={{
+                backgroundColor: step <= currentStep ? 'rgb(90, 90, 150)' : 'rgba(90, 90, 150, 0.3)'
+              }}
             />
           ))}
         </div>

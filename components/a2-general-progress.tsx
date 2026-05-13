@@ -26,23 +26,23 @@ export function A2GeneralProgress({
   }
 
   const getPhaseColor = () => {
-    if (completedDays <= 30) return 'from-purple via-blue to-cyan'
-    if (completedDays <= 60) return 'from-blue via-cyan to-teal'
-    return 'from-cyan via-teal to-emerald'
+    if (completedDays <= 30) return 'linear-gradient(to right, rgb(90, 90, 150), rgb(80, 160, 170))'
+    if (completedDays <= 60) return 'linear-gradient(to right, rgb(80, 160, 170), rgb(100, 180, 190))'
+    return 'linear-gradient(to right, rgb(100, 180, 190), rgb(120, 200, 210))'
   }
   
   if (variant === 'compact') {
     return (
-      <div className="bg-background/50 backdrop-blur-sm border-b border-muted/30 px-4 py-2">
+      <div className="bg-background/50 backdrop-blur-sm border-b border-a2-border px-4 py-2">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-1.5">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-white/60">Progreso A2</span>
+              <span className="text-xs font-medium text-a2-text-secondary">Progreso A2</span>
               <span className="text-xs text-white/40">|</span>
-              <span className="text-xs text-cyan font-medium">{getMonthLabel()}</span>
+              <span className="text-xs text-a2-primary font-medium">{getMonthLabel()}</span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-xs text-white/50">
+              <span className="text-xs text-a2-text-secondary">
                 {isFullyComplete 
                   ? 'A2 Completado!' 
                   : `${completedDays}/${totalDays} días`
@@ -51,10 +51,10 @@ export function A2GeneralProgress({
               <span className="text-sm font-semibold text-white">{Math.round(percent)}%</span>
             </div>
           </div>
-          <div className="h-1 bg-white/10 rounded-full overflow-hidden">
+          <div className="h-1 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)' }}>
             <div 
-              className={`h-full rounded-full transition-all duration-500 ease-out bg-gradient-to-r ${getPhaseColor()}`}
-              style={{ width: `${percent}%` }}
+              className="h-full rounded-full transition-all duration-500 ease-out"
+              style={{ width: `${percent}%`, background: getPhaseColor() }}
             />
           </div>
         </div>
@@ -63,16 +63,16 @@ export function A2GeneralProgress({
   }
 
   return (
-    <div className="bg-background/50 backdrop-blur-sm border-b border-muted/30 px-4 py-3">
+    <div className="bg-background/50 backdrop-blur-sm border-b border-a2-border px-4 py-3">
       <div className="max-w-6xl mx-auto">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-3">
-            <span className="text-xs font-medium text-white/60">Progreso A2 - 90 Días</span>
+            <span className="text-xs font-medium text-a2-text-secondary">Progreso A2 - 90 Días</span>
             <span className="text-xs text-white/40">|</span>
-            <span className="text-xs text-cyan font-medium">{getMonthLabel()}</span>
+            <span className="text-xs text-a2-primary font-medium">{getMonthLabel()}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-white/50">
+            <span className="text-xs text-a2-text-secondary">
               {isFullyComplete 
                 ? 'A2 Completado! 🎉' 
                 : `${completedDays}/${totalDays} días`
@@ -81,10 +81,10 @@ export function A2GeneralProgress({
             <span className="text-sm font-semibold text-white">{Math.round(percent)}%</span>
           </div>
         </div>
-        <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
+        <div className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)' }}>
           <div 
-            className={`h-full rounded-full transition-all duration-500 ease-out bg-gradient-to-r ${getPhaseColor()}`}
-            style={{ width: `${percent}%` }}
+            className="h-full rounded-full transition-all duration-500 ease-out"
+            style={{ width: `${percent}%`, background: getPhaseColor() }}
           />
         </div>
       </div>

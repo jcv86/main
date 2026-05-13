@@ -43,7 +43,7 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
     <div className="space-y-8">
       <div>
         <h2 className="text-2xl font-bold text-white mb-2">Define Tu Visión</h2>
-        <p className="text-white/60">Comencemos clarificando lo que buscas en tu trayectoria profesional.</p>
+        <p className="text-a2-text-secondary">Comencemos clarificando lo que buscas en tu trayectoria profesional.</p>
       </div>
 
       {/* Professional Role */}
@@ -53,10 +53,10 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
           onChange={setRole}
           label="¿Qué rol o título profesional estás buscando?"
           placeholder="ej., Senior Product Manager, Data Scientist, Growth Hacker, Desarrollador Full Stack..."
-          icon={<Briefcase className="w-4 h-4 text-cyan-400" />}
+          icon={<Briefcase className="w-4 h-4 text-a2-primary" />}
           minRows={2}
         />
-        {errors.role && <p className="text-red-400 text-sm">{errors.role}</p>}
+        {errors.role && <p className="text-a2-accent-cyan text-sm">{errors.role}</p>}
       </div>
 
       {/* Ideal Environment */}
@@ -66,10 +66,10 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
           onChange={setEnvironment}
           label="Describe tu ambiente de trabajo ideal"
           placeholder="Considera tamaño de empresa, industria, cultura, valores, flexibilidad, oportunidades de crecimiento..."
-          icon={<Building2 className="w-4 h-4 text-purple-400" />}
+          icon={<Building2 className="w-4 h-4 text-a2-primary" />}
           minRows={3}
         />
-        {errors.environment && <p className="text-red-400 text-sm">{errors.environment}</p>}
+        {errors.environment && <p className="text-a2-accent-cyan text-sm">{errors.environment}</p>}
       </div>
 
       {/* Desired Outcome */}
