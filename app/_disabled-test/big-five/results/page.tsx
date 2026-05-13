@@ -487,10 +487,10 @@ export default function BigFiveResults() {
               </CardContent>
             </Card>
 
-            <Card className="mb-8 border-2 border-purple/20 bg-background">
+            <Card className="mb-8 bg-background" style={{ border: '2px solid rgba(225, 120, 130, 0.2)' }}>
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Heart className="w-6 h-6 text-purple" />
+                  <Heart className="w-6 h-6" style={{ color: 'rgba(225, 120, 130, 0.6)' }} />
                   Impacto en tu Vida Personal
                 </CardTitle>
                 <CardDescription>
@@ -500,7 +500,7 @@ export default function BigFiveResults() {
               <CardContent className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
+                    <h3 className="font-semibold text-lg flex items-center gap-2" style={{ color: 'rgba(225, 120, 130, 0.6)' }}>
                       <Users className="w-5 h-5" />
                       Relaciones Personales
                     </h3>
@@ -511,7 +511,7 @@ export default function BigFiveResults() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
+                    <h3 className="font-semibold text-lg flex items-center gap-2" style={{ color: 'rgba(225, 120, 130, 0.6)' }}>
                       <Home className="w-5 h-5" />
                       Vida Familiar
                     </h3>
@@ -522,7 +522,7 @@ export default function BigFiveResults() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
+                    <h3 className="font-semibold text-lg flex items-center gap-2" style={{ color: 'rgba(225, 120, 130, 0.6)' }}>
                       <Heart className="w-5 h-5" />
                       Bienestar Emocional
                     </h3>
@@ -533,7 +533,7 @@ export default function BigFiveResults() {
                   </div>
 
                   <div className="space-y-3">
-                    <h3 className="font-semibold text-lg flex items-center gap-2 text-purple">
+                    <h3 className="font-semibold text-lg flex items-center gap-2" style={{ color: 'rgba(225, 120, 130, 0.6)' }}>
                       <Sparkles className="w-5 h-5" />
                       Desarrollo Personal
                     </h3>
@@ -544,8 +544,8 @@ export default function BigFiveResults() {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-lg p-6 border-l-4 border-purple">
-                  <h3 className="font-semibold text-lg mb-3 text-purple">
+                <div className="bg-white rounded-lg p-6" style={{ borderLeft: '4px solid rgba(225, 120, 130, 0.6)' }}>
+                  <h3 className="font-semibold text-lg mb-3" style={{ color: 'rgba(225, 120, 130, 0.6)' }}>
                      Recuerda: Tu personalidad impacta tu felicidad, no solo tu productividad
                   </h3>
                   <p className="text-muted leading-relaxed">

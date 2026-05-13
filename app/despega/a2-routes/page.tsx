@@ -525,11 +525,11 @@ export default function A2RoutesPage() {
         {/* Main Route Breakdown - Tus 90 Días Estructurados */}
         <Card className="bg-transparent border-muted/80">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-white text-2xl">
-              <MapPin className="w-7 h-7 text-blue" />
-              Tus 90 Días Estructurados
-            </CardTitle>
-          </CardHeader>
+              <CardTitle className="flex items-center gap-2 text-2xl" style={{ color: 'rgba(90, 90, 150)' }}>
+                <CheckCircle2 className="w-6 h-6" style={{ color: 'rgba(90, 90, 150, 0.6)' }} />
+                Tus 90 Días Estructurados
+              </CardTitle>
+            </CardHeader>
           <CardContent className="space-y-6">
             {([30, 60, 90] as const).map((days) => {
               const milestoneData = getMilestoneData(days)
@@ -541,10 +541,13 @@ export default function A2RoutesPage() {
               const prevMonthLabel = days === 60 ? 'Mes 1' : days === 90 ? 'Mes 2' : null
 
               return (
-                <div key={days} className={`border rounded-lg overflow-hidden transition-opacity ${monthLocked ? 'opacity-60' : ''}`} style={{ borderColor: 'rgba(90, 90, 150, 0.8)' }}>
+                <div key={days} className={`border rounded-lg overflow-hidden transition-opacity ${monthLocked ? 'opacity-60' : ''}`} style={{ borderColor: 'rgba(90, 90, 150, 0.6)' }}>
                   <button
                     onClick={() => !monthLocked && setExpandedMilestone(isExpanded ? null : days)}
-                    className={`w-full flex items-center justify-between p-4 transition-colors text-left ${monthLocked ? 'bg-muted/10 cursor-not-allowed' : 'bg-muted/20 hover:bg-muted/30 cursor-pointer'}`}
+                    className={`w-full flex items-center justify-between p-4 transition-colors text-left ${monthLocked ? 'cursor-not-allowed' : 'cursor-pointer'}`}
+                    style={{ 
+                      backgroundColor: monthLocked ? 'rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.2)'
+                    }}
                     disabled={monthLocked}
                   >
                     <div className="flex items-center gap-3">
@@ -557,7 +560,7 @@ export default function A2RoutesPage() {
                         {monthLocked ? <Lock className="w-4 h-4" /> : phaseNum}
                       </div>
                       <div>
-                        <p className={`font-semibold ${monthLocked ? 'text-white/40' : 'text-white'}`}>{milestoneData.label}</p>
+                        <p className="font-black" style={{ color: 'rgba(90, 90, 150)' }}>{milestoneData.label}</p>
                         {monthLocked
                           ? <p className="text-xs text-white/30">Completa {prevMonthLabel} al 100% para desbloquear</p>
                           : <p className="text-xs text-white/60">{milestoneData.milestone} · {tasks.length} tareas</p>
