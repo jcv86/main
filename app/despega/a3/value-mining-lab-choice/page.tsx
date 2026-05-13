@@ -55,9 +55,6 @@ export default function ValueMiningLabChoice() {
                 <div className="w-16 h-16 rounded-full bg-blue-500/20 border-2 border-blue-500/30 flex items-center justify-center group-hover:bg-blue-500/30 transition-colors">
                   <BookOpen className="w-8 h-8 text-blue-400" />
                 </div>
-                <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
-                  Recomendado
-                </Badge>
               </div>
 
               <div className="space-y-2">
@@ -85,7 +82,7 @@ export default function ValueMiningLabChoice() {
               </ul>
 
               <Button 
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold h-12 rounded-full"
+                className="w-full bg-transparent border-2 border-[rgb(170,70,170)] text-[rgb(170,70,170)] font-semibold h-12 rounded-full hover:bg-[rgb(170,70,170)]/10 transition-colors"
                 onClick={(e) => {
                   e.stopPropagation()
                   router.push('/despega/a3/value-mining-lab-text')
