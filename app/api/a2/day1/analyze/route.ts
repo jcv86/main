@@ -4,16 +4,6 @@ import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
-const AnalysisSchema = z.object({
-  visionClarity: z.number().int().min(0).max(25).describe('Score for vision clarity (0-25)'),
-  milestoneQuality: z.number().int().min(0).max(25).describe('Score for milestone quality (0-25)'),
-  actionCompleteness: z.number().int().min(0).max(25).describe('Score for action plan completeness (0-25)'),
-  realismCoherence: z.number().int().min(0).max(25).describe('Score for realism and coherence (0-25)'),
-  feedback: z.string().describe('Detailed feedback on strengths and areas for improvement'),
-  strengths: z.array(z.string()).describe('Key strengths of the submission'),
-  improvements: z.array(z.string()).describe('Key areas for improvement'),
-})
-
 export async function POST(request: Request) {
   try {
     const body = await request.json()
