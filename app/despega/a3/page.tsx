@@ -27,7 +27,7 @@ import {
   MapPin
 } from 'lucide-react'
 import { A2TodaysRoute } from '@/components/a2-todays-route'
-import { A2ProgressSidebar } from '@/components/a2-progress-sidebar'
+import { A2ProgressDisplay } from '@/components/a2-progress-display'
 
 // ============================================
 // A3 BASIC LEVEL TRAINING PATH
@@ -452,7 +452,7 @@ export default function A3BasicLevelTrainingPath() {
             <MapPin className="w-5 h-5" style={{ color: 'rgb(170,70,170)' }} />
             <h2 className="text-2xl font-bold text-white">Tu Progreso A2 (90 Días)</h2>
           </div>
-          <A2ProgressSidebar />
+          <A2ProgressDisplay />
         </div>
 
         {/* ========== MAIN PROGRESS BAR ========== */}
