@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { A2_DAYS } from '@/lib/a2-days-config'
 
-const DIA_NUM = 14
+const DIA_NUM = 1 // REPLACE WITH ACTUAL DAY NUMBER
 
 interface UserProgress {
   dia_actual: number

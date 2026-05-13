@@ -1,16 +1,65 @@
+/**
+ * TEMPLATE: This file is used to generate all A2 day pages (dia-1 through dia-90)
+ * It fetches real user progress from Supabase instead of using hardcoded mockup data
+ */
+
 'use client'
 
 import { useRouter } from 'next/navigation'
-import { X, ArrowRight, ArrowLeft, Calendar, CheckCircle2, Lightbulb, Target, Zap } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
+import { X, ArrowRight, ArrowLeft, Calendar, CheckCircle2, Lightbulb, Target, Zap, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { A2_DAYS } from '@/lib/a2-days-config'
 
 const DIA_NUM = 2
 
-export default function Dia2Page() {
+interface UserProgress {
+  dia_actual: number
+  porcentaje_completado: number
+  estado: string
+  user_id: string
+}
+
+export default function DiaPage() {
   const router = useRouter()
+  const [userProgress, setUserProgress] = useState<UserProgress | null>(null)
+  const [loading, setLoading] = useState(true)
+  const supabase = createClient()
+
+  useEffect(() => {
+    const fetchUserProgress = async () => {
+      try {
+        const { data: { user } } = await supabase.auth.getUser()
+        if (!user) {
+          router.push('/auth/signin')
+          return
+        }
+
+        const { data: progressData } = await supabase
+          .from('a2_user_route_progress')
+          .select('*')
+          .eq('user_id', user.id)
+          .single()
+
+        if (progressData) {
+          setUserProgress(progressData)
+        }
+      } catch (error) {
+        console.error('[v0] Error fetching user progress:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchUserProgress()
+  }, [supabase, router])
+
   const dayConfig = A2_DAYS[DIA_NUM]
+  const displayDay = userProgress?.dia_actual || DIA_NUM
+  const progressPercentage = userProgress?.porcentaje_completado || 0
+  const isCurrentDay = userProgress?.dia_actual === DIA_NUM
 
   if (!dayConfig) {
     return (
@@ -21,6 +70,17 @@ export default function Dia2Page() {
           <Button onClick={() => router.back()} className="bg-cyan-600 hover:bg-cyan-700">
             Atrás
           </Button>
+        </div>
+      </div>
+    )
+  }
+
+  if (loading) {
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+        <div className="bg-slate-900 border border-slate-700 rounded-lg p-6 text-center max-w-md">
+          <Loader2 className="w-8 h-8 animate-spin text-cyan-400 mx-auto mb-4" />
+          <p className="text-slate-200">Cargando tu progreso...</p>
         </div>
       </div>
     )
@@ -42,9 +102,9 @@ export default function Dia2Page() {
         {/* Header */}
         <div className="sticky top-0 bg-gradient-to-r from-slate-950 to-slate-900 border-b border-slate-700 p-6 flex justify-between items-start">
           <div className="flex-1">
-            <div className="flex items-center gap-3 mb-2">
-              <Badge className="bg-cyan-600/20 text-cyan-400 border-cyan-500/30">
-                Día {DIA_NUM} de 90
+            <div className="flex items-center gap-3 mb-2 flex-wrap">
+              <Badge className={isCurrentDay ? 'bg-green-600/20 text-green-400 border-green-500/30' : 'bg-cyan-600/20 text-cyan-400 border-cyan-500/30'}>
+                {isCurrentDay ? '★ Tu Día Actual' : `Día ${DIA_NUM}`} de 90
               </Badge>
               <Badge className="bg-purple-600/20 text-purple-400 border-purple-500/30">
                 {phaseName[dayConfig.phase as keyof typeof phaseName]}
@@ -58,8 +118,22 @@ export default function Dia2Page() {
           </button>
         </div>
 
+        {/* Progress Bar - REAL USER PROGRESS */}
+        <div className="bg-slate-800/30 border-b border-slate-700 px-6 py-3">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-xs text-slate-400">Progreso Total de tu Ruta</p>
+            <p className="text-sm font-bold text-cyan-400">{progressPercentage}% completado</p>
+          </div>
+          <div className="w-full bg-slate-800 rounded-lg h-2">
+            <div 
+              className="bg-gradient-to-r from-cyan-500 to-purple-500 h-2 rounded-lg transition-all duration-300"
+              style={{ width: `${progressPercentage}%` }}
+            ></div>
+          </div>
+        </div>
+
         {/* Content */}
-        <div className="p-6 space-y-6 max-h-[calc(90vh-200px)] overflow-y-auto">
+        <div className="p-6 space-y-6 max-h-[calc(90vh-250px)] overflow-y-auto">
           <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
             <p className="text-slate-200 leading-relaxed">{dayConfig.description}</p>
           </div>
@@ -123,13 +197,6 @@ export default function Dia2Page() {
               ))}
             </ul>
           </div>
-
-          <div className="w-full bg-slate-800 border border-slate-700 rounded-lg h-2">
-            <div 
-              className="bg-gradient-to-r from-cyan-500 to-purple-500 h-2 rounded-lg"
-              style={{ width: `${(DIA_NUM / 90) * 100}%` }}
-            ></div>
-          </div>
         </div>
 
         {/* Footer */}
@@ -149,7 +216,7 @@ export default function Dia2Page() {
             variant="outline"
             className="flex-1"
           >
-            Dashboard
+            Volver a Dashboard
           </Button>
 
           <Button
