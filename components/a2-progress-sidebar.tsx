@@ -19,9 +19,11 @@ interface Milestone {
 interface A2ProgressData {
   current_month: number
   progress_percentage: number
-  month_progress: MonthProgress[]
-  milestones: Milestone[]
+  completed_tasks: number
+  total_tasks: number
   status: string
+  month_progress?: MonthProgress[]
+  milestones?: Milestone[]
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -61,6 +63,25 @@ export function A2ProgressSidebar() {
     )
   }
 
+  // Compute month progress from actual data
+  const monthProgress = progress.month_progress || [
+    {
+      month: 1,
+      percentage: Math.min(progress.progress_percentage, 33),
+      completed: progress.current_month > 1
+    },
+    {
+      month: 2,
+      percentage: progress.current_month === 2 ? Math.max(0, Math.min(progress.progress_percentage - 33, 34)) : progress.current_month > 2 ? 100 : 0,
+      completed: progress.current_month > 2
+    },
+    {
+      month: 3,
+      percentage: progress.current_month === 3 ? Math.max(0, progress.progress_percentage - 67) : progress.current_month > 3 ? 100 : 0,
+      completed: progress.current_month > 3
+    }
+  ]
+
   return (
     <aside className="hidden lg:block w-72 bg-muted/5 border-r border-muted/40 sticky top-0 h-screen overflow-y-auto p-6 space-y-6">
       {/* Header */}
@@ -81,7 +102,7 @@ export function A2ProgressSidebar() {
 
       {/* Months Timeline */}
       <div className="space-y-3">
-        {progress.month_progress.map((month) => {
+        {monthProgress.map((month) => {
           const isActive = month.month === progress.current_month
           const isCompleted = month.completed
           
@@ -135,7 +156,7 @@ export function A2ProgressSidebar() {
               </button>
 
               {/* Milestones */}
-              {expandedMonth === month.month && progress.milestones.length > 0 && (
+              {expandedMonth === month.month && progress.milestones && progress.milestones.length > 0 && (
                 <div className="space-y-2 pl-8 mt-2">
                   {progress.milestones.map((milestone, idx) => (
                     <div key={idx} className="flex items-start gap-2 text-xs">
