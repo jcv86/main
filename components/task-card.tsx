@@ -104,7 +104,6 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between gap-2 flex-wrap">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-2xl">{emoji}</span>
                   <h4 className={`font-semibold text-sm transition-all`} style={{ color: completed ? 'rgba(255, 255, 255, 0.5)' : 'rgb(255, 255, 255)', textDecoration: completed ? 'line-through' : 'none' }}>
                     Día {task.day}: {task.title}
                   </h4>
