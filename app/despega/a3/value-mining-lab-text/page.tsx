@@ -260,9 +260,9 @@ export default function ValueMiningLabModule() {
               Back to A3
             </Button>
           </Link>
-          <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)] border-[rgba(170,70,170,0.3)]">
+          <span className="text-[rgba(170,70,170,0.8)] text-sm font-semibold">
             Module 2 of 10 • {MODULE_XP} XP
-          </Badge>
+          </span>
         </div>
 
         {/* Title Section */}
@@ -272,11 +272,11 @@ export default function ValueMiningLabModule() {
               <Gem className="w-7 h-7 text-[rgb(170,70,170)]" />
             </div>
             <div>
-              <h1 className="text-3xl font-bold text-white">Laboratorio de Minería de Valor</h1>
+              <h1 className="text-3xl font-normal text-white">Laboratorio de Minería de Valor</h1>
               <p className="text-white/60">Achievement discovery lab • Optional AI coach available</p>
             </div>
           </div>
-          <p className="text-white/70 text-lg">
+          <p className="text-white/60 text-lg">
             Every job, no matter how simple, creates value. In this lab, you&apos;ll learn to uncover 
             the hidden impact of your work and transform ordinary tasks into compelling achievements.
           </p>
@@ -777,15 +777,15 @@ export default function ValueMiningLabModule() {
             <div className="w-16 h-16 rounded-full bg-[rgba(170,70,170,0.2)] flex items-center justify-center mx-auto">
               <Gem className="w-8 h-8 text-[rgb(200,130,200)]" />
             </div>
-            <h3 className="text-2xl font-bold text-white">Value Mining Complete!</h3>
+            <h3 className="text-2xl font-normal text-white">Value Mining Complete!</h3>
             <p className="text-white/70 max-w-md mx-auto">
               You&apos;ve discovered the hidden value in your experience and created {achievements.filter(a => a.title).length} achievement stories. 
               Your strongest story is saved for future modules.
             </p>
             <div className="flex items-center justify-center gap-4 pt-2">
-              <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(200,130,200)] text-lg px-4 py-2">
-                +{MODULE_XP} XP
-              </Badge>
+          <span className="text-[rgba(170,70,170,0.8)] text-lg font-semibold px-4 py-2">
+            +{MODULE_XP} XP
+          </span>
             </div>
             <Button 
               onClick={handleComplete} 

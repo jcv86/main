@@ -149,7 +149,7 @@ export default function ValueMiningLabCoach() {
     return (
       <div className="min-h-screen bg-black/95 flex flex-col items-center justify-center p-8">
         <div className="text-center space-y-6 max-w-2xl">
-          <h2 className="text-3xl font-bold text-white">Sesión Completada</h2>
+          <h2 className="text-3xl font-normal text-white">Sesión Completada</h2>
           <p className="text-white/60 text-lg">Excelente trabajo en la Minería de Valor</p>
           <p className="text-white/40">Ganaste 100 XP</p>
           <Button 
