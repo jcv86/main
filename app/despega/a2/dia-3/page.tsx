@@ -5,6 +5,7 @@ import { X, ArrowRight, ArrowLeft, CheckCircle2, Clock, BookOpen, Wrench, Users,
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { A2_DAYS } from '@/lib/a2-days-config'
+import { A2CompleteDayButton } from '@/components/a2-complete-day-button'
 
 const DIA_NUM = 3
 
@@ -197,6 +198,13 @@ export default function DiaPage() {
         )}
 
 
+
+        {/* Complete Day Button */}
+        <div className="bg-emerald-900/20 border border-emerald-500/30 rounded-lg p-6 mb-8">
+          <h3 className="text-lg font-semibold text-white mb-3">¿Completaste este día?</h3>
+          <p className="text-white/70 mb-4">Marca este día como completado para avanzar en tu progreso de 90 días.</p>
+          <A2CompleteDayButton dayNumber={DIA_NUM} />
+        </div>
 
         {/* Navigation */}
         <div className="flex items-center justify-between pt-8 border-t border-white/10">
