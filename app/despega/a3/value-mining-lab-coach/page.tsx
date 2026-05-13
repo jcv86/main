@@ -230,7 +230,7 @@ export default function ValueMiningLabCoach() {
         <div className="grid grid-cols-3 gap-4">
           {/* Left Column: Coach Video Profile */}
           <div className="space-y-3">
-            <div className="border-2 border-[rgb(170,70,170)]/40 rounded-lg overflow-hidden bg-black/40 aspect-[3/4]">
+            <div className="rounded-lg overflow-hidden bg-black/40 aspect-[3/4]">
               <video
                 autoPlay
                 loop
@@ -300,7 +300,7 @@ export default function ValueMiningLabCoach() {
                   onClick={isListening ? stopListening : startListening}
                   variant="ghost"
                   size="sm"
-                  className={`m-3 text-xs font-medium border-0 ${
+                  className={`m-3 text-xs font-medium border-0 rounded-full ${
                     isListening 
                       ? 'bg-red-600 hover:bg-red-700 text-white' 
                       : 'bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white'
@@ -325,7 +325,7 @@ export default function ValueMiningLabCoach() {
           {/* Right Column: Question & Value Categories */}
           <div className="space-y-3">
             {/* Question Display */}
-            <Card className="bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)] p-4 min-h-40">
+            <Card className="bg-[rgba(170,70,170,0.2)] border-[rgba(170,70,170,0.3)] p-4 min-h-40">
               <p className="text-xs text-[rgb(170,70,170)] uppercase font-medium mb-2">Pregunta</p>
               <p className="text-white/90 text-sm leading-relaxed font-medium">{currentQ.question}</p>
             </Card>
@@ -348,7 +348,7 @@ export default function ValueMiningLabCoach() {
 
             {/* Guidance Card */}
             <Card className="bg-yellow-500/10 border-yellow-500/20 p-3">
-              <p className="text-xs text-yellow-600 dark:text-yellow-400">💡 {currentQ.guidance}</p>
+              <p className="text-xs text-yellow-600/60 dark:text-yellow-400/60">💡 {currentQ.guidance}</p>
             </Card>
           </div>
         </div>
