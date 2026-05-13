@@ -267,6 +267,12 @@ export default function A3BasicLevelTrainingPath() {
         if (response.ok) {
           const { progress } = await response.json()
           
+          // Fetch A2 current day from database
+          if (progress?.a2CurrentDay) {
+            setCurrentDay(progress.a2CurrentDay)
+            console.log('[v0] A2 Current Day from DB:', progress.a2CurrentDay)
+          }
+          
           // Map API response to our module structure
           const progressMap: Record<string, ModuleProgreso> = {}
           

@@ -67,9 +67,19 @@ export async function GET() {
           totalModules: 10,
           moduleStates: defaultModuleStates,
           completedModuleIds: [],
+          a2CurrentDay: 1, // Default to day 1 if not found
         },
       })
     }
+
+    // Fetch A2 user progress to get current day
+    const { data: a2Data } = await supabase
+      .from('a2_user_route_progress')
+      .select('dia_actual')
+      .eq('user_id', userId)
+      .single()
+
+    const a2CurrentDay = a2Data?.dia_actual || 1
 
     // Fetch user progress from database
     const { data: progressData, error: progressError } = await supabase
@@ -111,6 +121,7 @@ export async function GET() {
           totalModules: 10,
           moduleStates,
           completedModuleIds,
+          a2CurrentDay, // Include A2 current day
         },
       })
     }
@@ -126,6 +137,7 @@ export async function GET() {
         totalModules: 10,
         moduleStates: defaultModuleStates,
         completedModuleIds: [],
+        a2CurrentDay, // Include A2 current day
       },
     })
   } catch (error) {
