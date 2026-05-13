@@ -318,7 +318,7 @@ export default function ValueMiningLabCoach() {
         <div className="flex justify-end gap-2">
           <Button
             onClick={handleSubmitResponse}
-            disabled={responseMode === 'audio' ? !hasAudioRecording : !userResponse.trim()}
+            disabled={!userResponse.trim() && !hasAudioRecording}
             className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white gap-2 px-8 disabled:opacity-50"
           >
             Enviar Respuesta
@@ -326,7 +326,7 @@ export default function ValueMiningLabCoach() {
           </Button>
           <Button
             onClick={currentQuestion < COACH_QUESTIONS.length - 1 ? handleSubmitResponse : () => router.push('/despega/a3')}
-            disabled={responseMode === 'audio' ? !hasAudioRecording : !userResponse.trim()}
+            disabled={!userResponse.trim() && !hasAudioRecording}
             className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white gap-2 px-8 disabled:opacity-50"
           >
             {currentQuestion < COACH_QUESTIONS.length - 1 ? 'Siguiente Pregunta' : 'Finalizar'}
