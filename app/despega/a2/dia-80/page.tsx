@@ -6,9 +6,9 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { A2_DAYS } from '@/lib/a2-days-config'
 
-const DIA_NUM = 1
+const DIA_NUM = 80
 
-export default function Dia1Page() {
+export default function Dia80Page() {
   const router = useRouter()
   const dayConfig = A2_DAYS[DIA_NUM]
 

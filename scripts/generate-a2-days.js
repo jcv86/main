@@ -1,4 +1,18 @@
-'use client'
+const fs = require('fs');
+const path = require('path');
+
+// Create all 90 day directories and page.tsx files
+for (let i = 1; i <= 90; i++) {
+  const dayDir = path.join(__dirname, `../app/despega/a2/dia-${i}`);
+  const pageFile = path.join(dayDir, 'page.tsx');
+  
+  // Create directory if it doesn't exist
+  if (!fs.existsSync(dayDir)) {
+    fs.mkdirSync(dayDir, { recursive: true });
+  }
+  
+  // Create a simple page.tsx that imports and uses the dynamic day
+  const pageContent = `'use client'
 
 import { useRouter } from 'next/navigation'
 import { X, ArrowRight, ArrowLeft, Calendar, CheckCircle2, Lightbulb, Target, Zap } from 'lucide-react'
@@ -6,9 +20,9 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { A2_DAYS } from '@/lib/a2-days-config'
 
-const DIA_NUM = 1
+const DIA_NUM = ${i}
 
-export default function Dia1Page() {
+export default function Dia${i}Page() {
   const router = useRouter()
   const dayConfig = A2_DAYS[DIA_NUM]
 
@@ -127,7 +141,7 @@ export default function Dia1Page() {
           <div className="w-full bg-slate-800 border border-slate-700 rounded-lg h-2">
             <div 
               className="bg-gradient-to-r from-cyan-500 to-purple-500 h-2 rounded-lg"
-              style={{ width: `${(DIA_NUM / 90) * 100}%` }}
+              style={{ width: \`\${(DIA_NUM / 90) * 100}%\` }}
             ></div>
           </div>
         </div>
@@ -135,7 +149,7 @@ export default function Dia1Page() {
         {/* Footer */}
         <div className="sticky bottom-0 bg-slate-950 border-t border-slate-700 p-6 flex justify-between gap-3">
           <Button
-            onClick={() => prevDay && router.push(`/despega/a2/dia-${prevDay}`)}
+            onClick={() => prevDay && router.push(\`/despega/a2/dia-\${prevDay}\`)}
             disabled={!prevDay}
             variant="outline"
             className="flex-1"
@@ -153,7 +167,7 @@ export default function Dia1Page() {
           </Button>
 
           <Button
-            onClick={() => nextDay && router.push(`/despega/a2/dia-${nextDay}`)}
+            onClick={() => nextDay && router.push(\`/despega/a2/dia-\${nextDay}\`)}
             disabled={!nextDay}
             className="flex-1 bg-cyan-600 hover:bg-cyan-700"
           >
@@ -165,3 +179,10 @@ export default function Dia1Page() {
     </div>
   )
 }
+`;
+
+  fs.writeFileSync(pageFile, pageContent);
+  console.log(`Created: /app/despega/a2/dia-${i}/page.tsx`);
+}
+
+console.log('✓ All 90 day pages created successfully!');
