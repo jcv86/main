@@ -54,7 +54,6 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
           label="¿Qué rol o título profesional estás buscando?"
           placeholder="ej., Senior Product Manager, Data Scientist, Growth Hacker, Desarrollador Full Stack..."
           icon={<Briefcase className="w-4 h-4 text-cyan-400" />}
-          coachContext="professional role targeting"
           minRows={2}
         />
         {errors.role && <p className="text-red-400 text-sm">{errors.role}</p>}
@@ -68,7 +67,6 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
           label="Describe tu ambiente de trabajo ideal"
           placeholder="Considera tamaño de empresa, industria, cultura, valores, flexibilidad, oportunidades de crecimiento..."
           icon={<Building2 className="w-4 h-4 text-purple-400" />}
-          coachContext="ideal work environment description"
           minRows={3}
         />
         {errors.environment && <p className="text-red-400 text-sm">{errors.environment}</p>}
@@ -79,11 +77,10 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
         <A2EnhancedInput
           value={desiredOutcome}
           onChange={setDesiredOutcome}
-          label="¿Qué quieres lograr en los próximos 30 días?"
-          placeholder="Sé específico sobre el resultado que quieres alcanzar para el Día 30..."
-          icon={<Target className="w-4 h-4 text-emerald-400" />}
-          coachContext="30-day career goal outcome"
-          minRows={3}
+          label="¿Qué deseas lograr en los próximos 30 días?"
+          placeholder="Sé específico sobre el resultado que quieres lograr para el Día 30"
+          icon={<Target className="w-4 h-4 text-green-400" />}
+          minRows={2}
         />
         {errors.desiredOutcome && <p className="text-red-400 text-sm">{errors.desiredOutcome}</p>}
       </div>
