@@ -26,7 +26,6 @@ import {
   Trophy,
   MapPin
 } from 'lucide-react'
-import { A2TodaysRoute } from '@/components/a2-todays-route'
 import { A2ProgressDisplay } from '@/components/a2-progress-display'
 
 // ============================================
@@ -435,15 +434,6 @@ export default function A3BasicLevelTrainingPath() {
               Ruta Seleccionada: {selectedPath} Días
             </Badge>
           </div>
-        </div>
-
-        {/* ========== A2 INTEGRATION: TODAY'S ROUTE ========== */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2 mb-4">
-            <MapPin className="w-5 h-5" style={{ color: 'rgb(80,160,170)' }} />
-            <h2 className="text-2xl font-bold text-white">Tu Ruta de Hoy (A2: Día {currentDay}/90)</h2>
-          </div>
-          <A2TodaysRoute dayNumber={currentDay} />
         </div>
 
         {/* ========== A2 INTEGRATION: ROUTE PROGRESS ========== */}
