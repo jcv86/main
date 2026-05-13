@@ -23,8 +23,12 @@ import {
   Mic,
   Video,
   AlertTriangle,
-  Trophy
+  Trophy,
+  MapPin,
+  Navigation
 } from 'lucide-react'
+import { A2TodaysRoute } from '@/components/a2-todays-route'
+import { A2RouteProgress } from '@/components/a2-route-progress'
 
 // ============================================
 // A3 BASIC LEVEL TRAINING PATH
@@ -236,6 +240,7 @@ export default function A3BasicLevelTrainingPath() {
   const [moduleProgreso, setModuleProgreso] = useState<Record<string, ModuleProgreso>>({})
   const [selectedPath, setSelectedPath] = useState<'30' | '60' | '90'>('30')
   const [expandedModule, setExpandedModule] = useState<string | null>(null)
+  const [currentDay, setCurrentDay] = useState(1) // A2: Current day in 90-day journey
 
   // Calculate totals
   const earnedXp = Object.values(moduleProgreso).reduce((sum, p) => sum + p.earnedXp, 0)
@@ -425,6 +430,24 @@ export default function A3BasicLevelTrainingPath() {
               Ruta Seleccionada: {selectedPath} Días
             </Badge>
           </div>
+        </div>
+
+        {/* ========== A2 INTEGRATION: TODAY'S ROUTE ========== */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 mb-4">
+            <MapPin className="w-5 h-5" style={{ color: 'rgb(80,160,170)' }} />
+            <h2 className="text-2xl font-bold text-white">Tu Ruta de Hoy (A2: Día {currentDay}/90)</h2>
+          </div>
+          <A2TodaysRoute dayNumber={currentDay} />
+        </div>
+
+        {/* ========== A2 INTEGRATION: ROUTE PROGRESS ========== */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 mb-4">
+            <Navigation className="w-5 h-5" style={{ color: 'rgb(170,70,170)' }} />
+            <h2 className="text-2xl font-bold text-white">Tu Progreso de Ruta (A2 vs A3)</h2>
+          </div>
+          <A2RouteProgress dayNumber={currentDay} />
         </div>
 
         {/* ========== MAIN PROGRESS BAR ========== */}

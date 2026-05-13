@@ -2,40 +2,6 @@
 
 import { useState, useCallback, useRef } from 'react'
 
-interface SpeechRecognitionResultList {
-  readonly length: number
-  item(index: number): SpeechRecognitionResult
-  [index: number]: SpeechRecognitionResult
-}
-
-interface SpeechRecognitionResult {
-  readonly length: number
-  item(index: number): SpeechRecognitionAlternative
-  [index: number]: SpeechRecognitionAlternative
-  readonly isFinal: boolean
-}
-
-interface SpeechRecognitionAlternative {
-  readonly transcript: string
-  readonly confidence: number
-}
-
-interface SpeechRecognitionResultEvent extends Event {
-  readonly resultIndex: number
-  readonly results: SpeechRecognitionResultList
-}
-
-interface SpeechRecognitionErrorEvent extends Event {
-  readonly error: string
-}
-
-declare global {
-  interface Window {
-    SpeechRecognition: any
-    webkitSpeechRecognition: any
-  }
-}
-
 export function useSpeechRecognition() {
   const [transcript, setTranscript] = useState('')
   const [isListening, setIsListening] = useState(false)
@@ -48,7 +14,7 @@ export function useSpeechRecognition() {
       return
     }
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
     recognitionRef.current = new SpeechRecognition()
 
     recognitionRef.current.continuous = true
@@ -60,7 +26,7 @@ export function useSpeechRecognition() {
       setError(null)
     }
 
-    recognitionRef.current.onresult = (event: SpeechRecognitionResultEvent) => {
+    recognitionRef.current.onresult = (event: any) => {
       let interimTranscript = ''
 
       for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -77,7 +43,7 @@ export function useSpeechRecognition() {
       }
     }
 
-    recognitionRef.current.onerror = (event: SpeechRecognitionErrorEvent) => {
+    recognitionRef.current.onerror = (event: any) => {
       console.error('[v0] Speech recognition error:', event.error)
       setError(`Error: ${event.error}`)
     }
