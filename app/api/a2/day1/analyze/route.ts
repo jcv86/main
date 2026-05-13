@@ -1,0 +1,133 @@
+import { generateObject } from 'ai'
+import { anthropic } from '@ai-sdk/anthropic'
+import { z } from 'zod'
+import { cookies } from 'next/headers'
+import { createAdminClient } from '@/lib/supabase/admin'
+
+const AnalysisSchema = z.object({
+  visionClarity: z.number().int().min(0).max(25).describe('Score for vision clarity (0-25)'),
+  milestoneQuality: z.number().int().min(0).max(25).describe('Score for milestone quality (0-25)'),
+  actionCompleteness: z.number().int().min(0).max(25).describe('Score for action plan completeness (0-25)'),
+  realismCoherence: z.number().int().min(0).max(25).describe('Score for realism and coherence (0-25)'),
+  feedback: z.string().describe('Detailed feedback on strengths and areas for improvement'),
+  strengths: z.array(z.string()).describe('Key strengths of the submission'),
+  improvements: z.array(z.string()).describe('Key areas for improvement'),
+})
+
+export async function POST(request: Request) {
+  try {
+    const body = await request.json()
+    const { visionRole, visionEnvironment, visionDesiredOutcome, milestones, actionPlan } = body
+
+    const cookieStore = await cookies()
+    const demoUserCookie = cookieStore.get('demo_user')
+    
+    if (!demoUserCookie) {
+      return Response.json(
+        { error: 'Not authenticated' },
+        { status: 401 }
+      )
+    }
+
+    const demoUser = JSON.parse(demoUserCookie.value)
+    const userId = demoUser.id
+
+    // Format submission data for analysis
+    const submissionText = `
+VISION STATEMENT:
+Role/Title: ${visionRole}
+Ideal Environment: ${visionEnvironment}
+Desired 30-Day Outcome: ${visionDesiredOutcome}
+
+MILESTONES:
+Day 10: ${milestones?.day10 || 'Not specified'}
+Day 20: ${milestones?.day20 || 'Not specified'}
+Day 30: ${milestones?.day30 || 'Not specified'}
+
+ACTION PLAN:
+${actionPlan ? JSON.stringify(actionPlan, null, 2) : 'Not specified'}
+`
+
+    // Use AI to analyze and score
+    const { object } = await generateObject({
+      model: anthropic('claude-3-5-sonnet-20241022'),
+      schema: AnalysisSchema,
+      prompt: `You are an expert career coach evaluating a professional development plan. 
+      
+Please analyze this 90-day job search plan based on these criteria:
+
+1. VISION CLARITY (0-25): Are the role, environment, and outcomes clear and specific?
+2. MILESTONE QUALITY (0-25): Are the 30-day milestones realistic, specific, and well-structured?
+3. ACTION COMPLETENESS (0-25): Does the action plan cover all necessary activities?
+4. REALISM & COHERENCE (0-25): Is the plan realistic and internally coherent?
+
+SUBMISSION TO ANALYZE:
+${submissionText}
+
+Provide scores that total insights into actionability and feasibility. Be constructive and encouraging.`,
+      temperature: 0.7,
+    })
+
+    const totalScore = object.visionClarity + object.milestoneQuality + object.actionCompleteness + object.realismCoherence
+    const passFail = totalScore >= 75 ? 'pass' : 'fail'
+
+    // Store analysis in database
+    const supabase = createAdminClient()
+    const { data: submission, error: getError } = await supabase
+      .from('a2_day1_submissions')
+      .select('id')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .single()
+
+    if (submission) {
+      const { error: updateError } = await supabase
+        .from('a2_day1_submissions')
+        .update({
+          analysis_score: totalScore,
+          analysis_result: {
+            visionClarity: object.visionClarity,
+            milestoneQuality: object.milestoneQuality,
+            actionCompleteness: object.actionCompleteness,
+            realismCoherence: object.realismCoherence,
+            feedback: object.feedback,
+            strengths: object.strengths,
+            improvements: object.improvements,
+          },
+          analysis_status: 'completed',
+          pass_fail_status: passFail,
+          updated_at: new Date().toISOString(),
+          ...(passFail === 'pass' && { completed_at: new Date().toISOString() }),
+        })
+        .eq('id', submission.id)
+
+      if (updateError) {
+        console.error('[v0] Error updating analysis:', updateError)
+      }
+    }
+
+    return Response.json({
+      success: true,
+      analysis: {
+        totalScore,
+        passFail,
+        scores: {
+          visionClarity: object.visionClarity,
+          milestoneQuality: object.milestoneQuality,
+          actionCompleteness: object.actionCompleteness,
+          realismCoherence: object.realismCoherence,
+        },
+        feedback: object.feedback,
+        strengths: object.strengths,
+        improvements: object.improvements,
+      },
+    })
+  } catch (error) {
+    console.error('[v0] Analysis error:', error)
+    return Response.json(
+      { error: 'Failed to analyze submission' },
+      { status: 500 }
+    )
+  }
+}

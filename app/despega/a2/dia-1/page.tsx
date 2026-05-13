@@ -1,24 +1,32 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { X, ArrowRight, ArrowLeft, CheckCircle2, Clock, BookOpen, Wrench, Users, ClipboardList, Trophy } from 'lucide-react'
+import { ArrowRight, ArrowLeft, CheckCircle2, Clock, BookOpen } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { A2_DAYS } from '@/lib/a2-days-config'
+import { A2Day1Modal } from '@/components/a2-day1-modal'
 
 const DIA_NUM = 1
 
-const taskTypeLabels: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
-  learning: { label: 'Aprender', icon: <BookOpen className="w-4 h-4" />, color: 'bg-blue-500/20 text-blue-400' },
-  practice: { label: 'Practicar', icon: <Wrench className="w-4 h-4" />, color: 'bg-yellow-500/20 text-yellow-400' },
-  networking: { label: 'Conectar', icon: <Users className="w-4 h-4" />, color: 'bg-pink-500/20 text-pink-400' },
-  planning: { label: 'Planificar', icon: <ClipboardList className="w-4 h-4" />, color: 'bg-purple-500/20 text-purple-400' },
-  milestone: { label: 'Hito', icon: <Trophy className="w-4 h-4" />, color: 'bg-emerald-500/20 text-emerald-400' },
+const taskTypeLabels: Record<string, { label: string; color: string }> = {
+  learning: { label: 'Aprender', color: 'bg-blue-500/20 text-blue-400' },
+  practice: { label: 'Practicar', color: 'bg-yellow-500/20 text-yellow-400' },
+  networking: { label: 'Conectar', color: 'bg-pink-500/20 text-pink-400' },
+  planning: { label: 'Planificar', color: 'bg-purple-500/20 text-purple-400' },
+  milestone: { label: 'Hito', color: 'bg-emerald-500/20 text-emerald-400' },
 }
 
-export default function DiaPage() {
+export default function Dia1Page() {
   const router = useRouter()
+  const [showModal, setShowModal] = useState(false)
   const dayConfig = A2_DAYS[DIA_NUM]
+
+  useEffect(() => {
+    // Auto-open modal when page loads
+    setShowModal(true)
+  }, [])
 
   if (!dayConfig) {
     return (
@@ -37,15 +45,6 @@ export default function DiaPage() {
   const prevDay = DIA_NUM > 1 ? DIA_NUM - 1 : null
   const nextDay = DIA_NUM < 90 ? DIA_NUM + 1 : null
 
-  const phaseName: Record<string, string> = {
-    clarity: 'Claridad',
-    material: 'Material',
-    interview: 'Entrevista',
-    'real-action': 'Acción Real',
-    refinement: 'Refinamiento'
-  }
-
-  // Map phase to task type for display
   const phaseToType: Record<string, string> = {
     clarity: 'planning',
     material: 'learning',
@@ -55,11 +54,15 @@ export default function DiaPage() {
   }
   const typeInfo = taskTypeLabels[phaseToType[dayConfig.phase] || 'planning']
 
-  // Use estimatedHours from config (in hours, e.g. 1.5 = 1h 30m)
   const estimatedHours = dayConfig.estimatedHours || 1
   const hours = Math.floor(estimatedHours)
   const minutes = Math.round((estimatedHours - hours) * 60)
   const timeDisplay = hours > 0 ? `${hours}h${minutes > 0 ? ` ${minutes}m` : ''}` : `${minutes}m`
+
+  const handleModalComplete = () => {
+    // Mark day as complete and update progress
+    setShowModal(false)
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -72,17 +75,14 @@ export default function DiaPage() {
                 Día {DIA_NUM} de 90
               </Badge>
               <Badge className={typeInfo.color}>
-                {typeInfo.icon}
-                <span className="ml-1">{typeInfo.label}</span>
+                {typeInfo.label}
               </Badge>
             </div>
-            <Button 
-              variant="ghost" 
-              size="sm"
-              onClick={() => router.push('/despega/a2-routes')}
-              className="text-white/70 hover:text-white"
+            <Button
+              onClick={() => setShowModal(true)}
+              className="bg-cyan-600 hover:bg-cyan-700"
             >
-              <X className="w-5 h-5" />
+              Start Day 1 Flow
             </Button>
           </div>
 
@@ -96,7 +96,6 @@ export default function DiaPage() {
               <Clock className="w-4 h-4" />
               {timeDisplay}
             </span>
-            <span>Fase: {phaseName[dayConfig.phase] || dayConfig.phase}</span>
           </div>
         </div>
       </div>
@@ -196,6 +195,18 @@ export default function DiaPage() {
           </a>
         )}
 
+        {/* CTA */}
+        <div className="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 border border-cyan-500/20 rounded-lg p-6 text-center">
+          <h3 className="text-lg font-semibold text-white mb-2">Ready to Complete Day 1?</h3>
+          <p className="text-white/60 mb-4">Start the interactive 7-step flow to define your vision, create milestones, and build your action plan.</p>
+          <Button
+            onClick={() => setShowModal(true)}
+            className="bg-cyan-600 hover:bg-cyan-700 px-8"
+          >
+            Start Day 1 Flow
+          </Button>
+        </div>
+
 
 
         {/* Navigation */}
@@ -232,6 +243,13 @@ export default function DiaPage() {
           )}
         </div>
       </div>
+
+      {/* Day 1 Modal */}
+      <A2Day1Modal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onComplete={handleModalComplete}
+      />
     </div>
   )
 }
