@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { CameraMicrophoneTest } from '@/components/camera-microphone-test'
-import { ChevronRight, Send, Mic, MessageSquare, CheckCircle2, FileText } from 'lucide-react'
+import { ChevronRight, Send, Mic, MessageSquare, CheckCircle2 } from 'lucide-react'
 
 const COACH_QUESTIONS = [
   {
@@ -53,7 +53,6 @@ export default function ValueMiningLabCoach() {
   const [progress, setProgress] = useState(0)
   const [isRecording, setIsRecording] = useState(false)
   const [hasAudioRecording, setHasAudioRecording] = useState(false)
-  const [responseMode, setResponseMode] = useState<'text' | 'audio'>('text')
 
   const handleCameraTestComplete = (passed: boolean) => {
     if (passed) {
@@ -97,11 +96,15 @@ export default function ValueMiningLabCoach() {
   }
 
   const handleSubmitResponse = () => {
-    if (responseMode === 'audio' && !hasAudioRecording) return
-    if (responseMode === 'text' && !userResponse.trim()) return
+    if (!userResponse.trim() && !hasAudioRecording) {
+      console.log('[v0] No response to submit')
+      return
+    }
 
-    console.log('[v0] Response submitted:', responseMode === 'audio' ? 'Audio' : userResponse)
+    // Simulate coach feedback
+    console.log('[v0] Response submitted:', hasAudioRecording ? 'Audio' : userResponse)
     
+    // Move to next question
     if (currentQuestion < COACH_QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
       setProgress(((currentQuestion + 1) / COACH_QUESTIONS.length) * 100)
@@ -109,9 +112,11 @@ export default function ValueMiningLabCoach() {
       setHasAudioRecording(false)
       setIsRecording(false)
     } else {
+      // Session complete
       setSessionActive(false)
       setProgress(100)
     }
+  }
   }
 
   useEffect(() => {
@@ -242,78 +247,39 @@ export default function ValueMiningLabCoach() {
             <div className="bg-white/5 border border-white/10 rounded-lg overflow-hidden">
               <p className="text-xs text-white/60 uppercase px-3 pt-3 pb-2">Tu Respuesta</p>
               
-              {/* Response Mode Toggle - Tab Style */}
-              <div className="flex border-t border-white/10">
-                <Button
-                  onClick={() => setResponseMode('text')}
-                  variant="ghost"
-                  size="sm"
-                  className={`flex-1 rounded-none text-xs font-medium border-b-2 transition-all ${
-                    responseMode === 'text' 
-                      ? 'bg-[rgb(170,70,170)]/20 border-b-[rgb(170,70,170)] text-white' 
-                      : 'border-b-transparent text-white/60 hover:text-white'
-                  }`}
-                >
-                  <FileText className="w-3 h-3 mr-1" />
-                  Texto
-                </Button>
-                <Button
-                  onClick={() => setResponseMode('audio')}
-                  variant="ghost"
-                  size="sm"
-                  className={`flex-1 rounded-none text-xs font-medium border-b-2 transition-all ${
-                    responseMode === 'audio' 
-                      ? 'bg-[rgb(170,70,170)]/20 border-b-[rgb(170,70,170)] text-white' 
-                      : 'border-b-transparent text-white/60 hover:text-white'
-                  }`}
-                >
-                  <Mic className="w-3 h-3 mr-1" />
-                  Voz
-                </Button>
-              </div>
+              {/* Text Input Area */}
+              <textarea
+                value={userResponse}
+                onChange={(e) => setUserResponse(e.target.value)}
+                placeholder="Tu respuesta aparecerá aquí o escribe manualmente..."
+                className="w-full bg-transparent text-white/90 text-sm placeholder:text-white/30 resize-none h-24 outline-none px-3 py-3 border-0"
+              />
 
-              {/* Text Input Mode */}
-              {responseMode === 'text' && (
-                <textarea
-                  value={userResponse}
-                  onChange={(e) => setUserResponse(e.target.value)}
-                  placeholder="Tu respuesta aparecerá aquí o escribe manualmente..."
-                  className="w-full bg-transparent text-white/90 text-sm placeholder:text-white/30 resize-none h-24 outline-none px-3 py-3"
-                />
-              )}
-
-              {/* Audio Recording Mode */}
-              {responseMode === 'audio' && (
-                <div className="px-3 py-4 space-y-3">
-                  {isRecording ? (
-                    <div className="flex items-center justify-center gap-2 py-2">
-                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                      <span className="text-xs text-red-400 font-medium">Grabando...</span>
-                    </div>
-                  ) : hasAudioRecording ? (
-                    <div className="flex items-center justify-center gap-2 py-2">
-                      <CheckCircle2 className="w-4 h-4 text-green-400" />
-                      <span className="text-xs text-green-400 font-medium">Grabación completada</span>
-                    </div>
-                  ) : (
-                    <p className="text-xs text-white/50 text-center py-2">Presiona para grabar tu respuesta</p>
-                  )}
-
-                  {/* Record Button */}
-                  <Button
-                    onClick={isRecording ? stopAudioRecording : startAudioRecording}
-                    size="sm"
-                    className={`w-full text-xs font-medium ${
-                      isRecording 
-                        ? 'bg-red-600 hover:bg-red-700 text-white' 
-                        : 'bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white'
-                    }`}
-                  >
-                    <Mic className="w-3 h-3 mr-2" />
-                    {isRecording ? 'Detener Grabación' : 'Grabar Respuesta'}
-                  </Button>
+              {/* Audio Recording Section - Shown below textarea */}
+              {isRecording && (
+                <div className="px-3 pb-2 flex items-center gap-2">
+                  <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                  <span className="text-xs text-red-400 font-medium">Grabando...</span>
                 </div>
               )}
+
+              {hasAudioRecording && !isRecording && (
+                <div className="px-3 pb-2 flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-green-400" />
+                  <span className="text-xs text-green-400 font-medium">Grabación completada</span>
+                </div>
+              )}
+
+              {/* Usar micrófono Button */}
+              <Button
+                onClick={isRecording ? stopAudioRecording : startAudioRecording}
+                variant="ghost"
+                size="sm"
+                className="m-3 text-xs font-medium bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white border-0"
+              >
+                <Mic className="w-3 h-3 mr-2" />
+                {isRecording ? 'Detener Grabación' : 'Usar micrófono'}
+              </Button>
             </div>
           </div>
 
