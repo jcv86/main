@@ -1,12 +1,9 @@
 'use client'
 
-import { useState } from 'react'
-// useState kept for showDetailModal
+import { useRouter } from 'next/navigation'
 import { CheckCircle2, Circle, Clock, BookOpen, Wrench, Users, ClipboardList, Trophy, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { TaskDetailModal } from '@/components/task-detail-modal'
-import { getTaskDetail } from '@/lib/task-details'
 
 export interface Task {
   day: number
@@ -43,8 +40,7 @@ const taskTypeEmojis = {
 }
 
 export function TaskCard({ task, completed = false, onComplete, taskId, locked = false }: TaskCardProps) {
-  const [showDetailModal, setShowDetailModal] = useState(false)
-  const taskDetail = getTaskDetail(task.day)
+  const router = useRouter()
   const typeInfo = taskTypeIcons[task.type]
   const emoji = taskTypeEmojis[task.type]
 
@@ -75,6 +71,11 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
     )
   }
 
+  const handleCardClick = () => {
+    // Navigate to the individual day page
+    router.push(`/despega/a2/dia-${task.day}`)
+  }
+
   return (
     <>
       <div className={`transition-all duration-200 ${completed ? 'opacity-60' : ''}`}>
@@ -82,7 +83,7 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
           className={`bg-muted/20 border-2 ${
             completed ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-muted/40'
           } rounded-[28px] p-4 hover:border-muted/60 transition group cursor-pointer`}
-          onClick={() => taskDetail && setShowDetailModal(true)}
+          onClick={handleCardClick}
         >
           <div className="flex items-start gap-3">
             {/* Completion checkbox */}
@@ -148,15 +149,6 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
           </div>
         </div>
       </div>
-
-      {/* Task Detail Modal */}
-      {taskDetail && (
-        <TaskDetailModal
-          task={taskDetail}
-          isOpen={showDetailModal}
-          onClose={() => setShowDetailModal(false)}
-        />
-      )}
     </>
   )
 }
