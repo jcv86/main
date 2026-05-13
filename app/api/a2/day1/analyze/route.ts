@@ -1,6 +1,5 @@
-import { generateObject } from 'ai'
+import { generateText } from 'ai'
 import { anthropic } from '@ai-sdk/anthropic'
-import { z } from 'zod'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/admin'
@@ -49,13 +48,12 @@ ACTION PLAN:
 ${actionPlan ? JSON.stringify(actionPlan, null, 2) : 'Not specified'}
 `
 
-    // Use AI to analyze and score
-    const { object } = await generateObject({
+    // Use AI to analyze and score - use generateText with JSON parsing
+    const { text } = await generateText({
       model: anthropic('claude-3-5-sonnet-20241022'),
-      schema: AnalysisSchema,
       prompt: `You are an expert career coach evaluating a professional development plan. 
-      
-Please analyze this 90-day job search plan based on these criteria:
+
+Analyze this 90-day job search plan and provide scores and feedback in JSON format:
 
 1. VISION CLARITY (0-25): Are the role, environment, and outcomes clear and specific?
 2. MILESTONE QUALITY (0-25): Are the 30-day milestones realistic, specific, and well-structured?
@@ -65,9 +63,36 @@ Please analyze this 90-day job search plan based on these criteria:
 SUBMISSION TO ANALYZE:
 ${submissionText}
 
-Provide scores that total insights into actionability and feasibility. Be constructive and encouraging.`,
+Respond ONLY with valid JSON in this exact format (no other text):
+{
+  "visionClarity": <number 0-25>,
+  "milestoneQuality": <number 0-25>,
+  "actionCompleteness": <number 0-25>,
+  "realismCoherence": <number 0-25>,
+  "feedback": "<string>",
+  "strengths": ["<strength1>", "<strength2>", ...],
+  "improvements": ["<improvement1>", "<improvement2>", ...]
+}`,
       temperature: 0.7,
     })
+
+    // Parse JSON response
+    let object
+    try {
+      object = JSON.parse(text)
+    } catch (parseError) {
+      console.error('[v0] Failed to parse AI response:', text)
+      // Provide default scores if parsing fails
+      object = {
+        visionClarity: 15,
+        milestoneQuality: 15,
+        actionCompleteness: 15,
+        realismCoherence: 15,
+        feedback: 'Unable to generate detailed feedback. Please try again.',
+        strengths: ['Submitted a plan'],
+        improvements: ['Review and resubmit for detailed feedback'],
+      }
+    }
 
     const totalScore = object.visionClarity + object.milestoneQuality + object.actionCompleteness + object.realismCoherence
     const passFail = totalScore >= 75 ? 'pass' : 'fail'

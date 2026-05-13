@@ -1,15 +1,7 @@
-import { generateObject } from 'ai'
+import { generateText } from 'ai'
 import { anthropic } from '@ai-sdk/anthropic'
-import { z } from 'zod'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
-
-const EnhancedVisionSchema = z.object({
-  role: z.string().describe('Enhanced professional role/title'),
-  environment: z.string().describe('Enhanced ideal environment description'),
-  desiredOutcome: z.string().describe('Enhanced desired outcome after 30 days'),
-  reasoning: z.string().describe('Brief reasoning for the enhancements'),
-})
 
 export async function POST(request: Request) {
   try {
@@ -34,10 +26,9 @@ export async function POST(request: Request) {
       )
     }
 
-    // Use AI to enhance the vision
-    const { object } = await generateObject({
+    // Use AI to enhance the vision with generateText and JSON parsing
+    const { text } = await generateText({
       model: anthropic('claude-3-5-sonnet-20241022'),
-      schema: EnhancedVisionSchema,
       prompt: `You are a career coach helping someone define their professional vision. 
       
 The user has provided these initial thoughts:
@@ -47,9 +38,32 @@ The user has provided these initial thoughts:
 
 Please enhance and refine these statements to be more specific, actionable, and inspiring. 
 Make them more concrete and aligned with career development best practices.
-Keep the core intent but improve clarity, specificity, and achievability.`,
+Keep the core intent but improve clarity, specificity, and achievability.
+
+Respond ONLY with valid JSON in this exact format (no other text):
+{
+  "role": "<enhanced role/title>",
+  "environment": "<enhanced environment description>",
+  "desiredOutcome": "<enhanced desired outcome>",
+  "reasoning": "<brief reasoning for enhancements>"
+}`,
       temperature: 0.7,
     })
+
+    // Parse JSON response
+    let object
+    try {
+      object = JSON.parse(text)
+    } catch (parseError) {
+      console.error('[v0] Failed to parse enhancement response:', text)
+      // Return original values if parsing fails
+      object = {
+        role,
+        environment,
+        desiredOutcome,
+        reasoning: 'Enhancement service temporarily unavailable',
+      }
+    }
 
     return NextResponse.json({
       success: true,
