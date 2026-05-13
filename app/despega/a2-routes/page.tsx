@@ -407,10 +407,10 @@ export default function A2RoutesPage() {
       <div className="max-w-6xl mx-auto space-y-8">
         {/* Header */}
         <div className="space-y-2">
-          <h1 className="text-5xl font-black text-white flex items-center gap-3">
+          <h1 className="text-5xl font-light text-white flex items-center gap-3">
             Tu Ruta: De Aquí a Imprescindible
           </h1>
-          <p className="text-xl text-white/85">Tu plan personalizado de 90 días mapeado a conversaciones reales</p>
+          <p className="text-xl" style={{ color: 'rgba(255, 255, 255, 0.52)' }}>Tu plan personalizado de 90 días mapeado a conversaciones reales</p>
         </div>
 
         {/* Success Banner - First element */}
@@ -528,7 +528,8 @@ export default function A2RoutesPage() {
               size="sm"
               onClick={handleResetProgress}
               disabled={isResetting || completedTasks.size === 0}
-              className="border-red/40 text-red/80 hover:bg-red/10 hover:text-red hover:border-red/60 gap-2"
+              className="gap-2"
+              style={{ borderColor: 'rgba(90, 90, 150, 0.4)', color: 'rgb(90, 90, 150)' }}
             >
               <RotateCcw className={`w-4 h-4 ${isResetting ? 'animate-spin' : ''}`} />
               {isResetting ? 'Reseteando...' : 'Resetear progreso'}
@@ -598,27 +599,27 @@ export default function A2RoutesPage() {
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Card className="bg-muted/30 border-muted/50 p-4">
+            <Card className="p-4" style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.4)' }}>
               <div className="text-center">
-                  <p className="text-2xl font-bold text-blue mb-1">{calculateTotalProgress().completed}</p>
+                  <p className="text-2xl font-bold mb-1" style={{ color: 'rgba(90, 90, 150)' }}>{calculateTotalProgress().completed}</p>
                 <p className="text-xs text-white/70">Tareas Completadas</p>
               </div>
             </Card>
-            <Card className="bg-muted/30 border-muted/50 p-4">
+            <Card className="p-4" style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.4)' }}>
               <div className="text-center">
-                <p className="text-2xl font-bold text-blue mb-1">{calculateTotalProgress().total - calculateTotalProgress().completed}</p>
+                <p className="text-2xl font-bold mb-1" style={{ color: 'rgba(90, 90, 150)' }}>{calculateTotalProgress().total - calculateTotalProgress().completed}</p>
                 <p className="text-xs text-white/70">Tareas Restantes</p>
               </div>
             </Card>
-            <Card className="bg-muted/30 border-muted/50 p-4">
+            <Card className="p-4" style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.4)' }}>
               <div className="text-center">
-                  <p className="text-2xl font-bold text-blue mb-1">3</p>
+                  <p className="text-2xl font-bold mb-1" style={{ color: 'rgba(90, 90, 150)' }}>3</p>
                 <p className="text-xs text-white/70">Fases Disponibles</p>
               </div>
             </Card>
-            <Card className="bg-muted/30 border-muted/50 p-4">
+            <Card className="p-4" style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.4)' }}>
               <div className="text-center">
-                  <p className="text-2xl font-bold text-blue mb-1">90</p>
+                  <p className="text-2xl font-bold mb-1" style={{ color: 'rgba(90, 90, 150)' }}>90</p>
                 <p className="text-xs text-white/70">Días de Plan</p>
               </div>
             </Card>
