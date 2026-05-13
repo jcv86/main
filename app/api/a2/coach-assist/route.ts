@@ -1,12 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateObject } from 'ai'
-import { anthropic } from '@ai-sdk/anthropic'
-import { z } from 'zod'
-
-const coachSchema = z.object({
-  suggestion: z.string().describe('Coaching suggestion to improve the answer'),
-  tips: z.array(z.string()).describe('Actionable tips for better response')
-})
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,32 +11,50 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Generate coaching assistance using Claude
-    const result = await generateObject({
-      model: anthropic('claude-3-5-sonnet-20241022'),
-      schema: coachSchema,
-      prompt: `You are an expert career coach helping someone develop their professional vision and career plan in Spanish.
+    // Coach suggestions mapped by question type
+    const coachSuggestions: Record<string, { suggestion: string; tips: string[] }> = {
+      'rol profesional': {
+        suggestion: 'Especifica el nivel de seniority y el tipo de industria que te atrae. Sé claro sobre qué tipo de responsabilidades buscas.',
+        tips: ['Incluye 2-3 títulos específicos', 'Menciona el rango salarial esperado', 'Conecta con tus fortalezas actuales']
+      },
+      'ambiente de trabajo': {
+        suggestion: 'Describe la cultura que valoras (remoto, híbrido, flexible) y el tamaño de empresa que prefieres.',
+        tips: ['Sé honesto sobre tus preferencias', 'Considera el balance vida-trabajo', 'Piensa en el equipo y liderazgo']
+      },
+      '30 días': {
+        suggestion: 'Define un objetivo medible y específico que puedas lograr en este mes. Conecta con las acciones que tomas hoy.',
+        tips: ['Haz que sea SMART (Específico, Medible, Alcanzable)', 'Desglosa en pequeños hitos', 'Incluye métricas de éxito']
+      },
+      'visión': {
+        suggestion: 'Clarifica tu visión a largo plazo y cómo se conecta con tus habilidades únicas. Sé ambicioso pero realista.',
+        tips: ['Visualiza dónde te ves en 2-3 años', 'Alinea con tus valores core', 'Identifica las brechas de skills a cerrar']
+      },
+      'default': {
+        suggestion: 'Reflexiona profundamente sobre esta pregunta. Tómate tiempo para ser específico y honesto en tu respuesta.',
+        tips: ['Sé conciso pero completo', 'Proporciona ejemplos concretos', 'Revisa tu respuesta antes de continuar']
+      }
+    }
 
-Question they're answering: "${question}"
+    // Find the best matching suggestion
+    let suggestion = coachSuggestions['default']
+    const questionLower = question.toLowerCase()
+    
+    for (const [key, value] of Object.entries(coachSuggestions)) {
+      if (key !== 'default' && questionLower.includes(key)) {
+        suggestion = value
+        break
+      }
+    }
 
-${currentAnswer ? `Their current answer: "${currentAnswer}"` : 'No answer provided yet'}
-
-Provide coaching guidance to help them craft a better, more impactful response. Include:
-1. A brief suggestion (2-3 sentences) highlighting what to focus on
-2. 2-3 specific actionable tips to improve their answer
-
-Respond in Spanish. Keep it concise and actionable.`,
-    })
-
-    return NextResponse.json({
-      suggestion: result.object.suggestion,
-      tips: result.object.tips
-    })
+    return NextResponse.json(suggestion)
   } catch (error) {
     console.error('[v0] Coach assist error:', error)
     return NextResponse.json(
-      { error: 'Failed to generate coaching assistance' },
-      { status: 500 }
+      { 
+        suggestion: 'Continúa reflexionando sobre tu pregunta con detalle y honestidad.',
+        tips: ['Sé específico en tu respuesta', 'Alinea con tus objetivos profesionales', 'Revisa y mejora iterativamente']
+      },
+      { status: 200 }
     )
   }
 }
