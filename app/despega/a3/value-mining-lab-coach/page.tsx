@@ -132,6 +132,36 @@ export default function ValueMiningLabCoach() {
     }
   }
 
+  // Capture user's camera when ready
+  useEffect(() => {
+    if (!isReadyToContinue || !videoRef.current) return
+
+    const startCamera = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+          audio: false
+        })
+        
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream
+        }
+      } catch (err) {
+        console.error('[v0] Error capturing camera:', err)
+      }
+    }
+
+    startCamera()
+
+    // Cleanup: stop camera stream when component unmounts or when isReadyToContinue becomes false
+    return () => {
+      if (videoRef.current?.srcObject) {
+        const stream = videoRef.current.srcObject as MediaStream
+        stream.getTracks().forEach(track => track.stop())
+      }
+    }
+  }, [isReadyToContinue])
+
   if (showCameraTest) {
     return (
       <>
