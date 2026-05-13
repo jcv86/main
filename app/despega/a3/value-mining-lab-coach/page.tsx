@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { CameraMicrophoneTest } from '@/components/camera-microphone-test'
-import { ChevronRight, Send, Mic, MicOff, CheckCircle2, Volume2 } from 'lucide-react'
+import { ChevronRight, Mic, MicOff, CheckCircle2, Volume2 } from 'lucide-react'
 import { useSpeechRecognition } from '@/lib/hooks/use-speech-recognition'
 
 const COACH_QUESTIONS = [
@@ -318,14 +318,6 @@ export default function ValueMiningLabCoach() {
 
         {/* Action Buttons */}
         <div className="flex justify-end gap-2">
-          <Button
-            onClick={handleSubmitResponse}
-            disabled={!userResponse.trim()}
-            className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white gap-2 px-8 disabled:opacity-50"
-          >
-            Enviar Respuesta
-            <Send className="w-4 h-4" />
-          </Button>
           <Button
             onClick={currentQuestion < COACH_QUESTIONS.length - 1 ? handleSubmitResponse : () => router.push('/despega/a3')}
             disabled={!userResponse.trim()}
