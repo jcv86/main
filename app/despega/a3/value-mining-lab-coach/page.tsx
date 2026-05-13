@@ -321,7 +321,7 @@ export default function ValueMiningLabCoach() {
           <Button
             onClick={currentQuestion < COACH_QUESTIONS.length - 1 ? handleSubmitResponse : () => router.push('/despega/a3')}
             disabled={!userResponse.trim()}
-            className="bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white gap-2 px-8 disabled:opacity-50"
+            className="bg-gradient-to-r from-[rgba(170,70,170,0.7)] to-[rgba(170,70,170,0.3)] hover:from-[rgba(170,70,170,0.8)] hover:to-[rgba(170,70,170,0.4)] text-white gap-2 px-8 py-2 rounded-full font-semibold disabled:opacity-50"
           >
             {currentQuestion < COACH_QUESTIONS.length - 1 ? 'Siguiente Pregunta' : 'Finalizar'}
             <ChevronRight className="w-4 h-4" />

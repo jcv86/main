@@ -789,7 +789,7 @@ export default function ValueMiningLabModule() {
             </div>
             <Button 
               onClick={handleComplete} 
-              className="rounded-[20px] bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.8)] px-8 py-3 text-lg"
+              className="rounded-[20px] bg-gradient-to-r from-[rgba(170,70,170,0.7)] to-[rgba(170,70,170,0.3)] hover:from-[rgba(170,70,170,0.8)] hover:to-[rgba(170,70,170,0.4)] px-8 py-3 text-lg text-white font-semibold"
             >
               Play to Estudio Constructor de CV
               <ArrowRight className="w-5 h-5 ml-2" />

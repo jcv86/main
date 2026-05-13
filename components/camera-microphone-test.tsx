@@ -231,7 +231,7 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete, intervie
             <Button
               onClick={handleContinue}
               disabled={!allReady || isValidating}
-              className="flex-1 bg-gradient-to-r from-[rgba(170,70,170,0.4)] to-[rgba(170,70,170,0.2)] hover:from-[rgba(170,70,170,0.5)] hover:to-[rgba(170,70,170,0.3)] text-white h-12 font-semibold rounded-full disabled:opacity-50"
+              className="flex-1 bg-gradient-to-r from-[rgba(170,70,170,0.7)] to-[rgba(170,70,170,0.3)] hover:from-[rgba(170,70,170,0.8)] hover:to-[rgba(170,70,170,0.4)] text-white h-12 font-semibold rounded-full disabled:opacity-50"
             >
               {isValidating ? (
                 <>
