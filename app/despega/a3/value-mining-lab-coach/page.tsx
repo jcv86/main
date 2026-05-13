@@ -222,7 +222,7 @@ export default function ValueMiningLabCoach() {
                 muted
                 className="w-full h-full object-cover"
               />
-              {isRecording && (
+              {isListening && (
                 <div className="absolute top-3 right-3 flex items-center gap-2 bg-red-500/20 px-3 py-1 rounded-full border border-red-500/30">
                   <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                   <span className="text-xs text-red-400">Grabando</span>
