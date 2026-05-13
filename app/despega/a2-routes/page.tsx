@@ -12,8 +12,6 @@ import { Badge } from '@/components/ui/badge'
 import { Loader2, Calendar, Target, CheckCircle2, AlertCircle, ArrowRight, Zap, MapPin, Download, Trophy, RotateCcw, Lock } from 'lucide-react'
 import { TaskCard } from '@/components/task-card'
 import { PhaseProgress } from '@/components/phase-progress'
-import { AchievementsDisplay } from '@/components/achievement-badge'
-import { RecommendationsDisplay } from '@/components/recommendations-display'
 import { ResourceLibrary } from '@/components/resource-library'
 import { 
   fetchUserCompletions, 
@@ -597,43 +595,6 @@ export default function A2RoutesPage() {
           </div>
 
 
-
-          {/* Achievements & Recommendations Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <Card className="bg-transparent border-muted/80 lg:col-span-2">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-white">
-                  <Trophy className="w-5 h-5 text-blue" />
-                  Tus Logros Desbloqueados
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <AchievementsDisplay
-                  completedTasks={calculateTotalProgress().completed}
-                  totalTasks={calculateTotalProgress().total}
-                />
-              </CardContent>
-            </Card>
-
-            <Card className="bg-transparent border-muted/80">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-white">
-                  <Zap className="w-5 h-5 text-blue" />
-                  Qué Sigue
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <RecommendationsDisplay
-                  recommendations={getSimpleRecommendations(
-                    completedTasks,
-                    route?.route_30days || [],
-                    route?.route_60days || [],
-                    route?.route_90days || []
-                  )}
-                />
-              </CardContent>
-            </Card>
-          </div>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
