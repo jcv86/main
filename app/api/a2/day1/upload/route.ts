@@ -1,7 +1,6 @@
 import { put } from '@vercel/blob'
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
-import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function POST(request: Request) {
   try {
@@ -35,36 +34,6 @@ export async function POST(request: Request) {
     const blob = await put(filename, file, {
       access: 'public',
     })
-
-    // Store blob reference in database
-    const supabase = createAdminClient()
-    const { data: submission, error: getError } = await supabase
-      .from('a2_day1_submissions')
-      .select('id')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single()
-
-    if (getError && getError.code !== 'PGRST116') {
-      console.error('[v0] Error fetching submission:', getError)
-    }
-
-    if (submission) {
-      const { error: updateError } = await supabase
-        .from('a2_day1_submissions')
-        .update({
-          document_blob_id: blob.pathname,
-          document_url: blob.url,
-          document_name: fileName,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', submission.id)
-
-      if (updateError) {
-        console.error('[v0] Error updating submission:', updateError)
-      }
-    }
 
     return NextResponse.json({
       success: true,
