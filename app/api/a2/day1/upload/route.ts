@@ -33,7 +33,7 @@ export async function POST(request: Request) {
     // Upload to Vercel Blob
     const filename = `day1/${userId}/${Date.now()}-${fileName}`
     const blob = await put(filename, file, {
-      access: 'private',
+      access: 'public',
     })
 
     // Store blob reference in database
