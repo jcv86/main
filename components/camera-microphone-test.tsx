@@ -245,7 +245,7 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete, intervie
               ) : (
                 <>
                   <Check className="w-4 h-4 mr-2" />
-                  Continuar a Sofia
+                  {interviewType === 'Coach' ? 'Continuar a Coaching' : 'Continuar a Sofia'}
                 </>
               )}
             </Button>
