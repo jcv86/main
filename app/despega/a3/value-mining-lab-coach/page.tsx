@@ -98,12 +98,18 @@ const COACH_QUESTIONS = [
 export default function ValueMiningLabCoach() {
   const router = useRouter()
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [showCameraTest, setShowCameraTest] = useState(true)
-  const [isReadyToContinue, setIsReadyToContinue] = useState(false)
-  const [currentQuestion, setCurrentQuestion] = useState(0)
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
+  const audioChunksRef = useRef<Blob[]>([])
+  
   const [userResponse, setUserResponse] = useState('')
+  const [isReadyToContinue, setIsReadyToContinue] = useState(false)
+  const [showCameraTest, setShowCameraTest] = useState(true)
+  const [currentQuestion, setCurrentQuestion] = useState(0)
   const [sessionActive, setSessionActive] = useState(false)
   const [progress, setProgress] = useState(0)
+  const [isRecording, setIsRecording] = useState(false)
+  const [hasAudioRecording, setHasAudioRecording] = useState(false)
+  const [responseMode, setResponseMode] = useState<'text' | 'audio'>('text')
 
   const handleCameraTestComplete = (passed: boolean) => {
     if (passed) {
@@ -116,22 +122,6 @@ export default function ValueMiningLabCoach() {
     setSessionActive(true)
   }
 
-  const handleSubmitResponse = () => {
-    // Simulate coach feedback
-    console.log('[v0] Response:', userResponse)
-    
-    // Move to next question
-    if (currentQuestion < COACH_QUESTIONS.length - 1) {
-      setCurrentQuestion(currentQuestion + 1)
-      setProgress(((currentQuestion + 1) / COACH_QUESTIONS.length) * 100)
-      setUserResponse('')
-    } else {
-      // Session complete
-      setSessionActive(false)
-      setProgress(100)
-    }
-  }
-
   // Capture user's camera when ready
   useEffect(() => {
     if (!isReadyToContinue || !videoRef.current) return
@@ -140,7 +130,7 @@ export default function ValueMiningLabCoach() {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
           video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
-          audio: false
+          audio: true
         })
         
         if (videoRef.current) {
@@ -153,7 +143,6 @@ export default function ValueMiningLabCoach() {
 
     startCamera()
 
-    // Cleanup: stop camera stream when component unmounts or when isReadyToContinue becomes false
     return () => {
       if (videoRef.current?.srcObject) {
         const stream = videoRef.current.srcObject as MediaStream
@@ -161,6 +150,68 @@ export default function ValueMiningLabCoach() {
       }
     }
   }, [isReadyToContinue])
+
+  // Start audio recording
+  const startAudioRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+      const mediaRecorder = new MediaRecorder(stream)
+      mediaRecorderRef.current = mediaRecorder
+      audioChunksRef.current = []
+
+      mediaRecorder.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data)
+      }
+
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' })
+        console.log('[v0] Audio recording complete:', audioBlob.size, 'bytes')
+        setHasAudioRecording(true)
+        
+        // Stop all audio tracks
+        stream.getTracks().forEach(track => track.stop())
+      }
+
+      mediaRecorder.start()
+      setIsRecording(true)
+    } catch (err) {
+      console.error('[v0] Error starting audio recording:', err)
+    }
+  }
+
+  const stopAudioRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop()
+      setIsRecording(false)
+    }
+  }
+
+  const handleSubmitResponse = () => {
+    if (responseMode === 'audio' && !hasAudioRecording) {
+      console.log('[v0] No audio recording to submit')
+      return
+    }
+    if (responseMode === 'text' && !userResponse.trim()) {
+      console.log('[v0] No text response to submit')
+      return
+    }
+
+    // Simulate coach feedback
+    console.log('[v0] Response submitted:', responseMode === 'audio' ? 'Audio' : userResponse)
+    
+    // Move to next question
+    if (currentQuestion < COACH_QUESTIONS.length - 1) {
+      setCurrentQuestion(currentQuestion + 1)
+      setProgress(((currentQuestion + 1) / COACH_QUESTIONS.length) * 100)
+      setUserResponse('')
+      setHasAudioRecording(false)
+      setIsRecording(false)
+    } else {
+      // Session complete
+      setSessionActive(false)
+      setProgress(100)
+    }
+  }
 
   if (showCameraTest) {
     return (
@@ -229,7 +280,8 @@ export default function ValueMiningLabCoach() {
 
           {/* Center Column - User Camera + Input */}
           <div className="bg-white/5 border border-white/10 rounded-lg overflow-hidden flex flex-col">
-            <div className="flex-1 bg-black/50 flex items-center justify-center rounded-t-lg">
+            {/* Camera section - takes full remaining space */}
+            <div className="flex-1 bg-black/50 flex items-center justify-center rounded-t-lg min-h-0">
               <video
                 ref={videoRef}
                 autoPlay
@@ -241,23 +293,94 @@ export default function ValueMiningLabCoach() {
 
             {/* Response input area */}
             <div className="p-4 bg-black/80 border-t border-white/10 space-y-3">
-              <textarea
-                value={userResponse}
-                onChange={(e) => setUserResponse(e.target.value)}
-                placeholder="Tu respuesta aquí..."
-                className="w-full bg-white/10 border border-white/20 rounded-lg p-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-[rgb(170,70,170)]/50 resize-none h-24"
-              />
-              <Button
-                onClick={handleSubmitResponse}
-                disabled={!userResponse.trim()}
-                className="w-full bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white disabled:opacity-50"
-              >
-                <Send className="w-4 h-4 mr-2" />
-                Enviar Respuesta
-              </Button>
+              {/* Response mode toggle */}
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => setResponseMode('text')}
+                  variant={responseMode === 'text' ? 'default' : 'outline'}
+                  size="sm"
+                  className={`flex-1 ${responseMode === 'text' ? 'bg-[rgb(170,70,170)]' : 'border-white/20'}`}
+                >
+                  <MessageSquare className="w-4 h-4 mr-1" />
+                  Texto
+                </Button>
+                <Button
+                  onClick={() => setResponseMode('audio')}
+                  variant={responseMode === 'audio' ? 'default' : 'outline'}
+                  size="sm"
+                  className={`flex-1 ${responseMode === 'audio' ? 'bg-[rgb(170,70,170)]' : 'border-white/20'}`}
+                >
+                  <Mic className="w-4 h-4 mr-1" />
+                  Voz
+                </Button>
+              </div>
+
+              {/* Text input mode */}
+              {responseMode === 'text' && (
+                <>
+                  <textarea
+                    value={userResponse}
+                    onChange={(e) => setUserResponse(e.target.value)}
+                    placeholder="Tu respuesta aquí..."
+                    className="w-full bg-white/10 border border-white/20 rounded-lg p-3 text-white text-sm placeholder:text-white/40 focus:outline-none focus:border-[rgb(170,70,170)]/50 resize-none h-20"
+                  />
+                  <Button
+                    onClick={handleSubmitResponse}
+                    disabled={!userResponse.trim()}
+                    className="w-full bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white disabled:opacity-50"
+                  >
+                    <Send className="w-4 h-4 mr-2" />
+                    Enviar Respuesta
+                  </Button>
+                </>
+              )}
+
+              {/* Audio recording mode */}
+              {responseMode === 'audio' && (
+                <>
+                  <div className="bg-white/5 border border-white/20 rounded-lg p-4 flex flex-col items-center gap-3">
+                    {isRecording && (
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                        <p className="text-sm text-red-400 font-semibold">Grabando...</p>
+                      </div>
+                    )}
+                    {!isRecording && !hasAudioRecording && (
+                      <p className="text-sm text-white/60">Presiona para grabar tu respuesta</p>
+                    )}
+                    {hasAudioRecording && !isRecording && (
+                      <div className="flex items-center gap-2">
+                        <CheckCircle2 className="w-5 h-5 text-green-400" />
+                        <p className="text-sm text-green-400 font-semibold">Grabación completada</p>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <Button
+                    onClick={isRecording ? stopAudioRecording : startAudioRecording}
+                    className={`w-full h-12 font-semibold text-base ${
+                      isRecording 
+                        ? 'bg-red-600 hover:bg-red-700' 
+                        : 'bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)]'
+                    }`}
+                  >
+                    <Mic className="w-5 h-5 mr-2" />
+                    {isRecording ? 'Detener Grabación' : 'Grabar Respuesta'}
+                  </Button>
+
+                  <Button
+                    onClick={handleSubmitResponse}
+                    disabled={!hasAudioRecording}
+                    className="w-full bg-[rgb(170,70,170)] hover:bg-[rgba(170,70,170,0.9)] text-white disabled:opacity-50"
+                  >
+                    <Send className="w-4 h-4 mr-2" />
+                    Enviar Respuesta
+                  </Button>
+                </>
+              )}
             </div>
 
-            <div className="px-4 pb-4">
+            <div className="px-4 pb-2">
               <p className="text-xs text-white/60">Cámara: Activa</p>
             </div>
           </div>
