@@ -7,6 +7,7 @@ import { ArrowLeft, ArrowRight, BookOpen, Wrench, Users, ClipboardList, Trophy }
 import { A2_DAILY_MISSIONS } from '@/lib/a2-missions-full'
 import { A2DailyMissionCard } from '@/components/a2-daily-mission-card'
 import { getA3CheckpointForDay } from '@/lib/a3-checkpoint-map'
+import { markTaskComplete, getTaskId } from '@/lib/supabase/task-completions'
 
 interface A2DayPageTemplateProps {
   dayNumber: number
@@ -167,10 +168,19 @@ export function A2DayPageTemplate({
               </Button>
             )}
             <Button
-              onClick={() => {
+              onClick={async () => {
+                try {
+                  // Mark current day as complete
+                  const taskId = getTaskId([], dayNumber, `Día ${dayNumber}`)
+                  await markTaskComplete(taskId)
+                  console.log('[v0] Task marked complete:', taskId)
+                } catch (err) {
+                  console.error('[v0] Error marking task complete:', err)
+                }
+                
                 onComplete?.()
                 if (nextDay) {
-                  router.push(`/despega/a2/dia-${nextDay}`)
+                  router.push(`/despega/a2-routes#dia-${nextDay}`)
                 }
               }}
               className="flex-1 py-6 rounded-full font-semibold bg-purple-600/80 hover:bg-purple-600/100 text-white transition-all duration-200 border border-purple-500/80 hover:border-purple-500/100"

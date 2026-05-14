@@ -7,6 +7,7 @@ import { Day2Experience } from '@/components/a2-day2-experience'
 import { Card } from '@/components/ui/card'
 import { AlertCircle, Loader } from 'lucide-react'
 import { calcularPerfilA1, type A1ProfileResult, type A1Response } from '@/lib/disc-calculator'
+import { markTaskComplete, getTaskId } from '@/lib/supabase/task-completions'
 import type { Day2Submission } from '@/lib/a2-day2-types'
 
 const DIA_NUM = 2
@@ -89,6 +90,11 @@ export default function DiaPage() {
       // if (!response.ok) throw new Error('Failed to save')
 
       console.log('[v0] Day 2 submission saved:', submission)
+
+      // Mark this task as complete in Supabase
+      const taskId = getTaskId([], 2, 'Día 2')
+      await markTaskComplete(taskId)
+      console.log('[v0] Task marked complete:', taskId)
 
       // Navigate to A2 progress dashboard with anchor to día-3
       router.push('/despega/a2-routes#dia-3')
