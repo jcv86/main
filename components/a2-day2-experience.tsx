@@ -297,7 +297,7 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
       {currentStep === 'reflection' && (
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Crea tu regla personal</h2>
+            <h2 className="text-2xl text-white mb-2" style={{ fontWeight: 500 }}>Crea tu regla personal</h2>
             <p className="text-white/70">Escribe una estrategia específica para manejar tu riesgo en entrevistas.</p>
           </div>
 
