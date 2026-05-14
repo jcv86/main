@@ -311,8 +311,7 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
                 className="w-full p-4 rounded-[12px] text-white placeholder:text-white/40 focus:outline-none resize-none"
                 style={{
                   backgroundColor: 'rgba(90, 90, 150, 0.1)',
-                  borderColor: 'rgba(90, 90, 150, 0.8)',
-                  border: '1px solid'
+                  border: '2px solid rgba(90, 90, 150, 0.8)'
                 }}
                 rows={4}
               />
@@ -331,8 +330,7 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
                 className="w-full p-4 rounded-[12px] text-white placeholder:text-white/40 focus:outline-none"
                 style={{
                   backgroundColor: 'rgba(90, 90, 150, 0.1)',
-                  borderColor: 'rgba(90, 90, 150, 0.8)',
-                  border: '1px solid'
+                  border: '2px solid rgba(90, 90, 150, 0.8)'
                 }}
               />
               <p className="text-xs text-white/50 mt-2">
