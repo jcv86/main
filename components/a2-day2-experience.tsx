@@ -109,10 +109,18 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
             Paso {currentStepIndex + 1} de {steps.length}
           </h3>
           <div className="flex items-center gap-2 text-xs">
-            <span className="text-emerald-400 font-semibold">+500 XP</span>
+            <span className="font-semibold" style={{ color: 'rgb(80, 160, 170)' }}>+500 XP</span>
           </div>
         </div>
-        <Progress value={progressPercent} className="h-2 bg-purple-500/20" />
+        <div className="relative w-full overflow-hidden rounded-[20px]" style={{ height: '8px', backgroundColor: 'rgba(90, 90, 150, 0.4)' }}>
+          <div
+            className="h-full transition-all duration-300"
+            style={{ 
+              width: `${progressPercent}%`,
+              backgroundColor: 'rgb(90, 90, 150, 0.4)'
+            }}
+          />
+        </div>
       </div>
 
       {/* Error Messages */}
@@ -131,13 +139,13 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
       {currentStep === 'intro' && (
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Tu Sistema Operativo Profesional</h2>
+            <h2 className="text-2xl font-normal text-white mb-2">Tu Sistema Operativo Profesional</h2>
             <p className="text-white/70">
               Basado en tu perfil A1, vamos a identificar cómo tu estilo de trabajo afecta tus entrevistas.
             </p>
           </div>
 
-          <Card className="border border-purple-500/40 bg-purple-500/5 p-6 rounded-[20px] space-y-6">
+          <Card className="border p-6 rounded-[20px] space-y-6" style={{ borderColor: 'rgba(90, 90, 150, 0.6)', backgroundColor: 'rgba(90, 90, 150, 0.2)' }}>
             <h3 className="text-lg font-semibold text-purple-300">Tu Perfil A1</h3>
 
             <div className="grid grid-cols-2 gap-4">
@@ -167,8 +175,8 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
             </p>
           </Card>
 
-          <div className="bg-emerald-500/10 border border-emerald-500/40 rounded-[16px] p-4 space-y-3">
-            <p className="text-sm text-emerald-300 font-semibold">💡 Mini Lección</p>
+          <div className="border rounded-[16px] p-4 space-y-3" style={{ backgroundColor: 'rgba(90, 90, 150, 0.4)', borderColor: 'rgba(90, 90, 150, 0.2)' }}>
+            <p className="text-sm font-semibold" style={{ color: 'rgb(80, 160, 170)' }}>💡 Mini Lección</p>
             <p className="text-sm text-white/80 leading-relaxed">
               Tu estilo de trabajo es una <strong>herramienta</strong>, no una etiqueta. En entrevistas, entender tu estilo te permite:
             </p>
@@ -342,14 +350,15 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
             <p className="text-white/70">Resumen de tu sistema operativo profesional para entrevistas.</p>
           </div>
 
-          <Card className="border border-cyan-400/60 bg-gradient-to-br from-cyan-400/10 to-purple-400/10 p-6 rounded-[20px] space-y-6">
+          <Card className="border p-6 rounded-[20px] space-y-6" style={{ borderColor: 'rgba(90, 90, 150, 0.6)', backgroundColor: 'rgba(90, 90, 150, 0.2)' }}>
             <div>
-              <p className="text-xs text-cyan-400 font-semibold mb-2">CARACTERÍSTICAS CLAVE</p>
+              <p className="text-xs font-semibold mb-2" style={{ color: 'rgb(80, 160, 170)' }}>CARACTERÍSTICAS CLAVE</p>
               <div className="flex flex-wrap gap-2">
                 {selectedTraits.map((traitId) => (
                   <span
                     key={traitId}
-                    className="px-3 py-1 rounded-full bg-cyan-400/20 text-cyan-300 text-sm font-semibold border border-cyan-400/40"
+                    className="px-3 py-1 rounded-full text-sm font-semibold border"
+                    style={{ backgroundColor: 'rgba(80, 160, 170, 0.3)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }}
                   >
                     {traitLabel(traitId)}
                   </span>
@@ -357,25 +366,26 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
               </div>
             </div>
 
-            <div className="border-t border-purple-500/40 pt-4">
-              <p className="text-xs text-purple-300 font-semibold mb-2">RIESGO DE ENTREVISTA</p>
+            <div style={{ borderTopColor: 'rgba(90, 90, 150, 0.4)' }} className="border-t pt-4">
+              <p className="text-xs font-semibold mb-2" style={{ color: 'rgb(80, 160, 170)' }}>RIESGO DE ENTREVISTA</p>
               <p className="text-white font-semibold">{riskLabel(selectedRisk)}</p>
             </div>
 
-            <div className="border-t border-purple-500/40 pt-4">
-              <p className="text-xs text-purple-300 font-semibold mb-2">MI REGLA PERSONAL</p>
+            <div style={{ borderTopColor: 'rgba(90, 90, 150, 0.4)' }} className="border-t pt-4">
+              <p className="text-xs font-semibold mb-2" style={{ color: 'rgb(80, 160, 170)' }}>MI REGLA PERSONAL</p>
               <p className="text-white italic">"{personalRule}"</p>
             </div>
 
-            <div className="border-t border-purple-500/40 pt-4">
-              <p className="text-xs text-emerald-300 font-semibold">+500 XP GANADO</p>
+            <div style={{ borderTopColor: 'rgba(90, 90, 150, 0.4)' }} className="border-t pt-4">
+              <p className="text-xs font-semibold" style={{ color: 'rgb(80, 160, 170)' }}>+500 XP GANADO</p>
             </div>
           </Card>
 
           <Button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="w-full py-6 bg-emerald-600/80 hover:bg-emerald-600/100 text-white font-semibold rounded-full disabled:opacity-50"
+            className="w-full py-6 text-white font-semibold rounded-full disabled:opacity-50"
+            style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}
           >
             {isSubmitting ? 'Guardando...' : 'Completar Día 2'}
             {!isSubmitting && <Check className="w-4 h-4 ml-2" />}
