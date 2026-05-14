@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { A2DayPageTemplate } from '@/components/a2-day-page-template'
 import { Day1Experience } from '@/components/a2-day1-experience'
-import { markTaskComplete, getTaskId } from '@/lib/supabase/task-completions'
+import { markTaskComplete } from '@/lib/supabase/task-completions'
 
 const DIA_NUM = 1
 
@@ -23,9 +23,8 @@ export default function Dia1Page() {
       console.log('[v0] Day 1 submission saved:', submission)
 
       // Mark this task as complete in Supabase
-      const taskId = getTaskId([], 1, 'Día 1')
-      await markTaskComplete(taskId)
-      console.log('[v0] Task marked complete:', taskId)
+      await markTaskComplete(30, 1, 'Día 1')
+      console.log('[v0] Task marked complete: Día 1')
 
       // Navigate to A2 progress dashboard with anchor to día-2
       router.push('/despega/a2-routes#dia-2')
