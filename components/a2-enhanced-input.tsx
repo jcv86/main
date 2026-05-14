@@ -126,17 +126,19 @@ export function A2EnhancedInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="text-white placeholder-slate-500 rounded-lg focus:ring-0 min-h-24"
+        className="text-white placeholder-slate-500 rounded-[20px] focus:ring-0 min-h-24"
         style={{
           backgroundColor: 'rgba(30, 32, 42, 0.5)',
-          borderColor: 'rgba(90, 90, 150, 0.3)',
+          borderColor: 'rgba(90, 90, 150, 0.6)',
           borderWidth: '1px',
         }}
         onFocus={(e) => {
-          e.currentTarget.style.borderColor = 'rgba(90, 90, 150, 0.6)'
+          e.currentTarget.style.borderColor = 'rgba(90, 90, 150, 0.8)'
+          e.currentTarget.style.backgroundColor = 'rgba(30, 32, 42, 0.8)'
         }}
         onBlur={(e) => {
-          e.currentTarget.style.borderColor = 'rgba(90, 90, 150, 0.3)'
+          e.currentTarget.style.borderColor = 'rgba(90, 90, 150, 0.6)'
+          e.currentTarget.style.backgroundColor = 'rgba(30, 32, 42, 0.5)'
         }}
         rows={minRows}
       />
