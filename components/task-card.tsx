@@ -78,8 +78,8 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
 
   // Active (current) day styling - most saturated and bright
   const activeStyle = {
-    backgroundColor: 'rgba(90, 90, 150, 0.25)',
-    border: `2px solid rgba(90, 90, 150, 0.8)`,
+    backgroundColor: 'rgba(90, 90, 150, 0.4)',
+    border: `2px solid rgba(90, 90, 150, 0.6)`,
   }
 
   // Completed day styling - medium highlight
@@ -124,13 +124,13 @@ export function TaskCard({ task, completed = false, onComplete, taskId, locked =
                   <h4 className={`font-semibold text-sm transition-all`} style={{ color: completed ? 'rgba(255, 255, 255, 0.8)' : 'rgb(255, 255, 255)', textDecoration: 'none' }}>
                     Día {task.day}: {task.title}
                   </h4>
-                  <Badge className="text-xs whitespace-nowrap" style={{ backgroundColor: completed ? 'rgba(90, 90, 150, 0.5)' : 'rgba(90, 90, 150, 0.3)', color: completed ? 'rgba(255, 255, 255, 0.9)' : 'rgb(90, 90, 150)' }}>
+                  <Badge className="text-xs whitespace-nowrap" style={{ backgroundColor: completed ? 'rgba(90, 90, 150, 0.5)' : 'rgba(90, 90, 150, 0.6)', color: '#ffffff' }}>
                     {typeInfo.label}
                   </Badge>
                 </div>
 
                 {/* Time estimate */}
-                <span className="text-xs px-2 py-1 rounded whitespace-nowrap flex items-center gap-1" style={{ backgroundColor: completed ? 'rgba(90, 90, 150, 0.5)' : 'rgba(90, 90, 150, 0.3)', color: completed ? 'rgba(255, 255, 255, 0.9)' : 'rgb(90, 90, 150)' }}>
+                <span className="text-xs px-2 py-1 rounded whitespace-nowrap flex items-center gap-1" style={{ backgroundColor: completed ? 'rgba(90, 90, 150, 0.5)' : 'rgba(90, 90, 150, 0.3)', color: '#ffffff' }}>
                   <Clock className="w-3 h-3" />
                   {hours > 0 ? `${hours}h${minutes > 0 ? ` ${minutes}m` : ''}` : `${minutes}m`}
                 </span>
