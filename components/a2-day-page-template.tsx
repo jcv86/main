@@ -136,8 +136,12 @@ export function A2DayPageTemplate({
           {prevDay && (
             <Button
               onClick={() => router.push(`/despega/a2/dia-${prevDay}`)}
-              variant="outline"
-              className="flex-1 text-cyan-400 hover:text-cyan-300 py-6 rounded-full font-semibold border-cyan-500/60 bg-cyan-500/10 hover:bg-cyan-500/20 hover:border-cyan-500/100 transition-all duration-200"
+              className="flex-1 py-6 rounded-full font-semibold transition-all duration-200 border-2"
+              style={{
+                color: 'hsl(var(--a2-accent-cyan))',
+                borderColor: 'hsl(var(--a2-accent-cyan))',
+                backgroundColor: 'rgba(15, 23, 42, 0.4)',
+              }}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Anterior
