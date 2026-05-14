@@ -308,7 +308,12 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
                 value={reflection}
                 onChange={(e) => setReflection(e.target.value)}
                 placeholder="¿Cómo afecta este riesgo tu rendimiento? Sé específico con ejemplos..."
-                className="w-full p-4 rounded-[12px] bg-purple-500/10 border border-purple-500/40 text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400 resize-none"
+                className="w-full p-4 rounded-[12px] text-white placeholder:text-white/40 focus:outline-none resize-none"
+                style={{
+                  backgroundColor: 'rgba(90, 90, 150, 0.1)',
+                  borderColor: 'rgba(90, 90, 150, 0.8)',
+                  border: '1px solid'
+                }}
                 rows={4}
               />
               <p className="text-xs text-white/50 mt-2">
@@ -323,7 +328,12 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
                 value={personalRule}
                 onChange={(e) => setPersonalRule(e.target.value)}
                 placeholder="Mi regla: ..."
-                className="w-full p-4 rounded-[12px] bg-purple-500/10 border border-purple-500/40 text-white placeholder:text-white/40 focus:outline-none focus:border-cyan-400"
+                className="w-full p-4 rounded-[12px] text-white placeholder:text-white/40 focus:outline-none"
+                style={{
+                  backgroundColor: 'rgba(90, 90, 150, 0.1)',
+                  borderColor: 'rgba(90, 90, 150, 0.8)',
+                  border: '1px solid'
+                }}
               />
               <p className="text-xs text-white/50 mt-2">
                 {personalRule.length}/20 caracteres mínimo
@@ -346,7 +356,7 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
       {currentStep === 'summary' && (
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Tu Tarjeta de Insights</h2>
+            <h2 className="text-2xl text-white mb-2" style={{ fontWeight: 500 }}>Tu Tarjeta de Insights</h2>
             <p className="text-white/70">Resumen de tu sistema operativo profesional para entrevistas.</p>
           </div>
 
