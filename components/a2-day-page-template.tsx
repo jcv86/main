@@ -79,7 +79,7 @@ export function A2DayPageTemplate({
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Badge className="bg-purple-600/60 text-white border-purple-500/40">
+              <Badge className="text-white" style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)', borderColor: 'rgba(90, 90, 150, 0.6)' }}>
                 Día {dayNumber} de 90
               </Badge>
               <Badge className={typeInfo.color}>
@@ -96,7 +96,13 @@ export function A2DayPageTemplate({
               onClick={() => router.push('/despega/a2-routes')}
               variant="ghost"
               size="sm"
-              className="text-white hover:text-white hover:bg-purple-500/40 border border-purple-500/40 hover:border-purple-500/60 rounded-[12px] transition-all duration-200 px-3 py-1 text-sm"
+              className="rounded-[12px] transition-all duration-200 px-3 py-1 text-sm"
+              style={{
+                backgroundColor: 'rgba(90, 90, 150, 0.6)',
+                borderColor: 'rgba(90, 90, 150, 0.6)',
+                color: 'rgba(255, 255, 255, 0.8)',
+                border: '1px solid'
+              }}
             >
               ← Volver a Dashboard
             </Button>
