@@ -105,12 +105,12 @@ export function A2DailyMissionCard({
 
   return (
     <Card
-      className={`transition-all rounded-[28px] border ${
+      className={`transition-all duration-200 rounded-[28px] border ${
         isCompleted
-          ? 'bg-green-500/10 border-green-500/30'
+          ? 'bg-slate-900/20 border-green-500/40 hover:border-green-500/60'
           : isAvailable
-            ? 'bg-slate-900/40 border-purple-500/30 hover:border-purple-500/50 cursor-pointer'
-            : 'bg-slate-900/20 border-slate-700/30 opacity-60'
+            ? 'bg-slate-900/20 border-purple-500/40 hover:border-purple-500/80 hover:bg-purple-500/5 cursor-pointer'
+            : 'bg-slate-900/20 border-slate-700/20 opacity-60'
       }`}
     >
       <div className="p-6 space-y-4">
@@ -149,7 +149,7 @@ export function A2DailyMissionCard({
               <Button
                 size="sm"
                 onClick={onStart}
-                className="bg-purple-600/20 hover:bg-purple-600/40 border border-purple-500/50 text-purple-300"
+                className="bg-purple-600/10 hover:bg-purple-600/40 border border-purple-500/60 hover:border-purple-500/100 text-purple-300 hover:text-purple-200 transition-all duration-200"
               >
                 <ChevronRight className="w-4 h-4" />
               </Button>
@@ -173,7 +173,7 @@ export function A2DailyMissionCard({
 
         {/* Expandable Content */}
         {expanded && (
-          <div className="space-y-4 border-t border-slate-700/50 pt-4">
+          <div className="space-y-4 border-t border-purple-500/20 pt-4">
             {/* Goal */}
             <div>
               <h4 className="text-xs uppercase tracking-wide text-purple-400 mb-2">
@@ -206,7 +206,7 @@ export function A2DailyMissionCard({
 
             {/* A3 Module Info */}
             {isA3Checkpoint && a3ModuleName && (
-              <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3">
+              <div className="bg-emerald-500/5 border border-emerald-500/40 rounded-lg p-3">
                 <p className="text-sm text-emerald-300">
                   <span className="font-semibold">A3 Module:</span> {a3ModuleName}
                 </p>
@@ -215,7 +215,7 @@ export function A2DailyMissionCard({
 
             {/* Block Reason */}
             {blockReason && !isAvailable && (
-              <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-3 flex gap-2">
+              <div className="bg-amber-500/5 border border-amber-500/40 rounded-lg p-3 flex gap-2">
                 <AlertCircle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
                 <p className="text-sm text-amber-200">{blockReason}</p>
               </div>

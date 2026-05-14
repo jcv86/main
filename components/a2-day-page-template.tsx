@@ -52,10 +52,10 @@ export function A2DayPageTemplate({
   if (!mission) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center p-4">
-        <div className="bg-slate-900 border border-white/30 rounded-[28px] p-6 text-center max-w-md">
+        <div className="bg-slate-900/50 border border-purple-500/40 rounded-[28px] p-6 text-center max-w-md">
           <h2 className="text-xl font-bold text-white mb-2">Día no encontrado</h2>
           <p className="text-slate-400 mb-4">El día {dayNumber} no existe en la configuración.</p>
-          <Button onClick={() => router.push('/despega/a2-routes')} className="bg-purple-600 hover:bg-purple-700">
+          <Button onClick={() => router.push('/despega/a2-routes')} className="bg-purple-600/70 hover:bg-purple-600/90 border border-purple-500/80 hover:border-purple-500/100 text-white transition-all duration-200">
             Volver a la Ruta
           </Button>
         </div>
@@ -70,11 +70,11 @@ export function A2DayPageTemplate({
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-900/50 to-purple-900/50 border-b border-white/40">
+      <div className="bg-slate-900/30 border-b border-purple-500/20">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Badge className="bg-purple-600/20 text-purple-400 border-purple-500/30">
+              <Badge className="bg-purple-600/10 text-purple-400 border-purple-500/40">
                 Día {dayNumber} de 90
               </Badge>
               <Badge className={typeInfo.color}>
@@ -82,7 +82,7 @@ export function A2DayPageTemplate({
                 <span className="ml-1">{typeInfo.label}</span>
               </Badge>
               {checkpoint && (
-                <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
+                <Badge className="bg-emerald-500/10 text-emerald-300 border-emerald-500/40">
                   A3 Checkpoint
                 </Badge>
               )}
@@ -91,7 +91,7 @@ export function A2DayPageTemplate({
               onClick={() => router.push('/despega/a2-routes')}
               variant="ghost"
               size="sm"
-              className="text-slate-400 hover:text-white"
+              className="text-slate-400 hover:text-white hover:bg-red-500/20 transition-all duration-200"
             >
               ✕
             </Button>
@@ -116,14 +116,14 @@ export function A2DayPageTemplate({
         />
 
         {/* Why This Matters */}
-        <div className="rounded-[28px] border border-purple-500/30 bg-purple-500/10 p-6 space-y-4">
+        <div className="rounded-[28px] border border-purple-500/40 bg-purple-500/5 p-6 space-y-4">
           <h3 className="text-lg font-semibold text-purple-300">¿Por qué es importante?</h3>
           <p className="text-white/80 leading-relaxed">{mission.whyItMatters}</p>
         </div>
 
         {/* A3 Checkpoint Info */}
         {checkpoint && (
-          <div className="rounded-[28px] border border-emerald-500/30 bg-emerald-500/10 p-6 space-y-4">
+          <div className="rounded-[28px] border border-emerald-500/40 bg-emerald-500/5 p-6 space-y-4">
             <h3 className="text-lg font-semibold text-emerald-300">A3 Learning Checkpoint</h3>
             <p className="text-white/80 leading-relaxed">
               Today you unlock <strong>Module {checkpoint.moduleNumber}: {checkpoint.moduleTitle}</strong>
@@ -137,8 +137,7 @@ export function A2DayPageTemplate({
             <Button
               onClick={() => router.push(`/despega/a2/dia-${prevDay}`)}
               variant="outline"
-              className="flex-1 text-white hover:opacity-80 py-6 rounded-full font-semibold"
-              style={{ borderColor: 'rgba(90, 90, 150, 0.5)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
+              className="flex-1 text-white hover:text-white py-6 rounded-full font-semibold border-purple-500/60 bg-purple-500/10 hover:bg-purple-500/20 hover:border-purple-500/100 transition-all duration-200"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Anterior
@@ -151,8 +150,7 @@ export function A2DayPageTemplate({
                 router.push(`/despega/a2/dia-${nextDay}`)
               }
             }}
-            className="flex-1 py-6 rounded-full font-semibold"
-            style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
+            className="flex-1 py-6 rounded-full font-semibold bg-purple-600/70 hover:bg-purple-600/90 text-white transition-all duration-200 border border-purple-500/80 hover:border-purple-500/100"
           >
             {nextDay ? 'Siguiente' : 'Completar'}
             {nextDay && <ArrowRight className="w-4 h-4 ml-2" />}
