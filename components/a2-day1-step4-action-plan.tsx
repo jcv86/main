@@ -37,7 +37,7 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-white mb-2">Crea Tu Plan de Acción</h2>
         <p className="text-white/60">Divide tus metas en acciones específicas en 4 áreas clave.</p>
@@ -49,7 +49,7 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
         onChange={setApplications}
         label="Aplicaciones a Empleos"
         placeholder="ej., Aplicar a 5 posiciones por semana, actualizar CV para cada rol, preparar carta de presentación personalizada..."
-        icon={<Briefcase className="w-4 h-4 text-red-400" />}
+        icon={<Briefcase className="w-4 h-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />}
         minRows={3}
       />
 
@@ -59,7 +59,7 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
         onChange={setNetworking}
         label="Networking y Conexiones"
         placeholder="ej., Conectar con 3 profesionales por semana en LinkedIn, asistir a 1 evento de networking mensual..."
-        icon={<Users className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
+        icon={<Users className="w-4 h-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />}
         minRows={3}
       />
 
@@ -69,7 +69,7 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
         onChange={setLearning}
         label="Aprendizaje y Desarrollo"
         placeholder="ej., Completar curso de habilidades técnicas, leer 1 libro de desarrollo profesional, practicar entrevistas..."
-        icon={<BookOpen className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
+        icon={<BookOpen className="w-4 h-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />}
         minRows={3}
       />
 
@@ -79,7 +79,7 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
         onChange={setPersonal}
         label="Crecimiento Personal"
         placeholder="ej., Mantener rutina de ejercicio, practicar meditación, establecer límites saludables trabajo-vida..."
-        icon={<Heart className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
+        icon={<Heart className="w-4 h-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />}
         minRows={3}
       />
 
@@ -88,15 +88,15 @@ export function A2Day1Step4ActionPlan({ onNext, onBack, initialData }: Step4Acti
         <Button
           onClick={onBack}
           variant="outline"
-          className="flex-1 text-white hover:bg-slate-800 py-6 rounded-full"
-          style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}
+          className="flex-1 text-white hover:opacity-80 transition py-6 rounded-full font-semibold"
+          style={{ borderColor: 'rgba(90, 90, 150, 0.5)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
         >
           Atrás
         </Button>
         <Button
           onClick={handleNext}
-          className="flex-1 text-white py-6 rounded-full"
-          style={{ backgroundColor: 'rgb(80, 160, 170)' }}
+          className="flex-1 text-white py-6 rounded-full font-semibold hover:opacity-80 transition"
+          style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
         >
           Siguiente
         </Button>

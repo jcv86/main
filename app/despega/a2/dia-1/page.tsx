@@ -67,11 +67,11 @@ export default function Dia1Page() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-900/50 to-purple-900/50 border-b border-white/40">
-        <div className="max-w-4xl mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
+      <div className="border-b" style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}>
+        <div className="max-w-6xl mx-auto px-4 py-6">
+          <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <Badge className="bg-purple-600/20 text-purple-400 border-purple-500/30">
+              <Badge style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', color: 'rgba(90, 90, 150)', borderColor: 'rgba(90, 90, 150, 0.5)' }} className="border">
                 Día {DIA_NUM} de 90
               </Badge>
               <Badge className={typeInfo.color}>
@@ -80,16 +80,17 @@ export default function Dia1Page() {
             </div>
             <Button
               onClick={() => setShowModal(true)}
-              className="bg-purple-600 hover:bg-purple-700"
+              style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)', color: 'white' }}
+              className="hover:opacity-80 transition"
             >
-              Start Day 1 Flow
+              Comenzar Día 1
             </Button>
           </div>
 
-          <h1 className="text-2xl md:text-3xl font-bold text-white mt-4">
+          <h1 className="text-3xl font-bold text-white">
             {dayConfig.title}
           </h1>
-          <p className="text-white/70 mt-2">{dayConfig.subtitle}</p>
+          <p className="text-white/60 mt-2">{dayConfig.subtitle}</p>
 
           <div className="flex items-center gap-4 mt-4 text-sm text-white/60">
             <span className="flex items-center gap-1">
@@ -101,116 +102,100 @@ export default function Dia1Page() {
       </div>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-        {/* Main Description */}
-        <div className="bg-slate-900/50 border border-white/30 rounded-lg p-6">
-          <p className="text-white/85 text-lg leading-relaxed">
-            {dayConfig.description}
-          </p>
-        </div>
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="space-y-8">
+          {/* Main Description */}
+          <div className="rounded-[28px] border p-6" style={{ backgroundColor: 'rgba(30, 32, 42, 0.8)', borderColor: 'rgba(90, 90, 150, 0.3)' }}>
+            <p className="text-white/85 text-lg leading-relaxed">
+              {dayConfig.description}
+            </p>
+          </div>
 
-        {/* Tasks */}
-        {dayConfig.tasks && dayConfig.tasks.length > 0 && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-purple-400" />
-              Tareas del Día
-            </h2>
-            <div className="space-y-3">
-              {dayConfig.tasks.map((task, idx) => (
-                <div 
-                  key={idx}
-                  className="bg-slate-900/30 border border-white/30/50 rounded-lg p-4 flex items-start gap-4"
-                >
-                  <div className="flex items-center justify-center w-8 h-8 bg-purple-600/20 text-purple-400 rounded-full text-sm font-bold flex-shrink-0">
-                    {idx + 1}
+          {/* Tasks */}
+          {dayConfig.tasks && dayConfig.tasks.length > 0 && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-semibold text-white flex items-center gap-2">
+                <CheckCircle2 className="w-6 h-6" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />
+                Tareas del Día
+              </h2>
+              <div className="space-y-3">
+                {dayConfig.tasks.map((task, idx) => (
+                  <div 
+                    key={idx}
+                    className="rounded-[28px] border p-4 flex items-start gap-4 transition-all hover:border-opacity-70"
+                    style={{ backgroundColor: 'rgba(90, 90, 150, 0.15)', borderColor: 'rgba(90, 90, 150, 0.3)' }}
+                  >
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold flex-shrink-0" style={{ backgroundColor: 'rgba(90, 90, 150, 0.3)', color: 'rgba(90, 90, 150, 0.8)' }}>
+                      {idx + 1}
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="font-semibold text-white">{task}</h3>
+                    </div>
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-white">{task}</h3>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Learning Goals */}
-        {dayConfig.learningGoals && dayConfig.learningGoals.length > 0 && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-              <BookOpen className="w-5 h-5 text-purple-400" />
-              Objetivos de Aprendizaje
-            </h2>
-            <div className="bg-purple-900/20 border border-purple-500/30 rounded-lg p-4">
-              <ul className="space-y-2">
-                {dayConfig.learningGoals.map((goal, idx) => (
-                  <li key={idx} className="flex items-center gap-2 text-white/80">
-                    <CheckCircle2 className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                    {goal}
-                  </li>
                 ))}
-              </ul>
-            </div>
-          </div>
-        )}
-
-        {/* Action Items */}
-        {dayConfig.actionItems && dayConfig.actionItems.length > 0 && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-              <ArrowRight className="w-5 h-5 text-purple-400" />
-              Acciones a Entregar
-            </h2>
-            <div className="bg-cyan-900/20 border border-purple-500/30 rounded-lg p-4">
-              <ul className="space-y-2">
-                {dayConfig.actionItems.map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-2 text-white/80">
-                    <CheckCircle2 className="w-4 h-4 text-purple-400 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
-
-        {/* Notion Template Link */}
-        {dayConfig.notionTemplate && (
-          <a
-            href={dayConfig.notionTemplate}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="block bg-slate-900/30 border border-white/30/50 rounded-lg p-4 hover:border-cyan-500/50 transition group"
-          >
-            <div className="flex items-center justify-between">
-              <div>
-                <Badge className="mb-2 text-xs bg-blue-500/20 text-blue-400">Plantilla</Badge>
-                <h3 className="font-semibold text-white group-hover:text-purple-400 transition">
-                  Plantilla de Notion - Día {DIA_NUM}
-                </h3>
-                <p className="text-sm text-white/60">Accede a tu plantilla de trabajo</p>
               </div>
-              <ArrowRight className="w-5 h-5 text-white/40 group-hover:text-purple-400 transition" />
             </div>
-          </a>
-        )}
+          )}
 
-        {/* CTA */}
-        <div className="bg-gradient-to-r from-cyan-900/30 to-purple-900/30 border border-cyan-500/20 rounded-lg p-6 text-center">
-          <h3 className="text-lg font-semibold text-white mb-2">Ready to Complete Day 1?</h3>
-          <p className="text-white/60 mb-4">Start the interactive 7-step flow to define your vision, create milestones, and build your action plan.</p>
-          <Button
-            onClick={() => setShowModal(true)}
-            className="bg-purple-600 hover:bg-purple-700 px-8"
-          >
-            Start Day 1 Flow
-          </Button>
+          {/* Learning Goals */}
+          {dayConfig.learningGoals && dayConfig.learningGoals.length > 0 && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-semibold text-white flex items-center gap-2">
+                <BookOpen className="w-6 h-6" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />
+                Objetivos de Aprendizaje
+              </h2>
+              <div className="rounded-[28px] border p-4" style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.3)' }}>
+                <ul className="space-y-2">
+                  {dayConfig.learningGoals.map((goal, idx) => (
+                    <li key={idx} className="flex items-center gap-2 text-white/80">
+                      <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: 'rgba(90, 90, 150, 0.6)' }} />
+                      {goal}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* Action Items */}
+          {dayConfig.actionItems && dayConfig.actionItems.length > 0 && (
+            <div className="space-y-4">
+              <h2 className="text-2xl font-semibold text-white flex items-center gap-2">
+                <ArrowRight className="w-6 h-6" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />
+                Acciones a Entregar
+              </h2>
+              <div className="rounded-[28px] border p-4" style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.3)' }}>
+                <ul className="space-y-2">
+                  {dayConfig.actionItems.map((item, idx) => (
+                    <li key={idx} className="flex items-center gap-2 text-white/80">
+                      <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: 'rgba(90, 90, 150, 0.6)' }} />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {/* CTA Button */}
+          <div className="rounded-[28px] border p-6 text-center" style={{ backgroundColor: 'rgba(90, 90, 150, 0.15)', borderColor: 'rgba(90, 90, 150, 0.4)' }}>
+            <h3 className="text-lg font-semibold text-white mb-3">
+              ¿Listo para comenzar el Día 1?
+            </h3>
+            <Button
+              onClick={() => setShowModal(true)}
+              style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)', color: 'white' }}
+              size="lg"
+              className="hover:opacity-80 transition"
+            >
+              Comenzar el Flujo Completo
+            </Button>
+          </div>
         </div>
+      </div>
 
-
-
-        {/* Navigation */}
-        <div className="flex items-center justify-between pt-8 border-t border-white/40">
+      {/* Navigation */}
+      <div className="max-w-6xl mx-auto px-4 py-8 flex items-center justify-between border-t" style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}>
           {prevDay ? (
             <Button
               variant="outline"
@@ -242,7 +227,6 @@ export default function Dia1Page() {
             </Button>
           )}
         </div>
-      </div>
 
       {/* Day 1 Modal */}
       <A2Day1Modal

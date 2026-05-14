@@ -40,10 +40,10 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-white mb-2">Define Tu Visión</h2>
-        <p className="text-a2-text-secondary">Comencemos clarificando lo que buscas en tu trayectoria profesional.</p>
+        <p className="text-white/60">Comencemos clarificando lo que buscas en tu trayectoria profesional.</p>
       </div>
 
       {/* Professional Role */}
@@ -53,10 +53,10 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
           onChange={setRole}
           label="¿Qué rol o título profesional estás buscando?"
           placeholder="ej., Senior Product Manager, Data Scientist, Growth Hacker, Desarrollador Full Stack..."
-          icon={<Briefcase className="w-4 h-4 text-a2-primary" />}
+          icon={<Briefcase className="w-4 h-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />}
           minRows={2}
         />
-        {errors.role && <p className="text-a2-accent-cyan text-sm">{errors.role}</p>}
+        {errors.role && <p className="text-white/60 text-sm">{errors.role}</p>}
       </div>
 
       {/* Ideal Environment */}
@@ -66,10 +66,10 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
           onChange={setEnvironment}
           label="Describe tu ambiente de trabajo ideal"
           placeholder="Considera tamaño de empresa, industria, cultura, valores, flexibilidad, oportunidades de crecimiento..."
-          icon={<Building2 className="w-4 h-4 text-a2-primary" />}
+          icon={<Building2 className="w-4 h-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />}
           minRows={3}
         />
-        {errors.environment && <p className="text-a2-accent-cyan text-sm">{errors.environment}</p>}
+        {errors.environment && <p className="text-white/60 text-sm">{errors.environment}</p>}
       </div>
 
       {/* Desired Outcome */}
@@ -79,18 +79,18 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
           onChange={setDesiredOutcome}
           label="¿Qué deseas lograr en los próximos 30 días?"
           placeholder="Sé específico sobre el resultado que quieres lograr para el Día 30"
-          icon={<Target className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
+          icon={<Target className="w-4 h-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />}
           minRows={2}
         />
-        {errors.desiredOutcome && <p className="text-sm" style={{ color: 'rgb(80, 160, 170)' }}>{errors.desiredOutcome}</p>}
+        {errors.desiredOutcome && <p className="text-white/60 text-sm">{errors.desiredOutcome}</p>}
       </div>
 
       {/* Navigation */}
       <div className="flex gap-4 pt-4">
         <Button
           onClick={handleNext}
-          className="flex-1 text-white py-6 rounded-full"
-          style={{ backgroundColor: 'rgb(80, 160, 170)' }}
+          className="flex-1 text-white py-6 rounded-full font-semibold hover:opacity-80 transition"
+          style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
         >
           Siguiente
         </Button>

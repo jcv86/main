@@ -45,7 +45,7 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-white mb-2">Define Tus Hitos</h2>
         <p className="text-white/60">Divide tu meta de 30 días en hitos claros y alcanzables.</p>
@@ -58,10 +58,10 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
           onChange={setDay10}
           label="¿Qué deberías lograr para el Día 10?"
           placeholder="Resultado específico y medible para el primer checkpoint..."
-          icon={<Flag className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
+          icon={<Flag className="w-4 h-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />}
           minRows={2}
         />
-        {errors.day10 && <p className="text-sm" style={{ color: 'rgb(80, 160, 170)' }}>{errors.day10}</p>}
+        {errors.day10 && <p className="text-white/60 text-sm">{errors.day10}</p>}
       </div>
 
       {/* Day 20 Milestone */}
@@ -71,10 +71,10 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
           onChange={setDay20}
           label="¿Qué deberías lograr para el Día 20?"
           placeholder="Progreso hacia tu meta principal..."
-          icon={<Flag className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
+          icon={<Flag className="w-4 h-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />}
           minRows={2}
         />
-        {errors.day20 && <p className="text-sm" style={{ color: 'rgb(80, 160, 170)' }}>{errors.day20}</p>}
+        {errors.day20 && <p className="text-white/60 text-sm">{errors.day20}</p>}
       </div>
 
       {/* Day 30 Milestone */}
@@ -84,10 +84,10 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
           onChange={setDay30}
           label="¿Qué deberías lograr para el Día 30?"
           placeholder="Tu meta final de los 30 días..."
-          icon={<Flag className="w-4 h-4" style={{ color: 'rgb(90, 90, 150)' }} />}
+          icon={<Flag className="w-4 h-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />}
           minRows={2}
         />
-        {errors.day30 && <p className="text-sm" style={{ color: 'rgb(80, 160, 170)' }}>{errors.day30}</p>}
+        {errors.day30 && <p className="text-white/60 text-sm">{errors.day30}</p>}
       </div>
 
       {/* Navigation */}
@@ -95,15 +95,15 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
         <Button
           onClick={onBack}
           variant="outline"
-          className="flex-1 text-white hover:bg-slate-800 py-6 rounded-full"
-          style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}
+          className="flex-1 text-white hover:opacity-80 transition py-6 rounded-full font-semibold"
+          style={{ borderColor: 'rgba(90, 90, 150, 0.5)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
         >
           Atrás
         </Button>
         <Button
           onClick={handleNext}
-          className="flex-1 text-white py-6 rounded-full"
-          style={{ backgroundColor: 'rgb(80, 160, 170)' }}
+          className="flex-1 text-white py-6 rounded-full font-semibold hover:opacity-80 transition"
+          style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
         >
           Siguiente
         </Button>

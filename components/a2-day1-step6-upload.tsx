@@ -56,7 +56,7 @@ export function A2Day1Step6Upload({ onNext, onBack }: Step6UploadProps) {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-white mb-2">Sube Tu Trabajo</h2>
         <p className="text-white/60">Sube tu documento del plan del Día 1 (PDF, Word o exportación de Google Docs) para análisis y puntuación con IA.</p>
@@ -65,7 +65,7 @@ export function A2Day1Step6Upload({ onNext, onBack }: Step6UploadProps) {
       {!uploaded ? (
         <div className="space-y-4">
           {/* File Upload Area */}
-          <label className="block border-2 border-dashed border-slate-600 rounded-lg p-8 text-center hover:border-cyan-500 transition cursor-pointer group">
+          <label className="block border-2 border-dashed rounded-[28px] p-8 text-center transition cursor-pointer group" style={{ borderColor: 'rgba(90, 90, 150, 0.5)', backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
             <input
               type="file"
               onChange={handleFileSelect}
@@ -73,24 +73,24 @@ export function A2Day1Step6Upload({ onNext, onBack }: Step6UploadProps) {
               className="hidden"
               disabled={loading}
             />
-            <Upload className="w-8 h-8 text-white/40 mx-auto mb-2 transition" style={{ color: 'rgb(90, 90, 150)' }} />
-            <p className="text-white font-medium transition" style={{ color: 'rgb(90, 90, 150)' }}>
+            <Upload className="w-8 h-8 mx-auto mb-2 transition" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />
+            <p className="text-white font-medium transition" style={{ color: 'rgba(90, 90, 150, 0.8)' }}>
               {file ? file.name : 'Click to upload or drag and drop'}
             </p>
             <p className="text-sm text-white/60 mt-1">PDF, Word, or text documents</p>
           </label>
 
           {error && (
-            <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-3">
-              <p className="text-red-300 text-sm">{error}</p>
+            <div className="rounded-[28px] border p-3" style={{ backgroundColor: 'rgba(255, 100, 100, 0.1)', borderColor: 'rgba(255, 100, 100, 0.3)' }}>
+              <p className="text-white/80 text-sm">{error}</p>
             </div>
           )}
 
           <Button
             onClick={handleUpload}
             disabled={!file || loading}
-            className="w-full text-white"
-            style={{ backgroundColor: 'rgb(80, 160, 170)' }}
+            className="w-full text-white font-semibold hover:opacity-80 transition py-6 rounded-full"
+            style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
           >
             {loading ? (
               <>

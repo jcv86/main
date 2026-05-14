@@ -105,13 +105,13 @@ export function A2Day1Modal({ isOpen, onClose, onComplete }: A2Day1ModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-slate-950 border border-a2-border rounded-[28px]" style={{ backgroundColor: 'rgba(15, 17, 23, 0.95)', borderColor: 'rgba(90, 90, 150, 0.4)' }}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-[28px]" style={{ backgroundColor: 'rgba(15, 17, 23, 0.98)', borderColor: 'rgba(90, 90, 150, 0.4)', border: '1px solid rgba(90, 90, 150, 0.4)' }}>
         <DialogHeader className="flex items-center justify-between pr-8">
           <div className="flex-1">
-            <DialogTitle className="text-xl font-bold text-white">
+            <DialogTitle className="text-2xl font-bold text-white">
               {stepTitles[currentStep - 1]}
             </DialogTitle>
-            <p className="text-xs text-a2-text-secondary mt-1">Paso {currentStep} de 6</p>
+            <p className="text-sm text-white/60 mt-1">Paso {currentStep} de 6</p>
           </div>
         </DialogHeader>
 
@@ -120,18 +120,16 @@ export function A2Day1Modal({ isOpen, onClose, onComplete }: A2Day1ModalProps) {
           {[1, 2, 3, 4, 5, 6].map((step) => (
             <div
               key={step}
-              className={`flex-1 h-1 rounded-full transition ${
-                step <= currentStep ? 'bg-a2-primary' : 'bg-a2-border'
-              }`}
+              className="flex-1 h-1 rounded-full transition-all"
               style={{
-                backgroundColor: step <= currentStep ? 'rgb(90, 90, 150)' : 'rgba(90, 90, 150, 0.3)'
+                backgroundColor: step <= currentStep ? 'rgba(90, 90, 150, 0.8)' : 'rgba(90, 90, 150, 0.2)'
               }}
             />
           ))}
         </div>
 
         {/* Content */}
-        <div className="px-6 py-6">
+        <div className="px-6 py-6 space-y-6">
           {currentStep === 1 && (
             <A2Day1Step1Vision
               onNext={handleStep1Next}
