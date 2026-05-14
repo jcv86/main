@@ -70,11 +70,11 @@ export function A2DayPageTemplate({
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-slate-900/30 border-b border-purple-500/20">
+      <div className="bg-purple-900/20 border-b border-purple-500/40">
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Badge className="bg-purple-600/10 text-purple-400 border-purple-500/40">
+              <Badge className="bg-purple-600/60 text-white border-purple-500/40">
                 Día {dayNumber} de 90
               </Badge>
               <Badge className={typeInfo.color}>
@@ -82,7 +82,7 @@ export function A2DayPageTemplate({
                 <span className="ml-1">{typeInfo.label}</span>
               </Badge>
               {checkpoint && (
-                <Badge className="bg-emerald-500/10 text-emerald-300 border-emerald-500/40">
+                <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
                   A3 Checkpoint
                 </Badge>
               )}
@@ -137,7 +137,7 @@ export function A2DayPageTemplate({
             <Button
               onClick={() => router.push(`/despega/a2/dia-${prevDay}`)}
               variant="outline"
-              className="flex-1 text-white hover:text-white py-6 rounded-full font-semibold border-purple-500/60 bg-purple-500/10 hover:bg-purple-500/20 hover:border-purple-500/100 transition-all duration-200"
+              className="flex-1 text-cyan-400 hover:text-cyan-300 py-6 rounded-full font-semibold border-cyan-500/60 bg-cyan-500/10 hover:bg-cyan-500/20 hover:border-cyan-500/100 transition-all duration-200"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Anterior
@@ -150,7 +150,7 @@ export function A2DayPageTemplate({
                 router.push(`/despega/a2/dia-${nextDay}`)
               }
             }}
-            className="flex-1 py-6 rounded-full font-semibold bg-purple-600/70 hover:bg-purple-600/90 text-white transition-all duration-200 border border-purple-500/80 hover:border-purple-500/100"
+            className="flex-1 py-6 rounded-full font-semibold bg-purple-600/80 hover:bg-purple-600/100 text-white transition-all duration-200 border border-purple-500/80 hover:border-purple-500/100"
           >
             {nextDay ? 'Siguiente' : 'Completar'}
             {nextDay && <ArrowRight className="w-4 h-4 ml-2" />}

@@ -34,57 +34,57 @@ const missionTypeConfig: Record<
   { color: string; icon: React.ReactNode; label: string }
 > = {
   roadmap_gate: {
-    color: 'bg-purple-500/20 text-purple-300 border-purple-500/30',
+    color: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
     icon: <Target className="w-4 h-4" />,
     label: 'Contrato',
   },
   mirror: {
-    color: 'bg-indigo-500/20 text-indigo-300 border-indigo-500/30',
+    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
     icon: <Sparkles className="w-4 h-4" />,
     label: 'Autoconocimiento',
   },
   evidence: {
-    color: 'bg-cyan-500/20 text-cyan-300 border-cyan-500/30',
+    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
     icon: <CheckCircle2 className="w-4 h-4" />,
     label: 'Evidencia',
   },
   builder: {
-    color: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
+    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
     icon: <BookOpen className="w-4 h-4" />,
     label: 'Constructor',
   },
   market_intel: {
-    color: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30',
+    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
     icon: <Target className="w-4 h-4" />,
     label: 'Inteligencia',
   },
   coach_forge: {
-    color: 'bg-amber-500/20 text-amber-300 border-amber-500/30',
+    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
     icon: <Sparkles className="w-4 h-4" />,
     label: 'Coach',
   },
   field_action: {
-    color: 'bg-red-500/20 text-red-300 border-red-500/30',
+    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
     icon: <CheckCircle2 className="w-4 h-4" />,
     label: 'Acción',
   },
   performance_drill: {
-    color: 'bg-orange-500/20 text-orange-300 border-orange-500/30',
+    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
     icon: <Target className="w-4 h-4" />,
     label: 'Práctica',
   },
   a3_checkpoint: {
-    color: 'bg-green-500/20 text-green-300 border-green-500/30',
+    color: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
     icon: <Trophy className="w-4 h-4" />,
     label: 'Checkpoint A3',
   },
   debrief: {
-    color: 'bg-slate-500/20 text-slate-300 border-slate-500/30',
+    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
     icon: <BookOpen className="w-4 h-4" />,
     label: 'Reflexión',
   },
   milestone: {
-    color: 'bg-violet-500/20 text-violet-300 border-violet-500/30',
+    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
     icon: <Trophy className="w-4 h-4" />,
     label: 'Hito',
   },
@@ -118,7 +118,7 @@ export function A2DailyMissionCard({
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 space-y-2">
             <div className="flex items-center gap-2 flex-wrap">
-              <Badge className="bg-purple-500/20 text-purple-300 border-purple-500/30">
+              <Badge className="bg-purple-600/60 text-white border-purple-500/40">
                 Día {dayNumber}
               </Badge>
               <Badge className={config.color}>
@@ -126,12 +126,12 @@ export function A2DailyMissionCard({
                 <span className="ml-1">{config.label}</span>
               </Badge>
               {isA3Checkpoint && (
-                <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/30">
+                <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
                   A3 Checkpoint
                 </Badge>
               )}
               {isCompleted && (
-                <Badge className="bg-green-500/20 text-green-300">
+                <Badge className="bg-green-500/20 text-green-300 border-green-500/40">
                   <CheckCircle2 className="w-3 h-3 mr-1" />
                   Completado
                 </Badge>
