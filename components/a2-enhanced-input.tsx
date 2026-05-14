@@ -116,7 +116,7 @@ export function A2EnhancedInput({
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2 mb-2">
-        {icon && <span className="text-teal-400">{icon}</span>}
+        {icon && <span style={{ color: 'rgba(90, 90, 150, 0.8)' }}>{icon}</span>}
         <label className="text-sm font-semibold text-white uppercase tracking-wide">
           {label}
         </label>
@@ -126,7 +126,18 @@ export function A2EnhancedInput({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="bg-slate-900/50 border border-slate-700 text-white placeholder-slate-500 rounded-lg focus:border-teal-500 focus:ring-0 min-h-24"
+        className="text-white placeholder-slate-500 rounded-lg focus:ring-0 min-h-24"
+        style={{
+          backgroundColor: 'rgba(30, 32, 42, 0.5)',
+          borderColor: 'rgba(90, 90, 150, 0.3)',
+          borderWidth: '1px',
+        }}
+        onFocus={(e) => {
+          e.currentTarget.style.borderColor = 'rgba(90, 90, 150, 0.6)'
+        }}
+        onBlur={(e) => {
+          e.currentTarget.style.borderColor = 'rgba(90, 90, 150, 0.3)'
+        }}
         rows={minRows}
       />
 
@@ -136,7 +147,12 @@ export function A2EnhancedInput({
           variant="outline"
           size="sm"
           disabled={isLoading}
-          className={`border-teal-600/50 hover:bg-teal-600/20 transition disabled:opacity-50 ${isRecording ? 'text-red-400 border-red-600/50' : 'text-teal-400'}`}
+          className="transition disabled:opacity-50"
+          style={{
+            borderColor: isRecording ? 'rgba(239, 68, 68, 0.5)' : 'rgba(90, 90, 150, 0.5)',
+            backgroundColor: isRecording ? 'rgba(239, 68, 68, 0.1)' : 'rgba(90, 90, 150, 0.1)',
+            color: isRecording ? 'rgba(239, 68, 68, 0.8)' : 'rgba(90, 90, 150, 0.8)',
+          }}
           type="button"
         >
           {isRecording ? (
@@ -157,7 +173,12 @@ export function A2EnhancedInput({
           variant="outline"
           size="sm"
           disabled={isLoading}
-          className="border-teal-600/50 text-teal-400 hover:bg-teal-600/20 disabled:opacity-50"
+          className="disabled:opacity-50"
+          style={{
+            borderColor: 'rgba(90, 90, 150, 0.5)',
+            backgroundColor: 'rgba(90, 90, 150, 0.1)',
+            color: 'rgba(90, 90, 150, 0.8)',
+          }}
           type="button"
         >
           <Sparkles className={`w-4 h-4 mr-2 ${isLoading ? 'animate-spin' : ''}`} />
@@ -166,20 +187,20 @@ export function A2EnhancedInput({
       </div>
 
       {coachSuggestion && (
-        <div className="bg-purple-900/30 border border-purple-600/50 rounded-lg p-4 space-y-3">
+        <div className="rounded-lg p-4 space-y-3" style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.3)', border: '1px solid rgba(90, 90, 150, 0.3)' }}>
           <div className="flex items-start gap-2">
-            <AlertCircle className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+            <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />
             <div className="flex-1 space-y-2">
-              <p className="text-sm font-semibold text-purple-300">Sugerencia del Coach:</p>
+              <p className="text-sm font-semibold" style={{ color: 'rgba(90, 90, 150, 0.8)' }}>Sugerencia del Coach:</p>
               <p className="text-sm text-white/80">{coachSuggestion.suggestion}</p>
               
               {coachSuggestion.tips && coachSuggestion.tips.length > 0 && (
                 <div className="mt-2 space-y-1">
-                  <p className="text-xs font-semibold text-purple-400 uppercase">Tips:</p>
+                  <p className="text-xs font-semibold uppercase" style={{ color: 'rgba(90, 90, 150, 0.7)' }}>Tips:</p>
                   <ul className="text-xs text-white/70 space-y-1">
                     {coachSuggestion.tips.map((tip, idx) => (
                       <li key={idx} className="flex gap-2">
-                        <span className="text-purple-400">•</span>
+                        <span style={{ color: 'rgba(90, 90, 150, 0.7)' }}>•</span>
                         <span>{tip}</span>
                       </li>
                     ))}
@@ -191,7 +212,8 @@ export function A2EnhancedInput({
                 onClick={() => setCoachSuggestion(null)}
                 variant="ghost"
                 size="sm"
-                className="text-xs text-purple-400 hover:text-purple-300 mt-2"
+                className="text-xs mt-2"
+                style={{ color: 'rgba(90, 90, 150, 0.8)' }}
               >
                 Cerrar sugerencia
               </Button>

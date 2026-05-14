@@ -104,8 +104,8 @@ export function A2Day1Step2Coach({ visionData, onNext, onBack }: Step2CoachProps
           <Button
             onClick={handleEnhance}
             disabled={loading}
-            className="w-full text-white"
-            style={{ backgroundColor: 'rgb(80, 160, 170)' }}
+            className="w-full text-white hover:opacity-80 transition py-6 rounded-full font-semibold"
+            style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
           >
             {loading ? (
               <>
@@ -161,8 +161,8 @@ export function A2Day1Step2Coach({ visionData, onNext, onBack }: Step2CoachProps
             </Button>
             <Button
               onClick={handleAccept}
-              className="flex-1 text-white"
-              style={{ backgroundColor: 'rgb(80, 160, 170)' }}
+              className="flex-1 text-white hover:opacity-80 transition py-6 rounded-full font-semibold"
+              style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
             >
               Accept Enhancement
             </Button>

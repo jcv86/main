@@ -108,11 +108,11 @@ export function A2Day1Step6Upload({ onNext, onBack }: Step6UploadProps) {
       ) : (
         <div className="space-y-4">
           {/* Upload Success */}
-          <div className="rounded-lg p-4" style={{ backgroundColor: 'rgba(90, 90, 150, 0.15)', borderColor: 'rgba(90, 90, 150, 0.4)', borderWidth: '1px' }}>
+          <div className="rounded-[28px] border p-4" style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', borderColor: 'rgba(16, 185, 129, 0.3)' }}>
             <div className="flex items-start gap-3">
-              <Check className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'rgb(80, 160, 170)' }} />
+              <Check className="w-5 h-5 flex-shrink-0 mt-0.5" style={{ color: 'rgba(16, 185, 129, 0.8)' }} />
               <div>
-                <p className="font-semibold" style={{ color: 'rgb(80, 160, 170)' }}>Upload Successful</p>
+                <p className="font-semibold" style={{ color: 'rgba(16, 185, 129, 0.8)' }}>Upload Successful</p>
                 <p className="text-sm text-white/70 mt-1">{uploaded.name}</p>
               </div>
             </div>
@@ -129,16 +129,16 @@ export function A2Day1Step6Upload({ onNext, onBack }: Step6UploadProps) {
         <Button
           onClick={onBack}
           variant="outline"
-          className="flex-1 text-white hover:bg-slate-800 py-6 rounded-full"
-          style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}
+          className="flex-1 text-white hover:opacity-80 transition py-6 rounded-full font-semibold"
+          style={{ borderColor: 'rgba(90, 90, 150, 0.5)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
         >
           Atrás
         </Button>
         <Button
           onClick={() => uploaded && onNext()}
           disabled={!uploaded}
-          className="flex-1 text-white py-6 rounded-full"
-          style={{ backgroundColor: 'rgb(80, 160, 170)' }}
+          className="flex-1 text-white py-6 rounded-full font-semibold hover:opacity-80 transition disabled:opacity-50"
+          style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
         >
           Siguiente
         </Button>
