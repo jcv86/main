@@ -90,8 +90,8 @@ export default function DiaPage() {
 
       console.log('[v0] Day 2 submission saved:', submission)
 
-      // Navigate to next day
-      router.push('/despega/a2/dia-3')
+      // Navigate to A2 progress dashboard with anchor to día-3
+      router.push('/despega/a2-routes#dia-3')
     } catch (err) {
       console.error('[v0] Error saving Day 2:', err)
       throw err

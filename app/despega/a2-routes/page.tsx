@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { generatePersonalizedRoute, type PersonalizedRoute } from '@/lib/route-generator'
@@ -27,6 +27,7 @@ import { exportProgressToPDF } from '@/lib/pdf-export'
 
 export default function A2RoutesPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [route, setRoute] = useState<PersonalizedRoute | null>(null)
   const [discProfile, setDiscProfile] = useState<string>('DISC Profile')
   const [loading, setLoading] = useState(true)
@@ -44,6 +45,21 @@ export default function A2RoutesPage() {
     if (authLoading || !user?.id) return
     loadCompletionsFromSupabase()
   }, [authLoading, user?.id])
+
+  // Handle hash anchor scrolling after page loads
+  useEffect(() => {
+    // Check if there's a hash in the URL
+    const hash = window.location.hash
+    if (hash) {
+      const elementId = hash.replace('#', '')
+      setTimeout(() => {
+        const element = document.getElementById(elementId)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        }
+      }, 100) // Small delay to ensure DOM is fully rendered
+    }
+  }, [route, completedTasks]) // Re-run when route or tasks change
 
   const loadCompletionsFromSupabase = async () => {
     try {
@@ -584,14 +600,15 @@ export default function A2RoutesPage() {
                         const prevTaskId = prevTask ? getTaskId(days, prevTask.day, prevTask.title) : null
                         const isDayLocked = taskIdx > 0 && prevTaskId !== null && !completedTasks.has(prevTaskId)
                         return (
-                          <TaskCard
-                            key={taskIdx}
-                            task={task}
-                            taskId={taskId}
-                            completed={completedTasks.has(taskId)}
-                            onComplete={() => handleTaskComplete(taskId)}
-                            locked={isDayLocked}
-                          />
+                          <div key={taskIdx} id={`dia-${task.day}`}>
+                            <TaskCard
+                              task={task}
+                              taskId={taskId}
+                              completed={completedTasks.has(taskId)}
+                              onComplete={() => handleTaskComplete(taskId)}
+                              locked={isDayLocked}
+                            />
+                          </div>
                         )
                       })}
                     </div>

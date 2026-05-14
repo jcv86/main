@@ -22,7 +22,7 @@ export default function Dia1Page() {
       console.log('[v0] Day 1 submission saved:', submission)
 
       // Navigate to next day
-      router.push('/despega/a2/dia-2')
+      router.push('/despega/a2-routes#dia-2')
     } catch (err) {
       console.error('[v0] Error saving Day 1:', err)
       throw err
