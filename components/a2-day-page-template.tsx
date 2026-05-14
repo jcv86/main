@@ -11,6 +11,8 @@ import { getA3CheckpointForDay } from '@/lib/a3-checkpoint-map'
 interface A2DayPageTemplateProps {
   dayNumber: number
   onComplete?: () => void
+  children?: React.ReactNode
+  mission?: { type: string; title: string; whyItMatters: string }
 }
 
 const taskTypeLabels: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
@@ -44,9 +46,12 @@ const taskTypeLabels: Record<string, { label: string; icon: React.ReactNode; col
 export function A2DayPageTemplate({
   dayNumber,
   onComplete,
+  children,
+  mission: customMission,
 }: A2DayPageTemplateProps) {
   const router = useRouter()
-  const mission = A2_DAILY_MISSIONS[dayNumber]
+  const configMission = A2_DAILY_MISSIONS[dayNumber]
+  const mission = customMission ? { ...configMission, ...customMission } : configMission
   const checkpoint = getA3CheckpointForDay(dayNumber)
   
   if (!mission) {
@@ -101,65 +106,74 @@ export function A2DayPageTemplate({
 
       {/* Main Content */}
       <div className="max-w-4xl mx-auto px-4 py-8 space-y-8">
-        {/* Mission Card */}
-        <A2DailyMissionCard
-          mission={mission}
-          dayNumber={dayNumber}
-          isCompleted={false}
-          isAvailable={true}
-          isA3Checkpoint={!!checkpoint}
-          a3ModuleName={checkpoint ? `Module ${checkpoint.moduleNumber}: ${checkpoint.moduleTitle}` : undefined}
-          onStart={() => {
-            // TODO: Open mission details modal/drawer
-            console.log('[v0] Starting mission for day', dayNumber)
-          }}
-        />
+        {/* Custom Children */}
+        {children ? (
+          children
+        ) : (
+          <>
+            {/* Mission Card */}
+            <A2DailyMissionCard
+              mission={mission}
+              dayNumber={dayNumber}
+              isCompleted={false}
+              isAvailable={true}
+              isA3Checkpoint={!!checkpoint}
+              a3ModuleName={checkpoint ? `Module ${checkpoint.moduleNumber}: ${checkpoint.moduleTitle}` : undefined}
+              onStart={() => {
+                // TODO: Open mission details modal/drawer
+                console.log('[v0] Starting mission for day', dayNumber)
+              }}
+            />
 
-        {/* Why This Matters */}
-        <div className="rounded-[28px] border border-purple-500/40 bg-purple-500/5 p-6 space-y-4">
-          <h3 className="text-lg font-semibold text-purple-300">¿Por qué es importante?</h3>
-          <p className="text-white/80 leading-relaxed">{mission.whyItMatters}</p>
-        </div>
+            {/* Why This Matters */}
+            <div className="rounded-[28px] border border-purple-500/40 bg-purple-500/5 p-6 space-y-4">
+              <h3 className="text-lg font-semibold text-purple-300">¿Por qué es importante?</h3>
+              <p className="text-white/80 leading-relaxed">{mission.whyItMatters}</p>
+            </div>
 
-        {/* A3 Checkpoint Info */}
-        {checkpoint && (
-          <div className="rounded-[28px] border border-emerald-500/40 bg-emerald-500/5 p-6 space-y-4">
-            <h3 className="text-lg font-semibold text-emerald-300">A3 Learning Checkpoint</h3>
-            <p className="text-white/80 leading-relaxed">
-              Today you unlock <strong>Module {checkpoint.moduleNumber}: {checkpoint.moduleTitle}</strong>
-            </p>
-          </div>
+            {/* A3 Checkpoint Info */}
+            {checkpoint && (
+              <div className="rounded-[28px] border border-emerald-500/40 bg-emerald-500/5 p-6 space-y-4">
+                <h3 className="text-lg font-semibold text-emerald-300">A3 Learning Checkpoint</h3>
+                <p className="text-white/80 leading-relaxed">
+                  Today you unlock <strong>Module {checkpoint.moduleNumber}: {checkpoint.moduleTitle}</strong>
+                </p>
+              </div>
+            )}
+          </>
         )}
 
         {/* Navigation */}
-        <div className="flex gap-4 pt-4">
-          {prevDay && (
+        {!children && (
+          <div className="flex gap-4 pt-4">
+            {prevDay && (
+              <Button
+                onClick={() => router.push(`/despega/a2/dia-${prevDay}`)}
+                className="flex-1 py-6 rounded-full font-semibold transition-all duration-200 border-2"
+                style={{
+                  color: 'hsl(var(--a2-accent-cyan))',
+                  borderColor: 'hsl(var(--a2-accent-cyan))',
+                  backgroundColor: 'rgba(15, 23, 42, 0.4)',
+                }}
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Anterior
+              </Button>
+            )}
             <Button
-              onClick={() => router.push(`/despega/a2/dia-${prevDay}`)}
-              className="flex-1 py-6 rounded-full font-semibold transition-all duration-200 border-2"
-              style={{
-                color: 'hsl(var(--a2-accent-cyan))',
-                borderColor: 'hsl(var(--a2-accent-cyan))',
-                backgroundColor: 'rgba(15, 23, 42, 0.4)',
+              onClick={() => {
+                onComplete?.()
+                if (nextDay) {
+                  router.push(`/despega/a2/dia-${nextDay}`)
+                }
               }}
+              className="flex-1 py-6 rounded-full font-semibold bg-purple-600/80 hover:bg-purple-600/100 text-white transition-all duration-200 border border-purple-500/80 hover:border-purple-500/100"
             >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Anterior
+              {nextDay ? 'Siguiente' : 'Completar'}
+              {nextDay && <ArrowRight className="w-4 h-4 ml-2" />}
             </Button>
-          )}
-          <Button
-            onClick={() => {
-              onComplete?.()
-              if (nextDay) {
-                router.push(`/despega/a2/dia-${nextDay}`)
-              }
-            }}
-            className="flex-1 py-6 rounded-full font-semibold bg-purple-600/80 hover:bg-purple-600/100 text-white transition-all duration-200 border border-purple-500/80 hover:border-purple-500/100"
-          >
-            {nextDay ? 'Siguiente' : 'Completar'}
-            {nextDay && <ArrowRight className="w-4 h-4 ml-2" />}
-          </Button>
-        </div>
+          </div>
+        )}
       </div>
     </div>
   )
