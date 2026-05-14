@@ -263,11 +263,11 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
               <button
                 key={risk.id}
                 onClick={() => setSelectedRisk(selectedRisk === risk.id ? '' : risk.id)}
-                className={`text-left p-4 rounded-[16px] border-2 transition-all ${
-                  selectedRisk === risk.id
-                    ? 'border-cyan-400 bg-cyan-400/10'
-                    : 'border-purple-500/40 bg-purple-500/5 hover:border-purple-500/60'
-                }`}
+                className="text-left p-4 rounded-[16px] border-2 transition-all"
+                style={{
+                  borderColor: selectedRisk === risk.id ? 'rgb(34, 211, 238)' : 'rgba(90, 90, 150, 0.8)',
+                  backgroundColor: selectedRisk === risk.id ? 'rgba(34, 211, 238, 0.1)' : 'rgba(90, 90, 150, 0.05)'
+                }}
               >
                 <div className="flex items-start justify-between">
                   <div>
