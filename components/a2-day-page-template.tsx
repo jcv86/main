@@ -96,9 +96,9 @@ export function A2DayPageTemplate({
               onClick={() => router.push('/despega/a2-routes')}
               variant="ghost"
               size="sm"
-              className="text-slate-400 hover:text-white hover:bg-red-500/20 transition-all duration-200"
+              className="text-white hover:text-white hover:bg-purple-500/40 border border-purple-500/40 hover:border-purple-500/60 rounded-[12px] transition-all duration-200 px-3 py-1 text-sm"
             >
-              ✕
+              ← Volver a Dashboard
             </Button>
           </div>
         </div>
