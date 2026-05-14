@@ -360,7 +360,7 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
 
           <Card className="border p-6 rounded-[20px] space-y-6" style={{ borderColor: 'rgba(90, 90, 150, 0.6)', backgroundColor: 'rgba(90, 90, 150, 0.2)' }}>
             <div>
-              <p className="text-xs font-semibold mb-2" style={{ color: 'rgb(80, 160, 170)' }}>CARACTERÍSTICAS CLAVE</p>
+              <p className="text-xs font-semibold mb-2" style={{ color: 'rgb(90, 90, 150)' }}>CARACTERÍSTICAS CLAVE</p>
               <div className="flex flex-wrap gap-2">
                 {selectedTraits.map((traitId) => (
                   <span
@@ -375,17 +375,17 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
             </div>
 
             <div style={{ borderTopColor: 'rgba(90, 90, 150, 0.4)' }} className="border-t pt-4">
-              <p className="text-xs font-semibold mb-2" style={{ color: 'rgb(80, 160, 170)' }}>RIESGO DE ENTREVISTA</p>
+              <p className="text-xs font-semibold mb-2" style={{ color: 'rgb(90, 90, 150)' }}>RIESGO DE ENTREVISTA</p>
               <p className="text-white font-semibold">{riskLabel(selectedRisk)}</p>
             </div>
 
             <div style={{ borderTopColor: 'rgba(90, 90, 150, 0.4)' }} className="border-t pt-4">
-              <p className="text-xs font-semibold mb-2" style={{ color: 'rgb(80, 160, 170)' }}>MI REGLA PERSONAL</p>
+              <p className="text-xs font-semibold mb-2" style={{ color: 'rgb(90, 90, 150)' }}>MI REGLA PERSONAL</p>
               <p className="text-white italic">"{personalRule}"</p>
             </div>
 
             <div style={{ borderTopColor: 'rgba(90, 90, 150, 0.4)' }} className="border-t pt-4">
-              <p className="text-xs font-semibold" style={{ color: 'rgb(80, 160, 170)' }}>+500 XP GANADO</p>
+              <p className="text-xs font-semibold" style={{ color: 'rgb(90, 90, 150)' }}>+500 XP GANADO</p>
             </div>
           </Card>
 

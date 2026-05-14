@@ -76,7 +76,7 @@ export function A2DayPageTemplate({
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-purple-900/20 border-b border-purple-500/40">
+      <div className="border-b" style={{ backgroundColor: 'rgb(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.6)', borderWidth: '2px' }}>
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
