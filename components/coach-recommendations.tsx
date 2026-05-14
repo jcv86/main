@@ -112,7 +112,7 @@ export function CoachRecommendations({ userProfile }: RecommendationsProps) {
                   
                   <div className="flex gap-2 flex-wrap">
                     {rec.book.category && (
-                      <span className="text-xs bg-white/50 dark:bg-black/20 px-2 py-1 rounded">
+                      <span className="text-xs bg-purple-500/50 dark:bg-black/20 px-2 py-1 rounded">
                         {rec.book.category}
                       </span>
                     )}

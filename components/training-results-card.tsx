@@ -191,11 +191,11 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
                 transition={{ delay: 0.5 }}
                 className="grid grid-cols-3 gap-4 pt-4"
               >
-                <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+                <div className="bg-purple-500/5 rounded-lg p-3 border border-white/10">
                   <p className="text-white/60 text-sm">Preguntas</p>
                   <p className="text-xl font-bold text-white">{result.questionsCompleted}/{result.totalQuestions}</p>
                 </div>
-                <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+                <div className="bg-purple-500/5 rounded-lg p-3 border border-white/10">
                   <p className="text-white/60 text-sm">Tiempo</p>
                   <p className="text-xl font-bold text-white">{Math.round(result.timeSpent / 60)}m</p>
                 </div>

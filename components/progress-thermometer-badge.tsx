@@ -25,11 +25,11 @@ export function ProgressThermometerBadge({
       onClick={onClick}
       className="cursor-pointer group"
     >
-      <div className="flex items-center gap-2 px-3 py-2 rounded-full border border-white/10 bg-white/5 hover:bg-white/10 transition-all">
+      <div className="flex items-center gap-2 px-3 py-2 rounded-full border border-white/10 bg-purple-500/5 hover:bg-white/10 transition-all">
         {/* Thermometer Visual */}
         <div className="flex flex-col gap-0.5">
           {/* Bar Container */}
-          <div className="w-16 h-6 rounded-full bg-white/5 border border-white/10 overflow-hidden flex items-center px-1">
+          <div className="w-16 h-6 rounded-full bg-purple-500/5 border border-white/10 overflow-hidden flex items-center px-1">
             {/* Fill Bar */}
             <div
               className={`h-4 rounded-full bg-gradient-to-r ${colorMap[color]} transition-all duration-500`}

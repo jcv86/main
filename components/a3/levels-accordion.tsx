@@ -79,7 +79,7 @@ export function LevelsAccordion({ modules }: LevelsAccordionProps) {
             key={levelGroup.level}
             className={`border rounded-lg overflow-hidden transition ${
               isLocked 
-                ? 'border-white/5 bg-white/2 opacity-60' 
+                ? 'border-purple-500/20 bg-white/2 opacity-60' 
                 : 'border-white/10 hover:border-white/20'
             }`}
           >

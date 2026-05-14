@@ -21,7 +21,7 @@ export default function DemoDISCButton() {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="flex items-center gap-3 p-3 bg-white/50 rounded-lg">
+          <div className="flex items-center gap-3 p-3 bg-purple-500/50 rounded-lg">
             <div className="w-10 h-10 bg-blue/10 rounded-full flex items-center justify-center">
               <BarChart3 className="h-5 w-5 text-blue" />
             </div>
@@ -31,7 +31,7 @@ export default function DemoDISCButton() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 bg-white/50 rounded-lg">
+          <div className="flex items-center gap-3 p-3 bg-purple-500/50 rounded-lg">
             <div className="w-10 h-10 bg-purple/10 rounded-full flex items-center justify-center">
               <Brain className="h-5 w-5 text-purple" />
             </div>
@@ -41,7 +41,7 @@ export default function DemoDISCButton() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 bg-white/50 rounded-lg">
+          <div className="flex items-center gap-3 p-3 bg-purple-500/50 rounded-lg">
             <div className="w-10 h-10 bg-green/10 rounded-full flex items-center justify-center">
               <Target className="h-5 w-5 text-green" />
             </div>
@@ -51,7 +51,7 @@ export default function DemoDISCButton() {
             </div>
           </div>
 
-          <div className="flex items-center gap-3 p-3 bg-white/50 rounded-lg">
+          <div className="flex items-center gap-3 p-3 bg-purple-500/50 rounded-lg">
             <div className="w-10 h-10 bg-orange/10 rounded-full flex items-center justify-center">
               <Play className="h-5 w-5 text-orange" />
             </div>

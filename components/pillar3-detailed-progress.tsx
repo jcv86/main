@@ -117,7 +117,7 @@ export function Pillar3DetailedProgress({
       case 'completed':
         return 'bg-green-500/10 border-green-500/40'
       case 'locked':
-        return 'bg-white/5 border-white/10'
+        return 'bg-purple-500/5 border-white/10'
       case 'in_progress':
         return 'bg-cyan-500/10 border-cyan-500/30'
       default:
@@ -219,7 +219,7 @@ export function Pillar3DetailedProgress({
                 }}
                 disabled={isLocked}
                 className={`w-full p-4 flex items-center justify-between transition ${
-                  isLocked ? 'cursor-not-allowed' : 'hover:bg-white/5'
+                  isLocked ? 'cursor-not-allowed' : 'hover:bg-purple-500/5'
                 }`}
               >
                 <div className="flex items-center gap-3 flex-1 text-left">

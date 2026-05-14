@@ -124,7 +124,7 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
           
           {/* Progress bar for in-progress or completed modules */}
           {(module.status === 'in_progress' || module.status === 'completed') && (
-            <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+            <div className="h-1.5 w-full bg-purple-500/5 rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-training to-training/60 transition-all duration-500 rounded-full"
                 style={{ width: `${Math.min(module.progress || 0, 100)}%` }}
@@ -151,7 +151,7 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
           <div className="space-y-2">
             <button
               onClick={() => setExpanded(!expanded)}
-              className="flex items-center justify-between w-full p-2 rounded hover:bg-white/5 transition text-sm text-white/80"
+              className="flex items-center justify-between w-full p-2 rounded hover:bg-purple-500/5 transition text-sm text-white/80"
             >
               <span>Hitos ({completedMilestones}/{totalMilestones})</span>
               {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -177,7 +177,7 @@ export function ModuleCard({ module, onStart }: ModuleCardProps) {
         
         {/* Unlock text if locked */}
         {module.status === 'locked' && module.unlockText && (
-          <p className="text-xs text-white/50 italic p-2 bg-white/5 rounded">{module.unlockText}</p>
+          <p className="text-xs text-white/50 italic p-2 bg-purple-500/5 rounded">{module.unlockText}</p>
         )}
         
         {/* Action button */}

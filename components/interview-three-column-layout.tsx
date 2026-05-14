@@ -172,7 +172,7 @@ export function InterviewThreeColumnLayout({
           </div>
 
           {/* Response Input */}
-          <div className="bg-white/5 border border-white/10 rounded-lg p-3 space-y-2 min-h-24">
+          <div className="bg-purple-500/5 border border-white/10 rounded-lg p-3 space-y-2 min-h-24">
             <p className="text-xs text-white/60 uppercase">Tu Respuesta</p>
             <textarea
               value={userAnswer}
@@ -210,7 +210,7 @@ export function InterviewThreeColumnLayout({
                   className={`w-full px-3 py-2 rounded-lg transition-all text-sm font-medium border ${
                     selectedQuality === item.level
                       ? `${item.color} border-current`
-                      : 'bg-white/5 border-white/10 text-white/70 hover:border-white/30'
+                      : 'bg-purple-500/5 border-white/10 text-white/70 hover:border-white/30'
                   }`}
                 >
                   {item.label}

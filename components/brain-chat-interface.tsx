@@ -290,7 +290,7 @@ export function BrainChatInterface() {
                                 {message.sources.map((source, idx) => (
                                   <div
                                     key={idx}
-                                    className="flex items-start gap-2 p-2 rounded-[28px] bg-white/50 dark:bg-transparent/50"
+                                    className="flex items-start gap-2 p-2 rounded-[28px] bg-purple-500/50 dark:bg-transparent/50"
                                   >
                                     <div className="mt-0.5">
                                       {source.sourceType === "book" ? (

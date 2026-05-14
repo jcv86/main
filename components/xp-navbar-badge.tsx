@@ -43,7 +43,7 @@ export function XPNavbarBadge() {
         />
 
         {/* XP Total Display */}
-        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+        <div className="flex items-center gap-1.5 px-2 py-1.5 rounded-full bg-purple-500/5 border border-white/10 hover:bg-white/10 transition-all">
           <Zap className="w-3.5 h-3.5 text-amber-400" />
           <span className="text-xs font-semibold text-white/90">
             {(xpData.total_xp / 1000).toFixed(1)}k

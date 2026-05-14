@@ -95,22 +95,22 @@ export function GamificationProfile({
 
           {/* Stats Grid */}
           <div className="grid grid-cols-4 gap-4">
-            <div className="bg-white/50 rounded-[28px] p-4 text-center">
+            <div className="bg-purple-500/50 rounded-[28px] p-4 text-center">
               <Flame className="w-6 h-6 text-red mx-auto mb-2" />
               <p className="text-2xl font-bold text-foreground">{streak}</p>
               <p className="text-xs text-muted-foreground">Current Streak</p>
             </div>
-            <div className="bg-white/50 rounded-[28px] p-4 text-center">
+            <div className="bg-purple-500/50 rounded-[28px] p-4 text-center">
               <Trophy className="w-6 h-6 text-orange mx-auto mb-2" />
               <p className="text-2xl font-bold text-foreground">{bestStreak}</p>
               <p className="text-xs text-muted-foreground">Best Streak</p>
             </div>
-            <div className="bg-white/50 rounded-[28px] p-4 text-center">
+            <div className="bg-purple-500/50 rounded-[28px] p-4 text-center">
               <Star className="w-6 h-6 text-amber-500 mx-auto mb-2" />
               <p className="text-2xl font-bold text-foreground">{totalTipsEarned}</p>
               <p className="text-xs text-muted-foreground">Tips Earned</p>
             </div>
-            <div className="bg-white/50 rounded-[28px] p-4 text-center">
+            <div className="bg-purple-500/50 rounded-[28px] p-4 text-center">
               <Award className="w-6 h-6 text-purple/50 mx-auto mb-2" />
               <p className="text-2xl font-bold text-foreground">{badges.length}</p>
               <p className="text-xs text-muted-foreground">Badges</p>

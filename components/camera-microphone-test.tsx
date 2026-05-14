@@ -147,7 +147,7 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete, intervie
           {/* Device Status */}
           <div className="space-y-3">
             {/* Camera Status */}
-            <div className="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-white/10">
+            <div className="flex items-center justify-between p-4 rounded-lg bg-purple-500/5 border border-white/10">
               <div className="flex items-center gap-3">
                 <span className="text-lg">📹</span>
                 <span className="text-white font-semibold">Cámara</span>
@@ -168,7 +168,7 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete, intervie
             </div>
 
             {/* Microphone Status */}
-            <div className="flex items-center justify-between p-4 rounded-lg bg-white/5 border border-white/10">
+            <div className="flex items-center justify-between p-4 rounded-lg bg-purple-500/5 border border-white/10">
               <div className="flex items-center gap-3">
                 <span className="text-lg">🎤</span>
                 <span className="text-white font-semibold">Micrófono</span>

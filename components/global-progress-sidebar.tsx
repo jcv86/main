@@ -133,12 +133,12 @@ export function GlobalProgressSidebar() {
           <p className="text-xs font-semibold text-muted-foreground dark:text-white/85">Acceso Rápido</p>
           <div className="space-y-1">
             <Link href="/despega/journey">
-              <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-white/50 dark:hover:bg-muted/80 text-blue dark:text-blue/40">
+              <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-purple-500/50 dark:hover:bg-muted/80 text-blue dark:text-blue/40">
                 Dashboard Completo
               </button>
             </Link>
             <Link href="/despega/a2/coach">
-              <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-white/50 dark:hover:bg-muted/80 text-purple dark:text-purple/40">
+              <button className="w-full text-xs font-semibold text-left p-2 rounded hover:bg-purple-500/50 dark:hover:bg-muted/80 text-purple dark:text-purple/40">
                 Hablar con Coach
               </button>
             </Link>
