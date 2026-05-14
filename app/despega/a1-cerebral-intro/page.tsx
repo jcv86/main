@@ -151,7 +151,7 @@ export default function A1CerebralIntroPage() {
               <CardDescription className="text-white/75">Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="p-8 rounded-[28px] border border-white/10" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.15)' }}>
+              <div className="p-8 rounded-[28px]" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.15)', border: '1px solid rgba(90, 90, 150, 0.6)' }}>
                 <p className="text-xl font-semibold text-white mb-8 text-center">
                   "Cuando enfrento un desafío importante, tiendo a ser más:"
                 </p>

@@ -194,7 +194,7 @@ export function A2RouteProgress({ dayNumber, userMetrics }: A2RouteProgressProps
             <Progress value={Math.min(progressPercentage, 100)} className="h-2" />
           </div>
 
-          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-white/10">
+          <div className="grid grid-cols-2 gap-2 pt-2" style={{ borderTopColor: 'rgba(90, 90, 150, 0.6)', borderTop: '1px solid' }}>
             <div>
               <p className="text-xs text-white/60">Día Actual</p>
               <p className="text-lg font-bold text-cyan-400">{currentDay}</p>

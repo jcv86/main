@@ -84,7 +84,7 @@ export function A2TodaysRoute({ dayNumber, onTaskComplete }: TodaysRouteProps) {
 
           {/* Actions/Checklist */}
           {isExpanded && (
-            <div className="space-y-4 pt-4 border-t border-white/10">
+            <div className="space-y-4 pt-4" style={{ borderTopColor: 'rgba(90, 90, 150, 0.6)', borderTop: '1px solid' }}>
               <div>
                 <h4 className="text-sm font-semibold text-white mb-2">Action Items:</h4>
                 <ul className="space-y-2">

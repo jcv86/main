@@ -44,7 +44,7 @@ export function A2ProgressPanel() {
 
   return (
     <Link href="/despega/a2-routes">
-      <aside className="sticky top-16 z-30 hidden lg:block w-64 h-screen border-l border-white/10 bg-black/40 backdrop-blur-sm overflow-y-auto">
+      <aside className="sticky top-16 z-30 hidden lg:block w-64 h-screen bg-black/40 backdrop-blur-sm overflow-y-auto" style={{ borderLeft: '1px solid rgba(90, 90, 150, 0.6)' }}>
         <div className="p-6 space-y-6">
           {/* Header */}
           <div>
@@ -81,8 +81,9 @@ export function A2ProgressPanel() {
                 <div key={m.num} className={`p-3 rounded-lg border transition-all ${
                   isActive
                     ? 'bg-gradient-to-r from-purple/20 to-blue/20 border-purple/50'
-                    : 'bg-white/5 border-white/10'
-                }`}>
+                    : 'transition-all'
+                }`}
+                style={!isActive ? { backgroundColor: 'rgba(90, 90, 150, 0.05)', borderColor: 'rgba(90, 90, 150, 0.6)', border: '1px solid' } : {}}>
                   <div className="flex items-center justify-between mb-2">
                     <p className="text-xs font-bold text-white/70">{m.label}</p>
                     <p className="text-xs font-bold text-white/90">{Math.round(monthProgress)}%</p>
@@ -99,7 +100,7 @@ export function A2ProgressPanel() {
           </div>
 
           {/* CTA */}
-          <div className="pt-4 border-t border-white/10">
+          <div className="pt-4" style={{ borderTopColor: 'rgba(90, 90, 150, 0.6)', borderTop: '1px solid' }}>
             <div className="flex items-center gap-2 text-sm text-cyan hover:text-cyan/80 transition-colors font-semibold">
               <TrendingUp className="w-4 h-4" />
               Ver detalles

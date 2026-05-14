@@ -73,8 +73,9 @@ export function A2ProgressBar() {
               className={`p-3 rounded-lg border transition-all ${
                 isActive
                   ? 'bg-purple/20 border-purple/50'
-                  : 'bg-white/5 border-white/10'
+                  : 'transition-all'
               }`}
+              style={!isActive ? { backgroundColor: 'rgba(90, 90, 150, 0.05)', borderColor: 'rgba(90, 90, 150, 0.6)', border: '1px solid' } : {}}
             >
               <p className="text-xs font-bold text-white/70">{m.label}</p>
               <div className="mt-2 h-2 bg-white/10 rounded-full overflow-hidden">
