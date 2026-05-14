@@ -130,6 +130,19 @@ export const A3_CHECKPOINT_MAP: Record<number, A3Checkpoint> = {
 }
 
 /**
+ * Get checkpoint day number for a given module ID
+ * Returns the day number when this module is scheduled
+ */
+export function getCheckpointDayForModule(moduleId: string): number | undefined {
+  for (const [day, checkpoint] of Object.entries(A3_CHECKPOINT_MAP)) {
+    if (checkpoint.moduleId === moduleId) {
+      return Number(day)
+    }
+  }
+  return undefined
+}
+
+/**
  * Get A3 checkpoint for a given A2 day
  * Returns checkpoint if day is a checkpoint day, undefined otherwise
  */

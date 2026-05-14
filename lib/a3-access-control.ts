@@ -9,7 +9,7 @@
  */
 
 import { canOpenA3Module } from '@/lib/a2-helpers'
-import { getA3CheckpointForDay, getA3ModuleById } from '@/lib/a3-checkpoint-map'
+import { getA3CheckpointForDay, getCheckpointDayForModule } from '@/lib/a3-checkpoint-map'
 
 export interface A3AccessCheck {
   canAccess: boolean
@@ -85,7 +85,11 @@ export async function checkA3ModuleAccess(
     // 5. Check all conditions
     const day1PresentationMet = day1Passed
     const currentDayMet = checkpoint?.moduleId === requestedModuleId
-    const prerequisitesMet = completedA3Modules.includes(getA3ModuleById(requestedModuleId)?.prerequisiteModuleId)
+    
+    // Check if all prerequisite modules are completed
+    const requiredPrevious = checkpoint?.requiredPreviousModules || []
+    const prerequisitesMet = requiredPrevious.length === 0 || 
+      requiredPrevious.every(moduleId => completedA3Modules.includes(moduleId))
 
     // Build block reasons
     if (!day1PresentationMet) {
@@ -93,16 +97,17 @@ export async function checkA3ModuleAccess(
     }
 
     if (!currentDayMet) {
+      const checkpointDay = getCheckpointDayForModule(requestedModuleId)
       blockReasons.push(
         `You can only access A3 modules on their checkpoint days. ` +
-          `${requestedModuleId} is available on day ${checkpoint?.checkpointDay}.` +
+          `${requestedModuleId} is available on day ${checkpointDay || 'unknown'}.` +
           ` You're currently on day ${currentDay}.`,
       )
     }
 
-    if (!prerequisitesMet && checkpoint?.moduleNumber > 1) {
-      const prevModule = getA3ModuleById(requestedModuleId)?.prerequisiteModuleId
-      blockReasons.push(`You must complete the previous module before accessing this one.`)
+    if (!prerequisitesMet && checkpoint?.moduleNumber && checkpoint.moduleNumber > 1) {
+      const missingModules = requiredPrevious.filter(m => !completedA3Modules.includes(m))
+      blockReasons.push(`You must complete these modules first: ${missingModules.join(', ')}`)
     }
 
     const canAccess = day1PresentationMet && currentDayMet && prerequisitesMet
@@ -112,7 +117,7 @@ export async function checkA3ModuleAccess(
       reason: canAccess ? 'Access granted - all conditions met' : 'Access denied',
       blockReasons,
       currentDay,
-      checkpointDay: checkpoint?.checkpointDay,
+      checkpointDay: getCheckpointDayForModule(requestedModuleId),
       requestedModuleId,
       day1Status,
       day1Score,
