@@ -254,11 +254,11 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
       {currentStep === 'risk' && (
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Selecciona 1 riesgo de entrevista</h2>
+            <h2 className="text-2xl text-white mb-2" style={{ fontWeight: 500 }}>Selecciona 1 riesgo de entrevista</h2>
             <p className="text-white/70">El desafío que enfrentas típicamente en contextos de evaluación.</p>
           </div>
 
-          <div className="grid grid-cols-1 gap-3">
+          <div className="grid grid-cols-1 gap-3" style={{ borderColor: 'rgba(80, 160, 170, 0.6)' }}>
             {INTERVIEW_RISKS.map((risk) => (
               <button
                 key={risk.id}
