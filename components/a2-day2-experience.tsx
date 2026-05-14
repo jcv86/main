@@ -201,7 +201,7 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
       {currentStep === 'traits' && (
         <div className="space-y-6">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Selecciona 3 características que te describan</h2>
+            <h2 className="text-2xl font-semibold text-white mb-2">Selecciona 3 características que te describan</h2>
             <p className="text-white/70">Elige las que más resonan contigo en contexto de trabajo.</p>
           </div>
 
@@ -216,11 +216,11 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
                     setSelectedTraits([...selectedTraits, trait.id])
                   }
                 }}
-                className={`text-left p-4 rounded-[16px] border-2 transition-all ${
-                  selectedTraits.includes(trait.id)
-                    ? 'border-cyan-400 bg-cyan-400/10'
-                    : 'border-purple-500/40 bg-purple-500/5 hover:border-purple-500/60'
-                }`}
+                className="text-left p-4 rounded-[16px] border-2 transition-all"
+                style={{
+                  borderColor: selectedTraits.includes(trait.id) ? 'rgb(34, 211, 238)' : 'rgba(90, 90, 150, 0.6)',
+                  backgroundColor: selectedTraits.includes(trait.id) ? 'rgba(34, 211, 238, 0.1)' : 'rgba(90, 90, 150, 0.05)'
+                }}
               >
                 <div className="flex items-start justify-between">
                   <div>
