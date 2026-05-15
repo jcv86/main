@@ -10,9 +10,10 @@ import { A2Day1Step7Analysis } from './a2-day1-step7-analysis'
 
 interface Day1ExperienceProps {
   onComplete: (submission: any) => Promise<void>
+  userId?: string
 }
 
-export function Day1Experience({ onComplete }: Day1ExperienceProps) {
+export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
   const [currentStep, setCurrentStep] = useState(1)
   const [visionData, setVisionData] = useState({
     role: '',
@@ -124,6 +125,7 @@ export function Day1Experience({ onComplete }: Day1ExperienceProps) {
           <A2Day1Step1Vision
             onNext={handleStep1Next}
             initialData={visionData}
+            userId={userId}
           />
         )}
         {currentStep === 2 && (

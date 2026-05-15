@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useRef } from 'react'
-import { Mic, MicOff, Sparkles, AlertCircle } from 'lucide-react'
+import { useState } from 'react'
+import { Sparkles, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -12,6 +12,7 @@ interface A2EnhancedInputProps {
   label: string
   icon?: React.ReactNode
   minRows?: number
+  userId?: string
 }
 
 export function A2EnhancedInput({
@@ -21,81 +22,21 @@ export function A2EnhancedInput({
   label,
   icon,
   minRows = 3,
+  userId,
 }: A2EnhancedInputProps) {
-  const [isRecording, setIsRecording] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [coachSuggestion, setCoachSuggestion] = useState<{ suggestion: string; tips: string[] } | null>(null)
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null)
-  const chunksRef = useRef<Blob[]>([])
-
-  const handleVoiceInput = async () => {
-    if (isRecording) {
-      mediaRecorderRef.current?.stop()
-      setIsRecording(false)
-      return
-    }
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
-      const mediaRecorder = new MediaRecorder(stream)
-      mediaRecorderRef.current = mediaRecorder
-      chunksRef.current = []
-
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) {
-          chunksRef.current.push(e.data)
-        }
-      }
-
-      mediaRecorder.onstop = async () => {
-        stream.getTracks().forEach((track) => track.stop())
-        
-        // Send audio to transcription API
-        const audioBlob = new Blob(chunksRef.current, { type: 'audio/webm' })
-        const formData = new FormData()
-        formData.append('audio', audioBlob)
-        
-        try {
-          const response = await fetch('/api/a2/transcribe', {
-            method: 'POST',
-            body: formData,
-          })
-          
-          if (response.ok) {
-            const data = await response.json()
-            const transcription = data.transcription || '[Transcripción no disponible]'
-            const currentValue = value ? value + ' ' : ''
-            onChange(currentValue + transcription)
-          } else {
-            console.error('[v0] Transcription failed')
-            const currentValue = value ? value + ' ' : ''
-            onChange(currentValue + '[Error en transcripción]')
-          }
-        } catch (error) {
-          console.error('[v0] Transcription error:', error)
-          const currentValue = value ? value + ' ' : ''
-          onChange(currentValue + '[Error al procesar audio]')
-        }
-      }
-
-      mediaRecorder.start()
-      setIsRecording(true)
-    } catch (error) {
-      console.error('Error accessing microphone:', error)
-      alert('No se pudo acceder al micrófono. Por favor, verifica los permisos.')
-    }
-  }
 
   const handleCoachAssist = async () => {
     setIsLoading(true)
     try {
-      // Get coach assistance from AI
       const response = await fetch('/api/a2/coach-assist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
           question: label,
-          currentAnswer: value 
+          currentAnswer: value,
+          userId: userId
         }),
       })
       
@@ -145,37 +86,11 @@ export function A2EnhancedInput({
 
       <div className="flex gap-2">
         <Button
-          onClick={handleVoiceInput}
-          variant="outline"
-          size="sm"
-          disabled={isLoading}
-          className="transition disabled:opacity-50"
-          style={{
-            borderColor: isRecording ? 'rgba(239, 68, 68, 0.5)' : 'rgba(90, 90, 150, 0.5)',
-            backgroundColor: isRecording ? 'rgba(239, 68, 68, 0.1)' : 'rgba(90, 90, 150, 0.1)',
-            color: isRecording ? 'rgba(239, 68, 68, 0.8)' : 'rgba(90, 90, 150, 0.8)',
-          }}
-          type="button"
-        >
-          {isRecording ? (
-            <>
-              <MicOff className="w-4 h-4 mr-2" />
-              Detener Grabación
-            </>
-          ) : (
-            <>
-              <Mic className="w-4 h-4 mr-2" />
-              Usar micrófono
-            </>
-          )}
-        </Button>
-
-        <Button
           onClick={handleCoachAssist}
           variant="outline"
           size="sm"
           disabled={isLoading}
-          className="disabled:opacity-50"
+          className="flex-1 disabled:opacity-50"
           style={{
             borderColor: 'rgba(90, 90, 150, 0.5)',
             backgroundColor: 'rgba(90, 90, 150, 0.1)',

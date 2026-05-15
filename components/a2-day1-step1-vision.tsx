@@ -16,9 +16,10 @@ interface Step1VisionProps {
     environment: string
     desiredOutcome: string
   }
+  userId?: string
 }
 
-export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
+export function A2Day1Step1Vision({ onNext, initialData, userId }: Step1VisionProps) {
   const [role, setRole] = useState(initialData?.role || '')
   const [environment, setEnvironment] = useState(initialData?.environment || '')
   const [desiredOutcome, setDesiredOutcome] = useState(initialData?.desiredOutcome || '')
@@ -55,6 +56,7 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
           placeholder="ej., Senior Product Manager, Data Scientist, Growth Hacker, Desarrollador Full Stack..."
           icon={<Briefcase className="w-4 h-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />}
           minRows={2}
+          userId={userId}
         />
         {errors.role && <p className="text-white/60 text-sm">{errors.role}</p>}
       </div>
@@ -68,6 +70,7 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
           placeholder="Considera tamaño de empresa, industria, cultura, valores, flexibilidad, oportunidades de crecimiento..."
           icon={<Building2 className="w-4 h-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />}
           minRows={3}
+          userId={userId}
         />
         {errors.environment && <p className="text-white/60 text-sm">{errors.environment}</p>}
       </div>
@@ -81,6 +84,7 @@ export function A2Day1Step1Vision({ onNext, initialData }: Step1VisionProps) {
           placeholder="Sé específico sobre el resultado que quieres lograr para el Día 30"
           icon={<Target className="w-4 h-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />}
           minRows={2}
+          userId={userId}
         />
         {errors.desiredOutcome && <p className="text-white/60 text-sm">{errors.desiredOutcome}</p>}
       </div>

@@ -14,6 +14,7 @@ interface A2DayPageTemplateProps {
   onComplete?: () => void
   children?: React.ReactNode
   mission?: { type: string; title: string; whyItMatters: string }
+  userId?: string
 }
 
 const taskTypeLabels: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
