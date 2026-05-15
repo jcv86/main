@@ -103,13 +103,14 @@ export function A2ProgressSidebar() {
             <div key={month.month}>
               <button
                 onClick={() => setExpandedMonth(isActive ? expandedMonth : month.month)}
-                className={`w-full flex items-start gap-3 p-4 rounded-lg transition-all ${
+                className={`w-full flex items-start gap-3 p-4 rounded-lg transition-all border ${
                   isActive
-                    ? 'bg-purple/20 border border-purple/40'
+                    ? 'border-purple/40'
                     : isCompleted
-                    ? 'bg-emerald-500/10 border border-emerald-500/20'
-                    : 'bg-muted/20 border border-muted/30 opacity-60'
+                    ? 'bg-emerald-500/10 border-emerald-500/20'
+                    : 'bg-muted/20 border-muted/30 opacity-60'
                 }`}
+                style={isActive ? { backgroundColor: 'rgba(90, 90, 150, 0.6)' } : {}}
               >
                 {/* Icon */}
                 <div className="mt-1 flex-shrink-0">
