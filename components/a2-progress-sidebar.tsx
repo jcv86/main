@@ -10,12 +10,6 @@ interface MonthProgress {
   completed: boolean
 }
 
-interface Milestone {
-  month: number
-  title: string
-  status: 'completed' | 'pending' | 'in_progress'
-}
-
 interface A2ProgressData {
   current_month: number
   progress_percentage: number
@@ -23,7 +17,6 @@ interface A2ProgressData {
   total_tasks: number
   status: string
   month_progress?: MonthProgress[]
-  milestones?: Milestone[]
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -155,45 +148,13 @@ export function A2ProgressSidebar() {
                 </div>
               </button>
 
-              {/* Milestones */}
-              {expandedMonth === month.month && progress.milestones && progress.milestones.length > 0 && (
-                <div className="space-y-2 pl-8 mt-2">
-                  {progress.milestones.map((milestone, idx) => (
-                    <div key={idx} className="flex items-start gap-2 text-xs">
-                      <div
-                        className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${
-                          milestone.status === 'completed'
-                            ? 'bg-emerald-500'
-                            : milestone.status === 'in_progress'
-                            ? 'bg-purple'
-                            : 'bg-muted/40'
-                        }`}
-                      />
-                      <p className={milestone.status === 'completed' ? 'text-white/70' : 'text-white/50'}>
-                        {milestone.title}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
+              {/* Milestones - REMOVED */}
             </div>
           )
         })}
       </div>
 
-      {/* Quick Stats */}
-      <div className="pt-4 border-t border-muted/30 space-y-3">
-        <div className="text-xs space-y-2">
-          <div className="flex justify-between text-white/60">
-            <span>Estado:</span>
-            <span className="text-white font-semibold capitalize">
-              {progress.status === 'completed' ? 'Completado' : 
-               progress.status === 'near_completion' ? 'Casi Terminado' :
-               progress.status === 'in_progress' ? 'En Progreso' : 'No Iniciado'}
-            </span>
-          </div>
-        </div>
-      </div>
+      {/* Quick Stats - REMOVED */}
     </aside>
   )
 }
