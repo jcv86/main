@@ -105,12 +105,12 @@ export function A2ProgressSidebar() {
                 onClick={() => setExpandedMonth(isActive ? expandedMonth : month.month)}
                 className={`w-full flex items-start gap-3 p-4 rounded-lg transition-all border ${
                   isActive
-                    ? 'border-purple/40'
+                    ? 'border'
                     : isCompleted
                     ? 'bg-emerald-500/10 border-emerald-500/20'
                     : 'bg-muted/20 border-muted/30 opacity-60'
                 }`}
-                style={isActive ? { backgroundColor: 'rgba(90, 90, 150, 0.6)' } : {}}
+                style={isActive ? { backgroundColor: 'rgba(90, 90, 150, 0.6)', borderColor: 'rgba(90, 90, 150, 0.8)' } : {}}
               >
                 {/* Icon */}
                 <div className="mt-1 flex-shrink-0">
