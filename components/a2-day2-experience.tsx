@@ -393,7 +393,7 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
             onClick={handleSubmit}
             disabled={isSubmitting}
             className="w-full py-6 text-white font-semibold rounded-full disabled:opacity-50"
-            style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}
+            style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
           >
             {isSubmitting ? 'Guardando...' : 'Completar Día 2'}
             {!isSubmitting && <Check className="w-4 h-4 ml-2" />}
