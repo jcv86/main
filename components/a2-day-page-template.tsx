@@ -100,9 +100,7 @@ export function A2DayPageTemplate({
               className="rounded-[12px] transition-all duration-200 px-3 py-1 text-sm"
               style={{
                 backgroundColor: 'rgba(90, 90, 150, 0.6)',
-                borderColor: 'rgba(90, 90, 150, 0.6)',
-                color: 'rgba(255, 255, 255, 0.8)',
-                border: '1px solid'
+                color: 'rgba(255, 255, 255, 0.8)'
               }}
             >
               ← Volver a Dashboard
