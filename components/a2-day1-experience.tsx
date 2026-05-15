@@ -95,23 +95,27 @@ export function Day1Experience({ onComplete }: Day1ExperienceProps) {
 
   return (
     <div className="w-full space-y-6">
-      {/* Step Header */}
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold text-white">{stepTitles[currentStep - 1]}</h2>
-        <p className="text-sm text-white/60">Paso {currentStep} de 6</p>
-      </div>
+      {/* Step Header with Border */}
+      <div className="border-b" style={{ backgroundColor: 'rgba(90, 90, 150, 0)', borderColor: 'rgba(90, 90, 150, 0)' }}>
+        <div className="max-w-4xl mx-auto px-4 py-6 space-y-3">
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold text-white">{stepTitles[currentStep - 1]}</h2>
+            <p className="text-sm text-white/60">Paso {currentStep} de 6</p>
+          </div>
 
-      {/* Progress Bar */}
-      <div className="flex gap-1 rounded-full h-2 bg-purple-500/15 overflow-hidden">
-        {[1, 2, 3, 4, 5, 6].map((step) => (
-          <div
-            key={step}
-            className="flex-1 h-full transition-all"
-            style={{
-              backgroundColor: step <= currentStep ? 'rgba(139, 92, 246, 0.8)' : 'rgba(139, 92, 246, 0.2)',
-            }}
-          />
-        ))}
+          {/* Progress Bar */}
+          <div className="flex gap-1 rounded-full h-2 bg-purple-500/15 overflow-hidden">
+            {[1, 2, 3, 4, 5, 6].map((step) => (
+              <div
+                key={step}
+                className="flex-1 h-full transition-all"
+                style={{
+                  backgroundColor: step <= currentStep ? 'rgba(139, 92, 246, 0.8)' : 'rgba(139, 92, 246, 0.2)',
+                }}
+              />
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Content */}

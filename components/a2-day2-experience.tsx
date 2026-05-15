@@ -103,23 +103,27 @@ export function Day2Experience({ a1Profile, onComplete }: Day2ExperienceProps) {
   return (
     <div className="space-y-6">
       {/* Progress Bar */}
-      <div className="space-y-3">
-        <div className="flex justify-between items-center">
-          <h3 className="text-sm font-semibold text-purple-300">
-            Paso {currentStepIndex + 1} de {steps.length}
-          </h3>
-          <div className="flex items-center gap-2 text-xs">
-            <span className="font-semibold" style={{ color: 'rgb(80, 160, 170)' }}>+500 XP</span>
+      <div className="border-b" style={{ backgroundColor: 'rgba(90, 90, 150, 0)', borderColor: 'rgba(90, 90, 150, 0)' }}>
+        <div className="max-w-4xl mx-auto px-4 py-6">
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <h3 className="text-sm font-semibold text-purple-300">
+                Paso {currentStepIndex + 1} de {steps.length}
+              </h3>
+              <div className="flex items-center gap-2 text-xs">
+                <span className="font-semibold" style={{ color: 'rgb(80, 160, 170)' }}>+500 XP</span>
+              </div>
+            </div>
+            <div className="relative w-full overflow-hidden rounded-[20px]" style={{ height: '8px', backgroundColor: 'rgba(90, 90, 150, 0.4)' }}>
+              <div
+                className="h-full transition-all duration-300"
+                style={{ 
+                  width: `${progressPercent}%`,
+                  backgroundColor: 'rgb(90, 90, 150, 0.4)'
+                }}
+              />
+            </div>
           </div>
-        </div>
-        <div className="relative w-full overflow-hidden rounded-[20px]" style={{ height: '8px', backgroundColor: 'rgba(90, 90, 150, 0.4)' }}>
-          <div
-            className="h-full transition-all duration-300"
-            style={{ 
-              width: `${progressPercent}%`,
-              backgroundColor: 'rgb(90, 90, 150, 0.4)'
-            }}
-          />
         </div>
       </div>
 
