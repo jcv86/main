@@ -117,7 +117,7 @@ export function A2ProgressSidebar() {
                   {isCompleted ? (
                     <CheckCircle2 className="w-5 h-5 text-emerald-500" />
                   ) : isActive ? (
-                    <Circle className="w-5 h-5 text-purple fill-purple/30" />
+                    <Circle className="w-5 h-5 fill-purple/30" style={{ color: 'rgb(90, 90, 150)', stroke: 'rgb(90, 90, 150)', strokeWidth: '2' }} />
                   ) : (
                     <Circle className="w-5 h-5 text-muted/40" />
                   )}
