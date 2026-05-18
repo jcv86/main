@@ -103,14 +103,14 @@ Lo más importante que aprendí: ${draft.result.learned}
     }
   }
 
-  const updateDraft = (section: keyof StoryDraft, field: keyof StoryDraft[keyof StoryDraft], value: string) => {
+  const updateDraft = (section: keyof StoryDraft, field: string, value: string) => {
     setDraft({
       ...draft,
       [section]: {
         ...draft[section],
         [field]: value,
       },
-    })
+    } as StoryDraft)
   }
 
   const handleCompleteDay = async () => {
