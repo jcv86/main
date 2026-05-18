@@ -70,26 +70,26 @@ export function A2Day1Step2Coach({ visionData, onNext, onBack }: Step2CoachProps
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-white mb-2">AI Coach Enhancement</h2>
-        <p className="text-white/60">Let your AI coach refine your vision to make it more specific and actionable.</p>
+        <h2 className="text-2xl font-bold text-white mb-2">Mejora del Coach IA</h2>
+        <p className="text-white/60">Deja que tu coach IA refine tu visión para hacerla más específica y accionable.</p>
       </div>
 
       {!enhanced ? (
         <div className="space-y-6">
           {/* Your Original Vision */}
           <div className="bg-slate-900/30 border border-slate-700/50 rounded-lg p-4 space-y-4">
-            <p className="text-sm font-semibold text-white/70">YOUR ORIGINAL VISION:</p>
+            <p className="text-sm font-semibold text-white/70">TU VISIÓN ORIGINAL:</p>
             <div className="space-y-3 text-white/80">
               <div>
-                <p className="text-xs text-white/60 mb-1">Role:</p>
+                <p className="text-xs text-white/60 mb-1">Rol:</p>
                 <p>{visionData.role}</p>
               </div>
               <div>
-                <p className="text-xs text-white/60 mb-1">Environment:</p>
+                <p className="text-xs text-white/60 mb-1">Ambiente:</p>
                 <p>{visionData.environment}</p>
               </div>
               <div>
-                <p className="text-xs text-white/60 mb-1">Desired Outcome:</p>
+                <p className="text-xs text-white/60 mb-1">Resultado Deseado:</p>
                 <p>{visionData.desiredOutcome}</p>
               </div>
             </div>
@@ -140,11 +140,11 @@ export function A2Day1Step2Coach({ visionData, onNext, onBack }: Step2CoachProps
                 <p>{enhanced.role}</p>
               </div>
               <div>
-                <p className="text-xs mb-1" style={{ color: 'rgb(90, 90, 150)' }}>Environment:</p>
+                <p className="text-xs mb-1" style={{ color: 'rgb(90, 90, 150)' }}>Ambiente:</p>
                 <p>{enhanced.environment}</p>
               </div>
               <div>
-                <p className="text-xs mb-1" style={{ color: 'rgb(90, 90, 150)' }}>Desired Outcome:</p>
+                <p className="text-xs mb-1" style={{ color: 'rgb(90, 90, 150)' }}>Resultado Deseado:</p>
                 <p>{enhanced.desiredOutcome}</p>
               </div>
             </div>
@@ -157,14 +157,14 @@ export function A2Day1Step2Coach({ visionData, onNext, onBack }: Step2CoachProps
               className="flex-1"
             >
               <RefreshCw className="w-4 h-4 mr-2" />
-              Try Again
+              Intentar de Nuevo
             </Button>
             <Button
               onClick={handleAccept}
               className="flex-1 text-white hover:opacity-80 transition py-6 rounded-full font-semibold"
               style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
             >
-              Accept Enhancement
+              Aceptar Mejora
             </Button>
           </div>
         </div>

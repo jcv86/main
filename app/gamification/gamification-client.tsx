@@ -10,9 +10,9 @@ export default function GamificationClient() {
   return (
     <div className="space-y-6 pb-12">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Gamification Hub</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Centro de Gamificación</h1>
         <p className="text-muted-foreground mt-2">
-          Track your progress, earn rewards, and compete with other users
+          Sigue tu progreso, gana recompensas y compite con otros usuarios
         </p>
       </div>
 
@@ -20,19 +20,19 @@ export default function GamificationClient() {
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="profile" className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4" />
-            <span className="hidden sm:inline">Profile</span>
+            <span className="hidden sm:inline">Perfil</span>
           </TabsTrigger>
           <TabsTrigger value="leaderboard" className="flex items-center gap-2">
             <Trophy className="h-4 w-4" />
-            <span className="hidden sm:inline">Leaderboard</span>
+            <span className="hidden sm:inline">Ranking</span>
           </TabsTrigger>
           <TabsTrigger value="activity" className="flex items-center gap-2">
             <Flame className="h-4 w-4" />
-            <span className="hidden sm:inline">Activity</span>
+            <span className="hidden sm:inline">Actividad</span>
           </TabsTrigger>
           <TabsTrigger value="info" className="flex items-center gap-2">
             <span className="text-lg">ℹ️</span>
-            <span className="hidden sm:inline">Info</span>
+            <span className="hidden sm:inline">Información</span>
           </TabsTrigger>
         </TabsList>
 

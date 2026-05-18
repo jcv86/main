@@ -162,7 +162,7 @@ export function ContactFormModal({ open, onOpenChange }: ContactFormModalProps) 
             <div className="bg-red/5 border border-red/20 rounded-[28px] p-4 flex items-start gap-3">
               <AlertCircle className="w-5 h-5 text-red flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-red">Error</p>
+                <p className="text-sm font-semibold text-red">Error al enviar</p>
                 <p className="text-xs text-red mt-1">{errorMessage}</p>
               </div>
             </div>

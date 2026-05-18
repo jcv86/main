@@ -189,9 +189,9 @@ export function ColorSchemeTest() {
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="name" className="text-foreground">
-                    Name
+                    Nombre
                   </Label>
-                  <Input id="name" placeholder="Enter your name" className="border-border focus:border-foreground" />
+                  <Input id="name" placeholder="Ingresa tu nombre" className="border-border focus:border-foreground" />
                 </div>
                 <div>
                   <Label htmlFor="email" className="text-foreground">
@@ -200,17 +200,17 @@ export function ColorSchemeTest() {
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder="Ingresa tu email"
                     className="border-border focus:border-foreground"
                   />
                 </div>
                 <div>
                   <Label htmlFor="message" className="text-foreground">
-                    Message
+                    Mensaje
                   </Label>
                   <Textarea
                     id="message"
-                    placeholder="Enter your message"
+                    placeholder="Ingresa tu mensaje"
                     className="border-border focus:border-foreground"
                   />
                 </div>
@@ -218,15 +218,15 @@ export function ColorSchemeTest() {
               <div className="space-y-4">
                 <Alert className="border-border bg-card">
                   <Info className="h-4 w-4" />
-                  <AlertTitle className="text-foreground">Information</AlertTitle>
+                  <AlertTitle className="text-foreground">Información</AlertTitle>
                   <AlertDescription className="text-muted-foreground">
-                    This is an informational alert using our color scheme.
+                    Esta es una alerta informativa usando nuestro esquema de colores.
                   </AlertDescription>
                 </Alert>
                 <Alert variant="destructive" className="border-destructive/50 text-destructive">
                   <AlertTriangle className="h-4 w-4" />
                   <AlertTitle>Error</AlertTitle>
-                  <AlertDescription>This is a destructive alert showing the red accent color.</AlertDescription>
+                  <AlertDescription>Esta es una alerta destructiva mostrando el color de acento rojo.</AlertDescription>
                 </Alert>
               </div>
             </div>
@@ -236,9 +236,9 @@ export function ColorSchemeTest() {
         {/* Tabs */}
         <Card className="border-border bg-card">
           <CardHeader>
-            <CardTitle className="text-foreground">Tabs Component</CardTitle>
+            <CardTitle className="text-foreground">Componente de Pestañas</CardTitle>
             <CardDescription className="text-muted-foreground">
-              Tabbed interface showing different content sections
+              Interfaz con pestañas mostrando diferentes secciones de contenido
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -246,7 +246,7 @@ export function ColorSchemeTest() {
               <TabsList className="grid w-full grid-cols-4 bg-muted">
                 <TabsTrigger value="overview" className="data-[state=active]:bg-background">
                   <Target className="h-4 w-4 mr-2" />
-                  Overview
+                  Descripción General
                 </TabsTrigger>
                 <TabsTrigger value="analytics" className="data-[state=active]:bg-background">
                   <TrendingUp className="h-4 w-4 mr-2" />
@@ -258,7 +258,7 @@ export function ColorSchemeTest() {
                 </TabsTrigger>
                 <TabsTrigger value="settings" className="data-[state=active]:bg-background">
                   <Settings className="h-4 w-4 mr-2" />
-                  Settings
+                  Configuración
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="overview" className="mt-6">
