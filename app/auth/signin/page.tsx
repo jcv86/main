@@ -111,7 +111,9 @@ export default function SignInPage() {
       // Also store in localStorage for client-side
       localStorage.setItem('demo_user', JSON.stringify(demoUser))
       
-      router.push('/dashboard')
+      // Get the next URL from search params, default to dashboard
+      const next = searchParams.get('next') || '/dashboard'
+      router.push(next)
       router.refresh()
     } catch (err) {
       console.error('[v0] Quick login error:', err)
