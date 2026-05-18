@@ -1,22 +1,140 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, Loader, AlertCircle } from 'lucide-react'
+import { Day5VersionBuilder } from './a2-day5-version-builder'
+import { Day5CoachFeedback } from './a2-day5-coach-feedback'
+import { Day5TestSelector } from './a2-day5-test-selector'
+import {
+  createTestIntroduction,
+  getTestIntroduction,
+  updateTestIntroduction,
+  type TestIntroduction,
+} from '@/lib/supabase/a2-intro-identity'
 
 interface Day5ExperienceProps {
   onComplete: (submission: any) => Promise<void>
   userId?: string
 }
 
-export function Day5Experience({ onComplete }: Day5ExperienceProps) {
+export function Day5Experience({ onComplete, userId }: Day5ExperienceProps) {
   const [step, setStep] = useState(1)
-  const [introduction, setIntroduction] = useState('')
+  const [testIntro, setTestIntro] = useState<Partial<TestIntroduction>>({
+    version_a: '',
+    version_b: '',
+    version_c: '',
+    test_type: '',
+    test_feedback: '',
+  })
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleTestIntroduction = () => {
-    setIntroduction('Soy PM especializado en lanzar productos B2B SaaS que generan impacto. Coordine equipos de 10+ personas y lancé 3 productos que alcanzaron 100K usuarios.')
-    setStep(2)
+  // Load existing data on mount
+  useEffect(() => {
+    if (userId) {
+      loadDay5Data()
+    }
+  }, [userId])
+
+  const loadDay5Data = async () => {
+    if (!userId) return
+    setIsLoading(true)
+    try {
+      const { data: intro, error: introError } = await getTestIntroduction(userId, 5)
+      if (introError && introError.code !== 'PGRST116') throw introError
+      if (intro) {
+        setTestIntro(intro)
+        setStep(2) // Skip to building if data exists
+      }
+    } catch (err) {
+      console.error('[v0] Error loading Day 5 data:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleVersionsBuilt = async (versions: { versionA: string; versionB: string }) => {
+    if (!userId) return
+
+    setIsLoading(true)
+    try {
+      // Create or update test introduction
+      let intro
+      if (testIntro.id) {
+        const { data: updated, error } = await updateTestIntroduction(testIntro.id, userId, {
+          version_a: versions.versionA,
+          version_b: versions.versionB,
+        })
+        if (error) throw error
+        intro = updated
+      } else {
+        const { data: created, error } = await createTestIntroduction(userId, {
+          day_number: 5,
+          version_a: versions.versionA,
+          version_b: versions.versionB,
+          status: 'in_progress',
+        })
+        if (error) throw error
+        intro = created
+      }
+
+      if (intro) {
+        setTestIntro(intro)
+        setStep(2)
+      }
+    } catch (err) {
+      console.error('[v0] Error saving versions:', err)
+      setError('Error al guardar las versiones.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleCoachFeedback = async (improvedVersion: string) => {
+    if (!userId || !testIntro.id) return
+
+    setIsLoading(true)
+    try {
+      const { data: updated, error } = await updateTestIntroduction(testIntro.id, userId, {
+        version_c: improvedVersion,
+        test_feedback: 'Coach feedback applied',
+      })
+      if (error) throw error
+      if (updated) {
+        setTestIntro(updated)
+        setStep(3)
+      }
+    } catch (err) {
+      console.error('[v0] Error saving coach feedback:', err)
+      setError('Error al guardar el feedback del Coach.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleTestCompleted = async (testType: string, feedback: string) => {
+    if (!userId || !testIntro.id) return
+
+    setIsLoading(true)
+    try {
+      const { data: updated, error } = await updateTestIntroduction(testIntro.id, userId, {
+        test_type: testType,
+        test_feedback: feedback,
+        status: 'completed',
+      })
+      if (error) throw error
+      if (updated) {
+        setTestIntro(updated)
+        setStep(4)
+      }
+    } catch (err) {
+      console.error('[v0] Error saving test result:', err)
+      setError('Error al guardar el resultado del test.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleCompleteDay = async () => {
@@ -24,11 +142,12 @@ export function Day5Experience({ onComplete }: Day5ExperienceProps) {
     try {
       await onComplete({
         dayNumber: 5,
-        introduction,
+        testIntroduction: testIntro,
         completedAt: new Date().toISOString(),
       })
     } catch (err) {
       console.error('[v0] Error completing Day 5:', err)
+      setError('Error al completar el día.')
     } finally {
       setIsSubmitting(false)
     }
@@ -36,11 +155,27 @@ export function Day5Experience({ onComplete }: Day5ExperienceProps) {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 px-4">
-      {step === 1 && (
+      {error && (
+        <div className="rounded-lg p-4 border border-red-500/40" style={{ backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
+          <div className="flex gap-3">
+            <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+            <p className="text-red-300 text-sm">{error}</p>
+          </div>
+        </div>
+      )}
+
+      {isLoading && step === 1 && (
+        <div className="flex flex-col items-center justify-center py-12 space-y-4">
+          <Loader className="w-8 h-8 text-cyan-400 animate-spin" />
+          <p className="text-white/70">Cargando tu introducción...</p>
+        </div>
+      )}
+
+      {step === 1 && !isLoading && (
         <div className="space-y-6">
           <div>
-            <h2 className="text-3xl font-bold text-white mb-3">El Primer Experimento Profesional</h2>
-            <p className="text-white/70">Crea tu introducción profesional y pruébala</p>
+            <h2 className="text-3xl font-bold text-white mb-3">Primer Experimento Profesional</h2>
+            <p className="text-white/70">Crea y prueba tu introducción en 3 formatos</p>
           </div>
 
           <div className="rounded-lg p-6 border border-purple-500/40" style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)' }}>
@@ -48,7 +183,7 @@ export function Day5Experience({ onComplete }: Day5ExperienceProps) {
             <ul className="space-y-3 text-white/80">
               <li className="flex gap-3">
                 <span style={{ color: 'rgb(80, 160, 170)' }}>✓</span>
-                <span>Crear 3 versiones de tu intro (human, recruiter, interview)</span>
+                <span>Crear 3 versiones de tu intro (casual, recruiter, entrevista)</span>
               </li>
               <li className="flex gap-3">
                 <span style={{ color: 'rgb(80, 160, 170)' }}>✓</span>
@@ -56,57 +191,52 @@ export function Day5Experience({ onComplete }: Day5ExperienceProps) {
               </li>
               <li className="flex gap-3">
                 <span style={{ color: 'rgb(80, 160, 170)' }}>✓</span>
-                <span>Prueba real: envía a alguien o haz test en voz alta</span>
+                <span>Prueba real: envía o presenta en voz alta</span>
               </li>
               <li className="flex gap-3">
                 <span style={{ color: 'rgb(80, 160, 170)' }}>✓</span>
-                <span>Recibe feedback y genera Version C (final)</span>
+                <span>Captura feedback y refina</span>
               </li>
             </ul>
           </div>
 
           <Button
-            onClick={handleTestIntroduction}
+            onClick={() => setStep(2)}
             className="w-full py-6 text-white font-semibold rounded-full"
             style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
           >
-            Crear introducción probada
+            Crear versiones
             <ChevronRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
       )}
 
       {step === 2 && (
-        <div className="space-y-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Tu Introducción Profesional v1</h2>
-          </div>
+        <Day5VersionBuilder
+          onVersionsBuilt={handleVersionsBuilt}
+          isLoading={isLoading}
+          onNext={() => setStep(3)}
+        />
+      )}
 
-          <div className="rounded-lg p-6 border-2 border-cyan-400/40" style={{ backgroundColor: 'rgba(80, 160, 170, 0.05)' }}>
-            <p className="text-sm font-semibold text-cyan-300 mb-3">VERSIÓN PROBADA</p>
-            <p className="text-white text-lg italic">"{introduction}"</p>
-          </div>
+      {step === 3 && (
+        <Day5CoachFeedback
+          versionA={testIntro.version_a || ''}
+          versionB={testIntro.version_b || ''}
+          onFeedbackApplied={handleCoachFeedback}
+          isLoading={isLoading}
+          onNext={() => setStep(4)}
+        />
+      )}
 
-          <div className="space-y-3">
-            <p className="text-white/80 text-sm">¿Cómo te fue? Comparte feedback</p>
-            <textarea
-              placeholder="¿Qué preguntas hizo? ¿Qué resonó? ¿Qué cambiarías?"
-              className="w-full p-4 rounded-lg text-white placeholder:text-white/40 focus:outline-none resize-none"
-              style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', border: '1px solid rgba(90, 90, 150, 0.6)' }}
-              rows={3}
-            />
-          </div>
-
-          <Button
-            onClick={handleCompleteDay}
-            disabled={isSubmitting}
-            className="w-full py-6 text-white font-semibold rounded-full"
-            style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
-          >
-            {isSubmitting ? 'Guardando...' : 'Completar Día 5'}
-            <ChevronRight className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
+      {step === 4 && (
+        <Day5TestSelector
+          testIntroduction={testIntro}
+          onTestCompleted={handleTestCompleted}
+          isLoading={isLoading}
+          onComplete={handleCompleteDay}
+          isSubmitting={isSubmitting}
+        />
       )}
     </div>
   )
