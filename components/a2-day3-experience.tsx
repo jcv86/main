@@ -1,35 +1,119 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { ChevronRight, Sparkles } from 'lucide-react'
+import { ChevronRight, Sparkles, Loader, AlertCircle } from 'lucide-react'
+import { Day3JobSearch } from './a2-day3-job-search'
+import { Day3SignalExtraction } from './a2-day3-signal-extraction'
+import { Day3CoachAnalysis } from './a2-day3-coach-analysis'
+import {
+  createMarketSignal,
+  createExtractedSignal,
+  getMarketSignals,
+  getExtractedSignals,
+  type MarketSignal,
+  type ExtractedSignal,
+} from '@/lib/supabase/a2-market-and-board'
 
 interface Day3ExperienceProps {
   onComplete: (submission: any) => Promise<void>
   userId?: string
 }
 
-export function Day3Experience({ onComplete }: Day3ExperienceProps) {
+export function Day3Experience({ onComplete, userId }: Day3ExperienceProps) {
   const [step, setStep] = useState(1)
-  const [marketData, setMarketData] = useState({
-    companies: [] as string[],
-    requirements: [] as string[],
-    signals: [] as string[],
-  })
+  const [marketSignals, setMarketSignals] = useState<MarketSignal[]>([])
+  const [extractedSignals, setExtractedSignals] = useState<ExtractedSignal[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSearchMarket = () => {
-    // Simulate finding 3 job postings and extracting market signals
-    setMarketData({
-      companies: ['TechCorp', 'DataWorks', 'CloudFirst'],
-      requirements: ['Python, SQL, 5+ years', 'Data engineering focus', 'Cloud infrastructure'],
-      signals: ['Python', 'AWS', 'Scala', 'Kubernetes', 'Leadership', 'Communication'],
-    })
-    setStep(2)
+  // Load existing data on mount
+  useEffect(() => {
+    if (userId) {
+      loadDay3Data()
+    }
+  }, [userId])
+
+  const loadDay3Data = async () => {
+    if (!userId) return
+    setIsLoading(true)
+    try {
+      const { data: signals, error: signalsError } = await getMarketSignals(userId, 3)
+      if (signalsError) throw signalsError
+      setMarketSignals(signals || [])
+
+      const { data: extracted, error: extractedError } = await getExtractedSignals(userId, 3)
+      if (extractedError) throw extractedError
+      setExtractedSignals(extracted || [])
+    } catch (err) {
+      console.error('[v0] Error loading Day 3 data:', err)
+      setError('Error cargando datos. Intenta nuevamente.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  const handleCoachAnalysis = async () => {
-    setStep(3)
+  const handleAddJobPosting = async (jobData: {
+    job_title: string
+    company_name: string
+    job_url?: string
+    requirements: string[]
+    fears_skills: string[]
+    strengths_needed: string[]
+    salary_range?: string
+    location?: string
+    industry?: string
+  }) => {
+    if (!userId) return
+
+    setIsLoading(true)
+    try {
+      const { data: newSignal, error } = await createMarketSignal(userId, {
+        day_number: 3,
+        ...jobData,
+      })
+
+      if (error) throw error
+      if (newSignal) {
+        setMarketSignals((prev) => [newSignal, ...prev])
+      }
+    } catch (err) {
+      console.error('[v0] Error adding job posting:', err)
+      setError('Error al guardar la vacante.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleExtractSignals = async () => {
+    if (!userId || marketSignals.length === 0) return
+
+    setIsLoading(true)
+    try {
+      // Call API to extract signals using OpenAI
+      const response = await fetch('/api/a2/extract-signals', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          marketSignals,
+          userId,
+          dayNumber: 3,
+        }),
+      })
+
+      if (!response.ok) throw new Error('Failed to extract signals')
+
+      const { signals: extracted } = await response.json()
+      setExtractedSignals(extracted)
+      setStep(3)
+    } catch (err) {
+      console.error('[v0] Error extracting signals:', err)
+      setError('Error extrayendo señales del mercado.')
+      setStep(2)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleCompleteDay = async () => {
@@ -37,11 +121,13 @@ export function Day3Experience({ onComplete }: Day3ExperienceProps) {
     try {
       await onComplete({
         dayNumber: 3,
-        marketData,
+        marketSignals,
+        extractedSignals,
         completedAt: new Date().toISOString(),
       })
     } catch (err) {
       console.error('[v0] Error completing Day 3:', err)
+      setError('Error al completar el día.')
     } finally {
       setIsSubmitting(false)
     }
@@ -49,6 +135,15 @@ export function Day3Experience({ onComplete }: Day3ExperienceProps) {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 px-4">
+      {error && (
+        <div className="rounded-lg p-4 border border-red-500/40" style={{ backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
+          <div className="flex gap-3">
+            <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+            <p className="text-red-300 text-sm">{error}</p>
+          </div>
+        </div>
+      )}
+
       {step === 1 && (
         <div className="space-y-6">
           <div>
@@ -79,7 +174,7 @@ export function Day3Experience({ onComplete }: Day3ExperienceProps) {
           </div>
 
           <Button
-            onClick={handleSearchMarket}
+            onClick={() => setStep(2)}
             className="w-full py-6 text-white font-semibold rounded-full"
             style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
           >
@@ -91,95 +186,35 @@ export function Day3Experience({ onComplete }: Day3ExperienceProps) {
 
       {step === 2 && (
         <div className="space-y-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Market Signals Encontradas</h2>
-            <p className="text-white/70">Lo que el mercado realmente busca</p>
-          </div>
-
-          <div className="space-y-4">
-            <div className="rounded-lg p-4 border border-purple-500/40" style={{ backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
-              <p className="text-sm text-white/60 mb-2">COMPAÑÍAS ANALIZADAS</p>
-              <div className="flex flex-wrap gap-2">
-                {marketData.companies.map((company) => (
-                  <span
-                    key={company}
-                    className="px-3 py-1 rounded-full text-sm font-medium"
-                    style={{ backgroundColor: 'rgba(80, 160, 170, 0.3)', color: 'rgb(80, 160, 170)' }}
-                  >
-                    {company}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="rounded-lg p-4 border border-purple-500/40" style={{ backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
-              <p className="text-sm text-white/60 mb-2">SKILLS MÁS PEDIDAS</p>
-              <div className="flex flex-wrap gap-2">
-                {marketData.signals.map((signal) => (
-                  <span
-                    key={signal}
-                    className="px-3 py-1 rounded-full text-sm font-medium"
-                    style={{ backgroundColor: 'rgba(90, 90, 150, 0.5)', color: 'rgb(200, 200, 255)' }}
-                  >
-                    {signal}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <Button
-            onClick={handleCoachAnalysis}
-            className="w-full py-6 text-white font-semibold rounded-full"
-            style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
-          >
-            Ver análisis del Coach
-            <Sparkles className="w-4 h-4 ml-2" />
-          </Button>
+          <Day3JobSearch
+            marketSignals={marketSignals}
+            onAddJobPosting={handleAddJobPosting}
+            isLoading={isLoading}
+            onNext={handleExtractSignals}
+            jobsCount={marketSignals.length}
+          />
         </div>
       )}
 
       {step === 3 && (
         <div className="space-y-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Análisis de Coach</h2>
-          </div>
+          <Day3SignalExtraction
+            extractedSignals={extractedSignals}
+            marketSignals={marketSignals}
+            isLoading={isLoading}
+            onNext={() => setStep(4)}
+          />
+        </div>
+      )}
 
-          <div className="space-y-4">
-            <div className="rounded-lg p-6 border border-cyan-400/40" style={{ backgroundColor: 'rgba(80, 160, 170, 0.05)' }}>
-              <p className="text-sm font-semibold text-cyan-300 mb-3">💡 LO QUE EL MERCADO QUIERE</p>
-              <p className="text-white/90 mb-4">
-                El mercado busca perfiles con Python sólido, experiencia en AWS, y capacidad para trabajar con tecnologías de escalabilidad como Kubernetes.
-              </p>
-
-              <p className="text-sm font-semibold text-cyan-300 mb-3">📍 LO QUE TÚ TIENES</p>
-              <p className="text-white/90 mb-4">
-                De tu Bóveda de Evidencia, ya hemos identificado experiencia en [X], que es muy relevante.
-              </p>
-
-              <p className="text-sm font-semibold text-cyan-300 mb-3">⚠️ LO QUE FALTA</p>
-              <p className="text-white/90 mb-4">
-                Deberías fortalecer: Kubernetes, Docker, experiencia en arquitectura de sistemas a escala.
-              </p>
-
-              <p className="text-sm font-semibold text-cyan-300 mb-3">📚 ENTRENAMIENTOS RECOMENDADOS</p>
-              <ul className="space-y-2 text-white/80">
-                <li>• Kubernetes Deep Dive (Linux Academy)</li>
-                <li>• Advanced Docker (Pluralsight)</li>
-                <li>• System Design for Tech Interviews</li>
-              </ul>
-            </div>
-          </div>
-
-          <Button
-            onClick={handleCompleteDay}
-            disabled={isSubmitting}
-            className="w-full py-6 text-white font-semibold rounded-full"
-            style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
-          >
-            {isSubmitting ? 'Guardando...' : 'Completar Día 3'}
-            <ChevronRight className="w-4 h-4 ml-2" />
-          </Button>
+      {step === 4 && (
+        <div className="space-y-6">
+          <Day3CoachAnalysis
+            marketSignals={marketSignals}
+            extractedSignals={extractedSignals}
+            onComplete={handleCompleteDay}
+            isSubmitting={isSubmitting}
+          />
         </div>
       )}
     </div>
