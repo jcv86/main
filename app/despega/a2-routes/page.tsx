@@ -40,10 +40,21 @@ export default function A2RoutesPage() {
   const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
 
-  // Load completions from Supabase on mount
+  // Load completions from Supabase on mount and when URL changes
   useEffect(() => {
     if (authLoading || !user?.id) return
+    
+    // Load completions from Supabase
     loadCompletionsFromSupabase()
+    
+    // Also reload when coming back from a day page (URL hash changed)
+    const handleHashChange = () => {
+      console.log('[v0] URL hash changed, reloading completions')
+      loadCompletionsFromSupabase()
+    }
+    
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
   }, [authLoading, user?.id])
 
   // Handle hash anchor scrolling after page loads
@@ -52,6 +63,19 @@ export default function A2RoutesPage() {
     const hash = window.location.hash
     if (hash) {
       const elementId = hash.replace('#', '')
+      // Extract the day number from hash (e.g., "dia-2" -> day 2)
+      const dayMatch = elementId.match(/dia-(\d+)/)
+      if (dayMatch) {
+        const dayNum = parseInt(dayMatch[1])
+        // Determine which phase this day belongs to
+        if (dayNum <= 10) {
+          setExpandedMilestone(30)
+        } else if (dayNum <= 20) {
+          setExpandedMilestone(60)
+        } else {
+          setExpandedMilestone(90)
+        }
+      }
       setTimeout(() => {
         const element = document.getElementById(elementId)
         if (element) {

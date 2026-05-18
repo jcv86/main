@@ -57,6 +57,31 @@ export const markTaskComplete = async (
     return null
   }
 
+  // Create a consistent task ID for debugging
+  const taskId = getTaskId(phase, day, title)
+  console.log('[v0] Marking task complete:', { taskId, phase, day, title, userId: user.id })
+
+  // Check if already exists first
+  const { data: existing, error: checkError } = await supabase
+    .from('a2_user_task_completions')
+    .select('id')
+    .eq('user_id', user.id)
+    .eq('phase', phase)
+    .eq('day', day)
+    .eq('task_title', title)
+    .maybeSingle()
+
+  if (checkError && checkError.code !== 'PGRST116') {
+    console.error('[v0] Error checking existing task:', checkError)
+    return null
+  }
+
+  // If already exists, just return it without re-inserting
+  if (existing) {
+    console.log('[v0] Task already marked as complete:', taskId)
+    return existing as any
+  }
+
   const { data, error } = await supabase
     .from('a2_user_task_completions')
     .insert({
@@ -69,15 +94,11 @@ export const markTaskComplete = async (
     .single()
 
   if (error) {
-    // If it's a unique constraint error (task already completed), ignore it
-    if (error.code === '23505') {
-      console.log('[v0] Task already marked as complete')
-      return { phase, day, task_title: title } as any
-    }
-    console.error('[v0] Error marking task complete:', error)
+    console.error('[v0] Error marking task complete:', { taskId, error })
     return null
   }
 
+  console.log('[v0] Task marked complete successfully:', taskId)
   return data
 }
 
