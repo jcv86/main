@@ -332,7 +332,7 @@ export default function A1ReportPage() {
                   </div>
                   <div className="flex items-center gap-3 w-40">
                     <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
-                      <div className={`h-full bg-gradient-to-r ${dim.color}`} style={{ width: `${(dim.score / 10) * 100}%` }} />
+                      <div className="h-full" style={{ backgroundColor: 'rgb(80, 160, 170)', width: `${(dim.score / 10) * 100}%` }} />
                     </div>
                     <p className="text-lg font-bold text-white w-10 text-right">{Math.max(0, Math.round(dim.score))}%</p>
                   </div>
@@ -416,8 +416,9 @@ export default function A1ReportPage() {
           </div>
           <Button 
             onClick={() => router.push('/despega/conozcamonos-2')} 
-            className="bg-green hover:bg-green/90 text-white font-bold text-lg px-12 py-6 rounded-xl"
+            className="text-white font-bold text-lg px-12 py-6 rounded-xl hover:opacity-90 transition-opacity"
             size="lg"
+            style={{ backgroundColor: 'rgb(80, 160, 170)' }}
           >
             Continuar a Conociéndonos
             <ArrowRight className="w-5 h-5 ml-3" />
