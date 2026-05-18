@@ -4,9 +4,8 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Loader2, ArrowRight, CheckCircle2, Zap, Target, Phone, Sparkles } from 'lucide-react'
+import { Loader2, ArrowRight, CheckCircle2, Zap, Target, Sparkles } from 'lucide-react'
 import { PhaseTransitionHandler } from '@/components/phase-transition-handler'
 import { EnhancedInsightsGrid } from '@/components/a1-enhanced-insights-grid'
 import { A1WowReport } from '@/components/a1-wow-report'
@@ -377,9 +376,15 @@ export default function A1ReportPage() {
             />
           </div>
         ) : (
-          <div className="bg-red/20 border-2 border-red/50 rounded-xl p-8 text-center">
-            <p className="text-red font-semibold text-lg">No se pudieron generar los insights</p>
-            <p className="text-red/80 text-base mt-2">Por favor intenta de nuevo. Si el problema persiste, contacta con soporte.</p>
+          <div className="bg-gradient-to-r from-purple/15 to-blue/15 border-l-4 border-purple rounded-xl p-8">
+            <h3 className="text-3xl font-bold text-white mb-4">
+              Tu Perfil: {primaryLabel.split(' - ')[0]} + {secondaryLabel.split(' - ')[0]}
+            </h3>
+            <p className="text-white/85 text-lg leading-relaxed">
+              Combinas la fortaleza de ser <strong>{primaryLabel.split(' - ')[0]}</strong> con características de <strong>{secondaryLabel.split(' - ')[0]}</strong>. 
+              Esta combinación única te permite destacar tanto en análisis como en ejecución. 
+              Continúa al siguiente paso para descubrir cómo aprovechar tu perfil al máximo.
+            </p>
           </div>
         )}
       </ASectionPart>
@@ -400,50 +405,23 @@ export default function A1ReportPage() {
         ) : null}
       </ASectionPart>
 
-      {/* Next Steps */}
-      <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="bg-gradient-to-br from-purple/20 to-purple/5 border-2 border-purple/40 hover:border-purple/60 transition-all">
-            <CardHeader>
-              <CardTitle className="text-xl text-white">🔍 Patrones Profundos</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-base text-white/85 mb-6 leading-relaxed">Descubre cómo tu perfil te ayuda en entrevistas, equipos y liderazgo.</p>
-              <Button onClick={() => router.push('/despega/a1-patterns')} variant="outline" className="border-purple/40 w-full" size="sm">
-                Explorar Patrones
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-blue/20 to-blue/5 border-2 border-blue/40 hover:border-blue/60 transition-all">
-            <CardHeader>
-              <CardTitle className="text-xl text-white"> Entrena de Entrevistas</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-base text-white/85 mb-6 leading-relaxed">Practica entrevistas personalizadas según tu tipo de personalidad.</p>
-              <Button 
-                onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile.primary}`)} 
-                className="w-full bg-blue/80 hover:bg-blue/70/90 text-white font-semibold" 
-                size="sm"
-              >
-                <Phone className="w-4 h-4 mr-2" />
-                Comenzar
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-green/20 to-green/5 border-2 border-green/40 hover:border-green/60 transition-all">
-            <CardHeader>
-              <CardTitle className="text-xl text-white"> Crea Tu Ruta</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-base text-white/85 mb-6 leading-relaxed">Diseña tu plan de 90 días personalizado para alcanzar tus objetivos.</p>
-              <Button onClick={() => router.push('/despega/conozcamonos-2')} className="w-full bg-green/80 hover:bg-green/70/90 text-white font-semibold" size="sm">
-                Siguiente Fase
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </CardContent>
-          </Card>
+      {/* Next Step - Single Button to C2 */}
+      <ASectionPart title="Siguiente Paso" icon={<CheckCircle2 />}>
+        <div className="flex flex-col items-center text-center space-y-6 py-8">
+          <div className="max-w-2xl">
+            <h3 className="text-2xl font-bold text-white mb-4">Ahora que conoces tu perfil, es hora de profundizar</h3>
+            <p className="text-lg text-white/85 leading-relaxed">
+              En el siguiente paso, exploraremos tus metas, desafíos y cómo tu perfil cerebral puede ayudarte a alcanzar tus objetivos profesionales.
+            </p>
+          </div>
+          <Button 
+            onClick={() => router.push('/despega/conozcamonos-2')} 
+            className="bg-green hover:bg-green/90 text-white font-bold text-lg px-12 py-6 rounded-xl"
+            size="lg"
+          >
+            Continuar a Conociéndonos
+            <ArrowRight className="w-5 h-5 ml-3" />
+          </Button>
         </div>
       </ASectionPart>
     </ASection>
