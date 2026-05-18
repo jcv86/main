@@ -29,9 +29,9 @@ export default function Dia8Page() {
       // Wait a moment for Supabase to sync, then navigate
       await new Promise(resolve => setTimeout(resolve, 500))
 
-      // Navigate to A2 progress dashboard with anchor to día-9
-      console.log('[v0] Navigating to /despega/a2-routes#dia-9')
-      router.push('/despega/a2-routes#dia-9')
+      // Navigate back to A2 progress dashboard
+      console.log('[v0] Navigating to /despega/a2-routes')
+      router.push('/despega/a2-routes')
     } catch (err) {
       console.error('[v0] Error in handleDay8Complete:', err)
       throw err

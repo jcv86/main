@@ -18,7 +18,7 @@ export default function Dia10Page() {
       if (user?.id) {
         await markTaskComplete(30, 10, 'Día 10')
       }
-      router.push('/despega/a2-routes#dia-11')
+      router.push('/despega/a2-routes')
     } catch (err) {
       console.error('[v0] Error saving Day 10:', err)
       throw err
