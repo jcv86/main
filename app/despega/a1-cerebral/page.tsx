@@ -20,6 +20,7 @@ export default function A1CerebralPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [authOk, setAuthOk] = useState(false)
+  const [userId, setUserId] = useState<string | null>(null)
   const [questionTimings, setQuestionTimings] = useState<QuestionTiming[]>([])
   const router = useRouter()
   const sb = createClient()
@@ -29,14 +30,14 @@ export default function A1CerebralPage() {
       const { data: { user } } = await sb.auth.getUser()
       
       // Check if user exists in Supabase or is a demo user
-      let userId = user?.id
+      let currentUserId = user?.id
       if (!user) {
         // Check if demo user exists in localStorage
         const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
         if (demoUserStr) {
           try {
             const demoUser = JSON.parse(demoUserStr)
-            userId = demoUser.id
+            currentUserId = demoUser.id
             console.log('[v0] Demo user found for a1-cerebral:', demoUser.email)
           } catch (e) {
             console.error('[v0] Error parsing demo user:', e)
@@ -48,6 +49,7 @@ export default function A1CerebralPage() {
           return
         }
       }
+      setUserId(currentUserId || null)
       setAuthOk(true)
     }
     check()
@@ -108,25 +110,25 @@ export default function A1CerebralPage() {
       try {
         console.log('[v0] Starting test submission via API...')
         
-        // Get user first
-        const { data: { user } } = await sb.auth.getUser()
-        if (!user) {
-          console.log('[v0] No user found, redirecting to signin')
-          router.push('/auth/signin')
+        // Use the userId from state (which could be a demo user or authenticated user)
+        if (!userId) {
+          console.error('[v0] No user ID available')
+          setError('Error: usuario no identificado')
           return
         }
         
         const scores = calculateScores()
         console.log('[v0] Scores calculated:', scores)
         console.log('[v0] Response timings:', questionTimings)
+        console.log('[v0] Submitting with user_id:', userId)
         
-        // Call API endpoint to save Cerebral assessment, passing user_id and response timings
+        // Call API endpoint to save Cerebral assessment
         const response = await fetch('/api/a1-cerebral-save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify({
-            user_id: user.id,
+            user_id: userId,
             responses: { more, less },
             questions: DISC_TEST_QUESTIONS.map(q => ({ id: q.id, pregunta: q.pregunta })),
             disc_profile: scores,
