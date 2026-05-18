@@ -1,28 +1,167 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, Loader, AlertCircle } from 'lucide-react'
+import { Day8VaultImport } from './a2-day8-vault-import'
+import { Day8MemoryCaptureForm } from './a2-day8-memory-capture-form'
+import { Day8CoachMemoryTagger } from './a2-day8-coach-memory-tagger'
+import { Day8MemoryMapReview } from './a2-day8-memory-map-review'
+import {
+  createWorkMemory,
+  getWorkMemories,
+  updateWorkMemory,
+  bulkUpdateWorkMemories,
+  type WorkMemory,
+} from '@/lib/supabase/a2-days7-8'
 
 interface Day8ExperienceProps {
   onComplete: (submission: any) => Promise<void>
   userId?: string
 }
 
-export function Day8Experience({ onComplete }: Day8ExperienceProps) {
+export function Day8Experience({ onComplete, userId }: Day8ExperienceProps) {
   const [step, setStep] = useState(1)
-  const [memories, setMemories] = useState<string[]>([])
+  const [memories, setMemories] = useState<WorkMemory[]>([])
+  const [selectedMemories, setSelectedMemories] = useState<string[]>([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleMineMemories = () => {
-    setMemories([
-      'Lancé producto X en 2021, coordiné 8 personas, resultó en $500K MRR',
-      'Salvé cliente importante implementando feature que pidieron en 48h',
-      'Rediseñé onboarding, aumentó retención de 40% a 68% en 3 meses',
-      'Presenté roadmap ante Junta Directiva, conseguimos inversión',
-      'Resolví conflicto de equipos diferentes coordinando solución win-win',
-    ])
-    setStep(2)
+  // Load existing data on mount
+  useEffect(() => {
+    if (userId) {
+      loadDay8Data()
+    }
+  }, [userId])
+
+  const loadDay8Data = async () => {
+    if (!userId) return
+    setIsLoading(true)
+    try {
+      const { data: memories, error: memoriesError } = await getWorkMemories(userId, 8)
+      if (memoriesError && memoriesError.code !== 'PGRST116') throw memoriesError
+      if (memories && memories.length > 0) {
+        setMemories(memories)
+        setSelectedMemories(memories.filter(m => m.is_selected).map(m => m.id))
+        setStep(2)
+      }
+    } catch (err) {
+      console.error('[v0] Error loading Day 8 data:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleVaultImported = async (vaultData: any) => {
+    if (!userId) return
+
+    setIsLoading(true)
+    try {
+      // Create initial memories from vault
+      const newMemories: WorkMemory[] = []
+      for (let i = 0; i < vaultData.count; i++) {
+        const { data: memory, error } = await createWorkMemory(userId, {
+          day_number: 8,
+          memory_id: i + 1,
+          memory_text: '',
+          memory_where: '',
+          memory_why_remember: '',
+          is_selected: false,
+          creation_timestamp: new Date().toISOString(),
+          source_from_day_2: vaultData.fromDay2,
+          status: 'in_progress',
+        })
+        if (error) throw error
+        if (memory) newMemories.push(memory)
+      }
+      setMemories(newMemories)
+      setStep(2)
+    } catch (err) {
+      console.error('[v0] Error importing vault:', err)
+      setError('Error al importar bóveda.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleMemoryCaptured = async (memoryData: {
+    memory_id: number
+    memory_text: string
+    memory_where: string
+    memory_why_remember: string
+  }) => {
+    if (!userId) return
+
+    setIsLoading(true)
+    try {
+      const existingMemory = memories.find(m => m.memory_id === memoryData.memory_id)
+      if (existingMemory) {
+        const { data: updated, error } = await updateWorkMemory(existingMemory.id, userId, {
+          memory_text: memoryData.memory_text,
+          memory_where: memoryData.memory_where,
+          memory_why_remember: memoryData.memory_why_remember,
+        })
+        if (error) throw error
+        if (updated) {
+          setMemories(memories.map(m => m.id === updated.id ? updated : m))
+        }
+      }
+    } catch (err) {
+      console.error('[v0] Error capturing memory:', err)
+      setError('Error al capturar memoria.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleMemoriesTagged = async (taggedMemories: Array<{
+    id: string
+    tags: string[]
+  }>) => {
+    if (!userId) return
+
+    setIsLoading(true)
+    try {
+      const updates = taggedMemories.map(tm => ({
+        id: tm.id,
+        data: { coach_tags: tm.tags },
+      }))
+      const { data: updated, error } = await bulkUpdateWorkMemories(userId, updates)
+      if (error) throw error
+      if (updated) {
+        setMemories(updated as WorkMemory[])
+        setStep(4)
+      }
+    } catch (err) {
+      console.error('[v0] Error tagging memories:', err)
+      setError('Error al etiquetar memorias.')
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleMemoriesSelected = async (selected: string[]) => {
+    if (!userId) return
+
+    setIsLoading(true)
+    try {
+      const updates = memories.map(m => ({
+        id: m.id,
+        data: { is_selected: selected.includes(m.id) },
+      }))
+      const { data: updated, error } = await bulkUpdateWorkMemories(userId, updates)
+      if (error) throw error
+      if (updated) {
+        setMemories(updated as WorkMemory[])
+        setSelectedMemories(selected)
+      }
+    } catch (err) {
+      console.error('[v0] Error selecting memories:', err)
+      setError('Error al seleccionar memorias.')
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const handleCompleteDay = async () => {
@@ -30,11 +169,13 @@ export function Day8Experience({ onComplete }: Day8ExperienceProps) {
     try {
       await onComplete({
         dayNumber: 8,
-        memories,
+        workMemories: memories,
+        selectedMemories,
         completedAt: new Date().toISOString(),
       })
     } catch (err) {
       console.error('[v0] Error completing Day 8:', err)
+      setError('Error al completar el día.')
     } finally {
       setIsSubmitting(false)
     }
@@ -42,11 +183,27 @@ export function Day8Experience({ onComplete }: Day8ExperienceProps) {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 px-4">
-      {step === 1 && (
+      {error && (
+        <div className="rounded-lg p-4 border border-red-500/40" style={{ backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
+          <div className="flex gap-3">
+            <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+            <p className="text-red-300 text-sm">{error}</p>
+          </div>
+        </div>
+      )}
+
+      {isLoading && step === 1 && (
+        <div className="flex flex-col items-center justify-center py-12 space-y-4">
+          <Loader className="w-8 h-8 text-cyan-400 animate-spin" />
+          <p className="text-white/70">Cargando tus memorias...</p>
+        </div>
+      )}
+
+      {step === 1 && !isLoading && (
         <div className="space-y-6">
           <div>
             <h2 className="text-3xl font-bold text-white mb-3">Excavación de Memoria Profesional</h2>
-            <p className="text-white/70">Extrae tus mejores historias de trabajo reales</p>
+            <p className="text-white/70">Extrae tus 10 mejores historias de trabajo reales</p>
           </div>
 
           <div className="rounded-lg p-6 border border-purple-500/40" style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)' }}>
@@ -54,7 +211,7 @@ export function Day8Experience({ onComplete }: Day8ExperienceProps) {
             <ul className="space-y-3 text-white/80">
               <li className="flex gap-3">
                 <span style={{ color: 'rgb(80, 160, 170)' }}>✓</span>
-                <span>10 memorias laborales crudas (formato: What / Where / Why I remember)</span>
+                <span>10 memorias laborales crudas (What / Where / Why Remember)</span>
               </li>
               <li className="flex gap-3">
                 <span style={{ color: 'rgb(80, 160, 170)' }}>✓</span>
@@ -62,46 +219,61 @@ export function Day8Experience({ onComplete }: Day8ExperienceProps) {
               </li>
               <li className="flex gap-3">
                 <span style={{ color: 'rgb(80, 160, 170)' }}>✓</span>
-                <span>Seleccionar best 5 para día 9</span>
+                <span>Seleccionar best 5 para construcción STAR</span>
+              </li>
+              <li className="flex gap-3">
+                <span style={{ color: 'rgb(80, 160, 170)' }}>✓</span>
+                <span>Exportar tu Mapa de Memorias</span>
               </li>
             </ul>
           </div>
 
           <Button
-            onClick={handleMineMemories}
+            onClick={() => setStep(2)}
             className="w-full py-6 text-white font-semibold rounded-full"
             style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
           >
-            Excavar Memorias
+            Comenzar Excavación
             <ChevronRight className="w-4 h-4 ml-2" />
           </Button>
         </div>
       )}
 
       {step === 2 && (
-        <div className="space-y-6">
-          <div>
-            <h2 className="text-2xl font-bold text-white mb-2">Tus 5 Memorias Seleccionadas</h2>
-          </div>
+        <Day8VaultImport
+          onVaultImported={handleVaultImported}
+          isLoading={isLoading}
+          onNext={() => setStep(3)}
+        />
+      )}
 
-          <div className="space-y-3">
-            {memories.map((mem, idx) => (
-              <div key={idx} className="rounded-lg p-4 border border-purple-500/40" style={{ backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
-                <p className="text-white/80 text-sm">{mem}</p>
-              </div>
-            ))}
-          </div>
+      {step === 3 && memories.length > 0 && (
+        <Day8MemoryCaptureForm
+          memories={memories}
+          onMemoryCaptured={handleMemoryCaptured}
+          isLoading={isLoading}
+          onNext={() => setStep(4)}
+        />
+      )}
 
-          <Button
-            onClick={handleCompleteDay}
-            disabled={isSubmitting}
-            className="w-full py-6 text-white font-semibold rounded-full"
-            style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
-          >
-            {isSubmitting ? 'Guardando...' : 'Completar Día 8'}
-            <ChevronRight className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
+      {step === 4 && memories.length > 0 && (
+        <Day8CoachMemoryTagger
+          memories={memories}
+          onMemoriesTagged={handleMemoriesTagged}
+          isLoading={isLoading}
+          onNext={() => setStep(5)}
+        />
+      )}
+
+      {step === 5 && memories.length > 0 && (
+        <Day8MemoryMapReview
+          memories={memories}
+          selectedMemories={selectedMemories}
+          onMemoriesSelected={handleMemoriesSelected}
+          onComplete={handleCompleteDay}
+          isLoading={isLoading}
+          isSubmitting={isSubmitting}
+        />
       )}
     </div>
   )

@@ -14,13 +14,26 @@ export default function Dia8Page() {
 
   const handleDay8Complete = async (submission: any) => {
     try {
-      console.log('[v0] Day 8 submission saved:', submission)
+      console.log('[v0] Day 8 submission received:', submission)
+
+      // Mark this task as complete in Supabase
       if (user?.id) {
-        await markTaskComplete(30, 8, 'Día 8')
+        const result = await markTaskComplete(30, 8, 'Día 8')
+        console.log('[v0] Task marked complete result:', result)
+        
+        if (!result) {
+          console.warn('[v0] Failed to mark task complete, but continuing with navigation')
+        }
       }
+
+      // Wait a moment for Supabase to sync, then navigate
+      await new Promise(resolve => setTimeout(resolve, 500))
+
+      // Navigate to A2 progress dashboard with anchor to día-9
+      console.log('[v0] Navigating to /despega/a2-routes#dia-9')
       router.push('/despega/a2-routes#dia-9')
     } catch (err) {
-      console.error('[v0] Error saving Day 8:', err)
+      console.error('[v0] Error in handleDay8Complete:', err)
       throw err
     }
   }
