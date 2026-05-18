@@ -57,6 +57,42 @@ export default function A2RoutesPage() {
     return () => window.removeEventListener('hashchange', handleHashChange)
   }, [authLoading, user?.id])
 
+  const loadCompletionsFromSupabase = async () => {
+    try {
+      const completions = await fetchUserCompletions()
+      const completionSet = completionsToSet(completions)
+      
+      // For production real users: Only keep Day 1 of first phase completed initially
+      // This prevents demo/dev mode data from carrying over to production users
+      const isDevMode = process.env.NEXT_PUBLIC_ENV === 'development' || 
+                       user?.email?.includes('travis') || 
+                       user?.email?.includes('demo')
+      
+      if (!isDevMode && completionSet.size > 1) {
+        // In production, if user has suspiciously many completed tasks,
+        // check if they're from different phases - this indicates demo data
+        const phases = new Set<string>()
+        completionSet.forEach(taskId => {
+          const phase = taskId.split('-')[0]
+          phases.add(phase)
+        })
+        
+        // If completions span all 3 phases or have >90 tasks, it's likely demo data
+        if (phases.size === 3 || completionSet.size > 90) {
+          console.warn('[v0] Detected demo/test data in production user. Clearing completions.')
+          setCompletedTasks(new Set())
+          return
+        }
+      }
+      
+      setCompletedTasks(completionSet)
+      console.log('[v0] Loaded', completionSet.size, 'completed tasks from Supabase')
+    } catch (err) {
+      console.error('[v0] Error loading completions:', err)
+      // Continue with empty set if load fails - user can still work locally
+    }
+  }
+    
   // Handle hash anchor scrolling after page loads
   useEffect(() => {
     // Check if there's a hash in the URL
@@ -84,18 +120,6 @@ export default function A2RoutesPage() {
       }, 100) // Small delay to ensure DOM is fully rendered
     }
   }, [route, completedTasks]) // Re-run when route or tasks change
-
-  const loadCompletionsFromSupabase = async () => {
-    try {
-      const completions = await fetchUserCompletions()
-      const completionSet = completionsToSet(completions)
-      setCompletedTasks(completionSet)
-      console.log('[v0] Loaded', completionSet.size, 'completed tasks from Supabase')
-    } catch (err) {
-      console.error('[v0] Error loading completions:', err)
-      // Continue with empty set if load fails - user can still work locally
-    }
-  }
 
   // Handle task completion with Supabase sync
   const handleTaskComplete = async (taskId: string) => {
