@@ -1,12 +1,35 @@
 'use client'
 
 import { useState } from 'react'
-import { A2Day1Step1Vision } from './a2-day1-step1-vision'
-import { A2Day1Step3Milestones } from './a2-day1-step3-milestones'
-import { A2Day1Step4ActionPlan } from './a2-day1-step4-action-plan'
+import { A2Day1Intro } from './a2-day1-intro'
+import { A2Day1VisionScan } from './a2-day1-vision-scan'
+import { A2Day1Hypothesis } from './a2-day1-hypothesis'
+import { A2Day1RoutGates } from './a2-day1-route-gates'
+import { A2Day1Roadmap } from './a2-day1-roadmap'
 import { A2Day1Step5ExternalSave } from './a2-day1-step5-external-save'
-import { A2Day1Step6Upload } from './a2-day1-step6-upload'
-import { A2Day1Step7Analysis } from './a2-day1-step7-analysis'
+import { A2Day1Upload } from './a2-day1-upload'
+import { A2Day1Scoring } from './a2-day1-scoring'
+
+interface RouteData {
+  change30Days: string
+  targetRole: string
+  mainBlocker: string
+  hypothesis?: string
+  gates?: {
+    identity: string
+    evidence: string
+    material: string
+  }
+  roadmap?: string
+  scores?: {
+    clarity: number
+    logic: number
+    realism: number
+    actionability: number
+  }
+  totalScore?: number
+  passStatus?: 'pending' | 'pass' | 'fail'
+}
 
 interface Day1ExperienceProps {
   onComplete: (submission: any) => Promise<void>
@@ -15,103 +38,107 @@ interface Day1ExperienceProps {
 
 export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
   const [currentStep, setCurrentStep] = useState(1)
-  const [visionData, setVisionData] = useState({
-    role: '',
-    environment: '',
-    desiredOutcome: '',
-  })
-  const [milestonesData, setMilestonesData] = useState({
-    day10: '',
-    day20: '',
-    day30: '',
-  })
-  const [actionPlanData, setActionPlanData] = useState({
-    applications: '',
-    networking: '',
-    learning: '',
-    personal: '',
+  const [routeData, setRouteData] = useState<RouteData>({
+    change30Days: '',
+    targetRole: '',
+    mainBlocker: '',
   })
 
-  // Step 1: Vision -> Step 2: Milestones
-  const handleStep1Next = (data: typeof visionData) => {
-    setVisionData(data)
+  const stepTitles = [
+    'El Contrato de Tu Ruta',
+    'Escaneo de Visión',
+    'Hipótesis de Ruta',
+    'Las 3 Puertas',
+    'Tu Roadmap',
+    'Guardar Externamente',
+    'Sube Tu Documento',
+    'Análisis y Puntuación',
+  ]
+
+  const handleStep1Next = () => {
     setCurrentStep(2)
   }
 
-  // Step 2: Milestones -> Step 3: Action Plan
-  const handleStep2Next = (data: typeof milestonesData) => {
-    setMilestonesData(data)
+  const handleVisionNext = (data: Partial<RouteData>) => {
+    setRouteData((prev) => ({ ...prev, ...data }))
     setCurrentStep(3)
   }
 
-  // Step 3: Action Plan -> Step 4: External Save
-  const handleStep3Next = (data: any) => {
-    setActionPlanData(data)
+  const handleHypothesisNext = (hypothesis: string) => {
+    setRouteData((prev) => ({ ...prev, hypothesis }))
     setCurrentStep(4)
   }
 
-  // Step 4: External Save -> Step 5: Upload
-  const handleStep4Next = () => {
+  const handleGatesNext = (gates: RouteData['gates']) => {
+    setRouteData((prev) => ({ ...prev, gates }))
     setCurrentStep(5)
   }
 
-  // Step 5: Upload -> Step 6: Analysis
-  const handleStep5Next = () => {
+  const handleRoadmapNext = (roadmap: string) => {
+    setRouteData((prev) => ({ ...prev, roadmap }))
     setCurrentStep(6)
   }
 
-  const handleStep6Complete = async () => {
-    // Prepare submission data
-    const submission = {
+  const handleExternalSaveNext = () => {
+    setCurrentStep(7)
+  }
+
+  const handleUploadNext = () => {
+    setCurrentStep(8)
+  }
+
+  const handleScoringComplete = async (scores: RouteData['scores'], totalScore: number, passStatus: 'pass' | 'fail') => {
+    const finalSubmission = {
+      ...routeData,
+      scores,
+      totalScore,
+      passStatus,
       dayNumber: 1,
-      visionData,
-      milestonesData,
-      actionPlanData,
       completedAt: new Date().toISOString(),
     }
 
     try {
-      await onComplete(submission)
+      await onComplete(finalSubmission)
     } catch (err) {
       console.error('[v0] Error completing Day 1:', err)
     }
-  }
-
-  const handleStep6Revise = () => {
-    setCurrentStep(1)
   }
 
   const handleBack = (stepToGoTo: number) => {
     setCurrentStep(stepToGoTo)
   }
 
-  const stepTitles = [
-    'Día 1: Define Tu Visión',
-    'Define Tus Hitos',
-    'Plan de Acción',
-    'Guardar Externamente',
-    'Sube Tu Trabajo',
-    'Análisis y Resultados',
-  ]
+  const handleRevise = () => {
+    setCurrentStep(2) // Back to vision scan
+  }
 
   return (
     <div className="w-full space-y-6">
-      {/* Step Header with Border */}
-      <div className="border-b" style={{ backgroundColor: 'rgba(90, 90, 150, 0)', borderColor: 'rgba(90, 90, 150, 0)' }}>
+      {/* Step Header */}
+      <div
+        className="border-b"
+        style={{
+          backgroundColor: 'rgba(90, 90, 150, 0)',
+          borderColor: 'rgba(90, 90, 150, 0)',
+        }}
+      >
         <div className="max-w-4xl mx-auto px-4 py-6 space-y-3">
           <div className="space-y-2">
             <h2 className="text-2xl font-bold text-white">{stepTitles[currentStep - 1]}</h2>
-            <p className="text-sm text-white/60">Paso {currentStep} de 6</p>
+            <p className="text-sm text-white/60">Paso {currentStep} de {stepTitles.length}</p>
           </div>
 
           {/* Progress Bar */}
           <div className="flex gap-1 rounded-full h-2 bg-purple-500/15 overflow-hidden">
-            {[1, 2, 3, 4, 5, 6].map((step) => (
+            {stepTitles.map((_, index) => (
               <div
-                key={step}
+                key={index}
                 className="flex-1 h-full transition-all"
                 style={{
-                  backgroundColor: step <= currentStep ? 'rgba(139, 92, 246, 0.8)' : 'rgba(139, 92, 246, 0.2)',
+                  backgroundColor:
+                    index + 1 <= currentStep
+                      ? 'rgba(90, 90, 150, 0.8)'
+                      : 'rgba(90, 90, 150, 0.2)',
                 }}
               />
             ))}
@@ -121,46 +148,60 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
 
       {/* Content */}
       <div className="space-y-6">
-        {currentStep === 1 && (
-          <A2Day1Step1Vision
-            onNext={handleStep1Next}
-            initialData={visionData}
+        {currentStep === 1 && <A2Day1Intro onNext={handleStep1Next} />}
+
+        {currentStep === 2 && (
+          <A2Day1VisionScan
+            onNext={handleVisionNext}
+            initialData={routeData}
             userId={userId}
           />
         )}
-        {currentStep === 2 && (
-          <A2Day1Step3Milestones
-            onNext={handleStep2Next}
-            onBack={() => handleBack(1)}
-            initialData={milestonesData}
-          />
-        )}
+
         {currentStep === 3 && (
-          <A2Day1Step4ActionPlan
-            onNext={handleStep3Next}
+          <A2Day1Hypothesis
+            onNext={handleHypothesisNext}
             onBack={() => handleBack(2)}
-            initialData={actionPlanData}
+            visionData={routeData}
           />
         )}
+
         {currentStep === 4 && (
-          <A2Day1Step5ExternalSave
-            onNext={handleStep4Next}
+          <A2Day1RoutGates
+            onNext={handleGatesNext}
             onBack={() => handleBack(3)}
+            initialGates={routeData.gates}
           />
         )}
+
         {currentStep === 5 && (
-          <A2Day1Step6Upload
-            onNext={handleStep5Next}
+          <A2Day1Roadmap
+            onNext={handleRoadmapNext}
             onBack={() => handleBack(4)}
+            routeData={routeData}
           />
         )}
+
         {currentStep === 6 && (
-          <A2Day1Step7Analysis
-            visionData={visionData}
-            milestonesData={milestonesData}
-            actionPlanData={actionPlanData}
-            onComplete={handleStep6Complete}
-            onRevise={handleStep6Revise}
+          <A2Day1Step5ExternalSave
+            onNext={handleExternalSaveNext}
+            onBack={() => handleBack(5)}
+          />
+        )}
+
+        {currentStep === 7 && (
+          <A2Day1Upload
+            onNext={handleUploadNext}
+            onBack={() => handleBack(6)}
+            routeData={routeData}
+          />
+        )}
+
+        {currentStep === 8 && (
+          <A2Day1Scoring
+            routeData={routeData}
+            onComplete={handleScoringComplete}
+            onRevise={handleRevise}
           />
         )}
       </div>
