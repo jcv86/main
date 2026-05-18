@@ -36,6 +36,28 @@ export async function POST(request: NextRequest) {
 
     console.log('[v0] Saving Cerebral assessment for user:', user_id)
 
+    // Calculate dominant pattern from disc_profile scores
+    let dominant_pattern = 'D'
+    if (disc_profile && typeof disc_profile === 'object') {
+      const scores = {
+        D: disc_profile.D || 0,
+        I: disc_profile.I || 0,
+        S: disc_profile.S || 0,
+        C: disc_profile.C || 0,
+      }
+      
+      const maxScore = Math.max(...Object.values(scores))
+      const dominantLetter = Object.keys(scores).find(
+        key => scores[key as keyof typeof scores] === maxScore
+      )
+      
+      if (dominantLetter) {
+        dominant_pattern = dominantLetter
+      }
+    }
+    
+    console.log('[v0] Calculated dominant pattern:', dominant_pattern)
+
     // Save to a1_cerebral_assessment table
     const { data, error } = await supabase
       .from('a1_cerebral_assessment')
@@ -44,6 +66,7 @@ export async function POST(request: NextRequest) {
         responses: responses,
         questions: questions,
         disc_profile: disc_profile,
+        dominant_pattern: dominant_pattern,
         completed_at: new Date().toISOString(),
       })
       .select()
