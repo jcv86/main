@@ -221,7 +221,7 @@ export default function A1ReportPage() {
       <ASection title="Tu Perfil Cerebral" subtitle="Descubre Tu Tipo de Personalidad" icon="" colorClass="from-purple/50">
         <ASectionPart title="Completar Evaluación" icon={<Zap />}>
           <div className="space-y-4">
-            <div className="p-6 border-2 rounded-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderStyle: 'none', borderRadius: '2px' }}>
+            <div className="p-6 rounded-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
               <p className="text-white font-semibold text-lg">{error}</p>
               <p className="text-white/85 text-base mt-3 leading-relaxed">
                 Por favor completa la evaluación de Perfil Cerebral para ver tus resultados. El proceso toma aproximadamente 10-15 minutos.
@@ -286,26 +286,26 @@ export default function A1ReportPage() {
           {/* Primary and Secondary Profile Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Primary Profile Card */}
-            <div className="bg-gradient-to-br from-purple/20 to-purple/5 border-2 border-purple/40 rounded-2xl p-8">
-              <p className="text-purple font-bold text-sm uppercase tracking-wide mb-3">Tu Tipo Principal</p>
+            <div className="rounded-2xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
+              <p className="font-bold text-sm uppercase tracking-wide mb-3" style={{ color: 'rgb(80, 160, 170)' }}>Tu Tipo Principal</p>
               <h2 className="text-5xl font-black text-white mb-2">{primaryLabel.split(' - ')[0]}</h2>
               <p className="text-white/75 text-base mb-6 leading-relaxed">{primaryLabel.split(' - ')[1]}</p>
               <div className="flex items-center gap-4">
-                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden border border-white/30">
-                  <div className="h-full bg-purple" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
+                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden">
+                  <div className="h-full" style={{ backgroundColor: 'rgb(80, 160, 170)', width: `${Math.max(0, profile.primaryScore)}%` }} />
                 </div>
                 <p className="text-2xl font-bold text-white w-16 text-right">{Math.max(0, Math.round(profile.primaryScore))}%</p>
               </div>
             </div>
 
             {/* Secondary Profile Card */}
-            <div className="bg-gradient-to-br from-blue/20 to-blue/5 border-2 border-blue/40 rounded-2xl p-8">
-              <p className="text-blue font-bold text-sm uppercase tracking-wide mb-3">Tu Tipo Secundario</p>
+            <div className="rounded-2xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
+              <p className="font-bold text-sm uppercase tracking-wide mb-3" style={{ color: 'rgb(80, 160, 170)' }}>Tu Tipo Secundario</p>
               <h2 className="text-5xl font-black text-white mb-2">{secondaryLabel.split(' - ')[0]}</h2>
               <p className="text-white/75 text-base mb-6 leading-relaxed">{secondaryLabel.split(' - ')[1]}</p>
               <div className="flex items-center gap-4">
-                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden border border-white/30">
-                  <div className="h-full bg-blue" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
+                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden">
+                  <div className="h-full" style={{ backgroundColor: 'rgb(80, 160, 170)', width: `${Math.max(0, profile.secondaryScore)}%` }} />
                 </div>
                 <p className="text-2xl font-bold text-white w-16 text-right">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
               </div>
@@ -313,7 +313,7 @@ export default function A1ReportPage() {
           </div>
 
           {/* All 4 Profiles Breakdown */}
-          <div className="bg-card border border-border rounded-2xl p-8">
+          <div className="rounded-2xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
             <h3 className="font-bold text-2xl text-white mb-8">Desglose Completo de Dimensiones</h3>
             <div className="space-y-5">
               {[
@@ -322,7 +322,7 @@ export default function A1ReportPage() {
                 { label: 'Estabilizador', score: profile.S, color: 'from-green', icon: '🛡️', description: 'Constante y confiable' },
                 { label: 'Arquitecto', score: profile.C, color: 'from-blue', icon: '🏗️', description: 'Analítico y preciso' }
               ].map((dim, idx) => (
-                <div key={idx} className="flex items-center gap-4 p-4 bg-background/50 hover:bg-background transition-all rounded-xl border border-white/10 hover:border-white/20">
+                <div key={idx} className="flex items-center gap-4 p-4 hover:bg-background transition-all rounded-xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
                   <span className="text-3xl">{dim.icon}</span>
                   <div className="flex-1">
                     <div className="flex items-baseline gap-2">
@@ -331,7 +331,7 @@ export default function A1ReportPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3 w-40">
-                    <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden border border-white/30">
+                    <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
                       <div className={`h-full bg-gradient-to-r ${dim.color}`} style={{ width: `${(dim.score / 10) * 100}%` }} />
                     </div>
                     <p className="text-lg font-bold text-white w-10 text-right">{Math.max(0, Math.round(dim.score))}%</p>
@@ -354,7 +354,7 @@ export default function A1ReportPage() {
         ) : insights ? (
           <div className="space-y-8">
             {/* Executive Summary */}
-            <div className="bg-gradient-to-r from-purple/15 to-blue/15 border-l-4 border-purple rounded-xl p-8">
+            <div className="rounded-xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
               <h3 className="text-3xl font-bold text-white mb-4">
                 Tu Perfil: {primaryLabel.split(' - ')[0]} + {secondaryLabel.split(' - ')[0]}
               </h3>
@@ -376,7 +376,7 @@ export default function A1ReportPage() {
             />
           </div>
         ) : (
-          <div className="bg-gradient-to-r from-purple/15 to-blue/15 border-l-4 border-purple rounded-xl p-8">
+          <div className="rounded-xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
             <h3 className="text-3xl font-bold text-white mb-4">
               Tu Perfil: {primaryLabel.split(' - ')[0]} + {secondaryLabel.split(' - ')[0]}
             </h3>
