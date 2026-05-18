@@ -3,10 +3,8 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(request: NextRequest) {
   try {
-    console.log('[v0] A1 Cerebral save endpoint called')
-
     const body = await request.json()
-    const { responses, questions, disc_profile, response_timings } = body
+    const { responses, questions, disc_profile } = body
 
     const supabase = await createClient()
 
@@ -14,15 +12,39 @@ export async function POST(request: NextRequest) {
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     
     if (authError || !user) {
-      console.error('[v0] No authenticated user found:', authError?.message)
       return NextResponse.json(
         { error: 'User must be authenticated to save assessment results' },
         { status: 401 }
       )
     }
 
-    console.log('[v0] Authenticated user:', user.id)
-    console.log('[v0] Saving Cerebral assessment for user:', user.id)
+    // Ensure user exists in public.users (required for FK constraint)
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select('id')
+      .eq('id', user.id)
+      .single()
+
+    if (!existingUser) {
+      // Create the public.users record if missing
+      const { error: userInsertError } = await supabase
+        .from('users')
+        .insert({
+          id: user.id,
+          email: user.email,
+          full_name: user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0],
+          avatar_url: user.user_metadata?.avatar_url || null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .select()
+        .single()
+
+      if (userInsertError && userInsertError.code !== '23505') {
+        // 23505 = unique violation (user already exists, which is fine)
+        console.error('[v0] Failed to create public.users record:', userInsertError)
+      }
+    }
 
     // Calculate dominant pattern from disc_profile scores
     let dominant_pattern = 'D'
@@ -43,19 +65,15 @@ export async function POST(request: NextRequest) {
         dominant_pattern = dominantLetter
       }
     }
-    
-    console.log('[v0] Calculated dominant pattern:', dominant_pattern)
 
     const saveData = {
-      user_id: user.id, // Use the authenticated user's ID
+      user_id: user.id,
       responses: responses,
       questions: questions,
       disc_profile: disc_profile,
       dominant_pattern: dominant_pattern,
       completed_at: new Date().toISOString(),
     }
-
-    console.log('[v0] Preparing to insert assessment data for user:', user.id)
 
     // Save to a1_cerebral_assessment table
     const { data, error } = await supabase
@@ -65,11 +83,9 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (error) {
-      console.error('[v0] Supabase insert error:', error.message, error.code, error.details)
+      console.error('[v0] Supabase insert error:', error.message, error.code)
       throw new Error(`Database error: ${error.message}`)
     }
-
-    console.log('[v0] Successfully saved Cerebral assessment:', data?.id)
 
     return NextResponse.json({
       success: true,
