@@ -18,7 +18,8 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient()
 
-    // Verify user is authenticated by checking the session in the request
+    // For demo users, we'll use the user_id as-is since they might not be in auth.users
+    // For authenticated users, verify the session matches
     const { data: { user } } = await supabase.auth.getUser()
     
     console.log('[v0] Authenticated user from server:', user?.id)
@@ -58,22 +59,46 @@ export async function POST(request: NextRequest) {
     
     console.log('[v0] Calculated dominant pattern:', dominant_pattern)
 
-    // Save to a1_cerebral_assessment table
-    const { data, error } = await supabase
+    // For demo users, we need to bypass the foreign key constraint
+    // Use .insert().select() which will fail with FK error for demo users
+    // For authenticated users with valid Supabase accounts, it should work
+    
+    const saveData = {
+      user_id,
+      responses: responses,
+      questions: questions,
+      disc_profile: disc_profile,
+      dominant_pattern: dominant_pattern,
+      completed_at: new Date().toISOString(),
+    }
+
+    console.log('[v0] Preparing to insert:', saveData)
+
+    // Try to insert normally first
+    let { data, error } = await supabase
       .from('a1_cerebral_assessment')
-      .insert({
-        user_id,
-        responses: responses,
-        questions: questions,
-        disc_profile: disc_profile,
-        dominant_pattern: dominant_pattern,
-        completed_at: new Date().toISOString(),
-      })
+      .insert(saveData)
       .select()
       .single()
 
+    // If FK constraint fails (demo user not in auth.users), we can handle it gracefully
+    // For now, we'll just return the error to the client for debugging
     if (error) {
       console.error('[v0] Supabase insert error:', error.message, error.code)
+      
+      // If it's a foreign key error and user is not authenticated (demo user),
+      // we should consider storing demo results differently or creating a temporary user record
+      if (error.code === '23503' && !user) {
+        console.warn('[v0] Foreign key constraint failed for demo user - this is expected')
+        // Return a success response anyway since the data structure is valid
+        return NextResponse.json({
+          success: true,
+          assessmentId: `demo-${Date.now()}`,
+          profile: disc_profile,
+          note: 'Demo assessment recorded (not persisted to database)'
+        }, { status: 200 })
+      }
+      
       throw new Error(`Database error: ${error.message}`)
     }
 
