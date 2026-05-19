@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronRight, Loader2, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
+import { isTravisMode } from '@/lib/travis-form-data'
 
 interface Day14ExperienceProps {
   onComplete: (submission: any) => Promise<void>
@@ -31,17 +33,35 @@ export function Day14Experience({ onComplete, userId }: Day14ExperienceProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDevMode, setIsDevMode] = useState(false)
   const sb = createClient()
 
   useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
     if (userId) {
-      loadDay12Inventory()
+      initializeDay14(travisMode)
     }
   }, [userId])
 
-  const loadDay12Inventory = async () => {
+  const initializeDay14 = async (travisMode: boolean) => {
     if (!userId) return
     setIsLoading(true)
+    try {
+      if (travisMode) {
+        await ensureTravisDataForDay(userId, 14)
+      }
+      await loadDay12Inventory()
+    } catch (err) {
+      console.error('[v0] Error initializing Day 14:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const loadDay12Inventory = async () => {
+    if (!userId) return
     setError(null)
     try {
       const { data, error: err } = await sb

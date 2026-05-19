@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronRight, Loader2, AlertCircle, Trash2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
+import { isTravisMode } from '@/lib/travis-form-data'
 
 interface Day21ExperienceProps {
   onComplete: (submission: any) => Promise<void>
@@ -31,18 +33,36 @@ export function Day21Experience({ onComplete, userId }: Day21ExperienceProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDevMode, setIsDevMode] = useState(false)
   const sb = createClient()
 
-  // Load Day 19-20 bullets on mount
+  // Load Day 19-20 bullets on mount (with Travis auto-seed)
   useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
     if (userId) {
-      loadPreviousBullets()
+      initializeDay21(travisMode)
     }
   }, [userId])
 
-  const loadPreviousBullets = async () => {
+  const initializeDay21 = async (travisMode: boolean) => {
     if (!userId) return
     setIsLoading(true)
+    try {
+      if (travisMode) {
+        await ensureTravisDataForDay(userId, 21)
+      }
+      await loadPreviousBullets()
+    } catch (err) {
+      console.error('[v0] Error initializing Day 21:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const loadPreviousBullets = async () => {
+    if (!userId) return
     try {
       const { data, error: err } = await sb
         .from('a2_cv_bullets')
@@ -67,8 +87,6 @@ export function Day21Experience({ onComplete, userId }: Day21ExperienceProps) {
     } catch (err) {
       console.error('[v0] Error loading bullets:', err)
       setError('Failed to load your previous bullets.')
-    } finally {
-      setIsLoading(false)
     }
   }
 

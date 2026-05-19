@@ -14,6 +14,8 @@ import {
   updateCareerMirror,
   type CareerMirror,
 } from '@/lib/supabase/a2-days7-8'
+import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
+import { isTravisMode } from '@/lib/travis-form-data'
 
 interface Day7ExperienceProps {
   onComplete: (submission: any) => Promise<void>
@@ -33,17 +35,36 @@ export function Day7Experience({ onComplete, userId }: Day7ExperienceProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDevMode, setIsDevMode] = useState(false)
 
-  // Load existing data on mount
+  // Load existing data on mount (with Travis auto-seed)
   useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
     if (userId) {
-      loadDay7Data()
+      initializeDay7(travisMode)
     }
   }, [userId])
 
-  const loadDay7Data = async () => {
+  const initializeDay7 = async (travisMode: boolean) => {
     if (!userId) return
     setIsLoading(true)
+    
+    try {
+      if (travisMode) {
+        await ensureTravisDataForDay(userId, 7)
+      }
+      await loadDay7Data()
+    } catch (err) {
+      console.error('[v0] Error initializing Day 7:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const loadDay7Data = async () => {
+    if (!userId) return
     try {
       const { data: mirror, error: mirrorError } = await getCareerMirror(userId, 7)
       if (mirrorError && mirrorError.code !== 'PGRST116') throw mirrorError
@@ -53,8 +74,6 @@ export function Day7Experience({ onComplete, userId }: Day7ExperienceProps) {
       }
     } catch (err) {
       console.error('[v0] Error loading Day 7 data:', err)
-    } finally {
-      setIsLoading(false)
     }
   }
 

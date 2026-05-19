@@ -1,9 +1,34 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { ArrowLeft, CheckCircle } from 'lucide-react'
+import { isTravisMode } from '@/lib/travis-form-data'
+
+// Travis pre-filled data for vault setup
+const TRAVIS_VAULT_DATA = {
+  vaultType: 'notion',
+  vaultLink: `https://notion.so/travis-evidence-vault-dtc-2026
+
+Mi Bóveda de Evidencia está configurada en Notion con la siguiente estructura:
+
+📁 DTC Evidence Vault - Travis
+├── 📄 Logros y Métricas (5 entries)
+├── 📄 Testimonios (3 entries)  
+├── 📄 Certificaciones (2 entries)
+├── 📄 Screenshots de Resultados
+└── 📄 Documentos de Soporte
+
+Cada sección tiene campos para:
+- Fecha del logro
+- Descripción detallada
+- Métrica/resultado cuantificable
+- Contexto y stakeholders
+- Link a evidencia adicional
+
+Bóveda creada y lista para la caza de evidencia.`,
+}
 
 interface A2Day2VaultSetupProps {
   onNext: (vaultType: string, vaultLink: string) => void
@@ -49,6 +74,18 @@ export function A2Day2VaultSetup({
 }: A2Day2VaultSetupProps) {
   const [selectedVault, setSelectedVault] = useState<string | null>(null)
   const [vaultLink, setVaultLink] = useState('')
+  const [isDevMode, setIsDevMode] = useState(false)
+
+  // Load Travis data in dev mode
+  useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
+    if (travisMode) {
+      setSelectedVault(TRAVIS_VAULT_DATA.vaultType)
+      setVaultLink(TRAVIS_VAULT_DATA.vaultLink)
+    }
+  }, [])
 
   const handleNext = () => {
     if (selectedVault && vaultLink.trim()) {
@@ -60,6 +97,13 @@ export function A2Day2VaultSetup({
 
   return (
     <div className="max-w-3xl mx-auto px-4 space-y-8">
+      {/* Dev Mode Badge */}
+      {isDevMode && (
+        <div className="fixed top-20 right-4 z-50 bg-green-600/90 text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-lg">
+          Travis Dev - Bóveda Pre-configurada
+        </div>
+      )}
+
       {/* Header */}
       <div
         className="rounded-lg p-4"

@@ -13,6 +13,8 @@ import {
   updateProfessionalIdentity,
   type ProfessionalIdentity,
 } from '@/lib/supabase/a2-intro-identity'
+import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
+import { isTravisMode } from '@/lib/travis-form-data'
 
 interface Day6ExperienceProps {
   onComplete: (submission: any) => Promise<void>
@@ -32,17 +34,36 @@ export function Day6Experience({ onComplete, userId }: Day6ExperienceProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDevMode, setIsDevMode] = useState(false)
 
-  // Load existing data on mount
+  // Load existing data on mount (with Travis auto-seed)
   useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
     if (userId) {
-      loadDay6Data()
+      initializeDay6(travisMode)
     }
   }, [userId])
 
-  const loadDay6Data = async () => {
+  const initializeDay6 = async (travisMode: boolean) => {
     if (!userId) return
     setIsLoading(true)
+    
+    try {
+      if (travisMode) {
+        await ensureTravisDataForDay(userId, 6)
+      }
+      await loadDay6Data()
+    } catch (err) {
+      console.error('[v0] Error initializing Day 6:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const loadDay6Data = async () => {
+    if (!userId) return
     try {
       const { data: prof, error: profError } = await getProfessionalIdentity(userId, 6)
       if (profError && profError.code !== 'PGRST116') throw profError
@@ -52,8 +73,6 @@ export function Day6Experience({ onComplete, userId }: Day6ExperienceProps) {
       }
     } catch (err) {
       console.error('[v0] Error loading Day 6 data:', err)
-    } finally {
-      setIsLoading(false)
     }
   }
 

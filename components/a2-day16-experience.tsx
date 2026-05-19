@@ -5,6 +5,8 @@ import { Button } from '@/components/ui/button'
 import { ChevronRight, Loader2, AlertCircle, CheckCircle2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
+import { isTravisMode } from '@/lib/travis-form-data'
 
 interface Day16ExperienceProps {
   onComplete: (submission: any) => Promise<void>
@@ -17,18 +19,36 @@ export function Day16Experience({ onComplete, userId }: Day16ExperienceProps) {
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [checkpointData, setCheckpointData] = useState<any>(null)
+  const [isDevMode, setIsDevMode] = useState(false)
   const router = useRouter()
   const sb = createClient()
 
   useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
     if (userId) {
-      loadCheckpointData()
+      initializeDay16(travisMode)
     }
   }, [userId])
 
-  const loadCheckpointData = async () => {
+  const initializeDay16 = async (travisMode: boolean) => {
     if (!userId) return
     setIsLoading(true)
+    try {
+      if (travisMode) {
+        await ensureTravisDataForDay(userId, 16)
+      }
+      await loadCheckpointData()
+    } catch (err) {
+      console.error('[v0] Error initializing Day 16:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const loadCheckpointData = async () => {
+    if (!userId) return
     setError(null)
     try {
       // Validate that previous days are complete

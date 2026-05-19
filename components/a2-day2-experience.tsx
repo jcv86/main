@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { A2Day2Intro } from './a2-day2-intro'
 import { A2Day2VaultSetup } from './a2-day2-vault-setup'
 import { A2Day2EvidenceHunt } from './a2-day2-evidence-hunt'
@@ -8,6 +8,29 @@ import { A2Day2Upload } from './a2-day2-upload'
 import { A2Day2Classification } from './a2-day2-classification'
 import { A2Day2GoldPieces } from './a2-day2-gold-pieces'
 import { A2Day2Completion } from './a2-day2-completion'
+import { isTravisMode } from '@/lib/travis-form-data'
+import { TRAVIS_DAY2_UPLOAD_FRAGMENTS } from '@/lib/travis-form-data'
+
+// Travis pre-filled data for Day 2
+const TRAVIS_DAY2_DATA = {
+  vaultType: 'notion' as const,
+  vaultLink: 'https://notion.so/travis-evidence-vault-dtc-2026',
+  fragments: [
+    { id: '1', text: 'Reduje churn 23% mediante redesign de onboarding', category: 'achievement', goldPiece: true },
+    { id: '2', text: 'Presenté roadmap Q3 al CEO con 8 features priorizadas', category: 'achievement', goldPiece: true },
+    { id: '3', text: 'Conduje 15 entrevistas que cambiaron priorización Q4', category: 'research', goldPiece: false },
+    { id: '4', text: 'Diseñé estrategia API que generó $40K MRR partners', category: 'achievement', goldPiece: true },
+    { id: '5', text: 'Análisis de pricing que añadió $30K MRR', category: 'achievement', goldPiece: false },
+    { id: '6', text: 'GTM de Analytics Dashboard con 35% adoption', category: 'launch', goldPiece: false },
+    { id: '7', text: 'Sistema de roadmap transparente, NPS +12', category: 'process', goldPiece: false },
+    { id: '8', text: 'Programa retention que bajó churn M4-6 de 8% a 2%', category: 'achievement', goldPiece: false },
+  ],
+  goldPieces: [
+    { id: '1', text: 'Reduje churn 23% mediante redesign de onboarding - +$50K revenue' },
+    { id: '2', text: 'Roadmap Q3 priorizado por user research - +$80K revenue' },
+    { id: '4', text: 'Estrategia API partners - $40K MRR incremental' },
+  ],
+}
 
 interface EvidenceVaultData {
   vaultType?: 'notion' | 'drive' | 'local' | 'dtc' | 'cloud'
@@ -24,6 +47,22 @@ interface Day2ExperienceProps {
 export function Day2Experience({ onComplete, userId }: Day2ExperienceProps) {
   const [currentStep, setCurrentStep] = useState(1)
   const [vaultData, setVaultData] = useState<EvidenceVaultData>({})
+  const [isDevMode, setIsDevMode] = useState(false)
+
+  // Load Travis data in dev mode
+  useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
+    if (travisMode) {
+      setVaultData({
+        vaultType: TRAVIS_DAY2_DATA.vaultType,
+        vaultLink: TRAVIS_DAY2_DATA.vaultLink,
+        fragments: TRAVIS_DAY2_DATA.fragments,
+        goldPieces: TRAVIS_DAY2_DATA.goldPieces,
+      })
+    }
+  }, [])
 
   const stepTitles = [
     'La Bóveda de Evidencia',
@@ -87,6 +126,13 @@ export function Day2Experience({ onComplete, userId }: Day2ExperienceProps) {
 
   return (
     <div className="w-full space-y-6">
+      {/* Dev Mode Badge */}
+      {isDevMode && (
+        <div className="fixed top-20 right-4 z-50 bg-green-600/90 text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-lg">
+          Travis Dev Mode - Day 2 Pre-cargado
+        </div>
+      )}
+
       {/* Step Header */}
       <div
         className="border-b"

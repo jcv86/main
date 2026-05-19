@@ -14,6 +14,8 @@ import {
   bulkUpdateWorkMemories,
   type WorkMemory,
 } from '@/lib/supabase/a2-days7-8'
+import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
+import { isTravisMode } from '@/lib/travis-form-data'
 
 interface Day8ExperienceProps {
   onComplete: (submission: any) => Promise<void>
@@ -27,17 +29,36 @@ export function Day8Experience({ onComplete, userId }: Day8ExperienceProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDevMode, setIsDevMode] = useState(false)
 
-  // Load existing data on mount
+  // Load existing data on mount (with Travis auto-seed)
   useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
     if (userId) {
-      loadDay8Data()
+      initializeDay8(travisMode)
     }
   }, [userId])
 
-  const loadDay8Data = async () => {
+  const initializeDay8 = async (travisMode: boolean) => {
     if (!userId) return
     setIsLoading(true)
+    
+    try {
+      if (travisMode) {
+        await ensureTravisDataForDay(userId, 8)
+      }
+      await loadDay8Data()
+    } catch (err) {
+      console.error('[v0] Error initializing Day 8:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const loadDay8Data = async () => {
+    if (!userId) return
     try {
       const { data: memories, error: memoriesError } = await getWorkMemories(userId, 8)
       if (memoriesError && memoriesError.code !== 'PGRST116') throw memoriesError

@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronRight, Loader2, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
+import { isTravisMode } from '@/lib/travis-form-data'
 
 interface Day9ExperienceProps {
   onComplete: (submission: any) => Promise<void>
@@ -24,18 +26,37 @@ export function Day9Experience({ onComplete, userId }: Day9ExperienceProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDevMode, setIsDevMode] = useState(false)
   const sb = createClient()
 
-  // Load Day 8 memories on mount
+  // Load Day 8 memories on mount (with Travis auto-seed)
   useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
     if (userId) {
-      loadDay8Memories()
+      initializeDay9(travisMode)
     }
   }, [userId])
 
-  const loadDay8Memories = async () => {
+  const initializeDay9 = async (travisMode: boolean) => {
     if (!userId) return
     setIsLoading(true)
+    
+    try {
+      if (travisMode) {
+        await ensureTravisDataForDay(userId, 9)
+      }
+      await loadDay8Memories()
+    } catch (err) {
+      console.error('[v0] Error initializing Day 9:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const loadDay8Memories = async () => {
+    if (!userId) return
     setError(null)
     try {
       const { data, error: err } = await sb
