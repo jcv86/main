@@ -3178,6 +3178,7 @@ export const A2_DAILY_MISSIONS: Record<number, A2DailyMission> = {
     },
     notionTemplate: 'https://notion.so/template-dia-90-90day-report',
   },
+}
 
 /**
  * Export for backward compatibility with existing code
