@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { A2Day1Intro } from './a2-day1-intro'
 import { A2Day1VisionScan } from './a2-day1-vision-scan'
 import { A2Day1Hypothesis } from './a2-day1-hypothesis'
@@ -9,6 +9,7 @@ import { A2Day1Roadmap } from './a2-day1-roadmap'
 import { A2Day1Step5ExternalSave } from './a2-day1-step5-external-save'
 import { A2Day1Upload } from './a2-day1-upload'
 import { A2Day1Scoring } from './a2-day1-scoring'
+import { TRAVIS_DAY1_DATA, isTravisMode } from '@/lib/travis-form-data'
 
 interface RouteData {
   change30Days: string
@@ -38,11 +39,29 @@ interface Day1ExperienceProps {
 
 export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
   const [currentStep, setCurrentStep] = useState(1)
+  const [isDevMode, setIsDevMode] = useState(false)
   const [routeData, setRouteData] = useState<RouteData>({
     change30Days: '',
     targetRole: '',
     mainBlocker: '',
   })
+
+  // Load Travis data in dev mode
+  useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
+    if (travisMode) {
+      setRouteData({
+        change30Days: TRAVIS_DAY1_DATA.change30Days,
+        targetRole: TRAVIS_DAY1_DATA.targetRole,
+        mainBlocker: TRAVIS_DAY1_DATA.mainBlocker,
+        hypothesis: TRAVIS_DAY1_DATA.hypothesis,
+        gates: TRAVIS_DAY1_DATA.gates,
+        roadmap: TRAVIS_DAY1_DATA.roadmap,
+      })
+    }
+  }, [])
 
   const stepTitles = [
     'El Contrato de Tu Ruta',
@@ -114,6 +133,13 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
 
   return (
     <div className="w-full space-y-6">
+      {/* Dev Mode Badge */}
+      {isDevMode && (
+        <div className="fixed top-20 right-4 z-50 bg-green-600/90 text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-lg">
+          Travis Dev Mode - Datos Pre-cargados
+        </div>
+      )}
+
       {/* Step Header */}
       <div
         className="border-b"
