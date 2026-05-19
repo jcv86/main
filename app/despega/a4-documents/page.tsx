@@ -77,7 +77,7 @@ export default function A4DocumentsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black p-8">
+    <div className="min-h-screen p-8" style={{ backgroundColor: 'rgba(232, 93, 117, 0.2)' }}>
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
