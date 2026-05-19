@@ -1,11 +1,12 @@
 'use client'
 
 import { createClient } from '@/lib/supabase/client'
+import { createDocument } from '@/lib/supabase/dtc-documents'
 import { isTravisMode } from './travis-form-data'
 
 /**
  * Travis Dev Mode - Complete Supabase Data Seeding
- * This seeds all required tables for comfortable testing across all 90 days
+ * This seeds all required documents and tables for comfortable testing across all 90 days
  */
 
 // Travis user ID for dev mode
@@ -129,8 +130,137 @@ Diseñé sistema de feedback loops que mejoró NPS en 12 puntos.`,
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// SEEDING FUNCTIONS
+// NEW: DTC DOCUMENTS SEEDING
 // ═══════════════════════════════════════════════════════════════════════════
+
+export async function seedTravisDocuments(userId: string) {
+  if (!isTravisMode()) return { success: false, reason: 'Not Travis mode' }
+
+  console.log('[Travis] Seeding DTC documents for user:', userId)
+
+  try {
+    // Day 1 - Route Contract
+    await createDocument(userId, {
+      title: 'Mi Contrato de Ruta - DTC 2026',
+      type: 'route_contract',
+      source_module: 'a2_day_1',
+      related_day: 1,
+      content: `# Mi Contrato de Ruta
+
+## Quién Soy
+Soy Travis, PM con 18 meses de experiencia práctica en B2B SaaS.
+
+## Qué Quiero
+Quiero posicionarme como PM Mid-level con evidencia clara de impacto.
+
+## Mis Valores
+- Decisiones basadas en datos
+- Ejecución rigurosa
+- Impacto medible
+
+## Mi Promesa
+Completaré este programa con portfolio documentado que demuestre mi valor en el mercado.`,
+      status: 'approved',
+      source: 'travis_seed',
+      tags: ['foundation', 'contract'],
+    })
+
+    // Day 2 - Evidence Vault
+    await createDocument(userId, {
+      title: 'Mi Bóveda de Evidencia - DTC Workspace',
+      type: 'evidence_vault',
+      source_module: 'a2_day_2',
+      related_day: 2,
+      content: `Bóveda de evidencia creada en Notion con estructura completa:
+- Logros y Métricas (5 entries)
+- Testimonios (3 entries)
+- Certificaciones (2 entries)
+- Screenshots de Resultados
+- Documentos de Soporte`,
+      status: 'approved',
+      source: 'travis_seed',
+      tags: ['vault', 'evidence'],
+    })
+
+    // Day 3 - Market Signals Document
+    await createDocument(userId, {
+      title: 'Análisis de Señales del Mercado - Day 3',
+      type: 'market_signal',
+      source_module: 'a2_day_3',
+      related_day: 3,
+      content: `Señales del mercado identificadas:
+1. Data Analysis - Frequency: 8/10, Importance: 9/10
+2. User Research - Frequency: 7/10, Importance: 8/10
+3. Jira/Asana - Frequency: 9/10, Importance: 7/10
+4. Cross-functional Leadership - Frequency: 6/10, Importance: 9/10
+5. Agile/Scrum - Frequency: 8/10, Importance: 8/10
+
+Target roles: PM Mid-level en B2B SaaS ($80K-140K)
+Industries: EdTech, MarTech, SaaS`,
+      status: 'approved',
+      source: 'travis_seed',
+      tags: ['market', 'signals', 'day3'],
+    })
+
+    // Day 4 - Candidate Board
+    await createDocument(userId, {
+      title: 'Mi Tablero de Candidato - Day 4',
+      type: 'candidate_board',
+      source_module: 'a2_day_4',
+      related_day: 4,
+      content: `## Quién Soy
+Soy un Analista de Producto con 18 meses actuando como PM sin el título. He liderado 5 features con impacto de +$200K en revenue.
+
+## Qué Quiere el Mercado
+El mercado pide: Data Analysis, User Research, Cross-functional Leadership.
+Tools: Jira, Amplitude, Figma, SQL.
+Salarios: $80K-140K para PM Mid/Senior en B2B SaaS.
+
+## Qué Puedo Probar
+- 5 features lanzadas con métricas documentadas
+- Reducción de churn 23% mediante redesign de onboarding
+- Roadmap Q3 generó +$80K en revenue nueva
+- 15 entrevistas de usuario que cambiaron priorización
+- API strategy que habilitó $40K MRR de partners
+
+## Mi Hipótesis
+Si actualizo mi posicionamiento de "Analyst que hace PM" a "PM con 18 meses de experiencia práctica y $200K+ en impacto documentado", entonces podré acceder a roles PM Mid-level.`,
+      status: 'approved',
+      source: 'travis_seed',
+      tags: ['board', 'candidato', 'day4'],
+    })
+
+    // Day 5 - Test Introduction
+    await createDocument(userId, {
+      title: 'Mis Versiones de Introducción - Day 5',
+      type: 'test_introduction',
+      source_module: 'a2_day_5',
+      related_day: 5,
+      content: `## Versión A (Simple)
+Hola! Soy Travis, Product Manager con experiencia en B2B SaaS. He liderado features que generaron más de $200K en revenue. Me apasiona usar datos para tomar decisiones de producto que impacten usuarios reales.
+
+## Versión B (Narrative)
+Soy Travis, PM especializado en EdTech y SaaS. En los últimos 18 meses, reduje churn 23%, diseñé roadmaps que generaron $80K en revenue nueva, y construí integraciones API que habilitaron $40K MRR de partners.
+
+## Versión C (Strategic)
+Como Product Manager en B2B SaaS, mi enfoque es simple: entender profundamente al usuario, medir todo lo que importa, y ejecutar con precisión. En mi rol actual, transformé insights de 50+ entrevistas en features que aumentaron retention 23% y generaron $200K+ en impacto directo.
+
+## Mejor Versión
+La versión C resonó mejor - específica, con números, y con call-to-action claro.`,
+      status: 'approved',
+      source: 'travis_seed',
+      tags: ['introduction', 'test', 'day5'],
+    })
+
+    console.log('[Travis] DTC documents seeded successfully')
+    return { success: true }
+  } catch (error) {
+    console.error('[Travis] Error seeding DTC documents:', error)
+    return { success: false, error }
+  }
+}
+
+
 
 export async function seedTravisMarketSignals(userId: string) {
   const supabase = createClient()
@@ -317,20 +447,29 @@ export async function ensureTravisDataForDay(userId: string, dayNumber: number) 
 
   console.log(`[Travis] Ensuring data for Day ${dayNumber}`)
 
-  // Seed data based on what the day needs
-  if (dayNumber >= 3) {
-    await seedTravisMarketSignals(userId)
-    await seedTravisExtractedSignals(userId)
-  }
-  if (dayNumber >= 4) {
-    await seedTravisCandidateBoard(userId)
-  }
-  if (dayNumber >= 5) {
-    await seedTravisTestIntroduction(userId)
-  }
-  if (dayNumber >= 10) {
-    await seedTravisDay9Tasks(userId)
-  }
+  try {
+    // Seed DTC documents first
+    await seedTravisDocuments(userId)
 
-  return { success: true }
+    // Then seed specific table data based on day
+    if (dayNumber >= 3) {
+      await seedTravisMarketSignals(userId)
+      await seedTravisExtractedSignals(userId)
+    }
+    if (dayNumber >= 4) {
+      await seedTravisCandidateBoard(userId)
+    }
+    if (dayNumber >= 5) {
+      await seedTravisTestIntroduction(userId)
+    }
+    if (dayNumber >= 10) {
+      await seedTravisDay9Tasks(userId)
+    }
+
+    return { success: true }
+  } catch (error) {
+    console.error(`[Travis] Error ensuring data for Day ${dayNumber}:`, error)
+    return { success: false, error }
+  }
 }
+
