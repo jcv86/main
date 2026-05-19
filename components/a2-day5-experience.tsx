@@ -14,6 +14,7 @@ import {
 } from '@/lib/supabase/a2-intro-identity'
 import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
 import { isTravisMode } from '@/lib/travis-form-data'
+import { saveDayDocument, formatDocumentContent } from '@/lib/supabase/dtc-documents-phase2'
 
 interface Day5ExperienceProps {
   onComplete: (submission: any) => Promise<void>

@@ -6,6 +6,7 @@ import { ChevronRight, Sparkles, Loader, AlertCircle } from 'lucide-react'
 import { Day3JobSearch } from './a2-day3-job-search'
 import { Day3SignalExtraction } from './a2-day3-signal-extraction'
 import { Day3CoachAnalysis } from './a2-day3-coach-analysis'
+import { saveDayDocument, formatDocumentContent } from '@/lib/supabase/dtc-documents-phase2'
 import {
   createMarketSignal,
   createExtractedSignal,
@@ -16,6 +17,7 @@ import {
 } from '@/lib/supabase/a2-market-and-board'
 import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
 import { isTravisMode } from '@/lib/travis-form-data'
+import { saveDayDocument, formatDocumentContent } from '@/lib/supabase/dtc-documents-phase2'
 
 interface Day3ExperienceProps {
   onComplete: (submission: any) => Promise<void>
@@ -139,13 +141,25 @@ export function Day3Experience({ onComplete, userId }: Day3ExperienceProps) {
 
   const handleCompleteDay = async () => {
     setIsSubmitting(true)
+    const submission = {
+      dayNumber: 3,
+      marketSignals,
+      extractedSignals,
+      completedAt: new Date().toISOString(),
+    }
     try {
-      await onComplete({
-        dayNumber: 3,
-        marketSignals,
-        extractedSignals,
-        completedAt: new Date().toISOString(),
-      })
+      // Save to DTC documents
+      if (userId) {
+        await saveDayDocument(
+          userId,
+          3,
+          'market_signal',
+          formatDocumentContent(submission),
+          'Señales del Mercado - Day 3'
+        )
+      }
+
+      await onComplete(submission)
     } catch (err) {
       console.error('[v0] Error completing Day 3:', err)
       setError('Error al completar el día.')

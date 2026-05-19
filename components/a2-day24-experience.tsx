@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronRight } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { saveDayDocument, formatDocumentContent } from '@/lib/supabase/dtc-documents-phase2'
 
 interface Day24ExperienceProps {
   onComplete: (submission: any) => Promise<void>

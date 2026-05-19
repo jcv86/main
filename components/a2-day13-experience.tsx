@@ -6,6 +6,7 @@ import { ChevronRight, Loader2, AlertCircle, Plus, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
 import { isTravisMode } from '@/lib/travis-form-data'
+import { saveDayDocument, formatDocumentContent } from '@/lib/supabase/dtc-documents-phase2'
 
 interface Day13ExperienceProps {
   onComplete: (submission: any) => Promise<void>

@@ -13,6 +13,7 @@ import {
 } from '@/lib/supabase/a2-market-and-board'
 import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
 import { isTravisMode } from '@/lib/travis-form-data'
+import { saveDayDocument, formatDocumentContent } from '@/lib/supabase/dtc-documents-phase2'
 
 interface Day4ExperienceProps {
   onComplete: (submission: any) => Promise<void>
