@@ -185,6 +185,13 @@ export async function getAllDocuments(userId: string) {
 }
 
 /**
+ * Get all documents for a user (alias for getAllDocuments)
+ */
+export async function getAllUserDocuments(userId: string) {
+  return getAllDocuments(userId)
+}
+
+/**
  * Update a document
  */
 export async function updateDocument(
