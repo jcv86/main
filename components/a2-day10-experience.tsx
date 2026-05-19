@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { ChevronRight, Loader2, AlertCircle } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
+import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
+import { isTravisMode } from '@/lib/travis-form-data'
 
 interface Day10ExperienceProps {
   onComplete: (submission: any) => Promise<void>
@@ -22,18 +24,39 @@ export function Day10Experience({ onComplete, userId }: Day10ExperienceProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDevMode, setIsDevMode] = useState(false)
   const sb = createClient()
 
-  // Load Day 9 tasks on mount
+  // Load Day 9 tasks on mount (with Travis auto-seed)
   useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
     if (userId) {
-      loadDay9Tasks()
+      initializeDay10(travisMode)
     }
   }, [userId])
 
-  const loadDay9Tasks = async () => {
+  const initializeDay10 = async (travisMode: boolean) => {
     if (!userId) return
     setIsLoading(true)
+    
+    try {
+      // Auto-seed Travis data if in dev mode (seeds Day 9 data)
+      if (travisMode) {
+        await ensureTravisDataForDay(userId, 10)
+      }
+      
+      await loadDay9Tasks()
+    } catch (err) {
+      console.error('[v0] Error initializing Day 10:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const loadDay9Tasks = async () => {
+    if (!userId) return
     setError(null)
     try {
       const { data, error: err } = await sb
@@ -67,8 +90,6 @@ export function Day10Experience({ onComplete, userId }: Day10ExperienceProps) {
     } catch (err) {
       console.error('[v0] Error loading Day 9 tasks:', err)
       setError('Failed to load your Day 9 task statements.')
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -160,6 +181,13 @@ export function Day10Experience({ onComplete, userId }: Day10ExperienceProps) {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 px-4">
+      {/* Dev Mode Badge */}
+      {isDevMode && (
+        <div className="fixed top-20 right-4 z-50 bg-green-600/90 text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-lg">
+          Travis Dev Mode - Day 9 Data Loaded
+        </div>
+      )}
+
       {error && (
         <div className="rounded-lg p-4 flex items-start gap-3" style={{ backgroundColor: 'rgba(220, 38, 38, 0.1)' }}>
           <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />

@@ -11,6 +11,8 @@ import {
   updateCandidateBoard,
   type CandidateBoard,
 } from '@/lib/supabase/a2-market-and-board'
+import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
+import { isTravisMode } from '@/lib/travis-form-data'
 
 interface Day4ExperienceProps {
   onComplete: (submission: any) => Promise<void>
@@ -30,17 +32,38 @@ export function Day4Experience({ onComplete, userId }: Day4ExperienceProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isDevMode, setIsDevMode] = useState(false)
 
-  // Load existing board data on mount
+  // Load existing board data on mount (with Travis auto-seed)
   useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
     if (userId) {
-      loadDay4Data()
+      initializeDay4(travisMode)
     }
   }, [userId])
 
-  const loadDay4Data = async () => {
+  const initializeDay4 = async (travisMode: boolean) => {
     if (!userId) return
     setIsLoading(true)
+    
+    try {
+      // Auto-seed Travis data if in dev mode
+      if (travisMode) {
+        await ensureTravisDataForDay(userId, 4)
+      }
+      
+      await loadDay4Data()
+    } catch (err) {
+      console.error('[v0] Error initializing Day 4:', err)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const loadDay4Data = async () => {
+    if (!userId) return
     try {
       const { data: board, error: boardError } = await getCandidateBoard(userId, 4)
       if (boardError && boardError.code !== 'PGRST116') throw boardError
@@ -51,8 +74,6 @@ export function Day4Experience({ onComplete, userId }: Day4ExperienceProps) {
     } catch (err) {
       console.error('[v0] Error loading Day 4 data:', err)
       // Ignore "not found" errors for new users
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -125,6 +146,13 @@ export function Day4Experience({ onComplete, userId }: Day4ExperienceProps) {
 
   return (
     <div className="max-w-5xl mx-auto space-y-6 px-4">
+      {/* Dev Mode Badge */}
+      {isDevMode && (
+        <div className="fixed top-20 right-4 z-50 bg-green-600/90 text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-lg">
+          Travis Dev Mode - Tablero Pre-cargado
+        </div>
+      )}
+
       {error && (
         <div className="rounded-lg p-4 border border-red-500/40" style={{ backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
           <div className="flex gap-3">
