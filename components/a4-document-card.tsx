@@ -17,34 +17,34 @@ export function DocumentCard({ document, isSelected, onSelect, onEdit }: Documen
   const createdDate = new Date(document.created_at)
 
   const statusColors: Record<string, string> = {
-    draft: 'bg-yellow-50 border-yellow-200',
-    review: 'bg-blue-50 border-blue-200',
-    revision: 'bg-orange-50 border-orange-200',
-    approved: 'bg-green-50 border-green-200',
-    final: 'bg-purple-50 border-purple-200',
+    draft: 'bg-stone-800',
+    review: 'bg-stone-800',
+    revision: 'bg-stone-800',
+    approved: 'bg-stone-800',
+    final: 'bg-stone-800',
   }
 
   const statusBadgeColors: Record<string, string> = {
-    draft: 'text-yellow-700 bg-yellow-100',
-    review: 'text-blue-700 bg-blue-100',
-    revision: 'text-orange-700 bg-orange-100',
-    approved: 'text-green-700 bg-green-100',
-    final: 'text-purple-700 bg-purple-100',
+    draft: 'text-gray-300 bg-gray-700',
+    review: 'text-gray-300 bg-gray-700',
+    revision: 'text-gray-300 bg-gray-700',
+    approved: 'text-gray-300 bg-gray-700',
+    final: 'text-gray-300 bg-gray-700',
   }
 
   return (
     <div
       onClick={() => onSelect(document)}
-      className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
+      className={`p-4 rounded-lg cursor-pointer transition-all ${
         isSelected
-          ? 'border-primary bg-primary/5'
-          : `border-border hover:border-primary/50 ${statusColors[document.status] || 'bg-card'}`
+          ? 'bg-stone-800 ring-2 ring-red-500'
+          : `bg-stone-900 hover:bg-stone-800 ${statusColors[document.status]}`
       }`}
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
-          <h3 className="font-semibold text-foreground mb-1">{document.title}</h3>
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <h3 className="font-semibold text-red-400 mb-1">{document.title}</h3>
+          <div className="flex items-center gap-2 text-sm text-gray-400">
             <FileText size={14} />
             <span className="capitalize">{document.type}</span>
             {document.related_day && (
@@ -61,11 +61,11 @@ export function DocumentCard({ document, isSelected, onSelect, onEdit }: Documen
       </div>
 
       {document.content && (
-        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{document.content}</p>
+        <p className="text-sm text-gray-400 mb-3 line-clamp-2">{document.content}</p>
       )}
 
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1 text-xs text-muted-foreground">
+        <div className="flex items-center gap-1 text-xs text-gray-500">
           <Calendar size={12} />
           <span>{formatDistanceToNow(createdDate, { addSuffix: true, locale: es })}</span>
         </div>
@@ -76,6 +76,7 @@ export function DocumentCard({ document, isSelected, onSelect, onEdit }: Documen
             e.stopPropagation()
             onEdit(document)
           }}
+          className="text-red-400 hover:text-red-300 hover:bg-stone-800"
         >
           <Edit size={14} className="mr-1" />
           Editar

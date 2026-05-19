@@ -35,10 +35,10 @@ export function DocumentFilter({ onFilterTypeChange, onFilterStatusChange }: Doc
   return (
     <div className="flex gap-3 flex-wrap">
       <Select onValueChange={value => onFilterTypeChange(value === 'all' ? null : value)}>
-        <SelectTrigger className="w-[200px]">
+        <SelectTrigger className="w-[200px] border-gray-700 bg-black text-gray-300">
           <SelectValue placeholder="Filtrar por tipo..." />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-stone-900 border-gray-700">
           <SelectItem value="all">Todos los tipos</SelectItem>
           {documentTypes.map(type => (
             <SelectItem key={type.value} value={type.value}>
@@ -49,10 +49,10 @@ export function DocumentFilter({ onFilterTypeChange, onFilterStatusChange }: Doc
       </Select>
 
       <Select onValueChange={value => onFilterStatusChange(value === 'all' ? null : value)}>
-        <SelectTrigger className="w-[200px]">
+        <SelectTrigger className="w-[200px] border-gray-700 bg-black text-gray-300">
           <SelectValue placeholder="Filtrar por estado..." />
         </SelectTrigger>
-        <SelectContent>
+        <SelectContent className="bg-stone-900 border-gray-700">
           <SelectItem value="all">Todos los estados</SelectItem>
           {statusOptions.map(status => (
             <SelectItem key={status.value} value={status.value}>
@@ -65,7 +65,7 @@ export function DocumentFilter({ onFilterTypeChange, onFilterStatusChange }: Doc
       <Button variant="outline" onClick={() => {
         onFilterTypeChange(null)
         onFilterStatusChange(null)
-      }}>
+      }} className="border-gray-600 text-gray-300 hover:bg-stone-900">
         <X size={16} className="mr-1" />
         Limpiar filtros
       </Button>
