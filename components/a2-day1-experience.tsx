@@ -224,6 +224,8 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
           <A2Day1Step5ExternalSave
             onNext={handleExternalSaveNext}
             onBack={() => handleBack(5)}
+            routeData={routeData}
+            userId={userId}
           />
         )}
 
