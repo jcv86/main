@@ -32,6 +32,8 @@ export function A2Day1Step5ExternalSave({ onNext, onBack, routeData, userId }: S
   const [isSaving, setIsSaving] = useState(false)
   const [saved, setSaved] = useState(false)
 
+  console.log('[v0] Step5 mounted with:', { userId, hasRouteData: !!routeData, routeDataKeys: routeData ? Object.keys(routeData) : [] })
+
   // Format route data as document content
   const formatRouteContent = () => {
     if (!routeData) return ''
@@ -67,11 +69,14 @@ ${routeData.roadmap || 'No definido'}
   }
 
   const handleNext = async () => {
+    console.log('[v0] handleNext called, userId:', userId, 'hasRouteData:', !!routeData)
+    
     // Auto-save to DTC Documents before proceeding
     if (userId && routeData) {
       setIsSaving(true)
       try {
-        await upsertDocument(userId, 'route_contract', 'a2_day_1', {
+        console.log('[v0] Calling upsertDocument with:', { userId, type: 'route_contract', sourceModule: 'a2_day_1' })
+        const result = await upsertDocument(userId, 'route_contract', 'a2_day_1', {
           title: 'Mi Contrato de Ruta',
           type: 'route_contract',
           source_module: 'a2_day_1',
@@ -81,6 +86,7 @@ ${routeData.roadmap || 'No definido'}
           source: 'user',
           tags: ['day1', 'contract', 'route'],
         })
+        console.log('[v0] upsertDocument result:', result)
         setSaved(true)
         console.log('[v0] Day 1 route contract saved to DTC Documents')
       } catch (err) {
@@ -88,6 +94,8 @@ ${routeData.roadmap || 'No definido'}
       } finally {
         setIsSaving(false)
       }
+    } else {
+      console.log('[v0] Skipping DTC save - missing userId or routeData')
     }
     onNext()
   }
