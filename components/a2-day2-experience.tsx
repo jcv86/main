@@ -8,6 +8,7 @@ import { A2Day2Upload } from './a2-day2-upload'
 import { A2Day2Classification } from './a2-day2-classification'
 import { A2Day2GoldPieces } from './a2-day2-gold-pieces'
 import { A2Day2Completion } from './a2-day2-completion'
+import { saveDayDocument, formatDocumentContent } from '@/lib/supabase/dtc-documents-phase2'
 import { isTravisMode } from '@/lib/travis-form-data'
 import { TRAVIS_DAY2_UPLOAD_FRAGMENTS } from '@/lib/travis-form-data'
 
@@ -110,6 +111,17 @@ export function Day2Experience({ onComplete, userId }: Day2ExperienceProps) {
     }
 
     try {
+      // Save to DTC documents
+      if (userId) {
+        await saveDayDocument(
+          userId,
+          2,
+          'evidence_vault',
+          formatDocumentContent(submission),
+          'Mi Bóveda de Evidencia'
+        )
+      }
+
       await onComplete(submission)
     } catch (err) {
       console.error('[v0] Error completing Day 2:', err)

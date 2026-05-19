@@ -9,6 +9,7 @@ import { A2Day1Roadmap } from './a2-day1-roadmap'
 import { A2Day1Step5ExternalSave } from './a2-day1-step5-external-save'
 import { A2Day1Upload } from './a2-day1-upload'
 import { A2Day1Scoring } from './a2-day1-scoring'
+import { saveDayDocument, formatDocumentContent } from '@/lib/supabase/dtc-documents-phase2'
 import { TRAVIS_DAY1_DATA, isTravisMode } from '@/lib/travis-form-data'
 
 interface RouteData {
@@ -117,6 +118,17 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
     }
 
     try {
+      // Save to DTC documents
+      if (userId) {
+        await saveDayDocument(
+          userId,
+          1,
+          'route_contract',
+          formatDocumentContent(finalSubmission),
+          'Mi Contrato de Ruta'
+        )
+      }
+
       await onComplete(finalSubmission)
     } catch (err) {
       console.error('[v0] Error completing Day 1:', err)
