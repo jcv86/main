@@ -87,7 +87,7 @@ export interface A2DailyMission {
   }
   
   // Phase label for UI grouping
-  phaseLabel: "Foundation" | "Role Alignment" | "Simulation & Certification"
+  phaseLabel: "Foundation" | "Role Alignment" | "Simulation & Certification" | "Master Difficult Questions & Return to Real Market"
   
   // A3 checkpoint metadata (only if this is a checkpoint day)
   a3Checkpoint?: A3Checkpoint
