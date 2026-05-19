@@ -114,11 +114,7 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
           'Mi Roadmap Profesional': routeData.roadmap || '',
         })
         
-        await saveDayDocument(userId, 1, 'route_contract', {
-          title: 'Mi Contrato de Ruta',
-          content,
-          status: 'draft',
-        })
+        await saveDayDocument(userId, 1, 'route_contract', content, 'Mi Contrato de Ruta')
         console.log('[v0] Day 1 route contract saved to DTC Documents')
       } catch (err) {
         console.error('[v0] Error saving to DTC Documents:', err)
