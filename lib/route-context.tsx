@@ -59,11 +59,15 @@ const RouteStateContext = createContext<RouteStateContextType | undefined>(undef
 
 interface RouteStateProviderProps {
   children: ReactNode
-  userId: string
+  userId?: string
   initialMode?: RouteMode
 }
 
-export function RouteStateProvider({ children, userId, initialMode = 'production' }: RouteStateProviderProps) {
+export function RouteStateProvider({ 
+  children, 
+  userId = 'demo-travis',
+  initialMode = 'production' 
+}: RouteStateProviderProps) {
   const [routeState, setRouteState] = useState<UserRouteState>(
     createEmptyRouteState(userId, initialMode)
   )
@@ -188,7 +192,16 @@ export function useRouteState() {
   if (!context) {
     throw new Error('useRouteState must be used within RouteStateProvider')
   }
-  return context
+  
+  // Add helper functions for debug panel
+  const isDev = context.routeState.mode === 'travis_dev' || context.routeState.mode === 'qa_test'
+  
+  return {
+    ...context,
+    state: context.routeState, // Alias for compatibility
+    updateState: context.updateRouteState, // Alias for compatibility
+    isDev,
+  }
 }
 
 /**

@@ -15,6 +15,7 @@ interface A2DayPageTemplateProps {
   children?: React.ReactNode
   mission?: { type: string; title: string; whyItMatters: string }
   userId?: string
+  routeContext?: any // A2DayContext type
 }
 
 const taskTypeLabels: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
@@ -50,6 +51,7 @@ export function A2DayPageTemplate({
   onComplete,
   children,
   mission: customMission,
+  routeContext,
 }: A2DayPageTemplateProps) {
   const router = useRouter()
   const configMission = A2_DAILY_MISSIONS[dayNumber]
@@ -130,6 +132,41 @@ export function A2DayPageTemplate({
                 console.log('[v0] Starting mission for day', dayNumber)
               }}
             />
+
+            {/* Route Context - C1, A1, C2 Information */}
+            {routeContext && (
+              <div className="rounded-[28px] border border-blue-500/40 bg-blue-500/5 p-6 space-y-4">
+                <h3 className="text-lg font-semibold text-blue-300">Tu Contexto en Esta Misión</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* C1: Professional Identity */}
+                  {routeContext.c1 && (
+                    <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-700/40">
+                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tu Identidad</p>
+                      <p className="text-white mt-2 font-medium">{routeContext.c1.targetRole}</p>
+                      <p className="text-slate-400 text-sm mt-1">{routeContext.c1.industry}</p>
+                    </div>
+                  )}
+                  
+                  {/* A1: Communication Profile */}
+                  {routeContext.a1 && (
+                    <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-700/40">
+                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tu Estilo</p>
+                      <p className="text-white mt-2 font-medium capitalize">{routeContext.a1.communicationStyle}</p>
+                      <p className="text-slate-400 text-sm mt-1">Comunicación efectiva</p>
+                    </div>
+                  )}
+                  
+                  {/* C2: Evidence Vault */}
+                  {routeContext.c2 && (
+                    <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-700/40">
+                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tu Evidencia</p>
+                      <p className="text-white mt-2 font-medium">{routeContext.c2.achievements?.length || 0} Logros</p>
+                      <p className="text-slate-400 text-sm mt-1">Documentados</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             {/* Why This Matters */}
             <div className="rounded-[28px] border border-purple-500/40 bg-purple-500/5 p-6 space-y-4">

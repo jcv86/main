@@ -149,6 +149,7 @@ export interface A3ModuleState {
   attempts: A3AttemptSession[]
   lastAttemptAt?: Date
   certificationStatus: 'not_certified' | 'in_progress' | 'certified'
+  certifiedAt?: Date                   // When certification was earned
   reportUrl?: string                   // Where validation report saved
 }
 
@@ -229,6 +230,7 @@ export interface A2DayContext {
   a1: Partial<A1CommunicationProfile> | null
   c2: Partial<C2EvidenceVault> | null
   isUnlocked: boolean
+  isDev: boolean                       // True if in dev mode (travis_dev/qa_test)
   lockReason?: string                  // Why locked if applicable
 }
 
@@ -239,6 +241,7 @@ export interface A3ModuleContext {
   a1: Partial<A1CommunicationProfile> | null
   a2: Partial<A2RouteState> | null
   isUnlocked: boolean
+  isDev: boolean                       // True if in dev mode
   lockReason?: string
   previousModules: A3ModuleState[]
 }

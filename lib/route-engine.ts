@@ -207,6 +207,7 @@ export function getA2DayContext(state: UserRouteState, dayNumber: number): A2Day
 
   const isUnlocked = canAccessDay(state, dayNumber)
   const lockReason = isUnlocked ? undefined : getLockReason(state, dayNumber) || undefined
+  const isDev = state.mode === 'travis_dev' || state.mode === 'qa_test'
 
   return {
     day: dayState,
@@ -215,6 +216,7 @@ export function getA2DayContext(state: UserRouteState, dayNumber: number): A2Day
     a1: state.a1 || null,
     c2: state.c2 || null,
     isUnlocked,
+    isDev,
     lockReason,
   }
 }
@@ -227,6 +229,7 @@ export function getA3ModuleContext(state: UserRouteState, moduleId: string): A3M
 
   const isUnlocked = canAccessA3Module(state, moduleId)
   const lockReason = isUnlocked ? undefined : 'Complete previous modules first'
+  const isDev = state.mode === 'travis_dev' || state.mode === 'qa_test'
 
   const previousModules = checkpoint.requiredPreviousModules
     .map(id => state.a3?.modules[id])
@@ -239,6 +242,7 @@ export function getA3ModuleContext(state: UserRouteState, moduleId: string): A3M
     a1: state.a1 || null,
     a2: state.a2 || null,
     isUnlocked,
+    isDev,
     lockReason,
     previousModules,
   }
