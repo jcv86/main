@@ -1,116 +1,200 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
-import { cookies } from 'next/headers'
-import { jwtDecode } from 'jwt-decode'
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+)
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { moduleId, moduleName, trainingType } = body
-
-    console.log('[v0] Module completion request:', {
+    const {
       moduleId,
       moduleName,
-      trainingType
-    })
+      moduleNumber,
+      trainingType,
+      responses,
+      careerMirrorCard,
+      userId
+    } = body
 
-    // Get auth token from cookies
-    const cookieStore = await cookies()
-    const authToken =
-      cookieStore.get('sb-auth-token')?.value || cookieStore.get('sb-token')?.value
-
-    if (!authToken) {
-      console.warn('[v0] No auth token found for module-completion')
-      return NextResponse.json({ error: 'Authentication required' }, { status: 401 })
+    // Validate required fields
+    if (!moduleId || !moduleNumber || !trainingType) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      )
     }
 
-    // Extract user ID from JWT
-    let userId: string
-    try {
-      const decoded: any = jwtDecode(authToken)
-      userId = decoded.sub
-      if (!userId) {
-        throw new Error('No user ID in token')
+    // Get current user ID from auth if not provided
+    const authHeader = request.headers.get('authorization')
+    let currentUserId = userId
+
+    if (!currentUserId && authHeader?.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.substring(7)
+        const {
+          data: { user },
+          error: authError
+        } = await supabase.auth.getUser(token)
+
+        if (authError || !user) {
+          return NextResponse.json(
+            { error: 'Unauthorized' },
+            { status: 401 }
+          )
+        }
+        currentUserId = user.id
+      } catch (error) {
+        return NextResponse.json(
+          { error: 'Invalid token' },
+          { status: 401 }
+        )
       }
-    } catch (decodeError) {
-      console.error('[v0] Error decoding auth token:', decodeError)
-      return NextResponse.json({ error: 'Invalid authentication token' }, { status: 401 })
     }
 
-    const supabase = await createClient()
+    if (!currentUserId) {
+      return NextResponse.json(
+        { error: 'User ID required' },
+        { status: 401 }
+      )
+    }
 
-    // Check if this module has already been completed
-    const { data: existingCompletion } = await supabase
-      .from('a3_training_module_completions')
+    // 1. Record session attempt in a3_session_attempts
+    const { data: sessionData, error: sessionError } = await supabase
+      .from('a3_session_attempts')
+      .insert([
+        {
+          user_id: currentUserId,
+          module_id: moduleId,
+          module_number: moduleNumber,
+          session_type: trainingType === 'coach' ? 'coach_training' : 'interviewer_simulation',
+          lead_character: 'coach',
+          difficulty: 'adaptive',
+          is_route_checkpoint: true,
+          status: 'completed',
+          progress: 100,
+          score: 100, // Module 1 is pass/fail - 100 for completion
+          transcript: JSON.stringify({
+            q1_career_direction: responses[0] || '',
+            q2_professional_identity: responses[1] || '',
+            q3_core_values: responses[2] || '',
+            q4_personal_brand: responses[3] || ''
+          }),
+          deliverable: careerMirrorCard || {},
+          session_completed_at: new Date().toISOString()
+        }
+      ])
+      .select()
+
+    if (sessionError) {
+      console.error('[v0] Session recording error:', sessionError)
+      return NextResponse.json(
+        { error: 'Failed to record session' },
+        { status: 500 }
+      )
+    }
+
+    // 2. Record module completion in a3_module_completion
+    const { data: completionData, error: completionError } = await supabase
+      .from('a3_module_completion')
+      .upsert(
+        [
+          {
+            user_id: currentUserId,
+            module_id: moduleId,
+            module_number: moduleNumber,
+            completed_at: new Date().toISOString(),
+            best_score: 100,
+            deliverable: careerMirrorCard || {}
+          }
+        ],
+        { onConflict: 'user_id,module_id' }
+      )
+      .select()
+
+    if (completionError) {
+      console.error('[v0] Completion recording error:', completionError)
+      return NextResponse.json(
+        { error: 'Failed to record completion' },
+        { status: 500 }
+      )
+    }
+
+    // 3. Update a3_route_progression
+    // First get current progression
+    const { data: currentProgress, error: getProgressError } = await supabase
+      .from('a3_route_progression')
       .select('*')
-      .eq('user_id', userId)
-      .eq('training_module_id', moduleId)
-      .maybeSingle()
+      .eq('user_id', currentUserId)
+      .single()
 
-    let isFirstCompletion = false
-    let xpAwarded = 0
-
-    if (!existingCompletion) {
-      isFirstCompletion = true
-      xpAwarded = 100  // Default XP for module completion
-
-      // Record the first completion
-      const { error: completionError } = await supabase
-        .from('a3_training_module_completions')
-        .insert({
-          user_id: userId,
-          training_type: trainingType,
-          training_module_id: moduleId,
-          xp_amount: xpAwarded,
-          xp_awarded_at: new Date().toISOString(),
-          is_first_completion: true,
-          first_completion_at: new Date().toISOString(),
-        })
-
-      if (completionError) {
-        console.error('[v0] Error recording completion:', completionError)
-      } else {
-        console.log('[v0] Completion recorded for:', moduleId)
-      }
-
-      // Update gamification profile with XP
-      const { data: gamProfile } = await supabase
-        .from('user_gamification_profile')
-        .select('total_xp, current_xp')
-        .eq('user_id', userId)
-        .maybeSingle()
-
-      if (gamProfile) {
-        await supabase
-          .from('user_gamification_profile')
-          .update({
-            total_xp: (gamProfile.total_xp || 0) + xpAwarded,
-            current_xp: (gamProfile.current_xp || 0) + xpAwarded,
-            updated_at: new Date().toISOString(),
-          })
-          .eq('user_id', userId)
-      } else {
-        await supabase.from('user_gamification_profile').insert({
-          user_id: userId,
-          total_xp: xpAwarded,
-          current_xp: xpAwarded,
-          current_level: 'Bronze',
-        })
-      }
-    } else {
-      console.log('[v0] Module already completed, no XP awarded:', moduleId)
+    if (getProgressError && getProgressError.code !== 'PGRST116') {
+      console.error('[v0] Error fetching progress:', getProgressError)
+      return NextResponse.json(
+        { error: 'Failed to fetch progress' },
+        { status: 500 }
+      )
     }
 
+    // Calculate next module
+    const nextModuleNumber = moduleNumber < 10 ? moduleNumber + 1 : 10
+    const totalCompleted = (currentProgress?.total_completed || 0) + 1
+
+    // Determine unlock dates
+    const updates: any = {
+      user_id: currentUserId,
+      current_module_number: nextModuleNumber,
+      total_completed: totalCompleted,
+      updated_at: new Date().toISOString()
+    }
+
+    // First time unlocking modules 7-10, set unlock flags
+    if (moduleNumber === 6 && !currentProgress?.can_replay_modules_7_10) {
+      updates.can_replay_modules_7_10 = true
+      updates.advanced_unlocked_at = new Date().toISOString()
+    }
+
+    if (moduleNumber === 10) {
+      updates.pro_unlocked_at = new Date().toISOString()
+      updates.route_completed_at = new Date().toISOString()
+    }
+
+    const { data: progressData, error: progressError } = await supabase
+      .from('a3_route_progression')
+      .upsert(updates, { onConflict: 'user_id' })
+      .select()
+
+    if (progressError) {
+      console.error('[v0] Progress update error:', progressError)
+      return NextResponse.json(
+        { error: 'Failed to update progress' },
+        { status: 500 }
+      )
+    }
+
+    // 4. Award XP (80 for each module completion)
+    const xpAwarded = 80
+
+    // Return success with data
     return NextResponse.json({
       success: true,
-      isFirstCompletion,
+      moduleId,
+      moduleName,
+      moduleNumber,
       xpAwarded,
-      message: isFirstCompletion
-        ? `+${xpAwarded} XP ganados`
-        : 'Módulo completado (sin XP adicionales)',
+      nextModule: nextModuleNumber,
+      session: sessionData?.[0],
+      completion: completionData?.[0],
+      progress: progressData?.[0]
     })
+
   } catch (error) {
-    console.error('[v0] Error in module-completion:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('[v0] Module completion error:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

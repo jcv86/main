@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowLeft, ArrowRight, BookOpen, Wrench, Users, ClipboardList, Trophy } from 'lucide-react'
+import { ArrowLeft, ArrowRight, BookOpen, Wrench, Users, ClipboardList, Trophy, Zap } from 'lucide-react'
 import { A2_DAILY_MISSIONS } from '@/lib/a2-missions-full'
 import { A2DailyMissionCard } from '@/components/a2-daily-mission-card'
 import { getA3CheckpointForDay } from '@/lib/a3-checkpoint-map'
@@ -137,13 +137,26 @@ export function A2DayPageTemplate({
               <p className="text-white/80 leading-relaxed">{mission.whyItMatters}</p>
             </div>
 
-            {/* A3 Checkpoint Info */}
+            {/* A3 Checkpoint Info with CTA */}
             {checkpoint && (
               <div className="rounded-[28px] border border-emerald-500/40 bg-emerald-500/5 p-6 space-y-4">
-                <h3 className="text-lg font-semibold text-emerald-300">A3 Learning Checkpoint</h3>
-                <p className="text-white/80 leading-relaxed">
-                  Today you unlock <strong>Module {checkpoint.moduleNumber}: {checkpoint.moduleTitle}</strong>
-                </p>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="text-lg font-semibold text-emerald-300">🎯 A3 Learning Checkpoint</h3>
+                    <p className="text-white/80 leading-relaxed mt-2">
+                      ¡Felicidades! Completaste el fundamento. Ahora comienza <strong>Module {checkpoint.moduleNumber}: {checkpoint.moduleTitle}</strong>
+                    </p>
+                  </div>
+                  <Zap className="w-6 h-6 text-emerald-400 flex-shrink-0" />
+                </div>
+                
+                <Button
+                  onClick={() => router.push(checkpoint.route)}
+                  className="w-full py-6 rounded-lg font-semibold bg-emerald-600/80 hover:bg-emerald-600/100 text-white transition-all duration-200 border border-emerald-500/80 hover:border-emerald-500/100 text-base"
+                >
+                  Comenzar {checkpoint.moduleTitle}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
               </div>
             )}
           </>
