@@ -1,10 +1,11 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Upload, AlertCircle, CheckCircle } from 'lucide-react'
 import { ArrowLeft } from 'lucide-react'
+import { TRAVIS_DAY1_UPLOAD_DOCUMENT, isTravisMode } from '@/lib/travis-form-data'
 
 interface A2Day1UploadProps {
   onNext: () => void
@@ -22,6 +23,19 @@ export function A2Day1Upload({
   const [fileName, setFileName] = useState('')
   const [validationStatus, setValidationStatus] = useState<'pending' | 'checking' | 'valid' | 'invalid'>('pending')
   const [validationMessage, setValidationMessage] = useState('')
+  const [isDevMode, setIsDevMode] = useState(false)
+
+  // Load Travis data in dev mode
+  useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
+    if (travisMode) {
+      // Auto-load Travis document and validate it
+      setUploadMethod('text')
+      handleTextPaste(TRAVIS_DAY1_UPLOAD_DOCUMENT)
+    }
+  }, [])
 
   const requiredElements = [
     { key: 'situation', label: 'Situación actual' },
@@ -82,6 +96,13 @@ export function A2Day1Upload({
 
   return (
     <div className="max-w-3xl mx-auto px-4 space-y-6">
+      {/* Dev Mode Badge */}
+      {isDevMode && (
+        <div className="fixed top-20 right-4 z-50 bg-green-600/90 text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-lg">
+          Documento Pre-cargado (Dev)
+        </div>
+      )}
+
       {/* Header */}
       <div
         className="rounded-lg p-4"

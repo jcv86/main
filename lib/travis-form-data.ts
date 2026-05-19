@@ -768,3 +768,220 @@ export function isTravisMode(): boolean {
   
   return false
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// DOCUMENT UPLOAD DATA - For all form textarea fields
+// ═══════════════════════════════════════════════════════════════════════════
+
+/**
+ * Complete structured document content for Day 1 upload
+ * Includes all required sections: Situación, Objetivo, 3 Puertas
+ */
+export const TRAVIS_DAY1_UPLOAD_DOCUMENT = `# RUTA PERSONALIZADA - DÍA 1 ESCANEO DE VISIÓN
+
+## SITUACIÓN ACTUAL
+Soy Analista de Producto Junior con 18 meses de experiencia trabajando como Product Manager sin el título ni reconocimiento formal. He liderado 5 features de alto impacto que generaron más de $200K en revenue incremental para mi empresa. Mi CV actual no refleja esta realidad, posicionándome como "asistente" cuando debería estar en nivel "mid".
+
+### Datos Contextuales:
+- Empresa: B2B SaaS EdTech, $5M ARR, Serie A
+- Equipo de Producto: 4 personas (yo + 1 PM Senior + 2 Product Analysts)
+- Responsabilidades actuales: Roadmap design, user research, feature scoping, Go-To-Market
+- Título formal: "Product Analyst" o "Senior Product Analyst"
+- Feedback común de reclutadores: "Excelente PM, pero tu CV dice que eres analista"
+
+## OBJETIVO - 30 Días
+Hacer la transición formal a un puesto de Product Manager Mid-level en empresa B2B SaaS con:
+- Responsabilidades claras de toma de decisiones estratégicas
+- Autonomía en roadmap y priorización
+- Salario rango: $50K-70K USD anuales
+- Modalidad: Remota o híbrida con flexibilidad
+- Sector: EdTech, ProductivityTech o MarTech preferentemente
+
+## LAS 3 PUERTAS (GATES)
+
+### PUERTA 1: IDENTIDAD PROFESIONAL
+**Estado Actual:** Me presento como "Analista que hace trabajo de PM"
+**Necesidad:** Reconstruir identidad como "PM con 18 meses experiencia práctica"
+
+**Cambio de narrativa requerido:**
+- De: "Apoyo al equipo de producto en análisis de datos"
+- A: "Lideré el diseño y lanzamiento de features que impactaron 200K en revenue"
+
+**Evidencia:**
+- 5 features lanzadas con diseño de mi autoría
+- Roadmaps trimestrales presentados al CEO
+- User research que cambió priorización
+- Relaciones directas con 30+ clientes
+
+### PUERTA 2: EVIDENCIA CONSOLIDADA
+**Estado Actual:** Evidencia dispersa en Slack, Google Drive, documentos antiguos
+**Necesidad:** Portfolio profesional coherente con narrativa clara
+
+**Logros a documentar (Formato STAR):**
+1. Feature de onboarding: redujo churn 23%, impactó 1.2K usuarios, +$50K en revenue retenida
+2. Roadmap Q3: priorizó top 8 features según investigación con 50+ clientes, generó $80K en nueva revenue
+3. User research: entrevistas con 15 clientes mostraron oportunidad X, reposicionó roadmap Q4
+4. Integration API: facilitó 8 nuevas integraciones, habilitó $40K en revenue de partners
+5. Pricing research: análisis de elasticidad permitió precio premium, +$30K MRR
+
+### PUERTA 3: MATERIALES PROFESIONALES ACTUALIZADOS
+**Estado Actual:** CV desactualizado, sin LinkedIn posts, sin portfolio
+**Necesidad:** Presencia profesional coherente y actualizada
+
+**Materiales a preparar:**
+- CV actualizado con lenguaje de PM y métricas
+- LinkedIn completo (headline: "Product Manager en EdTech SaaS | B2B SaaS", 5+ posts)
+- Portfolio visual con 5 case studies
+- Email pitch para outreach (100 palabras max)
+
+## ESTRATEGIA SEMANAL
+
+### SEMANA 1: Consolidación de Evidencia
+- Recopilar todas las métricas de mis 5 proyectos
+- Crear narrativas STAR completas
+- Evidencia portfolio visual
+
+### SEMANA 2: Actualización de Presencia
+- Reescribir CV completo
+- Actualizar LinkedIn Profile
+- Solicitar 3 recomendaciones
+
+### SEMANA 3: Preparación de Entrevistas
+- Dominar pitch de 60 segundos
+- Preparar 10 historias conductuales
+- Mock interviews
+
+### SEMANA 4: Ejecución y Outreach
+- Identificar 20 empresas target
+- Aplicaciones personalizadas
+- Networking directo
+
+## MÉTRICAS DE ÉXITO
+- Día 30: Al menos 3 entrevistas programadas con empresas Tier A/B
+- Día 45: Al menos 1 oferta de PM Mid-level
+- Incremento de tasa de conversión de screening: 20% → 40%
+
+---
+**Documento completado:** Día 1 Escaneo de Visión
+**Estado:** Listo para Validación DTC`
+
+/**
+ * Document content for Day 2 - Evidence fragments
+ */
+export const TRAVIS_DAY2_UPLOAD_FRAGMENTS = `# EVIDENCIA CONSOLIDADA - DÍA 2
+
+## FRAGMENTO 1: FEATURE ONBOARDING
+Reduje el churn de nuevos usuarios un 23% mediante redesign de onboarding flow. Identifiqué que 45% abandonaban antes de activación clave (crear primer proyecto). Ejecuté:
+- User research con 12 nuevos usuarios
+- Rediseño del flow (5 pasos → 3 pasos)
+- Implementación y A/B testing
+- Resultado: 23% reducción churn, +1.2K usuarios retenidos, +$50K revenue
+
+## FRAGMENTO 2: ROADMAP ESTRATÉGICO Q3
+Presenté roadmap Q3 al CEO priorizando 8 features según investigación con 50+ clientes. Metodología:
+- User interviews con 50 clientes
+- Analysis de usage data
+- Competitive analysis
+- Propuesta de 3 escenarios con trade-offs
+- Selección: opción media (impacto/esfuerzo)
+- Resultado: Q3 fue nuestro mejor quarter, +$80K revenue
+
+## FRAGMENTO 3: USER RESEARCH Q4
+Condujo 15 entrevistas profundas con clientes Enterprise que casi churn. Descubrí: necesitaban "admin dashboard" que no estaba en roadmap.
+- Cambié priorización de roadmap
+- Sugerimos solución alternativa temporal
+- Frenamos churn: -8% tasa de attrición Q4
+- Iniciamos proyecto de admin dashboard
+
+## FRAGMENTO 4: API INTEGRATION STRATEGY
+Diseñé estrategia de integraciones API que habilitó ecosystem partners. Logros:
+- 8 integraciones con partners key (Zapier, Make, Integromat)
+- $40K MRR incremental de revenue de partners
+- 20% de nueve revenue viene de through-partners
+
+## FRAGMENTO 5: PRICING OPTIMIZATION
+Análisis de elasticidad de precio mostró oportunidad de precio premium. Encontré que:
+- Clientes Enterprise pagaban 5x más sin quejarse
+- Creé tier "Professional" nuevo con pricing +40%
+- Implementación sin churn
+- Resultado: +$30K MRR adicional sin nuevos usuarios
+
+## FRAGMENTO 6: GTM DE FEATURE
+Lancé "Analytics Dashboard" con GTM coordinado: 
+- Sales enablement
+- In-app messaging
+- Customer education webinar
+- Sales call campaign a top 50 customers
+- Resultado: 35% adoption en 2 semanas, $25K ARR nuevo
+
+## FRAGMENTO 7: ROADMAP TRANSPARENCY
+Implementé sistema de "transparent roadmap" para comunicar a clientes qué estamos construyendo y por qué:
+- Publicamos roadmap cada quarter
+- Explicamos reasoning
+- Abiertos a feedback
+- Resultado: NPS +12 puntos, reducción de "feature requests" repetidas
+
+## FRAGMENTO 8: RETENTION STRATEGY
+Identifiqué que 60% de churn ocurría en meses 4-6 de relación. Diseñé programa "Success Sprint":
+- Check-ins estructurados
+- Taller de "best practices"
+- Customización de setup
+- Resultado: churn M4-6 bajó de 8% a 2%
+
+---
+Documentación completada. Todos los fragmentos validados y certificados.`
+
+/**
+ * Get upload document content for any day
+ */
+export function getTravisUploadContent(dayNumber: number): string {
+  const uploadContentMap: Record<number, string> = {
+    1: TRAVIS_DAY1_UPLOAD_DOCUMENT,
+    2: TRAVIS_DAY2_UPLOAD_FRAGMENTS,
+  }
+
+  // For days 3-90, return realistic day-specific content
+  return uploadContentMap[dayNumber] || generateGenericDayContent(dayNumber)
+}
+
+/**
+ * Generate content for days that don't have specific upload data
+ */
+function generateGenericDayContent(dayNumber: number): string {
+  const phase = Math.ceil(dayNumber / 11.25) // 8 phases
+  const phaseNames = [
+    'Construcción de Identidad',
+    'Consolidación de Evidencia',
+    'Actualización de Presencia',
+    'Preparación de Entrevistas',
+    'Ejecución y Networking',
+    'Negociación y Cierre',
+    'Onboarding y Transition',
+    'Consolidación y Crecimiento',
+  ]
+
+  return `# PROGRESO - DÍA ${dayNumber}
+
+## Fase: ${phaseNames[Math.max(0, phase - 1)]}
+
+En este día de mi ruta, he avanzado en la construcción de mi candidatura PM. 
+
+### Lo que completé hoy:
+- Revisión y validación de material preparado
+- Seguimiento a aplicaciones enviadas
+- Prep para entrevistas programadas
+- Refinamiento de narrativa profesional
+
+### Logros acumulados hasta día ${dayNumber}:
+- ${Math.floor(dayNumber / 10)} semanas de ejecución consistente
+- ~${Math.floor(dayNumber * 2)} horas de inversión personal
+- ${Math.floor(dayNumber / 3)} contactos nuevos en el network
+- Progreso: ${Math.round((dayNumber / 90) * 100)}% del programa
+
+### Enfoque para próximos días:
+Continuar con disciplina en los hitos semanales mientras mantengo mi rol actual. El cambio es gradual pero consistente.
+
+---
+**Documento auto-completado para continuidad de narrativa**
+**Día: ${dayNumber} de 90**`
+}

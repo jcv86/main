@@ -1,9 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { ArrowLeft, Upload } from 'lucide-react'
+import { TRAVIS_DAY2_UPLOAD_FRAGMENTS, isTravisMode } from '@/lib/travis-form-data'
 
 interface A2Day2UploadProps {
   onNext: (fragments: any[]) => void
@@ -14,6 +15,18 @@ export function A2Day2Upload({ onNext, onBack }: A2Day2UploadProps) {
   const [uploadMethod, setUploadMethod] = useState<'file' | 'text' | null>(null)
   const [uploadedContent, setUploadedContent] = useState('')
   const [fragmentCount, setFragmentCount] = useState(0)
+  const [isDevMode, setIsDevMode] = useState(false)
+
+  // Load Travis data in dev mode
+  useEffect(() => {
+    const travisMode = isTravisMode()
+    setIsDevMode(travisMode)
+    
+    if (travisMode) {
+      setUploadMethod('text')
+      handleTextChange(TRAVIS_DAY2_UPLOAD_FRAGMENTS)
+    }
+  }, [])
 
   const parseFragments = (content: string) => {
     // Simple parsing: count "FRAGMENTO" mentions or line breaks
@@ -61,6 +74,13 @@ export function A2Day2Upload({ onNext, onBack }: A2Day2UploadProps) {
 
   return (
     <div className="max-w-3xl mx-auto px-4 space-y-6">
+      {/* Dev Mode Badge */}
+      {isDevMode && (
+        <div className="fixed top-20 right-4 z-50 bg-green-600/90 text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-lg">
+          Fragmentos Pre-cargados (Dev)
+        </div>
+      )}
+
       {/* Header */}
       <div
         className="rounded-lg p-4"
