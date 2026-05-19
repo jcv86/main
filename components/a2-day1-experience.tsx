@@ -99,7 +99,31 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
     setCurrentStep(6)
   }
 
-  const handleExternalSaveNext = () => {
+  const handleExternalSaveNext = async () => {
+    // Save to DTC Documents before moving to next step
+    if (userId && routeData) {
+      try {
+        const content = formatDocumentContent({
+          'Mi Cambio en 30 Días': routeData.change30Days,
+          'Mi Rol Objetivo': routeData.targetRole,
+          'Mi Bloqueador Principal': routeData.mainBlocker,
+          'Mi Hipótesis de Ruta': routeData.hypothesis || '',
+          'PUERTA 1 - IDENTIDAD': routeData.gates?.identity || '',
+          'PUERTA 2 - EVIDENCIA': routeData.gates?.evidence || '',
+          'PUERTA 3 - MATERIAL': routeData.gates?.material || '',
+          'Mi Roadmap Profesional': routeData.roadmap || '',
+        })
+        
+        await saveDayDocument(userId, 1, 'route_contract', {
+          title: 'Mi Contrato de Ruta',
+          content,
+          status: 'draft',
+        })
+        console.log('[v0] Day 1 route contract saved to DTC Documents')
+      } catch (err) {
+        console.error('[v0] Error saving to DTC Documents:', err)
+      }
+    }
     setCurrentStep(7)
   }
 
@@ -224,8 +248,6 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
           <A2Day1Step5ExternalSave
             onNext={handleExternalSaveNext}
             onBack={() => handleBack(5)}
-            routeData={routeData}
-            userId={userId}
           />
         )}
 

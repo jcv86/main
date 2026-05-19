@@ -4,97 +4,22 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Download, Link as LinkIcon, Database, Check, Loader } from 'lucide-react'
-import { upsertDocument } from '@/lib/supabase/dtc-documents'
-
-interface RouteData {
-  change30Days: string
-  targetRole: string
-  mainBlocker: string
-  hypothesis?: string
-  gates?: {
-    identity: string
-    evidence: string
-    material: string
-  }
-  roadmap?: string
-}
+import { Download, Link as LinkIcon, Database, Loader } from 'lucide-react'
 
 interface Step5ExternalSaveProps {
   onNext: () => void
   onBack: () => void
-  routeData?: RouteData
-  userId?: string
 }
 
-export function A2Day1Step5ExternalSave({ onNext, onBack, routeData, userId }: Step5ExternalSaveProps) {
+export function A2Day1Step5ExternalSave({ onNext, onBack }: Step5ExternalSaveProps) {
   const [notionLink, setNotionLink] = useState('')
   const [isSaving, setIsSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
-
-  // Format route data as document content
-  const formatRouteContent = () => {
-    if (!routeData) return ''
-    
-    return `# Mi Contrato de Ruta - DTC 2026
-
-## Mi Cambio en 30 Días
-${routeData.change30Days || 'No definido'}
-
-## Mi Rol Objetivo
-${routeData.targetRole || 'No definido'}
-
-## Mi Bloqueador Principal
-${routeData.mainBlocker || 'No definido'}
-
-## Mi Hipótesis de Ruta
-${routeData.hypothesis || 'No definida'}
-
-## Mis 3 Puertas de Validación
-
-### PUERTA 1 - IDENTIDAD (Día 10)
-${routeData.gates?.identity || 'No definida'}
-
-### PUERTA 2 - EVIDENCIA (Día 20)
-${routeData.gates?.evidence || 'No definida'}
-
-### PUERTA 3 - MATERIAL (Día 30)
-${routeData.gates?.material || 'No definida'}
-
-## Mi Roadmap Profesional
-${routeData.roadmap || 'No definido'}
-`
-  }
-
-  const handleNext = async () => {
-    // Auto-save to DTC Documents before proceeding
-    if (userId && routeData) {
-      setIsSaving(true)
-      try {
-        await upsertDocument(userId, 'route_contract', 'a2_day_1', {
-          title: 'Mi Contrato de Ruta',
-          type: 'route_contract',
-          source_module: 'a2_day_1',
-          related_day: 1,
-          content: formatRouteContent(),
-          status: 'draft',
-          source: 'user',
-          tags: ['day1', 'contract', 'route'],
-        })
-        setSaved(true)
-        console.log('[v0] Day 1 route contract saved to DTC Documents')
-      } catch (err) {
-        console.error('[v0] Error saving to DTC Documents:', err)
-      } finally {
-        setIsSaving(false)
-      }
-    }
-    onNext()
-  }
 
   const handleDownload = () => {
-    // Download as TXT file
-    const content = formatRouteContent()
+    const content = `# Mi Contrato de Ruta - DTC 2026
+
+Tu documento de ruta personal para los próximos 90 días.
+Se guardará automáticamente en DTC Docs.`
     const blob = new Blob([content], { type: 'text/plain' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -105,9 +30,21 @@ ${routeData.roadmap || 'No definido'}
   }
 
   const handleCopyToClipboard = async () => {
-    const content = formatRouteContent()
+    const content = `# Mi Contrato de Ruta - DTC 2026
+
+Tu documento de ruta personal para los próximos 90 días.
+Se guardará automáticamente en DTC Docs.`
     await navigator.clipboard.writeText(content)
     alert('Copiado al portapapeles')
+  }
+
+  const handleNext = async () => {
+    setIsSaving(true)
+    // Show saving state briefly, then proceed
+    // The actual DTC save happens in the parent component
+    await new Promise(r => setTimeout(r, 300))
+    setIsSaving(false)
+    onNext()
   }
 
   return (
@@ -125,7 +62,6 @@ ${routeData.roadmap || 'No definido'}
             <h3 className="font-semibold text-white">Guardado Automático en DTC Docs</h3>
             <p className="text-sm text-white/60">Tu documento se guardará automáticamente al continuar. Podrás editarlo en cualquier momento desde La Realidad.</p>
           </div>
-          {saved && <Check className="w-5 h-5 text-green-400 ml-auto" />}
         </div>
       </div>
 
