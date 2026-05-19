@@ -2395,20 +2395,6 @@ export const A2_DAILY_MISSIONS: Record<number, A2DailyMission> = {
     },
     notionTemplate: 'https://notion.so/template-dia-70-repair-weakest',
   },
-    instructions: [
-      'Identify your weakest answer from simulation',
-      'Get detailed coach feedback on it',
-      'Completely rework the answer',
-      'Practice until strong',
-    ],
-    deliverable: 'Completely rewritten and rehearsed weakest answer',
-    dtcValidation: { required: false },
-    completionResult: {
-      onPass: 'Continúa al siguiente día',
-      onFail: 'Sigue mejorando esta respuesta',
-    },
-    notionTemplate: 'https://notion.so/template-dia-70-repair-weakest',
-  },
 
   71: {
     day: 71,
