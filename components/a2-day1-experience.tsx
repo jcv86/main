@@ -100,8 +100,8 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
   }
 
   const handleExternalSaveNext = async () => {
-    // Save to DTC Documents before moving to next step
-    if (userId && routeData) {
+    // Save to DTC Documents before moving to next step (skip for demo users)
+    if (userId && routeData && !userId.includes('demo-')) {
       try {
         const content = formatDocumentContent({
           'Mi Cambio en 30 Días': routeData.change30Days,
