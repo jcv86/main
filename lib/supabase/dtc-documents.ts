@@ -74,26 +74,37 @@ export async function createDocument(
   userId: string,
   input: CreateDocumentInput
 ) {
-  const sb = createClient()
-  
-  const { data, error } = await sb
-    .from('dtc_documents')
-    .insert({
-      user_id: userId,
-      title: input.title,
-      type: input.type,
-      source_module: input.source_module || null,
-      related_day: input.related_day || null,
-      related_a3_module: input.related_a3_module || null,
-      content: input.content || null,
-      status: input.status || 'draft',
-      source: input.source || 'user',
-      tags: input.tags || [],
-    })
-    .select()
-    .single()
+  try {
+    const sb = createClient()
+    
+    const { data, error } = await sb
+      .from('dtc_documents')
+      .insert({
+        user_id: userId,
+        title: input.title,
+        type: input.type,
+        source_module: input.source_module || null,
+        related_day: input.related_day || null,
+        related_a3_module: input.related_a3_module || null,
+        content: input.content || null,
+        status: input.status || 'draft',
+        source: input.source || 'user',
+        tags: input.tags || [],
+      })
+      .select()
+      .single()
 
-  return { data: data as DTCDocument | null, error }
+    if (error) {
+      console.error('[v0] createDocument error:', error)
+      return { data: null, error }
+    }
+
+    console.log('[v0] Document created successfully:', data?.id)
+    return { data: data as DTCDocument | null, error }
+  } catch (err) {
+    console.error('[v0] createDocument exception:', err)
+    return { data: null, error: err }
+  }
 }
 
 /**
@@ -199,20 +210,31 @@ export async function updateDocument(
   documentId: string,
   input: UpdateDocumentInput
 ) {
-  const sb = createClient()
-  
-  const { data, error } = await sb
-    .from('dtc_documents')
-    .update({
-      ...input,
-      updated_at: new Date().toISOString(),
-    })
-    .eq('user_id', userId)
-    .eq('id', documentId)
-    .select()
-    .single()
+  try {
+    const sb = createClient()
+    
+    const { data, error } = await sb
+      .from('dtc_documents')
+      .update({
+        ...input,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('user_id', userId)
+      .eq('id', documentId)
+      .select()
+      .single()
 
-  return { data: data as DTCDocument | null, error }
+    if (error) {
+      console.error('[v0] updateDocument error:', error)
+      return { data: null, error }
+    }
+
+    console.log('[v0] Document updated successfully:', documentId)
+    return { data: data as DTCDocument | null, error }
+  } catch (err) {
+    console.error('[v0] updateDocument exception:', err)
+    return { data: null, error: err }
+  }
 }
 
 /**
@@ -266,28 +288,44 @@ export async function upsertDocument(
   sourceModule: string,
   input: CreateDocumentInput
 ) {
-  const sb = createClient()
-  
-  // Try to find existing document
-  const { data: existing } = await sb
-    .from('dtc_documents')
-    .select('id')
-    .eq('user_id', userId)
-    .eq('type', type)
-    .eq('source_module', sourceModule)
-    .eq('related_day', input.related_day || null)
-    .maybeSingle()
+  try {
+    const sb = createClient()
+    
+    // Try to find existing document
+    const { data: existing, error: findError } = await sb
+      .from('dtc_documents')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('type', type)
+      .eq('source_module', sourceModule)
+      .eq('related_day', input.related_day || null)
+      .maybeSingle()
 
-  if (existing) {
-    // Update existing
-    return updateDocument(userId, existing.id, {
-      title: input.title,
-      content: input.content,
-      status: input.status,
-      tags: input.tags,
-    })
-  } else {
-    // Create new
-    return createDocument(userId, input)
+    if (findError) {
+      console.error('[v0] Error finding existing document:', findError)
+      throw findError
+    }
+
+    if (existing) {
+      // Update existing
+      console.log('[v0] Updating existing document:', existing.id)
+      const result = await updateDocument(userId, existing.id, {
+        title: input.title,
+        content: input.content,
+        status: input.status,
+        tags: input.tags,
+      })
+      console.log('[v0] Document updated:', result)
+      return result
+    } else {
+      // Create new
+      console.log('[v0] Creating new document:', { type, sourceModule, userId })
+      const result = await createDocument(userId, input)
+      console.log('[v0] Document created:', result)
+      return result
+    }
+  } catch (err) {
+    console.error('[v0] upsertDocument error:', err)
+    throw err
   }
 }
