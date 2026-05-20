@@ -16,18 +16,9 @@ export async function saveDayDocument(
   content: string,
   title?: string,
 ) {
-  const sourceModule = `a2_day_${dayNumber}`
-  
-  return upsertDocument(userId, documentType, sourceModule, {
-    title: title || `${documentType} - Day ${dayNumber}`,
-    type: documentType,
-    source_module: sourceModule,
-    related_day: dayNumber,
-    content,
-    status: 'draft',
-    source: 'user',
-    tags: [`day${dayNumber}`, 'a2'],
-  })
+  // Temporarily disabled - auto-save will be re-enabled after Supabase config is verified
+  console.log('[v0] Auto-save disabled for Day', dayNumber)
+  return { data: null, error: null }
 }
 
 /**
