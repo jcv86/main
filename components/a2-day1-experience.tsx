@@ -100,14 +100,9 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
   }
 
   const handleExternalSaveNext = async () => {
-    console.log('[v0] handleExternalSaveNext called')
-    console.log('[v0] userId:', userId)
-    console.log('[v0] routeData:', routeData)
-    
     // Save to DTC Documents before moving to next step
     if (userId && routeData) {
       try {
-        console.log('[v0] Formatting document content...')
         const content = formatDocumentContent({
           'Mi Cambio en 30 Días': routeData.change30Days,
           'Mi Rol Objetivo': routeData.targetRole,
@@ -118,21 +113,11 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
           'PUERTA 3 - MATERIAL': routeData.gates?.material || '',
           'Mi Roadmap Profesional': routeData.roadmap || '',
         })
-        console.log('[v0] Content formatted, length:', content?.length)
         
-        console.log('[v0] Calling saveDayDocument with:', { userId, dayNumber: 1, type: 'route_contract' })
-        const result = await saveDayDocument(userId, 1, 'route_contract', content, 'Mi Contrato de Ruta')
-        console.log('[v0] saveDayDocument result:', result)
-        console.log('[v0] Day 1 route contract saved to DTC Documents')
+        await saveDayDocument(userId, 1, 'route_contract', content, 'Mi Contrato de Ruta')
       } catch (err) {
-        console.error('[v0] Error saving to DTC Documents:', err)
-        console.error('[v0] Error details:', {
-          message: err instanceof Error ? err.message : String(err),
-          stack: err instanceof Error ? err.stack : undefined,
-        })
+        console.error('[v0] Error saving Day 1 to DTC:', err)
       }
-    } else {
-      console.log('[v0] Skipping save - missing userId or routeData', { userId: !!userId, routeData: !!routeData })
     }
     setCurrentStep(7)
   }
