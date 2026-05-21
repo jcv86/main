@@ -235,20 +235,21 @@ export default function A1ResultadoPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div className="p-3 bg-red/5 dark:bg-red/20 rounded-[28px] border-l-4 border-red/50">
-                <p className="font-semibold text-red dark:text-red/30">Energía (Acción & Dinamismo)</p>
-                <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">Tu capacidad para iniciar, moverte rápido y llevar momentum</p>
-              </div>
+              {/* Issue #4: Correct priority order: Plan Ejecutivo → Energía → Relaciones → Enfoque */}
               <div className="p-3 bg-yellow/5 dark:bg-yellow/20 rounded-[28px] border-l-4 border-orange">
-                <p className="font-semibold text-yellow dark:text-yellow/20">Plan Ejecutivo (Influencia & Visión)</p>
+                <p className="font-semibold text-yellow dark:text-yellow/20">1. Plan Ejecutivo (Influencia & Visión)</p>
                 <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">Tu capacidad para inspirar, comunicar dirección y llevar gente contigo</p>
               </div>
+              <div className="p-3 bg-red/5 dark:bg-red/20 rounded-[28px] border-l-4 border-red/50">
+                <p className="font-semibold text-red dark:text-red/30">2. Energía (Acción & Dinamismo)</p>
+                <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">Tu capacidad para iniciar, moverte rápido y llevar momentum</p>
+              </div>
               <div className="p-3 bg-green/5 dark:bg-green/20 rounded-[28px] border-l-4 border-green">
-                <p className="font-semibold text-green dark:text-green/30">Relaciones (Estabilidad & Confianza)</p>
+                <p className="font-semibold text-green dark:text-green/30">3. Relaciones (Estabilidad & Confianza)</p>
                 <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">Tu capacidad para conectar, sostener y ser confiable para otros</p>
               </div>
               <div className="p-3 bg-blue/5 dark:bg-blue/20 rounded-[28px] border-l-4 border-blue/50">
-                <p className="font-semibold text-blue dark:text-blue-200">Enfoque (Precisión & Profundidad)</p>
+                <p className="font-semibold text-blue dark:text-blue-200">4. Enfoque (Precisión & Profundidad)</p>
                 <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">Tu capacidad para analizar, refinar y asegurar calidad en lo que haces</p>
               </div>
             </CardContent>
