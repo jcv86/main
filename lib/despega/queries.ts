@@ -1,5 +1,26 @@
 import { createClient } from "@/lib/supabase/server"
 
+// Helper to get active cycle for current user (Issue #6: cycle isolation)
+async function getActiveCycleId(pilar?: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) return null
+
+  let query = supabase
+    .from("despega_cycles")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq("status", "active")
+
+  if (pilar) {
+    query = query.eq("pilar", pilar)
+  }
+
+  const { data } = await query.limit(1).single()
+  return data?.id || null
+}
+
 export async function getDespegaUserProfile() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -21,11 +42,16 @@ export async function getPilarProgress(pilar: string) {
 
   if (!user) return null
 
+  // Issue #6: Filter by active cycle to ensure data isolation
+  const cycle_id = await getActiveCycleId(pilar)
+  if (!cycle_id) return null
+
   const { data } = await supabase
     .from("despega_pilar_progress")
     .select("*")
     .eq("user_id", user.id)
     .eq("pilar", pilar)
+    .eq("cycle_id", cycle_id)
     .single()
 
   return data
@@ -37,10 +63,21 @@ export async function getAllPilaresProgress() {
 
   if (!user) return []
 
+  // Issue #6: Filter by active cycles
+  const { data: cycles } = await supabase
+    .from("despega_cycles")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq("status", "active")
+
+  const cycle_ids = cycles?.map(c => c.id) || []
+  if (cycle_ids.length === 0) return []
+
   const { data } = await supabase
     .from("despega_pilar_progress")
     .select("*")
     .eq("user_id", user.id)
+    .in("cycle_id", cycle_ids)
 
   return data || []
 }

@@ -39,6 +39,7 @@ export async function initializeDespegaProfile(camino_foco: "persona" | "profesi
 
   if (!user) throw new Error("Unauthorized")
 
+  const now = new Date()
   const { data, error } = await supabase
     .from("despega_user_profiles")
     .upsert({
@@ -47,25 +48,54 @@ export async function initializeDespegaProfile(camino_foco: "persona" | "profesi
       camino_persona_active: camino_foco === "persona" || camino_foco === "ambos",
       camino_profesional_active: camino_foco === "profesional" || camino_foco === "ambos",
       onboarding_completed: true,
-      ciclo_start_date: new Date().toISOString().split("T")[0],
+      ciclo_start_date: now.toISOString().split("T")[0],
+      created_at: now.toISOString(),
+      updated_at: now.toISOString(),
     })
     .select()
     .single()
 
   if (error) throw error
 
-  // Initialize pilar progress for both paths
+  // Create initial cycles for each pilar (Issue #5: Initialize with timestamps)
   const pilares = ["a1_cerebral", "a2_rutas", "aterrizaje", "base"]
+  const cycles: any[] = []
   
   for (const pilar of pilares) {
+    const { data: cycleData, error: cycleError } = await supabase
+      .from("despega_cycles")
+      .insert({
+        user_id: user.id,
+        pilar,
+        cycle_number: 1,
+        status: "active",
+        start_date: now.toISOString(),
+        end_date: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(), // +30 days
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+      })
+      .select()
+      .single()
+
+    if (cycleError) {
+      console.error(`[v0] Error creating cycle for pilar ${pilar}:`, cycleError)
+      continue
+    }
+    cycles.push(cycleData)
+
+    // Initialize pilar progress for this cycle (Issue #5: Include timestamps)
     await supabase.from("despega_pilar_progress").upsert({
       user_id: user.id,
       pilar,
-      progreso: 0,
-      score: 0,
-      ciclo_actual: 30,
-      ciclo_dia: 1,
+      cycle_id: cycleData.id,
+      diagnostic_score: 0,
+      points_accumulated: 0,
+      missions_completed: 0,
+      progress_pct: 0,
       is_unlocked: pilar === "a1_cerebral", // Only A1 starts unlocked
+      ciclo_dia: 1,
+      created_at: now.toISOString(),
+      updated_at: now.toISOString(),
     })
   }
 
@@ -73,6 +103,8 @@ export async function initializeDespegaProfile(camino_foco: "persona" | "profesi
   await supabase.from("despega_rankings").upsert({
     user_id: user.id,
     score_general: 0,
+    created_at: now.toISOString(),
+    updated_at: now.toISOString(),
   })
 
   revalidatePath("/despega")

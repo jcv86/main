@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 import { DISC_TEST_QUESTIONS } from '@/lib/disc-test-questions'
 import { QuestionProgress } from '@/components/question-progress'
+import { getDemoMode } from '@/lib/despega/demo-user'
 
 type QuestionTiming = {
   questionId: number
@@ -29,21 +30,15 @@ export default function A1CerebralPage() {
     const check = async () => {
       const { data: { user } } = await sb.auth.getUser()
       
-      // Check if user exists in Supabase or is a demo user
+      // Check if user exists in Supabase or is in demo mode
       let currentUserId = user?.id
       if (!user) {
-        // Check if demo user exists in localStorage
-        const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
-        if (demoUserStr) {
-          try {
-            const demoUser = JSON.parse(demoUserStr)
-            currentUserId = demoUser.id
-            console.log('[v0] Demo user found for a1-cerebral:', demoUser.email)
-          } catch (e) {
-            console.error('[v0] Error parsing demo user:', e)
-            router.push('/auth/signin')
-            return
-          }
+        // Issue #8: Check demo mode flag (no PII in localStorage)
+        const isDemoMode = getDemoMode()
+        if (isDemoMode) {
+          // In demo mode: use a placeholder ID
+          currentUserId = 'demo-user-' + Math.random().toString(36).substr(2, 9)
+          console.log('[v0] Demo mode active for a1-cerebral')
         } else {
           router.push('/auth/signin')
           return

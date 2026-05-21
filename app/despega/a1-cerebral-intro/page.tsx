@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Brain, CheckCircle2, Zap } from 'lucide-react'
 import { StepHeader } from '@/components/step-header'
+import { getDemoMode } from '@/lib/despega/demo-user'
 
 export default function A1CerebralIntroPage() {
   const [authOk, setAuthOk] = useState(false)
@@ -17,21 +18,14 @@ export default function A1CerebralIntroPage() {
     const check = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       
-      // Check if user exists in Supabase or is a demo user
+      // Check if user exists in Supabase or is in demo mode
       let userId = user?.id
       if (!user) {
-        // Check if demo user exists in localStorage
-        const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
-        if (demoUserStr) {
-          try {
-            const demoUser = JSON.parse(demoUserStr)
-            userId = demoUser.id
-            console.log('[v0] Demo user found:', demoUser.email)
-          } catch (e) {
-            console.error('[v0] Error parsing demo user:', e)
-            router.push('/auth/signin')
-            return
-          }
+        // Issue #8: Check demo mode flag (no PII in localStorage)
+        const isDemoMode = getDemoMode()
+        if (isDemoMode) {
+          userId = 'demo-user-' + Math.random().toString(36).substr(2, 9)
+          console.log('[v0] Demo mode active for A1 intro')
         } else {
           router.push('/auth/signin')
           return

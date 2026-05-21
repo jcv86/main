@@ -5,13 +5,20 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
+import { Checkbox } from "@/components/ui/checkbox"
 import { Progress } from "@/components/ui/progress"
 import { ChevronRight, ChevronLeft, CheckCircle2, Loader2 } from "lucide-react"
 import { C1_QUESTIONS } from "@/lib/canon-questions"
 
 interface C1ComponentProps {
-  onComplete: (responses: Record<number, string>, insights: string) => void
+  onComplete: (responses: Record<number, string>, insights: string, contextData: ContextData) => void
   onBack: () => void
+}
+
+interface ContextData {
+  shiftWorker: boolean
+  otherContext: string
+  consentGiven: boolean
 }
 
 export function ConozcamonosUnoComponent({ onComplete, onBack }: C1ComponentProps) {
@@ -19,6 +26,14 @@ export function ConozcamonosUnoComponent({ onComplete, onBack }: C1ComponentProp
   const [responses, setResponses] = useState<Record<number, string>>({})
   const [isValid, setIsValid] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  
+  // Issue #2: Custom context fields
+  const [shiftWorker, setShiftWorker] = useState(false)
+  const [otherContext, setOtherContext] = useState("")
+  const [consentGiven, setConsentGiven] = useState(false)
+  
+  // Track if we're on the context section (after questions)
+  const [showingContext, setShowingContext] = useState(false)
 
   const question = C1_QUESTIONS[currentQuestion]
   const progress = ((currentQuestion + 1) / C1_QUESTIONS.length) * 100
@@ -67,16 +82,32 @@ export function ConozcamonosUnoComponent({ onComplete, onBack }: C1ComponentProp
     if (currentQuestion < C1_QUESTIONS.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
       setIsValid(false)
+    } else if (!showingContext) {
+      // After all questions, show context section
+      setShowingContext(true)
+      setIsValid(consentGiven) // Context is valid only if consent given
     } else {
+      // Final submission after context
       setIsLoading(true)
       const insights = await generateC1Insights(responses)
       setIsLoading(false)
-      onComplete(responses, insights)
+      
+      const contextData: ContextData = {
+        shiftWorker,
+        otherContext,
+        consentGiven
+      }
+      
+      onComplete(responses, insights, contextData)
     }
   }
 
   const handlePrevious = () => {
-    if (currentQuestion > 0) {
+    if (showingContext) {
+      setShowingContext(false)
+      setCurrentQuestion(C1_QUESTIONS.length - 1)
+      setIsValid(currentResponse.length >= 3)
+    } else if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1)
       setIsValid(currentResponse.length >= 3)
     }
@@ -99,49 +130,120 @@ export function ConozcamonosUnoComponent({ onComplete, onBack }: C1ComponentProp
         <div className="mb-8">
           <div className="flex justify-between items-center mb-3">
             <span className="text-sm font-semibold text-muted-foreground">
-              Pregunta {currentQuestion + 1} de {C1_QUESTIONS.length}
+              {showingContext ? 
+                "Información adicional" 
+                : `Pregunta ${currentQuestion + 1} de ${C1_QUESTIONS.length}`
+              }
             </span>
             <span className="text-sm font-semibold text-muted-foreground">
-              {Math.round(progress)}%
+              {showingContext ? "100%" : `${Math.round(progress)}%`}
             </span>
           </div>
-          <Progress value={progress} className="h-2" />
+          <Progress value={showingContext ? 100 : progress} className="h-2" />
         </div>
 
-        {/* Question Card */}
-        <Card className="mb-8 border-0 shadow-lg">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-2xl text-foreground">
-              {question.question}
-            </CardTitle>
-            {question.subtitle && (
+        {/* Question Card OR Context Card */}
+        {!showingContext ? (
+          <Card className="mb-8 border-0 shadow-lg">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-2xl text-foreground">
+                {question.question}
+              </CardTitle>
+              {question.subtitle && (
+                <CardDescription className="text-base mt-2">
+                  {question.subtitle}
+                </CardDescription>
+              )}
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {question.type === "textarea" ? (
+                <Textarea
+                  value={currentResponse}
+                  onChange={(e) => handleResponseChange(e.target.value)}
+                  placeholder={question.placeholder}
+                  className="min-h-32 text-base resize-none"
+                />
+              ) : (
+                <Input
+                  value={currentResponse}
+                  onChange={(e) => handleResponseChange(e.target.value)}
+                  placeholder={question.placeholder}
+                  className="text-base h-12"
+                  type="text"
+                />
+              )}
+              <p className="text-xs text-muted-foreground">
+                {currentResponse.length} caracteres
+              </p>
+            </CardContent>
+          </Card>
+        ) : (
+          // Issue #2: Custom context capture form
+          <Card className="mb-8 border-0 shadow-lg">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-2xl text-foreground">
+                Tu Contexto Adicional
+              </CardTitle>
               <CardDescription className="text-base mt-2">
-                {question.subtitle}
+                Información adicional para personalizar aún más tu análisis
               </CardDescription>
-            )}
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {question.type === "textarea" ? (
-              <Textarea
-                value={currentResponse}
-                onChange={(e) => handleResponseChange(e.target.value)}
-                placeholder={question.placeholder}
-                className="min-h-32 text-base resize-none"
-              />
-            ) : (
-              <Input
-                value={currentResponse}
-                onChange={(e) => handleResponseChange(e.target.value)}
-                placeholder={question.placeholder}
-                className="text-base h-12"
-                type="text"
-              />
-            )}
-            <p className="text-xs text-muted-foreground">
-              {currentResponse.length} caracteres
-            </p>
-          </CardContent>
-        </Card>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Shift Worker Checkbox */}
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id="shift-worker"
+                  checked={shiftWorker}
+                  onCheckedChange={(checked) => setShiftWorker(checked as boolean)}
+                  className="mt-1"
+                />
+                <div className="flex-1">
+                  <label htmlFor="shift-worker" className="text-base font-semibold text-foreground cursor-pointer">
+                    Trabajo en turnos (noche, rotativo, etc.)
+                  </label>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Esto nos ayuda a personalizar tu plan de 90 días según tu disponibilidad
+                  </p>
+                </div>
+              </div>
+
+              {/* Custom Context Text */}
+              <div className="space-y-2">
+                <label htmlFor="other-context" className="text-base font-semibold text-foreground">
+                  ¿Hay algo más que debamos saber? (Opcional)
+                </label>
+                <Textarea
+                  id="other-context"
+                  value={otherContext}
+                  onChange={(e) => setOtherContext(e.target.value)}
+                  placeholder="Ej: Voy a cambiar de trabajo en 3 meses, tengo 2 hijos, estoy aprendiendo inglés..."
+                  className="min-h-24 text-base resize-none"
+                />
+                <p className="text-xs text-muted-foreground">
+                  {otherContext.length} caracteres
+                </p>
+              </div>
+
+              {/* Consent Checkbox */}
+              <div className="flex items-start gap-3 bg-blue/5 border border-blue/20 rounded-lg p-4">
+                <Checkbox
+                  id="consent"
+                  checked={consentGiven}
+                  onCheckedChange={(checked) => setConsentGiven(checked as boolean)}
+                  className="mt-1"
+                />
+                <div className="flex-1">
+                  <label htmlFor="consent" className="text-sm font-semibold text-foreground cursor-pointer">
+                    Autorizo a Despega usar esta información para personalizar mi experiencia
+                  </label>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Tus datos se cifran y solo se usan para mejorar tus resultados
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Info Card */}
         <Card className="mb-8 bg-purple/5 border-purple/30">
