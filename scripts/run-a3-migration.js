@@ -43,54 +43,28 @@ async function runMigration() {
       process.exit(1);
     }
 
-    // Split by semicolon and execute statements individually
-    const statements = sql
-      .split(';')
-      .map(stmt => stmt.trim())
-      .filter(stmt => stmt.length > 0 && !stmt.startsWith('--'));
+    // Execute the entire SQL file as one transaction
+    console.log(`\n⏳ Executing SQL file (entire transaction)...\n`);
 
-    console.log(`\n⏳ Executing ${statements.length} SQL statements...\n`);
-
-    let successCount = 0;
-    let skipCount = 0;
-
-    for (let i = 0; i < statements.length; i++) {
-      try {
-        const stmtPreview = statements[i].substring(0, 60).replace(/\n/g, ' ');
-        process.stdout.write(`[${i + 1}/${statements.length}] ${stmtPreview}... `);
-        
-        await client.query(statements[i]);
-        console.log('✅');
-        successCount++;
-      } catch (error) {
-        // Skip "already exists" errors
-        if (
-          error.message.includes('already exists') ||
-          error.code === '42P07' || // DUPLICATE_TABLE
-          error.code === '42P06' || // DUPLICATE_SCHEMA
-          error.code === '42723'    // DUPLICATE_FUNCTION
-        ) {
-          console.log('⏭️  (already exists)');
-          skipCount++;
-        } else {
-          console.error(`\n❌ Error executing statement ${i + 1}:`);
-          console.error(error.message);
-          throw error;
-        }
-      }
+    try {
+      await client.query('BEGIN');
+      await client.query(sql);
+      await client.query('COMMIT');
+      
+      console.log('✅ All statements executed successfully\n');
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
     }
-    
-    console.log(`\n✅ Migration completed successfully!`);
-    console.log(`   • Executed: ${successCount} statements`);
-    console.log(`   • Skipped: ${skipCount} statements (already exist)`);
-    console.log('\n📊 A3 Behavioral System schema created:');
-    console.log('   ✓ despega_a3_pre_interview');
-    console.log('   ✓ despega_a3_employability');
-    console.log('   ✓ despega_a3_behavioral_obs');
+    console.log('\n📊 A3 Behavioral System schema deployed:');
+    console.log('   ✓ despega_a3_pre_interview_analysis');
+    console.log('   ✓ despega_a3_employability_diagnosis');
+    console.log('   ✓ despega_a3_behavioral_observations');
     console.log('   ✓ despega_a3_emotional_state');
-    console.log('   ✓ despega_a3_difficulty_progress');
-    console.log('   ✓ despega_a3_success_signals');
-    console.log('   ✓ despega_a3_feedback');
+    console.log('   ✓ despega_a3_difficulty_levels');
+    console.log('   ✓ despega_a3_p_success_calculations');
+    console.log('   ✓ despega_a3_structured_feedback');
+    console.log('\n✅ Migration completed successfully!');
 
   } catch (error) {
     console.error('\n❌ Migration failed:', error.message);

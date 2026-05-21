@@ -1,6 +1,39 @@
 -- Enhanced A3 System: Complete Interview Training & Behavioral Analysis
 -- This extends the existing A3 schema with behavioral observation, progress tracking, and emotional regulation
 
+-- A3.0 User A3 Progress (Parent table for simulations)
+CREATE TABLE IF NOT EXISTS despega_user_a3_progress (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  cycle_id UUID, -- Reference to despega_cycles(id) if needed
+  pilar TEXT DEFAULT 'a3_entrevista',
+  
+  -- Simulation Session
+  session_type TEXT CHECK (session_type IN ('pre_interview', 'simulation', 'coached_retry')),
+  session_number INTEGER DEFAULT 1,
+  session_date TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  
+  -- Overall Progress
+  scenarios_completed INTEGER DEFAULT 0,
+  current_difficulty_level INTEGER DEFAULT 1,
+  p_success_probability FLOAT CHECK (p_success_probability >= 0 AND p_success_probability <= 1),
+  
+  -- Emotional & Behavioral State
+  overall_anxiety_level FLOAT CHECK (overall_anxiety_level >= 0 AND overall_anxiety_level <= 100),
+  overall_confidence_level FLOAT CHECK (overall_confidence_level >= 0 AND overall_confidence_level <= 100),
+  behavioral_stability_score FLOAT CHECK (behavioral_stability_score >= 0 AND behavioral_stability_score <= 100),
+  
+  -- Session Outcome
+  completed BOOLEAN DEFAULT FALSE,
+  completed_at TIMESTAMP WITH TIME ZONE,
+  session_score FLOAT CHECK (session_score >= 0 AND session_score <= 100),
+  coaching_notes TEXT,
+  
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  UNIQUE(user_id, cycle_id, session_number)
+);
+
 -- A3.0 Pre-Interview Analysis
 CREATE TABLE IF NOT EXISTS despega_a3_pre_interview_analysis (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -208,6 +241,7 @@ CREATE TABLE IF NOT EXISTS despega_a3_structured_feedback (
 );
 
 -- Enable RLS
+ALTER TABLE despega_user_a3_progress ENABLE ROW LEVEL SECURITY;
 ALTER TABLE despega_a3_pre_interview_analysis ENABLE ROW LEVEL SECURITY;
 ALTER TABLE despega_a3_employability_diagnosis ENABLE ROW LEVEL SECURITY;
 ALTER TABLE despega_a3_behavioral_observations ENABLE ROW LEVEL SECURITY;
@@ -217,6 +251,10 @@ ALTER TABLE despega_a3_p_success_calculations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE despega_a3_structured_feedback ENABLE ROW LEVEL SECURITY;
 
 -- RLS Policies
+CREATE POLICY "Users can view own a3 progress" ON despega_user_a3_progress FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own a3 progress" ON despega_user_a3_progress FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own a3 progress" ON despega_user_a3_progress FOR UPDATE USING (auth.uid() = user_id);
+
 CREATE POLICY "Users can view own pre-interview analysis" ON despega_a3_pre_interview_analysis FOR SELECT USING (auth.uid() = user_id);
 CREATE POLICY "Users can insert own pre-interview analysis" ON despega_a3_pre_interview_analysis FOR INSERT WITH CHECK (auth.uid() = user_id);
 
@@ -240,6 +278,9 @@ CREATE POLICY "Users can view own structured feedback" ON despega_a3_structured_
 CREATE POLICY "Users can insert own structured feedback" ON despega_a3_structured_feedback FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- Indexes
+CREATE INDEX IF NOT EXISTS idx_a3_progress_user ON despega_user_a3_progress(user_id);
+CREATE INDEX IF NOT EXISTS idx_a3_progress_cycle ON despega_user_a3_progress(cycle_id);
+CREATE INDEX IF NOT EXISTS idx_a3_progress_user_cycle ON despega_user_a3_progress(user_id, cycle_id);
 CREATE INDEX IF NOT EXISTS idx_a3_pre_interview_user ON despega_a3_pre_interview_analysis(user_id);
 CREATE INDEX IF NOT EXISTS idx_a3_employability_user ON despega_a3_employability_diagnosis(user_id);
 CREATE INDEX IF NOT EXISTS idx_a3_behavioral_user ON despega_a3_behavioral_observations(user_id);
