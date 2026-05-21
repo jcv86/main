@@ -65,6 +65,7 @@
     "node-fetch": "^3.3.2",
     "nodemailer": "latest",
     "openai": "6.2.0",
+    "pg": "^8.21.0",
     "react": "^19",
     "react-chartjs-2": "^5.3.1",
     "react-dom": "^19",
