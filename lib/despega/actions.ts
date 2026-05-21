@@ -118,13 +118,38 @@ export async function completeMision(mision_id: string, respuesta?: any, tiempo_
   if (!user) throw new Error("Unauthorized")
 
   try {
-    // Use atomic RPC for mission completion (Issue #9: Idempotent + Atomic)
+    // Get mission points
+    const { data: mision, error: misionError } = await supabase
+      .from('despega_misiones')
+      .select('puntos')
+      .eq('id', mision_id)
+      .single()
+
+    if (misionError || !mision) {
+      throw new Error(`Mission ${mision_id} not found`)
+    }
+
+    // Get active cycle for A1
+    const { data: cycle, error: cycleError } = await supabase
+      .from('despega_cycles')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('pilar', 'a1_cerebral')
+      .eq('status', 'active')
+      .single()
+
+    if (cycleError || !cycle) {
+      throw new Error('No active cycle found for A1')
+    }
+
+    // Use atomic RPC for mission completion (Blocker #3: Idempotent + Atomic + Cycle-aware)
     // This function handles: mission completion, progress update, scoring, all in one transaction
-    const { data, error } = await supabase.rpc('complete_mission_transaction', {
+    const { data, error } = await supabase.rpc('complete_a1_mission_transaction', {
       p_user_id: user.id,
       p_mision_id: mision_id,
-      p_user_notes: respuesta,
-      p_tiempo_dedicado_minutos: tiempo_dedicado_minutos || 0,
+      p_cycle_id: cycle.id,
+      p_notes: respuesta || null,
+      p_puntos: mision.puntos,
     })
 
     if (error) {
@@ -138,32 +163,21 @@ export async function completeMision(mision_id: string, respuesta?: any, tiempo_
 
     const result = data[0]
     
-    // Check if this was an idempotent call (already completed)
-    if (result.idempotent_call) {
-      console.log("[v0] Mission already completed (idempotent call prevented duplicate)")
-      // Still return success, but indicate it was a duplicate
-      return {
-        success: true,
-        mission_completed_id: result.mission_completed_id,
-        points_earned: result.points_earned,
-        idempotent_duplicate: true
-      }
-    }
-
     console.log("[v0] Mission completion recorded via atomic RPC", {
       mission_id: mision_id,
-      points: result.points_earned,
-      progress_updated: result.progress_updated,
-      event_logged: result.event_logged
+      points: result.puntos_awarded,
+      progress_pct: result.progress_pct_new,
+      success: result.success,
+      message: result.message
     })
 
     revalidatePath("/despega")
     
     return {
-      success: true,
-      mission_completed_id: result.mission_completed_id,
-      points_earned: result.points_earned,
-      idempotent_duplicate: false
+      success: result.success,
+      puntos_awarded: result.puntos_awarded,
+      progress_pct_new: result.progress_pct_new,
+      message: result.message
     }
   } catch (error) {
     console.error("[v0] Error in completeMision:", error)
