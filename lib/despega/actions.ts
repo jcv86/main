@@ -85,87 +85,58 @@ export async function completeMision(mision_id: string, respuesta?: any, tiempo_
 
   if (!user) throw new Error("Unauthorized")
 
-  // Get mision details
-  const { data: mision } = await supabase
-    .from("despega_misiones")
-    .select("*, ruta:despega_rutas(pilar)")
-    .eq("id", mision_id)
-    .single()
-
-  if (!mision) throw new Error("Mision not found")
-
-  // Record mision completion
-  const { data: userMision, error: misionError } = await supabase
-    .from("despega_user_misiones")
-    .upsert({
-      user_id: user.id,
-      mision_id,
-      completed: true,
-      completed_at: new Date().toISOString(),
-      puntos_earned: mision.puntos,
-      respuesta,
-      tiempo_dedicado_minutos,
+  try {
+    // Use atomic RPC for mission completion (Issue #9: Idempotent + Atomic)
+    // This function handles: mission completion, progress update, scoring, all in one transaction
+    const { data, error } = await supabase.rpc('complete_mission_transaction', {
+      p_user_id: user.id,
+      p_mision_id: mision_id,
+      p_user_notes: respuesta,
+      p_tiempo_dedicado_minutos: tiempo_dedicado_minutos || 0,
     })
-    .select()
-    .single()
 
-  if (misionError) throw misionError
-
-  // Update pilar progress
-  const pilar = mision.ruta.pilar
-  const { data: currentProgress } = await supabase
-    .from("despega_pilar_progress")
-    .select("*")
-    .eq("user_id", user.id)
-    .eq("pilar", pilar)
-    .single()
-
-  if (currentProgress) {
-    const newScore = (currentProgress.score || 0) + mision.puntos
-    const newProgreso = Math.min(currentProgress.progreso + 2, 100)
-
-    await supabase
-      .from("despega_pilar_progress")
-      .update({
-        score: newScore,
-        progreso: newProgreso,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("user_id", user.id)
-      .eq("pilar", pilar)
-  }
-
-  // Update rankings
-  const { data: currentRanking } = await supabase
-    .from("despega_rankings")
-    .select("*")
-    .eq("user_id", user.id)
-    .single()
-
-  if (currentRanking) {
-    const scoreFieldMap: Record<string, string> = {
-      "a1_cerebral": "score_a1_cerebral",
-      "a2_rutas": "score_a2_rutas",
-      "aterrizaje": "score_aterrizaje",
-      "base": "score_base",
+    if (error) {
+      console.error("[v0] RPC error in completeMision:", error)
+      throw error
     }
 
-    const scoreField = scoreFieldMap[pilar]
-    const currentPilarScore = currentRanking[scoreField] || 0
+    if (!data || data.length === 0) {
+      throw new Error("RPC returned no data")
+    }
 
-    await supabase
-      .from("despega_rankings")
-      .update({
-        [scoreField]: currentPilarScore + mision.puntos,
-        score_general: (currentRanking.score_general || 0) + mision.puntos,
-        total_misiones_completadas: (currentRanking.total_misiones_completadas || 0) + 1,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("user_id", user.id)
+    const result = data[0]
+    
+    // Check if this was an idempotent call (already completed)
+    if (result.idempotent_call) {
+      console.log("[v0] Mission already completed (idempotent call prevented duplicate)")
+      // Still return success, but indicate it was a duplicate
+      return {
+        success: true,
+        mission_completed_id: result.mission_completed_id,
+        points_earned: result.points_earned,
+        idempotent_duplicate: true
+      }
+    }
+
+    console.log("[v0] Mission completion recorded via atomic RPC", {
+      mission_id: mision_id,
+      points: result.points_earned,
+      progress_updated: result.progress_updated,
+      event_logged: result.event_logged
+    })
+
+    revalidatePath("/despega")
+    
+    return {
+      success: true,
+      mission_completed_id: result.mission_completed_id,
+      points_earned: result.points_earned,
+      idempotent_duplicate: false
+    }
+  } catch (error) {
+    console.error("[v0] Error in completeMision:", error)
+    throw error
   }
-
-  revalidatePath("/despega")
-  return userMision
 }
 
 export async function updatePilarProgress(pilar: string, ciclo_actual: number, ciclo_dia: number) {
