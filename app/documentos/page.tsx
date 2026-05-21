@@ -58,112 +58,230 @@ export default function DownloadsPage() {
 
         {/* Individual Documents */}
         <div>
-          <h3 className="text-xl font-bold mb-4">Documentos Individuales</h3>
+          <h3 className="text-xl font-bold mb-6">Documentos Individuales</h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="bg-primary/5 border-l-4 border-primary p-4 mb-6 rounded">
+            <p className="text-sm font-medium mb-2">Elige tu formato preferido:</p>
+            <p className="text-xs text-muted-foreground">
+              Todos los documentos están disponibles en <strong>Markdown (.md)</strong> y <strong>Word (.docx)</strong> en español
+            </p>
+          </div>
+
+          <div className="space-y-6">
             {/* Investor Brief */}
             <div className="bg-card border border-border rounded-lg p-6">
-              <h4 className="font-bold mb-2">INVESTOR_BRIEF.md</h4>
-              <p className="text-sm text-muted-foreground mb-4">
-                Resumen ejecutivo para CORFO, StartUp Chile e inversores. (5 min)
-              </p>
-              <a
-                href="/api/documentos/download?file=INVESTOR_BRIEF.md"
-                download
-                className="text-primary hover:underline text-sm font-medium"
-              >
-                Descargar →
-              </a>
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <h4 className="font-bold">Investor Brief - Resumen Ejecutivo</h4>
+                  <p className="text-xs text-muted-foreground mt-1">Para CORFO, StartUp Chile e inversores (5 min)</p>
+                </div>
+                <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">Prioritario</span>
+              </div>
+              <div className="flex gap-3 mt-4">
+                <a
+                  href="/api/documentos/download?file=INVESTOR_BRIEF.md"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📄 Markdown
+                </a>
+                <span className="text-muted-foreground">|</span>
+                <a
+                  href="/documentos/INVESTOR_BRIEF.docx"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📘 Word (.docx)
+                </a>
+              </div>
             </div>
 
             {/* Technical README */}
             <div className="bg-card border border-border rounded-lg p-6">
-              <h4 className="font-bold mb-2">README_TECHNICAL.md</h4>
-              <p className="text-sm text-muted-foreground mb-4">
-                Documentación técnica completa: stack, setup, módulos. (20 min)
-              </p>
-              <a
-                href="/api/documentos/download?file=README_TECHNICAL.md"
-                download
-                className="text-primary hover:underline text-sm font-medium"
-              >
-                Descargar →
-              </a>
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <h4 className="font-bold">README Técnico - Documentación Completa</h4>
+                  <p className="text-xs text-muted-foreground mt-1">Stack, setup, módulos, dependencias (20 min)</p>
+                </div>
+                <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">Desarrolladores</span>
+              </div>
+              <div className="flex gap-3 mt-4">
+                <a
+                  href="/api/documentos/download?file=README_TECHNICAL.md"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📄 Markdown
+                </a>
+                <span className="text-muted-foreground">|</span>
+                <a
+                  href="/documentos/README_TECHNICAL.docx"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📘 Word (.docx)
+                </a>
+              </div>
             </div>
 
             {/* MVP Checklist */}
             <div className="bg-card border border-border rounded-lg p-6">
-              <h4 className="font-bold mb-2">MVP_PROGRESS_CHECKLIST.md</h4>
-              <p className="text-sm text-muted-foreground mb-4">
-                Status detallado: 87% MVP completitud por módulo. (10 min)
-              </p>
-              <a
-                href="/api/documentos/download?file=MVP_PROGRESS_CHECKLIST.md"
-                download
-                className="text-primary hover:underline text-sm font-medium"
-              >
-                Descargar →
-              </a>
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <h4 className="font-bold">MVP Progress Checklist - Status 87%</h4>
+                  <p className="text-xs text-muted-foreground mt-1">Completitud por módulo y estado de features (10 min)</p>
+                </div>
+                <span className="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded">MVP Status</span>
+              </div>
+              <div className="flex gap-3 mt-4">
+                <a
+                  href="/api/documentos/download?file=MVP_PROGRESS_CHECKLIST.md"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📄 Markdown
+                </a>
+                <span className="text-muted-foreground">|</span>
+                <a
+                  href="/documentos/MVP_PROGRESS_CHECKLIST.docx"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📘 Word (.docx)
+                </a>
+              </div>
             </div>
 
             {/* Architecture */}
             <div className="bg-card border border-border rounded-lg p-6">
-              <h4 className="font-bold mb-2">TECHNICAL_ARCHITECTURE.md</h4>
-              <p className="text-sm text-muted-foreground mb-4">
-                Arquitectura del sistema, seguridad, escalabilidad. (25 min)
-              </p>
-              <a
-                href="/api/documentos/download?file=TECHNICAL_ARCHITECTURE.md"
-                download
-                className="text-primary hover:underline text-sm font-medium"
-              >
-                Descargar →
-              </a>
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <h4 className="font-bold">Technical Architecture - Diseño del Sistema</h4>
+                  <p className="text-xs text-muted-foreground mt-1">Diagramas, seguridad, escalabilidad (25 min)</p>
+                </div>
+                <span className="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded">Técnico</span>
+              </div>
+              <div className="flex gap-3 mt-4">
+                <a
+                  href="/api/documentos/download?file=TECHNICAL_ARCHITECTURE.md"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📄 Markdown
+                </a>
+                <span className="text-muted-foreground">|</span>
+                <a
+                  href="/documentos/TECHNICAL_ARCHITECTURE.docx"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📘 Word (.docx)
+                </a>
+              </div>
             </div>
 
             {/* Git & Deploy */}
             <div className="bg-card border border-border rounded-lg p-6">
-              <h4 className="font-bold mb-2">GIT_AND_DEPLOY_STATUS.md</h4>
-              <p className="text-sm text-muted-foreground mb-4">
-                2,986 commits, deploy history, performance metrics. (10 min)
-              </p>
-              <a
-                href="/api/documentos/download?file=GIT_AND_DEPLOY_STATUS.md"
-                download
-                className="text-primary hover:underline text-sm font-medium"
-              >
-                Descargar →
-              </a>
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <h4 className="font-bold">Git & Deploy Status - 2,986 Commits</h4>
+                  <p className="text-xs text-muted-foreground mt-1">Historial, deployment, performance metrics (10 min)</p>
+                </div>
+                <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded">DevOps</span>
+              </div>
+              <div className="flex gap-3 mt-4">
+                <a
+                  href="/api/documentos/download?file=GIT_AND_DEPLOY_STATUS.md"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📄 Markdown
+                </a>
+                <span className="text-muted-foreground">|</span>
+                <a
+                  href="/documentos/GIT_AND_DEPLOY_STATUS.docx"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📘 Word (.docx)
+                </a>
+              </div>
             </div>
 
             {/* Setup Guide */}
             <div className="bg-card border border-border rounded-lg p-6">
-              <h4 className="font-bold mb-2">DOWNLOAD_AND_USE.md</h4>
-              <p className="text-sm text-muted-foreground mb-4">
-                Instrucciones paso a paso para setup local (30 min). (15 min)
-              </p>
-              <a
-                href="/api/documentos/download?file=DOWNLOAD_AND_USE.md"
-                download
-                className="text-primary hover:underline text-sm font-medium"
-              >
-                Descargar →
-              </a>
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <h4 className="font-bold">Download & Use - Guía de Setup</h4>
+                  <p className="text-xs text-muted-foreground mt-1">Instrucciones paso a paso para correr localmente (15 min)</p>
+                </div>
+                <span className="bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded">Getting Started</span>
+              </div>
+              <div className="flex gap-3 mt-4">
+                <a
+                  href="/api/documentos/download?file=DOWNLOAD_AND_USE.md"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📄 Markdown
+                </a>
+                <span className="text-muted-foreground">|</span>
+                <a
+                  href="/documentos/DOWNLOAD_AND_USE.docx"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📘 Word (.docx)
+                </a>
+              </div>
+            </div>
+
+            {/* Paquete Completado */}
+            <div className="bg-card border border-border rounded-lg p-6">
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <h4 className="font-bold">Paquete Completado - Resumen</h4>
+                  <p className="text-xs text-muted-foreground mt-1">Checklist de completitud, próximos hitos (3 min)</p>
+                </div>
+                <span className="bg-cyan-100 text-cyan-700 text-xs px-2 py-1 rounded">Resumen</span>
+              </div>
+              <div className="flex gap-3 mt-4">
+                <a
+                  href="/api/documentos/download?file=PAQUETE_COMPLETADO.md"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📄 Markdown
+                </a>
+                <span className="text-muted-foreground">|</span>
+                <a
+                  href="/documentos/PAQUETE_COMPLETADO.docx"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📘 Word (.docx)
+                </a>
+              </div>
             </div>
 
             {/* Env Example */}
             <div className="bg-card border border-border rounded-lg p-6">
-              <h4 className="font-bold mb-2">.env.example</h4>
-              <p className="text-sm text-muted-foreground mb-4">
-                Template de variables de entorno (sin valores sensibles).
-              </p>
-              <a
-                href="/api/documentos/download?file=.env.example"
-                download
-                className="text-primary hover:underline text-sm font-medium"
-              >
-                Descargar →
-              </a>
+              <div className="flex items-start justify-between mb-3">
+                <div>
+                  <h4 className="font-bold">.env.example - Variables de Entorno</h4>
+                  <p className="text-xs text-muted-foreground mt-1">Template sin valores sensibles (reference only)</p>
+                </div>
+                <span className="bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded">Config</span>
+              </div>
+              <div className="flex gap-3 mt-4">
+                <a
+                  href="/api/documentos/download?file=.env.example"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  📄 Text File
+                </a>
+              </div>
             </div>
           </div>
         </div>

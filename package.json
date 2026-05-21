@@ -3,10 +3,12 @@
   "version": "5.0.0",
   "private": true,
   "scripts": {
+    "prebuild": "node scripts/generate-docx.js",
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "generate:docs": "node scripts/generate-docx.js"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.76",
@@ -49,6 +51,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "date-fns": "^4.1.0",
+    "docx": "^9.6.1",
     "framer-motion": "^12.34.3",
     "glob": "^13.0.6",
     "html2canvas": "^1.4.1",
