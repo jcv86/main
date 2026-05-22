@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOWNLOAD_AND_USE</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #fff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 24px;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    h1 { font-size: 2em; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; }
+    h2 { font-size: 1.5em; }
+    h3 { font-size: 1.25em; }
+    code {
+      background: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+    pre {
+      background: #f5f5f5;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 16px 0;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    table th {
+      background: #f5f5f5;
+      font-weight: 600;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    ul, ol {
+      margin: 16px 0;
+      padding-left: 24px;
+    }
+    li {
+      margin: 8px 0;
+    }
+    blockquote {
+      border-left: 4px solid #ddd;
+      margin: 16px 0;
+      padding-left: 16px;
+      color: #666;
+    }
+    .page-break {
+      page-break-after: always;
+      margin-top: 40px;
+    }
+    @media print {
+      body { padding: 0; }
+      .page-break { page-break-after: always; }
+    }
+  </style>
+</head>
+<body>
+  <h1>DOWNLOAD AND USE - Setup Instructions</h1>
+<p><strong>For</strong>: Investors, Partners, Technical Teams<br><strong>Date</strong>: 2026-05-22<br><strong>Status</strong>: ✅ Ready to Deploy  </p>
+<hr>
+<h2>Option 1: Clone from GitHub (RECOMMENDED)</h2>
+<h3>For Developers</h3>
+<pre><code class="language-bash"># Clone repository
+git clone https://github.com/jcv86/main.git
+cd main
+
+# Checkout production branch
+git checkout v0/jcv86-4cea421a
+
+# Install dependencies
+pnpm install
+
+# Setup environment
+cp .env.example .env.local
+
+# Add your API keys to .env.local
+# (See .env.example for all variables)
+
+# Run development server
+pnpm dev
+
+# Open http://localhost:3000
+</code></pre>
+<h3>For Non-Technical Users</h3>
+<ol>
+<li>Download code from: <a href="https://github.com/jcv86/main/releases">https://github.com/jcv86/main/releases</a></li>
+<li>Extract ZIP file</li>
+<li>Follow Developer setup above</li>
+</ol>
+<hr>
+<h2>Option 2: Deploy Direct to Vercel (FASTEST)</h2>
+<h3>One-Click Deploy</h3>
+<pre><code class="language-bash"># Fork on GitHub, then click:
+# https://vercel.com/import
+
+# Or use CLI:
+vercel
+</code></pre>
+<h3>What You Need</h3>
+<ul>
+<li>GitHub account</li>
+<li>Vercel account (free tier OK)</li>
+<li>Supabase account (free tier OK)</li>
+<li>API keys (see .env.example)</li>
+</ul>
+<h3>Steps</h3>
+<ol>
+<li><p><strong>Create Supabase Project</strong></p>
+<ul>
+<li>Go to: <a href="https://supabase.com/dashboard">https://supabase.com/dashboard</a></li>
+<li>Create new project</li>
+<li>Copy URL and API key to .env</li>
+</ul>
+</li>
+<li><p><strong>Add API Keys</strong></p>
+<ul>
+<li>Create Vercel Blob token</li>
+<li>Create Anthropic API key</li>
+<li>Create OpenAI API key (optional)</li>
+</ul>
+</li>
+<li><p><strong>Deploy</strong></p>
+<pre><code class="language-bash">vercel
+</code></pre>
+</li>
+<li><p><strong>Visit</strong></p>
+<ul>
+<li><a href="https://despega-tu-carrera.vercel.app">https://despega-tu-carrera.vercel.app</a></li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>Environment Setup</h2>
+<h3>Required Variables (.env.local)</h3>
+<pre><code class="language-env"># Supabase (REQUIRED)
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# IA APIs (REQUIRED for features)
+ANTHROPIC_API_KEY=sk-ant-xxxx
+OPENAI_API_KEY=sk-xxxx
+
+# Storage (REQUIRED for file uploads)
+VERCEL_BLOB_TOKEN=your-blob-token
+
+# App Configuration
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
+</code></pre>
+<h3>Optional Variables</h3>
+<pre><code class="language-env"># Logging
+LOG_LEVEL=info
+
+# Debug mode
+DEBUG=dtc:*
+
+# Custom domain
+VERCEL_URL=your-domain.com
+</code></pre>
+<p>See <a href="./.env.example">.env.example</a> for complete list.</p>
+<hr>
+<h2>Database Setup</h2>
+<h3>Automatic (Recommended)</h3>
+<pre><code class="language-bash"># Vercel deploys migrations automatically
+# No manual action needed
+</code></pre>
+<h3>Manual</h3>
+<pre><code class="language-bash"># 1. Login to Supabase Console
+# https://app.supabase.com/
+
+# 2. Go to SQL Editor
+
+# 3. Run migration files (in order):
+# scripts/migrations/001-rpc-mission.sql
+# scripts/migrations/002-cycle-id.sql
+# scripts/migrations/003-progress-flags.sql
+
+# Or use CLI:
+pnpm exec supabase db push
+</code></pre>
+<hr>
+<h2>Running Locally</h2>
+<h3>Development</h3>
+<pre><code class="language-bash"># Terminal 1: Dev Server
+pnpm dev
+
+# Terminal 2: Monitor (optional)
+pnpm dev:inspect
+
+# Open http://localhost:3000
+</code></pre>
+<h3>Testing</h3>
+<pre><code class="language-bash"># Test auth flow
+# Create account → Login → Access dashboard
+
+# Test A1 module
+# Complete vision scan → See roadmap
+
+# Test A2 module
+# Complete day 1-5 → Check progress
+
+# Test A4 module
+# Send message to IA Coach → See response
+</code></pre>
+<h3>Production Build</h3>
+<pre><code class="language-bash"># Build for production
+pnpm build
+
+# Start production server
+pnpm start
+
+# Or deploy to Vercel (recommended)
+vercel --prod
+</code></pre>
+<hr>
+<h2>First Time Setup Walkthrough</h2>
+<h3>1. Prepare (5 min)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> GitHub account created</li>
+<li><input disabled="" type="checkbox"> Vercel account created</li>
+<li><input disabled="" type="checkbox"> Supabase account created</li>
+<li><input disabled="" type="checkbox"> API keys ready (see below)</li>
+</ul>
+<h3>2. Create API Keys</h3>
+<p><strong>Supabase</strong></p>
+<ul>
+<li>Go to: <a href="https://supabase.com/dashboard">https://supabase.com/dashboard</a></li>
+<li>Create project → get API key and URL</li>
+</ul>
+<p><strong>Anthropic</strong></p>
+<ul>
+<li>Go to: <a href="https://console.anthropic.com">https://console.anthropic.com</a></li>
+<li>Create API key</li>
+</ul>
+<p><strong>OpenAI</strong> (optional)</p>
+<ul>
+<li>Go to: <a href="https://platform.openai.com/api/keys">https://platform.openai.com/api/keys</a></li>
+<li>Create API key</li>
+</ul>
+<p><strong>Vercel Blob</strong> (optional, for file uploads)</p>
+<ul>
+<li>Go to Vercel dashboard → Storage → Blob</li>
+<li>Create connection → get token</li>
+</ul>
+<h3>3. Clone &amp; Setup (10 min)</h3>
+<pre><code class="language-bash">git clone https://github.com/jcv86/main.git
+cd main
+pnpm install
+cp .env.example .env.local
+
+# Add API keys to .env.local
+nano .env.local  # or your editor
+
+pnpm dev
+# Opens http://localhost:3000
+</code></pre>
+<h3>4. Create Test Account (5 min)</h3>
+<ul>
+<li>Go to Sign Up</li>
+<li>Create account with email</li>
+<li>Login with credentials</li>
+<li>Explore dashboard</li>
+</ul>
+<h3>5. Test Modules (15 min)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Try A1 (Cerebro Ejecutivo)</li>
+<li><input disabled="" type="checkbox"> Try A2 (90 Días)</li>
+<li><input disabled="" type="checkbox"> Try A3 (Renovación)</li>
+<li><input disabled="" type="checkbox"> Try A4 (Plan B Coach)</li>
+<li><input disabled="" type="checkbox"> Check DTC Documents</li>
+</ul>
+<h3>6. Deploy (10 min)</h3>
+<pre><code class="language-bash">vercel
+# Follows interactive setup
+# Deploys to https://your-project.vercel.app
+</code></pre>
+<p><strong>Total Time</strong>: ~1 hour for complete setup</p>
+<hr>
+<h2>Customization</h2>
+<h3>Change Branding</h3>
+<pre><code class="language-typescript">// src/lib/config.ts
+export const APP_NAME = &quot;My Company Platform&quot;
+export const APP_DESCRIPTION = &quot;Custom description&quot;
+export const BRAND_COLOR = &quot;#FF6B35&quot;
+</code></pre>
+<h3>Modify Copy (Text)</h3>
+<pre><code class="language-typescript">// src/lib/content.ts
+export const MODULES = {
+  A1: { title: &quot;Custom A1 Title&quot;, ... },
+  A2: { title: &quot;Custom A2 Title&quot;, ... },
+  // etc
+}
+</code></pre>
+<h3>Add Custom Modules</h3>
+<pre><code class="language-typescript">// 1. Create: src/app/modulos/a5/page.tsx
+// 2. Add route: app router recognizes automatically
+// 3. Add navigation: Update sidebar.tsx
+// 4. Add to DB: migrations/004-add-a5-module.sql
+</code></pre>
+<hr>
+<h2>Deployment Options</h2>
+<h3>Vercel (Recommended)</h3>
+<pre><code class="language-bash">vercel --prod
+</code></pre>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>Auto-scaling</li>
+<li>Global CDN</li>
+<li>Git integration</li>
+<li>Free tier available</li>
+</ul>
+<p><strong>Cost</strong>: Free → $20/month at scale</p>
+<h3>Docker</h3>
+<pre><code class="language-bash">docker build -t dtc .
+docker run -p 3000:3000 dtc
+</code></pre>
+<p><strong>Pros</strong>:</p>
+<ul>
+<li>Run anywhere</li>
+<li>Full control</li>
+<li>Self-hosted</li>
+</ul>
+<p><strong>Cost</strong>: Infrastructure dependent</p>
+<h3>AWS / Google Cloud</h3>
+<p>Requires more setup. Contact team for guidance.</p>
+<hr>
+<h2>Monitoring &amp; Support</h2>
+<h3>Check Health</h3>
+<pre><code class="language-bash"># API health check
+curl https://your-domain.com/api/health
+
+# Database connection
+psql $DATABASE_URL -c &quot;SELECT 1&quot;
+
+# Logs
+vercel logs
+
+# Analytics
+vercel analytics
+</code></pre>
+<h3>Troubleshooting</h3>
+<p>See: <a href="./TROUBLESHOOTING-GUIDE.md">TROUBLESHOOTING-GUIDE.md</a></p>
+<h3>Get Help</h3>
+<ul>
+<li>Docs: <a href="./README_TECHINICAL.md">README_TECHINICAL.md</a></li>
+<li>Architecture: <a href="./TECHNICAL_ARCHITECTURE.md">TECHNICAL_ARCHITECTURE.md</a></li>
+<li>Status: <a href="./MVP_PROGRESS_CHECKLIST.md">MVP_PROGRESS_CHECKLIST.md</a></li>
+</ul>
+<hr>
+<h2>Next Steps</h2>
+<ol>
+<li><strong>Setup</strong> (1 hour) - Follow walkthrough above</li>
+<li><strong>Explore</strong> (1 hour) - Try all 4 modules</li>
+<li><strong>Test</strong> (30 min) - Run E2E tests</li>
+<li><strong>Deploy</strong> (30 min) - Go live to Vercel</li>
+<li><strong>Monitor</strong> (ongoing) - Watch analytics</li>
+</ol>
+<hr>
+<h2>Package Contents</h2>
+<pre><code>/
+├─ src/ (All application code)
+├─ scripts/ (Setup, migrations, seeds)
+├─ docs/ (All documentation)
+├─ public/ (Static files)
+├─ .env.example (Configuration template)
+├─ package.json (Dependencies)
+├─ README.md (Quick start)
+└─ [All other documentation files]
+
+Size: ~200 MB (with node_modules)
+Deploy Time: ~5 minutes
+</code></pre>
+<hr>
+<h2>Support</h2>
+<ul>
+<li><strong>Documentation</strong>: See docs/ folder</li>
+<li><strong>Issues</strong>: GitHub Issues</li>
+<li><strong>Email</strong>: [Your team contact]</li>
+</ul>
+<hr>
+<p><strong>Document</strong>: Download and Use<br><strong>Updated</strong>: 2026-05-22<br><strong>Status</strong>: ✅ Ready</p>
+
+  <div class="page-break"></div>
+  <footer style="text-align: center; color: #999; font-size: 12px; margin-top: 40px;">
+    <p>Generated on: 2026-05-22</p>
+    <p>DTC Platform - Version 6.0.0</p>
+  </footer>
+</body>
+</html>
+    

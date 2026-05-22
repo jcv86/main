@@ -1,0 +1,687 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* DTC Brand Colors - Black-first aesthetic */
+    --background: 0 0% 0%;           /* #000000 */
+    --foreground: 40 11% 96%;        /* #F5F5F2 */
+    --card: 0 0% 2%;                 /* #050505 */
+    --muted: 40 5% 85%;              /* #D9D9D3 - Improved contrast */
+    --muted-foreground: 40 3% 72%;   /* #B8B8B0 - Better contrast (was 60%) */
+    
+    /* 6-Color Psychology System - PER BRANDBOOK IMAGE */
+    --yellow: 47 100% 50%;           /* #FFD700 - Activates Memory */
+    --orange: 24 100% 50%;           /* #FF7F00 - Stimulates Appetite */
+    --red: 0 100% 50%;               /* #FF0000 - Encourages Action */
+    --green: 120 100% 25%;           /* #008000 - Relaxes Mentally */
+    --purple: 270 100% 50%;          /* #8000FF - Encourages Creativity */
+    --blue: 240 100% 50%;            /* #0000FF - Increases Productivity */
+    
+    /* Pillar System (4 phases) - for UI navigation */
+    --ritual: 264 85% 54%;           /* #A855F7 - El Ritual (A1) - Purple: Encourages Creativity */
+    --exploration: 217 91% 60%;      /* #3B82F6 - Exploración (A2) - Blue: Increases Productivity */
+    --training: 300 41% 47%;         /* #AA46AA - Entrenamiento (A3) - Purple/Magenta */
+    --reality: 0 100% 50%;           /* #FF0000 - La Realidad (A4) - Red: Encourages Action */
+    
+    /* Support Colors */
+    --cyan: 186 100% 42%;            /* #06B6D4 - Cyan (archived) */
+    
+    /* A2-SPECIFIC DESIGN TOKENS - Dark theme with purple accents */
+    --a2-primary: 270 20% 35%;       /* rgb(90, 90, 150) - Main accent */
+    --a2-primary-light: 270 20% 60%; /* Lighter variant */
+    --a2-primary-dark: 270 20% 20%;  /* Darker variant */
+    --a2-bg-dark: 230 30% 8%;        /* Very dark blue-ish background */
+    --a2-surface: 230 20% 12%;       /* Card/surface background */
+    --a2-border: 270 15% 40%;        /* Dimmed borders */
+    --a2-accent-cyan: 189 48% 53%;  /* rgb(80, 160, 170) - Exact A2 brand cyan for buttons */
+    --a2-text-primary: 40 11% 96%;   /* White/light text */
+    --a2-text-secondary: 40 5% 70%;  /* Gray text */
+    --a2-text-muted: 40 3% 50%;      /* Muted gray text */
+    
+    /* Borders - A2 brandbook purple */
+    --border: rgba(90, 90, 150, 0.6);
+    --border-light: rgba(90, 90, 150, 0.4);
+    
+    /* Legacy compatibility (will be phased out) */
+    --primary: 217 91% 60%;          /* Blue - Exploración (A2) */
+    --primary-foreground: 40 11% 96%;
+    --secondary: 300 41% 47%;         /* Purple/Magenta - Entrenamiento (A3) */
+    --secondary-foreground: 0 0% 0%;
+    --accent: 0 84% 60%;             /* Red for errors */
+    --accent-foreground: 40 11% 96%;
+    --destructive: 0 84% 60%;        /* Red for errors */
+    --destructive-foreground: 40 11% 96%;
+    --input: rgba(90, 90, 150, 0.3);
+    --ring: 264 85% 54%;             /* Purple focus ring */
+    --radius: 20px;
+    
+    /* Chart colors - brand-aligned */
+    --chart-1: 264 85% 54%;          /* Purple - El Ritual */
+    --chart-2: 217 91% 60%;          /* Blue - Exploración */
+    --chart-3: 300 41% 47%;          /* Purple/Magenta - Entrenamiento (A3) */
+    --chart-4: 186 100% 42%;         /* Cyan - La Realidad */
+    --chart-5: 142 71% 45%;          /* Green - Success */
+  }
+
+  .dark {
+    /* Dark mode uses A2 purple borders */
+    --background: 0 0% 0%;
+    --foreground: 40 11% 96%;
+    --card: 0 0% 2%;
+    --muted: 40 5% 85%;
+    --muted-foreground: 40 3% 72%;
+    --border: rgba(90, 90, 150, 0.6);
+    --border-light: rgba(90, 90, 150, 0.4);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    @apply scroll-smooth;
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-size: 16px;
+    line-height: 1.75;
+  }
+
+  /* Display typography - Montserrat */
+  h1, .h1 {
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+    font-size: clamp(48px, 8vw, 88px);
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: -0.04em;
+  }
+
+  h2, .h2 {
+    font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+    font-size: clamp(32px, 5vw, 56px);
+    font-weight: 700;
+    line-height: 0.98;
+    letter-spacing: -0.03em;
+  }
+
+  h3, .h3 {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    font-size: clamp(20px, 3vw, 24px);
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  h4, h5, h6 {
+    font-family: 'Montserrat', system-ui, sans-serif;
+    font-weight: 600;
+  }
+
+  p, .body {
+    font-size: 16px;
+    line-height: 1.75;
+    font-weight: 400;
+  }
+
+  label, .label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+  }
+
+  /* Links */
+  a {
+    @apply text-foreground transition-colors;
+    text-decoration: none;
+  }
+
+  a:hover {
+    @apply text-blue;
+  }
+
+  /* Nav links never underline */
+  nav a, nav a:hover {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
+/* Premium Micro-animations & Polish */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(80, 160, 170, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(80, 160, 170, 0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+/* Animation utility classes */
+.animate-slide-in-up {
+  animation: slideInUp 0.4s ease-out;
+}
+
+.animate-slide-in-down {
+  animation: slideInDown 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite;
+}
+
+/* Smooth transitions for interactive elements */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.transition-smooth-fast {
+  transition: all 0.15s ease-out;
+}
+
+/* Glass morphism effect for premium feel */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-effect-sm {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Gradient accents */
+.gradient-text {
+  background: linear-gradient(135deg, #50a0aa, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-border {
+  background: linear-gradient(135deg, #50a0aa, #a855f7) border-box;
+  border: 2px solid transparent;
+}
+
+/* Hover states with smooth transitions */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Premium button styles */
+.btn-premium {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-premium:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+.btn-premium-primary {
+  background: linear-gradient(135deg, rgb(6, 182, 212), rgb(168, 85, 247));
+  color: white;
+}
+
+.btn-premium-primary:hover {
+  box-shadow: 0 10px 15px -3px rgba(168, 85, 247, 0.4);
+}
+
+.btn-premium-primary:active {
+  transform: scale(0.95);
+}
+
+.btn-premium-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-premium-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-premium-secondary:active {
+  transform: scale(0.95);
+}
+
+/* Loading shimmer effect */
+.shimmer-loading {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Mobile-first responsive utilities */
+@media (max-width: 640px) {
+  /* Reduce animation complexity on mobile */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+  /* Larger touch targets on mobile */
+  button, a, input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better font sizing for mobile readability */
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  h1 {
+    font-size: clamp(24px, 6vw, 48px);
+  }
+  
+  h2 {
+    font-size: clamp(20px, 5vw, 32px);
+  }
+  
+  h3 {
+    font-size: clamp(18px, 4vw, 24px);
+  }
+}
+
+/* Premium container styles */
+.container-premium {
+  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+/* Accessible focus styles */
+*:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Smooth page transitions */
+.page-transition {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Accessible color contrast for text on backgrounds */
+.text-on-dark {
+  @apply text-white;
+}
+
+.text-on-light {
+  @apply text-slate-950;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--foreground));
+}
+
+/* Typography utilities */
+.text-display-lg {
+  font-family: 'Lora', serif;
+  font-size: clamp(48px, 8vw, 88px);
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.text-display-md {
+  font-family: 'Lora', serif;
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 700;
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+
+.text-display-sm {
+  font-family: 'Montserrat', system-ui, sans-serif;
+  font-size: clamp(20px, 3vw, 24px);
+  font-weight: 600;
+  line-height: 1.1;
+}
+
+.text-body-lg {
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.text-body {
+  font-size: 16px;
+  line-height: 1.75;
+  font-weight: 400;
+}
+
+.text-body-sm {
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+.text-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
+
+/* Secondary text - proper contrast on dark backgrounds */
+.text-secondary {
+  color: hsl(var(--muted));
+  opacity: 1;
+}
+
+.text-tertiary {
+  color: hsl(var(--muted-foreground));
+  opacity: 1;
+}
+
+/* Muted variants with WCAG AA compliance */
+.text-muted {
+  color: hsl(var(--muted-foreground));
+}
+
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground));
+}
+
+/* Brand color utilities - PER BRANDBOOK */
+.text-purple {
+  color: hsl(var(--purple));
+}
+
+.text-blue {
+  color: hsl(var(--blue));
+}
+
+.text-orange {
+  color: hsl(var(--orange));
+}
+
+.text-cyan {
+  color: hsl(var(--cyan));
+}
+
+.text-yellow {
+  color: hsl(var(--yellow));
+}
+
+.text-red {
+  color: hsl(var(--red));
+}
+
+.text-green {
+  color: hsl(var(--green));
+}
+
+.bg-purple {
+  background-color: hsl(var(--purple));
+}
+
+.bg-blue {
+  background-color: hsl(var(--blue));
+}
+
+.bg-orange {
+  background-color: hsl(var(--orange));
+}
+
+.bg-cyan {
+  background-color: hsl(var(--cyan));
+}
+
+.bg-yellow {
+  background-color: hsl(var(--yellow));
+}
+
+.bg-red {
+  background-color: hsl(var(--red));
+}
+
+.bg-green {
+  background-color: hsl(var(--green));
+}
+
+.border-purple {
+  border-color: hsl(var(--purple));
+}
+
+.border-blue {
+  border-color: hsl(var(--blue));
+}
+
+.border-orange {
+  border-color: hsl(var(--orange));
+}
+
+.border-cyan {
+  border-color: hsl(var(--cyan));
+}
+
+.border-yellow {
+  border-color: hsl(var(--yellow));
+}
+
+.border-red {
+  border-color: hsl(var(--red));
+}
+
+.border-green {
+  border-color: hsl(var(--green));
+}
+
+/* Surface utilities */
+.surface {
+  @apply bg-card border border-border rounded-[28px];
+}
+
+.surface-lg {
+  @apply bg-card border border-border rounded-[36px];
+}
+
+.surface-pill {
+  @apply bg-card border border-border rounded-full;
+}
+
+/* Shadow utilities */
+.shadow-soft {
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.shadow-elevated {
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.42);
+}
+
+/* Gradient utilities */
+.gradient-purple {
+  background: linear-gradient(135deg, hsl(var(--purple)) 0%, hsl(var(--purple)) 100%);
+}
+
+.gradient-blue {
+  background: linear-gradient(135deg, hsl(var(--blue)) 0%, hsl(var(--blue)) 100%);
+}
+
+.gradient-orange {
+  background: linear-gradient(135deg, hsl(var(--orange)) 0%, hsl(var(--orange)) 100%);
+}
+
+.gradient-cyan {
+  background: linear-gradient(135deg, hsl(var(--cyan)) 0%, hsl(var(--cyan)) 100%);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-in {
+  animation: slideIn 0.6s ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.6s ease-out;
+}
+
+/* Interactive effects */
+.interactive-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.interactive-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+}
+
+.interactive-scale {
+  transition: transform 0.2s ease;
+}
+
+.interactive-scale:hover {
+  transform: scale(1.02);
+}
+
+/* Transitions */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-smooth-fast {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+    color: black !important;
+  }
+}
+
+/* Mobile utilities */
+@media (max-width: 768px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
