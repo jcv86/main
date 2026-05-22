@@ -112,7 +112,7 @@ export default function DownloadsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h4 className="font-bold">Guía Técnica Completa - Documentación Completa</h4>
+                  <h4 className="font-bold">Guía Técnica Completa</h4>
                   <p className="text-xs text-muted-foreground mt-1">Stack, setup, módulos, dependencias (20 min)</p>
                 </div>
                 <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">Desarrolladores</span>
@@ -124,6 +124,14 @@ export default function DownloadsPage() {
                   className="text-primary hover:underline text-sm font-medium"
                 >
                   📄 Markdown
+                </a>
+                <span className="text-muted-foreground">|</span>
+                <a
+                  href="/api/documentos/download?file=LEEME_TECNICO.html"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  🌐 HTML (PDF)
                 </a>
               </div>
             </div>
@@ -144,6 +152,14 @@ export default function DownloadsPage() {
                   className="text-primary hover:underline text-sm font-medium"
                 >
                   📄 Markdown
+                </a>
+                <span className="text-muted-foreground">📄 Markdown#124;</span>
+                <a
+                  href="/api/documentos/download?file=LISTA_PROGRESO_MVP.html"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  🌐 HTML (PDF)
                 </a>
               </div>
             </div>
@@ -195,7 +211,7 @@ export default function DownloadsPage() {
                   <h4 className="font-bold">Descarga y Uso - Guía de Setup</h4>
                   <p className="text-xs text-muted-foreground mt-1">Instrucciones paso a paso para correr localmente (15 min)</p>
                 </div>
-                <span className="bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded">Getting Started</span>
+                <span className="bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded">Primeros Pasos</span>
               </div>
               <div className="flex gap-3 mt-4">
                 <a
@@ -275,7 +291,7 @@ export default function DownloadsPage() {
             Paquete generado: 2026-05-22 | MVP: 100% Production Ready | Production: Live
           </p>
           <p className="mt-2">
-            Para más información, lee INVESTOR_BRIEF.md o README_TECHINICAL.md
+            Para más información, lee RESUMEN_INVERSOR.md o LEEME_TECNICO.md
           </p>
         </div>
       </div>
