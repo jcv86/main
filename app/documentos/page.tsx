@@ -1,8 +1,5 @@
 'use client'
 
-import fs from 'fs'
-import path from 'path'
-
 interface Document {
   name: string
   title: string
