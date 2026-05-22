@@ -1,0 +1,1 @@
+pnpm-lock.yaml exists in the main repository. Run 'pnpm install' to install dependencies.

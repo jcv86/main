@@ -1,0 +1,210 @@
+{
+  "version": "1.0.0",
+  "categories": {
+    "career_exploration": {
+      "name": "Exploración de Carrera",
+      "description": "Usuario explorando opciones de carrera y profesiones",
+      "keywords": ["carrera", "profesión", "estudiar", "qué carrera", "opciones", "futuro profesional"],
+      "prompts": [
+        {
+          "id": "ce_001",
+          "trigger": "usuario pregunta qué carrera estudiar",
+          "context_needed": ["personality_assessment", "interests", "strengths"],
+          "response_structure": {
+            "step1": "Validar la pregunta y reconocer la importancia de la decisión",
+            "step2": "Analizar resultados de evaluaciones y fortalezas del usuario",
+            "step3": "Proporcionar 2-3 opciones de carrera específicas con justificación"
+          },
+          "sofia_approach": "Empático, enfocado en pasiones y valores personales",
+          "dani_approach": "Analítico, enfocado en mercado laboral y proyección"
+        },
+        {
+          "id": "ce_002",
+          "trigger": "usuario inseguro sobre su elección de carrera",
+          "context_needed": ["personality_assessment", "current_situation"],
+          "response_structure": {
+            "step1": "Validar sentimientos de incertidumbre como normales",
+            "step2": "Identificar fortalezas y logros previos del usuario",
+            "step3": "Sugerir ejercicio de autoconocimiento o test específico"
+          },
+          "sofia_approach": "Reconfortante, enfocado en autoconfianza",
+          "dani_approach": "Estructurado, enfocado en plan de acción concreto"
+        }
+      ]
+    },
+    "skill_development": {
+      "name": "Desarrollo de Habilidades",
+      "description": "Usuario buscando mejorar habilidades específicas",
+      "keywords": ["habilidad", "aprender", "mejorar", "desarrollar", "competencia", "capacitación"],
+      "prompts": [
+        {
+          "id": "sd_001",
+          "trigger": "usuario pregunta qué habilidades desarrollar",
+          "context_needed": ["career_goals", "current_skills", "test_results"],
+          "response_structure": {
+            "step1": "Reconocer la importancia del desarrollo continuo",
+            "step2": "Analizar brechas entre habilidades actuales y objetivos",
+            "step3": "Recomendar 2-3 habilidades prioritarias con recursos específicos"
+          },
+          "sofia_approach": "Motivacional, enfocado en crecimiento personal",
+          "dani_approach": "Estratégico, enfocado en ROI y demanda del mercado"
+        },
+        {
+          "id": "sd_002",
+          "trigger": "usuario busca recursos de aprendizaje",
+          "context_needed": ["skill_target", "learning_style", "time_availability"],
+          "response_structure": {
+            "step1": "Clarificar objetivo de aprendizaje específico",
+            "step2": "Evaluar estilo de aprendizaje y disponibilidad",
+            "step3": "Recomendar recursos específicos de la biblioteca (libros, cursos)"
+          },
+          "sofia_approach": "Personalizado, considerando preferencias individuales",
+          "dani_approach": "Eficiente, priorizando recursos de mayor impacto"
+        }
+      ]
+    },
+    "job_search": {
+      "name": "Búsqueda de Empleo",
+      "description": "Usuario en proceso de búsqueda laboral",
+      "keywords": ["trabajo", "empleo", "postular", "cv", "entrevista", "búsqueda laboral"],
+      "prompts": [
+        {
+          "id": "js_001",
+          "trigger": "usuario busca ayuda con CV o postulaciones",
+          "context_needed": ["work_experience", "target_roles", "strengths"],
+          "response_structure": {
+            "step1": "Reconocer la importancia de una buena presentación",
+            "step2": "Identificar fortalezas clave a destacar",
+            "step3": "Dar 3 recomendaciones concretas para mejorar CV/postulación"
+          },
+          "sofia_approach": "Alentador, enfocado en confianza y autenticidad",
+          "dani_approach": "Táctico, enfocado en ATS y palabras clave"
+        },
+        {
+          "id": "js_002",
+          "trigger": "usuario nervioso por entrevista",
+          "context_needed": ["interview_type", "target_company", "personality"],
+          "response_structure": {
+            "step1": "Validar nerviosismo como normal y positivo",
+            "step2": "Repasar fortalezas y logros relevantes",
+            "step3": "Proporcionar 3 tips prácticos de preparación"
+          },
+          "sofia_approach": "Tranquilizador, enfocado en preparación emocional",
+          "dani_approach": "Práctico, enfocado en técnicas y estrategias"
+        }
+      ]
+    },
+    "self_assessment": {
+      "name": "Autoevaluación",
+      "description": "Usuario explorando sus resultados de tests",
+      "keywords": ["resultado", "test", "evaluación", "personalidad", "fortaleza", "debilidad"],
+      "prompts": [
+        {
+          "id": "sa_001",
+          "trigger": "usuario pregunta sobre resultados de test",
+          "context_needed": ["test_results", "personality_assessment"],
+          "response_structure": {
+            "step1": "Reconocer valentía de hacer autoevaluación",
+            "step2": "Explicar resultados clave en lenguaje claro",
+            "step3": "Conectar resultados con acciones concretas"
+          },
+          "sofia_approach": "Positivo, enfocado en fortalezas y potencial",
+          "dani_approach": "Objetivo, enfocado en aplicación práctica"
+        }
+      ]
+    },
+    "motivation_support": {
+      "name": "Apoyo Motivacional",
+      "description": "Usuario necesita motivación o está desanimado",
+      "keywords": ["desanimado", "frustrado", "difícil", "no puedo", "rendirse", "desmotivado"],
+      "prompts": [
+        {
+          "id": "ms_001",
+          "trigger": "usuario expresa frustración o desánimo",
+          "context_needed": ["current_situation", "past_achievements"],
+          "response_structure": {
+            "step1": "Validar sentimientos y normalizar la experiencia",
+            "step2": "Recordar logros previos y fortalezas",
+            "step3": "Proponer un pequeño paso concreto y alcanzable"
+          },
+          "sofia_approach": "Empático y reconfortante, enfocado en emociones",
+          "dani_approach": "Realista pero optimista, enfocado en soluciones"
+        }
+      ]
+    },
+    "networking": {
+      "name": "Networking y Conexiones",
+      "description": "Usuario buscando expandir red profesional",
+      "keywords": ["networking", "contactos", "conexiones", "linkedin", "red profesional"],
+      "prompts": [
+        {
+          "id": "nw_001",
+          "trigger": "usuario pregunta cómo hacer networking",
+          "context_needed": ["career_field", "personality", "current_network"],
+          "response_structure": {
+            "step1": "Desmitificar el networking como algo natural",
+            "step2": "Identificar fortalezas personales para conectar",
+            "step3": "Sugerir 2-3 estrategias específicas según personalidad"
+          },
+          "sofia_approach": "Auténtico, enfocado en conexiones genuinas",
+          "dani_approach": "Estratégico, enfocado en networking efectivo"
+        }
+      ]
+    }
+  },
+  "intention_detection": {
+    "rules": [
+      {
+        "intention": "career_exploration",
+        "patterns": ["qué carrera", "qué estudiar", "opciones de carrera", "profesión", "futuro profesional"],
+        "confidence_threshold": 0.7
+      },
+      {
+        "intention": "skill_development",
+        "patterns": ["aprender", "desarrollar habilidad", "mejorar en", "capacitación", "curso"],
+        "confidence_threshold": 0.7
+      },
+      {
+        "intention": "job_search",
+        "patterns": ["buscar trabajo", "postular", "cv", "currículum", "entrevista", "empleo"],
+        "confidence_threshold": 0.8
+      },
+      {
+        "intention": "self_assessment",
+        "patterns": ["resultado", "test", "evaluación", "mi personalidad", "fortalezas", "debilidades"],
+        "confidence_threshold": 0.8
+      },
+      {
+        "intention": "motivation_support",
+        "patterns": ["desanimado", "frustrado", "no puedo", "difícil", "rendirse", "ayuda"],
+        "confidence_threshold": 0.9
+      },
+      {
+        "intention": "networking",
+        "patterns": ["networking", "contactos", "conexiones", "linkedin", "red profesional"],
+        "confidence_threshold": 0.7
+      }
+    ]
+  },
+  "engagement_metrics": {
+    "tracked_events": [
+      "message_sent",
+      "response_received",
+      "action_suggested",
+      "action_completed",
+      "resource_recommended",
+      "resource_accessed",
+      "test_started",
+      "test_completed",
+      "session_duration",
+      "return_visit"
+    ],
+    "satisfaction_indicators": [
+      "positive_feedback",
+      "follow_up_question",
+      "action_taken",
+      "resource_used",
+      "session_length_appropriate"
+    ]
+  }
+}
