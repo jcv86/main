@@ -1,278 +1,237 @@
 # DTC - Despega Tu Carrera
 
-**Plataforma SaaS de Transformación Profesional con IA**
+**Plataforma SaaS de Transformacion Profesional con Inteligencia Artificial**
 
-Status: ✅ **100% PRODUCTION READY** | Last Update: 2026-05-22
-
----
-
-## Quick Links
-
-- **Live App**: https://despega-tu-carrera.vercel.app
-- **Status**: 100% Production Ready
-- **Last Deploy**: 2026-05-22 (May 23 Go-Live Approved)
-- **Documentation**: See [MVP_PROGRESS_CHECKLIST.md](./MVP_PROGRESS_CHECKLIST.md)
+Estado: **100% LISTO PARA PRODUCCION** | Ultima Actualizacion: 22 de Mayo 2026
 
 ---
 
-## What is DTC?
+## Enlaces Rapidos
 
-**Despega Tu Carrera** (DTC) is a comprehensive 4-module career transformation platform that guides professionals through a structured journey of self-discovery, action, personal branding, and backup planning.
-
-### The 4 Modules
-
-| Module | Duration | Focus | Status |
-|--------|----------|-------|--------|
-| **A1** - Cerebro Ejecutivo | 1 session | Vision scan + professional roadmap | ✅ 100% |
-| **A2** - 90 Días de Acción | 30 days | Daily experiences + IA coaching | ✅ 100% |
-| **A3** - Renovación | 10 modules | Personal branding mastery | ✅ 100% |
-| **A4** - Plan B | On-demand | Career alternatives + IA coach | ✅ 100% |
+- [Resumen para Inversores](./RESUMEN_INVERSOR.md)
+- [Arquitectura Tecnica](./ARQUITECTURA_TECNICA.md)
+- [Lista de Progreso MVP](./LISTA_PROGRESO_MVP.md)
+- [Guia Tecnica](./LEEME_TECNICO.md)
+- [Estado Git y Deploy](./ESTADO_GIT_Y_DEPLOY.md)
+- [Descarga y Uso](./DESCARGA_Y_USO.md)
 
 ---
 
-## Key Features
+## Que es DTC?
 
-### Core Platform
-- ✅ Multi-user authentication (Google OAuth + Email)
-- ✅ Secure session management (JWT tokens)
-- ✅ User profiles & preferences
-- ✅ Dashboard with smart navigation
-- ✅ Demo mode for testing
+**Despega Tu Carrera** (DTC) es una plataforma integral de transformacion profesional de 4 modulos que guia a profesionales a traves de un viaje estructurado de autodescubrimiento, accion, marca personal y planificacion alternativa.
+
+### Los 4 Modulos
+
+| Modulo | Duracion | Enfoque | Estado |
+|--------|----------|---------|--------|
+| **A1** - Cerebro Ejecutivo | 1 sesion | Escaneo de vision + hoja de ruta profesional | 100% |
+| **A2** - 90 Dias de Accion | 30 dias | Experiencias diarias + coaching IA | 100% |
+| **A3** - Renovacion | 10 modulos | Dominio de marca personal | 100% |
+| **A4** - Plan B | Bajo demanda | Alternativas de carrera + coach IA | 100% |
+
+---
+
+## Caracteristicas Principales
+
+### Plataforma Core
+- Autenticacion multi-usuario (Google OAuth + Email)
+- Gestion segura de sesiones (tokens JWT)
+- Perfiles de usuario y preferencias
+- Dashboard con navegacion inteligente
+- Modo demo para pruebas
 
 ### A1 - Cerebro Ejecutivo
-- ✅ Vision scan (3 contextual questions)
-- ✅ Claude AI hypothesis generation
-- ✅ Professional roadmap auto-generation
-- ✅ 3-door system (Identity, Evidence, Material)
-- ✅ IA coaching feedback
-- ✅ Export (Notion, TXT, Clipboard)
+- Escaneo de vision (3 preguntas contextuales)
+- Generacion de hipotesis con Claude IA
+- Auto-generacion de hoja de ruta profesional
+- Sistema de 3 puertas (Identidad, Evidencia, Material)
+- Feedback de coaching IA
+- Exportacion (Notion, TXT, Portapapeles)
 
-### A2 - 90 Días de Acción
-- ✅ All 30 days fully structured
-- ✅ Daily personalized scan questions
-- ✅ IA-powered daily analysis
-- ✅ Claude coaching per day
-- ✅ Smart middleware (no future day access)
-- ✅ Seamless A2→A3 transition
-- ✅ **NEW**: Unlimited cycles with data preservation
-- ✅ Progress tracking + visual indicators
+### A2 - 90 Dias de Accion
+- Los 30 dias completamente estructurados
+- Preguntas de escaneo diario personalizadas
+- Analisis diario potenciado por IA
+- Coaching Claude por dia
+- Middleware inteligente (sin acceso a dias futuros)
+- Transicion fluida A2 a A3
+- Ciclos ilimitados con preservacion de datos
+- Seguimiento de progreso + indicadores visuales
 
-### A3 - Renovación (10 Modules)
-- ✅ 1. Articulating Your Brand
-- ✅ 2. Professional Package
-- ✅ 3. Digital Presence
-- ✅ 4. Strategic Positioning
-- ✅ 5. Media Kit Creation
-- ✅ 6. Communication Skills
-- ✅ 7. Network Strategy
-- ✅ 8. Speaking Mastery
-- ✅ 9. Thought Leadership
-- ✅ 10. Personal Website
+### A3 - Renovacion (10 Modulos)
+1. Articulando Tu Marca
+2. Paquete Profesional
+3. Presencia Digital
+4. Posicionamiento Estrategico
+5. Creacion de Media Kit
+6. Habilidades de Comunicacion
+7. Estrategia de Networking
+8. Dominio de Oratoria
+9. Liderazgo de Pensamiento
+10. Sitio Web Personal
 
 ### A4 - Plan B
-- ✅ IA Coach (Claude 3.5 streaming)
-- ✅ Context-aware career coaching
-- ✅ Real-time responses
-- ✅ Career alternatives guidance
-- ✅ Backup strategy development
+- Coach IA (Claude 3.5 streaming)
+- Coaching de carrera consciente del contexto
+- Respuestas en tiempo real
+- Guia de alternativas de carrera
+- Desarrollo de estrategia de respaldo
 
-### Data & Storage
-- ✅ Centralized DTC Documents
-- ✅ Auto-save from all modules
-- ✅ Export functionality (PDF, TXT)
-- ✅ Vercel Blob storage
-- ✅ Supabase PostgreSQL (3 migrations)
+### Datos y Almacenamiento
+- Documentos DTC centralizados
+- Auto-guardado desde todos los modulos
+- Funcionalidad de exportacion (PDF, TXT)
+- Almacenamiento Vercel Blob
+- Supabase PostgreSQL (3 migraciones)
 
-### Security & Infrastructure
-- ✅ Row-Level Security (RLS) policies
-- ✅ SSL/TLS encryption
-- ✅ Automated backups (6h interval)
-- ✅ Connection pooling
-- ✅ GDPR-ready architecture
-- ✅ Vercel auto-scaling
+### Seguridad e Infraestructura
+- Politicas de Seguridad a Nivel de Fila (RLS)
+- Encriptacion SSL/TLS
+- Backups automatizados (intervalo de 6h)
+- Connection pooling
+- Arquitectura lista para GDPR
+- Auto-escalado de Vercel
 
 ---
 
-## Tech Stack
+## Stack Tecnologico
 
 ### Frontend
-- **Framework**: Next.js 15 with App Router
-- **Language**: TypeScript (strict mode)
-- **Styling**: Tailwind CSS
-- **UI Components**: shadcn/ui + custom
-- **State**: SWR + React context
+- **Framework**: Next.js 15 con App Router
+- **Lenguaje**: TypeScript (modo estricto)
+- **Estilos**: Tailwind CSS
+- **Componentes UI**: shadcn/ui + personalizados
+- **Estado**: SWR + contexto React
 
-### Backend & Data
-- **Database**: Supabase (PostgreSQL)
-- **Authentication**: Supabase Auth + OAuth
-- **File Storage**: Vercel Blob
-- **ORM**: Direct SQL queries (parameterized)
+### Backend y Datos
+- **Base de Datos**: Supabase (PostgreSQL)
+- **Autenticacion**: Supabase Auth + OAuth
+- **Almacenamiento**: Vercel Blob
+- **ORM**: Consultas SQL directas (parametrizadas)
 
-### AI & ML
+### IA y ML
 - **LLM**: Claude 3.5 (Anthropic)
 - **Vision**: GPT-4o (OpenAI)
-- **Video**: MediaPipe (gesture detection)
-- **Streaming**: AI SDK v6 with Vercel AI Gateway
+- **Video**: MediaPipe (deteccion de gestos)
+- **Streaming**: AI SDK v6 con Vercel AI Gateway
 
-### Deployment
-- **Hosting**: Vercel (auto-scaling)
-- **CI/CD**: Vercel deployment
-- **Monitoring**: Vercel Analytics + Sentry (ready)
-- **Database**: Supabase managed PostgreSQL
+### Despliegue
+- **Hosting**: Vercel (auto-escalado)
+- **CI/CD**: Despliegue Vercel
+- **Monitoreo**: Vercel Analytics + Sentry (listo)
+- **Base de Datos**: Supabase PostgreSQL gestionado
 
 ---
 
-## Getting Started
+## Como Empezar
 
-### Prerequisites
-- Node.js 18+ (or pnpm 8+)
+### Prerequisitos
+- Node.js 18+ (o pnpm 8+)
 - Git
-- Access to Supabase (create free account)
-- OpenAI / Anthropic API keys (for IA features)
+- Acceso a Supabase (crear cuenta gratuita)
+- Claves API de OpenAI / Anthropic (para funciones IA)
 
-### Installation
+### Instalacion
 
 ```bash
-# Clone the repository
+# Clonar el repositorio
 git clone https://github.com/jcv86/main.git
 cd main
 
-# Install dependencies
+# Instalar dependencias
 pnpm install
 
-# Set up environment variables
-cp .env.example .env.local
+# Configurar variables de entorno
+cp .env.ejemplo .env.local
 
-# Run development server
+# Ejecutar servidor de desarrollo
 pnpm dev
 
-# Open http://localhost:3000
+# Abrir http://localhost:3000
 ```
 
-### Environment Variables
+### Variables de Entorno
 
-See `.env.example` for complete list. Key variables:
+Ver `.env.ejemplo` para lista completa. Variables clave:
 
 ```env
 # Supabase
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+NEXT_PUBLIC_SUPABASE_URL=tu_url_supabase
+NEXT_PUBLIC_SUPABASE_ANON_KEY=tu_clave_supabase
+SUPABASE_SERVICE_ROLE_KEY=tu_clave_service_role
 
-# IA APIs
-ANTHROPIC_API_KEY=your_anthropic_key
-OPENAI_API_KEY=your_openai_key
+# APIs de IA
+ANTHROPIC_API_KEY=tu_clave_anthropic
+OPENAI_API_KEY=tu_clave_openai
 
 # Vercel
-VERCEL_BLOB_TOKEN=your_blob_token
+VERCEL_BLOB_TOKEN=tu_token_blob
 
 # App
 NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-### Database Setup
+---
 
-```bash
-# Deploy migrations to Supabase
-# Migrations are in: /scripts/migrations/
+## Metricas de Produccion
 
-# 1. RPC Atómico (Mission completion)
-# 2. Cycle ID system (Unlimited cycles)
-# 3. Progress flags (Smart navigation)
-
-# Note: Migrations are already deployed. This is for local dev.
-```
+| Metrica | Valor | Estado |
+|---------|-------|--------|
+| **Uptime** | 99.9%+ | En Vivo |
+| **Carga de Pagina** | <2s | OK |
+| **Tiempo de Respuesta** | 150ms promedio | OK |
+| **Lighthouse** | 92+ | OK |
+| **Tamano de Build** | 2.3 MB | Optimizado |
+| **Base de Datos** | 3 migraciones | Desplegado |
+| **Backups** | Automatizados (6h) | Configurado |
 
 ---
 
-## Documentation
+## Cambios Recientes (22 de Mayo 2026)
 
-- **[MVP_PROGRESS_CHECKLIST.md](./MVP_PROGRESS_CHECKLIST.md)** - Complete status by module (100% Production Ready)
-- **[TECHNICAL_ARCHITECTURE.md](./TECHNICAL_ARCHITECTURE.md)** - System design & architecture
-- **[README_TECHINICAL.md](./README_TECHINICAL.md)** - Technical details & stack
-- **[INVESTOR_BRIEF.md](./INVESTOR_BRIEF.md)** - Executive summary for investors
-- **[GIT_AND_DEPLOY_STATUS.md](./GIT_AND_DEPLOY_STATUS.md)** - Commit history & deployment status
-- **[ESTADO-TECNICO-COMPLETO-FINAL.md](./ESTADO-TECNICO-COMPLETO-FINAL.md)** - Complete technical status
+**Migraciones de Base de Datos Desplegadas (3)**
+- RPC Atomico: Completar mision A1 (idempotencia verificada)
+- ID de Ciclo: Ciclos ilimitados con preservacion de datos
+- Flags de Progreso: Navegacion inteligente (3 flags centralizados)
 
----
+**Mejoras de Middleware**
+- Redirecciones inteligentes (no puede acceder a dias futuros)
+- Transicion fluida A2 a A3
+- Streaming de Coach IA A4
 
-## Production Metrics
-
-| Metric | Value | Status |
-|--------|-------|--------|
-| **Uptime** | 99.9%+ | ✅ Live |
-| **Page Load** | <2s | ✅ OK |
-| **Response Time** | 150ms avg | ✅ OK |
-| **Lighthouse** | 92+ | ✅ OK |
-| **Build Size** | 2.3 MB | ✅ Optimized |
-| **Database** | 3 migrations | ✅ Deployed |
-| **Backups** | Automated (6h) | ✅ Configured |
+**Documentacion (3,900+ lineas)**
+- Checklist de pruebas E2E (10 casos)
+- Procedimientos de verificacion de BD
+- Runbook de despliegue (23 de Mayo)
+- Guia de solucion de problemas
 
 ---
 
-## Recent Changes (May 22, 2026)
+## Documentacion
 
-✅ **Database Migrations Deployed (3)**
-- RPC Atómico: Complete A1 mission (idempotence verified)
-- Cycle ID: Unlimited cycles with data preservation
-- Progress Flags: Smart navigation (3 centralized flags)
-
-✅ **Middleware Improvements**
-- Smart redirects (cannot access future days)
-- Seamless A2→A3 transition
-- A4 IA Coach streaming
-
-✅ **Documentation (3,900+ lines)**
-- E2E testing checklist (10 cases)
-- DB verification procedures
-- Deployment runbook (May 23)
-- Troubleshooting guide
+- **[RESUMEN_INVERSOR.md](./RESUMEN_INVERSOR.md)** - Resumen ejecutivo para inversores
+- **[LISTA_PROGRESO_MVP.md](./LISTA_PROGRESO_MVP.md)** - Estado completo por modulo (100% Listo)
+- **[ARQUITECTURA_TECNICA.md](./ARQUITECTURA_TECNICA.md)** - Diseno del sistema y arquitectura
+- **[LEEME_TECNICO.md](./LEEME_TECNICO.md)** - Detalles tecnicos y stack
+- **[ESTADO_GIT_Y_DEPLOY.md](./ESTADO_GIT_Y_DEPLOY.md)** - Historial de commits y estado de despliegue
+- **[DESCARGA_Y_USO.md](./DESCARGA_Y_USO.md)** - Instrucciones de instalacion y uso
 
 ---
 
-## Contributing
+## Soporte y Contacto
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/my-feature`)
-3. Make your changes
-4. Commit with descriptive message (`git commit -am 'feat: add my feature'`)
-5. Push to branch (`git push origin feature/my-feature`)
-6. Submit a pull request
+### Documentacion
+- Ver [LISTA_PROGRESO_MVP.md](./LISTA_PROGRESO_MVP.md) para estado actual
+- Ver [ARQUITECTURA_TECNICA.md](./ARQUITECTURA_TECNICA.md) para diseno del sistema
 
-## Code Standards
-
-- **TypeScript**: Strict mode enabled
-- **Linting**: ESLint passing (0 warnings)
-- **Formatting**: Prettier auto-format
-- **Components**: Modular React components
-- **Testing**: E2E + manual testing procedures
+### Despliegue
+- Produccion: https://despega-tu-carrera.vercel.app
+- Estado: 100% Listo para Produccion
 
 ---
 
-## Support & Contact
-
-### Documentation
-- See [MVP_PROGRESS_CHECKLIST.md](./MVP_PROGRESS_CHECKLIST.md) for current status
-- See [TECHNICAL_ARCHITECTURE.md](./TECHNICAL_ARCHITECTURE.md) for system design
-- See [TROUBLESHOOTING-GUIDE.md](./TROUBLESHOOTING-GUIDE.md) for common issues
-
-### Issues
-- Bug reports: Create a GitHub issue
-- Feature requests: Create a GitHub issue with `[FEATURE]` prefix
-
-### Deployment
-- Production: https://despega-tu-carrera.vercel.app
-- Status: [Vercel Status Page](https://www.vercel.com/status)
-
----
-
-## License
-
-MIT License - See LICENSE file for details
-
----
-
-**Project**: DTC - Despega Tu Carrera  
-**Status**: ✅ 100% Production Ready  
-**Last Updated**: 2026-05-22  
-**Next**: Go-Live (May 23, 2026)
+**Proyecto**: DTC - Despega Tu Carrera  
+**Estado**: 100% Listo para Produccion  
+**Ultima Actualizacion**: 22 de Mayo 2026  
+**Siguiente**: Go-Live (23 de Mayo 2026)
