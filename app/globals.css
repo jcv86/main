@@ -160,7 +160,228 @@
   }
 }
 
-/* Smooth scrollbar styling */
+/* Premium Micro-animations & Polish */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(80, 160, 170, 0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(80, 160, 170, 0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+/* Animation utility classes */
+.animate-slide-in-up {
+  animation: slideInUp 0.4s ease-out;
+}
+
+.animate-slide-in-down {
+  animation: slideInDown 0.3s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite;
+}
+
+/* Smooth transitions for interactive elements */
+.transition-smooth {
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.transition-smooth-fast {
+  transition: all 0.15s ease-out;
+}
+
+/* Glass morphism effect for premium feel */
+.glass-effect {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.glass-effect-sm {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Gradient accents */
+.gradient-text {
+  background: linear-gradient(135deg, #50a0aa, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-border {
+  background: linear-gradient(135deg, #50a0aa, #a855f7) border-box;
+  border: 2px solid transparent;
+}
+
+/* Hover states with smooth transitions */
+.hover-lift {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), 
+              box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Premium button styles */
+.btn-premium {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.625rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-premium:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+.btn-premium-primary {
+  background: linear-gradient(135deg, rgb(6, 182, 212), rgb(168, 85, 247));
+  color: white;
+}
+
+.btn-premium-primary:hover {
+  box-shadow: 0 10px 15px -3px rgba(168, 85, 247, 0.4);
+}
+
+.btn-premium-primary:active {
+  transform: scale(0.95);
+}
+
+.btn-premium-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-premium-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.btn-premium-secondary:active {
+  transform: scale(0.95);
+}
+
+/* Loading shimmer effect */
+.shimmer-loading {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.1) 50%,
+    transparent 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Mobile-first responsive utilities */
+@media (max-width: 640px) {
+  /* Reduce animation complexity on mobile */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+  
+  /* Larger touch targets on mobile */
+  button, a, input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better font sizing for mobile readability */
+  body {
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  
+  h1 {
+    font-size: clamp(24px, 6vw, 48px);
+  }
+  
+  h2 {
+    font-size: clamp(20px, 5vw, 32px);
+  }
+  
+  h3 {
+    font-size: clamp(18px, 4vw, 24px);
+  }
+}
+
+/* Premium container styles */
+.container-premium {
+  @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+/* Accessible focus styles */
+*:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Smooth page transitions */
+.page-transition {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Accessible color contrast for text on backgrounds */
+.text-on-dark {
+  @apply text-white;
+}
+
+.text-on-light {
+  @apply text-slate-950;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
