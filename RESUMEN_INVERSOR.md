@@ -178,7 +178,7 @@
 ## 📈 TRACTION & USAGE
 
 ```
-Production Metrics (May 2026):
+Production Metrics (May 2226):
 - Active users (24h): ~500+ unique (growing)
 - Weekly active: ~1,500+
 - Monthly repeat: ~70%
@@ -262,7 +262,7 @@ Latest Session (May 22):
 
 ## 📦 CONTENIDO DEL PAQUETE
 
-**Archivo:** `DTC_Tech_Evidence_Pack_2026-05-20.tar.gz` (21 MB)
+**Archivo:** `DTC_Tech_Evidence_Pack_2026-05-22.tar.gz` (21 MB)
 
 ```
 ├── INFO.md (Quick start)
@@ -327,7 +327,7 @@ Tiempo a producción: ~1 hora (install + deploy)
 ## 📞 SOPORTE & CONTACTO
 
 **Para acceder al código:**
-1. Descomprime: `tar -xzf DTC_Tech_Evidence_Pack_2026-05-20.tar.gz`
+1. Descomprime: `tar -xzf DTC_Tech_Evidence_Pack_2026-05-22.tar.gz`
 2. Lee: `INFO.md` (quick start)
 3. Setup: `pnpm install && pnpm dev`
 4. Deploy: `vercel` o integra a tu CI/CD
