@@ -1,1 +1,0 @@
-export { AdminTestsManager } from "./index"

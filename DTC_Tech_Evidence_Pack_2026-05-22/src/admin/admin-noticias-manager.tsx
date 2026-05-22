@@ -1,1 +1,0 @@
-export { AdminNoticiasManager } from "./index"
