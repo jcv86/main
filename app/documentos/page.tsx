@@ -67,13 +67,6 @@ export default function DownloadsPage() {
             </details>
           </div>
         </div>
-            </a>
-            
-            <p className="text-xs text-center text-muted-foreground">
-              Extrae con: tar -xzf DTC_Tech_Evidence_Pack_2026-05-20.tar.gz
-            </p>
-          </div>
-        </div>
 
         {/* Individual Documents */}
         <div>
