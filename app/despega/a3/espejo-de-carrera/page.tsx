@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { A3ModuleAccessGate } from '@/components/a3-module-access-gate'
-import { ArrowRight, Mirror, Layers, Check } from 'lucide-react'
+import { ArrowRight, Compass, Layers, Check } from 'lucide-react'
 
 export default function EspejoCarreraPage() {
   const router = useRouter()
@@ -23,7 +23,7 @@ export default function EspejoCarreraPage() {
           {/* Header */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <Mirror className="w-6 h-6 text-cyan-400" />
+              <Compass className="w-6 h-6 text-cyan-400" />
               <h1 className="text-4xl font-bold">Espejo de Carrera - Checkpoint A3</h1>
             </div>
             <p className="text-white/70 text-lg">
@@ -63,7 +63,7 @@ export default function EspejoCarreraPage() {
             {/* Why It Matters */}
             <Card className="bg-teal-900/20 border-teal-500/30 p-6 space-y-4">
               <div className="flex items-start gap-3">
-                <Mirror className="w-5 h-5 text-teal-400 flex-shrink-0 mt-1" />
+                <Compass className="w-5 h-5 text-teal-400 flex-shrink-0 mt-1" />
                 <div>
                   <h3 className="font-semibold text-lg mb-2">Por qué importa</h3>
                   <ul className="space-y-2 text-sm text-white/70">

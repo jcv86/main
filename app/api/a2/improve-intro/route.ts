@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { openai } from '@ai-sdk/openai'
-import { streamText } from 'ai'
+import { createOpenAI } from '@ai-sdk/openai'
+import { generateText } from 'ai'
 
 /**
  * POST /api/a2/improve-intro
  * Uses OpenAI GPT-4o to improve intro text based on feedback
- * Streams improvements in real-time for interactive coaching
  */
 export async function POST(request: NextRequest) {
   try {
@@ -19,7 +18,6 @@ export async function POST(request: NextRequest) {
     }
 
     const selectedText = selectedVersion === 'a' ? versionA : versionB
-    const otherText = selectedVersion === 'a' ? versionB : versionA
 
     const systemPrompt = `You are a professional branding coach helping someone improve their professional introduction. 
 Your goal is to enhance their introduction to be more compelling, authentic, and memorable.
@@ -43,7 +41,12 @@ Context about them: ${userContext || 'Professional career transition'}
 
 Please improve this introduction to be more compelling and memorable. Focus on making it stand out while staying authentic.`
 
-    const { stream } = await streamText({
+    // Use Vercel AI Gateway for better compatibility
+    const openai = createOpenAI({
+      apiKey: process.env.OPENAI_API_KEY || '',
+    })
+
+    const { text } = await generateText({
       model: openai('gpt-4o'),
       system: systemPrompt,
       messages: [
@@ -55,23 +58,10 @@ Please improve this introduction to be more compelling and memorable. Focus on m
       maxTokens: 500,
     })
 
-    // Return streaming response
-    const encoder = new TextEncoder()
-    const customStream = new ReadableStream({
-      async start(controller) {
-        for await (const chunk of stream) {
-          controller.enqueue(encoder.encode(chunk))
-        }
-        controller.close()
-      },
-    })
-
-    return new Response(customStream, {
-      headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        Connection: 'keep-alive',
-      },
+    return NextResponse.json({
+      success: true,
+      improvement: text,
+      selectedVersion,
     })
   } catch (error) {
     console.error('[v0] Error improving intro:', error)

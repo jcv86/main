@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { openai } from '@ai-sdk/openai'
-import { streamText } from 'ai'
+import { createOpenAI } from '@ai-sdk/openai'
+import { generateText } from 'ai'
 
 /**
  * POST /api/a2/generate-identity
  * Uses OpenAI GPT-4o to generate professional identity versions
- * Streams results for interactive coaching experience
  */
 export async function POST(request: NextRequest) {
   try {
@@ -36,7 +35,12 @@ ${candidateProfile ? `Candidate Profile: ${candidateProfile}` : ''}
 
 Generate 3 tailored identity versions for this professional. Make each version compelling and distinct for its intended context.`
 
-    const { stream } = await streamText({
+    // Use Vercel AI Gateway for better compatibility
+    const openai = createOpenAI({
+      apiKey: process.env.OPENAI_API_KEY || '',
+    })
+
+    const { text } = await generateText({
       model: openai('gpt-4o'),
       system: systemPrompt,
       messages: [
@@ -48,23 +52,10 @@ Generate 3 tailored identity versions for this professional. Make each version c
       maxTokens: 800,
     })
 
-    // Return streaming response
-    const encoder = new TextEncoder()
-    const customStream = new ReadableStream({
-      async start(controller) {
-        for await (const chunk of stream) {
-          controller.enqueue(encoder.encode(chunk))
-        }
-        controller.close()
-      },
-    })
-
-    return new Response(customStream, {
-      headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        Connection: 'keep-alive',
-      },
+    return NextResponse.json({
+      success: true,
+      identity_versions: text,
+      archetype,
     })
   } catch (error) {
     console.error('[v0] Error generating identity:', error)
