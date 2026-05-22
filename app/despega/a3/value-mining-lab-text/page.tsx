@@ -287,13 +287,13 @@ export default function ValueMiningLabModule() {
           <div className="flex items-start gap-3">
             <Lightbulb className="w-5 h-5 text-[rgb(80,160,170)] mt-0.5 flex-shrink-0" />
             <div>
-              <p className="font-semibold text-white">The Value Mining Principle</p>
+              <p className="font-semibold text-white">El Principio de Minería de Valor</p>
               <p className="text-white/70 text-sm mt-1">
-                <strong className="text-[rgb(80,160,170)]">Task</strong> = What you did. 
-                <strong className="text-[rgb(170,70,170)] ml-2">Value</strong> = Why it mattered.
+                <strong className="text-[rgb(80,160,170)]">Tarea</strong> = Qué hiciste. 
+                <strong className="text-[rgb(170,70,170)] ml-2">Valor</strong> = Por qué importó.
                 <br />
-                Interviewers don&apos;t want to know what you did—they want to know what changed because of you.
-                You don&apos;t need exact numbers. Estimates, percentages, and qualitative improvements all count.
+                Los entrevistadores no quieren saber qué hiciste—quieren saber qué cambió gracias a ti.
+                No necesitas números exactos. Las estimaciones, porcentajes, y mejoras cualitativas también cuentan.
               </p>
             </div>
           </div>
@@ -306,7 +306,7 @@ export default function ValueMiningLabModule() {
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
           </div>
           <Progress value={progress} className="h-2 bg-white/10" />
-          <p className="text-white/50 text-xs mt-2">{completedSteps.length} of {ACTIVITIES.length} activities completed</p>
+          <p className="text-white/50 text-xs mt-2">{completedSteps.length} de {ACTIVITIES.length} actividades completadas</p>
         </Card>
 
         {/* Transformation Example */}

@@ -98,13 +98,13 @@ export default function GamificationClient() {
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg p-6">
                 <h3 className="font-bold text-lg mb-3">Streaks & Achievements</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Build streaks by staying active daily and unlock achievements through milestones.
+                  Crea racha manteniéndose activo diariamente y desbloquea logros en los hitos.
                 </p>
                 <ul className="text-sm space-y-1 list-disc list-inside">
-                  <li>Maintain daily activity streaks</li>
-                  <li>Unlock badges for milestones</li>
-                  <li>Share your achievements</li>
-                  <li>Compete on the leaderboard</li>
+                  <li>Mantén rachas de actividad diaria</li>
+                  <li>Desbloquea insignias en hitos</li>
+                  <li>Comparte tus logros</li>
+                  <li>Compite en la tabla de líderes</li>
                 </ul>
               </div>
             </div>

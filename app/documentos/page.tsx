@@ -21,26 +21,26 @@ export default function DownloadsPage() {
         <div className="bg-card border border-border rounded-lg p-8 mb-8">
           <div className="flex items-start justify-between mb-6">
             <div>
-              <h2 className="text-2xl font-bold mb-2">DTC Tech Evidence Package</h2>
+              <h2 className="text-2xl font-bold mb-2">Paquete de Evidencia Técnica DTC</h2>
               <p className="text-muted-foreground">
                 Código completo + Documentación técnica profesional
               </p>
             </div>
             <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
-              LATEST - May 22
+              ÚLTIMA - 22 de Mayo
             </span>
           </div>
 
           <div className="bg-muted p-6 rounded-lg mb-6">
-            <p className="text-sm mb-3 font-mono font-bold text-primary">DTC_Tech_Evidence_Pack_2026-05-22.tar.gz ⭐ CURRENT</p>
+            <p className="text-sm mb-3 font-mono font-bold text-primary">DTC_Tech_Evidence_Pack_2026-05-22.tar.gz ⭐ ACTUAL</p>
             <ul className="text-sm text-muted-foreground space-y-2">
               <li>✓ 1,318 archivos de código fuente</li>
-              <li>✓ 9 documentos técnicos (3,900+ líneas) - UPDATED</li>
-              <li>✓ Status: 100% Production Ready (actualizado desde 87%)</li>
-              <li>✓ 3 migrations deployed (RPC + Cycles + Flags)</li>
-              <li>✓ Zero critical blockers</li>
+              <li>✓ 9 documentos técnicos (3,900+ líneas) - ACTUALIZADO</li>
+              <li>✓ Estado: 100% Listo para Producción (actualizado desde 87%)</li>
+              <li>✓ 3 migraciones desplegadas (RPC + Ciclos + Banderas)</li>
+              <li>✓ Cero blockers críticos</li>
               <li>✓ 3,020+ commits (actualizado desde 2,986)</li>
-              <li>✓ May 23 Go-Live APPROVED</li>
+              <li>✓ Go-Live 23 de Mayo APROBADO</li>
             </ul>
           </div>
 
@@ -49,12 +49,12 @@ export default function DownloadsPage() {
               href="/api/documentos/download?file=DTC_Tech_Evidence_Pack_2026-05-22.tar.gz"
               className="block w-full bg-primary text-primary-foreground font-semibold py-3 px-4 rounded-lg text-center hover:bg-primary/90 transition"
             >
-              📥 Descargar Paquete Completo May 22 (21 MB)
+              📥 Descargar Paquete Completo 22 de Mayo (21 MB)
             </a>
             
             <details className="text-sm">
               <summary className="cursor-pointer text-muted-foreground hover:text-foreground font-medium">
-                📦 Versión anterior (May 20) - Solo para referencia
+                📦 Versión anterior (20 de Mayo) - Solo para referencia
               </summary>
               <div className="mt-3 p-3 bg-muted rounded-lg">
                 <a
@@ -259,7 +259,7 @@ export default function DownloadsPage() {
                   download
                   className="text-primary hover:underline text-sm font-medium"
                 >
-                  📄 Text File
+                  📄 Markdown
                 </a>
               </div>
             </div>
@@ -268,7 +268,7 @@ export default function DownloadsPage() {
 
         {/* Quick Start */}
         <div className="mt-12 bg-muted p-8 rounded-lg">
-          <h3 className="text-xl font-bold mb-4">Quick Start (3 pasos)</h3>
+          <h3 className="text-xl font-bold mb-4">Inicio Rápido (3 pasos)</h3>
           <div className="space-y-4 font-mono text-sm">
             <div>
               <p className="text-muted-foreground mb-1">1. Extrae el paquete:</p>
@@ -279,7 +279,7 @@ export default function DownloadsPage() {
               <p className="bg-background p-3 rounded">cd DTC_Tech_Evidence_Pack_2026-05-20 && pnpm install</p>
             </div>
             <div>
-              <p className="text-muted-foreground mb-1">3. Corre el servidor:</p>
+              <p className="text-muted-foreground mb-1">3. Ejecuta el servidor:</p>
               <p className="bg-background p-3 rounded">cp .env.example .env.local && pnpm dev</p>
             </div>
           </div>
@@ -288,7 +288,7 @@ export default function DownloadsPage() {
         {/* Footer Info */}
         <div className="mt-12 text-center text-sm text-muted-foreground border-t border-border pt-8">
           <p>
-            Paquete generado: 2026-05-22 | MVP: 100% Production Ready | Production: Live
+            Paquete generado: 22 de Mayo 2026 | MVP: 100% Listo para Producción | Producción: En Vivo
           </p>
           <p className="mt-2">
             Para más información, lee RESUMEN_INVERSOR.md o LEEME_TECNICO.md
