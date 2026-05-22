@@ -26,28 +26,47 @@ export default function DownloadsPage() {
                 Código completo + Documentación técnica profesional
               </p>
             </div>
-            <span className="bg-primary/10 text-primary px-3 py-1 rounded-full text-sm font-medium">
-              21 MB
+            <span className="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-medium">
+              LATEST - May 22
             </span>
           </div>
 
           <div className="bg-muted p-6 rounded-lg mb-6">
-            <p className="text-sm mb-3 font-mono">DTC_Tech_Evidence_Pack_2026-05-20.tar.gz</p>
+            <p className="text-sm mb-3 font-mono font-bold text-primary">DTC_Tech_Evidence_Pack_2026-05-22.tar.gz ⭐ CURRENT</p>
             <ul className="text-sm text-muted-foreground space-y-2">
               <li>✓ 1,318 archivos de código fuente</li>
-              <li>✓ 8 documentos técnicos (2,500+ líneas)</li>
-              <li>✓ .env.example template</li>
-              <li>✓ Git history (2,986 commits)</li>
-              <li>✓ Instrucciones de setup (30 min)</li>
+              <li>✓ 9 documentos técnicos (3,900+ líneas) - UPDATED</li>
+              <li>✓ Status: 100% Production Ready (actualizado desde 87%)</li>
+              <li>✓ 3 migrations deployed (RPC + Cycles + Flags)</li>
+              <li>✓ Zero critical blockers</li>
+              <li>✓ 3,020+ commits (actualizado desde 2,986)</li>
+              <li>✓ May 23 Go-Live APPROVED</li>
             </ul>
           </div>
 
           <div className="space-y-4">
             <a
-              href="/api/documentos/download?file=DTC_Tech_Evidence_Pack_2026-05-20.tar.gz"
+              href="/api/documentos/download?file=DTC_Tech_Evidence_Pack_2026-05-22.tar.gz"
               className="block w-full bg-primary text-primary-foreground font-semibold py-3 px-4 rounded-lg text-center hover:bg-primary/90 transition"
             >
-              📥 Descargar Paquete Completo (21 MB)
+              📥 Descargar Paquete Completo May 22 (21 MB)
+            </a>
+            
+            <details className="text-sm">
+              <summary className="cursor-pointer text-muted-foreground hover:text-foreground font-medium">
+                📦 Versión anterior (May 20) - Solo para referencia
+              </summary>
+              <div className="mt-3 p-3 bg-muted rounded-lg">
+                <a
+                  href="/api/documentos/download?file=DTC_Tech_Evidence_Pack_2026-05-20.tar.gz"
+                  className="text-primary hover:underline text-sm"
+                >
+                  Descargar DTC_Tech_Evidence_Pack_2026-05-20.tar.gz (87% MVP)
+                </a>
+              </div>
+            </details>
+          </div>
+        </div>
             </a>
             
             <p className="text-xs text-center text-muted-foreground">
