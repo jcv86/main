@@ -2,8 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 /**
  * POST /api/a2/improve-intro
- * Coaching API - Improves professional intro text
- * MVP: Returns structured improvements (ready for OpenAI integration)
+ * Uses OpenAI GPT-4o via direct API call to improve professional introductions
  */
 export async function POST(request: NextRequest) {
   try {
@@ -14,43 +13,71 @@ export async function POST(request: NextRequest) {
     }
 
     const selectedText = selectedVersion === 'a' ? versionA : versionB
+    const apiKey = process.env.OPENAI_API_KEY
 
-    // MVP: Provide structured coaching response
-    const improvement = `
-**Improvements for Your Introduction:**
+    if (!apiKey) {
+      console.error('[v0] Missing OPENAI_API_KEY')
+      return NextResponse.json({ error: 'API configuration missing' }, { status: 500 })
+    }
 
-1. **Add Specificity**: Include concrete achievements or metrics that demonstrate impact
-   - Current: Generic description
-   - Suggested: Include 1-2 quantifiable results (e.g., "Led X% growth", "Managed $Y budget")
+    const systemPrompt = `You are a professional branding coach helping someone improve their professional introduction. 
+Your goal is to enhance their introduction to be more compelling, authentic, and memorable.
 
-2. **Highlight Unique Value**: Make it clear what differentiates you
-   - Current: Standard professional language
-   - Suggested: Lead with your key differentiator or specialization
+Provide:
+1. 2-3 specific, actionable improvements to make
+2. A revised version incorporating those improvements
+3. Why these changes matter for their professional brand
 
-3. **Make it Memorable**: Add a personal touch while staying professional
-   - Current: Formal tone
-   - Suggested: Include a brief insight about your approach or passion
+Be conversational, specific, and encouraging.`
 
-**Suggested Revision:**
-"${selectedText} [with added metrics, unique angle, and personal touch]"
+    const userPrompt = `Their selected introduction is:
+"${selectedText}"
 
-This revision would work great for both casual conversations and professional settings.
-`
+Context: ${userContext || 'Professional career transition'}
+
+Improve this introduction to be more compelling and memorable while keeping it authentic.`
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: userPrompt },
+        ],
+        temperature: 0.7,
+        max_tokens: 500,
+      }),
+    })
+
+    if (!response.ok) {
+      const error = await response.text()
+      console.error('[v0] OpenAI API error:', error)
+      return NextResponse.json(
+        { error: 'Failed to improve introduction' },
+        { status: response.status }
+      )
+    }
+
+    const data = await response.json()
+    const improvement = data.choices[0]?.message?.content || 'Unable to generate improvement'
 
     return NextResponse.json({
       success: true,
       improvement,
       selectedVersion,
-      tips: [
-        'Use power verbs (Led, Transformed, Accelerated)',
-        'Include numbers/metrics when possible',
-        'Keep it to 2-3 sentences max',
-        'Practice saying it out loud for flow',
-      ],
+      model: 'gpt-4o-mini',
     })
   } catch (error) {
     console.error('[v0] Error improving intro:', error)
-    return NextResponse.json({ error: 'Failed to improve introduction' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Failed to improve introduction' },
+      { status: 500 }
+    )
   }
 }
 
