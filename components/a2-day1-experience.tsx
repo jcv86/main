@@ -11,6 +11,11 @@ import { A2Day1Upload } from './a2-day1-upload'
 import { A2Day1Scoring } from './a2-day1-scoring'
 import { saveDayDocument, formatDocumentContent } from '@/lib/supabase/dtc-documents-phase2'
 import { TRAVIS_DAY1_DATA, isTravisMode } from '@/lib/travis-form-data'
+import { 
+  autosaveDayProgress, 
+  loadDayProgressWithFallback, 
+  clearAllDrafts 
+} from '@/lib/a2-progress-persistence'
 
 interface RouteData {
   change30Days: string
@@ -47,22 +52,41 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
     mainBlocker: '',
   })
 
-  // Load Travis data in dev mode
+  // Load Travis data or saved draft on mount
   useEffect(() => {
-    const travisMode = isTravisMode()
-    setIsDevMode(travisMode)
-    
-    if (travisMode) {
-      setRouteData({
-        change30Days: TRAVIS_DAY1_DATA.change30Days,
-        targetRole: TRAVIS_DAY1_DATA.targetRole,
-        mainBlocker: TRAVIS_DAY1_DATA.mainBlocker,
-        hypothesis: TRAVIS_DAY1_DATA.hypothesis,
-        gates: TRAVIS_DAY1_DATA.gates,
-        roadmap: TRAVIS_DAY1_DATA.roadmap,
-      })
+    const loadData = async () => {
+      const travisMode = isTravisMode()
+      setIsDevMode(travisMode)
+      
+      if (travisMode) {
+        // Use Travis test data
+        setRouteData({
+          change30Days: TRAVIS_DAY1_DATA.change30Days,
+          targetRole: TRAVIS_DAY1_DATA.targetRole,
+          mainBlocker: TRAVIS_DAY1_DATA.mainBlocker,
+          hypothesis: TRAVIS_DAY1_DATA.hypothesis,
+          gates: TRAVIS_DAY1_DATA.gates,
+          roadmap: TRAVIS_DAY1_DATA.roadmap,
+        })
+      } else if (userId) {
+        // Try to load saved draft
+        const draft = await loadDayProgressWithFallback(userId, 1)
+        if (draft) {
+          console.log(`[v0] Resuming Day 1 from step ${draft.stepNumber}`)
+          setRouteData(draft.formData)
+          setCurrentStep(draft.stepNumber)
+          
+          // Show toast/notification that we're resuming
+          if (draft.stepNumber > 1) {
+            // You can add a toast notification here
+            console.log(`[v0] Welcome back! Resuming from step ${draft.stepNumber}`)
+          }
+        }
+      }
     }
-  }, [])
+
+    loadData()
+  }, [userId])
 
   const stepTitles = [
     'El Contrato de Tu Ruta',
@@ -80,22 +104,30 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
   }
 
   const handleVisionNext = (data: Partial<RouteData>) => {
-    setRouteData((prev) => ({ ...prev, ...data }))
+    const newData = { ...routeData, ...data }
+    setRouteData(newData)
+    if (userId) autosaveDayProgress(userId, 1, 3, newData)
     setCurrentStep(3)
   }
 
   const handleHypothesisNext = (hypothesis: string) => {
-    setRouteData((prev) => ({ ...prev, hypothesis }))
+    const newData = { ...routeData, hypothesis }
+    setRouteData(newData)
+    if (userId) autosaveDayProgress(userId, 1, 4, newData)
     setCurrentStep(4)
   }
 
   const handleGatesNext = (gates: RouteData['gates']) => {
-    setRouteData((prev) => ({ ...prev, gates }))
+    const newData = { ...routeData, gates }
+    setRouteData(newData)
+    if (userId) autosaveDayProgress(userId, 1, 5, newData)
     setCurrentStep(5)
   }
 
   const handleRoadmapNext = (roadmap: string) => {
-    setRouteData((prev) => ({ ...prev, roadmap }))
+    const newData = { ...routeData, roadmap }
+    setRouteData(newData)
+    if (userId) autosaveDayProgress(userId, 1, 6, newData)
     setCurrentStep(6)
   }
 
@@ -119,10 +151,12 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
         console.error('[v0] Error saving Day 1 to DTC:', err)
       }
     }
+    if (userId) autosaveDayProgress(userId, 1, 7, routeData)
     setCurrentStep(7)
   }
 
   const handleUploadNext = () => {
+    if (userId) autosaveDayProgress(userId, 1, 8, routeData)
     setCurrentStep(8)
   }
 
@@ -149,6 +183,11 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
       }
 
       await onComplete(finalSubmission)
+      
+      // Clear draft after successful completion
+      if (userId) {
+        clearAllDrafts(1)
+      }
     } catch (err) {
       console.error('[v0] Error completing Day 1:', err)
     }

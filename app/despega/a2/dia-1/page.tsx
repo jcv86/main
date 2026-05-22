@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { A2DayPageTemplate } from '@/components/a2-day-page-template'
 import { Day1Experience } from '@/components/a2-day1-experience'
-import { markTaskComplete } from '@/lib/supabase/task-completions'
 
 const DIA_NUM = 1
 
@@ -16,14 +15,26 @@ export default function Dia1Page() {
     try {
       console.log('[v0] Day 1 submission received:', submission)
 
-      // Mark this task as complete in Supabase
+      // Call the /api/a2/complete-day endpoint with full submission data
       if (user?.id) {
-        const result = await markTaskComplete(30, 1, 'Día 1')
-        console.log('[v0] Task marked complete result:', result)
-        
-        if (!result) {
-          console.warn('[v0] Failed to mark task complete, but continuing with navigation')
+        const apiResponse = await fetch('/api/a2/complete-day', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            dayNumber: 1,
+            submission, // Full submission data including scores, passStatus, etc.
+          }),
+        })
+
+        if (!apiResponse.ok) {
+          const error = await apiResponse.json()
+          console.error('[v0] API error:', error)
+          throw new Error(error.error || 'Failed to complete day')
         }
+
+        const result = await apiResponse.json()
+        console.log('[v0] Day 1 completion result:', result)
+        console.log('[v0] A3 unlocks triggered:', result.a3_unlocks)
       }
 
       // Wait a moment for Supabase to sync, then navigate
