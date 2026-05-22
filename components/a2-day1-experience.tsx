@@ -73,7 +73,7 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
         const draft = await loadDayProgressWithFallback(userId, 1)
         if (draft) {
           console.log(`[v0] Resuming Day 1 from step ${draft.stepNumber}`)
-          setRouteData(draft.formData)
+          setRouteData((prev) => ({ ...prev, ...draft.formData }))
           setCurrentStep(draft.stepNumber)
           
           // Show toast/notification that we're resuming
