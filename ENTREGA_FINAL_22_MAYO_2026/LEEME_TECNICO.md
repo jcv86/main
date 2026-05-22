@@ -1,30 +1,30 @@
-# README TÉCNICO - DTC Despega Tu Carrera
+# LEEME TÉCNICO - DTC Despega Tu Carrera
 
-**Document:** Technical Setup & Operations  
-**Date:** 2026-05-22  
-**Version:** 6.0.0  
-**Status:** ✅ Production Ready  
+**Documento:** Setup Técnico y Operaciones  
+**Fecha:** 22 de Mayo 2026  
+**Versión:** 6.0.0  
+**Status:** ✅ Listo para Producción  
 
 ---
 
-## Quick Start (5 Minutes)
+## Inicio Rápido (5 Minutos)
 
 ```bash
-# Clone repo
+# Clonar repositorio
 git clone https://github.com/jcv86/main.git
 cd main
 
-# Install dependencies
+# Instalar dependencias
 pnpm install
 
-# Setup environment
-cp .env.example .env.local
-# Edit .env.local with your API keys
+# Configurar ambiente
+cp .env.ejemplo .env.local
+# Editar .env.local con tus claves de API
 
-# Run development
+# Ejecutar desarrollo
 pnpm dev
 
-# Open browser
+# Abrir navegador
 open http://localhost:3000
 ```
 
