@@ -44,10 +44,9 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
-     * - /documentos (public downloads page)
-     * - /documentos-publicos (public docs viewer)
-     * - /api/documentos/* (public docs APIs)
+     * - /documentos* (all documentos routes - /documentos, /documentos-publicos, /documentos/*)
+     * - /api/documentos* (all docs APIs)
      */
-    '/((?!_next/static|_next/image|favicon.ico|^/documentos|^/api/documentos|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|documentos|/api/documentos|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
