@@ -84,18 +84,26 @@ export default function DownloadsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h4 className="font-bold">Investor Brief - Resumen Ejecutivo</h4>
+                  <h4 className="font-bold">Resumen Inversor - Presentación Ejecutiva</h4>
                   <p className="text-xs text-muted-foreground mt-1">Para CORFO, StartUp Chile e inversores (5 min)</p>
                 </div>
                 <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">Prioritario</span>
               </div>
               <div className="flex gap-3 mt-4">
                 <a
-                  href="/api/documentos/download?file=INVESTOR_BRIEF.md"
+                  href="/api/documentos/download?file=RESUMEN_INVERSOR.md"
                   download
                   className="text-primary hover:underline text-sm font-medium"
                 >
                   📄 Markdown
+                </a>
+                <span className="text-muted-foreground">|</span>
+                <a
+                  href="/api/documentos/download?file=RESUMEN_INVERSOR.html"
+                  download
+                  className="text-primary hover:underline text-sm font-medium"
+                >
+                  🌐 HTML (PDF)
                 </a>
               </div>
             </div>
@@ -104,14 +112,14 @@ export default function DownloadsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h4 className="font-bold">README Técnico - Documentación Completa</h4>
+                  <h4 className="font-bold">Guía Técnica Completa - Documentación Completa</h4>
                   <p className="text-xs text-muted-foreground mt-1">Stack, setup, módulos, dependencias (20 min)</p>
                 </div>
                 <span className="bg-green-100 text-green-700 text-xs px-2 py-1 rounded">Desarrolladores</span>
               </div>
               <div className="flex gap-3 mt-4">
                 <a
-                  href="/api/documentos/download?file=README_TECHINICAL.md"
+                  href="/api/documentos/download?file=LEEME_TECNICO.md"
                   download
                   className="text-primary hover:underline text-sm font-medium"
                 >
@@ -124,14 +132,14 @@ export default function DownloadsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h4 className="font-bold">MVP Progress Checklist - Status 100%</h4>
+                  <h4 className="font-bold">Lista de Progreso MVP - Status 100%</h4>
                   <p className="text-xs text-muted-foreground mt-1">Completitud por módulo y estado de features (10 min)</p>
                 </div>
                 <span className="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded">MVP Status</span>
               </div>
               <div className="flex gap-3 mt-4">
                 <a
-                  href="/api/documentos/download?file=MVP_PROGRESS_CHECKLIST.md"
+                  href="/api/documentos/download?file=LISTA_PROGRESO_MVP.md"
                   download
                   className="text-primary hover:underline text-sm font-medium"
                 >
@@ -144,14 +152,14 @@ export default function DownloadsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h4 className="font-bold">Technical Architecture - Diseño del Sistema</h4>
+                  <h4 className="font-bold">Arquitectura Técnica - Diseño del Sistema</h4>
                   <p className="text-xs text-muted-foreground mt-1">Diagramas, seguridad, escalabilidad (25 min)</p>
                 </div>
                 <span className="bg-orange-100 text-orange-700 text-xs px-2 py-1 rounded">Técnico</span>
               </div>
               <div className="flex gap-3 mt-4">
                 <a
-                  href="/api/documentos/download?file=TECHNICAL_ARCHITECTURE.md"
+                  href="/api/documentos/download?file=ARQUITECTURA_TECNICA.md"
                   download
                   className="text-primary hover:underline text-sm font-medium"
                 >
@@ -164,14 +172,14 @@ export default function DownloadsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h4 className="font-bold">Git & Deploy Status - 3,020+ Commits</h4>
+                  <h4 className="font-bold">Estado de Git y Deploy - 3,020+ Commits</h4>
                   <p className="text-xs text-muted-foreground mt-1">Historial, deployment, performance metrics (10 min)</p>
                 </div>
                 <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded">DevOps</span>
               </div>
               <div className="flex gap-3 mt-4">
                 <a
-                  href="/api/documentos/download?file=GIT_AND_DEPLOY_STATUS.md"
+                  href="/api/documentos/download?file=ESTADO_GIT_Y_DEPLOY.md"
                   download
                   className="text-primary hover:underline text-sm font-medium"
                 >
@@ -184,14 +192,14 @@ export default function DownloadsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h4 className="font-bold">Download & Use - Guía de Setup</h4>
+                  <h4 className="font-bold">Descarga y Uso - Guía de Setup</h4>
                   <p className="text-xs text-muted-foreground mt-1">Instrucciones paso a paso para correr localmente (15 min)</p>
                 </div>
                 <span className="bg-indigo-100 text-indigo-700 text-xs px-2 py-1 rounded">Getting Started</span>
               </div>
               <div className="flex gap-3 mt-4">
                 <a
-                  href="/api/documentos/download?file=DOWNLOAD_AND_USE.md"
+                  href="/api/documentos/download?file=DESCARGA_Y_USO.md"
                   download
                   className="text-primary hover:underline text-sm font-medium"
                 >
