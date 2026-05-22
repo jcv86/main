@@ -85,14 +85,6 @@ export default function DownloadsPage() {
                 >
                   📄 Markdown
                 </a>
-                <span className="text-muted-foreground">|</span>
-                <a
-                  href="/documentos/INVESTOR_BRIEF.docx"
-                  download
-                  className="text-primary hover:underline text-sm font-medium"
-                >
-                  📘 Word (.docx)
-                </a>
               </div>
             </div>
 
@@ -107,19 +99,11 @@ export default function DownloadsPage() {
               </div>
               <div className="flex gap-3 mt-4">
                 <a
-                  href="/api/documentos/download?file=README_TECHNICAL.md"
+                  href="/api/documentos/download?file=README_TECHINICAL.md"
                   download
                   className="text-primary hover:underline text-sm font-medium"
                 >
                   📄 Markdown
-                </a>
-                <span className="text-muted-foreground">|</span>
-                <a
-                  href="/documentos/README_TECHNICAL.docx"
-                  download
-                  className="text-primary hover:underline text-sm font-medium"
-                >
-                  📘 Word (.docx)
                 </a>
               </div>
             </div>
@@ -128,7 +112,7 @@ export default function DownloadsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h4 className="font-bold">MVP Progress Checklist - Status 87%</h4>
+                  <h4 className="font-bold">MVP Progress Checklist - Status 100%</h4>
                   <p className="text-xs text-muted-foreground mt-1">Completitud por módulo y estado de features (10 min)</p>
                 </div>
                 <span className="bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded">MVP Status</span>
@@ -140,14 +124,6 @@ export default function DownloadsPage() {
                   className="text-primary hover:underline text-sm font-medium"
                 >
                   📄 Markdown
-                </a>
-                <span className="text-muted-foreground">|</span>
-                <a
-                  href="/documentos/MVP_PROGRESS_CHECKLIST.docx"
-                  download
-                  className="text-primary hover:underline text-sm font-medium"
-                >
-                  📘 Word (.docx)
                 </a>
               </div>
             </div>
@@ -169,14 +145,6 @@ export default function DownloadsPage() {
                 >
                   📄 Markdown
                 </a>
-                <span className="text-muted-foreground">|</span>
-                <a
-                  href="/documentos/TECHNICAL_ARCHITECTURE.docx"
-                  download
-                  className="text-primary hover:underline text-sm font-medium"
-                >
-                  📘 Word (.docx)
-                </a>
               </div>
             </div>
 
@@ -184,7 +152,7 @@ export default function DownloadsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h4 className="font-bold">Git & Deploy Status - 2,986 Commits</h4>
+                  <h4 className="font-bold">Git & Deploy Status - 3,020+ Commits</h4>
                   <p className="text-xs text-muted-foreground mt-1">Historial, deployment, performance metrics (10 min)</p>
                 </div>
                 <span className="bg-red-100 text-red-700 text-xs px-2 py-1 rounded">DevOps</span>
@@ -196,14 +164,6 @@ export default function DownloadsPage() {
                   className="text-primary hover:underline text-sm font-medium"
                 >
                   📄 Markdown
-                </a>
-                <span className="text-muted-foreground">|</span>
-                <a
-                  href="/documentos/GIT_AND_DEPLOY_STATUS.docx"
-                  download
-                  className="text-primary hover:underline text-sm font-medium"
-                >
-                  📘 Word (.docx)
                 </a>
               </div>
             </div>
@@ -225,14 +185,6 @@ export default function DownloadsPage() {
                 >
                   📄 Markdown
                 </a>
-                <span className="text-muted-foreground">|</span>
-                <a
-                  href="/documentos/DOWNLOAD_AND_USE.docx"
-                  download
-                  className="text-primary hover:underline text-sm font-medium"
-                >
-                  📘 Word (.docx)
-                </a>
               </div>
             </div>
 
@@ -240,26 +192,18 @@ export default function DownloadsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h4 className="font-bold">Paquete Completado - Resumen</h4>
+                  <h4 className="font-bold">Paquete Completado - Resumen May 22</h4>
                   <p className="text-xs text-muted-foreground mt-1">Checklist de completitud, próximos hitos (3 min)</p>
                 </div>
                 <span className="bg-cyan-100 text-cyan-700 text-xs px-2 py-1 rounded">Resumen</span>
               </div>
               <div className="flex gap-3 mt-4">
                 <a
-                  href="/api/documentos/download?file=PAQUETE_COMPLETADO.md"
+                  href="/api/documentos/download?file=DOCUMENTATION_COMPLETE_2026-05-22.md"
                   download
                   className="text-primary hover:underline text-sm font-medium"
                 >
                   📄 Markdown
-                </a>
-                <span className="text-muted-foreground">|</span>
-                <a
-                  href="/documentos/PAQUETE_COMPLETADO.docx"
-                  download
-                  className="text-primary hover:underline text-sm font-medium"
-                >
-                  📘 Word (.docx)
                 </a>
               </div>
             </div>
@@ -308,10 +252,10 @@ export default function DownloadsPage() {
         {/* Footer Info */}
         <div className="mt-12 text-center text-sm text-muted-foreground border-t border-border pt-8">
           <p>
-            Paquete generado: 2026-05-20 | MVP: 87% | Production: Live
+            Paquete generado: 2026-05-22 | MVP: 100% Production Ready | Production: Live
           </p>
           <p className="mt-2">
-            Para más información, lee INVESTOR_BRIEF.md o README_TECHNICAL.md
+            Para más información, lee INVESTOR_BRIEF.md o README_TECHINICAL.md
           </p>
         </div>
       </div>
