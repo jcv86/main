@@ -1,395 +1,405 @@
-# 📦 DOWNLOAD & USE INSTRUCTIONS
+# DOWNLOAD AND USE - Setup Instructions
 
-**DTC Technical Evidence Package**  
-**Version:** 2026-05-20  
-**File:** `DTC_Tech_Evidence_Pack_2026-05-20.tar.gz` (21 MB)  
-
----
-
-## 📥 DOWNLOAD
-
-### Opción 1: Direct Download (Si tienes acceso al repo)
-```bash
-# El archivo está en la raíz del proyecto
-ls -lh DTC_Tech_Evidence_Pack_2026-05-20.tar.gz
-
-# Tamaño: 21 MB
-# Descomprimido: 32 MB
-# Archivos: 1,318 código + docs
-```
-
-### Opción 2: Build from source (Si necesitas reconstruir)
-```bash
-# El paquete se generó con:
-cd /vercel/share/v0-project
-tar -czf DTC_Tech_Evidence_Pack_2026-05-20.tar.gz \
-  README_TECHNICAL.md \
-  MVP_PROGRESS_CHECKLIST.md \
-  TECHNICAL_ARCHITECTURE.md \
-  GIT_AND_DEPLOY_STATUS.md \
-  .env.example \
-  src/ \
-  docs/ \
-  package.json \
-  tsconfig.json
-```
+**For**: Investors, Partners, Technical Teams  
+**Date**: 2026-05-22  
+**Status**: ✅ Ready to Deploy  
 
 ---
 
-## 📖 CÓMO USAR EL PAQUETE
+## Option 1: Clone from GitHub (RECOMMENDED)
 
-### PASO 1: Extrae el archivo
+### For Developers
+
 ```bash
-# En tu máquina local
-mkdir -p ~/projects
-cd ~/projects
+# Clone repository
+git clone https://github.com/jcv86/main.git
+cd main
 
-# Extrae
-tar -xzf DTC_Tech_Evidence_Pack_2026-05-20.tar.gz
-cd DTC_Tech_Evidence_Pack_2026-05-20
+# Checkout production branch
+git checkout v0/jcv86-4cea421a
 
-# Verifica contenido
-ls -la
-```
-
-### PASO 2: Lee primero estos documentos (10 min)
-```bash
-# Quick overview
-cat INFO.md
-
-# Para inversores/CORFO
-cat INVESTOR_BRIEF.md
-
-# Para desarrolladores
-cat README_TECHNICAL.md
-
-# Status detallado
-cat MVP_PROGRESS_CHECKLIST.md
-```
-
-### PASO 3: Setup del proyecto (15 min)
-```bash
-# Instala dependencias
+# Install dependencies
 pnpm install
-# o: npm install / yarn install / bun install
 
-# Copia template de env
+# Setup environment
 cp .env.example .env.local
 
-# IMPORTANTE: Edita .env.local y agrega valores reales:
-# - NEXT_PUBLIC_SUPABASE_URL (tu Supabase project URL)
-# - NEXT_PUBLIC_SUPABASE_ANON_KEY (tu Supabase key)
-# - ANTHROPIC_API_KEY (tu API key de Anthropic)
-# - OPENAI_API_KEY (tu API key de OpenAI)
-# - NEXTAUTH_SECRET (random secret string)
-# - GOOGLE_CLIENT_ID y GOOGLE_CLIENT_SECRET (si usas Google OAuth)
+# Add your API keys to .env.local
+# (See .env.example for all variables)
 
-nano .env.local  # o vim, VS Code, etc.
-```
-
-### PASO 4: Corre localmente (2 min)
-```bash
-# Dev server
+# Run development server
 pnpm dev
 
-# Verás output como:
-# ▲ Next.js 15.0.0
-# - Local:        http://localhost:3000
-# 
-# Ready in 1.2s
-
-# Abre en el browser: http://localhost:3000
+# Open http://localhost:3000
 ```
 
-### PASO 5: Explora la aplicación
-```
-Home → /
-  ↓
-Auth/Login → /auth/login
-  ↓
-Dashboard → /despega
-  ├── A1 Module → /despega/a1
-  ├── A2 Module → /despega/a2/dia-1...30
-  ├── A3 Module → /despega/a3
-  └── A4 Module → /despega/a4
+### For Non-Technical Users
 
-Admin → /la-realidad
-  └── Documents → /la-realidad/documentos
-```
+1. Download code from: https://github.com/jcv86/main/releases
+2. Extract ZIP file
+3. Follow Developer setup above
 
-### PASO 6: Build para producción (5 min)
+---
+
+## Option 2: Deploy Direct to Vercel (FASTEST)
+
+### One-Click Deploy
+
 ```bash
-# Build
+# Fork on GitHub, then click:
+# https://vercel.com/import
+
+# Or use CLI:
+vercel
+```
+
+### What You Need
+
+- GitHub account
+- Vercel account (free tier OK)
+- Supabase account (free tier OK)
+- API keys (see .env.example)
+
+### Steps
+
+1. **Create Supabase Project**
+   - Go to: https://supabase.com/dashboard
+   - Create new project
+   - Copy URL and API key to .env
+
+2. **Add API Keys**
+   - Create Vercel Blob token
+   - Create Anthropic API key
+   - Create OpenAI API key (optional)
+
+3. **Deploy**
+   ```bash
+   vercel
+   ```
+
+4. **Visit**
+   - https://despega-tu-carrera.vercel.app
+
+---
+
+## Environment Setup
+
+### Required Variables (.env.local)
+
+```env
+# Supabase (REQUIRED)
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# IA APIs (REQUIRED for features)
+ANTHROPIC_API_KEY=sk-ant-xxxx
+OPENAI_API_KEY=sk-xxxx
+
+# Storage (REQUIRED for file uploads)
+VERCEL_BLOB_TOKEN=your-blob-token
+
+# App Configuration
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
+```
+
+### Optional Variables
+
+```env
+# Logging
+LOG_LEVEL=info
+
+# Debug mode
+DEBUG=dtc:*
+
+# Custom domain
+VERCEL_URL=your-domain.com
+```
+
+See [.env.example](./.env.example) for complete list.
+
+---
+
+## Database Setup
+
+### Automatic (Recommended)
+
+```bash
+# Vercel deploys migrations automatically
+# No manual action needed
+```
+
+### Manual
+
+```bash
+# 1. Login to Supabase Console
+# https://app.supabase.com/
+
+# 2. Go to SQL Editor
+
+# 3. Run migration files (in order):
+# scripts/migrations/001-rpc-mission.sql
+# scripts/migrations/002-cycle-id.sql
+# scripts/migrations/003-progress-flags.sql
+
+# Or use CLI:
+pnpm exec supabase db push
+```
+
+---
+
+## Running Locally
+
+### Development
+
+```bash
+# Terminal 1: Dev Server
+pnpm dev
+
+# Terminal 2: Monitor (optional)
+pnpm dev:inspect
+
+# Open http://localhost:3000
+```
+
+### Testing
+
+```bash
+# Test auth flow
+# Create account → Login → Access dashboard
+
+# Test A1 module
+# Complete vision scan → See roadmap
+
+# Test A2 module
+# Complete day 1-5 → Check progress
+
+# Test A4 module
+# Send message to IA Coach → See response
+```
+
+### Production Build
+
+```bash
+# Build for production
 pnpm build
 
 # Start production server
 pnpm start
 
-# O deploy a Vercel
-vercel deploy
+# Or deploy to Vercel (recommended)
+vercel --prod
 ```
 
 ---
 
-## 📚 DOCUMENTOS INCLUIDOS
+## First Time Setup Walkthrough
 
-| Documento | Leer Si... | Tiempo |
-|-----------|-----------|--------|
-| **INFO.md** | Quieres quick start | 5 min |
-| **INVESTOR_BRIEF.md** | Eres inversor/CORFO | 10 min |
-| **README_TECHNICAL.md** | Eres desarrollador | 20 min |
-| **MVP_PROGRESS_CHECKLIST.md** | Necesitas status detallado | 15 min |
-| **TECHNICAL_ARCHITECTURE.md** | Quieres entender el diseño | 25 min |
-| **GIT_AND_DEPLOY_STATUS.md** | Te interesa el historial | 10 min |
-| **PACKAGE_INDEX.md** | Necesitas índice completo | 5 min |
+### 1. Prepare (5 min)
 
-**Total recomendado:** ~30-50 min para entender todo
+- [ ] GitHub account created
+- [ ] Vercel account created
+- [ ] Supabase account created
+- [ ] API keys ready (see below)
 
----
+### 2. Create API Keys
 
-## 🔧 REQUISITOS
+**Supabase**
+- Go to: https://supabase.com/dashboard
+- Create project → get API key and URL
 
-### Sistema Operativo
-- ✅ macOS 10.14+
-- ✅ Linux (Ubuntu 18.04+)
-- ✅ Windows (WSL2)
+**Anthropic**
+- Go to: https://console.anthropic.com
+- Create API key
 
-### Software Requerido
-- ✅ Node.js 18+ ([https://nodejs.org](https://nodejs.org))
-- ✅ pnpm 8+ ([https://pnpm.io](https://pnpm.io))
-  ```bash
-  # Instala pnpm si no lo tienes
-  npm install -g pnpm
-  ```
+**OpenAI** (optional)
+- Go to: https://platform.openai.com/api/keys
+- Create API key
 
-### APIs/Servicios Requeridos (para producción)
-- ✅ **Supabase** - Database + Auth (gratis tier disponible)
-- ✅ **Anthropic API** - Claude (paid, ~$5 crédito inicial)
-- ✅ **OpenAI API** - GPT-4o (paid, ~$5 crédito inicial)
-- ✅ **Google OAuth** - Para sign-in (gratis)
+**Vercel Blob** (optional, for file uploads)
+- Go to Vercel dashboard → Storage → Blob
+- Create connection → get token
 
----
-
-## 🚀 EJEMPLO: SETUP COMPLETO EN 30 MIN
+### 3. Clone & Setup (10 min)
 
 ```bash
-# 1. Descomprimir (1 min)
-tar -xzf DTC_Tech_Evidence_Pack_2026-05-20.tar.gz
-cd DTC_Tech_Evidence_Pack_2026-05-20
-
-# 2. Leer docs (5 min)
-cat INFO.md
-cat INVESTOR_BRIEF.md
-
-# 3. Instalar (10 min)
+git clone https://github.com/jcv86/main.git
+cd main
 pnpm install
-
-# 4. Configurar env (5 min)
 cp .env.example .env.local
-# Edita .env.local con tus API keys
 
-# 5. Correr (1 min)
+# Add API keys to .env.local
+nano .env.local  # or your editor
+
 pnpm dev
-
-# 6. Abrir browser (1 min)
-# Visit: http://localhost:3000
-
-# 7. Explore! (7 min)
-# - Home page
-# - A1 demo
-# - A2 days preview
-# - Dashboard
+# Opens http://localhost:3000
 ```
 
----
+### 4. Create Test Account (5 min)
 
-## 💡 TIPS & TROUBLESHOOTING
+- Go to Sign Up
+- Create account with email
+- Login with credentials
+- Explore dashboard
 
-### Error: "Port 3000 already in use"
-```bash
-# Cambia el puerto
-pnpm dev -- -p 3001
-# O: http://localhost:3001
-```
+### 5. Test Modules (15 min)
 
-### Error: "Supabase connection failed"
-```bash
-# Verifica .env.local
-cat .env.local | grep SUPABASE
+- [ ] Try A1 (Cerebro Ejecutivo)
+- [ ] Try A2 (90 Días)
+- [ ] Try A3 (Renovación)
+- [ ] Try A4 (Plan B Coach)
+- [ ] Check DTC Documents
 
-# Asegúrate que:
-# - URL es correcta (https://xxx.supabase.co)
-# - Anon key no está vacía
-# - No hay espacios extra
-```
-
-### Error: "API key not valid" (Anthropic/OpenAI)
-```bash
-# Verifica en .env.local
-cat .env.local | grep -E "ANTHROPIC|OPENAI"
-
-# Opciones:
-# 1. Quita las líneas de IA para usar modo demo
-# 2. Agrega las keys válidas
-# 3. Usa demo user (no necesita APIs)
-```
-
-### Error: "pnpm: command not found"
-```bash
-# Instala pnpm globalmente
-npm install -g pnpm@latest
-
-# Verifica instalación
-pnpm --version  # debe ser 8+
-```
-
-### Quiero usar demo user (sin APIs)
-```bash
-# En login:
-# Email: travis@nuanu.com
-# Password: (cualquier cosa, es demo)
-
-# O busca "Demo Mode" en el código
-```
-
----
-
-## 📊 PROYECTO STATS
-
-- **Commits:** 2,986 en 10 meses
-- **Código:** 1,318 archivos TypeScript/React
-- **Módulos:** A1, A2 (30 días), A3 (10 módulos), A4
-- **Coverage:** 87% MVP completo
-- **Performance:** Lighthouse 92+ en todas categorías
-- **Uptime Prod:** 99.98%
-
----
-
-## 🎯 NEXT STEPS (Una vez ejecutando)
-
-### Para Desarrolladores
-1. Explora `/src/app/` para ver las rutas
-2. Chequea `/src/components/` para componentes
-3. Lee `/src/lib/` para utilities
-4. Examina `/src/hooks/` para custom hooks
-5. Modifica `/src/styles/globals.css` para styling
-
-### Para Evaluadores
-1. Testea A1 module (5 min)
-2. Recorre A2 días 1-5 (10 min)
-3. Explora A3 módulos (5 min)
-4. Lee documentos técnicos (20 min)
-5. Verifica código en `/src/` (10 min)
-
-### Para Inversores/CORFO
-1. Lee INVESTOR_BRIEF.md (10 min)
-2. Verifica MVP_PROGRESS_CHECKLIST.md (5 min)
-3. Chequea GIT_AND_DEPLOY_STATUS.md (5 min)
-4. Corre localmente para ver UI (10 min)
-5. Contacta al equipo para q&a técnicas
-
----
-
-## 📞 SUPPORT
-
-### Si tienes problemas:
-
-1. **Build/Install issues:**
-   - Asegúrate Node.js 18+: `node --version`
-   - Asegúrate pnpm: `pnpm --version`
-   - Limpia cache: `pnpm install --force`
-
-2. **Runtime errors:**
-   - Verifica .env.local está correcto
-   - Chequea console browser (F12 → Console)
-   - Lee README_TECHNICAL.md para troubleshooting
-
-3. **API/Database issues:**
-   - Verifica Supabase está online
-   - Chequea API keys son válidas
-   - Prueba modo demo (sin APIs requeridas)
-
-4. **Performance issues:**
-   - Limpia build: `rm -rf .next`
-   - Reconstruye: `pnpm build`
-   - Verifica network speed
-
----
-
-## ✅ VERIFICACIÓN: Todo funciona?
-
-Una vez corriendo en localhost:3000:
-
-```
-Home page carga?              ✅ YES → /
-Puedes ir a /auth/login?      ✅ YES → Auth flow works
-Ves demo user option?         ✅ YES → Demo mode active
-Puedes clickear en A1?        ✅ YES → Navigation works
-Ves A2 días 1-30?             ✅ YES → Routes working
-Dashboard muestra módulos?    ✅ YES → Full setup success!
-```
-
-Si todo dice YES → **Setup completo! 🎉**
-
----
-
-## 📦 CONTENIDO VERIFICACIÓN
+### 6. Deploy (10 min)
 
 ```bash
-# Verifica que el paquete tenga todo
-ls -la | grep -E "README|CHECKLIST|ARCHITECTURE|GIT|ENV|INVESTOR"
+vercel
+# Follows interactive setup
+# Deploys to https://your-project.vercel.app
+```
 
-# Debe mostrar:
-✅ README_TECHNICAL.md
-✅ MVP_PROGRESS_CHECKLIST.md
-✅ TECHNICAL_ARCHITECTURE.md
-✅ GIT_AND_DEPLOY_STATUS.md
-✅ INVESTOR_BRIEF.md
-✅ .env.example
+**Total Time**: ~1 hour for complete setup
 
-# Verifica código fuente
-ls -la src/ | head -10
-# Debe mostrar: app/, components/, lib/, hooks/, etc.
+---
 
-# Verifica documentación
-ls -la docs/ | head -5
-# Debe mostrar: A*.md files
+## Customization
+
+### Change Branding
+
+```typescript
+// src/lib/config.ts
+export const APP_NAME = "My Company Platform"
+export const APP_DESCRIPTION = "Custom description"
+export const BRAND_COLOR = "#FF6B35"
+```
+
+### Modify Copy (Text)
+
+```typescript
+// src/lib/content.ts
+export const MODULES = {
+  A1: { title: "Custom A1 Title", ... },
+  A2: { title: "Custom A2 Title", ... },
+  // etc
+}
+```
+
+### Add Custom Modules
+
+```typescript
+// 1. Create: src/app/modulos/a5/page.tsx
+// 2. Add route: app router recognizes automatically
+// 3. Add navigation: Update sidebar.tsx
+// 4. Add to DB: migrations/004-add-a5-module.sql
 ```
 
 ---
 
-## 🎓 LEARNING PATH (Si eres nuevo en el proyecto)
+## Deployment Options
 
-**Day 1 (30 min):**
-- [ ] Extrae package
-- [ ] Lee INFO.md
-- [ ] Corre `pnpm install && pnpm dev`
-- [ ] Visita http://localhost:3000
-- [ ] Explora Home page
+### Vercel (Recommended)
 
-**Day 2 (1 hour):**
-- [ ] Lee README_TECHNICAL.md
-- [ ] Testea A1 module
-- [ ] Testea A2 días 1-3
-- [ ] Chequea DTC Documents
+```bash
+vercel --prod
+```
 
-**Day 3 (1-2 hours):**
-- [ ] Lee TECHNICAL_ARCHITECTURE.md
-- [ ] Explora `/src/app/` rutas
-- [ ] Chequea `/src/components/`
-- [ ] Entiende flujo de datos
+**Pros**:
+- Auto-scaling
+- Global CDN
+- Git integration
+- Free tier available
 
-**Day 4+ (ongoing):**
-- [ ] Modificar componentes
-- [ ] Agregar features
-- [ ] Hacer deploy
-- [ ] Contribuir al proyecto
+**Cost**: Free → $20/month at scale
+
+### Docker
+
+```bash
+docker build -t dtc .
+docker run -p 3000:3000 dtc
+```
+
+**Pros**:
+- Run anywhere
+- Full control
+- Self-hosted
+
+**Cost**: Infrastructure dependent
+
+### AWS / Google Cloud
+
+Requires more setup. Contact team for guidance.
 
 ---
 
-**Documento:** Download & Use Guide  
-**Actualizado:** 2026-05-20  
-**Version:** 1.0  
+## Monitoring & Support
 
-**¡Listo para empezar? Run: `tar -xzf DTC_Tech_Evidence_Pack_2026-05-20.tar.gz`** 🚀
+### Check Health
+
+```bash
+# API health check
+curl https://your-domain.com/api/health
+
+# Database connection
+psql $DATABASE_URL -c "SELECT 1"
+
+# Logs
+vercel logs
+
+# Analytics
+vercel analytics
+```
+
+### Troubleshooting
+
+See: [TROUBLESHOOTING-GUIDE.md](./TROUBLESHOOTING-GUIDE.md)
+
+### Get Help
+
+- Docs: [README_TECHINICAL.md](./README_TECHINICAL.md)
+- Architecture: [TECHNICAL_ARCHITECTURE.md](./TECHNICAL_ARCHITECTURE.md)
+- Status: [MVP_PROGRESS_CHECKLIST.md](./MVP_PROGRESS_CHECKLIST.md)
+
+---
+
+## Next Steps
+
+1. **Setup** (1 hour) - Follow walkthrough above
+2. **Explore** (1 hour) - Try all 4 modules
+3. **Test** (30 min) - Run E2E tests
+4. **Deploy** (30 min) - Go live to Vercel
+5. **Monitor** (ongoing) - Watch analytics
+
+---
+
+## Package Contents
+
+```
+/
+├─ src/ (All application code)
+├─ scripts/ (Setup, migrations, seeds)
+├─ docs/ (All documentation)
+├─ public/ (Static files)
+├─ .env.example (Configuration template)
+├─ package.json (Dependencies)
+├─ README.md (Quick start)
+└─ [All other documentation files]
+
+Size: ~200 MB (with node_modules)
+Deploy Time: ~5 minutes
+```
+
+---
+
+## Support
+
+- **Documentation**: See docs/ folder
+- **Issues**: GitHub Issues
+- **Email**: [Your team contact]
+
+---
+
+**Document**: Download and Use  
+**Updated**: 2026-05-22  
+**Status**: ✅ Ready
 
