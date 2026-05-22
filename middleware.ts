@@ -1,18 +1,42 @@
 import { updateSession } from '@/lib/supabase/middleware'
 import { NextRequest, NextResponse } from 'next/server'
 
+// Public routes that don't require authentication
+const PUBLIC_ROUTES = [
+  '/documentos',
+  '/documentos-publicos',
+  '/api/documentos',
+]
+
+function isPublicRoute(pathname: string): boolean {
+  return PUBLIC_ROUTES.some(route => pathname.startsWith(route))
+}
+
 export async function middleware(request: NextRequest) {
-  // Fix double slashes in pathname (e.g., //api/auth/callback/google → /api/auth/callback/google)
-  let pathname = request.nextUrl.pathname
+  const pathname = request.nextUrl.pathname
+
+  // Fix double slashes in pathname
   if (pathname.includes('//')) {
-    pathname = pathname.replace(/\/+/g, '/')
+    const normalizedPath = pathname.replace(/\/+/g, '/')
     const normalizedUrl = new URL(request.nextUrl)
-    normalizedUrl.pathname = pathname
+    normalizedUrl.pathname = normalizedPath
     return NextResponse.redirect(normalizedUrl)
   }
 
-  // Handle API routes with CORS
-  if (request.nextUrl.pathname.startsWith('/api/')) {
+  // PUBLIC ROUTES - Allow without any auth check
+  if (isPublicRoute(pathname)) {
+    const response = NextResponse.next()
+    // Add CORS headers for API routes
+    if (pathname.startsWith('/api/')) {
+      response.headers.set('Access-Control-Allow-Origin', '*')
+      response.headers.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
+      response.headers.set('Access-Control-Allow-Headers', 'Content-Type')
+    }
+    return response
+  }
+
+  // Handle other API routes with CORS
+  if (pathname.startsWith('/api/')) {
     const response = NextResponse.next()
     response.headers.set('Access-Control-Allow-Origin', process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000')
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
@@ -28,7 +52,6 @@ export async function middleware(request: NextRequest) {
   // Check for demo user in cookie (set by demo login)
   const demoUser = request.cookies.get('demo_user')?.value
   if (demoUser) {
-    // Allow demo users to bypass auth validation
     return NextResponse.next()
   }
 
@@ -39,15 +62,8 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Match all request paths except:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - images - .svg, .png, .jpg, .jpeg, .gif, .webp
-     * - /documentos (public downloads page)
-     * - /documentos-publicos (public docs viewer)
-     * - /api/documentos/* (public docs APIs)
+     * Match all request paths except static files
      */
-    '/((?!_next/static|_next/image|favicon.ico|^/documentos|^/api/documentos|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
   ],
 }
