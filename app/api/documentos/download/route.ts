@@ -15,8 +15,12 @@ export async function GET(request: NextRequest) {
 
     // Whitelist allowed files
     const allowedFiles = [
+      // TAR Archives & Bundles
       'DTC_Tech_Evidence_Pack_2026-05-20.tar.gz',
       'DTC_Tech_Evidence_Pack_2026-05-22.tar.gz',
+      'Complete_Documentation_Bundle_2026-05-22.tar.gz',
+      // Markdown Documents
+      'README.md',
       'INVESTOR_BRIEF.md',
       'README_TECHNICAL.md',
       'README_TECHINICAL.md',
@@ -27,6 +31,15 @@ export async function GET(request: NextRequest) {
       'DOCUMENTATION_COMPLETE_2026-05-22.md',
       'PACKAGE_INDEX.md',
       'PAQUETE_COMPLETADO.md',
+      // HTML Versions (for PDF printing)
+      'README.html',
+      'INVESTOR_BRIEF.html',
+      'MVP_PROGRESS_CHECKLIST.html',
+      'GIT_AND_DEPLOY_STATUS.html',
+      'README_TECHINICAL.html',
+      'TECHNICAL_ARCHITECTURE.html',
+      'DOWNLOAD_AND_USE.html',
+      // Configuration
       '.env.example',
     ];
 
