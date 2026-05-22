@@ -47,6 +47,6 @@ export const config = {
      * - /documentos (public downloads page)
      * - /api/documentos/download (public download API)
      */
-    '/((?!_next/static|_next/image|favicon.ico|documentos|api/documentos/download|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+    '/((?!_next/static|_next/image|favicon.ico|^/documentos|^/api/documentos/download|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 }
