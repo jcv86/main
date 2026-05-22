@@ -11,6 +11,11 @@ import { A2Day2Completion } from './a2-day2-completion'
 import { saveDayDocument, formatDocumentContent } from '@/lib/supabase/dtc-documents-phase2'
 import { isTravisMode } from '@/lib/travis-form-data'
 import { TRAVIS_DAY2_UPLOAD_FRAGMENTS } from '@/lib/travis-form-data'
+import { 
+  autosaveDayProgress, 
+  loadDayProgressWithFallback, 
+  clearAllDrafts 
+} from '@/lib/a2-progress-persistence'
 
 // Travis pre-filled data for Day 2
 const TRAVIS_DAY2_DATA = {
@@ -50,20 +55,32 @@ export function Day2Experience({ onComplete, userId }: Day2ExperienceProps) {
   const [vaultData, setVaultData] = useState<EvidenceVaultData>({})
   const [isDevMode, setIsDevMode] = useState(false)
 
-  // Load Travis data in dev mode
+  // Load Travis data or saved draft on mount
   useEffect(() => {
-    const travisMode = isTravisMode()
-    setIsDevMode(travisMode)
-    
-    if (travisMode) {
-      setVaultData({
-        vaultType: TRAVIS_DAY2_DATA.vaultType,
-        vaultLink: TRAVIS_DAY2_DATA.vaultLink,
-        fragments: TRAVIS_DAY2_DATA.fragments,
-        goldPieces: TRAVIS_DAY2_DATA.goldPieces,
-      })
+    const loadData = async () => {
+      const travisMode = isTravisMode()
+      setIsDevMode(travisMode)
+      
+      if (travisMode) {
+        setVaultData({
+          vaultType: TRAVIS_DAY2_DATA.vaultType,
+          vaultLink: TRAVIS_DAY2_DATA.vaultLink,
+          fragments: TRAVIS_DAY2_DATA.fragments,
+          goldPieces: TRAVIS_DAY2_DATA.goldPieces,
+        })
+      } else if (userId) {
+        // Try to load saved draft
+        const draft = await loadDayProgressWithFallback(userId, 2)
+        if (draft) {
+          console.log(`[v0] Resuming Day 2 from step ${draft.stepNumber}`)
+          setVaultData(draft.formData)
+          setCurrentStep(draft.stepNumber)
+        }
+      }
     }
-  }, [])
+
+    loadData()
+  }, [userId])
 
   const stepTitles = [
     'La Bóveda de Evidencia',
@@ -76,30 +93,40 @@ export function Day2Experience({ onComplete, userId }: Day2ExperienceProps) {
   ]
 
   const handleStep1Next = () => {
+    if (userId) autosaveDayProgress(userId, 2, 2, vaultData)
     setCurrentStep(2)
   }
 
   const handleVaultSetupNext = (vaultType: string, vaultLink: string) => {
-    setVaultData((prev) => ({ ...prev, vaultType: vaultType as any, vaultLink }))
+    const newData = { ...vaultData, vaultType: vaultType as any, vaultLink }
+    setVaultData(newData)
+    if (userId) autosaveDayProgress(userId, 2, 3, newData)
     setCurrentStep(3)
   }
 
   const handleEvidenceHuntNext = () => {
+    if (userId) autosaveDayProgress(userId, 2, 4, vaultData)
     setCurrentStep(4)
   }
 
   const handleUploadNext = (fragments: any[]) => {
-    setVaultData((prev) => ({ ...prev, fragments }))
+    const newData = { ...vaultData, fragments }
+    setVaultData(newData)
+    if (userId) autosaveDayProgress(userId, 2, 5, newData)
     setCurrentStep(5)
   }
 
   const handleClassificationNext = (classifiedFragments: any[]) => {
-    setVaultData((prev) => ({ ...prev, fragments: classifiedFragments }))
+    const newData = { ...vaultData, fragments: classifiedFragments }
+    setVaultData(newData)
+    if (userId) autosaveDayProgress(userId, 2, 6, newData)
     setCurrentStep(6)
   }
 
   const handleGoldPiecesNext = (goldPieces: any[]) => {
-    setVaultData((prev) => ({ ...prev, goldPieces }))
+    const newData = { ...vaultData, goldPieces }
+    setVaultData(newData)
+    if (userId) autosaveDayProgress(userId, 2, 7, newData)
     setCurrentStep(7)
   }
 
@@ -123,6 +150,11 @@ export function Day2Experience({ onComplete, userId }: Day2ExperienceProps) {
       }
 
       await onComplete(submission)
+      
+      // Clear draft after successful completion
+      if (userId) {
+        clearAllDrafts(2)
+      }
     } catch (err) {
       console.error('[v0] Error completing Day 2:', err)
     }

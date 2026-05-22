@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { A2DayPageTemplate } from '@/components/a2-day-page-template'
 import { Day6Experience } from '@/components/a2-day6-experience'
-import { markTaskComplete } from '@/lib/supabase/task-completions'
 
 const DIA_NUM = 6
 
@@ -14,13 +13,23 @@ export default function Dia6Page() {
 
   const handleDay6Complete = async (submission: any) => {
     try {
-      console.log('[v0] Day 6 submission saved:', submission)
+      console.log('[v0] Day 6 submission received:', submission)
       if (user?.id) {
-        await markTaskComplete(30, 6, 'Día 6')
+        const apiResponse = await fetch('/api/a2/complete-day', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dayNumber: 6, submission }),
+        })
+
+        if (!apiResponse.ok) throw new Error('Failed to complete day')
+        const result = await apiResponse.json()
+        console.log('[v0] Day 6 completion result:', result)
+        console.log('[v0] A3 unlocks triggered:', result.a3_unlocks)
       }
-      router.push('/despega/a2-routes')
+      await new Promise(resolve => setTimeout(resolve, 500))
+      router.push('/despega/a2-routes#dia-7')
     } catch (err) {
-      console.error('[v0] Error saving Day 6:', err)
+      console.error('[v0] Error in handleDay6Complete:', err)
       throw err
     }
   }

@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { A2DayPageTemplate } from '@/components/a2-day-page-template'
 import { Day8Experience } from '@/components/a2-day8-experience'
-import { markTaskComplete } from '@/lib/supabase/task-completions'
 
 const DIA_NUM = 8
 
@@ -16,22 +15,20 @@ export default function Dia8Page() {
     try {
       console.log('[v0] Day 8 submission received:', submission)
 
-      // Mark this task as complete in Supabase
       if (user?.id) {
-        const result = await markTaskComplete(30, 8, 'Día 8')
-        console.log('[v0] Task marked complete result:', result)
-        
-        if (!result) {
-          console.warn('[v0] Failed to mark task complete, but continuing with navigation')
-        }
+        const apiResponse = await fetch('/api/a2/complete-day', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dayNumber: 8, submission }),
+        })
+
+        if (!apiResponse.ok) throw new Error('Failed to complete day')
+        const result = await apiResponse.json()
+        console.log('[v0] Day 8 completion result:', result)
       }
 
-      // Wait a moment for Supabase to sync, then navigate
       await new Promise(resolve => setTimeout(resolve, 500))
-
-      // Navigate back to A2 progress dashboard
-      console.log('[v0] Navigating to /despega/a2-routes')
-      router.push('/despega/a2-routes')
+      router.push('/despega/a2-routes#dia-9')
     } catch (err) {
       console.error('[v0] Error in handleDay8Complete:', err)
       throw err

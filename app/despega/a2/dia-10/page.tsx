@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { A2DayPageTemplate } from '@/components/a2-day-page-template'
 import { Day10Experience } from '@/components/a2-day10-experience'
-import { markTaskComplete } from '@/lib/supabase/task-completions'
 
 const DIA_NUM = 10
 
@@ -14,13 +13,22 @@ export default function Dia10Page() {
 
   const handleDay10Complete = async (submission: any) => {
     try {
-      console.log('[v0] Day 10 submission saved:', submission)
+      console.log('[v0] Day 10 submission received:', submission)
       if (user?.id) {
-        await markTaskComplete(30, 10, 'Día 10')
+        const apiResponse = await fetch('/api/a2/complete-day', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dayNumber: 10, submission }),
+        })
+
+        if (!apiResponse.ok) throw new Error('Failed to complete day')
+        const result = await apiResponse.json()
+        console.log('[v0] Day 10 completion result:', result)
       }
-      router.push('/despega/a2-routes')
+      await new Promise(resolve => setTimeout(resolve, 500))
+      router.push('/despega/a2-routes#phase2')
     } catch (err) {
-      console.error('[v0] Error saving Day 10:', err)
+      console.error('[v0] Error in handleDay10Complete:', err)
       throw err
     }
   }
