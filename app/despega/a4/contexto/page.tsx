@@ -1,10 +1,22 @@
 'use client'
 
 import { A4ContextCoach } from '@/components/a4/context-coach'
-import { useAuth } from '@supabase/auth-helpers-react'
+import { useEffect, useState } from 'react'
+import { createClient } from '@/lib/supabase/client'
 
 export default function A4ContextPage() {
-  const { user } = useAuth()
+  const [userId, setUserId] = useState<string | undefined>(undefined)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const getUser = async () => {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      setUserId(user?.id)
+      setLoading(false)
+    }
+    getUser()
+  }, [])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-850 p-4 md:p-8">
@@ -16,11 +28,17 @@ export default function A4ContextPage() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Chat Coach - Main */}
-        <div className="lg:col-span-2">
-          <A4ContextCoach userId={user?.id} topicContext="noticias y contexto de Chile" />
+      {/* Loading State */}
+      {loading ? (
+        <div className="max-w-6xl mx-auto text-center py-12">
+          <p className="text-gray-400">Cargando...</p>
+        </div>
+      ) : (
+        /* Main Content */
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Chat Coach - Main */}
+          <div className="lg:col-span-2">
+            <A4ContextCoach userId={userId} topicContext="noticias y contexto de Chile" />
         </div>
 
         {/* Info Panel - Sidebar */}
@@ -96,6 +114,7 @@ export default function A4ContextPage() {
           </div>
         </div>
       </div>
+      )}
 
       {/* Footer */}
       <div className="max-w-6xl mx-auto mt-12 pt-8 border-t border-gray-700/50 text-center">

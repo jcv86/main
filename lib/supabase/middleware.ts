@@ -59,6 +59,72 @@ export async function updateSession(request: NextRequest) {
       return NextResponse.redirect(url)
     }
     // A3 and interview-0 routes are accessible without authentication for demo/preview
+
+    // Smart redirect middleware for A2/A3 progression (Migration 002: cycle management)
+    if (user && isDespegaRoute && !isA3Route && !isInterview0Route) {
+      try {
+        // Check if user is accessing an A2 day page
+        const pathMatch = request.nextUrl.pathname.match(/\/despega\/a2\/dia-(\d+)/)
+        if (pathMatch) {
+          const requestedDay = parseInt(pathMatch[1])
+
+          // Get user's current A2 progress
+          const { data: progress } = await supabase
+            .from('despega_pilar_progress')
+            .select('ciclo_dia, is_a2_pilar_complete, is_a3_unlocked')
+            .eq('user_id', user.id)
+            .eq('pilar', 'a2_rutas')
+            .single()
+
+          // Smart redirect logic
+          if (progress) {
+            // If A2 is complete, redirect to A3 dashboard
+            if (progress.is_a2_pilar_complete && !progress.is_a3_unlocked) {
+              const url = request.nextUrl.clone()
+              url.pathname = '/despega/a3'
+              return NextResponse.redirect(url)
+            }
+
+            // If trying to access a future day, redirect to current day
+            if (requestedDay > progress.ciclo_dia && !progress.is_a2_pilar_complete) {
+              const url = request.nextUrl.clone()
+              url.pathname = `/despega/a2/dia-${progress.ciclo_dia}`
+              return NextResponse.redirect(url)
+            }
+
+            // If accessing past day but still in A2, allow
+            if (requestedDay <= progress.ciclo_dia) {
+              return supabaseResponse
+            }
+          }
+        }
+
+        // Redirect to A2 dashboard if accessing /despega without a specific day
+        if (request.nextUrl.pathname === '/despega' || request.nextUrl.pathname === '/despega/') {
+          const { data: progress } = await supabase
+            .from('despega_pilar_progress')
+            .select('ciclo_dia, is_a2_pilar_complete')
+            .eq('user_id', user.id)
+            .eq('pilar', 'a2_rutas')
+            .single()
+
+          if (progress && progress.is_a2_pilar_complete) {
+            const url = request.nextUrl.clone()
+            url.pathname = '/despega/a3'
+            return NextResponse.redirect(url)
+          }
+
+          if (progress) {
+            const url = request.nextUrl.clone()
+            url.pathname = `/despega/a2/dia-${progress.ciclo_dia}`
+            return NextResponse.redirect(url)
+          }
+        }
+      } catch (err) {
+        // If redirect logic fails, continue without redirect
+        console.log('[v0] Smart redirect middleware failed (continuing normally)', err)
+      }
+    }
   } catch (error) {
     // If auth fails (build time or missing env vars), just continue without auth
     console.log('[v0] Auth middleware skipped (likely build time)')
