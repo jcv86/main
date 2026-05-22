@@ -8,57 +8,26 @@ export async function GET(request: NextRequest) {
     
     if (!filename) {
       return NextResponse.json(
-        { error: 'File parameter required' },
+        { error: 'Parametro file requerido' },
         { status: 400 }
       );
     }
 
-    // Whitelist allowed files
-    const allowedFiles = [
-      // TAR Archives & Bundles
-      'DTC_Tech_Evidence_Pack_2026-05-20.tar.gz',
-      'DTC_Tech_Evidence_Pack_2026-05-22.tar.gz',
-      'Complete_Documentation_Bundle_2026-05-22.tar.gz',
-      'Paquete_Documentacion_Completo_2026-05-22.tar.gz',
-      // Markdown Documents (Spanish names)
-      'LEEME.md',
-      'RESUMEN_INVERSOR.md',
-      'LISTA_PROGRESO_MVP.md',
-      'ARQUITECTURA_TECNICA.md',
-      'LEEME_TECNICO.md',
-      'ESTADO_GIT_Y_DEPLOY.md',
-      'DESCARGA_Y_USO.md',
-      'DOCUMENTACION_COMPLETA_2026-05-22.md',
-      'INDICE_PAQUETE.md',
-      'PAQUETE_COMPLETADO.md',
-      // HTML Versions (Spanish names)
-      'LEEME.html',
-      'RESUMEN_INVERSOR.html',
-      'LISTA_PROGRESO_MVP.html',
-      'ESTADO_GIT_Y_DEPLOY.html',
-      'LEEME_TECNICO.html',
-      'ARQUITECTURA_TECNICA.html',
-      'DESCARGA_Y_USO.html',
-      // Additional Documentation Files (Spanish variants)
-      'DOCUMENTACION-COMPLETA-DTC.md',
-      'DOCUMENTACION-FUNCIONAL-DTC.md',
-      'ESTADO-TECNICO-COMPLETO-FINAL.md',
-      'INDEX-DOCUMENTACION-COMPLETA.md',
-      'RESUMEN-EJECUTIVO-FINAL.md',
-      'RESUMEN-IMPLEMENTACION.md',
-      'A2_COMPLETE_TECHNICAL_VERIFICATION.md',
-      'A4_DASHBOARD_README.md',
-      'A4_TECHNICAL_VALIDATION.md',
-      'README_A2_COMPLETE.md',
-      'README_PRODUCTION.md',
-      'README_TECHNICAL.md',
-      // Configuration
-      '.env.ejemplo',
-    ];
-
-    if (!allowedFiles.includes(filename)) {
+    // Prevent directory traversal
+    if (filename.includes('..') || filename.includes('/')) {
       return NextResponse.json(
-        { error: 'File not allowed', allowed: allowedFiles },
+        { error: 'Ruta de archivo invalida' },
+        { status: 400 }
+      );
+    }
+
+    // Allow all documentation file types
+    const allowedExtensions = ['.md', '.html', '.pdf', '.txt', '.ejemplo', '.tar.gz', '.json'];
+    const hasAllowedExtension = allowedExtensions.some(ext => filename.endsWith(ext));
+    
+    if (!hasAllowedExtension) {
+      return NextResponse.json(
+        { error: 'Tipo de archivo no permitido' },
         { status: 403 }
       );
     }
@@ -67,7 +36,7 @@ export async function GET(request: NextRequest) {
     
     if (!fs.existsSync(filePath)) {
       return NextResponse.json(
-        { error: 'File not found', file: filename },
+        { error: 'Archivo no encontrado', archivo: filename },
         { status: 404 }
       );
     }
@@ -77,20 +46,24 @@ export async function GET(request: NextRequest) {
     // Determine content type
     let contentType = 'application/octet-stream';
     if (filename.endsWith('.tar.gz')) contentType = 'application/gzip';
-    if (filename.endsWith('.md')) contentType = 'text/markdown';
-    if (filename.endsWith('.example')) contentType = 'text/plain';
+    if (filename.endsWith('.md')) contentType = 'text/markdown; charset=utf-8';
+    if (filename.endsWith('.html')) contentType = 'text/html; charset=utf-8';
+    if (filename.endsWith('.pdf')) contentType = 'application/pdf';
+    if (filename.endsWith('.txt') || filename.endsWith('.ejemplo')) contentType = 'text/plain; charset=utf-8';
+    if (filename.endsWith('.json')) contentType = 'application/json; charset=utf-8';
 
     return new NextResponse(fileBuffer, {
       headers: {
         'Content-Type': contentType,
         'Content-Disposition': `attachment; filename="${filename}"`,
         'Cache-Control': 'public, max-age=3600',
+        'Access-Control-Allow-Origin': '*',
       },
     });
   } catch (error) {
-    console.error('[v0] Download error:', error);
+    console.error('[v0] Error de descarga:', error);
     return NextResponse.json(
-      { error: 'Failed to download file', details: (error as Error).message },
+      { error: 'Error al descargar archivo', detalles: (error as Error).message },
       { status: 500 }
     );
   }

@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs'
+import { readFileSync, existsSync } from 'fs'
 import { join } from 'path'
 import { NextResponse } from 'next/server'
 
@@ -9,40 +9,47 @@ export async function GET(
   try {
     const { filename } = await params
     
-    // Whitelist of allowed HTML and PDF files
-    const allowedFiles = [
-      'LEEME.html',
-      'RESUMEN_INVERSOR.html',
-      'LISTA_PROGRESO_MVP.html',
-      'ESTADO_GIT_Y_DEPLOY.html',
-      'LEEME_TECNICO.html',
-      'ARQUITECTURA_TECNICA.html',
-      'DESCARGA_Y_USO.html',
-      // Support both extensions
-      'LEEME.pdf',
-      'RESUMEN_INVERSOR.pdf',
-      'LISTA_PROGRESO_MVP.pdf',
-      'ESTADO_GIT_Y_DEPLOY.pdf',
-      'LEEME_TECNICO.pdf',
-      'ARQUITECTURA_TECNICA.pdf',
-      'DESCARGA_Y_USO.pdf',
-    ]
-
-    if (!allowedFiles.includes(filename)) {
+    // Allow all markdown, HTML, PDF, and config files
+    const allowedExtensions = ['.md', '.html', '.pdf', '.txt', '.ejemplo']
+    const extension = filename.substring(filename.lastIndexOf('.'))
+    
+    if (!allowedExtensions.includes(extension)) {
       return NextResponse.json(
-        { error: 'File not allowed' },
+        { error: 'Tipo de archivo no permitido' },
         { status: 403 }
+      )
+    }
+
+    // Prevent directory traversal
+    if (filename.includes('..') || filename.includes('/')) {
+      return NextResponse.json(
+        { error: 'Ruta de archivo invalida' },
+        { status: 400 }
       )
     }
 
     const filePath = join(process.cwd(), filename)
     
+    // Check if file exists
+    if (!existsSync(filePath)) {
+      return NextResponse.json(
+        { error: 'Archivo no encontrado' },
+        { status: 404 }
+      )
+    }
+    
     try {
       const fileContent = readFileSync(filePath)
       
-      const contentType = filename.endsWith('.html') 
-        ? 'text/html; charset=utf-8'
-        : 'application/pdf'
+      // Determine content type based on extension
+      let contentType = 'text/plain; charset=utf-8'
+      if (filename.endsWith('.html')) {
+        contentType = 'text/html; charset=utf-8'
+      } else if (filename.endsWith('.pdf')) {
+        contentType = 'application/pdf'
+      } else if (filename.endsWith('.md')) {
+        contentType = 'text/markdown; charset=utf-8'
+      }
 
       return new NextResponse(fileContent, {
         headers: {
@@ -53,16 +60,16 @@ export async function GET(
         },
       })
     } catch (err) {
-      console.error('[v0] File read error:', err)
+      console.error('[v0] Error leyendo archivo:', err)
       return NextResponse.json(
-        { error: 'File not found' },
-        { status: 404 }
+        { error: 'Error leyendo archivo' },
+        { status: 500 }
       )
     }
   } catch (error) {
-    console.error('[v0] Error serving file:', error)
+    console.error('[v0] Error sirviendo archivo:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Error interno del servidor' },
       { status: 500 }
     )
   }
