@@ -16,12 +16,15 @@ export async function GET(request: NextRequest) {
     // Whitelist allowed files
     const allowedFiles = [
       'DTC_Tech_Evidence_Pack_2026-05-20.tar.gz',
+      'DTC_Tech_Evidence_Pack_2026-05-22.tar.gz',
       'INVESTOR_BRIEF.md',
       'README_TECHNICAL.md',
+      'README_TECHINICAL.md',
       'MVP_PROGRESS_CHECKLIST.md',
       'TECHNICAL_ARCHITECTURE.md',
       'GIT_AND_DEPLOY_STATUS.md',
       'DOWNLOAD_AND_USE.md',
+      'DOCUMENTATION_COMPLETE_2026-05-22.md',
       'PACKAGE_INDEX.md',
       'PAQUETE_COMPLETADO.md',
       '.env.example',
