@@ -4,11 +4,12 @@ import { NextResponse } from 'next/server'
 
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string[] } }
+  { params }: { params: Promise<{ slug: string[] }> }
 ) {
   try {
     // slug[0] es el nombre del archivo
-    const filename = params.slug?.[0]
+    const { slug } = await params
+    const filename = slug?.[0]
 
     if (!filename) {
       return NextResponse.json(

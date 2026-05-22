@@ -4,10 +4,10 @@ import { NextResponse } from 'next/server'
 
 export async function GET(
   request: Request,
-  { params }: { params: { filename: string } }
+  { params }: { params: Promise<{ filename: string }> }
 ) {
   try {
-    const filename = params.filename
+    const { filename } = await params
     
     // Whitelist of allowed HTML and PDF files
     const allowedFiles = [
