@@ -437,13 +437,16 @@ export default function A4DocumentsPage() {
                           {SPECIALTY_MAP[specialty].label}
                         </Badge>
                       )}
-                      {artifact.tags?.slice(0, 2).map(tag => (
-                        !SPECIALTY_MAP[tag] && (
-                          <Badge key={tag} variant="outline" className="text-xs">
-                            {tag}
-                          </Badge>
-                        )
-                      ))}
+                      {artifact.tags?.slice(0, 2).map(tag => {
+                        if (!SPECIALTY_MAP[tag]) {
+                          return (
+                            <Badge key={tag} variant="outline" className="text-xs">
+                              {tag}
+                            </Badge>
+                          )
+                        }
+                        return null
+                      })}
                     </div>
                     <div className="text-xs text-muted-foreground pt-3 border-t border-border">
                       {new Date(artifact.completed_at).toLocaleDateString('es-ES')}
