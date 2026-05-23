@@ -29,6 +29,13 @@ const lora = Lora({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://despegatucarrera.cl"),
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
+  themeColor: "#1a1a1a",
   title: {
     default: "Despega Tu Carrera - El Ritual, Exploración, Entrenamiento y La Realidad | Transformación Profesional con IA",
     template: "%s | Despega Tu Carrera",
