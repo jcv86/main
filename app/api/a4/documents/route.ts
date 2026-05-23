@@ -21,24 +21,30 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type') as DocumentType | null
     const status = searchParams.get('status') as DocumentStatus | null
+    const source = searchParams.get('source') // 'user', 'agent', 'jtest', 'system'
     const phase = searchParams.get('phase')
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
 
     let query = supabase
-      .from('a4_documents')
+      .from('a4_documents_extended')
       .select(`
         *,
         a4_document_versions(id, version_number, created_at),
-        a4_document_feedback(id, rating, created_at)
+        a4_document_feedback(id, rating, created_at),
+        a4_document_label_assignments(
+          label_id,
+          a4_document_labels(label_name, label_color)
+        )
       `)
       .eq('user_id', user.id)
       .order('updated_at', { ascending: false })
       .range(offset, offset + limit - 1)
 
-    if (type) query = query.eq('document_type', type)
+    if (type) query = query.eq('type', type)
     if (status) query = query.eq('status', status)
-    if (phase) query = query.eq('source_phase', phase)
+    if (source) query = query.eq('source', source)
+    if (phase) query = query.eq('source_module', phase)
 
     const { data: documents, error } = await query
 
@@ -49,19 +55,21 @@ export async function GET(request: NextRequest) {
 
     // Get document stats
     const { data: stats } = await supabase
-      .from('a4_documents')
-      .select('document_type, status')
+      .from('a4_documents_extended')
+      .select('type, status, source')
       .eq('user_id', user.id)
 
     const documentStats = {
       total: stats?.length || 0,
       byType: {} as Record<string, number>,
-      byStatus: {} as Record<string, number>
+      byStatus: {} as Record<string, number>,
+      bySource: {} as Record<string, number>
     }
 
     stats?.forEach(doc => {
-      documentStats.byType[doc.document_type] = (documentStats.byType[doc.document_type] || 0) + 1
+      documentStats.byType[doc.type] = (documentStats.byType[doc.type] || 0) + 1
       documentStats.byStatus[doc.status] = (documentStats.byStatus[doc.status] || 0) + 1
+      documentStats.bySource[doc.source] = (documentStats.bySource[doc.source] || 0) + 1
     })
 
     return NextResponse.json({
@@ -91,32 +99,38 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json()
     const { 
-      documentType, 
+      type,  // Changed from documentType
       title, 
       content = '',
-      sourcePhase = 'a4',
-      sourceStepId,
+      source = 'user',  // 'user', 'agent', 'jtest', 'system'
+      sourceAgentId,
+      sourceJTestId,
+      sourceModule = 'a4',  // Changed from sourcePhase
       metadata = {}
     } = body
 
-    if (!documentType) {
-      return NextResponse.json({ error: 'documentType is required' }, { status: 400 })
+    if (!type) {
+      return NextResponse.json({ error: 'type is required' }, { status: 400 })
     }
 
-    // Create the document
+    // Create the document using extended table
     const { data: document, error } = await supabase
-      .from('a4_documents')
+      .from('a4_documents_extended')
       .insert({
         user_id: user.id,
-        document_type: documentType,
-        title: title || `New ${documentType}`,
+        type,
+        title: title || `New ${type}`,
         content,
-        source_phase: sourcePhase,
-        source_step_id: sourceStepId,
+        source,
+        source_agent_id: sourceAgentId,
+        source_jtest_id: sourceJTestId,
+        source_module: sourceModule,
         status: 'draft',
+        version: 1,
         metadata: {
           ...metadata,
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          createdVia: source
         }
       })
       .select()
@@ -131,8 +145,8 @@ export async function POST(request: NextRequest) {
     void supabase.from('a4_profile_signals').insert({
       user_id: user.id,
       signal_type: 'document_created',
-      source_phase: sourcePhase,
-      signal_data: { documentType, documentId: document.id },
+      source_phase: sourceModule,
+      signal_data: { documentType: type, documentId: document.id, source },
       weight: 1.0
     })
 
@@ -165,8 +179,8 @@ export async function PATCH(request: NextRequest) {
 
     // Verify ownership
     const { data: existingDoc } = await supabase
-      .from('a4_documents')
-      .select('id, user_id, content, current_version')
+      .from('a4_documents_extended')
+      .select('id, user_id, content, version')
       .eq('id', documentId)
       .single()
 
@@ -176,7 +190,7 @@ export async function PATCH(request: NextRequest) {
 
     // Create version before updating if content changed
     if (createVersion && content && content !== existingDoc.content) {
-      const newVersion = (existingDoc.current_version || 0) + 1
+      const newVersion = (existingDoc.version || 0) + 1
       void supabase.from('a4_document_versions').insert({
         document_id: documentId,
         version_number: newVersion,
@@ -192,7 +206,7 @@ export async function PATCH(request: NextRequest) {
     if (status !== undefined) updates.status = status
 
     const { data: updatedDoc, error } = await supabase
-      .from('a4_documents')
+      .from('a4_documents_extended')
       .update(updates)
       .eq('id', documentId)
       .select()
@@ -231,7 +245,7 @@ export async function DELETE(request: NextRequest) {
 
     // Verify ownership
     const { data: existingDoc } = await supabase
-      .from('a4_documents')
+      .from('a4_documents_extended')
       .select('id, user_id')
       .eq('id', documentId)
       .single()
@@ -240,17 +254,17 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Document not found' }, { status: 404 })
     }
 
-    // Soft delete by setting status to archived
+    // Delete document (cascade will handle versions, labels, etc.)
     const { error } = await supabase
-      .from('a4_documents')
-      .update({ status: 'archived', updated_at: new Date().toISOString() })
+      .from('a4_documents_extended')
+      .delete()
       .eq('id', documentId)
 
     if (error) {
       return NextResponse.json({ error: 'Failed to delete document' }, { status: 500 })
     }
 
-    return NextResponse.json({ message: 'Document archived successfully' })
+    return NextResponse.json({ message: 'Document deleted successfully' })
   } catch (error) {
     console.error('[A4 Documents API] Error deleting document:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
