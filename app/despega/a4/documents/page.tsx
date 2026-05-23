@@ -96,15 +96,14 @@ export default function A4DocumentsPage() {
       if (filterType) params.set('type', filterType)
       if (filterStatus) params.set('status', filterStatus)
       
-      console.log('[v0] Fetching documents with params:', params.toString())
       const response = await fetch(`/api/a4/documents?${params.toString()}`)
       
       if (!response.ok) {
-        throw new Error(`API error: ${response.status}`)
+        const errorData = await response.json()
+        throw new Error(`API error: ${response.status} - ${errorData?.error}`)
       }
       
       const data = await response.json()
-      console.log('[v0] Fetched documents:', data)
       
       setDocuments(data.documents || [])
       setStats(data.stats || null)
@@ -163,8 +162,17 @@ export default function A4DocumentsPage() {
     )
   }
 
+  // Return null only if not loading AND user is null - this triggers redirect in middleware
   if (!user) {
-    return null
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <Card className="bg-slate-900/50 border-[rgb(80,160,170)]">
+          <CardContent className="pt-6">
+            <p className="text-muted-foreground text-center">Por favor inicia sesión para ver tus documentos.</p>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   return (
