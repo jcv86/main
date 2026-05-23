@@ -96,27 +96,38 @@ export default function A4DocumentsPage() {
       
       const supabase = createClient()
       
+      console.log('[v0] Starting fetch...')
+
       // Fetch test results
+      console.log('[v0] Fetching test results...')
       const { data: testsData, error: testsError } = await supabase
         .from('dtc_test_results')
         .select('*')
         .order('completed_at', { ascending: false })
 
+      console.log('[v0] Test results:', { count: testsData?.length, error: testsError })
+
       if (testsError) throw testsError
 
       // Fetch activity artifacts
+      console.log('[v0] Fetching artifacts...')
       const { data: artifactsData, error: artifactsError } = await supabase
         .from('dtc_activity_artifacts')
         .select('*')
         .order('completed_at', { ascending: false })
 
+      console.log('[v0] Artifacts:', { count: artifactsData?.length, error: artifactsError })
+
       if (artifactsError) throw artifactsError
 
       // Fetch progress milestones
+      console.log('[v0] Fetching milestones...')
       const { data: milestonesData, error: milestonesError } = await supabase
         .from('dtc_progress_milestones')
         .select('*')
         .order('achieved_at', { ascending: false })
+
+      console.log('[v0] Milestones:', { count: milestonesData?.length, error: milestonesError })
 
       if (milestonesError) throw milestonesError
 
@@ -128,13 +139,16 @@ export default function A4DocumentsPage() {
       const totalXP = (milestonesData || []).reduce((sum, m) => sum + (m.xp_earned || 0), 0)
       const totalPoints = (milestonesData || []).reduce((sum, m) => sum + (m.points_earned || 0), 0)
 
-      setStats({
+      const newStats = {
         totalTests: testsData?.length || 0,
         totalArtifacts: artifactsData?.length || 0,
         totalMilestones: milestonesData?.length || 0,
         totalXP,
         totalPoints,
-      })
+      }
+
+      console.log('[v0] Final stats:', newStats)
+      setStats(newStats)
     } catch (err) {
       console.error('[v0] Error fetching documents:', err)
       setError('Error al cargar documentos')
