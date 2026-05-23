@@ -76,10 +76,34 @@ export default function A4DocumentsPage() {
   const [filterType, setFilterType] = useState<string | null>(null)
   const [filterStatus, setFilterStatus] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [realUserId, setRealUserId] = useState<string | null>(null)
+
+  // Get REAL user ID from Supabase auth once on mount
+  useEffect(() => {
+    const getRealUserId = async () => {
+      const supabase = createClient()
+      const { data: { user: authUser } } = await supabase.auth.getUser()
+      if (authUser?.id) {
+        console.log('[v0] Got real user ID:', authUser.id)
+        setRealUserId(authUser.id)
+      } else {
+        console.log('[v0] No auth user, will retry...')
+        // Retry after a short delay (session might be loading)
+        setTimeout(async () => {
+          const { data: { user: retryUser } } = await supabase.auth.getUser()
+          if (retryUser?.id) {
+            console.log('[v0] Got real user ID on retry:', retryUser.id)
+            setRealUserId(retryUser.id)
+          }
+        }, 500)
+      }
+    }
+    getRealUserId()
+  }, [])
 
   // Fetch documents using client-side Supabase (works with auth)
   const fetchDocuments = useCallback(async () => {
-    if (authLoading || !user) return
+    if (authLoading || !user || !realUserId) return
 
     try {
       setLoading(true)
@@ -87,16 +111,7 @@ export default function A4DocumentsPage() {
       
       const supabase = createClient()
       
-      // Get REAL user ID from Supabase auth (not demo user object)
-      const { data: { user: authUser } } = await supabase.auth.getUser()
-      const realUserId = authUser?.id
-      
-      if (!realUserId) {
-        console.error('[v0] No authenticated user found')
-        setError('No se encontró usuario autenticado')
-        setLoading(false)
-        return
-      }
+      console.log('[v0] Fetching documents for realUserId:', realUserId)
       
       console.log('[v0] Fetching documents for user:', realUserId)
       
@@ -144,13 +159,13 @@ export default function A4DocumentsPage() {
     } finally {
       setLoading(false)
     }
-  }, [filterType, filterStatus, user, authLoading])
+  }, [filterType, filterStatus, user, authLoading, realUserId])
 
   useEffect(() => {
-    if (!authLoading && user) {
+    if (!authLoading && user && realUserId) {
       fetchDocuments()
     }
-  }, [fetchDocuments, authLoading, user])
+  }, [fetchDocuments, authLoading, user, realUserId])
 
   const getDocumentIcon = (type: string) => {
     const docType = DOCUMENT_TYPES.find(t => t.value === type)
@@ -168,19 +183,10 @@ export default function A4DocumentsPage() {
 
   const handleDelete = async (docId: string) => {
     if (!confirm('¿Estás seguro de eliminar este documento?')) return
-    if (!user) return
+    if (!user || !realUserId) return
     
     try {
       const supabase = createClient()
-      
-      // Get REAL user ID from Supabase auth
-      const { data: { user: authUser } } = await supabase.auth.getUser()
-      const realUserId = authUser?.id
-      
-      if (!realUserId) {
-        setError('No se encontró usuario autenticado')
-        return
-      }
       
       const { error: deleteError } = await supabase
         .from('dtc_documents')
