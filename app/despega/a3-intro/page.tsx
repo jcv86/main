@@ -307,7 +307,7 @@ export default function A3IntroPage() {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-3 p-4 rounded-lg bg-white/5 border border-white/10 hover:border-training/30 transition-colors"
+                  className="flex items-start gap-3 p-4 rounded-lg bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 hover:border-training/30 transition-colors"
                 >
                   <CheckCircle2 className="w-5 h-5 text-training flex-shrink-0 mt-0.5" />
                   <p className="text-white/90 font-medium">{item}</p>

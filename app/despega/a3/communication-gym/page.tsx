@@ -277,7 +277,7 @@ export default function CommunicationGymModule() {
         </Card>
 
         {/* Speaking Pattern */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
           <p className="text-white/50 text-xs uppercase mb-4">Better Speaking Pattern</p>
           <div className="flex flex-wrap items-center justify-center gap-2">
             {SPEAKING_PATTERNS.map((pattern, i) => (
@@ -298,7 +298,7 @@ export default function CommunicationGymModule() {
         </Card>
 
         {/* Progreso */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -316,7 +316,7 @@ export default function CommunicationGymModule() {
                 ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
                 : currentStep === index 
                   ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
-                  : 'bg-white/5 border-white/10'
+                  : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
             }`}
           >
             <button 
@@ -361,7 +361,7 @@ export default function CommunicationGymModule() {
                     {/* Criteria */}
                     <div className="grid md:grid-cols-2 gap-2">
                       {drill.criteria?.map((criterion, i) => (
-                        <div key={i} className="flex items-center gap-2 bg-white/5 rounded-lg p-2">
+                        <div key={i} className="flex items-center gap-2 bg-[rgba(80,160,170,0.2)] rounded-lg p-2">
                           <Target className="w-4 h-4 text-[rgb(170,70,170)]" />
                           <span className="text-white/70 text-sm">{criterion}</span>
                         </div>
@@ -369,7 +369,7 @@ export default function CommunicationGymModule() {
                     </div>
                     
                     {/* Recording interface */}
-                    <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">
+                    <div className="bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-lg p-6 text-center">
                       {isRecording ? (
                         <div className="space-y-4">
                           <div className="w-20 h-20 rounded-full bg-[rgba(80,160,170,0.5)]/20 flex items-center justify-center mx-auto animate-pulse">
@@ -425,7 +425,7 @@ export default function CommunicationGymModule() {
                         className={`p-4 rounded-lg transition-all ${
                           pauseStep > i ? 'bg-green-500/10 border border-green-500/30' :
                           pauseStep === i ? 'bg-[rgba(170,70,170,0.1)] border border-[rgba(170,70,170,0.3)]' :
-                          'bg-white/5 border border-white/10'
+                          'bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10'
                         }`}
                       >
                         <div className="flex items-center justify-between mb-2">
@@ -466,7 +466,7 @@ export default function CommunicationGymModule() {
                 {drill.type === 'assessment' && (
                   <div className="space-y-4">
                     {drill.aspects?.map((aspect) => (
-                      <div key={aspect.id} className="bg-white/5 border border-white/10 rounded-lg p-4">
+                      <div key={aspect.id} className="bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-lg p-4">
                         <div className="flex items-center justify-between mb-2">
                           <div>
                             <p className="text-white font-medium">{aspect.label}</p>
@@ -483,7 +483,7 @@ export default function CommunicationGymModule() {
                                   ? i === 0 ? 'bg-[rgba(80,160,170,0.5)]/20 text-[rgb(80,160,170)] border border-[rgb(80,160,170)]/30' :
                                     i === 1 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
                                     'bg-green-500/20 text-green-400 border border-green-500/30'
-                                  : 'bg-white/5 text-white/60 hover:bg-white/10'
+                                  : 'bg-[rgba(80,160,170,0.2)] text-white/60 hover:bg-white/10'
                               }`}
                             >
                               {option}
@@ -545,7 +545,7 @@ export default function CommunicationGymModule() {
             <p className="text-white/70">
               You&apos;ve trained your voice and delivery skills. Earned {MODULE_XP} XP!
             </p>
-            <div className="bg-white/5 rounded-lg p-4 text-left">
+            <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-4 text-left">
               <p className="text-white/70 text-sm mb-2">Skills practiced:</p>
               <div className="flex flex-wrap gap-2">
                 <Badge className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)]">Timed speaking</Badge>

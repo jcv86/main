@@ -561,7 +561,7 @@ export default function ChallensingTrainingPage() {
                         ? 'text-white'
                         : completedQuestions.includes(idx)
                         ? 'bg-green/20 border border-green/40 cursor-pointer hover:bg-green/30 text-white'
-                        : 'bg-white/10 border border-white/20 text-white/80'
+                        : 'bg-white/10 border border-[rgb(80,160,170)]/20 text-white/80'
                     }`}
                     style={idx === currentQuestion ? { backgroundColor: 'rgb(170, 70, 170, 0.2)', border: '1px solid rgb(170, 70, 170, 0.6)' } : {}}
                   >

@@ -268,7 +268,7 @@ export default function ValueMiningLabCoach() {
             </div>
 
             {/* Response Input Section */}
-            <div className="bg-white/5 border border-white/10 rounded-lg overflow-hidden">
+            <div className="bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-lg overflow-hidden">
               <p className="text-xs text-white/60 uppercase px-3 pt-3 pb-2">Tu Respuesta</p>
               
               {/* Text Input Area */}
@@ -337,7 +337,7 @@ export default function ValueMiningLabCoach() {
                 {VALUE_CATEGORIES.map((cat, idx) => (
                   <button
                     key={idx}
-                    className="w-full text-left bg-white/5 border border-white/10 rounded-lg p-2 hover:bg-white/8 hover:border-white/20 transition-all"
+                    className="w-full text-left bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-lg p-2 hover:bg-white/8 hover:border-[rgb(80,160,170)]/20 transition-all"
                   >
                     <p className="text-xs font-medium text-white">{cat.title}</p>
                     <p className="text-xs text-white/50 mt-1">{cat.description}</p>

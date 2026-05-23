@@ -128,7 +128,7 @@ export default function BasePage() {
             <div className="flex items-center gap-4">
               {/* A1 */}
               <Link href="/despega/a1-cerebral" className="flex-1">
-                <div className="bg-white/20 backdrop-blur hover:bg-white/30 transition-all p-4 rounded-[28px] cursor-pointer border border-white/30 text-center">
+                <div className="bg-white/20 backdrop-blur hover:bg-white/30 transition-all p-4 rounded-[28px] cursor-pointer border border-[rgb(80,160,170)]/30 text-center">
                   <div className="text-2xl mb-2"></div>
                   <h3 className="font-bold text-sm">A1: Autoconocimiento</h3>
                   <p className="text-xs text-white mt-1">Descubre tu perfil DISC</p>
@@ -141,7 +141,7 @@ export default function BasePage() {
               
               {/* A2 */}
               <Link href="/despega/a2/dashboard" className="flex-1">
-                <div className="bg-white/20 backdrop-blur hover:bg-white/30 transition-all p-4 rounded-[28px] cursor-pointer border-2 border-white/70 text-center ring-2 ring-white/50">
+                <div className="bg-white/20 backdrop-blur hover:bg-white/30 transition-all p-4 rounded-[28px] cursor-pointer border-2 border-[rgb(80,160,170)]/70 text-center ring-2 ring-white/50">
                   <div className="text-2xl mb-2">🏗️</div>
                   <h3 className="font-bold text-sm">A2: Exploración</h3>
                   <p className="text-xs text-white mt-1">Construye tu plan de 90 días</p>
@@ -154,7 +154,7 @@ export default function BasePage() {
               
               {/* A3 */}
               <Link href="/despega/a3" className="flex-1">
-                <div className="bg-white/10 backdrop-blur hover:bg-white/20 transition-all p-4 rounded-[28px] cursor-pointer border border-white/20 text-center opacity-70">
+                <div className="bg-white/10 backdrop-blur hover:bg-white/20 transition-all p-4 rounded-[28px] cursor-pointer border border-[rgb(80,160,170)]/20 text-center opacity-70">
                   <div className="text-2xl mb-2"></div>
                   <h3 className="font-bold text-sm">A3: Aterrizaje</h3>
                   <p className="text-xs text-indigo-200 mt-1">Entrena con simulaciones</p>
@@ -167,7 +167,7 @@ export default function BasePage() {
               
               {/* A4 */}
               <Link href="/despega/a4-base" className="flex-1">
-                <div className="bg-white/10 backdrop-blur hover:bg-white/20 transition-all p-4 rounded-[28px] cursor-pointer border border-white/20 text-center opacity-70">
+                <div className="bg-white/10 backdrop-blur hover:bg-white/20 transition-all p-4 rounded-[28px] cursor-pointer border border-[rgb(80,160,170)]/20 text-center opacity-70">
                   <div className="text-2xl mb-2">🌍</div>
                   <h3 className="font-bold text-sm">A4: La Realidad</h3>
                   <p className="text-xs text-indigo-200 mt-1">Contexto estratégico</p>

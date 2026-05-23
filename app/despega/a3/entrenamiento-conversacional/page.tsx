@@ -178,7 +178,7 @@ export default function EntrenamientoConversacionalPage() {
           <div className="space-y-4">
             {conversation.map((turn, idx) => (
               <div key={idx} className={`flex ${turn.role === 'candidate' ? 'justify-end' : 'justify-start'}`}>
-                <Card className={turn.role === 'candidate' ? 'bg-purple-600/20 border-purple-500/30 max-w-md' : 'bg-white/5 border-white/10 max-w-md'}>
+                <Card className={turn.role === 'candidate' ? 'bg-purple-600/20 border-purple-500/30 max-w-md' : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 max-w-md'}>
                   <CardContent className="pt-3">
                     <p className="text-sm text-white/90">{turn.message}</p>
                     <p className="text-xs text-white/40 mt-2">

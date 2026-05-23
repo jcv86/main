@@ -220,7 +220,7 @@ export default function RiskDifficultQuestionsLabModule() {
         </Card>
 
         {/* Progreso */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -248,8 +248,8 @@ export default function RiskDifficultQuestionsLabModule() {
                   isCompleted 
                     ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
                     : isLocked 
-                    ? 'bg-white/5 border-white/10 opacity-50' 
-                    : 'bg-white/5 border-white/20'
+                    ? 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 opacity-50' 
+                    : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/20'
                 }`}
               >
                 <div 
@@ -298,7 +298,7 @@ export default function RiskDifficultQuestionsLabModule() {
                               className={`p-3 rounded text-left transition-all ${
                                 selectedRisks.includes(cat.id)
                                   ? 'bg-[rgba(170,70,170,0.3)] border border-[rgba(170,70,170,0.5)]'
-                                  : 'bg-white/5 border border-white/10 hover:border-white/30'
+                                  : 'bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 hover:border-[rgb(80,160,170)]/30'
                               }`}
                             >
                               <span className="text-xl">{cat.icon}</span>
@@ -335,7 +335,7 @@ export default function RiskDifficultQuestionsLabModule() {
                             className={`rounded-[2px] border cursor-pointer transition-all ${
                               studiedFormulas.includes(cat.id)
                                 ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]'
-                                : 'bg-white/5 border-white/10 hover:border-white/30'
+                                : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 hover:border-[rgb(80,160,170)]/30'
                             }`}
                             onClick={() => {
                               if (!studiedFormulas.includes(cat.id)) {
@@ -404,7 +404,7 @@ export default function RiskDifficultQuestionsLabModule() {
 
                         <div className="space-y-2">
                           {RED_FLAGS.map((flag, i) => (
-                            <div key={i} className="flex gap-3 p-3 bg-white/5 rounded">
+                            <div key={i} className="flex gap-3 p-3 bg-[rgba(80,160,170,0.2)] rounded">
                               <XCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
                               <div>
                                 <p className="text-white font-medium">{flag.bad}</p>
@@ -414,7 +414,7 @@ export default function RiskDifficultQuestionsLabModule() {
                           ))}
                         </div>
 
-                        <label className="flex items-center gap-3 p-3 bg-white/5 rounded cursor-pointer">
+                        <label className="flex items-center gap-3 p-3 bg-[rgba(80,160,170,0.2)] rounded cursor-pointer">
                           <input 
                             type="checkbox" 
                             checked={acknowledgedFlags}
@@ -446,7 +446,7 @@ export default function RiskDifficultQuestionsLabModule() {
                           const risk = RISK_CATEGORIES.find(r => r.id === riskId)
                           if (!risk) return null
                           return (
-                            <Card key={riskId} className="rounded-[2px] bg-white/5 border-white/10 p-4">
+                            <Card key={riskId} className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
                               <div className="flex items-center gap-2 mb-2">
                                 <span className="text-lg">{risk.icon}</span>
                                 <h4 className="font-medium">{risk.title}</h4>
@@ -456,7 +456,7 @@ export default function RiskDifficultQuestionsLabModule() {
                                 placeholder={`Write your safe answer for ${risk.title.toLowerCase()}...`}
                                 value={safeAnswers[riskId] || ''}
                                 onChange={(e) => setSafeAnswers({...safeAnswers, [riskId]: e.target.value})}
-                                className="bg-white/5 border-white/20 min-h-[100px] text-white"
+                                className="bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/20 min-h-[100px] text-white"
                               />
                               {(safeAnswers[riskId]?.length || 0) > 50 && (
                                 <p className="text-xs text-[rgb(200,130,200)] mt-2 flex items-center gap-1">
@@ -530,7 +530,7 @@ export default function RiskDifficultQuestionsLabModule() {
                                 placeholder="Type your answer quickly..."
                                 value={drillAnswers[currentDrillQuestion] || ''}
                                 onChange={(e) => setDrillAnswers({...drillAnswers, [currentDrillQuestion]: e.target.value})}
-                                className="bg-white/5 border-white/20 min-h-[120px] text-white"
+                                className="bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/20 min-h-[120px] text-white"
                               />
                             </Card>
 
@@ -539,7 +539,7 @@ export default function RiskDifficultQuestionsLabModule() {
                                 <Button
                                   variant="outline"
                                   onClick={() => setCurrentDrillQuestion(currentDrillQuestion - 1)}
-                                  className="border-white/20"
+                                  className="border-[rgb(80,160,170)]/20"
                                 >
                                   <ArrowLeft className="w-4 h-4 mr-2" /> Anterior
                                 </Button>

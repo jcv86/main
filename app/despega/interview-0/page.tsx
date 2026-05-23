@@ -51,19 +51,19 @@ export default function Interview0Page() {
               </div>
 
               <div className="grid grid-cols-2 gap-3 text-sm">
-                <div className="bg-white/5 rounded-lg p-3">
+                <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-3">
                   <p className="text-white/60 text-xs mb-1">Environment</p>
                   <p className="text-white font-semibold">100</p>
                 </div>
-                <div className="bg-white/5 rounded-lg p-3">
+                <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-3">
                   <p className="text-white/60 text-xs mb-1">Presence</p>
                   <p className="text-white font-semibold">100</p>
                 </div>
-                <div className="bg-white/5 rounded-lg p-3">
+                <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-3">
                   <p className="text-white/60 text-xs mb-1">Audio Camera</p>
                   <p className="text-white font-semibold">100</p>
                 </div>
-                <div className="bg-white/5 rounded-lg p-3">
+                <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-3">
                   <p className="text-white/60 text-xs mb-1">Preparation</p>
                   <p className="text-white font-semibold">100</p>
                 </div>
@@ -164,19 +164,19 @@ export default function Interview0Page() {
                   </p>
 
                   <div className="space-y-3 text-sm text-white/70 text-left max-w-md mx-auto">
-                    <div className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-[rgba(80,160,170,0.2)]">
                       <Lightbulb className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
                       <p><span className="font-semibold text-white">Auditoría de Entorno</span> - Luz, fondo, ruido y profesionalismo</p>
                     </div>
-                    <div className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-[rgba(80,160,170,0.2)]">
                       <Lightbulb className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
                       <p><span className="font-semibold text-white">Validación de Presencia</span> - Postura, contacto visual y energía</p>
                     </div>
-                    <div className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-[rgba(80,160,170,0.2)]">
                       <Lightbulb className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
                       <p><span className="font-semibold text-white">Prueba de Audio/Cámara</span> - Sonido claro y video de calidad</p>
                     </div>
-                    <div className="flex items-start gap-3 p-3 rounded-lg bg-white/5">
+                    <div className="flex items-start gap-3 p-3 rounded-lg bg-[rgba(80,160,170,0.2)]">
                       <Lightbulb className="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" />
                       <p><span className="font-semibold text-white">Pitch Inicial</span> - Presentación profesional en 60 segundos</p>
                     </div>

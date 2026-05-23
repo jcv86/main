@@ -247,7 +247,7 @@ export default function DespegazoDashboard() {
                 <div className={`text-6xl md:text-8xl font-black mb-4 ${scoreColor} transition-colors duration-500`}>
                   {readiness.overall_score}
                 </div>
-                <div className="w-full h-2 md:h-3 bg-white/20 rounded-full overflow-hidden border border-white/30 mb-4">
+                <div className="w-full h-2 md:h-3 bg-white/20 rounded-full overflow-hidden border border-[rgb(80,160,170)]/30 mb-4">
                   <div
                     className="h-full bg-gradient-to-r from-purple to-blue transition-all duration-500"
                     style={{ width: `${readiness.overall_score}%` }}
@@ -266,7 +266,7 @@ export default function DespegazoDashboard() {
               <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 md:mb-8">Próximos Pasos Recomendados</h3>
               <div className="space-y-3 md:space-y-4">
                 {readiness.recommendations.slice(0, 4).map((rec, i) => (
-                  <div key={i} className="flex gap-3 md:gap-4 p-4 md:p-5 bg-background/50 border border-white/10 rounded-lg md:rounded-xl hover:border-white/30 hover:bg-background/70 transition-all cursor-pointer">
+                  <div key={i} className="flex gap-3 md:gap-4 p-4 md:p-5 bg-background/50 border border-[rgb(80,160,170)]/10 rounded-lg md:rounded-xl hover:border-[rgb(80,160,170)]/30 hover:bg-background/70 transition-all cursor-pointer">
                     <div className="text-lg md:text-2xl flex-shrink-0">
                       {i === 0 ? '1️⃣' : i === 1 ? '2️⃣' : i === 2 ? '3️⃣' : '4️⃣'}
                     </div>
@@ -324,7 +324,7 @@ export default function DespegazoDashboard() {
               <div
                 key={i}
                 onClick={() => router.push(stage.href)}
-                className="group cursor-pointer bg-gradient-to-r from-background to-background/50 border-2 border-white/10 hover:border-white/30 rounded-lg md:rounded-2xl p-4 md:p-8 transition-all hover:shadow-xl hover:bg-background/80"
+                className="group cursor-pointer bg-gradient-to-r from-background to-background/50 border-2 border-[rgb(80,160,170)]/10 hover:border-[rgb(80,160,170)]/30 rounded-lg md:rounded-2xl p-4 md:p-8 transition-all hover:shadow-xl hover:bg-background/80"
               >
                 <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 md:gap-6 mb-4 md:mb-6">
                   <div className="flex items-start gap-3 md:gap-6 flex-1 min-w-0">
@@ -380,7 +380,7 @@ export default function DespegazoDashboard() {
           <Button
             onClick={() => router.push('/despega/conozcamonos-1')}
             variant="outline"
-            className="h-12 md:h-16 border-2 border-white/30 hover:border-purple/60 text-white hover:text-purple font-bold text-sm md:text-lg rounded-lg md:rounded-xl transition-all active:scale-95"
+            className="h-12 md:h-16 border-2 border-[rgb(80,160,170)]/30 hover:border-purple/60 text-white hover:text-purple font-bold text-sm md:text-lg rounded-lg md:rounded-xl transition-all active:scale-95"
           >
             <Clock className="w-4 md:w-6 h-4 md:h-6 mr-2 md:mr-3" />
             Continuar Mi Jornada

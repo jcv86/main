@@ -228,7 +228,7 @@ export default function BasicInterviewMissionModule() {
         </div>
 
         {/* Progreso */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progreso de la Misión</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -262,7 +262,7 @@ export default function BasicInterviewMissionModule() {
             </Card>
 
             {/* Interview Details */}
-            <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+            <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
                 <div>
                   <User className="w-5 h-5 text-[rgb(80,160,170)] mx-auto mb-1" />
@@ -288,7 +288,7 @@ export default function BasicInterviewMissionModule() {
             </Card>
 
             {/* Interview Structure Preview */}
-            <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+            <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
               <h4 className="font-semibold mb-3">Interview Structure</h4>
               <div className="space-y-2">
                 {INTERVIEW_SECTIONS.map((section, i) => (
@@ -345,7 +345,7 @@ export default function BasicInterviewMissionModule() {
             </Card>
 
             {/* Question Card */}
-            <Card className="rounded-[2px] bg-white/5 border-white/20 p-6">
+            <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/20 p-6">
               <div className="flex items-start gap-4 mb-4">
                 <div className="w-10 h-10 rounded-full bg-[rgba(80,160,170,0.2)] flex items-center justify-center flex-shrink-0">
                   <User className="w-5 h-5 text-[rgb(80,160,170)]" />
@@ -381,7 +381,7 @@ export default function BasicInterviewMissionModule() {
                   placeholder="Type your answer as if speaking to the interviewer..."
                   value={answers[currentQuestion.id] || ''}
                   onChange={(e) => setAnswers({...answers, [currentQuestion.id]: e.target.value})}
-                  className="bg-white/5 border-white/20 min-h-[150px] text-white"
+                  className="bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/20 min-h-[150px] text-white"
                 />
                 <p className="text-xs text-white/40">
                   {(answers[currentQuestion.id]?.length || 0)} characters
@@ -402,7 +402,7 @@ export default function BasicInterviewMissionModule() {
                       setCurrentQuestionIndex(INTERVIEW_SECTIONS[currentSectionIndex - 1].questions.length - 1)
                     }
                   }}
-                  className="border-white/20"
+                  className="border-[rgb(80,160,170)]/20"
                 >
                   <ArrowLeft className="w-4 h-4 mr-2" /> Anterior
                 </Button>
@@ -435,7 +435,7 @@ export default function BasicInterviewMissionModule() {
               </p>
             </Card>
 
-            <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+            <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
               <h4 className="font-semibold mb-4">Self-Evaluation</h4>
               <p className="text-sm text-white/60 mb-4">
                 Rate yourself honestly on each criterion (1 = needs work, 5 = excellent)
@@ -512,7 +512,7 @@ export default function BasicInterviewMissionModule() {
               </div>
 
               {/* Readiness Statement */}
-              <Card className="rounded-[2px] bg-white/10 border-white/20 p-4 mb-6 text-left">
+              <Card className="rounded-[2px] bg-white/10 border-[rgb(80,160,170)]/20 p-4 mb-6 text-left">
                 <h4 className="font-semibold text-[rgb(200,130,200)] mb-2">Your Readiness Level</h4>
                 <p className="text-sm text-white/80">
                   {calculateOverallScore() >= 80 

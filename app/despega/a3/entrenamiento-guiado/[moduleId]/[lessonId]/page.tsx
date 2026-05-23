@@ -302,15 +302,15 @@ export default function LessonPage() {
               </div>
 
               <div className="grid grid-cols-3 gap-3 text-sm">
-                <div className="bg-white/5 rounded-lg p-3">
+                <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-3">
                   <p className="text-white/60 text-xs mb-1">Lección</p>
                   <p className="text-white font-semibold">{lessonId} / 4</p>
                 </div>
-                <div className="bg-white/5 rounded-lg p-3">
+                <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-3">
                   <p className="text-white/60 text-xs mb-1">Tiempo</p>
                   <p className="text-white font-semibold">~10m</p>
                 </div>
-                <div className="bg-white/5 rounded-lg p-3">
+                <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-3">
                   <p className="text-white/60 text-xs mb-1">XP Ganado</p>
                   <p className="text-white font-semibold">{isLastLesson ? moduleXp : 0}</p>
                 </div>

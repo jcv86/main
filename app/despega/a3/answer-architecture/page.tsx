@@ -243,7 +243,7 @@ export default function AnswerArchitectureModule() {
         </div>
 
         {/* Key Learning */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
           <div className="flex items-start gap-3">
             <Lightbulb className="w-5 h-5 text-[rgb(80,160,170)] mt-0.5" />
             <div>
@@ -259,7 +259,7 @@ export default function AnswerArchitectureModule() {
         </Card>
 
         {/* Progreso */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -277,7 +277,7 @@ export default function AnswerArchitectureModule() {
                 ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
                 : currentStep === index 
                   ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
-                  : 'bg-white/5 border-white/10'
+                  : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
             }`}
           >
             <button 
@@ -380,7 +380,7 @@ export default function AnswerArchitectureModule() {
                           value={answers[`timing-${variation.seconds}`]}
                           onChange={(e) => updateAnswer(`timing-${variation.seconds}`, e.target.value)}
                           placeholder={`Write your ${variation.seconds}-second version...`}
-                          className="w-full bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-20"
+                          className="w-full bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-20"
                         />
                       </div>
                     ))}
@@ -407,7 +407,7 @@ export default function AnswerArchitectureModule() {
                       value={answers[answerType.id]}
                       onChange={(e) => updateAnswer(answerType.id, e.target.value)}
                       placeholder="Write your answer here..."
-                      className="w-full bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-32"
+                      className="w-full bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-32"
                     />
                   </div>
                 )}
@@ -433,7 +433,7 @@ export default function AnswerArchitectureModule() {
             <p className="text-white/70">
               You&apos;ve built {ANSWER_TYPES.length} structured interview answers. Earned {MODULE_XP} XP!
             </p>
-            <div className="bg-white/5 rounded-lg p-4 text-left">
+            <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-4 text-left">
               <p className="text-white/70 text-sm mb-2">Your answer bank is ready for:</p>
               <ul className="space-y-1">
                 <li className="text-[rgb(80,160,170)] text-sm">• Sala de Práctica del Coach - practice with feedback</li>

@@ -67,7 +67,7 @@ export default function MarcaPersonalPage() {
           </div>
 
           {/* Progress Section */}
-          <Card className="bg-white/5 border-white/10 p-6">
+          <Card className="bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-6">
             <h3 className="text-lg font-semibold mb-4">Tu Progreso en A2</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -82,7 +82,7 @@ export default function MarcaPersonalPage() {
           </Card>
 
           {/* Brand Elements Section */}
-          <Card className="bg-white/5 border-white/10 p-6 space-y-4">
+          <Card className="bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-6 space-y-4">
             <h3 className="text-lg font-semibold mb-4">Elementos de tu Marca</h3>
             <div className="grid md:grid-cols-2 gap-4">
               <div className="p-4 bg-amber-900/20 rounded border border-amber-500/20">

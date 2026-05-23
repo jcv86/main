@@ -274,7 +274,7 @@ export default function JobDecoderModule() {
         {/* Requirement Types Guide */}
         <div className="grid md:grid-cols-3 gap-4">
           {REQUIREMENT_TYPES.map((type) => (
-            <Card key={type.id} className="rounded-[2px] bg-white/5 border-white/10 p-4">
+            <Card key={type.id} className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
               <div className="flex items-center gap-2 mb-2">
                 <type.icon className="w-4 h-4" style={{ color: type.color }} />
                 <span className="text-white font-medium text-sm">{type.name}</span>
@@ -285,7 +285,7 @@ export default function JobDecoderModule() {
         </div>
 
         {/* Progreso */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -300,7 +300,7 @@ export default function JobDecoderModule() {
             ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
             : currentStep === 0 
               ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
-              : 'bg-white/5 border-white/10'
+              : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
         }`}>
           <button 
             onClick={() => setExpandedSection(expandedSection === 'paste' ? null : 'paste')}
@@ -337,7 +337,7 @@ export default function JobDecoderModule() {
                 value={jobData.jobPosting}
                 onChange={(e) => setJobData(prev => ({ ...prev, jobPosting: e.target.value, usingSample: false }))}
                 placeholder="Paste the full job description here..."
-                className="w-full bg-white/5 border border-white/20 rounded-lg p-4 text-white placeholder:text-white/30 min-h-48 font-mono text-sm"
+                className="w-full bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/20 rounded-lg p-4 text-white placeholder:text-white/30 min-h-48 font-mono text-sm"
               />
               
               <p className="text-white/50 text-xs">{jobData.jobPosting.length} characters (minimum 100)</p>
@@ -360,7 +360,7 @@ export default function JobDecoderModule() {
             ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
             : currentStep === 1 
               ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
-              : 'bg-white/5 border-white/10'
+              : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
         }`}>
           <button 
             onClick={() => setExpandedSection(expandedSection === 'identify' ? null : 'identify')}
@@ -416,7 +416,7 @@ export default function JobDecoderModule() {
                 <input
                   type="text"
                   placeholder="Add custom requirement..."
-                  className="flex-1 bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30"
+                  className="flex-1 bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/20 rounded-lg p-3 text-white placeholder:text-white/30"
                   onKeyPress={(e) => {
                     if (e.key === 'Enter') {
                       addRequirement((e.target as HTMLInputElement).value, 'must-have')
@@ -459,7 +459,7 @@ export default function JobDecoderModule() {
             ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
             : currentStep === 2 
               ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
-              : 'bg-white/5 border-white/10'
+              : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
         }`}>
           <button 
             onClick={() => setExpandedSection(expandedSection === 'categorize' ? null : 'categorize')}
@@ -495,7 +495,7 @@ export default function JobDecoderModule() {
                   </div>
                   <div className="space-y-2">
                     {jobData.identifiedRequirements.filter(r => r.type === 'must-have').map((req, i) => (
-                      <div key={i} className="flex items-center justify-between bg-white/5 rounded-lg p-2">
+                      <div key={i} className="flex items-center justify-between bg-[rgba(80,160,170,0.2)] rounded-lg p-2">
                         <span className="text-white/80 text-sm">{req.text}</span>
                         <button 
                           onClick={() => {
@@ -526,7 +526,7 @@ export default function JobDecoderModule() {
                   </div>
                   <div className="space-y-2">
                     {jobData.identifiedRequirements.filter(r => r.type === 'nice-to-have').map((req, i) => (
-                      <div key={i} className="flex items-center justify-between bg-white/5 rounded-lg p-2">
+                      <div key={i} className="flex items-center justify-between bg-[rgba(80,160,170,0.2)] rounded-lg p-2">
                         <span className="text-white/80 text-sm">{req.text}</span>
                         <button 
                           onClick={() => {
@@ -565,7 +565,7 @@ export default function JobDecoderModule() {
             ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
             : currentStep === 3 
               ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
-              : 'bg-white/5 border-white/10'
+              : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
         }`}>
           <button 
             onClick={() => setExpandedSection(expandedSection === 'match' ? null : 'match')}
@@ -597,7 +597,7 @@ export default function JobDecoderModule() {
                 {jobData.identifiedRequirements.filter(r => r.type === 'must-have').slice(0, 5).map((req, i) => {
                   const existing = jobData.matchMap.find(m => m.requirement === req.text)
                   return (
-                    <div key={i} className="bg-white/5 border border-white/10 rounded-lg p-4 space-y-3">
+                    <div key={i} className="bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-lg p-4 space-y-3">
                       <p className="text-white font-medium">{req.text}</p>
                       <div className="flex gap-2">
                         {(['strong', 'partial', 'gap'] as const).map((match) => (
@@ -622,7 +622,7 @@ export default function JobDecoderModule() {
                           value={existing.evidence}
                           onChange={(e) => updateMatchMap(req.text, existing.match, e.target.value)}
                           placeholder={existing.match === 'gap' ? "How will you address this gap?" : "What's your evidence?"}
-                          className="w-full bg-white/5 border border-white/20 rounded-lg p-2 text-white placeholder:text-white/30 text-sm"
+                          className="w-full bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/20 rounded-lg p-2 text-white placeholder:text-white/30 text-sm"
                         />
                       )}
                     </div>
@@ -648,7 +648,7 @@ export default function JobDecoderModule() {
             ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
             : currentStep === 4 
               ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
-              : 'bg-white/5 border-white/10'
+              : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
         }`}>
           <button 
             onClick={() => setExpandedSection(expandedSection === 'questions' ? null : 'questions')}
@@ -679,7 +679,7 @@ export default function JobDecoderModule() {
               
               <div className="space-y-4">
                 {QUESTION_PATTERNS.map((pattern, i) => (
-                  <div key={i} className="bg-white/5 border border-white/10 rounded-lg p-4">
+                  <div key={i} className="bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-lg p-4">
                     <div className="flex items-center gap-2 mb-2">
                       <FileQuestion className="w-4 h-4 text-[rgb(170,70,170)]" />
                       <span className="text-white/80 text-sm font-medium">Based on: {pattern.requirement}</span>
@@ -701,11 +701,11 @@ export default function JobDecoderModule() {
                             className={`w-full text-left p-2 rounded-lg text-sm transition-all ${
                               isSelected
                                 ? 'bg-[rgba(170,70,170,0.2)] border border-[rgba(170,70,170,0.4)] text-white'
-                                : 'bg-white/5 text-white/70 hover:bg-white/10'
+                                : 'bg-[rgba(80,160,170,0.2)] text-white/70 hover:bg-white/10'
                             }`}
                           >
                             <span className="flex items-center gap-2">
-                              {isSelected ? <CheckCircle2 className="w-4 h-4 text-[rgb(170,70,170)]" /> : <span className="w-4 h-4 border border-white/30 rounded" />}
+                              {isSelected ? <CheckCircle2 className="w-4 h-4 text-[rgb(170,70,170)]" /> : <span className="w-4 h-4 border border-[rgb(80,160,170)]/30 rounded" />}
                               {q}
                             </span>
                           </button>
@@ -739,7 +739,7 @@ export default function JobDecoderModule() {
               You&apos;ve decoded the job posting and identified {jobData.selectedQuestions.length} likely interview questions. 
               Earned {MODULE_XP} XP!
             </p>
-            <div className="bg-white/5 rounded-lg p-4 text-left">
+            <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-4 text-left">
               <p className="text-white/70 text-sm mb-2">Questions you&apos;ll prepare in Arquitectura de Respuestas:</p>
               <ul className="space-y-1">
                 {jobData.selectedQuestions.slice(0, 3).map((q, i) => (

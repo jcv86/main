@@ -147,7 +147,7 @@ export default function A4Page() {
               <Button className="bg-white text-cyan hover:bg-blue/5 font-semibold" size="lg">
                 Explorar Radar Estratégico
               </Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white/10" size="lg">
+              <Button variant="outline" className="border-[rgb(80,160,170)] text-white hover:bg-white/10" size="lg">
                 Ver Guía A4
               </Button>
             </div>

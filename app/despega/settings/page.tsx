@@ -136,7 +136,7 @@ export default function SettingsPage() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="animate-pulse space-y-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-32 bg-white/5 rounded-lg" />
+            <div key={i} className="h-32 bg-[rgba(80,160,170,0.2)] rounded-lg" />
           ))}
         </div>
       </div>
@@ -220,7 +220,7 @@ export default function SettingsPage() {
               <select
                 value={preferences.language || 'es'}
                 onChange={(e) => handlePreferenceChange('language', e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-blue/50"
+                className="w-full px-4 py-2 rounded-lg bg-white/10 border border-[rgb(80,160,170)]/20 text-white focus:outline-none focus:ring-2 focus:ring-blue/50"
               >
                 {LANGUAGES.map(lang => (
                   <option key={lang.value} value={lang.value}>{lang.label}</option>
@@ -340,7 +340,7 @@ export default function SettingsPage() {
               <select
                 value={preferences.timezone || 'America/Santiago'}
                 onChange={(e) => handlePreferenceChange('timezone', e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-red/50"
+                className="w-full px-4 py-2 rounded-lg bg-white/10 border border-[rgb(80,160,170)]/20 text-white focus:outline-none focus:ring-2 focus:ring-red/50"
               >
                 {TIMEZONES.map(tz => (
                   <option key={tz.value} value={tz.value}>{tz.label}</option>
@@ -411,7 +411,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Action Buttons */}
-      <div className="mt-8 flex items-center gap-3 sticky bottom-0 bg-black/80 backdrop-blur p-4 rounded-lg border border-white/10">
+      <div className="mt-8 flex items-center gap-3 sticky bottom-0 bg-black/80 backdrop-blur p-4 rounded-lg border border-[rgb(80,160,170)]/10">
         <Button
           onClick={handleSave}
           disabled={loading}

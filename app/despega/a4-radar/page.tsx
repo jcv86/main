@@ -73,7 +73,7 @@ export default function MarketRadarPage() {
       {/* FLUJO / PROCESO */}
       <ASectionPart title="Cómo Funciona el Radar" icon={<Radar />}>
         <div className="space-y-4">
-          <div className="p-4 bg-background/50 border border-white/20 rounded-lg space-y-3">
+          <div className="p-4 bg-background/50 border border-[rgb(80,160,170)]/20 rounded-lg space-y-3">
             <div className="flex gap-3 items-start">
               <div className="w-8 h-8 rounded-[20px] bg-purple/20 border border-purple/50 flex items-center justify-center flex-shrink-0 text-purple font-bold text-sm">1</div>
               <div>

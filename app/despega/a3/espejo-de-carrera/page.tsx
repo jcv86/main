@@ -78,7 +78,7 @@ export default function EspejoCarreraPage() {
           </div>
 
           {/* Progress Section */}
-          <Card className="bg-white/5 border-white/10 p-6">
+          <Card className="bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-6">
             <h3 className="text-lg font-semibold mb-4">Tu Progreso en A2</h3>
             <div className="space-y-4">
               <div className="space-y-2">
@@ -104,7 +104,7 @@ export default function EspejoCarreraPage() {
           </Card>
 
           {/* Mirror Card Section */}
-          <Card className="bg-white/5 border-white/10 p-6 space-y-4">
+          <Card className="bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-6 space-y-4">
             <h3 className="text-lg font-semibold mb-4">Tu Tarjeta de Espejo de Carrera</h3>
             <p className="text-sm text-white/70 mb-4">
               Basada en tus respuestas en A2 Días 1-10, tu espejo de carrera refleja:
@@ -167,7 +167,7 @@ export default function EspejoCarreraPage() {
           </Card>
 
           {/* Next Steps */}
-          <Card className="bg-white/5 border-white/10 p-6 space-y-3">
+          <Card className="bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-6 space-y-3">
             <h3 className="text-lg font-semibold">Próximos Pasos</h3>
             <ol className="space-y-2 text-sm text-white/70">
               <li className="flex gap-3">

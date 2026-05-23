@@ -236,7 +236,7 @@ export default function CareerMirrorCoach() {
             <Button 
               onClick={handleRestartModule}
               variant="outline"
-              className="w-full border-white/20 text-white hover:bg-white/10"
+              className="w-full border-[rgb(80,160,170)]/20 text-white hover:bg-white/10"
             >
               Reintentar Módulo 1
             </Button>
@@ -325,7 +325,7 @@ export default function CareerMirrorCoach() {
             </div>
 
             {/* Response Input Section */}
-            <div className="bg-white/5 border border-white/10 rounded-lg overflow-hidden">
+            <div className="bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-lg overflow-hidden">
               <p className="text-xs text-white/60 uppercase px-3 pt-3 pb-2">Tu Respuesta</p>
               
               {/* Text Input Area */}
@@ -394,7 +394,7 @@ export default function CareerMirrorCoach() {
                 {currentQ.categories.map((cat, idx) => (
                   <button
                     key={idx}
-                    className="w-full text-left bg-white/5 border border-white/10 rounded-lg p-2 hover:bg-white/8 hover:border-[rgb(80,160,170)]/40 transition-all"
+                    className="w-full text-left bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-lg p-2 hover:bg-white/8 hover:border-[rgb(80,160,170)]/40 transition-all"
                   >
                     <p className="text-xs font-medium text-white">{cat.title}</p>
                     <p className="text-xs text-white/50 mt-1">{cat.description}</p>

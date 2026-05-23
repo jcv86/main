@@ -300,7 +300,7 @@ export default function ValueMiningLabModule() {
         </Card>
 
         {/* Progreso */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -310,7 +310,7 @@ export default function ValueMiningLabModule() {
         </Card>
 
         {/* Transformation Example */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-5">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-5">
           <p className="text-white/50 text-xs uppercase tracking-wider mb-3">Example Transformation</p>
           <div className="grid md:grid-cols-2 gap-4">
             <div className="bg-red-500/10 border border-red-500/30 rounded-[2px] p-4">
@@ -348,8 +348,8 @@ export default function ValueMiningLabModule() {
                   isCompleted 
                     ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]' 
                     : isLocked
-                      ? 'bg-white/[0.02] border-white/5 opacity-60'
-                      : 'bg-white/5 border-white/10'
+                      ? 'bg-white/[0.02] border-[rgb(80,160,170)]/5 opacity-60'
+                      : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
                 }`}
               >
                 {/* Activity Header */}
@@ -396,11 +396,11 @@ export default function ValueMiningLabModule() {
 
                 {/* Activity Content */}
                 {isExpanded && !isLocked && (
-                  <div className="px-5 pb-5 border-t border-white/10">
+                  <div className="px-5 pb-5 border-t border-[rgb(80,160,170)]/10">
                     {/* Activity 1: Write Tasks */}
                     {index === 0 && (
                       <div className="pt-5 space-y-4">
-                        <div className="bg-white/5 rounded-[2px] p-4">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded-[2px] p-4">
                           <p className="text-white/70 text-sm mb-3">
                             Think about your previous jobs, internships, or even volunteer work. 
                             What did you do on a daily or weekly basis? Comenzar with simple tasks.
@@ -438,7 +438,7 @@ export default function ValueMiningLabModule() {
                                 value={task.task}
                                 onChange={(e) => updateTask(i, 'task', e.target.value)}
                                 placeholder={`Task ${i + 1}: What did you do regularly?`}
-                                className="flex-1 bg-white/5 border border-white/10 rounded-[2px] px-4 py-3 text-white placeholder:text-white/30 focus:border-[rgba(170,70,170,0.5)] focus:outline-none"
+                                className="flex-1 bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-[2px] px-4 py-3 text-white placeholder:text-white/30 focus:border-[rgba(170,70,170,0.5)] focus:outline-none"
                               />
                               {task.task.trim() && (
                                 <CheckCircle2 className="w-5 h-5 text-[rgb(170,70,170)]" />
@@ -485,7 +485,7 @@ export default function ValueMiningLabModule() {
                               className={`text-left p-4 rounded-[2px] border transition-all ${
                                 selectedCategories.includes(category.id)
                                   ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]'
-                                  : 'bg-white/5 border-white/10 hover:border-white/20'
+                                  : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 hover:border-[rgb(80,160,170)]/20'
                               }`}
                             >
                               <div className="flex items-start justify-between">
@@ -500,7 +500,7 @@ export default function ValueMiningLabModule() {
                                   <p className="text-white/60 text-sm mt-1">{category.description}</p>
                                   <div className="flex flex-wrap gap-1 mt-2">
                                     {category.examples.map((ex, i) => (
-                                      <span key={i} className="text-xs text-white/40 bg-white/5 px-2 py-0.5 rounded">
+                                      <span key={i} className="text-xs text-white/40 bg-[rgba(80,160,170,0.2)] px-2 py-0.5 rounded">
                                         {ex}
                                       </span>
                                     ))}
@@ -553,7 +553,7 @@ export default function ValueMiningLabModule() {
                         <div className="space-y-4">
                           {tasks.slice(0, 5).map((task, i) => (
                             task.task.trim() && (
-                              <div key={i} className="bg-white/5 rounded-[2px] p-4 space-y-3">
+                              <div key={i} className="bg-[rgba(80,160,170,0.2)] rounded-[2px] p-4 space-y-3">
                                 <div className="flex items-center gap-2">
                                   <TrendingUp className="w-4 h-4 text-white/40" />
                                   <p className="text-white/60 text-sm">
@@ -569,7 +569,7 @@ export default function ValueMiningLabModule() {
                                   }}
                                   placeholder="Transform this into a value statement... (e.g., 'I [task], which resulted in [impact], benefiting [who].')"
                                   rows={2}
-                                  className="w-full bg-white/5 border border-white/10 rounded-[2px] px-4 py-3 text-white placeholder:text-white/30 focus:border-[rgba(170,70,170,0.5)] focus:outline-none resize-none"
+                                  className="w-full bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-[2px] px-4 py-3 text-white placeholder:text-white/30 focus:border-[rgba(170,70,170,0.5)] focus:outline-none resize-none"
                                 />
                               </div>
                             )
@@ -602,13 +602,13 @@ export default function ValueMiningLabModule() {
 
                         <div className="space-y-6">
                           {achievements.map((achievement, i) => (
-                            <Card key={i} className="rounded-[2px] bg-white/5 border-white/10 p-5 space-y-4">
+                            <Card key={i} className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-5 space-y-4">
                               <div className="flex items-center justify-between">
                                 <h4 className="text-white font-medium">Achievement {i + 1}</h4>
                                 <select
                                   value={achievement.formula}
                                   onChange={(e) => updateAchievement(i, 'formula', e.target.value)}
-                                  className="bg-white/10 border border-white/20 rounded px-3 py-1 text-white/80 text-sm"
+                                  className="bg-white/10 border border-[rgb(80,160,170)]/20 rounded px-3 py-1 text-white/80 text-sm"
                                 >
                                   <option value="CAR">CAR Method</option>
                                   <option value="PAR">PAR Method</option>
@@ -620,7 +620,7 @@ export default function ValueMiningLabModule() {
                                 value={achievement.title}
                                 onChange={(e) => updateAchievement(i, 'title', e.target.value)}
                                 placeholder="Achievement title (e.g., 'Improved customer response time')"
-                                className="w-full bg-white/5 border border-white/10 rounded-[2px] px-4 py-2 text-white placeholder:text-white/30 focus:border-[rgba(170,70,170,0.5)] focus:outline-none"
+                                className="w-full bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-[2px] px-4 py-2 text-white placeholder:text-white/30 focus:border-[rgba(170,70,170,0.5)] focus:outline-none"
                               />
 
                               <div className="grid gap-3">
@@ -636,7 +636,7 @@ export default function ValueMiningLabModule() {
                                       : "What problem existed?"
                                     }
                                     rows={2}
-                                    className="w-full bg-white/5 border border-white/10 rounded-[2px] px-4 py-2 text-white placeholder:text-white/30 focus:border-[rgba(170,70,170,0.5)] focus:outline-none resize-none"
+                                    className="w-full bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-[2px] px-4 py-2 text-white placeholder:text-white/30 focus:border-[rgba(170,70,170,0.5)] focus:outline-none resize-none"
                                   />
                                 </div>
                                 <div>
@@ -648,7 +648,7 @@ export default function ValueMiningLabModule() {
                                     onChange={(e) => updateAchievement(i, 'action', e.target.value)}
                                     placeholder="What specific action did you take?"
                                     rows={2}
-                                    className="w-full bg-white/5 border border-white/10 rounded-[2px] px-4 py-2 text-white placeholder:text-white/30 focus:border-[rgba(170,70,170,0.5)] focus:outline-none resize-none"
+                                    className="w-full bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-[2px] px-4 py-2 text-white placeholder:text-white/30 focus:border-[rgba(170,70,170,0.5)] focus:outline-none resize-none"
                                   />
                                 </div>
                                 <div>
@@ -660,7 +660,7 @@ export default function ValueMiningLabModule() {
                                     onChange={(e) => updateAchievement(i, 'result', e.target.value)}
                                     placeholder="What was the outcome? (Include numbers if possible)"
                                     rows={2}
-                                    className="w-full bg-white/5 border border-white/10 rounded-[2px] px-4 py-2 text-white placeholder:text-white/30 focus:border-[rgba(170,70,170,0.5)] focus:outline-none resize-none"
+                                    className="w-full bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-[2px] px-4 py-2 text-white placeholder:text-white/30 focus:border-[rgba(170,70,170,0.5)] focus:outline-none resize-none"
                                   />
                                 </div>
                               </div>
@@ -711,7 +711,7 @@ export default function ValueMiningLabModule() {
                                 className={`w-full text-left p-4 rounded-[2px] border transition-all ${
                                   selectedStoryIndex === i
                                     ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]'
-                                    : 'bg-white/5 border-white/10 hover:border-white/20'
+                                    : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 hover:border-[rgb(80,160,170)]/20'
                                 }`}
                               >
                                 <div className="flex items-start justify-between gap-4">

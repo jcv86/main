@@ -47,7 +47,7 @@ export default function ValueMiningLabChoice() {
         {/* Mode selection cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
           {/* Without Coach option */}
-          <Card className="bg-white/5 border-white/10 hover:bg-white/8 transition-colors cursor-pointer group flex flex-col"
+          <Card className="bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 hover:bg-white/8 transition-colors cursor-pointer group flex flex-col"
             onClick={() => router.push('/despega/a3/value-mining-lab-text')}
           >
             <div className="p-8 space-y-6 flex flex-col h-full">
@@ -145,7 +145,7 @@ export default function ValueMiningLabChoice() {
         </div>
 
         {/* Info section */}
-        <Card className="bg-white/5 border-white/10 p-8">
+        <Card className="bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-8">
           <h3 className="text-xl font-light text-white mb-4">¿Cuál debo elegir?</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div>

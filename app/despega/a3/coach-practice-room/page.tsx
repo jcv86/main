@@ -254,7 +254,7 @@ export default function CoachPracticeRoomModule() {
         </Card>
 
         {/* Practice Flow */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
           <p className="text-white/50 text-xs uppercase mb-3">Practice Loop</p>
           <div className="flex items-center justify-center gap-3 text-sm flex-wrap">
             <span className="bg-[rgba(170,70,170,0.2)] text-[rgb(170,70,170)] px-3 py-1 rounded-full">1. Answer</span>
@@ -267,7 +267,7 @@ export default function CoachPracticeRoomModule() {
         </Card>
 
         {/* Progreso */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -285,7 +285,7 @@ export default function CoachPracticeRoomModule() {
                 ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
                 : currentStep === index 
                   ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
-                  : 'bg-white/5 border-white/10'
+                  : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
             }`}
           >
             <button 
@@ -330,7 +330,7 @@ export default function CoachPracticeRoomModule() {
                           score === 'good' ? 'bg-green-500/20 border border-green-500/30' :
                           score === 'needs-work' ? 'bg-yellow-500/20 border border-yellow-500/30' :
                           score === 'missing' ? 'bg-red-500/20 border border-red-500/30' :
-                          'bg-white/5 border border-white/10'
+                          'bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10'
                         }`}
                       >
                         <p className="text-white text-xs font-medium">{criteria.label}</p>
@@ -366,13 +366,13 @@ export default function CoachPracticeRoomModule() {
                       }
                     }}
                     placeholder="Write your answer here..."
-                    className="w-full bg-white/5 border border-white/20 rounded-lg p-4 text-white placeholder:text-white/30 min-h-32"
+                    className="w-full bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/20 rounded-lg p-4 text-white placeholder:text-white/30 min-h-32"
                   />
                 </div>
                 
                 {/* Feedback display */}
                 {showingFeedback[session.id] && feedback[session.id] && (
-                  <div className="space-y-3 border-t border-white/10 pt-4">
+                  <div className="space-y-3 border-t border-[rgb(80,160,170)]/10 pt-4">
                     <p className="text-white font-medium flex items-center gap-2">
                       <Eye className="w-4 h-4 text-[rgb(170,70,170)]" />
                       Coach Feedback
@@ -481,7 +481,7 @@ export default function CoachPracticeRoomModule() {
             <p className="text-white/70">
               You&apos;ve practiced {PRACTICE_SESSIONS.length} key questions with feedback. Earned {MODULE_XP} XP!
             </p>
-            <div className="bg-white/5 rounded-lg p-4 text-left">
+            <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-4 text-left">
               <p className="text-white/70 text-sm mb-2">Total practice iterations:</p>
               <div className="flex gap-4">
                 {PRACTICE_SESSIONS.map(session => (

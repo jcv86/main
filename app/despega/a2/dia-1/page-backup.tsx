@@ -634,7 +634,7 @@ export default function Dia1Page() {
                       <p className="text-slate-300 mb-4">
                         Tu plan de 30 días está listo y validado. Ahora puedes empezar con Día 2.
                       </p>
-                      <div className="bg-white/5 rounded p-3 mb-4">
+                      <div className="bg-[rgba(80,160,170,0.2)] rounded p-3 mb-4">
                         <p className="text-sm text-slate-300">
                           <strong>Puntuación:</strong> {data.analysisScore}/100
                         </p>
@@ -654,7 +654,7 @@ export default function Dia1Page() {
                       <p className="text-slate-300 mb-4">
                         Tu plan necesita algunos ajustes para ser más específico y realista.
                       </p>
-                      <div className="bg-white/5 rounded p-3 mb-4 space-y-2">
+                      <div className="bg-[rgba(80,160,170,0.2)] rounded p-3 mb-4 space-y-2">
                         <p className="text-sm text-slate-300">
                           <strong>Puntuación:</strong> {data.analysisScore}/100
                         </p>

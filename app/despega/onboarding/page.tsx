@@ -685,28 +685,28 @@ export default function DespegaOnboarding() {
             <CardContent className="pt-8">
               <h2 className="text-2xl font-bold mb-6 text-muted/90 dark:text-muted/5">Qué Obtendrás de Este Test</h2>
               <div className="space-y-4">
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
+                <div className="flex gap-4 p-4 bg-[rgba(80,160,170,0.2)]0 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
                   <div className="text-3xl min-w-fit"></div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Tu Perfil Personalizado</p>
                     <p className="text-sm text-muted-foreground dark:text-muted-foreground">Descubre tu estilo natural, tus fortalezas y áreas donde puedes crecer</p>
                   </div>
                 </div>
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-teal-500">
+                <div className="flex gap-4 p-4 bg-[rgba(80,160,170,0.2)]0 dark:bg-card/50 rounded-[28px] border-l-4 border-teal-500">
                   <div className="text-3xl min-w-fit"></div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Insights Accionables</p>
                     <p className="text-sm text-muted-foreground dark:text-muted-foreground">Cómo comunicar mejor, trabajar más efectivamente y liderar según tu estilo</p>
                   </div>
                 </div>
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
+                <div className="flex gap-4 p-4 bg-[rgba(80,160,170,0.2)]0 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
                   <div className="text-3xl min-w-fit"></div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Libros Recomendados</p>
                     <p className="text-sm text-muted-foreground dark:text-muted-foreground">Seleccionamos libros estratégicos adaptados a tu perfil para acelerar tu desarrollo</p>
                   </div>
                 </div>
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-teal-500">
+                <div className="flex gap-4 p-4 bg-[rgba(80,160,170,0.2)]0 dark:bg-card/50 rounded-[28px] border-l-4 border-teal-500">
                   <div className="text-3xl min-w-fit">���</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Plan de Acción</p>
@@ -826,7 +826,7 @@ export default function DespegaOnboarding() {
 
     return (
       <div className="min-h-screen bg-background p-4 overflow-y-auto flex items-center justify-center">
-        <Card className="w-full max-w-2xl border-white/10 bg-white/5 backdrop-blur-sm">
+        <Card className="w-full max-w-2xl border-[rgb(80,160,170)]/10 bg-[rgba(80,160,170,0.2)] backdrop-blur-sm">
           <CardHeader>
             <CardTitle style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }} className="text-2xl">Conozcámonos - Contexto Inicial</CardTitle>
             <CardDescription className="text-white/70">7 preguntas para personalizar tu experiencia</CardDescription>
@@ -845,7 +845,7 @@ export default function DespegaOnboarding() {
                         setC1Responses({ ...c1Responses, [currentC1Q.id]: opt })
                         handleC1Next()
                       }}
-                      className="justify-start h-12 px-4 text-base border-2 border-white/20 hover:border-training hover:bg-training/10 transition-all"
+                      className="justify-start h-12 px-4 text-base border-2 border-[rgb(80,160,170)]/20 hover:border-training hover:bg-training/10 transition-all"
                     >
                       {opt}
                     </Button>
@@ -858,7 +858,7 @@ export default function DespegaOnboarding() {
                     placeholder="Tu respuesta..."
                     value={c1Responses[currentC1Q.id] || ""}
                     onChange={(e) => setC1Responses({ ...c1Responses, [currentC1Q.id]: e.target.value })}
-                    className="w-full p-3 border-2 border-white/20 rounded-lg bg-white/5 text-white placeholder:text-white/50 focus:border-training focus:outline-none transition-all"
+                    className="w-full p-3 border-2 border-[rgb(80,160,170)]/20 rounded-lg bg-[rgba(80,160,170,0.2)] text-white placeholder:text-white/50 focus:border-training focus:outline-none transition-all"
                   />
                   <Button 
                     onClick={handleC1Next}

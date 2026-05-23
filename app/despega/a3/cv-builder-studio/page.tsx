@@ -329,7 +329,7 @@ export default function CVBuilderStudioModule() {
         </Card>
 
         {/* Progreso */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progreso</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -409,7 +409,7 @@ export default function CVBuilderStudioModule() {
             ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
             : currentStep === 0 
               ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
-              : 'bg-white/5 border-white/10'
+              : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
         }`}>
           <button 
             onClick={() => setExpandedSection(expandedSection === 'contact' ? null : 'contact')}
@@ -456,7 +456,7 @@ export default function CVBuilderStudioModule() {
                       value={cvData.contact[field.key as keyof typeof cvData.contact]}
                       onChange={(e) => updateContact(field.key, e.target.value)}
                       placeholder={field.placeholder}
-                      className="w-full bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30"
+                      className="w-full bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/20 rounded-lg p-3 text-white placeholder:text-white/30"
                     />
                   </div>
                 ))}
@@ -480,7 +480,7 @@ export default function CVBuilderStudioModule() {
             ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
             : currentStep === 1 
               ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
-              : 'bg-white/5 border-white/10'
+              : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
         }`}>
           <button 
             onClick={() => setExpandedSection(expandedSection === 'summary' ? null : 'summary')}
@@ -525,7 +525,7 @@ export default function CVBuilderStudioModule() {
                       className={`p-3 rounded-lg text-left transition-all ${
                         cvData.selectedTemplate === template.type
                           ? 'bg-[rgba(170,70,170,0.2)] border border-[rgba(170,70,170,0.4)]'
-                          : 'bg-white/5 border border-white/10 hover:border-white/30'
+                          : 'bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 hover:border-[rgb(80,160,170)]/30'
                       }`}
                     >
                       <p className="text-white text-sm font-medium">{template.type}</p>
@@ -541,7 +541,7 @@ export default function CVBuilderStudioModule() {
                   value={cvData.summary}
                   onChange={(e) => setCvData(prev => ({ ...prev, summary: e.target.value }))}
                   placeholder="Write your 2-3 sentence professional summary..."
-                  className="w-full bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-24"
+                  className="w-full bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/20 rounded-lg p-3 text-white placeholder:text-white/30 min-h-24"
                 />
                 <p className="text-white/50 text-xs mt-1">{cvData.summary.length} characters (minimum 50)</p>
               </div>
@@ -564,7 +564,7 @@ export default function CVBuilderStudioModule() {
             ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
             : currentStep === 2 
               ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
-              : 'bg-white/5 border-white/10'
+              : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
         }`}>
           <button 
             onClick={() => setExpandedSection(expandedSection === 'experience' ? null : 'experience')}
@@ -591,7 +591,7 @@ export default function CVBuilderStudioModule() {
                 <p className="text-[rgb(80,160,170)] text-sm font-medium mb-2">Achievement Bullet Formulas:</p>
                 <div className="grid md:grid-cols-3 gap-3">
                   {CV_SECTIONS[2].bulletFormulas?.map((formula) => (
-                    <div key={formula.name} className="bg-white/5 rounded-lg p-2">
+                    <div key={formula.name} className="bg-[rgba(80,160,170,0.2)] rounded-lg p-2">
                       <p className="text-white text-sm font-medium">{formula.name}</p>
                       <p className="text-white/50 text-xs">{formula.template}</p>
                     </div>
@@ -613,7 +613,7 @@ export default function CVBuilderStudioModule() {
               
               {/* Experience inputs */}
               <div className="space-y-6">
-                <div className="bg-white/5 border border-white/10 rounded-lg p-4 space-y-4">
+                <div className="bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-lg p-4 space-y-4">
                   <p className="text-white font-medium">Most Recent Position</p>
                   <div className="grid md:grid-cols-3 gap-4">
                     <input
@@ -621,21 +621,21 @@ export default function CVBuilderStudioModule() {
                       value={cvData.experiences[0].title}
                       onChange={(e) => updateExperience(0, 'title', e.target.value)}
                       placeholder="Job Title"
-                      className="bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30"
+                      className="bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/20 rounded-lg p-3 text-white placeholder:text-white/30"
                     />
                     <input
                       type="text"
                       value={cvData.experiences[0].company}
                       onChange={(e) => updateExperience(0, 'company', e.target.value)}
                       placeholder="Company Name"
-                      className="bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30"
+                      className="bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/20 rounded-lg p-3 text-white placeholder:text-white/30"
                     />
                     <input
                       type="text"
                       value={cvData.experiences[0].dates}
                       onChange={(e) => updateExperience(0, 'dates', e.target.value)}
                       placeholder="Jan 2022 - Present"
-                      className="bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30"
+                      className="bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/20 rounded-lg p-3 text-white placeholder:text-white/30"
                     />
                   </div>
                   <div className="space-y-2">
@@ -647,7 +647,7 @@ export default function CVBuilderStudioModule() {
                         value={bullet}
                         onChange={(e) => updateBullet(0, i, e.target.value)}
                         placeholder={`Achievement ${i + 1}: Comenzar with action verb (Led, Managed, Created...)`}
-                        className="w-full bg-white/5 border border-white/20 rounded-lg p-3 text-white placeholder:text-white/30"
+                        className="w-full bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/20 rounded-lg p-3 text-white placeholder:text-white/30"
                       />
                     ))}
                   </div>
@@ -672,7 +672,7 @@ export default function CVBuilderStudioModule() {
             ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
             : currentStep === 3 
               ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
-              : 'bg-white/5 border-white/10'
+              : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
         }`}>
           <button 
             onClick={() => setExpandedSection(expandedSection === 'skills' ? null : 'skills')}
@@ -743,7 +743,7 @@ export default function CVBuilderStudioModule() {
             ? 'bg-[rgba(170,70,170,0.15)] border-[rgba(170,70,170,0.4)]' 
             : currentStep === 4 
               ? 'bg-[rgba(170,70,170,0.1)] border-[rgba(170,70,170,0.3)]'
-              : 'bg-white/5 border-white/10'
+              : 'bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10'
         }`}>
           <button 
             onClick={() => setExpandedSection(expandedSection === 'ats' ? null : 'ats')}
@@ -780,13 +780,13 @@ export default function CVBuilderStudioModule() {
                     className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${
                       cvData.atsChecklist.includes(item.id)
                         ? 'bg-[rgba(170,70,170,0.15)] border border-[rgba(170,70,170,0.4)]'
-                        : 'bg-white/5 border border-white/10 hover:border-white/30'
+                        : 'bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 hover:border-[rgb(80,160,170)]/30'
                     }`}
                   >
                     <div className={`w-5 h-5 rounded flex items-center justify-center ${
                       cvData.atsChecklist.includes(item.id)
                         ? 'bg-[rgb(170,70,170)] text-white'
-                        : 'border border-white/30'
+                        : 'border border-[rgb(80,160,170)]/30'
                     }`}>
                       {cvData.atsChecklist.includes(item.id) && <CheckCircle2 className="w-4 h-4" />}
                     </div>

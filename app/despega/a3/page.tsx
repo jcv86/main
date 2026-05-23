@@ -345,7 +345,7 @@ export default function A3BasicLevelTrainingPath() {
       case 'available':
         return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)', color: 'rgb(170, 70, 170)', borderColor: 'rgba(170, 70, 170, 0.4)' }} className="border">Disponible</Badge>
       case 'locked':
-        return <Badge className="bg-white/10 text-white/50 border-white/20 border">Bloqueado</Badge>
+        return <Badge className="bg-white/10 text-white/50 border-[rgb(80,160,170)]/20 border">Bloqueado</Badge>
     }
   }
 
@@ -447,7 +447,7 @@ export default function A3BasicLevelTrainingPath() {
 
         {/* ========== MAIN PROGRESS BAR ========== */}
         <Card 
-          className="bg-white/5 border p-6 space-y-4"
+          className="bg-[rgba(80,160,170,0.2)] border p-6 space-y-4"
           style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
         >
           <h2 className="text-lg font-semibold text-white">Tu Progreso del Nivel Básico</h2>
@@ -521,19 +521,19 @@ export default function A3BasicLevelTrainingPath() {
                     </p>
                     
                     <div className="grid grid-cols-2 gap-2 pt-2">
-                      <div className="text-xs bg-white/5 rounded p-2 border border-white/10">
+                      <div className="text-xs bg-[rgba(80,160,170,0.2)] rounded p-2 border border-[rgb(80,160,170)]/10">
                         <p className="font-semibold text-white">⬆️ Mayor Dificultad</p>
                         <p className="text-white/60">Casos empresariales reales</p>
                       </div>
-                      <div className="text-xs bg-white/5 rounded p-2 border border-white/10">
+                      <div className="text-xs bg-[rgba(80,160,170,0.2)] rounded p-2 border border-[rgb(80,160,170)]/10">
                         <p className="font-semibold text-white">🎓 Aprendizaje Profundo</p>
                         <p className="text-white/60">Técnicas avanzadas</p>
                       </div>
-                      <div className="text-xs bg-white/5 rounded p-2 border border-white/10">
+                      <div className="text-xs bg-[rgba(80,160,170,0.2)] rounded p-2 border border-[rgb(80,160,170)]/10">
                         <p className="font-semibold text-white">🏆 Más XP</p>
                         <p className="text-white/60">1,700+ puntos</p>
                       </div>
-                      <div className="text-xs bg-white/5 rounded p-2 border border-white/10">
+                      <div className="text-xs bg-[rgba(80,160,170,0.2)] rounded p-2 border border-[rgb(80,160,170)]/10">
                         <p className="font-semibold text-white">📊 Sofia V2</p>
                         <p className="text-white/60">Entrevistadora mejorada</p>
                       </div>
@@ -568,8 +568,8 @@ export default function A3BasicLevelTrainingPath() {
             return (
               <Card 
                 key={module.id}
-                className={`bg-white/5 overflow-hidden transition-all border ${
-                  isLocked ? 'opacity-60 border-white/10' : ''
+                className={`bg-[rgba(80,160,170,0.2)] overflow-hidden transition-all border ${
+                  isLocked ? 'opacity-60 border-[rgb(80,160,170)]/10' : ''
                 }`}
                 style={{ 
                   borderColor: isLocked ? undefined : 'rgba(170, 70, 170, 0.2)'
@@ -721,7 +721,7 @@ export default function A3BasicLevelTrainingPath() {
 
         {/* ========== SUMMARY TABLE ========== */}
         <Card 
-          className="bg-white/5 border p-6"
+          className="bg-[rgba(80,160,170,0.2)] border p-6"
           style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
         >
           <h2 className="text-lg font-semibold text-white mb-4">Module Summary</h2>
@@ -763,7 +763,7 @@ export default function A3BasicLevelTrainingPath() {
 
         {/* ========== HOW PROGRESS WORKS ========== */}
         <Card 
-          className="bg-white/5 border p-6"
+          className="bg-[rgba(80,160,170,0.2)] border p-6"
           style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
         >
           <h2 className="text-lg font-semibold text-white mb-4">Cómo Funciona el Progreso</h2>

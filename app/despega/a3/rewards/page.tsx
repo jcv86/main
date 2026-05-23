@@ -196,7 +196,7 @@ export default function RewardsPage() {
                 className={`bg-black border-2 ${
                   reward.status === 'unlocked'
                     ? `bg-gradient-to-br ${rarityColors[reward.rarity as keyof typeof rarityColors]} border-yellow-500/50`
-                    : 'border-white/20 opacity-60'
+                    : 'border-[rgb(80,160,170)]/20 opacity-60'
                 }`}
               >
                 <CardContent className="pt-6">
@@ -214,7 +214,7 @@ export default function RewardsPage() {
                       <Lock className="w-5 h-5 text-white/40 flex-shrink-0" />
                     )}
                   </div>
-                  <div className="flex items-center justify-between pt-3 border-t border-white/20">
+                  <div className="flex items-center justify-between pt-3 border-t border-[rgb(80,160,170)]/20">
                     <span className="text-xs text-white/60">{reward.rarity.toUpperCase()}</span>
                     <Badge className={reward.status === 'unlocked' ? 'bg-yellow-500/30 text-yellow-300' : 'bg-white/10 text-white/60'}>
                       +{reward.xpReward} XP

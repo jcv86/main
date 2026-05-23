@@ -237,7 +237,7 @@ export default function FirstRecruiterSimulationModule() {
         </Card>
 
         {/* Interview Details */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
           <div className="grid md:grid-cols-4 gap-4 text-center">
             <div>
               <p className="text-white/40 text-xs uppercase">Interviewer Style</p>
@@ -263,7 +263,7 @@ export default function FirstRecruiterSimulationModule() {
         </Card>
 
         {/* Progreso */}
-        <Card className="rounded-[2px] bg-white/5 border-white/10 p-4">
+        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.2)] border-[rgb(80,160,170)]/10 p-4">
           <div className="flex justify-between text-sm mb-2">
             <span className="text-white/70">Progreso de la Entrevista</span>
             <span className="text-[rgb(170,70,170)]">{progress}%</span>
@@ -295,11 +295,11 @@ export default function FirstRecruiterSimulationModule() {
                   className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all ${
                     preChecklist.includes(item.id)
                       ? 'bg-green-500/20 border border-green-500/30'
-                      : 'bg-white/5 border border-white/10 hover:border-white/30'
+                      : 'bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 hover:border-[rgb(80,160,170)]/30'
                   }`}
                 >
                   <div className={`w-5 h-5 rounded flex items-center justify-center ${
-                    preChecklist.includes(item.id) ? 'bg-green-500 text-white' : 'border border-white/30'
+                    preChecklist.includes(item.id) ? 'bg-green-500 text-white' : 'border border-[rgb(80,160,170)]/30'
                   }`}>
                     {preChecklist.includes(item.id) && <CheckCircle2 className="w-4 h-4" />}
                   </div>
@@ -309,7 +309,7 @@ export default function FirstRecruiterSimulationModule() {
             </div>
             
             {/* Interview structure preview */}
-            <div className="bg-white/5 rounded-lg p-4">
+            <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-4">
               <p className="text-white/50 text-xs uppercase mb-3">Interview Flow</p>
               <div className="flex flex-wrap gap-2">
                 {INTERVIEW_SCRIPT.map((q, i) => (
@@ -370,7 +370,7 @@ export default function FirstRecruiterSimulationModule() {
             <div className="space-y-2">
               <p className="text-white/70 text-sm">Your ratings by question:</p>
               {INTERVIEW_SCRIPT.map((q, i) => (
-                <div key={q.id} className="flex items-center justify-between bg-white/5 rounded-lg p-3">
+                <div key={q.id} className="flex items-center justify-between bg-[rgba(80,160,170,0.2)] rounded-lg p-3">
                   <span className="text-white/80 text-sm">{i + 1}. {q.stage}</span>
                   <div className="flex gap-1">
                     {[1, 2, 3, 4, 5].map((star) => (
