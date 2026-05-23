@@ -32,11 +32,12 @@ import Link from 'next/link'
 
 interface Document {
   id: string
-  document_type: string
+  type: string
   title: string
   content: string
   status: string
-  source_phase: string
+  source: string
+  source_module: string
   created_at: string
   updated_at: string
   metadata: Record<string, unknown>
@@ -48,6 +49,7 @@ interface DocumentStats {
   total: number
   byType: Record<string, number>
   byStatus: Record<string, number>
+  bySource?: Record<string, number>
 }
 
 const DOCUMENT_TYPES = [
@@ -305,13 +307,13 @@ export default function A4DocumentsPage() {
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      {getDocumentIcon(doc.document_type)}
+                      {getDocumentIcon(doc.type)}
                       <div>
                         <CardTitle className="text-base line-clamp-1">
                           {doc.title}
                         </CardTitle>
                         <CardDescription className="text-xs">
-                          {DOCUMENT_TYPES.find(t => t.value === doc.document_type)?.label || doc.document_type}
+                          {DOCUMENT_TYPES.find(t => t.value === doc.type)?.label || doc.type}
                         </CardDescription>
                       </div>
                     </div>
