@@ -455,15 +455,3 @@ export async function getInterviewContext(userId: string): Promise<{
     coachFeedback: feedback,
   }
 }
-
-// ============================================
-// EXPORT COMBINED INDEX
-// ============================================
-
-export {
-  getA2DayKnowledgeContext,
-  getA3ModuleKnowledgeContext,
-  getCoachContext,
-  getCVContext,
-  getInterviewContext,
-}
