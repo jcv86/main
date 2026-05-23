@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Brain, CheckCircle2, Zap } from 'lucide-react'
 import { StepHeader } from '@/components/step-header'
 import { getDemoMode } from '@/lib/despega/demo-user'
+import { PILLAR_COLORS } from '@/lib/constants/pillar-colors'
 
 export default function A1CerebralIntroPage() {
   const [authOk, setAuthOk] = useState(false)
@@ -71,10 +72,10 @@ export default function A1CerebralIntroPage() {
         {/* Main Content */}
         <div className="space-y-8">
           {/* What is Cerebral Assessment */}
-          <Card className="border-0 shadow-lg">
+          <Card className="border-0 shadow-lg" style={{ backgroundColor: PILLAR_COLORS.A1.primaryRgba }}>
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }}>
-                <Zap className="w-6 h-6" style={{ color: 'rgb(80, 160, 170)' }} />
+              <CardTitle className="text-2xl flex items-center gap-2" style={{ color: PILLAR_COLORS.A1.primary, fontWeight: '500' }}>
+                <Zap className="w-6 h-6" />
                 ¿Qué es esta Evaluación?
               </CardTitle>
             </CardHeader>

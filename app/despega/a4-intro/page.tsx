@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { TrendingUp, Newspaper, MapPin, Zap, Brain, ArrowRight, Radar } from 'lucide-react'
 import { StepHeader } from '@/components/step-header'
+import { PILLAR_COLORS } from '@/lib/constants/pillar-colors'
 
 export default function ContinuousExecutionIntroPage() {
   const [authOk, setAuthOk] = useState(false)
@@ -72,10 +73,10 @@ export default function ContinuousExecutionIntroPage() {
         />
 
         <div className="space-y-8">
-          <Card className="bg-[rgba(225,120,130,0.2)] shadow-lg border-0">
+          <Card className="shadow-lg border-0" style={{ backgroundColor: PILLAR_COLORS.A4.primaryRgba }}>
             <CardHeader className="pb-4">
               <CardTitle className="text-3xl flex items-center gap-3 text-white">
-                <Radar className="w-8 h-8" style={{ color: 'rgba(225, 120, 130)' }} />
+                <Radar className="w-8 h-8" style={{ color: PILLAR_COLORS.A4.primary }} />
                 Tu Coach IA 24/7
               </CardTitle>
             </CardHeader>
@@ -83,7 +84,7 @@ export default function ContinuousExecutionIntroPage() {
               <p className="text-white/90 text-lg leading-relaxed">
                 Esta es tu fase de ejecución continua. No terminas en entrenamiento - aquí EMPIEZAS a aplicar todo. Tu coach IA personal te proporciona contexto real del mercado laboral, tendencias de industria, inteligencia competitiva y decisiones estratégicas para que entres al mercado con ventaja.
               </p>
-              <div className="bg-[rgba(225,120,130,0.2)] p-6 rounded-xl">
+              <div className="p-6 rounded-xl" style={{ backgroundColor: PILLAR_COLORS.A4.accentRgba }}>
                 <p className="text-white font-bold text-lg">
                   Tu objetivo: Ejecutar tu plan con inteligencia del mercado. Conocer antes que los demás, decidir mejor, actuar con confianza.
                 </p>
@@ -91,10 +92,10 @@ export default function ContinuousExecutionIntroPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-[rgba(225,120,130,0.2)] shadow-lg border-0">
+          <Card className="shadow-lg border-0" style={{ backgroundColor: PILLAR_COLORS.A4.primaryRgba }}>
             <CardHeader className="pb-4">
               <CardTitle className="text-3xl flex items-center gap-3 text-white font-light">
-                <TrendingUp className="w-8 h-8" style={{ color: 'rgba(225, 120, 130)' }} />
+                <TrendingUp className="w-8 h-8" style={{ color: PILLAR_COLORS.A4.primary }} />
                 Tus 7 Herramientas de Inteligencia
               </CardTitle>
             </CardHeader>
@@ -109,8 +110,8 @@ export default function ContinuousExecutionIntroPage() {
                 ].map((tool, idx) => {
                   const IconComponent = tool.icon
                   return (
-                    <div key={idx} className={`p-5 bg-[rgba(225,120,130,0.3)] rounded-xl flex gap-4 hover:shadow-lg transition-all`}>
-                      <IconComponent className={`w-7 h-7 flex-shrink-0 mt-1`} style={{ color: 'rgba(225, 120, 130)' }} />
+                    <div key={idx} className="p-5 rounded-xl flex gap-4 hover:shadow-lg transition-all" style={{ backgroundColor: PILLAR_COLORS.A4.accentRgba }}>
+                      <IconComponent className="w-7 h-7 flex-shrink-0 mt-1" style={{ color: PILLAR_COLORS.A4.primary }} />
                       <div className="flex-1">
                         <p className="font-medium text-white text-lg">{tool.label}</p>
                         <p className="text-[rgb(180,180,180)] text-base">{tool.desc}</p>
@@ -122,7 +123,7 @@ export default function ContinuousExecutionIntroPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-[rgba(0,0,0,0.1)] shadow-lg border-0">
+          <Card className="shadow-lg border-0" style={{ backgroundColor: 'rgba(0,0,0,0.1)' }}>
             <CardHeader className="pb-4">
               <CardTitle className="text-3xl text-white font-light">Tu Flujo de Ejecución</CardTitle>
               <CardDescription className="text-white/75 text-lg">Cómo funciona tu ejecución continua</CardDescription>
@@ -135,24 +136,24 @@ export default function ContinuousExecutionIntroPage() {
                   { num: '3', label: 'Ejecuta', desc: 'Tú actúas con inteligencia de mercado real' }
                 ].map((step, idx) => (
                   <div key={idx} className="bg-background/50 p-6 rounded-xl text-center transition-all">
-                    <div className="text-5xl font-black mb-3" style={{ color: 'rgba(225, 120, 130)' }}>{step.num}</div>
+                    <div className="text-5xl font-black mb-3" style={{ color: PILLAR_COLORS.A4.primary }}>{step.num}</div>
                     <p className="font-bold text-white text-xl mb-2">{step.label}</p>
                     <p className="text-white/85 text-base">{step.desc}</p>
                   </div>
                 ))}
               </div>
-              <div className="bg-[rgba(225,120,130,0.2)] p-6 rounded-xl">
+              <div className="p-6 rounded-xl" style={{ backgroundColor: PILLAR_COLORS.A4.accentRgba }}>
                 <p className="text-white text-lg font-semibold text-center">
-                  <span style={{ color: 'rgba(225, 120, 130)' }}>Coach IA 24/7:</span> Tu asistente personal que nunca duerme, siempre actualizado, siempre disponible para ayudarte a tomar las mejores decisiones.
+                  <span style={{ color: PILLAR_COLORS.A4.primary }}>Coach IA 24/7:</span> Tu asistente personal que nunca duerme, siempre actualizado, siempre disponible para ayudarte a tomar las mejores decisiones.
                 </p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="bg-[rgba(225,120,130,0.2)] shadow-lg border-0">
+          <Card className="shadow-lg border-0" style={{ backgroundColor: PILLAR_COLORS.A4.primaryRgba }}>
             <CardHeader className="pb-4">
               <CardTitle className="text-3xl flex items-center gap-3 text-white font-light">
-                <Radar className="w-8 h-8" style={{ color: 'rgba(225, 120, 130, 0.2)' }} />
+                <Radar className="w-8 h-8" style={{ color: PILLAR_COLORS.A4.accentRgba }} />
                 Tipos de Decisiones que Tomarás
               </CardTitle>
             </CardHeader>
@@ -164,7 +165,7 @@ export default function ContinuousExecutionIntroPage() {
                   '¿Cuándo es el mejor momento para cambiar?',
                   '¿Qué skills necesito para crecer?'
                 ].map((q, idx) => (
-                  <div key={idx} className="p-5 bg-[rgba(225,120,130,0.2)] rounded-xl">
+                  <div key={idx} className="p-5 rounded-xl" style={{ backgroundColor: PILLAR_COLORS.A4.accentRgba }}>
                     <p className="font-medium text-white text-lg">{q}</p>
                   </div>
                 ))}
@@ -172,13 +173,13 @@ export default function ContinuousExecutionIntroPage() {
             </CardContent>
           </Card>
 
-          <div className="p-8 bg-[rgba(225,120,130,0.1)] rounded-xl shadow-lg">
+          <div className="p-8 rounded-xl shadow-lg" style={{ backgroundColor: PILLAR_COLORS.A4.accentRgba }}>
             <h3 className="text-3xl font-bold text-white mb-3">Bienvenido a Tu Ejecución Continua</h3>
             <p className="text-white/90 text-lg mb-8">Aquí es donde todo tu trabajo cobra vida. Entra al dashboard y comienza tu ejecución con inteligencia de mercado.</p>
             <Button 
               onClick={() => router.push('/despega/a4')}
               className="w-full text-white font-bold text-lg py-6"
-              style={{ backgroundColor: 'rgba(225, 120, 130, 0.6)', borderRadius: '20px' }}
+              style={{ backgroundColor: PILLAR_COLORS.A4.primary, borderRadius: '20px' }}
             >
               Ir a Ejecución Continua
               <ArrowRight className="w-5 h-5 ml-2" />
