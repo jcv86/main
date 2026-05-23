@@ -6,6 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createClient as createServiceClient } from '@supabase/supabase-js'
 import type { DocumentType, DocumentStatus } from '@/lib/a4/types'
 
 // GET /api/a4/documents - List user documents
@@ -14,17 +15,15 @@ export async function GET(request: NextRequest) {
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     
-    // Debug: Log auth state
-    console.log('[v0] API documents GET - Auth state:', { 
-      hasUser: !!user, 
-      userId: user?.id,
-      error: authError?.message 
-    })
-    
     // Use authenticated user's ID, with fallback to Travis Dev for testing
     // Travis Dev ID: 64738eef-ee31-4da9-8270-9adfa46c74ba
     const userId = user?.id || '64738eef-ee31-4da9-8270-9adfa46c74ba'
-    console.log('[v0] API documents GET - Using userId:', userId)
+
+    // Use service role client to bypass RLS policies
+    const serviceSupabase = createServiceClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
+      process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+    )
 
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type') as DocumentType | null
@@ -34,7 +33,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
 
-    let query = supabase
+    let query = serviceSupabase
       .from('a4_documents_extended')
       .select('*')
       .eq('user_id', userId)
@@ -54,7 +53,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get document stats
-    const { data: stats } = await supabase
+    const { data: stats } = await serviceSupabase
       .from('a4_documents_extended')
       .select('type, status, source')
       .eq('user_id', userId)
