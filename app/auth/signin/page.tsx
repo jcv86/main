@@ -97,29 +97,17 @@ export default function SignInPage() {
     setIsLoadingDemo(true)
 
     try {
-      const supabase = createClient()
-      if (!supabase) {
-        setError('Error de configuracion: Supabase no esta disponible')
-        setIsLoadingDemo(false)
-        return
-      }
-
-      // Use real Supabase authentication with demo password
-      // All demo users have the same password: "demo123456"
-      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+      // For demo access, create a demo session in localStorage
+      // This bypasses real Supabase auth for testing purposes
+      const demoUser = {
+        id: `demo-${testEmail.split('@')[0]}`,
         email: testEmail,
-        password: 'demo123456'
-      })
-
-      if (signInError) {
-        console.error('[v0] Demo login error:', signInError)
-        // If password login fails, fallback to magic link or show error
-        setError(`Error al iniciar sesión: ${signInError.message}`)
-        setIsLoadingDemo(false)
-        return
+        aud: 'authenticated',
+        role: 'authenticated',
       }
 
-      console.log('[v0] Demo login successful:', data.user?.email, data.user?.id)
+      // Store demo user in localStorage for client-side access
+      localStorage.setItem('demo_user', JSON.stringify(demoUser))
       
       // Get the next URL from search params, default to dashboard
       const next = searchParams.get('next') || '/dashboard'
