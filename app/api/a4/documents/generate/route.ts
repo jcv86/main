@@ -7,11 +7,22 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { generateText } from 'ai'
-import { A4ContextIntegration } from '@/lib/a4/context-integration'
-import { A4ProfileSnapshot } from '@/lib/a4/profile-snapshot'
-import type { DocumentType } from '@/lib/a4/types'
 
-const DOCUMENT_PROMPTS: Record<DocumentType, string> = {
+// Simple document type for API usage
+type SimpleDocumentType = 
+  | 'cv' 
+  | 'cover_letter' 
+  | 'linkedin_summary' 
+  | 'elevator_pitch'
+  | 'interview_prep'
+  | 'career_roadmap'
+  | 'skills_inventory'
+  | 'achievements_portfolio'
+  | 'network_map'
+  | 'market_analysis'
+  | 'custom'
+
+const DOCUMENT_PROMPTS: Record<SimpleDocumentType, string> = {
   cv: `Generate a professional CV/Resume in Spanish for a Chilean job market. 
     Use the user's profile data, skills, experience, and career goals to create a compelling narrative.
     Format with clear sections: Perfil Profesional, Experiencia, Educación, Habilidades, Logros.
@@ -76,28 +87,35 @@ export async function POST(request: NextRequest) {
       customPrompt,
       targetCompany,
       targetRole,
-      additionalContext = {}
     } = body
 
-    if (!documentType || !DOCUMENT_PROMPTS[documentType as DocumentType]) {
+    if (!documentType || !DOCUMENT_PROMPTS[documentType as SimpleDocumentType]) {
       return NextResponse.json({ 
         error: 'Invalid document type',
         validTypes: Object.keys(DOCUMENT_PROMPTS)
       }, { status: 400 })
     }
 
-    // Gather context from A1-A3
-    const contextIntegration = new A4ContextIntegration(supabase)
-    const profileSnapshot = new A4ProfileSnapshot(supabase)
-    
-    const [context, snapshot] = await Promise.all([
-      contextIntegration.gatherAllContext(user.id),
-      profileSnapshot.generateSnapshot(user.id)
+    // Gather context from database directly
+    const [profileResult, ritualsResult, knowledgeResult, skillsResult] = await Promise.all([
+      supabase.from('profiles').select('*').eq('id', user.id).single(),
+      supabase.from('a1_ritual_responses').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(20),
+      supabase.from('a2_knowledge_entries').select('*').eq('user_id', user.id).order('created_at', { ascending: false }).limit(30),
+      supabase.from('a3_skills_progress').select('*').eq('user_id', user.id).limit(20)
     ])
 
+    const context = {
+      profile: profileResult.data,
+      rituals: ritualsResult.data || [],
+      knowledge: knowledgeResult.data || [],
+      skills: skillsResult.data || []
+    }
+
+    // Build context summary
+    const contextSummary = buildContextSummary(context)
+
     // Build the full prompt
-    const basePrompt = DOCUMENT_PROMPTS[documentType as DocumentType]
-    const contextSummary = buildContextSummary(context, snapshot)
+    const basePrompt = DOCUMENT_PROMPTS[documentType as SimpleDocumentType]
     
     let fullPrompt = `${basePrompt}
 
@@ -110,7 +128,7 @@ ${contextSummary.a2Summary}
 ## Habilidades y Entrenamiento (A3 - Entrenamiento):
 ${contextSummary.a3Summary}
 
-## Perfil Consolidado:
+## Perfil del Usuario:
 ${contextSummary.profileSummary}
 `
 
@@ -126,7 +144,7 @@ ${contextSummary.profileSummary}
 
     // Generate content using AI
     const { text: generatedContent } = await generateText({
-      model: 'anthropic/claude-3.5-sonnet',
+      model: 'anthropic/claude-sonnet-4-20250514',
       system: `Eres un experto coach de carrera especializado en el mercado laboral chileno.
         Generas documentos profesionales de alta calidad en español.
         Tu tono es profesional pero cercano, usando el "tú" informal.
@@ -134,32 +152,30 @@ ${contextSummary.profileSummary}
         Usas formato Markdown para estructurar el contenido.`,
       prompt: fullPrompt,
       maxTokens: 4000,
-      temperature: 0.7
     })
 
     // Generate a suggested title
-    const suggestedTitle = generateTitle(documentType as DocumentType, targetRole, targetCompany)
+    const suggestedTitle = generateTitle(documentType as SimpleDocumentType, targetRole, targetCompany)
 
-    // Log the generation for analytics
-    await supabase.from('a4_generation_logs').insert({
+    // Log the generation for analytics (non-blocking)
+    supabase.from('a4_generation_logs').insert({
       user_id: user.id,
       document_type: documentType,
       prompt_tokens: fullPrompt.length,
       completion_tokens: generatedContent.length,
-      model: 'claude-3.5-sonnet',
-      target_company: targetCompany,
-      target_role: targetRole,
+      model_used: 'claude-sonnet-4',
+      generation_params: { targetCompany, targetRole },
       created_at: new Date().toISOString()
-    }).catch(err => console.error('[A4 Generate] Log error:', err))
+    }).then(() => {}).catch(() => {})
 
     return NextResponse.json({
       content: generatedContent,
       suggestedTitle,
       documentType,
       contextUsed: {
-        a1Signals: context.a1?.signals?.length || 0,
-        a2Steps: context.a2?.stepsCompleted || 0,
-        a3Sessions: context.a3?.trainingSessions?.length || 0
+        a1Signals: context.rituals.length,
+        a2Entries: context.knowledge.length,
+        a3Skills: context.skills.length
       },
       generatedAt: new Date().toISOString()
     })
@@ -169,47 +185,42 @@ ${contextSummary.profileSummary}
   }
 }
 
-function buildContextSummary(context: any, snapshot: any) {
+function buildContextSummary(context: { profile: any; rituals: any[]; knowledge: any[]; skills: any[] }) {
+  const { profile, rituals, knowledge, skills } = context
+
   return {
-    a1Summary: context.a1 ? `
-- Valores identificados: ${context.a1.values?.join(', ') || 'No definidos'}
-- Fortalezas: ${context.a1.strengths?.join(', ') || 'No definidas'}
-- Motivaciones: ${context.a1.motivations?.join(', ') || 'No definidas'}
-- Estilo de trabajo: ${context.a1.workStyle || 'No definido'}
-- Señales registradas: ${context.a1.signals?.length || 0}
+    a1Summary: rituals.length > 0 ? `
+- Respuestas del ritual: ${rituals.length}
+- Últimas reflexiones: ${rituals.slice(0, 5).map(r => r.response?.substring(0, 100)).filter(Boolean).join('; ')}
 ` : 'No hay datos de A1 disponibles.',
 
-    a2Summary: context.a2 ? `
-- Industria objetivo: ${context.a2.targetIndustry || 'No definida'}
-- Rol objetivo: ${context.a2.targetRole || 'No definido'}
-- Experiencia previa: ${context.a2.experience?.map((e: any) => e.title).join(', ') || 'No registrada'}
-- Educación: ${context.a2.education?.map((e: any) => e.degree).join(', ') || 'No registrada'}
-- Pasos completados: ${context.a2.stepsCompleted || 0}
+    a2Summary: knowledge.length > 0 ? `
+- Entradas de conocimiento: ${knowledge.length}
+- Temas explorados: ${[...new Set(knowledge.map(k => k.topic).filter(Boolean))].join(', ') || 'Varios'}
+- Últimos aprendizajes: ${knowledge.slice(0, 3).map(k => k.content?.substring(0, 100)).filter(Boolean).join('; ')}
 ` : 'No hay datos de A2 disponibles.',
 
-    a3Summary: context.a3 ? `
-- Habilidades técnicas: ${context.a3.technicalSkills?.join(', ') || 'No definidas'}
-- Habilidades blandas: ${context.a3.softSkills?.join(', ') || 'No definidas'}
-- Certificaciones: ${context.a3.certifications?.join(', ') || 'Ninguna'}
-- Sesiones de entrenamiento: ${context.a3.trainingSessions?.length || 0}
-- Nivel de confianza: ${context.a3.confidenceLevel || 'No medido'}
+    a3Summary: skills.length > 0 ? `
+- Habilidades en progreso: ${skills.length}
+- Skills: ${skills.map(s => s.skill_name).filter(Boolean).join(', ') || 'No definidas'}
 ` : 'No hay datos de A3 disponibles.',
 
-    profileSummary: snapshot ? `
-- Puntuación general: ${snapshot.overallScore || 'No calculada'}
-- Completitud del perfil: ${snapshot.completeness || 0}%
-- Fortalezas principales: ${snapshot.topStrengths?.join(', ') || 'No identificadas'}
-- Áreas de mejora: ${snapshot.areasToImprove?.join(', ') || 'No identificadas'}
-- Preparación para empleo: ${snapshot.jobReadiness || 'No evaluada'}
-` : 'No hay snapshot de perfil disponible.'
+    profileSummary: profile ? `
+- Nombre: ${profile.full_name || profile.name || 'No especificado'}
+- Email: ${profile.email || 'No especificado'}
+- Rol actual: ${profile.current_role || profile.job_title || 'No especificado'}
+- Industria: ${profile.industry || 'No especificada'}
+- Experiencia: ${profile.years_experience || 'No especificada'} años
+- Ubicación: ${profile.location || 'Chile'}
+` : 'No hay perfil disponible.'
   }
 }
 
-function generateTitle(type: DocumentType, targetRole?: string, targetCompany?: string): string {
+function generateTitle(type: SimpleDocumentType, targetRole?: string, targetCompany?: string): string {
   const now = new Date()
   const dateStr = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`
   
-  const titles: Record<DocumentType, string> = {
+  const titles: Record<SimpleDocumentType, string> = {
     cv: targetRole ? `CV - ${targetRole}` : `CV Profesional - ${dateStr}`,
     cover_letter: targetCompany ? `Carta - ${targetCompany}` : `Carta de Presentación - ${dateStr}`,
     linkedin_summary: `LinkedIn Summary - ${dateStr}`,

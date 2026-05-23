@@ -6,11 +6,6 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { 
-  A4DocumentEngine, 
-  A4DocumentIntelligence,
-  A4ContextIntegration 
-} from '@/lib/a4'
 import type { DocumentType, DocumentStatus } from '@/lib/a4/types'
 
 // GET /api/a4/documents - List user documents
@@ -30,8 +25,6 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
 
-    const engine = new A4DocumentEngine(supabase)
-    
     let query = supabase
       .from('a4_documents')
       .select(`
@@ -86,7 +79,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-// POST /api/a4/documents - Create/Generate new document
+// POST /api/a4/documents - Create new document
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
@@ -100,10 +93,9 @@ export async function POST(request: NextRequest) {
     const { 
       documentType, 
       title, 
-      sourcePhase,
+      content = '',
+      sourcePhase = 'a4',
       sourceStepId,
-      generateFromContext = true,
-      customPrompt,
       metadata = {}
     } = body
 
@@ -111,45 +103,38 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'documentType is required' }, { status: 400 })
     }
 
-    const engine = new A4DocumentEngine(supabase)
-    const intelligence = new A4DocumentIntelligence(supabase)
-    const contextIntegration = new A4ContextIntegration(supabase)
+    // Create the document
+    const { data: document, error } = await supabase
+      .from('a4_documents')
+      .insert({
+        user_id: user.id,
+        document_type: documentType,
+        title: title || `New ${documentType}`,
+        content,
+        source_phase: sourcePhase,
+        source_step_id: sourceStepId,
+        status: 'draft',
+        metadata: {
+          ...metadata,
+          createdAt: new Date().toISOString()
+        }
+      })
+      .select()
+      .single()
 
-    // Gather context from A1-A3 if requested
-    let contextData = null
-    if (generateFromContext) {
-      contextData = await contextIntegration.gatherAllContext(user.id)
+    if (error) {
+      console.error('[A4 Documents API] Error creating document:', error)
+      return NextResponse.json({ error: 'Failed to create document' }, { status: 500 })
     }
 
-    // Generate document content using AI
-    const generatedContent = await intelligence.generateDocumentContent(
-      user.id,
-      documentType,
-      contextData,
-      customPrompt
-    )
-
-    // Create the document
-    const document = await engine.createDocument({
-      userId: user.id,
-      documentType,
-      title: title || generatedContent.suggestedTitle,
-      content: generatedContent.content,
-      sourcePhase: sourcePhase || 'a4',
-      sourceStepId,
-      metadata: {
-        ...metadata,
-        generatedAt: new Date().toISOString(),
-        contextUsed: !!contextData,
-        aiModel: 'claude-3.5-sonnet'
-      }
-    })
-
-    // Track signals for profile
-    await engine.trackDocumentSignal(user.id, document.id, 'created', {
-      documentType,
-      generatedFromContext: generateFromContext
-    })
+    // Track signal
+    await supabase.from('a4_profile_signals').insert({
+      user_id: user.id,
+      signal_type: 'document_created',
+      source_phase: sourcePhase,
+      signal_data: { documentType, documentId: document.id },
+      weight: 1.0
+    }).catch(() => {}) // Non-blocking
 
     return NextResponse.json({
       document,
@@ -178,12 +163,10 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'documentId is required' }, { status: 400 })
     }
 
-    const engine = new A4DocumentEngine(supabase)
-
     // Verify ownership
     const { data: existingDoc } = await supabase
       .from('a4_documents')
-      .select('id, user_id, content')
+      .select('id, user_id, content, current_version')
       .eq('id', documentId)
       .single()
 
@@ -193,7 +176,13 @@ export async function PATCH(request: NextRequest) {
 
     // Create version before updating if content changed
     if (createVersion && content && content !== existingDoc.content) {
-      await engine.createVersion(documentId, existingDoc.content, 'Auto-saved before edit')
+      const newVersion = (existingDoc.current_version || 0) + 1
+      await supabase.from('a4_document_versions').insert({
+        document_id: documentId,
+        version_number: newVersion,
+        content: existingDoc.content,
+        change_summary: 'Auto-saved before edit'
+      }).catch(() => {})
     }
 
     // Update document
@@ -212,11 +201,6 @@ export async function PATCH(request: NextRequest) {
     if (error) {
       return NextResponse.json({ error: 'Failed to update document' }, { status: 500 })
     }
-
-    // Track edit signal
-    await engine.trackDocumentSignal(user.id, documentId, 'edited', {
-      fieldsUpdated: Object.keys(updates)
-    })
 
     return NextResponse.json({
       document: updatedDoc,

@@ -389,3 +389,13 @@ export interface UpdateDocumentPayload {
   coach_feedback?: string
   tags?: string[]
 }
+
+// ============================================
+// TYPE ALIASES FOR SIMPLIFIED API USAGE
+// ============================================
+// These allow using shorter names like DocumentType instead of DTCDocumentType
+export type DocumentType = DTCDocumentType
+export type DocumentStatus = DTCDocumentStatus
+export type DocumentSource = DTCDocumentSource
+export type SourceModule = DTCSourceModule
+export type SignalType = DTCSignalType
