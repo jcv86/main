@@ -65,7 +65,7 @@ export async function POST(req: NextRequest) {
     let contextData = c1Context || {}
     if (userId) {
       try {
-        const supabase = createClient()
+        const supabase = await createClient()
         const { data: c1Data } = await supabase
           .from('conozcamonos_1_responses')
           .select('responses')
@@ -77,6 +77,7 @@ export async function POST(req: NextRequest) {
         }
       } catch (err) {
         console.log('[v0] Could not fetch C1 context:', err)
+        // C1 is optional context - continue without it if fetch fails
       }
     }
 
