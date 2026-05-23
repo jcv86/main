@@ -7,7 +7,6 @@ import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation"
 import { ArrowRight, Zap, Target, BookOpen, Loader2 } from "lucide-react"
 import { createClient } from "@/lib/supabase/client"
-import { PILLAR_COLORS } from "@/lib/constants/pillar-colors"
 
 interface CerebroProfile {
   energia: number
@@ -175,7 +174,7 @@ export default function YourRouteIntroPage() {
         </div>
 
         {/* Main Content */}
-        <Card className="border-0 shadow-lg" style={{ backgroundColor: PILLAR_COLORS.A2.primaryRgba }}>
+        <Card className="border-0 shadow-lg bg-white dark:bg-background">
           <CardContent className="pt-8 space-y-6">
             <div className="space-y-4">
               <p className="text-lg text-muted-foreground dark:text-white/85 leading-relaxed">
@@ -183,7 +182,7 @@ export default function YourRouteIntroPage() {
                 hemos diseñado un plan de 90 días con micro-acciones concretas.
               </p>
               
-              <div className="p-4 bg-muted/5 dark:bg-card/50 rounded-[28px] border-0">
+              <div className="p-4 bg-muted/5 dark:bg-card/50 rounded-[28px] border border-muted/20 dark:border-card">
                 <p className="text-muted-foreground dark:text-white/85 leading-relaxed">
                   No se trata de trabajar más horas. Se trata de trabajar <strong>en dirección correcta, 
                   con acciones que realmente importan</strong>, adaptadas a tu patrón natural de comportamiento.
@@ -192,19 +191,19 @@ export default function YourRouteIntroPage() {
 
               {/* Cerebro Profile Scores */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
-                <div className="bg-red/5 dark:bg-red/20 p-3 rounded-[28px] border-0">
+                <div className="bg-red/5 dark:bg-red/20 p-3 rounded-[28px] border border-red/20 dark:border-red">
                   <p className="text-xs text-red dark:text-red/40 font-semibold">Energía</p>
                   <p className="text-2xl font-bold text-red dark:text-red/30">{cerebroProfile?.energia}%</p>
                 </div>
-                <div className="bg-yellow/5 dark:bg-yellow/20 p-3 rounded-[28px] border-0">
+                <div className="bg-yellow/5 dark:bg-yellow/20 p-3 rounded-[28px] border border-yellow/20 dark:border-yellow">
                   <p className="text-xs text-yellow dark:text-yellow/40 font-semibold">Enfoque</p>
                   <p className="text-2xl font-bold text-yellow dark:text-yellow/20">{cerebroProfile?.enfoque}%</p>
                 </div>
-                <div className="bg-green/5 dark:bg-green/20 p-3 rounded-[28px] border-0">
+                <div className="bg-green/5 dark:bg-green/20 p-3 rounded-[28px] border border-green/20 dark:border-green">
                   <p className="text-xs text-green dark:text-green/40 font-semibold">Relaciones</p>
                   <p className="text-2xl font-bold text-green dark:text-green/30">{cerebroProfile?.relaciones}%</p>
                 </div>
-                <div className="bg-blue/5 dark:bg-blue/20 p-3 rounded-[28px] border-0">
+                <div className="bg-blue/5 dark:bg-blue/20 p-3 rounded-[28px] border border-blue/30 dark:border-blue/10">
                   <p className="text-xs text-blue dark:text-blue/40 font-semibold">Plan Ejecutivo</p>
                   <p className="text-2xl font-bold text-blue dark:text-blue-200">{cerebroProfile?.plan_ejecutivo}%</p>
                 </div>

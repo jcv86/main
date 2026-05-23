@@ -34,50 +34,6 @@ export default function DespegazoDashboard() {
     try {
       let user = null
       
-      // First check for demo user in localStorage
-      const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
-      if (demoUserStr) {
-        try {
-          const demoUser = JSON.parse(demoUserStr)
-          console.log('[v0] Demo user found in localStorage:', demoUser.email)
-          // Demo users skip data loading and show demo dashboard
-          setUserName(demoUser.email?.split('@')[0] || 'Demo')
-          setLoading(false)
-          setProgress({
-            a1_completed: true,
-            a2_completed: true,
-            a3_progress: { day: 6, completed: true },
-            a4_active: true
-          })
-          setReadiness({
-            overall_score: 85,
-            a1_completeness: 100,
-            a2_completeness: 100,
-            a3_completeness: 100,
-            a4_completeness: 75,
-            strengths: [
-              'Autoconocimiento fuerte (DISC completado)',
-              'Plan de desarrollo definido',
-              'Habilidades de comunicación',
-              'Experiencia técnica sólida'
-            ],
-            gaps: [
-              'Ampliar red de contactos',
-              'Preparar más casos de entrevista'
-            ],
-            recommendations: [
-              'Completa tu perfil de LinkedIn',
-              'Practica entrevistas conductuales',
-              'Amplía tu red de contactos',
-              'Actualiza tu CV con logros medibles'
-            ]
-          })
-          return
-        } catch (e) {
-          console.error('[v0] Error parsing demo user:', e)
-        }
-      }
-      
       // Check if demo credentials are available in environment
       const demoEmail = process.env.NEXT_PUBLIC_DEMO_EMAIL
       const demoPassword = process.env.NEXT_PUBLIC_DEMO_PASSWORD

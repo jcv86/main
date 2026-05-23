@@ -38,7 +38,6 @@ import {
   getDocumentLabel,
   getDocumentCategory 
 } from '@/lib/constants/dtc-document-types'
-import { PILLAR_COLORS } from '@/lib/constants/pillar-colors'
 
 interface DTCTestResult {
   id: string
@@ -109,7 +108,115 @@ export default function A4DocumentsPage() {
       
       const supabase = createClient()
       
-      console.log('[v0] Starting fetch...')
+      console.log('[v0] Starting fetch for user:', user.id)
+
+      // Check if this is a demo user - return mock data
+      if (user.id?.startsWith('demo-')) {
+        console.log('[v0] Demo user detected, returning mock data')
+        
+        // Mock test results data
+        const mockTests = [
+          {
+            id: '1',
+            user_id: user.id,
+            test_name: 'DISC Assessment',
+            test_type: 'Personality',
+            score: 85,
+            interpretation: 'Alto patrón de comunicación directa con orientación a resultados',
+            tags: ['Liderazgo', 'Decisión', 'Comunicación'],
+            completed_at: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000).toISOString(),
+            results: { profile: 'D' }
+          },
+          {
+            id: '2',
+            user_id: user.id,
+            test_name: 'StrengthsFinder',
+            test_type: 'Fortalezas',
+            score: 90,
+            interpretation: 'Fortalezas estratégicas en pensamiento estratégico y ejecución',
+            tags: ['Estrategia', 'Ejecución', 'Liderazgo'],
+            completed_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
+            results: { top_themes: ['Ideation', 'Execution'] }
+          }
+        ]
+
+        // Mock artifacts data
+        const mockArtifacts = [
+          {
+            id: 'a1',
+            user_id: user.id,
+            type: 'artifact',
+            title: 'Prep. Entrevista - Technical Data',
+            description: 'Preparación para entrevistas técnicas de data engineering',
+            artifact_type: 'interview_prep',
+            activity_type: 'Entrenamiento',
+            tags: ['Data Engineering', 'Entrevistas', 'Técnico'],
+            coach_feedback: 'Excelente preparación técnica',
+            ai_summary: 'Análisis profundo de preguntas técnicas comunes en entrevistas de data engineering',
+            completed_at: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+            content: {}
+          },
+          {
+            id: 'a2',
+            user_id: user.id,
+            type: 'artifact',
+            title: 'Señales del Mercado - Demanda AI Engineers',
+            description: 'Análisis de tendencias del mercado laboral',
+            artifact_type: 'market_analysis',
+            activity_type: 'Exploración',
+            tags: ['AI', 'Mercado', 'Tendencias'],
+            coach_feedback: 'Insights muy relevantes del mercado',
+            ai_summary: 'Análisis de la alta demanda de profesionales en AI con salarios competitivos',
+            completed_at: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString(),
+            content: {}
+          }
+        ]
+
+        // Mock milestones data
+        const mockMilestones = [
+          {
+            id: 'm1',
+            user_id: user.id,
+            type: 'milestone',
+            phase: 'A3',
+            milestone_type: 'phase_completion',
+            title: 'Fase A3 Completada',
+            description: 'Has completado todos los módulos de la Fase 3',
+            xp_earned: 500,
+            points_earned: 100,
+            badges_earned: ['Phase Master', 'Consistent Learner'],
+            streak_count: 15,
+            achieved_at: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString()
+          },
+          {
+            id: 'm2',
+            user_id: user.id,
+            type: 'milestone',
+            phase: 'A4',
+            milestone_type: 'milestone',
+            title: 'Primer Documento de A4 Completado',
+            description: 'Has completado tu primer artefacto en la fase de ejecución',
+            xp_earned: 250,
+            points_earned: 50,
+            badges_earned: ['Executor'],
+            streak_count: 5,
+            achieved_at: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString()
+          }
+        ]
+
+        setTestResults(mockTests)
+        setArtifacts(mockArtifacts)
+        setMilestones(mockMilestones)
+        setStats({
+          totalTests: mockTests.length,
+          totalArtifacts: mockArtifacts.length,
+          totalMilestones: mockMilestones.length,
+          totalXP: 750,
+          totalPoints: 150
+        })
+        setLoading(false)
+        return
+      }
 
       // Fetch test results
       console.log('[v0] Fetching test results...')
@@ -238,25 +345,25 @@ export default function A4DocumentsPage() {
         {/* Stats Grid */}
         {stats && (
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div className="border-0 rounded-lg p-4 shadow-lg" style={{ backgroundColor: PILLAR_COLORS.A4.primaryRgba }}>
-              <div className="text-sm text-white/75">Pruebas</div>
-              <div className="text-2xl font-bold text-white">{stats.totalTests}</div>
+            <div className="bg-card border border-border/30 rounded-lg p-4">
+              <div className="text-sm text-muted-foreground">Pruebas</div>
+              <div className="text-2xl font-bold text-foreground">{stats.totalTests}</div>
             </div>
-            <div className="border-0 rounded-lg p-4 shadow-lg" style={{ backgroundColor: PILLAR_COLORS.A4.primaryRgba }}>
-              <div className="text-sm text-white/75">Artefactos</div>
-              <div className="text-2xl font-bold text-white">{stats.totalArtifacts}</div>
+            <div className="bg-card border border-border/30 rounded-lg p-4">
+              <div className="text-sm text-muted-foreground">Artefactos</div>
+              <div className="text-2xl font-bold text-foreground">{stats.totalArtifacts}</div>
             </div>
-            <div className="border-0 rounded-lg p-4 shadow-lg" style={{ backgroundColor: PILLAR_COLORS.A4.primaryRgba }}>
-              <div className="text-sm text-white/75">Logros</div>
-              <div className="text-2xl font-bold text-white">{stats.totalMilestones}</div>
+            <div className="bg-card border border-border/30 rounded-lg p-4">
+              <div className="text-sm text-muted-foreground">Logros</div>
+              <div className="text-2xl font-bold text-foreground">{stats.totalMilestones}</div>
             </div>
-            <div className="border-0 rounded-lg p-4 shadow-lg" style={{ backgroundColor: PILLAR_COLORS.A4.primaryRgba }}>
-              <div className="text-sm text-white/75">XP Ganados</div>
-              <div className="text-2xl font-bold" style={{ color: PILLAR_COLORS.A4.primary }}>{stats.totalXP}</div>
+            <div className="bg-card border border-border/30 rounded-lg p-4">
+              <div className="text-sm text-muted-foreground">XP Ganados</div>
+              <div className="text-2xl font-bold text-primary">{stats.totalXP}</div>
             </div>
-            <div className="border-0 rounded-lg p-4 shadow-lg" style={{ backgroundColor: PILLAR_COLORS.A4.primaryRgba }}>
-              <div className="text-sm text-white/75">Puntos</div>
-              <div className="text-2xl font-bold" style={{ color: PILLAR_COLORS.A4.primary }}>{stats.totalPoints}</div>
+            <div className="bg-card border border-border/30 rounded-lg p-4">
+              <div className="text-sm text-muted-foreground">Puntos</div>
+              <div className="text-2xl font-bold text-primary">{stats.totalPoints}</div>
             </div>
           </div>
         )}
@@ -290,20 +397,20 @@ export default function A4DocumentsPage() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 border-0" style={{ backgroundColor: PILLAR_COLORS.A4.primaryRgba }}>
-            <TabsTrigger value="timeline" className="flex items-center gap-2 text-white" style={{ color: 'inherit' }}>
+          <TabsList className="grid w-full grid-cols-4">
+            <TabsTrigger value="timeline" className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
               <span className="hidden sm:inline">Timeline</span>
             </TabsTrigger>
-            <TabsTrigger value="tests" className="flex items-center gap-2 text-white" style={{ color: 'inherit' }}>
+            <TabsTrigger value="tests" className="flex items-center gap-2">
               <TestTube className="w-4 h-4" />
               <span className="hidden sm:inline">Pruebas</span>
             </TabsTrigger>
-            <TabsTrigger value="artifacts" className="flex items-center gap-2 text-white" style={{ color: 'inherit' }}>
+            <TabsTrigger value="artifacts" className="flex items-center gap-2">
               <FileText className="w-4 h-4" />
               <span className="hidden sm:inline">Artefactos</span>
             </TabsTrigger>
-            <TabsTrigger value="progress" className="flex items-center gap-2 text-white" style={{ color: 'inherit' }}>
+            <TabsTrigger value="progress" className="flex items-center gap-2">
               <Trophy className="w-4 h-4" />
               <span className="hidden sm:inline">Logros</span>
             </TabsTrigger>
@@ -314,75 +421,57 @@ export default function A4DocumentsPage() {
             <div className="space-y-3">
               {/* Merge and sort all items */}
               {[
-                ...testResults.map(t => ({ ...t, type: 'test' as const, date: t.completed_at })),
-                ...artifacts.map(a => ({ ...a, type: 'artifact' as const, date: a.completed_at })),
-                ...milestones.map(m => ({ ...m, type: 'milestone' as const, date: m.achieved_at })),
+                ...testResults.map(t => ({ ...t, type: 'test', date: t.completed_at })),
+                ...artifacts.map(a => ({ ...a, type: 'artifact', date: a.completed_at })),
+                ...milestones.map(m => ({ ...m, type: 'milestone', date: m.achieved_at })),
               ]
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                .map((item) => {
-                  const getTitle = () => {
-                    if (item.type === 'test' && 'test_name' in item) return (item as any).test_name
-                    if (item.type === 'artifact' && 'title' in item) return (item as any).title
-                    if (item.type === 'milestone' && 'title' in item) return (item as any).title
-                    return ''
-                  }
-                  
-                  const getDescription = () => {
-                    if (item.type === 'test' && 'interpretation' in item) return (item as any).interpretation
-                    if (item.type === 'artifact' && 'description' in item) return (item as any).description
-                    if (item.type === 'milestone' && 'description' in item) return (item as any).description
-                    return ''
-                  }
-
-                  return (
-                  <div key={item.id} className="border-0 rounded-lg p-4 shadow-lg transition-all hover:shadow-xl" style={{ backgroundColor: PILLAR_COLORS.A4.primaryRgba }}>
+                .map((item) => (
+                  <div key={item.id} className="bg-card border border-border/30 rounded-lg p-4 hover:border-primary transition-colors">
                     <div className="flex items-start gap-4">
-                      <div className="mt-1" style={{ color: PILLAR_COLORS.A4.primary }}>
+                      <div className="mt-1 text-primary">
                         {item.type === 'test' && <TestTube className="w-5 h-5" />}
                         {item.type === 'artifact' && <FileText className="w-5 h-5" />}
                         {item.type === 'milestone' && <Trophy className="w-5 h-5" />}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-white truncate">
-                          {getTitle()}
+                        <h3 className="font-semibold text-foreground truncate">
+                          {item.test_name || item.title}
                         </h3>
-                        <p className="text-sm text-white/75 mt-1">
-                          {getDescription()}
+                        <p className="text-sm text-muted-foreground mt-1">
+                          {item.description || item.interpretation}
                         </p>
                         <div className="flex flex-wrap gap-2 mt-3">
-                          {item.type === 'test' || item.type === 'artifact' ? (
-                            ((item as any).tags || []).slice(0, 3).map(tag => (
-                              <Badge key={tag} variant="secondary" className="text-xs bg-white/20 text-white border-0">
-                                {tag}
-                              </Badge>
-                            ))
-                          ) : null}
-                          {(item as any).activity_type && (
-                            <Badge className={`text-xs bg-white/20 text-white border-0`}>
-                              {(item as any).activity_type}
+                          {(item.tags || []).slice(0, 3).map(tag => (
+                            <Badge key={tag} variant="secondary" className="text-xs">
+                              {tag}
+                            </Badge>
+                          ))}
+                          {item.activity_type && (
+                            <Badge className={`text-xs ${getActivityColor(item.activity_type)}`}>
+                              {item.activity_type}
                             </Badge>
                           )}
                         </div>
                       </div>
                       <div className="text-right whitespace-nowrap">
-                        <div className="text-xs text-white/65">
+                        <div className="text-xs text-muted-foreground">
                           {new Date(item.date).toLocaleDateString('es-ES')}
                         </div>
-                        {(item as any).score && (
-                          <div className="text-lg font-bold mt-1" style={{ color: PILLAR_COLORS.A4.primary }}>
-                            {(item as any).score}%
+                        {item.score && (
+                          <div className="text-lg font-bold text-primary mt-1">
+                            {item.score}%
                           </div>
                         )}
-                        {(item as any).xp_earned && (
-                          <div className="text-sm font-semibold" style={{ color: PILLAR_COLORS.A4.primary }}>
-                            +{(item as any).xp_earned} XP
+                        {item.xp_earned && (
+                          <div className="text-sm font-semibold text-primary">
+                            +{item.xp_earned} XP
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
-                )
-                })}
+                ))}
             </div>
           </TabsContent>
 
@@ -390,31 +479,31 @@ export default function A4DocumentsPage() {
           <TabsContent value="tests" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {testResults.map((test) => (
-                <div key={test.id} className="border-0 rounded-lg p-5 shadow-lg" style={{ backgroundColor: PILLAR_COLORS.A4.primaryRgba }}>
+                <div key={test.id} className="bg-card border border-border/30 rounded-lg p-5">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <Brain className="w-6 h-6" style={{ color: PILLAR_COLORS.A4.primary }} />
+                      <Brain className="w-6 h-6 text-primary" />
                       <div>
-                        <h3 className="font-semibold text-white">{test.test_name}</h3>
-                        <p className="text-xs text-white/65">{test.test_type}</p>
+                        <h3 className="font-semibold text-foreground">{test.test_name}</h3>
+                        <p className="text-xs text-muted-foreground">{test.test_type}</p>
                       </div>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold" style={{ color: PILLAR_COLORS.A4.primary }}>{test.score}%</div>
-                      <p className="text-xs text-white/65">Puntuación</p>
+                      <div className="text-2xl font-bold text-primary">{test.score}%</div>
+                      <p className="text-xs text-muted-foreground">Puntuación</p>
                     </div>
                   </div>
-                  <p className="text-sm text-white/75 mb-3 line-clamp-2">
+                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                     {test.interpretation}
                   </p>
                   <div className="flex flex-wrap gap-1">
                     {test.tags.map(tag => (
-                      <Badge key={tag} variant="outline" className="text-xs bg-white/20 text-white border-0">
+                      <Badge key={tag} variant="outline" className="text-xs">
                         {tag}
                       </Badge>
                     ))}
                   </div>
-                  <div className="text-xs text-white/65 mt-3 pt-3" style={{ borderTopColor: 'rgba(255,255,255,0.2)', borderTopWidth: '1px' }}>
+                  <div className="text-xs text-muted-foreground mt-3 pt-3 border-t border-border">
                     {new Date(test.completed_at).toLocaleDateString('es-ES')}
                   </div>
                 </div>
@@ -431,38 +520,38 @@ export default function A4DocumentsPage() {
                 const specialty = artifact.tags?.find(tag => SPECIALTY_MAP[tag])
                 
                 return (
-                  <div key={artifact.id} className="border-0 rounded-lg p-5 shadow-lg" style={{ backgroundColor: PILLAR_COLORS.A4.primaryRgba }}>
+                  <div key={artifact.id} className="bg-card border border-border/30 rounded-lg p-5">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
-                        <div className="p-2 rounded-lg" style={{ backgroundColor: PILLAR_COLORS.A4.accentRgba }}>
+                        <div className={`p-2 rounded-lg ${docType?.color || 'bg-blue-500'} bg-opacity-10`}>
                           {getTypeIcon(artifact.artifact_type)}
                         </div>
                         <div>
-                          <h3 className="font-semibold text-white">{artifact.title}</h3>
-                          <p className="text-xs text-white/65">
+                          <h3 className="font-semibold text-foreground">{artifact.title}</h3>
+                          <p className="text-xs text-muted-foreground">
                             {category}
                           </p>
                         </div>
                       </div>
                     </div>
-                    <p className="text-sm text-white/75 mb-3 line-clamp-2">
+                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
                       {artifact.description}
                     </p>
                     {artifact.ai_summary && (
-                      <p className="text-xs p-2 rounded mb-3 line-clamp-2" style={{ backgroundColor: PILLAR_COLORS.A4.accentRgba, color: '#fff' }}>
+                      <p className="text-xs bg-secondary/50 p-2 rounded mb-3 line-clamp-2">
                         {artifact.ai_summary}
                       </p>
                     )}
                     <div className="flex flex-wrap gap-1 mb-3">
                       {specialty && (
-                        <Badge className="text-xs bg-white/20 text-white border-0">
+                        <Badge className={`text-xs ${SPECIALTY_MAP[specialty].color}`}>
                           {SPECIALTY_MAP[specialty].label}
                         </Badge>
                       )}
                       {artifact.tags?.slice(0, 2).map(tag => {
                         if (!SPECIALTY_MAP[tag]) {
                           return (
-                            <Badge key={tag} variant="outline" className="text-xs bg-white/20 text-white border-0">
+                            <Badge key={tag} variant="outline" className="text-xs">
                               {tag}
                             </Badge>
                           )
@@ -483,19 +572,19 @@ export default function A4DocumentsPage() {
           <TabsContent value="progress" className="space-y-4">
             <div className="space-y-3">
               {milestones.map((milestone) => (
-                <div key={milestone.id} className="border-0 rounded-lg p-4 shadow-lg" style={{ backgroundColor: PILLAR_COLORS.A4.primaryRgba }}>
+                <div key={milestone.id} className="bg-card border border-border/30 rounded-lg p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-4 flex-1">
-                      <Trophy className="w-5 h-5 mt-1 flex-shrink-0" style={{ color: PILLAR_COLORS.A4.primary }} />
+                      <Trophy className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-white">{milestone.title}</h3>
-                        <p className="text-sm text-white/75 mt-1">
+                        <h3 className="font-semibold text-foreground">{milestone.title}</h3>
+                        <p className="text-sm text-muted-foreground mt-1">
                           {milestone.description}
                         </p>
                         {milestone.badges_earned && milestone.badges_earned.length > 0 && (
                           <div className="flex flex-wrap gap-2 mt-3">
                             {milestone.badges_earned.map(badge => (
-                              <Badge key={badge} className="bg-white/20 text-white border-0 text-xs">
+                              <Badge key={badge} className="bg-primary/20 text-primary text-xs">
                                 {badge}
                               </Badge>
                             ))}
@@ -506,16 +595,16 @@ export default function A4DocumentsPage() {
                     <div className="text-right whitespace-nowrap ml-4">
                       <div className="space-y-1">
                         {milestone.xp_earned > 0 && (
-                          <div className="text-sm font-bold" style={{ color: PILLAR_COLORS.A4.primary }}>+{milestone.xp_earned} XP</div>
+                          <div className="text-sm font-bold text-primary">+{milestone.xp_earned} XP</div>
                         )}
                         {milestone.points_earned > 0 && (
-                          <div className="text-sm font-bold" style={{ color: PILLAR_COLORS.A4.primary }}>+{milestone.points_earned} pts</div>
+                          <div className="text-sm font-bold text-primary">+{milestone.points_earned} pts</div>
                         )}
                         {milestone.streak_count > 1 && (
-                          <div className="text-xs text-white/65">Racha: {milestone.streak_count}</div>
+                          <div className="text-xs text-muted-foreground">Racha: {milestone.streak_count}</div>
                         )}
                       </div>
-                      <div className="text-xs text-white/65 mt-3">
+                      <div className="text-xs text-muted-foreground mt-3">
                         {new Date(milestone.achieved_at).toLocaleDateString('es-ES')}
                       </div>
                     </div>

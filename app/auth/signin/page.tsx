@@ -109,14 +109,10 @@ export default function SignInPage() {
       // Store demo user in localStorage for client-side access
       localStorage.setItem('demo_user', JSON.stringify(demoUser))
       
-      // Also set a cookie so middleware can read it
-      document.cookie = `demo_user=${encodeURIComponent(JSON.stringify(demoUser))}; path=/; max-age=86400`
-      
-      // Get the next URL from search params, default to despega dashboard
-      const next = searchParams.get('next') || '/despega'
-      
-      // Use hard navigation to ensure localStorage is available on the new page
-      window.location.href = next
+      // Get the next URL from search params, default to dashboard
+      const next = searchParams.get('next') || '/dashboard'
+      router.push(next)
+      router.refresh()
     } catch (err) {
       console.error('[v0] Quick login error:', err)
       setError('Error al iniciar sesión. Por favor intenta nuevamente.')
