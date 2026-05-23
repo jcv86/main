@@ -436,20 +436,22 @@ export default function A4DocumentsPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-foreground truncate">
-                          {item.test_name || item.title}
+                          {item.type === 'test' ? (item as any).test_name : (item as any).title}
                         </h3>
                         <p className="text-sm text-muted-foreground mt-1">
-                          {item.description || item.interpretation}
+                          {item.type === 'test' ? (item as any).interpretation : (item as any).description}
                         </p>
                         <div className="flex flex-wrap gap-2 mt-3">
-                          {(item.tags || []).slice(0, 3).map(tag => (
-                            <Badge key={tag} variant="secondary" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                          {item.activity_type && (
-                            <Badge className={`text-xs ${getActivityColor(item.activity_type)}`}>
-                              {item.activity_type}
+                          {item.type === 'test' || item.type === 'artifact' ? (
+                            ((item as any).tags || []).slice(0, 3).map(tag => (
+                              <Badge key={tag} variant="secondary" className="text-xs">
+                                {tag}
+                              </Badge>
+                            ))
+                          ) : null}
+                          {(item as any).activity_type && (
+                            <Badge className={`text-xs ${getActivityColor((item as any).activity_type)}`}>
+                              {(item as any).activity_type}
                             </Badge>
                           )}
                         </div>
